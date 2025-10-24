@@ -31,4 +31,4 @@ TODO.md
 *.log
 
 # TypeScript incremental and tsbuildinfo files
-packages/**/tsconfig.tsbuildinfo
+**/tsconfig.tsbuildinfo
