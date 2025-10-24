@@ -30,3 +30,10 @@ Thumbs.db
 _local/
 notes/
 scripts-local/
+
+# archive and build caches
+# ignore zip archives (e.g. fresh-root-upload.zip)
+*.zip
+
+# TypeScript incremental build info files (do not commit)
+**/*.tsbuildinfo
