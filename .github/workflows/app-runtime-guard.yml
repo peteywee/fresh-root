@@ -1,0 +1,67 @@
+name: app-runtime-guard
+
+on:
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  check-allowed-paths:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout (full history for proper diff)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: List changed files
+        id: diff
+        shell: bash
+        run: |
+          BASE_SHA="${{ github.event.pull_request.base.sha }}"
+          HEAD_SHA="${{ github.event.pull_request.head.sha }}"
+          git diff --name-only "$BASE_SHA" "$HEAD_SHA" > changed.txt
+          echo "changed<<EOF" >> $GITHUB_OUTPUT
+          cat changed.txt >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+          echo "Changed files:"
+          cat changed.txt || true
+
+      - name: Enforce allowlist (fail if any file is outside runtime)
+        shell: bash
+        run: |
+          ALLOW=(
+            '^apps/web/app(/|$)'
+            '^apps/web/components(/|$)'
+            '^apps/web/lib(/|$)'
+            '^packages/types(/|$)'
+            '^public(/|$)'
+            '^.github/workflows/app-runtime-guard.yml$'
+          )
+          ALLOW_RE="$(IFS='|'; echo "${ALLOW[*]}")"
+
+          BAD=0
+          echo "Scanning for forbidden paths..."
+          while IFS= read -r f; do
+            [[ -z "$f" ]] && continue
+            if [[ "$f" =~ (^|/)node_modules(/|$) ]]; then
+              continue
+            fi
+            if echo "$f" | egrep -q "$ALLOW_RE"; then
+              echo "✓ allowed: $f"
+            else
+              echo "✗ forbidden: $f"
+              BAD=1
+            fi
+          done < changed.txt
+
+          if [[ $BAD -ne 0 ]]; then
+            echo "::error::This PR touches files outside the app runtime allowlist."
+            exit 1
+          fi
+
+      - name: pnpm version (informational)
+        shell: bash
+        run: |
+          corepack enable
+          corepack prepare pnpm@9.12.0 --activate
+          pnpm -v
