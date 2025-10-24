@@ -164,10 +164,20 @@ For local development with emulators:
    Set `NEXT_PUBLIC_USE_EMULATORS=true` in `.env.local`
 
 3. **Seed emulator data** (optional):
-   ```bash
-   # Create seed script if needed
-   pnpm tsx scripts/seed/seed.emulator.ts
-   ```
+
+```bash
+# Create seed script if needed
+pnpm tsx scripts/seed/seed.emulator.ts
+```
+
+### 5. Install Additional Dependencies
+
+For server-side Firebase operations, install the admin SDK:
+
+```bash
+cd apps/web
+pnpm add -D firebase-admin @types/node
+```
 
 ### Available Scripts
 
@@ -227,6 +237,7 @@ pnpm build
    ```
 
 2. **Deploy to Firebase Hosting**:
+
    ```bash
    firebase deploy --only hosting
    ```
@@ -265,9 +276,10 @@ Or use Firebase Hosting rewrites for server-side environment variables.
 #### Port Conflicts
 
 - Change dev server port in `apps/web/package.json`:
-  ```json
-  "dev": "next dev --port 3001"
-  ```
+
+   ```json
+   "dev": "next dev --port 3001"
+   ```
 
 ### Getting Help
 
