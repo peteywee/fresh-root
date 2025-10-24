@@ -1,7 +1,7 @@
 'use client';
-import { useAuth } from '../../../lib/auth-context';
+import React, { useEffect, type ReactNode } from 'react';
+import { useAuth } from '../../lib/auth-context';
 import { useRouter } from 'next/navigation';
-import { useEffect, type ReactNode } from 'react';
 
 export default function ProtectedRoute({ children }: { children: ReactNode }) {
   const { user, isLoading } = useAuth();
@@ -11,6 +11,6 @@ export default function ProtectedRoute({ children }: { children: ReactNode }) {
     if (!isLoading && !user) router.replace('/login');
   }, [isLoading, user, router]);
 
-  if (isLoading || !user) return <div className="p-6">Loading…</div>;
-  return <>{children}</>;
+  if (isLoading || !user) return React.createElement('div', { className: 'p-6' }, 'Loading…');
+  return React.createElement(React.Fragment, null, children);
 }
