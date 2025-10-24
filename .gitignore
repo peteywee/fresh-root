@@ -1,4 +1,3 @@
-# deps/build
 node_modules/
 .npm/
 .pnpm-store/
@@ -8,32 +7,21 @@ out/
 coverage/
 .playwright/
 
-# env (keep examples only)
 .env
 .env.*
 !.env.example
 
-# firebase/emulators
 .firebase/
 firebase-debug.log
 firestore-debug.log
 ui-debug.log
 functions/.runtimeconfig.json
 
-# editors
 .vscode/
 .idea/
 .DS_Store
 Thumbs.db
 
-# local-only areas (notes, temp)
 _local/
 notes/
 scripts-local/
-
-# archive and build caches
-# ignore zip archives (e.g. fresh-root-upload.zip)
-*.zip
-
-# TypeScript incremental build info files (do not commit)
-**/*.tsbuildinfo
