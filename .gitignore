@@ -29,3 +29,6 @@ scripts-local/
 # Local TODOs
 TODO.md
 *.log
+
+# TypeScript incremental and tsbuildinfo files
+packages/**/tsconfig.tsbuildinfo
