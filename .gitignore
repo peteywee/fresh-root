@@ -1,0 +1,45 @@
+# Standard Python/Docker/Node ignores
+# Customize or remove entries you don't want
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+
+# Virtual environments
+venv/
+env/
+.venv/
+
+# VS Code
+.vscode/
+
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# macOS
+.DS_Store
+
+# Logs
+*.log
+
+# Editor swap files
+*~
+
+# Local environment files
+.env
+.env.local
+
+# Docker
+docker-compose.override.yml
+
+# GitHub Actions runtime files
+.github/workflows/*.local
