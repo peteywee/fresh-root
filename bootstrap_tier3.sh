@@ -9,7 +9,7 @@ mkdir -p apps/web/app/api/_shared
 mkdir -p apps/web/app/api/items
 mkdir -p apps/web/app/lib
 mkdir -p apps/web/app/components
-mkdir -p apps/web/app/(app)/protected
+mkdir -p "apps/web/app/\(app)\/protected"
 
 # --- API validation helpers (Zod) ---
 cat > apps/web/app/api/_shared/validation.ts <<'TS'
@@ -178,7 +178,7 @@ export default function ProtectedRoute({ children }: { children: React.ReactNode
 TSX
 
 # --- Demo "protected" page using the mutation hook (works without auth) ---
-cat > apps/web/app/(app)/protected/page.tsx <<'TSX'
+cat > "apps/web/app/(app)/protected/page.tsx" <<'TSX'
 'use client';
 
 import React from 'react';
