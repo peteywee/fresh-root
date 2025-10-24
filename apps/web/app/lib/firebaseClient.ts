@@ -1,4 +1,4 @@
-import { initializeApp, getApps, getApp } from 'firebase/app'
+import { getApp, getApps, initializeApp, FirebaseOptions } from 'firebase/app'
 import { z } from 'zod'
 
 // Validate expected NEXT_PUBLIC_ env vars used to initialize Firebase.
@@ -18,13 +18,7 @@ const rawEnv = {
   NEXT_PUBLIC_FIREBASE_APP_ID: process.env.NEXT_PUBLIC_FIREBASE_APP_ID
 }
 
-let cfg = undefined as undefined | {
-  apiKey: string
-  authDomain: string
-  projectId: string
-  storageBucket?: string
-  appId: string
-}
+let cfg = undefined as undefined | FirebaseOptions
 
 try {
   const parsed = EnvSchema.parse(rawEnv)
