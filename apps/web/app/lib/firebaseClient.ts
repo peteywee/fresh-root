@@ -45,6 +45,21 @@ try {
 // Initialize exactly once on the client. Only attempt initialize if cfg is valid.
 export const firebaseApp = ((): ReturnType<typeof getApp> | undefined => {
   if (typeof window === 'undefined') return undefined
+
+  // In development, if validation failed, provide a harmless fallback config so the
+  // client can initialize Firebase for local dev UI/testing without requiring secrets.
+  if (!cfg && process.env.NODE_ENV === 'development') {
+    // eslint-disable-next-line no-console
+    console.warn('Firebase env vars not set; using development fallback config for local testing')
+    cfg = {
+      apiKey: 'fake-api-key',
+      authDomain: 'localhost',
+      projectId: 'local-demo',
+      storageBucket: undefined,
+      appId: '1:000000000000:web:000000000000'
+    }
+  }
+
   if (!cfg) return undefined
   return getApps().length ? getApp() : initializeApp(cfg)
 })()
