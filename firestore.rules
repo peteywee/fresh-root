@@ -1,8 +1,71 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Deny everything by default. Replace with your complete rules set later.
-    match /{document=**} {
+    function isSignedIn() {
+      return request.auth != null;
+    }
+    function isUser(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+    function getRole(orgId) {
+      return (request.auth.token.roles != null) ? request.auth.token.roles[orgId] : null;
+    }
+    function isAdmin(orgId) {
+      let role = getRole(orgId);
+      return role in ['org_owner','org_admin','admin','manager'];
+    }
+    function isMember(orgId) {
+      let role = getRole(orgId);
+      return role in ['org_owner','org_admin','org_member','admin','manager','member'];
+    }
+
+    match /users/{userId} {
+      allow read: if isSignedIn();
+      allow write: if isUser(userId);
+    }
+
+    match /join_tokens/{tokenId} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn() && isAdmin(request.resource.data.orgId);
+      allow delete: if isSignedIn() && isAdmin(resource.data.orgId);
+    }
+
+    match /organizations/{orgId} {
+      allow get, list: if isMember(orgId);
+      allow create: if isSignedIn();
+      allow update: if isSignedIn() && isAdmin(orgId);
+
+      match /members/{userId} {
+        allow read: if isMember(orgId) || isUser(userId);
+        allow create: if isUser(userId);
+        allow update: if isAdmin(orgId) || isUser(userId);
+        allow delete: if isAdmin(orgId);
+      }
+
+      match /certifications/{certId} {
+        allow read: if isMember(orgId);
+        allow create: if isAdmin(orgId);
+        allow update: if isAdmin(orgId);
+        allow delete: if isAdmin(orgId);
+      }
+
+      match /schedules/{scheduleId} {
+        allow read: if isMember(orgId);
+        allow create, update, delete: if isAdmin(orgId);
+        match /shifts/{shiftId} {
+          allow read: if isMember(orgId);
+          allow create, update, delete: if isAdmin(orgId);
+        }
+      }
+
+      match /attendance_records/{recordId} {
+        allow read: if (isMember(orgId) && resource.data.userId == request.auth.uid) || isAdmin(orgId);
+        allow create: if isSignedIn() && request.resource.data.userId == request.auth.uid;
+        allow update: if isAdmin(orgId);
+      }
+    }
+
+    match /attendance_ledger/{ledgerEntryId} {
       allow read, write: if false;
     }
   }

@@ -179,6 +179,10 @@ cd apps/web
 pnpm add -D firebase-admin @types/node
 ```
 
+### 6. Configure Tailwind CSS
+
+The project uses Tailwind CSS for styling. The configuration is already set up, but you may need to install the Tailwind CSS IntelliSense extension in VS Code for better development experience.
+
 ### Available Scripts
 
 ```bash

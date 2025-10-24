@@ -25,9 +25,7 @@ Thumbs.db
 _local/
 notes/
 scripts-local/
-<<<<<<< HEAD
 
 # Local TODOs
 TODO.md
-=======
->>>>>>> restore/tier3
+*.log
