@@ -1,14 +1,12 @@
 /* pnpm seed (requires emulators running) */
-import { initializeApp } from 'firebase-admin/app';
-import { getAuth } from 'firebase-admin/auth';
-import { getFirestore } from 'firebase-admin/firestore';
+import * as admin from 'firebase-admin';
 
 process.env.FIRESTORE_EMULATOR_HOST = 'localhost:8080';
 process.env.FIREBASE_AUTH_EMULATOR_HOST = 'localhost:9099';
 
-const app = initializeApp({ projectId: 'fresh-schedules-dev' });
-const auth = getAuth(app);
-const db = getFirestore(app);
+const app = admin.initializeApp({ projectId: 'fresh-schedules-dev' });
+const auth = admin.auth();
+const db = admin.firestore();
 
 async function seed() {
   console.log('Seeding emulator data…');
@@ -19,13 +17,13 @@ async function seed() {
   const manager = await auth.createUser({
     uid: 'manager_uid_123',
     email: 'manager@test.com',
-    password: 'password',
+    password: 'TestUser!2345',
     displayName: 'Test Manager'
   });
   const staff = await auth.createUser({
     uid: 'staff_uid_123',
     email: 'staff@test.com',
-    password: 'password',
+    password: 'TestUser!2345',
     displayName: 'Test Staff'
   });
 

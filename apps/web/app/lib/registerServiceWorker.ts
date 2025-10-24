@@ -10,7 +10,15 @@ export async function safeRegisterServiceWorker(scriptUrl = '/sw.js') {
 
     const ua = navigator.userAgent || '';
     const isEmbeddedWebView = /vscode|WebView|Electron|HeadlessChrome/i.test(ua);
-    if (isEmbeddedWebView) {
+    // Developer override: allow forcing registration in embedded contexts for debugging.
+    // Override via any of:
+    // - global flag: window.__ALLOW_SW_IN_EMBEDDED = true
+    // - localStorage: localStorage.setItem('ALLOW_SW', '1')
+    // - URL query param: ?allow_sw=1
+    const urlAllows = typeof URL !== 'undefined' && new URL(location.href).searchParams.get('allow_sw') === '1';
+    const storageAllows = typeof localStorage !== 'undefined' && localStorage.getItem('ALLOW_SW') === '1';
+    const globalAllows = (window as any).__ALLOW_SW_IN_EMBEDDED === true;
+    if (isEmbeddedWebView && !(urlAllows || storageAllows || globalAllows)) {
       console.debug('Skipping SW registration: running inside embedded webview/electron/vscode');
       return;
     }
