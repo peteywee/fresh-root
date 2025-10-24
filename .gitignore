@@ -25,3 +25,6 @@ Thumbs.db
 _local/
 notes/
 scripts-local/
+
+# Local TODOs
+TODO.md
