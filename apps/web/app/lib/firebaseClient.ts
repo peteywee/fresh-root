@@ -1,4 +1,6 @@
 import { getApp, getApps, initializeApp, FirebaseOptions } from 'firebase/app'
+import { getAuth } from 'firebase/auth'
+import { getFirestore } from 'firebase/firestore'
 import { z } from 'zod'
 
 // Validate expected NEXT_PUBLIC_ env vars used to initialize Firebase.
@@ -57,3 +59,7 @@ export const firebaseApp = ((): ReturnType<typeof getApp> | undefined => {
   if (!cfg) return undefined
   return getApps().length ? getApp() : initializeApp(cfg)
 })()
+
+// Export auth and db instances
+export const auth = firebaseApp ? getAuth(firebaseApp) : undefined
+export const db = firebaseApp ? getFirestore(firebaseApp) : undefined

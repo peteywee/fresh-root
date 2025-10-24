@@ -6,9 +6,11 @@
     "dev": "pnpm --filter @apps/web dev",
     "build": "pnpm -r build",
     "typecheck": "pnpm -r typecheck",
+    "deps:check": "pnpm audit --audit-level=moderate",
     "lint": "echo \"(placeholder)\" && exit 0"
   },
   "devDependencies": {
+    "@types/node": "^18.16.19",
     "autocannon": "8.0.0"
   }
 }
