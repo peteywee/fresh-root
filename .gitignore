@@ -1,45 +1,32 @@
-# Standard Python/Docker/Node ignores
-# Customize or remove entries you don't want
-
-# Byte-compiled / optimized / DLL files
-__pycache__/
-*.py[cod]
-*.class
-
-# Distribution / packaging
-build/
-dist/
-*.egg-info/
-
-# Virtual environments
-venv/
-env/
-.venv/
-
-# VS Code
-.vscode/
-
-# Node
+# deps/build
 node_modules/
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
+.npm/
+.pnpm-store/
+.next/
+dist/
+out/
+coverage/
+.playwright/
 
-# macOS
-.DS_Store
-
-# Logs
-*.log
-
-# Editor swap files
-*~
-
-# Local environment files
+# env (keep examples only)
 .env
-.env.local
+.env.*
+!.env.example
 
-# Docker
-docker-compose.override.yml
+# firebase/emulators
+.firebase/
+firebase-debug.log
+firestore-debug.log
+ui-debug.log
+functions/.runtimeconfig.json
 
-# GitHub Actions runtime files
-.github/workflows/*.local
+# editors
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# local-only areas (notes, temp)
+_local/
+notes/
+scripts-local/
