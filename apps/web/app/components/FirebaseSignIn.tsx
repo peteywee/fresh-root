@@ -15,10 +15,11 @@ export default function FirebaseSignIn() {
     const ui = new firebaseui.auth.AuthUI(auth)
 
     ui.start(containerRef.current!, {
+      // Use provider IDs as strings to avoid SDK namespace/type differences.
+      // See FirebaseUI docs for provider id strings.
       signInOptions: [
-        // Add providers you want to support; placeholder uses Email
-        firebaseui.auth.AnonymousAuthProvider?.PROVIDER_ID,
-        firebaseui.auth.EmailAuthProvider?.PROVIDER_ID
+        'anonymous',
+        'email'
       ],
       signInSuccessUrl: '/',
       tosUrl: '/',
