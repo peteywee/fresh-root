@@ -13,7 +13,7 @@ A modern, production-ready Progressive Web App (PWA) for staff scheduling, built
 
 ## Project Structure
 
-```
+```text
 fresh-root/
 ├── apps/
 │   └── web/                 # Next.js web application

@@ -166,7 +166,7 @@ function useCreateItem() {
 
 API routes follow Next.js App Router conventions:
 
-```
+```text
 apps/web/app/api/
 ├── _shared/
 │   └── validation.ts    # Shared validation utilities
@@ -174,7 +174,7 @@ apps/web/app/api/
 │   └── route.ts         # GET /api/health
 └── items/
     └── route.ts         # GET/POST /api/items
-```
+```json
 
 ### Creating API Routes
 
