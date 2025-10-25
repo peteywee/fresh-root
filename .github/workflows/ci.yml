@@ -15,8 +15,27 @@ jobs:
           cache: 'pnpm'
       - run: corepack enable
       - run: pnpm -v
-  - run: pnpm install --frozen-lockfile
-  - run: pnpm deps:check || echo "deps:check script missing, skipping"
-      - run: pnpm -r typecheck
-      - run: pnpm -r lint
-      - run: pnpm -r build
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm deps:check || echo "deps:check script missing, skipping"
+      
+      # Run tests
+      - name: Run tests
+        run: pnpm -r test --run
+      
+      # Type checking
+      - name: Type check
+        run: pnpm -r typecheck
+      
+      # Linting
+      - name: Lint
+        run: pnpm -r lint
+      
+      # Build
+      - name: Build
+        run: pnpm -r build
+      
+      # Upload test coverage (if available)
+      - name: Test coverage
+        if: success()
+        run: pnpm -r test:coverage || echo "Coverage not available"
+        continue-on-error: true

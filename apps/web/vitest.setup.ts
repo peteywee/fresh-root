@@ -1,6 +1,11 @@
 import '@testing-library/jest-dom/vitest'
 import { cleanup } from '@testing-library/react'
-import { afterEach } from 'vitest'
+import { afterEach, vi } from 'vitest'
+
+// Make vi globally available
+declare global {
+  const vi: typeof import('vitest')['vi']
+}
 
 // Cleanup after each test
 afterEach(() => {

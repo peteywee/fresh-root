@@ -7,10 +7,9 @@
     "build": "pnpm -r build",
     "typecheck": "pnpm -r typecheck",
     "deps:check": "pnpm audit --audit-level=moderate",
-    "lint": "echo \"(placeholder)\" && exit 0",
+    "lint": "pnpm -r lint",
     "test": "vitest --run",
     "test:ui": "vitest --ui",
-    "test:rules": "jest --config ./jest.rules.config.js --run",
     "test:e2e": "playwright test",
     "test:coverage": "vitest --coverage",
     "sim:auth": "pnpm dlx tsx tools/sim/auth_sim.mts"
