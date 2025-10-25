@@ -1,0 +1,22 @@
+{
+  "servers": {
+    "filetag": {
+      "type": "stdio",
+      "command": "node",
+      "args": ["${workspaceFolder}/mcp/filetag-server.mjs"],
+      "envFile": "${workspaceFolder}/.env"
+    }
+  },
+  "inputs": []
+}
+{
+  "servers": {
+    "filetag": {
+      "type": "stdio",
+      "command": "node",
+      "args": ["${workspaceFolder}/mcp/filetag-server-enhanced.mjs"],
+      "envFile": "${workspaceFolder}/.env"
+    }
+  },
+  "inputs": []
+}

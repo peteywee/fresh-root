@@ -9,15 +9,15 @@ function getVersion(cmd) {
   }
 }
 
-const nodev = process.version;
-const pnpmv = getVersion('pnpm --version');
+const nodeVersion = process.version;
+const pnpmVersion = getVersion('pnpm --version');
 
-if (!semver.satisfies(semver.coerce(nodev), '>=20.0.0')) {
-  console.error(`❌ Node ${nodev} not supported. Use Node >=20.`);
+if (!semver.satisfies(semver.coerce(nodeVersion), '>=20.0.0')) {
+  console.error(`❌ Node ${nodeVersion} not supported. Use Node >=20.`);
   process.exit(1);
 }
-if (!pnpmv || !semver.satisfies(semver.coerce(pnpmv), '>=9.0.0')) {
-  console.error(`❌ pnpm ${pnpmv || 'not found'} not supported. Install pnpm >=9.`);
+if (!pnpmVersion || !semver.satisfies(semver.coerce(pnpmVersion), '>=9.0.0')) {
+  console.error(`❌ pnpm ${pnpmVersion || 'not found'} not supported. Install pnpm >=9.`);
   process.exit(1);
 }
-console.log(`✅ Node ${nodev} / pnpm ${pnpmv} OK`);
+console.log(`✅ Node ${nodeVersion} / pnpm ${pnpmVersion} OK`);
