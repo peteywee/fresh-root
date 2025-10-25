@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 const { spawnSync } = require('child_process');
+const semver = require('semver');
 
 function run(cmd) {
   const p = spawnSync(cmd[0], cmd.slice(1), { encoding: 'utf-8' });
@@ -16,7 +17,7 @@ try {
 
 const offenders = [];
 for (const pkg of outdated) {
-  if (pkg.current && pkg.latest && pkg.current !== pkg.latest && !pkg.isWorkspacePeer) {
+  if (pkg.current && pkg.latest && semver.lt(pkg.current, pkg.latest) && pkg.isWorkspacePeer !== true) {
     offenders.push(`${pkg.name}@${pkg.current} → ${pkg.latest} (${pkg.location})`);
   }
 }

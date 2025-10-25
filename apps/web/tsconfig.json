@@ -7,7 +7,8 @@
       "DOM"
     ],
     "types": [
-      "node"
+      "node",
+      "vitest/globals"
     ],
     "allowJs": true,
     "noEmit": true,
@@ -22,9 +23,13 @@
   "include": [
     "app",
     "next-env.d.ts",
-    ".next/types/**/*.ts"
+    ".next/types/**/*.ts",
+    "vitest.d.ts"
   ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "**/__tests__/**",
+    "**/*.test.ts",
+    "**/*.test.tsx"
   ]
 }
