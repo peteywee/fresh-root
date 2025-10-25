@@ -26,15 +26,18 @@ export function middleware(request: NextRequest) {
 
   // Content Security Policy (adjust based on your needs)
   // Note: This is a basic CSP. You may need to adjust it for your specific requirements
+  const nonce = Buffer.from(crypto.randomUUID()).toString('base64')
   const csp = [
     "default-src 'self'",
-    "script-src 'self' 'unsafe-inline' 'unsafe-eval'", // Adjust for Next.js
-    "style-src 'self' 'unsafe-inline'",
+    `script-src 'self' 'nonce-${nonce}' 'strict-dynamic'`,
+    "style-src 'self' 'unsafe-inline'", // Consider tightening this as well
     "img-src 'self' data: https:",
     "font-src 'self' data:",
     "connect-src 'self' https://firebaseapp.com https://*.firebaseio.com https://*.googleapis.com",
     "frame-ancestors 'self'",
   ].join('; ')
+
+  response.headers.set('x-nonce', nonce) // Pass nonce to be used in script tags
   
   response.headers.set('Content-Security-Policy', csp)
 
