@@ -7,12 +7,11 @@
     "build": "pnpm -r build",
     "typecheck": "pnpm -r typecheck",
     "deps:check": "pnpm audit --audit-level=moderate",
-    "lint": "echo \"(placeholder)\" && exit 0",
-    "test": "echo \"(placeholder - vitest not configured)\" && exit 0",
-    "test:ui": "echo \"(placeholder - vitest not configured)\" && exit 0",
-    "test:rules": "echo \"(placeholder - jest not configured)\" && exit 0",
-    "test:e2e": "echo \"(placeholder - playwright not configured)\" && exit 0",
-    "test:coverage": "echo \"(placeholder - vitest not configured)\" && exit 0",
+    "lint": "pnpm -r lint",
+    "test": "pnpm test:rules && vitest --run",
+    "test:ui": "vitest --ui",
+    "test:e2e": "playwright test",
+    "test:coverage": "vitest --coverage",
     "sim:auth": "pnpm dlx tsx tools/sim/auth_sim.mts"
   },
   "devDependencies": {
