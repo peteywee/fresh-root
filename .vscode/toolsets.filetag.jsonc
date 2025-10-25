@@ -1,0 +1,12 @@
+{
+  "filetag": {
+    "tools": [
+      "filetag.scan",
+      "filetag.report",
+      "filetag.analyze",
+      "filetag.clearCache"
+    ],
+    "description": "Workspace analysis (smart scan, report, analyze, cache)",
+    "icon": "tools"
+  }
+}
