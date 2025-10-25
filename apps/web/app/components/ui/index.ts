@@ -10,3 +10,6 @@ export type { InputProps, TextareaProps } from './Input'
 
 export { Spinner, Loading } from './Loading'
 export type { SpinnerProps, LoadingProps } from './Loading'
+
+export { Alert } from './Alert'
+export type { AlertProps } from './Alert'
