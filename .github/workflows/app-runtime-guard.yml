@@ -35,6 +35,7 @@ jobs:
             '^apps/web/lib(/|$)'
             '^packages/types(/|$)'
             '^public(/|$)'
+            '^\\.mcp.json$'
             '^.github/workflows/app-runtime-guard.yml$'
           )
           ALLOW_RE="$(IFS='|'; echo "${ALLOW[*]}")"
