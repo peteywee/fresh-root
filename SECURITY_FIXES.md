@@ -69,7 +69,7 @@ For CI pipelines using these tools:
 1. **auth_sim.mts**: Always set `SEED` environment variable for deterministic results:
    ```yaml
    - name: Run auth simulation
-     run: SEED=42 pnpm dlx tsx tools/sim/auth_sim.mts
+     run: pnpm dlx tsx tools/sim/auth_sim.mts
      env:
        SEED: 42
    ```
