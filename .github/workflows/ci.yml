@@ -1,41 +1,23 @@
 name: ci
 on:
-  pull_request:
-    branches: [ develop, main ]
-  push:
-    branches: [ develop ]
+  push: { branches: [develop, main] }
+  pull_request: { branches: [develop, main] }
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v3
+        with: { version: 9 }
       - uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: 20
           cache: 'pnpm'
-      - run: corepack enable
-      - run: pnpm -v
-      - run: pnpm install --frozen-lockfile
-      - run: pnpm deps:check || echo "deps:check script missing, skipping"
-      
-      # Run tests
-      - name: Run tests
-        run: pnpm -r test --run
-      
-      # Type checking
-      - name: Type check
-        run: pnpm -r typecheck
-      
-      # Linting
-      - name: Lint
-        run: pnpm -r lint
-      
-      # Build
-      - name: Build
-        run: pnpm -r build
-      
-      # Upload test coverage (if available)
-      - name: Test coverage
-        if: success()
-        run: pnpm -r test:coverage || echo "Coverage not available"
-        continue-on-error: true
+      - run: pnpm -w install --frozen-lockfile
+      - run: pnpm -w run typecheck
+      - run: pnpm -w run lint
+      - run: pnpm -w run test
+      - run: pnpm -w run test:rules
+      - run: pnpm -w run test:e2e
+      - run: pnpm -w run build
