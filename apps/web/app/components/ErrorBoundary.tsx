@@ -104,12 +104,12 @@ function DefaultErrorFallback({ error, reset }: FallbackProps) {
           >
             Try again
           </button>
-          <button
-            onClick={() => window.location.href = '/'}
-            className="flex-1 px-4 py-2 bg-gray-200 text-gray-900 rounded-md hover:bg-gray-300 transition-colors"
+          <a
+            href="/"
+            className="flex-1 text-center px-4 py-2 bg-gray-200 text-gray-900 rounded-md hover:bg-gray-300 transition-colors"
           >
             Go home
-          </button>
+          </a>
         </div>
       </div>
     </div>
