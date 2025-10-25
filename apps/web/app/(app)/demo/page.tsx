@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useCallback } from 'react'
 import { Button, Card, Input, Textarea, Loading, Spinner, Alert } from '../../components/ui'
 
 /**
@@ -23,6 +23,18 @@ export default function DemoPage() {
       setShowAlert(true)
     }, 2000)
   }
+
+  const handleNameChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData(prev => ({ ...prev, name: e.target.value }))
+  }, [])
+
+  const handleEmailChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData(prev => ({ ...prev, email: e.target.value }))
+  }, [])
+
+  const handleMessageChange = useCallback((e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setFormData(prev => ({ ...prev, message: e.target.value }))
+  }, [])
 
   return (
     <div className="min-h-screen bg-gray-50 p-8">
@@ -88,7 +100,7 @@ export default function DemoPage() {
               label="Name"
               placeholder="Enter your name"
               value={formData.name}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, name: e.target.value })}
+              onChange={handleNameChange}
               fullWidth
               helperText="This field is required"
             />
@@ -98,7 +110,7 @@ export default function DemoPage() {
               type="email"
               placeholder="you@example.com"
               value={formData.email}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, email: e.target.value })}
+              onChange={handleEmailChange}
               fullWidth
             />
 
@@ -107,7 +119,7 @@ export default function DemoPage() {
               placeholder="Enter your message"
               rows={4}
               value={formData.message}
-              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setFormData({ ...formData, message: e.target.value })}
+              onChange={handleMessageChange}
               fullWidth
             />
 
