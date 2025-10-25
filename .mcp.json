@@ -3,14 +3,14 @@
     "github/github-mcp-server": {
       "type": "http",
       "url": "https://api.githubcopilot.com/mcp/",
-      "gallery": "https://api.mcp.github.com/2025-09-15/v0/servers/ab12cd34-5678-90ef-1234-567890abcdef",
+"gallery": "${env:GITHUB_MCP_GALLERY_URL}",
       "version": "0.13.0"
     },
     "chromedevtools/chrome-devtools-mcp": {
       "type": "stdio",
       "command": "npx",
       "args": [
-        "chrome-devtools-mcp@latest",
+        "chrome-devtools-mcp@0.0.1-seed",
         "--browserUrl",
         "${input:browser_url}",
         "--headless",
