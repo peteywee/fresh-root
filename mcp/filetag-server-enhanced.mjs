@@ -26,6 +26,53 @@ const TEXT_EXTS = new Set([
   ".json",".md",".yml",".yaml",".css",".scss",".html",".txt",".xml",".sh",".ps1"
 ]);
 
+// Files that should never have their contents read due to security concerns
+const SENSITIVE_FILES = new Set([
+  ".env",
+  ".env.local",
+  ".env.development",
+  ".env.production",
+  ".env.test",
+  "id_rsa",
+  "id_dsa",
+  "id_ecdsa",
+  "id_ed25519",
+  ".pem",
+  ".key",
+  ".p12",
+  ".pfx",
+  "credentials.json",
+  "serviceAccountKey.json",
+  "firebase-adminsdk",
+  "secrets",
+  ".npmrc",
+  ".pypirc"
+]);
+
+function isSensitiveFile(filePath) {
+  const basename = path.basename(filePath);
+  const lower = basename.toLowerCase();
+  
+  // Check exact matches
+  if (SENSITIVE_FILES.has(basename) || SENSITIVE_FILES.has(lower)) {
+    return true;
+  }
+  
+  // Check partial matches for patterns
+  for (const pattern of SENSITIVE_FILES) {
+    if (lower.includes(pattern) || basename.includes(pattern)) {
+      return true;
+    }
+  }
+  
+  // Check for common secret file patterns
+  if (lower.match(/\.(pem|key|p12|pfx|crt|cer)$/)) {
+    return true;
+  }
+  
+  return false;
+}
+
 async function walk(dir, ignore = []) {
   const out = [];
   const q = [dir];
@@ -120,11 +167,16 @@ server.registerTool(
       totalBytes += stat.size;
 
       if (samples.length < 12) {
-        try {
-          const buf = await fs.readFile(f, { encoding: "utf8" });
-          samples.push({ file: path.relative(base, f), first200: buf.slice(0, 200) });
-        } catch {
-          samples.push({ file: path.relative(base, f) });
+        // Skip reading contents of sensitive files to prevent information disclosure
+        if (isSensitiveFile(f)) {
+          samples.push({ file: path.relative(base, f), note: "Content omitted (sensitive file)" });
+        } else {
+          try {
+            const buf = await fs.readFile(f, { encoding: "utf8" });
+            samples.push({ file: path.relative(base, f), first200: buf.slice(0, 200) });
+          } catch {
+            samples.push({ file: path.relative(base, f) });
+          }
         }
       }
     }
