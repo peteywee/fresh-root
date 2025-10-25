@@ -7,10 +7,20 @@
     "build": "pnpm -r build",
     "typecheck": "pnpm -r typecheck",
     "deps:check": "pnpm audit --audit-level=moderate",
-    "lint": "echo \"(placeholder)\" && exit 0"
+    "lint": "echo \"(placeholder)\" && exit 0",
+    "test": "vitest --run",
+    "test:ui": "vitest --ui",
+    "test:rules": "jest --config ./jest.rules.config.js --run",
+    "test:e2e": "playwright test",
+    "test:coverage": "vitest --coverage"
   },
   "devDependencies": {
     "@types/node": "^18.16.19",
     "autocannon": "8.0.0"
+  }
+  ,"pnpm": {
+    "overrides": {
+      "undici": "5.29.0"
+    }
   }
 }
