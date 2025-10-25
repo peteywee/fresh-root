@@ -12,7 +12,8 @@
     "test:ui": "vitest --ui",
     "test:rules": "jest --config ./jest.rules.config.js --run",
     "test:e2e": "playwright test",
-    "test:coverage": "vitest --coverage"
+    "test:coverage": "vitest --coverage",
+    "sim:auth": "pnpm dlx tsx tools/sim/auth_sim.mts"
   },
   "devDependencies": {
     "@types/node": "^18.16.19",
@@ -22,5 +23,8 @@
     "overrides": {
       "undici": "5.29.0"
     }
+  },
+  "overrides": {
+    "undici": "5.29.0"
   }
 }
