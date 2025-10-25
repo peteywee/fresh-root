@@ -27,6 +27,7 @@ export function middleware(request: NextRequest) {
   // Content Security Policy (adjust based on your needs)
   // Note: This is a basic CSP. You may need to adjust it for your specific requirements
   const nonce = Buffer.from(crypto.randomUUID()).toString('base64')
+  const nonce = Buffer.from(crypto.randomUUID()).toString('base64')
   const csp = [
     "default-src 'self'",
     `script-src 'self' 'nonce-${nonce}' 'strict-dynamic'`,
@@ -36,6 +37,8 @@ export function middleware(request: NextRequest) {
     "connect-src 'self' https://firebaseapp.com https://*.firebaseio.com https://*.googleapis.com",
     "frame-ancestors 'self'",
   ].join('; ')
+
+  response.headers.set('x-nonce', nonce) // Pass nonce to be used in script tags
 
   response.headers.set('x-nonce', nonce) // Pass nonce to be used in script tags
   
