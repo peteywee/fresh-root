@@ -1,5 +1,51 @@
 name: ci
 on:
+  pull_request:
+    branches: [ main ]
+  push:
+    branches: [ main ]
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup pnpm (latest)
+        uses: pnpm/action-setup@v3
+        with:
+          version: latest
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
+      - name: Install (frozen lockfile)
+        run: pnpm install --frozen-lockfile
+
+      - name: Verify lockfile exists
+        run: pnpm ci:verify-lock
+
+      - name: Fail on unmet/peer deps
+        run: pnpm ci:check-peers
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Typecheck
+        run: pnpm typecheck
+
+      - name: Unit/Integration (Jest)
+        run: pnpm test
+
+      - name: Build
+        run: pnpm build
+
+      - name: E2E (Jest + Playwright)
+        run: pnpm e2e
+name: ci
+on:
   push: { branches: [develop, main] }
   pull_request: {}
 

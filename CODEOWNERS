@@ -1,0 +1,14 @@
+Code ownership
+
+
+                    @peteywee   # Patrick Craven
+
+
+
+Sensitive areas
+/docs/*                   @peteywee
+firestore.rules           @peteywee
+storage.rules             @peteywee
+apps/web/**               @peteywee
+functions/**              @peteywee
+packages/**               @peteywee

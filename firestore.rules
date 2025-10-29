@@ -58,6 +58,21 @@ service cloud.firestore {
         }
       }
 
+      // Messages: Managers publish messages for members; members can read and write receipts.
+      match /messages/{messageId} {
+        allow read: if isMember(orgId);
+        allow create: if isAdmin(orgId);
+        allow update: if false; // messages are immutable once published
+        allow delete: if isAdmin(orgId);
+      }
+
+      match /receipts/{receiptId} {
+        allow create: if isSignedIn() && request.resource.data.userId == request.auth.uid;
+        allow read: if isSignedIn() && (request.auth.uid == resource.data.userId || isAdmin(orgId));
+        allow update: if isSignedIn() && request.auth.uid == resource.data.userId;
+        allow delete: if isAdmin(orgId);
+      }
+
       match /attendance_records/{recordId} {
         allow read: if (isMember(orgId) && resource.data.userId == request.auth.uid) || isAdmin(orgId);
         allow create: if isSignedIn() && request.resource.data.userId == request.auth.uid;

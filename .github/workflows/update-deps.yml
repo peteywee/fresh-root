@@ -1,0 +1,40 @@
+name: update-deps
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 9 * * 1' # weekly, Mondays 09:00 UTC
+jobs:
+  bump:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v3
+        with:
+          version: latest
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
+      - name: Install
+        run: pnpm install
+
+      - name: Update to latest (recursive, interactive-less)
+        run: pnpm -r up -Lri
+
+      - name: Rebuild
+        run: pnpm -r build || true
+
+      - name: Create PR
+        uses: peter-evans/create-pull-request@v6
+        with:
+          branch: chore/auto-bump-deps
+          title: "chore: weekly auto-bump dependencies"
+          commit-message: "chore: auto-bump deps via pnpm -r up -Lri"
+          body: |
+            Automated dependency update. Please review CI.
+          labels: chore, dependencies
