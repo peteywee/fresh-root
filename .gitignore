@@ -35,3 +35,7 @@ TODO.md
 
 # TypeScript incremental and tsbuildinfo files
 **/tsconfig.tsbuildinfo
+
+# Workspace local config
+*.code-workspace
+fresh-root-10.code-workspace
