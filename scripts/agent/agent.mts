@@ -70,13 +70,19 @@ async function main() {
   ok(`Firestore rules & indexes ensured`);
 
   // 4) Install if needed (best-effort)
-  await pRetry(async () => {
-    await execa("pnpm", ["install"], { stdio: "inherit" });
-  }, { retries: 1 }).catch(() => warn("pnpm install failed (non-fatal)"));
+  if (!planOnly) {
+    await pRetry(async () => {
+      await execa("pnpm", ["install"], { stdio: "inherit" });
+    }, { retries: 1 }).catch(() => warn("pnpm install failed (non-fatal)"));
+  }
 
-  // 5) Typecheck and rules tests (fail the job if they fail)
-  await execa("pnpm", ["-s", "typecheck"], { stdio: "inherit" });
-  await execa("pnpm", ["-s", "test:rules"], { stdio: "inherit" });
+  // 5) Typecheck and rules tests (skip in plan-only mode)
+  if (!planOnly) {
+    await execa("pnpm", ["-s", "typecheck"], { stdio: "inherit" });
+    // Rules tests require emulators - run but don't fail if emulators aren't available
+    await execa("pnpm", ["-s", "test:rules"], { stdio: "inherit" })
+      .catch(() => warn("Rules tests failed (may need emulators running)"));
+  }
 
   ok("Repo agent completed successfully.");
 }

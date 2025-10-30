@@ -65,7 +65,7 @@ jobs:
           GITHUB_REPOSITORY: ${{ github.repository }}
         run: |
           set -euo pipefail
-          node --enable-source-maps ./dist/agent/agent.cjs \
+          node --enable-source-maps ./dist/agent/agent.mjs \
             --issue "$ISSUE_NUMBER" \
             $( [ "$AGENT_FORCE" = "true" ] && echo "--force" ) \
             $( [ "$AGENT_PLAN_ONLY" = "true" ] && echo "--plan-only" )

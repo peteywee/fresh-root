@@ -22,7 +22,7 @@
   "scripts": {
     "prepare": "husky install || true",
     "build:agent": "tsc -p scripts/agent/tsconfig.json",
-    "run:agent": "node --enable-source-maps ./dist/agent/agent.cjs",
+    "run:agent": "node --enable-source-maps ./dist/agent/agent.mjs",
     "lint": "pnpm -w eslint .",
     "format": "pnpm -w prettier --write .",
     "typecheck": "tsc --build",
