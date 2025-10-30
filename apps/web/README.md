@@ -2,6 +2,42 @@
 
 The main web application for Fresh Schedules, built with Next.js 16 and React 18.
 
+## Architecture Overview
+
+This is a **server-first** Next.js 14+ App Router application:
+
+### Server-First Principles
+
+1. **Data Access**: All privileged data access happens on the server
+   - Server Components fetch data directly from Firestore/APIs
+   - Server Actions handle mutations and state changes
+   - Client components never directly write to Firestore for privileged operations
+
+2. **RBAC Enforcement**: Role-based access control is enforced at multiple layers
+   - Server-side: Primary enforcement in Server Actions and API Routes
+   - Firestore Rules: Secondary enforcement as a security backstop
+   - Client-side: UI controls for user experience (not security)
+
+3. **Caching Strategy**: Leverages Next.js ISR and tag-based revalidation
+   - Read-heavy pages use ISR for performance
+   - Server-side cache utilities with tag-based invalidation
+   - Targeted cache revalidation after writes
+
+### Authentication
+
+Supports multiple authentication flows:
+- Google Sign-In (redirect/popup with fallbacks)
+- Email Link (magic link) authentication
+- Session management via secure HTTP-only cookies
+- Minimal session endpoint for token validation
+
+### Security
+
+- ID tokens verified server-side on every privileged operation
+- Manager-level permissions enforced for sensitive operations
+- Org-scoped data access prevents enumeration attacks
+- Centralized error reporting with safe user-facing messages
+
 ## Tech Stack
 
 - **Framework**: Next.js 16 (App Router)
