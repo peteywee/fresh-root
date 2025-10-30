@@ -34,7 +34,7 @@ try {
 } catch (err) {
   // In dev this will surface useful messages but won't crash the server build.
   // Consumers should still ensure they set the NEXT_PUBLIC_FIREBASE_* vars.
-  // eslint-disable-next-line no-console
+   
   console.warn('Firebase env validation failed:', err)
 }
 
@@ -45,7 +45,7 @@ export const firebaseApp = ((): ReturnType<typeof getApp> | undefined => {
   // In development, if validation failed, provide a harmless fallback config so the
   // client can initialize Firebase for local dev UI/testing without requiring secrets.
   if (!cfg && process.env.NODE_ENV === 'development') {
-    // eslint-disable-next-line no-console
+     
     console.warn('Firebase env vars not set; using development fallback config for local testing')
     cfg = {
       apiKey: 'fake-api-key',

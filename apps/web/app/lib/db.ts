@@ -1,6 +1,5 @@
 // Server-first Firestore read helpers with cache tags.
 // NOTE: Keep this file importable by server components only.
-import { ENV } from "./env";
 import { initializeApp } from "firebase/app";
 import {
   collection,
@@ -13,7 +12,9 @@ import {
   orderBy,
   limit
 } from "firebase/firestore";
+
 import { cached } from "./cache";
+import { ENV } from "./env";
 
 const app = initializeApp({
   apiKey: ENV.NEXT_PUBLIC_FIREBASE_API_KEY,

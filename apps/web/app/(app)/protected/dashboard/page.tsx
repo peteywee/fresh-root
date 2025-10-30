@@ -1,10 +1,11 @@
 "use client";
 
 import React, { useCallback, useState } from 'react';
-import ProtectedRoute from '../../../components/ProtectedRoute';
+
 import { publishSchedule } from '../../../../src/lib/api/schedules';
-import MonthView from '../../../components/MonthView';
 import Inbox from '../../../components/Inbox';
+import MonthView from '../../../components/MonthView';
+import ProtectedRoute from '../../../components/ProtectedRoute';
 
 const DashboardPage = React.memo(() => {
   const [busy, setBusy] = useState(false);

@@ -1,6 +1,7 @@
 import { z } from 'zod';
-import { parseJson, badRequest, serverError, ok } from '../_shared/validation';
+
 import { verifyIdToken, adminDb, isManagerClaims, adminSdk } from '../../../src/lib/firebase.server';
+import { parseJson, badRequest, serverError, ok } from '../_shared/validation';
 
 const PublishSchema = z.object({
   scheduleId: z.string().min(1),

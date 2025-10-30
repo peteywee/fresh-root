@@ -1,7 +1,7 @@
 'use client'
-import React, { useEffect, useRef } from 'react'
 import { getAuth } from 'firebase/auth'
 import * as firebaseui from 'firebaseui'
+import React, { useEffect, useRef } from 'react'
 import 'firebaseui/dist/firebaseui.css'
 
 // This component mounts FirebaseUI's sign-in widget into a container.

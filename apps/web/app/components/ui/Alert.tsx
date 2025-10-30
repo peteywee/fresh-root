@@ -1,7 +1,7 @@
 'use client'
 
-import React from 'react'
 import { clsx } from 'clsx'
+import React from 'react'
 
 export interface AlertProps {
   type?: 'success' | 'error' | 'warning' | 'info'

@@ -1,6 +1,7 @@
-import { describe, it, expect } from 'vitest';
-import { middleware } from '../middleware';
 import { NextRequest } from 'next/server';
+import { describe, it, expect } from 'vitest';
+
+import { middleware } from '../middleware';
 
 function req(path: string, cookie?: string) {
   return new NextRequest(`http://localhost${path}`, {
