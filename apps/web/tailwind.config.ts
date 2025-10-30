@@ -2,7 +2,11 @@ import type { Config } from 'tailwindcss'
 
 const config: Config = {
   darkMode: ['class'],
-  content: ['./app/**/*.{ts,tsx}', './components/**/*.{ts,tsx}'],
+  content: [
+    './app/**/*.{ts,tsx}', 
+    './components/**/*.{ts,tsx}',
+    '../../packages/ui/src/**/*.{ts,tsx}'
+  ],
   theme: {
     extend: {
       colors: {
@@ -25,6 +29,7 @@ const config: Config = {
       },
       borderRadius: {
         xl: '0.75rem',
+        '2xl': '1rem'
       },
       animation: {
         'fade-in': 'fadeIn 0.5s ease-in-out',

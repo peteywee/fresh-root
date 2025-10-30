@@ -4,6 +4,7 @@ import Providers from './providers'
 import { ErrorProvider } from '../src/lib/error/ErrorContext'
 import RegisterServiceWorker from './RegisterServiceWorker'
 import { randomUUID } from 'crypto'
+import { inter } from './fonts'
 
 export const metadata = { title: 'Fresh Schedules' }
 
@@ -43,15 +44,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   ].join('; ')
 
   return (
-    <html lang="en" className="dark">
+    <html lang="en" className={`dark ${inter.variable}`}>
       <head>
         {/* Per-request CSP with nonce for inline scripts */}
         <meta httpEquiv="Content-Security-Policy" content={csp} />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
       </head>
-      <body className="animate-fade-in">
+      <body className="animate-fade-in font-sans">
         <ErrorProvider>
           <Providers>
             {/* Register service worker safely in browsers (no-op in webviews) */}
