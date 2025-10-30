@@ -7,9 +7,17 @@ import { doc, getDoc, setDoc } from 'firebase/firestore';
 let testEnv: RulesTestEnvironment;
 
 beforeAll(async () => {
-  // Load rules from repository root
+  // Load rules from repository root - use process.cwd() which points to package directory
+  // then navigate up to repo root
   const rulesPath = join(process.cwd(), '../../firestore.rules');
-  const firestoreOptions: any = { 
+  
+  interface FirestoreOptions {
+    rules: string;
+    host: string;
+    port: number;
+  }
+  
+  const firestoreOptions: FirestoreOptions = { 
     rules: readFileSync(rulesPath, 'utf8'),
     host: 'localhost',
     port: 8080
@@ -37,25 +45,14 @@ afterAll(async () => {
 describe('RBAC Rules Tests', () => {
   describe('Organization Access', () => {
     test('org_owner can write to org', async () => {
-      const membershipId = 'u1_orgA';
-      const ctx = testEnv.authenticatedContext('u1', {});
+      const ctx = testEnv.authenticatedContext('u1', { 
+        orgId: 'orgA', 
+        roles: ['org_owner'] 
+      });
       const db = ctx.firestore();
       
-      // First create membership
-      await setDoc(doc(db, `memberships/${membershipId}`), {
-        uid: 'u1',
-        orgId: 'orgA',
-        roles: ['owner']
-      });
-      
-      // Then org document should be writable by owner via custom claims
-      const ctxWithClaims = testEnv.authenticatedContext('u1', { 
-        orgId: 'orgA', 
-        roles: ['owner'] 
-      });
-      const dbClaims = ctxWithClaims.firestore();
       await expect(
-        setDoc(doc(dbClaims, 'orgs/orgA'), { name: 'Org A' })
+        setDoc(doc(db, 'orgs/orgA'), { name: 'Org A' })
       ).resolves.toBeUndefined();
     });
 
@@ -182,7 +179,7 @@ describe('RBAC Rules Tests', () => {
       ).resolves.toBeUndefined();
     });
 
-    test('staff cannot create membership', async () => {
+    test('staff cannot create membership for others', async () => {
       const ctx = testEnv.authenticatedContext('u11', { 
         orgId: 'orgF', 
         roles: ['staff'] 
@@ -195,6 +192,21 @@ describe('RBAC Rules Tests', () => {
           roles: ['staff']
         })
       ).rejects.toThrow();
+    });
+    
+    test('user can create their own membership', async () => {
+      const ctx = testEnv.authenticatedContext('u11b', { 
+        orgId: 'orgF', 
+        roles: ['staff'] 
+      });
+      const db = ctx.firestore();
+      await expect(
+        setDoc(doc(db, 'memberships/u11b_orgF'), {
+          uid: 'u11b',
+          orgId: 'orgF',
+          roles: ['staff']
+        })
+      ).resolves.toBeUndefined();
     });
   });
 
