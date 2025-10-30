@@ -14,11 +14,6 @@ const LoginForm = React.memo(() => {
   const [error, setError] = useState<string>('')
   const [sending, setSending] = useState(false)
 
-  const actionCodeSettings = useMemo(() => {
-    // Not used directly anymore; kept as a stable object to avoid re-renders
-    return {}
-  }, [])
-
   // If the page loads with an email link, complete sign-in
   useEffect(() => {
     if (typeof window === 'undefined') return
