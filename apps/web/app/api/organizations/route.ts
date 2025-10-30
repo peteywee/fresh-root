@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest } from 'next/server'
 import { z } from 'zod'
 
 import { parseJson, badRequest, ok, serverError } from '../_shared/validation'
@@ -11,24 +11,11 @@ const CreateOrgSchema = z.object({
   size: z.enum(['1-10', '11-50', '51-200', '201-500', '500+']).optional(),
 })
 
-// Schema for updating an organization
-const UpdateOrgSchema = z.object({
-  name: z.string().min(1).max(100).optional(),
-  description: z.string().max(500).optional(),
-  industry: z.string().optional(),
-  size: z.enum(['1-10', '11-50', '51-200', '201-500', '500+']).optional(),
-  settings: z.object({
-    allowPublicSchedules: z.boolean().optional(),
-    requireShiftApproval: z.boolean().optional(),
-    defaultShiftDuration: z.number().positive().optional(),
-  }).optional(),
-})
-
 /**
  * GET /api/organizations
  * List organizations the current user belongs to
  */
-export async function GET(request: NextRequest) {
+export async function GET(_request: NextRequest) {
   try {
     // In production, fetch from database based on authenticated user
     const organizations = [
@@ -51,7 +38,7 @@ export async function GET(request: NextRequest) {
     ]
 
     return ok({ organizations })
-  } catch (error) {
+  } catch (_error) {
     return serverError('Failed to fetch organizations')
   }
 }
@@ -78,7 +65,7 @@ export async function POST(request: NextRequest) {
     }
 
     return ok(newOrg)
-  } catch (error) {
+  } catch (_error) {
     return serverError('Failed to create organization')
   }
 }
