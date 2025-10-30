@@ -6,7 +6,8 @@
 "main": "dist/index.js",
 "scripts": {
   "build": "tsc -p tsconfig.json",
-  "dev": "node --loader ts-node/esm src/index.ts"
+  "dev": "node --loader ts-node/esm src/index.ts",
+  "lint": "eslint src --max-warnings=0"
 },
 "dependencies": {
   "fast-glob": "^3.3.2",

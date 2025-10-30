@@ -13,8 +13,13 @@
     "paths": {
       "@fresh-schedules/types": ["packages/types/src/index.ts"]
     }
+    ,
+    "typeRoots": ["./types", "./node_modules/@types"]
   }
   ,
+  "include": [
+    "types/**/*.d.ts"
+  ],
   "exclude": [
     "node_modules",
     "tests",

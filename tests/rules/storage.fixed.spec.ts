@@ -50,15 +50,15 @@ afterAll(async () => {
 
 describe('storage rules', () => {
   it('user writes only to own folder', async () => {
-  // Explicitly pass token claims to ensure request.auth.uid and token are available in rules
-  const ctx = storageTestEnv.authenticatedContext('alice', { uid: 'alice', email: 'alice@test.local' } as Record<string, unknown>);
+  // Explicitly pass token claims; 'uid' is deprecated in mock token claims. Use 'sub' or omit.
+  const ctx = storageTestEnv.authenticatedContext('alice', { sub: 'alice', email: 'alice@test.local' } as Record<string, unknown>);
     const storage = ctx.storage();
     const ref = storage.ref('organizations/orgA/alice/file.txt');
     await expect(ref.putString('hi')).resolves.toBeTruthy();
   });
 
   it('user cannot write to another user\'s folder', async () => {
-  const ctx = storageTestEnv.authenticatedContext('alice', { uid: 'alice', email: 'alice@test.local' } as Record<string, unknown>);
+  const ctx = storageTestEnv.authenticatedContext('alice', { sub: 'alice', email: 'alice@test.local' } as Record<string, unknown>);
     const storage = ctx.storage();
     const ref = storage.ref('organizations/orgA/bob/file.txt');
     await expect(ref.putString('hi')).rejects.toBeDefined();

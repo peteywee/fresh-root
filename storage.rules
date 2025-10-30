@@ -1,18 +1,16 @@
 rules_version = '2';
 service firebase.storage {
   match /b/{bucket}/o {
-    match /organizations/{orgId}/{userId}/{fileName} {
-      allow write: if request.auth != null && request.auth.uid == userId;
-      allow read: if request.auth != null && (
-        (request.auth.token.roles[orgId] in ['org_owner','org_admin','admin','manager']) ||
-        request.auth.uid == userId
-      );
-    }
+    // Per-user objects under their org namespace
+    match /organizations/{orgId}/{uid}/{fileName} {
+      // User can write to their own path
+      allow write: if request.auth != null && request.auth.uid == uid;
 
-    // Organization assets (e.g., published schedules, images) - managers may upload
-    match /organizations/{orgId}/assets/{allPaths=**} {
-      allow read: if request.auth != null && request.auth.token.roles[orgId] in ['org_owner','org_admin','admin','manager','member'];
-      allow write: if request.auth != null && request.auth.token.roles[orgId] in ['org_owner','org_admin','admin','manager'];
+      // Read allowed for the user and for managers of that org
+      allow read: if request.auth != null && (
+        request.auth.uid == uid ||
+        (request.auth.token.roles[orgId] in ['manager','admin','org_admin','org_owner'])
+      );
     }
   }
 }
