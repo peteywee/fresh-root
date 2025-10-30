@@ -29,7 +29,7 @@
     "api:dev": "pnpm --filter @fresh-schedules/api dev",
     "api:test": "pnpm --filter @fresh-schedules/api test",
     "api:build": "pnpm --filter @fresh-schedules/api build",
-    "api:docker:build": "docker build -t fresh-schedules-api:latest services/api",
+    "api:docker:build": "docker build -f services/api/Dockerfile -t fresh-schedules-api:latest .",
     "api:docker:run": "docker run --rm -p 4000:4000 -e FIREBASE_PROJECT_ID=demo-fresh fresh-schedules-api:latest",
     "test": "vitest run --passWithNoTests",
   "test:rules": "vitest run --globals --dir tests/rules --reporter=dot",
