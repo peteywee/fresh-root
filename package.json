@@ -11,27 +11,30 @@
   "scripts": {
     "dev": "pnpm --filter @apps/web dev",
     "build": "pnpm -r build",
-    "typecheck": "pnpm -r typecheck",
+    "typecheck": "node ./scripts/run-typecheck.js",
     "lint": "pnpm -r lint",
-  "test:rules": "pnpm dlx firebase-tools emulators:exec -- \"jest --config=jest.rules.config.js\"",
-  "test": "pnpm test:rules && pnpm --filter @apps/web test",
+    "test:rules": "firebase emulators:exec -- \"jest --config=jest.rules.config.js\"",
+    "test": "pnpm test:rules && pnpm --filter @apps/web test",
     "sim:auth": "pnpm dlx tsx tools/sim/auth_sim.mts",
     "ci:verify-lock": "test -f pnpm-lock.yaml",
     "ci:check-peers": "pnpm -r ls --depth -1 | (grep -i unmet && exit 1 || echo OK)",
     "dev:web": "pnpm --filter @apps/web dev"
   },
   "dependencies": {
+    "firebase-admin": "^12.0.0",
     "zod": "^3.24.1"
   },
   "devDependencies": {
-    "@types/node": "^18.16.19",
-    "typescript": "^5.6.3",
-    "jest": "^29.7.0",
-    "ts-jest": "^29.2.5",
-    "@types/jest": "^29.5.14",
     "@firebase/rules-unit-testing": "^5.0.0",
-    "eslint": "^9.38.0",
+    "@types/jest": "^29.5.14",
+    "@types/node": "^18.16.19",
     "@typescript-eslint/eslint-plugin": "^8.0.0",
-    "@typescript-eslint/parser": "^8.0.0"
+    "@typescript-eslint/parser": "^8.0.0",
+    "eslint": "^9.38.0",
+    "firebase-tools": "^14.0.0",
+    "jest": "^29.7.0",
+    "playwright": "^1.56.1",
+    "ts-jest": "^29.2.5",
+    "typescript": "^5.6.3"
   }
 }

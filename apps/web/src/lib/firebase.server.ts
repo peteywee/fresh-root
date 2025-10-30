@@ -1,4 +1,4 @@
-import admin from 'firebase-admin';
+import * as admin from 'firebase-admin';
 
 // Initialize Firebase Admin SDK if not already initialized.
 function initAdmin() {
@@ -25,25 +25,34 @@ function initAdmin() {
     // If admin cannot initialize (e.g., no credentials), export undefined handles.
     // Callers should handle missing admin (e.g., in local dev use client-side flows/emulators).
     console.warn('Firebase Admin SDK not initialized (missing credentials).');
-    return null as unknown as admin.app.App;
+    return null as unknown as AdminAppType | null;
   }
 }
 
-const app = initAdmin();
-export const adminSdk = admin;
-export const adminAuth = app ? admin.auth() : undefined;
-export const adminDb = app ? admin.firestore() : undefined;
-export const adminStorage = app ? admin.storage() : undefined;
+// Infer admin types from runtime helpers to avoid referencing an ambient `admin` namespace
+type AdminAppType = ReturnType<typeof admin.app>;
+type AdminAuthType = ReturnType<typeof admin.auth>;
+type AdminFirestoreType = ReturnType<typeof admin.firestore>;
+type AdminStorageType = ReturnType<typeof admin.storage>;
 
-export async function verifyIdToken(token?: string) {
+const app: AdminAppType | null = initAdmin();
+export const adminSdk = admin;
+export const adminAuth: AdminAuthType | undefined = app ? admin.auth() : undefined;
+export const adminDb: AdminFirestoreType | undefined = app ? admin.firestore() : undefined;
+export const adminStorage: AdminStorageType | undefined = app ? admin.storage() : undefined;
+
+type VerifyIdTokenReturn = AdminAuthType extends { verifyIdToken(token: string): Promise<infer R> } ? R : unknown;
+export async function verifyIdToken(token?: string): Promise<VerifyIdTokenReturn> {
   if (!adminAuth) throw new Error('Admin auth not initialized');
   if (!token) throw new Error('No token');
   return adminAuth.verifyIdToken(token);
 }
 
-export function isManagerClaims(claims: admin.auth.DecodedIdToken, orgId?: string) {
+export function isManagerClaims(claims: VerifyIdTokenReturn | Record<string, unknown> | undefined, orgId?: string): boolean {
   if (!claims) return false;
-  if (claims.role === 'manager' || (claims as unknown as Record<string, unknown>)['custom:role'] === 'manager') return true;
+  const c = claims as unknown as Record<string, unknown>;
+  if (typeof c['role'] === 'string' && c['role'] === 'manager') return true;
+  if (typeof c['custom:role'] === 'string' && c['custom:role'] === 'manager') return true;
   // check namespaced roles object
   const roles = (claims as unknown as Record<string, unknown>)['roles'] as Record<string, string> | undefined
     || (claims as unknown as Record<string, unknown>)['rolesMap'] as Record<string, string> | undefined

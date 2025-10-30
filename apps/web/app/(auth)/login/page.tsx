@@ -4,7 +4,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { isSignInWithEmailLink } from 'firebase/auth'
 import Link from 'next/link'
-import { loginWithGoogleSmart, sendEmailLinkRobust } from '../../../src/lib/auth-helpers'
+import { loginWithGoogleSmart, sendEmailLinkRobust, startGooglePopup, establishServerSession } from '../../../src/lib/auth-helpers'
 
 export default function LoginPage() {
   const router = useRouter()
@@ -38,13 +38,16 @@ export default function LoginPage() {
     e.preventDefault()
     setError('')
     setStatus('')
-    if (!email) {
+    const trimmed = email.trim()
+    if (!trimmed) {
       setError('Please enter your email')
       return
     }
     try {
       setSending(true)
-      await sendEmailLinkRobust(email)
+      // Optimistically show sending status so user sees activity immediately
+      setStatus('Sending magic link…')
+      await sendEmailLinkRobust(trimmed)
       setStatus('Magic link sent! Check your email and click the link to finish signing in.')
     } catch (e: any) {
       console.error(e)
@@ -58,9 +61,22 @@ export default function LoginPage() {
     setError('')
     setStatus('')
     try {
-      await loginWithGoogleSmart()
-      // For popup flow this will run; for redirect it won’t until the redirect completes
-      router.replace('/auth/callback')
+      // Start the popup synchronously to avoid popup blockers, then await completion.
+      // When the popup flow completes the returned credential will include a user
+      // so we can establish a server session immediately and redirect home.
+      const cred = await startGooglePopup()
+      try {
+        // Try to establish a server session directly after popup sign-in.
+        await establishServerSession()
+        router.replace('/')
+        return
+      } catch (sessErr) {
+        // If session creation fails, fall back to callback route to retry the
+        // session creation flow there.
+        console.warn('Session creation after popup failed, falling back to callback', sessErr)
+        router.replace('/auth/callback')
+        return
+      }
     } catch (e: any) {
       console.error(e)
       setError(e?.message || 'Google sign-in failed')
@@ -85,6 +101,7 @@ export default function LoginPage() {
         <button
           type="button"
           onClick={onGoogle}
+          aria-label="Continue with Google"
           className="w-full rounded bg-black text-white py-2 text-sm hover:opacity-90"
         >
           Continue with Google

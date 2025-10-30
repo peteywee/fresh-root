@@ -1,5 +1,4 @@
-import { NextResponse } from 'next/server'
-import type { NextRequest } from 'next/server'
+// NOTE: middleware convention deprecated; file retained as a no-op marker.
 
 /**
  * Middleware to add security headers to all responses
@@ -11,41 +10,15 @@ import type { NextRequest } from 'next/server'
  * - Referrer-Policy: Controls referrer information
  * - Permissions-Policy: Controls browser features
  */
-export function middleware(request: NextRequest) {
-  const response = NextResponse.next()
+// The middleware file convention is deprecated in newer Next.js versions and
+// the project uses a different approach for request-time headers now. Keep
+// this file only as an explicit no-op marker to avoid the old behavior.
 
-  // Security headers
-  response.headers.set('X-DNS-Prefetch-Control', 'on')
-  response.headers.set('X-Frame-Options', 'SAMEORIGIN')
-  response.headers.set('X-Content-Type-Options', 'nosniff')
-  response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin')
-  response.headers.set(
-    'Permissions-Policy',
-    'camera=(), microphone=(), geolocation=()'
-  )
+// If you need per-request dynamic CSP (nonce-based) preserve that logic in
+// a server component (e.g. inject a <meta httpEquiv="Content-Security-Policy" />
+// in `app/layout.tsx`) and set static security headers via `next.config.js`.
 
-  // Content Security Policy (adjust based on your needs)
-  // Note: This is a basic CSP. You may need to adjust it for your specific requirements
-  const nonce = Buffer.from(crypto.randomUUID()).toString('base64')
-  const nonce = Buffer.from(crypto.randomUUID()).toString('base64')
-  const csp = [
-    "default-src 'self'",
-    `script-src 'self' 'nonce-${nonce}' 'strict-dynamic'`,
-    "style-src 'self' 'unsafe-inline'", // Consider tightening this as well
-    "img-src 'self' data: https:",
-    "font-src 'self' data:",
-    "connect-src 'self' https://firebaseapp.com https://*.firebaseio.com https://*.googleapis.com",
-    "frame-ancestors 'self'",
-  ].join('; ')
-
-  response.headers.set('x-nonce', nonce) // Pass nonce to be used in script tags
-
-  response.headers.set('x-nonce', nonce) // Pass nonce to be used in script tags
-  
-  response.headers.set('Content-Security-Policy', csp)
-
-  return response
-}
+export const middleware = undefined
 
 // Configure which routes should use the middleware
 export const config = {

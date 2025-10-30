@@ -37,6 +37,14 @@ export async function loginWithGoogleSmart() {
   }
 }
 
+// Open the Google popup immediately from a user gesture. This calls the SDK synchronously
+// so browsers will treat it as a user-initiated popup and not block it.
+export function startGooglePopup(): Promise<unknown> {
+  const provider = new GoogleAuthProvider();
+  // call signInWithPopup synchronously; the returned Promise can be awaited by the caller.
+  return signInWithPopup(auth!, provider) as Promise<unknown>;
+}
+
 export async function completeGoogleRedirectOnce(): Promise<boolean> {
   try {
     const res = await getRedirectResult(auth!);
@@ -49,7 +57,8 @@ export async function completeGoogleRedirectOnce(): Promise<boolean> {
 
 export async function sendEmailLinkRobust(email: string) {
   try {
-    await sendSignInLinkToEmail(auth!, email, actionCodeSettings);
+    if (!auth) throw new Error('Firebase auth is not initialized. Ensure NEXT_PUBLIC_FIREBASE_* env vars are set or enable emulators.');
+    await sendSignInLinkToEmail(auth, email, actionCodeSettings);
     await setPendingEmail(email);
   } catch (e) {
     reportError(e as any, { phase: 'send_email_link' });

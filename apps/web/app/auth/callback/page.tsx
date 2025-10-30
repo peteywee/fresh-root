@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { completeEmailLinkIfPresent, completeGoogleRedirectOnce, establishServerSession } from '../../../src/lib/auth-helpers';
+import { auth } from '../../../app/lib/firebaseClient';
 import { reportError } from '../../../src/lib/error/reporting';
 
 export default function AuthCallbackPage() {
@@ -17,7 +18,11 @@ export default function AuthCallbackPage() {
         // Complete either email link or Google redirect if applicable
         const completedEmail = await completeEmailLinkIfPresent();
         const completedGoogle = await completeGoogleRedirectOnce();
-        if (completedEmail || completedGoogle) {
+        // For popup flows, getRedirectResult() is not used — the main window will already have
+        // an authenticated user. If either redirect/email completed OR a current user exists,
+        // establish the server session.
+        const hasCurrentUser = !!(auth && auth.currentUser);
+        if (completedEmail || completedGoogle || hasCurrentUser) {
           await establishServerSession();
         }
         if (!mounted) return;
