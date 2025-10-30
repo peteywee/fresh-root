@@ -49,7 +49,7 @@ jobs:
           cache: 'pnpm'
 
       - name: Install deps
-        run: pnpm install --frozen-lockfile || pnpm install
+        run: pnpm install --prefer-frozen-lockfile
 
       - name: Build agent (tsc)
         run: pnpm -s run -w build:agent

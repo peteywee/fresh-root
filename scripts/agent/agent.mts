@@ -71,12 +71,14 @@ async function main() {
 
   // 4) Install if needed (best-effort)
   await pRetry(async () => {
-    await execa("pnpm", ["install", "--no-frozen-lockfile"], { stdio: "inherit" });
+    await execa("pnpm", ["install", "--prefer-frozen-lockfile"], { stdio: "inherit" });
   }, { retries: 1 }).catch(() => warn("pnpm install failed (non-fatal)"));
 
-  // 5) Typecheck and rules tests (fail the job if they fail)
+  // 5) Typecheck (always run, even in plan mode)
+  await execa("pnpm", ["-s", "typecheck"], { stdio: "inherit" });
+
+  // 6) Rules tests (skip in plan mode as they require full setup)
   if (!planOnly) {
-    await execa("pnpm", ["-s", "typecheck"], { stdio: "inherit" });
     await execa("pnpm", ["-s", "test:rules"], { stdio: "inherit" });
   }
 
