@@ -18,7 +18,7 @@
 // a server component (e.g. inject a <meta httpEquiv="Content-Security-Policy" />
 // in `app/layout.tsx`) and set static security headers via `next.config.js`.
 
-export const middleware = undefined
+export const proxy = undefined
 
 // Configure which routes should use the middleware
 export const config = {
