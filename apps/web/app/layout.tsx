@@ -1,64 +1,50 @@
-import './globals.css'
-import { randomUUID } from 'crypto'
-import React from 'react'
+import "./globals.css"; // ensure this exists; keep Tailwind base/utilities here
+import { inter } from "./fonts";
+import type { Metadata, Viewport } from "next";
+import Link from "next/link";
+import Logo from "../components/Logo";
 
-import { inter } from './fonts'
-import Providers from './providers'
-import RegisterServiceWorker from './RegisterServiceWorker'
-import { ErrorProvider } from '../src/lib/error/ErrorContext'
+export const metadata: Metadata = {
+  title: "Fresh Schedules",
+  description: "Staff scheduling built for speed and control."
+};
 
-export const metadata = { title: 'Fresh Schedules' }
+export const viewport: Viewport = {
+  themeColor: "#0b0f14",
+  colorScheme: "dark light",
+  width: "device-width",
+  initialScale: 1
+};
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  // Generate a per-request nonce to allow safe inline scripts when needed.
-  // This will be embedded into the CSP meta tag so inline scripts can use
-  // the same nonce attribute.
-  const nonce = Buffer.from(randomUUID()).toString('base64')
-
-  const connectHosts = [
-    "'self'",
-    'https://*.firebaseapp.com',
-    'https://*.firebaseio.com',
-    'https://*.googleapis.com',
-    'https://accounts.google.com',
-    'https://www.googleapis.com',
-    'https://identitytoolkit.googleapis.com',
-  ]
-
-  const frameHosts = ["'self'", 'https://*.firebaseapp.com', 'https://accounts.google.com', 'https://apis.google.com']
-
-  const useEmulators = process.env.NEXT_PUBLIC_USE_EMULATORS === 'true'
-  if (useEmulators) {
-    connectHosts.push('http://localhost:9099', 'http://127.0.0.1:9099')
-    frameHosts.push('http://localhost:9099', 'http://127.0.0.1:9099')
-  }
-
-  const csp = [
-    "default-src 'self'",
-    `script-src 'self' 'nonce-${nonce}' 'strict-dynamic' https://apis.google.com`,
-    "style-src 'self' 'unsafe-inline'",
-    "img-src 'self' data: https:",
-    "font-src 'self' data:",
-    `connect-src ${connectHosts.join(' ')}`,
-    `frame-src ${frameHosts.join(' ')}`,
-    "frame-ancestors 'self'",
-  ].join('; ')
-
+  // Server layout; zero client JS here.
   return (
-    <html lang="en" className={`dark ${inter.variable}`}>
-      <head>
-        {/* Per-request CSP with nonce for inline scripts */}
-        <meta httpEquiv="Content-Security-Policy" content={csp} />
-      </head>
-      <body className="animate-fade-in font-sans">
-        <ErrorProvider>
-          <Providers>
-            {/* Register service worker safely in browsers (no-op in webviews) */}
-            <RegisterServiceWorker />
-            {children}
-          </Providers>
-        </ErrorProvider>
+    <html lang="en" className={`${inter.variable}`}>
+      <body className="min-h-screen bg-[#0b0f14] text-gray-100 antialiased">
+        <header className="sticky top-0 z-40 border-b border-neutral-900/80 bg-[#0b0f14]/80 backdrop-blur">
+          <nav className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
+            <Link prefetch href="/" className="flex items-center gap-2">
+              <Logo className="h-6 w-6" />
+              <span className="font-semibold tracking-wide">Fresh&nbsp;Schedules</span>
+            </Link>
+            <div className="flex items-center gap-4 text-sm text-gray-300">
+              <Link prefetch href="/planning" className="hover:text-white">Planning</Link>
+              <Link prefetch href="/(app)/protected/schedules" className="hover:text-white">
+                Schedules
+              </Link>
+              <Link prefetch href="/(app)/protected/dashboard" className="hover:text-white">
+                Dashboard
+              </Link>
+            </div>
+          </nav>
+        </header>
+
+        <main className="mx-auto max-w-6xl px-4 py-6">{children}</main>
+
+        <footer className="mx-auto max-w-6xl px-4 py-10 text-xs text-neutral-500">
+          <p>© {new Date().getFullYear()} Top Shelf Service LLC. All rights reserved.</p>
+        </footer>
       </body>
     </html>
-  )
+  );
 }

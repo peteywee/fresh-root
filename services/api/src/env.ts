@@ -4,7 +4,8 @@ const EnvSchema = z.object({
   PORT: z.string().default("4000"),
   FIREBASE_PROJECT_ID: z.string().min(1, "FIREBASE_PROJECT_ID required"),
   GOOGLE_APPLICATION_CREDENTIALS: z.string().optional(), // optional if auth via env vars
-  NODE_ENV: z.enum(["development","test","production"]).default("development")
+  NODE_ENV: z.enum(["development","test","production"]).default("development"),
+  REDIS_URL: z.string().optional()
 });
 
 export type Env = z.infer<typeof EnvSchema>;
