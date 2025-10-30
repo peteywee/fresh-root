@@ -1,3 +1,16 @@
+Node/Next/Pnpm
+node_modules
+.pnpm-store
+.next
+dist
+coverage
+.playwright
+test-results
+Monte Carlo outputs (not staged)
+reports/montecarlo_.json
+reports/montecarlo_.csv
+Env & local
+.env*
 # Environment & local state
 .env
 mcp/.filetag-state.json
@@ -9,7 +22,7 @@ dist/
 out/
 coverage/
 .playwright/
-
+.zencoder*
 .env
 .env.*
 !.env.example

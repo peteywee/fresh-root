@@ -1,72 +1,91 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    function isSignedIn() {
-      return request.auth != null;
-    }
-    function isUser(userId) {
-      return isSignedIn() && request.auth.uid == userId;
-    }
-    function getRole(orgId) {
-      return (request.auth.token.roles != null) ? request.auth.token.roles[orgId] : null;
-    }
-    function isAdmin(orgId) {
-      let role = getRole(orgId);
-      return role in ['org_owner','org_admin','admin','manager'];
-    }
-    function isMember(orgId) {
-      let role = getRole(orgId);
-      return role in ['org_owner','org_admin','org_member','admin','manager','member'];
+
+    function isSignedIn() { return request.auth != null; }
+    function uid() { return request.auth.uid; }
+
+    // Org membership exists in memberships/{uid}_{orgId}
+    function isOrgMember(orgId) {
+      return exists(/databases/$(database)/documents/memberships/$(uid() + "_" + orgId));
     }
 
+    // roles: ['owner','admin','manager','scheduler']
+    function hasAnyRole(orgId, roles) {
+      return isOrgMember(orgId) &&
+        get(/databases/$(database)/documents/memberships/$(uid() + "_" + orgId)).data.roles.hasAny(roles);
+    }
+
+    // Users: self only; no enumeration
     match /users/{userId} {
-      allow read: if isSignedIn();
-      allow write: if isUser(userId);
+      allow read, create, update: if isSignedIn() && userId == uid();
+      allow list: if false;
     }
 
-    match /join_tokens/{tokenId} {
-      allow read: if isSignedIn();
-      allow create: if isSignedIn() && isAdmin(request.resource.data.orgId);
-      allow delete: if isSignedIn() && isAdmin(resource.data.orgId);
-    }
-
-    match /organizations/{orgId} {
-      allow get, list: if isMember(orgId);
+    // Orgs
+    match /orgs/{orgId} {
+      allow read: if isSignedIn() && isOrgMember(orgId);
       allow create: if isSignedIn();
-      allow update: if isSignedIn() && isAdmin(orgId);
-
-      match /members/{userId} {
-        allow read: if isMember(orgId) || isUser(userId);
-        allow create: if isUser(userId);
-        allow update: if isAdmin(orgId) || isUser(userId);
-        allow delete: if isAdmin(orgId);
-      }
-
-      match /certifications/{certId} {
-        allow read: if isMember(orgId);
-        allow create: if isAdmin(orgId);
-        allow update: if isAdmin(orgId);
-        allow delete: if isAdmin(orgId);
-      }
-
-      match /schedules/{scheduleId} {
-        allow read: if isMember(orgId);
-        allow create, update, delete: if isAdmin(orgId);
-        match /shifts/{shiftId} {
-          allow read: if isMember(orgId);
-          allow create, update, delete: if isAdmin(orgId);
-        }
-      }
-
-      match /attendance_records/{recordId} {
-        allow read: if (isMember(orgId) && resource.data.userId == request.auth.uid) || isAdmin(orgId);
-        allow create: if isSignedIn() && request.resource.data.userId == request.auth.uid;
-        allow update: if isAdmin(orgId);
-      }
+      allow update, delete: if isSignedIn() && hasAnyRole(orgId, ['owner','admin','manager']);
+      allow list: if false;
     }
 
-    match /attendance_ledger/{ledgerEntryId} {
-      allow read, write: if false;
+    // Memberships: id = uid_orgId
+    match /memberships/{membershipId} {
+      allow read: if isSignedIn() && resource.data.uid == uid();
+      allow create: if isSignedIn() && request.resource.data.uid == uid();
+      allow update, delete: if false; // managed by backend
+      allow list: if false;
+    }
+
+    // Org-scoped resources
+    match /venues/{orgId}/{venueId} {
+      allow read: if isSignedIn() && isOrgMember(orgId);
+      allow write: if isSignedIn() && hasAnyRole(orgId, ['owner','admin','manager']);
+      allow list: if false;
+    }
+
+    match /zones/{orgId}/{zoneId} {
+      allow read: if isSignedIn() && isOrgMember(orgId);
+      allow write: if isSignedIn() && hasAnyRole(orgId, ['owner','admin','manager']);
+      allow list: if false;
+    }
+
+    match /positions/{orgId}/{positionId} {
+      allow read: if isSignedIn() && isOrgMember(orgId);
+      allow write: if isSignedIn() && hasAnyRole(orgId, ['owner','admin','manager']);
+      allow list: if false;
+    }
+
+    // Schedules (top-level per org)
+    match /schedules/{orgId}/{scheduleId} {
+      allow read: if isSignedIn() && isOrgMember(orgId);
+      allow write: if isSignedIn() && hasAnyRole(orgId, ['owner','admin','manager','scheduler']);
+      allow list: if false;
+    }
+
+    // Shifts under a schedule (collection group "shifts")
+    match /shifts/{orgId}/{scheduleId}/{shiftId} {
+      allow read: if isSignedIn() && isOrgMember(orgId);
+      allow write: if isSignedIn() && hasAnyRole(orgId, ['owner','admin','manager','scheduler']);
+      allow list: if false;
+    }
+
+    // Attendance
+    match /attendance_records/{orgId}/{recordId} {
+      allow read: if isSignedIn() && (isOrgMember(orgId) || resource.data.staffUid == uid());
+      allow create, update: if isSignedIn() && (
+        hasAnyRole(orgId, ['owner','admin','manager']) || request.resource.data.staffUid == uid()
+      );
+      allow delete: if false;
+      allow list: if false;
+    }
+
+    // Join tokens (non-enumerable)
+    match /join_tokens/{orgId}/{tokenId} {
+      allow get: if isSignedIn() && hasAnyRole(orgId, ['owner','admin','manager']);
+      allow create, update, delete: if isSignedIn() && hasAnyRole(orgId, ['owner','admin','manager']);
+      allow list: if false;
     }
   }
 }

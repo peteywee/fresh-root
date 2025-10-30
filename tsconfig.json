@@ -2,6 +2,7 @@
   "compilerOptions": {
     "target": "ES2022",
     "lib": ["ES2022", "DOM"],
+    "jsx": "react-jsx",
     "module": "ESNext",
     "moduleResolution": "Bundler",
     "resolveJsonModule": true,
@@ -12,5 +13,24 @@
     "paths": {
       "@fresh-schedules/types": ["packages/types/src/index.ts"]
     }
+    ,
+    "typeRoots": ["./types", "./node_modules/@types"]
   }
+  ,
+  "include": [
+    "types/**/*.d.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "tests",
+    "tests/**",
+    "scripts",
+    "scripts/**",
+    "tests/e2e/**",
+    "**/__tests__/**",
+    "**/*.spec.ts",
+    "**/*.spec.tsx",
+    "**/*.test.ts",
+    "**/*.test.tsx"
+  ]
 }

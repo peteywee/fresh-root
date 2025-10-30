@@ -18,8 +18,9 @@ export default function FirebaseSignIn() {
       // Use provider IDs as strings to avoid SDK namespace/type differences.
       // See FirebaseUI docs for provider id strings.
       signInOptions: [
-        'anonymous',
-        'email'
+        'google.com',
+        'email',
+        'anonymous'
       ],
       signInSuccessUrl: '/',
       tosUrl: '/',

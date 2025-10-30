@@ -1,13 +1,25 @@
-import { describe, it, expect, beforeAll, afterAll } from 'vitest';
+// Use Jest globals for rules tests
 import { initializeTestEnvironment, RulesTestEnvironment } from '@firebase/rules-unit-testing';
 import fs from 'fs';
 
 let testEnv: RulesTestEnvironment;
 
 beforeAll(async () => {
+  const firestoreOptions: any = { rules: fs.readFileSync('firestore.rules', 'utf8') };
+  const firestoreHost = process.env.FIRESTORE_EMULATOR_HOST || process.env.FIREBASE_FIRESTORE_EMULATOR_HOST;
+  if (firestoreHost) {
+    const [host, portStr] = firestoreHost.split(':');
+    firestoreOptions.host = host;
+    firestoreOptions.port = Number(portStr);
+  } else {
+    // Default to localhost:8080 so tests can be pointed at a running emulator without extra env setup.
+    firestoreOptions.host = 'localhost';
+    firestoreOptions.port = 8080;
+  }
+
   testEnv = await initializeTestEnvironment({
     projectId: 'fresh-schedules-dev',
-    firestore: { rules: fs.readFileSync('firestore.rules', 'utf8') }
+    firestore: firestoreOptions
   });
 });
 
