@@ -1,0 +1,22 @@
+# syntax=docker/dockerfile:1
+FROM node:20-slim AS build
+WORKDIR /app
+
+# Only copy API workspace to keep image small
+COPY services/api/package.json services/api/tsconfig.json ./services/api/
+RUN corepack enable && corepack prepare pnpm@9.0.0 --activate
+COPY pnpm-lock.yaml ./
+RUN pnpm fetch
+
+COPY services/api ./services/api
+RUN pnpm --filter @fresh-schedules/api install -r --offline && \
+    pnpm --filter @fresh-schedules/api build
+
+FROM gcr.io/distroless/nodejs20-debian12
+WORKDIR /app
+ENV NODE_ENV=production PORT=4000
+COPY --from=build /app/services/api/dist ./dist
+COPY --from=build /app/services/api/package.json ./
+USER nonroot:nonroot
+EXPOSE 4000
+CMD ["dist/index.js"]

@@ -1,13 +1,28 @@
 import express, { type Request, type Response } from "express";
 
 import { InMemoryCache } from "./cache/provider.js";
+import { RedisCache } from "./cache/redis.js";
 import { loadEnv } from "./env.js";
 import { initFirebase } from "./firebase.js";
 import { requireAuth, requireManager, sameOrgGuard } from "./rbac.js";
 
 const env = loadEnv();
 const { db } = initFirebase(env.FIREBASE_PROJECT_ID);
-const cache = new InMemoryCache();
+
+async function buildCache() {
+  const url = process.env.REDIS_URL;
+  if (url) {
+    try {
+      const cache = await RedisCache.connect(url);
+      console.log("[api] using Redis cache");
+      return cache;
+    } catch (e) {
+      console.warn("[api] Redis unavailable, falling back to in-memory cache:", e);
+    }
+  }
+  return new InMemoryCache();
+}
+const cache = await buildCache();
 
 const app = express();
 app.use(express.json());
