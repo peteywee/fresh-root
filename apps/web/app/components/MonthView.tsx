@@ -1,16 +1,56 @@
 "use client";
-import React from 'react';
+import React, { useMemo } from 'react';
 
-export default function MonthView({ month = new Date() }: { month?: Date }) {
-  // Minimal, fast-rendering month grid stub for v12 initial implementation.
-  const days = Array.from({ length: 30 }).map((_, i) => ({ day: i + 1 }));
+const MonthView = React.memo(({ month = new Date() }: { month?: Date }) => {
+  // Optimized month grid with memoization for performance
+  const days = useMemo(() => {
+    const year = month.getFullYear();
+    const monthIndex = month.getMonth();
+    const firstDay = new Date(year, monthIndex, 1);
+    const lastDay = new Date(year, monthIndex + 1, 0);
+    const daysInMonth = lastDay.getDate();
+    const startDayOfWeek = firstDay.getDay();
+
+    const daysArray = [];
+    // Add empty cells for days before the first day of the month
+    for (let i = 0; i < startDayOfWeek; i++) {
+      daysArray.push(null);
+    }
+    // Add days of the month
+    for (let day = 1; day <= daysInMonth; day++) {
+      daysArray.push(day);
+    }
+    return daysArray;
+  }, [month]);
+
   return (
-    <div className="grid grid-cols-7 gap-1 text-sm">
-      {days.map((d) => (
-        <div key={d.day} className="border rounded p-1 text-center">
-          {d.day}
-        </div>
-      ))}
+    <div className="card p-4">
+      <h3 className="text-lg font-semibold text-primary mb-4">
+        {month.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
+      </h3>
+      <div className="grid grid-cols-7 gap-2 text-sm">
+        {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
+          <div key={day} className="font-medium text-text-muted text-center py-2">
+            {day}
+          </div>
+        ))}
+        {days.map((day, index) => (
+          <div
+            key={index}
+            className={`aspect-square flex items-center justify-center rounded-lg transition-all duration-200 ${
+              day
+                ? 'bg-surface-accent hover:bg-primary/10 hover:text-primary cursor-pointer border border-surface-accent'
+                : ''
+            }`}
+          >
+            {day && <span className="font-medium">{day}</span>}
+          </div>
+        ))}
+      </div>
     </div>
   );
-}
+});
+
+MonthView.displayName = 'MonthView';
+
+export default MonthView;

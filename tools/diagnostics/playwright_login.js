@@ -3,9 +3,13 @@ const playwright = require('playwright');
 (async () => {
   const baseUrl = process.env.URL || 'http://localhost:3000';
   // If caller passed a URL that already contains a path, use it directly.
-  // Otherwise try the two likely App Router paths: /login and /auth/login.
+  // Otherwise try app root first, then two likely routes: /login and /auth/login.
   const hasPath = /^https?:\/\/.+\/.+/.test(baseUrl);
-  const candidates = hasPath ? [baseUrl] : [`${baseUrl}/login`, `${baseUrl}/auth/login`];
+  const candidates = hasPath ? [baseUrl] : [
+    `${baseUrl}/`,
+    `${baseUrl}/login`,
+    `${baseUrl}/auth/login`
+  ];
   console.log(`Starting Playwright check. Will try: ${candidates.join(', ')}`);
 
   const browser = await playwright.chromium.launch({ headless: true });
@@ -47,9 +51,9 @@ const playwright = require('playwright');
     let resp = null;
     let triedUrl = null;
     for (const t of candidates) {
-      triedUrl = t
-      resp = await page.goto(t, { waitUntil: 'domcontentloaded', timeout: 8000 }).catch(() => null);
-      if (resp && resp.status() !== 404) break;
+      triedUrl = t;
+      resp = await page.goto(t, { waitUntil: 'domcontentloaded', timeout: 10000 }).catch(() => null);
+      if (resp && resp.status() >= 200 && resp.status() < 500) break;
     }
     console.log('[main] tried URL:', triedUrl, 'status:', resp && resp.status());
 
@@ -98,6 +102,10 @@ const playwright = require('playwright');
         if (token) {
           console.error('[main] Obtained custom token; performing emulator sign-in in page');
           const initScript = `(async function(){
+            // Only proceed if we have a proper origin (avoid 'null' origin which triggers PNA/CORS issues)
+            if (!window.location || !window.location.origin || window.location.origin === 'null') {
+              return { signed: false, sessionOk: false, error: 'Invalid page origin for emulator sign-in' };
+            }
             function loadScript(src){return new Promise((res,rej)=>{const s=document.createElement('script');s.src=src;s.onload=res;s.onerror=rej;document.head.appendChild(s)})}
             await loadScript('https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js');
             await loadScript('https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js');
@@ -112,6 +120,9 @@ const playwright = require('playwright');
             if (idToken) {
               const r = await fetch('/api/session', { method: 'POST', headers: {'content-type':'application/json'}, body: JSON.stringify({ idToken }) });
               sessionOk = r.ok;
+              if (!r.ok) {
+                try { const txt = await r.text(); console.error('[main] /api/session error response:', txt); } catch {}
+              }
             }
             return { signed: !!idToken, sessionOk };
           })()`;

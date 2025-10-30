@@ -1,14 +1,16 @@
 "use client";
 
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import ProtectedRoute from '../../../components/ProtectedRoute';
 import { publishSchedule } from '../../../../src/lib/api/schedules';
+import MonthView from '../../../components/MonthView';
+import Inbox from '../../../components/Inbox';
 
-export default function DashboardPage() {
-  const [busy, setBusy] = React.useState(false);
-  const [message, setMessage] = React.useState<string | null>(null);
+const DashboardPage = React.memo(() => {
+  const [busy, setBusy] = useState(false);
+  const [message, setMessage] = useState<string | null>(null);
 
-  const onPublish = async () => {
+  const onPublish = useCallback(async () => {
     setBusy(true);
     setMessage(null);
     try {
@@ -23,38 +25,75 @@ export default function DashboardPage() {
     } finally {
       setBusy(false);
     }
-  };
+  }, []);
 
   return (
     <ProtectedRoute>
-      <main className="p-6 space-y-6">
-        <h1 className="text-2xl font-semibold">Dashboard</h1>
-        <section className="space-y-3">
-          <div className="flex items-center gap-3">
+      <main className="min-h-screen p-6 bg-gradient-to-br from-surface via-surface-card to-surface-accent animate-fade-in">
+        <div className="max-w-7xl mx-auto space-y-6">
+          <header className="text-center py-8">
+            <h1 className="text-4xl font-bold text-primary mb-2">Dashboard</h1>
+            <p className="text-text-muted text-lg">Manage your schedules and stay updated</p>
+          </header>
+
+          <section className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8">
             <button
               onClick={onPublish}
               disabled={busy}
-              className="rounded px-3 py-2 bg-blue-600 text-white"
+              className="btn-primary px-6 py-3 text-lg font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {busy ? 'Publishing…' : 'Publish Schedule'}
+              {busy ? (
+                <div className="flex items-center gap-2">
+                  <div className="loading-skeleton w-5 h-5 rounded-full"></div>
+                  Publishing…
+                </div>
+              ) : (
+                '🚀 Publish Schedule'
+              )}
             </button>
-            {message && <div className="text-sm text-gray-700">{message}</div>}
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="border p-3 rounded">
-              <h2 className="font-medium">Month View</h2>
-              <div className="mt-2">
-                {/* lightweight MonthView stub */}
-                <div className="text-sm text-gray-600">Month view placeholder (rendering optimized)</div>
+            {message && (
+              <div className={`text-sm px-4 py-2 rounded-lg animate-slide-up ${
+                message.includes('successfully')
+                  ? 'bg-secondary/10 text-secondary border border-secondary'
+                  : 'bg-red-500/10 text-red-400 border border-red-500'
+              }`}>
+                {message}
+              </div>
+            )}
+          </section>
+
+          <section className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div className="animate-slide-up" style={{ animationDelay: '0.1s' }}>
+              <MonthView />
+            </div>
+            <div className="animate-slide-up" style={{ animationDelay: '0.2s' }}>
+              <Inbox />
+            </div>
+          </section>
+
+          <section className="card p-6 text-center animate-slide-up" style={{ animationDelay: '0.3s' }}>
+            <h2 className="text-2xl font-semibold text-primary mb-4">Quick Stats</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div className="bg-surface-accent rounded-lg p-4">
+                <div className="text-2xl font-bold text-primary">12</div>
+                <div className="text-text-muted">Active Schedules</div>
+              </div>
+              <div className="bg-surface-accent rounded-lg p-4">
+                <div className="text-2xl font-bold text-secondary">5</div>
+                <div className="text-text-muted">Pending Tasks</div>
+              </div>
+              <div className="bg-surface-accent rounded-lg p-4">
+                <div className="text-2xl font-bold text-primary">98%</div>
+                <div className="text-text-muted">Uptime</div>
               </div>
             </div>
-            <div className="border p-3 rounded">
-              <h2 className="font-medium">Inbox</h2>
-              <div className="mt-2 text-sm text-gray-600">Messages & receipts placeholder</div>
-            </div>
-          </div>
-        </section>
+          </section>
+        </div>
       </main>
     </ProtectedRoute>
   );
-}
+});
+
+DashboardPage.displayName = 'DashboardPage';
+
+export default DashboardPage;
