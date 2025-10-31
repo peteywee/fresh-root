@@ -39,7 +39,7 @@ export async function GET(_request: NextRequest) {
     }
 
     return ok(userProfile)
-  } catch (_error) {
+  } catch {
     return serverError('Failed to fetch user profile')
   }
 }
@@ -66,7 +66,7 @@ export async function PATCH(request: NextRequest) {
     }
 
     return ok(updatedProfile)
-  } catch (_error) {
+  } catch {
     return serverError('Failed to update profile')
   }
 }

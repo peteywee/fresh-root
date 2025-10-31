@@ -5,7 +5,7 @@ import { middleware } from '../middleware';
 
 function req(path: string, cookie?: string) {
   return new NextRequest(`http://localhost${path}`, {
-    headers: cookie ? { cookie } as any : undefined,
+    headers: cookie ? ({ cookie } as HeadersInit) : undefined,
   });
 }
 

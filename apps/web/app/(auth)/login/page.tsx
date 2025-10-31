@@ -21,7 +21,8 @@ const LoginForm = React.memo(() => {
 
     const href = window.location.href
     const code = params?.get('oobCode') || ''
-    const looksLikeEmailLink = isSignInWithEmailLink({} as any, href) || !!code
+    // Check if URL looks like an email link (has mode and oobCode params)
+    const looksLikeEmailLink = (href.includes('mode=') && href.includes('oobCode=')) || !!code
     if (looksLikeEmailLink) {
       // Delegate handling to the dedicated callback route for consistency
       router.replace('/auth/callback')
@@ -45,9 +46,10 @@ const LoginForm = React.memo(() => {
       setStatus('Sending magic link…')
       await sendEmailLinkRobust(trimmed)
       setStatus('Magic link sent! Check your email and click the link to finish signing in.')
-    } catch (e: any) {
+    } catch (e) {
       console.error(e)
-      setError(e?.message || 'Failed to send magic link')
+      const errorMessage = e instanceof Error ? e.message : 'Failed to send magic link'
+      setError(errorMessage)
     } finally {
       setSending(false)
     }
@@ -73,9 +75,10 @@ const LoginForm = React.memo(() => {
         router.replace('/auth/callback')
         return
       }
-    } catch (e: any) {
+    } catch (e) {
       console.error(e)
-      setError(e?.message || 'Google sign-in failed')
+      const errorMessage = e instanceof Error ? e.message : 'Google sign-in failed'
+      setError(errorMessage)
     }
   }, [router])
 
