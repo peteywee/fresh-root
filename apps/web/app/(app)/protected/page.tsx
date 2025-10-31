@@ -38,7 +38,7 @@ export default function ProtectedDemoPage() {
         </form>
         {createItem.isError && (
           <div className="text-sm text-red-700">
-            {(createItem.error as any)?.message ?? 'Error'}
+            {createItem.error instanceof Error ? createItem.error.message : 'Error'}
           </div>
         )}
         {createItem.isSuccess && (

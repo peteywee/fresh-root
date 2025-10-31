@@ -1,10 +1,12 @@
 /// <reference types="vitest" />
 /// <reference types="@testing-library/jest-dom" />
 
-import { TestingLibraryMatchers } from '@testing-library/jest-dom/matchers'
+import type { TestingLibraryMatchers } from '@testing-library/jest-dom/matchers'
 import type { Assertion, AsymmetricMatchersContaining } from 'vitest'
 
 declare module 'vitest' {
-  interface Assertion<T = any> extends jest.Matchers<void, T>, TestingLibraryMatchers<T, void> {}
-  interface AsymmetricMatchersContaining extends jest.Matchers<void, any> {}
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  interface Assertion<T = any> extends TestingLibraryMatchers<T, void> {}
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  interface AsymmetricMatchersContaining extends TestingLibraryMatchers<any, void> {}
 }

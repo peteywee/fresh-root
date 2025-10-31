@@ -4,7 +4,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import * as helpers from '../lib/auth-helpers';
 
 vi.mock('firebase/auth', async () => {
-  const actual = await vi.importActual<any>('firebase/auth');
+  const actual = await vi.importActual<typeof import('firebase/auth')>('firebase/auth');
   return {
     ...actual,
     GoogleAuthProvider: vi.fn(),
@@ -19,16 +19,28 @@ vi.mock('firebase/auth', async () => {
 
 beforeEach(() => {
   vi.resetAllMocks();
-  (global as any).window = { location: { href: 'http://localhost/auth/callback', origin: 'http://localhost' }, localStorage: new Map() };
-  (window.localStorage as any).getItem = (k: string) => (window.localStorage as any).get(k);
-  (window.localStorage as any).setItem = (k: string, v: string) => (window.localStorage as any).set(k, v);
-  (window.localStorage as any).removeItem = (k: string) => (window.localStorage as any).delete(k);
+  const mockStorage = new Map<string, string>();
+  // Create a mock localStorage that implements Storage interface
+  const mockLocalStorage = {
+    getItem: (k: string) => mockStorage.get(k) ?? null,
+    setItem: (k: string, v: string) => mockStorage.set(k, v),
+    removeItem: (k: string) => mockStorage.delete(k),
+    clear: () => mockStorage.clear(),
+    key: (index: number) => Array.from(mockStorage.keys())[index] ?? null,
+    get length() { return mockStorage.size; },
+  };
+  
+  global.window = { 
+    location: { href: 'http://localhost/auth/callback', origin: 'http://localhost' } as Location, 
+    localStorage: mockLocalStorage as Storage,
+    prompt: vi.fn(),
+  } as unknown as Window & typeof globalThis;
 });
 
 describe('Google popup -> redirect fallback', () => {
   it('falls back to redirect on popup error', async () => {
-    (firebaseAuth.signInWithPopup as any).mockRejectedValue(new Error('popup blocked'));
-    (firebaseAuth.signInWithRedirect as any).mockResolvedValue(undefined);
+    vi.mocked(firebaseAuth.signInWithPopup).mockRejectedValue(new Error('popup blocked'));
+    vi.mocked(firebaseAuth.signInWithRedirect).mockResolvedValue(undefined);
     await expect(helpers.loginWithGooglePopupOrRedirect()).resolves.toBeUndefined();
     expect(firebaseAuth.signInWithRedirect).toHaveBeenCalled();
   });
@@ -36,8 +48,14 @@ describe('Google popup -> redirect fallback', () => {
 
 describe('Email link completion', () => {
   it('prompts for email if not stored and link present', async () => {
-    (firebaseAuth.isSignInWithEmailLink as any).mockReturnValue(true);
-    (firebaseAuth.signInWithEmailLink as any).mockResolvedValue({});
+    vi.mocked(firebaseAuth.isSignInWithEmailLink).mockReturnValue(true);
+    // Mock minimal UserCredential structure
+    const mockUserCredential = {
+      user: { uid: 'test-user', email: 'user@test.com' },
+      providerId: null,
+      operationType: 'signIn' as const,
+    };
+    vi.mocked(firebaseAuth.signInWithEmailLink).mockResolvedValue(mockUserCredential as never);
     vi.spyOn(window, 'prompt').mockReturnValue('user@test.com');
     await expect(helpers.completeEmailLinkIfPresent()).resolves.toBe(true);
   });
@@ -45,7 +63,15 @@ describe('Email link completion', () => {
 
 describe('Google redirect completion idempotent', () => {
   it('swallows duplicate getRedirectResult calls', async () => {
-    (firebaseAuth.getRedirectResult as any).mockResolvedValueOnce({ user: { uid: '1' } }).mockResolvedValueOnce(null);
+    // Mock minimal UserCredential structure for first call
+    const mockUserCredential = {
+      user: { uid: '1', email: 'test@example.com' },
+      providerId: null,
+      operationType: 'signIn' as const,
+    };
+    vi.mocked(firebaseAuth.getRedirectResult)
+      .mockResolvedValueOnce(mockUserCredential as never)
+      .mockResolvedValueOnce(null);
     const first = await helpers.completeGoogleRedirectOnce();
     const second = await helpers.completeGoogleRedirectOnce();
     expect(first).toBe(true);
