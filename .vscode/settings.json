@@ -45,7 +45,6 @@
   "eslint.useFlatConfig": false,
   "eslint.enable": true,
   "eslint.validate": ["javascript", "javascriptreact", "typescript", "typescriptreact"],
-  "eslint.packageManager": "pnpm",
   "eslint.codeActionsOnSave.rules": null,
 
   // ---------- Format & Save ----------
@@ -60,14 +59,8 @@
   // ---------- Testing (Vitest) ----------
   "vitest.commandLine": "pnpm vitest -- --watch=false",
   "vitest.runAllTestsOnLaunch": false,
-  "vitest.include": [
-    "**/*.{test,spec}.{ts,tsx,js,jsx}"
-  ],
-  "vitest.exclude": [
-    "**/dist/**",
-    "**/.next/**",
-    "**/node_modules/**"
-  ],
+  "vitest.include": ["**/*.{test,spec}.{ts,tsx,js,jsx}"],
+  "vitest.exclude": ["**/dist/**", "**/.next/**", "**/node_modules/**"],
   "testing.automaticallyOpenPeekView": "never",
   "testing.openTesting": "never",
   "testing.saveBeforeTest": "allEditorsInActiveGroup",

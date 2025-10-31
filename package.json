@@ -22,12 +22,11 @@
   "scripts": {
     "build:agent": "tsc -p scripts/agent/tsconfig.json",
     "run:agent": "node --enable-source-maps ./dist/agent/agent.mjs",
+    "check:deps": "pnpm -w install --frozen-lockfile 2>&1 | tee /dev/stderr | grep -qiE '(deprecated|Issues with peer dependencies found)' && exit 1 || exit 0",
     "lint": "eslint \"apps/**/src/**/*.{ts,tsx,js,jsx}\" \"apps/**/app/**/*.{ts,tsx,js,jsx}\" \"packages/**/src/**/*.{ts,tsx,js,jsx}\" \"functions/src/**/*.{ts,tsx,js,jsx}\" --max-warnings 200",
     "format": "pnpm -w prettier --write .",
     "typecheck": "tsc --build",
     "build": "pnpm -r --filter @apps/web... run build && pnpm -r --filter @packages/* run build && pnpm --filter functions run build",
-    "build:agent": "tsc -p scripts/agent/tsconfig.json",
-    "run:agent": "node --enable-source-maps ./dist/agent/agent.mjs",
     "emu": "firebase emulators:start --import ./.emulator-data --export-on-exit",
     "emu:firestore": "firebase emulators:start --only firestore",
     "api:dev": "pnpm --filter @fresh-schedules/api dev",
