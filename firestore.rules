@@ -44,6 +44,45 @@ service cloud.firestore {
       allow create: if isSignedIn();
       allow update, delete: if isSignedIn() && (hasAnyRole(['org_owner']) || hasAnyRoleLegacy(orgId, ['owner','admin','manager']));
       allow list: if false;
+
+      // Schedules as subcollection under orgs
+      match /schedules/{scheduleId} {
+        allow read: if isSignedIn() && (sameOrg(orgId) || isOrgMember(orgId));
+        allow write: if isSignedIn() && ((hasAnyRole(['org_owner','admin','manager','scheduler']) && sameOrg(orgId)) || hasAnyRoleLegacy(orgId, ['owner','admin','manager','scheduler']));
+      }
+
+      // Shifts as subcollection under schedules
+      match /schedules/{scheduleId}/shifts/{shiftId} {
+        allow read: if isSignedIn() && (sameOrg(orgId) || isOrgMember(orgId));
+        allow write: if isSignedIn() && ((hasAnyRole(['org_owner','admin','manager','scheduler']) && sameOrg(orgId)) || hasAnyRoleLegacy(orgId, ['owner','admin','manager','scheduler']));
+      }
+
+      // Join tokens - managers can create/manage
+      match /join_tokens/{tokenId} {
+        allow read: if isSignedIn() && (sameOrg(orgId) || isOrgMember(orgId));
+        allow write: if isSignedIn() && ((isManager() && sameOrg(orgId)) || hasAnyRoleLegacy(orgId, ['owner','admin','manager']));
+      }
+    }
+
+    // Organizations (alternate path) - alias for orgs
+    match /organizations/{orgId} {
+      allow read: if isSignedIn() && (sameOrg(orgId) || isOrgMember(orgId));
+      allow create: if isSignedIn();
+      allow update, delete: if isSignedIn() && (hasAnyRole(['org_owner']) || hasAnyRoleLegacy(orgId, ['owner','admin','manager']));
+      allow list: if false;
+
+      // Messages - managers can create, all members can read
+      match /messages/{messageId} {
+        allow read: if isSignedIn() && (sameOrg(orgId) || isOrgMember(orgId));
+        allow write: if isSignedIn() && ((isManager() && sameOrg(orgId)) || hasAnyRoleLegacy(orgId, ['owner','admin','manager']));
+      }
+
+      // Receipts - members can create their own receipts only
+      match /receipts/{receiptId} {
+        allow read: if isSignedIn() && (sameOrg(orgId) || isOrgMember(orgId));
+        allow create: if isSignedIn() && (sameOrg(orgId) || isOrgMember(orgId)) && request.resource.data.userId == uid();
+        allow update, delete: if isSignedIn() && resource.data.userId == uid();
+      }
     }
 
     // Memberships: id = uid_orgId

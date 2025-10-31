@@ -5,8 +5,8 @@ import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
 import React, { useCallback, useEffect, useState, Suspense } from 'react'
 
-import { auth } from '../../lib/firebaseClient'
 import { sendEmailLinkRobust, startGooglePopup, establishServerSession } from '../../../src/lib/auth-helpers'
+import { auth } from '../../lib/firebaseClient'
 
 const LoginForm = React.memo(() => {
   const router = useRouter()
