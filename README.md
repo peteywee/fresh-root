@@ -1,6 +1,12 @@
 # Fresh Schedules
 
+**Status:** ✅ Production Ready | **Version:** 1.0.0 | **Last Updated:** October 31, 2025
+
 A modern, production-ready Progressive Web App (PWA) for staff scheduling, built with Next.js, Firebase, and a monorepo architecture using pnpm.
+
+> **📖 [Complete Technical Documentation](./docs/COMPLETE_TECHNICAL_DOCUMENTATION.md)** - Comprehensive guide with architecture, troubleshooting, and reproducibility instructions
+>
+> **🏗️ [Architecture Diagrams](./docs/ARCHITECTURE_DIAGRAMS.md)** - Visual system architecture with Mermaid diagrams
 
 ## Features
 
@@ -10,30 +16,16 @@ A modern, production-ready Progressive Web App (PWA) for staff scheduling, built
 - **Monorepo architecture**: Organized with pnpm workspaces for scalable development
 - **Type-safe**: Full TypeScript support with Zod validation
 - **Modern stack**: Next.js 16, React 18, Tailwind CSS, React Query
-
-## Project Structure
-
-```text
-fresh-root/
-├── apps/
-│   └── web/                 # Next.js web application
-│       ├── app/             # Next.js app router
-│       ├── components/      # Reusable UI components
-│       ├── lib/             # Client-side utilities
-│       └── public/          # Static assets
-├── packages/
-│   └── types/               # Shared TypeScript types
-├── firebase.json            # Firebase configuration
-├── pnpm-workspace.yaml      # Monorepo configuration
-└── tsconfig.json           # Root TypeScript config
-```
+- **CI/CD**: Automated testing, linting, and security scanning via GitHub Actions
+- **RBAC**: Role-based access control with Firestore security rules
 
 ## Quick Start
 
 ### Prerequisites
 
-- Node.js >= 20.0.0
-- pnpm >= 9.0.0
+- **Node.js** >= 20.10.0
+- **pnpm** >= 9.1.0 (installed via corepack)
+- **Git** >= 2.20
 
 ### Installation
 
@@ -43,10 +35,32 @@ fresh-root/
    corepack enable
    ```
 
-2. **Install dependencies**:
+2. **Clone and install**:
 
    ```bash
+   git clone https://github.com/peteywee/fresh-root.git
+   cd fresh-root
    pnpm install
+   ```
+
+3. **Set up environment variables**:
+
+   Create `.env.local` in `apps/web/` with your Firebase configuration:
+
+   ```env
+   NEXT_PUBLIC_FIREBASE_API_KEY=your_api_key
+   NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com
+   NEXT_PUBLIC_FIREBASE_PROJECT_ID=your_project_id
+   NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=your_project.appspot.com
+   NEXT_PUBLIC_FIREBASE_APP_ID=your_app_id
+   NEXT_PUBLIC_USE_EMULATORS=false
+   ```
+
+4. **Start development server**:
+
+   ```bash
+   pnpm dev
+   # Open http://localhost:3000
    ```
 
 3. **Set up environment variables**:
