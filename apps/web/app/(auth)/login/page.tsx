@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
 import React, { useCallback, useEffect, useState, Suspense } from 'react'
 
+import { auth } from '../../lib/firebaseClient'
 import { sendEmailLinkRobust, startGooglePopup, establishServerSession } from '../../../src/lib/auth-helpers'
 
 const LoginForm = React.memo(() => {
@@ -21,8 +22,8 @@ const LoginForm = React.memo(() => {
 
     const href = window.location.href
     const code = params?.get('oobCode') || ''
-    // Check if URL looks like an email link (has mode and oobCode params)
-    const looksLikeEmailLink = (href.includes('mode=') && href.includes('oobCode=')) || !!code
+    // Use Firebase SDK to check if this is a valid email link, falling back to URL param check
+    const looksLikeEmailLink = (auth && isSignInWithEmailLink(auth, href)) || !!code
     if (looksLikeEmailLink) {
       // Delegate handling to the dedicated callback route for consistency
       router.replace('/auth/callback')
