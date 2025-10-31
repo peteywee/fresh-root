@@ -16,8 +16,8 @@ export function middleware(req: NextRequest) {
   const PUBLIC = [/^\/onboarding/, /^\/signin/, /^\/api/, /^\/_next/, /^\/favicon\.ico$/];
   if (PUBLIC.some(rx => rx.test(pathname))) return NextResponse.next();
 
-  // TEMPORARY: Allow bypassing the guard for development
-  if (process.env.BYPASS_ONBOARDING_GUARD === "true") {
+  // TEMPORARY: Allow bypassing the guard for development only
+  if (process.env.BYPASS_ONBOARDING_GUARD === "true" && process.env.NODE_ENV === "development") {
     return NextResponse.next();
   }
 
