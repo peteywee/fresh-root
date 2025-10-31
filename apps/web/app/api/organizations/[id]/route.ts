@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest } from 'next/server'
 import { z } from 'zod'
 
 import { parseJson, badRequest, ok, serverError } from '../../_shared/validation'
@@ -44,7 +44,7 @@ export async function GET(
     }
 
     return ok(organization)
-  } catch (error) {
+  } catch (_error) {
     return serverError('Failed to fetch organization')
   }
 }
@@ -74,7 +74,7 @@ export async function PATCH(
     }
 
     return ok(updatedOrg)
-  } catch (error) {
+  } catch (_error) {
     return serverError('Failed to update organization')
   }
 }
@@ -92,7 +92,7 @@ export async function DELETE(
 
     // In production, check if user is admin and delete from database
     return ok({ message: 'Organization deleted successfully', id })
-  } catch (error) {
+  } catch (_error) {
     return serverError('Failed to delete organization')
   }
 }

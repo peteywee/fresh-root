@@ -1,7 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
 
-import * as server from '../lib/firebase.server';
-
 // Mock Admin Auth
 vi.mock('../lib/firebase.server', async () => {
   return {

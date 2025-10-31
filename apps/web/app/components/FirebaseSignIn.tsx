@@ -30,7 +30,7 @@ export default function FirebaseSignIn() {
     return () => {
       try {
         ui.delete()
-      } catch (e) {
+      } catch {
         // ignore if already deleted
       }
     }

@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest } from 'next/server'
 import { z } from 'zod'
 
 import { parseJson, badRequest, ok, serverError } from '../../_shared/validation'
@@ -19,7 +19,7 @@ const UpdateProfileSchema = z.object({
  * GET /api/users/profile
  * Get the current user's profile
  */
-export async function GET(request: NextRequest) {
+export async function GET(_request: NextRequest) {
   try {
     // In production, extract user from auth token/session
     // For now, return a mock profile
@@ -39,7 +39,7 @@ export async function GET(request: NextRequest) {
     }
 
     return ok(userProfile)
-  } catch (error) {
+  } catch (_error) {
     return serverError('Failed to fetch user profile')
   }
 }
@@ -66,7 +66,7 @@ export async function PATCH(request: NextRequest) {
     }
 
     return ok(updatedProfile)
-  } catch (error) {
+  } catch (_error) {
     return serverError('Failed to update profile')
   }
 }

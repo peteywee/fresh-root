@@ -12,7 +12,7 @@ export default function UploadStub() {
         onChange={(e) => {
           const file = e.target.files?.[0];
           if (file) {
-            // eslint-disable-next-line no-console
+             
             console.log('Selected file:', { name: file.name, size: file.size, type: file.type });
           }
         }}

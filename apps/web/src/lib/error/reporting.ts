@@ -16,7 +16,7 @@ export async function initErrorReporting() {
   mod?.init?.({ dsn });
   Sentry = mod || null;
     sentryLoaded = true;
-  } catch (e) {
+  } catch {
     // Avoid hard-crashing if package is not present — keep it optional
     // to honor "no unmet peers" policy.
     // If you want strict enforcement, add @sentry/nextjs to deps.

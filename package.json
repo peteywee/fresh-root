@@ -20,16 +20,19 @@
     "tools/*"
   ],
   "scripts": {
-    "prepare": "husky install || true",
-    "build:agent": "tsc -p scripts/agent/tsconfig.json",
-    "run:agent": "node --enable-source-maps ./dist/agent/agent.mjs",
     "lint": "eslint \"apps/**/src/**/*.{ts,tsx,js,jsx}\" \"apps/**/app/**/*.{ts,tsx,js,jsx}\" \"packages/**/src/**/*.{ts,tsx,js,jsx}\" \"functions/src/**/*.{ts,tsx,js,jsx}\" --max-warnings 200",
     "format": "pnpm -w prettier --write .",
     "typecheck": "tsc --build",
     "build": "pnpm -r --filter @apps/web... run build && pnpm -r --filter @packages/* run build && pnpm --filter functions run build",
     "emu": "firebase emulators:start --import ./.emulator-data --export-on-exit",
+    "emu:firestore": "firebase emulators:start --only firestore",
+    "api:dev": "pnpm --filter @fresh-schedules/api dev",
+    "api:test": "pnpm --filter @fresh-schedules/api test",
+    "api:build": "pnpm --filter @fresh-schedules/api build",
+    "api:docker:build": "docker build -f services/api/Dockerfile -t fresh-schedules-api:latest .",
+    "api:docker:run": "docker run --rm -p 4000:4000 -e FIREBASE_PROJECT_ID=demo-fresh fresh-schedules-api:latest",
     "test": "vitest run --passWithNoTests",
-    "test:rules": "pnpm --filter @fresh-root/rules-tests test",
+  "test:rules": "vitest run --globals --dir tests/rules --reporter=dot",
     "ci": "pnpm -w install --frozen-lockfile && pnpm -w typecheck && pnpm -w lint && pnpm -w build && pnpm -w test && pnpm -w test:rules"
   },
   "dependencies": {
@@ -39,6 +42,7 @@
     "zod": "^3.24.1"
   },
   "devDependencies": {
+    "firebase": "^12.0.0",
     "@firebase/rules-unit-testing": "^5.0.0",
     "@types/jest": "^29.5.14",
     "@types/node": "^20.19.0",

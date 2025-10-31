@@ -1,6 +1,5 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 vi.mock('../lib/firebase.server', async () => {
-  const now = new Date();
   const fakeDoc = () => {
     const data: any = {};
     return {
@@ -11,7 +10,7 @@ vi.mock('../lib/firebase.server', async () => {
     };
   };
   const fakeDb = {
-    collection: vi.fn((name: string) => ({ doc: fakeDoc() })),
+    collection: vi.fn((_name: string) => ({ doc: fakeDoc() })),
   };
   return {
     adminDb: fakeDb,

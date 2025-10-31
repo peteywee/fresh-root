@@ -8,7 +8,6 @@ import {
   getDoc,
   doc,
   query,
-  where,
   orderBy,
   limit
 } from "firebase/firestore";

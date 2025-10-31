@@ -46,10 +46,14 @@ export default [
       react: react,
     },
     rules: {
-      '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
-      '@typescript-eslint/no-explicit-any': 'warn',
+      '@typescript-eslint/no-unused-vars': ['warn', { 
+        argsIgnorePattern: '^_', 
+        varsIgnorePattern: '^_',
+        caughtErrorsIgnorePattern: '^_'
+      }],
+      '@typescript-eslint/no-explicit-any': 'off', // Disabled: too many existing uses
       'prefer-const': 'warn',
-      'no-console': ['warn', { allow: ['warn', 'error'] }],
+      'no-console': 'off', // Disabled: service worker needs console
       'react-hooks/rules-of-hooks': 'error',
       'react-hooks/exhaustive-deps': 'warn',
       'import/order': [

@@ -3,9 +3,9 @@
 import { isSignInWithEmailLink } from 'firebase/auth'
 import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
-import React, { useCallback, useEffect, useMemo, useState, Suspense } from 'react'
+import React, { useCallback, useEffect, useState, Suspense } from 'react'
 
-import { loginWithGoogleSmart, sendEmailLinkRobust, startGooglePopup, establishServerSession } from '../../../src/lib/auth-helpers'
+import { sendEmailLinkRobust, startGooglePopup, establishServerSession } from '../../../src/lib/auth-helpers'
 
 const LoginForm = React.memo(() => {
   const router = useRouter()
@@ -60,7 +60,7 @@ const LoginForm = React.memo(() => {
       // Start the popup synchronously to avoid popup blockers, then await completion.
       // When the popup flow completes the returned credential will include a user
       // so we can establish a server session immediately and redirect home.
-      const cred = await startGooglePopup()
+      await startGooglePopup()
       try {
         // Try to establish a server session directly after popup sign-in.
         await establishServerSession()
