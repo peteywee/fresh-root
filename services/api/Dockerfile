@@ -2,14 +2,17 @@
 FROM node:20-slim AS build
 WORKDIR /app
 
-# Only copy API workspace to keep image small
+# Copy workspace config and lockfile
 COPY pnpm-workspace.yaml package.json pnpm-lock.yaml ./
 COPY services/api/package.json services/api/tsconfig.json ./services/api/
+
 RUN corepack enable && corepack prepare pnpm@9.1.0 --activate
-RUN pnpm fetch --filter @fresh-schedules/api
+
+# Fetch dependencies (including workspace root deps)
+RUN pnpm fetch
 
 COPY services/api ./services/api
-RUN pnpm --filter @fresh-schedules/api install -r --offline && \
+RUN pnpm install -r --offline --filter @fresh-schedules/api... && \
     pnpm --filter @fresh-schedules/api build
 
 FROM gcr.io/distroless/nodejs20-debian12
