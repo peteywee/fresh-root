@@ -1,9 +1,9 @@
 import type { Metadata, Viewport } from "next";
 import Link from "next/link";
 
-import Logo from "../components/Logo";
 import "./globals.css"; // ensure this exists; keep Tailwind base/utilities here
 import { inter } from "./fonts";
+import Logo from "../components/Logo";
 
 export const metadata: Metadata = {
   title: "Fresh Schedules",
