@@ -23,8 +23,13 @@ export async function createSchedule(payload: CreatePayload) {
     cache: "no-store"
   });
   if (!res.ok) {
-    const j = await res.json().catch(() => ({}));
-    throw new Error(`API error ${res.status}: ${j.error ?? "unknown"}`);
-  }
+      let errorPayload: any = { error: "unknown" };
+      try {
+        errorPayload = await res.json();
+      } catch {
+        errorPayload = { error: await res.text() };
+      }
+      throw new Error(`API error ${res.status}: ${errorPayload.error ?? "unknown"}`);
+    }
   return res.json();
 }
