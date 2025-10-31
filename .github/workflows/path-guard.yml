@@ -1,0 +1,162 @@
+name: Path Guard (strict-by-default)
+
+on:
+  pull_request:
+    branches: [ "main" ]
+    types: [opened, synchronize, reopened, labeled, unlabeled, edited]
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  path-guard:
+    name: Verify changed paths
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Determine toggles (labels / title)
+        id: toggles
+        run: |
+          set -euo pipefail
+          LABELS="$(jq -r '.pull_request.labels[].name' < "$GITHUB_EVENT_PATH" | tr '[:upper:]' '[:lower:]' | tr '\n' ' ')"
+          TITLE="$(jq -r '.pull_request.title' < "$GITHUB_EVENT_PATH" | tr '[:upper:]' '[:lower:]')"
+
+          # toggles (default strict)
+          OFF="false"
+          ALLOW_TESTS="false"
+          ALLOW_WORKSTATION="false"
+
+          # disable entirely
+          if echo "$LABELS" | grep -q "check:off"; then OFF="true"; fi
+          if echo "$TITLE" | grep -q "\[allow-non-runtime\]"; then OFF="true"; fi
+
+          # opt-in buckets
+          if echo "$LABELS" | grep -q "allow:tests"; then ALLOW_TESTS="true"; fi
+          if echo "$LABELS" | grep -q "allow:workstation"; then ALLOW_WORKSTATION="true"; fi
+
+          {
+            echo "off=$OFF"
+            echo "allow_tests=$ALLOW_TESTS"
+            echo "allow_workstation=$ALLOW_WORKSTATION"
+          } | tee -a "$GITHUB_OUTPUT"
+
+      - name: Skip (guard off)
+        if: steps.toggles.outputs.off == 'true'
+        run: |
+          echo "Guard disabled by label or title token."
+          exit 0
+
+      - name: Compute changed files
+        id: diff
+        run: |
+          set -euo pipefail
+          BASE_SHA="${{ github.event.pull_request.base.sha }}"
+          HEAD_SHA="${{ github.event.pull_request.head.sha }}"
+          git diff --name-only "$BASE_SHA" "$HEAD_SHA" | sed '/^$/d' > changed.txt
+          echo "Changed files:"
+          cat changed.txt || true
+
+      - name: Enforce allowlist
+        env:
+          ALLOW_TESTS: ${{ steps.toggles.outputs.allow_tests }}
+          ALLOW_WORKSTATION: ${{ steps.toggles.outputs.allow_workstation }}
+        run: |
+          set -euo pipefail
+
+          echo "::group::Build allowlist"
+          # Always-allowed repo/meta (kept minimal—NO workstation here)
+          ALLOW_ALWAYS=(
+            '^README\.md$'
+            '^LICENSE$'
+            '^\.gitignore$'
+            '^renovate\.json$'
+            '^eslint\.config\.mjs$'
+            '^pnpm-workspace\.yaml$'
+            '^turbo\.json$'
+            '^tsconfig\.json$'
+            '^\.github/workflows/.*'   # CI changes are always fair game
+            '^\.github/.*'
+          )
+
+          # Core runtime code you want on main by default
+          ALLOW_CORE=(
+            '^apps/web/.*'
+            '^services/api/.*'
+            '^packages/.*'
+            '^scripts?/.*'            # build/runtime/ops scripts
+            '^infra/.*'               # if you keep IaC here; remove if not
+          )
+
+          # Tests (BLOCKED by default; opt-in with label allow:tests)
+          ALLOW_TESTS_ARR=(
+            '^tests?/.*'
+            '^apps/web/src/__tests__/.*'
+            '^services/api/test/.*'
+            '^packages/.*/__tests__/.*'
+          )
+
+          # Workstation configs (BLOCKED by default; opt-in with label allow:workstation)
+          ALLOW_WORKSTATION_ARR=(
+            '^\.vscode/.*'
+            '^\.idea/.*'
+            '^\.devcontainer/.*'
+            '^\.direnv/.*'
+            '^\.DS_Store$'
+            '^\.nvmrc$'
+            '^\.tool-versions$'
+            '^\.editorconfig$'
+            '^\.fleet/.*'
+            '^\.history/.*'
+            '^\.fleet-settings/.*'
+          )
+
+          # Assemble final allowlist
+          ALLOW=( "${ALLOW_ALWAYS[@]}" "${ALLOW_CORE[@]}" )
+
+          if [[ "$ALLOW_TESTS" == "true" ]]; then
+            ALLOW+=( "${ALLOW_TESTS_ARR[@]}" )
+          fi
+
+          if [[ "$ALLOW_WORKSTATION" == "true" ]]; then
+            ALLOW+=( "${ALLOW_WORKSTATION_ARR[@]}" )
+          fi
+
+          # Join into ERE
+          ALLOW_RE="$(printf '%s|' "${ALLOW[@]}")"
+          ALLOW_RE="${ALLOW_RE%|}"
+          echo "ALLOW_RE: $ALLOW_RE"
+          echo "::endgroup::"
+
+          echo "::group::Scan"
+          BAD=0
+          while IFS= read -r f; do
+            [[ -z "$f" ]] && continue
+            if [[ "$f" =~ (^|/)node_modules(/|$) ]]; then
+              echo "↷ ignoring: $f"
+              continue
+            fi
+            if echo "$f" | egrep -q "$ALLOW_RE"; then
+              echo "✓ allowed: $f"
+            else
+              echo "✗ forbidden: $f"
+              BAD=1
+            fi
+          done < changed.txt
+          echo "::endgroup::"
+
+          if [[ $BAD -ne 0 ]]; then
+            echo "::error::This PR touches files blocked by default (tests or workstation configs)."
+            echo "To proceed, either:"
+            echo " - Add label 'allow:tests' to include tests."
+            echo " - Add label 'allow:workstation' to include workstation configs (.vscode, .devcontainer, etc.)."
+            echo " - Or add label 'check:off' (or token '[allow-non-runtime]' in title) to disable this guard."
+            exit 1
+          fi
+
+          echo "All changed files comply with strict-by-default policy."
