@@ -1,20 +1,24 @@
 "use client";
 
-import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
-import { auth } from '../../../app/lib/firebaseClient';
-import { completeEmailLinkIfPresent, completeGoogleRedirectOnce, establishServerSession } from '../../../src/lib/auth-helpers';
-import { reportError } from '../../../src/lib/error/reporting';
+import { auth } from "../../../app/lib/firebaseClient";
+import {
+  completeEmailLinkIfPresent,
+  completeGoogleRedirectOnce,
+  establishServerSession,
+} from "../../../src/lib/auth-helpers";
+import { reportError } from "../../../src/lib/error/reporting";
 
 export default function AuthCallbackPage() {
   const router = useRouter();
-  const [status, setStatus] = useState<'idle'|'working'|'done'|'error'>('idle');
+  const [status, setStatus] = useState<"idle" | "working" | "done" | "error">("idle");
 
   useEffect(() => {
     let mounted = true;
     (async () => {
-      setStatus('working');
+      setStatus("working");
       try {
         // Complete either email link or Google redirect if applicable
         const completedEmail = await completeEmailLinkIfPresent();
@@ -27,24 +31,28 @@ export default function AuthCallbackPage() {
           await establishServerSession();
         }
         if (!mounted) return;
-        setStatus('done');
-        router.replace('/');
+        setStatus("done");
+        router.replace("/");
       } catch (e) {
-        reportError(e as any, { phase: 'auth_callback' });
+        reportError(e as any, { phase: "auth_callback" });
         if (!mounted) return;
-        setStatus('error');
+        setStatus("error");
       }
     })();
-    return () => { mounted = false; };
+    return () => {
+      mounted = false;
+    };
   }, [router]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-6">
-      <div className="max-w-md w-full text-center">
-        <h1 className="text-2xl font-semibold mb-4">Signing you in…</h1>
+    <div className="flex min-h-screen items-center justify-center p-6">
+      <div className="w-full max-w-md text-center">
+        <h1 className="mb-4 text-2xl font-semibold">Signing you in…</h1>
         <p className="text-gray-500">Completing authentication. You’ll be redirected shortly.</p>
-        {status === 'error' && (
-          <p className="text-red-600 mt-4">Something went wrong. Please try again from the login page.</p>
+        {status === "error" && (
+          <p className="mt-4 text-red-600">
+            Something went wrong. Please try again from the login page.
+          </p>
         )}
       </div>
     </div>

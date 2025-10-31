@@ -281,9 +281,9 @@ Or use Firebase Hosting rewrites for server-side environment variables.
 
 - Change dev server port in `apps/web/package.json`:
 
-   ```json
-   "dev": "next dev --port 3001"
-   ```
+  ```json
+  "dev": "next dev --port 3001"
+  ```
 
 ### Getting Help
 

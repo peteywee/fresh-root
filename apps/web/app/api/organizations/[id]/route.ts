@@ -1,39 +1,38 @@
-import { NextRequest } from 'next/server'
-import { z } from 'zod'
+import { NextRequest } from "next/server";
+import { z } from "zod";
 
-import { parseJson, badRequest, ok, serverError } from '../../_shared/validation'
+import { parseJson, badRequest, ok, serverError } from "../../_shared/validation";
 
 // Schema for updating organization
 const UpdateOrgSchema = z.object({
   name: z.string().min(1).max(100).optional(),
   description: z.string().max(500).optional(),
   industry: z.string().optional(),
-  size: z.enum(['1-10', '11-50', '51-200', '201-500', '500+']).optional(),
-  settings: z.object({
-    allowPublicSchedules: z.boolean().optional(),
-    requireShiftApproval: z.boolean().optional(),
-    defaultShiftDuration: z.number().positive().optional(),
-  }).optional(),
-})
+  size: z.enum(["1-10", "11-50", "51-200", "201-500", "500+"]).optional(),
+  settings: z
+    .object({
+      allowPublicSchedules: z.boolean().optional(),
+      requireShiftApproval: z.boolean().optional(),
+      defaultShiftDuration: z.number().positive().optional(),
+    })
+    .optional(),
+});
 
 /**
  * GET /api/organizations/[id]
  * Get organization details
  */
-export async function GET(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
-    const { id } = await params
+    const { id } = await params;
 
     // In production, fetch from database and check permissions
     const organization = {
       id,
-      name: 'Acme Corp',
-      description: 'A great company',
-      industry: 'Technology',
-      size: '51-200',
+      name: "Acme Corp",
+      description: "A great company",
+      industry: "Technology",
+      size: "51-200",
       createdAt: new Date().toISOString(),
       settings: {
         allowPublicSchedules: false,
@@ -41,11 +40,11 @@ export async function GET(
         defaultShiftDuration: 8,
       },
       memberCount: 25,
-    }
+    };
 
-    return ok(organization)
+    return ok(organization);
   } catch (_error) {
-    return serverError('Failed to fetch organization')
+    return serverError("Failed to fetch organization");
   }
 }
 
@@ -53,29 +52,26 @@ export async function GET(
  * PATCH /api/organizations/[id]
  * Update organization details
  */
-export async function PATCH(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function PATCH(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
-    const { id } = await params
-    const parsed = await parseJson(request, UpdateOrgSchema)
-    
+    const { id } = await params;
+    const parsed = await parseJson(request, UpdateOrgSchema);
+
     if (!parsed.success) {
-      return badRequest('Validation failed', parsed.details)
+      return badRequest("Validation failed", parsed.details);
     }
 
     // In production, update in database after checking permissions
     const updatedOrg = {
       id,
-      name: 'Acme Corp',
+      name: "Acme Corp",
       ...parsed.data,
       updatedAt: new Date().toISOString(),
-    }
+    };
 
-    return ok(updatedOrg)
+    return ok(updatedOrg);
   } catch (_error) {
-    return serverError('Failed to update organization')
+    return serverError("Failed to update organization");
   }
 }
 
@@ -85,14 +81,14 @@ export async function PATCH(
  */
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> },
 ) {
   try {
-    const { id } = await params
+    const { id } = await params;
 
     // In production, check if user is admin and delete from database
-    return ok({ message: 'Organization deleted successfully', id })
+    return ok({ message: "Organization deleted successfully", id });
   } catch (_error) {
-    return serverError('Failed to delete organization')
+    return serverError("Failed to delete organization");
   }
 }

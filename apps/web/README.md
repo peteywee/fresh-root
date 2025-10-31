@@ -212,16 +212,16 @@ Coverage reports are generated in the `coverage/` directory.
 Example test structure:
 
 ```tsx
-import { describe, it, expect } from 'vitest'
-import { render, screen } from '@testing-library/react'
-import { MyComponent } from './MyComponent'
+import { describe, it, expect } from "vitest";
+import { render, screen } from "@testing-library/react";
+import { MyComponent } from "./MyComponent";
 
-describe('MyComponent', () => {
-  it('renders correctly', () => {
-    render(<MyComponent />)
-    expect(screen.getByText('Hello')).toBeInTheDocument()
-  })
-})
+describe("MyComponent", () => {
+  it("renders correctly", () => {
+    render(<MyComponent />);
+    expect(screen.getByText("Hello")).toBeInTheDocument();
+  });
+});
 ```
 
 ## Styling
@@ -255,17 +255,17 @@ import { clsx } from 'clsx'
 Global state is managed with Zustand. Example store:
 
 ```tsx
-import { create } from 'zustand'
+import { create } from "zustand";
 
 interface Store {
-  count: number
-  increment: () => void
+  count: number;
+  increment: () => void;
 }
 
 export const useStore = create<Store>((set) => ({
   count: 0,
-  increment: () => set((state) => ({ count: state.count + 1 }))
-}))
+  increment: () => set((state) => ({ count: state.count + 1 })),
+}));
 ```
 
 ### React Query
@@ -273,13 +273,13 @@ export const useStore = create<Store>((set) => ({
 Server state is managed with React Query:
 
 ```tsx
-import { useQuery } from '@tanstack/react-query'
+import { useQuery } from "@tanstack/react-query";
 
 function MyComponent() {
   const { data, isLoading } = useQuery({
-    queryKey: ['items'],
-    queryFn: () => fetch('/api/items').then(r => r.json())
-  })
+    queryKey: ["items"],
+    queryFn: () => fetch("/api/items").then((r) => r.json()),
+  });
 }
 ```
 
@@ -295,14 +295,14 @@ Firebase Authentication is used for user management. The app includes:
 Example:
 
 ```tsx
-import ProtectedRoute from '@/components/ProtectedRoute'
+import ProtectedRoute from "@/components/ProtectedRoute";
 
 export default function MyPage() {
   return (
     <ProtectedRoute>
       <div>Protected content</div>
     </ProtectedRoute>
-  )
+  );
 }
 ```
 
@@ -312,21 +312,21 @@ export default function MyPage() {
 
 ```tsx
 // app/api/my-endpoint/route.ts
-import { NextRequest } from 'next/server'
-import { ok, badRequest } from '../_shared/validation'
-import { z } from 'zod'
+import { NextRequest } from "next/server";
+import { ok, badRequest } from "../_shared/validation";
+import { z } from "zod";
 
 const Schema = z.object({
-  name: z.string().min(1)
-})
+  name: z.string().min(1),
+});
 
 export async function POST(request: NextRequest) {
-  const parsed = await parseJson(request, Schema)
+  const parsed = await parseJson(request, Schema);
   if (!parsed.success) {
-    return badRequest('Validation failed', parsed.details)
+    return badRequest("Validation failed", parsed.details);
   }
-  
-  return ok({ success: true, data: parsed.data })
+
+  return ok({ success: true, data: parsed.data });
 }
 ```
 
@@ -335,13 +335,13 @@ export async function POST(request: NextRequest) {
 All API routes use Zod for validation:
 
 ```tsx
-import { z } from 'zod'
+import { z } from "zod";
 
 const UserSchema = z.object({
   email: z.string().email(),
   age: z.number().positive(),
-  role: z.enum(['admin', 'user'])
-})
+  role: z.enum(["admin", "user"]),
+});
 ```
 
 ## Security
@@ -404,8 +404,8 @@ The app is optimized for Vercel deployment. Connect your repository to Vercel fo
 
 ```tsx
 // Use console methods allowed by ESLint
-console.warn('Warning message')
-console.error('Error message')
+console.warn("Warning message");
+console.error("Error message");
 ```
 
 ## Contributing

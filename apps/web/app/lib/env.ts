@@ -7,7 +7,7 @@ const clientEnv = z.object({
   NEXT_PUBLIC_FIREBASE_PROJECT_ID: z.string().min(1),
   NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET: z.string().min(1),
   NEXT_PUBLIC_USE_EMULATORS: z.enum(["true", "false"]).default("false"),
-  NEXT_PUBLIC_SENTRY_DSN: z.string().optional().default("")
+  NEXT_PUBLIC_SENTRY_DSN: z.string().optional().default(""),
 });
 
 export const ENV = clientEnv.parse({
@@ -16,5 +16,5 @@ export const ENV = clientEnv.parse({
   NEXT_PUBLIC_FIREBASE_PROJECT_ID: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
   NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
   NEXT_PUBLIC_USE_EMULATORS: process.env.NEXT_PUBLIC_USE_EMULATORS,
-  NEXT_PUBLIC_SENTRY_DSN: process.env.NEXT_PUBLIC_SENTRY_DSN
+  NEXT_PUBLIC_SENTRY_DSN: process.env.NEXT_PUBLIC_SENTRY_DSN,
 });

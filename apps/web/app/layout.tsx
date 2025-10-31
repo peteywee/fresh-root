@@ -1,19 +1,20 @@
-import "./globals.css"; // ensure this exists; keep Tailwind base/utilities here
-import { inter } from "./fonts";
 import type { Metadata, Viewport } from "next";
 import Link from "next/link";
+
+import "./globals.css"; // ensure this exists; keep Tailwind base/utilities here
+import { inter } from "./fonts";
 import Logo from "../components/Logo";
 
 export const metadata: Metadata = {
   title: "Fresh Schedules",
-  description: "Staff scheduling built for speed and control."
+  description: "Staff scheduling built for speed and control.",
 };
 
 export const viewport: Viewport = {
   themeColor: "#0b0f14",
   colorScheme: "dark light",
   width: "device-width",
-  initialScale: 1
+  initialScale: 1,
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -28,11 +29,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <span className="font-semibold tracking-wide">Fresh&nbsp;Schedules</span>
             </Link>
             <div className="flex items-center gap-4 text-sm text-gray-300">
-              <Link prefetch href="/planning" className="hover:text-white">Planning</Link>
-              <Link prefetch href="/protected/schedules" className="hover:text-white">
+              <Link href="/protected/schedules" className="hover:text-white">
                 Schedules
               </Link>
-              <Link prefetch href="/protected/dashboard" className="hover:text-white">
+              <Link href="/protected/dashboard" className="hover:text-white">
                 Dashboard
               </Link>
             </div>

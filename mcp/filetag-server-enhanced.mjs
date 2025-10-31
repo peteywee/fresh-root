@@ -22,8 +22,29 @@ const server = new McpServer({
 
 // --- helpers ---
 const TEXT_EXTS = new Set([
-  ".js",".cjs",".mjs",".ts",".tsx",".jsx",".py",".java",".cpp",".c",".go",".rs",
-  ".json",".md",".yml",".yaml",".css",".scss",".html",".txt",".xml",".sh",".ps1"
+  ".js",
+  ".cjs",
+  ".mjs",
+  ".ts",
+  ".tsx",
+  ".jsx",
+  ".py",
+  ".java",
+  ".cpp",
+  ".c",
+  ".go",
+  ".rs",
+  ".json",
+  ".md",
+  ".yml",
+  ".yaml",
+  ".css",
+  ".scss",
+  ".html",
+  ".txt",
+  ".xml",
+  ".sh",
+  ".ps1",
 ]);
 
 async function walk(dir, ignore = []) {
@@ -41,7 +62,7 @@ async function walk(dir, ignore = []) {
     for (const e of entries) {
       const full = path.join(d, e.name);
       const rel = full.slice(dir.length + 1);
-      if (ignore.some(g => rel.startsWith(g))) continue;
+      if (ignore.some((g) => rel.startsWith(g))) continue;
       if (e.isDirectory()) q.push(full);
       else out.push(full);
     }
@@ -56,8 +77,8 @@ function shouldRead(file) {
 
 function getSmartDefaults(root) {
   // Self-learning: Suggest excludes based on common patterns
-  const commonIgnores = ['node_modules', '.git', 'dist', 'build', '.next', '__pycache__'];
-  const learnedIgnores = Array.from(learning.patterns.keys()).filter(p => p.includes('ignore'));
+  const commonIgnores = ["node_modules", ".git", "dist", "build", ".next", "__pycache__"];
+  const learnedIgnores = Array.from(learning.patterns.keys()).filter((p) => p.includes("ignore"));
   return [...commonIgnores, ...learnedIgnores];
 }
 
@@ -84,12 +105,14 @@ server.registerTool(
     },
   },
   async ({ root, include = [], exclude = [], deep = false, cache: useCache = true }) => {
-    const base = root && path.isAbsolute(root) ? root : (root ? path.join(process.cwd(), root) : process.cwd());
-    const cacheKey = `${base}:${include.join(',')}:${exclude.join(',')}:${deep}`;
+    const base =
+      root && path.isAbsolute(root) ? root : root ? path.join(process.cwd(), root) : process.cwd();
+    const cacheKey = `${base}:${include.join(",")}:${exclude.join(",")}:${deep}`;
 
     if (useCache && cache.has(cacheKey)) {
       const cached = cache.get(cacheKey);
-      if (Date.now() - cached.timestamp < 300000) { // 5min cache
+      if (Date.now() - cached.timestamp < 300000) {
+        // 5min cache
         return {
           content: [{ type: "text", text: JSON.stringify(cached.data, null, 2) }],
           structuredContent: cached.data,
@@ -98,8 +121,11 @@ server.registerTool(
     }
 
     const smartExclude = [...getSmartDefaults(base), ...exclude];
-    let files = (await walk(base, smartExclude))
-      .filter(f => shouldRead(f) && (include.length === 0 || include.some(p => f.startsWith(path.join(base, p)))));
+    let files = (await walk(base, smartExclude)).filter(
+      (f) =>
+        shouldRead(f) &&
+        (include.length === 0 || include.some((p) => f.startsWith(path.join(base, p)))),
+    );
 
     if (!deep && files.length > 1000) {
       files = files.slice(0, 1000); // Limit for usability
@@ -112,7 +138,11 @@ server.registerTool(
 
     for (const f of files) {
       let stat;
-      try { stat = await fs.stat(f); } catch { continue; }
+      try {
+        stat = await fs.stat(f);
+      } catch {
+        continue;
+      }
       const ext = path.extname(f).toLowerCase() || "<none>";
       byExt[ext] ??= { files: 0, bytes: 0 };
       byExt[ext].files++;
@@ -130,10 +160,12 @@ server.registerTool(
     }
 
     // Self-learning insights
-    const topExt = Object.entries(byExt).sort((a,b) => b[1].files - a[1].files)[0];
+    const topExt = Object.entries(byExt).sort((a, b) => b[1].files - a[1].files)[0];
     if (topExt) insights.push(`Primary language: ${topExt[0]} (${topExt[1].files} files)`);
-    if (totalBytes > 100 * 1024 * 1024) insights.push("Large codebase - consider using 'deep: false' for faster scans");
-    if (files.length > 500) insights.push("Many files - use include/exclude filters for targeted analysis");
+    if (totalBytes > 100 * 1024 * 1024)
+      insights.push("Large codebase - consider using 'deep: false' for faster scans");
+    if (files.length > 500)
+      insights.push("Many files - use include/exclude filters for targeted analysis");
 
     // Learn patterns
     for (const ext of Object.keys(byExt)) {
@@ -156,7 +188,7 @@ server.registerTool(
       content: [{ type: "text", text: JSON.stringify(payload, null, 2) }],
       structuredContent: payload,
     };
-  }
+  },
 );
 
 // --- tool: filetag.report (enhanced) ---
@@ -164,7 +196,8 @@ server.registerTool(
   "filetag.report",
   {
     title: "Smart workspace report",
-    description: "Generate insightful markdown report with recommendations and self-learned patterns.",
+    description:
+      "Generate insightful markdown report with recommendations and self-learned patterns.",
     inputSchema: {
       root: z.string().optional(),
       include: z.array(z.string()).optional(),
@@ -178,7 +211,10 @@ server.registerTool(
     const data = typeof scan?.structuredContent === "object" ? scan.structuredContent : undefined;
 
     if (!data) {
-      return { content: [{ type: "text", text: "No data available." }], structuredContent: { report: "No data available." } };
+      return {
+        content: [{ type: "text", text: "No data available." }],
+        structuredContent: { report: "No data available." },
+      };
     }
 
     const lines = [];
@@ -200,15 +236,21 @@ server.registerTool(
     lines.push(`## Recommendations`);
     const recs = [];
     if (data.totalFiles > 1000) recs.push("Consider breaking into smaller modules");
-    if (Object.keys(data.byExt).length > 10) recs.push("Diverse tech stack - ensure consistent tooling");
-    const learned = Array.from(learning.patterns.entries()).sort((a,b) => b[1] - a[1]).slice(0,3);
-    if (learned.length) recs.push(`Popular extensions: ${learned.map(([ext, count]) => `${ext} (${count}x)`).join(', ')}`);
+    if (Object.keys(data.byExt).length > 10)
+      recs.push("Diverse tech stack - ensure consistent tooling");
+    const learned = Array.from(learning.patterns.entries())
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 3);
+    if (learned.length)
+      recs.push(
+        `Popular extensions: ${learned.map(([ext, count]) => `${ext} (${count}x)`).join(", ")}`,
+      );
     if (recs.length === 0) recs.push("Codebase looks well-structured!");
     for (const rec of recs) lines.push(`- ${rec}`);
     lines.push(``);
 
     lines.push(`## File Types`);
-    const entries = Object.entries(data.byExt).sort((a,b) => b[1].files - a[1].files);
+    const entries = Object.entries(data.byExt).sort((a, b) => b[1].files - a[1].files);
     for (const [ext, v] of entries) {
       lines.push(`- \`${ext}\`: ${v.files} files, ${(v.bytes / 1024).toFixed(1)} KB`);
     }
@@ -227,7 +269,7 @@ server.registerTool(
       content: [{ type: "text", text: report }],
       structuredContent: { report },
     };
-  }
+  },
 );
 
 // --- tool: filetag.analyze (new) ---
@@ -246,7 +288,8 @@ server.registerTool(
     },
   },
   async ({ root, focus = "patterns" }) => {
-    const base = root && path.isAbsolute(root) ? root : (root ? path.join(process.cwd(), root) : process.cwd());
+    const base =
+      root && path.isAbsolute(root) ? root : root ? path.join(process.cwd(), root) : process.cwd();
     const files = (await walk(base, getSmartDefaults(base))).filter(shouldRead);
 
     const analysis = {};
@@ -257,26 +300,32 @@ server.registerTool(
       const deps = new Set();
       for (const f of files) {
         try {
-          const content = await fs.readFile(f, 'utf8');
+          const content = await fs.readFile(f, "utf8");
           const matches = content.match(/import\s+.*?\s+from\s+['"]([^'"]+)['"]/g) || [];
-          matches.forEach(m => {
+          matches.forEach((m) => {
             const dep = m.match(/from\s+['"]([^'"]+)['"]/);
-            if (dep && !dep[1].startsWith('.')) deps.add(dep[1]);
+            if (dep && !dep[1].startsWith(".")) deps.add(dep[1]);
           });
         } catch {}
       }
       analysis.dependencies = Array.from(deps);
-      if (deps.size > 20) recommendations.push("High dependency count - consider bundling or tree-shaking");
+      if (deps.size > 20)
+        recommendations.push("High dependency count - consider bundling or tree-shaking");
     } else if (focus === "quality") {
       // Basic quality metrics
-      let totalLines = 0, commentLines = 0, emptyLines = 0;
-      for (const f of files.slice(0, 100)) { // Sample for performance
+      let totalLines = 0,
+        commentLines = 0,
+        emptyLines = 0;
+      for (const f of files.slice(0, 100)) {
+        // Sample for performance
         try {
-          const content = await fs.readFile(f, 'utf8');
-          const lines = content.split('\n');
+          const content = await fs.readFile(f, "utf8");
+          const lines = content.split("\n");
           totalLines += lines.length;
-          commentLines += lines.filter(l => l.trim().startsWith('//') || l.trim().startsWith('/*')).length;
-          emptyLines += lines.filter(l => !l.trim()).length;
+          commentLines += lines.filter(
+            (l) => l.trim().startsWith("//") || l.trim().startsWith("/*"),
+          ).length;
+          emptyLines += lines.filter((l) => !l.trim()).length;
         } catch {}
       }
       analysis.quality = {
@@ -284,20 +333,23 @@ server.registerTool(
         commentRatio: commentLines / totalLines,
         density: (totalLines - emptyLines) / totalLines,
       };
-      if (analysis.quality.commentRatio < 0.1) recommendations.push("Low comment ratio - add more documentation");
-    } else { // patterns
+      if (analysis.quality.commentRatio < 0.1)
+        recommendations.push("Low comment ratio - add more documentation");
+    } else {
+      // patterns
       const patterns = {};
       for (const f of files.slice(0, 50)) {
         try {
-          const content = await fs.readFile(f, 'utf8');
+          const content = await fs.readFile(f, "utf8");
           // Simple pattern detection
-          if (content.includes('TODO')) patterns.todos = (patterns.todos || 0) + 1;
-          if (content.includes('console.log')) patterns.debugLogs = (patterns.debugLogs || 0) + 1;
-          if (content.includes('async')) patterns.asyncUsage = (patterns.asyncUsage || 0) + 1;
+          if (content.includes("TODO")) patterns.todos = (patterns.todos || 0) + 1;
+          if (content.includes("console.log")) patterns.debugLogs = (patterns.debugLogs || 0) + 1;
+          if (content.includes("async")) patterns.asyncUsage = (patterns.asyncUsage || 0) + 1;
         } catch {}
       }
       analysis.patterns = patterns;
-      if (patterns.debugLogs > 10) recommendations.push("Many debug logs found - clean up for production");
+      if (patterns.debugLogs > 10)
+        recommendations.push("Many debug logs found - clean up for production");
     }
 
     // Self-learning: Store analysis for future recommendations
@@ -307,7 +359,7 @@ server.registerTool(
       content: [{ type: "text", text: JSON.stringify({ analysis, recommendations }, null, 2) }],
       structuredContent: { analysis, recommendations },
     };
-  }
+  },
 );
 
 // --- tool: filetag.clearCache ---
@@ -317,7 +369,10 @@ server.registerTool(
     title: "Clear caches and learning data",
     description: "Clears scan caches and resets learned patterns for fresh analysis.",
     inputSchema: {},
-    outputSchema: { cleared: z.boolean(), stats: z.object({ cacheSize: z.number(), patternsLearned: z.number() }) },
+    outputSchema: {
+      cleared: z.boolean(),
+      stats: z.object({ cacheSize: z.number(), patternsLearned: z.number() }),
+    },
   },
   async () => {
     const stats = { cacheSize: cache.size, patternsLearned: learning.patterns.size };
@@ -328,7 +383,7 @@ server.registerTool(
       content: [{ type: "text", text: JSON.stringify({ cleared: true, stats }, null, 2) }],
       structuredContent: { cleared: true, stats },
     };
-  }
+  },
 );
 
 // --- start stdio transport ---

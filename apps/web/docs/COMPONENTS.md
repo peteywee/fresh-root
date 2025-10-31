@@ -9,12 +9,14 @@ This directory contains reusable UI components for the Fresh Schedules applicati
 A versatile button component with multiple variants and sizes.
 
 **Props:**
+
 - `variant`: `'primary' | 'secondary' | 'danger' | 'ghost'` - Button style variant
 - `size`: `'sm' | 'md' | 'lg'` - Button size
 - `loading`: `boolean` - Show loading spinner
 - All standard HTML button attributes
 
 **Example:**
+
 ```tsx
 import { Button } from '@/components/ui'
 
@@ -34,6 +36,7 @@ import { Button } from '@/components/ui'
 A container component for displaying content in a styled box.
 
 **Props:**
+
 - `title`: `string` - Card header title
 - `description`: `string` - Card header description
 - `variant`: `'default' | 'bordered' | 'elevated'` - Card style variant
@@ -41,16 +44,17 @@ A container component for displaying content in a styled box.
 - `className`: `string` - Additional CSS classes
 
 **Example:**
-```tsx
-import { Card } from '@/components/ui'
 
-<Card 
-  title="User Settings" 
+```tsx
+import { Card } from "@/components/ui";
+
+<Card
+  title="User Settings"
   description="Manage your account preferences"
   footer={<Button>Save</Button>}
 >
   <p>Card content goes here</p>
-</Card>
+</Card>;
 ```
 
 ---
@@ -60,6 +64,7 @@ import { Card } from '@/components/ui'
 Form input components with label, error, and helper text support.
 
 **Props:**
+
 - `label`: `string` - Input label
 - `error`: `string` - Error message to display
 - `helperText`: `string` - Helper text below input
@@ -67,6 +72,7 @@ Form input components with label, error, and helper text support.
 - All standard HTML input/textarea attributes
 
 **Example:**
+
 ```tsx
 import { Input, Textarea } from '@/components/ui'
 
@@ -92,14 +98,17 @@ import { Input, Textarea } from '@/components/ui'
 Loading indicators for async operations.
 
 **Spinner Props:**
+
 - `size`: `'sm' | 'md' | 'lg'` - Spinner size
 - `className`: `string` - Additional CSS classes
 
 **Loading Props:**
+
 - `text`: `string` - Loading text to display
 - `fullScreen`: `boolean` - Cover entire screen
 
 **Example:**
+
 ```tsx
 import { Spinner, Loading } from '@/components/ui'
 
@@ -120,6 +129,7 @@ import { Spinner, Loading } from '@/components/ui'
 Display important messages to users.
 
 **Props:**
+
 - `type`: `'success' | 'error' | 'warning' | 'info'` - Alert type
 - `title`: `string` - Alert title
 - `message`: `string` - Alert message
@@ -127,6 +137,7 @@ Display important messages to users.
 - `className`: `string` - Additional CSS classes
 
 **Example:**
+
 ```tsx
 import { Alert } from '@/components/ui'
 
@@ -150,42 +161,37 @@ import { Alert } from '@/components/ui'
 ### Basic Form Example
 
 ```tsx
-'use client'
+"use client";
 
-import { useState } from 'react'
-import { Input, Button, Card, Alert } from '@/components/ui'
+import { useState } from "react";
+import { Input, Button, Card, Alert } from "@/components/ui";
 
 export default function ProfileForm() {
-  const [name, setName] = useState('')
-  const [email, setEmail] = useState('')
-  const [error, setError] = useState<string | null>(null)
-  const [success, setSuccess] = useState(false)
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setError(null)
-    
+    e.preventDefault();
+    setError(null);
+
     try {
       // API call here
-      setSuccess(true)
+      setSuccess(true);
     } catch (err) {
-      setError('Failed to update profile')
+      setError("Failed to update profile");
     }
-  }
+  };
 
   return (
     <Card title="Edit Profile" description="Update your information">
       <form onSubmit={handleSubmit} className="space-y-4">
         {error && <Alert type="error" message={error} />}
         {success && <Alert type="success" message="Profile updated!" />}
-        
-        <Input
-          label="Name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          fullWidth
-        />
-        
+
+        <Input label="Name" value={name} onChange={(e) => setName(e.target.value)} fullWidth />
+
         <Input
           label="Email"
           type="email"
@@ -193,7 +199,7 @@ export default function ProfileForm() {
           onChange={(e) => setEmail(e.target.value)}
           fullWidth
         />
-        
+
         <div className="flex gap-2">
           <Button type="submit" variant="primary">
             Save Changes
@@ -204,7 +210,7 @@ export default function ProfileForm() {
         </div>
       </form>
     </Card>
-  )
+  );
 }
 ```
 
@@ -215,6 +221,7 @@ All components use Tailwind CSS utility classes and follow a consistent design s
 ## Accessibility
 
 Components follow accessibility best practices:
+
 - Proper ARIA attributes
 - Keyboard navigation support
 - Screen reader friendly
@@ -231,6 +238,7 @@ pnpm test
 ## Contributing
 
 When adding new components:
+
 1. Create the component in this directory
 2. Add comprehensive tests in `__tests__/`
 3. Export from `index.ts`

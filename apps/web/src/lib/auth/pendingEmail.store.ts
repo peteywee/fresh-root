@@ -1,6 +1,6 @@
-import { kvSet, kvGet, kvDelete } from '../storage/kv';
+import { kvSet, kvGet, kvDelete } from "../storage/kv";
 
-const KEY = 'emailForSignIn';
+const KEY = "emailForSignIn";
 const TTL_MS_DEFAULT = 15 * 60 * 1000; // 15 minutes
 
 export async function setPendingEmail(email: string, ttlMs: number = TTL_MS_DEFAULT) {

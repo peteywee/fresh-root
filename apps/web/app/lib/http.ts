@@ -20,7 +20,7 @@ export async function apiFetch<T>(input: RequestInfo, init?: RequestInit): Promi
   });
   const text = await res.text();
   const isJson = res.headers.get("content-type")?.includes("application/json");
-  const body = isJson ? JSON.parse(text || "{}") : (text || "");
+  const body = isJson ? JSON.parse(text || "{}") : text || "";
   if (!res.ok) {
     const apiErr = (body as ApiError)?.error;
     const code = apiErr?.code ?? String(res.status);

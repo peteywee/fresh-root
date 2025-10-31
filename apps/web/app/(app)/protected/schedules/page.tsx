@@ -6,7 +6,7 @@ export const revalidate = 60;
 
 export const metadata = {
   title: "Schedules | Fresh Schedules",
-  description: "Recent schedules by week and venue."
+  description: "Recent schedules by week and venue.",
 };
 
 async function getOrgId(): Promise<string> {

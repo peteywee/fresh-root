@@ -1,5 +1,5 @@
 "use client";
-import React, { useMemo } from 'react';
+import React, { useMemo } from "react";
 
 const MonthView = React.memo(({ month = new Date() }: { month?: Date }) => {
   // Optimized month grid with memoization for performance
@@ -25,22 +25,22 @@ const MonthView = React.memo(({ month = new Date() }: { month?: Date }) => {
 
   return (
     <div className="card p-4">
-      <h3 className="text-lg font-semibold text-primary mb-4">
-        {month.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
+      <h3 className="mb-4 text-lg font-semibold text-primary">
+        {month.toLocaleDateString("en-US", { month: "long", year: "numeric" })}
       </h3>
       <div className="grid grid-cols-7 gap-2 text-sm">
-        {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
-          <div key={day} className="font-medium text-text-muted text-center py-2">
+        {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
+          <div key={day} className="py-2 text-center font-medium text-text-muted">
             {day}
           </div>
         ))}
         {days.map((day, index) => (
           <div
             key={index}
-            className={`aspect-square flex items-center justify-center rounded-lg transition-all duration-200 ${
+            className={`flex aspect-square items-center justify-center rounded-lg transition-all duration-200 ${
               day
-                ? 'bg-surface-accent hover:bg-primary/10 hover:text-primary cursor-pointer border border-surface-accent'
-                : ''
+                ? "cursor-pointer border border-surface-accent bg-surface-accent hover:bg-primary/10 hover:text-primary"
+                : ""
             }`}
           >
             {day && <span className="font-medium">{day}</span>}
@@ -51,6 +51,6 @@ const MonthView = React.memo(({ month = new Date() }: { month?: Date }) => {
   );
 });
 
-MonthView.displayName = 'MonthView';
+MonthView.displayName = "MonthView";
 
 export default MonthView;

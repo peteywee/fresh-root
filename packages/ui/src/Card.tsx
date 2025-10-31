@@ -1,5 +1,5 @@
-import { clsx } from 'clsx';
-import React from 'react';
+import { clsx } from "clsx";
+import React from "react";
 
 interface CardProps {
   children: React.ReactNode;
@@ -8,9 +8,7 @@ interface CardProps {
 
 export function Card({ children, className }: CardProps) {
   return (
-    <div className={clsx('rounded-lg border bg-white p-6 shadow-sm', className)}>
-      {children}
-    </div>
+    <div className={clsx("rounded-lg border bg-white p-6 shadow-sm", className)}>{children}</div>
   );
 }
 
@@ -20,11 +18,7 @@ interface CardHeaderProps {
 }
 
 export function CardHeader({ children, className }: CardHeaderProps) {
-  return (
-    <div className={clsx('flex flex-col space-y-1.5 pb-4', className)}>
-      {children}
-    </div>
-  );
+  return <div className={clsx("flex flex-col space-y-1.5 pb-4", className)}>{children}</div>;
 }
 
 interface CardTitleProps {
@@ -34,7 +28,7 @@ interface CardTitleProps {
 
 export function CardTitle({ children, className }: CardTitleProps) {
   return (
-    <h3 className={clsx('text-2xl font-semibold leading-none tracking-tight', className)}>
+    <h3 className={clsx("text-2xl font-semibold leading-none tracking-tight", className)}>
       {children}
     </h3>
   );
@@ -46,9 +40,5 @@ interface CardContentProps {
 }
 
 export function CardContent({ children, className }: CardContentProps) {
-  return (
-    <div className={clsx('pt-0', className)}>
-      {children}
-    </div>
-  );
+  return <div className={clsx("pt-0", className)}>{children}</div>;
 }

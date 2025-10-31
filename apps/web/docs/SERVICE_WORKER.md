@@ -17,7 +17,7 @@ If you need to temporarily allow service worker registration while testing from 
   In the browser console run:
 
   ```js
-  localStorage.setItem('ALLOW_SW', '1')
+  localStorage.setItem("ALLOW_SW", "1");
   // then reload
   ```
 
@@ -26,7 +26,7 @@ If you need to temporarily allow service worker registration while testing from 
   If you can inject a script before the app boots, set:
 
   ```js
-  window.__ALLOW_SW_IN_EMBEDDED = true
+  window.__ALLOW_SW_IN_EMBEDDED = true;
   ```
 
 Notes
@@ -37,7 +37,7 @@ Notes
 Unregistering stray service workers (if you see registration failures):
 
 ```js
-navigator.serviceWorker.getRegistrations().then(rs => rs.forEach(r => r.unregister()));
+navigator.serviceWorker.getRegistrations().then((rs) => rs.forEach((r) => r.unregister()));
 ```
 
 If you want me to run the dev server and exercise registration using the override, tell me which override method you prefer (query param, localStorage, or global flag) and I will start the dev server and follow the test steps. I cannot interact with your local browser UI, so I'll provide exact commands and steps to run on your machine and verify success.

@@ -1,0 +1,96 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Install (frozen)",
+      "type": "shell",
+      "command": "pnpm -w install --frozen-lockfile"
+    },
+    {
+      "label": "Typecheck",
+      "type": "shell",
+      "command": "pnpm -w typecheck",
+      "problemMatcher": "$tsc"
+    },
+    {
+      "label": "Lint",
+      "type": "shell",
+      "command": "pnpm -w lint"
+    },
+    {
+      "label": "Build (all)",
+      "type": "shell",
+      "command": "pnpm -w build"
+    },
+    {
+      "label": "Tests: Vitest (watch)",
+      "type": "shell",
+      "command": "pnpm vitest"
+    },
+    {
+      "label": "Tests: Coverage",
+      "type": "shell",
+      "command": "pnpm vitest run --coverage"
+    },
+    {
+      "label": "Rules: Unit Tests",
+      "type": "shell",
+      "command": "pnpm -w test:rules"
+    },
+    {
+      "label": "Sanity Script",
+      "type": "shell",
+      "command": "./scripts/sanity.sh",
+      "options": { "cwd": "${workspaceFolder}" }
+    },
+    {
+      "label": "Deps: Check (no deprecated/peers)",
+      "type": "shell",
+      "command": "pnpm -w install --frozen-lockfile",
+      "problemMatcher": [
+        {
+          "owner": "deps",
+          "severity": "error",
+          "pattern": {
+            "regexp": "^(.*deprecated.*)$",
+            "message": 1
+          }
+        },
+        {
+          "owner": "deps",
+          "severity": "error",
+          "pattern": {
+            "regexp": "^(.*Issues with peer dependencies found.*)$",
+            "message": 1
+          }
+        }
+      ]
+    },
+    {
+      "label": "Fast Test Loop",
+      "type": "shell",
+      "command": "pnpm vitest run --reporter=dot --maxThreads=1",
+      "options": { "env": { "CI": "true" } },
+      "problemMatcher": []
+    },
+    {
+      "label": "Test Watch",
+      "type": "shell",
+      "command": "pnpm test",
+      "isBackground": true,
+      "problemMatcher": []
+    },
+    {
+      "label": "Test Rules",
+      "type": "shell",
+      "command": "pnpm test:rules",
+      "problemMatcher": []
+    },
+    {
+      "label": "Type Check",
+      "type": "shell",
+      "command": "pnpm typecheck",
+      "problemMatcher": ["$tsc"]
+    }
+  ]
+}

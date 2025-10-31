@@ -1,9 +1,9 @@
-import { initializeTestEnvironment } from "@firebase/rules-unit-testing";
 import { readFile } from "node:fs/promises";
-import { beforeAll, afterAll, test, expect } from "vitest";
-import { setDoc, doc, getDoc } from "firebase/firestore";
 
+import { initializeTestEnvironment } from "@firebase/rules-unit-testing";
 import type { RulesTestEnvironment } from "@firebase/rules-unit-testing";
+import { setDoc, doc, getDoc } from "firebase/firestore";
+import { beforeAll, afterAll, test, expect } from "vitest";
 let testEnv: RulesTestEnvironment;
 
 beforeAll(async () => {

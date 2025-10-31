@@ -21,13 +21,13 @@ jobs:
       - name: Use PNPM
         uses: pnpm/action-setup@v4
         with:
-          version: 9
+          version: 9.1.0
 
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
-          cache: 'pnpm'
+          node-version: "20"
+          cache: "pnpm"
 
       - name: Install dependencies
         run: pnpm -w install --frozen-lockfile || pnpm -w install
@@ -53,7 +53,7 @@ jobs:
         if: github.event_name == 'pull_request'
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: 'chore(eslint): auto-fix lint errors'
+          commit_message: "chore(eslint): auto-fix lint errors"
           branch: ${{ github.head_ref }}
 
       - name: Typecheck (non-blocking)

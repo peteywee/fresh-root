@@ -1,20 +1,20 @@
 module.exports = {
-  browsers: ['chromium'],
+  browsers: ["chromium"],
   launchOptions: { headless: true },
   serverOptions: {
-    command: 'pnpm --filter @apps/web dev',
+    command: "pnpm --filter @apps/web dev",
     port: 3000,
     launchTimeout: 60000,
-    usedPortAction: 'kill'
-  }
+    usedPortAction: "kill",
+  },
 };
 module.exports = {
-  browsers: ['chromium'],
+  browsers: ["chromium"],
   launchOptions: { headless: true },
   serverOptions: {
-    command: 'pnpm --filter @apps/web dev',
+    command: "pnpm --filter @apps/web dev",
     port: 3000,
     launchTimeout: 60000,
-    usedPortAction: 'kill'
-  }
+    usedPortAction: "kill",
+  },
 };

@@ -17,10 +17,10 @@ const securityHeaders = [
       "img-src 'self' data: blob: https:", // Added https: for external images
       "font-src 'self' data:",
       "connect-src 'self' https://*.googleapis.com https://*.firebaseio.com wss://* https://accounts.google.com",
-      "frame-ancestors 'none'"
-    ].join("; ")
+      "frame-ancestors 'none'",
+    ].join("; "),
   },
-  { key: "Strict-Transport-Security", value: "max-age=63072000; includeSubDomains; preload" }
+  { key: "Strict-Transport-Security", value: "max-age=63072000; includeSubDomains; preload" },
 ];
 
 const nextConfig = {
@@ -31,32 +31,31 @@ const nextConfig = {
     formats: ["image/avif", "image/webp"],
     remotePatterns: [
       { protocol: "https", hostname: "**.googleusercontent.com" },
-      { protocol: "https", hostname: "**.firebaseapp.com" }
-    ]
+      { protocol: "https", hostname: "**.firebaseapp.com" },
+    ],
   },
   modularizeImports: {
     "lucide-react": {
       transform: "lucide-react/icons/{{member}}",
-      skipDefaultConversion: true
+      skipDefaultConversion: true,
     },
     "date-fns": {
-      transform: "date-fns/{{member}}"
+      transform: "date-fns/{{member}}",
     },
     "lodash-es": {
-      transform: "lodash-es/{{member}}"
-    }
+      transform: "lodash-es/{{member}}",
+    },
   },
   experimental: {
     typedRoutes: true,
     optimizePackageImports: ["react", "react-dom"],
-    serverActions: { bodySizeLimit: '1mb' }
+    serverActions: { bodySizeLimit: "1mb" },
   },
   headers: async () => [{ source: "/(.*)", headers: securityHeaders }],
   eslint: { ignoreDuringBuilds: false },
   compiler: {
-    removeConsole:
-      process.env.NODE_ENV === "production" ? { exclude: ["error", "warn"] } : false
-  }
+    removeConsole: process.env.NODE_ENV === "production" ? { exclude: ["error", "warn"] } : false,
+  },
 };
 
 export default nextConfig;

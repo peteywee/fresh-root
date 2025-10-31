@@ -24,9 +24,15 @@ export const Membership = z.object({
 export type Membership = z.infer<typeof Membership>;
 `;
 
-export async function ensureRBAC(
-  { root, force, planOnly }: { root: string; force: boolean; planOnly: boolean; }
-) {
+export async function ensureRBAC({
+  root,
+  force,
+  planOnly,
+}: {
+  root: string;
+  force: boolean;
+  planOnly: boolean;
+}) {
   const target = join(root, "packages/types/src/rbac.ts");
   const idx = join(root, "packages/types/src/index.ts");
 
@@ -63,8 +69,8 @@ export async function ensureRBAC(
       main: "./dist/index.js",
       types: "./dist/index.d.ts",
       scripts: {
-        build: "tsc -p tsconfig.json"
-      }
+        build: "tsc -p tsconfig.json",
+      },
     };
     await write(pkg, JSON.stringify(content, null, 2));
   }
@@ -80,9 +86,9 @@ export async function ensureRBAC(
         outDir: "./dist",
         rootDir: "./src",
         strict: true,
-        moduleResolution: "Node"
+        moduleResolution: "Node",
       },
-      include: ["src"]
+      include: ["src"],
     };
     await write(tsconfig, JSON.stringify(content, null, 2));
   }

@@ -29,8 +29,8 @@ afterAll(async () => {
 
 describe('messages and receipts rules', () => {
   it('admin can create messages, member cannot', async () => {
-    const adminCtx = testEnv.authenticatedContext('a1', { roles: { 'orgA': 'org_admin' } });
-    const memberCtx = testEnv.authenticatedContext('m1', { roles: { 'orgA': 'org_member' } });
+    const adminCtx = testEnv.authenticatedContext('a1', { orgId: 'orgA', roles: ['manager'] });
+    const memberCtx = testEnv.authenticatedContext('m1', { orgId: 'orgA', roles: ['org_member'] });
     const adminDb = adminCtx.firestore();
     const memberDb = memberCtx.firestore();
 
@@ -44,7 +44,7 @@ describe('messages and receipts rules', () => {
   });
 
   it('member can create receipt for self, cannot for others', async () => {
-    const memberCtx = testEnv.authenticatedContext('m1', { roles: { 'orgA': 'org_member' } });
+    const memberCtx = testEnv.authenticatedContext('m1', { orgId: 'orgA', roles: ['org_member'] });
     const memberDb = memberCtx.firestore();
     // create own receipt
     await expect(memberDb.collection('organizations/orgA/receipts').doc('r1').set({ userId: 'm1' }))

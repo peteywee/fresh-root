@@ -1,15 +1,15 @@
-import { NextRequest } from 'next/server'
-import { z } from 'zod'
+import { NextRequest } from "next/server";
+import { z } from "zod";
 
-import { parseJson, badRequest, ok, serverError } from '../_shared/validation'
+import { parseJson, badRequest, ok, serverError } from "../_shared/validation";
 
 // Schema for creating an organization
 const CreateOrgSchema = z.object({
   name: z.string().min(1).max(100),
   description: z.string().max(500).optional(),
   industry: z.string().optional(),
-  size: z.enum(['1-10', '11-50', '51-200', '201-500', '500+']).optional(),
-})
+  size: z.enum(["1-10", "11-50", "51-200", "201-500", "500+"]).optional(),
+});
 
 /**
  * GET /api/organizations
@@ -20,26 +20,26 @@ export async function GET(_request: NextRequest) {
     // In production, fetch from database based on authenticated user
     const organizations = [
       {
-        id: 'org-1',
-        name: 'Acme Corp',
-        description: 'A great company',
-        role: 'admin',
+        id: "org-1",
+        name: "Acme Corp",
+        description: "A great company",
+        role: "admin",
         createdAt: new Date().toISOString(),
         memberCount: 25,
       },
       {
-        id: 'org-2',
-        name: 'Tech Startup',
-        description: 'Innovative solutions',
-        role: 'manager',
+        id: "org-2",
+        name: "Tech Startup",
+        description: "Innovative solutions",
+        role: "manager",
         createdAt: new Date().toISOString(),
         memberCount: 10,
       },
-    ]
+    ];
 
-    return ok({ organizations })
-  } catch (_error) {
-    return serverError('Failed to fetch organizations')
+    return ok({ organizations });
+  } catch {
+    return serverError("Failed to fetch organizations");
   }
 }
 
@@ -49,23 +49,23 @@ export async function GET(_request: NextRequest) {
  */
 export async function POST(request: NextRequest) {
   try {
-    const parsed = await parseJson(request, CreateOrgSchema)
-    
+    const parsed = await parseJson(request, CreateOrgSchema);
+
     if (!parsed.success) {
-      return badRequest('Validation failed', parsed.details)
+      return badRequest("Validation failed", parsed.details);
     }
 
     // In production, create organization in database
     const newOrg = {
       id: `org-${Date.now()}`,
       ...parsed.data,
-      role: 'admin', // Creator is admin
+      role: "admin", // Creator is admin
       createdAt: new Date().toISOString(),
       memberCount: 1,
-    }
+    };
 
-    return ok(newOrg)
-  } catch (_error) {
-    return serverError('Failed to create organization')
+    return ok(newOrg);
+  } catch {
+    return serverError("Failed to create organization");
   }
 }

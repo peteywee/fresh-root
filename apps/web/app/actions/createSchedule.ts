@@ -11,25 +11,28 @@ export async function createSchedule(payload: CreatePayload) {
   const token = {
     uid: "u1-dev",
     orgId: payload.orgId,
-    roles: ["manager"]
+    roles: ["manager"],
   };
-  const res = await fetch(`${process.env.API_BASE_URL ?? "http://localhost:4000"}/orgs/${payload.orgId}/schedules`, {
-    method: "POST",
-    headers: {
-      "content-type": "application/json",
-      "x-user-token": JSON.stringify(token)
+  const res = await fetch(
+    `${process.env.API_BASE_URL ?? "http://localhost:4000"}/orgs/${payload.orgId}/schedules`,
+    {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        "x-user-token": JSON.stringify(token),
+      },
+      body: JSON.stringify({ startDate: payload.startDate }),
+      cache: "no-store",
     },
-    body: JSON.stringify({ startDate: payload.startDate }),
-    cache: "no-store"
-  });
+  );
   if (!res.ok) {
-      let errorPayload: any = { error: "unknown" };
-      try {
-        errorPayload = await res.json();
-      } catch {
-        errorPayload = { error: await res.text() };
-      }
-      throw new Error(`API error ${res.status}: ${errorPayload.error ?? "unknown"}`);
+    let errorPayload: any = { error: "unknown" };
+    try {
+      errorPayload = await res.json();
+    } catch {
+      errorPayload = { error: await res.text() };
     }
+    throw new Error(`API error ${res.status}: ${errorPayload.error ?? "unknown"}`);
+  }
   return res.json();
 }
