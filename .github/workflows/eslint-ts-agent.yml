@@ -1,0 +1,67 @@
+name: ESLint + TypeScript Agent
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  lint-and-typecheck:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Use PNPM
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm -w install --frozen-lockfile || pnpm -w install
+
+      - name: ESLint (PR review annotations)
+        uses: reviewdog/action-eslint@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          reporter: github-pr-review
+          filter_mode: diff_context
+          fail_on_error: false
+          eslint_flags: >-
+            "apps/**/src/**/*.{ts,tsx,js,jsx}" "apps/**/app/**/*.{ts,tsx,js,jsx}"
+            "packages/**/src/**/*.{ts,tsx,js,jsx}" "functions/src/**/*.{ts,tsx,js,jsx}"
+
+      - name: ESLint auto-fix (best effort)
+        run: pnpm -w exec eslint "apps/**/src/**/*.{ts,tsx,js,jsx}" "apps/**/app/**/*.{ts,tsx,js,jsx}" "packages/**/src/**/*.{ts,tsx,js,jsx}" "functions/src/**/*.{ts,tsx,js,jsx}" --fix || true
+
+      - name: Prettier write (best effort)
+        run: pnpm -w prettier --write . || true
+
+      - name: Commit auto-fixes to PR branch (if any)
+        if: github.event_name == 'pull_request'
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: 'chore(eslint): auto-fix lint errors'
+          branch: ${{ github.head_ref }}
+
+      - name: Typecheck (non-blocking)
+        run: pnpm -s -w typecheck || true
+
+      - name: Summary
+        if: always()
+        run: |
+          echo "ESLint + TypeScript agent completed." >> $GITHUB_STEP_SUMMARY
+          echo "- Annotations added via reviewdog." >> $GITHUB_STEP_SUMMARY
+          echo "- Auto-fixes committed when possible (ESLint + Prettier)." >> $GITHUB_STEP_SUMMARY
