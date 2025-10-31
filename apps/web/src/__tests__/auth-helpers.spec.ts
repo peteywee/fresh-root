@@ -4,7 +4,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import * as helpers from '../lib/auth-helpers';
 
 vi.mock('firebase/auth', async () => {
-  const actual = await vi.importActual<any>('firebase/auth');
+  const actual = await vi.importActual<typeof import('firebase/auth')>('firebase/auth');
   return {
     ...actual,
     GoogleAuthProvider: vi.fn(),
@@ -19,25 +19,52 @@ vi.mock('firebase/auth', async () => {
 
 beforeEach(() => {
   vi.resetAllMocks();
-  (global as any).window = { location: { href: 'http://localhost/auth/callback', origin: 'http://localhost' }, localStorage: new Map() };
-  (window.localStorage as any).getItem = (k: string) => (window.localStorage as any).get(k);
-  (window.localStorage as any).setItem = (k: string, v: string) => (window.localStorage as any).set(k, v);
-  (window.localStorage as any).removeItem = (k: string) => (window.localStorage as any).delete(k);
+  
+  // Mock indexedDB for pendingEmail.store
+  const mockIDB = {
+    open: vi.fn().mockResolvedValue({
+      transaction: vi.fn().mockReturnValue({
+        objectStore: vi.fn().mockReturnValue({
+          get: vi.fn().mockResolvedValue(undefined),
+          put: vi.fn().mockResolvedValue(undefined),
+          delete: vi.fn().mockResolvedValue(undefined),
+        }),
+      }),
+    }),
+  };
+  (global as unknown as { indexedDB: typeof mockIDB }).indexedDB = mockIDB;
+  
+  type MockStorage = Map<string, string> & {
+    getItem: (k: string) => string | undefined;
+    setItem: (k: string, v: string) => void;
+    removeItem: (k: string) => void;
+  };
+  
+  const mockLocalStorage = new Map() as MockStorage;
+  mockLocalStorage.getItem = (k: string) => mockLocalStorage.get(k);
+  mockLocalStorage.setItem = (k: string, v: string) => mockLocalStorage.set(k, v);
+  mockLocalStorage.removeItem = (k: string) => mockLocalStorage.delete(k);
+  
+  (global as unknown as { window: { location: Location; localStorage: MockStorage; prompt: typeof vi.fn } }).window = { 
+    location: { href: 'http://localhost/auth/callback', origin: 'http://localhost' } as Location, 
+    localStorage: mockLocalStorage,
+    prompt: vi.fn(),
+  };
 });
 
 describe('Google popup -> redirect fallback', () => {
   it('falls back to redirect on popup error', async () => {
-    (firebaseAuth.signInWithPopup as any).mockRejectedValue(new Error('popup blocked'));
-    (firebaseAuth.signInWithRedirect as any).mockResolvedValue(undefined);
-    await expect(helpers.loginWithGooglePopupOrRedirect()).resolves.toBeUndefined();
+    vi.mocked(firebaseAuth.signInWithPopup).mockRejectedValue(new Error('popup blocked'));
+    vi.mocked(firebaseAuth.signInWithRedirect).mockResolvedValue(undefined as never);
+    await expect(helpers.loginWithGoogleSmart()).resolves.toBeUndefined();
     expect(firebaseAuth.signInWithRedirect).toHaveBeenCalled();
   });
 });
 
 describe('Email link completion', () => {
   it('prompts for email if not stored and link present', async () => {
-    (firebaseAuth.isSignInWithEmailLink as any).mockReturnValue(true);
-    (firebaseAuth.signInWithEmailLink as any).mockResolvedValue({});
+    vi.mocked(firebaseAuth.isSignInWithEmailLink).mockReturnValue(true);
+    vi.mocked(firebaseAuth.signInWithEmailLink).mockResolvedValue({} as firebaseAuth.UserCredential);
     vi.spyOn(window, 'prompt').mockReturnValue('user@test.com');
     await expect(helpers.completeEmailLinkIfPresent()).resolves.toBe(true);
   });
@@ -45,7 +72,7 @@ describe('Email link completion', () => {
 
 describe('Google redirect completion idempotent', () => {
   it('swallows duplicate getRedirectResult calls', async () => {
-    (firebaseAuth.getRedirectResult as any).mockResolvedValueOnce({ user: { uid: '1' } }).mockResolvedValueOnce(null);
+    vi.mocked(firebaseAuth.getRedirectResult).mockResolvedValueOnce({ user: { uid: '1' } } as firebaseAuth.UserCredential).mockResolvedValueOnce(null);
     const first = await helpers.completeGoogleRedirectOnce();
     const second = await helpers.completeGoogleRedirectOnce();
     expect(first).toBe(true);

@@ -5,7 +5,7 @@ import { middleware } from '../middleware';
 
 function req(path: string, cookie?: string) {
   return new NextRequest(`http://localhost${path}`, {
-    headers: cookie ? { cookie } as any : undefined,
+    headers: cookie ? ({ cookie } as HeadersInit) : undefined,
   });
 }
 
@@ -17,11 +17,15 @@ describe('middleware', () => {
 
   it('blocks /dashboard without __session', () => {
     const res = middleware(req('/dashboard'));
-    expect(res.headers.get('location')).toMatch('/login');
+    const location = res.headers.get('location');
+    expect(location).toBeTruthy();
+    expect(location).toContain('/login');
   });
 
   it('redirects /login to /dashboard if __session present', () => {
     const res = middleware(req('/login', '__session=x'));
-    expect(res.headers.get('location')).toMatch('/dashboard');
+    const location = res.headers.get('location');
+    expect(location).toBeTruthy();
+    expect(location).toContain('/dashboard');
   });
 });
