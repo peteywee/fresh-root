@@ -2,10 +2,10 @@ name: Sync Labels (declarative)
 
 on:
   push:
-    branches: [ dev, main ]
+    branches: [dev, main]
     paths:
-      - '.github/labels.yml'
-      - '.github/workflows/labels-sync.yml'
+      - ".github/labels.yml"
+      - ".github/workflows/labels-sync.yml"
   workflow_dispatch: {}
 
 permissions:

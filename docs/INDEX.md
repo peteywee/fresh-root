@@ -170,7 +170,7 @@ fresh-root/
 
 ### Current State
 
-```
+```text
 ✅ Production Ready
 ✅ All tests passing
 ✅ CI/CD pipeline green

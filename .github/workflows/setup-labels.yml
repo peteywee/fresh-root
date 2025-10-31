@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       dry_run:
-        description: 'Dry run (preview changes without applying)'
+        description: "Dry run (preview changes without applying)"
         required: false
         type: boolean
         default: false

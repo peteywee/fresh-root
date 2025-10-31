@@ -151,7 +151,7 @@ Every push/PR triggers automated checks:
 
 See [`.github/workflows/`](./.github/workflows/) for details.
 
-3. **Set up environment variables**:
+1. **Set up environment variables**:
    Create `.env.local` in `apps/web/` with your Firebase configuration:
 
    ```env
@@ -162,7 +162,7 @@ See [`.github/workflows/`](./.github/workflows/) for details.
    NEXT_PUBLIC_FIREBASE_APP_ID=your_app_id
    ```
 
-4. **Start development server**:
+2. **Start development server**:
 
    ```bash
    pnpm dev
@@ -202,7 +202,7 @@ firebase deploy --only storage
 
 ## Development
 
-### Available Scripts
+### Common Commands
 
 From the root directory:
 

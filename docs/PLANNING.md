@@ -318,7 +318,7 @@
 
 ### Branch Strategy
 
-```
+```text
 main (production)
   └── dev (staging)
       ├── feat/user-profile
@@ -329,7 +329,7 @@ main (production)
 
 ### Commit Convention
 
-```
+```text
 type(scope): subject
 
 [optional body]
@@ -587,7 +587,7 @@ type(scope): subject
 
 ---
 
-## 🎉 Ready to Start Planning!
+## Ready to Start Planning
 
 **Next Actions:**
 

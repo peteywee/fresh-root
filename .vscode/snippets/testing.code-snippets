@@ -9,8 +9,8 @@
       "  it('should $2', () => {",
       "    expect($3).toBe($4);",
       "  });",
-      "});"
+      "});",
     ],
-    "description": "Quick Vitest suite"
-  }
+    "description": "Quick Vitest suite",
+  },
 }

@@ -3,7 +3,7 @@
   "configurations": [
     {
       // Debug Next.js (apps/web) with breakpoints in server & client
-      "type": "pwa-node",
+      "type": "node",
       "request": "launch",
       "name": "Web: Next dev",
       "cwd": "${workspaceFolder}/apps/web",
@@ -18,7 +18,7 @@
     },
     {
       // Debug Vitest (all workspaces) with watch disabled by default
-      "type": "pwa-node",
+      "type": "node",
       "request": "launch",
       "name": "Tests: Vitest (workspace)",
       "cwd": "${workspaceFolder}",
@@ -32,7 +32,7 @@
     },
     {
       // Single-file test focus: put cursor in the file and run
-      "type": "pwa-node",
+      "type": "node",
       "request": "launch",
       "name": "Tests: Current File (Vitest)",
       "program": "${workspaceFolder}/node_modules/vitest/vitest.mjs",
@@ -45,7 +45,7 @@
     },
     {
       // Functions emulator (if/when you debug Cloud Functions locally)
-      "type": "pwa-node",
+      "type": "node",
       "request": "launch",
       "name": "Firebase Emulators",
       "cwd": "${workspaceFolder}",

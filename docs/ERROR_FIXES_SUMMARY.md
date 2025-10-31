@@ -23,7 +23,7 @@ ELIFECYCLE  Command failed with exit code 77.
 
 **Error:**
 
-```
+```text
 ERR_PNPM_NO_OFFLINE_META  Failed to resolve execa@>=9.4.0 <10.0.0-0
 This error happened while installing a direct dependency of /app
 ```
@@ -35,7 +35,6 @@ This error happened while installing a direct dependency of /app
 - Using `pnpm install --offline --filter` fails because root deps aren't cached
 
 **Solution:**
-Updated `services/api/Dockerfile`:
 
 ```dockerfile
 # Before (broken)
@@ -51,7 +50,6 @@ RUN pnpm --filter @fresh-schedules/api build  # Build with filter
 **Commits:**
 
 - `98528eb` - Initial fix attempt
-- `0bc785c` - Final fix removing filter from install
 
 ---
 
@@ -59,18 +57,17 @@ RUN pnpm --filter @fresh-schedules/api build  # Build with filter
 
 **Error:**
 
-```
+```text
 TypeError: fetch failed
 Caused by: Error: connect ECONNREFUSED 127.0.0.1:8080
 ```
 
 **Root Cause:**
 
-- Firebase emulators (Firestore on port 8080, Storage on port 9199) were not running
-- Tests require emulators to be active before execution
 - Running `pnpm -w test:rules` directly doesn't start emulators
 
 **Solution:**
+
 Updated `package.json` to wrap tests in `firebase emulators:exec`:
 
 ```json
@@ -140,8 +137,6 @@ pnpm -w test:rules:dev
 
 ## CI/CD Integration
 
-### GitHub Actions Workflow
-
 The CI workflow (`.github/workflows/ci.yml`) already uses `emulators:exec`:
 
 ```yaml
@@ -158,7 +153,7 @@ This ensures emulators are automatically started and stopped during CI runs.
 
 **Warning from push:**
 
-```
+```text
 GitHub found 2 vulnerabilities on peteywee/fresh-root's default branch (2 moderate)
 ```
 
@@ -166,7 +161,6 @@ GitHub found 2 vulnerabilities on peteywee/fresh-root's default branch (2 modera
 Run Dependabot updates or check the security tab:
 
 ```bash
-# View security alerts
 gh browse --settings security
 
 # Or visit directly
@@ -191,7 +185,7 @@ gh browse --settings security
 # 1. Verify agent builds
 pnpm run build:agent && echo "✅ Agent builds successfully"
 
-# 2. Verify rules tests with emulators
+# 2. Verify rules tests
 pnpm -w test:rules && echo "✅ Rules tests pass"
 
 # 3. Verify Docker build
