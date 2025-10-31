@@ -5,7 +5,7 @@ WORKDIR /app
 # Only copy API workspace to keep image small
 COPY pnpm-workspace.yaml package.json pnpm-lock.yaml ./
 COPY services/api/package.json services/api/tsconfig.json ./services/api/
-RUN corepack enable && corepack prepare pnpm@9.0.0 --activate
+RUN corepack enable && corepack prepare pnpm@9.1.0 --activate
 RUN pnpm fetch --filter @fresh-schedules/api
 
 COPY services/api ./services/api
