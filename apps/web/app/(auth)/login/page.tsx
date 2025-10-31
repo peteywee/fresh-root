@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
 import React, { useCallback, useEffect, useState, Suspense } from 'react'
 
+import { auth } from '../../lib/firebaseClient'
 import { sendEmailLinkRobust, startGooglePopup, establishServerSession } from '../../../src/lib/auth-helpers'
 
 const LoginForm = React.memo(() => {
@@ -21,7 +22,8 @@ const LoginForm = React.memo(() => {
 
     const href = window.location.href
     const code = params?.get('oobCode') || ''
-    const looksLikeEmailLink = isSignInWithEmailLink({} as any, href) || !!code
+    // Use Firebase SDK to check if this is a valid email link, falling back to URL param check
+    const looksLikeEmailLink = (auth && isSignInWithEmailLink(auth, href)) || !!code
     if (looksLikeEmailLink) {
       // Delegate handling to the dedicated callback route for consistency
       router.replace('/auth/callback')
@@ -45,9 +47,10 @@ const LoginForm = React.memo(() => {
       setStatus('Sending magic link…')
       await sendEmailLinkRobust(trimmed)
       setStatus('Magic link sent! Check your email and click the link to finish signing in.')
-    } catch (e: any) {
+    } catch (e) {
       console.error(e)
-      setError(e?.message || 'Failed to send magic link')
+      const errorMessage = e instanceof Error ? e.message : 'Failed to send magic link'
+      setError(errorMessage)
     } finally {
       setSending(false)
     }
@@ -73,9 +76,10 @@ const LoginForm = React.memo(() => {
         router.replace('/auth/callback')
         return
       }
-    } catch (e: any) {
+    } catch (e) {
       console.error(e)
-      setError(e?.message || 'Google sign-in failed')
+      const errorMessage = e instanceof Error ? e.message : 'Google sign-in failed'
+      setError(errorMessage)
     }
   }, [router])
 
