@@ -1,3 +1,5 @@
+// [P0][SECURITY][TEST] Edge security middleware tests (CORS, headers, rate limiting, size caps)
+// Tags: P0, SECURITY, TEST, EDGE, VITEST
 import express from "express";
 import { describe, expect, it } from "vitest";
 import { applySecurity } from "../src/mw/security.js";

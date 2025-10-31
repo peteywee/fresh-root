@@ -1,4 +1,5 @@
-// [P0][SECURITY][AUTH] Session middleware: verify Firebase session cookie and attach userToken
+// [P0][SECURITY][AUTH] Session cookie verification and MFA enforcement middleware
+// Tags: P0, SECURITY, AUTH, SESSION, MFA, MIDDLEWARE
 import type { NextFunction, Request, Response } from "express";
 import { getAdminAuth } from "../firebase.js";
 

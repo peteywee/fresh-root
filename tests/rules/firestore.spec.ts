@@ -1,4 +1,5 @@
-// Use Jest globals for rules tests
+// [P1][INTEGRITY][TEST] Firestore security rules tests with emulator
+// Tags: P1, INTEGRITY, TEST, FIRESTORE, RULES, SECURITY
 import { initializeTestEnvironment, RulesTestEnvironment } from '@firebase/rules-unit-testing';
 import fs from 'fs';
 

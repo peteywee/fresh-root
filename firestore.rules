@@ -1,3 +1,5 @@
+// [P1][INTEGRITY][RULES] Firestore security rules for multi-tenant RBAC
+// Tags: P1, INTEGRITY, FIRESTORE, RULES, SECURITY, RBAC, TENANT_ISOLATION
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {

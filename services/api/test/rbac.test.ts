@@ -1,3 +1,5 @@
+// [P0][SECURITY][TEST] RBAC and tenant isolation tests
+// Tags: P0, SECURITY, TEST, RBAC, VITEST
 import type { Request, Response, NextFunction } from "express";
 import { describe, it, expect } from "vitest";
 

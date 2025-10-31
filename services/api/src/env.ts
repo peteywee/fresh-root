@@ -1,6 +1,7 @@
+// [P0][SECURITY][ENV] Centralized environment validation with fail-fast
+// Tags: P0, SECURITY, ENV, VALIDATION
 import { z } from "zod";
 
-// [P0][SECURITY][ENV] Centralized env validation (fail-fast)
 const EnvSchema = z.object({
   PORT: z.string().default("4000"),
   NODE_ENV: z.enum(["development", "test", "production"]).default("development"),

@@ -1,4 +1,5 @@
-// [P1][RELIABILITY][OBS] Structured JSON logger
+// [P1][RELIABILITY][OBS] Structured JSON logger for production observability
+// Tags: P1, RELIABILITY, OBSERVABILITY, LOGGING, JSON
 import type { Request, Response } from "express";
 
 export type LogLevel = "debug" | "info" | "warn" | "error";

@@ -1,4 +1,5 @@
-// [P0][SECURITY][ENV] Client-side env helper for Next.js (compile-time)
+// [P0][SECURITY][ENV] Client-side environment validation for Next.js web app
+// Tags: P0, SECURITY, ENV, VALIDATION, NEXTJS, CLIENT
 // Note: Only NEXT_PUBLIC_ variables are exposed to the client bundle.
 
 export type WebEnv = {

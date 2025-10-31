@@ -1,3 +1,5 @@
+// [P0][SECURITY][RBAC] Role-based access control and tenant isolation guards
+// Tags: P0, SECURITY, RBAC, AUTHORIZATION, TENANT_ISOLATION
 import type { Request, Response, NextFunction } from "express";
 
 // Shared shape with your Zod types: uid, orgId, roles[]

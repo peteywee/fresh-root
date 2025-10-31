@@ -1,3 +1,5 @@
+// [P0][SECURITY][FIREBASE] Firebase Admin SDK singleton for Next.js server-side operations
+// Tags: P0, SECURITY, FIREBASE, ADMIN_SDK, NEXTJS
 import { cert, initializeApp, type App } from "firebase-admin/app";
 import { getAuth, type Auth } from "firebase-admin/auth";
 import { getFirestore, type Firestore } from "firebase-admin/firestore";

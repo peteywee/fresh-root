@@ -1,7 +1,8 @@
+// [P0][SECURITY][FIREBASE] Firebase Admin SDK singleton initialization
+// Tags: P0, SECURITY, FIREBASE, ADMIN_SDK
 import admin from "firebase-admin";
 import { getApps } from "firebase-admin/app";
 
-// [P0][SECURITY][FIREBASE] Admin singleton init using env JSON when provided
 export function initFirebase(projectId: string, googleCredsJson?: string) {
   if (getApps().length === 0) {
     if (googleCredsJson) {

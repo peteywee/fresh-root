@@ -1,4 +1,5 @@
-// [P1][RELIABILITY][SENTRY] Sentry error tracking initialization
+// [P1][RELIABILITY][SENTRY] Sentry error tracking and performance monitoring
+// Tags: P1, RELIABILITY, OBSERVABILITY, SENTRY, ERROR_TRACKING, PROFILING
 import * as Sentry from "@sentry/node";
 import { nodeProfilingIntegration } from "@sentry/profiling-node";
 import type { Express } from "express";
