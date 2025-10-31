@@ -1,0 +1,47 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Install (frozen)",
+      "type": "shell",
+      "command": "pnpm -w install --frozen-lockfile"
+    },
+    {
+      "label": "Typecheck",
+      "type": "shell",
+      "command": "pnpm -w typecheck",
+      "problemMatcher": "$tsc"
+    },
+    {
+      "label": "Lint",
+      "type": "shell",
+      "command": "pnpm -w lint"
+    },
+    {
+      "label": "Build (all)",
+      "type": "shell",
+      "command": "pnpm -w build"
+    },
+    {
+      "label": "Tests: Vitest (watch)",
+      "type": "shell",
+      "command": "pnpm vitest"
+    },
+    {
+      "label": "Tests: Coverage",
+      "type": "shell",
+      "command": "pnpm vitest run --coverage"
+    },
+    {
+      "label": "Rules: Unit Tests",
+      "type": "shell",
+      "command": "pnpm -w test:rules"
+    },
+    {
+      "label": "Sanity Script",
+      "type": "shell",
+      "command": "./scripts/sanity.sh",
+      "options": { "cwd": "${workspaceFolder}" }
+    }
+  ]
+}

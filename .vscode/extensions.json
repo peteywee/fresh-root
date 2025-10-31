@@ -1,0 +1,12 @@
+{
+  "recommendations": [
+    "ZixuanChen.vitest-explorer",
+    "ms-vscode.js-debug-nightly",
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode",
+    "ryanluker.vscode-coverage-gutters",
+    "redhat.vscode-yaml",
+    "streetsidesoftware.code-spell-checker",
+    "wayou.vscode-todo-highlight"
+  ]
+}
