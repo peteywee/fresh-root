@@ -39,6 +39,7 @@ This repository contains comprehensive technical documentation covering all aspe
 | **[../SETUP.md](../SETUP.md)**               | Step-by-step setup instructions |
 | **[../USAGE.md](../USAGE.md)**               | Application usage guide         |
 | **[../CONTRIBUTING.md](../CONTRIBUTING.md)** | Contribution guidelines         |
+| **[VS Code Workspace Rules](../.vscode/docs/RULES.md)** | Editor rules: no deprecated deps/peers |
 
 ### 5. AI Development Context
 
@@ -96,7 +97,7 @@ Located in `docs/RUNBOOKS/`:
 
 ### System Layers
 
-```
+```text
 ┌─────────────────────────────────┐
 │     Client (Next.js PWA)        │
 │     React 18 + TypeScript       │
@@ -119,11 +120,11 @@ Located in `docs/RUNBOOKS/`:
 │     Security Rules Engine       │
 │   firestore.rules | storage.rules│
 └─────────────────────────────────┘
-```
+```text
 
 ### Monorepo Structure
 
-```
+```text
 fresh-root/
 ├── apps/web/              # Next.js PWA
 ├── packages/              # Shared packages
