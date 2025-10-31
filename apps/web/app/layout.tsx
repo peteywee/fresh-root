@@ -29,10 +29,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             </Link>
             <div className="flex items-center gap-4 text-sm text-gray-300">
               <Link prefetch href="/planning" className="hover:text-white">Planning</Link>
-              <Link prefetch href="/(app)/protected/schedules" className="hover:text-white">
+              <Link prefetch href="/protected/schedules" className="hover:text-white">
                 Schedules
               </Link>
-              <Link prefetch href="/(app)/protected/dashboard" className="hover:text-white">
+              <Link prefetch href="/protected/dashboard" className="hover:text-white">
                 Dashboard
               </Link>
             </div>
