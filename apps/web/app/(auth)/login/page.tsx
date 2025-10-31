@@ -23,7 +23,15 @@ const LoginForm = React.memo(() => {
     const href = window.location.href
     const code = params?.get('oobCode') || ''
     // Use Firebase SDK to check if this is a valid email link, falling back to URL param check
-    const looksLikeEmailLink = (auth && isSignInWithEmailLink(auth, href)) || !!code
+    let looksLikeEmailLink = false;
+    if (auth) {
+      looksLikeEmailLink = isSignInWithEmailLink(auth, href) || !!code;
+    } else {
+      // If auth is not available, we cannot check the email link via Firebase SDK.
+      // Optionally, log a warning for debugging.
+      console.warn('Firebase auth instance is undefined; cannot check email link via SDK.');
+      looksLikeEmailLink = !!code;
+    }
     if (looksLikeEmailLink) {
       // Delegate handling to the dedicated callback route for consistency
       router.replace('/auth/callback')
