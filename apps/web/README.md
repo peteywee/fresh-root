@@ -2,6 +2,29 @@
 
 The main web application for Fresh Schedules, built with Next.js 16 and React 18.
 
+## Architecture: Server-First
+
+This application follows a **server-first architecture**:
+
+- **Data access occurs in server components or server actions** - No direct Firestore client writes for privileged operations
+- **Client components call server actions** - Minimal client-side logic for data mutations
+- **RBAC enforced server-side** - Firestore rules are a backstop, not the primary control
+- **Server-side caching with ISR** - Improved performance with tag-based invalidation for targeted revalidation
+
+### Why Server-First?
+
+1. **Security**: Sensitive operations happen on the server where credentials are secure
+2. **Performance**: Server-side caching and ISR reduce client load times
+3. **Consistency**: Single source of truth for business logic
+4. **Maintainability**: Easier to update and test server logic vs. distributed client code
+
+### Key Patterns
+
+- Use Next.js Server Components for data fetching
+- Implement Server Actions for mutations (create, update, delete)
+- Apply ISR with `revalidateTag()` for cache invalidation after writes
+- Reserve client components for interactivity (forms, buttons, client-side state)
+
 ## Tech Stack
 
 - **Framework**: Next.js 16 (App Router)

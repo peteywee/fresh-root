@@ -21,6 +21,8 @@
   ],
   "scripts": {
     "prepare": "husky install || true",
+    "build:agent": "tsc -p scripts/agent/tsconfig.json",
+    "run:agent": "node --enable-source-maps ./dist/agent/agent.mjs",
     "lint": "eslint \"apps/**/src/**/*.{ts,tsx,js,jsx}\" \"apps/**/app/**/*.{ts,tsx,js,jsx}\" \"packages/**/src/**/*.{ts,tsx,js,jsx}\" \"functions/src/**/*.{ts,tsx,js,jsx}\" --max-warnings 200",
     "format": "pnpm -w prettier --write .",
     "typecheck": "tsc --build",
@@ -31,7 +33,9 @@
     "ci": "pnpm -w install --frozen-lockfile && pnpm -w typecheck && pnpm -w lint && pnpm -w build && pnpm -w test && pnpm -w test:rules"
   },
   "dependencies": {
+    "execa": "^9.4.0",
     "firebase-admin": "^12.0.0",
+    "p-retry": "^6.2.0",
     "zod": "^3.24.1"
   },
   "devDependencies": {
