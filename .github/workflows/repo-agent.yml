@@ -70,6 +70,11 @@ jobs:
             $( [ "$AGENT_FORCE" = "true" ] && echo "--force" ) \
             $( [ "$AGENT_PLAN_ONLY" = "true" ] && echo "--plan-only" )
 
+      - name: Lint & fix (ESLint + Prettier)
+        run: |
+          pnpm -w exec eslint "apps/**/src/**/*.{ts,tsx,js,jsx}" "apps/**/app/**/*.{ts,tsx,js,jsx}" "packages/**/src/**/*.{ts,tsx,js,jsx}" "functions/src/**/*.{ts,tsx,js,jsx}" --fix || true
+          pnpm -w prettier --write . || true
+
       - name: Lint & Typecheck (root)
         run: |
           pnpm -s run -w lint || true

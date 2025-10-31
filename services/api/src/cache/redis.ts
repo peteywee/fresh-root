@@ -1,5 +1,6 @@
-import type { CacheProvider } from "./provider.js";
 import { createClient, type RedisClientType } from "redis";
+
+import type { CacheProvider } from "./provider.js";
 
 export class RedisCache implements CacheProvider {
   private client: RedisClientType;
