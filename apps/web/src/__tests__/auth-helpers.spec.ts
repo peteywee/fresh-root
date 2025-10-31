@@ -49,7 +49,13 @@ describe('Google popup -> redirect fallback', () => {
 describe('Email link completion', () => {
   it('prompts for email if not stored and link present', async () => {
     vi.mocked(firebaseAuth.isSignInWithEmailLink).mockReturnValue(true);
-    vi.mocked(firebaseAuth.signInWithEmailLink).mockResolvedValue({} as never);
+    // Mock minimal UserCredential structure
+    const mockUserCredential = {
+      user: { uid: 'test-user', email: 'user@test.com' },
+      providerId: null,
+      operationType: 'signIn' as const,
+    };
+    vi.mocked(firebaseAuth.signInWithEmailLink).mockResolvedValue(mockUserCredential as never);
     vi.spyOn(window, 'prompt').mockReturnValue('user@test.com');
     await expect(helpers.completeEmailLinkIfPresent()).resolves.toBe(true);
   });
@@ -57,8 +63,14 @@ describe('Email link completion', () => {
 
 describe('Google redirect completion idempotent', () => {
   it('swallows duplicate getRedirectResult calls', async () => {
+    // Mock minimal UserCredential structure for first call
+    const mockUserCredential = {
+      user: { uid: '1', email: 'test@example.com' },
+      providerId: null,
+      operationType: 'signIn' as const,
+    };
     vi.mocked(firebaseAuth.getRedirectResult)
-      .mockResolvedValueOnce({ user: { uid: '1' } } as never)
+      .mockResolvedValueOnce(mockUserCredential as never)
       .mockResolvedValueOnce(null);
     const first = await helpers.completeGoogleRedirectOnce();
     const second = await helpers.completeGoogleRedirectOnce();
