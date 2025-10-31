@@ -36,7 +36,9 @@
     "ci": "pnpm -w install --frozen-lockfile && pnpm -w typecheck && pnpm -w lint && pnpm -w build && pnpm -w test && pnpm -w test:rules"
   },
   "dependencies": {
+    "execa": "^9.4.0",
     "firebase-admin": "^12.0.0",
+    "p-retry": "^6.2.0",
     "zod": "^3.24.1"
   },
   "devDependencies": {

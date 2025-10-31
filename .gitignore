@@ -52,3 +52,5 @@ TODO.md
 # Workspace local config
 *.code-workspace
 fresh-root-10.code-workspace
+*.original-backup
+dist/agent/
