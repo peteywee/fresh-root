@@ -38,7 +38,7 @@ export async function GET(_request: NextRequest) {
     ]
 
     return ok({ organizations })
-  } catch (_error) {
+  } catch {
     return serverError('Failed to fetch organizations')
   }
 }
@@ -65,7 +65,7 @@ export async function POST(request: NextRequest) {
     }
 
     return ok(newOrg)
-  } catch (_error) {
+  } catch {
     return serverError('Failed to create organization')
   }
 }

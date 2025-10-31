@@ -7,7 +7,7 @@ export async function POST(req: NextRequest) {
     if (!idToken) return NextResponse.json({ error: 'Missing idToken' }, { status: 400 })
     // TODO: Verify with Firebase Admin and set cookie; for now, no-op success
     return NextResponse.json({ status: 'ok' }, { status: 200 })
-  } catch (_e) {
+  } catch {
     return NextResponse.json({ error: 'Invalid request' }, { status: 400 })
   }
 }
