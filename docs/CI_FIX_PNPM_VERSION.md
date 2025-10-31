@@ -61,4 +61,3 @@ When updating pnpm version:
 
 - Previous fixes: `docs/TEST_FIXES_ROUND2.md`
 - Branch consolidation: `docs/BRANCH_CONSOLIDATION.md`
-

@@ -1,6 +1,11 @@
 # Fresh Schedules
 
+**Status:** ✅ Production Ready | **Version:** 1.0.0 | **Last Updated:** October 31, 2025
+
 A modern, production-ready Progressive Web App (PWA) for staff scheduling, built with Next.js, Firebase, and a monorepo architecture using pnpm.
+
+> **📖 [Complete Technical Documentation](./docs/COMPLETE_TECHNICAL_DOCUMENTATION.md)** - Comprehensive guide with architecture, troubleshooting, and reproducibility  
+> **🏗️ [Architecture Diagrams](./docs/ARCHITECTURE_DIAGRAMS.md)** - Visual system architecture with Mermaid diagrams
 
 ## Features
 
@@ -10,44 +15,141 @@ A modern, production-ready Progressive Web App (PWA) for staff scheduling, built
 - **Monorepo architecture**: Organized with pnpm workspaces for scalable development
 - **Type-safe**: Full TypeScript support with Zod validation
 - **Modern stack**: Next.js 16, React 18, Tailwind CSS, React Query
+- **CI/CD**: Automated testing, linting, and security scanning via GitHub Actions
+- **RBAC**: Role-based access control with Firestore security rules
+
+## Quick Links
+
+| Resource                                                                     | Description                                                     |
+| ---------------------------------------------------------------------------- | --------------------------------------------------------------- |
+| 📖 **[Complete Technical Docs](./docs/COMPLETE_TECHNICAL_DOCUMENTATION.md)** | Architecture, critical issues, solutions, reproducibility guide |
+| 🏗️ **[Architecture Diagrams](./docs/ARCHITECTURE_DIAGRAMS.md)**              | System diagrams (data flow, CI/CD, auth, deployment)            |
+| 🔧 **[Test Fixes Round 2](./docs/TEST_FIXES_ROUND2.md)**                     | 6 critical bug fixes (storage, auth, Docker, ESLint)            |
+| 🌳 **[Branch Consolidation](./docs/BRANCH_CONSOLIDATION.md)**                | Repository cleanup (7 branches → 1)                             |
+| ⚙️ **[CI Fix: PNPM Version](./docs/CI_FIX_PNPM_VERSION.md)**                 | GitHub Actions pnpm version mismatch resolution                 |
+| 📦 **[Setup Guide](./SETUP.md)**                                             | Step-by-step setup instructions                                 |
+| 📘 **[Usage Guide](./USAGE.md)**                                             | Application usage documentation                                 |
 
 ## Project Structure
 
 ```text
 fresh-root/
 ├── apps/
-│   └── web/                 # Next.js web application
-│       ├── app/             # Next.js app router
-│       ├── components/      # Reusable UI components
-│       ├── lib/             # Client-side utilities
-│       └── public/          # Static assets
+│   └── web/                     # Next.js PWA application
+│       ├── app/                 # App router (pages & API routes)
+│       ├── components/          # UI components
+│       ├── src/lib/             # Client utilities
+│       └── middleware.ts        # Auth middleware
 ├── packages/
-│   └── types/               # Shared TypeScript types
-├── firebase.json            # Firebase configuration
-├── pnpm-workspace.yaml      # Monorepo configuration
-└── tsconfig.json           # Root TypeScript config
+│   ├── types/                   # Shared TypeScript types
+│   ├── ui/                      # UI component library
+│   ├── rules-tests/             # Firebase rules testing
+│   └── config/                  # Shared configs
+├── services/
+│   └── api/                     # Dockerized API service
+├── tests/
+│   ├── e2e/                     # Playwright E2E tests
+│   └── rules/                   # Firebase security rules tests
+├── .github/workflows/           # CI/CD pipelines (5 workflows)
+├── firebase.json                # Firebase configuration
+├── firestore.rules              # Firestore security rules (RBAC)
+├── storage.rules                # Storage security rules
+├── pnpm-workspace.yaml          # Workspace configuration
+└── package.json                 # Root dependencies (pnpm@9.1.0)
 ```
 
 ## Quick Start
 
 ### Prerequisites
 
-- Node.js >= 20.0.0
-- pnpm >= 9.0.0
+- Node.js >= 20.10.0
+- pnpm >= 9.1.0 (via corepack)
+- Git >= 2.20
 
 ### Installation
 
-1. **Enable pnpm corepack** (if not already enabled):
+1. **Enable pnpm corepack**:
 
    ```bash
    corepack enable
    ```
 
-2. **Install dependencies**:
+2. **Clone and install**:
 
    ```bash
+   git clone https://github.com/peteywee/fresh-root.git
+   cd fresh-root
    pnpm install
    ```
+
+3. **Set up environment variables**:
+
+   Create `.env.local` in `apps/web/`:
+
+   ```env
+   NEXT_PUBLIC_FIREBASE_API_KEY=your_api_key
+   NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com
+   NEXT_PUBLIC_FIREBASE_PROJECT_ID=your_project_id
+   NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=your_project.appspot.com
+   NEXT_PUBLIC_FIREBASE_APP_ID=your_app_id
+   NEXT_PUBLIC_USE_EMULATORS=false
+   ```
+
+4. **Start development server**:
+
+   ```bash
+   pnpm dev
+   # Open http://localhost:3000
+   ```
+
+## Available Scripts
+
+From the root directory:
+
+```bash
+pnpm dev          # Start development server
+pnpm build        # Build all packages
+pnpm typecheck    # Run TypeScript checks
+pnpm lint         # Run ESLint
+pnpm test         # Run all tests
+pnpm test:rules   # Run Firebase rules tests
+pnpm test:e2e     # Run E2E tests (Playwright)
+```
+
+## Development Workflow
+
+### Running Tests
+
+**With Firebase Emulators:**
+
+```bash
+# Terminal 1: Start emulators
+firebase emulators:start
+
+# Terminal 2: Run tests
+pnpm test:rules
+```
+
+**All tests:**
+
+```bash
+pnpm test        # Unit tests
+pnpm test:rules  # Firestore + Storage rules
+pnpm test:e2e    # End-to-end tests
+```
+
+### CI/CD Pipeline
+
+Every push/PR triggers automated checks:
+
+- ✅ ESLint (with auto-fix)
+- ✅ TypeScript checks
+- ✅ Firebase rules tests
+- ✅ API unit tests
+- ✅ Docker build
+- ✅ CodeQL security scan
+
+See [`.github/workflows/`](./.github/workflows/) for details.
 
 3. **Set up environment variables**:
    Create `.env.local` in `apps/web/` with your Firebase configuration:

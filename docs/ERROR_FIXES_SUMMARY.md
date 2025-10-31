@@ -22,12 +22,14 @@ ELIFECYCLE  Command failed with exit code 77.
 ### 2. ✅ Docker Build Failure (Fixed)
 
 **Error:**
+
 ```
 ERR_PNPM_NO_OFFLINE_META  Failed to resolve execa@>=9.4.0 <10.0.0-0
 This error happened while installing a direct dependency of /app
 ```
 
 **Root Cause:**
+
 - `execa` is a workspace root dependency in `package.json`
 - Using `pnpm fetch --filter @fresh-schedules/api` only fetches API package deps
 - Using `pnpm install --offline --filter` fails because root deps aren't cached
@@ -47,6 +49,7 @@ RUN pnpm --filter @fresh-schedules/api build  # Build with filter
 ```
 
 **Commits:**
+
 - `98528eb` - Initial fix attempt
 - `0bc785c` - Final fix removing filter from install
 
@@ -55,12 +58,14 @@ RUN pnpm --filter @fresh-schedules/api build  # Build with filter
 ### 3. ✅ Rules Tests Failure (Fixed)
 
 **Error:**
+
 ```
 TypeError: fetch failed
 Caused by: Error: connect ECONNREFUSED 127.0.0.1:8080
 ```
 
 **Root Cause:**
+
 - Firebase emulators (Firestore on port 8080, Storage on port 9199) were not running
 - Tests require emulators to be active before execution
 - Running `pnpm -w test:rules` directly doesn't start emulators
@@ -95,6 +100,7 @@ pnpm -w test:rules:dev  # Terminal 2
 ## Testing Instructions
 
 ### Build and Run Agent
+
 ```bash
 # Build agent
 pnpm run build:agent
@@ -107,6 +113,7 @@ pnpm run:agent --issue 21 --no-self-heal --no-self-update
 ```
 
 ### Docker API Build
+
 ```bash
 # Build container
 pnpm run api:docker:build
@@ -119,6 +126,7 @@ curl http://localhost:4000/health
 ```
 
 ### Rules Tests
+
 ```bash
 # Automatic (recommended)
 pnpm -w test:rules
@@ -149,12 +157,14 @@ This ensures emulators are automatically started and stopped during CI runs.
 ## GitHub Security Warnings
 
 **Warning from push:**
+
 ```
 GitHub found 2 vulnerabilities on peteywee/fresh-root's default branch (2 moderate)
 ```
 
 **Action Needed:**
 Run Dependabot updates or check the security tab:
+
 ```bash
 # View security alerts
 gh browse --settings security
@@ -167,11 +177,11 @@ gh browse --settings security
 
 ## Summary of Changes
 
-| File | Changes | Purpose |
-|------|---------|---------|
+| File                      | Changes                               | Purpose                             |
+| ------------------------- | ------------------------------------- | ----------------------------------- |
 | `services/api/Dockerfile` | Remove `--filter` from `pnpm install` | Include workspace root deps (execa) |
-| `package.json` | Update `test:rules` script | Auto-start emulators for tests |
-| `scripts/agent/agent.mts` | Pulled from main via self-update | Latest agent code |
+| `package.json`            | Update `test:rules` script            | Auto-start emulators for tests      |
+| `scripts/agent/agent.mts` | Pulled from main via self-update      | Latest agent code                   |
 
 ---
 
