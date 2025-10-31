@@ -1,14 +1,14 @@
-import type { Config } from 'jest';
+import type { Config } from "jest";
 const config: Config = {
-  testEnvironment: 'jsdom',
-  transform: { '^.+\\.(t|j)sx?$': ['ts-jest', { tsconfig: 'tsconfig.json' }] },
-  testMatch: ['/tests//.spec.(ts|tsx)'],
+  testEnvironment: "jsdom",
+  transform: { "^.+\\.(t|j)sx?$": ["ts-jest", { tsconfig: "tsconfig.json" }] },
+  testMatch: ["/tests//.spec.(ts|tsx)"],
   moduleNameMapper: {
-    '^@/(.)$': '<rootDir>/$1',
-    '^@apps/web/(.*)$': '<rootDir>/apps/web/$1'
+    "^@/(.)$": "<rootDir>/$1",
+    "^@apps/web/(.*)$": "<rootDir>/apps/web/$1",
   },
-  reporters: ['default'],
+  reporters: ["default"],
   setupFilesAfterEnv: [],
-  globals: {}
+  globals: {},
 };
 export default config;

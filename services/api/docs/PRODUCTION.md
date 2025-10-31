@@ -106,7 +106,7 @@ curl -i -H "Origin: https://evil.com" https://api.example.com/health
 
 **Header:**
 
-```
+```http
 Strict-Transport-Security: max-age=15552000; includeSubDomains
 ```
 
@@ -114,7 +114,7 @@ Strict-Transport-Security: max-age=15552000; includeSubDomains
 
 All responses include:
 
-```
+```http
 X-Content-Type-Options: nosniff
 X-Frame-Options: DENY
 Referrer-Policy: no-referrer

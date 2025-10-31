@@ -1,11 +1,11 @@
 "use client";
 
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState } from "react";
 
-import { publishSchedule } from '../../../../src/lib/api/schedules';
-import Inbox from '../../../components/Inbox';
-import MonthView from '../../../components/MonthView';
-import ProtectedRoute from '../../../components/ProtectedRoute';
+import { publishSchedule } from "../../../../src/lib/api/schedules";
+import Inbox from "../../../components/Inbox";
+import MonthView from "../../../components/MonthView";
+import ProtectedRoute from "../../../components/ProtectedRoute";
 
 const DashboardPage = React.memo(() => {
   const [busy, setBusy] = useState(false);
@@ -16,13 +16,13 @@ const DashboardPage = React.memo(() => {
     setMessage(null);
     try {
       // For demo: replace with real orgId/scheduleId selection
-      const orgId = 'orgA';
-      const scheduleId = 'demo-schedule';
+      const orgId = "orgA";
+      const scheduleId = "demo-schedule";
       const res = await publishSchedule({ orgId, scheduleId });
-      setMessage('Published successfully');
-      console.log('publish result', res);
+      setMessage("Published successfully");
+      console.log("publish result", res);
     } catch (err: any) {
-      setMessage(err?.message || 'Publish failed');
+      setMessage(err?.message || "Publish failed");
     } finally {
       setBusy(false);
     }
@@ -30,60 +30,65 @@ const DashboardPage = React.memo(() => {
 
   return (
     <ProtectedRoute>
-      <main className="min-h-screen p-6 bg-gradient-to-br from-surface via-surface-card to-surface-accent animate-fade-in">
-        <div className="max-w-7xl mx-auto space-y-6">
-          <header className="text-center py-8">
-            <h1 className="text-4xl font-bold text-primary mb-2">Dashboard</h1>
-            <p className="text-text-muted text-lg">Manage your schedules and stay updated</p>
+      <main className="min-h-screen animate-fade-in bg-gradient-to-br from-surface via-surface-card to-surface-accent p-6">
+        <div className="mx-auto max-w-7xl space-y-6">
+          <header className="py-8 text-center">
+            <h1 className="mb-2 text-4xl font-bold text-primary">Dashboard</h1>
+            <p className="text-lg text-text-muted">Manage your schedules and stay updated</p>
           </header>
 
-          <section className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8">
+          <section className="mb-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
             <button
               onClick={onPublish}
               disabled={busy}
-              className="btn-primary px-6 py-3 text-lg font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
+              className="btn-primary px-6 py-3 text-lg font-semibold disabled:cursor-not-allowed disabled:opacity-50"
             >
               {busy ? (
                 <div className="flex items-center gap-2">
-                  <div className="loading-skeleton w-5 h-5 rounded-full"></div>
+                  <div className="loading-skeleton h-5 w-5 rounded-full"></div>
                   Publishing…
                 </div>
               ) : (
-                '🚀 Publish Schedule'
+                "🚀 Publish Schedule"
               )}
             </button>
             {message && (
-              <div className={`text-sm px-4 py-2 rounded-lg animate-slide-up ${
-                message.includes('successfully')
-                  ? 'bg-secondary/10 text-secondary border border-secondary'
-                  : 'bg-red-500/10 text-red-400 border border-red-500'
-              }`}>
+              <div
+                className={`animate-slide-up rounded-lg px-4 py-2 text-sm ${
+                  message.includes("successfully")
+                    ? "border border-secondary bg-secondary/10 text-secondary"
+                    : "border border-red-500 bg-red-500/10 text-red-400"
+                }`}
+              >
                 {message}
               </div>
             )}
           </section>
 
-          <section className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <div className="animate-slide-up" style={{ animationDelay: '0.1s' }}>
+          <section className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+            <div className="animate-slide-up" style={{ animationDelay: "0.1s" }}>
               <MonthView />
             </div>
-            <div className="animate-slide-up" style={{ animationDelay: '0.2s' }}>
+            <div className="animate-slide-up" style={{ animationDelay: "0.2s" }}>
               <Inbox />
             </div>
           </section>
 
-          <section className="card p-6 text-center animate-slide-up" style={{ animationDelay: '0.3s' }}>
-            <h2 className="text-2xl font-semibold text-primary mb-4">Quick Stats</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              <div className="bg-surface-accent rounded-lg p-4">
+          <section
+            className="card animate-slide-up p-6 text-center"
+            style={{ animationDelay: "0.3s" }}
+          >
+            <h2 className="mb-4 text-2xl font-semibold text-primary">Quick Stats</h2>
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+              <div className="rounded-lg bg-surface-accent p-4">
                 <div className="text-2xl font-bold text-primary">12</div>
                 <div className="text-text-muted">Active Schedules</div>
               </div>
-              <div className="bg-surface-accent rounded-lg p-4">
+              <div className="rounded-lg bg-surface-accent p-4">
                 <div className="text-2xl font-bold text-secondary">5</div>
                 <div className="text-text-muted">Pending Tasks</div>
               </div>
-              <div className="bg-surface-accent rounded-lg p-4">
+              <div className="rounded-lg bg-surface-accent p-4">
                 <div className="text-2xl font-bold text-primary">98%</div>
                 <div className="text-text-muted">Uptime</div>
               </div>
@@ -95,6 +100,6 @@ const DashboardPage = React.memo(() => {
   );
 });
 
-DashboardPage.displayName = 'DashboardPage';
+DashboardPage.displayName = "DashboardPage";
 
 export default DashboardPage;

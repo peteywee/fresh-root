@@ -2,7 +2,7 @@ name: update-deps
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 9 * * 1' # weekly, Mondays 09:00 UTC
+    - cron: "0 9 * * 1" # weekly, Mondays 09:00 UTC
 jobs:
   bump:
     runs-on: ubuntu-latest
@@ -18,7 +18,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'pnpm'
+          cache: "pnpm"
 
       - name: Install
         run: pnpm install

@@ -9,7 +9,7 @@ import {
   doc,
   query,
   orderBy,
-  limit
+  limit,
 } from "firebase/firestore";
 
 import { cached } from "./cache";
@@ -18,7 +18,7 @@ import { ENV } from "./env";
 const app = initializeApp({
   apiKey: ENV.NEXT_PUBLIC_FIREBASE_API_KEY,
   authDomain: ENV.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
-  projectId: ENV.NEXT_PUBLIC_FIREBASE_PROJECT_ID
+  projectId: ENV.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
 });
 const db = getFirestore(app);
 
@@ -43,11 +43,7 @@ const TAG_SCHEDULES = (orgId: string) => `schedules:${orgId}`;
 async function _fetchRecentSchedulesLite(orgId: string, max = 10): Promise<ScheduleLite[]> {
   // Ensure indexes exist: (weekStart DESC, venueId ASC) on schedules/{orgId}/{scheduleId}
   const ref = collection(db, "schedules", orgId, "schedules");
-  const q = query(
-    ref,
-    orderBy("weekStart", "desc"),
-    limit(max)
-  );
+  const q = query(ref, orderBy("weekStart", "desc"), limit(max));
   const snap = await getDocs(q);
   return snap.docs.map((d) => {
     const data = d.data() as ScheduleDocData;
@@ -61,17 +57,19 @@ async function _fetchRecentSchedulesLite(orgId: string, max = 10): Promise<Sched
           ? (data.weekStart as { toDate: () => Date }).toDate().toISOString()
           : (data.weekStart as string),
       venueId: data.venueId,
-      status: data.status
+      status: data.status,
     };
   });
 }
 
 export const fetchRecentSchedulesLite = (orgId: string, max = 10) =>
-  cached<Parameters<typeof _fetchRecentSchedulesLite>, Awaited<ReturnType<typeof _fetchRecentSchedulesLite>>>(
-    `recentSchedules:${orgId}:${max}`,
-    _fetchRecentSchedulesLite,
-    { tag: TAG_SCHEDULES(orgId), ttl: 60 }
-  )(orgId, max);
+  cached<
+    Parameters<typeof _fetchRecentSchedulesLite>,
+    Awaited<ReturnType<typeof _fetchRecentSchedulesLite>>
+  >(`recentSchedules:${orgId}:${max}`, _fetchRecentSchedulesLite, {
+    tag: TAG_SCHEDULES(orgId),
+    ttl: 60,
+  })(orgId, max);
 
 export async function fetchScheduleDoc(orgId: string, scheduleId: string) {
   const ref = doc(db, "schedules", orgId, scheduleId);

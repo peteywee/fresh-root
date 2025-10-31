@@ -34,11 +34,11 @@ This repository contains comprehensive technical documentation covering all aspe
 
 ### 4. Setup & Usage Guides
 
-| Document                                     | Purpose                         |
-| -------------------------------------------- | ------------------------------- |
-| **[../SETUP.md](../SETUP.md)**               | Step-by-step setup instructions |
-| **[../USAGE.md](../USAGE.md)**               | Application usage guide         |
-| **[../CONTRIBUTING.md](../CONTRIBUTING.md)** | Contribution guidelines         |
+| Document                                                | Purpose                                |
+| ------------------------------------------------------- | -------------------------------------- |
+| **[../SETUP.md](../SETUP.md)**                          | Step-by-step setup instructions        |
+| **[../USAGE.md](../USAGE.md)**                          | Application usage guide                |
+| **[../CONTRIBUTING.md](../CONTRIBUTING.md)**            | Contribution guidelines                |
 | **[VS Code Workspace Rules](../.vscode/docs/RULES.md)** | Editor rules: no deprecated deps/peers |
 
 ### 5. AI Development Context
@@ -97,7 +97,7 @@ Located in `docs/RUNBOOKS/`:
 
 ### System Layers
 
-```text
+````text
 ┌─────────────────────────────────┐
 │     Client (Next.js PWA)        │
 │     React 18 + TypeScript       │
@@ -135,7 +135,7 @@ fresh-root/
 ├── services/api/          # Dockerized API
 ├── tests/                 # E2E + Rules tests
 └── .github/workflows/     # CI/CD pipelines
-```
+````
 
 ## Development Journey Highlights
 

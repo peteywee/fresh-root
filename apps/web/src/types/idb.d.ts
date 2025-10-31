@@ -1,1 +1,1 @@
-declare module 'idb';
+declare module "idb";

@@ -32,18 +32,21 @@ We are committed to providing a welcoming and inclusive environment. Please:
 ### Setup
 
 1. **Fork and clone the repository**:
+
    ```bash
    git clone https://github.com/YOUR-USERNAME/fresh-root.git
    cd fresh-root
    ```
 
 2. **Install dependencies**:
+
    ```bash
    corepack enable
    pnpm install
    ```
 
 3. **Set up environment variables**:
+
    ```bash
    cd apps/web
    cp .env.example .env.local
@@ -78,6 +81,7 @@ We follow the [Conventional Commits](https://www.conventionalcommits.org/) speci
 ```
 
 **Types**:
+
 - `feat` - New feature
 - `fix` - Bug fix
 - `docs` - Documentation only
@@ -87,6 +91,7 @@ We follow the [Conventional Commits](https://www.conventionalcommits.org/) speci
 - `chore` - Maintenance tasks
 
 **Examples**:
+
 ```
 feat(auth): add Google OAuth sign-in
 fix(api): handle empty response in user profile endpoint
@@ -174,17 +179,18 @@ pnpm test:coverage
 - Mock external dependencies
 
 **Example**:
-```tsx
-import { describe, it, expect } from 'vitest'
-import { render, screen } from '@testing-library/react'
-import { Button } from './Button'
 
-describe('Button', () => {
-  it('renders with text', () => {
-    render(<Button>Click me</Button>)
-    expect(screen.getByText('Click me')).toBeInTheDocument()
-  })
-})
+```tsx
+import { describe, it, expect } from "vitest";
+import { render, screen } from "@testing-library/react";
+import { Button } from "./Button";
+
+describe("Button", () => {
+  it("renders with text", () => {
+    render(<Button>Click me</Button>);
+    expect(screen.getByText("Click me")).toBeInTheDocument();
+  });
+});
 ```
 
 ## Linting and Type Checking
@@ -233,18 +239,22 @@ Fix all linting and type errors before submitting a PR.
 
 ```markdown
 ## Description
+
 Brief description of the changes
 
 ## Type of Change
+
 - [ ] Bug fix
 - [ ] New feature
 - [ ] Breaking change
 - [ ] Documentation update
 
 ## Testing
+
 How has this been tested?
 
 ## Checklist
+
 - [ ] Tests pass
 - [ ] Linting passes
 - [ ] Documentation updated
@@ -256,6 +266,7 @@ How has this been tested?
 ### Reporting Bugs
 
 Include:
+
 - Clear description of the issue
 - Steps to reproduce
 - Expected vs actual behavior
@@ -266,6 +277,7 @@ Include:
 ### Feature Requests
 
 Include:
+
 - Clear description of the feature
 - Use cases and benefits
 - Potential implementation approach

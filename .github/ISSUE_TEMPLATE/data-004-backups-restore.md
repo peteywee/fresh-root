@@ -2,7 +2,7 @@
 name: DATA-004 Backups & Restore Drill
 about: Automate daily Firestore export and validate a restore drill to a scratch project
 title: "[DATA-004] Backups & Restore"
-labels: ["data","platform","P1"]
+labels: ["data", "platform", "P1"]
 assignees: ["peteywee"]
 ---
 

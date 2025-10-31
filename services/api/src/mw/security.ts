@@ -1,6 +1,7 @@
 // [P0][SECURITY][EDGE] Edge security: headers, CORS allowlist, rate limiting, body size caps
 // Tags: P0, SECURITY, EDGE, CORS, HSTS, RATE_LIMIT, MIDDLEWARE
 import express, { type Express, type NextFunction, type Request, type Response } from "express";
+
 import type { Env } from "../env.js";
 import { getCorsOrigins } from "../env.js";
 

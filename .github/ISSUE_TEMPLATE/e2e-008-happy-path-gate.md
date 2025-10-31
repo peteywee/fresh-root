@@ -2,7 +2,7 @@
 name: E2E-008 Happy Path Gate (Playwright)
 about: Automate onboarding → create org → plan → publish; gate PRs on E2E
 title: "[E2E-008] Happy Path Gate"
-labels: ["e2e","platform","P1"]
+labels: ["e2e", "platform", "P1"]
 assignees: ["peteywee"]
 ---
 

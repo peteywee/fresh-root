@@ -48,6 +48,7 @@ All errors follow a consistent format:
 Check API health status.
 
 **Response**:
+
 ```json
 {
   "status": "ok",
@@ -64,6 +65,7 @@ Check API health status.
 List items (demo endpoint).
 
 **Response**:
+
 ```json
 {
   "items": [
@@ -81,6 +83,7 @@ List items (demo endpoint).
 Create a new item.
 
 **Request**:
+
 ```json
 {
   "name": "New Item"
@@ -88,6 +91,7 @@ Create a new item.
 ```
 
 **Response**:
+
 ```json
 {
   "id": "2",
@@ -97,6 +101,7 @@ Create a new item.
 ```
 
 **Validation**:
+
 - `name`: Required, string, 1-100 characters
 
 ---
@@ -110,6 +115,7 @@ Get the current user's profile.
 **Authentication**: Required
 
 **Response**:
+
 ```json
 {
   "id": "user-123",
@@ -134,6 +140,7 @@ Update the current user's profile.
 **Authentication**: Required
 
 **Request**:
+
 ```json
 {
   "displayName": "Jane Doe",
@@ -146,6 +153,7 @@ Update the current user's profile.
 ```
 
 **Response**:
+
 ```json
 {
   "id": "user-123",
@@ -162,6 +170,7 @@ Update the current user's profile.
 ```
 
 **Validation**:
+
 - `displayName`: Optional, string, 1-100 characters
 - `bio`: Optional, string, max 500 characters
 - `phoneNumber`: Optional, string, E.164 format
@@ -180,6 +189,7 @@ List organizations the current user belongs to.
 **Authentication**: Required
 
 **Response**:
+
 ```json
 {
   "organizations": [
@@ -202,6 +212,7 @@ Create a new organization.
 **Authentication**: Required
 
 **Request**:
+
 ```json
 {
   "name": "New Company",
@@ -212,6 +223,7 @@ Create a new organization.
 ```
 
 **Response**:
+
 ```json
 {
   "id": "org-123",
@@ -226,6 +238,7 @@ Create a new organization.
 ```
 
 **Validation**:
+
 - `name`: Required, string, 1-100 characters
 - `description`: Optional, string, max 500 characters
 - `industry`: Optional, string
@@ -238,9 +251,11 @@ Get organization details.
 **Authentication**: Required
 
 **Parameters**:
+
 - `id`: Organization ID (path parameter)
 
 **Response**:
+
 ```json
 {
   "id": "org-1",
@@ -265,9 +280,11 @@ Update organization details.
 **Authentication**: Required (admin only)
 
 **Parameters**:
+
 - `id`: Organization ID (path parameter)
 
 **Request**:
+
 ```json
 {
   "name": "Updated Name",
@@ -279,6 +296,7 @@ Update organization details.
 ```
 
 **Response**:
+
 ```json
 {
   "id": "org-1",
@@ -292,6 +310,7 @@ Update organization details.
 ```
 
 **Validation**:
+
 - Same as POST /api/organizations, all fields optional
 - `settings.allowPublicSchedules`: Optional, boolean
 - `settings.requireShiftApproval`: Optional, boolean
@@ -304,9 +323,11 @@ Delete an organization.
 **Authentication**: Required (admin only)
 
 **Parameters**:
+
 - `id`: Organization ID (path parameter)
 
 **Response**:
+
 ```json
 {
   "message": "Organization deleted successfully",
@@ -324,6 +345,7 @@ API endpoints are rate-limited to prevent abuse:
 - Authenticated requests: 1000 requests per hour
 
 Rate limit headers:
+
 ```http
 X-RateLimit-Limit: 1000
 X-RateLimit-Remaining: 999
@@ -335,10 +357,12 @@ X-RateLimit-Reset: 1640995200
 Endpoints that return lists support pagination:
 
 **Query Parameters**:
+
 - `page`: Page number (default: 1)
 - `limit`: Items per page (default: 20, max: 100)
 
 **Response**:
+
 ```json
 {
   "data": [...],
@@ -356,10 +380,12 @@ Endpoints that return lists support pagination:
 Some endpoints support filtering and sorting:
 
 **Query Parameters**:
+
 - `sort`: Field to sort by (e.g., `createdAt`, `-createdAt` for descending)
 - `filter[field]`: Filter by field value
 
 **Example**:
+
 ```
 GET /api/organizations?sort=-createdAt&filter[industry]=Technology
 ```
@@ -369,6 +395,7 @@ GET /api/organizations?sort=-createdAt&filter[industry]=Technology
 Configure webhooks to receive real-time notifications:
 
 **Events**:
+
 - `schedule.published`
 - `shift.created`
 - `shift.updated`
@@ -376,6 +403,7 @@ Configure webhooks to receive real-time notifications:
 - `member.removed`
 
 **Webhook Payload**:
+
 ```json
 {
   "event": "schedule.published",
@@ -392,26 +420,26 @@ Configure webhooks to receive real-time notifications:
 ### JavaScript/TypeScript
 
 ```typescript
-import { apiFetch } from './lib/http'
+import { apiFetch } from "./lib/http";
 
 // Get user profile
-const profile = await apiFetch('/api/users/profile')
+const profile = await apiFetch("/api/users/profile");
 
 // Update profile
-const updated = await apiFetch('/api/users/profile', {
-  method: 'PATCH',
+const updated = await apiFetch("/api/users/profile", {
+  method: "PATCH",
   body: JSON.stringify({
-    displayName: 'New Name'
-  })
-})
+    displayName: "New Name",
+  }),
+});
 
 // Create organization
-const org = await apiFetch('/api/organizations', {
-  method: 'POST',
+const org = await apiFetch("/api/organizations", {
+  method: "POST",
   body: JSON.stringify({
-    name: 'My Company'
-  })
-})
+    name: "My Company",
+  }),
+});
 ```
 
 ### cURL
@@ -446,6 +474,7 @@ curl -X PATCH https://api.example.com/api/users/profile \
 ## Support
 
 For questions or issues with the API:
+
 - Open an issue on GitHub
 - Check the [CONTRIBUTING.md](../../CONTRIBUTING.md) guide
 - Review the [USAGE.md](../../USAGE.md) documentation

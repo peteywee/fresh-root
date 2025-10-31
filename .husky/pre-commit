@@ -1,0 +1,7 @@
+#!/bin/sh
+
+# Pre-commit: lint and format (no deprecated husky.sh sourcing)
+pnpm -w lint || exit 1
+pnpm -w format || exit 1
+
+echo "[husky] Pre-commit checks completed."

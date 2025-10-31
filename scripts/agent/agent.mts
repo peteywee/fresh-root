@@ -15,15 +15,19 @@ const argv = process.argv.slice(2);
 const ArgSchema = z.object({
   issue: z.string().default("21"),
   force: z.boolean().default(false),
-  planOnly: z.boolean().default(false)
+  planOnly: z.boolean().default(false),
 });
 function parseArgs() {
-  let issue = "21", force = false, planOnly = false;
+  let issue = "21",
+    force = false,
+    planOnly = false;
   for (let i = 0; i < argv.length; i++) {
     const a = argv[i];
     if (a === "--force") force = true;
     else if (a === "--plan-only") planOnly = true;
-    else if (a === "--issue") { issue = argv[++i]; }
+    else if (a === "--issue") {
+      issue = argv[++i];
+    }
   }
   return ArgSchema.parse({ issue, force, planOnly });
 }
@@ -71,17 +75,21 @@ async function main() {
 
   // 4) Install if needed (best-effort)
   if (!planOnly) {
-    await pRetry(async () => {
-      await execa("pnpm", ["install"], { stdio: "inherit" });
-    }, { retries: 1 }).catch(() => warn("pnpm install failed (non-fatal)"));
+    await pRetry(
+      async () => {
+        await execa("pnpm", ["install"], { stdio: "inherit" });
+      },
+      { retries: 1 },
+    ).catch(() => warn("pnpm install failed (non-fatal)"));
   }
 
   // 5) Typecheck and rules tests (skip in plan-only mode)
   if (!planOnly) {
     await execa("pnpm", ["-s", "typecheck"], { stdio: "inherit" });
     // Rules tests require emulators - run but don't fail if emulators aren't available
-    await execa("pnpm", ["-s", "test:rules"], { stdio: "inherit" })
-      .catch(() => warn("Rules tests failed (may need emulators running)"));
+    await execa("pnpm", ["-s", "test:rules"], { stdio: "inherit" }).catch(() =>
+      warn("Rules tests failed (may need emulators running)"),
+    );
   }
 
   ok("Repo agent completed successfully.");

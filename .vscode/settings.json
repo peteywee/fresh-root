@@ -15,17 +15,14 @@
     "**/.pnpm-store": true
   },
   "files.watcherExclude": {
-    "**/.git/**": true,
-    "**/.next/**": true,
     "**/node_modules/**": true,
+    "**/.next/**": true,
     "**/dist/**": true,
     "**/build/**": true,
     "**/coverage/**": true,
     "**/.turbo/**": true,
     "**/.firebase/**": true,
-    "**/.pnpm-store/**": true,
-    "**/.cache/**": true,
-    "**/.eslintcache": true
+    "**/.pnpm-store/**": true
   },
   "search.useIgnoreFiles": true,
   "search.followSymlinks": false,
@@ -36,25 +33,36 @@
     "watchFile": "useFsEventsOnParentDirectory",
     "watchDirectory": "useFsEvents"
   },
-  "typescript.tsserver.log": "off",
   "typescript.disableAutomaticTypeAcquisition": true,
   "typescript.suggest.autoImports": true,
   "typescript.preferences.importModuleSpecifier": "shortest",
 
   // ---------- ESLint ----------
-  "eslint.useFlatConfig": false,
+  "eslint.useFlatConfig": true,
   "eslint.enable": true,
   "eslint.validate": ["javascript", "javascriptreact", "typescript", "typescriptreact"],
   "eslint.codeActionsOnSave.rules": null,
+  "eslint.packageManager": "pnpm",
+  "eslint.probe": ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx"],
+  "eslint.runtime": "node",
 
   // ---------- Format & Save ----------
   "editor.formatOnSave": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": "explicit",
-    "source.organizeImports": "explicit"
+    "source.fixAll.eslint": "explicit"
   },
   "prettier.enable": true,
+
+  // Use workspace TypeScript so module resolution matches project
+  "typescript.tsdk": "node_modules/typescript/lib",
+
+  // ---------- Markdownlint ----------
+  "markdownlint.config": {
+    "MD040": true,
+    "MD022": true,
+    "MD031": true
+  },
 
   // ---------- Testing (Vitest) ----------
   "vitest.commandLine": "pnpm vitest -- --watch=false",
@@ -94,7 +102,25 @@
   // ---------- Workbench ----------
   "workbench.tree.indent": 14,
   "workbench.editor.enablePreview": false,
+  "workbench.startupEditor": "none",
 
   // ---------- Breadcrumbs & File Nav ----------
-  "breadcrumbs.enabled": true
+  "breadcrumbs.enabled": true,
+
+  // ---------- Tailwind CSS: disable heavy code actions; keep completion only ----------
+  "tailwindCSS.emmetCompletions": false,
+  "tailwindCSS.hovers": true,
+  "tailwindCSS.lint.cssConflict": "ignore",
+  "tailwindCSS.lint.invalidScreen": "ignore",
+  "tailwindCSS.lint.invalidVariant": "ignore",
+  "tailwindCSS.lint.redundantVariant": "ignore",
+  "tailwindCSS.includeLanguages": { "typescriptreact": "html" },
+  "tailwindCSS.experimental.classRegex": [
+    ["clsx\\(([^)]*)\\)", "(?:'|\"|`)([^'\"`]*)(?:'|\"|`)"],
+    ["cva\\(([^)]*)\\)", "(?:'|\"|`)([^'\"`]*)(?:'|\"|`)"]
+  ],
+
+  // ---------- GitHub extensions: keep them idle by default ----------
+  "github.prs.defaultQuery": "is:open author:@me",
+  "github.gitAuthentication": true
 }

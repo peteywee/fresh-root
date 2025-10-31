@@ -12,7 +12,7 @@ export function initFirebase(projectId: string, googleCredsJson?: string) {
           credential: admin.credential.cert(creds),
           projectId,
         });
-      } catch (e) {
+      } catch (_e) {
         console.warn(
           "[firebase] Invalid GOOGLE_APPLICATION_CREDENTIALS_JSON, falling back to default credentials",
         );

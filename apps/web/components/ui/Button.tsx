@@ -14,7 +14,7 @@ const variants: Record<Variant, string> = {
   ghost:
     "bg-transparent text-gray-200 hover:bg-neutral-900/60 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-700",
   danger:
-    "bg-rose-600 text-white hover:bg-rose-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-400"
+    "bg-rose-600 text-white hover:bg-rose-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-400",
 };
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -22,7 +22,12 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
   loading?: boolean;
 }
 
-export default function Button({ variant = "primary", loading, className = "", ...props }: ButtonProps) {
+export default function Button({
+  variant = "primary",
+  loading,
+  className = "",
+  ...props
+}: ButtonProps) {
   return (
     <button
       className={`${base} ${variants[variant]} ${loading ? "cursor-wait opacity-75" : ""} ${className}`}

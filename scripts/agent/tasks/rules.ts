@@ -115,14 +115,20 @@ export interface AuthContext {
 }
 `;
 
-export async function ensureRules(
-  { root, force, planOnly }: { root: string; force: boolean; planOnly: boolean; }
-) {
+export async function ensureRules({
+  root,
+  force,
+  planOnly,
+}: {
+  root: string;
+  force: boolean;
+  planOnly: boolean;
+}) {
   const paths = [
     ["firestore.rules", FIRESTORE_RULES],
     ["firestore.indexes.json", FIRESTORE_INDEXES],
     ["services/api/src/cache/provider.ts", CACHE_PROVIDER],
-    ["services/api/src/auth/types.ts", AUTH_IFACE]
+    ["services/api/src/auth/types.ts", AUTH_IFACE],
   ] as const;
 
   for (const [rel, content] of paths) {

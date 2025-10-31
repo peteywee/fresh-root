@@ -1,6 +1,7 @@
 // [P0][SECURITY][AUTH] Session cookie verification and MFA enforcement middleware
 // Tags: P0, SECURITY, AUTH, SESSION, MFA, MIDDLEWARE
 import type { NextFunction, Request, Response } from "express";
+
 import { getAdminAuth } from "../firebase.js";
 
 export type UserToken = {
@@ -40,7 +41,7 @@ export async function requireSession(req: Request, res: Response, next: NextFunc
 
     (req as any).userToken = userToken;
     next();
-  } catch (e) {
+  } catch (_e) {
     return res.status(401).json({ error: "unauthenticated" });
   }
 }

@@ -1,19 +1,24 @@
-import { NextRequest } from 'next/server'
-import { z } from 'zod'
+import { NextRequest } from "next/server";
+import { z } from "zod";
 
-import { parseJson, badRequest, ok, serverError } from '../../_shared/validation'
+import { parseJson, badRequest, ok, serverError } from "../../_shared/validation";
 
 // Schema for updating user profile
 const UpdateProfileSchema = z.object({
   displayName: z.string().min(1).max(100).optional(),
   bio: z.string().max(500).optional(),
-  phoneNumber: z.string().regex(/^\+?[1-9]\d{1,14}$/).optional(),
-  preferences: z.object({
-    theme: z.enum(['light', 'dark', 'auto']).optional(),
-    notifications: z.boolean().optional(),
-    language: z.string().length(2).optional(),
-  }).optional(),
-})
+  phoneNumber: z
+    .string()
+    .regex(/^\+?[1-9]\d{1,14}$/)
+    .optional(),
+  preferences: z
+    .object({
+      theme: z.enum(["light", "dark", "auto"]).optional(),
+      notifications: z.boolean().optional(),
+      language: z.string().length(2).optional(),
+    })
+    .optional(),
+});
 
 /**
  * GET /api/users/profile
@@ -24,23 +29,23 @@ export async function GET(_request: NextRequest) {
     // In production, extract user from auth token/session
     // For now, return a mock profile
     const userProfile = {
-      id: 'user-123',
-      email: 'user@example.com',
-      displayName: 'John Doe',
-      bio: 'Software developer',
-      phoneNumber: '+1234567890',
+      id: "user-123",
+      email: "user@example.com",
+      displayName: "John Doe",
+      bio: "Software developer",
+      phoneNumber: "+1234567890",
       photoURL: null,
       createdAt: new Date().toISOString(),
       preferences: {
-        theme: 'light',
+        theme: "light",
         notifications: true,
-        language: 'en',
+        language: "en",
       },
-    }
+    };
 
-    return ok(userProfile)
+    return ok(userProfile);
   } catch {
-    return serverError('Failed to fetch user profile')
+    return serverError("Failed to fetch user profile");
   }
 }
 
@@ -50,23 +55,23 @@ export async function GET(_request: NextRequest) {
  */
 export async function PATCH(request: NextRequest) {
   try {
-    const parsed = await parseJson(request, UpdateProfileSchema)
-    
+    const parsed = await parseJson(request, UpdateProfileSchema);
+
     if (!parsed.success) {
-      return badRequest('Validation failed', parsed.details)
+      return badRequest("Validation failed", parsed.details);
     }
 
     // In production, update user in database
     // For now, return updated mock data
     const updatedProfile = {
-      id: 'user-123',
-      email: 'user@example.com',
+      id: "user-123",
+      email: "user@example.com",
       ...parsed.data,
       updatedAt: new Date().toISOString(),
-    }
+    };
 
-    return ok(updatedProfile)
+    return ok(updatedProfile);
   } catch {
-    return serverError('Failed to update profile')
+    return serverError("Failed to update profile");
   }
 }

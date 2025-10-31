@@ -1,5 +1,5 @@
-import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
 
 interface PlanningState {
   avgWage: number;
@@ -25,6 +25,6 @@ export const useAppStore = create<AppState>()(
           planning: { ...state.planning, ...updates },
         })),
     }),
-    { name: 'app-storage' }
-  )
+    { name: "app-storage" },
+  ),
 );

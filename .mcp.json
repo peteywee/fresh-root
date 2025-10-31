@@ -3,7 +3,7 @@
     "github/github-mcp-server": {
       "type": "http",
       "url": "https://api.githubcopilot.com/mcp/",
-"gallery": "${env:GITHUB_MCP_GALLERY_URL}",
+      "gallery": "${env:GITHUB_MCP_GALLERY_URL}",
       "version": "0.13.0"
     },
     "chromedevtools/chrome-devtools-mcp": {
@@ -26,9 +26,7 @@
     "firebase": {
       "type": "stdio",
       "command": "npx",
-      "args": [
-        "firebase@12.4.0"
-      ],
+      "args": ["firebase@12.4.0"],
       "env": {},
       "cwd": "${workspaceFolder}"
     }

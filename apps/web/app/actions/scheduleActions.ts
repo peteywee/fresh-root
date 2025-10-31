@@ -5,7 +5,13 @@ import { invalidate } from "../lib/cache";
 
 const TAG_SCHEDULES = (orgId: string) => `schedules:${orgId}`;
 
-export async function publishSchedule({ orgId, scheduleId: _scheduleId }: { orgId: string; scheduleId: string }) {
+export async function publishSchedule({
+  orgId,
+  scheduleId: _scheduleId,
+}: {
+  orgId: string;
+  scheduleId: string;
+}) {
   // TODO: perform the privileged write (e.g., call Cloud Function or route handler)
   // await callPublish(orgId, scheduleId);
 

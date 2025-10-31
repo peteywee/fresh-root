@@ -1,10 +1,12 @@
 // [P1][RELIABILITY][OTEL] OpenTelemetry distributed tracing initialization
 // Tags: P1, RELIABILITY, OBSERVABILITY, OTEL, TRACING, INSTRUMENTATION
-import { NodeSDK } from "@opentelemetry/sdk-node";
 import { getNodeAutoInstrumentations } from "@opentelemetry/auto-instrumentations-node";
-import { OTLPTraceExporter } from "@opentelemetry/exporter-trace-otlp-http";
-import { Resource } from "@opentelemetry/resources";
-import { SEMRESATTRS_SERVICE_NAME, SEMRESATTRS_SERVICE_VERSION } from "@opentelemetry/semantic-conventions";
+import { Resource } from "@opentelemetry/resources"; // Added: used below
+import { NodeSDK } from "@opentelemetry/sdk-node";
+import {
+  SEMRESATTRS_SERVICE_NAME,
+  SEMRESATTRS_SERVICE_VERSION,
+} from "@opentelemetry/semantic-conventions";
 
 export interface OTelConfig {
   serviceName: string;
@@ -15,20 +17,39 @@ export interface OTelConfig {
 
 let sdk: NodeSDK | null = null;
 
+// Dynamically resolve an available OTLP trace exporter to avoid compile-time module errors.
+function loadOTLPTraceExporter(): new (config?: any) => any {
+  try {
+    // Preferred: HTTP exporter
+    return require("@opentelemetry/exporter-trace-otlp-http").OTLPTraceExporter;
+  } catch {}
+  try {
+    // Fallback: gRPC exporter
+    return require("@opentelemetry/exporter-trace-otlp-grpc").OTLPTraceExporter;
+  } catch {}
+  try {
+    // Fallback: proto HTTP exporter (varies by setup)
+    return require("@opentelemetry/exporter-trace-otlp-proto").OTLPTraceExporter;
+  } catch {}
+  throw new Error(
+    "No OTLP trace exporter package found. Install one of: @opentelemetry/exporter-trace-otlp-http, @opentelemetry/exporter-trace-otlp-grpc, or @opentelemetry/exporter-trace-otlp-proto.",
+  );
+}
+
 /**
  * Initialize OpenTelemetry SDK with auto-instrumentation for Express, HTTP, and more.
  * Must be called BEFORE any other imports that should be instrumented.
- * 
+ *
  * @example
  * ```typescript
  * import { initOTel } from './obs/otel.js';
- * 
+ *
  * initOTel({
  *   serviceName: 'fresh-schedules-api',
  *   serviceVersion: '1.0.0',
  *   endpoint: process.env.OTEL_EXPORTER_OTLP_TRACES_ENDPOINT,
  * });
- * 
+ *
  * // Now import Express and other instrumented libraries
  * import express from 'express';
  * ```
@@ -43,22 +64,18 @@ export function initOTel(config: OTelConfig): void {
   }
 
   try {
-    // Create OTLP trace exporter
-    const traceExporter = new OTLPTraceExporter({
+    // Create OTLP trace exporter (dynamically loaded to avoid missing module errors)
+    const OTLPTraceExporterCtor = loadOTLPTraceExporter();
+    const traceExporter = new OTLPTraceExporterCtor({
       url: endpoint,
     });
 
-    // Configure resource with service metadata
-    const resource = Resource.default().merge(
-      new Resource({
+    // Initialize SDK with auto-instrumentation
+    sdk = new NodeSDK({
+      resource: new Resource({
         [SEMRESATTRS_SERVICE_NAME]: serviceName,
         [SEMRESATTRS_SERVICE_VERSION]: serviceVersion || "unknown",
       }),
-    );
-
-    // Initialize SDK with auto-instrumentation
-    sdk = new NodeSDK({
-      resource,
       traceExporter,
       instrumentations: [
         getNodeAutoInstrumentations({
@@ -71,11 +88,11 @@ export function initOTel(config: OTelConfig): void {
             enabled: true,
             // Capture request/response headers for debugging
             requestHook: (span, request) => {
-                const userAgent =
-                  "headers" in request && request.headers
-                    ? request.headers["user-agent"] || "unknown"
-                    : "unknown";
-                span.setAttribute("http.user_agent", userAgent);
+              const userAgent =
+                "headers" in request && request.headers
+                  ? request.headers["user-agent"] || "unknown"
+                  : "unknown";
+              span.setAttribute("http.user_agent", userAgent);
             },
           },
           // Enable DNS instrumentation
@@ -114,11 +131,11 @@ export function initOTel(config: OTelConfig): void {
 /**
  * Get the active trace context for correlation with logs.
  * Use this to attach trace IDs to log entries.
- * 
+ *
  * @example
  * ```typescript
  * import { trace } from '@opentelemetry/api';
- * 
+ *
  * const span = trace.getActiveSpan();
  * if (span) {
  *   const traceId = span.spanContext().traceId;
@@ -139,7 +156,7 @@ export function getTraceContext() {
         traceFlags: ctx.traceFlags,
       };
     }
-  } catch (e) {
+  } catch (_e) {
     // OTel not available
   }
   return null;
@@ -148,7 +165,7 @@ export function getTraceContext() {
 /**
  * Manually flush pending traces (useful for serverless or testing).
  */
-export async function flushTraces(timeout: number = 5000): Promise<void> {
+export async function flushTraces(_timeout: number = 5000): Promise<void> {
   if (sdk) {
     await sdk.shutdown();
     console.log("[otel] traces flushed");

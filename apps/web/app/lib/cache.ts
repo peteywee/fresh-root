@@ -1,4 +1,8 @@
-import { unstable_cache as nextCache, revalidateTag, unstable_noStore as noStore } from "next/cache";
+import {
+  unstable_cache as nextCache,
+  revalidateTag,
+  unstable_noStore as noStore,
+} from "next/cache";
 
 export type CacheCfg = { tag?: string; ttl?: number; noStore?: boolean };
 
@@ -9,7 +13,7 @@ export type CacheCfg = { tag?: string; ttl?: number; noStore?: boolean };
 export function cached<TArgs extends unknown[], TRes>(
   key: string,
   fn: (...args: TArgs) => Promise<TRes>,
-  cfg: CacheCfg = {}
+  cfg: CacheCfg = {},
 ) {
   const { tag, ttl, noStore: skip } = cfg;
   if (skip) {

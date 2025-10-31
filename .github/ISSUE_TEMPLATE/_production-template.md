@@ -8,7 +8,7 @@ assignees: [peteywee]
 
 ## Labels
 
-- P*:
+- P\*:
 - Area:
 
 ## Objective
@@ -53,13 +53,13 @@ Why this task exists, dependencies, and production impact.
 
 ### 6️⃣ Why This Ties Directly to Production Readiness
 
-| Capability | Enabled By | Effect |
-|-------------|-------------|--------|
-| **Reproducibility** | Commands + Files + Scope | “Works on my machine” eliminated |
-| **Traceability** | Labels + Paths + Rationale | Audit trail & postmortem evidence |
-| **Observability Maturity** | KPIs + DoD | Links code output → SLO targets |
-| **Automation** | Labels + AC | GitHub Actions can parse and gate |
-| **Governance** | DoD + CI + Docs | Enforces “All Green Before You Push” |
+| Capability                 | Enabled By                 | Effect                               |
+| -------------------------- | -------------------------- | ------------------------------------ |
+| **Reproducibility**        | Commands + Files + Scope   | “Works on my machine” eliminated     |
+| **Traceability**           | Labels + Paths + Rationale | Audit trail & postmortem evidence    |
+| **Observability Maturity** | KPIs + DoD                 | Links code output → SLO targets      |
+| **Automation**             | Labels + AC                | GitHub Actions can parse and gate    |
+| **Governance**             | DoD + CI + Docs            | Enforces “All Green Before You Push” |
 
 ---
 
@@ -82,17 +82,17 @@ Why this task exists, dependencies, and production impact.
 
 Would you like me to now generate the **`.github/workflows/validate-template.yml`** that automatically fails CI if any PR description or issue lacks these required headings? That turns this philosophy into enforceable policy.
 
-| Section | Why it must exist |
-|---|---|
-| Labels | Drive automation, dashboards, CI gating, and triage visibility. Missing labels block workflow metrics. |
-| Objective | Defines “why this work matters.” Prevents scope creep and misaligned effort. |
-| Scope | Prevents accidental coupling or half-baked integrations. |
-| Files / Paths | Enables deterministic rebuilds and traceable file history. |
-| Commands | Ensures reproducibility on any system or CI runner. |
-| Acceptance Criteria | Converts subjective “done” into binary truth. |
-| Success KPIs | Translates engineering work into measurable ops impact. |
-| Definition of Done | Locks delivery gates: tests, docs, security, and CI states. |
-| Explanation / Rationale | Captures architectural intent for future maintainers and audits. |
+| Section                 | Why it must exist                                                                                      |
+| ----------------------- | ------------------------------------------------------------------------------------------------------ |
+| Labels                  | Drive automation, dashboards, CI gating, and triage visibility. Missing labels block workflow metrics. |
+| Objective               | Defines “why this work matters.” Prevents scope creep and misaligned effort.                           |
+| Scope                   | Prevents accidental coupling or half-baked integrations.                                               |
+| Files / Paths           | Enables deterministic rebuilds and traceable file history.                                             |
+| Commands                | Ensures reproducibility on any system or CI runner.                                                    |
+| Acceptance Criteria     | Converts subjective “done” into binary truth.                                                          |
+| Success KPIs            | Translates engineering work into measurable ops impact.                                                |
+| Definition of Done      | Locks delivery gates: tests, docs, security, and CI states.                                            |
+| Explanation / Rationale | Captures architectural intent for future maintainers and audits.                                       |
 
 #### Acceptance Benchmarks (Global Defaults)
 

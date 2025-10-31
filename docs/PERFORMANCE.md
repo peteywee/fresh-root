@@ -37,6 +37,7 @@
 ### Next Steps (Fast Follow)
 
 1. **Update Existing Firebase Client**
+
    ```bash
    # Replace direct process.env reads with ENV module
    apps/web/app/lib/firebaseClient.ts
@@ -44,6 +45,7 @@
    ```
 
 2. **Apply ISR to Read-Heavy Pages**
+
    ```typescript
    // Add to dashboard, schedules list, etc.
    export const revalidate = 60; // ISR
@@ -56,6 +58,7 @@
    - Example: `publishSchedule()` in `scheduleActions.ts`
 
 4. **Add Bundle Analyzer**
+
    ```bash
    pnpm add -D @next/bundle-analyzer
    # Then: ANALYZE=true pnpm build

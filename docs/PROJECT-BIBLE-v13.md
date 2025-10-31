@@ -19,10 +19,10 @@
 You are now at **Plan C: Production Hardening**. Version 12 was not production-ready; **v13 is**.  
 This Bible is your **single source of truth** to:
 
-1) Reconstruct the app from zero,  
-2) Execute work in **dependency blocks** (Security → Reliability → Integrity → Experience → Release),  
-3) Validate with **tests, metrics, and CI/CD gates**,  
-4) Ship with **Blue/Green** and a documented rollback.
+1. Reconstruct the app from zero,
+2. Execute work in **dependency blocks** (Security → Reliability → Integrity → Experience → Release),
+3. Validate with **tests, metrics, and CI/CD gates**,
+4. Ship with **Blue/Green** and a documented rollback.
 
 **North Star UX:** From dashboard to a published weekly schedule in **≤ 5 minutes** on a seeded demo org, with performance ≥ Lighthouse 90 and a11y ≥ 95.
 
@@ -60,20 +60,20 @@ This Bible is your **single source of truth** to:
 
 ### 2.2 Environment Variables (Fail-Fast)
 
-| Variable | Scope | Required | Notes |
-|---|---|---:|---|
-| `NEXT_PUBLIC_FIREBASE_API_KEY` | Web | Yes | Firebase Web |
-| `NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN` | Web | Yes | Firebase Web |
-| `NEXT_PUBLIC_FIREBASE_PROJECT_ID` | Web | Yes | Firebase Web |
-| `NEXT_PUBLIC_USE_EMULATORS` | Web | Dev | `"true"` enables emulator |
-| `SESSION_SECRET` | Server | Dev | Only for local JWT sessions; **prod** uses real Firebase session cookies |
-| `GOOGLE_APPLICATION_CREDENTIALS_JSON` | Server | Prod/CI | Inline service acct JSON (safer for CI than files) |
-| `SENTRY_DSN` | Both | No | Error tracking |
-| `OTEL_EXPORTER_OTLP_TRACES_ENDPOINT` | Server | No | Traces export URL |
-| `REDIS_URL` | Server | No | Optional cache |
-| `CORS_ORIGINS` | Server | Yes | Comma list of allowed origins |
-| `FIREBASE_PROJECT_ID` | Ops | Yes | For backups |
-| `BACKUP_BUCKET` | Ops | Yes | `gs://bucket` |
+| Variable                              | Scope  | Required | Notes                                                                    |
+| ------------------------------------- | ------ | -------: | ------------------------------------------------------------------------ |
+| `NEXT_PUBLIC_FIREBASE_API_KEY`        | Web    |      Yes | Firebase Web                                                             |
+| `NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN`    | Web    |      Yes | Firebase Web                                                             |
+| `NEXT_PUBLIC_FIREBASE_PROJECT_ID`     | Web    |      Yes | Firebase Web                                                             |
+| `NEXT_PUBLIC_USE_EMULATORS`           | Web    |      Dev | `"true"` enables emulator                                                |
+| `SESSION_SECRET`                      | Server |      Dev | Only for local JWT sessions; **prod** uses real Firebase session cookies |
+| `GOOGLE_APPLICATION_CREDENTIALS_JSON` | Server |  Prod/CI | Inline service acct JSON (safer for CI than files)                       |
+| `SENTRY_DSN`                          | Both   |       No | Error tracking                                                           |
+| `OTEL_EXPORTER_OTLP_TRACES_ENDPOINT`  | Server |       No | Traces export URL                                                        |
+| `REDIS_URL`                           | Server |       No | Optional cache                                                           |
+| `CORS_ORIGINS`                        | Server |      Yes | Comma list of allowed origins                                            |
+| `FIREBASE_PROJECT_ID`                 | Ops    |      Yes | For backups                                                              |
+| `BACKUP_BUCKET`                       | Ops    |      Yes | `gs://bucket`                                                            |
 
 **Policy:** Missing required envs = **fatal** at boot (fail-fast config check).
 
@@ -85,26 +85,26 @@ This Bible is your **single source of truth** to:
 
 **Goal:** No unauthenticated/unauthorized writes, enforced MFA, hardened edge.
 
-**Scope:**  
+**Scope:**
 
-- Session cookies: create/verify/clear  
-- Middleware: `requireSession`, `require2FAForManagers`  
-- Edge controls: Helmet, rate limits, size caps, strict CORS  
+- Session cookies: create/verify/clear
+- Middleware: `requireSession`, `require2FAForManagers`
+- Edge controls: Helmet, rate limits, size caps, strict CORS
 - Tests: 401/403/happy paths
 
-**Files/Paths:**  
+**Files/Paths:**
 
-- `apps/web/lib/session.ts`  
-- `services/api/src/mw/session.ts`  
-- `services/api/src/mw/security.ts`  
-- `services/api/src/mw/session.guard.test.ts`  
+- `apps/web/lib/session.ts`
+- `services/api/src/mw/session.ts`
+- `services/api/src/mw/security.ts`
+- `services/api/src/mw/session.guard.test.ts`
 - `docs/SECURITY.md`
 
-**Acceptance Criteria:**  
+**Acceptance Criteria:**
 
-- POST without session → **401**  
-- Privileged without MFA → **403 mfa_required**  
-- Dev headers **rejected in prod**  
+- POST without session → **401**
+- Privileged without MFA → **403 mfa_required**
+- Dev headers **rejected in prod**
 - Flood/oversize throttled or **413**
 
 **Success KPIs:** 0 unauthenticated writes; p95 auth < 150ms
@@ -117,25 +117,25 @@ This Bible is your **single source of truth** to:
 
 **Goal:** Errors visible, latency traced, data safely backed up and restorable.
 
-**Scope:**  
+**Scope:**
 
-- JSON logs (reqId, latencyMs, uid, orgId)  
-- Sentry init + release tagging  
-- OTel traces (API→Firestore)  
+- JSON logs (reqId, latencyMs, uid, orgId)
+- Sentry init + release tagging
+- OTel traces (API→Firestore)
 - Daily Firestore export + restore drill runbook
 
-**Files/Paths:**  
+**Files/Paths:**
 
-- `services/api/src/obs/log.ts`  
-- `services/api/src/obs/sentry.ts`  
-- `services/api/src/obs/otel.ts`  
-- `scripts/ops/backup-firestore.sh`  
+- `services/api/src/obs/log.ts`
+- `services/api/src/obs/sentry.ts`
+- `services/api/src/obs/otel.ts`
+- `scripts/ops/backup-firestore.sh`
 - `docs/runbooks/restore.md`
 
-**Acceptance Criteria:**  
+**Acceptance Criteria:**
 
-- Synthetic error in Sentry with trace  
-- Traces include DB spans and reqId correlation  
+- Synthetic error in Sentry with trace
+- Traces include DB spans and reqId correlation
 - Restore drill completes & checksum verified
 
 **Success KPIs:** MTTR ≤ 30m; backups 100% success
@@ -148,22 +148,22 @@ This Bible is your **single source of truth** to:
 
 **Goal:** Payload correctness and tenant isolation guaranteed.
 
-**Scope:**  
+**Scope:**
 
-- Zod schemas for core entities  
-- API validators for write routes  
+- Zod schemas for core entities
+- API validators for write routes
 - Rules test matrix (allow + ≥3 denials per collection)
 
-**Files/Paths:**  
+**Files/Paths:**
 
-- `packages/types/src/*.ts` (orgs, memberships, positions, schedules, shifts)  
-- `services/api/src/validators/*.ts`  
+- `packages/types/src/*.ts` (orgs, memberships, positions, schedules, shifts)
+- `services/api/src/validators/*.ts`
 - `tests/rules/*.test.ts`
 
-**Acceptance Criteria:**  
+**Acceptance Criteria:**
 
-- Invalid payload → **422** (pointer messages)  
-- Cross-org write/read → **denied**  
+- Invalid payload → **422** (pointer messages)
+- Cross-org write/read → **denied**
 - Rules suite green, coverage ≥ 85%
 
 **Success KPIs:** 0 policy regressions; coverage maintained
@@ -176,23 +176,23 @@ This Bible is your **single source of truth** to:
 
 **Goal:** Sub-5-minute schedule publish with consistent, accessible UI.
 
-**Scope:**  
+**Scope:**
 
-- Tailwind tokens + global styles  
-- UI primitives (shadcn/ui or custom light primitives)  
+- Tailwind tokens + global styles
+- UI primitives (shadcn/ui or custom light primitives)
 - Scheduler **Week Grid** (virtualized) with keyboard ops and sticky budget header
 
-**Files/Paths:**  
+**Files/Paths:**
 
-- `apps/web/tailwind.config.ts`  
-- `apps/web/styles/globals.css`  
-- `apps/web/components/ui/*`  
+- `apps/web/tailwind.config.ts`
+- `apps/web/styles/globals.css`
+- `apps/web/components/ui/*`
 - `apps/web/components/scheduler/*` (types, grid, virtualizer)
 
-**Acceptance Criteria:**  
+**Acceptance Criteria:**
 
-- Lighthouse **≥ 90** overall, **a11y ≥ 95**  
-- 1k visible rows ≥ 55 FPS  
+- Lighthouse **≥ 90** overall, **a11y ≥ 95**
+- 1k visible rows ≥ 55 FPS
 - Create 10 shifts **< 90s**; publish **≤ 5 min**
 
 **Success KPIs:** TTI ≤ 2.5s; CLS < 0.01
@@ -205,22 +205,22 @@ This Bible is your **single source of truth** to:
 
 **Goal:** Nothing broken ships; deploys are zero-downtime with fast rollback.
 
-**Scope:**  
+**Scope:**
 
-- Playwright happy path (auth → onboarding → org → plan → publish)  
-- CI gate requires E2E green  
+- Playwright happy path (auth → onboarding → org → plan → publish)
+- CI gate requires E2E green
 - Blue/Green deployment + smoke + rollback script
 
-**Files/Paths:**  
+**Files/Paths:**
 
-- `e2e/playwright/*.spec.ts` & `playwright.config.ts`  
-- `.github/workflows/deploy.yml`  
+- `e2e/playwright/*.spec.ts` & `playwright.config.ts`
+- `.github/workflows/deploy.yml`
 - `scripts/ops/rollback.sh`
 
-**Acceptance Criteria:**  
+**Acceptance Criteria:**
 
-- 100% critical flow coverage; artifacts on failure  
-- Smoke green before promotion  
+- 100% critical flow coverage; artifacts on failure
+- Smoke green before promotion
 - Rollback **< 5 min**
 
 **Success KPIs:** Downtime = 0 min; ≥ 99% deploy success
@@ -233,9 +233,9 @@ This Bible is your **single source of truth** to:
 
 ### 4.1 What We Use
 
-- **Firebase Web SDK (`firebase`)**: **Auth UX only** (sign-in/MFA).  
-- **Firebase Admin SDK (`firebase-admin`)**: verify session cookies; all privileged Firestore ops.  
-- **@firebase/rules-unit-testing**: simulate clients and assert allow/deny.  
+- **Firebase Web SDK (`firebase`)**: **Auth UX only** (sign-in/MFA).
+- **Firebase Admin SDK (`firebase-admin`)**: verify session cookies; all privileged Firestore ops.
+- **@firebase/rules-unit-testing**: simulate clients and assert allow/deny.
 - **firebase-tools** (optional): emulators locally; **prod backups use `gcloud`**.
 
 ### 4.2 Client Auth (Web)
@@ -244,8 +244,8 @@ This Bible is your **single source of truth** to:
 
 ### 4.3 Session Cookies (Server)
 
-- Web calls `/api/session` to mint session cookie via Admin SDK (preferred in prod).  
-- Middleware verifies cookie → `req.userToken`.  
+- Web calls `/api/session` to mint session cookie via Admin SDK (preferred in prod).
+- Middleware verifies cookie → `req.userToken`.
 - Privileged routes check `mfa===true` for `org_owner|admin|manager`.
 
 ### 4.4 Rules Testing
@@ -254,7 +254,7 @@ This Bible is your **single source of truth** to:
 
 ### 4.5 Backups & Restore
 
-- **Daily** `gcloud firestore export` → `gs://bucket/prefix`.  
+- **Daily** `gcloud firestore export` → `gs://bucket/prefix`.
 - Quarterly **restore drill** documented in `docs/runbooks/restore.md`.
 
 ---
@@ -287,7 +287,7 @@ src/mw/session.guard.test.ts
 src/obs/log.ts
 src/obs/sentry.ts
 src/obs/otel.ts
-src/validators/*.ts
+src/validators/\*.ts
 src/lib/firebase-admin.ts # singleton Admin init
 
 apps/web/
@@ -295,18 +295,18 @@ lib/session.ts
 lib/firebase-client.ts
 tailwind.config.ts
 styles/globals.css
-components/ui/*
-components/scheduler/*
+components/ui/_
+components/scheduler/_
 
 tests/rules/
-*.test.ts
+\*.test.ts
 
 e2e/playwright/
 playwright.config.ts
 happy-path.spec.ts
 
 .github/
-ISSUE_TEMPLATE/*.md
+ISSUE_TEMPLATE/\*.md
 workflows/deploy.yml
 
 yaml
@@ -338,3 +338,4 @@ FIREBASE_PROJECT_ID=<id> BACKUP_BUCKET=gs://<bucket> ./scripts/ops/backup-firest
 
 # Deploy (Blue/Green workflow; provider-specific wiring inside deploy.yml)
 gh workflow run deploy.yml
+```

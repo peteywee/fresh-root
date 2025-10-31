@@ -11,7 +11,11 @@ export function badRequest(message: string, details?: unknown, code = "BAD_REQUE
 }
 
 /** Build a 500 error response with consistent shape */
-export function serverError(message = "Internal Server Error", details?: unknown, code = "INTERNAL") {
+export function serverError(
+  message = "Internal Server Error",
+  details?: unknown,
+  code = "INTERNAL",
+) {
   return Response.json({ error: { code, message, details } } as ApiError, { status: 500 });
 }
 
@@ -30,7 +34,10 @@ export async function parseJson<T>(req: Request, schema: z.ZodType<T>) {
   }
   const parsed = schema.safeParse(json);
   if (!parsed.success) {
-    const details = parsed.error.issues.map((i: any) => ({ path: i.path.join("."), message: i.message }));
+    const details = parsed.error.issues.map((i: any) => ({
+      path: i.path.join("."),
+      message: i.message,
+    }));
     return { success: false as const, details };
   }
   return { success: true as const, data: parsed.data };

@@ -1,40 +1,36 @@
-'use client'
-import { getAuth } from 'firebase/auth'
-import * as firebaseui from 'firebaseui'
-import React, { useEffect, useRef } from 'react'
-import 'firebaseui/dist/firebaseui.css'
+"use client";
+import { getAuth } from "firebase/auth";
+import * as firebaseui from "firebaseui";
+import React, { useEffect, useRef } from "react";
+import "firebaseui/dist/firebaseui.css";
 
 // This component mounts FirebaseUI's sign-in widget into a container.
 // It assumes you have initialized firebase in `apps/web/app/lib/firebaseClient.ts`.
 
 export default function FirebaseSignIn() {
-  const containerRef = useRef<HTMLDivElement | null>(null)
+  const containerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    const auth = getAuth()
-    const ui = new firebaseui.auth.AuthUI(auth)
+    const auth = getAuth();
+    const ui = new firebaseui.auth.AuthUI(auth);
 
     ui.start(containerRef.current!, {
       // Use provider IDs as strings to avoid SDK namespace/type differences.
       // See FirebaseUI docs for provider id strings.
-      signInOptions: [
-        'google.com',
-        'email',
-        'anonymous'
-      ],
-      signInSuccessUrl: '/',
-      tosUrl: '/',
-      privacyPolicyUrl: '/'
-    })
+      signInOptions: ["google.com", "email", "anonymous"],
+      signInSuccessUrl: "/",
+      tosUrl: "/",
+      privacyPolicyUrl: "/",
+    });
 
     return () => {
       try {
-        ui.delete()
+        ui.delete();
       } catch {
         // ignore if already deleted
       }
-    }
-  }, [])
+    };
+  }, []);
 
-  return <div ref={containerRef} />
+  return <div ref={containerRef} />;
 }

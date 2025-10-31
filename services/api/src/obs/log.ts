@@ -1,7 +1,6 @@
 // [P1][RELIABILITY][OBS] Structured JSON logger for production observability
 // Tags: P1, RELIABILITY, OBSERVABILITY, LOGGING, JSON
 import type { Request, Response } from "express";
-import { getTraceContext } from "./otel.js";
 
 export type LogLevel = "debug" | "info" | "warn" | "error";
 
@@ -37,11 +36,9 @@ export class Logger {
 
   private write(ctx: LogContext): void {
     const timestamp = new Date().toISOString();
-    const traceCtx = getTraceContext();
     const logEntry = {
       timestamp,
       env: this.env,
-      ...(traceCtx && { traceId: traceCtx.traceId, spanId: traceCtx.spanId }),
       ...ctx,
     };
 

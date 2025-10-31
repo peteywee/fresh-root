@@ -2,7 +2,7 @@
 name: OBS-003 Observability (Sentry + OTel + JSON logs)
 about: Wire Sentry, structured logs with reqId, and OpenTelemetry traces + dashboards
 title: "[OBS-003] Observability"
-labels: ["observability","platform","backend","P1"]
+labels: ["observability", "platform", "backend", "P1"]
 assignees: ["peteywee"]
 ---
 

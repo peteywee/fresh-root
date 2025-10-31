@@ -7,14 +7,14 @@ import Logo from "../components/Logo";
 
 export const metadata: Metadata = {
   title: "Fresh Schedules",
-  description: "Staff scheduling built for speed and control."
+  description: "Staff scheduling built for speed and control.",
 };
 
 export const viewport: Viewport = {
   themeColor: "#0b0f14",
   colorScheme: "dark light",
   width: "device-width",
-  initialScale: 1
+  initialScale: 1,
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

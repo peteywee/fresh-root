@@ -1,5 +1,5 @@
-'use client';
-import React, { createContext, useContext, useState, useEffect } from 'react';
+"use client";
+import React, { createContext, useContext, useState, useEffect } from "react";
 
 type AuthState = {
   user: any | null;
@@ -25,11 +25,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     void init();
   }, []);
 
-  return (
-    <AuthContext.Provider value={{ user, isLoading }}>
-      {children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={{ user, isLoading }}>{children}</AuthContext.Provider>;
 }
 
 export function useAuth() {

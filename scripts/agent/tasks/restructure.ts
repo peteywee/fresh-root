@@ -3,7 +3,7 @@ import { join } from "node:path";
 
 type Result = { created: string[]; ensured: string[] };
 
-export async function ensureMonorepo({ root, planOnly }: { root: string; planOnly: boolean; }) {
+export async function ensureMonorepo({ root, planOnly }: { root: string; planOnly: boolean }) {
   const dirs = ["apps/web", "services/api", "packages/types", "tests/rules"];
   const created: string[] = [];
   const ensured: string[] = [];
@@ -33,6 +33,6 @@ export function plannedChangesSummary(r: Result) {
   return [
     "Planned changes:",
     `- Created: ${r.created.length ? r.created.join(", ") : "(none)"}`,
-    `- Ensured: ${r.ensured.length ? r.ensured.join(", ") : "(none)"}`
+    `- Ensured: ${r.ensured.length ? r.ensured.join(", ") : "(none)"}`,
   ].join("\n");
 }
