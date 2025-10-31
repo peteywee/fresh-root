@@ -3,6 +3,13 @@ name: ESLint + TypeScript Agent
 on:
   pull_request:
     types: [opened, synchronize, reopened]
+  push:
+    branches: ["main", "dev"]
+    paths:
+      - "apps/**/*.{ts,tsx,js,jsx}"
+      - "packages/**/*.{ts,tsx,js,jsx}"
+      - "functions/src/**/*.{ts,tsx,js,jsx}"
+      - "services/**/*.{ts,tsx,js,jsx}"
   workflow_dispatch: {}
 
 permissions:
