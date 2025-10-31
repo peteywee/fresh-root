@@ -47,4 +47,16 @@ Code owner: pateick craven
  3. Run `pnpm test` (Vitest) and `pnpm typecheck` before opening a PR.
  4. When modifying security rules, add or update files in `tests/rules/` to cover access patterns.
 
+- Hard repository rules (must follow for every change)
+  - No deprecated dependencies allowed: If pnpm prints a "deprecated" warning for any package during install or list, do not merge until replaced/removed.
+  - No unmet peer dependencies allowed: Resolve all peer warnings by aligning versions or adding the required peers; do not ignore.
+  - Pinned toolchain: Use the exact pnpm version pinned in the root `package.json` (`packageManager`). Keep workflows in sync.
+  - No deprecated editor/workspace settings: avoid adding deprecated VS Code or ESLint settings. Prefer documented, current options.
+  - Lockfile integrity: Avoid incidental `pnpm-lock.yaml` churn; explain intentional changes in PR description.
+
+- Quick local checks before pushing
+  - `pnpm install` from repo root completes with zero deprecated or peer-dependency warnings.
+  - `pnpm typecheck` and `pnpm test` pass locally.
+  - If emulator-facing code changed, run `pnpm test:rules`.
+
 If anything below is unclear or you want deeper detail on a particular area (CI, deploy, or a specific package), tell me which area and I'll expand or merge in more examples from the codebase.
