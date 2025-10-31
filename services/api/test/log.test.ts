@@ -9,6 +9,8 @@ describe("Logger", () => {
 
   beforeEach(() => {
     consoleLogSpy = vi.spyOn(console, "log").mockImplementation(() => {});
+    // Clear any console.log calls from module imports (e.g., OTel initialization)
+    vi.clearAllMocks();
   });
 
   it("outputs JSON in production mode", () => {

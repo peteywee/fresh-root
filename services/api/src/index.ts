@@ -1,8 +1,23 @@
+// [P1][RELIABILITY][OTEL] Initialize OpenTelemetry FIRST for auto-instrumentation
+import { loadEnv } from "./env.js";
+import { initOTel } from "./obs/otel.js";
+
+// Load env before OTel init to get endpoint
+const env = loadEnv();
+
+// Initialize OpenTelemetry tracing (must be before Express import)
+initOTel({
+  serviceName: "fresh-schedules-api",
+  serviceVersion: process.env.npm_package_version,
+  endpoint: env.OTEL_EXPORTER_OTLP_TRACES_ENDPOINT,
+});
+
+// [P0][SECURITY][API] Fresh Schedules API Service - Main entrypoint
+// Tags: P0, SECURITY, API, EXPRESS, ENTRYPOINT
 import express, { type Request, type Response } from "express";
 
 import { InMemoryCache } from "./cache/provider.js";
 import { RedisCache } from "./cache/redis.js";
-import { loadEnv } from "./env.js";
 import { getAdminAuth, initFirebase } from "./firebase.js";
 import { requestLogger } from "./mw/logger.js";
 import { applySecurity } from "./mw/security.js";
@@ -10,7 +25,6 @@ import { require2FAForManagers, requireSession } from "./mw/session.js";
 import { initSentry } from "./obs/sentry.js";
 import { requireManager, sameOrgGuard } from "./rbac.js";
 
-const env = loadEnv();
 const { db } = initFirebase(env.FIREBASE_PROJECT_ID, env.GOOGLE_APPLICATION_CREDENTIALS_JSON);
 
 async function buildCache() {

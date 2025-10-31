@@ -52,6 +52,20 @@ REDIS_URL=redis://production-redis:6379
 - Test with `/debug/sentry` endpoint (throws synthetic error)
 - Release tagging uses `npm_package_version` from package.json
 
+**OpenTelemetry Configuration:**
+
+- When `OTEL_EXPORTER_OTLP_TRACES_ENDPOINT` is set, the API automatically:
+  - Instruments Express routes and HTTP requests
+  - Exports traces to OTLP endpoint (Jaeger, Tempo, Honeycomb, etc.)
+  - Correlates traces with logs via `traceId` and `spanId`
+- Supported backends: Jaeger, Grafana Tempo, Honeycomb, Datadog, New Relic, etc.
+- Example endpoints:
+  - Jaeger: `http://localhost:4318/v1/traces`
+  - Grafana Cloud: `https://otlp-gateway-prod-us-central-0.grafana.net/otlp/v1/traces`
+  - Honeycomb: `https://api.honeycomb.io/v1/traces`
+- Auto-instruments: Express, HTTP, DNS, Net (FS disabled as too noisy)
+- Traces include: `http.method`, `http.url`, `http.status_code`, `http.user_agent`, `service.name`, `service.version`
+
 ---
 
 ## Security Controls Active in Production
@@ -278,6 +292,18 @@ for i in {1..350}; do
   curl -s https://api.example.com/health > /dev/null
 done
 # Last ~50 should return 429
+```
+
+### 5. OpenTelemetry Tracing
+
+```bash
+# Make a request and check if traces are exported
+curl https://api.example.com/health
+
+# Check your observability backend for traces:
+# - Trace should include spans for HTTP request, Express route handler
+# - Check for service.name = "fresh-schedules-api"
+# - Verify traceId appears in logs for correlation
 ```
 
 ---
