@@ -36,8 +36,9 @@ jobs:
       - name: Typecheck
         run: pnpm -w typecheck
 
-      - name: Firestore Rules Tests
-        run: pnpm -w test:rules
+      - name: Firestore & Storage Rules Tests (via emulators:exec)
+        run: |
+          pnpm exec firebase emulators:exec --only firestore,storage "pnpm -w test:rules"
 
       - name: API Unit Tests
         run: pnpm --filter @fresh-schedules/api test
