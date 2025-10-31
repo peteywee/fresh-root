@@ -46,6 +46,9 @@ jobs:
       - name: ESLint auto-fix (best effort)
         run: pnpm -w exec eslint "apps/**/src/**/*.{ts,tsx,js,jsx}" "apps/**/app/**/*.{ts,tsx,js,jsx}" "packages/**/src/**/*.{ts,tsx,js,jsx}" "functions/src/**/*.{ts,tsx,js,jsx}" --fix || true
 
+      - name: Prettier write (best effort)
+        run: pnpm -w prettier --write . || true
+
       - name: Commit auto-fixes to PR branch (if any)
         if: github.event_name == 'pull_request'
         uses: stefanzweifel/git-auto-commit-action@v5
@@ -61,4 +64,4 @@ jobs:
         run: |
           echo "ESLint + TypeScript agent completed." >> $GITHUB_STEP_SUMMARY
           echo "- Annotations added via reviewdog." >> $GITHUB_STEP_SUMMARY
-          echo "- Auto-fixes committed when possible." >> $GITHUB_STEP_SUMMARY
+          echo "- Auto-fixes committed when possible (ESLint + Prettier)." >> $GITHUB_STEP_SUMMARY
