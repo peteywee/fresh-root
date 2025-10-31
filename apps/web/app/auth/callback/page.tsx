@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { completeEmailLinkIfPresent, completeGoogleRedirectOnce, establishServerSession } from '../../../src/lib/auth-helpers';
+import { useEffect, useState } from 'react';
+
 import { auth } from '../../../app/lib/firebaseClient';
+import { completeEmailLinkIfPresent, completeGoogleRedirectOnce, establishServerSession } from '../../../src/lib/auth-helpers';
 import { reportError } from '../../../src/lib/error/reporting';
 
 export default function AuthCallbackPage() {

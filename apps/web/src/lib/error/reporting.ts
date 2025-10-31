@@ -20,7 +20,7 @@ export async function initErrorReporting() {
     // Avoid hard-crashing if package is not present — keep it optional
     // to honor "no unmet peers" policy.
     // If you want strict enforcement, add @sentry/nextjs to deps.
-    // eslint-disable-next-line no-console
+     
     console.warn('Sentry not available; falling back to console error.');
   }
 }
@@ -30,7 +30,7 @@ export function reportError(error: unknown, context?: Record<string, unknown>) {
     Sentry.captureException(error, context ? { extra: context } : undefined);
   } else {
     // Safe fallback: minimal PII, structured
-    // eslint-disable-next-line no-console
+     
     console.error('[ERR]', {
       message: (error as any)?.message || String(error),
       stack: (error as any)?.stack || null,

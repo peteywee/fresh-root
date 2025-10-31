@@ -1,9 +1,10 @@
 'use client'
 
-import React, { useCallback, useEffect, useMemo, useState, Suspense } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
 import { isSignInWithEmailLink } from 'firebase/auth'
 import Link from 'next/link'
+import { useRouter, useSearchParams } from 'next/navigation'
+import React, { useCallback, useEffect, useMemo, useState, Suspense } from 'react'
+
 import { loginWithGoogleSmart, sendEmailLinkRobust, startGooglePopup, establishServerSession } from '../../../src/lib/auth-helpers'
 
 const LoginForm = React.memo(() => {
@@ -27,7 +28,7 @@ const LoginForm = React.memo(() => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+   
 
   const onSendMagicLink = useCallback(async (e: React.FormEvent) => {
     e.preventDefault()

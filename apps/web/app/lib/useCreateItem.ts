@@ -1,5 +1,6 @@
 'use client';
 import { useMutation } from '@tanstack/react-query';
+
 import { apiFetch } from './http';
 
 type Item = { id: string; name: string; createdAt: number };
@@ -15,7 +16,7 @@ export function useCreateItem() {
       return data;
     },
     onError(err) {
-      // eslint-disable-next-line no-console
+       
       console.error('CreateItem failed:', err);
     },
   });

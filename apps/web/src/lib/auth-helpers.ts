@@ -1,4 +1,3 @@
-import { auth } from '../../app/lib/firebaseClient';
 import {
   GoogleAuthProvider,
   signInWithPopup,
@@ -8,9 +7,11 @@ import {
   signInWithEmailLink,
   getRedirectResult,
 } from 'firebase/auth';
+
 import { actionCodeSettings } from './actionCodeSettings';
-import { reportError } from './error/reporting';
 import { setPendingEmail, getPendingEmail, clearPendingEmail } from './auth/pendingEmail.store';
+import { reportError } from './error/reporting';
+import { auth } from '../../app/lib/firebaseClient';
 
 function shouldUseRedirect(): boolean {
   if (typeof navigator === 'undefined') return false;

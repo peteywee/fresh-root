@@ -23,7 +23,7 @@
     "prepare": "husky install || true",
     "build:agent": "tsc -p scripts/agent/tsconfig.json",
     "run:agent": "node --enable-source-maps ./dist/agent/agent.mjs",
-    "lint": "pnpm -w eslint .",
+    "lint": "eslint \"apps/**/src/**/*.{ts,tsx,js,jsx}\" \"apps/**/app/**/*.{ts,tsx,js,jsx}\" \"packages/**/src/**/*.{ts,tsx,js,jsx}\" \"functions/src/**/*.{ts,tsx,js,jsx}\" --max-warnings 200",
     "format": "pnpm -w prettier --write .",
     "typecheck": "tsc --build",
     "build": "pnpm -r --filter @apps/web... run build && pnpm -r --filter @packages/* run build && pnpm --filter functions run build",

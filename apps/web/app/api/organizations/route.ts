@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { parseJson, badRequest, ok, serverError } from '../_shared/validation'
 import { z } from 'zod'
+
+import { parseJson, badRequest, ok, serverError } from '../_shared/validation'
 
 // Schema for creating an organization
 const CreateOrgSchema = z.object({

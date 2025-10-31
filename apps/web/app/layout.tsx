@@ -1,10 +1,11 @@
 import './globals.css'
-import React from 'react'
-import Providers from './providers'
-import { ErrorProvider } from '../src/lib/error/ErrorContext'
-import RegisterServiceWorker from './RegisterServiceWorker'
 import { randomUUID } from 'crypto'
+import React from 'react'
+
 import { inter } from './fonts'
+import Providers from './providers'
+import RegisterServiceWorker from './RegisterServiceWorker'
+import { ErrorProvider } from '../src/lib/error/ErrorContext'
 
 export const metadata = { title: 'Fresh Schedules' }
 

@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest'
-import { badRequest, ok, serverError, parseJson } from '../validation'
 import { z } from 'zod'
+
+import { badRequest, ok, serverError, parseJson } from '../validation'
 
 describe('API Validation utilities', () => {
   describe('badRequest', () => {

@@ -1,5 +1,6 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
 import * as firebaseAuth from 'firebase/auth';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+
 import * as helpers from '../lib/auth-helpers';
 
 vi.mock('firebase/auth', async () => {
