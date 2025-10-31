@@ -9,11 +9,11 @@ COPY services/api/package.json services/api/tsconfig.json ./services/api/
 RUN corepack enable && corepack prepare pnpm@9.1.0 --activate
 
 # Fetch all dependencies (including workspace root)
-RUN pnpm fetch
+RUN pnpm fetch --no-optional
 
 # Install all deps first, then build API
 COPY services/api ./services/api
-RUN pnpm install -r --offline && \
+RUN pnpm install -r --offline --no-optional && \
     pnpm --filter @fresh-schedules/api build
 
 FROM gcr.io/distroless/nodejs20-debian12

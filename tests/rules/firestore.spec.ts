@@ -29,22 +29,22 @@ afterAll(async () => {
 
 describe('firestore rules', () => {
   it('member can read org, admin can write', async () => {
-    const ctx = testEnv.authenticatedContext('u1', { roles: { 'orgA': 'org_member' }});
+    const ctx = testEnv.authenticatedContext('u1', { orgId: 'orgA', roles: ['org_member'] });
     const db = ctx.firestore();
-    await expect(db.doc('organizations/orgA').get()).resolves.toBeTruthy();
+    await expect(db.doc('orgs/orgA').get()).resolves.toBeTruthy();
   });
 
   it('non-admin cannot create join_tokens', async () => {
-    const ctx = testEnv.authenticatedContext('u2', { roles: { 'orgA': 'org_member' }});
+    const ctx = testEnv.authenticatedContext('u2', { orgId: 'orgA', roles: ['org_member'] });
     const db = ctx.firestore();
-    await expect(db.collection('join_tokens').doc('t').set({ orgId: 'orgA' }))
+    await expect(db.collection('join_tokens/orgA').doc('t').set({ orgId: 'orgA' }))
       .rejects.toThrow();
   });
 
   it('admin can create join_tokens', async () => {
-    const ctx = testEnv.authenticatedContext('admin1', { roles: { 'orgA': 'org_admin' }});
+    const ctx = testEnv.authenticatedContext('admin1', { orgId: 'orgA', roles: ['manager'] });
     const db = ctx.firestore();
-    await expect(db.collection('join_tokens').doc('t2').set({ orgId: 'orgA' }))
+    await expect(db.collection('join_tokens/orgA').doc('t2').set({ orgId: 'orgA' }))
       .resolves.toBeUndefined();
   });
 });

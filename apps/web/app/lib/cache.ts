@@ -25,5 +25,5 @@ export function cached<TArgs extends unknown[], TRes>(
 
 export function invalidate(tag: string) {
   "use server";
-  revalidateTag(tag);
+  revalidateTag(tag, {});
 }
