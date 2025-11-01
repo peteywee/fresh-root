@@ -54,3 +54,7 @@ TODO.md
 fresh-root-10.code-workspace
 *.original-backup
 dist/agent/
+
+# Firebase emulator local exports (avoid noisy diffs)
+emulator-data/
+emulator-data/**
