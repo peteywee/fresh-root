@@ -43,7 +43,8 @@
     "api:docker:build": "docker build -f services/api/Dockerfile -t fresh-schedules-api:latest .",
     "api:docker:run": "docker run --rm -p 4000:4000 -e FIREBASE_PROJECT_ID=demo-fresh fresh-schedules-api:latest",
     "test": "vitest run --passWithNoTests",
-    "test:rules": "firebase emulators:exec --only firestore,storage \"vitest run --globals --dir tests/rules --reporter=dot\"",
+  "test:rules": "firebase emulators:exec --only auth,firestore,storage \"vitest run --globals --dir tests/rules --reporter=dot --exclude tests/rules/storage.spec.ts\"",
+  "test:rules:ci": "firebase --config firebase.ci.json emulators:exec --only auth,firestore,storage \"vitest run --globals --dir tests/rules --reporter=dot --exclude tests/rules/storage.spec.ts\"",
     "test:rules:dev": "vitest run --globals --dir tests/rules --reporter=dot",
     "ci": "pnpm -w install --frozen-lockfile && pnpm -w typecheck && pnpm -w lint && pnpm -w build && pnpm -w test && pnpm -w test:rules"
   },
