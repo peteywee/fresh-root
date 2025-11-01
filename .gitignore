@@ -58,3 +58,13 @@ dist/agent/
 # Firebase emulator local exports (avoid noisy diffs)
 emulator-data/
 emulator-data/**
+
+# Test and log files
+*.test.ts.bak
+*.spec.ts.bak
+*.log.bak
+**/test/**/*.bak
+**/tests/**/*.bak
+test-output/
+logs/
+*.log.*
