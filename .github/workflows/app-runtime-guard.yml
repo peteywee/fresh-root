@@ -45,6 +45,12 @@ jobs:
             # CI and workflow files commonly touched alongside runtime changes
             '^.github/workflows/app-runtime-guard\.yml$'
             '^.github/workflows/ci\.yml$'
+            '^.github/workflows/eslint-ts-agent\.yml$'
+            '^.github/workflows/repo-agent\.yml$'
+
+            # Repo metadata (non-runtime) allowed alongside chores
+            '^.github/labels\.yml$'
+            '^\.gitignore$'
 
             # Configuration files that may change with runtime adjustments
             '^package\.json$'
@@ -53,6 +59,7 @@ jobs:
             '^tsconfig(\.base)?\.json$'
             '^eslint\.config\.mjs$'
             '^postcss\.config\.(cjs|mjs)$'
+            '^apps/web/postcss\.config\.(cjs|mjs)$'
             '^tailwind\.config\.(cjs|ts)$'
             '^turbo\.json$'
             '^jest\.rules\.config\.js$'
@@ -69,6 +76,7 @@ jobs:
 
             # Backend service touched by server-first runtime integration
             '^services/api(/|$)'
+            '^apps/web/proxy\.ts$'
           )
           ALLOW_RE="$(IFS='|'; echo "${ALLOW[*]}")"
 
