@@ -11,6 +11,11 @@
       "allowedVersions": {
         "firebase": "12"
       }
+    },
+    "overrides": {
+      "glob": "^10.4.5",
+      "inflight": "^1.0.6",
+      "node-domexception": "^1.0.0"
     }
   },
   "workspaces": [
@@ -20,14 +25,16 @@
     "tools/*"
   ],
   "scripts": {
+    "prepare": "husky",
     "build:agent": "tsc -p scripts/agent/tsconfig.json",
     "run:agent": "node --enable-source-maps ./dist/agent/agent.mjs",
-    "lint": "eslint \"apps/**/src/**/*.{ts,tsx,js,jsx}\" \"apps/**/app/**/*.{ts,tsx,js,jsx}\" \"packages/**/src/**/*.{ts,tsx,js,jsx}\" \"functions/src/**/*.{ts,tsx,js,jsx}\" --max-warnings 200",
+    "check:deps": "pnpm -w install --frozen-lockfile 2>&1 | tee /dev/stderr | grep -qiE '(deprecated|Issues with peer dependencies found)' && exit 1 || exit 0",
+    "lint": "eslint \"apps/**/src/**/*.{ts,tsx,js,jsx}\" \"apps/**/app/**/*.{ts,tsx,js,jsx}\" \"apps/**/vitest.setup.ts\" \"packages/**/src/**/*.{ts,tsx,js,jsx}\" \"functions/src/**/*.{ts,tsx,js,jsx}\" \"services/api/src/**/*.{ts,tsx,js,jsx}\" \"services/api/test/**/*.{ts,tsx,js,jsx}\" --max-warnings 200",
+    "lint:fix": "pnpm -w run lint -- --fix",
+    "fix": "pnpm -w run lint -- --fix && pnpm -w format",
     "format": "pnpm -w prettier --write .",
     "typecheck": "tsc --build",
     "build": "pnpm -r --filter @apps/web... run build && pnpm -r --filter @packages/* run build && pnpm --filter functions run build",
-    "build:agent": "tsc -p scripts/agent/tsconfig.json",
-    "run:agent": "node --enable-source-maps ./dist/agent/agent.mjs",
     "emu": "firebase emulators:start --import ./.emulator-data --export-on-exit",
     "emu:firestore": "firebase emulators:start --only firestore",
     "api:dev": "pnpm --filter @fresh-schedules/api dev",
@@ -36,39 +43,40 @@
     "api:docker:build": "docker build -f services/api/Dockerfile -t fresh-schedules-api:latest .",
     "api:docker:run": "docker run --rm -p 4000:4000 -e FIREBASE_PROJECT_ID=demo-fresh fresh-schedules-api:latest",
     "test": "vitest run --passWithNoTests",
-    "test:rules": "firebase emulators:exec --only firestore,storage \"vitest run --globals --dir tests/rules --reporter=dot\"",
+  "test:rules": "firebase emulators:exec --only auth,firestore,storage \"vitest run --globals --dir tests/rules --reporter=dot --exclude tests/rules/storage.spec.ts\"",
+  "test:rules:ci": "firebase --config firebase.ci.json emulators:exec --only auth,firestore,storage \"vitest run --globals --dir tests/rules --reporter=dot --exclude tests/rules/storage.spec.ts\"",
     "test:rules:dev": "vitest run --globals --dir tests/rules --reporter=dot",
     "ci": "pnpm -w install --frozen-lockfile && pnpm -w typecheck && pnpm -w lint && pnpm -w build && pnpm -w test && pnpm -w test:rules"
   },
   "dependencies": {
-    "execa": "^9.4.0",
-    "firebase-admin": "^12.0.0",
-    "p-retry": "^6.2.0",
-    "zod": "^3.24.1"
+    "execa": "^9.6.0",
+    "firebase-admin": "^13.5.0",
+    "p-retry": "^7.1.0",
+    "zod": "^4.1.12"
   },
   "devDependencies": {
-    "firebase": "^12.0.0",
     "@firebase/rules-unit-testing": "^5.0.0",
-    "@types/jest": "^29.5.14",
-    "@types/node": "^20.19.0",
-    "@typescript-eslint/eslint-plugin": "^8.0.0",
-    "@typescript-eslint/parser": "^8.0.0",
+    "@types/jest": "^30.0.0",
+    "@types/node": "^24.9.2",
+    "@typescript-eslint/eslint-plugin": "^8.46.2",
+    "@typescript-eslint/parser": "^8.46.2",
     "eslint": "^9.38.0",
-    "eslint-config-next": "^16.0.0",
-    "eslint-plugin-import": "^2.31.0",
-    "eslint-plugin-react": "^7.35.0",
+    "eslint-config-next": "^16.0.1",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^7.0.1",
     "execa": "^9.4.0",
-    "firebase-tools": "^14.0.0",
-    "husky": "^9.0.0",
-    "jest": "^29.7.0",
+    "firebase": "^12.5.0",
+    "firebase-tools": "^14.23.0",
+    "husky": "^9.1.7",
+    "jest": "^30.2.0",
     "p-retry": "^6.2.0",
     "playwright": "^1.56.1",
-    "postcss": "^8.4.47",
-    "prettier": "^3.3.3",
-    "prettier-plugin-tailwindcss": "^0.6.8",
-    "ts-jest": "^29.2.5",
-    "typescript": "^5.6.3",
-    "vitest": "^2.1.3"
+    "postcss": "^8.5.6",
+    "prettier": "^3.6.2",
+    "prettier-plugin-tailwindcss": "^0.7.1",
+    "ts-jest": "^29.4.5",
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.6"
   }
 }

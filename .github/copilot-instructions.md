@@ -43,8 +43,22 @@ Code owner: pateick craven
 
 - Editing and testing checklist for PRs (useful to keep in mind when authoring code)
   1. Run `pnpm install` then `pnpm dev` and ensure the app boots locally.
- 2. If touching Firebase behavior, run emulators: `firebase emulators:start` with `NEXT_PUBLIC_USE_EMULATORS=true` and run relevant rules tests (`pnpm test:rules`).
- 3. Run `pnpm test` (Vitest) and `pnpm typecheck` before opening a PR.
- 4. When modifying security rules, add or update files in `tests/rules/` to cover access patterns.
+  1. If touching Firebase behavior, run emulators: `firebase emulators:start` with `NEXT_PUBLIC_USE_EMULATORS=true` and run relevant rules tests (`pnpm test:rules`).
+  1. Run `pnpm test` (Vitest) and `pnpm typecheck` before opening a PR.
+  1. When modifying security rules, add or update files in `tests/rules/` to cover access patterns.
+
+- Hard repository rules (must follow for every change)
+  - No deprecated dependencies allowed: If pnpm prints a "deprecated" warning for any package during install or list, do not merge until replaced/removed.
+  - No unmet peer dependencies allowed: Resolve all peer warnings by aligning versions or adding the required peers; do not ignore.
+  - Pinned toolchain: Use the exact pnpm version pinned in the root `package.json` (`packageManager`). Keep workflows in sync.
+  - No deprecated editor/workspace settings: avoid adding deprecated VS Code or ESLint settings. Prefer documented, current options.
+  - Lockfile integrity: Avoid incidental `pnpm-lock.yaml` churn; explain intentional changes in PR description.
+
+  - All lint/format errors must be auto-fixed before commit or PR, in any language. If a tool can auto-fix on save or pre-commit, prefer that. Copilot and all contributors must never leave markdown, code, or config files with known lint/format errors.
+
+- Quick local checks before pushing
+  - `pnpm install` from repo root completes with zero deprecated or peer-dependency warnings.
+  - `pnpm typecheck` and `pnpm test` pass locally.
+  - If emulator-facing code changed, run `pnpm test:rules`.
 
 If anything below is unclear or you want deeper detail on a particular area (CI, deploy, or a specific package), tell me which area and I'll expand or merge in more examples from the codebase.

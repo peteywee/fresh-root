@@ -1,49 +1,47 @@
-'use client'
+"use client";
 
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback } from "react";
 
-import { Button, Card, Input, Textarea, Loading, Spinner, Alert } from '../../components/ui'
+import { Button, Card, Input, Textarea, Loading, Spinner, Alert } from "../../components/ui";
 
 /**
  * Demo page showcasing all UI components
  */
 export default function DemoPage() {
-  const [loading, setLoading] = useState(false)
-  const [showAlert, setShowAlert] = useState(false)
+  const [loading, setLoading] = useState(false);
+  const [showAlert, setShowAlert] = useState(false);
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    message: '',
-  })
+    name: "",
+    email: "",
+    message: "",
+  });
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    setLoading(true)
+    e.preventDefault();
+    setLoading(true);
     setTimeout(() => {
-      setLoading(false)
-      setShowAlert(true)
-    }, 2000)
-  }
+      setLoading(false);
+      setShowAlert(true);
+    }, 2000);
+  };
 
   const handleNameChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData(prev => ({ ...prev, name: e.target.value }))
-  }, [])
+    setFormData((prev) => ({ ...prev, name: e.target.value }));
+  }, []);
 
   const handleEmailChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData(prev => ({ ...prev, email: e.target.value }))
-  }, [])
+    setFormData((prev) => ({ ...prev, email: e.target.value }));
+  }, []);
 
   const handleMessageChange = useCallback((e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setFormData(prev => ({ ...prev, message: e.target.value }))
-  }, [])
+    setFormData((prev) => ({ ...prev, message: e.target.value }));
+  }, []);
 
   return (
     <div className="min-h-screen bg-gray-50 p-8">
-      <div className="max-w-6xl mx-auto space-y-8">
+      <div className="mx-auto max-w-6xl space-y-8">
         <div className="text-center">
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">
-            Component Demo
-          </h1>
+          <h1 className="mb-2 text-4xl font-bold text-gray-900">Component Demo</h1>
           <p className="text-gray-600">
             Explore the reusable UI components available in Fresh Schedules
           </p>
@@ -62,9 +60,15 @@ export default function DemoPage() {
         <Card title="Buttons" description="Various button styles and sizes">
           <div className="space-y-4">
             <div className="flex flex-wrap gap-3">
-              <Button variant="primary" size="sm">Primary Small</Button>
-              <Button variant="primary" size="md">Primary Medium</Button>
-              <Button variant="primary" size="lg">Primary Large</Button>
+              <Button variant="primary" size="sm">
+                Primary Small
+              </Button>
+              <Button variant="primary" size="md">
+                Primary Medium
+              </Button>
+              <Button variant="primary" size="lg">
+                Primary Large
+              </Button>
             </div>
             <div className="flex flex-wrap gap-3">
               <Button variant="secondary">Secondary</Button>
@@ -79,7 +83,7 @@ export default function DemoPage() {
         </Card>
 
         {/* Cards */}
-        <div className="grid md:grid-cols-3 gap-4">
+        <div className="grid gap-4 md:grid-cols-3">
           <Card title="Default Card" variant="default">
             <p className="text-gray-600">This is a default card with a border.</p>
           </Card>
@@ -92,10 +96,7 @@ export default function DemoPage() {
         </div>
 
         {/* Form Inputs */}
-        <Card
-          title="Form Example"
-          description="Example form using Input and Textarea components"
-        >
+        <Card title="Form Example" description="Example form using Input and Textarea components">
           <form onSubmit={handleSubmit} className="space-y-4">
             <Input
               label="Name"
@@ -139,26 +140,26 @@ export default function DemoPage() {
         <Card title="Loading States" description="Spinners and loading indicators">
           <div className="space-y-6">
             <div>
-              <h4 className="text-sm font-medium text-gray-700 mb-3">Spinner Sizes</h4>
+              <h4 className="mb-3 text-sm font-medium text-gray-700">Spinner Sizes</h4>
               <div className="flex items-center gap-6">
                 <div className="text-center">
                   <Spinner size="sm" />
-                  <p className="text-xs text-gray-500 mt-2">Small</p>
+                  <p className="mt-2 text-xs text-gray-500">Small</p>
                 </div>
                 <div className="text-center">
                   <Spinner size="md" />
-                  <p className="text-xs text-gray-500 mt-2">Medium</p>
+                  <p className="mt-2 text-xs text-gray-500">Medium</p>
                 </div>
                 <div className="text-center">
                   <Spinner size="lg" />
-                  <p className="text-xs text-gray-500 mt-2">Large</p>
+                  <p className="mt-2 text-xs text-gray-500">Large</p>
                 </div>
               </div>
             </div>
 
             <div>
-              <h4 className="text-sm font-medium text-gray-700 mb-3">Loading Component</h4>
-              <div className="bg-white border rounded-lg p-8">
+              <h4 className="mb-3 text-sm font-medium text-gray-700">Loading Component</h4>
+              <div className="rounded-lg border bg-white p-8">
                 <Loading text="Loading data..." />
               </div>
             </div>
@@ -183,10 +184,7 @@ export default function DemoPage() {
               title="Warning"
               message="Your session will expire in 5 minutes."
             />
-            <Alert
-              type="info"
-              message="New features have been added to the platform."
-            />
+            <Alert type="info" message="New features have been added to the platform." />
           </div>
         </Card>
 
@@ -195,33 +193,29 @@ export default function DemoPage() {
           title="Card with Footer"
           description="This card demonstrates the footer prop"
           footer={
-            <div className="flex justify-between items-center">
+            <div className="flex items-center justify-between">
               <span className="text-sm text-gray-500">Last updated: Just now</span>
               <Button size="sm">View Details</Button>
             </div>
           }
         >
           <p className="text-gray-700">
-            Cards can have optional footers for actions or additional information.
-            This is useful for displaying metadata or action buttons.
+            Cards can have optional footers for actions or additional information. This is useful
+            for displaying metadata or action buttons.
           </p>
         </Card>
 
         {/* Documentation Link */}
         <Card>
-          <div className="text-center py-4">
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">
-              Component Documentation
-            </h3>
-            <p className="text-gray-600 mb-4">
+          <div className="py-4 text-center">
+            <h3 className="mb-2 text-lg font-semibold text-gray-900">Component Documentation</h3>
+            <p className="mb-4 text-gray-600">
               Learn more about these components and how to use them in your application.
             </p>
-            <Button variant="primary">
-              View Documentation
-            </Button>
+            <Button variant="primary">View Documentation</Button>
           </div>
         </Card>
       </div>
     </div>
-  )
+  );
 }

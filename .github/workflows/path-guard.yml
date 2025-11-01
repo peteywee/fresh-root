@@ -2,7 +2,7 @@ name: Path Guard (strict-by-default)
 
 on:
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
     types: [opened, synchronize, reopened, labeled, unlabeled, edited]
 
 permissions:

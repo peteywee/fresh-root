@@ -2,7 +2,7 @@ name: CI (lint, typecheck, rules, api)
 
 on:
   pull_request:
-    branches: [ "develop", "main" ]
+    branches: ["develop", "main"]
   workflow_dispatch: {}
 
 permissions:
@@ -19,13 +19,21 @@ jobs:
 
       - name: Use PNPM
         uses: pnpm/action-setup@v4
-        with: { version: 9 }
+        with: { version: 9.1.0 }
 
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
-          cache: 'pnpm'
+          node-version: "20"
+          cache: "pnpm"
+
+      - name: Cache Firebase Emulators
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/firebase/emulators
+          key: ${{ runner.os }}-firebase-emulators-${{ hashFiles('firebase.json') }}
+          restore-keys: |
+            ${{ runner.os }}-firebase-emulators-
 
       - name: Install
         run: pnpm install --frozen-lockfile || pnpm install
@@ -36,9 +44,8 @@ jobs:
       - name: Typecheck
         run: pnpm -w typecheck
 
-      - name: Firestore & Storage Rules Tests (via emulators:exec)
-        run: |
-          pnpm exec firebase emulators:exec --only firestore,storage "pnpm -w test:rules"
+      - name: Firestore & Storage Rules Tests (CI ports)
+        run: pnpm -w test:rules:ci
 
       - name: API Unit Tests
         run: pnpm --filter @fresh-schedules/api test

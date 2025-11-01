@@ -20,17 +20,17 @@ declare namespace admin {
   function auth(): typeof authNS;
 }
 
-declare module 'firebase-admin' {
+declare module "firebase-admin" {
   export = admin;
 }
 
 // Keep these modules loosely typed for non-test usage
-declare module 'firebase-admin/auth' {
+declare module "firebase-admin/auth" {
   const auth: any;
   export = auth;
 }
 
-declare module 'firebase-admin/firestore' {
+declare module "firebase-admin/firestore" {
   const firestore: any;
   export = firestore;
 }

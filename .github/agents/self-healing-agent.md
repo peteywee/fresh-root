@@ -8,7 +8,7 @@ The repo-agent now includes self-updating and self-healing capabilities to autom
 
 ### 🔄 Self-Update
 
-**Automatically pulls latest agent code from main branch**
+### Automatically pulls latest agent code from main branch
 
 - Checks for updates to `scripts/agent/` directory
 - Fetches latest changes from `origin/main`
@@ -17,6 +17,7 @@ The repo-agent now includes self-updating and self-healing capabilities to autom
 - Exits with code 77 to signal restart required
 
 **Usage:**
+
 ```bash
 # Enable (default)
 pnpm run:agent --issue 21
@@ -26,11 +27,12 @@ pnpm run:agent --issue 21 --no-self-update
 ```
 
 **Workflow Integration:**
+
 The agent automatically updates itself before running tasks, ensuring it always uses the latest logic and fixes.
 
 ### 🩹 Self-Heal
 
-**Detects and fixes common repository issues**
+### Detects and fixes common repository issues
 
 Diagnostic checks and auto-fixes:
 
@@ -55,6 +57,7 @@ Diagnostic checks and auto-fixes:
    - Fix: Runs `pnpm run build:agent`
 
 **Usage:**
+
 ```bash
 # Enable (default)
 pnpm run:agent --issue 21
@@ -64,6 +67,7 @@ pnpm run:agent --issue 21 --no-self-heal
 ```
 
 **Behavior:**
+
 - Runs diagnostics before main agent tasks
 - Applies fixes in best-effort mode (non-fatal)
 - Logs all detected issues and applied fixes
@@ -73,14 +77,15 @@ pnpm run:agent --issue 21 --no-self-heal
 
 ```bash
 node --enable-source-maps ./dist/agent/agent.mjs [options]
+```
 
 Options:
-  --issue <number>       GitHub issue number (default: "21")
-  --force                Force overwrite existing files
-  --plan-only            Dry-run mode, no changes written
-  --no-self-heal         Disable self-healing diagnostics
-  --no-self-update       Disable automatic agent updates
-```
+
+- `--issue <number>` - GitHub issue number (default: "21")
+- `--force` - Force overwrite existing files
+- `--plan-only` - Dry-run mode, no changes written
+- `--no-self-heal` - Disable self-healing diagnostics
+- `--no-self-update` - Disable automatic agent updates
 
 ## Exit Codes
 
@@ -125,7 +130,7 @@ If the agent self-updates (exit code 77), the workflow can detect this and re-ru
 
 ## Example Output
 
-```
+```text
 [agent] Repo agent started. Issue #21 | planOnly=false | force=false
 [agent] git root: /home/user/fresh-root
 [self-update] Checking for agent updates...
@@ -146,6 +151,7 @@ If the agent self-updates (exit code 77), the workflow can detect this and re-ru
 **Symptom:** Self-update claims no changes, but you know there are updates
 
 **Solution:**
+
 ```bash
 # Manually fetch and reset agent
 git fetch origin main
@@ -158,6 +164,7 @@ pnpm run build:agent
 **Symptom:** Diagnostic detects issue but fix doesn't work
 
 **Solution:**
+
 - Check logs for specific error messages
 - Manually apply the fix to understand why it failed
 - Add more robust healing logic if it's a common issue
@@ -167,6 +174,7 @@ pnpm run build:agent
 **Symptom:** Agent keeps exiting with 77 and never completes
 
 **Solution:**
+
 ```bash
 # Disable self-update temporarily
 pnpm run:agent --issue 21 --no-self-update

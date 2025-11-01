@@ -11,7 +11,7 @@ export class RedisCache implements CacheProvider {
 
   static async connect(url: string) {
     const client: RedisClientType = createClient({ url });
-  client.on("error", (e: unknown) => console.error("[redis] error", e));
+    client.on("error", (e: unknown) => console.error("[redis] error", e));
     await client.connect();
     return new RedisCache(client);
   }
@@ -19,7 +19,11 @@ export class RedisCache implements CacheProvider {
   async get<T = unknown>(key: string): Promise<T | null> {
     const v = await this.client.get(key);
     if (v == null) return null;
-    try { return JSON.parse(v) as T; } catch { return null; }
+    try {
+      return JSON.parse(v) as T;
+    } catch {
+      return null;
+    }
   }
 
   async set<T = unknown>(key: string, value: T, ttlSec?: number): Promise<void> {

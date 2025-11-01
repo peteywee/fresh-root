@@ -1,0 +1,7 @@
+#!/bin/sh
+
+# Pre-push: gate on typecheck and lint (no deprecated husky.sh sourcing)
+pnpm -w typecheck || exit 1
+pnpm -w lint || exit 1
+
+echo "[husky] Pre-push checks passed."

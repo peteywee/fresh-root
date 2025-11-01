@@ -1,0 +1,13 @@
+{
+  "recommendations": [
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode",
+    "ZixuanChen.vitest-explorer",
+    "ms-vscode.js-debug-nightly",
+    "redhat.vscode-yaml"
+  ],
+  "unwantedRecommendations": [
+    "github.vscode-pull-request-github",
+    "bradlc.vscode-tailwindcss"
+  ]
+}

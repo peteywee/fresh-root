@@ -166,7 +166,7 @@ function useCreateItem() {
 
 API routes follow Next.js App Router conventions:
 
-```text
+````text
 apps/web/app/api/
 ├── _shared/
 │   └── validation.ts    # Shared validation utilities
@@ -209,7 +209,7 @@ export async function GET() {
   // Return data
   return ok({ examples: [] });
 }
-```
+````
 
 ### Error Handling
 
@@ -273,10 +273,7 @@ export default function FileUpload() {
 
   return (
     <div>
-      <input
-        type="file"
-        onChange={(e) => setFile(e.target.files?.[0] || null)}
-      />
+      <input type="file" onChange={(e) => setFile(e.target.files?.[0] || null)} />
       <button onClick={handleUpload} disabled={!file}>
         Upload
       </button>
@@ -336,8 +333,8 @@ export const useAppStore = create<AppState>()(
           preferences: { ...state.preferences, ...prefs },
         })),
     }),
-    { name: "app-storage" }
-  )
+    { name: "app-storage" },
+  ),
 );
 ```
 
@@ -352,9 +349,7 @@ function UserProfile() {
   return (
     <div>
       <h1>Welcome, {user?.name}</h1>
-      <button onClick={() => setPreferences({ theme: "dark" })}>
-        Toggle Theme
-      </button>
+      <button onClick={() => setPreferences({ theme: "dark" })}>Toggle Theme</button>
     </div>
   );
 }
@@ -441,16 +436,10 @@ function DefaultFallback({ error }: { error: Error }) {
 The app uses Tailwind for styling:
 
 ```tsx
-export default function Card({
-  title,
-  children,
-}: {
-  title: string;
-  children: React.ReactNode;
-}) {
+export default function Card({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <div className="bg-white rounded-lg shadow-md p-6 border border-gray-200">
-      <h3 className="text-lg font-semibold text-gray-900 mb-4">{title}</h3>
+    <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-md">
+      <h3 className="mb-4 text-lg font-semibold text-gray-900">{title}</h3>
       <div className="text-gray-700">{children}</div>
     </div>
   );
@@ -464,7 +453,7 @@ Add custom styles in `apps/web/src/styles/globals.css`:
 ```css
 /* Custom utilities */
 .btn-primary {
-  @apply bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors;
+  @apply rounded bg-blue-600 px-4 py-2 text-white transition-colors hover:bg-blue-700;
 }
 
 .card-shadow {
@@ -502,7 +491,7 @@ import { setupServer } from "msw/node";
 const server = setupServer(
   rest.get("/api/items", (req, res, ctx) => {
     return res(ctx.json({ items: [] }));
-  })
+  }),
 );
 
 beforeAll(() => server.listen());

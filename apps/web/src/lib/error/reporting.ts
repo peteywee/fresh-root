@@ -11,27 +11,27 @@ export async function initErrorReporting() {
   const dsn = process.env.NEXT_PUBLIC_SENTRY_DSN;
   if (!dsn) return; // no-op if DSN not set
   try {
-  const importer = new Function('s', 'return import(s)') as (s: string) => Promise<any>;
-  const mod: any = await importer('@sentry/nextjs');
-  mod?.init?.({ dsn });
-  Sentry = mod || null;
+    const importer = new Function("s", "return import(s)") as (s: string) => Promise<any>;
+    const mod: any = await importer("@sentry/nextjs");
+    mod?.init?.({ dsn });
+    Sentry = mod || null;
     sentryLoaded = true;
   } catch {
     // Avoid hard-crashing if package is not present — keep it optional
     // to honor "no unmet peers" policy.
     // If you want strict enforcement, add @sentry/nextjs to deps.
-     
-    console.warn('Sentry not available; falling back to console error.');
+
+    console.warn("Sentry not available; falling back to console error.");
   }
 }
 
 export function reportError(error: unknown, context?: Record<string, unknown>) {
-  if (Sentry && typeof Sentry.captureException === 'function') {
+  if (Sentry && typeof Sentry.captureException === "function") {
     Sentry.captureException(error, context ? { extra: context } : undefined);
   } else {
     // Safe fallback: minimal PII, structured
-     
-    console.error('[ERR]', {
+
+    console.error("[ERR]", {
       message: (error as any)?.message || String(error),
       stack: (error as any)?.stack || null,
       context: context || null,

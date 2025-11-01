@@ -5,7 +5,7 @@ export default function Logo({ className = "" }: { className?: string }) {
   return (
     <Image
       className={className}
-      src="/logo.svg"         // place a tiny monochrome svg in public/logo.svg (under 2KB)
+      src="/logo.svg" // place a tiny monochrome svg in public/logo.svg (under 2KB)
       alt="Fresh Schedules"
       width={24}
       height={24}
