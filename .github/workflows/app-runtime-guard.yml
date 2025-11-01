@@ -57,6 +57,12 @@ jobs:
             '^turbo\.json$'
             '^jest\.rules\.config\.js$'
 
+            # Firebase emulator CI config (used by test:rules:ci)
+            '^firebase\.ci\.json$'
+
+            # Documentation changes (technical docs and process/setup guides)
+            '^docs(/|$)'
+
             # Tests affecting runtime behavior (rules, e2e)
             '^tests/rules(/|$)'
             '^tests/e2e(/|$)'
