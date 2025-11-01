@@ -43,3 +43,14 @@ labels:
   - name: P2
     color: 0e8a16
     description: "Normal priority"
+
+  # Guard control labels (used by workflows like path-guard)
+  - name: allow:tests
+    color: 0366d6
+    description: "Allow tests in PR (unblocks path guard for tests)"
+  - name: allow:workstation
+    color: 6f42c1
+    description: "Allow workstation config (.vscode, .devcontainer, etc.)"
+  - name: check:off
+    color: b60205
+    description: "Disable path guard for the PR"
