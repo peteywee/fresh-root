@@ -1,5 +1,6 @@
 # Declarative labels config. Synced by .github/workflows/labels-sync.yml
 # Colors should be 6-hex chars without '#'
+# Auto-labeler applies guard:bypass via .github/labeler.yml for normal app/runtime changes
 - name: security
   color: b60205
   description: "Security work: auth, vulns, secrets, permissions"
