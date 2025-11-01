@@ -8,7 +8,7 @@ import { NextResponse } from "next/server";
  *
  * TEMPORARY: Set BYPASS_ONBOARDING_GUARD=true in env to disable for development.
  */
-export function middleware(req: NextRequest) {
+export function proxy(req: NextRequest) {
   const url = req.nextUrl;
   const pathname = url.pathname;
 
