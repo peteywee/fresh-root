@@ -549,7 +549,7 @@ server.registerTool(
         commentRatio: Number(commentRatio.toFixed(4)),
         todos,
         debugLogs,
-        asyncTokens: { async: asyncCount, await: awaitCount },
+        asyncTokens: { async: asyncCount, "await": awaitCount },
       },
       recommendations: recs,
     };
