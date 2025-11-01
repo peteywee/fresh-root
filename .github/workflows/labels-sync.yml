@@ -1,26 +1,30 @@
-name: Sync Labels (declarative)
+  - name: Show labels file
+    run: |
+      echo "=== .github/labels.yml ==="
+      if [ -f .github/labels.yml ]; then
+        sed -n '1,200p' .github/labels.yml || true
+      else
+        echo ".github/labels.yml not found"
+        exit 1
+      fi
 
-on:
-  push:
-    branches: [dev, main]
-    paths:
-      - ".github/labels.yml"
-      - ".github/workflows/labels-sync.yml"
-  workflow_dispatch: {}
+  - name: Validate labels.yml (yamllint)
+    uses: mikeal/yamllint-action@v1
+    with:
+      file: .github/labels.yml
 
-permissions:
-  issues: write
-  contents: read
+  - name: Debug token & env
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    run: |
+      echo "GITHUB_REPOSITORY=$GITHUB_REPOSITORY"
+      echo "GITHUB_ACTOR=$GITHUB_ACTOR"
+      echo "GITHUB_EVENT_NAME=$GITHUB_EVENT_NAME"
+      if [ -n "${GITHUB_TOKEN:-}" ]; then echo "GITHUB_TOKEN: set"; else echo "GITHUB_TOKEN: NOT set"; fi
 
-jobs:
-  sync:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Sync labels from .github/labels.yml
-        uses: crazy-max/ghaction-github-labeler@v5
-        with:
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-          yaml-file: .github/labels.yml
-          skip-delete: true
+  - name: Sync labels from .github/labels.yml
+    uses: crazy-max/ghaction-github-labeler@v5
+    with:
+      github-token: ${{ secrets.GITHUB_TOKEN }}
+      yaml-file: .github/labels.yml
+      skip-delete: true
