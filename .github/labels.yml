@@ -1,45 +1,59 @@
 # Declarative labels config. Synced by .github/workflows/labels-sync.yml
 # Colors should be 6-hex chars without '#'
-labels:
-  - name: security
-    color: b60205
-    description: "Security work: auth, vulns, secrets, permissions"
-  - name: observability
-    color: 5319e7
-    description: "Telemetry, tracing, logging, alerting"
-  - name: data
-    color: 0e8a16
-    description: "Data pipelines, backups, migrations"
-  - name: rules
-    color: 0052cc
-    description: "Firestore/Storage rules and tests"
-  - name: ui
-    color: 1d76db
-    description: "Design system, components, styles"
-  - name: ux
-    color: c5def5
-    description: "Interaction design and flows"
-  - name: e2e
-    color: 5319e7
-    description: "End-to-end tests and frameworks"
-  - name: release
-    color: f7c6c7
-    description: "Release engineering and deployment"
-  - name: backend
-    color: d4c5f9
-    description: "API, services, infrastructure code"
-  - name: frontend
-    color: f9d0c4
-    description: "Web app features and fixes"
-  - name: platform
-    color: c2e0c6
-    description: "Tooling, CI, build system, devex"
-  - name: P0
-    color: d73a4a
-    description: "Highest priority / urgent"
-  - name: P1
-    color: fbca04
-    description: "High priority"
-  - name: P2
-    color: 0e8a16
-    description: "Normal priority"
+# Auto-labeler applies guard:bypass via .github/labeler.yml for normal app/runtime changes
+- name: security
+  color: b60205
+  description: "Security work: auth, vulns, secrets, permissions"
+- name: observability
+  color: 5319e7
+  description: "Telemetry, tracing, logging, alerting"
+- name: data
+  color: 0e8a16
+  description: "Data pipelines, backups, migrations"
+- name: rules
+  color: 0052cc
+  description: "Firestore/Storage rules and tests"
+- name: ui
+  color: 1d76db
+  description: "Design system, components, styles"
+- name: ux
+  color: c5def5
+  description: "Interaction design and flows"
+- name: e2e
+  color: 5319e7
+  description: "End-to-end tests and frameworks"
+- name: release
+  color: f7c6c7
+  description: "Release engineering and deployment"
+- name: backend
+  color: d4c5f9
+  description: "API, services, infrastructure code"
+- name: frontend
+  color: f9d0c4
+  description: "Web app features and fixes"
+- name: platform
+  color: c2e0c6
+  description: "Tooling, CI, build system, devex"
+- name: P0
+  color: d73a4a
+  description: "Highest priority / urgent"
+- name: P1
+  color: fbca04
+  description: "High priority"
+- name: P2
+  color: 0e8a16
+  description: "Normal priority"
+
+# Guard control labels (used by guard/workflows)
+- name: allow:tests
+  color: 0366d6
+  description: "Allow tests in PR (unblocks path guard for tests)"
+- name: allow:workstation
+  color: 6f42c1
+  description: "Allow workstation config (.vscode, .devcontainer, etc.)"
+- name: check:off
+  color: b60205
+  description: "Disable legacy path guard for the PR"
+- name: guard:bypass
+  color: fef2c0
+  description: "Bypass app-runtime-guard for this PR"

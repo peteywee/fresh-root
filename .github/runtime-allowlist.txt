@@ -1,0 +1,49 @@
+# App runtime
+^apps/web/app(/|$)
+^apps/web/app/lib(/|$)
+^apps/web/components(/|$)
+^apps/web/middleware\.ts$
+
+# Shared packages used by the app
+^packages/types(/|$)
+
+# Public assets
+^public(/|$)
+
+# CI and workflow files commonly touched alongside runtime changes
+^\.github/workflows/app-runtime-guard\.yml$
+^\.github/workflows/ci\.yml$
+^\.github/workflows/eslint-ts-agent\.yml$
+^\.github/workflows/repo-agent\.yml$
+
+# Repo metadata (non-runtime) allowed alongside chores
+^\.github/labels\.yml$
+^\.gitignore$
+
+# Configuration files that may change with runtime adjustments
+^package\.json$
+^pnpm-workspace\.yaml$
+^pnpm-lock\.yaml$
+^tsconfig(\.base)?\.json$
+^eslint\.config\.mjs$
+^postcss\.config\.(cjs|mjs)$
+^apps/web/postcss\.config\.(cjs|mjs)$
+^tailwind\.config\.(cjs|ts)$
+^turbo\.json$
+^jest\.rules\.config\.js$
+
+# Firebase emulator CI config (used by test:rules:ci)
+^firebase\.ci\.json$
+
+# Documentation changes (technical docs and process/setup guides)
+^docs(/|$)
+
+# Tests affecting runtime behavior (rules, e2e)
+^tests/rules(/|$)
+^tests/e2e(/|$)
+
+# Backend service touched by server-first runtime integration
+^services/api(/|$)
+
+# Specific app files
+^apps/web/proxy\.ts$

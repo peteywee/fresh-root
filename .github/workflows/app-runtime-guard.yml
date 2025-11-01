@@ -13,6 +13,12 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Bypass guard if labeled
+        if: contains(join(github.event.pull_request.labels.*.name, ','), 'guard:bypass')
+        shell: bash
+        run: |
+          echo "Guard bypassed via label 'guard:bypass'"
+
       - name: List changed files
         id: diff
         shell: bash
@@ -27,43 +33,15 @@ jobs:
           cat changed.txt || true
 
       - name: Enforce allowlist (fail if any file is outside runtime)
+        if: ${{ !contains(join(github.event.pull_request.labels.*.name, ','), 'guard:bypass') }}
         shell: bash
         run: |
-          ALLOW=(
-            # Core app runtime (broader to include src and middleware)
-            '^apps/web/app(/|$)'
-            '^apps/web/app/lib(/|$)'
-            '^apps/web/components(/|$)'
-            '^apps/web/middleware\.ts$'
-
-            # Shared packages used by the app
-            '^packages/types(/|$)'
-
-            # Public assets
-            '^public(/|$)'
-
-            # CI and workflow files commonly touched alongside runtime changes
-            '^.github/workflows/app-runtime-guard\.yml$'
-            '^.github/workflows/ci\.yml$'
-
-            # Configuration files that may change with runtime adjustments
-            '^package\.json$'
-            '^pnpm-workspace\.yaml$'
-            '^pnpm-lock\.yaml$'
-            '^tsconfig(\.base)?\.json$'
-            '^eslint\.config\.mjs$'
-            '^postcss\.config\.(cjs|mjs)$'
-            '^tailwind\.config\.(cjs|ts)$'
-            '^turbo\.json$'
-            '^jest\.rules\.config\.js$'
-
-            # Tests affecting runtime behavior (rules, e2e)
-            '^tests/rules(/|$)'
-            '^tests/e2e(/|$)'
-
-            # Backend service touched by server-first runtime integration
-            '^services/api(/|$)'
-          )
+          # Load allowlist patterns from central config
+          if [[ ! -f .github/runtime-allowlist.txt ]]; then
+            echo "::error::.github/runtime-allowlist.txt not found"
+            exit 1
+          fi
+          mapfile -t ALLOW < <(sed -e 's/#.*$//' -e '/^\s*$/d' .github/runtime-allowlist.txt)
           ALLOW_RE="$(IFS='|'; echo "${ALLOW[*]}")"
 
           BAD=0
