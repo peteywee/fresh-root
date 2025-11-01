@@ -72,8 +72,8 @@ jobs:
 
       - name: Lint & fix (ESLint + Prettier)
         run: |
-          pnpm -w exec eslint "apps/**/src/**/*.{ts,tsx,js,jsx}" "apps/**/app/**/*.{ts,tsx,js,jsx}" "packages/**/src/**/*.{ts,tsx,js,jsx}" "functions/src/**/*.{ts,tsx,js,jsx}" --fix
-          pnpm -w prettier --write .
+          pnpm -w exec eslint "apps/**/src/**/*.{ts,tsx,js,jsx}" "apps/**/app/**/*.{ts,tsx,js,jsx}" "packages/**/src/**/*.{ts,tsx,js,jsx}" "functions/src/**/*.{ts,tsx,js,jsx}"
+          pnpm -w prettier --check .
 
       - name: Lint & Typecheck (root)
         run: |
