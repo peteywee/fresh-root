@@ -82,15 +82,64 @@
   - [x] Verified apps/web/app/api/metrics/route.ts exists
   - [x] Note: recordRequest() defined but not called (superseded by OpenTelemetry auto-instrumentation)
 
-🧩 Block 3 – Integrity Core (P1)
+🧩 Block 3 – Integrity Core (P1) 🚧 IN PROGRESS (71% complete)
 
-- [ ] [BLOCK3] Expand packages/types/ with Zod schemas for orgs, memberships, positions, schedules, shifts
+- [x] [BLOCK3] Expand packages/types/ with Zod schemas for orgs, memberships, positions, schedules, shifts
+  - [x] Created packages/types/src/memberships.ts with full CRUD schemas
+  - [x] Created packages/types/src/positions.ts with types and skill levels
+  - [x] Created packages/types/src/shifts.ts with assignments and time validation
+  - [x] Created packages/types/src/venues.ts with addresses and coordinates
+  - [x] Created packages/types/src/zones.ts for venue subdivisions
+  - [x] Created packages/types/src/attendance.ts with check-in/out and geolocation
+  - [x] Created packages/types/src/join-tokens.ts for org invitations
+  - [x] Enhanced packages/types/src/orgs.ts with settings and subscription tiers
+  - [x] Enhanced packages/types/src/schedules.ts with AI metadata and publishing
+  - [x] Updated packages/types/src/index.ts to export all schemas
 - [ ] [BLOCK3] Add API-level Zod validation for every write route (422 on invalid payload)
+  - [ ] Add validation to POST /api/organizations
+  - [ ] Add validation to POST /api/memberships
+  - [ ] Add validation to POST /api/positions
+  - [ ] Add validation to POST /api/schedules
+  - [ ] Add validation to POST /api/shifts
+  - [ ] Add validation to POST /api/venues
+  - [ ] Add validation to POST /api/zones
+  - [ ] Add validation to POST /api/attendance
+  - [ ] Add validation to POST /api/join-tokens
 - [ ] [BLOCK3] Write rules test matrix (≥ 1 allow + 3 denies per collection)
-- [ ] [BLOCK3] Add unit tests for Zod validators
-- [ ] [BLOCK3] Add migration-check script validating schema parity vs rules
-- [ ] [BLOCK3] Create schema index doc (docs/schema-map.md) listing collections ↔ schemas
-- [ ] [BLOCK3] Add pre-commit hook enforcing pnpm typecheck && pnpm lint
+  - [x] Created tests/rules/organizations.spec.ts (4 suites, 13+ tests)
+  - [x] Created tests/rules/positions.spec.ts (2 suites, 10+ tests)
+  - [ ] Create tests/rules/schedules.spec.ts
+  - [ ] Create tests/rules/shifts.spec.ts
+  - [ ] Create tests/rules/venues.spec.ts
+  - [ ] Create tests/rules/zones.spec.ts
+  - [ ] Create tests/rules/attendance.spec.ts
+  - [ ] Create tests/rules/join-tokens.spec.ts
+- [x] [BLOCK3] Add unit tests for Zod validators
+  - [x] Created packages/types/src/**tests**/memberships.test.ts (9 suites, 17+ tests)
+  - [x] Created packages/types/src/**tests**/positions.test.ts (7 suites, 15+ tests)
+  - [x] Created packages/types/src/**tests**/shifts.test.ts (4 suites, 8+ tests)
+  - [x] Created packages/types/src/**tests**/schedules.test.ts (3 suites, 7+ tests)
+  - [ ] Create packages/types/src/**tests**/venues.test.ts
+  - [ ] Create packages/types/src/**tests**/zones.test.ts
+  - [ ] Create packages/types/src/**tests**/attendance.test.ts
+  - [ ] Create packages/types/src/**tests**/join-tokens.test.ts
+  - [ ] Create packages/types/src/**tests**/orgs.test.ts
+- [x] [BLOCK3] Add migration-check script validating schema parity vs rules
+  - [x] Created scripts/ops/validate-schema-rules-parity.ts with 4 validation checks
+  - [x] Script validates collections → schemas mapping
+  - [x] Script validates schemas → exports in index.ts
+  - [x] Script validates collections → documentation
+  - [x] Script detects orphaned schemas
+  - [x] Made script executable with chmod +x
+- [x] [BLOCK3] Create schema index doc (docs/schema-map.md) listing collections ↔ schemas
+  - [x] Documented all 10 collections with Firestore paths
+  - [x] Included schema file references and rules line numbers
+  - [x] Added access control matrices for each collection
+  - [x] Listed API endpoints for each collection
+  - [x] Included testing requirements and migration check reference
+- [x] [BLOCK3] Add pre-commit hook enforcing pnpm typecheck && pnpm lint
+  - [x] Updated .husky/pre-commit to include typecheck step
+  - [x] Hook now runs: tag-files → typecheck → lint → format
 
 🎨 Block 4 – Experience Layer (P1)
 
