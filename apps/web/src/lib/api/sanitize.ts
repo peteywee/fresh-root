@@ -39,7 +39,12 @@ export function unescapeHtml(text: string): string {
  * Strip HTML tags from text
  */
 export function stripHtmlTags(text: string): string {
-  return text.replace(/<[^>]*>/g, "");
+  let previous;
+  do {
+    previous = text;
+    text = text.replace(/<[^>]*>/g, "");
+  } while (text !== previous);
+  return text;
 }
 
 /**
