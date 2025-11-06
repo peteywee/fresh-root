@@ -118,10 +118,12 @@ done
 ```html
 <!-- Malicious site at evil.com -->
 <form action="https://api.yourapp.com/api/organizations/org-1/members" method="POST">
-  <input type="hidden" name="uid" value="attacker-uid">
-  <input type="hidden" name="roles" value='["admin"]'>
+  <input type="hidden" name="uid" value="attacker-uid" />
+  <input type="hidden" name="roles" value='["admin"]' />
 </form>
-<script>document.forms[0].submit()</script>
+<script>
+  document.forms[0].submit();
+</script>
 ```
 
 **Fix Required:**

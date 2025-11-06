@@ -60,7 +60,7 @@ export const PATCH = requireOrgMembership(
     const { userId, orgId, roles } = context;
     // Handler has verified org membership and admin role
     // ...
-  })
+  }),
 );
 ```
 
@@ -106,7 +106,7 @@ export const POST = rateLimit(RateLimits.WRITE)(
   withValidation(OrganizationCreateSchema, async (request, data) => {
     // Handler is rate limited to 30 requests/minute
     // ...
-  })
+  }),
 );
 ```
 
@@ -149,8 +149,8 @@ export const POST = csrfProtection()(
     withValidation(OrganizationCreateSchema, async (request, data) => {
       // Handler requires valid CSRF token
       // ...
-    })
-  )
+    }),
+  ),
 );
 ```
 
@@ -263,7 +263,7 @@ export const POST = requireSession(
     // No rate limiting - vulnerable to abuse
     // No CSRF protection - vulnerable to CSRF
     // No input sanitization - vulnerable to XSS
-  })
+  }),
 );
 
 // AFTER (Block 3.2.1)
@@ -276,9 +276,9 @@ export const POST = rateLimit(RateLimits.WRITE)(
           urlFields: ["website"],
         });
         // Now properly secured!
-      })
-    )
-  )
+      }),
+    ),
+  ),
 );
 ```
 
