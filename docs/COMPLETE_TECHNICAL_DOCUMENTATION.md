@@ -1239,7 +1239,7 @@ pnpm test:e2e
 
 ## 1. Clean install
 
-rm -rf node_modules packages/_/node_modules apps/_/node_modules
+rm -rf node*modules packages/*/node*modules apps/*/node_modules
 pnpm install --frozen-lockfile
 
 ## 2. Lint
