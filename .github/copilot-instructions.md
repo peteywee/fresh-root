@@ -91,7 +91,7 @@ FILETAG_CLI=markdown.fix FILETAG_MODE=common FILETAG_DRYRUN=false FILETAG_LANGUA
 ## Markdown fixer policy
 
 - Configuration:
-  - Rules defined in `.markdownlint.json` (e.g., MD001, MD009, MD010, MD018/019, MD022, MD024 siblings_only, MD025/026, MD029/030, MD031/032, MD033/034, MD038, MD040/041, MD046, MD052).
+  - Rules defined in `.markdownlint.json` (e.g., MD001, MD009, MD010, MD013 (line_length=120; ignore code blocks/tables/headings), MD018/019, MD022, MD024 siblings_only, MD025/026, MD029/030, MD031/032, MD033/034, MD038, MD040/041, MD046, MD052).
   - Exclusions in `.markdownlintignore` (e.g., node_modules, .next, dist, build, coverage, .turbo, all MDX).
 - Behavior:
   - Favors safe, broad, idempotent fixes: code block fencing, consistent ATX headings, blank line hygiene, single-space after list markers, and ordered list renumbering according to `FILETAG_OL_STYLE=one` by default.
