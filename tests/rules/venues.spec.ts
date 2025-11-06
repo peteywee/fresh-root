@@ -36,27 +36,27 @@ describe("Venues Rules", () => {
 
   beforeEach(async () => {
     await testEnv.clearFirestore();
-    
+
     await testEnv.withSecurityRulesDisabled(async (context) => {
       const db = context.firestore();
-      
+
       await setDoc(doc(db, `organizations/${ORG_ID}`), {
         id: ORG_ID,
         name: "Test Org",
       });
-      
+
       await setDoc(doc(db, `memberships/${MANAGER_UID}_${ORG_ID}`), {
         uid: MANAGER_UID,
         orgId: ORG_ID,
         roles: ["manager"],
       });
-      
+
       await setDoc(doc(db, `memberships/${STAFF_UID}_${ORG_ID}`), {
         uid: STAFF_UID,
         orgId: ORG_ID,
         roles: ["staff"],
       });
-      
+
       await setDoc(doc(db, `venues/${VENUE_ID}`), {
         id: VENUE_ID,
         orgId: ORG_ID,
@@ -161,7 +161,7 @@ describe("Venues Rules", () => {
         updateDoc(doc(db, `venues/${VENUE_ID}`), {
           status: "inactive",
           updatedAt: Date.now(),
-        })
+        }),
       );
     });
 
@@ -174,7 +174,7 @@ describe("Venues Rules", () => {
       await assertFails(
         updateDoc(doc(db, `venues/${VENUE_ID}`), {
           status: "inactive",
-        })
+        }),
       );
     });
 
@@ -187,7 +187,7 @@ describe("Venues Rules", () => {
       await assertFails(
         updateDoc(doc(db, `venues/${VENUE_ID}`), {
           status: "inactive",
-        })
+        }),
       );
     });
   });

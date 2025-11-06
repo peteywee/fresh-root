@@ -37,10 +37,10 @@ describe("Zones Rules", () => {
 
   beforeEach(async () => {
     await testEnv.clearFirestore();
-    
+
     await testEnv.withSecurityRulesDisabled(async (context) => {
       const db = context.firestore();
-      
+
       await setDoc(doc(db, `organizations/${ORG_ID}`), { id: ORG_ID, name: "Test Org" });
       await setDoc(doc(db, `memberships/${MANAGER_UID}_${ORG_ID}`), {
         uid: MANAGER_UID,
@@ -120,7 +120,7 @@ describe("Zones Rules", () => {
         roles: ["manager"],
       });
       await assertSucceeds(
-        updateDoc(doc(managerContext.firestore(), `zones/${ZONE_ID}`), { status: "inactive" })
+        updateDoc(doc(managerContext.firestore(), `zones/${ZONE_ID}`), { status: "inactive" }),
       );
     });
 

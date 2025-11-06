@@ -37,10 +37,10 @@ describe("Attendance Rules", () => {
 
   beforeEach(async () => {
     await testEnv.clearFirestore();
-    
+
     await testEnv.withSecurityRulesDisabled(async (context) => {
       const db = context.firestore();
-      
+
       await setDoc(doc(db, `organizations/${ORG_ID}`), { id: ORG_ID, name: "Test Org" });
       await setDoc(doc(db, `memberships/${USER_UID}_${ORG_ID}`), {
         uid: USER_UID,
@@ -70,7 +70,9 @@ describe("Attendance Rules", () => {
         orgId: ORG_ID,
         roles: ["staff"],
       });
-      await assertSucceeds(getDoc(doc(userContext.firestore(), `attendance_records/${ATTENDANCE_ID}`)));
+      await assertSucceeds(
+        getDoc(doc(userContext.firestore(), `attendance_records/${ATTENDANCE_ID}`)),
+      );
     });
 
     it("ALLOW: manager can read any attendance", async () => {
@@ -78,7 +80,9 @@ describe("Attendance Rules", () => {
         orgId: ORG_ID,
         roles: ["manager"],
       });
-      await assertSucceeds(getDoc(doc(managerContext.firestore(), `attendance_records/${ATTENDANCE_ID}`)));
+      await assertSucceeds(
+        getDoc(doc(managerContext.firestore(), `attendance_records/${ATTENDANCE_ID}`)),
+      );
     });
 
     it("DENY: non-member cannot read attendance", async () => {
@@ -86,7 +90,9 @@ describe("Attendance Rules", () => {
         orgId: "different-org",
         roles: ["staff"],
       });
-      await assertFails(getDoc(doc(otherContext.firestore(), `attendance_records/${ATTENDANCE_ID}`)));
+      await assertFails(
+        getDoc(doc(otherContext.firestore(), `attendance_records/${ATTENDANCE_ID}`)),
+      );
     });
   });
 
@@ -105,7 +111,12 @@ describe("Attendance Rules", () => {
         checkInTime: Date.now(),
         createdAt: Date.now(),
       };
-      await assertSucceeds(setDoc(doc(userContext.firestore(), `attendance_records/${newAttendance.id}`), newAttendance));
+      await assertSucceeds(
+        setDoc(
+          doc(userContext.firestore(), `attendance_records/${newAttendance.id}`),
+          newAttendance,
+        ),
+      );
     });
 
     it("DENY: user cannot create attendance for others", async () => {
@@ -122,7 +133,12 @@ describe("Attendance Rules", () => {
         checkInTime: Date.now(),
         createdAt: Date.now(),
       };
-      await assertFails(setDoc(doc(userContext.firestore(), `attendance_records/${fakeAttendance.id}`), fakeAttendance));
+      await assertFails(
+        setDoc(
+          doc(userContext.firestore(), `attendance_records/${fakeAttendance.id}`),
+          fakeAttendance,
+        ),
+      );
     });
 
     it("ALLOW: user can update their own check-out", async () => {
@@ -134,7 +150,7 @@ describe("Attendance Rules", () => {
         updateDoc(doc(userContext.firestore(), `attendance_records/${ATTENDANCE_ID}`), {
           status: "checked_out",
           checkOutTime: Date.now(),
-        })
+        }),
       );
     });
 
@@ -146,7 +162,7 @@ describe("Attendance Rules", () => {
       await assertSucceeds(
         updateDoc(doc(managerContext.firestore(), `attendance_records/${ATTENDANCE_ID}`), {
           status: "approved",
-        })
+        }),
       );
     });
   });

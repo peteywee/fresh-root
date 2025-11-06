@@ -6,7 +6,17 @@ import {
   initializeTestEnvironment,
   RulesTestEnvironment,
 } from "@firebase/rules-unit-testing";
-import { doc, getDoc, setDoc, updateDoc, deleteDoc, collection, query, where, getDocs } from "firebase/firestore";
+import {
+  doc,
+  getDoc,
+  setDoc,
+  updateDoc,
+  deleteDoc,
+  collection,
+  query,
+  where,
+  getDocs,
+} from "firebase/firestore";
 import { readFileSync } from "fs";
 import { resolve } from "path";
 import { describe, it, beforeAll, afterAll, beforeEach } from "vitest";
@@ -37,28 +47,28 @@ describe("Schedules Rules", () => {
 
   beforeEach(async () => {
     await testEnv.clearFirestore();
-    
+
     await testEnv.withSecurityRulesDisabled(async (context) => {
       const db = context.firestore();
-      
+
       await setDoc(doc(db, `organizations/${ORG_ID}`), {
         id: ORG_ID,
         name: "Test Org",
         ownerId: OWNER_UID,
       });
-      
+
       await setDoc(doc(db, `memberships/${SCHEDULER_UID}_${ORG_ID}`), {
         uid: SCHEDULER_UID,
         orgId: ORG_ID,
         roles: ["scheduler"],
       });
-      
+
       await setDoc(doc(db, `memberships/${STAFF_UID}_${ORG_ID}`), {
         uid: STAFF_UID,
         orgId: ORG_ID,
         roles: ["staff"],
       });
-      
+
       await setDoc(doc(db, `schedules/${SCHEDULE_ID}`), {
         id: SCHEDULE_ID,
         orgId: ORG_ID,
@@ -102,10 +112,7 @@ describe("Schedules Rules", () => {
         roles: ["staff"],
       });
       const db = staffContext.firestore();
-      const schedulesQuery = query(
-        collection(db, "schedules"),
-        where("orgId", "==", ORG_ID)
-      );
+      const schedulesQuery = query(collection(db, "schedules"), where("orgId", "==", ORG_ID));
       await assertSucceeds(getDocs(schedulesQuery));
     });
   });
@@ -177,7 +184,7 @@ describe("Schedules Rules", () => {
         updateDoc(doc(db, `schedules/${SCHEDULE_ID}`), {
           status: "published",
           publishedAt: Date.now(),
-        })
+        }),
       );
     });
 
@@ -190,7 +197,7 @@ describe("Schedules Rules", () => {
       await assertFails(
         updateDoc(doc(db, `schedules/${SCHEDULE_ID}`), {
           status: "published",
-        })
+        }),
       );
     });
 
@@ -203,7 +210,7 @@ describe("Schedules Rules", () => {
       await assertFails(
         updateDoc(doc(db, `schedules/${SCHEDULE_ID}`), {
           status: "published",
-        })
+        }),
       );
     });
   });

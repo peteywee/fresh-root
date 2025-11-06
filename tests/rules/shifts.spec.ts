@@ -6,7 +6,17 @@ import {
   initializeTestEnvironment,
   RulesTestEnvironment,
 } from "@firebase/rules-unit-testing";
-import { doc, getDoc, setDoc, updateDoc, deleteDoc, collection, query, where, getDocs } from "firebase/firestore";
+import {
+  doc,
+  getDoc,
+  setDoc,
+  updateDoc,
+  deleteDoc,
+  collection,
+  query,
+  where,
+  getDocs,
+} from "firebase/firestore";
 import { readFileSync } from "fs";
 import { resolve } from "path";
 import { describe, it, beforeAll, afterAll, beforeEach } from "vitest";
@@ -38,31 +48,31 @@ describe("Shifts Rules", () => {
 
   beforeEach(async () => {
     await testEnv.clearFirestore();
-    
+
     // Setup test data
     await testEnv.withSecurityRulesDisabled(async (context) => {
       const db = context.firestore();
-      
+
       // Create org
       await setDoc(doc(db, `organizations/${ORG_ID}`), {
         id: ORG_ID,
         name: "Test Org",
         ownerId: OWNER_UID,
       });
-      
+
       // Create memberships
       await setDoc(doc(db, `memberships/${SCHEDULER_UID}_${ORG_ID}`), {
         uid: SCHEDULER_UID,
         orgId: ORG_ID,
         roles: ["scheduler"],
       });
-      
+
       await setDoc(doc(db, `memberships/${STAFF_UID}_${ORG_ID}`), {
         uid: STAFF_UID,
         orgId: ORG_ID,
         roles: ["staff"],
       });
-      
+
       // Create schedule
       await setDoc(doc(db, `schedules/${SCHEDULE_ID}`), {
         id: SCHEDULE_ID,
@@ -70,7 +80,7 @@ describe("Shifts Rules", () => {
         name: "Week 1 Schedule",
         status: "draft",
       });
-      
+
       // Create shift
       await setDoc(doc(db, `shifts/${SHIFT_ID}`), {
         id: SHIFT_ID,
@@ -119,7 +129,7 @@ describe("Shifts Rules", () => {
       const shiftsQuery = query(
         collection(db, "shifts"),
         where("scheduleId", "==", SCHEDULE_ID),
-        where("orgId", "==", ORG_ID)
+        where("orgId", "==", ORG_ID),
       );
       await assertSucceeds(getDocs(shiftsQuery));
     });
@@ -198,7 +208,7 @@ describe("Shifts Rules", () => {
         updateDoc(doc(db, `shifts/${SHIFT_ID}`), {
           status: "published",
           updatedAt: Date.now(),
-        })
+        }),
       );
     });
 
@@ -211,7 +221,7 @@ describe("Shifts Rules", () => {
       await assertFails(
         updateDoc(doc(db, `shifts/${SHIFT_ID}`), {
           status: "published",
-        })
+        }),
       );
     });
 
@@ -224,7 +234,7 @@ describe("Shifts Rules", () => {
       await assertFails(
         updateDoc(doc(db, `shifts/${SHIFT_ID}`), {
           status: "published",
-        })
+        }),
       );
     });
   });

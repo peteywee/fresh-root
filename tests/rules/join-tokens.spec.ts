@@ -36,10 +36,10 @@ describe("Join Tokens Rules", () => {
 
   beforeEach(async () => {
     await testEnv.clearFirestore();
-    
+
     await testEnv.withSecurityRulesDisabled(async (context) => {
       const db = context.firestore();
-      
+
       await setDoc(doc(db, `organizations/${ORG_ID}`), { id: ORG_ID, name: "Test Org" });
       await setDoc(doc(db, `memberships/${ADMIN_UID}_${ORG_ID}`), {
         uid: ADMIN_UID,
@@ -110,7 +110,9 @@ describe("Join Tokens Rules", () => {
         createdAt: Date.now(),
         createdBy: ADMIN_UID,
       };
-      await assertSucceeds(setDoc(doc(adminContext.firestore(), `join_tokens/${newToken.id}`), newToken));
+      await assertSucceeds(
+        setDoc(doc(adminContext.firestore(), `join_tokens/${newToken.id}`), newToken),
+      );
     });
 
     it("DENY: staff cannot create token", async () => {
@@ -130,7 +132,9 @@ describe("Join Tokens Rules", () => {
         createdAt: Date.now(),
         createdBy: STAFF_UID,
       };
-      await assertFails(setDoc(doc(staffContext.firestore(), `join_tokens/${newToken.id}`), newToken));
+      await assertFails(
+        setDoc(doc(staffContext.firestore(), `join_tokens/${newToken.id}`), newToken),
+      );
     });
 
     it("ALLOW: admin can update token", async () => {
@@ -142,7 +146,7 @@ describe("Join Tokens Rules", () => {
         updateDoc(doc(adminContext.firestore(), `join_tokens/${TOKEN_ID}`), {
           status: "revoked",
           revokedAt: Date.now(),
-        })
+        }),
       );
     });
 
