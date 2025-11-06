@@ -56,10 +56,9 @@ export const POST = rateLimit(RateLimits.WRITE)(
       requireRole("manager")(async (request, context) => {
         try {
           const body = await request.json();
-          const sanitized = sanitizeObject(body);
 
-          // Validate with Zod
-          const validationResult = PositionCreateSchema.safeParse(sanitized);
+          // Validate with Zod first
+          const validationResult = PositionCreateSchema.safeParse(body);
           if (!validationResult.success) {
             return NextResponse.json(
               { error: "Invalid position data", details: validationResult.error.errors },
@@ -67,7 +66,8 @@ export const POST = rateLimit(RateLimits.WRITE)(
             );
           }
 
-          const data = validationResult.data;
+          // Then sanitize the validated data
+          const data = sanitizeObject(validationResult.data);
           const { userId, orgId } = context;
 
           // In production, create position in Firestore
