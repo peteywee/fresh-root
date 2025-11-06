@@ -16,7 +16,7 @@ async function seed() {
   console.log("Seeding emulator data…");
 
   const { users } = await auth.listUsers();
-  if (users.length) await auth.deleteUsers(users.map((u: any) => u.uid));
+  if (users.length) await auth.deleteUsers(users.map((u) => u.uid));
 
   const manager = await auth.createUser({
     uid: "manager_uid_123",

@@ -116,7 +116,7 @@ app.post(
       await cache.del(`schedules:${orgId}`);
 
       return res.status(201).json({ id: ref.id });
-    } catch (e: any) {
+    } catch (e) {
       console.error(e);
       return res.status(500).json({ error: "internal_server_error" });
     }
@@ -131,7 +131,7 @@ app.get(
   async (req: Request, res: Response) => {
     try {
       const { orgId } = req.params;
-      const cached = await cache.get<any[]>(`schedules:${orgId}`);
+      const cached = await cache.get<unknown[]>(`schedules:${orgId}`);
       if (cached) return res.json({ items: cached, cached: true });
 
       const snap = await db
@@ -144,7 +144,7 @@ app.get(
       const items = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
       await cache.set(`schedules:${orgId}`, items, 30); // 30s TTL
       return res.json({ items, cached: false });
-    } catch (e: any) {
+    } catch (e) {
       console.error(e);
       return res.status(500).json({ error: "internal_server_error" });
     }

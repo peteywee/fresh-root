@@ -56,7 +56,7 @@ export default [
           caughtErrorsIgnorePattern: "^_",
         },
       ],
-      "@typescript-eslint/no-explicit-any": "off", // Disabled: too many existing uses
+      "@typescript-eslint/no-explicit-any": "warn", // Warn on explicit any types
       "prefer-const": "warn",
       "no-console": "off", // Disabled: service worker needs console
       "react-hooks/rules-of-hooks": "error",

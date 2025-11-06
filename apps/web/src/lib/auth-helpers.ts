@@ -15,12 +15,17 @@ import { setPendingEmail, getPendingEmail, clearPendingEmail } from "./auth/pend
 import { reportError } from "./error/reporting";
 import { auth } from "../../app/lib/firebaseClient";
 
+// Extend Navigator to include non-standard iOS standalone property
+interface NavigatorWithStandalone extends Navigator {
+  standalone?: boolean;
+}
+
 function shouldUseRedirect(): boolean {
   if (typeof navigator === "undefined") return false;
   const ua = navigator.userAgent.toLowerCase();
   const isIOS = /iphone|ipad|ipod/.test(ua);
   const isSafari = /safari/.test(ua) && !/chrome|chromium|crios/.test(ua);
-  const isStandalone = (navigator as any).standalone === true;
+  const isStandalone = (navigator as NavigatorWithStandalone).standalone === true;
   const smallScreen = typeof window !== "undefined" && window.innerWidth < 768;
   return isIOS || isSafari || isStandalone || smallScreen;
 }
@@ -34,12 +39,12 @@ export async function loginWithGoogleSmart() {
       await signInWithPopup(auth!, provider);
     }
   } catch (e) {
-    reportError(e as any, { phase: "google_sign_in" });
+    reportError(e as unknown, { phase: "google_sign_in" });
     // Fallback: try redirect if popup failed (e.g., blocked)
     try {
       await signInWithRedirect(auth!, provider);
     } catch (e2) {
-      reportError(e2 as any, { phase: "google_sign_in_fallback" });
+      reportError(e2 as unknown, { phase: "google_sign_in_fallback" });
       throw e2;
     }
   }
@@ -58,7 +63,7 @@ export async function completeGoogleRedirectOnce(): Promise<boolean> {
     const res = await getRedirectResult(auth!);
     return !!res?.user;
   } catch (e) {
-    reportError(e as any, { phase: "google_redirect_complete" });
+    reportError(e as unknown, { phase: "google_redirect_complete" });
     return false;
   }
 }
@@ -72,7 +77,7 @@ export async function sendEmailLinkRobust(email: string) {
     await sendSignInLinkToEmail(auth, email, actionCodeSettings);
     await setPendingEmail(email);
   } catch (e) {
-    reportError(e as any, { phase: "send_email_link" });
+    reportError(e as unknown, { phase: "send_email_link" });
     throw e;
   }
 }
@@ -91,7 +96,7 @@ export async function completeEmailLinkIfPresent(): Promise<boolean> {
   try {
     await signInWithEmailLink(auth!, email, window.location.href);
   } catch (e) {
-    reportError(e as any, { phase: "complete_email_link" });
+    reportError(e as unknown, { phase: "complete_email_link" });
     throw e;
   } finally {
     await clearPendingEmail();
@@ -118,12 +123,12 @@ export async function logoutEverywhere() {
   try {
     await fetch("/api/session", { method: "DELETE" });
   } catch (e) {
-    reportError(e as any, { phase: "session_delete" });
+    reportError(e as unknown, { phase: "session_delete" });
   }
   try {
     const { signOut } = await import("firebase/auth");
     await signOut(auth!);
   } catch (e) {
-    reportError(e as any, { phase: "client_signout" });
+    reportError(e as unknown, { phase: "client_signout" });
   }
 }
