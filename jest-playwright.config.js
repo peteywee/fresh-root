@@ -1,3 +1,5 @@
+// [P2][APP][ENV] Jest Playwright Config
+// Tags: P2, APP, ENV
 module.exports = {
   browsers: ["chromium"],
   launchOptions: { headless: true },

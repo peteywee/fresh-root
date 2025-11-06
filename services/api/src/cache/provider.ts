@@ -1,3 +1,5 @@
+// [P1][API][CODE] Provider
+// Tags: P1, API, CODE
 export interface CacheProvider {
   get<T = unknown>(key: string): Promise<T | null>;
   set<T = unknown>(key: string, value: T, ttlSec?: number): Promise<void>;

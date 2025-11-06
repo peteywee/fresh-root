@@ -1,3 +1,5 @@
+// [P2][UI][CODE] MonthView
+// Tags: P2, UI, CODE
 "use client";
 import React, { useMemo } from "react";
 

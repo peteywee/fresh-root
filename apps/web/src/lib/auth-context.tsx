@@ -1,3 +1,5 @@
+// [P0][AUTH][CODE] Auth Context
+// Tags: P0, AUTH, CODE
 "use client";
 import React, { createContext, useContext, useState, useEffect } from "react";
 

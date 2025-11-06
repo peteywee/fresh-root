@@ -1,3 +1,5 @@
+// [P0][APP][ENV] Index
+// Tags: P0, APP, ENV
 export const APP_CONFIG = {
   name: "Fresh Schedules",
   version: "0.1.0",

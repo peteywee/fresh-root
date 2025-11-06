@@ -1,3 +1,5 @@
+// [P2][APP][CODE] ErrorContext
+// Tags: P2, APP, CODE
 "use client";
 import { createContext, useContext, useMemo, useReducer, type ReactNode } from "react";
 

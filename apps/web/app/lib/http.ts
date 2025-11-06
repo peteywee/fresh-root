@@ -1,3 +1,5 @@
+// [P2][APP][CODE] Http
+// Tags: P2, APP, CODE
 import type { ApiError } from "../api/_shared/validation";
 
 export class HttpError extends Error {

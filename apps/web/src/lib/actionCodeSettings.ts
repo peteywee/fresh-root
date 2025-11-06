@@ -1,3 +1,5 @@
+// [P0][APP][CODE] ActionCodeSettings
+// Tags: P0, APP, CODE
 import type { ActionCodeSettings } from "firebase/auth";
 
 // Build a client-safe action code settings object.

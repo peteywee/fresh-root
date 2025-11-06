@@ -1,3 +1,5 @@
+// [P2][APP][CODE] RegisterServiceWorker
+// Tags: P2, APP, CODE
 // Safe service worker registration helper
 export async function safeRegisterServiceWorker(scriptUrl = "/sw.js") {
   try {

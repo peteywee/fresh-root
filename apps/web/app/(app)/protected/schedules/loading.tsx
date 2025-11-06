@@ -1,3 +1,5 @@
+// [P2][APP][CODE] Loading
+// Tags: P2, APP, CODE
 // Streaming-friendly skeleton to avoid jank during route transitions.
 export default function Loading() {
   return (

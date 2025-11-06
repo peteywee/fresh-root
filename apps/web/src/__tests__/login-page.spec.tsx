@@ -1,3 +1,5 @@
+// [P1][OBSERVABILITY][LOGGING] Login Page Spec tests
+// Tags: P1, OBSERVABILITY, LOGGING, TEST
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 

@@ -22,9 +22,15 @@
       echo "GITHUB_EVENT_NAME=$GITHUB_EVENT_NAME"
       if [ -n "${GITHUB_TOKEN:-}" ]; then echo "GITHUB_TOKEN: set"; else echo "GITHUB_TOKEN: NOT set"; fi
 
-  - name: Sync labels from .github/labels.yml
-    uses: crazy-max/ghaction-github-labeler@v5
-    with:
-      github-token: ${{ secrets.GITHUB_TOKEN }}
-      yaml-file: .github/labels.yml
-      skip-delete: true
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Sync labels from .github/labels.yml
+        uses: crazy-max/ghaction-github-labeler@v5
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          yaml-file: .github/labels.yml
+          skip-delete: true

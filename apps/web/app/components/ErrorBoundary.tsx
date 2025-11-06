@@ -1,3 +1,5 @@
+// [P2][UI][CODE] ErrorBoundary
+// Tags: P2, UI, CODE
 "use client";
 
 import React, { Component, ErrorInfo, ReactNode } from "react";

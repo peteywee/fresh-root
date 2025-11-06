@@ -1,12 +1,8 @@
 // [P1][RELIABILITY][OTEL] OpenTelemetry distributed tracing initialization
 // Tags: P1, RELIABILITY, OBSERVABILITY, OTEL, TRACING, INSTRUMENTATION
 import { getNodeAutoInstrumentations } from "@opentelemetry/auto-instrumentations-node";
-import { Resource } from "@opentelemetry/resources"; // Added: used below
 import { NodeSDK } from "@opentelemetry/sdk-node";
-import {
-  SEMRESATTRS_SERVICE_NAME,
-  SEMRESATTRS_SERVICE_VERSION,
-} from "@opentelemetry/semantic-conventions";
+// (no direct semantic attr constants needed; set via env vars)
 
 export interface OTelConfig {
   serviceName: string;
@@ -70,12 +66,21 @@ export function initOTel(config: OTelConfig): void {
       url: endpoint,
     });
 
+    // Configure service identity via environment to avoid direct Resource class dependency
+    try {
+      // Standard OTel envs understood by the SDK/resource detectors
+      process.env.OTEL_SERVICE_NAME = serviceName;
+      const attrs: string[] = [];
+      if (serviceVersion) attrs.push(`service.version=${serviceVersion}`);
+      if (attrs.length) {
+        const prior = process.env.OTEL_RESOURCE_ATTRIBUTES?.trim();
+        process.env.OTEL_RESOURCE_ATTRIBUTES =
+          prior && prior.length ? `${prior},${attrs.join(",")}` : attrs.join(",");
+      }
+    } catch {}
+
     // Initialize SDK with auto-instrumentation
     sdk = new NodeSDK({
-      resource: new Resource({
-        [SEMRESATTRS_SERVICE_NAME]: serviceName,
-        [SEMRESATTRS_SERVICE_VERSION]: serviceVersion || "unknown",
-      }),
       traceExporter,
       instrumentations: [
         getNodeAutoInstrumentations({

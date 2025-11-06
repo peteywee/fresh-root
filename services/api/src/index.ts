@@ -1,5 +1,7 @@
 // [P1][RELIABILITY][OTEL] Initialize OpenTelemetry FIRST for auto-instrumentation
+// eslint-disable-next-line import/order -- load env early for OTel endpoint
 import { loadEnv } from "./env.js";
+// eslint-disable-next-line import/order -- import OTel early; init runs before Express import
 import { initOTel } from "./obs/otel.js";
 
 // Load env before OTel init to get endpoint
@@ -81,7 +83,7 @@ app.post("/session", async (req: Request, res: Response) => {
       `session=${encodeURIComponent(sessionCookie)}; HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=${Math.floor(expiresIn / 1000)}`,
     );
     return res.status(200).json({ ok: true });
-  } catch (e) {
+  } catch (_e) {
     return res.status(401).json({ error: "invalid_token" });
   }
 });

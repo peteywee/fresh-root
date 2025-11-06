@@ -1,3 +1,5 @@
+// [P0][TEST][TEST] Schedules Test tests
+// Tags: P0, TEST, TEST
 import { initializeTestEnvironment, assertFails, assertSucceeds } from "@firebase/rules-unit-testing";
 import { readFile } from "node:fs/promises";
 import { setDoc, doc, getDoc, collection, addDoc } from "firebase/firestore";

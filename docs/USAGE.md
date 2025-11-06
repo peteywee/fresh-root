@@ -174,11 +174,13 @@ apps/web/app/api/
 │   └── route.ts         # GET /api/health
 └── items/
     └── route.ts         # GET/POST /api/items
+
 ```json
 
 ### Creating API Routes
 
 ```tsx
+
 // apps/web/app/api/example/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import { parseJson, badRequest, ok } from "../_shared/validation";

@@ -1,3 +1,5 @@
+// [P2][UI][CODE] Card
+// Tags: P2, UI, CODE
 import * as React from "react";
 
 export function Card({ className = "", ...props }: React.HTMLAttributes<HTMLDivElement>) {

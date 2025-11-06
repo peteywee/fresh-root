@@ -1,3 +1,5 @@
+// [P0][APP][ENV] Next Config
+// Tags: P0, APP, ENV
 /** @type {import('next').NextConfig} */
 
 const securityHeaders = [

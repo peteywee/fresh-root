@@ -1,3 +1,5 @@
+// [P0][AUTH][CODE] PendingEmail Store
+// Tags: P0, AUTH, CODE
 import { kvSet, kvGet, kvDelete } from "../storage/kv";
 
 const KEY = "emailForSignIn";

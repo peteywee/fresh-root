@@ -1,3 +1,5 @@
+// [P1][API][CODE] Route API route handler
+// Tags: P1, API, CODE
 import { z } from "zod";
 
 import { parseJson, badRequest, ok, serverError } from "../_shared/validation";

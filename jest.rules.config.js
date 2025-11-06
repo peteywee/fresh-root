@@ -1,3 +1,5 @@
+// [P2][APP][ENV] Jest Rules Config
+// Tags: P2, APP, ENV
 module.exports = {
   testEnvironment: "node",
   // Explicit list to avoid picking up a broken intermediate file during edits

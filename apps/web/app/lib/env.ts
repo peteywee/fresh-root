@@ -1,3 +1,5 @@
+// [P0][APP][ENV] Env
+// Tags: P0, APP, ENV
 // Runtime env validation for client/server
 import { z } from "zod";
 

@@ -1,3 +1,5 @@
+// [P1][API][CODE] ProtectedRoute
+// Tags: P1, API, CODE
 "use client";
 
 import { useRouter } from "next/navigation";

@@ -1,3 +1,5 @@
+// [P2][UI][CODE] Index
+// Tags: P2, UI, CODE
 // Export all UI components for easy importing
 export { Button } from "./Button";
 export type { ButtonProps } from "./Button";

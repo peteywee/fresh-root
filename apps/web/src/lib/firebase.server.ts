@@ -1,3 +1,5 @@
+// [P0][FIREBASE][FIREBASE] Firebase Server
+// Tags: P0, FIREBASE, FIREBASE
 import * as admin from "firebase-admin";
 
 // Initialize Firebase Admin SDK if not already initialized.

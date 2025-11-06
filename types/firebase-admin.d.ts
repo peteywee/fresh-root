@@ -1,3 +1,5 @@
+// [P0][FIREBASE][FIREBASE] Firebase Admin D type definitions
+// Tags: P0, FIREBASE, FIREBASE
 // Minimal ambient types to satisfy tests without pulling full admin types into the app build
 // NOTE: Runtime uses the real firebase-admin package; this file is only for TypeScript.
 

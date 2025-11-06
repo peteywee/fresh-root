@@ -1,3 +1,5 @@
+// [P0][APP][CODE] Index
+// Tags: P0, APP, CODE
 "use client";
 import { QueryClientProvider } from "@tanstack/react-query";
 import React from "react";

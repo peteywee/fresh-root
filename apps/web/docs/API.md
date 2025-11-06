@@ -4,7 +4,7 @@ This document provides detailed information about the Fresh Schedules API endpoi
 
 ## Base URL
 
-```
+```text
 Development: http://localhost:3000/api
 Production: https://your-domain.com/api
 ```
@@ -386,7 +386,7 @@ Some endpoints support filtering and sorting:
 
 **Example**:
 
-```
+```text
 GET /api/organizations?sort=-createdAt&filter[industry]=Technology
 ```
 
@@ -464,12 +464,12 @@ curl -X PATCH https://api.example.com/api/users/profile \
 ## Best Practices
 
 1. **Always validate input** - Use Zod schemas for validation
-2. **Handle errors gracefully** - Return consistent error responses
-3. **Use appropriate HTTP methods** - GET for reads, POST for creates, PATCH for updates, DELETE for deletes
-4. **Include authentication** - Check user permissions before processing requests
-5. **Rate limit** - Implement rate limiting to prevent abuse
-6. **Document changes** - Update this documentation when adding/modifying endpoints
-7. **Version your API** - Consider versioning for breaking changes
+1. **Handle errors gracefully** - Return consistent error responses
+1. **Use appropriate HTTP methods** - GET for reads, POST for creates, PATCH for updates, DELETE for deletes
+1. **Include authentication** - Check user permissions before processing requests
+1. **Rate limit** - Implement rate limiting to prevent abuse
+1. **Document changes** - Update this documentation when adding/modifying endpoints
+1. **Version your API** - Consider versioning for breaking changes
 
 ## Support
 

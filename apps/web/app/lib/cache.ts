@@ -1,3 +1,5 @@
+// [P2][APP][CODE] Cache
+// Tags: P2, APP, CODE
 import {
   unstable_cache as nextCache,
   revalidateTag,

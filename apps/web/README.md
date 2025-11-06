@@ -11,12 +11,12 @@ This application follows a **server-first architecture**:
 - **RBAC enforced server-side** - Firestore rules are a backstop, not the primary control
 - **Server-side caching with ISR** - Improved performance with tag-based invalidation for targeted revalidation
 
-### Why Server-First?
+### Why Server-First
 
 1. **Security**: Sensitive operations happen on the server where credentials are secure
-2. **Performance**: Server-side caching and ISR reduce client load times
-3. **Consistency**: Single source of truth for business logic
-4. **Maintainability**: Easier to update and test server logic vs. distributed client code
+1. **Performance**: Server-side caching and ISR reduce client load times
+1. **Consistency**: Single source of truth for business logic
+1. **Maintainability**: Easier to update and test server logic vs. distributed client code
 
 ### Key Patterns
 
@@ -42,7 +42,7 @@ This application follows a **server-first architecture**:
 
 ## Project Structure
 
-```
+```text
 apps/web/
 ├── app/                    # Next.js App Router
 │   ├── (app)/             # App routes (authenticated)

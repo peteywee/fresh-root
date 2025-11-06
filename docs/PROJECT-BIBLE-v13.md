@@ -1,6 +1,6 @@
 # Fresh Schedules — PROJECT BIBLE (v13, Production-Ready)
 
-**Status:** Authoritative, executable specification for a **server-first, RBAC-secured scheduling platform** with caching, auth, Firestore rules, observability, CI/CD, and zero-downtime releases.  
+**Status:** Authoritative, executable specification for a **server-first, RBAC-secured scheduling platform** with caching, auth, Firestore rules, observability, CI/CD, and zero-downtime releases.
 **Owner:** Patrick (peteywee) • Repo: `peteywee/fresh-root`
 
 ---
@@ -16,13 +16,13 @@
 
 ## 0) Executive Summary
 
-You are now at **Plan C: Production Hardening**. Version 12 was not production-ready; **v13 is**.  
+You are now at **Plan C: Production Hardening**. Version 12 was not production-ready; **v13 is**.
 This Bible is your **single source of truth** to:
 
 1. Reconstruct the app from zero,
-2. Execute work in **dependency blocks** (Security → Reliability → Integrity → Experience → Release),
-3. Validate with **tests, metrics, and CI/CD gates**,
-4. Ship with **Blue/Green** and a documented rollback.
+1. Execute work in **dependency blocks** (Security → Reliability → Integrity → Experience → Release),
+1. Validate with **tests, metrics, and CI/CD gates**,
+1. Ship with **Blue/Green** and a documented rollback.
 
 **North Star UX:** From dashboard to a published weekly schedule in **≤ 5 minutes** on a seeded demo org, with performance ≥ Lighthouse 90 and a11y ≥ 95.
 
@@ -43,10 +43,10 @@ This Bible is your **single source of truth** to:
 ### 1.2 System Data Flow (Auth-first)
 
 1. User signs in via **Firebase Web SDK** (email/password or provider) and completes **MFA** if privileged.
-2. Web calls **/api/session** to mint a **session cookie** (Admin SDK verify).
-3. Subsequent requests include cookie → **API verifies** → attaches `userToken { uid, orgId, roles, mfa }`.
-4. API validates payloads (**Zod**), checks **RBAC + rules expectations**, writes via **Admin SDK**.
-5. Logs and traces emitted; p95 targets monitored; backups scheduled.
+1. Web calls **/api/session** to mint a **session cookie** (Admin SDK verify).
+1. Subsequent requests include cookie → **API verifies** → attaches `userToken { uid, orgId, roles, mfa }`.
+1. API validates payloads (**Zod**), checks **RBAC + rules expectations**, writes via **Admin SDK**.
+1. Logs and traces emitted; p95 targets monitored; backups scheduled.
 
 ---
 

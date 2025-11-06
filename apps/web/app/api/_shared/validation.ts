@@ -1,3 +1,5 @@
+// [P1][INTEGRITY][VALIDATION] Validation
+// Tags: P1, INTEGRITY, VALIDATION
 import { z } from "zod";
 
 /** Standard API error payload shape */

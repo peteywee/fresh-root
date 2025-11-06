@@ -1,6 +1,7 @@
 #!/bin/sh
 
-# Pre-commit: lint and format (no deprecated husky.sh sourcing)
+# Pre-commit: auto-tag files, lint, and format
+node scripts/tag-files.mjs || exit 1
 pnpm -w lint || exit 1
 pnpm -w format || exit 1
 

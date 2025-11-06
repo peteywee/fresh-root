@@ -41,7 +41,9 @@
       "label": "Sanity Script",
       "type": "shell",
       "command": "./scripts/sanity.sh",
-      "options": { "cwd": "${workspaceFolder}" }
+      "options": {
+        "cwd": "${workspaceFolder}"
+      }
     },
     {
       "label": "Deps: Check (no deprecated/peers)",
@@ -70,7 +72,11 @@
       "label": "Fast Test Loop",
       "type": "shell",
       "command": "pnpm vitest run --reporter=dot --maxThreads=1",
-      "options": { "env": { "CI": "true" } },
+      "options": {
+        "env": {
+          "CI": "true"
+        }
+      },
       "problemMatcher": []
     },
     {
@@ -91,6 +97,19 @@
       "type": "shell",
       "command": "pnpm typecheck",
       "problemMatcher": ["$tsc"]
+    },
+    {
+      "label": "Docs: Markdown Fix (apply)",
+      "type": "shell",
+      "command": "FILETAG_CLI=markdown.fix FILETAG_MODE=common FILETAG_DRYRUN=false FILETAG_LANGUAGE=text FILETAG_OL_STYLE=one node mcp/filetag-server.mjs",
+      "isBackground": false
+    },
+    {
+      "label": "Tag: Auto-tag Files",
+      "type": "shell",
+      "command": "node scripts/tag-files.mjs",
+      "isBackground": false,
+      "problemMatcher": []
     }
   ]
 }
