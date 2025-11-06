@@ -1,25 +1,20 @@
 // [P0][API][CODE] Route API route handler
 // Tags: P0, API, CODE
+import { CreateOrganizationSchema } from "@fresh-schedules/types";
 import { NextRequest } from "next/server";
-import { z } from "zod";
+import { NextResponse } from "next/server";
 
-import { requireSession, AuthenticatedRequest, require2FAForManagers } from "../_shared/middleware";
-import { parseJson, badRequest, ok, serverError } from "../_shared/validation";
+import { withSecurity } from "../_shared/middleware";
+import { parseJson, serverError } from "../_shared/validation";
 
-// Schema for creating an organization
-const CreateOrgSchema = z.object({
-  name: z.string().min(1).max(100),
-  description: z.string().max(500).optional(),
-  industry: z.string().optional(),
-  size: z.enum(["1-10", "11-50", "51-200", "201-500", "500+"]).optional(),
-});
+// Rate limiting via withSecurity
 
 /**
  * GET /api/organizations
  * List organizations the current user belongs to
  */
-export async function GET(request: NextRequest) {
-  return requireSession(request as AuthenticatedRequest, async (authReq) => {
+export const GET = withSecurity(
+  async (request: NextRequest, context: { params: Record<string, string>; userId: string }) => {
     try {
       // In production, fetch from database based on authenticated user
       const organizations = [
@@ -30,7 +25,7 @@ export async function GET(request: NextRequest) {
           role: "admin",
           createdAt: new Date().toISOString(),
           memberCount: 25,
-          ownerId: authReq.user?.uid,
+          ownerId: context.userId,
         },
         {
           id: "org-2",
@@ -39,43 +34,50 @@ export async function GET(request: NextRequest) {
           role: "manager",
           createdAt: new Date().toISOString(),
           memberCount: 10,
-          ownerId: authReq.user?.uid,
+          ownerId: context.userId,
         },
       ];
-
-      return ok({ organizations, userId: authReq.user?.uid });
+      return NextResponse.json({ organizations, userId: context.userId });
     } catch {
       return serverError("Failed to fetch organizations");
     }
-  });
-}
+  },
+  { requireAuth: true, maxRequests: 100, windowMs: 60_000 },
+);
 
 /**
  * POST /api/organizations
- * Create a new organization (requires 2FA for manager operations)
+ * Create a new organization
  */
-export async function POST(request: NextRequest) {
-  return require2FAForManagers(request as AuthenticatedRequest, async (authReq) => {
+export const POST = withSecurity(
+  async (request: NextRequest, context: { params: Record<string, string>; userId: string }) => {
     try {
-      const parsed = await parseJson(authReq, CreateOrgSchema);
-
+      const parsed = await parseJson(request, CreateOrganizationSchema);
       if (!parsed.success) {
-        return badRequest("Validation failed", parsed.details);
+        return NextResponse.json(
+          {
+            error: {
+              code: "VALIDATION_ERROR",
+              message: "Invalid organization data",
+              details: parsed.details,
+            },
+          },
+          { status: 422 },
+        );
       }
-
       // In production, create organization in database
       const newOrg = {
         id: `org-${Date.now()}`,
         ...parsed.data,
         role: "admin", // Creator is admin
-        ownerId: authReq.user?.uid,
+        ownerId: context.userId,
         createdAt: new Date().toISOString(),
         memberCount: 1,
       };
-
-      return ok(newOrg);
+      return NextResponse.json(newOrg, { status: 201 });
     } catch {
       return serverError("Failed to create organization");
     }
-  });
-}
+  },
+  { requireAuth: true, maxRequests: 100, windowMs: 60_000 },
+);

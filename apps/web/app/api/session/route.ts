@@ -1,16 +1,28 @@
-// [P0][AUTH][SESSION] Route API route handler
+// [P0][AUTH][SESSION] Session cookie management endpoints
 // Tags: P0, AUTH, SESSION
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
+import { z } from "zod";
 
 import { getFirebaseAdminAuth } from "../../../lib/firebase-admin";
+import { parseJson, badRequest, serverError, ok } from "../_shared/validation";
 
-// Session endpoint: verify idToken with Firebase Admin and set secure session cookie
+// Schema for session creation
+const CreateSessionSchema = z.object({
+  idToken: z.string().min(1, "idToken is required"),
+});
+
+/**
+ * POST /api/session
+ * Create a session cookie from a Firebase ID token
+ */
 export async function POST(req: NextRequest) {
   try {
-    const { idToken } = await req.json();
-    if (!idToken || typeof idToken !== "string") {
-      return NextResponse.json({ error: "Missing or invalid idToken" }, { status: 400 });
+    const parsed = await parseJson(req, CreateSessionSchema);
+    if (!parsed.success) {
+      return badRequest("Validation failed", parsed.details);
     }
+
+    const { idToken } = parsed.data;
 
     const auth = getFirebaseAdminAuth();
     // Verify the idToken and create a session cookie (5 days default)
@@ -18,7 +30,7 @@ export async function POST(req: NextRequest) {
     const sessionCookie = await auth.createSessionCookie(idToken, { expiresIn });
 
     // Set secure HttpOnly session cookie
-    const response = NextResponse.json({ ok: true }, { status: 200 });
+    const response = ok({ ok: true });
     response.cookies.set("session", sessionCookie, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
@@ -30,13 +42,21 @@ export async function POST(req: NextRequest) {
     return response;
   } catch (error) {
     console.error("Session creation error:", error);
-    return NextResponse.json({ error: "Invalid token or internal error" }, { status: 401 });
+    return serverError(
+      error instanceof Error ? error.message : "Invalid token or internal error",
+      undefined,
+      "UNAUTHORIZED",
+    );
   }
 }
 
+/**
+ * DELETE /api/session
+ * Clear the session cookie (logout)
+ */
 export async function DELETE() {
   // Clear session cookie
-  const response = NextResponse.json({ ok: true }, { status: 200 });
+  const response = ok({ ok: true });
   response.cookies.set("session", "", {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",

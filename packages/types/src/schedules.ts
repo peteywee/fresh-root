@@ -1,77 +1,146 @@
-// [P0][INTEGRITY][CODE] Schedule and shift Zod schemas
-// Tags: P0, INTEGRITY, CODE
+// [P1][INTEGRITY][SCHEMA] Schedule schemas
+// Tags: P1, INTEGRITY, SCHEMA, ZOD, SCHEDULES
 import { z } from "zod";
 
-export const ShiftStatus = z.enum(["draft", "published", "cancelled"]);
-export type ShiftStatus = z.infer<typeof ShiftStatus>;
-
-export const Shift = z.object({
-  id: z.string(),
-  scheduleId: z.string(),
-  positionId: z.string(),
-  userId: z.string().optional(),
-  startTime: z.string().datetime(),
-  endTime: z.string().datetime(),
-  status: ShiftStatus,
-  notes: z.string().optional(),
-  createdAt: z.string().datetime(),
-  updatedAt: z.string().datetime().optional(),
-});
-export type Shift = z.infer<typeof Shift>;
-
-export const ScheduleStatus = z.enum(["draft", "published", "active", "completed"]);
+/**
+ * Schedule status lifecycle
+ */
+export const ScheduleStatus = z.enum(["draft", "published", "active", "completed", "archived"]);
 export type ScheduleStatus = z.infer<typeof ScheduleStatus>;
 
-export const Schedule = z.object({
-  id: z.string(),
-  orgId: z.string(),
-  name: z.string().min(1).max(100),
-  description: z.string().max(500).optional(),
-  startDate: z.string().datetime(),
-  endDate: z.string().datetime(),
-  status: ScheduleStatus,
-  createdAt: z.string().datetime(),
-  updatedAt: z.string().datetime().optional(),
-  createdBy: z.string(),
-});
-export type Schedule = z.infer<typeof Schedule>;
+/**
+ * Schedule visibility settings
+ */
+export const ScheduleVisibility = z.enum([
+  "private", // Only managers can see
+  "team", // All team members can see
+  "public", // Public viewing (with link)
+]);
+export type ScheduleVisibility = z.infer<typeof ScheduleVisibility>;
 
-export const CreateScheduleInput = z.object({
-  name: z.string().min(1).max(100),
-  description: z.string().max(500).optional(),
-  startDate: z.string().datetime(),
-  endDate: z.string().datetime(),
+/**
+ * Schedule statistics
+ */
+export const ScheduleStatsSchema = z.object({
+  totalShifts: z.number().int().nonnegative().default(0),
+  assignedShifts: z.number().int().nonnegative().default(0),
+  unassignedShifts: z.number().int().nonnegative().default(0),
+  totalHours: z.number().nonnegative().default(0),
+  totalCost: z.number().nonnegative().default(0),
+  conflictCount: z.number().int().nonnegative().default(0),
 });
-export type CreateScheduleInput = z.infer<typeof CreateScheduleInput>;
+export type ScheduleStats = z.infer<typeof ScheduleStatsSchema>;
 
-export const UpdateScheduleInput = z
+/**
+ * Full Schedule document schema
+ * Firestore path: /schedules/{orgId}/{scheduleId}
+ * or /orgs/{orgId}/schedules/{scheduleId}
+ */
+export const ScheduleSchema = z
   .object({
-    name: z.string().min(1).max(100).optional(),
+    id: z.string().min(1),
+    orgId: z.string().min(1, "Organization ID is required"),
+    name: z.string().min(1, "Schedule name is required").max(100),
     description: z.string().max(500).optional(),
-    startDate: z.string().datetime().optional(),
-    endDate: z.string().datetime().optional(),
-    status: ScheduleStatus.optional(),
+
+    // Time boundaries (Unix timestamps in milliseconds)
+    startDate: z.number().int().positive(),
+    endDate: z.number().int().positive(),
+
+    status: ScheduleStatus.default("draft"),
+    visibility: ScheduleVisibility.default("team"),
+
+    // Metadata
+    templateId: z.string().optional(), // If created from a template
+    parentScheduleId: z.string().optional(), // If cloned from another schedule
+
+    // Statistics (denormalized for performance)
+    stats: ScheduleStatsSchema.optional(),
+
+    // AI generation metadata
+    aiGenerated: z.boolean().default(false),
+    aiModel: z.string().optional(),
+    aiGeneratedAt: z.number().int().positive().optional(),
+
+    // Publishing
+    publishedAt: z.number().int().positive().optional(),
+    publishedBy: z.string().optional(),
+
+    createdBy: z.string().min(1),
+    createdAt: z.number().int().positive(),
+    updatedAt: z.number().int().positive(),
   })
-  .partial();
-export type UpdateScheduleInput = z.infer<typeof UpdateScheduleInput>;
+  .refine((data) => data.endDate > data.startDate, {
+    message: "End date must be after start date",
+    path: ["endDate"],
+  });
+export type Schedule = z.infer<typeof ScheduleSchema>;
 
-export const CreateShiftInput = z.object({
-  positionId: z.string(),
-  userId: z.string().optional(),
-  startTime: z.string().datetime(),
-  endTime: z.string().datetime(),
-  notes: z.string().optional(),
-});
-export type CreateShiftInput = z.infer<typeof CreateShiftInput>;
-
-export const UpdateShiftInput = z
+/**
+ * Schema for creating a new schedule
+ * Used in POST /api/schedules
+ */
+export const CreateScheduleSchema = z
   .object({
-    positionId: z.string().optional(),
-    userId: z.string().optional(),
-    startTime: z.string().datetime().optional(),
-    endTime: z.string().datetime().optional(),
-    status: ShiftStatus.optional(),
-    notes: z.string().optional(),
+    orgId: z.string().min(1, "Organization ID is required"),
+    name: z.string().min(1, "Schedule name is required").max(100),
+    description: z.string().max(500).optional(),
+    startDate: z.number().int().positive(),
+    endDate: z.number().int().positive(),
+    visibility: ScheduleVisibility.optional().default("team"),
+    templateId: z.string().optional(),
   })
-  .partial();
-export type UpdateShiftInput = z.infer<typeof UpdateShiftInput>;
+  .refine((data) => data.endDate > data.startDate, {
+    message: "End date must be after start date",
+    path: ["endDate"],
+  });
+export type CreateScheduleInput = z.infer<typeof CreateScheduleSchema>;
+
+/**
+ * Schema for updating an existing schedule
+ * Used in PATCH /api/schedules/{id}
+ */
+export const UpdateScheduleSchema = z.object({
+  name: z.string().min(1).max(100).optional(),
+  description: z.string().max(500).optional(),
+  startDate: z.number().int().positive().optional(),
+  endDate: z.number().int().positive().optional(),
+  status: ScheduleStatus.optional(),
+  visibility: ScheduleVisibility.optional(),
+});
+export type UpdateScheduleInput = z.infer<typeof UpdateScheduleSchema>;
+
+/**
+ * Schema for publishing a schedule
+ * Used in POST /api/schedules/{id}/publish
+ */
+export const PublishScheduleSchema = z.object({
+  notifyStaff: z.boolean().default(true),
+  message: z.string().max(500).optional(),
+});
+export type PublishScheduleInput = z.infer<typeof PublishScheduleSchema>;
+
+/**
+ * Schema for cloning a schedule
+ * Used in POST /api/schedules/{id}/clone
+ */
+export const CloneScheduleSchema = z.object({
+  name: z.string().min(1).max(100),
+  startDate: z.number().int().positive(),
+  endDate: z.number().int().positive(),
+  includeAssignments: z.boolean().default(false),
+});
+export type CloneScheduleInput = z.infer<typeof CloneScheduleSchema>;
+
+/**
+ * Query parameters for listing schedules
+ */
+export const ListSchedulesQuerySchema = z.object({
+  orgId: z.string().min(1, "Organization ID is required"),
+  status: ScheduleStatus.optional(),
+  startAfter: z.coerce.number().int().positive().optional(),
+  startBefore: z.coerce.number().int().positive().optional(),
+  limit: z.coerce.number().int().positive().max(100).default(50),
+  cursor: z.string().optional(),
+});
+export type ListSchedulesQuery = z.infer<typeof ListSchedulesQuerySchema>;

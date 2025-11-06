@@ -1,68 +1,82 @@
-// [P0][API][CODE] Route API route handler
-// Tags: P0, API, CODE
+// [P0][API][SCHEDULE] Schedule publish endpoint
+// Tags: P0, API, SCHEDULE
+import { NextRequest } from "next/server";
 import { z } from "zod";
 
-import {
-  verifyIdToken,
-  adminDb,
-  isManagerClaims,
-  adminSdk,
-} from "../../../src/lib/firebase.server";
+import { requireOrgMembership, requireRole } from "../../../src/lib/api/authorization";
+import { adminDb, adminSdk } from "../../../src/lib/firebase.server";
+import { withSecurity } from "../_shared/middleware";
 import { parseJson, badRequest, serverError, ok } from "../_shared/validation";
 
 const PublishSchema = z.object({
-  scheduleId: z.string().min(1),
-  orgId: z.string().min(1),
+  scheduleId: z.string().min(1, "scheduleId is required"),
+  orgId: z.string().min(1, "orgId is required"),
   publish: z.boolean().optional().default(true),
 });
 
-export async function POST(req: Request) {
-  try {
-    const parsed = await parseJson(req, PublishSchema);
-    if (!parsed.success) return badRequest("Invalid payload", parsed.details);
-    const { scheduleId, orgId } = parsed.data;
+/**
+ * POST /api/publish
+ * Publish a schedule (requires manager+ role)
+ */
+export const POST = withSecurity(
+  requireOrgMembership(
+    requireRole("manager")(
+      async (
+        req: NextRequest,
+        context: {
+          params: Record<string, string>;
+          userId: string;
+          orgId: string;
+          roles: ("org_owner" | "admin" | "manager" | "scheduler" | "corporate" | "staff")[];
+        },
+      ) => {
+        try {
+          const parsed = await parseJson(req, PublishSchema);
+          if (!parsed.success) {
+            return badRequest("Invalid payload", parsed.details);
+          }
 
-    // verify Authorization header (Bearer token)
-    const auth = req.headers.get("authorization") || req.headers.get("Authorization");
-    if (!auth || !auth.startsWith("Bearer "))
-      return badRequest("Missing Authorization header", null, "UNAUTHORIZED");
-    const token = auth.split(" ")[1];
+          const { scheduleId, orgId } = parsed.data;
 
-    const decoded = await verifyIdToken(token).catch(() => {
-      throw new Error("Invalid token");
-    });
+          // Verify orgId matches the context
+          if (orgId !== context.orgId) {
+            return badRequest("Organization ID mismatch", null, "FORBIDDEN");
+          }
 
-    if (!isManagerClaims(decoded, orgId))
-      return badRequest("Insufficient permissions", null, "FORBIDDEN");
+          if (!adminDb || !adminSdk) {
+            return serverError("Admin DB not initialized");
+          }
 
-    if (!adminDb || !adminSdk) return serverError("Admin DB not initialized");
+          const FieldValue = adminSdk.firestore.FieldValue;
+          const scheduleRef = adminDb.doc(`organizations/${orgId}/schedules/${scheduleId}`);
+          await scheduleRef.set(
+            { state: "published", publishedAt: FieldValue.serverTimestamp() },
+            { merge: true },
+          );
 
-    const FieldValue = adminSdk.firestore.FieldValue;
-    const scheduleRef = adminDb.doc(`organizations/${orgId}/schedules/${scheduleId}`);
-    await scheduleRef.set(
-      { state: "published", publishedAt: FieldValue.serverTimestamp() },
-      { merge: true },
-    );
+          // Create notification message
+          const msgRef = adminDb.collection(`organizations/${orgId}/messages`).doc();
+          await msgRef.set({
+            type: "publish_notice",
+            title: "Schedule Published",
+            body: "The latest schedule has been published. Check your shifts.",
+            targets: "members",
+            recipients: [],
+            scheduleId,
+            createdAt: FieldValue.serverTimestamp(),
+          });
 
-    // create message
-    const msgRef = adminDb.collection(`organizations/${orgId}/messages`).doc();
-    await msgRef.set({
-      type: "publish_notice",
-      title: "Schedule Published",
-      body: "The latest schedule has been published. Check your shifts.",
-      targets: "members",
-      recipients: [],
-      scheduleId,
-      createdAt: FieldValue.serverTimestamp(),
-    });
-
-    return ok({ success: true });
-  } catch (err: unknown) {
-    const maybeMessage =
-      err && typeof err === "object" && "message" in err
-        ? (err as Record<string, unknown>)["message"]
-        : undefined;
-    const msg = typeof maybeMessage === "string" ? maybeMessage : String(err);
-    return serverError(msg || "Unexpected error");
-  }
-}
+          return ok({ success: true, scheduleId, orgId });
+        } catch (err: unknown) {
+          const maybeMessage =
+            err && typeof err === "object" && "message" in err
+              ? (err as Record<string, unknown>)["message"]
+              : undefined;
+          const msg = typeof maybeMessage === "string" ? maybeMessage : String(err);
+          return serverError(msg || "Unexpected error");
+        }
+      },
+    ),
+  ),
+  { requireAuth: true, maxRequests: 50, windowMs: 60_000 },
+);

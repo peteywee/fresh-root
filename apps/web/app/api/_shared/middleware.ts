@@ -4,7 +4,16 @@ import { trace, SpanStatusCode } from "@opentelemetry/api";
 import * as Sentry from "@sentry/nextjs";
 import { NextRequest, NextResponse } from "next/server";
 
+// Compose helpers and internal tooling
+import {
+  cors,
+  requestSizeLimit,
+  rateLimit as inMemoryRateLimit,
+  securityHeaders,
+} from "./security";
 import { getFirebaseAdminAuth } from "../../../lib/firebase-admin";
+import { csrfProtection } from "../../../src/lib/api/csrf";
+import { createRedisRateLimit, RedisClient } from "../../../src/lib/api/redis-rate-limit";
 import { Logger } from "../../../src/lib/logger";
 
 export interface AuthenticatedRequest extends NextRequest {
@@ -120,4 +129,71 @@ export async function require2FAForManagers(
   });
 
   return sessionResult;
+}
+
+// Compose helper: security + csrf + auth + optional redis rate limiter
+// (imports moved to top for consistent ordering)
+
+export interface WithSecurityOptions {
+  requireAuth?: boolean;
+  require2FA?: boolean;
+  maxRequests?: number;
+  windowMs?: number;
+  redisClient?: RedisClient | null;
+  redisRateLimit?: { max: number; windowSeconds: number } | null;
+  corsAllowedOrigins?: string[];
+  maxBodySize?: number;
+}
+
+export function withSecurity<
+  C extends { params: Record<string, string> } = { params: Record<string, string> },
+>(
+  handler: (req: AuthenticatedRequest | NextRequest, ctx: C) => Promise<NextResponse>,
+  options: WithSecurityOptions = {},
+): (req: AuthenticatedRequest | NextRequest, ctx: C) => Promise<NextResponse> {
+  const corsMw = cors(options.corsAllowedOrigins || []);
+  const sizeMw = requestSizeLimit(options.maxBodySize || undefined);
+
+  return async (req: AuthenticatedRequest | NextRequest, ctx: C) => {
+    return corsMw(req as NextRequest, (req1) =>
+      sizeMw(req1 as NextRequest, async (req2) => {
+        // Redis limiter if configured
+        if (options.redisClient && options.redisRateLimit) {
+          const redisLimiter = createRedisRateLimit(options.redisClient, {
+            max: options.redisRateLimit.max,
+            windowSeconds: options.redisRateLimit.windowSeconds,
+          });
+          const blocked = await redisLimiter(req2 as NextRequest, ctx);
+          if (blocked) return securityHeaders(blocked);
+        }
+
+        // In-memory fallback rate limiter
+        const maxReqs = options.maxRequests ?? 100;
+        const windowMs = options.windowMs ?? 15 * 60 * 1000;
+        return inMemoryRateLimit(maxReqs, windowMs)(req2 as NextRequest, async (req3) => {
+          const csrfWrapped = csrfProtection()(async (
+            r: NextRequest,
+            _c: { params: Record<string, string> },
+          ) => {
+            if (options.require2FA) {
+              return require2FAForManagers(r as AuthenticatedRequest, async (ra) => {
+                return handler(ra as AuthenticatedRequest, ctx);
+              });
+            }
+
+            if (options.requireAuth) {
+              return requireSession(r as AuthenticatedRequest, async (ra) => {
+                return handler(ra as AuthenticatedRequest, ctx);
+              });
+            }
+
+            return handler(r as NextRequest, ctx);
+          });
+
+          const response = await csrfWrapped(req3 as NextRequest, ctx);
+          return securityHeaders(response);
+        });
+      }),
+    );
+  };
 }

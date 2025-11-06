@@ -77,20 +77,103 @@
   - [x] Add scripts/ops/create-uptime-alert.sh (alert policy creation)
   - [x] Document setup (docs/runbooks/uptime-alerts.md)
 - [x] [BLOCK2] Health endpoint
-  - [x] Verified apps/web/app/api/health/route.ts exists (basic implementation)
+  - [x] Verified apps/web/app/api/health/route.ts exists and enhanced with diagnostics (uptime, timestamp, environment)
 - [x] [BLOCK2] Metrics endpoint
   - [x] Verified apps/web/app/api/metrics/route.ts exists
   - [x] Note: recordRequest() defined but not called (superseded by OpenTelemetry auto-instrumentation)
 
-🧩 Block 3 – Integrity Core (P1)
+🧩 Block 3 – Integrity Core (P1) ✅ COMPLETE
 
-- [ ] [BLOCK3] Expand packages/types/ with Zod schemas for orgs, memberships, positions, schedules, shifts
-- [ ] [BLOCK3] Add API-level Zod validation for every write route (422 on invalid payload)
-- [ ] [BLOCK3] Write rules test matrix (≥ 1 allow + 3 denies per collection)
-- [ ] [BLOCK3] Add unit tests for Zod validators
-- [ ] [BLOCK3] Add migration-check script validating schema parity vs rules
-- [ ] [BLOCK3] Create schema index doc (docs/schema-map.md) listing collections ↔ schemas
-- [ ] [BLOCK3] Add pre-commit hook enforcing pnpm typecheck && pnpm lint
+- [x] [BLOCK3] Expand packages/types/ with Zod schemas for orgs, memberships, positions, schedules, shifts
+  - [x] Created packages/types/src/memberships.ts with full CRUD schemas
+  - [x] Created packages/types/src/positions.ts with types and skill levels
+  - [x] Created packages/types/src/shifts.ts with assignments and time validation
+  - [x] Created packages/types/src/venues.ts with addresses and coordinates
+  - [x] Created packages/types/src/zones.ts for venue subdivisions
+  - [x] Created packages/types/src/attendance.ts with check-in/out and geolocation
+  - [x] Created packages/types/src/join-tokens.ts for org invitations
+  - [x] Enhanced packages/types/src/orgs.ts with settings and subscription tiers
+  - [x] Enhanced packages/types/src/schedules.ts with AI metadata and publishing
+  - [x] Updated packages/types/src/index.ts to export all schemas
+- [x] [BLOCK3] Add API-level Zod validation for every write route (422 on invalid payload)
+  - [x] Add validation to POST /api/organizations (uses CreateOrgSchema)
+  - [x] Add validation to PATCH /api/organizations/[id] (uses UpdateOrgSchema)
+  - [x] Add validation to DELETE /api/organizations/[id] (protected by withSecurity)
+  - [x] Add validation to POST /api/organizations/[id]/members (uses CreateMembershipSchema)
+  - [x] Add validation to PATCH /api/organizations/[id]/members (uses UpdateMembershipSchema)
+  - [x] Add validation to DELETE /api/organizations/[id]/members (protected by withSecurity + requireRole)
+  - [x] Add validation to POST /api/items (uses CreateItemInput)
+  - [x] Add validation to GET /api/items (protected by withSecurity)
+  - [x] Add validation to POST /api/session (uses CreateSessionSchema)
+  - [x] Add validation to DELETE /api/session (session clearing)
+  - [x] Add validation to POST /api/auth/mfa/setup (protected by withSecurity)
+  - [x] Add validation to POST /api/auth/mfa/verify (uses verifySchema)
+  - [x] Add validation to POST /api/publish (uses PublishSchema + requireRole("manager"))
+  - [x] Add validation to GET /api/users/profile (protected by withSecurity)
+  - [x] Add validation to PATCH /api/users/profile (uses UpdateProfileSchema)
+  - [x] Add validation to POST /api/positions (uses CreatePositionSchema + requireRole("manager"))
+  - [x] Add validation to GET /api/positions (protected by withSecurity + requireOrgMembership)
+  - [x] Add validation to POST /api/schedules (uses CreateScheduleSchema + requireRole("scheduler"))
+  - [x] Add validation to GET /api/schedules (protected by withSecurity + requireOrgMembership)
+  - [x] Add validation to POST /api/shifts (uses CreateShiftSchema from @fresh-schedules/types)
+  - [x] Add validation to GET /api/shifts (protected by withSecurity + requireOrgMembership)
+  - [x] Add validation to GET /api/shifts/[id] (protected by withSecurity + requireOrgMembership)
+  - [x] Add validation to PATCH /api/shifts/[id] (uses UpdateShiftSchema from @fresh-schedules/types)
+  - [x] Add validation to DELETE /api/shifts/[id] (protected by withSecurity + requireRole("admin"))
+  - [x] Add validation to POST /api/venues (uses CreateVenueSchema + requireRole("manager"))
+  - [x] Add validation to GET /api/venues (protected by withSecurity + requireOrgMembership)
+  - [x] Add validation to POST /api/zones (uses CreateZoneSchema + requireRole("manager"))
+  - [x] Add validation to GET /api/zones (protected by withSecurity + requireOrgMembership)
+  - [x] Add validation to POST /api/attendance (uses CreateAttendanceRecordSchema + requireRole("scheduler"))
+  - [x] Add validation to GET /api/attendance (protected by withSecurity + requireOrgMembership)
+  - [x] Add validation to POST /api/join-tokens (uses CreateJoinTokenSchema + requireRole("admin"))
+  - [x] Add validation to GET /api/join-tokens (protected by withSecurity + requireRole("manager"))
+- [x] [BLOCK3] Write rules test matrix (≥ 1 allow + 3 denies per collection)
+  - [x] Created tests/rules/organizations.spec.ts (4 suites, 13+ tests)
+  - [x] Created tests/rules/positions.spec.ts (2 suites, 10+ tests)
+  - [x] Created tests/rules/schedules.spec.mts (4 suites: Read/Create/Update/Delete with org membership checks)
+  - [x] Created tests/rules/shifts.spec.mts (4 suites: Read/Create/Update/Delete with scheduler+ role enforcement)
+  - [x] Created tests/rules/venues.spec.mts (4 suites: Read/Create/Update/Delete with manager+ role enforcement)
+  - [x] Created tests/rules/zones.spec.mts (4 suites: Read/Create/Update/Delete with manager+ role enforcement)
+  - [x] Created tests/rules/attendance.spec.mts (4 suites: Read/Create/Update/Delete with scheduler+ role enforcement)
+  - [x] Created tests/rules/join-tokens.spec.mts (4 suites: Read/Create/Update/Delete with admin+ role enforcement)
+- [x] [BLOCK3] Add unit tests for Zod validators
+  - [x] Created packages/types/src/**tests**/memberships.test.ts (9 suites, 17+ tests)
+  - [x] Created packages/types/src/**tests**/positions.test.ts (7 suites, 15+ tests)
+  - [x] Created packages/types/src/**tests**/shifts.test.ts (4 suites, 8+ tests)
+  - [x] Created packages/types/src/**tests**/schedules.test.ts (3 suites, 7+ tests)
+  - [x] Created packages/types/src/**tests**/venues.test.ts (7 suites, 15+ tests)
+  - [x] Created packages/types/src/**tests**/zones.test.ts (6 suites, 12+ tests)
+  - [x] Created packages/types/src/**tests**/attendance.test.ts (5 suites, 10+ tests)
+  - [x] Created packages/types/src/**tests**/join-tokens.test.ts (6 suites, 12+ tests)
+  - [x] Created packages/types/src/**tests**/orgs.test.ts (8 suites, 16+ tests)
+- [x] [BLOCK3] Add migration-check script validating schema parity vs rules
+  - [x] Created scripts/ops/validate-schema-rules-parity.ts with 4 validation checks
+  - [x] Script validates collections → schemas mapping
+  - [x] Script validates schemas → exports in index.ts
+  - [x] Script validates collections → documentation
+  - [x] Script detects orphaned schemas
+  - [x] Made script executable with chmod +x
+- [x] [BLOCK3] Create schema index doc (docs/schema-map.md) listing collections ↔ schemas
+  - [x] Documented all 10 collections with Firestore paths
+  - [x] Included schema file references and rules line numbers
+  - [x] Added access control matrices for each collection
+  - [x] Listed API endpoints for each collection
+  - [x] Included testing requirements and migration check reference
+- [x] [BLOCK3] Add pre-commit hook enforcing pnpm typecheck && pnpm lint
+  - [x] Updated .husky/pre-commit to include typecheck step
+  - [x] Hook now runs: tag-files → typecheck → lint → format
+- [x] [BLOCK3] Standardize all API routes to consistent pattern
+  - [x] All routes use withSecurity() wrapper with rate limiting
+  - [x] All routes use consistent error handling (badRequest, serverError, ok)
+  - [x] All protected routes require authentication via requireAuth: true
+  - [x] Role-based routes use requireOrgMembership() and requireRole() patterns
+  - [x] All write routes use Zod validation via parseJson() helper
+  - [x] All routes have proper P0/P1 priority tags and area classifications
+  - [x] Updated /api/session, /api/publish, /api/health, /api/internal/backup
+  - [x] Updated /api/auth/mfa/setup, /api/auth/mfa/verify
+  - [x] Updated /api/shifts and /api/shifts/[id]
+  - [x] Verified typecheck and lint pass with no errors
 
 🎨 Block 4 – Experience Layer (P1)
 
