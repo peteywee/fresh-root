@@ -175,8 +175,17 @@ export function sanitizeRichText(html: string): string {
   } while (html !== prevHtml);
 
   // Remove event handlers (onclick, onload, etc.)
-  html = html.replace(/\son\w+\s*=\s*["'][^"']*["']/gi, "");
-  html = html.replace(/\son\w+\s*=\s*[^\s>]*/gi, "");
+  // Repeatedly remove quoted event handlers
+  let prevHandlerHtml;
+  do {
+    prevHandlerHtml = html;
+    html = html.replace(/\son\w+\s*=\s*["'][^"']*["']/gi, "");
+  } while (html !== prevHandlerHtml);
+  // Repeatedly remove unquoted event handlers
+  do {
+    prevHandlerHtml = html;
+    html = html.replace(/\son\w+\s*=\s*[^\s>]*/gi, "");
+  } while (html !== prevHandlerHtml);
 
   // Remove dangerous tags
   let prevDangerousHtml;
