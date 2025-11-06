@@ -28,21 +28,6 @@ import os from "node:os";
 const ajv = new Ajv2020({ strict: false, allErrors: true, $data: true, allowUnionTypes: true });
 addFormats(ajv);
 
-/**
- * Validate data against a JSON Schema Draft 2020-12 (supports $dynamicRef).
- * @param {object} schema - The JSON schema (Draft 2020-12)
- * @param {object} data - The data to validate
- * @returns {object} { valid: boolean, errors: array|null }
- */
-function validateJsonSchemaDraft2020(schema, data) {
-  try {
-    const validate = ajv.compile(schema);
-    const valid = validate(data);
-    return { valid, errors: valid ? null : validate.errors };
-  } catch (e) {
-    return { valid: false, errors: [{ message: e.message, schemaError: true }] };
-  }
-}
 
 const server = new McpServer({ name: "filetag", version: "0.2.0" });
 
