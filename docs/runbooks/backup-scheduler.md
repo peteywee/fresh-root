@@ -1,8 +1,7 @@
 # Backup Scheduler (Cloud Scheduler → Internal Endpoint)
 
 This runbook configures a daily Cloud Scheduler job that calls an internal
-Next.js API endpoint to trigger a Firestore export using the Firestore Admin
-REST API.
+Next.js API endpoint to trigger a Firestore export using the Firestore Admin REST API.
 
 ## Prerequisites
 
