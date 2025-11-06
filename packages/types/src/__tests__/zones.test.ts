@@ -2,12 +2,7 @@
 // Tags: P1, INTEGRITY, TEST, ZOD, ZONES
 import { describe, it, expect } from "vitest";
 
-import {
-  ZoneSchema,
-  CreateZoneSchema,
-  UpdateZoneSchema,
-  ListZonesQuerySchema,
-} from "../zones";
+import { ZoneSchema, CreateZoneSchema, UpdateZoneSchema, ListZonesQuerySchema } from "../zones";
 
 describe("ZoneSchema", () => {
   it("validates a complete zone", () => {
@@ -27,7 +22,7 @@ describe("ZoneSchema", () => {
       createdAt: Date.now(),
       updatedAt: Date.now(),
     };
-    
+
     const result = ZoneSchema.safeParse(zone);
     expect(result.success).toBe(true);
   });
@@ -58,9 +53,9 @@ describe("ZoneSchema", () => {
       createdAt: Date.now(),
       updatedAt: Date.now(),
     };
-    
+
     const validValues = [true, false];
-    validValues.forEach(isActive => {
+    validValues.forEach((isActive) => {
       const zoneWithStatus = { ...zone, isActive };
       const result = ZoneSchema.safeParse(zoneWithStatus);
       expect(result.success).toBe(true);
@@ -78,7 +73,7 @@ describe("ZoneSchema", () => {
       createdAt: Date.now(),
       updatedAt: Date.now(),
     };
-    
+
     const result = ZoneSchema.safeParse(zone);
     expect(result.success).toBe(false);
   });
@@ -94,7 +89,7 @@ describe("CreateZoneSchema", () => {
       type: "storage" as const,
       capacity: 30,
     };
-    
+
     const result = CreateZoneSchema.safeParse(input);
     expect(result.success).toBe(true);
   });

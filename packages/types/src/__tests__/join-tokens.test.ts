@@ -91,7 +91,11 @@ describe("RedeemJoinTokenSchema", () => {
 
 describe("ListJoinTokensQuerySchema", () => {
   it("validates query parameters", () => {
-    const result = ListJoinTokensQuerySchema.safeParse({ orgId: "o1", status: "active", limit: 20 });
+    const result = ListJoinTokensQuerySchema.safeParse({
+      orgId: "o1",
+      status: "active",
+      limit: 20,
+    });
     expect(result.success).toBe(true);
   });
 

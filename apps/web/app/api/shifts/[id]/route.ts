@@ -4,43 +4,43 @@
 import { UpdateShiftSchema } from "@fresh-schedules/types";
 import { NextRequest, NextResponse } from "next/server";
 
-import { requireOrgMembership, requireRole } from "../../../../src/lib/api/authorization";
-import { csrfProtection } from "../../../../src/lib/api/csrf";
-import { rateLimit, RateLimits } from "../../../../src/lib/api/rate-limit";
+import { requireOrgMembership, requireRole } from "../../../../src/lib/api";
 import { sanitizeObject } from "../../../../src/lib/api/sanitize";
-import { serverError } from "../../_shared/validation";
+import { withSecurity } from "../../_shared/middleware";
+import { badRequest, serverError } from "../../_shared/validation";
 
-export const GET = requireOrgMembership(
-  async (
-    request: NextRequest,
-    context: { params: Record<string, string>; userId: string; orgId: string },
-  ) => {
-    // Apply rate limiting
-    const rateLimitResponse = await rateLimit(request, RateLimits.api);
-    if (rateLimitResponse) return rateLimitResponse;
+// Rate limiting via withSecurity options
 
-    try {
-      const { params } = context;
-      const { id } = await params;
-      const shift = {
-        id,
-        scheduleId: "sched-1",
-        positionId: "pos-1",
-        userId: "user-123",
-        startTime: "2025-01-15T09:00:00Z",
-        endTime: "2025-01-15T17:00:00Z",
-        status: "published",
-        breakMinutes: 30,
-        createdAt: new Date().toISOString(),
-      };
-      return NextResponse.json(shift);
-    } catch {
-      return serverError("Failed to fetch shift");
-    }
-  },
+export const GET = withSecurity(
+  requireOrgMembership(
+    async (
+      request: NextRequest,
+      context: { params: Record<string, string>; userId: string; orgId: string },
+    ) => {
+      try {
+        const { params } = context;
+        const { id } = params;
+        const shift = {
+          id,
+          scheduleId: "sched-1",
+          positionId: "pos-1",
+          userId: "user-123",
+          startTime: "2025-01-15T09:00:00Z",
+          endTime: "2025-01-15T17:00:00Z",
+          status: "published",
+          breakMinutes: 30,
+          createdAt: new Date().toISOString(),
+        };
+        return NextResponse.json(shift);
+      } catch {
+        return serverError("Failed to fetch shift");
+      }
+    },
+  ),
+  { requireAuth: true, maxRequests: 100, windowMs: 60_000 },
 );
 
-export const PATCH = csrfProtection()(
+export const PATCH = withSecurity(
   requireOrgMembership(
     requireRole("scheduler")(
       async (
@@ -52,13 +52,9 @@ export const PATCH = csrfProtection()(
           roles: ("org_owner" | "admin" | "manager" | "scheduler" | "corporate" | "staff")[];
         },
       ) => {
-        // Apply rate limiting
-        const rateLimitResponse = await rateLimit(request, RateLimits.api);
-        if (rateLimitResponse) return rateLimitResponse;
-
         try {
           const { params } = context;
-          const { id } = await params;
+          const { id } = params;
           const body = await request.json();
           const validated = UpdateShiftSchema.parse(body);
           const sanitized = sanitizeObject(validated);
@@ -70,16 +66,17 @@ export const PATCH = csrfProtection()(
           return NextResponse.json(updated);
         } catch (error) {
           if (error instanceof Error && error.name === "ZodError") {
-            return NextResponse.json({ error: "Invalid shift update" }, { status: 400 });
+            return badRequest("Invalid shift update");
           }
           return serverError("Failed to update shift");
         }
       },
     ),
   ),
+  { requireAuth: true, maxRequests: 100, windowMs: 60_000 },
 );
 
-export const DELETE = csrfProtection()(
+export const DELETE = withSecurity(
   requireOrgMembership(
     requireRole("admin")(
       async (
@@ -91,13 +88,9 @@ export const DELETE = csrfProtection()(
           roles: ("org_owner" | "admin" | "manager" | "scheduler" | "corporate" | "staff")[];
         },
       ) => {
-        // Apply rate limiting
-        const rateLimitResponse = await rateLimit(request, RateLimits.api);
-        if (rateLimitResponse) return rateLimitResponse;
-
         try {
           const { params } = context;
-          const { id } = await params;
+          const { id } = params;
           return NextResponse.json({ message: "Shift deleted successfully", id });
         } catch {
           return serverError("Failed to delete shift");
@@ -105,4 +98,5 @@ export const DELETE = csrfProtection()(
       },
     ),
   ),
+  { requireAuth: true, maxRequests: 100, windowMs: 60_000 },
 );

@@ -69,18 +69,11 @@ export function setCSRFCookie(
   response.headers.set("Set-Cookie", cookieValue);
 }
 
-export function csrfProtection(config: CSRFConfig = {}) {
+export function csrfProtection<Ctx extends Record<string, unknown> = {}>(config: CSRFConfig = {}) {
   const fullConfig = { ...DEFAULT_CONFIG, ...config };
-  return function (
-    handler: (
-      request: NextRequest,
-      context: { params: Record<string, string> },
-    ) => Promise<NextResponse>,
-  ) {
-    return async (
-      request: NextRequest,
-      context: { params: Record<string, string> },
-    ): Promise<NextResponse> => {
+  type C = Ctx & { params: Record<string, string> };
+  return function (handler: (request: NextRequest, context: C) => Promise<NextResponse>) {
+    return async (request: NextRequest, context: C): Promise<NextResponse> => {
       const method = request.method.toUpperCase();
       if (method === "GET" || method === "HEAD" || method === "OPTIONS") {
         return handler(request, context);
@@ -119,17 +112,20 @@ export function csrfProtection(config: CSRFConfig = {}) {
   };
 }
 
-export function withCSRFToken(
+export function withCSRFToken<Ctx extends Record<string, unknown> = {}>(
   handler: (
     request: NextRequest,
-    context: { params: Record<string, string> },
+    context: Ctx & { params: Record<string, string> },
   ) => Promise<NextResponse>,
   config: CSRFConfig = {},
-): (request: NextRequest, context: { params: Record<string, string> }) => Promise<NextResponse> {
+): (
+  request: NextRequest,
+  context: Ctx & { params: Record<string, string> },
+) => Promise<NextResponse> {
   const fullConfig = { ...DEFAULT_CONFIG, ...config };
   return async (
     request: NextRequest,
-    context: { params: Record<string, string> },
+    context: Ctx & { params: Record<string, string> },
   ): Promise<NextResponse> => {
     const cookies = request.headers.get("cookie") || "";
     const cookieMatch = cookies.match(new RegExp(`${fullConfig.cookieName}=([^;]+)`));

@@ -28,7 +28,7 @@ describe("VenueSchema", () => {
       createdAt: Date.now(),
       updatedAt: Date.now(),
     };
-    
+
     const result = VenueSchema.safeParse(venue);
     expect(result.success).toBe(true);
   });
@@ -49,7 +49,7 @@ describe("VenueSchema", () => {
 
   it("validates venue types", () => {
     const validTypes = ["indoor", "outdoor", "hybrid", "virtual"];
-    validTypes.forEach(type => {
+    validTypes.forEach((type) => {
       const result = VenueType.safeParse(type);
       expect(result.success).toBe(true);
     });
@@ -68,7 +68,7 @@ describe("VenueSchema", () => {
     };
     const result = VenueSchema.safeParse(venue);
     expect(result.success).toBe(true);
-    
+
     const inactiveVenue = { ...venue, isActive: false };
     const inactiveResult = VenueSchema.safeParse(inactiveVenue);
     expect(inactiveResult.success).toBe(true);
@@ -88,7 +88,7 @@ describe("VenueSchema", () => {
       createdAt: Date.now(),
       updatedAt: Date.now(),
     };
-    
+
     const result = VenueSchema.safeParse(venue);
     expect(result.success).toBe(true);
   });
@@ -104,7 +104,7 @@ describe("CreateVenueSchema", () => {
       capacity: 200,
       contactEmail: "venue@example.com",
     };
-    
+
     const result = CreateVenueSchema.safeParse(input);
     expect(result.success).toBe(true);
   });

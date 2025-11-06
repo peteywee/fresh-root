@@ -8,10 +8,7 @@ export type Role = z.infer<typeof Role>;
 export * from "./rbac";
 export * from "./orgs";
 export * from "./schedules";
-
-// Export memberships but rename conflicting Membership
-export type { Membership as MembershipDocument } from "./memberships";
-
+export * from "./memberships"; // This provides the canonical Membership export
 export * from "./positions";
 export * from "./shifts";
 export * from "./venues";

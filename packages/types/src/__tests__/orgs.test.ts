@@ -116,7 +116,11 @@ describe("UpdateOrganizationSchema", () => {
 
 describe("ListOrganizationsQuerySchema", () => {
   it("validates query parameters", () => {
-    const result = ListOrganizationsQuerySchema.safeParse({ status: "active", size: "11-50", limit: 25 });
+    const result = ListOrganizationsQuerySchema.safeParse({
+      status: "active",
+      size: "11-50",
+      limit: 25,
+    });
     expect(result.success).toBe(true);
   });
 });
