@@ -17,4 +17,3 @@ export * from "./positions";
 
 // Schedule and shift types
 export * from "./schedules";
-

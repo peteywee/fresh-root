@@ -37,7 +37,7 @@ export const MembershipCreateSchema = z.object({
         // Ensure org_owner is not assigned via API (only through org creation)
         return !roles.includes("org_owner");
       },
-      { message: "org_owner role cannot be assigned via API" }
+      { message: "org_owner role cannot be assigned via API" },
     ),
   mfaVerified: z.boolean().optional().default(false),
 });
@@ -59,7 +59,7 @@ export const MembershipUpdateSchema = z
           // Prevent org_owner from being assigned or removed via update
           return !roles.includes("org_owner");
         },
-        { message: "org_owner role cannot be modified via API" }
+        { message: "org_owner role cannot be modified via API" },
       )
       .optional(),
     mfaVerified: z.boolean().optional(),

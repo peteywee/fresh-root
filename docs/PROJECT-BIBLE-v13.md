@@ -348,20 +348,28 @@ gh workflow run deploy.yml
 
 **Purpose:**
 Define, authorize, and route the corporate-staff user class—administrative, HQ-level personnel who require organizational visibility but do not perform shift work.
-This path extends the Onboarding Wizard (§7.1) and integrates across all major scopes: Auth & Identity → Org & Membership → Finance & Analytics → Experience Layer.
+This path extends the Onboarding Wizard (§7.1) and integrates across independent primary scopes with orthogonal concerns.
 
-#### Primary Scope → Auth & Identity
+#### Primary Scope A → Auth & Identity
 
 **Implementation:**
 
-- Adds `role:"corporate"` to `users/{uid}` and `memberships/{uid_orgId}`
+- Adds `role:"corporate"` to `users/{uid}` document
 - Role set during onboarding immediately after Firebase Auth creation
 - Controls initial redirect and claim issuance
+- **Independent**: Can create auth users with corporate role without any organization
 
 **Why:**
 Centralizing identity derivation at the authentication layer eliminates split logic between backend and UI. Every subsystem consumes one authoritative role field.
 
-#### Secondary Scope A → Org & Membership
+#### Primary Scope B → Org & Membership
+
+**Implementation:**
+
+- Adds `role:"corporate"` to `memberships/{uid_orgId}` document
+- **Independent**: Can create organizations and memberships without auth users
+- Links users to organizations with corporate-specific permissions
+- Enables cross-venue visibility through organizational structure
 
 **Firestore Documents:**
 
@@ -383,17 +391,17 @@ match /memberships/{uid_orgId} {
 ```
 
 **Why:**
-Keeps data shape unified while granting controlled cross-venue visibility. Corporate users appear in the same membership index, preserving analytics integrity.
+Keeps data shape unified while granting controlled cross-venue visibility. Corporate users appear in the same membership index, preserving analytics integrity. Organizations can be managed independently of auth identities.
 
-#### Secondary Scope B → Finance & Analytics
+#### Secondary Scope A → Finance & Analytics
 
 **Permissions Matrix:**
 
 | Capability          | Manager | Corporate | Staff |
 | ------------------- | ------- | --------- | ----- |
-| View Labor & Budget | ✅       | ✅         | ❌     |
-| Export Payroll      | ✅       | ✅         | ❌     |
-| Edit Forecasts      | ✅       | ❌         | ❌     |
+| View Labor & Budget | ✅      | ✅        | ❌    |
+| Export Payroll      | ✅      | ✅        | ❌    |
+| Edit Forecasts      | ✅      | ❌        | ❌    |
 
 **Why:**
 Corporate roles must audit financial metrics but never mutate them. This implements least-privilege compliance for SOX-type audit trails.
@@ -402,11 +410,11 @@ Corporate roles must audit financial metrics but never mutate them. This impleme
 
 **Routing Map:**
 
-| Role      | Redirect              | Component               |
-| --------- | --------------------- | ----------------------- |
-| manager   | /dashboard/overview   | ManagerDashboard.tsx    |
-| staff     | /dashboard/my-shifts  | StaffDashboard.tsx      |
-| corporate | /dashboard/analytics  | CorporateDashboard.tsx  |
+| Role      | Redirect             | Component              |
+| --------- | -------------------- | ---------------------- |
+| manager   | /dashboard/overview  | ManagerDashboard.tsx   |
+| staff     | /dashboard/my-shifts | StaffDashboard.tsx     |
+| corporate | /dashboard/analytics | CorporateDashboard.tsx |
 
 **UX Notes:**
 
@@ -419,11 +427,11 @@ Explicit differentiation prevents HQ employees from mistakenly choosing "Manager
 
 #### API Alignment
 
-| API Route                | Method | Role Access        |
-| ------------------------ | ------ | ------------------ |
-| /api/finance/export      | GET    | manager, corporate |
-| /api/analytics/reports   | GET    | manager, corporate |
-| /api/schedules/publish   | POST   | manager only       |
+| API Route              | Method | Role Access        |
+| ---------------------- | ------ | ------------------ |
+| /api/finance/export    | GET    | manager, corporate |
+| /api/analytics/reports | GET    | manager, corporate |
+| /api/schedules/publish | POST   | manager only       |
 
 **Why:**
 Mirrors RBAC table for endpoint parity; ensures frontend and backend stay synchronized through declarative role checks.
@@ -431,22 +439,36 @@ Mirrors RBAC table for endpoint parity; ensures frontend and backend stay synchr
 #### Scope Hierarchy Diagram
 
 ```text
-[ AUTH & IDENTITY ]  ← Primary
-   ├─ defines role=corporate, sets claims
-   ├─► [ ORG & MEMBERSHIP ] → venuesAccess[], privileges[]
-   ├─► [ FINANCE & ANALYTICS ] → read-only dashboards
-   └─► [ EXPERIENCE LAYER ] → /dashboard/analytics
+PRIMARY SCOPES (Independent, No Coupling):
+
+[ AUTH & IDENTITY ] ← Primary A
+   ├─ defines role=corporate in users/{uid}
+   ├─ sets auth claims
+   └─ can exist without organizations
+
+[ ORG & MEMBERSHIP ] ← Primary B
+   ├─ defines role=corporate in memberships/{uid_orgId}
+   ├─ venuesAccess[], privileges[]
+   └─ can exist without auth users
+
+SECONDARY SCOPES (Consume Primary Scopes):
+
+[ FINANCE & ANALYTICS ] ← Secondary A
+   └─ read-only dashboards (consumes both Auth + Org)
+
+[ EXPERIENCE LAYER ] ← Secondary B
+   └─ /dashboard/analytics routing (consumes both Auth + Org)
 ```
 
 #### Metrics & Acceptance
 
-| Metric                         | Target   |
-| ------------------------------ | -------- |
-| Role choice completion rate    | ≥ 98 %   |
-| Corporate onboarding time      | ≤ 2 min  |
-| Data consistency (role match)  | 100 %    |
-| Cross-venue access accuracy    | 100 %    |
-| Wrong-dashboard tickets        | < 2 %    |
+| Metric                        | Target  |
+| ----------------------------- | ------- |
+| Role choice completion rate   | ≥ 98 %  |
+| Corporate onboarding time     | ≤ 2 min |
+| Data consistency (role match) | 100 %   |
+| Cross-venue access accuracy   | 100 %   |
+| Wrong-dashboard tickets       | < 2 %   |
 
 #### Definition of Done
 
@@ -460,5 +482,5 @@ Mirrors RBAC table for endpoint parity; ensures frontend and backend stay synchr
 
 ---
 
-**END OF PROJECT BIBLE v13**
+## END OF PROJECT BIBLE v13
 

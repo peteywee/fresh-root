@@ -53,7 +53,7 @@ export const CreateScheduleInput = z
     {
       message: "startDate must be before or equal to endDate",
       path: ["endDate"],
-    }
+    },
   );
 export type CreateScheduleInput = z.infer<typeof CreateScheduleInput>;
 
@@ -86,7 +86,7 @@ export const CreateShiftInput = z
     {
       message: "startTime must be before endTime",
       path: ["endTime"],
-    }
+    },
   )
   .refine(
     (data) => {
@@ -101,7 +101,7 @@ export const CreateShiftInput = z
     {
       message: "Break minutes must be less than shift duration",
       path: ["breakMinutes"],
-    }
+    },
   );
 export type CreateShiftInput = z.infer<typeof CreateShiftInput>;
 
