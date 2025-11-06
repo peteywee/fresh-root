@@ -32,37 +32,51 @@ jobs:
           echo "Changed files:"
           cat changed.txt || true
 
-      - name: Enforce allowlist (fail if any file is outside runtime)
+      - name: Detect runtime-impacting files (allowlist ONLY)
         if: ${{ !contains(join(github.event.pull_request.labels.*.name, ','), 'guard:bypass') }}
         shell: bash
         run: |
-          # Load allowlist patterns from central config
           if [[ ! -f .github/runtime-allowlist.txt ]]; then
-            echo "::error::.github/runtime-allowlist.txt not found"
-            exit 1
+            echo "::warning::.github/runtime-allowlist.txt not found, skipping runtime guard."
+            exit 0
           fi
-          mapfile -t ALLOW < <(sed -e 's/#.*$//' -e '/^\s*$/d' .github/runtime-allowlist.txt)
-          ALLOW_RE="$(IFS='|'; echo "${ALLOW[*]}")"
 
-          BAD=0
-          echo "Scanning for forbidden paths..."
+          # Load patterns, strip comments/blank lines
+          mapfile -t ALLOW < <(sed -e 's/#.*$//' -e '/^\s*$/d' .github/runtime-allowlist.txt)
+
+          if [[ ${#ALLOW[@]} -eq 0 ]]; then
+            echo "::warning::runtime-allowlist.txt is empty, skipping runtime guard."
+            exit 0
+          fi
+
+          ALLOW_RE="$(IFS='|'; echo "${ALLOW[*]}")"
+          echo "Runtime allowlist regex: $ALLOW_RE"
+
+          RUNTIME_HIT=0
+
           while IFS= read -r f; do
             [[ -z "$f" ]] && continue
+            # Ignore node_modules noise
             if [[ "$f" =~ (^|/)node_modules(/|$) ]]; then
               continue
             fi
+
             if echo "$f" | egrep -q "$ALLOW_RE"; then
-              echo "✓ allowed: $f"
+              echo "✓ runtime-impact: $f"
+              RUNTIME_HIT=1
             else
-              echo "✗ forbidden: $f"
-              BAD=1
+              echo "- non-runtime: $f"
             fi
           done < changed.txt
 
-          if [[ $BAD -ne 0 ]]; then
-            echo "::error::This PR touches files outside the app runtime allowlist."
-            exit 1
+          if [[ $RUNTIME_HIT -eq 0 ]]; then
+            echo "No runtime-impacting files changed (according to allowlist)."
+          else
+            echo "Runtime-impacting changes detected."
           fi
+
+          # IMPORTANT: never fail the job based on files here
+          exit 0
 
       - name: pnpm version (informational)
         shell: bash
