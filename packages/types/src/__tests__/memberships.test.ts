@@ -1,4 +1,4 @@
-//[P1][INTEGRITY][TEST] Membership Zod schema validation tests
+// [P1][INTEGRITY][TEST] Membership Zod schema validation tests
 // Tags: P1, INTEGRITY, TEST, zod, validation, rbac
 
 import { describe, it, expect } from "vitest";

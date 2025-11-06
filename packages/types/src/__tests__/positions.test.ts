@@ -1,4 +1,4 @@
-//[P1][INTEGRITY][TEST] Position Zod schema validation tests
+// [P1][INTEGRITY][TEST] Position Zod schema validation tests
 // Tags: P1, INTEGRITY, TEST, zod, validation, schedules
 
 import { describe, it, expect } from "vitest";
