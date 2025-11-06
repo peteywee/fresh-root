@@ -179,7 +179,11 @@ export function sanitizeRichText(html: string): string {
   html = html.replace(/\son\w+\s*=\s*[^\s>]*/gi, "");
 
   // Remove dangerous tags
-  html = html.replace(/<(iframe|object|embed|link|style)[^>]*>.*?<\/\1>/gi, "");
+  let prevDangerousHtml;
+  do {
+    prevDangerousHtml = html;
+    html = html.replace(/<(iframe|object|embed|link|style)[^>]*>.*?<\/\1>/gi, "");
+  } while (html !== prevDangerousHtml);
 
   // TODO: For production, use DOMPurify:
   // import DOMPurify from 'isomorphic-dompurify';
