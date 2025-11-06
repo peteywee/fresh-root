@@ -233,25 +233,25 @@ e# Fresh Schedules v13 Plan C Milestone Checklist
   - [x] Command injection prevention
 ```
 
-- [ ] Apply security middleware to API routes
+- [x] Apply security middleware to API routes
 
 ```text
-- [ ] Add `requireOrgMembership` to all org-scoped routes
-- [ ] Add `requireRole("admin")` to organization management routes
-- [ ] Add `requireRole("manager")` to position/schedule/shift management routes
-- [ ] Add `rateLimit(RateLimits.WRITE)` to all POST/PUT/PATCH/DELETE routes
-- [ ] Add `rateLimit(RateLimits.AUTH)` to auth routes
-- [ ] Add `csrfProtection()` to all state-changing routes
-- [ ] Add input sanitization to user-generated content fields
+- [x] Add `requireOrgMembership` to all org-scoped routes
+- [x] Add `requireRole("admin")` to organization management routes
+- [x] Add `requireRole("manager")` to position/schedule/shift management routes
+- [x] Add `rateLimit(RateLimits.WRITE)` to all POST/PUT/PATCH/DELETE routes
+- [x] Add `rateLimit(RateLimits.AUTH)` to auth routes
+- [x] Add `csrfProtection()` to all state-changing routes
+- [x] Add input sanitization to user-generated content fields
 ```
 
-- [ ] Integration tests for security
+- [x] Integration tests for security
 
 ```text
-- [ ] Test cross-org access denial (user cannot access other org's data)
-- [ ] Test role enforcement (staff cannot create schedules)
-- [ ] Test rate limiting (429 after threshold)
-- [ ] Test CSRF protection (403 without valid token)
+- [x] Test cross-org access denial (user cannot access other org's data)
+- [x] Test role enforcement (staff cannot create schedules)
+- [x] Test rate limiting (429 after threshold)
+- [x] Test CSRF protection (403 without valid token)
 ```
 
 ### 3.3 - Firestore Rules Test Matrix

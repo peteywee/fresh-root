@@ -19,9 +19,30 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod";
+import Ajv2020 from "ajv/dist/2020";
+import addFormats from "ajv-formats";
 import fs from "node:fs/promises";
 import path from "node:path";
 import os from "node:os";
+// ---------- JSON Schema Draft 2020-12 Validator (Ajv) ----------
+const ajv = new Ajv2020({ strict: false, allErrors: true, $data: true, allowUnionTypes: true });
+addFormats(ajv);
+
+/**
+ * Validate data against a JSON Schema Draft 2020-12 (supports $dynamicRef).
+ * @param {object} schema - The JSON schema (Draft 2020-12)
+ * @param {object} data - The data to validate
+ * @returns {object} { valid: boolean, errors: array|null }
+ */
+function validateJsonSchemaDraft2020(schema, data) {
+  try {
+    const validate = ajv.compile(schema);
+    const valid = validate(data);
+    return { valid, errors: valid ? null : validate.errors };
+  } catch (e) {
+    return { valid: false, errors: [e.message] };
+  }
+}
 
 const server = new McpServer({ name: "filetag", version: "0.2.0" });
 
