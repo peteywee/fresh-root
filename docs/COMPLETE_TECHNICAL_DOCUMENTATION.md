@@ -1433,10 +1433,10 @@ git commit -m "fix(rules): update rules and tests together"
 
    \`\`\`dockerfile
 
-   ## Use --prod or --production
+## Use --prod or --production
 
-   RUN pnpm install -r --offline --prod
-   \`\`\`
+RUN pnpm install -r --offline --prod
+\`\`\`
 
 1. **Not using BuildKit**
 
@@ -1448,15 +1448,15 @@ git commit -m "fix(rules): update rules and tests together"
 
    \`\`\`dockerfile
 
-   ## Copy package files first (cached if unchanged)
+## Copy package files first (cached if unchanged)
 
-   COPY package.json pnpm-lock.yaml ./
-   RUN pnpm install
+COPY package.json pnpm-lock.yaml ./
+RUN pnpm install
 
-   ## Then copy source (changes more often)
+## Then copy source (changes more often)
 
-   COPY . .
-   \`\`\`
+COPY . .
+\`\`\`
 
 ---
 
@@ -1683,7 +1683,7 @@ docker `logs <container-id>` # View logs
 pnpm -r run build # Build all workspaces
 pnpm --filter @fresh-schedules/web dev # Run specific workspace
 pnpm list --depth 0 # List top-level deps
-pnpm `why `<package>`` # Why is package installed
+pnpm `why`<package>`` # Why is package installed
 \`\`\`
 
 ### Environment Variables

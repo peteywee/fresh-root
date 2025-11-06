@@ -28,27 +28,29 @@ export function readUserToken(req: Request): UserToken | null {
 export function requireAuth(req: Request, res: Response, next: NextFunction) {
   const tok = readUserToken(req);
   if (!tok) return res.status(401).json({ error: "unauthenticated" });
-  (req as any).userToken = tok;
+  (req as Request & { userToken: UserToken }).userToken = tok;
   next();
 }
 
 export function requireManager(req: Request, res: Response, next: NextFunction) {
-  const tok: UserToken | undefined = (req as any).userToken ?? readUserToken(req) ?? undefined;
+  const tok: UserToken | undefined =
+    (req as Request & { userToken?: UserToken }).userToken ?? readUserToken(req) ?? undefined;
   if (!tok) return res.status(401).json({ error: "unauthenticated" });
   const ok =
     tok.roles.includes("org_owner") || tok.roles.includes("admin") || tok.roles.includes("manager");
   if (!ok) return res.status(403).json({ error: "forbidden" });
-  (req as any).userToken = tok;
+  (req as Request & { userToken: UserToken }).userToken = tok;
   next();
 }
 
 export function sameOrgGuard(getOrgId: (req: Request) => string) {
   return (req: Request, res: Response, next: NextFunction) => {
-    const tok: UserToken | undefined = (req as any).userToken ?? readUserToken(req) ?? undefined;
+    const tok: UserToken | undefined =
+      (req as Request & { userToken?: UserToken }).userToken ?? readUserToken(req) ?? undefined;
     if (!tok) return res.status(401).json({ error: "unauthenticated" });
     const orgId = getOrgId(req);
     if (tok.orgId !== orgId) return res.status(403).json({ error: "cross-org access denied" });
-    (req as any).userToken = tok;
+    (req as Request & { userToken: UserToken }).userToken = tok;
     next();
   };
 }

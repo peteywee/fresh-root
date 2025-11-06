@@ -43,7 +43,44 @@
     "ECONNREFUSED",
     "blockquotes",
     "punct",
-    "Punct"
+    "Punct",
+    // Firebase and authentication
+    "Firestore",
+    "firestore",
+    "FIRESTORE",
+    "firebaseio",
+    "firebaseapp",
+    "appspot",
+    "creds",
+    "Creds",
+    // Security and MFA
+    "TOTP",
+    "totp",
+    "otpauth",
+    "qrcode",
+    "HSTS",
+    "hsts",
+    "nosniff",
+    "enduser",
+    "INVALIDSECRET",
+    // OpenTelemetry
+    "OTEL",
+    "otlp",
+    "SEMRESATTRS",
+    // Code variables and identifiers
+    "sess",
+    "jank",
+    "FOIT",
+    "FOUT",
+    "crios",
+    "shadcn",
+    "newuser",
+    "anotheruser",
+    "regs",
+    "allowset",
+    "shid",
+    "autocannon",
+    "domcontentloaded"
   ],
 
   // ---------- Performance & Indexing ----------
@@ -155,5 +192,69 @@
 
   // ---------- GitHub ----------
   "github.prs.defaultQuery": "is:open author:@me",
-  "github.gitAuthentication": true
+  "github.gitAuthentication": true,
+
+  // ==========================
+  // TODO Tree / TODO Highlight
+  // ==========================
+
+  // 1) Tell TODO Tree how to detect todos
+  // - Matches lines that either:
+  //   a) start with a checkbox: "- [ ]" or "- [x]"
+  //   b) contain classic TODO/FIXME/HACK tags in comments
+  "todo-tree.regex.regex": "(//|#|<!--|;|/\\*|^)\\s*(TODO|FIXME|HACK|NOTE|BLOCK1|BLOCK2|BLOCK3|BLOCK4|BLOCK5)|^- \\[( |x|X)\\]",
+
+  // 2) Tags to highlight
+  // - BLOCK* tags are for grouping by Plan C Block
+  "todo-tree.general.tags": [
+    "TODO",
+    "FIXME",
+    "HACK",
+    "NOTE",
+    "BLOCK1",
+    "BLOCK2",
+    "BLOCK3",
+    "BLOCK4",
+    "BLOCK5"
+  ],
+
+  // 3) How to display tags in the tree
+  "todo-tree.general.showInExplorer": false,
+  "todo-tree.general.showTagsFromOpenFilesOnly": false,
+
+  // Group by TAG so you can get Block-based grouping
+  "todo-tree.tree.grouped": true,
+  "todo-tree.tree.groupBy": "tag",
+
+  // 4) Optional: tweak badges / icons
+  "todo-tree.general.statusBar": "total", // shows total TODOs in status bar
+  "todo-tree.general.statusBarClickBehaviour": "reveal",
+  "todo-tree.highlights.enabled": true,
+  "todo-tree.highlights.defaultHighlight": {
+    "foreground": "#ffffff",
+    "background": "#007acc",
+    "type": "tag"
+  },
+  "todo-tree.highlights.customHighlight": {
+    "BLOCK1": {
+      "icon": "shield",
+      "rulerColour": "#ff4b4b"
+    },
+    "BLOCK2": {
+      "icon": "pulse",
+      "rulerColour": "#ffa500"
+    },
+    "BLOCK3": {
+      "icon": "graph",
+      "rulerColour": "#4caf50"
+    },
+    "BLOCK4": {
+      "icon": "flame",
+      "rulerColour": "#2196f3"
+    },
+    "BLOCK5": {
+      "icon": "rocket",
+      "rulerColour": "#9c27b0"
+    }
+  }
 }

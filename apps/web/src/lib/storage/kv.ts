@@ -13,7 +13,7 @@ const VERSION = 1;
 
 async function db() {
   return openDB(DB_NAME, VERSION, {
-    upgrade(d: any) {
+    upgrade(d: IDBDatabase) {
       if (!d.objectStoreNames.contains(STORE)) {
         const s = d.createObjectStore(STORE, { keyPath: "key" });
         s.createIndex("by-expiry", "expiresAt");

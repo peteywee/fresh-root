@@ -1,42 +1,70 @@
 // [P2][APP][CODE] Reporting
 // Tags: P2, APP, CODE
-// Centralized error reporting with a safe no-op fallback.
-// If NEXT_PUBLIC_SENTRY_DSN is set and @sentry/nextjs is installed,
-// we capture exceptions there; otherwise we console.error.
+// Centralized error reporting with Sentry integration
+import * as Sentry from "@sentry/nextjs";
 
-let sentryLoaded = false;
-// Use loose typing to avoid requiring @sentry/nextjs types at build time
-let Sentry: any = null;
+import { logger } from "../logger";
 
-export async function initErrorReporting() {
-  if (sentryLoaded) return;
-  const dsn = process.env.NEXT_PUBLIC_SENTRY_DSN;
-  if (!dsn) return; // no-op if DSN not set
-  try {
-    const importer = new Function("s", "return import(s)") as (s: string) => Promise<any>;
-    const mod: any = await importer("@sentry/nextjs");
-    mod?.init?.({ dsn });
-    Sentry = mod || null;
-    sentryLoaded = true;
-  } catch {
-    // Avoid hard-crashing if package is not present — keep it optional
-    // to honor "no unmet peers" policy.
-    // If you want strict enforcement, add @sentry/nextjs to deps.
+/**
+ * Report error to Sentry and fallback to structured logging
+ */
+export function reportError(error: unknown, context?: Record<string, unknown>) {
+  // Always log locally with structured logger
+  logger.error("Application error", error, context);
 
-    console.warn("Sentry not available; falling back to console error.");
+  // Send to Sentry if configured
+  if (process.env.NEXT_PUBLIC_SENTRY_DSN) {
+    try {
+      if (error instanceof Error) {
+        Sentry.captureException(error, {
+          extra: context,
+          level: "error",
+        });
+      } else {
+        Sentry.captureMessage(String(error), {
+          extra: context,
+          level: "error",
+        });
+      }
+    } catch (sentryError) {
+      // Fallback: if Sentry fails, log to console
+      const errorMessage = sentryError instanceof Error ? sentryError.message : String(sentryError);
+      logger.warn(`Failed to send error to Sentry: ${errorMessage}`);
+    }
   }
 }
 
-export function reportError(error: unknown, context?: Record<string, unknown>) {
-  if (Sentry && typeof Sentry.captureException === "function") {
-    Sentry.captureException(error, context ? { extra: context } : undefined);
-  } else {
-    // Safe fallback: minimal PII, structured
+/**
+ * Set user context for error reporting
+ */
+export function setUserContext(user: { id: string; email?: string; username?: string }) {
+  if (process.env.NEXT_PUBLIC_SENTRY_DSN) {
+    Sentry.setUser({
+      id: user.id,
+      email: user.email,
+      username: user.username,
+    });
+  }
+}
 
-    console.error("[ERR]", {
-      message: (error as any)?.message || String(error),
-      stack: (error as any)?.stack || null,
-      context: context || null,
+/**
+ * Clear user context (e.g., on logout)
+ */
+export function clearUserContext() {
+  if (process.env.NEXT_PUBLIC_SENTRY_DSN) {
+    Sentry.setUser(null);
+  }
+}
+
+/**
+ * Add breadcrumb for debugging context
+ */
+export function addBreadcrumb(message: string, data?: Record<string, unknown>) {
+  if (process.env.NEXT_PUBLIC_SENTRY_DSN) {
+    Sentry.addBreadcrumb({
+      message,
+      data,
+      level: "info",
     });
   }
 }

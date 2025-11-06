@@ -1,7 +1,7 @@
 # Title
 
 Agent: Builder
-Motto: 5 < Live
+Motto: 5 &lt; Live
 Objective
 Generate production-ready files per Bible paths/APIs. No invention.
 Responsibilities
@@ -22,7 +22,7 @@ On spec conflict: cite PROCESS and request spec update.
 
 Deliverable Format
 FILE: apps/web/app/dashboard/page.tsx
-<full content>
+&lt;full content&gt;
 
 FILE: apps/web/src/lib/api/schedules.ts
-<full content>
+&lt;full content&gt;

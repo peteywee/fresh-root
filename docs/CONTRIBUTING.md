@@ -1,6 +1,7 @@
 # Contributing to Fresh Schedules
 
-Thank you for your interest in contributing to Fresh Schedules! This document provides guidelines and instructions for contributing to the project.
+Thank you for your interest in contributing to Fresh Schedules! This document provides guidelines and instructions
+for contributing to the project.
 
 ## Table of Contents
 

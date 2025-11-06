@@ -3,6 +3,7 @@
 import { NextRequest } from "next/server";
 import { z } from "zod";
 
+import { requireSession, AuthenticatedRequest, require2FAForManagers } from "../_shared/middleware";
 import { parseJson, badRequest, ok, serverError } from "../_shared/validation";
 
 // Schema for creating an organization
@@ -17,57 +18,64 @@ const CreateOrgSchema = z.object({
  * GET /api/organizations
  * List organizations the current user belongs to
  */
-export async function GET(_request: NextRequest) {
-  try {
-    // In production, fetch from database based on authenticated user
-    const organizations = [
-      {
-        id: "org-1",
-        name: "Acme Corp",
-        description: "A great company",
-        role: "admin",
-        createdAt: new Date().toISOString(),
-        memberCount: 25,
-      },
-      {
-        id: "org-2",
-        name: "Tech Startup",
-        description: "Innovative solutions",
-        role: "manager",
-        createdAt: new Date().toISOString(),
-        memberCount: 10,
-      },
-    ];
+export async function GET(request: NextRequest) {
+  return requireSession(request as AuthenticatedRequest, async (authReq) => {
+    try {
+      // In production, fetch from database based on authenticated user
+      const organizations = [
+        {
+          id: "org-1",
+          name: "Acme Corp",
+          description: "A great company",
+          role: "admin",
+          createdAt: new Date().toISOString(),
+          memberCount: 25,
+          ownerId: authReq.user?.uid,
+        },
+        {
+          id: "org-2",
+          name: "Tech Startup",
+          description: "Innovative solutions",
+          role: "manager",
+          createdAt: new Date().toISOString(),
+          memberCount: 10,
+          ownerId: authReq.user?.uid,
+        },
+      ];
 
-    return ok({ organizations });
-  } catch {
-    return serverError("Failed to fetch organizations");
-  }
+      return ok({ organizations, userId: authReq.user?.uid });
+    } catch {
+      return serverError("Failed to fetch organizations");
+    }
+  });
 }
 
 /**
  * POST /api/organizations
- * Create a new organization
+ * Create a new organization (requires 2FA for manager operations)
  */
 export async function POST(request: NextRequest) {
-  try {
-    const parsed = await parseJson(request, CreateOrgSchema);
+  return require2FAForManagers(request as AuthenticatedRequest, async (authReq) => {
+    try {
+      const parsed = await parseJson(authReq, CreateOrgSchema);
 
-    if (!parsed.success) {
-      return badRequest("Validation failed", parsed.details);
+      if (!parsed.success) {
+        return badRequest("Validation failed", parsed.details);
+      }
+
+      // In production, create organization in database
+      const newOrg = {
+        id: `org-${Date.now()}`,
+        ...parsed.data,
+        role: "admin", // Creator is admin
+        ownerId: authReq.user?.uid,
+        createdAt: new Date().toISOString(),
+        memberCount: 1,
+      };
+
+      return ok(newOrg);
+    } catch {
+      return serverError("Failed to create organization");
     }
-
-    // In production, create organization in database
-    const newOrg = {
-      id: `org-${Date.now()}`,
-      ...parsed.data,
-      role: "admin", // Creator is admin
-      createdAt: new Date().toISOString(),
-      memberCount: 1,
-    };
-
-    return ok(newOrg);
-  } catch {
-    return serverError("Failed to create organization");
-  }
+  });
 }
