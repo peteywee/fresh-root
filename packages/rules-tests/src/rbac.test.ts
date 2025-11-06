@@ -28,9 +28,11 @@ beforeAll(async () => {
   const firestoreHost =
     process.env.FIRESTORE_EMULATOR_HOST || process.env.FIREBASE_FIRESTORE_EMULATOR_HOST;
   if (firestoreHost) {
-    const [host, portStr] = firestoreHost.split(":");
-    firestoreOptions.host = host;
-    firestoreOptions.port = Number(portStr);
+    const parts = firestoreHost.split(":");
+    if (parts.length === 2 && parts[0]) {
+      firestoreOptions.host = parts[0];
+      firestoreOptions.port = Number(parts[1]);
+    }
   }
 
   testEnv = await initializeTestEnvironment({

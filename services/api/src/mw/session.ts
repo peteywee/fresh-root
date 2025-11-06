@@ -1,6 +1,7 @@
-// [P0][SECURITY][AUTH] Session cookie verification and MFA enforcement middleware
-// Tags: P0, SECURITY, AUTH, SESSION, MFA, MIDDLEWARE
-import type { NextFunction, Request, Response } from "express";
+// [P1][AUTH][SESSION] Server-side session authentication middleware
+// Tags: P1, AUTH, SESSION
+import type { Request, Response, NextFunction } from "express";
+import type { DecodedIdToken } from "firebase-admin/auth";
 
 import { getAdminAuth } from "../firebase.js";
 
@@ -9,7 +10,7 @@ export type UserToken = {
   orgId?: string;
   roles?: string[];
   mfa?: boolean;
-  [k: string]: any;
+  [k: string]: unknown;
 };
 
 function getCookie(req: Request, name: string): string | undefined {
@@ -32,14 +33,15 @@ export async function requireSession(req: Request, res: Response, next: NextFunc
     const decoded = await auth.verifySessionCookie(cookie, true);
 
     // Map decoded token -> userToken shape
+    const decodedToken = decoded as DecodedIdToken & { orgId?: string; org_id?: string; roles?: string[]; mfa?: boolean; "custom:mfa"?: boolean };
     const userToken: UserToken = {
       uid: decoded.uid,
-      orgId: (decoded as any).orgId || (decoded as any).org_id,
-      roles: (decoded as any).roles || [],
-      mfa: (decoded as any).mfa === true || (decoded as any)["custom:mfa"] === true,
+      orgId: decodedToken.orgId || decodedToken.org_id,
+      roles: decodedToken.roles || [],
+      mfa: decodedToken.mfa === true || decodedToken["custom:mfa"] === true,
     };
 
-    (req as any).userToken = userToken;
+    (req as Request & { userToken: UserToken }).userToken = userToken;
     next();
   } catch (_e) {
     return res.status(401).json({ error: "unauthenticated" });
@@ -47,7 +49,7 @@ export async function requireSession(req: Request, res: Response, next: NextFunc
 }
 
 export function require2FAForManagers(req: Request, res: Response, next: NextFunction) {
-  const tok: UserToken | undefined = (req as any).userToken;
+  const tok: UserToken | undefined = (req as Request & { userToken?: UserToken }).userToken;
   if (!tok) return res.status(401).json({ error: "unauthenticated" });
   const isPriv = (tok.roles || []).some((r) => ["org_owner", "admin", "manager"].includes(r));
   if (isPriv && !tok.mfa) return res.status(403).json({ error: "mfa_required" });

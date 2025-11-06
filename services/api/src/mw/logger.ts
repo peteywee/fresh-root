@@ -14,7 +14,7 @@ export function requestLogger() {
     const start = Date.now();
 
     // Attach reqId to request for downstream use
-    (req as any).reqId = reqId;
+    (req as Request & { reqId: string }).reqId = reqId;
 
     // Log response when finished
     res.on("finish", () => {

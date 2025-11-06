@@ -36,7 +36,7 @@ export default function AuthCallbackPage() {
         setStatus("done");
         router.replace("/");
       } catch (e) {
-        reportError(e as any, { phase: "auth_callback" });
+        reportError(e instanceof Error ? e : new Error(String(e)), { phase: "auth_callback" });
         if (!mounted) return;
         setStatus("error");
       }

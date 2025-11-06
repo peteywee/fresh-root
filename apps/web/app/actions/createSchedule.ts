@@ -32,7 +32,7 @@ export async function createSchedule(payload: CreatePayload) {
     },
   );
   if (!res.ok) {
-    let errorPayload: any = { error: "unknown" };
+    let errorPayload: { error: string } = { error: "unknown" };
     try {
       errorPayload = await res.json();
     } catch {

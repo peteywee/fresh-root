@@ -1,5 +1,6 @@
 // [P1][INTEGRITY][VALIDATION] Validation
 // Tags: P1, INTEGRITY, VALIDATION
+import { NextResponse } from "next/server";
 import { z } from "zod";
 
 /** Standard API error payload shape */
@@ -9,7 +10,7 @@ export type ApiError = {
 
 /** Build a 400 error response with consistent shape */
 export function badRequest(message: string, details?: unknown, code = "BAD_REQUEST") {
-  return Response.json({ error: { code, message, details } } as ApiError, { status: 400 });
+  return NextResponse.json({ error: { code, message, details } } as ApiError, { status: 400 });
 }
 
 /** Build a 500 error response with consistent shape */
@@ -18,12 +19,12 @@ export function serverError(
   details?: unknown,
   code = "INTERNAL",
 ) {
-  return Response.json({ error: { code, message, details } } as ApiError, { status: 500 });
+  return NextResponse.json({ error: { code, message, details } } as ApiError, { status: 500 });
 }
 
 /** Build a 200 response */
 export function ok<T>(data: T) {
-  return Response.json(data, { status: 200 });
+  return NextResponse.json(data, { status: 200 });
 }
 
 /** Utility to parse JSON request bodies against a Zod schema */
@@ -36,7 +37,7 @@ export async function parseJson<T>(req: Request, schema: z.ZodType<T>) {
   }
   const parsed = schema.safeParse(json);
   if (!parsed.success) {
-    const details = parsed.error.issues.map((i: any) => ({
+    const details = parsed.error.issues.map((i) => ({
       path: i.path.join("."),
       message: i.message,
     }));

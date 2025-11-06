@@ -138,7 +138,7 @@ a6959ce Initial plan
 
 ## Pull Request
 
-**PR #29**: https://github.com/peteywee/fresh-root/pull/29
+**PR #29**: <https://github.com/peteywee/fresh-root/pull/29>
 
 - **Title**: chore: consolidate all feature branches into dev
 - **Base**: `dev`

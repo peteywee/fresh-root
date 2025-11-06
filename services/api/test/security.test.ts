@@ -21,7 +21,7 @@ function startServer(
     }
   > = {},
 ) {
-  const env = { ...baseEnv, ...envOverrides } as any;
+  const env = { ...baseEnv, ...envOverrides };
   const app = express();
   applySecurity(app, env);
   app.get("/ping", (_req, res) => res.status(200).json({ ok: true }));

@@ -1,0 +1,33 @@
+blocks:
+  BLOCK1:
+    name: "Block 1 – Security Core"
+    description: >
+      Session cookies, MFA, security middleware, rules & access tests.
+
+  BLOCK2:
+    name: "Block 2 – Reliability Core"
+    description: >
+      Logging, Sentry, OTel, backup & restore runbook, uptime alerts.
+
+  BLOCK3:
+    name: "Block 3 – Integrity Core"
+    description: >
+      Zod schemas, API validators, Firestore rules test matrix.
+
+  BLOCK4:
+    name: "Block 4 – Experience Layer"
+    description: >
+      Design system, Week Grid, PWA, perf/a11y benchmarks, UX KPIs.
+
+  BLOCK5:
+    name: "Block 5 – Validation & Release"
+    description: >
+      Playwright happy path, CI gate, Blue/Green deploy, rollback.
+
+conventions:
+  checkboxFormat: "- [ ] [BLOCKX] Task description"
+  doneFormat: "- [x] [BLOCKX] Task description"
+  file: "docs/TODO-v13.md"
+  notes:
+    - "Use BLOCK* tags to get grouping in Todo Tree (groupBy: tag)."
+    - "You can mix block tags with classic TODO/FIXME in code comments."

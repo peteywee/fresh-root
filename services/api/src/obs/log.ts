@@ -82,9 +82,9 @@ export class Logger {
    * Convenience method to log HTTP requests with latency and status.
    */
   request(req: Request, res: Response, latencyMs: number, ctx?: Partial<LogContext>): void {
-    const userToken = (req as any).userToken;
+    const userToken = (req as Request & { userToken?: { uid: string; orgId?: string } }).userToken;
     this.info("request", {
-      reqId: (req as any).reqId,
+      reqId: (req as Request & { reqId?: string }).reqId,
       method: req.method,
       path: req.path,
       status: res.statusCode,
