@@ -18,6 +18,35 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Show labels file
+        run: |
+          echo "=== .github/labels.yml ==="
+          if [ -f .github/labels.yml ]; then
+            head -n 200 .github/labels.yml
+          else
+            echo "::warning::.github/labels.yml not found"
+          fi
+
+      - name: Validate labels.yml (yamllint)
+        if: hashFiles('.github/labels.yml') != ''
+        uses: mikeal/yamllint-action@v1
+        with:
+          file: .github/labels.yml
+
+      - name: Debug token & env
+        if: runner.debug == '1'
+        run: |
+          echo "GITHUB_REPOSITORY=$GITHUB_REPOSITORY"
+          echo "GITHUB_ACTOR=$GITHUB_ACTOR"
+          echo "GITHUB_EVENT_NAME=$GITHUB_EVENT_NAME"
+          TOKEN_SET=${{ secrets.GITHUB_TOKEN != '' }}
+          if [ "$TOKEN_SET" == 'true' ]; then
+            echo "GITHUB_TOKEN: set"
+          else
+            echo "GITHUB_TOKEN: NOT set"
+          fi
+
       - name: Sync labels from .github/labels.yml
         uses: crazy-max/ghaction-github-labeler@v5
         with:
