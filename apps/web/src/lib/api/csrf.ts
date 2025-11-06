@@ -99,7 +99,10 @@ export function csrfProtection(config: CSRFConfig = {}) {
       const requestToken = extractTokenFromRequest(request, fullConfig.headerName);
       if (!requestToken) {
         return NextResponse.json(
-          { error: `Forbidden - CSRF token missing from ${fullConfig.headerName} header`, code: "CSRF_HEADER_MISSING" },
+          {
+            error: `Forbidden - CSRF token missing from ${fullConfig.headerName} header`,
+            code: "CSRF_HEADER_MISSING",
+          },
           { status: 403 },
         );
       }
@@ -117,7 +120,10 @@ export function csrfProtection(config: CSRFConfig = {}) {
 }
 
 export function withCSRFToken(
-  handler: (request: NextRequest, context: { params: Record<string, string> }) => Promise<NextResponse>,
+  handler: (
+    request: NextRequest,
+    context: { params: Record<string, string> },
+  ) => Promise<NextResponse>,
   config: CSRFConfig = {},
 ): (request: NextRequest, context: { params: Record<string, string> }) => Promise<NextResponse> {
   const fullConfig = { ...DEFAULT_CONFIG, ...config };

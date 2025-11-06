@@ -49,9 +49,8 @@ const limiter = new InMemoryRateLimiter();
 setInterval(() => limiter.cleanup(), 60000);
 
 function defaultKeyGenerator(request: NextRequest): string {
-  const ip = request.headers.get("x-forwarded-for") ?? 
-             request.headers.get("x-real-ip") ?? 
-             "unknown";
+  const ip =
+    request.headers.get("x-forwarded-for") ?? request.headers.get("x-real-ip") ?? "unknown";
   return `${request.nextUrl.pathname}:${ip}`;
 }
 
@@ -62,11 +61,7 @@ export async function rateLimit(
   const keyFn = config.keyGenerator ?? defaultKeyGenerator;
   const key = keyFn(request);
 
-  const result = await limiter.checkLimit(
-    key,
-    config.max,
-    config.windowSeconds,
-  );
+  const result = await limiter.checkLimit(key, config.max, config.windowSeconds);
 
   if (!result.allowed) {
     return NextResponse.json(

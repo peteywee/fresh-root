@@ -1,7 +1,7 @@
 //[P1][API][CODE] Shifts API route handler
 // Tags: P1, API, CODE, validation, zod
 
-import { ShiftCreateSchema } from "@fresh-schedules/types";
+import { CreateShiftSchema } from "@fresh-schedules/types";
 import { NextRequest, NextResponse } from "next/server";
 
 import { requireOrgMembership, requireRole } from "../../../src/lib/api/authorization";
@@ -14,8 +14,15 @@ import { serverError } from "../_shared/validation";
  * GET /api/shifts
  * List shifts (filter by scheduleId if provided)
  */
-export const GET = rateLimit(RateLimits.STANDARD)(
-  requireOrgMembership(async (request: NextRequest, context) => {
+export const GET = requireOrgMembership(
+  async (
+    request: NextRequest,
+    context: { params: Record<string, string>; userId: string; orgId: string },
+  ) => {
+    // Apply rate limiting
+    const rateLimitResponse = await rateLimit(request, RateLimits.api);
+    if (rateLimitResponse) return rateLimitResponse;
+
     try {
       const { searchParams } = new URL(request.url);
       const scheduleId = searchParams.get("scheduleId");
@@ -43,26 +50,38 @@ export const GET = rateLimit(RateLimits.STANDARD)(
     } catch {
       return serverError("Failed to fetch shifts");
     }
-  }),
+  },
 );
 
 /**
  * POST /api/shifts
  * Create a new shift (requires scheduler+ role)
  */
-export const POST = rateLimit(RateLimits.WRITE)(
-  csrfProtection()(
-    requireOrgMembership(
-      requireRole("scheduler")(async (request: NextRequest, context) => {
+export const POST = csrfProtection()(
+  requireOrgMembership(
+    requireRole("scheduler")(
+      async (
+        request: NextRequest,
+        context: {
+          params: Record<string, string>;
+          userId: string;
+          orgId: string;
+          roles: ("org_owner" | "admin" | "manager" | "scheduler" | "corporate" | "staff")[];
+        },
+      ) => {
+        // Apply rate limiting
+        const rateLimitResponse = await rateLimit(request, RateLimits.api);
+        if (rateLimitResponse) return rateLimitResponse;
+
         try {
           const { searchParams } = new URL(request.url);
           const scheduleIdFromQuery = searchParams.get("scheduleId");
           const body = await request.json();
 
-          const validated = ShiftCreateSchema.parse(body);
+          const validated = CreateShiftSchema.parse(body);
           const sanitized = sanitizeObject(validated);
 
-          const scheduleId = scheduleIdFromQuery || (body?.scheduleId as string | undefined);
+          const scheduleId = scheduleIdFromQuery || validated.scheduleId;
           if (!scheduleId) {
             return NextResponse.json(
               { error: "scheduleId is required in query or body" },
@@ -72,8 +91,6 @@ export const POST = rateLimit(RateLimits.WRITE)(
 
           const newShift = {
             id: `shift-${Date.now()}`,
-            orgId: context.orgId,
-            scheduleId,
             status: "draft" as const,
             createdAt: new Date().toISOString(),
             createdBy: context.userId,
@@ -87,7 +104,7 @@ export const POST = rateLimit(RateLimits.WRITE)(
           }
           return serverError("Failed to create shift");
         }
-      }),
+      },
     ),
   ),
 );

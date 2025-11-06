@@ -60,17 +60,17 @@ Block 3 (Integrity Core) has been comprehensively implemented with all required 
 
 ## Schema Coverage
 
-| Collection | Schema File | Create Schema | Update Schema | List Schema | Tests |
-|------------|-------------|---------------|---------------|-------------|-------|
-| organizations | orgs.ts | ✓ | ✓ | ✓ | ✓ |
-| memberships | memberships.ts | ✓ | ✓ | ✓ | ✓ |
-| positions | positions.ts | ✓ | ✓ | ✓ | ✓ |
-| schedules | schedules.ts | ✓ | ✓ | ✓ | ✓ |
-| shifts | shifts.ts | ✓ | ✓ | ✓ | ✓ |
-| venues | venues.ts | ✓ | ✓ | ✓ | - |
-| zones | zones.ts | ✓ | ✓ | ✓ | - |
-| attendance_records | attendance.ts | ✓ | ✓ | ✓ | - |
-| join_tokens | join-tokens.ts | ✓ | ✓ | ✓ | - |
+| Collection         | Schema File    | Create Schema | Update Schema | List Schema | Tests |
+| ------------------ | -------------- | ------------- | ------------- | ----------- | ----- |
+| organizations      | orgs.ts        | ✓             | ✓             | ✓           | ✓     |
+| memberships        | memberships.ts | ✓             | ✓             | ✓           | ✓     |
+| positions          | positions.ts   | ✓             | ✓             | ✓           | ✓     |
+| schedules          | schedules.ts   | ✓             | ✓             | ✓           | ✓     |
+| shifts             | shifts.ts      | ✓             | ✓             | ✓           | ✓     |
+| venues             | venues.ts      | ✓             | ✓             | ✓           | -     |
+| zones              | zones.ts       | ✓             | ✓             | ✓           | -     |
+| attendance_records | attendance.ts  | ✓             | ✓             | ✓           | -     |
+| join_tokens        | join-tokens.ts | ✓             | ✓             | ✓           | -     |
 
 ## Key Features Implemented
 
@@ -185,7 +185,7 @@ export async function POST(req: Request) {
   if (!parsed.success) {
     return NextResponse.json(
       { error: { code: "VALIDATION_ERROR", message: "Invalid input", details: parsed.details } },
-      { status: 422 }
+      { status: 422 },
     );
   }
 

@@ -18,6 +18,3 @@ export * from "./venues";
 export * from "./zones";
 export * from "./attendance";
 export * from "./join-tokens";
-// export * from "./organizations"; // REMOVE or comment out the next line to avoid ambiguity
-export * from "./positions";
-export * from "./schedules";

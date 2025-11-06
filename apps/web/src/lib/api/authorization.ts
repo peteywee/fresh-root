@@ -25,10 +25,15 @@ export function requireOrgMembership(
     context: { params: Record<string, string> },
   ): Promise<NextResponse> => {
     const userId = request.headers.get("x-user-id");
-    if (!userId) return NextResponse.json({ error: "Unauthorized - No user session" }, { status: 401 });
+    if (!userId)
+      return NextResponse.json({ error: "Unauthorized - No user session" }, { status: 401 });
 
     const orgId = extractOrgId(request);
-    if (!orgId) return NextResponse.json({ error: "Bad Request - No organization ID provided" }, { status: 400 });
+    if (!orgId)
+      return NextResponse.json(
+        { error: "Bad Request - No organization ID provided" },
+        { status: 400 },
+      );
 
     // NOTE: In a full implementation, verify membership in Firestore here.
     return handler(request, { ...context, userId, orgId });
@@ -57,7 +62,10 @@ export function requireRole(requiredRole: OrgRole) {
       const userLevel = roles.length ? Math.max(...roles.map((r) => hierarchy.indexOf(r))) : -1;
       const requiredLevel = hierarchy.indexOf(requiredRole);
       if (userLevel < requiredLevel) {
-        return NextResponse.json({ error: `Forbidden - Requires ${requiredRole} role or higher` }, { status: 403 });
+        return NextResponse.json(
+          { error: `Forbidden - Requires ${requiredRole} role or higher` },
+          { status: 403 },
+        );
       }
 
       return handler(request, { ...context, roles });

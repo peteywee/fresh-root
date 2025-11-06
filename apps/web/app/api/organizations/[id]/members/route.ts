@@ -3,7 +3,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 
-import { requireSession, AuthenticatedRequest, require2FAForManagers } from "../../../_shared/middleware";
+import {
+  requireSession,
+  AuthenticatedRequest,
+  require2FAForManagers,
+} from "../../../_shared/middleware";
 import { parseJson, badRequest, ok, serverError } from "../../../_shared/validation";
 
 // Define schemas inline for now - can be moved to shared types later
@@ -16,7 +20,10 @@ const CreateMembershipSchema = z.object({
 });
 
 const UpdateMembershipSchema = z.object({
-  roles: z.array(z.enum(["org_owner", "admin", "manager", "scheduler", "staff"])).min(1).optional(),
+  roles: z
+    .array(z.enum(["org_owner", "admin", "manager", "scheduler", "staff"]))
+    .min(1)
+    .optional(),
   status: z.enum(["active", "suspended", "invited", "removed"]).optional(),
 });
 
@@ -39,10 +46,7 @@ function getUserRoles(user: AuthenticatedRequest["user"]): string[] {
  * GET /api/organizations/[id]/members
  * List all members of an organization
  */
-export async function GET(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> },
-) {
+export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   return requireSession(request as AuthenticatedRequest, async (authReq) => {
     try {
       const { id: orgId } = await params;
@@ -52,7 +56,7 @@ export async function GET(
       if (userOrgId !== orgId) {
         return NextResponse.json(
           { error: { code: "FORBIDDEN", message: "Access denied to this organization" } },
-          { status: 403 }
+          { status: 403 },
         );
       }
 
@@ -83,10 +87,7 @@ export async function GET(
  * POST /api/organizations/[id]/members
  * Add a new member to an organization (managers only)
  */
-export async function POST(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> },
-) {
+export async function POST(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   return require2FAForManagers(request as AuthenticatedRequest, async (authReq) => {
     try {
       const { id: orgId } = await params;
@@ -96,7 +97,7 @@ export async function POST(
       if (userOrgId !== orgId) {
         return NextResponse.json(
           { error: { code: "FORBIDDEN", message: "Access denied to this organization" } },
-          { status: 403 }
+          { status: 403 },
         );
       }
 
@@ -111,7 +112,7 @@ export async function POST(
               details: parsed.details,
             },
           },
-          { status: 422 }
+          { status: 422 },
         );
       }
 
@@ -149,16 +150,13 @@ export async function POST(
 /**
  * PATCH /api/organizations/[id]/members/[memberId]
  * Update a member's roles or status (managers only)
- * 
+ *
  * Note: This should be implemented as a separate route at:
  * /api/organizations/[id]/members/[memberId]/route.ts
- * 
+ *
  * For now, we can handle basic updates here via query param
  */
-export async function PATCH(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> },
-) {
+export async function PATCH(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   return require2FAForManagers(request as AuthenticatedRequest, async (authReq) => {
     try {
       const { id: orgId } = await params;
@@ -174,7 +172,7 @@ export async function PATCH(
       if (userOrgId !== orgId) {
         return NextResponse.json(
           { error: { code: "FORBIDDEN", message: "Access denied to this organization" } },
-          { status: 403 }
+          { status: 403 },
         );
       }
 
@@ -189,7 +187,7 @@ export async function PATCH(
               details: parsed.details,
             },
           },
-          { status: 422 }
+          { status: 422 },
         );
       }
 
@@ -233,7 +231,7 @@ export async function DELETE(
       if (userOrgId !== orgId) {
         return NextResponse.json(
           { error: { code: "FORBIDDEN", message: "Access denied to this organization" } },
-          { status: 403 }
+          { status: 403 },
         );
       }
 
