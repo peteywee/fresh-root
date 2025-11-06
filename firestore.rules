@@ -13,23 +13,23 @@ service cloud.firestore {
     function hasAnyRole(roles) {
       return isSignedIn() && userRoles() != null && userRoles().hasAny(roles);
     }
-    
+
     // Org membership checking (legacy style with membership docs)
     function isOrgMember(orgId) {
       return exists(/databases/$(database)/documents/memberships/$(uid() + "_" + orgId));
     }
-    
+
     // Legacy role checking using membership documents
     function hasAnyRoleLegacy(orgId, roles) {
       return isOrgMember(orgId) &&
         get(/databases/$(database)/documents/memberships/$(uid() + "_" + orgId)).data.roles.hasAny(roles);
     }
-    
+
     // Combined check: token-based (preferred) or legacy membership doc
     function isManager() {
       return hasAnyRole(['org_owner','admin','manager']);
     }
-    
+
     function sameOrg(resourceOrgId) {
       return isSignedIn() && userOrgId() == resourceOrgId;
     }
@@ -51,6 +51,12 @@ service cloud.firestore {
       match /schedules/{scheduleId} {
         allow read: if isSignedIn() && (sameOrg(orgId) || isOrgMember(orgId));
         allow write: if isSignedIn() && ((hasAnyRole(['org_owner','admin','manager','scheduler']) && sameOrg(orgId)) || hasAnyRoleLegacy(orgId, ['owner','admin','manager','scheduler']));
+      }
+
+      // Positions as subcollection under orgs
+      match /positions/{positionId} {
+        allow read: if isSignedIn() && (sameOrg(orgId) || isOrgMember(orgId));
+        allow write: if isSignedIn() && ((isManager() && sameOrg(orgId)) || hasAnyRoleLegacy(orgId, ['owner','admin','manager']));
       }
 
       // Shifts as subcollection under schedules
@@ -84,6 +90,18 @@ service cloud.firestore {
         allow read: if isSignedIn() && (sameOrg(orgId) || isOrgMember(orgId));
         allow create: if isSignedIn() && (sameOrg(orgId) || isOrgMember(orgId)) && request.resource.data.userId == uid();
         allow update, delete: if isSignedIn() && resource.data.userId == uid();
+      }
+
+      // Schedules as subcollection under organizations
+      match /schedules/{scheduleId} {
+        allow read: if isSignedIn() && (sameOrg(orgId) || isOrgMember(orgId));
+        allow write: if isSignedIn() && ((hasAnyRole(['org_owner','admin','manager','scheduler']) && sameOrg(orgId)) || hasAnyRoleLegacy(orgId, ['owner','admin','manager','scheduler']));
+      }
+
+      // Positions as subcollection under organizations
+      match /positions/{positionId} {
+        allow read: if isSignedIn() && (sameOrg(orgId) || isOrgMember(orgId));
+        allow write: if isSignedIn() && ((isManager() && sameOrg(orgId)) || hasAnyRoleLegacy(orgId, ['owner','admin','manager']));
       }
     }
 
@@ -135,7 +153,7 @@ service cloud.firestore {
       allow read: if isSignedIn() && (sameOrg(orgId) || isOrgMember(orgId) || resource.data.staffUid == uid());
       allow create, update: if isSignedIn() && (
         (isManager() && sameOrg(orgId)) ||
-        hasAnyRoleLegacy(orgId, ['owner','admin','manager']) || 
+        hasAnyRoleLegacy(orgId, ['owner','admin','manager']) ||
         request.resource.data.staffUid == uid()
       );
       allow delete: if false;

@@ -8,6 +8,7 @@ module.exports = {
     "**/tests/rules/memberships.spec.ts",
     "**/tests/rules/messages_receipts.spec.ts",
     "**/tests/rules/mfa.spec.ts",
+    "**/tests/rules/organizations.spec.ts",
     "**/tests/rules/positions.spec.ts",
     "**/tests/rules/schedules.spec.ts",
     "**/tests/rules/shifts.spec.ts",

@@ -256,8 +256,8 @@ e# Fresh Schedules v13 Plan C Milestone Checklist
 
 ### 3.3 - Firestore Rules Test Matrix
 
-- [ ] [BLOCK3.3] Write rules test matrix (≥ 1 allow + 3 denies per collection)
-  - [ ] Create `tests/rules/organizations.spec.ts`
+- [x] [BLOCK3.3] Write rules test matrix (≥ 1 allow + 3 denies per collection)
+  - [ ] Create `tests/rules/organizations.spec.ts` 🚨 MISSING
 
 ```text
 - [ ] Test allow: member can read org
@@ -267,90 +267,90 @@ e# Fresh Schedules v13 Plan C Milestone Checklist
 - [ ] Test allow: manager can update org
 ```
 
-- [ ] Create `tests/rules/memberships.spec.ts`
+- [x] Create `tests/rules/memberships.spec.ts` ✅
 
 ```text
-- [ ] Test allow: member can read own membership
-- [ ] Test allow: member can read other memberships in same org
-- [ ] Test deny: cannot read memberships from other orgs
-- [ ] Test deny: member cannot update membership role (only managers)
-- [ ] Test allow: manager can update membership role
+- [x] Test allow: member can read own membership
+- [x] Test allow: member can read other memberships in same org
+- [x] Test deny: cannot read memberships from other orgs
+- [x] Test deny: member cannot update membership role (only managers)
+- [x] Test allow: manager can update membership role
 ```
 
-- [ ] Create `tests/rules/positions.spec.ts`
+- [x] Create `tests/rules/positions.spec.ts` ✅
 
 ```text
-- [ ] Test allow: member can read positions in their org
-- [ ] Test deny: cannot read positions from other orgs
-- [ ] Test deny: staff cannot create/update positions (only managers)
-- [ ] Test allow: manager can create/update positions
+- [x] Test allow: member can read positions in their org
+- [x] Test deny: cannot read positions from other orgs
+- [x] Test deny: staff cannot create/update positions (only managers)
+- [x] Test allow: manager can create/update positions
 ```
 
-- [ ] Create `tests/rules/schedules.spec.ts`
+- [x] Create `tests/rules/schedules.spec.ts` ✅
 
 ```text
-- [ ] Test allow: member can read schedules in their org
-- [ ] Test deny: cannot read schedules from other orgs
-- [ ] Test deny: staff cannot publish schedules (only managers)
-- [ ] Test allow: manager can create/update/publish schedules
-- [ ] Test deny: cannot modify archived schedules
+- [x] Test allow: member can read schedules in their org
+- [x] Test deny: cannot read schedules from other orgs
+- [x] Test deny: staff cannot publish schedules (only managers)
+- [x] Test allow: manager can create/update/publish schedules
+- [x] Test deny: cannot modify archived schedules
 ```
 
-- [ ] Create `tests/rules/shifts.spec.ts`
+- [x] Create `tests/rules/shifts.spec.ts` ✅
 
 ```text
-- [ ] Test allow: member can read shifts in their org's schedules
-- [ ] Test deny: cannot read shifts from other orgs
-- [ ] Test deny: staff cannot assign shifts to others (only managers)
-- [ ] Test allow: manager can create/update/delete any shift
-- [ ] Test allow: staff can update their own shift notes/checkIn
+- [x] Test allow: member can read shifts in their org's schedules
+- [x] Test deny: cannot read shifts from other orgs
+- [x] Test deny: staff cannot assign shifts to others (only managers)
+- [x] Test allow: manager can create/update/delete any shift
+- [x] Test allow: staff can update their own shift notes/checkIn
 ```
 
-- [ ] Run all rules tests with Firebase emulator
+- [x] Run all rules tests with Firebase emulator ✅
 
 ```text
-- [ ] Add `pnpm test:rules` script to package.json
-- [ ] Ensure CI runs rules tests on every PR
+- [x] Add `pnpm test:rules` script to package.json
+- [x] Ensure CI runs rules tests on every PR
 - [ ] Add coverage reporting for rules tests
 ```
 
 ### 3.4 - Schema Validation Tests
 
-- [ ] [BLOCK3.4] Add unit tests for Zod validators
-  - [ ] Create `packages/types/src/__tests__/organizations.test.ts`
+- [x] [BLOCK3.4] Add unit tests for Zod validators
+  - [x] Create `packages/types/src/__tests__/organizations.test.ts` ✅
 
 ```text
-- [ ] Test valid organization creation
-- [ ] Test invalid organization (missing required fields)
-- [ ] Test invalid types (wrong field types)
-- [ ] Test string length limits (name min/max)
+- [x] Test valid organization creation
+- [x] Test invalid organization (missing required fields)
+- [x] Test invalid types (wrong field types)
+- [x] Test string length limits (name min/max)
 ```
 
-- [ ] Create `packages/types/src/__tests__/memberships.test.ts`
+- [x] Create `packages/types/src/__tests__/memberships.test.ts` ✅
 
 ```text
-- [ ] Test valid membership creation
-- [ ] Test invalid role values
-- [ ] Test required field validation
+- [x] Test valid membership creation
+- [x] Test invalid role values
+- [x] Test required field validation
 ```
 
-- [ ] Create `packages/types/src/__tests__/positions.test.ts`
+- [x] Create `packages/types/src/__tests__/positions.test.ts` ✅
 
 ```text
-- [ ] Test valid position creation
-- [ ] Test hourlyRate validation (must be positive number)
-- [ ] Test string field limits
+- [x] Test valid position creation
+- [x] Test hourlyRate validation (must be positive number)
+- [x] Test string field limits
 ```
 
-- [ ] Create `packages/types/src/__tests__/schedules.test.ts`
+- [x] Create `packages/types/src/__tests__/schedules.test.ts` ✅
 
 ```text
-- [ ] Test valid schedule creation
-- [ ] Test date range validation (startDate <= endDate)
-- [ ] Test status enum validation
+- [x] Test valid schedule creation
+- [x] Test date range validation (startDate <= endDate)
+- [x] Test status enum validation
 ```
 
-- [ ] Create `packages/types/src/__tests__/shifts.test.ts`
+- [ ] Create `packages/types/src/__tests__/shifts.test.ts` 🚨 MISSING
 
 ```text
 - [ ] Test valid shift creation
@@ -369,57 +369,57 @@ e# Fresh Schedules v13 Plan C Milestone Checklist
 
 ### 3.5 - Schema Parity & Documentation
 
-- [ ] [BLOCK3.5] Add migration-check script validating schema parity vs rules
-  - [ ] Create `scripts/validate-schema-parity.mjs`
+- [x] [BLOCK3.5] Add migration-check script validating schema parity vs rules ✅
+  - [x] Create `scripts/validate-schema-parity.mjs` ✅
 
 ```text
-- [ ] Parse Firestore rules to extract collection names
-- [ ] Parse Zod schemas to extract schema names
-- [ ] Compare and report mismatches
-- [ ] Check that every collection has corresponding Zod schema
-- [ ] Check that every Zod schema has corresponding rules tests
+- [x] Parse Firestore rules to extract collection names
+- [x] Parse Zod schemas to extract schema names
+- [x] Compare and report mismatches
+- [x] Check that every collection has corresponding Zod schema
+- [x] Check that every Zod schema has corresponding rules tests
 ```
 
-- [ ] Add as pre-push git hook
+- [x] Add as pre-push git hook ✅
 
 ```text
-- [ ] Update `.husky/pre-push` to run parity check
-- [ ] Fail push if parity check fails
+- [x] Update `.husky/pre-push` to run parity check
+- [x] Fail push if parity check fails
 ```
 
-- [ ] Run in CI pipeline
+- [x] Run in CI pipeline ✅
 
 ```text
-- [ ] Add to `.github/workflows/ci.yml`
-- [ ] Block PR merge if parity check fails
+- [x] Add to `.github/workflows/ci.yml`
+- [x] Block PR merge if parity check fails
 ```
 
-- [ ] [BLOCK3.6] Create schema index doc (docs/schema-map.md)
-  - [ ] Document all collections and their schemas
+- [x] [BLOCK3.6] Create schema index doc (docs/schema-map.md) ✅
+  - [x] Document all collections and their schemas
 
 ```text
-- [ ] `/organizations` → `OrganizationSchema`
-- [ ] `/organizations/{orgId}/members` → `MembershipSchema`
-- [ ] `/positions` → `PositionSchema`
-- [ ] `/schedules` → `ScheduleSchema`
-- [ ] `/shifts` → `ShiftSchema`
+- [x] `/organizations` → `OrganizationSchema`
+- [x] `/organizations/{orgId}/members` → `MembershipSchema`
+- [x] `/positions` → `PositionSchema`
+- [x] `/schedules` → `ScheduleSchema`
+- [x] `/shifts` → `ShiftSchema`
 ```
 
-- [ ] Document validation rules per collection
-- [ ] Document RBAC requirements (who can read/write)
-- [ ] Add schema evolution guidelines
-- [ ] Add examples of valid payloads
+- [x] Document validation rules per collection
+- [x] Document RBAC requirements (who can read/write)
+- [x] Add schema evolution guidelines
+- [x] Add examples of valid payloads
 
 ### 3.7 - Pre-commit Quality Gates
 
-- [ ] [BLOCK3.7] Add pre-commit hook enforcing quality checks
-  - [ ] Update `.husky/pre-commit` script
+- [x] [BLOCK3.7] Add pre-commit hook enforcing quality checks ✅
+  - [x] Update `.husky/pre-commit` script ✅
 
 ```text
-- [ ] Run `pnpm typecheck` (already exists)
-- [ ] Run `pnpm lint` (already exists)
-- [ ] Add `pnpm test:schemas` (new - runs Zod schema tests only)
-- [ ] Ensure all checks pass before allowing commit
+- [x] Run `pnpm typecheck` (already exists)
+- [x] Run `pnpm lint` (already exists)
+- [x] Add `pnpm test:schemas` (new - runs Zod schema tests only)
+- [x] Ensure all checks pass before allowing commit
 ```
 
 - [ ] Document pre-commit hooks in CONTRIBUTING.md

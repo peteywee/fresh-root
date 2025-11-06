@@ -2,14 +2,7 @@
 // Tags: P0, RBAC, CODE
 import { z } from "zod";
 
-export const OrgRole = z.enum([
-  "org_owner",
-  "admin",
-  "manager",
-  "scheduler",
-  "corporate",
-  "staff",
-]);
+export const OrgRole = z.enum(["org_owner", "admin", "manager", "scheduler", "corporate", "staff"]);
 export type OrgRole = z.infer<typeof OrgRole>;
 
 export const UserClaims = z.object({
