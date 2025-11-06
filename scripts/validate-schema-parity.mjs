@@ -6,7 +6,6 @@
 
 import fs from "node:fs/promises";
 import path from "node:path";
-import url from "node:url";
 
 const CWD = process.cwd();
 const FIRESTORE_RULES_PATH = path.join(CWD, "firestore.rules");
