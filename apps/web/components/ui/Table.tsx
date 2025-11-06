@@ -1,3 +1,5 @@
+// [P2][UI][CODE] Table
+// Tags: P2, UI, CODE
 import * as React from "react";
 
 export function Table({ className = "", ...props }: React.HTMLAttributes<HTMLTableElement>) {

@@ -2,6 +2,7 @@
 // Tags: P0, SECURITY, TEST, EDGE, VITEST
 import express from "express";
 import { describe, expect, it } from "vitest";
+
 import { applySecurity } from "../src/mw/security.js";
 
 // Minimal Env stub matching the shape used by applySecurity

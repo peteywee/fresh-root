@@ -1,4 +1,6 @@
 #!/usr/bin/env node
+// [P2][APP][CODE] Postinstall
+// Tags: P2, APP, CODE
 const { spawnSync } = require("child_process");
 const semver = require("semver");
 

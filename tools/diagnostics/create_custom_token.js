@@ -1,4 +1,6 @@
 #!/usr/bin/env node
+// [P0][AUTH][CODE] Create Custom Token
+// Tags: P0, AUTH, CODE
 // Create a custom token for a seeded emulator user and print it to stdout.
 const admin = require("firebase-admin");
 

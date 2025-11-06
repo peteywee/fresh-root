@@ -1,3 +1,5 @@
+// [P2][APP][CODE] Kv
+// Tags: P2, APP, CODE
 // Small IndexedDB KV store using idb.
 // Avoids localStorage perf/size pitfalls and is resilient across tabs.
 

@@ -1,3 +1,5 @@
+// [P1][OBSERVABILITY][LOGGING] Logger
+// Tags: P1, OBSERVABILITY, LOGGING
 export function log(msg: string) {
   console.log(`[agent] ${msg}`);
 }

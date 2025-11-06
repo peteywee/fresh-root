@@ -1,9 +1,13 @@
+# Objective
+
 ---
+
 name: SEC-001 Sessions & 2FA (Prod-grade auth)
 about: Enforce session-only auth + 2FA for privileged roles; ban dev headers in prod
 title: "[SEC-001] Sessions & 2FA"
 labels: ["security", "backend", "P0"]
 assignees: ["peteywee"]
+
 ---
 
 ## Objective

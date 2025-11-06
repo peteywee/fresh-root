@@ -1,3 +1,5 @@
+// [P0][TEST][TEST] Users Test tests
+// Tags: P0, TEST, TEST
 import { readFile } from "node:fs/promises";
 
 import { initializeTestEnvironment } from "@firebase/rules-unit-testing";

@@ -1,4 +1,6 @@
 #!/usr/bin/env node
+// [P2][APP][CODE] Filetag Server Enhanced
+// Tags: P2, APP, CODE
 // Enhanced MCP stdio server with improved usability, usefulness, and self-learning capabilities
 // - filetag.scan: Enhanced with smart defaults and caching
 // - filetag.report: Better markdown with insights and recommendations

@@ -1,3 +1,5 @@
+// [P1][API][CODE] Redis
+// Tags: P1, API, CODE
 import { createClient, type RedisClientType } from "redis";
 
 import type { CacheProvider } from "./provider.js";

@@ -1,3 +1,5 @@
+// [P0][TEST][TEST] Storage Fixed Spec tests
+// Tags: P0, TEST, TEST
 import { initializeTestEnvironment, RulesTestEnvironment } from '@firebase/rules-unit-testing';
 import fs from 'fs';
 import * as admin from 'firebase-admin';

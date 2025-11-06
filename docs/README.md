@@ -4,7 +4,7 @@
 
 A modern, production-ready Progressive Web App (PWA) for staff scheduling, built with Next.js, Firebase, and a monorepo architecture using pnpm.
 
-> **📖 [Complete Technical Documentation](./docs/COMPLETE_TECHNICAL_DOCUMENTATION.md)** - Comprehensive guide with architecture, troubleshooting, and reproducibility  
+> **📖 [Complete Technical Documentation](./docs/COMPLETE_TECHNICAL_DOCUMENTATION.md)** - Comprehensive guide with architecture, troubleshooting, and reproducibility
 > **🏗️ [Architecture Diagrams](./docs/ARCHITECTURE_DIAGRAMS.md)** - Visual system architecture with Mermaid diagrams
 
 ## Features
@@ -74,7 +74,7 @@ fresh-root/
    corepack enable
    ```
 
-2. **Clone and install**:
+1. **Clone and install**:
 
    ```bash
    git clone https://github.com/peteywee/fresh-root.git
@@ -82,7 +82,7 @@ fresh-root/
    pnpm install
    ```
 
-3. **Set up environment variables**:
+1. **Set up environment variables**:
 
    Create `.env.local` in `apps/web/`:
 
@@ -95,7 +95,7 @@ fresh-root/
    NEXT_PUBLIC_USE_EMULATORS=false
    ```
 
-4. **Start development server**:
+1. **Start development server**:
 
    ```bash
    pnpm dev
@@ -152,6 +152,7 @@ Every push/PR triggers automated checks:
 See [`.github/workflows/`](./.github/workflows/) for details.
 
 1. **Set up environment variables**:
+
    Create `.env.local` in `apps/web/` with your Firebase configuration:
 
    ```env
@@ -162,7 +163,7 @@ See [`.github/workflows/`](./.github/workflows/) for details.
    NEXT_PUBLIC_FIREBASE_APP_ID=your_app_id
    ```
 
-2. **Start development server**:
+1. **Start development server**:
 
    ```bash
    pnpm dev
@@ -175,14 +176,14 @@ See [`.github/workflows/`](./.github/workflows/) for details.
 ### 1. Create Firebase Project
 
 1. Go to [Firebase Console](https://console.firebase.google.com/)
-2. Create a new project or select existing one
-3. Enable Authentication, Firestore, and Storage
+1. Create a new project or select existing one
+1. Enable Authentication, Firestore, and Storage
 
 ### 2. Authentication Configuration
 
 1. Go to Authentication > Sign-in method
-2. Enable desired providers (Email/Password, Google, etc.)
-3. Configure authorized domains (add `localhost` for development)
+1. Enable desired providers (Email/Password, Google, etc.)
+1. Configure authorized domains (add `localhost` for development)
 
 ### 3. Firestore Security Rules
 
@@ -243,8 +244,8 @@ pnpm typecheck
 For local development with emulators:
 
 1. Install Firebase CLI: `npm install -g firebase-tools`
-2. Start emulators: `firebase emulators:start`
-3. The app will automatically connect to emulators when `NEXT_PUBLIC_USE_EMULATORS=true`
+1. Start emulators: `firebase emulators:start`
+1. The app will automatically connect to emulators when `NEXT_PUBLIC_USE_EMULATORS=true`
 
 ## Usage Guide
 
@@ -331,7 +332,7 @@ pnpm build
 ### Firebase Hosting
 
 1. Build the app: `pnpm build`
-2. Deploy to Firebase Hosting: `firebase deploy --only hosting`
+1. Deploy to Firebase Hosting: `firebase deploy --only hosting`
 
 ### Environment Variables
 
@@ -343,9 +344,9 @@ For production, set environment variables in Firebase Console or your hosting pl
 ## Contributing
 
 1. Follow the monorepo structure
-2. Use TypeScript for all new code
-3. Add Zod schemas for API validation
-4. Update this README for significant changes
+1. Use TypeScript for all new code
+1. Add Zod schemas for API validation
+1. Update this README for significant changes
 
 ## Architecture Decisions
 

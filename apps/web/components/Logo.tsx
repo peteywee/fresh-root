@@ -1,3 +1,5 @@
+// [P1][OBSERVABILITY][LOGGING] Logo
+// Tags: P1, OBSERVABILITY, LOGGING
 import Image from "next/image";
 
 export default function Logo({ className = "" }: { className?: string }) {

@@ -1,0 +1,61 @@
+# Auto-labeler config: apply guard:bypass to app runtime and directly adjacent files
+# This allows normal development to bypass the app-runtime-guard check automatically
+# Docs: https://github.com/actions/labeler
+
+# Apply guard:bypass for app runtime and directly adjacent changes
+"guard:bypass":
+  - changed-files:
+      - any-glob-to-any-file:
+          # Core app runtime
+          - "apps/web/app/**"
+          - "apps/web/components/**"
+          - "apps/web/middleware.ts"
+          - "apps/web/src/**"
+          - "apps/web/lib/**"
+
+          # Shared packages used by the app
+          - "packages/types/**"
+          - "packages/ui/**"
+          - "packages/config/**"
+
+          # Public assets
+          - "public/**"
+
+          # Backend service directly integrated with app runtime
+          - "services/api/**"
+
+          # Tests that validate runtime behavior
+          - "tests/rules/**"
+          - "tests/e2e/**"
+
+          # Documentation (technical, setup, process)
+          - "docs/**"
+
+          # Configuration files that change with runtime adjustments
+          - "package.json"
+          - "pnpm-workspace.yaml"
+          - "pnpm-lock.yaml"
+          - "tsconfig*.json"
+          - "eslint.config.mjs"
+          - "apps/web/eslint.config.mjs"
+          - "postcss.config.*"
+          - "apps/web/postcss.config.*"
+          - "tailwind.config.*"
+          - "apps/web/tailwind.config.*"
+          - "turbo.json"
+          - "jest.rules.config.js"
+          - "firebase.ci.json"
+          - "firebase.json"
+          - "firestore.rules"
+          - "storage.rules"
+
+          # CI/workflow files commonly touched alongside runtime changes
+          - ".github/workflows/ci.yml"
+          - ".github/workflows/app-runtime-guard.yml"
+          - ".github/workflows/eslint-ts-agent.yml"
+          - ".github/workflows/repo-agent.yml"
+
+          # Repo metadata (non-runtime but frequently changed)
+          - ".github/labels.yml"
+          - ".gitignore"
+          - "apps/web/proxy.ts"

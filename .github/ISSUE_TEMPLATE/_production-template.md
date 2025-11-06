@@ -1,9 +1,13 @@
+# Labels
+
 ---
+
 name: "🔧 Production Work Item"
 about: Standardized work ticket for production readiness
 title: "[WORK-ID] Title"
 labels: []
 assignees: [peteywee]
+
 ---
 
 ## Labels
@@ -27,7 +31,7 @@ Explain why this matters for production readiness.
 ## Commands
 
 ```bash
-# deterministic steps
+##  deterministic steps
 ```
 
 ## Acceptance Criteria

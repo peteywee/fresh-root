@@ -1,3 +1,5 @@
+// [P2][APP][CODE] Page page component
+// Tags: P2, APP, CODE
 // Server component: schedules list uses ISR + cache tag for rapid render.
 import { fetchRecentSchedulesLite } from "../../../lib/db";
 

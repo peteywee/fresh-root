@@ -1,3 +1,5 @@
+// [P0][APP][CODE] CreateSchedule
+// Tags: P0, APP, CODE
 "use server";
 
 type CreatePayload = { orgId: string; startDate: number };
@@ -8,6 +10,10 @@ type CreatePayload = { orgId: string; startDate: number };
  * In prod, swap to a signed session/token and add a gateway in the API to decode it.
  */
 export async function createSchedule(payload: CreatePayload) {
+  // Validate orgId to prevent SSRF (allow only alphanumeric, hyphen, underscore)
+  if (!/^[a-zA-Z0-9_-]+$/.test(payload.orgId)) {
+    throw new Error("Invalid orgId format");
+  }
   const token = {
     uid: "u1-dev",
     orgId: payload.orgId,

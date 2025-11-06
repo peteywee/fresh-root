@@ -1,3 +1,5 @@
+// [P2][APP][CODE] Reporting
+// Tags: P2, APP, CODE
 // Centralized error reporting with a safe no-op fallback.
 // If NEXT_PUBLIC_SENTRY_DSN is set and @sentry/nextjs is installed,
 // we capture exceptions there; otherwise we console.error.

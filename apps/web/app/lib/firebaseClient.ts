@@ -1,3 +1,5 @@
+// [P0][FIREBASE][FIREBASE] FirebaseClient
+// Tags: P0, FIREBASE, FIREBASE
 import { getApp, getApps, initializeApp, FirebaseOptions } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";

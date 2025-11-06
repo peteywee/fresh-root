@@ -1,3 +1,5 @@
+// [P2][APP][ENV] Tailwind Config
+// Tags: P2, APP, ENV
 import type { Config } from "tailwindcss";
 
 const config: Config = {

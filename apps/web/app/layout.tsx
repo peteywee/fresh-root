@@ -1,3 +1,5 @@
+// [P2][APP][CODE] Layout
+// Tags: P2, APP, CODE
 import type { Metadata, Viewport } from "next";
 import Link from "next/link";
 

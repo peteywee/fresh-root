@@ -85,41 +85,41 @@ NEXT_PUBLIC_SENTRY_DSN=your_sentry_dsn
 ### 1. Create Firebase Project
 
 1. Go to [Firebase Console](https://console.firebase.google.com/)
-2. Click "Create a project" or select an existing one
-3. Follow the setup wizard
+1. Click "Create a project" or select an existing one
+1. Follow the setup wizard
 
 ### 2. Enable Services
 
 #### Authentication
 
 1. Go to **Authentication** > **Sign-in method**
-2. Enable the following providers:
+1. Enable the following providers:
    - Email/Password
    - Google
    - Anonymous (optional)
-3. Configure authorized domains:
+1. Configure authorized domains:
    - Add `localhost` for development
    - Add your production domain
 
 #### Firestore Database
 
 1. Go to **Firestore Database**
-2. Click "Create database"
-3. Choose "Start in test mode" for development (configure security rules later)
+1. Click "Create database"
+1. Choose "Start in test mode" for development (configure security rules later)
 
 #### Storage
 
 1. Go to **Storage**
-2. Click "Get started"
-3. Choose "Start in test mode" for development
+1. Click "Get started"
+1. Choose "Start in test mode" for development
 
 ### 3. Get Firebase Configuration
 
 1. Go to **Project settings** (gear icon)
-2. Scroll to "Your apps" section
-3. Click "Add app" > Web app (</>) icon
-4. Register your app with a nickname
-5. Copy the config object values to your `.env.local`
+1. Scroll to "Your apps" section
+1. Click "Add app" > Web app (</>) icon
+1. Register your app with a nickname
+1. Copy the config object values to your `.env.local`
 
 ### 4. Deploy Security Rules
 
@@ -160,10 +160,11 @@ For local development with emulators:
    firebase emulators:start
    ```
 
-2. **Update environment**:
+1. **Update environment**:
+
    Set `NEXT_PUBLIC_USE_EMULATORS=true` in `.env.local`
 
-3. **Seed emulator data** (optional):
+1. **Seed emulator data** (optional):
 
 ```bash
 # Create seed script if needed
@@ -205,9 +206,9 @@ pnpm typecheck              # Type check web app
 ### Manual Testing
 
 1. **Authentication**: Test sign-in/sign-up flows
-2. **API Routes**: Test endpoints with tools like Postman or curl
-3. **Protected Routes**: Verify authentication guards work
-4. **Data Operations**: Test CRUD operations
+1. **API Routes**: Test endpoints with tools like Postman or curl
+1. **Protected Routes**: Verify authentication guards work
+1. **Data Operations**: Test CRUD operations
 
 ### API Testing Examples
 
@@ -240,7 +241,7 @@ pnpm build
    pnpm build
    ```
 
-2. **Deploy to Firebase Hosting**:
+1. **Deploy to Firebase Hosting**:
 
    ```bash
    firebase deploy --only hosting
@@ -251,7 +252,7 @@ pnpm build
 Set environment variables in Firebase Console:
 
 1. Go to **Functions** > **Configuration**
-2. Add environment variables under "Environment variables"
+1. Add environment variables under "Environment variables"
 
 Or use Firebase Hosting rewrites for server-side environment variables.
 
@@ -296,17 +297,17 @@ Or use Firebase Hosting rewrites for server-side environment variables.
 After setup is complete:
 
 1. **Explore the codebase**: Familiarize yourself with the project structure
-2. **Run the app**: Start development server and test features
-3. **Customize**: Modify components, add features, update styling
-4. **Deploy**: Set up CI/CD and deploy to production
+1. **Run the app**: Start development server and test features
+1. **Customize**: Modify components, add features, update styling
+1. **Deploy**: Set up CI/CD and deploy to production
 
 ## Development Workflow
 
 1. **Create feature branch**: `git checkout -b feature/your-feature`
-2. **Make changes**: Implement your feature
-3. **Test locally**: Run dev server and test thoroughly
-4. **Commit changes**: `git commit -m "Add your feature"`
-5. **Push and create PR**: Push to remote and create pull request
-6. **Code review**: Address feedback and merge
+1. **Make changes**: Implement your feature
+1. **Test locally**: Run dev server and test thoroughly
+1. **Commit changes**: `git commit -m "Add your feature"`
+1. **Push and create PR**: Push to remote and create pull request
+1. **Code review**: Address feedback and merge
 
 Happy coding! 🚀

@@ -1,3 +1,5 @@
+// [P2][APP][CODE] Page page component
+// Tags: P2, APP, CODE
 "use client";
 
 import React, { useState, useCallback } from "react";

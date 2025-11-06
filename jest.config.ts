@@ -1,3 +1,5 @@
+// [P2][APP][ENV] Jest Config
+// Tags: P2, APP, ENV
 import type { Config } from "jest";
 const config: Config = {
   testEnvironment: "jsdom",

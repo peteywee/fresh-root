@@ -1,3 +1,5 @@
+// [P2][UI][CODE] Inbox
+// Tags: P2, UI, CODE
 "use client";
 import React, { useMemo } from "react";
 

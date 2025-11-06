@@ -1,9 +1,13 @@
+# Objective
+
 ---
+
 name: UI-006 Design System Baseline (Tailwind + shadcn)
 about: Establish consistent tokens and primitives; remove ad-hoc UI
 title: "[UI-006] Design System Baseline"
 labels: ["ui", "frontend", "P1"]
 assignees: ["peteywee"]
+
 ---
 
 ## Objective

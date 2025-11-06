@@ -1,9 +1,13 @@
----
-name: Inspector data
-description: Refractor Specialist
+# My Agent
+
 ---
 
-# My Agent
+name: Inspector data
+description: Refractor Specialist
+
+---
+
+## My Agent (2)
 
 Assumptions / Qualifiers
 
@@ -52,6 +56,7 @@ Re-runs are no-op unless inputs change.
 Files to add (full contents)
 
 1. .github/workflows/repo-agent.yml
+
    name: Repo Agent (Monorepo Restructure + RBAC + Rules Tests)
 
 on:
@@ -85,79 +90,82 @@ github.event_name == 'workflow_dispatch' ||
 contains(github.event.comment.body, '/run-agent'))
 runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
+```text
+steps:
+- name: Checkout
+uses: actions/checkout@v4
+with:
+fetch-depth: 0
 
-      - name: Use PNPM
-        uses: pnpm/action-setup@v4
-        with:
-          version: 9
+- name: Use PNPM
+uses: pnpm/action-setup@v4
+with:
+version: 9
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'pnpm'
+- name: Setup Node
+uses: actions/setup-node@v4
+with:
+node-version: '20'
+cache: 'pnpm'
 
-      - name: Install deps
-        run: pnpm install --frozen-lockfile || pnpm install
+- name: Install deps
+run: pnpm install --frozen-lockfile || pnpm install
 
-      - name: Build agent (tsc)
-        run: pnpm -s run -w build:agent
-        continue-on-error: false
+- name: Build agent (tsc)
+run: pnpm -s run -w build:agent
+continue-on-error: false
 
-      - name: Run agent
-        id: agent
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          ISSUE_NUMBER: ${{ github.event.inputs.issue_number || '21' }}
-          AGENT_FORCE: ${{ github.event.inputs.force || 'false' }}
-          AGENT_PLAN_ONLY: ${{ github.event.inputs.plan_only || 'false' }}
-          GITHUB_REPOSITORY: ${{ github.repository }}
-        run: |
-          set -euo pipefail
-          node --enable-source-maps ./dist/agent/agent.cjs \
-            --issue "$ISSUE_NUMBER" \
-            $( [ "$AGENT_FORCE" = "true" ] && echo "--force" ) \
-            $( [ "$AGENT_PLAN_ONLY" = "true" ] && echo "--plan-only" )
+- name: Run agent
+id: agent
+env:
+GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+ISSUE_NUMBER: ${{ github.event.inputs.issue_number || '21' }}
+AGENT_FORCE: ${{ github.event.inputs.force || 'false' }}
+AGENT_PLAN_ONLY: ${{ github.event.inputs.plan_only || 'false' }}
+GITHUB_REPOSITORY: ${{ github.repository }}
+run: |
+set -euo pipefail
+node --enable-source-maps ./dist/agent/agent.cjs \
+--issue "$ISSUE_NUMBER" \
+$( [ "$AGENT_FORCE" = "true" ] && echo "--force" ) \
+$( [ "$AGENT_PLAN_ONLY" = "true" ] && echo "--plan-only" )
 
-      - name: Lint & Typecheck (root)
-        run: |
-          pnpm -s run -w lint || true
-          pnpm -s run -w typecheck || true
+- name: Lint & Typecheck (root)
+run: |
+pnpm -s run -w lint || true
+pnpm -s run -w typecheck || true
 
-      - name: Rules Tests
-        run: pnpm -s run -w test:rules
+- name: Rules Tests
+run: pnpm -s run -w test:rules
 
-      - name: Comment result to Issue
-        if: always()
-        uses: actions/github-script@v7
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const issue = Number(process.env.ISSUE_NUMBER || 21);
-            const runUrl = `https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
-            const status = core.getInput('job-status') || '${{ job.status }}';
-            const body = [
-              `### Repo Agent result: **${status.toUpperCase()}**`,
-              `- Workflow: ${runUrl}`,
-              `- Plan-only: ${process.env.AGENT_PLAN_ONLY}`,
-              `- Force: ${process.env.AGENT_FORCE}`,
-              `- Commit: ${context.sha}`,
-              '',
-              'If this failed, open the logs and check the agent step for details.'
-            ].join('\n');
-            await github.rest.issues.createComment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: issue,
-              body
-            });
+- name: Comment result to Issue
+if: always()
+uses: actions/github-script@v7
+with:
+github-token: ${{ secrets.GITHUB_TOKEN }}
+script: |
+const issue = Number(process.env.ISSUE_NUMBER || 21);
+const runUrl = `https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+const status = core.getInput('job-status') || '${{ job.status }}';
+const body = [
+`### Repo Agent result: **${status.toUpperCase()}**`,
+`- Workflow: ${runUrl}`,
+`- Plan-only: ${process.env.AGENT_PLAN_ONLY}`,
+`- Force: ${process.env.AGENT_FORCE}`,
+`- Commit: ${context.sha}`,
+'',
+'If this failed, open the logs and check the agent step for details.'
+].join('\n');
+await github.rest.issues.createComment({
+owner: context.repo.owner,
+repo: context.repo.repo,
+issue_number: issue,
+body
+});
+```
 
-2. package.json (root) — add scripts and dev deps
+1. package.json (root) — add scripts and dev deps
+
    {
    "name": "fresh-root",
    "private": true,
@@ -181,7 +189,8 @@ runs-on: ubuntu-latest
    }
    }
 
-3. scripts/agent/tsconfig.json
+1. scripts/agent/tsconfig.json
+
    {
    "extends": "../../tsconfig.json",
    "compilerOptions": {
@@ -198,8 +207,10 @@ runs-on: ubuntu-latest
    "include": ["**/*.ts", "**/*.mts"]
    }
 
-4. scripts/agent/agent.mts
-   #!/usr/bin/env node
+1. scripts/agent/agent.mts
+
+   ## !/usr/bin/env node
+
    import { execa } from "execa";
    import { z } from "zod";
    import pRetry from "p-retry";
@@ -229,11 +240,11 @@ else if (a === "--issue") { issue = argv[++i]; }
 return ArgSchema.parse({ issue, force, planOnly });
 }
 
-async function gitStatusShort(): Promise<string> {
+async function gitStatusShort(): `Promise`<string>`` {
 const { stdout } = await execa("git", ["status", "-s"]);
 return stdout;
 }
-async function gitRoot(): Promise<string> {
+async function gitRoot(): `Promise`<string>`` {
 const { stdout } = await execa("git", ["rev-parse", "--show-toplevel"]);
 return stdout.trim();
 }
@@ -287,7 +298,8 @@ err(e?.stack || String(e));
 process.exit(1);
 });
 
-5. scripts/agent/lib/logger.ts
+1. scripts/agent/lib/logger.ts
+
    export function log(msg: string) {
    console.log(`[agent] ${msg}`);
    }
@@ -301,7 +313,8 @@ process.exit(1);
    console.error(`\x1b[31m[err]\x1b[0m ${msg}`);
    }
 
-6. scripts/agent/tasks/restructure.ts
+1. scripts/agent/tasks/restructure.ts
+
    import { existsSync, mkdirSync, writeFileSync } from "node:fs";
    import { join } from "node:path";
 
@@ -341,7 +354,8 @@ return [
 ].join("\n");
 }
 
-7. scripts/agent/tasks/rbac.ts
+1. scripts/agent/tasks/rbac.ts
+
    import { writeFile } from "node:fs/promises";
    import { existsSync, mkdirSync } from "node:fs";
    import { join, dirname } from "node:path";
@@ -349,14 +363,14 @@ return [
 const RBAC_CONTENT = `import { z } from "zod";
 
 export const OrgRole = z.enum(["org_owner","admin","manager","scheduler","staff"]);
-export type OrgRole = z.infer<typeof OrgRole>;
+export type OrgRole = `z.infer<typeof OrgRole>`;
 
 export const UserClaims = z.object({
 uid: z.string(),
 orgId: z.string(),
 roles: z.array(OrgRole).nonempty()
 });
-export type UserClaims = z.infer<typeof UserClaims>;
+export type UserClaims = `z.infer<typeof UserClaims>`;
 
 export const Membership = z.object({
 orgId: z.string(),
@@ -365,7 +379,7 @@ roles: z.array(OrgRole),
 createdAt: z.number(),
 updatedAt: z.number()
 });
-export type Membership = z.infer<typeof Membership>;
+export type Membership = `z.infer<typeof Membership>`;
 `;
 
 export async function ensureRBAC(
@@ -432,7 +446,8 @@ await write(tsconfig, JSON.stringify(content, null, 2));
 }
 }
 
-8. scripts/agent/tasks/rules.ts
+1. scripts/agent/tasks/rules.ts
+
    import { writeFile } from "node:fs/promises";
    import { existsSync, mkdirSync } from "node:fs";
    import { join, dirname } from "node:path";
@@ -454,84 +469,90 @@ function sameOrg(resourceOrgId) {
 return isSignedIn() && userOrgId() == resourceOrgId;
 }
 
-    // orgs — read by members, write by org_owner only (or server)
-    match /orgs/{orgId} {
-      allow read: if isSignedIn() && sameOrg(orgId);
-      allow write: if isSignedIn() && userRoles().hasAny(['org_owner']);
-    }
+```text
+// orgs — read by members, write by org_owner only (or server)
+match /orgs/{orgId} {
+allow read: if isSignedIn() && sameOrg(orgId);
+allow write: if isSignedIn() && userRoles().hasAny(['org_owner']);
+}
 
-    // memberships — read own org, write manager+ within same org
-    match /memberships/{mid} {
-      allow read: if isSignedIn();
-      allow create, update, delete: if isManager() && sameOrg(request.resource.data.orgId);
-    }
+// memberships — read own org, write manager+ within same org
+match /memberships/{mid} {
+allow read: if isSignedIn();
+allow create, update, delete: if isManager() && sameOrg(request.resource.data.orgId);
+}
 
-    // schedules — manager+ can write within org, staff can read within org
-    match /orgs/{orgId}/schedules/{sid} {
-      allow read: if sameOrg(orgId);
-      allow create, update, delete: if isManager() && sameOrg(orgId);
-    }
+// schedules — manager+ can write within org, staff can read within org
+match /orgs/{orgId}/schedules/{sid} {
+allow read: if sameOrg(orgId);
+allow create, update, delete: if isManager() && sameOrg(orgId);
+}
 
-    // shifts — similar to schedules
-    match /orgs/{orgId}/schedules/{sid}/shifts/{shid} {
-      allow read: if sameOrg(orgId);
-      allow create, update, delete: if isManager() && sameOrg(orgId);
-    }
+// shifts — similar to schedules
+match /orgs/{orgId}/schedules/{sid}/shifts/{shid} {
+allow read: if sameOrg(orgId);
+allow create, update, delete: if isManager() && sameOrg(orgId);
+}
 
-    // positions, zones — manager+ write, all members read
-    match /orgs/{orgId}/{collName=positions|zones}/{docId} {
-      allow read: if sameOrg(orgId);
-      allow create, update, delete: if isManager() && sameOrg(orgId);
-    }
+// positions, zones — manager+ write, all members read
+match /orgs/{orgId}/{collName=positions|zones}/{docId} {
+allow read: if sameOrg(orgId);
+allow create, update, delete: if isManager() && sameOrg(orgId);
+}
 
-    // users profile (public minimal) — read own, write own
-    match /users/{uid} {
-      allow read: if isSignedIn() && request.auth.uid == uid;
-      allow write: if isSignedIn() && request.auth.uid == uid;
-    }
+// users profile (public minimal) — read own, write own
+match /users/{uid} {
+allow read: if isSignedIn() && request.auth.uid == uid;
+allow write: if isSignedIn() && request.auth.uid == uid;
+}
+```
 
 }
 }
 `;
 
 const FIRESTORE_INDEXES = `{
-  "indexes": [
-    {
-      "collectionGroup": "schedules",
-      "queryScope": "COLLECTION_GROUP",
-      "fields": [
-        { "fieldPath": "orgId", "order": "ASCENDING" },
-        { "fieldPath": "startDate", "order": "ASCENDING" }
-      ]
-    },
-    {
-      "collectionGroup": "shifts",
-      "queryScope": "COLLECTION_GROUP",
-      "fields": [
-        { "fieldPath": "orgId", "order": "ASCENDING" },
-        { "fieldPath": "start", "order": "ASCENDING" }
-      ]
-    }
-  ],
-  "fieldOverrides": []
+"indexes": [
+
+```text
+{
+"collectionGroup": "schedules",
+"queryScope": "COLLECTION_GROUP",
+"fields": [
+{ "fieldPath": "orgId", "order": "ASCENDING" },
+{ "fieldPath": "startDate", "order": "ASCENDING" }
+]
+},
+{
+"collectionGroup": "shifts",
+"queryScope": "COLLECTION_GROUP",
+"fields": [
+{ "fieldPath": "orgId", "order": "ASCENDING" },
+{ "fieldPath": "start", "order": "ASCENDING" }
+]
+}
+```
+
+],
+"fieldOverrides": []
 }
 `;
 
 const CACHE_PROVIDER = `export interface CacheProvider {
-get<T = unknown>(key: string): Promise<T | null>;
-set<T = unknown>(key: string, value: T, ttlSec?: number): Promise<void>;
-del(key: string): Promise<void>;
+`get<T = unknown>`(key: string): `Promise<T | null>`;
+`set<T = unknown>`(key: string, value: T, ttlSec?: number): `Promise`<void>``;
+del(key: string): `Promise`<void>``;
 }
 
 export class InMemoryCache implements CacheProvider {
-private store = new Map<string, { v: unknown; exp: number | null }>();
-async get<T>(key: string): Promise<T | null> {
+private store = new `Map<string, { v: unknown; exp: number | null }>`();
+async `get`<T>``(key: string): `Promise<T | null>` {
 const e = this.store.get(key);
 if (!e) return null;
 if (e.exp && Date.now() > e.exp) { this.store.delete(key); return null; }
 return e.v as T;
 }
-async set<T>(key: string, value: T, ttlSec?: number) {
+async `set`<T>``(key: string, value: T, ttlSec?: number) {
 const exp = ttlSec ? Date.now() + ttlSec \* 1000 : null;
 this.store.set(key, { v: value, exp });
 }
@@ -546,8 +567,8 @@ roles: string[];
 };
 
 export interface AuthContext {
-currentUser(): Promise<UserToken | null>;
-requireManager(): Promise<UserToken>;
+currentUser(): `Promise<UserToken | null>`;
+requireManager(): `Promise`<UserToken>``;
 }
 `;
 
@@ -579,6 +600,7 @@ const readme = `# Firestore Rules Tests
 - Uses @firebase/rules-unit-testing
 - See \`schedules.test.ts\` for patterns
 - Run: \`pnpm test:rules\`
+
   `;
   if (!planOnly) {
   const dir = dirname(readmePath);
@@ -635,7 +657,8 @@ if (!existsSync(testPath) || force) await writeFile(testPath, testContent, "utf8
 }
 }
 
-9. tests/rules/vitest.config.ts
+1. tests/rules/vitest.config.ts
+
    import { defineConfig } from "vitest/config";
 
 export default defineConfig({
@@ -647,19 +670,19 @@ testTimeout: 20000
 }
 });
 
-10. .env.example (additions for clarity)
+1. .env.example (additions for clarity)
 
-# Firebase / Local Testing
+## Firebase / Local Testing
 
 FIREBASE_PROJECT_ID=demo-fresh
 
-# Optional: Redis URL (future)
+## Optional: Redis URL (future)
 
 REDIS_URL=redis://localhost:6379
 
-11. apps/web/README.md (server-first guidance)
+1. apps/web/README.md (server-first guidance)
 
-# apps/web
+## apps/web
 
 Server-first Next.js (App Router).
 
@@ -669,11 +692,11 @@ Server-first Next.js (App Router).
 
 Commands (deterministic)
 
-# 1) Create a working branch
+## 1) Create a working branch
 
 git checkout -b chore/repo-agent-rbac
 
-# 2) Add files
+## 2) Add files
 
 git add .github/workflows/repo-agent.yml \
  package.json \
@@ -690,27 +713,27 @@ git add .github/workflows/repo-agent.yml \
  firestore.indexes.json \
  .env.example
 
-# 3) Commit
+## 3) Commit
 
 git commit -m "feat(agent): GitHub repo agent for monorepo restructure, RBAC schemas, Firestore rules + tests, caching/auth stubs"
 
-# 4) Push
+## 4) Push
 
 git push -u origin chore/repo-agent-rbac
 
-# 5) Run agent manually (optional, local)
+## 5) Run agent manually (optional, local)
 
 pnpm install
 pnpm build:agent
 pnpm run:agent --issue 21 --plan-only
 
-# 6) Trigger from GitHub UI
+## 6) Trigger from GitHub UI
 
-# Actions → Repo Agent → Run workflow (issue=21, plan_only=false, force=false)
+## Actions → Repo Agent → Run workflow (issue=21, plan_only=false, force=false)
 
-# Or comment in Issue #21:
+## Or comment in Issue #21
 
-# /run-agent
+## /run-agent
 
 Risks & Mitigations
 

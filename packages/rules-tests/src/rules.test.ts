@@ -1,3 +1,5 @@
+// [P0][TEST][TEST] Rules Test tests
+// Tags: P0, TEST, TEST
 import { assertFails, assertSucceeds, initializeTestEnvironment } from "@firebase/rules-unit-testing";
 import type { RulesTestEnvironment } from "@firebase/rules-unit-testing";
 import { doc, getDoc, setDoc } from "firebase/firestore";

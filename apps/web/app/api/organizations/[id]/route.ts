@@ -1,3 +1,5 @@
+// [P0][API][CODE] Route API route handler
+// Tags: P0, API, CODE
 import { NextRequest } from "next/server";
 import { z } from "zod";
 

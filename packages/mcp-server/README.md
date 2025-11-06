@@ -1,3 +1,5 @@
+# Title
+
 MCP Server — Fresh Schedules
 Exposes read-only repo tools to assistants via Model Context Protocol.
 Tools

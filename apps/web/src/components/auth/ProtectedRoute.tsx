@@ -1,3 +1,5 @@
+// [P0][AUTH][CODE] ProtectedRoute
+// Tags: P0, AUTH, CODE
 "use client";
 import { useRouter } from "next/navigation";
 import React, { useEffect, type ReactNode } from "react";

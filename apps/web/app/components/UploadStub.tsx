@@ -1,3 +1,5 @@
+// [P2][UI][CODE] UploadStub
+// Tags: P2, UI, CODE
 "use client";
 
 import React from "react";

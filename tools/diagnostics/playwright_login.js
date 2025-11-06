@@ -1,3 +1,5 @@
+// [P0][OBSERVABILITY][LOGGING] Playwright Login
+// Tags: P0, OBSERVABILITY, LOGGING
 const playwright = require("playwright");
 
 (async () => {

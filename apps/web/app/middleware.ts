@@ -1,3 +1,5 @@
+// [P2][API][MIDDLEWARE] Middleware middleware
+// Tags: P2, API, MIDDLEWARE
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 

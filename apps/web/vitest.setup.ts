@@ -1,3 +1,5 @@
+// [P0][TEST][TEST] Vitest Setup tests
+// Tags: P0, TEST, TEST
 import "@testing-library/jest-dom/vitest";
 import { cleanup } from "@testing-library/react";
 import { afterEach, vi } from "vitest";

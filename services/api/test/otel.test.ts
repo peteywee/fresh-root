@@ -1,6 +1,7 @@
 // [P1][RELIABILITY][TEST] OpenTelemetry initialization tests
 // Tags: P1, RELIABILITY, TEST, OTEL, VITEST
 import { beforeEach, describe, expect, it, vi } from "vitest";
+
 import { initOTel, getTraceContext } from "../src/obs/otel.js";
 
 describe("OpenTelemetry", () => {

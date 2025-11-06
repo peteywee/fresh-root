@@ -1,3 +1,5 @@
+// [P0][APP][CODE] Db
+// Tags: P0, APP, CODE
 // Server-first Firestore read helpers with cache tags.
 // NOTE: Keep this file importable by server components only.
 import { initializeApp } from "firebase/app";

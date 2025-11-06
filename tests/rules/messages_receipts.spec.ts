@@ -1,3 +1,5 @@
+// [P0][TEST][TEST] Messages Receipts Spec tests
+// Tags: P0, TEST, TEST
 import { initializeTestEnvironment, RulesTestEnvironment } from '@firebase/rules-unit-testing';
 import fs from 'fs';
 

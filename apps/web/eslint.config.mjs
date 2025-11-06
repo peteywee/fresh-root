@@ -1,3 +1,5 @@
+// [P2][APP][ENV] Eslint Config
+// Tags: P2, APP, ENV
 import typescriptEslint from "@typescript-eslint/eslint-plugin";
 import typescriptParser from "@typescript-eslint/parser";
 import reactHooks from "eslint-plugin-react-hooks";

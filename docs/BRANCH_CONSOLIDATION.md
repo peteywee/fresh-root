@@ -1,8 +1,8 @@
 # Branch Consolidation Summary
 
-**Date:** October 31, 2025  
-**Branch:** `consolidate/all-features`  
-**Target:** `dev`  
+**Date:** October 31, 2025
+**Branch:** `consolidate/all-features`
+**Target:** `dev`
 **PR:** #29
 
 ## Overview
@@ -18,27 +18,27 @@ Successfully consolidated all feature branches (except `fbs` and `studio/sync-*`
    - Resolution: Kept `dev` version for test files
    - Conflicts: `auth-helpers.spec.ts`, `vitest.d.ts`
 
-2. **chore/eslint-ts-agent**
+1. **chore/eslint-ts-agent**
    - Status: Merged with conflicts
    - Resolution: Kept `dev` version
    - Conflicts: `.github/workflows/eslint-ts-agent.yml`
 
-3. **chore/temporary-allowlist**
+1. **chore/temporary-allowlist**
    - Status: Already up to date (no changes needed)
 
-4. **copilot/fix-card-test-assertion-error**
+1. **copilot/fix-card-test-assertion-error**
    - Status: Already up to date (no changes needed)
 
-5. **copilot/restructure-monorepo-and-rbac**
+1. **copilot/restructure-monorepo-and-rbac**
    - Status: Merged with conflicts
    - Resolution: Kept `dev` version using `-X ours` strategy
    - Conflicts: Multiple files including `pnpm-lock.yaml`, agent files, rules, configs
    - Note: `pnpm-lock.yaml` was deleted in source branch, kept ours
 
-6. **copilot/restructure-monorepo-rbac-implementation**
+1. **copilot/restructure-monorepo-rbac-implementation**
    - Status: Already up to date (no changes needed)
 
-7. **feat/server-first-api-rbac** (local branch)
+1. **feat/server-first-api-rbac** (local branch)
    - Status: Already up to date (no changes needed)
 
 ### Excluded Branches (As Requested)
@@ -57,9 +57,9 @@ All merge conflicts were resolved using the **"keep dev version"** strategy beca
    - ESLint import order fixes
    - Next.js API updates
 
-2. **Other branches are stale**: Most branches showed "Already up to date", indicating their changes were already incorporated into dev
+1. **Other branches are stale**: Most branches showed "Already up to date", indicating their changes were already incorporated into dev
 
-3. **Safe resolution**: Using `-X ours` (dev's version) ensures we don't lose recent fixes
+1. **Safe resolution**: Using `-X ours` (dev's version) ensures we don't lose recent fixes
 
 ## Branches Deleted
 
@@ -118,7 +118,7 @@ gh pr create --base dev --head consolidate/all-features \
 
 The `consolidate/all-features` branch contains these new commits on top of `dev`:
 
-```
+```text
 f3e2ee2 merge: restructure-monorepo-and-rbac (kept dev version including pnpm-lock.yaml)
 830a470 merge: eslint-ts-agent (kept dev version)
 44a94d5 merge: ci-tests-redis-docker-middleware (kept dev version for conflicts)
@@ -148,9 +148,9 @@ a6959ce Initial plan
 ## Next Steps
 
 1. **Review PR #29** - Check the consolidated changes
-2. **Merge PR #29** - Merge `consolidate/all-features` → `dev`
-3. **Clean up `consolidate/all-features`** - Delete the branch after merge
-4. **Prepare for main** - Once dev is consolidated and stable, create PR: `dev` → `main`
+1. **Merge PR #29** - Merge `consolidate/all-features` → `dev`
+1. **Clean up `consolidate/all-features`** - Delete the branch after merge
+1. **Prepare for main** - Once dev is consolidated and stable, create PR: `dev` → `main`
 
 ## Repository State After Consolidation
 
@@ -172,7 +172,7 @@ a6959ce Initial plan
 ## Benefits
 
 1. **Cleaner Repository**: Reduced from 12+ branches to 5 active branches
-2. **Clear History**: All feature work consolidated with clear merge commits
-3. **No Lost Work**: All code preserved, conflicts resolved conservatively
-4. **Ready for Production**: Clean path from dev → main after testing
-5. **Maintained Critical Branches**: `fbs` and `studio/sync-*` preserved as requested
+1. **Clear History**: All feature work consolidated with clear merge commits
+1. **No Lost Work**: All code preserved, conflicts resolved conservatively
+1. **Ready for Production**: Clean path from dev → main after testing
+1. **Maintained Critical Branches**: `fbs` and `studio/sync-*` preserved as requested

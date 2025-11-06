@@ -1,9 +1,13 @@
+# Objective
+
 ---
+
 name: SEC-002 Edge Controls (rate limits, WAF, caps)
 about: Add rate-limit, Helmet, body-size caps, CORS; throttle abuse and reduce attack surface
 title: "[SEC-002] Edge Controls"
 labels: ["security", "platform", "backend", "P0"]
 assignees: ["peteywee"]
+
 ---
 
 ## Objective
