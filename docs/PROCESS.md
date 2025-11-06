@@ -6,9 +6,9 @@ Motto: 5 < Live
 ## 1) Change Control
 
 1. Proposal: explicit redline/new text.
-2. Impact Analysis: list affected sections/files.
-3. Approval: commit docs; bump version.
-4. Implementation: code strictly per updated spec.
+1. Impact Analysis: list affected sections/files.
+1. Approval: commit docs; bump version.
+1. Implementation: code strictly per updated spec.
 
 ### 1.1 Reviewer Empowerment (Bible Amend/Append)
 
@@ -16,7 +16,8 @@ A Code Reviewer **may** add a section to the Bible only if:
 
 - Provides an **exhaustive, definitive argument** linked to GOALS/OKRs & SCOPE.
 - Includes acceptance criteria, risks, and mitigations.
-- Links to PR where implementation will occur.  
+- Links to PR where implementation will occur.
+
   Upon approval, the reviewer **amends/appends** the Bible in the same PR.
 
 ## 2) Definition of Done (DoD)

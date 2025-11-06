@@ -20,7 +20,7 @@ But `test:rules` in `package.json` already wraps the test command:
 
 This created **nested emulator instances** trying to bind to the same ports (8080, 9199, 4400, 4500), causing:
 
-```
+```text
 ⚠  firestore: Port 8080 is not open on localhost (127.0.0.1), could not start Firestore Emulator.
 Error: Could not start Firestore Emulator, port taken.
 ```
@@ -68,7 +68,7 @@ Added GitHub Actions cache to avoid re-downloading emulator JARs on every run:
 
 This addresses the warning:
 
-```
+```text
 ⚠  It appears you are running in a CI environment. You can avoid downloading
    the Firestore Emulator repeatedly by caching the /home/runner/.cache/firebase/emulators directory.
 ```
@@ -134,8 +134,8 @@ firebase emulators:exec --only firestore,storage "pnpm test:rules"
 After pushing, check:
 
 1. Emulators start without port conflicts
-2. Rules tests run successfully
-3. Emulator cache is used on subsequent runs (faster startup)
+1. Rules tests run successfully
+1. Emulator cache is used on subsequent runs (faster startup)
 
 ## Port Configuration
 
@@ -160,7 +160,7 @@ These ports must remain available during test execution. Nesting emulator calls 
 ## Best Practices
 
 1. **Never nest `emulators:exec` calls**
-2. Use `test:rules` for CI/automated testing (manages emulators automatically)
-3. Use `test:rules:dev` for local development when emulators are already running
-4. Cache emulator binaries in CI to improve speed
-5. Ensure ports are available before starting emulators
+1. Use `test:rules` for CI/automated testing (manages emulators automatically)
+1. Use `test:rules:dev` for local development when emulators are already running
+1. Cache emulator binaries in CI to improve speed
+1. Ensure ports are available before starting emulators

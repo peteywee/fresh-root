@@ -1,9 +1,13 @@
+# Objective
+
 ---
+
 name: RULE-005 Zod Contracts & Rules Matrix
 about: Finalize Zod schemas and expand Firestore rules tests (success + denial matrices)
 title: "[RULE-005] Zod & Rules Matrix"
 labels: ["rules", "backend", "P1"]
 assignees: ["peteywee"]
+
 ---
 
 ## Objective

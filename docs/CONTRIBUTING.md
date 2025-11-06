@@ -38,14 +38,14 @@ We are committed to providing a welcoming and inclusive environment. Please:
    cd fresh-root
    ```
 
-2. **Install dependencies**:
+1. **Install dependencies**:
 
    ```bash
    corepack enable
    pnpm install
    ```
 
-3. **Set up environment variables**:
+1. **Set up environment variables**:
 
    ```bash
    cd apps/web
@@ -53,7 +53,8 @@ We are committed to providing a welcoming and inclusive environment. Please:
    # Edit .env.local with your Firebase config
    ```
 
-4. **Start development server**:
+1. **Start development server**:
+
    ```bash
    pnpm dev
    ```
@@ -72,7 +73,7 @@ We are committed to providing a welcoming and inclusive environment. Please:
 
 We follow the [Conventional Commits](https://www.conventionalcommits.org/) specification:
 
-```
+```text
 <type>(<scope>): <description>
 
 [optional body]
@@ -92,7 +93,7 @@ We follow the [Conventional Commits](https://www.conventionalcommits.org/) speci
 
 **Examples**:
 
-```
+```text
 feat(auth): add Google OAuth sign-in
 fix(api): handle empty response in user profile endpoint
 docs(readme): update installation instructions
@@ -124,7 +125,7 @@ test(components): add tests for Button component
 
 ### Code Organization
 
-```
+```text
 apps/web/
 ├── app/
 │   ├── api/           # API routes
@@ -211,19 +212,21 @@ Fix all linting and type errors before submitting a PR.
 ## Pull Request Process
 
 1. **Create a branch** from `main` or `develop`
-2. **Make your changes** following the coding standards
-3. **Write tests** for new functionality
-4. **Update documentation** if needed
-5. **Run tests and linting**:
+1. **Make your changes** following the coding standards
+1. **Write tests** for new functionality
+1. **Update documentation** if needed
+1. **Run tests and linting**:
+
    ```bash
    pnpm test
    pnpm lint
    pnpm typecheck
    ```
-6. **Commit your changes** with conventional commit messages
-7. **Push to your fork** and create a pull request
-8. **Fill out the PR template** completely
-9. **Wait for review** and address feedback
+
+1. **Commit your changes** with conventional commit messages
+1. **Push to your fork** and create a pull request
+1. **Fill out the PR template** completely
+1. **Wait for review** and address feedback
 
 ### PR Requirements
 

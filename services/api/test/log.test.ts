@@ -1,6 +1,7 @@
 // [P1][RELIABILITY][TEST] Unit tests for structured JSON logger
 // Tags: P1, RELIABILITY, TEST, LOGGING, VITEST
 import { beforeEach, describe, expect, it, vi } from "vitest";
+
 import { Logger } from "../src/obs/log.js";
 
 describe("Logger", () => {

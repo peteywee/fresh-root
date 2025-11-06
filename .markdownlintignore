@@ -1,0 +1,14 @@
+# Ignore heavy or generated content directories
+
+node_modules/
+.next/
+dist/
+build/
+coverage/
+.turbo/
+.firebase/
+.pnpm-store/
+
+## Ignore MDX files (handled by other tooling)
+
+**/*.mdx

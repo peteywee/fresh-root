@@ -51,7 +51,7 @@ jobs:
         with:
           commit_message: "chore(eslint): auto-fix lint errors"
           branch: ${{ github.head_ref }}
-          push: 'true'
+          push: "true"
 
       - name: Restore stashed changes (if any)
         if: always()

@@ -4,10 +4,9 @@
     "esbenp.prettier-vscode",
     "ZixuanChen.vitest-explorer",
     "ms-vscode.js-debug-nightly",
-    "redhat.vscode-yaml"
+    "redhat.vscode-yaml",
+    "DavidAnson.vscode-markdownlint",
+    "streetsidesoftware.code-spell-checker"
   ],
-  "unwantedRecommendations": [
-    "github.vscode-pull-request-github",
-    "bradlc.vscode-tailwindcss"
-  ]
+  "unwantedRecommendations": ["github.vscode-pull-request-github", "bradlc.vscode-tailwindcss"]
 }

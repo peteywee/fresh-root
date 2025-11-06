@@ -1,4 +1,51 @@
 {
+  // ---------- Basic whitespace & Markdown ----------
+  "editor.insertSpaces": true,
+  "files.trimTrailingWhitespace": true,
+  "[markdown]": {
+    "editor.tabSize": 2,
+    "editor.insertSpaces": true,
+    "files.trimTrailingWhitespace": true
+  },
+  "markdownlint.run": "onSave",
+  "markdownlint.ignore": [
+    "**/node_modules/**",
+    "**/.next/**",
+    "**/dist/**",
+    "**/build/**",
+    "**/coverage/**",
+    "**/.turbo/**",
+    "**/.firebase/**",
+    "**/.pnpm-store/**",
+    "**/*.mdx",
+    "**/.markdownlintignore"
+  ],
+
+  // ---------- Spelling dictionary ----------
+  "cSpell.words": [
+    "filetag",
+    "undici",
+    "Vitest",
+    "modelcontextprotocol",
+    "domexception",
+    "ghaction",
+    "firebaseui",
+    "pglite",
+    "reviewdog",
+    "Autobuild",
+    "SARIF",
+    "BUILDKIT",
+    // Repo- and tooling-specific terms
+    "peteywee",
+    "mapfile",
+    "codegen",
+    "Dockerized",
+    "ECONNREFUSED",
+    "blockquotes",
+    "punct",
+    "Punct"
+  ],
+
   // ---------- Performance & Indexing ----------
   "files.exclude": {
     "**/.git": true,
@@ -36,13 +83,13 @@
   "typescript.disableAutomaticTypeAcquisition": true,
   "typescript.suggest.autoImports": true,
   "typescript.preferences.importModuleSpecifier": "shortest",
+  "typescript.tsdk": "node_modules/typescript/lib",
 
   // ---------- ESLint ----------
   "eslint.useFlatConfig": true,
   "eslint.enable": true,
   "eslint.validate": ["javascript", "javascriptreact", "typescript", "typescriptreact"],
   "eslint.codeActionsOnSave.rules": null,
-  "eslint.packageManager": "pnpm",
   "eslint.probe": ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx"],
   "eslint.runtime": "node",
 
@@ -54,16 +101,6 @@
   },
   "prettier.enable": true,
 
-  // Use workspace TypeScript so module resolution matches project
-  "typescript.tsdk": "node_modules/typescript/lib",
-
-  // ---------- Markdownlint ----------
-  "markdownlint.config": {
-    "MD040": true,
-    "MD022": true,
-    "MD031": true
-  },
-
   // ---------- Testing (Vitest) ----------
   "vitest.commandLine": "pnpm vitest -- --watch=false",
   "vitest.runAllTestsOnLaunch": false,
@@ -73,10 +110,8 @@
   "testing.openTesting": "never",
   "testing.saveBeforeTest": "allEditorsInActiveGroup",
 
-  // ---------- JS/TS Editor Quality of Life ----------
-  "editor.quickSuggestions": {
-    "strings": true
-  },
+  // ---------- JS/TS Editor QoL ----------
+  "editor.quickSuggestions": { "strings": true },
   "editor.suggest.snippetsPreventQuickSuggestions": false,
   "editor.inlineSuggest.enabled": true,
   "editor.parameterHints.enabled": true,
@@ -91,7 +126,7 @@
     "NODE_OPTIONS": "--max-old-space-size=4096"
   },
 
-  // ---------- YAML/JSON (for firebase.json, rules, etc.) ----------
+  // ---------- YAML/JSON ----------
   "yaml.format.enable": true,
   "yaml.validate": true,
   "json.maxItemsComputed": 5000,
@@ -103,11 +138,9 @@
   "workbench.tree.indent": 14,
   "workbench.editor.enablePreview": false,
   "workbench.startupEditor": "none",
-
-  // ---------- Breadcrumbs & File Nav ----------
   "breadcrumbs.enabled": true,
 
-  // ---------- Tailwind CSS: disable heavy code actions; keep completion only ----------
+  // ---------- Tailwind CSS ----------
   "tailwindCSS.emmetCompletions": false,
   "tailwindCSS.hovers": true,
   "tailwindCSS.lint.cssConflict": "ignore",
@@ -120,7 +153,7 @@
     ["cva\\(([^)]*)\\)", "(?:'|\"|`)([^'\"`]*)(?:'|\"|`)"]
   ],
 
-  // ---------- GitHub extensions: keep them idle by default ----------
+  // ---------- GitHub ----------
   "github.prs.defaultQuery": "is:open author:@me",
   "github.gitAuthentication": true
 }

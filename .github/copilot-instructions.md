@@ -1,4 +1,4 @@
-## How to be immediately useful in this repository
+# How to be immediately useful in this repository
 
 This repo is a pnpm monorepo for a Next.js PWA backed by Firebase (auth, Firestore, Storage). The guidance below focuses on concrete, discoverable patterns and commands an AI coding agent should use when making or reviewing changes.
 
@@ -19,10 +19,14 @@ Code owner: pateick craven
   - Dev server: from repo root run `pnpm dev` (starts web on :3000). You can also `cd apps/web && pnpm dev`.
   - Use Firebase emulators locally: set `NEXT_PUBLIC_USE_EMULATORS=true` in `apps/web/.env.local` and run `firebase emulators:start` from the project root. Seeder: `pnpm tsx scripts/seed/seed.emulator.ts` (or `pnpm sim:auth` for auth sim).
   - Tests:
-    - Unit/fast tests: `pnpm test` (runs Vitest).
-    - Rules tests (Firestore/storage): `pnpm test:rules` — runs Jest with `jest.rules.config.js` (matches `tests/rules/**/*.spec.ts`).
-    - E2E: `pnpm test:e2e` (Playwright).
-  - Typecheck: `pnpm typecheck` (root runs across workspaces).
+
+```text
+- Unit/fast tests: `pnpm test` (runs Vitest).
+- Rules tests (Firestore/storage): `pnpm test:rules` — runs Jest with `jest.rules.config.js` (matches `tests/rules/**/*.spec.ts`).
+- E2E: `pnpm test:e2e` (Playwright).
+```
+
+- Typecheck: `pnpm typecheck` (root runs across workspaces).
 
 - Project-specific conventions & patterns
   - Zod-first API validation: API routes validate inputs with Zod; prefer reusing `app/api/_shared/validation.ts` schemas when adding endpoints.

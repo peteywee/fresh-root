@@ -74,7 +74,8 @@ export function initOTel(config: OTelConfig): void {
       if (serviceVersion) attrs.push(`service.version=${serviceVersion}`);
       if (attrs.length) {
         const prior = process.env.OTEL_RESOURCE_ATTRIBUTES?.trim();
-        process.env.OTEL_RESOURCE_ATTRIBUTES = prior && prior.length ? `${prior},${attrs.join(",")}` : attrs.join(",");
+        process.env.OTEL_RESOURCE_ATTRIBUTES =
+          prior && prior.length ? `${prior},${attrs.join(",")}` : attrs.join(",");
       }
     } catch {}
 

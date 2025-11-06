@@ -1,9 +1,9 @@
 # Fresh Root Project - Complete Technical Documentation
 
-**Last Updated:** October 31, 2025  
-**Project Owner:** Patrick Craven  
-**Repository:** peteywee/fresh-root  
-**Current Branch:** dev  
+**Last Updated:** October 31, 2025
+**Project Owner:** Patrick Craven
+**Repository:** peteywee/fresh-root
+**Current Branch:** dev
 **Status:** ✅ Production Ready
 
 ---
@@ -11,16 +11,16 @@
 ## Table of Contents
 
 1. [Executive Summary](#executive-summary)
-2. [Architecture Overview](#architecture-overview)
-3. [Development Journey & Major Milestones](#development-journey--major-milestones)
-4. [Critical Issues & Solutions](#critical-issues--solutions)
-5. [Repository Management](#repository-management)
-6. [CI/CD Pipeline](#cicd-pipeline)
-7. [Testing Infrastructure](#testing-infrastructure)
-8. [Firebase Integration](#firebase-integration)
-9. [Reproducibility Guide](#reproducibility-guide)
-10. [Known Pitfalls & Solutions](#known-pitfalls--solutions)
-11. [Future Roadmap](#future-roadmap)
+1. [Architecture Overview](#architecture-overview)
+1. [Development Journey & Major Milestones](#development-journey--major-milestones)
+1. [Critical Issues & Solutions](#critical-issues--solutions)
+1. [Repository Management](#repository-management)
+1. [CI/CD Pipeline](#cicd-pipeline)
+1. [Testing Infrastructure](#testing-infrastructure)
+1. [Firebase Integration](#firebase-integration)
+1. [Reproducibility Guide](#reproducibility-guide)
+1. [Known Pitfalls & Solutions](#known-pitfalls--solutions)
+1. [Future Roadmap](#future-roadmap)
 
 ---
 
@@ -38,11 +38,11 @@ Fresh Root (Fresh Schedules) is a production-ready Progressive Web App designed 
 
 ### Key Achievements
 
-✅ **Consolidated 7 feature branches** into unified codebase  
-✅ **Fixed 6+ critical test/build failures** (storage emulator, auth tokens, Docker)  
-✅ **Resolved CI/CD pipeline issues** (pnpm version mismatch)  
-✅ **Implemented security scanning** (CodeQL analysis)  
-✅ **Cleaned repository** (12+ branches → 3 active branches)  
+✅ **Consolidated 7 feature branches** into unified codebase
+✅ **Fixed 6+ critical test/build failures** (storage emulator, auth tokens, Docker)
+✅ **Resolved CI/CD pipeline issues** (pnpm version mismatch)
+✅ **Implemented security scanning** (CodeQL analysis)
+✅ **Cleaned repository** (12+ branches → 3 active branches)
 ✅ **Established reproducible development workflow**
 
 ---
@@ -51,7 +51,7 @@ Fresh Root (Fresh Schedules) is a production-ready Progressive Web App designed 
 
 ### System Architecture Diagram
 
-\`\`\`
+```text
 ┌─────────────────────────────────────────────────────────────────┐
 │ FRESH ROOT SYSTEM │
 └─────────────────────────────────────────────────────────────────┘
@@ -60,10 +60,10 @@ Fresh Root (Fresh Schedules) is a production-ready Progressive Web App designed 
 │ Client Layer │────────▶│ CDN/Hosting │
 │ (Next.js PWA) │ │ (Firebase/Vercel)│
 └──────────────────┘ └──────────────────┘
-│  
+│
  │ HTTPS/REST
-│  
- ▼  
+│
+ ▼
 ┌──────────────────────────────────────────────┐
 │ API Routes (Next.js) │
 │ ┌─────────┬─────────┬──────────┬─────────┐ │
@@ -89,14 +89,14 @@ Fresh Root (Fresh Schedules) is a production-ready Progressive Web App designed 
 │ │(RBAC + Org) │ (Auth + Path-based) │ │
 │ └──────────────┴──────────────────────────┘ │
 └────────────────────────────────────────────────┘
-\`\`\`
+```
 
 ### Monorepo Structure
 
 \`\`\`
 fresh-root/ # Root (pnpm workspace)
 │
-├── apps/  
+├── apps/
 │ └── web/ # Next.js PWA (main application)
 │ ├── app/ # App router pages & API routes
 │ │ ├── (app)/ # Authenticated app routes
@@ -231,8 +231,8 @@ Status: ✅ PRODUCTION READY
 
 ### Issue 1: Storage Emulator Not Configured
 
-**Severity:** 🔴 Critical  
-**Impact:** All storage-related tests failing with ECONNREFUSED  
+**Severity:** 🔴 Critical
+**Impact:** All storage-related tests failing with ECONNREFUSED
 **Date Discovered:** October 31, 2025
 
 #### Problem
@@ -276,8 +276,8 @@ The `emulators` section in `firebase.json` only configured Firestore (port 8080)
 
 ### Issue 2: Auth Token Format Mismatch
 
-**Severity:** 🔴 Critical  
-**Impact:** 20+ rules tests failing with PERMISSION_DENIED  
+**Severity:** 🔴 Critical
+**Impact:** 20+ rules tests failing with PERMISSION_DENIED
 **Date Discovered:** October 31, 2025
 
 #### Problem
@@ -296,7 +296,7 @@ Firestore security rules expected custom claims in format `{ orgId: string, role
 Mismatch between:
 
 1. **firestore.rules** expects: `request.auth.token.orgId` and `request.auth.token.roles` (array)
-2. **Tests** were passing: nested object with org IDs as keys
+1. **Tests** were passing: nested object with org IDs as keys
 
 #### Solution
 
@@ -325,8 +325,8 @@ roles: ['org_member', 'manager']
 
 ### Issue 3: Collection Path Mismatches
 
-**Severity:** 🟡 High  
-**Impact:** Multiple rules tests failing  
+**Severity:** 🟡 High
+**Impact:** Multiple rules tests failing
 **Date Discovered:** October 31, 2025
 
 #### Problem
@@ -372,8 +372,8 @@ db.collection('join_tokens/orgA').doc('t')
 
 ### Issue 4: Docker Build Failing on Optional Dependencies
 
-**Severity:** 🟡 High  
-**Impact:** Docker build fails, blocking containerized deployments  
+**Severity:** 🟡 High
+**Impact:** Docker build fails, blocking containerized deployments
 **Date Discovered:** October 31, 2025
 
 #### Problem
@@ -387,19 +387,19 @@ Docker multi-stage build failed during offline installation because `pnpm fetch`
 #### Root Cause
 
 1. `pnpm fetch` downloads ALL dependencies including optional ones
-2. Optional deps like `@electric-sql/pglite` (from firebase-tools) have platform-specific binaries
-3. `pnpm install --offline` can't resolve these without network access
+1. Optional deps like `@electric-sql/pglite` (from firebase-tools) have platform-specific binaries
+1. `pnpm install --offline` can't resolve these without network access
 
 #### Solution
 
 \`\`\`dockerfile
 
-# Before
+## Before
 
 RUN pnpm fetch
 RUN pnpm install -r --offline
 
-# After
+## After
 
 RUN pnpm fetch --no-optional
 RUN pnpm install -r --offline --no-optional
@@ -419,8 +419,8 @@ RUN pnpm install -r --offline --no-optional
 
 ### Issue 5: PNPM Version Mismatch in CI
 
-**Severity:** 🔴 Critical  
-**Impact:** All CI workflows failing before tests even run  
+**Severity:** 🔴 Critical
+**Impact:** All CI workflows failing before tests even run
 **Date Discovered:** October 31, 2025
 
 #### Problem
@@ -430,6 +430,7 @@ Multiple versions of pnpm specified:
 
 - version 9 in the GitHub Action config
 - version pnpm@9.1.0 in package.json
+
   \`\`\`
 
 GitHub Actions workflows failed immediately because `pnpm/action-setup@v4` enforces exact version matching when `packageManager` field is set in `package.json`.
@@ -444,15 +445,17 @@ GitHub Actions workflows failed immediately because `pnpm/action-setup@v4` enfor
 
 \`\`\`yaml
 
-# Before
+## Before
 
 - uses: pnpm/action-setup@v4
+
   with:
   version: 9 # ❌
 
-# After
+## After
 
 - uses: pnpm/action-setup@v4
+
   with:
   version: 9.1.0 # ✅ Exact match
   \`\`\`
@@ -473,8 +476,8 @@ GitHub Actions workflows failed immediately because `pnpm/action-setup@v4` enfor
 
 ### Issue 6: ESLint Import Order Violations
 
-**Severity:** 🟢 Low  
-**Impact:** CI warnings, code style inconsistency  
+**Severity:** 🟢 Low
+**Impact:** CI warnings, code style inconsistency
 **Date Discovered:** October 31, 2025
 
 #### Problem
@@ -490,8 +493,8 @@ ESLint import order plugin flagged 4 files with incorrect import ordering.
 Imports weren't following ESLint's configured order:
 
 1. External packages (e.g., `next`, `react`)
-2. Internal workspace packages (e.g., `@fresh-schedules/*`)
-3. Relative imports (e.g., `./components`)
+1. Internal workspace packages (e.g., `@fresh-schedules/*`)
+1. Relative imports (e.g., `./components`)
 
 #### Solution
 
@@ -521,8 +524,8 @@ import { getAuth } from 'firebase/auth';
 
 ### Issue 7: Next.js Cache API Update
 
-**Severity:** 🟢 Low  
-**Impact:** TypeScript compilation error  
+**Severity:** 🟢 Low
+**Impact:** TypeScript compilation error
 **Date Discovered:** October 31, 2025
 
 #### Problem
@@ -594,19 +597,19 @@ On October 31, 2025, we consolidated 7 feature branches:
 
 \`\`\`bash
 
-# Step 1: Create consolidation branch
+## Step 1: Create consolidation branch
 
 git checkout dev
 git pull origin dev
 git checkout -b consolidate/all-features
 
-# Step 2: Merge branches with conflict resolution strategy
+## Step 2: Merge branches with conflict resolution strategy
 
-# Strategy: Keep dev version (most recent, most stable)
+## Strategy: Keep dev version (most recent, most stable)
 
 git merge --no-ff -X ours origin/branch-name -m "merge: branch-name"
 
-# Branches merged:
+## Branches merged
 
 ✅ chore/ci-tests-redis-docker-middleware
 ✅ chore/eslint-ts-agent
@@ -616,18 +619,18 @@ git merge --no-ff -X ours origin/branch-name -m "merge: branch-name"
 ✅ copilot/restructure-monorepo-rbac-implementation
 ✅ feat/server-first-api-rbac
 
-# Step 3: Push and create PR
+## Step 3: Push and create PR
 
 git push origin consolidate/all-features
 gh pr create --base dev --head consolidate/all-features
 
-# Step 4: After merge, cleanup
+## Step 4: After merge, cleanup
 
 git push origin --delete consolidate/all-features
 git branch -D consolidate/all-features
 \`\`\`
 
-**Result:**  
+**Result:**
 Repository went from **12+ branches to 3 active branches**, dramatically simplifying development workflow.
 
 ### Deleted Branches
@@ -651,7 +654,7 @@ Cleaned up on October 31, 2025:
 
 ### Workflow Architecture
 
-\`\`\`
+```text
 ┌─────────────────────────────────────────────────────────────┐
 │ GITHUB ACTIONS WORKFLOWS │
 └─────────────────────────────────────────────────────────────┘
@@ -702,7 +705,7 @@ Trigger: Push to dev/main OR Pull Request
 ├─ Lint & Typecheck
 ├─ Run Rules Tests
 └─ Comment results back to issue
-\`\`\`
+```
 
 ### Workflow Details
 
@@ -717,14 +720,14 @@ Trigger: Push to dev/main OR Pull Request
 **Steps:**
 
 1. Checkout with full history
-2. Setup pnpm v9.1.0 (exact version from package.json)
-3. Setup Node.js 20 with pnpm cache
-4. Install dependencies with fallback: `pnpm install --frozen-lockfile || pnpm install`
-5. Lint (best-effort, continues on error)
-6. Typecheck (blocking)
-7. Firebase Rules Tests using emulators
-8. API unit tests
-9. API Docker build
+1. Setup pnpm v9.1.0 (exact version from package.json)
+1. Setup Node.js 20 with pnpm cache
+1. Install dependencies with fallback: `pnpm install --frozen-lockfile || pnpm install`
+1. Lint (best-effort, continues on error)
+1. Typecheck (blocking)
+1. Firebase Rules Tests using emulators
+1. API unit tests
+1. API Docker build
 
 **Success Criteria:**
 
@@ -743,10 +746,10 @@ Trigger: Push to dev/main OR Pull Request
 **Behavior:**
 
 1. Adds PR annotations via reviewdog
-2. Auto-fixes safe ESLint violations
-3. Runs Prettier for code formatting
-4. Commits fixes back to PR branch (if any)
-5. Runs typecheck (non-blocking, for visibility)
+1. Auto-fixes safe ESLint violations
+1. Runs Prettier for code formatting
+1. Commits fixes back to PR branch (if any)
+1. Runs typecheck (non-blocking, for visibility)
 
 **Benefits:**
 
@@ -808,7 +811,7 @@ Available in GitHub Security tab → Code scanning alerts
 
 ### Test Architecture
 
-\`\`\`
+```text
 ┌──────────────────────────────────────────────────────────┐
 │ TESTING PYRAMID │
 └──────────────────────────────────────────────────────────┘
@@ -828,14 +831,14 @@ Available in GitHub Security tab → Code scanning alerts
           ╱                        ╲
          ────────────────────────────
 
-\`\`\`
+```
 
 ### Test Categories
 
 #### 1. Unit Tests (Vitest)
 
-**Location:** `**/*.test.ts`, `**/*.spec.ts`  
-**Runner:** Vitest  
+**Location:** `**/*.test.ts`, `**/*.spec.ts`
+**Runner:** Vitest
 **Coverage Target:** 80%+
 
 **Run:**
@@ -851,8 +854,8 @@ pnpm test
 
 #### 2. Firebase Rules Tests
 
-**Location:** `tests/rules/`  
-**Runner:** Vitest + @firebase/rules-unit-testing  
+**Location:** `tests/rules/`
+**Runner:** Vitest + @firebase/rules-unit-testing
 **Emulators:** Firestore (8080), Storage (9199)
 
 **Run:**
@@ -884,8 +887,8 @@ await assertFails(doc.update({})); // Should fail
 
 #### 3. E2E Tests (Playwright)
 
-**Location:** `tests/e2e/`  
-**Runner:** Playwright  
+**Location:** `tests/e2e/`
+**Runner:** Playwright
 **Browsers:** Chromium, Firefox, WebKit
 
 **Run:**
@@ -908,8 +911,8 @@ pnpm test:e2e
 
 #### 4. API Tests
 
-**Location:** `services/api/test/`  
-**Runner:** Vitest  
+**Location:** `services/api/test/`
+**Runner:** Vitest
 **Environment:** Node.js with Firebase Admin SDK
 
 **Run:**
@@ -936,11 +939,11 @@ pnpm test
 **Rules tests with emulators:**
 \`\`\`bash
 
-# Terminal 1: Start emulators
+## Terminal 1: Start emulators
 
 firebase emulators:start
 
-# Terminal 2: Run tests
+## Terminal 2: Run tests
 
 pnpm test:rules
 \`\`\`
@@ -948,11 +951,11 @@ pnpm test:rules
 **E2E tests:**
 \`\`\`bash
 
-# Install browsers first
+## Install browsers first
 
 pnpm exec playwright install
 
-# Run tests
+## Run tests
 
 pnpm test:e2e
 \`\`\`
@@ -992,7 +995,7 @@ firestore
 │ ├── name: string
 │ ├── ownerId: string (creator)
 │ ├── createdAt: timestamp
-│ ├── members: map<userId, role>
+│ ├── members: `map<userId, role>`
 │ └── settings: object
 │
 ├── memberships/{membershipId}
@@ -1008,7 +1011,7 @@ firestore
 │ ├── createdBy: string
 │ ├── startDate: timestamp
 │ ├── endDate: timestamp
-│ ├── shifts: array<Shift>
+│ ├── shifts: `array`<Shift>``
 │ └── published: boolean
 │
 ├── messages/{messageId}
@@ -1016,7 +1019,7 @@ firestore
 │ ├── senderId: string
 │ ├── content: string
 │ ├── timestamp: timestamp
-│ └── readBy: array<userId>
+│ └── readBy: `array`<userId>``
 │
 └── join_tokens/{orgId}
 └── tokens/{tokenId}
@@ -1031,7 +1034,7 @@ firestore
 
 **Firestore Rules** (`firestore.rules`):
 
-\`\`\`javascript
+```javascript
 // Helper functions
 function isAuthenticated() {
 return request.auth != null;
@@ -1064,7 +1067,7 @@ hasRole('manager');
 allow delete: if belongsToOrg(resource.data.orgId) &&
 hasRole('org_admin');
 }
-\`\`\`
+```
 
 **Storage Rules** (`storage.rules`):
 
@@ -1078,14 +1081,16 @@ allow read: if request.auth != null;
 allow write: if request.auth.uid == userId;
 }
 
-    // Organization files
-    match /orgs/{orgId}/files/{fileId} {
-      allow read: if request.auth != null &&
-                     request.auth.token.orgId == orgId;
-      allow write: if request.auth.token.orgId == orgId &&
-                      ('manager' in request.auth.token.roles ||
-                       'org_admin' in request.auth.token.roles);
-    }
+```text
+// Organization files
+match /orgs/{orgId}/files/{fileId} {
+allow read: if request.auth != null &&
+request.auth.token.orgId == orgId;
+allow write: if request.auth.token.orgId == orgId &&
+('manager' in request.auth.token.roles ||
+'org_admin' in request.auth.token.roles);
+}
+```
 
 }
 }
@@ -1138,7 +1143,7 @@ firebase emulators:start
 \`\`\`
 
 **Emulator UI:**
-Open http://localhost:4000 to view:
+`Open <http://localhost:4000>` to view:
 
 - Firestore data
 - Auth users
@@ -1149,7 +1154,7 @@ Open http://localhost:4000 to view:
 \`\`\`typescript
 // apps/web/src/lib/firebaseClient.ts
 if (process.env.NEXT_PUBLIC_USE_EMULATORS === 'true') {
-connectAuthEmulator(auth, 'http://localhost:9099');
+connectAuthEmulator(auth, '<http://localhost:9099>');
 connectFirestoreEmulator(db, 'localhost', 8080);
 connectStorageEmulator(storage, 'localhost', 9199);
 }
@@ -1169,7 +1174,7 @@ connectStorageEmulator(storage, 'localhost', 9199);
 
 **Step 1: Clone Repository**
 \`\`\`bash
-git clone https://github.com/peteywee/fresh-root.git
+git `clone <https://github.com/peteywee/fresh-root.git>`
 cd fresh-root
 \`\`\`
 
@@ -1186,11 +1191,11 @@ pnpm install
 **Step 4: Configure Environment**
 \`\`\`bash
 
-# Copy example env
+## Copy example env
 
 cp apps/web/.env.example apps/web/.env.local
 
-# Edit with your Firebase credentials
+## Edit with your Firebase credentials
 
 vim apps/web/.env.local
 \`\`\`
@@ -1199,7 +1204,7 @@ vim apps/web/.env.local
 \`\`\`bash
 pnpm dev
 
-# Open http://localhost:3000
+## `Open <http://localhost:3000>`
 
 \`\`\`
 
@@ -1213,15 +1218,15 @@ firebase emulators:start
 **Terminal 2: Run Tests**
 \`\`\`bash
 
-# All tests
+## All tests
 
 pnpm test
 
-# Rules tests
+## Rules tests
 
 pnpm test:rules
 
-# E2E tests (requires browsers)
+## E2E tests (requires browsers)
 
 pnpm exec playwright install
 pnpm test:e2e
@@ -1232,28 +1237,28 @@ pnpm test:e2e
 **Simulate CI Pipeline:**
 \`\`\`bash
 
-# 1. Clean install
+## 1. Clean install
 
 rm -rf node_modules packages/_/node_modules apps/_/node_modules
 pnpm install --frozen-lockfile
 
-# 2. Lint
+## 2. Lint
 
 pnpm -w lint
 
-# 3. Typecheck
+## 3. Typecheck
 
 pnpm -w typecheck
 
-# 4. Rules tests (requires emulators)
+## 4. Rules tests (requires emulators)
 
 firebase emulators:exec --only firestore,storage "pnpm -w test:rules"
 
-# 5. API tests
+## 5. API tests
 
 pnpm --filter @fresh-schedules/api test
 
-# 6. API build
+## 6. API build
 
 pnpm --filter @fresh-schedules/api build
 \`\`\`
@@ -1263,17 +1268,17 @@ pnpm --filter @fresh-schedules/api build
 \`\`\`bash
 cd services/api
 
-# Build image
+## Build image
 
 docker build -t fresh-api:local .
 
-# Run container
+## Run container
 
 docker run -p 3001:3000 fresh-api:local
 
-# Test
+## Test
 
-curl http://localhost:3001/health
+`curl <http://localhost:3001/health>`
 \`\`\`
 
 ### Reproducing Branch Consolidation
@@ -1282,32 +1287,32 @@ If you need to consolidate branches again:
 
 \`\`\`bash
 
-# 1. Update dev
+## 1. Update dev
 
 git checkout dev
 git pull origin dev
 
-# 2. Create consolidation branch
+## 2. Create consolidation branch
 
 git checkout -b consolidate/round-2
 
-# 3. List branches to merge
+## 3. List branches to merge
 
 git branch -a | grep -v main | grep -v dev | grep -v HEAD
 
-# 4. Merge each branch (keep dev version on conflicts)
+## 4. Merge each branch (keep dev version on conflicts)
 
 for branch in branch1 branch2 branch3; do
 git merge --no-ff -X ours origin/$branch \\
 -m "merge: $branch (kept dev version)"
 done
 
-# 5. Push and create PR
+## 5. Push and create PR
 
 git push origin consolidate/round-2
 gh pr create --base dev --head consolidate/round-2
 
-# 6. After merge, cleanup
+## 6. After merge, cleanup
 
 git push origin --delete consolidate/round-2
 git branch -D consolidate/round-2
@@ -1329,15 +1334,15 @@ Error: connect ECONNREFUSED 127.0.0.1:8080
 **Solution:**
 \`\`\`bash
 
-# Check if emulators are running
+## Check if emulators are running
 
 ps aux | grep firebase
 
-# Start emulators
+## Start emulators
 
 firebase emulators:start
 
-# Verify ports in firebase.json match your code
+## Verify ports in firebase.json match your code
 
 \`\`\`
 
@@ -1378,13 +1383,13 @@ WARN Issues with peer dependencies found
 1. **Environment variables missing**
    - Solution: Add to GitHub Secrets, reference in workflow
 
-2. **pnpm version mismatch**
+1. **pnpm version mismatch**
    - Solution: Use exact version from package.json in workflows
 
-3. **Cached dependencies**
+1. **Cached dependencies**
    - Solution: Clear cache in workflow or use `--frozen-lockfile`
 
-4. **Different Node.js version**
+1. **Different Node.js version**
    - Solution: Match Node version in workflow to local
 
 ---
@@ -1398,17 +1403,17 @@ WARN Issues with peer dependencies found
 **Solution:**
 \`\`\`bash
 
-# 1. Review rule changes
+## 1. Review rule changes
 
 git diff firestore.rules
 
-# 2. Update test assertions
+## 2. Update test assertions
 
-# 3. Run rules tests locally
+## 3. Run rules tests locally
 
 firebase emulators:exec --only firestore "pnpm test:rules"
 
-# 4. Commit together
+## 4. Commit together
 
 git add firestore.rules tests/rules/
 git commit -m "fix(rules): update rules and tests together"
@@ -1425,27 +1430,30 @@ git commit -m "fix(rules): update rules and tests together"
 **Causes & Solutions:**
 
 1. **Including dev dependencies**
+
    \`\`\`dockerfile
 
-   # Use --prod or --production
+   ## Use --prod or --production
 
    RUN pnpm install -r --offline --prod
    \`\`\`
 
-2. **Not using BuildKit**
+1. **Not using BuildKit**
+
    \`\`\`bash
    DOCKER_BUILDKIT=1 docker build -t fresh-api .
    \`\`\`
 
-3. **No layer caching**
+1. **No layer caching**
+
    \`\`\`dockerfile
 
-   # Copy package files first (cached if unchanged)
+   ## Copy package files first (cached if unchanged)
 
    COPY package.json pnpm-lock.yaml ./
    RUN pnpm install
 
-   # Then copy source (changes more often)
+   ## Then copy source (changes more often)
 
    COPY . .
    \`\`\`
@@ -1464,16 +1472,16 @@ Type error: Cannot find module '@fresh-schedules/types'
 **Solution:**
 \`\`\`bash
 
-# Build workspace packages first
+## Build workspace packages first
 
 pnpm --filter @fresh-schedules/types build
 pnpm --filter @fresh-schedules/ui build
 
-# Then build app
+## Then build app
 
 pnpm --filter @fresh-schedules/web build
 
-# Or use Turbo to handle build order
+## Or use Turbo to handle build order
 
 pnpm build # Builds all in correct order
 \`\`\`
@@ -1487,16 +1495,16 @@ pnpm build # Builds all in correct order
 **Solution:**
 \`\`\`bash
 
-# Don't manually resolve lockfile conflicts
+## Don't manually resolve lockfile conflicts
 
 git checkout --theirs pnpm-lock.yaml # or --ours
 
-# Regenerate lockfile
+## Regenerate lockfile
 
 rm pnpm-lock.yaml
 pnpm install
 
-# Commit regenerated lockfile
+## Commit regenerated lockfile
 
 git add pnpm-lock.yaml
 git commit -m "chore: regenerate pnpm-lock.yaml after merge"
@@ -1521,7 +1529,7 @@ git commit -m "chore: regenerate pnpm-lock.yaml after merge"
 
 \`\`\`bash
 
-# Run in order
+## Run in order
 
 pnpm eslint --fix .
 pnpm prettier --write .
@@ -1637,7 +1645,7 @@ test('my slow test', async () => {
 
 \`\`\`bash
 
-# Development
+## Development
 
 pnpm dev # Start dev server
 pnpm build # Build all packages
@@ -1647,7 +1655,7 @@ pnpm test # Run all tests
 pnpm test:rules # Run rules tests
 pnpm test:e2e # Run E2E tests
 
-# Firebase
+## Firebase
 
 firebase emulators:start # Start all emulators
 firebase emulators:start --only firestore,storage
@@ -1655,7 +1663,7 @@ firebase deploy --only firestore:rules
 firebase deploy --only storage
 firebase deploy --only hosting
 
-# Git
+## Git
 
 git branch -a # List all branches
 git push origin --delete branch # Delete remote branch
@@ -1663,19 +1671,19 @@ git branch -D branch # Delete local branch
 gh pr create # Create PR (GitHub CLI)
 gh pr view 29 # View PR details
 
-# Docker
+## Docker
 
 docker build -t fresh-api . # Build image
 docker run -p 3000:3000 fresh-api # Run container
 docker ps # List containers
-docker logs <container-id> # View logs
+docker `logs <container-id>` # View logs
 
-# pnpm
+## pnpm
 
 pnpm -r run build # Build all workspaces
 pnpm --filter @fresh-schedules/web dev # Run specific workspace
 pnpm list --depth 0 # List top-level deps
-pnpm why <package> # Why is package installed
+pnpm `why `<package>`` # Why is package installed
 \`\`\`
 
 ### Environment Variables
@@ -1732,6 +1740,6 @@ See LICENSE file for details.
 
 ---
 
-**Document Version:** 1.0  
-**Last Updated:** October 31, 2025  
+**Document Version:** 1.0
+**Last Updated:** October 31, 2025
 **Next Review:** November 15, 2025
