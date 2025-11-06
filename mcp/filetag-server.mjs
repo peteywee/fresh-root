@@ -1,6 +1,6 @@
+#!/usr/bin/env node
 // [P2][APP][CODE] Filetag Server
 // Tags: P2, APP, CODE
-#!/usr/bin/env node
 // filetag MCP server (stdio) with caching, self-learning, and code analysis.
 // Tools:
 //   - filetag.scan       : Smart scan (auto-excludes, cache, sampling, insights)
@@ -512,16 +512,7 @@ function fixMarkdownCommon(mdText, { languageHint = "text", olStyle = "one" } = 
           if (olStyle === "one") return `${lead}1${punct} ${rest}`;
           return `${lead}${idxIn + 1}${punct} ${rest}`;
         }
-        // Unordered bullets: keep top-level at 0 indent, leave nested as-is
-        const mb = line.match(/^( *)([*+-])(\s+)(.*)$/);
-        if (mb) {
-          const [, lead, bullet, , rest] = mb;
-          // Only normalize if 1-3 spaces (top-level that's slightly indented)
-          if (lead.length > 0 && lead.length <= 3) {
-            stats.ulIndentNormalized++;
-            return `${bullet} ${rest}`;
-          }
-        }
+        // Unordered bullets: do not alter indentation to avoid MD005 regressions
         return line;
       });
       if (renumbered.some((l, k) => l !== block[k])) stats.listsRenumbered++;
