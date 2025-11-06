@@ -59,9 +59,7 @@ describe("Positions Collection - Read Access", () => {
       orgId: "orgA",
       roles: ["org_member"],
     });
-    await expect(
-      memberCtx.firestore().doc("orgs/orgA/positions/pos1").get(),
-    ).resolves.toBeTruthy();
+    await expect(memberCtx.firestore().doc("orgs/orgA/positions/pos1").get()).resolves.toBeTruthy();
   });
 
   test("❌ DENY: Unauthenticated user cannot read positions", async () => {
@@ -91,9 +89,9 @@ describe("Positions Collection - Read Access", () => {
       orgId: "orgB",
       roles: ["org_member"],
     });
-    await expect(
-      outsiderCtx.firestore().doc("orgs/orgA/positions/pos1").get(),
-    ).rejects.toThrow(/PERMISSION_DENIED/);
+    await expect(outsiderCtx.firestore().doc("orgs/orgA/positions/pos1").get()).rejects.toThrow(
+      /PERMISSION_DENIED/,
+    );
   });
 
   test("❌ DENY: Cannot list positions from other orgs", async () => {
@@ -111,9 +109,9 @@ describe("Positions Collection - Read Access", () => {
       orgId: "orgB",
       roles: ["manager"],
     });
-    await expect(
-      outsiderCtx.firestore().collection("orgs/orgA/positions").get(),
-    ).rejects.toThrow(/PERMISSION_DENIED/);
+    await expect(outsiderCtx.firestore().collection("orgs/orgA/positions").get()).rejects.toThrow(
+      /PERMISSION_DENIED/,
+    );
   });
 });
 
@@ -266,9 +264,9 @@ describe("Positions Collection - Delete Access", () => {
       orgId: "orgA",
       roles: ["staff"],
     });
-    await expect(
-      staffCtx.firestore().doc("orgs/orgA/positions/pos1").delete(),
-    ).rejects.toThrow(/PERMISSION_DENIED/);
+    await expect(staffCtx.firestore().doc("orgs/orgA/positions/pos1").delete()).rejects.toThrow(
+      /PERMISSION_DENIED/,
+    );
   });
 
   test("❌ DENY: Manager cannot delete positions (admin-only)", async () => {
@@ -283,9 +281,9 @@ describe("Positions Collection - Delete Access", () => {
       orgId: "orgA",
       roles: ["manager"],
     });
-    await expect(
-      managerCtx.firestore().doc("orgs/orgA/positions/pos1").delete(),
-    ).rejects.toThrow(/PERMISSION_DENIED/);
+    await expect(managerCtx.firestore().doc("orgs/orgA/positions/pos1").delete()).rejects.toThrow(
+      /PERMISSION_DENIED/,
+    );
   });
 
   test("✅ ALLOW: Admin can delete positions", async () => {
