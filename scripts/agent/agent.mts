@@ -1,4 +1,6 @@
 #!/usr/bin/env node
+// [P2][APP][CODE] Agent
+// Tags: P2, APP, CODE
 import { execa } from "execa";
 import { z } from "zod";
 import pRetry from "p-retry";

@@ -97,9 +97,11 @@ function splitShebang(content) {
 }
 
 // Check if file already has tags (after an optional shebang)
-function hasTag(content) {
+function hasTag(content, filePath) {
   const { body } = splitShebang(content);
-  return /^\/\/\s*\[P[0-3]\]/.test(body);
+  const prefix = getCommentPrefix(filePath) === "#" ? "#" : "//";
+  const re = new RegExp(`^${prefix}\\s*\\[P[0-3]\\]`);
+  return re.test(body);
 }
 
 // Build tag header
@@ -109,11 +111,19 @@ function buildTagHeader(filePath, content) {
   const components = inferComponents(filePath, content);
   const description = inferDescription(filePath);
 
-  const line1 = `// [${priority}][${area}][${components[0] || "CODE"}] ${description}`;
+  const comment = getCommentPrefix(filePath);
+  const line1 = `${comment} [${priority}][${area}][${components[0] || "CODE"}] ${description}`;
   const allTags = [priority, area, ...components].join(", ");
-  const line2 = `// Tags: ${allTags}`;
+  const line2 = `${comment} Tags: ${allTags}`;
 
   return `${line1}\n${line2}\n`;
+}
+
+// Determine comment prefix based on file type
+function getCommentPrefix(filePath) {
+  const ext = path.extname(filePath).toLowerCase();
+  if (ext === ".sh" || ext === ".py") return "#";
+  return "//"; // default for JS/TS
 }
 
 // Walk directory recursively
@@ -131,7 +141,7 @@ async function* walk(dir) {
       )
         continue;
       yield* walk(fullPath);
-    } else if (/\.(ts|tsx|js|jsx|mjs|cjs)$/.test(entry.name)) {
+    } else if (/\.(ts|tsx|js|jsx|mjs|cjs|mts|cts|sh|py)$/.test(entry.name)) {
       yield fullPath;
     }
   }
@@ -162,7 +172,7 @@ async function main() {
         fixedShebang++;
       }
 
-      if (hasTag(content)) {
+      if (hasTag(content, filePath)) {
         // Already tagged; write back if we only repaired shebang
         if (fixedShebang && !DRY_RUN) {
           await fs.writeFile(filePath, content, "utf8");

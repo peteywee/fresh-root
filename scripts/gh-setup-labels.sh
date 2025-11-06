@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# [P2][APP][CODE] Gh Setup Labels
+# Tags: P2, APP, CODE
 # Fresh Schedules — GitHub Labels bootstrap
 # Usage:
 #   ./scripts/gh-setup-labels.sh              # apply to current repo (or $GH_REPO)
