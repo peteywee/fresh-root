@@ -168,7 +168,11 @@ export function sanitizeRichText(html: string): string {
   // For production, use a library like DOMPurify or sanitize-html
 
   // Remove script tags and their content
-  html = html.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "");
+  let prevHtml;
+  do {
+    prevHtml = html;
+    html = html.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "");
+  } while (html !== prevHtml);
 
   // Remove event handlers (onclick, onload, etc.)
   html = html.replace(/\son\w+\s*=\s*["'][^"']*["']/gi, "");
