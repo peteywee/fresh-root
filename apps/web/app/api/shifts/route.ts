@@ -4,9 +4,9 @@
 import { ShiftCreateSchema } from "@fresh-schedules/types";
 import { NextRequest, NextResponse } from "next/server";
 
-import { rateLimit, RateLimits } from "../../../src/lib/api/rate-limit";
-import { csrfProtection } from "../../../src/lib/api/csrf";
 import { requireOrgMembership } from "../../../src/lib/api/authorization";
+import { csrfProtection } from "../../../src/lib/api/csrf";
+import { rateLimit, RateLimits } from "../../../src/lib/api/rate-limit";
 import { sanitizeObject } from "../../../src/lib/api/sanitize";
 import { serverError } from "../_shared/validation";
 
@@ -95,4 +95,3 @@ export const POST = rateLimit(RateLimits.WRITE)(
     }),
   ),
 );
-

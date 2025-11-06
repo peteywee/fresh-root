@@ -8,7 +8,8 @@ REST API.
 
 - gcloud CLI authenticated with Cloud Scheduler Admin
 - APIs enabled: cloudscheduler.googleapis.com, firestore.googleapis.com
-- Your server must have credentials for the Firestore Admin API (service account via GOOGLE_APPLICATION_CREDENTIALS_JSON or Workload Identity).
+- Your server must have credentials for the Firestore Admin API (service account via
+  GOOGLE_APPLICATION_CREDENTIALS_JSON or Workload Identity).
 
 ## Steps
 
@@ -21,7 +22,7 @@ REST API.
 The endpoint is `POST /api/internal/backup` and requires header
 `x-backup-token: $BACKUP_CRON_TOKEN`.
 
-2. Create the Cloud Scheduler job:
+1. Create the Cloud Scheduler job:
 
 ```bash
 PROJECT_ID=my-project \
@@ -33,7 +34,7 @@ SCHEDULE="0 2 * * *" \
 ./scripts/ops/create-backup-scheduler.sh
 ```
 
-3. Test:
+1. Test:
 
 ```bash
 gcloud scheduler jobs run firestore-backup-daily \

@@ -3,18 +3,20 @@
 
 import { MembershipCreateSchema } from "@fresh-schedules/types";
 import { NextRequest, NextResponse } from "next/server";
-import type { z } from "zod";
 
-import { withValidation } from "../../../../../src/lib/api/validation";
-import { requireSession, AuthenticatedRequest } from "../../../_shared/middleware";
+import { requireOrgMembership, requireRole } from "../../../../../src/lib/api/authorization";
+import { csrfProtection } from "../../../../../src/lib/api/csrf";
+import { rateLimit, RateLimits } from "../../../../../src/lib/api/rate-limit";
+import { sanitizeObject } from "../../../../../src/lib/api/sanitize";
 import { serverError } from "../../../_shared/validation";
 
 /**
  * GET /api/organizations/[id]/members
  * List members of an organization
  */
-export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  return requireSession(request as AuthenticatedRequest, async (_authReq) => {
+export const GET = rateLimit(RateLimits.STANDARD)(
+  requireOrgMembership(async (request: NextRequest, context) => {
+    const { params } = context;
     try {
       const { id: orgId } = await params;
 
@@ -44,48 +46,48 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
     } catch {
       return serverError("Failed to fetch members");
     }
-  });
-}
+  }),
+);
 
 /**
  * POST /api/organizations/[id]/members
- * Add a member to an organization
+ * Add a member to an organization (admin+ only)
  */
-async function postHandler(
-  request: NextRequest,
-  data: z.infer<typeof MembershipCreateSchema>,
-  params: { id: string },
-) {
-  return requireSession(request as AuthenticatedRequest, async (authReq) => {
-    try {
-      const { id: orgId } = params;
+export const POST = rateLimit(RateLimits.WRITE)(
+  csrfProtection()(
+    requireOrgMembership(
+      requireRole("admin")(async (request: NextRequest, context) => {
+        const { params } = context;
+        try {
+          const { id: orgId } = await params;
 
-      // In production:
-      // 1. Verify requester has permission to add members
-      // 2. Verify user being added exists
-      // 3. Check if user is already a member
-      // 4. Create membership in Firestore
+          const body = await request.json();
+          const validated = MembershipCreateSchema.parse(body);
+          const sanitized = sanitizeObject(validated);
 
-      const newMember = {
-        id: `mem-${Date.now()}`,
-        orgId,
-        ...data,
-        joinedAt: new Date().toISOString(),
-        invitedBy: authReq.user?.uid,
-        createdAt: new Date().toISOString(),
-      };
+          // In production:
+          // 1. Verify requester has permission to add members
+          // 2. Verify user being added exists
+          // 3. Check if user is already a member
+          // 4. Create membership in Firestore
 
-      return NextResponse.json(newMember, { status: 201 });
-    } catch {
-      return serverError("Failed to add member");
-    }
-  });
-}
+          const newMember = {
+            id: `mem-${Date.now()}`,
+            orgId,
+            ...sanitized,
+            joinedAt: new Date().toISOString(),
+            invitedBy: context.userId,
+            createdAt: new Date().toISOString(),
+          };
 
-export async function POST(request: NextRequest, context: { params: Promise<{ id: string }> }) {
-  const params = await context.params;
-  const validated = withValidation(MembershipCreateSchema, (req, data) =>
-    postHandler(req, data, params),
-  );
-  return validated(request);
-}
+          return NextResponse.json(newMember, { status: 201 });
+        } catch (error) {
+          if (error instanceof Error && error.name === "ZodError") {
+            return NextResponse.json({ error: "Invalid member data" }, { status: 400 });
+          }
+          return serverError("Failed to add member");
+        }
+      }),
+    ),
+  ),
+);

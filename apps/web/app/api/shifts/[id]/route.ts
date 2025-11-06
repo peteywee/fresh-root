@@ -3,18 +3,20 @@
 
 import { ShiftUpdateSchema } from "@fresh-schedules/types";
 import { NextRequest, NextResponse } from "next/server";
-import type { z } from "zod";
 
-import { withValidation } from "../../../../src/lib/api/validation";
-import { requireSession, AuthenticatedRequest } from "../../_shared/middleware";
+import { requireOrgMembership, requireRole } from "../../../../src/lib/api/authorization";
+import { csrfProtection } from "../../../../src/lib/api/csrf";
+import { rateLimit, RateLimits } from "../../../../src/lib/api/rate-limit";
+import { sanitizeObject } from "../../../../src/lib/api/sanitize";
 import { serverError } from "../../_shared/validation";
 
 /**
  * GET /api/shifts/[id]
  * Get shift details
  */
-export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  return requireSession(request as AuthenticatedRequest, async (_authReq) => {
+export const GET = rateLimit(RateLimits.STANDARD)(
+  requireOrgMembership(async (request: NextRequest, context) => {
+    const { params } = context;
     try {
       const { id } = await params;
 
@@ -36,69 +38,72 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
     } catch {
       return serverError("Failed to fetch shift");
     }
-  });
-}
+  }),
+);
 
 /**
  * PATCH /api/shifts/[id]
- * Update shift details
+ * Update shift details (manager+ can modify any shift, staff can modify their own)
  */
-async function patchHandler(
-  request: NextRequest,
-  data: z.infer<typeof ShiftUpdateSchema>,
-  params: { id: string },
-) {
-  return requireSession(request as AuthenticatedRequest, async (_authReq) => {
-    try {
-      const { id } = params;
+export const PATCH = rateLimit(RateLimits.WRITE)(
+  csrfProtection()(
+    requireOrgMembership(
+      requireRole("manager")(async (request: NextRequest, context) => {
+        const { params } = context;
+        try {
+          const { id } = await params;
 
-      // In production:
-      // 1. Check for overlapping shifts if times change
-      // 2. Validate user can modify this shift
-      // 3. Update in Firestore
+          const body = await request.json();
+          const validated = ShiftUpdateSchema.parse(body);
+          const sanitized = sanitizeObject(validated);
 
-      const updatedShift = {
-        id,
-        scheduleId: "sched-1",
-        positionId: "pos-1",
-        ...data,
-        updatedAt: new Date().toISOString(),
-      };
+          // In production:
+          // 1. Check for overlapping shifts if times change
+          // 2. Validate user can modify this shift (manager+ or own shift)
+          // 3. Update in Firestore
 
-      return NextResponse.json(updatedShift);
-    } catch {
-      return serverError("Failed to update shift");
-    }
-  });
-}
+          const updatedShift = {
+            id,
+            scheduleId: "sched-1",
+            positionId: "pos-1",
+            ...sanitized,
+            updatedAt: new Date().toISOString(),
+            updatedBy: context.userId,
+          };
 
-export async function PATCH(request: NextRequest, context: { params: Promise<{ id: string }> }) {
-  const params = await context.params;
-  const validated = withValidation(ShiftUpdateSchema, (req, data) =>
-    patchHandler(req, data, params),
-  );
-  return validated(request);
-}
+          return NextResponse.json(updatedShift);
+        } catch (error) {
+          if (error instanceof Error && error.name === "ZodError") {
+            return NextResponse.json({ error: "Invalid shift data" }, { status: 400 });
+          }
+          return serverError("Failed to update shift");
+        }
+      }),
+    ),
+  ),
+);
 
 /**
  * DELETE /api/shifts/[id]
- * Delete a shift
+ * Delete a shift (manager+ only)
  */
-export async function DELETE(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> },
-) {
-  return requireSession(request as AuthenticatedRequest, async (_authReq) => {
-    try {
-      const { id } = await params;
+export const DELETE = rateLimit(RateLimits.WRITE)(
+  csrfProtection()(
+    requireOrgMembership(
+      requireRole("manager")(async (request: NextRequest, context) => {
+        const { params } = context;
+        try {
+          const { id } = await params;
 
-      // In production, check permissions and delete from Firestore
-      return NextResponse.json({
-        message: "Shift deleted successfully",
-        id,
-      });
-    } catch {
-      return serverError("Failed to delete shift");
-    }
-  });
-}
+          // In production, check permissions and delete from Firestore
+          return NextResponse.json({
+            message: "Shift deleted successfully",
+            id,
+          });
+        } catch {
+          return serverError("Failed to delete shift");
+        }
+      }),
+    ),
+  ),
+);

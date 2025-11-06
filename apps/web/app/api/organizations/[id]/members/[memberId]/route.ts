@@ -3,111 +3,87 @@
 
 import { MembershipUpdateSchema } from "@fresh-schedules/types";
 import { NextRequest, NextResponse } from "next/server";
-import type { z } from "zod";
+// ...existing code...
 
+import { requireOrgMembership, requireRole } from "../../../../../../src/lib/api/authorization";
 import { withValidation } from "../../../../../../src/lib/api/validation";
-import { requireSession, AuthenticatedRequest } from "../../../../_shared/middleware";
 import { serverError } from "../../../../_shared/validation";
 
 /**
  * GET /api/organizations/[id]/members/[memberId]
- * Get member details
+ * Get member details (org membership required)
  */
-export async function GET(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string; memberId: string }> },
-) {
-  return requireSession(request as AuthenticatedRequest, async (_authReq) => {
-    try {
-      const { id: orgId, memberId } = await params;
-
-      // In production, fetch from Firestore and check permissions
-      const member = {
-        id: memberId,
-        orgId,
-        uid: "user-123",
-        roles: ["admin"],
-        joinedAt: new Date().toISOString(),
-        mfaVerified: true,
-        createdAt: new Date().toISOString(),
-      };
-
-      return NextResponse.json(member);
-    } catch {
-      return serverError("Failed to fetch member");
-    }
-  });
-}
+export const GET = requireOrgMembership(async (request: NextRequest, context) => {
+  const { params } = context;
+  try {
+    const { id: orgId, memberId } = await params;
+    // In production, fetch from Firestore and check permissions
+    const member = {
+      id: memberId,
+      orgId,
+      uid: "user-123",
+      roles: ["admin"],
+      joinedAt: new Date().toISOString(),
+      mfaVerified: true,
+      createdAt: new Date().toISOString(),
+    };
+    return NextResponse.json(member);
+  } catch {
+    return serverError("Failed to fetch member");
+  }
+});
 
 /**
  * PATCH /api/organizations/[id]/members/[memberId]
  * Update member roles or settings
  */
-async function patchHandler(
-  request: NextRequest,
-  data: z.infer<typeof MembershipUpdateSchema>,
-  params: { id: string; memberId: string },
-) {
-  return requireSession(request as AuthenticatedRequest, async (authReq) => {
-    try {
-      const { id: orgId, memberId } = params;
-
-      // In production:
-      // 1. Verify requester has permission to modify roles
-      // 2. Validate role changes are allowed
-      // 3. Update in Firestore
-
-      const updatedMember = {
-        id: memberId,
-        orgId,
-        uid: "user-123",
-        ...data,
-        updatedAt: new Date().toISOString(),
-        updatedBy: authReq.user?.uid,
-      };
-
-      return NextResponse.json(updatedMember);
-    } catch {
-      return serverError("Failed to update member");
+/**
+ * PATCH /api/organizations/[id]/members/[memberId]
+ * Update member roles or settings (admin+ only)
+ */
+  requireRole("admin")(
+    async (request: NextRequest, context) => {
+      return withValidation(MembershipUpdateSchema, async (req, data) => {
+        const { params, userId } = context;
+        try {
+          const { id: orgId, memberId } = params;
+          // In production: permission checks, update Firestore
+          const updatedMember = {
+            id: memberId,
+            orgId,
+            uid: "user-123",
+            ...data,
+            updatedAt: new Date().toISOString(),
+            updatedBy: userId,
+          };
+          return NextResponse.json(updatedMember);
+        } catch {
+          return serverError("Failed to update member");
+        }
+      })(request);
     }
-  });
-}
-
-export async function PATCH(
-  request: NextRequest,
-  context: { params: Promise<{ id: string; memberId: string }> },
-) {
-  const params = await context.params;
-  const validated = withValidation(MembershipUpdateSchema, (req, data) =>
-    patchHandler(req, data, params),
-  );
-  return validated(request);
-}
+  )
+// ...existing code...
 
 /**
  * DELETE /api/organizations/[id]/members/[memberId]
- * Remove a member from an organization
+ * Remove a member from an organization (admin+ only)
  */
-export async function DELETE(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string; memberId: string }> },
-) {
-  return requireSession(request as AuthenticatedRequest, async (_authReq) => {
-    try {
-      const { id: orgId, memberId } = await params;
-
-      // In production:
-      // 1. Verify requester has permission to remove members
-      // 2. Prevent removing the last org_owner
-      // 3. Delete from Firestore
-
-      return NextResponse.json({
-        message: "Member removed successfully",
-        orgId,
-        memberId,
-      });
-    } catch {
-      return serverError("Failed to remove member");
+export const DELETE = requireOrgMembership(
+  requireRole("admin")(
+    async (request: NextRequest, context) => {
+      const { params } = context;
+      try {
+        const { id: orgId, memberId } = params;
+        // In production: permission checks, delete from Firestore
+        return NextResponse.json({
+          message: "Member removed successfully",
+          orgId,
+          memberId,
+        });
+      } catch {
+        return serverError("Failed to remove member");
+      }
     }
-  });
-}
+  )
+);

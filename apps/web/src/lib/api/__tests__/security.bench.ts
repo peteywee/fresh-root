@@ -33,7 +33,7 @@ describe("Security Middleware Performance", () => {
       {
         time: 1000, // Run for 1 second
         iterations: 200, // Expect ~200 iterations in 1s = 5ms per iteration
-      }
+      },
     );
 
     bench(
@@ -47,7 +47,7 @@ describe("Security Middleware Performance", () => {
       {
         time: 1000,
         iterations: 200,
-      }
+      },
     );
   });
 
@@ -76,21 +76,25 @@ describe("Security Middleware Performance", () => {
       {
         time: 1000,
         iterations: 333, // Expect ~333 iterations in 1s = 3ms per iteration
-      }
+      },
     );
 
-    bench("CSRF generation (GET request) - should complete in <2ms", async () => {
-      const getRequest = new NextRequest("http://localhost:3000/api/test", {
-        method: "GET",
-      });
-      const handler = csrfProtection()(async () => {
-        return new Response("OK");
-      });
-      await handler(getRequest);
-    }, {
-      time: 1000,
-      iterations: 500, // Expect ~500 iterations in 1s = 2ms per iteration
-    });
+    bench(
+      "CSRF generation (GET request) - should complete in <2ms",
+      async () => {
+        const getRequest = new NextRequest("http://localhost:3000/api/test", {
+          method: "GET",
+        });
+        const handler = csrfProtection()(async () => {
+          return new Response("OK");
+        });
+        await handler(getRequest);
+      },
+      {
+        time: 1000,
+        iterations: 500, // Expect ~500 iterations in 1s = 2ms per iteration
+      },
+    );
   });
 
   describe("Authorization", () => {
@@ -118,17 +122,15 @@ describe("Security Middleware Performance", () => {
       {
         time: 1000,
         iterations: 100, // Expect ~100 iterations in 1s = 10ms per iteration
-      }
+      },
     );
 
     bench(
       "Role check (admin) - should complete in <5ms",
       async () => {
-        const handler = requireRole("admin")(
-          async (req, ctx: AuthContext) => {
-            return new Response("OK");
-          }
-        );
+        const handler = requireRole("admin")(async (req, ctx: AuthContext) => {
+          return new Response("OK");
+        });
         // Simulate already authenticated context
         const authenticatedHandler = async () => {
           return handler(request, mockContext);
@@ -138,7 +140,7 @@ describe("Security Middleware Performance", () => {
       {
         time: 1000,
         iterations: 200, // Expect ~200 iterations in 1s = 5ms per iteration
-      }
+      },
     );
   });
 
@@ -165,16 +167,16 @@ describe("Security Middleware Performance", () => {
             requireOrgMembership(
               requireRole("admin")(async (req, ctx) => {
                 return new Response("OK");
-              })
-            )
-          )
+              }),
+            ),
+          ),
         );
         await handler(request, { params: Promise.resolve({}) });
       },
       {
         time: 1000,
         iterations: 40, // Expect ~40 iterations in 1s = 25ms per iteration
-      }
+      },
     );
 
     bench(
@@ -183,40 +185,48 @@ describe("Security Middleware Performance", () => {
         const handler = rateLimit(RateLimits.STANDARD)(
           csrfProtection()(async () => {
             return new Response("OK");
-          })
+          }),
         );
         await handler(request);
       },
       {
         time: 1000,
         iterations: 100, // Expect ~100 iterations in 1s = 10ms per iteration
-      }
+      },
     );
   });
 });
 
 describe("Input Sanitization Performance", () => {
-  bench("Sanitize simple string - should complete in <1ms", () => {
-    sanitizeText("Hello <script>alert('xss')</script> World");
-  }, {
-    time: 1000,
-    iterations: 1000, // Expect ~1000 iterations in 1s = 1ms per iteration
-  });
+  bench(
+    "Sanitize simple string - should complete in <1ms",
+    () => {
+      sanitizeText("Hello <script>alert('xss')</script> World");
+    },
+    {
+      time: 1000,
+      iterations: 1000, // Expect ~1000 iterations in 1s = 1ms per iteration
+    },
+  );
 
-  bench("Sanitize complex object - should complete in <5ms", () => {
-    sanitizeObject(
-      {
-        name: "<b>Test</b>",
-        email: "test@example.com",
-        description: "This is a <script>malicious()</script> test",
-        nested: {
-          value: "<img src=x onerror=alert(1)>",
+  bench(
+    "Sanitize complex object - should complete in <5ms",
+    () => {
+      sanitizeObject(
+        {
+          name: "<b>Test</b>",
+          email: "test@example.com",
+          description: "This is a <script>malicious()</script> test",
+          nested: {
+            value: "<img src=x onerror=alert(1)>",
+          },
         },
-      },
-      { urlFields: ["website"] }
-    );
-  }, {
-    time: 1000,
-    iterations: 200, // Expect ~200 iterations in 1s = 5ms per iteration
-  });
+        { urlFields: ["website"] },
+      );
+    },
+    {
+      time: 1000,
+      iterations: 200, // Expect ~200 iterations in 1s = 5ms per iteration
+    },
+  );
 });

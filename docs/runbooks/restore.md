@@ -1,11 +1,11 @@
-# P1 RELIABILITY RESTORE: Firestore Data Restore Runbook
+# Firestore Data Restore Runbook
 
 Tags: P1, RELIABILITY, RESTORE, FIRESTORE, BACKUP, RUNBOOK
 
 ## Overview
 
-This runbook covers restoring Firestore data from automated backups. Use this when data
-corruption, accidental deletion, or other data loss incidents occur.
+This runbook covers restoring Firestore data from automated backups. Use this when data corruption,
+accidental deletion, or other data loss incidents occur.
 
 ## Prerequisites
 
