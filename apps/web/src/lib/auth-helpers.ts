@@ -1,3 +1,5 @@
+// [P0][AUTH][CODE] Auth Helpers
+// Tags: P0, AUTH, CODE
 import {
   GoogleAuthProvider,
   signInWithPopup,

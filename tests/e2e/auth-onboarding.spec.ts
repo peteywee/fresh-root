@@ -1,3 +1,5 @@
+// [P0][AUTH][TEST] Auth Onboarding Spec tests
+// Tags: P0, AUTH, TEST
 import { test, expect } from '@playwright/test';
 
 // NOTE: This is a harness template. For full automation you’d provide a test auth emulator UI or stub endpoints.

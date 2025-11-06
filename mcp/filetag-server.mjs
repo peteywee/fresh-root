@@ -1,3 +1,5 @@
+// [P2][APP][CODE] Filetag Server
+// Tags: P2, APP, CODE
 #!/usr/bin/env node
 // filetag MCP server (stdio) with caching, self-learning, and code analysis.
 // Tools:

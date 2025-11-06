@@ -1,3 +1,5 @@
+// [P0][RBAC][CODE] Rbac
+// Tags: P0, RBAC, CODE
 import { z } from "zod";
 
 export const OrgRole = z.enum(["org_owner", "admin", "manager", "scheduler", "staff"]);

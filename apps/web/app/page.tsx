@@ -1,3 +1,5 @@
+// [P2][APP][CODE] Page page component
+// Tags: P2, APP, CODE
 export default function Home() {
   return (
     <main className="p-6">

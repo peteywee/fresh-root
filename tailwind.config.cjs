@@ -1,3 +1,5 @@
+// [P2][APP][ENV] Tailwind Config
+// Tags: P2, APP, ENV
 module.exports = {
   content: [
     "./apps/web/**/*.{js,ts,jsx,tsx,html}",

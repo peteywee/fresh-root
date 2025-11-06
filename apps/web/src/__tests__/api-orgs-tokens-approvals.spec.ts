@@ -1,3 +1,5 @@
+// [P0][AUTH][TEST] Api Orgs Tokens Approvals Spec tests
+// Tags: P0, AUTH, TEST
 import { describe, it, expect, vi } from 'vitest';
 vi.mock('../lib/firebase.server', async () => {
   const fakeDoc = () => {

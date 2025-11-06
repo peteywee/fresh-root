@@ -1,3 +1,5 @@
+// [P2][UI][CODE] Alert
+// Tags: P2, UI, CODE
 "use client";
 
 import { clsx } from "clsx";

@@ -1,3 +1,5 @@
+// [P2][APP][CODE] Preinstall
+// Tags: P2, APP, CODE
 #!/usr/bin/env node
 const semver = require("semver");
 

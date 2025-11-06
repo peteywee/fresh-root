@@ -1,3 +1,5 @@
+// [P0][API][CODE] Schedules
+// Tags: P0, API, CODE
 import { collection, doc, getDocs, query, serverTimestamp, setDoc } from "firebase/firestore";
 
 import { db } from "../../../app/lib/firebaseClient";

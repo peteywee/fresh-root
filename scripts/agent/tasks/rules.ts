@@ -1,3 +1,5 @@
+// [P0][APP][CODE] Rules
+// Tags: P0, APP, CODE
 import { writeFile } from "node:fs/promises";
 import { existsSync, mkdirSync } from "node:fs";
 import { join, dirname } from "node:path";

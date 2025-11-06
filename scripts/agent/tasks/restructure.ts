@@ -1,3 +1,5 @@
+// [P2][APP][CODE] Restructure
+// Tags: P2, APP, CODE
 import { existsSync, mkdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 

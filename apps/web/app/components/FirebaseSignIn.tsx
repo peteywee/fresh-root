@@ -1,3 +1,5 @@
+// [P0][FIREBASE][FIREBASE] FirebaseSignIn
+// Tags: P0, FIREBASE, FIREBASE
 "use client";
 import { getAuth } from "firebase/auth";
 import * as firebaseui from "firebaseui";

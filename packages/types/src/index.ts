@@ -1,3 +1,5 @@
+// [P0][APP][CODE] Index
+// Tags: P0, APP, CODE
 import { z } from "zod";
 
 export const Role = z.enum(["admin", "manager", "staff"]);

@@ -1,3 +1,5 @@
+// [P0][AUTH][LOGGING] Page page component
+// Tags: P0, AUTH, LOGGING
 "use client";
 
 import { isSignInWithEmailLink } from "firebase/auth";

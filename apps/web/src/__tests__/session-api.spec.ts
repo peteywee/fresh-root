@@ -1,3 +1,5 @@
+// [P0][AUTH][SESSION] Session Api Spec tests
+// Tags: P0, AUTH, SESSION, TEST
 import { describe, it, expect, vi } from 'vitest';
 
 // Mock Admin Auth

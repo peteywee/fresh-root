@@ -1,3 +1,5 @@
+// [P1][OBSERVABILITY][LOGGING] Login Publish Logout E2e Spec tests
+// Tags: P1, OBSERVABILITY, LOGGING, TEST
 // Provide a minimal ambient declaration so TypeScript doesn't error about the global `page`.
 declare const page: import('playwright').Page;
 

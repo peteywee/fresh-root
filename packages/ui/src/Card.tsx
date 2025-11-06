@@ -1,3 +1,5 @@
+// [P2][UI][CODE] Card
+// Tags: P2, UI, CODE
 import { clsx } from "clsx";
 import React from "react";
 

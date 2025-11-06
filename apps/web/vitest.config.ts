@@ -1,3 +1,5 @@
+// [P1][TEST][ENV] Vitest Config tests
+// Tags: P1, TEST, ENV, TEST
 import { defineConfig } from "vitest/config";
 import react from "@vitejs/plugin-react";
 import path from "path";

@@ -1,3 +1,5 @@
+// [P2][UI][CODE] Button
+// Tags: P2, UI, CODE
 "use client";
 
 import { clsx } from "clsx";

@@ -1,3 +1,5 @@
+// [P0][APP][ENV] Eslint Config
+// Tags: P0, APP, ENV
 import typescriptEslint from "@typescript-eslint/eslint-plugin";
 import typescriptParser from "@typescript-eslint/parser";
 import importPlugin from "eslint-plugin-import";

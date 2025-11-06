@@ -1,3 +1,5 @@
+// [P0][AUTH][SESSION] Route API route handler
+// Tags: P0, AUTH, SESSION
 import { NextRequest, NextResponse } from "next/server";
 
 import { getFirebaseAdminAuth } from "../../../lib/firebase-admin";

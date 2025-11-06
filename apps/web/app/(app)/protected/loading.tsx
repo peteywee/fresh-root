@@ -1,3 +1,5 @@
+// [P2][APP][CODE] Loading
+// Tags: P2, APP, CODE
 export default function Loading() {
   return (
     <div className="grid gap-3">

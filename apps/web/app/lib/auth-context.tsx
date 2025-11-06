@@ -1,3 +1,5 @@
+// [P0][AUTH][CODE] Auth Context
+// Tags: P0, AUTH, CODE
 "use client";
 import { User, onAuthStateChanged } from "firebase/auth";
 import React, { createContext, useContext, useEffect, useState } from "react";

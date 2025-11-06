@@ -1,3 +1,5 @@
+// [P0][RBAC][TEST] Rbac Test tests
+// Tags: P0, RBAC, TEST
 import { initializeTestEnvironment, type RulesTestEnvironment } from "@firebase/rules-unit-testing";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { readFileSync } from "fs";

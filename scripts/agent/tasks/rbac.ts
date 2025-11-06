@@ -1,3 +1,5 @@
+// [P0][RBAC][CODE] Rbac
+// Tags: P0, RBAC, CODE
 import { writeFile, readFile } from "node:fs/promises";
 import { existsSync, mkdirSync } from "node:fs";
 import { join, dirname } from "node:path";

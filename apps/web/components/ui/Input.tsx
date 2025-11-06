@@ -1,3 +1,5 @@
+// [P2][UI][CODE] Input
+// Tags: P2, UI, CODE
 "use client";
 
 import * as React from "react";

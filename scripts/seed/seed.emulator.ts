@@ -1,3 +1,5 @@
+// [P0][APP][CODE] Seed Emulator
+// Tags: P0, APP, CODE
 /* pnpm seed (requires emulators running) */
 import { initializeApp } from "firebase-admin/app";
 import { getAuth } from "firebase-admin/auth";

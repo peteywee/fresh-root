@@ -1,3 +1,5 @@
+// [P1][TEST][TEST] Input Test tests
+// Tags: P1, TEST, TEST
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, it, expect } from 'vitest'

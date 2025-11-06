@@ -1,3 +1,5 @@
+// [P2][APP][CODE] QueryClient
+// Tags: P2, APP, CODE
 "use client";
 import { QueryClient } from "@tanstack/react-query";
 

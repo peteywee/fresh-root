@@ -1,3 +1,5 @@
+// [P2][APP][CODE] Fonts
+// Tags: P2, APP, CODE
 import { Inter } from "next/font/google";
 
 /**

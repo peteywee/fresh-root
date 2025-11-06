@@ -1,3 +1,5 @@
+// [P2][APP][CODE] RegisterServiceWorker
+// Tags: P2, APP, CODE
 "use client";
 import { useEffect } from "react";
 

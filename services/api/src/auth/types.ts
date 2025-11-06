@@ -1,3 +1,5 @@
+// [P0][AUTH][CODE] Types
+// Tags: P0, AUTH, CODE
 export type UserToken = {
   uid: string;
   orgId: string;

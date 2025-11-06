@@ -1,3 +1,5 @@
+// [P2][APP][CODE] Store
+// Tags: P2, APP, CODE
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
