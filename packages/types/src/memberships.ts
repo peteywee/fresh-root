@@ -39,7 +39,7 @@ export const MembershipCreateSchema = z.object({
       },
       { message: "org_owner role cannot be assigned via API" },
     ),
-  mfaVerified: z.boolean().optional().default(false),
+  mfaVerified: z.boolean().default(false),
 });
 
 export type MembershipCreateInput = z.infer<typeof MembershipCreateSchema>;

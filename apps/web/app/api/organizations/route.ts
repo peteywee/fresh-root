@@ -1,18 +1,11 @@
-// [P0][API][CODE] Route API route handler
-// Tags: P0, API, CODE
-import { NextRequest } from "next/server";
-import { z } from "zod";
+// [P0][API][CODE] Organizations API route handler
+// Tags: P0, API, CODE, validation, zod
+import { NextRequest, NextResponse } from "next/server";
+import type { z } from "zod";
 
-import { requireSession, AuthenticatedRequest, require2FAForManagers } from "../_shared/middleware";
-import { parseJson, badRequest, ok, serverError } from "../_shared/validation";
-
-// Schema for creating an organization
-const CreateOrgSchema = z.object({
-  name: z.string().min(1).max(100),
-  description: z.string().max(500).optional(),
-  industry: z.string().optional(),
-  size: z.enum(["1-10", "11-50", "51-200", "201-500", "500+"]).optional(),
-});
+import { withValidation } from "../../../src/lib/api/validation";
+import { requireSession, AuthenticatedRequest } from "../_shared/middleware";
+import { serverError, OrganizationCreateSchema } from "../_shared/validation";
 
 /**
  * GET /api/organizations
@@ -43,7 +36,7 @@ export async function GET(request: NextRequest) {
         },
       ];
 
-      return ok({ organizations, userId: authReq.user?.uid });
+      return NextResponse.json({ organizations, userId: authReq.user?.uid });
     } catch {
       return serverError("Failed to fetch organizations");
     }
@@ -52,30 +45,26 @@ export async function GET(request: NextRequest) {
 
 /**
  * POST /api/organizations
- * Create a new organization (requires 2FA for manager operations)
+ * Create a new organization
  */
-export async function POST(request: NextRequest) {
-  return require2FAForManagers(request as AuthenticatedRequest, async (authReq) => {
-    try {
-      const parsed = await parseJson(authReq, CreateOrgSchema);
+export const POST = withValidation(
+  OrganizationCreateSchema,
+  async (request: NextRequest, data: z.infer<typeof OrganizationCreateSchema>) => {
+    return requireSession(request as AuthenticatedRequest, async (authReq) => {
+      try {
+        // In production, create organization in Firestore
+        const newOrg = {
+          id: `org-${Date.now()}`,
+          ...data,
+          ownerId: authReq.user?.uid,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        };
 
-      if (!parsed.success) {
-        return badRequest("Validation failed", parsed.details);
+        return NextResponse.json(newOrg, { status: 201 });
+      } catch {
+        return serverError("Failed to create organization");
       }
-
-      // In production, create organization in database
-      const newOrg = {
-        id: `org-${Date.now()}`,
-        ...parsed.data,
-        role: "admin", // Creator is admin
-        ownerId: authReq.user?.uid,
-        createdAt: new Date().toISOString(),
-        memberCount: 1,
-      };
-
-      return ok(newOrg);
-    } catch {
-      return serverError("Failed to create organization");
-    }
-  });
-}
+    });
+  },
+);

@@ -35,3 +35,7 @@ export const UpdateOrganizationInput = z
   })
   .partial();
 export type UpdateOrganizationInput = z.infer<typeof UpdateOrganizationInput>;
+
+// API schema aliases for consistency
+export const OrganizationCreateSchema = CreateOrganizationInput;
+export const OrganizationUpdateSchema = UpdateOrganizationInput;

@@ -45,3 +45,9 @@ export async function parseJson<T>(req: Request, schema: z.ZodType<T>) {
   }
   return { success: true as const, data: parsed.data };
 }
+
+export const OrganizationCreateSchema = z.object({
+  name: z.string().min(1, "Organization name is required").max(100),
+  description: z.string().max(500).optional(),
+  settings: z.record(z.unknown()).optional(),
+});

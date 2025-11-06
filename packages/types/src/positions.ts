@@ -32,6 +32,7 @@ export type Position = z.infer<typeof PositionSchema>;
  * Input schema for creating a new position.
  */
 export const PositionCreateSchema = z.object({
+  orgId: z.string().min(1, "Organization ID is required"),
   title: z.string().min(1, "Title is required").max(100, "Title must be 100 characters or less"),
   description: z.string().max(500, "Description must be 500 characters or less").optional(),
   hourlyRate: z
@@ -43,7 +44,7 @@ export const PositionCreateSchema = z.object({
     .string()
     .regex(/^#[0-9A-Fa-f]{6}$/, "Color must be a valid hex color code")
     .optional(),
-  isActive: z.boolean().optional().default(true),
+  isActive: z.boolean().default(true),
 });
 
 export type PositionCreateInput = z.infer<typeof PositionCreateSchema>;

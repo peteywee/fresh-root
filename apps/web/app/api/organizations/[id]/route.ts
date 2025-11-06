@@ -1,24 +1,11 @@
-// [P0][API][CODE] Route API route handler
-// Tags: P0, API, CODE
-import { NextRequest } from "next/server";
-import { z } from "zod";
+// [P0][API][CODE] Organizations [id] API route handler
+// Tags: P0, API, CODE, validation, zod
+import { OrganizationUpdateSchema } from "@fresh-schedules/types";
+import { NextRequest, NextResponse } from "next/server";
+import type { z } from "zod";
 
-import { parseJson, badRequest, ok, serverError } from "../../_shared/validation";
-
-// Schema for updating organization
-const UpdateOrgSchema = z.object({
-  name: z.string().min(1).max(100).optional(),
-  description: z.string().max(500).optional(),
-  industry: z.string().optional(),
-  size: z.enum(["1-10", "11-50", "51-200", "201-500", "500+"]).optional(),
-  settings: z
-    .object({
-      allowPublicSchedules: z.boolean().optional(),
-      requireShiftApproval: z.boolean().optional(),
-      defaultShiftDuration: z.number().positive().optional(),
-    })
-    .optional(),
-});
+import { withValidation } from "../../../../src/lib/api/validation";
+import { serverError } from "../../_shared/validation";
 
 /**
  * GET /api/organizations/[id]
@@ -44,8 +31,8 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
       memberCount: 25,
     };
 
-    return ok(organization);
-  } catch (_error) {
+    return NextResponse.json(organization);
+  } catch {
     return serverError("Failed to fetch organization");
   }
 }
@@ -54,27 +41,34 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
  * PATCH /api/organizations/[id]
  * Update organization details
  */
-export async function PATCH(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+async function patchHandler(
+  request: NextRequest,
+  data: z.infer<typeof OrganizationUpdateSchema>,
+  params: { id: string },
+) {
   try {
-    const { id } = await params;
-    const parsed = await parseJson(request, UpdateOrgSchema);
-
-    if (!parsed.success) {
-      return badRequest("Validation failed", parsed.details);
-    }
+    const { id } = params;
 
     // In production, update in database after checking permissions
     const updatedOrg = {
       id,
       name: "Acme Corp",
-      ...parsed.data,
+      ...data,
       updatedAt: new Date().toISOString(),
     };
 
-    return ok(updatedOrg);
-  } catch (_error) {
+    return NextResponse.json(updatedOrg);
+  } catch {
     return serverError("Failed to update organization");
   }
+}
+
+export async function PATCH(request: NextRequest, context: { params: Promise<{ id: string }> }) {
+  const params = await context.params;
+  const validated = withValidation(OrganizationUpdateSchema, (req, data) =>
+    patchHandler(req, data, params),
+  );
+  return validated(request);
 }
 
 /**
@@ -82,15 +76,15 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
  * Delete an organization (admin only)
  */
 export async function DELETE(
-  request: NextRequest,
+  _request: NextRequest,
   { params }: { params: Promise<{ id: string }> },
 ) {
   try {
     const { id } = await params;
 
     // In production, check if user is admin and delete from database
-    return ok({ message: "Organization deleted successfully", id });
-  } catch (_error) {
+    return NextResponse.json({ message: "Organization deleted successfully", id });
+  } catch {
     return serverError("Failed to delete organization");
   }
 }

@@ -117,3 +117,9 @@ export const UpdateShiftInput = z
   })
   .partial();
 export type UpdateShiftInput = z.infer<typeof UpdateShiftInput>;
+
+// API schema aliases for consistency
+export const ScheduleCreateSchema = CreateScheduleInput;
+export const ScheduleUpdateSchema = UpdateScheduleInput;
+export const ShiftCreateSchema = CreateShiftInput;
+export const ShiftUpdateSchema = UpdateShiftInput;

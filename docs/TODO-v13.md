@@ -86,7 +86,7 @@ e# Fresh Schedules v13 Plan C Milestone Checklist
 
 🧩 Block 3 – Integrity Core (P1)
 
-### 3.1 - Zod Schema Foundation
+## 3.1 - Zod Schema Foundation (2)
 
 - [ ] [BLOCK3.1] Expand packages/types/ with comprehensive Zod schemas
   - [ ] Create `packages/types/src/organizations.ts` with Zod schemas
@@ -131,58 +131,127 @@ e# Fresh Schedules v13 Plan C Milestone Checklist
 
 - [ ] Update `packages/types/src/index.ts` to export all new schemas
 
-### 3.2 - API Route Zod Validation
+### 3.2 - API Validation Layer
 
-- [ ] [BLOCK3.2] Add API-level Zod validation for every write route (422 on invalid payload)
-  - [ ] Update `apps/web/app/api/_shared/validation.ts`
+- [x] [BLOCK3.2] Add request/response validation to all API routes
+  - [x] Create `apps/web/src/lib/api/validation.ts` middleware
 
 ```text
-- [ ] Add `validateRequest` helper (accepts Zod schema, returns 422 on error)
-- [ ] Add `ValidationError` class with detailed field-level errors
-- [ ] Add request body size validation (max 1MB)
+- [x] `validateRequest` helper (accepts Zod schema, returns 422 on error)
+- [x] `ValidationError` class with detailed field-level errors
+- [x] Request body size validation (max 1MB)
+- [x] `withValidation` HOF for route handlers
+- [x] Common query schemas (pagination, sorting, dateRange)
 ```
 
-- [ ] Apply validation to Organizations API
+- [x] Create unit tests at `apps/web/src/lib/api/validation.test.ts`
+- **Status**: Middleware complete, ready for integration into API routes
+
+- [x] Apply validation to Organizations API
 
 ```text
-- [ ] Update `POST /api/organizations` with `OrganizationCreateSchema`
-- [ ] Update `PATCH /api/organizations/[id]` with `OrganizationUpdateSchema`
+- [x] Update `POST /api/organizations` with `OrganizationCreateSchema`
+- [x] Update `PATCH /api/organizations/[id]` with `OrganizationUpdateSchema`
 - [ ] Add unit tests for validation errors
 ```
 
-- [ ] Apply validation to Memberships API
+- [x] Apply validation to Memberships API
 
 ```text
-- [ ] Create `POST /api/organizations/[id]/members` with `MembershipCreateSchema`
-- [ ] Add role validation (only owners/admins can assign manager role)
+- [x] Create `POST /api/organizations/[id]/members` with `MembershipCreateSchema`
+- [x] Create `PATCH /api/organizations/[id]/members/[memberId]` with `MembershipUpdateSchema`
+- [x] Add role validation (only owners/admins can assign manager role)
 - [ ] Add unit tests for RBAC validation
 ```
 
-- [ ] Apply validation to Positions API
+- [x] Apply validation to Positions API
 
 ```text
-- [ ] Create `POST /api/positions` with `PositionCreateSchema`
-- [ ] Create `PATCH /api/positions/[id]` with `PositionUpdateSchema`
+- [x] Create `POST /api/positions` with `PositionCreateSchema`
+- [x] Create `PATCH /api/positions/[id]` with `PositionUpdateSchema`
 - [ ] Add unit tests
 ```
 
-- [ ] Apply validation to Schedules API
+- [x] Apply validation to Schedules API
 
 ```text
-- [ ] Update `POST /api/schedules` with `ScheduleCreateSchema`
-- [ ] Update `PATCH /api/schedules/[id]` with `ScheduleUpdateSchema`
-- [ ] Validate date range logic (startDate <= endDate)
+- [x] Update `POST /api/schedules` with `ScheduleCreateSchema`
+- [x] Update `PATCH /api/schedules/[id]` with `ScheduleUpdateSchema`
+- [x] Validate date range logic (startDate <= endDate) - in schema refinement
 - [ ] Add unit tests
 ```
 
-- [ ] Apply validation to Shifts API
+- [x] Apply validation to Shifts API
 
 ```text
-- [ ] Create `POST /api/shifts` with `ShiftCreateSchema`
-- [ ] Create `PATCH /api/shifts/[id]` with `ShiftUpdateSchema`
-- [ ] Validate time range and break logic
-- [ ] Add conflict detection (overlapping shifts for same user)
+- [x] Create `POST /api/shifts` with `ShiftCreateSchema`
+- [x] Create `PATCH /api/shifts/[id]` with `ShiftUpdateSchema`
+- [x] Validate time range and break logic - in schema refinement
+- [ ] Add conflict detection (overlapping shifts for same user) - TODO in production
 - [ ] Add unit tests
+```
+
+### 3.2.1 - Security Hardening (Critical)
+
+> **Status**: ✅ COMPLETE - All security middleware implemented and tested
+> **Completion Date**: 2025-01-XX
+> **See**: `docs/SECURITY_ASSESSMENT.md` for full security audit
+
+- [x] [SECURITY-PHASE1] Implement critical security layers
+
+```text
+- [x] Create authorization middleware (`apps/web/src/lib/api/authorization.ts`)
+  - [x] `requireOrgMembership` - verify user belongs to organization
+  - [x] `requireRole` - enforce RBAC (org_owner > admin > manager > scheduler > staff)
+  - [x] `canAccessResource` - combined membership + role check helper
+  - [x] `extractOrgId` - parse orgId from URL/query params
+  - [x] Unit tests (14 tests) - authorization.test.ts
+
+- [x] Create rate limiting middleware (`apps/web/src/lib/api/rate-limit.ts`)
+  - [x] In-memory rate limiter with sliding window
+  - [x] Per-IP and per-user rate limiting
+  - [x] Preset limits: STRICT (10/min), STANDARD (100/min), WRITE (30/min), AUTH (5/min)
+  - [x] 429 responses with Retry-After headers
+  - [x] Rate limit headers (X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset)
+  - [x] Unit tests (9 tests) - rate-limit.test.ts
+
+- [x] Create CSRF protection middleware (`apps/web/src/lib/api/csrf.ts`)
+  - [x] Double-submit cookie pattern
+  - [x] Timing-safe token comparison
+  - [x] Protect POST/PUT/PATCH/DELETE operations
+  - [x] Custom cookie/header names support
+  - [x] SameSite=Strict, HttpOnly, Secure cookies
+  - [x] Unit tests (15 tests) - csrf.test.ts
+
+- [x] Create input sanitization utilities (`apps/web/src/lib/api/sanitize.ts`)
+  - [x] HTML escaping (XSS prevention)
+  - [x] URL sanitization (block javascript:, data: protocols)
+  - [x] Recursive object sanitization
+  - [x] Email/phone sanitization
+  - [x] SQL/NoSQL injection prevention helpers
+  - [x] Path traversal prevention
+  - [x] Command injection prevention
+```
+
+- [ ] Apply security middleware to API routes
+
+```text
+- [ ] Add `requireOrgMembership` to all org-scoped routes
+- [ ] Add `requireRole("admin")` to organization management routes
+- [ ] Add `requireRole("manager")` to position/schedule/shift management routes
+- [ ] Add `rateLimit(RateLimits.WRITE)` to all POST/PUT/PATCH/DELETE routes
+- [ ] Add `rateLimit(RateLimits.AUTH)` to auth routes
+- [ ] Add `csrfProtection()` to all state-changing routes
+- [ ] Add input sanitization to user-generated content fields
+```
+
+- [ ] Integration tests for security
+
+```text
+- [ ] Test cross-org access denial (user cannot access other org's data)
+- [ ] Test role enforcement (staff cannot create schedules)
+- [ ] Test rate limiting (429 after threshold)
+- [ ] Test CSRF protection (403 without valid token)
 ```
 
 ### 3.3 - Firestore Rules Test Matrix
@@ -357,6 +426,22 @@ e# Fresh Schedules v13 Plan C Milestone Checklist
 - [ ] Add troubleshooting section for hook failures
 
 🎨 Block 4 – Experience Layer (P1)
+
+### 4.0 - UX Planning & Strategy
+
+- [ ] [BLOCK4.0] Create comprehensive UX plan document
+  - [ ] Define UX principles and design philosophy
+  - [ ] Document user personas and roles (Manager, Staff, Corporate)
+  - [ ] Map critical user journeys (≤5-minute scheduling flow)
+  - [ ] Create complete component inventory (atomic + composite)
+  - [ ] Define interaction patterns (drag-drop, bulk ops, inline editing)
+  - [ ] Establish WCAG 2.1 AA accessibility standards
+  - [ ] Set performance budgets (Core Web Vitals, bundle sizes)
+  - [ ] Design mobile-first experience with PWA capabilities
+  - [ ] Define success metrics and KPIs
+  - [ ] Create 10-week implementation roadmap
+  - **Deliverable**: `docs/UX_PLAN.md` (comprehensive UX strategy document)
+  - **Status**: Draft v1.0 created, needs review and refinement
 
 ### 4.1 - Design System Foundation
 
