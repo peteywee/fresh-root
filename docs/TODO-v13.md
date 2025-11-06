@@ -84,13 +84,167 @@
 
 🧩 Block 3 – Integrity Core (P1)
 
-- [ ] [BLOCK3] Expand packages/types/ with Zod schemas for orgs, memberships, positions, schedules, shifts
-- [ ] [BLOCK3] Add API-level Zod validation for every write route (422 on invalid payload)
-- [ ] [BLOCK3] Write rules test matrix (≥ 1 allow + 3 denies per collection)
-- [ ] [BLOCK3] Add unit tests for Zod validators
-- [ ] [BLOCK3] Add migration-check script validating schema parity vs rules
-- [ ] [BLOCK3] Create schema index doc (docs/schema-map.md) listing collections ↔ schemas
-- [ ] [BLOCK3] Add pre-commit hook enforcing pnpm typecheck && pnpm lint
+### 3.1 - Zod Schema Foundation
+
+- [ ] [BLOCK3.1] Expand packages/types/ with comprehensive Zod schemas
+  - [ ] Create `packages/types/src/organizations.ts` with Zod schemas
+    - [ ] Define `OrganizationSchema` (id, name, createdAt, updatedAt, settings)
+    - [ ] Define `OrganizationCreateSchema` (input validation for creation)
+    - [ ] Define `OrganizationUpdateSchema` (partial updates)
+    - [ ] Export TypeScript types from Zod schemas
+  - [ ] Create `packages/types/src/memberships.ts` with Zod schemas
+    - [ ] Define `MembershipSchema` (orgId, uid, role, joinedAt, mfaVerified)
+    - [ ] Define `MembershipCreateSchema` (input validation)
+    - [ ] Define role enum: owner, admin, manager, member, staff
+  - [ ] Create `packages/types/src/positions.ts` with Zod schemas
+    - [ ] Define `PositionSchema` (id, orgId, title, description, hourlyRate)
+    - [ ] Define `PositionCreateSchema` and `PositionUpdateSchema`
+  - [ ] Create `packages/types/src/schedules.ts` with Zod schemas
+    - [ ] Define `ScheduleSchema` (id, orgId, name, startDate, endDate, status)
+    - [ ] Define `ScheduleCreateSchema` and `ScheduleUpdateSchema`
+    - [ ] Define schedule status enum: draft, published, archived
+  - [ ] Create `packages/types/src/shifts.ts` with Zod schemas
+    - [ ] Define `ShiftSchema` (id, scheduleId, positionId, uid, startTime, endTime, breakMinutes)
+    - [ ] Define `ShiftCreateSchema` and `ShiftUpdateSchema`
+    - [ ] Add validation rules (startTime < endTime, breakMinutes >= 0)
+  - [ ] Update `packages/types/src/index.ts` to export all new schemas
+
+### 3.2 - API Route Zod Validation
+
+- [ ] [BLOCK3.2] Add API-level Zod validation for every write route (422 on invalid payload)
+  - [ ] Update `apps/web/app/api/_shared/validation.ts`
+    - [ ] Add `validateRequest` helper (accepts Zod schema, returns 422 on error)
+    - [ ] Add `ValidationError` class with detailed field-level errors
+    - [ ] Add request body size validation (max 1MB)
+  - [ ] Apply validation to Organizations API
+    - [ ] Update `POST /api/organizations` with `OrganizationCreateSchema`
+    - [ ] Update `PATCH /api/organizations/[id]` with `OrganizationUpdateSchema`
+    - [ ] Add unit tests for validation errors
+  - [ ] Apply validation to Memberships API
+    - [ ] Create `POST /api/organizations/[id]/members` with `MembershipCreateSchema`
+    - [ ] Add role validation (only owners/admins can assign manager role)
+    - [ ] Add unit tests for RBAC validation
+  - [ ] Apply validation to Positions API
+    - [ ] Create `POST /api/positions` with `PositionCreateSchema`
+    - [ ] Create `PATCH /api/positions/[id]` with `PositionUpdateSchema`
+    - [ ] Add unit tests
+  - [ ] Apply validation to Schedules API
+    - [ ] Update `POST /api/schedules` with `ScheduleCreateSchema`
+    - [ ] Update `PATCH /api/schedules/[id]` with `ScheduleUpdateSchema`
+    - [ ] Validate date range logic (startDate <= endDate)
+    - [ ] Add unit tests
+  - [ ] Apply validation to Shifts API
+    - [ ] Create `POST /api/shifts` with `ShiftCreateSchema`
+    - [ ] Create `PATCH /api/shifts/[id]` with `ShiftUpdateSchema`
+    - [ ] Validate time range and break logic
+    - [ ] Add conflict detection (overlapping shifts for same user)
+    - [ ] Add unit tests
+
+### 3.3 - Firestore Rules Test Matrix
+
+- [ ] [BLOCK3.3] Write rules test matrix (≥ 1 allow + 3 denies per collection)
+  - [ ] Create `tests/rules/organizations.spec.ts`
+    - [ ] Test allow: member can read org
+    - [ ] Test deny: unauthenticated cannot read org
+    - [ ] Test deny: non-member cannot read org
+    - [ ] Test deny: member cannot update org (only managers)
+    - [ ] Test allow: manager can update org
+  - [ ] Create `tests/rules/memberships.spec.ts`
+    - [ ] Test allow: member can read own membership
+    - [ ] Test allow: member can read other memberships in same org
+    - [ ] Test deny: cannot read memberships from other orgs
+    - [ ] Test deny: member cannot update membership role (only managers)
+    - [ ] Test allow: manager can update membership role
+  - [ ] Create `tests/rules/positions.spec.ts`
+    - [ ] Test allow: member can read positions in their org
+    - [ ] Test deny: cannot read positions from other orgs
+    - [ ] Test deny: staff cannot create/update positions (only managers)
+    - [ ] Test allow: manager can create/update positions
+  - [ ] Create `tests/rules/schedules.spec.ts`
+    - [ ] Test allow: member can read schedules in their org
+    - [ ] Test deny: cannot read schedules from other orgs
+    - [ ] Test deny: staff cannot publish schedules (only managers)
+    - [ ] Test allow: manager can create/update/publish schedules
+    - [ ] Test deny: cannot modify archived schedules
+  - [ ] Create `tests/rules/shifts.spec.ts`
+    - [ ] Test allow: member can read shifts in their org's schedules
+    - [ ] Test deny: cannot read shifts from other orgs
+    - [ ] Test deny: staff cannot assign shifts to others (only managers)
+    - [ ] Test allow: manager can create/update/delete any shift
+    - [ ] Test allow: staff can update their own shift notes/checkIn
+  - [ ] Run all rules tests with Firebase emulator
+    - [ ] Add `pnpm test:rules` script to package.json
+    - [ ] Ensure CI runs rules tests on every PR
+    - [ ] Add coverage reporting for rules tests
+
+### 3.4 - Schema Validation Tests
+
+- [ ] [BLOCK3.4] Add unit tests for Zod validators
+  - [ ] Create `packages/types/src/__tests__/organizations.test.ts`
+    - [ ] Test valid organization creation
+    - [ ] Test invalid organization (missing required fields)
+    - [ ] Test invalid types (wrong field types)
+    - [ ] Test string length limits (name min/max)
+  - [ ] Create `packages/types/src/__tests__/memberships.test.ts`
+    - [ ] Test valid membership creation
+    - [ ] Test invalid role values
+    - [ ] Test required field validation
+  - [ ] Create `packages/types/src/__tests__/positions.test.ts`
+    - [ ] Test valid position creation
+    - [ ] Test hourlyRate validation (must be positive number)
+    - [ ] Test string field limits
+  - [ ] Create `packages/types/src/__tests__/schedules.test.ts`
+    - [ ] Test valid schedule creation
+    - [ ] Test date range validation (startDate <= endDate)
+    - [ ] Test status enum validation
+  - [ ] Create `packages/types/src/__tests__/shifts.test.ts`
+    - [ ] Test valid shift creation
+    - [ ] Test time range validation (startTime < endTime)
+    - [ ] Test breakMinutes validation (>= 0, < shift duration)
+    - [ ] Test overlapping shift detection logic
+  - [ ] Add test coverage reporting
+    - [ ] Configure Vitest coverage for packages/types
+    - [ ] Aim for ≥ 90% coverage on Zod schemas
+    - [ ] Add coverage badge to README
+
+### 3.5 - Schema Parity & Documentation
+
+- [ ] [BLOCK3.5] Add migration-check script validating schema parity vs rules
+  - [ ] Create `scripts/validate-schema-parity.mjs`
+    - [ ] Parse Firestore rules to extract collection names
+    - [ ] Parse Zod schemas to extract schema names
+    - [ ] Compare and report mismatches
+    - [ ] Check that every collection has corresponding Zod schema
+    - [ ] Check that every Zod schema has corresponding rules tests
+  - [ ] Add as pre-push git hook
+    - [ ] Update `.husky/pre-push` to run parity check
+    - [ ] Fail push if parity check fails
+  - [ ] Run in CI pipeline
+    - [ ] Add to `.github/workflows/ci.yml`
+    - [ ] Block PR merge if parity check fails
+
+- [ ] [BLOCK3.6] Create schema index doc (docs/schema-map.md)
+  - [ ] Document all collections and their schemas
+    - [ ] `/organizations` → `OrganizationSchema`
+    - [ ] `/organizations/{orgId}/members` → `MembershipSchema`
+    - [ ] `/positions` → `PositionSchema`
+    - [ ] `/schedules` → `ScheduleSchema`
+    - [ ] `/shifts` → `ShiftSchema`
+  - [ ] Document validation rules per collection
+  - [ ] Document RBAC requirements (who can read/write)
+  - [ ] Add schema evolution guidelines
+  - [ ] Add examples of valid payloads
+
+### 3.7 - Pre-commit Quality Gates
+
+- [ ] [BLOCK3.7] Add pre-commit hook enforcing quality checks
+  - [ ] Update `.husky/pre-commit` script
+    - [ ] Run `pnpm typecheck` (already exists)
+    - [ ] Run `pnpm lint` (already exists)
+    - [ ] Add `pnpm test:schemas` (new - runs Zod schema tests only)
+    - [ ] Ensure all checks pass before allowing commit
+  - [ ] Document pre-commit hooks in CONTRIBUTING.md
+  - [ ] Add troubleshooting section for hook failures
 
 🎨 Block 4 – Experience Layer (P1)
 
