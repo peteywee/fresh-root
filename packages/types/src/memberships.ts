@@ -75,9 +75,10 @@ export type MembershipUpdateInput = z.infer<typeof MembershipUpdateSchema>;
 export const ROLE_HIERARCHY: Record<OrgRole, number> = {
   staff: 0,
   scheduler: 1,
-  manager: 2,
-  admin: 3,
-  org_owner: 4,
+  corporate: 2,
+  manager: 3,
+  admin: 4,
+  org_owner: 5,
 };
 
 /**
