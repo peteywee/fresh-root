@@ -1,3 +1,5 @@
+// [P1][API][CODE] Index
+// Tags: P1, API, CODE
 // Central API exports for consistent imports across routes
 export * from "./session";
 export * from "./authorization";
