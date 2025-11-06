@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# [P2][APP][CODE] Bootstrap Tier3
+# Tags: P2, APP, CODE
 set -euo pipefail
 
 corepack enable

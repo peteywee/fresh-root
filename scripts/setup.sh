@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# [P0][APP][CODE] Setup
+# Tags: P0, APP, CODE
 set -euo pipefail
 
 # --------

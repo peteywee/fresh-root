@@ -1,4 +1,6 @@
 #!/usr/bin/env ts-node
+// [P0][AUTH][CODE] Auth Sim
+// Tags: P0, AUTH, CODE
 /**
 
 
