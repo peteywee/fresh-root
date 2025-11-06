@@ -98,7 +98,7 @@ e# Fresh Schedules v13 Plan C Milestone Checklist
 - [ ] Export TypeScript types from Zod schemas
 ```
 
-  - [ ] Create `packages/types/src/memberships.ts` with Zod schemas
+- [ ] Create `packages/types/src/memberships.ts` with Zod schemas
 
 ```text
 - [ ] Define `MembershipSchema` (orgId, uid, role, joinedAt, mfaVerified)
@@ -106,14 +106,14 @@ e# Fresh Schedules v13 Plan C Milestone Checklist
 - [ ] Define role enum: owner, admin, manager, member, staff
 ```
 
-  - [ ] Create `packages/types/src/positions.ts` with Zod schemas
+- [ ] Create `packages/types/src/positions.ts` with Zod schemas
 
 ```text
 - [ ] Define `PositionSchema` (id, orgId, title, description, hourlyRate)
 - [ ] Define `PositionCreateSchema` and `PositionUpdateSchema`
 ```
 
-  - [ ] Create `packages/types/src/schedules.ts` with Zod schemas
+- [ ] Create `packages/types/src/schedules.ts` with Zod schemas
 
 ```text
 - [ ] Define `ScheduleSchema` (id, orgId, name, startDate, endDate, status)
@@ -121,7 +121,7 @@ e# Fresh Schedules v13 Plan C Milestone Checklist
 - [ ] Define schedule status enum: draft, published, archived
 ```
 
-  - [ ] Create `packages/types/src/shifts.ts` with Zod schemas
+- [ ] Create `packages/types/src/shifts.ts` with Zod schemas
 
 ```text
 - [ ] Define `ShiftSchema` (id, scheduleId, positionId, uid, startTime, endTime, breakMinutes)
@@ -129,7 +129,7 @@ e# Fresh Schedules v13 Plan C Milestone Checklist
 - [ ] Add validation rules (startTime < endTime, breakMinutes >= 0)
 ```
 
-  - [ ] Update `packages/types/src/index.ts` to export all new schemas
+- [ ] Update `packages/types/src/index.ts` to export all new schemas
 
 ### 3.2 - API Route Zod Validation
 
@@ -142,7 +142,7 @@ e# Fresh Schedules v13 Plan C Milestone Checklist
 - [ ] Add request body size validation (max 1MB)
 ```
 
-  - [ ] Apply validation to Organizations API
+- [ ] Apply validation to Organizations API
 
 ```text
 - [ ] Update `POST /api/organizations` with `OrganizationCreateSchema`
@@ -150,7 +150,7 @@ e# Fresh Schedules v13 Plan C Milestone Checklist
 - [ ] Add unit tests for validation errors
 ```
 
-  - [ ] Apply validation to Memberships API
+- [ ] Apply validation to Memberships API
 
 ```text
 - [ ] Create `POST /api/organizations/[id]/members` with `MembershipCreateSchema`
@@ -158,7 +158,7 @@ e# Fresh Schedules v13 Plan C Milestone Checklist
 - [ ] Add unit tests for RBAC validation
 ```
 
-  - [ ] Apply validation to Positions API
+- [ ] Apply validation to Positions API
 
 ```text
 - [ ] Create `POST /api/positions` with `PositionCreateSchema`
@@ -166,7 +166,7 @@ e# Fresh Schedules v13 Plan C Milestone Checklist
 - [ ] Add unit tests
 ```
 
-  - [ ] Apply validation to Schedules API
+- [ ] Apply validation to Schedules API
 
 ```text
 - [ ] Update `POST /api/schedules` with `ScheduleCreateSchema`
@@ -175,7 +175,7 @@ e# Fresh Schedules v13 Plan C Milestone Checklist
 - [ ] Add unit tests
 ```
 
-  - [ ] Apply validation to Shifts API
+- [ ] Apply validation to Shifts API
 
 ```text
 - [ ] Create `POST /api/shifts` with `ShiftCreateSchema`
@@ -198,7 +198,7 @@ e# Fresh Schedules v13 Plan C Milestone Checklist
 - [ ] Test allow: manager can update org
 ```
 
-  - [ ] Create `tests/rules/memberships.spec.ts`
+- [ ] Create `tests/rules/memberships.spec.ts`
 
 ```text
 - [ ] Test allow: member can read own membership
@@ -208,7 +208,7 @@ e# Fresh Schedules v13 Plan C Milestone Checklist
 - [ ] Test allow: manager can update membership role
 ```
 
-  - [ ] Create `tests/rules/positions.spec.ts`
+- [ ] Create `tests/rules/positions.spec.ts`
 
 ```text
 - [ ] Test allow: member can read positions in their org
@@ -217,7 +217,7 @@ e# Fresh Schedules v13 Plan C Milestone Checklist
 - [ ] Test allow: manager can create/update positions
 ```
 
-  - [ ] Create `tests/rules/schedules.spec.ts`
+- [ ] Create `tests/rules/schedules.spec.ts`
 
 ```text
 - [ ] Test allow: member can read schedules in their org
@@ -227,7 +227,7 @@ e# Fresh Schedules v13 Plan C Milestone Checklist
 - [ ] Test deny: cannot modify archived schedules
 ```
 
-  - [ ] Create `tests/rules/shifts.spec.ts`
+- [ ] Create `tests/rules/shifts.spec.ts`
 
 ```text
 - [ ] Test allow: member can read shifts in their org's schedules
@@ -237,7 +237,7 @@ e# Fresh Schedules v13 Plan C Milestone Checklist
 - [ ] Test allow: staff can update their own shift notes/checkIn
 ```
 
-  - [ ] Run all rules tests with Firebase emulator
+- [ ] Run all rules tests with Firebase emulator
 
 ```text
 - [ ] Add `pnpm test:rules` script to package.json
@@ -257,7 +257,7 @@ e# Fresh Schedules v13 Plan C Milestone Checklist
 - [ ] Test string length limits (name min/max)
 ```
 
-  - [ ] Create `packages/types/src/__tests__/memberships.test.ts`
+- [ ] Create `packages/types/src/__tests__/memberships.test.ts`
 
 ```text
 - [ ] Test valid membership creation
@@ -265,7 +265,7 @@ e# Fresh Schedules v13 Plan C Milestone Checklist
 - [ ] Test required field validation
 ```
 
-  - [ ] Create `packages/types/src/__tests__/positions.test.ts`
+- [ ] Create `packages/types/src/__tests__/positions.test.ts`
 
 ```text
 - [ ] Test valid position creation
@@ -273,7 +273,7 @@ e# Fresh Schedules v13 Plan C Milestone Checklist
 - [ ] Test string field limits
 ```
 
-  - [ ] Create `packages/types/src/__tests__/schedules.test.ts`
+- [ ] Create `packages/types/src/__tests__/schedules.test.ts`
 
 ```text
 - [ ] Test valid schedule creation
@@ -281,7 +281,7 @@ e# Fresh Schedules v13 Plan C Milestone Checklist
 - [ ] Test status enum validation
 ```
 
-  - [ ] Create `packages/types/src/__tests__/shifts.test.ts`
+- [ ] Create `packages/types/src/__tests__/shifts.test.ts`
 
 ```text
 - [ ] Test valid shift creation
@@ -290,7 +290,7 @@ e# Fresh Schedules v13 Plan C Milestone Checklist
 - [ ] Test overlapping shift detection logic
 ```
 
-  - [ ] Add test coverage reporting
+- [ ] Add test coverage reporting
 
 ```text
 - [ ] Configure Vitest coverage for packages/types
@@ -311,14 +311,14 @@ e# Fresh Schedules v13 Plan C Milestone Checklist
 - [ ] Check that every Zod schema has corresponding rules tests
 ```
 
-  - [ ] Add as pre-push git hook
+- [ ] Add as pre-push git hook
 
 ```text
 - [ ] Update `.husky/pre-push` to run parity check
 - [ ] Fail push if parity check fails
 ```
 
-  - [ ] Run in CI pipeline
+- [ ] Run in CI pipeline
 
 ```text
 - [ ] Add to `.github/workflows/ci.yml`
@@ -336,10 +336,10 @@ e# Fresh Schedules v13 Plan C Milestone Checklist
 - [ ] `/shifts` → `ShiftSchema`
 ```
 
-  - [ ] Document validation rules per collection
-  - [ ] Document RBAC requirements (who can read/write)
-  - [ ] Add schema evolution guidelines
-  - [ ] Add examples of valid payloads
+- [ ] Document validation rules per collection
+- [ ] Document RBAC requirements (who can read/write)
+- [ ] Add schema evolution guidelines
+- [ ] Add examples of valid payloads
 
 ### 3.7 - Pre-commit Quality Gates
 
@@ -353,8 +353,8 @@ e# Fresh Schedules v13 Plan C Milestone Checklist
 - [ ] Ensure all checks pass before allowing commit
 ```
 
-  - [ ] Document pre-commit hooks in CONTRIBUTING.md
-  - [ ] Add troubleshooting section for hook failures
+- [ ] Document pre-commit hooks in CONTRIBUTING.md
+- [ ] Add troubleshooting section for hook failures
 
 🎨 Block 4 – Experience Layer (P1)
 
@@ -372,7 +372,7 @@ e# Fresh Schedules v13 Plan C Milestone Checklist
 - [ ] Define breakpoints (mobile, tablet, desktop, wide)
 ```
 
-  - [ ] Expand `apps/web/components/ui/` component library
+- [ ] Expand `apps/web/components/ui/` component library
 
 ```text
 - [ ] Create `Badge.tsx` (status indicators, counts)
@@ -386,7 +386,7 @@ e# Fresh Schedules v13 Plan C Milestone Checklist
 - [ ] Create `Accordion.tsx` (collapsible sections)
 ```
 
-  - [ ] Add component documentation
+- [ ] Add component documentation
 
 ```text
 - [ ] Create Storybook setup for component showcase
@@ -394,7 +394,7 @@ e# Fresh Schedules v13 Plan C Milestone Checklist
 - [ ] Add interactive examples
 ```
 
-  - [ ] Implement dark mode support
+- [ ] Implement dark mode support
 
 ```text
 - [ ] Add dark mode variants to all components
@@ -415,7 +415,7 @@ e# Fresh Schedules v13 Plan C Milestone Checklist
 - [ ] Implement drag-and-drop shift reassignment
 ```
 
-  - [ ] Add keyboard accessibility
+- [ ] Add keyboard accessibility
 
 ```text
 - [ ] Arrow keys for cell navigation
@@ -425,7 +425,7 @@ e# Fresh Schedules v13 Plan C Milestone Checklist
 - [ ] Shift+Arrow for multi-select
 ```
 
-  - [ ] Add shift conflict detection
+- [ ] Add shift conflict detection
 
 ```text
 - [ ] Visual indicators for overlapping shifts
@@ -433,7 +433,7 @@ e# Fresh Schedules v13 Plan C Milestone Checklist
 - [ ] Warnings for overtime rules
 ```
 
-  - [ ] Implement shift templates
+- [ ] Implement shift templates
 
 ```text
 - [ ] Save common shift patterns
@@ -441,7 +441,7 @@ e# Fresh Schedules v13 Plan C Milestone Checklist
 - [ ] Template management UI
 ```
 
-  - [ ] Add bulk operations
+- [ ] Add bulk operations
 
 ```text
 - [ ] Multi-select shifts
@@ -461,7 +461,7 @@ e# Fresh Schedules v13 Plan C Milestone Checklist
 - [ ] Upload reports as GitHub artifacts
 ```
 
-  - [ ] Optimize bundle size
+- [ ] Optimize bundle size
 
 ```text
 - [ ] Implement code splitting for routes
@@ -470,7 +470,7 @@ e# Fresh Schedules v13 Plan C Milestone Checklist
 - [ ] Analyze bundle with webpack-bundle-analyzer
 ```
 
-  - [ ] Optimize rendering performance
+- [ ] Optimize rendering performance
 
 ```text
 - [ ] Implement React.memo for expensive components
@@ -478,7 +478,7 @@ e# Fresh Schedules v13 Plan C Milestone Checklist
 - [ ] Virtualize long lists (shifts, users, positions)
 ```
 
-  - [ ] Add performance monitoring
+- [ ] Add performance monitoring
 
 ```text
 - [ ] Instrument with Web Vitals (LCP, FID, CLS)
@@ -496,7 +496,7 @@ e# Fresh Schedules v13 Plan C Milestone Checklist
 - [ ] Shift creation interaction latency < 100ms
 ```
 
-  - [ ] Create performance test suite
+- [ ] Create performance test suite
 
 ```text
 - [ ] Use Playwright for E2E performance tests
@@ -504,7 +504,7 @@ e# Fresh Schedules v13 Plan C Milestone Checklist
 - [ ] Run performance tests in CI
 ```
 
-  - [ ] Add performance regression detection
+- [ ] Add performance regression detection
 
 ```text
 - [ ] Compare metrics against baseline
@@ -523,7 +523,7 @@ e# Fresh Schedules v13 Plan C Milestone Checklist
 - [ ] Track intermediate steps (positions, shifts, validation)
 ```
 
-  - [ ] Add analytics instrumentation
+- [ ] Add analytics instrumentation
 
 ```text
 - [ ] Track time per scheduling step
@@ -531,7 +531,7 @@ e# Fresh Schedules v13 Plan C Milestone Checklist
 - [ ] Track feature usage (templates, bulk ops, conflicts)
 ```
 
-  - [ ] Create UX dashboard
+- [ ] Create UX dashboard
 
 ```text
 - [ ] Visualize scheduling time distribution
@@ -539,7 +539,7 @@ e# Fresh Schedules v13 Plan C Milestone Checklist
 - [ ] Identify bottlenecks and pain points
 ```
 
-  - [ ] Add user feedback collection
+- [ ] Add user feedback collection
 
 ```text
 - [ ] Post-schedule satisfaction survey
@@ -558,7 +558,7 @@ e# Fresh Schedules v13 Plan C Milestone Checklist
 - [ ] Background sync for failed mutations
 ```
 
-  - [ ] Add IndexedDB integration
+- [ ] Add IndexedDB integration
 
 ```text
 - [ ] Store schedules for offline viewing
@@ -566,7 +566,7 @@ e# Fresh Schedules v13 Plan C Milestone Checklist
 - [ ] Sync queued changes when online
 ```
 
-  - [ ] Implement offline UI indicators
+- [ ] Implement offline UI indicators
 
 ```text
 - [ ] Show offline status banner
@@ -574,7 +574,7 @@ e# Fresh Schedules v13 Plan C Milestone Checklist
 - [ ] Show sync progress
 ```
 
-  - [ ] Test offline scenarios
+- [ ] Test offline scenarios
 
 ```text
 - [ ] Create E2E tests for offline mode
@@ -592,7 +592,7 @@ e# Fresh Schedules v13 Plan C Milestone Checklist
 - [ ] Define shortcuts (quick actions)
 ```
 
-  - [ ] Implement install prompt
+- [ ] Implement install prompt
 
 ```text
 - [ ] Detect when PWA is installable
@@ -600,7 +600,7 @@ e# Fresh Schedules v13 Plan C Milestone Checklist
 - [ ] Track install events
 ```
 
-  - [ ] Add PWA-specific features
+- [ ] Add PWA-specific features
 
 ```text
 - [ ] Share target API (share schedules)
@@ -608,7 +608,7 @@ e# Fresh Schedules v13 Plan C Milestone Checklist
 - [ ] Badge API (unread notifications)
 ```
 
-  - [ ] Test PWA functionality
+- [ ] Test PWA functionality
 
 ```text
 - [ ] Create E2E tests for install flow
@@ -629,7 +629,7 @@ e# Fresh Schedules v13 Plan C Milestone Checklist
 - [ ] Document typography hierarchy
 ```
 
-  - [ ] Add component composition examples
+- [ ] Add component composition examples
 
 ```text
 - [ ] Show common UI patterns (forms, lists, cards)
@@ -637,7 +637,7 @@ e# Fresh Schedules v13 Plan C Milestone Checklist
 - [ ] Show loading and error states
 ```
 
-  - [ ] Document accessibility requirements
+- [ ] Document accessibility requirements
 
 ```text
 - [ ] ARIA label guidelines
@@ -677,7 +677,7 @@ e# Fresh Schedules v13 Plan C Milestone Checklist
 - [ ] View published schedule as staff member
 ```
 
-  - [ ] Add error scenario tests
+- [ ] Add error scenario tests
 
 ```text
 - [ ] Test validation errors (invalid inputs)
@@ -686,7 +686,7 @@ e# Fresh Schedules v13 Plan C Milestone Checklist
 - [ ] Test conflict resolution
 ```
 
-  - [ ] Add mobile viewport tests
+- [ ] Add mobile viewport tests
 
 ```text
 - [ ] Run all tests on mobile screen sizes
@@ -694,7 +694,7 @@ e# Fresh Schedules v13 Plan C Milestone Checklist
 - [ ] Test responsive layouts
 ```
 
-  - [ ] Add cross-browser tests
+- [ ] Add cross-browser tests
 
 ```text
 - [ ] Test on Chrome, Firefox, Safari
@@ -713,7 +713,7 @@ e# Fresh Schedules v13 Plan C Milestone Checklist
 - [ ] Set timeout (max 30 minutes)
 ```
 
-  - [ ] Configure Firebase emulators for E2E
+- [ ] Configure Firebase emulators for E2E
 
 ```text
 - [ ] Start emulators before tests
@@ -721,7 +721,7 @@ e# Fresh Schedules v13 Plan C Milestone Checklist
 - [ ] Clean up after tests
 ```
 
-  - [ ] Add CI gate for deployments
+- [ ] Add CI gate for deployments
 
 ```text
 - [ ] Block deploy if E2E tests fail
@@ -729,7 +729,7 @@ e# Fresh Schedules v13 Plan C Milestone Checklist
 - [ ] Allow deploy preview for PRs (even if tests fail)
 ```
 
-  - [ ] Upload test artifacts
+- [ ] Upload test artifacts
 
 ```text
 - [ ] Save screenshots on failure
@@ -749,7 +749,7 @@ e# Fresh Schedules v13 Plan C Milestone Checklist
 - [ ] Configure load balancer for traffic switching
 ```
 
-  - [ ] Create deployment scripts
+- [ ] Create deployment scripts
 
 ```text
 - [ ] `scripts/ops/deploy-staging.sh`
@@ -762,7 +762,7 @@ e# Fresh Schedules v13 Plan C Milestone Checklist
 - [ ] Auto-rollback if errors spike
 ```
 
-  - [ ] Implement smoke tests
+- [ ] Implement smoke tests
 
 ```text
 - [ ] Create `tests/smoke/` directory
@@ -771,7 +771,7 @@ e# Fresh Schedules v13 Plan C Milestone Checklist
 - [ ] Verify all health checks pass
 ```
 
-  - [ ] Add deployment monitoring
+- [ ] Add deployment monitoring
 
 ```text
 - [ ] Track deployment frequency
@@ -792,7 +792,7 @@ e# Fresh Schedules v13 Plan C Milestone Checklist
 - [ ] Notify team of rollback
 ```
 
-  - [ ] Document rollback procedure
+- [ ] Document rollback procedure
 
 ```text
 - [ ] Add to `docs/release-runbook.md`
@@ -801,7 +801,7 @@ e# Fresh Schedules v13 Plan C Milestone Checklist
 - [ ] Document post-rollback actions
 ```
 
-  - [ ] Test rollback process
+- [ ] Test rollback process
 
 ```text
 - [ ] Practice rollback in staging
@@ -809,7 +809,7 @@ e# Fresh Schedules v13 Plan C Milestone Checklist
 - [ ] Verify no data loss during rollback
 ```
 
-  - [ ] Add rollback alerts
+- [ ] Add rollback alerts
 
 ```text
 - [ ] Alert on-call engineer
@@ -828,7 +828,7 @@ e# Fresh Schedules v13 Plan C Milestone Checklist
 - [ ] Automate version bumping with npm version
 ```
 
-  - [ ] Generate changelogs
+- [ ] Generate changelogs
 
 ```text
 - [ ] Use conventional commits format
@@ -837,7 +837,7 @@ e# Fresh Schedules v13 Plan C Milestone Checklist
 - [ ] Include migration guides when needed
 ```
 
-  - [ ] Create GitHub releases
+- [ ] Create GitHub releases
 
 ```text
 - [ ] Publish release notes on GitHub
@@ -845,7 +845,7 @@ e# Fresh Schedules v13 Plan C Milestone Checklist
 - [ ] Link to deployed version
 ```
 
-  - [ ] Add release notes template
+- [ ] Add release notes template
 
 ```text
 - [ ] Define sections: Features, Fixes, Breaking Changes
@@ -863,7 +863,7 @@ e# Fresh Schedules v13 Plan C Milestone Checklist
 - [ ] Show deployment status
 ```
 
-  - [ ] Add release history
+- [ ] Add release history
 
 ```text
 - [ ] List recent deployments
@@ -872,7 +872,7 @@ e# Fresh Schedules v13 Plan C Milestone Checklist
 - [ ] Show rollback events
 ```
 
-  - [ ] Add health metrics
+- [ ] Add health metrics
 
 ```text
 - [ ] Show error rates (current vs baseline)
@@ -893,14 +893,14 @@ e# Fresh Schedules v13 Plan C Milestone Checklist
 - [ ] Upload screenshots and videos
 ```
 
-  - [ ] Create artifact retention policy
+- [ ] Create artifact retention policy
 
 ```text
 - [ ] Keep artifacts for 90 days
 - [ ] Archive critical release artifacts permanently
 ```
 
-  - [ ] Add artifact download links to PRs
+- [ ] Add artifact download links to PRs
 
 ```text
 - [ ] Comment on PR with artifact links

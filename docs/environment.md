@@ -37,16 +37,16 @@ The app will fail fast with clear error messages if any required variables are m
 
 These variables **must** be set in production:
 
-| Variable                             | Description                        | Example                            |
-| ------------------------------------ | ---------------------------------- | ---------------------------------- |
-| `NODE_ENV`                           | Runtime environment                | `production`                       |
-| `NEXT_PUBLIC_FIREBASE_API_KEY`       | Firebase API key (public)          | `AIzaSyD...`                       |
-| `NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN`   | Firebase auth domain               | `myapp.firebaseapp.com`            |
-| `NEXT_PUBLIC_FIREBASE_PROJECT_ID`    | Firebase project ID                | `my-project-123`                   |
-| `FIREBASE_PROJECT_ID`                | Firebase project ID (server)       | `my-project-123`                   |
+| Variable                              | Description                        | Example                            |
+| ------------------------------------- | ---------------------------------- | ---------------------------------- |
+| `NODE_ENV`                            | Runtime environment                | `production`                       |
+| `NEXT_PUBLIC_FIREBASE_API_KEY`        | Firebase API key (public)          | `AIzaSyD...`                       |
+| `NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN`    | Firebase auth domain               | `myapp.firebaseapp.com`            |
+| `NEXT_PUBLIC_FIREBASE_PROJECT_ID`     | Firebase project ID                | `my-project-123`                   |
+| `FIREBASE_PROJECT_ID`                 | Firebase project ID (server)       | `my-project-123`                   |
 | `GOOGLE_APPLICATION_CREDENTIALS_JSON` | Service account JSON (as string)   | `{"type":"service_account",...}`   |
-| `SESSION_SECRET`                     | Secret for session cookies (≥32ch) | `openssl rand -base64 32`          |
-| `CORS_ORIGINS`                       | Comma-separated allowed origins    | `https://myapp.com,https://www...` |
+| `SESSION_SECRET`                      | Secret for session cookies (≥32ch) | `openssl rand -base64 32`          |
+| `CORS_ORIGINS`                        | Comma-separated allowed origins    | `https://myapp.com,https://www...` |
 
 ### Development (Minimum Required)
 
