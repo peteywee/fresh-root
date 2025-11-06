@@ -2,26 +2,28 @@
 // Tags: P1, API, CODE, validation, zod
 
 import { PositionUpdateSchema } from "@fresh-schedules/types";
-import { NextRequest, NextResponse } from "next/server";
-import type { z } from "zod";
+import { NextResponse } from "next/server";
 
-import { withValidation } from "../../../../src/lib/api/validation";
-import { requireSession, AuthenticatedRequest } from "../../_shared/middleware";
+import { requireOrgMembership, requireRole } from "../../../../src/lib/api/authorization";
+import { csrfProtection } from "../../../../src/lib/api/csrf";
+import { rateLimit, RateLimits } from "../../../../src/lib/api/rate-limit";
+import { sanitizeObject } from "../../../../src/lib/api/sanitize";
 import { serverError } from "../../_shared/validation";
 
 /**
  * GET /api/positions/[id]
- * Get position details
+ * Get position details (requires staff+ role)
  */
-export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  return requireSession(request as AuthenticatedRequest, async (_authReq) => {
+export const GET = rateLimit(RateLimits.STANDARD)(
+  requireOrgMembership(async (request, context) => {
+    const { params } = context;
     try {
       const { id } = await params;
 
-      // In production, fetch from Firestore and check permissions
+      // In production, fetch from Firestore and verify orgId matches
       const position = {
         id,
-        orgId: "org-1",
+        orgId: context.orgId,
         title: "Server",
         description: "Front of house server position",
         hourlyRate: 15.0,
@@ -35,65 +37,73 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
     } catch {
       return serverError("Failed to fetch position");
     }
-  });
-}
+  }),
+);
 
 /**
  * PATCH /api/positions/[id]
- * Update position details
+ * Update position details (requires manager+ role)
  */
-async function patchHandler(
-  request: NextRequest,
-  data: z.infer<typeof PositionUpdateSchema>,
-  params: { id: string },
-) {
-  return requireSession(request as AuthenticatedRequest, async (_authReq) => {
-    try {
-      const { id } = params;
+export const PATCH = rateLimit(RateLimits.WRITE)(
+  csrfProtection()(
+    requireOrgMembership(
+      requireRole("manager")(async (request, context) => {
+        const { params } = context;
+        try {
+          const { id } = await params;
+          const body = await request.json();
+          const sanitized = sanitizeObject(body);
 
-      // In production, update in Firestore after checking permissions
-      const updatedPosition = {
-        id,
-        orgId: "org-1",
-        title: "Server",
-        ...data,
-        updatedAt: new Date().toISOString(),
-      };
+          // Validate with Zod
+          const validationResult = PositionUpdateSchema.safeParse(sanitized);
+          if (!validationResult.success) {
+            return NextResponse.json(
+              { error: "Invalid position data", details: validationResult.error.errors },
+              { status: 400 },
+            );
+          }
 
-      return NextResponse.json(updatedPosition);
-    } catch {
-      return serverError("Failed to update position");
-    }
-  });
-}
+          const data = validationResult.data;
 
-export async function PATCH(request: NextRequest, context: { params: Promise<{ id: string }> }) {
-  const params = await context.params;
-  const validated = withValidation(PositionUpdateSchema, (req, data) =>
-    patchHandler(req, data, params),
-  );
-  return validated(request);
-}
+          // In production, update in Firestore after verifying orgId matches
+          const updatedPosition = {
+            id,
+            orgId: context.orgId,
+            title: "Server",
+            ...data,
+            updatedAt: new Date().toISOString(),
+          };
+
+          return NextResponse.json(updatedPosition);
+        } catch {
+          return serverError("Failed to update position");
+        }
+      }),
+    ),
+  ),
+);
 
 /**
  * DELETE /api/positions/[id]
- * Delete a position (soft delete - set isActive to false)
+ * Delete a position (requires admin+ role, soft delete - set isActive to false)
  */
-export async function DELETE(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> },
-) {
-  return requireSession(request as AuthenticatedRequest, async (_authReq) => {
-    try {
-      const { id } = await params;
+export const DELETE = rateLimit(RateLimits.WRITE)(
+  csrfProtection()(
+    requireOrgMembership(
+      requireRole("admin")(async (request, context) => {
+        const { params } = context;
+        try {
+          const { id } = await params;
 
-      // In production, soft delete by setting isActive = false
-      return NextResponse.json({
-        message: "Position deleted successfully",
-        id,
-      });
-    } catch {
-      return serverError("Failed to delete position");
-    }
-  });
-}
+          // In production, soft delete by setting isActive = false after verifying orgId
+          return NextResponse.json({
+            message: "Position deleted successfully",
+            id,
+          });
+        } catch {
+          return serverError("Failed to delete position");
+        }
+      }),
+    ),
+  ),
+);

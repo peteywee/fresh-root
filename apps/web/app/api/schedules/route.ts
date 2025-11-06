@@ -3,21 +3,22 @@
 
 import { ScheduleCreateSchema } from "@fresh-schedules/types";
 import { NextRequest, NextResponse } from "next/server";
-import type { z } from "zod";
 
-import { withValidation } from "../../../src/lib/api/validation";
-import { requireSession, AuthenticatedRequest } from "../_shared/middleware";
+import { rateLimit, RateLimits } from "../../../src/lib/api/rate-limit";
+import { csrfProtection } from "../../../src/lib/api/csrf";
+import { requireOrgMembership } from "../../../src/lib/api/authorization";
+import { sanitizeObject } from "../../../src/lib/api/sanitize";
 import { serverError } from "../_shared/validation";
 
 /**
  * GET /api/schedules
  * List schedules in an organization
  */
-export async function GET(request: NextRequest) {
-  return requireSession(request as AuthenticatedRequest, async (_authReq) => {
+export const GET = rateLimit(RateLimits.STANDARD)(
+  requireOrgMembership(async (request: NextRequest, context) => {
     try {
       const { searchParams } = new URL(request.url);
-      const orgId = searchParams.get("orgId");
+      const orgId = searchParams.get("orgId") || context.orgId;
 
       if (!orgId) {
         return NextResponse.json({ error: "orgId query parameter is required" }, { status: 400 });
@@ -42,39 +43,47 @@ export async function GET(request: NextRequest) {
     } catch {
       return serverError("Failed to fetch schedules");
     }
-  });
-}
+  }),
+);
 
 /**
  * POST /api/schedules
  * Create a new schedule
  */
-export const POST = withValidation(
-  ScheduleCreateSchema,
-  async (request: NextRequest, data: z.infer<typeof ScheduleCreateSchema>) => {
-    return requireSession(request as AuthenticatedRequest, async (authReq) => {
+export const POST = rateLimit(RateLimits.WRITE)(
+  csrfProtection()(
+    requireOrgMembership(async (request: NextRequest, context) => {
       try {
         const { searchParams } = new URL(request.url);
-        const orgId = searchParams.get("orgId");
+        const orgId = searchParams.get("orgId") || context.orgId;
 
         if (!orgId) {
           return NextResponse.json({ error: "orgId query parameter is required" }, { status: 400 });
         }
 
+        const body = await request.json();
+        const validated = ScheduleCreateSchema.parse(body);
+
+        // Sanitize input
+        const sanitized = sanitizeObject(validated);
+
         // In production, create schedule in Firestore
         const newSchedule = {
           id: `sched-${Date.now()}`,
           orgId,
-          ...data,
+          ...sanitized,
           status: "draft" as const,
           createdAt: new Date().toISOString(),
-          createdBy: authReq.user?.uid,
+          createdBy: context.userId,
         };
 
         return NextResponse.json(newSchedule, { status: 201 });
-      } catch {
+      } catch (error) {
+        if (error instanceof Error && error.name === "ZodError") {
+          return NextResponse.json({ error: "Invalid schedule data" }, { status: 400 });
+        }
         return serverError("Failed to create schedule");
       }
-    });
-  },
+    }),
+  ),
 );

@@ -2,26 +2,22 @@
 // Tags: P1, API, CODE, validation, zod
 
 import { PositionCreateSchema } from "@fresh-schedules/types";
-import { NextRequest, NextResponse } from "next/server";
-import type { z } from "zod";
+import { NextResponse } from "next/server";
 
-import { withValidation } from "../../../src/lib/api/validation";
-import { requireSession, AuthenticatedRequest } from "../_shared/middleware";
+import { requireOrgMembership, requireRole } from "../../../src/lib/api/authorization";
+import { csrfProtection } from "../../../src/lib/api/csrf";
+import { rateLimit, RateLimits } from "../../../src/lib/api/rate-limit";
+import { sanitizeObject } from "../../../src/lib/api/sanitize";
 import { serverError } from "../_shared/validation";
 
 /**
  * GET /api/positions
  * List positions in an organization
  */
-export async function GET(request: NextRequest) {
-  return requireSession(request as AuthenticatedRequest, async (_authReq) => {
+export const GET = rateLimit(RateLimits.STANDARD)(
+  requireOrgMembership(async (request, context) => {
     try {
-      const { searchParams } = new URL(request.url);
-      const orgId = searchParams.get("orgId");
-
-      if (!orgId) {
-        return NextResponse.json({ error: "orgId query parameter is required" }, { status: 400 });
-      }
+      const { orgId } = context;
 
       // In production, fetch from Firestore filtered by orgId
       const positions = [
@@ -47,30 +43,47 @@ export async function GET(request: NextRequest) {
     } catch {
       return serverError("Failed to fetch positions");
     }
-  });
-}
+  }),
+);
 
 /**
  * POST /api/positions
- * Create a new position
+ * Create a new position (requires manager+ role)
  */
-export const POST = withValidation(
-  PositionCreateSchema,
-  async (request: NextRequest, data: z.infer<typeof PositionCreateSchema>) => {
-    return requireSession(request as AuthenticatedRequest, async (authReq) => {
-      try {
-        // In production, create position in Firestore
-        const newPosition = {
-          id: `pos-${Date.now()}`,
-          ...data,
-          createdAt: new Date().toISOString(),
-          createdBy: authReq.user?.uid,
-        };
+export const POST = rateLimit(RateLimits.WRITE)(
+  csrfProtection()(
+    requireOrgMembership(
+      requireRole("manager")(async (request, context) => {
+        try {
+          const body = await request.json();
+          const sanitized = sanitizeObject(body);
 
-        return NextResponse.json(newPosition, { status: 201 });
-      } catch {
-        return serverError("Failed to create position");
-      }
-    });
-  },
+          // Validate with Zod
+          const validationResult = PositionCreateSchema.safeParse(sanitized);
+          if (!validationResult.success) {
+            return NextResponse.json(
+              { error: "Invalid position data", details: validationResult.error.errors },
+              { status: 400 },
+            );
+          }
+
+          const data = validationResult.data;
+          const { userId, orgId } = context;
+
+          // In production, create position in Firestore
+          const newPosition = {
+            id: `pos-${Date.now()}`,
+            ...data,
+            orgId,
+            createdAt: new Date().toISOString(),
+            createdBy: userId,
+          };
+
+          return NextResponse.json(newPosition, { status: 201 });
+        } catch {
+          return serverError("Failed to create position");
+        }
+      }),
+    ),
+  ),
 );

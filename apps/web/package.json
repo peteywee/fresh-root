@@ -12,6 +12,7 @@
     "test:watch": "vitest",
     "test:ui": "vitest --ui",
     "test:coverage": "vitest --coverage",
+    "bench": "vitest bench --config vitest.bench.config.ts",
     "lint": "eslint . --ext .ts,.tsx"
   },
   "dependencies": {

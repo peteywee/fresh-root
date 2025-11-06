@@ -2,15 +2,12 @@
 // Tags: test, security, integration, authorization, rate-limiting, csrf
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { describe, it, expect, beforeEach, vi } from "vitest";
 import { NextRequest, NextResponse } from "next/server";
-import {
-  requireOrgMembership,
-  requireRole,
-  canAccessResource,
-} from "../authorization";
-import { rateLimit, RateLimits } from "../rate-limit";
+import { describe, it, expect, beforeEach, vi } from "vitest";
+
+import { requireOrgMembership, requireRole, canAccessResource } from "../authorization";
 import { csrfProtection, generateCSRFToken } from "../csrf";
+import { rateLimit, RateLimits } from "../rate-limit";
 
 // Mock Firestore
 vi.mock("firebase-admin/firestore", () => ({
@@ -101,7 +98,8 @@ describe("Security Integration Tests", () => {
         docs: [{ data: () => ({ roles: ["admin"] }) }],
       });
 
-      const mockGet = vi.fn()
+      const mockGet = vi
+        .fn()
         .mockResolvedValueOnce(mockGetMembership()) // isOrgMember call
         .mockResolvedValueOnce(mockGetRoles()); // getUserRoles call
 
@@ -125,7 +123,8 @@ describe("Security Integration Tests", () => {
       const { getFirestore } = await import("firebase-admin/firestore");
 
       // Mock membership with staff role
-      const mockGet = vi.fn()
+      const mockGet = vi
+        .fn()
         .mockResolvedValueOnce({ empty: false }) // isOrgMember
         .mockResolvedValueOnce({
           empty: false,
@@ -160,7 +159,8 @@ describe("Security Integration Tests", () => {
     it("should allow access when user has admin role", async () => {
       const { getFirestore } = await import("firebase-admin/firestore");
 
-      const mockGet = vi.fn()
+      const mockGet = vi
+        .fn()
         .mockResolvedValueOnce({ empty: false }) // isOrgMember
         .mockResolvedValueOnce({
           empty: false,
@@ -195,7 +195,8 @@ describe("Security Integration Tests", () => {
     it("should allow access when user has org_owner role (highest privilege)", async () => {
       const { getFirestore } = await import("firebase-admin/firestore");
 
-      const mockGet = vi.fn()
+      const mockGet = vi
+        .fn()
         .mockResolvedValueOnce({ empty: false }) // isOrgMember
         .mockResolvedValueOnce({
           empty: false,
@@ -358,7 +359,8 @@ describe("Security Integration Tests", () => {
       const { getFirestore } = await import("firebase-admin/firestore");
 
       // Mock org membership with admin role
-      const mockGet = vi.fn()
+      const mockGet = vi
+        .fn()
         .mockResolvedValueOnce({ empty: false }) // isOrgMember
         .mockResolvedValueOnce({
           empty: false,

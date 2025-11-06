@@ -1,9 +1,9 @@
 //[P1][API][AUTH] Authorization and RBAC middleware
 // Tags: authorization, rbac, middleware, security
 
-import { NextRequest, NextResponse } from "next/server";
-import { getFirestore } from "firebase-admin/firestore";
 import type { OrgRole } from "@workspace/types";
+import { getFirestore } from "firebase-admin/firestore";
+import { NextRequest, NextResponse } from "next/server";
 
 /**
  * Authorization error with status code

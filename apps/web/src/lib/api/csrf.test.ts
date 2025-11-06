@@ -1,8 +1,9 @@
 //[P1][API][TEST] CSRF protection middleware unit tests
 // Tags: test, csrf, security, vitest
 
-import { describe, it, expect } from "vitest";
 import { NextRequest, NextResponse } from "next/server";
+import { describe, it, expect } from "vitest";
+
 import { generateCSRFToken, verifyCSRFToken, csrfProtection } from "./csrf";
 
 describe("generateCSRFToken", () => {

@@ -86,50 +86,50 @@ e# Fresh Schedules v13 Plan C Milestone Checklist
 
 🧩 Block 3 – Integrity Core (P1)
 
-## 3.1 - Zod Schema Foundation (2)
+## 3.1 - Zod Schema Foundation ✅ COMPLETE
 
-- [ ] [BLOCK3.1] Expand packages/types/ with comprehensive Zod schemas
-  - [ ] Create `packages/types/src/organizations.ts` with Zod schemas
-
-```text
-- [ ] Define `OrganizationSchema` (id, name, createdAt, updatedAt, settings)
-- [ ] Define `OrganizationCreateSchema` (input validation for creation)
-- [ ] Define `OrganizationUpdateSchema` (partial updates)
-- [ ] Export TypeScript types from Zod schemas
-```
-
-- [ ] Create `packages/types/src/memberships.ts` with Zod schemas
+- [x] [BLOCK3.1] Expand packages/types/ with comprehensive Zod schemas
+  - [x] Create `packages/types/src/organizations.ts` with Zod schemas
 
 ```text
-- [ ] Define `MembershipSchema` (orgId, uid, role, joinedAt, mfaVerified)
-- [ ] Define `MembershipCreateSchema` (input validation)
-- [ ] Define role enum: owner, admin, manager, member, staff
+- [x] Define `OrganizationSchema` (id, name, createdAt, updatedAt, settings)
+- [x] Define `OrganizationCreateSchema` (input validation for creation)
+- [x] Define `OrganizationUpdateSchema` (partial updates)
+- [x] Export TypeScript types from Zod schemas
 ```
 
-- [ ] Create `packages/types/src/positions.ts` with Zod schemas
+- [x] Create `packages/types/src/memberships.ts` with Zod schemas
 
 ```text
-- [ ] Define `PositionSchema` (id, orgId, title, description, hourlyRate)
-- [ ] Define `PositionCreateSchema` and `PositionUpdateSchema`
+- [x] Define `MembershipSchema` (orgId, uid, role, joinedAt, mfaVerified)
+- [x] Define `MembershipCreateSchema` (input validation)
+- [x] Define role enum: owner, admin, manager, member, staff
 ```
 
-- [ ] Create `packages/types/src/schedules.ts` with Zod schemas
+- [x] Create `packages/types/src/positions.ts` with Zod schemas
 
 ```text
-- [ ] Define `ScheduleSchema` (id, orgId, name, startDate, endDate, status)
-- [ ] Define `ScheduleCreateSchema` and `ScheduleUpdateSchema`
-- [ ] Define schedule status enum: draft, published, archived
+- [x] Define `PositionSchema` (id, orgId, title, description, hourlyRate)
+- [x] Define `PositionCreateSchema` and `PositionUpdateSchema`
 ```
 
-- [ ] Create `packages/types/src/shifts.ts` with Zod schemas
+- [x] Create `packages/types/src/schedules.ts` with Zod schemas
 
 ```text
-- [ ] Define `ShiftSchema` (id, scheduleId, positionId, uid, startTime, endTime, breakMinutes)
-- [ ] Define `ShiftCreateSchema` and `ShiftUpdateSchema`
-- [ ] Add validation rules (startTime < endTime, breakMinutes >= 0)
+- [x] Define `ScheduleSchema` (id, orgId, name, startDate, endDate, status)
+- [x] Define `ScheduleCreateSchema` and `ScheduleUpdateSchema`
+- [x] Define schedule status enum: draft, published, archived
 ```
 
-- [ ] Update `packages/types/src/index.ts` to export all new schemas
+- [x] Create `packages/types/src/shifts.ts` with Zod schemas
+
+```text
+- [x] Define `ShiftSchema` (id, scheduleId, positionId, uid, startTime, endTime, breakMinutes)
+- [x] Define `ShiftCreateSchema` and `ShiftUpdateSchema`
+- [x] Add validation rules (startTime < endTime, breakMinutes >= 0)
+```
+
+- [x] Update `packages/types/src/index.ts` to export all new schemas
 
 ### 3.2 - API Validation Layer
 

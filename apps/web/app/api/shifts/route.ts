@@ -3,18 +3,19 @@
 
 import { ShiftCreateSchema } from "@fresh-schedules/types";
 import { NextRequest, NextResponse } from "next/server";
-import type { z } from "zod";
 
-import { withValidation } from "../../../src/lib/api/validation";
-import { requireSession, AuthenticatedRequest } from "../_shared/middleware";
+import { rateLimit, RateLimits } from "../../../src/lib/api/rate-limit";
+import { csrfProtection } from "../../../src/lib/api/csrf";
+import { requireOrgMembership } from "../../../src/lib/api/authorization";
+import { sanitizeObject } from "../../../src/lib/api/sanitize";
 import { serverError } from "../_shared/validation";
 
 /**
  * GET /api/shifts
  * List shifts for a schedule
  */
-export async function GET(request: NextRequest) {
-  return requireSession(request as AuthenticatedRequest, async (_authReq) => {
+export const GET = rateLimit(RateLimits.STANDARD)(
+  requireOrgMembership(async (request: NextRequest, context) => {
     try {
       const { searchParams } = new URL(request.url);
       const scheduleId = searchParams.get("scheduleId");
@@ -46,17 +47,16 @@ export async function GET(request: NextRequest) {
     } catch {
       return serverError("Failed to fetch shifts");
     }
-  });
-}
+  }),
+);
 
 /**
  * POST /api/shifts
  * Create a new shift
  */
-export const POST = withValidation(
-  ShiftCreateSchema,
-  async (request: NextRequest, data: z.infer<typeof ShiftCreateSchema>) => {
-    return requireSession(request as AuthenticatedRequest, async (_authReq) => {
+export const POST = rateLimit(RateLimits.WRITE)(
+  csrfProtection()(
+    requireOrgMembership(async (request: NextRequest, context) => {
       try {
         const { searchParams } = new URL(request.url);
         const scheduleId = searchParams.get("scheduleId");
@@ -68,6 +68,10 @@ export const POST = withValidation(
           );
         }
 
+        const body = await request.json();
+        const validated = ShiftCreateSchema.parse(body);
+        const sanitized = sanitizeObject(validated);
+
         // In production:
         // 1. Check for overlapping shifts for the same user
         // 2. Validate position belongs to same org as schedule
@@ -76,15 +80,19 @@ export const POST = withValidation(
         const newShift = {
           id: `shift-${Date.now()}`,
           scheduleId,
-          ...data,
+          ...sanitized,
           status: "draft" as const,
           createdAt: new Date().toISOString(),
         };
 
         return NextResponse.json(newShift, { status: 201 });
-      } catch {
+      } catch (error) {
+        if (error instanceof Error && error.name === "ZodError") {
+          return NextResponse.json({ error: "Invalid shift data" }, { status: 400 });
+        }
         return serverError("Failed to create shift");
       }
-    });
-  },
+    }),
+  ),
 );
+

@@ -1,13 +1,13 @@
 //[P1][API][CODE] Organization Member [memberId] API route handler
 // Tags: P1, API, CODE, validation, zod, rbac
 
+import { MembershipUpdateSchema } from "@fresh-schedules/types";
 import { NextRequest, NextResponse } from "next/server";
 import type { z } from "zod";
 
+import { withValidation } from "../../../../../../src/lib/api/validation";
 import { requireSession, AuthenticatedRequest } from "../../../../_shared/middleware";
 import { serverError } from "../../../../_shared/validation";
-import { withValidation } from "../../../../../../src/lib/api/validation";
-import { MembershipUpdateSchema } from "@fresh-schedules/types";
 
 /**
  * GET /api/organizations/[id]/members/[memberId]

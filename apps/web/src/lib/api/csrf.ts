@@ -1,8 +1,8 @@
 //[P1][API][SECURITY] CSRF protection middleware
 // Tags: csrf, security, double-submit-cookie, state-changing-operations
 
-import { NextRequest, NextResponse } from "next/server";
 import { randomBytes, timingSafeEqual } from "crypto";
+import { NextRequest, NextResponse } from "next/server";
 
 /**
  * CSRF token configuration

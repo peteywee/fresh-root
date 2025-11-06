@@ -1,8 +1,9 @@
 //[P1][API][TEST] Rate limiting middleware unit tests
 // Tags: test, rate-limiting, security, vitest
 
-import { describe, it, expect, beforeEach } from "vitest";
 import { NextRequest, NextResponse } from "next/server";
+import { describe, it, expect, beforeEach } from "vitest";
+
 import { rateLimit, RateLimits } from "./rate-limit";
 
 describe("rateLimit", () => {

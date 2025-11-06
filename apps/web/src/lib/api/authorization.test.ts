@@ -2,8 +2,9 @@
 // Tags: test, authorization, rbac, vitest
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { describe, it, expect, vi } from "vitest";
 import { NextRequest } from "next/server";
+import { describe, it, expect, vi } from "vitest";
+
 import {
   extractOrgId,
   isOrgMember,
