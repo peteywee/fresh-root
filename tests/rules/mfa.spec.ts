@@ -13,7 +13,7 @@ import { describe, test, expect, beforeAll, afterAll } from "vitest";
 let testEnv: RulesTestEnvironment;
 
 beforeAll(async () => {
-  const rulesPath = resolve(__dirname, "../../firestore.rules");
+  const rulesPath = resolve(__dirname, "../../../firestore.rules");
   const rules = readFileSync(rulesPath, "utf8");
 
   testEnv = await initializeTestEnvironment({

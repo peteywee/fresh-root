@@ -254,20 +254,20 @@ e# Fresh Schedules v13 Plan C Milestone Checklist
 - [x] Test CSRF protection (403 without valid token)
 ```
 
-### 3.3 - Firestore Rules Test Matrix
+### 3.3 - Firestore Rules Test Matrix ✅ COMPLETE
 
 - [x] [BLOCK3.3] Write rules test matrix (≥ 1 allow + 3 denies per collection)
-  - [ ] Create `tests/rules/organizations.spec.ts` 🚨 MISSING
+  - [x] Create `tests/rules/organizations.spec.ts`
 
 ```text
-- [ ] Test allow: member can read org
-- [ ] Test deny: unauthenticated cannot read org
-- [ ] Test deny: non-member cannot read org
-- [ ] Test deny: member cannot update org (only managers)
-- [ ] Test allow: manager can update org
+- [x] Test allow: member can read org
+- [x] Test deny: unauthenticated cannot read org
+- [x] Test deny: non-member cannot read org
+- [x] Test deny: member cannot update org (only managers)
+- [x] Test allow: manager can update org
 ```
 
-- [x] Create `tests/rules/memberships.spec.ts` ✅
+- [x] Create `tests/rules/memberships.spec.ts`
 
 ```text
 - [x] Test allow: member can read own membership
@@ -277,7 +277,7 @@ e# Fresh Schedules v13 Plan C Milestone Checklist
 - [x] Test allow: manager can update membership role
 ```
 
-- [x] Create `tests/rules/positions.spec.ts` ✅
+- [x] Create `tests/rules/positions.spec.ts`
 
 ```text
 - [x] Test allow: member can read positions in their org
@@ -286,7 +286,7 @@ e# Fresh Schedules v13 Plan C Milestone Checklist
 - [x] Test allow: manager can create/update positions
 ```
 
-- [x] Create `tests/rules/schedules.spec.ts` ✅
+- [x] Create `tests/rules/schedules.spec.ts`
 
 ```text
 - [x] Test allow: member can read schedules in their org
@@ -296,7 +296,7 @@ e# Fresh Schedules v13 Plan C Milestone Checklist
 - [x] Test deny: cannot modify archived schedules
 ```
 
-- [x] Create `tests/rules/shifts.spec.ts` ✅
+- [x] Create `tests/rules/shifts.spec.ts`
 
 ```text
 - [x] Test allow: member can read shifts in their org's schedules
@@ -306,18 +306,18 @@ e# Fresh Schedules v13 Plan C Milestone Checklist
 - [x] Test allow: staff can update their own shift notes/checkIn
 ```
 
-- [x] Run all rules tests with Firebase emulator ✅
+- [x] Run all rules tests with Firebase emulator
 
 ```text
 - [x] Add `pnpm test:rules` script to package.json
 - [x] Ensure CI runs rules tests on every PR
-- [ ] Add coverage reporting for rules tests
+- [x] Add coverage reporting for rules tests
 ```
 
-### 3.4 - Schema Validation Tests
+### 3.4 - Schema Validation Tests ✅ COMPLETE
 
 - [x] [BLOCK3.4] Add unit tests for Zod validators
-  - [x] Create `packages/types/src/__tests__/organizations.test.ts` ✅
+  - [x] Create `packages/types/src/__tests__/organizations.test.ts`
 
 ```text
 - [x] Test valid organization creation
@@ -326,7 +326,7 @@ e# Fresh Schedules v13 Plan C Milestone Checklist
 - [x] Test string length limits (name min/max)
 ```
 
-- [x] Create `packages/types/src/__tests__/memberships.test.ts` ✅
+- [x] Create `packages/types/src/__tests__/memberships.test.ts`
 
 ```text
 - [x] Test valid membership creation
@@ -334,7 +334,7 @@ e# Fresh Schedules v13 Plan C Milestone Checklist
 - [x] Test required field validation
 ```
 
-- [x] Create `packages/types/src/__tests__/positions.test.ts` ✅
+- [x] Create `packages/types/src/__tests__/positions.test.ts`
 
 ```text
 - [x] Test valid position creation
@@ -342,7 +342,7 @@ e# Fresh Schedules v13 Plan C Milestone Checklist
 - [x] Test string field limits
 ```
 
-- [x] Create `packages/types/src/__tests__/schedules.test.ts` ✅
+- [x] Create `packages/types/src/__tests__/schedules.test.ts`
 
 ```text
 - [x] Test valid schedule creation
@@ -350,27 +350,27 @@ e# Fresh Schedules v13 Plan C Milestone Checklist
 - [x] Test status enum validation
 ```
 
-- [ ] Create `packages/types/src/__tests__/shifts.test.ts` 🚨 MISSING
+- [x] Create `packages/types/src/__tests__/shifts.test.ts`
 
 ```text
-- [ ] Test valid shift creation
-- [ ] Test time range validation (startTime < endTime)
-- [ ] Test breakMinutes validation (>= 0, < shift duration)
-- [ ] Test overlapping shift detection logic
+- [x] Test valid shift creation
+- [x] Test time range validation (startTime < endTime)
+- [x] Test breakMinutes validation (>= 0, < shift duration)
+- [x] Test overlapping shift detection logic
 ```
 
-- [ ] Add test coverage reporting
+- [x] Add test coverage reporting
 
 ```text
-- [ ] Configure Vitest coverage for packages/types
-- [ ] Aim for ≥ 90% coverage on Zod schemas
-- [ ] Add coverage badge to README
+- [x] Configure Vitest coverage for packages/types
+- [x] Aim for ≥ 90% coverage on Zod schemas
+- [x] Add coverage badge to README
 ```
 
-### 3.5 - Schema Parity & Documentation
+### 3.5 - Schema Parity & Documentation ✅ COMPLETE
 
-- [x] [BLOCK3.5] Add migration-check script validating schema parity vs rules ✅
-  - [x] Create `scripts/validate-schema-parity.mjs` ✅
+- [x] [BLOCK3.5] Add migration-check script validating schema parity vs rules
+  - [x] Create `scripts/validate-schema-parity.mjs`
 
 ```text
 - [x] Parse Firestore rules to extract collection names
@@ -380,21 +380,21 @@ e# Fresh Schedules v13 Plan C Milestone Checklist
 - [x] Check that every Zod schema has corresponding rules tests
 ```
 
-- [x] Add as pre-push git hook ✅
+- [x] Add as pre-push git hook
 
 ```text
 - [x] Update `.husky/pre-push` to run parity check
 - [x] Fail push if parity check fails
 ```
 
-- [x] Run in CI pipeline ✅
+- [x] Run in CI pipeline
 
 ```text
 - [x] Add to `.github/workflows/ci.yml`
 - [x] Block PR merge if parity check fails
 ```
 
-- [x] [BLOCK3.6] Create schema index doc (docs/schema-map.md) ✅
+- [x] [BLOCK3.6] Create schema index doc (docs/schema-map.md)
   - [x] Document all collections and their schemas
 
 ```text
@@ -410,10 +410,10 @@ e# Fresh Schedules v13 Plan C Milestone Checklist
 - [x] Add schema evolution guidelines
 - [x] Add examples of valid payloads
 
-### 3.7 - Pre-commit Quality Gates
+### 3.7 - Pre-commit Quality Gates ✅ COMPLETE
 
-- [x] [BLOCK3.7] Add pre-commit hook enforcing quality checks ✅
-  - [x] Update `.husky/pre-commit` script ✅
+- [x] [BLOCK3.7] Add pre-commit hook enforcing quality checks
+  - [x] Update `.husky/pre-commit` script
 
 ```text
 - [x] Run `pnpm typecheck` (already exists)
@@ -422,8 +422,8 @@ e# Fresh Schedules v13 Plan C Milestone Checklist
 - [x] Ensure all checks pass before allowing commit
 ```
 
-- [ ] Document pre-commit hooks in CONTRIBUTING.md
-- [ ] Add troubleshooting section for hook failures
+- [x] Document pre-commit hooks in CONTRIBUTING.md
+- [x] Add troubleshooting section for hook failures
 
 🎨 Block 4 – Experience Layer (P1)
 

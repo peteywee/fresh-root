@@ -109,9 +109,19 @@ service cloud.firestore {
     // Token-based: managers can create/update
     // Legacy: users can create their own
     match /memberships/{membershipId} {
-      allow read: if isSignedIn() && (resource.data.uid == uid() || isManager() || hasAnyRoleLegacy(resource.data.orgId, ['owner','admin','manager']));
-      allow create: if isSignedIn() && (request.resource.data.uid == uid() || (isManager() && sameOrg(request.resource.data.orgId)));
-      allow update, delete: if isSignedIn() && (isManager() && sameOrg(resource.data.orgId));
+      allow read: if isSignedIn() && (
+        resource.data.uid == uid() ||
+        (isManager() && sameOrg(resource.data.orgId)) ||
+        hasAnyRoleLegacy(resource.data.orgId, ['owner','admin','manager'])
+      );
+      allow create: if isSignedIn() && (
+        request.resource.data.uid == uid() ||
+        (isManager() && sameOrg(request.resource.data.orgId))
+      );
+      allow update, delete: if isSignedIn() && (
+        (isManager() && sameOrg(resource.data.orgId)) ||
+        hasAnyRoleLegacy(resource.data.orgId, ['owner','admin','manager'])
+      );
       allow list: if false;
     }
 
