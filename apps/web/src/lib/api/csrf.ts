@@ -1,20 +1,13 @@
 //[P1][API][SECURITY] CSRF protection middleware
-// Tags: csrf, security, double-submit-cookie, state-changing-operations
+// Tags: csrf, security, double-submit-cookie
 
 import { randomBytes, timingSafeEqual } from "crypto";
 import { NextRequest, NextResponse } from "next/server";
 
-/**
- * CSRF token configuration
- */
 export interface CSRFConfig {
-  /** Cookie name for CSRF token */
   cookieName?: string;
-  /** Header name for CSRF token */
   headerName?: string;
-  /** Token length in bytes */
   tokenLength?: number;
-  /** Cookie options */
   cookieOptions?: {
     httpOnly?: boolean;
     secure?: boolean;
@@ -31,25 +24,16 @@ const DEFAULT_CONFIG: Required<CSRFConfig> = {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "strict",
-    maxAge: 86400, // 24 hours
+    maxAge: 86400,
   },
 };
 
-/**
- * Generate a CSRF token
- */
 export function generateCSRFToken(length: number = 32): string {
   return randomBytes(length).toString("base64url");
 }
 
-/**
- * Verify CSRF token using timing-safe comparison
- */
 export function verifyCSRFToken(token1: string, token2: string): boolean {
-  if (!token1 || !token2 || token1.length !== token2.length) {
-    return false;
-  }
-
+  if (!token1 || !token2 || token1.length !== token2.length) return false;
   try {
     const buffer1 = Buffer.from(token1);
     const buffer2 = Buffer.from(token2);
@@ -59,22 +43,12 @@ export function verifyCSRFToken(token1: string, token2: string): boolean {
   }
 }
 
-/**
- * Extract CSRF token from request (header or body)
- */
 function extractTokenFromRequest(request: NextRequest, headerName: string): string | null {
-  // Try header first
   const headerToken = request.headers.get(headerName);
   if (headerToken) return headerToken;
-
-  // For form submissions, token might be in body
-  // (This would require parsing the body, which we avoid in middleware)
   return null;
 }
 
-/**
- * Set CSRF cookie in response
- */
 export function setCSRFCookie(
   response: NextResponse,
   token: string,
@@ -95,48 +69,27 @@ export function setCSRFCookie(
   response.headers.set("Set-Cookie", cookieValue);
 }
 
-/**
- * CSRF protection middleware
- * Protects state-changing operations (POST, PUT, PATCH, DELETE)
- */
-export function csrfProtection(config: CSRFConfig = {}) {
+export function csrfProtection<Ctx extends Record<string, unknown> = {}>(config: CSRFConfig = {}) {
   const fullConfig = { ...DEFAULT_CONFIG, ...config };
-
-  return function (
-    handler: (
-      request: NextRequest,
-      context: { params: Record<string, string> },
-    ) => Promise<NextResponse>,
-  ) {
-    return async (
-      request: NextRequest,
-      context: { params: Record<string, string> },
-    ): Promise<NextResponse> => {
+  type C = Ctx & { params: Record<string, string> };
+  return function (handler: (request: NextRequest, context: C) => Promise<NextResponse>) {
+    return async (request: NextRequest, context: C): Promise<NextResponse> => {
       const method = request.method.toUpperCase();
-
-      // Only protect state-changing methods
       if (method === "GET" || method === "HEAD" || method === "OPTIONS") {
         return handler(request, context);
       }
 
-      // Get token from cookie
       const cookies = request.headers.get("cookie") || "";
       const cookieMatch = cookies.match(new RegExp(`${fullConfig.cookieName}=([^;]+)`));
       const cookieToken = cookieMatch?.[1];
-
       if (!cookieToken) {
         return NextResponse.json(
-          {
-            error: "Forbidden - CSRF token missing from cookie",
-            code: "CSRF_COOKIE_MISSING",
-          },
+          { error: "Forbidden - CSRF token missing from cookie", code: "CSRF_COOKIE_MISSING" },
           { status: 403 },
         );
       }
 
-      // Get token from request (header or body)
       const requestToken = extractTokenFromRequest(request, fullConfig.headerName);
-
       if (!requestToken) {
         return NextResponse.json(
           {
@@ -147,99 +100,44 @@ export function csrfProtection(config: CSRFConfig = {}) {
         );
       }
 
-      // Verify tokens match (timing-safe comparison)
       if (!verifyCSRFToken(cookieToken, requestToken)) {
         return NextResponse.json(
-          {
-            error: "Forbidden - CSRF token mismatch",
-            code: "CSRF_TOKEN_INVALID",
-          },
+          { error: "Forbidden - CSRF token mismatch", code: "CSRF_TOKEN_INVALID" },
           { status: 403 },
         );
       }
 
-      // Token valid, proceed with handler
       return handler(request, context);
     };
   };
 }
 
-/**
- * Helper: Generate and set CSRF token for GET requests
- * Use this for endpoints that return forms or pages with state-changing actions
- */
-export function withCSRFToken(
+export function withCSRFToken<Ctx extends Record<string, unknown> = {}>(
   handler: (
     request: NextRequest,
-    context: { params: Record<string, string> },
+    context: Ctx & { params: Record<string, string> },
   ) => Promise<NextResponse>,
   config: CSRFConfig = {},
-): (request: NextRequest, context: { params: Record<string, string> }) => Promise<NextResponse> {
+): (
+  request: NextRequest,
+  context: Ctx & { params: Record<string, string> },
+) => Promise<NextResponse> {
   const fullConfig = { ...DEFAULT_CONFIG, ...config };
-
   return async (
     request: NextRequest,
-    context: { params: Record<string, string> },
+    context: Ctx & { params: Record<string, string> },
   ): Promise<NextResponse> => {
-    // Check if token already exists in cookie
     const cookies = request.headers.get("cookie") || "";
     const cookieMatch = cookies.match(new RegExp(`${fullConfig.cookieName}=([^;]+)`));
     let token = cookieMatch?.[1];
-
-    // Generate new token if none exists
-    if (!token) {
-      token = generateCSRFToken(fullConfig.tokenLength);
-    }
-
-    // Call handler
+    if (!token) token = generateCSRFToken(fullConfig.tokenLength);
     const response = await handler(request, context);
-
-    // Set token in cookie if it was generated
     if (!cookieMatch?.[1]) {
       setCSRFCookie(response, token, fullConfig);
     }
-
-    // Also include token in response body for client-side use
-    // (Clients should send this in the x-csrf-token header)
-    if (response.headers.get("content-type")?.includes("application/json")) {
-      try {
-        const body = await response.json();
-        return NextResponse.json(
-          { ...body, csrfToken: token },
-          { status: response.status, headers: response.headers },
-        );
-      } catch {
-        // If response is not JSON, just return as-is
-        return response;
-      }
-    }
-
     return response;
   };
 }
 
-/**
- * Middleware: Skip CSRF check for specific conditions
- * Useful for API endpoints that use other auth mechanisms (e.g., API keys)
- */
-export function skipCSRFIf(
-  condition: (request: NextRequest) => boolean,
-  protectedHandler: ReturnType<typeof csrfProtection>,
-) {
-  return function (
-    handler: (
-      request: NextRequest,
-      context: { params: Record<string, string> },
-    ) => Promise<NextResponse>,
-  ) {
-    return async (
-      request: NextRequest,
-      context: { params: Record<string, string> },
-    ): Promise<NextResponse> => {
-      if (condition(request)) {
-        return handler(request, context);
-      }
-      return protectedHandler(handler)(request, context);
-    };
-  };
-}
+export const verifyCsrf = verifyCSRFToken;
+export const withCsrf = csrfProtection;

@@ -1,7 +1,9 @@
 // [P1][OPS][BACKUP] Internal endpoint to trigger Firestore export
 // Tags: P1, OPS, BACKUP, FIRESTORE
 import { GoogleAuth } from "google-auth-library";
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
+
+import { badRequest, serverError, ok } from "../../_shared/validation";
 
 // Security: protect with static header token set in env and Cloud Scheduler
 const HEADER_NAME = "x-backup-token";
@@ -42,25 +44,19 @@ export async function POST(req: NextRequest) {
   try {
     const configuredToken = process.env.BACKUP_CRON_TOKEN;
     if (!configuredToken) {
-      return NextResponse.json(
-        { error: "Server not configured (BACKUP_CRON_TOKEN)" },
-        { status: 500 },
-      );
+      return serverError("Server not configured (BACKUP_CRON_TOKEN)");
     }
 
     const headerToken = req.headers.get(HEADER_NAME);
     if (!headerToken || headerToken !== configuredToken) {
-      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+      return badRequest("Invalid or missing backup token", null, "FORBIDDEN");
     }
 
     const projectId = process.env.FIREBASE_PROJECT_ID;
     const bucket = process.env.BACKUP_BUCKET;
 
     if (!projectId || !bucket) {
-      return NextResponse.json(
-        { error: "Missing FIREBASE_PROJECT_ID or BACKUP_BUCKET" },
-        { status: 400 },
-      );
+      return badRequest("Missing FIREBASE_PROJECT_ID or BACKUP_BUCKET");
     }
 
     const collectionsParam = req.nextUrl.searchParams.get("collections");
@@ -73,9 +69,9 @@ export async function POST(req: NextRequest) {
 
     const result = await exportFirestore(projectId, bucket, collections);
 
-    return NextResponse.json({ success: true, operation: result });
+    return ok({ success: true, operation: result });
   } catch (error) {
-    return NextResponse.json({ error: (error as Error).message }, { status: 500 });
+    return serverError(error instanceof Error ? error.message : "Backup failed");
   }
 }
 

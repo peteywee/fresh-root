@@ -1,19 +1,17 @@
-// [P0][APP][CODE] Index - Central export for all type definitions and schemas
-// Tags: P0, APP, CODE, TYPES, VALIDATION
+// [P1][INTEGRITY][SCHEMA] Package types index
+// Tags: P1, INTEGRITY, SCHEMA, INDEX
 import { z } from "zod";
 
 export const Role = z.enum(["admin", "manager", "staff"]);
 export type Role = z.infer<typeof Role>;
 
-// RBAC and membership types
 export * from "./rbac";
-export * from "./memberships";
-
-// Organization types
 export * from "./orgs";
-
-// Position types
-export * from "./positions";
-
-// Schedule and shift types
 export * from "./schedules";
+export * from "./memberships"; // This provides the canonical Membership export
+export * from "./positions";
+export * from "./shifts";
+export * from "./venues";
+export * from "./zones";
+export * from "./attendance";
+export * from "./join-tokens";

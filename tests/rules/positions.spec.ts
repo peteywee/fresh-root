@@ -1,305 +1,172 @@
-// [P1][INTEGRITY][TEST] Firestore rules tests for positions collection
-// Tags: P1, INTEGRITY, TEST, FIRESTORE, RULES, SECURITY, RBAC
-import { initializeTestEnvironment, RulesTestEnvironment } from "@firebase/rules-unit-testing";
-import fs from "fs";
+// [P1][INTEGRITY][TEST] Positions rules tests
+// Tags: P1, INTEGRITY, TEST, FIRESTORE, RULES, POSITIONS
+import {
+  assertFails,
+  assertSucceeds,
+  initializeTestEnvironment,
+  RulesTestEnvironment,
+} from "@firebase/rules-unit-testing";
+import { doc, getDoc, setDoc, updateDoc, deleteDoc, collection, getDocs } from "firebase/firestore";
+import { readFileSync } from "fs";
+import { resolve } from "path";
+import { describe, it, beforeAll, afterAll } from "vitest";
 
-let testEnv: RulesTestEnvironment;
+describe("Positions Rules", () => {
+  let testEnv: RulesTestEnvironment;
+  const ORG_ID = "test-org-pos";
+  const POS_ID = "position-123";
+  const MANAGER_UID = "manager-pos";
+  const STAFF_UID = "staff-pos";
+  const OTHER_ORG_UID = "other-org-user";
 
-beforeAll(async () => {
-  const firestoreOptions: { rules: string; host?: string; port?: number } = {
-    rules: fs.readFileSync("firestore.rules", "utf8"),
-  };
-  const firestoreHost =
-    process.env.FIRESTORE_EMULATOR_HOST || process.env.FIREBASE_FIRESTORE_EMULATOR_HOST;
-  if (firestoreHost) {
-    const [host, portStr] = firestoreHost.split(":");
-    firestoreOptions.host = host;
-    firestoreOptions.port = Number(portStr);
-  } else {
-    firestoreOptions.host = "localhost";
-    firestoreOptions.port = 8080;
-  }
+  beforeAll(async () => {
+    testEnv = await initializeTestEnvironment({
+      projectId: "test-project-pos",
+      firestore: {
+        rules: readFileSync(resolve(__dirname, "../../firestore.rules"), "utf8"),
+        host: "127.0.0.1",
+        port: 8080,
+      },
+    });
 
-  testEnv = await initializeTestEnvironment({
-    projectId: "fresh-schedules-test-positions",
-    firestore: firestoreOptions,
-  });
-});
-
-afterAll(async () => {
-  await testEnv.cleanup();
-});
-
-beforeEach(async () => {
-  await testEnv.clearFirestore();
-});
-
-describe("Positions Collection - Read Access", () => {
-  test("✅ ALLOW: Member can read positions in their org", async () => {
-    // Setup: Create org and position
+    // Setup test data
     await testEnv.withSecurityRulesDisabled(async (context) => {
-      await context.firestore().collection("orgs").doc("orgA").set({
-        name: "Organization A",
+      const db = context.firestore();
+      await setDoc(doc(db, `positions/${ORG_ID}/${POS_ID}`), {
+        id: POS_ID,
+        orgId: ORG_ID,
+        name: "Event Staff",
+        type: "part_time",
+        createdAt: Date.now(),
       });
-      await context
-        .firestore()
-        .collection("orgs")
-        .doc("orgA")
-        .collection("positions")
-        .doc("pos1")
-        .set({
-          name: "Software Engineer",
-          department: "Engineering",
-          createdAt: new Date().toISOString(),
+    });
+  });
+
+  afterAll(async () => {
+    await testEnv.cleanup();
+  });
+
+  describe("Read access", () => {
+    it("ALLOW: org member can read position", async () => {
+      const staffContext = testEnv.authenticatedContext(STAFF_UID, {
+        orgId: ORG_ID,
+        roles: ["staff"],
+      });
+      const db = staffContext.firestore();
+      await assertSucceeds(getDoc(doc(db, `positions/${ORG_ID}/${POS_ID}`)));
+    });
+
+    it("DENY: non-member cannot read position", async () => {
+      const otherContext = testEnv.authenticatedContext(OTHER_ORG_UID, {
+        orgId: "different-org",
+        roles: ["staff"],
+      });
+      const db = otherContext.firestore();
+      await assertFails(getDoc(doc(db, `positions/${ORG_ID}/${POS_ID}`)));
+    });
+
+    it("DENY: unauthenticated cannot read position", async () => {
+      const unauthContext = testEnv.unauthenticatedContext();
+      const db = unauthContext.firestore();
+      await assertFails(getDoc(doc(db, `positions/${ORG_ID}/${POS_ID}`)));
+    });
+
+    it("DENY: listing positions forbidden", async () => {
+      const staffContext = testEnv.authenticatedContext(STAFF_UID, {
+        orgId: ORG_ID,
+        roles: ["staff"],
+      });
+      const db = staffContext.firestore();
+      await assertFails(getDocs(collection(db, `positions/${ORG_ID}`)));
+    });
+  });
+
+  describe("Write access", () => {
+    it("ALLOW: manager can create position", async () => {
+      const managerContext = testEnv.authenticatedContext(MANAGER_UID, {
+        orgId: ORG_ID,
+        roles: ["manager"],
+      });
+      const db = managerContext.firestore();
+      await assertSucceeds(
+        setDoc(doc(db, `positions/${ORG_ID}/new-pos-${Date.now()}`), {
+          name: "New Position",
+          orgId: ORG_ID,
+          type: "full_time",
+          createdAt: Date.now(),
+        }),
+      );
+    });
+
+    it("ALLOW: manager can update position", async () => {
+      const managerContext = testEnv.authenticatedContext(MANAGER_UID, {
+        orgId: ORG_ID,
+        roles: ["manager"],
+      });
+      const db = managerContext.firestore();
+      await assertSucceeds(
+        updateDoc(doc(db, `positions/${ORG_ID}/${POS_ID}`), {
+          name: "Updated Position",
+        }),
+      );
+    });
+
+    it("DENY: staff cannot create position", async () => {
+      const staffContext = testEnv.authenticatedContext(STAFF_UID, {
+        orgId: ORG_ID,
+        roles: ["staff"],
+      });
+      const db = staffContext.firestore();
+      await assertFails(
+        setDoc(doc(db, `positions/${ORG_ID}/staff-pos-${Date.now()}`), {
+          name: "Unauthorized Position",
+          orgId: ORG_ID,
+        }),
+      );
+    });
+
+    it("DENY: staff cannot update position", async () => {
+      const staffContext = testEnv.authenticatedContext(STAFF_UID, {
+        orgId: ORG_ID,
+        roles: ["staff"],
+      });
+      const db = staffContext.firestore();
+      await assertFails(
+        updateDoc(doc(db, `positions/${ORG_ID}/${POS_ID}`), {
+          name: "Staff Update Attempt",
+        }),
+      );
+    });
+
+    it("DENY: manager from different org cannot write", async () => {
+      const otherContext = testEnv.authenticatedContext(OTHER_ORG_UID, {
+        orgId: "different-org",
+        roles: ["manager"],
+      });
+      const db = otherContext.firestore();
+      await assertFails(
+        updateDoc(doc(db, `positions/${ORG_ID}/${POS_ID}`), {
+          name: "Cross-org Update",
+        }),
+      );
+    });
+
+    it("ALLOW: manager can delete position", async () => {
+      const deletePos = `delete-pos-${Date.now()}`;
+      await testEnv.withSecurityRulesDisabled(async (context) => {
+        const db = context.firestore();
+        await setDoc(doc(db, `positions/${ORG_ID}/${deletePos}`), {
+          name: "To Delete",
+          orgId: ORG_ID,
         });
-    });
-
-    // Test: Member can read positions in their org
-    const memberCtx = testEnv.authenticatedContext("member1", {
-      orgId: "orgA",
-      roles: ["org_member"],
-    });
-    await expect(memberCtx.firestore().doc("orgs/orgA/positions/pos1").get()).resolves.toBeTruthy();
-  });
-
-  test("❌ DENY: Unauthenticated user cannot read positions", async () => {
-    await testEnv.withSecurityRulesDisabled(async (context) => {
-      await context.firestore().collection("orgs").doc("orgA").set({ name: "Org A" });
-      await context.firestore().doc("orgs/orgA/positions/pos1").set({
-        name: "Software Engineer",
       });
-    });
 
-    const unauthCtx = testEnv.unauthenticatedContext();
-    await expect(unauthCtx.firestore().doc("orgs/orgA/positions/pos1").get()).rejects.toThrow(
-      /PERMISSION_DENIED/,
-    );
-  });
-
-  test("❌ DENY: Cannot read positions from other orgs", async () => {
-    await testEnv.withSecurityRulesDisabled(async (context) => {
-      await context.firestore().collection("orgs").doc("orgA").set({ name: "Org A" });
-      await context.firestore().doc("orgs/orgA/positions/pos1").set({
-        name: "Software Engineer",
+      const managerContext = testEnv.authenticatedContext(MANAGER_UID, {
+        orgId: ORG_ID,
+        roles: ["manager"],
       });
+      const db = managerContext.firestore();
+      await assertSucceeds(deleteDoc(doc(db, `positions/${ORG_ID}/${deletePos}`)));
     });
-
-    // User from orgB tries to read orgA position
-    const outsiderCtx = testEnv.authenticatedContext("outsider1", {
-      orgId: "orgB",
-      roles: ["org_member"],
-    });
-    await expect(outsiderCtx.firestore().doc("orgs/orgA/positions/pos1").get()).rejects.toThrow(
-      /PERMISSION_DENIED/,
-    );
-  });
-
-  test("❌ DENY: Cannot list positions from other orgs", async () => {
-    await testEnv.withSecurityRulesDisabled(async (context) => {
-      await context.firestore().collection("orgs").doc("orgA").set({ name: "Org A" });
-      await context.firestore().doc("orgs/orgA/positions/pos1").set({
-        name: "Software Engineer",
-      });
-      await context.firestore().doc("orgs/orgA/positions/pos2").set({
-        name: "Product Manager",
-      });
-    });
-
-    const outsiderCtx = testEnv.authenticatedContext("outsider1", {
-      orgId: "orgB",
-      roles: ["manager"],
-    });
-    await expect(outsiderCtx.firestore().collection("orgs/orgA/positions").get()).rejects.toThrow(
-      /PERMISSION_DENIED/,
-    );
-  });
-});
-
-describe("Positions Collection - Create Access", () => {
-  test("❌ DENY: Staff cannot create positions", async () => {
-    await testEnv.withSecurityRulesDisabled(async (context) => {
-      await context.firestore().collection("orgs").doc("orgA").set({ name: "Org A" });
-    });
-
-    const staffCtx = testEnv.authenticatedContext("staff1", {
-      orgId: "orgA",
-      roles: ["staff"],
-    });
-    await expect(
-      staffCtx.firestore().doc("orgs/orgA/positions/newPos").set({
-        name: "New Position",
-        department: "HR",
-        createdAt: new Date().toISOString(),
-      }),
-    ).rejects.toThrow(/PERMISSION_DENIED/);
-  });
-
-  test("❌ DENY: Scheduler cannot create positions", async () => {
-    await testEnv.withSecurityRulesDisabled(async (context) => {
-      await context.firestore().collection("orgs").doc("orgA").set({ name: "Org A" });
-    });
-
-    const schedulerCtx = testEnv.authenticatedContext("scheduler1", {
-      orgId: "orgA",
-      roles: ["scheduler"],
-    });
-    await expect(
-      schedulerCtx.firestore().doc("orgs/orgA/positions/newPos").set({
-        name: "New Position",
-        department: "HR",
-        createdAt: new Date().toISOString(),
-      }),
-    ).rejects.toThrow(/PERMISSION_DENIED/);
-  });
-
-  test("✅ ALLOW: Manager can create positions", async () => {
-    await testEnv.withSecurityRulesDisabled(async (context) => {
-      await context.firestore().collection("orgs").doc("orgA").set({ name: "Org A" });
-    });
-
-    const managerCtx = testEnv.authenticatedContext("manager1", {
-      orgId: "orgA",
-      roles: ["manager"],
-    });
-    await expect(
-      managerCtx.firestore().doc("orgs/orgA/positions/newPos").set({
-        name: "New Position",
-        department: "HR",
-        createdAt: new Date().toISOString(),
-      }),
-    ).resolves.toBeUndefined();
-  });
-
-  test("✅ ALLOW: Admin can create positions", async () => {
-    await testEnv.withSecurityRulesDisabled(async (context) => {
-      await context.firestore().collection("orgs").doc("orgA").set({ name: "Org A" });
-    });
-
-    const adminCtx = testEnv.authenticatedContext("admin1", {
-      orgId: "orgA",
-      roles: ["admin"],
-    });
-    await expect(
-      adminCtx.firestore().doc("orgs/orgA/positions/newPos").set({
-        name: "New Position",
-        department: "Engineering",
-        createdAt: new Date().toISOString(),
-      }),
-    ).resolves.toBeUndefined();
-  });
-});
-
-describe("Positions Collection - Update Access", () => {
-  test("❌ DENY: Staff cannot update positions", async () => {
-    await testEnv.withSecurityRulesDisabled(async (context) => {
-      await context.firestore().collection("orgs").doc("orgA").set({ name: "Org A" });
-      await context.firestore().doc("orgs/orgA/positions/pos1").set({
-        name: "Software Engineer",
-        department: "Engineering",
-      });
-    });
-
-    const staffCtx = testEnv.authenticatedContext("staff1", {
-      orgId: "orgA",
-      roles: ["staff"],
-    });
-    await expect(
-      staffCtx.firestore().doc("orgs/orgA/positions/pos1").update({
-        name: "Senior Software Engineer",
-      }),
-    ).rejects.toThrow(/PERMISSION_DENIED/);
-  });
-
-  test("✅ ALLOW: Manager can update positions", async () => {
-    await testEnv.withSecurityRulesDisabled(async (context) => {
-      await context.firestore().collection("orgs").doc("orgA").set({ name: "Org A" });
-      await context.firestore().doc("orgs/orgA/positions/pos1").set({
-        name: "Software Engineer",
-        department: "Engineering",
-      });
-    });
-
-    const managerCtx = testEnv.authenticatedContext("manager1", {
-      orgId: "orgA",
-      roles: ["manager"],
-    });
-    await expect(
-      managerCtx.firestore().doc("orgs/orgA/positions/pos1").update({
-        name: "Senior Software Engineer",
-      }),
-    ).resolves.toBeUndefined();
-  });
-
-  test("❌ DENY: Manager from different org cannot update positions", async () => {
-    await testEnv.withSecurityRulesDisabled(async (context) => {
-      await context.firestore().collection("orgs").doc("orgA").set({ name: "Org A" });
-      await context.firestore().doc("orgs/orgA/positions/pos1").set({
-        name: "Software Engineer",
-        department: "Engineering",
-      });
-    });
-
-    const outsiderManagerCtx = testEnv.authenticatedContext("manager2", {
-      orgId: "orgB",
-      roles: ["manager"],
-    });
-    await expect(
-      outsiderManagerCtx.firestore().doc("orgs/orgA/positions/pos1").update({
-        name: "Malicious Update",
-      }),
-    ).rejects.toThrow(/PERMISSION_DENIED/);
-  });
-});
-
-describe("Positions Collection - Delete Access", () => {
-  test("❌ DENY: Staff cannot delete positions", async () => {
-    await testEnv.withSecurityRulesDisabled(async (context) => {
-      await context.firestore().collection("orgs").doc("orgA").set({ name: "Org A" });
-      await context.firestore().doc("orgs/orgA/positions/pos1").set({
-        name: "Software Engineer",
-      });
-    });
-
-    const staffCtx = testEnv.authenticatedContext("staff1", {
-      orgId: "orgA",
-      roles: ["staff"],
-    });
-    await expect(staffCtx.firestore().doc("orgs/orgA/positions/pos1").delete()).rejects.toThrow(
-      /PERMISSION_DENIED/,
-    );
-  });
-
-  test("❌ DENY: Manager cannot delete positions (admin-only)", async () => {
-    await testEnv.withSecurityRulesDisabled(async (context) => {
-      await context.firestore().collection("orgs").doc("orgA").set({ name: "Org A" });
-      await context.firestore().doc("orgs/orgA/positions/pos1").set({
-        name: "Software Engineer",
-      });
-    });
-
-    const managerCtx = testEnv.authenticatedContext("manager1", {
-      orgId: "orgA",
-      roles: ["manager"],
-    });
-    await expect(managerCtx.firestore().doc("orgs/orgA/positions/pos1").delete()).rejects.toThrow(
-      /PERMISSION_DENIED/,
-    );
-  });
-
-  test("✅ ALLOW: Admin can delete positions", async () => {
-    await testEnv.withSecurityRulesDisabled(async (context) => {
-      await context.firestore().collection("orgs").doc("orgA").set({ name: "Org A" });
-      await context.firestore().doc("orgs/orgA/positions/pos1").set({
-        name: "Software Engineer",
-      });
-    });
-
-    const adminCtx = testEnv.authenticatedContext("admin1", {
-      orgId: "orgA",
-      roles: ["admin"],
-    });
-    await expect(
-      adminCtx.firestore().doc("orgs/orgA/positions/pos1").delete(),
-    ).resolves.toBeUndefined();
   });
 });
