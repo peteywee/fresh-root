@@ -60,23 +60,23 @@ describe("Organization schema", () => {
 
   it("should reject organization with missing required fields", () => {
     const missingId = { ...validOrg };
-    delete (missingId as any).id;
+    delete (missingId as Record<string, unknown>).id;
     expect(() => Organization.parse(missingId)).toThrow();
 
     const missingName = { ...validOrg };
-    delete (missingName as any).name;
+    delete (missingName as Record<string, unknown>).name;
     expect(() => Organization.parse(missingName)).toThrow();
 
     const missingOwnerId = { ...validOrg };
-    delete (missingOwnerId as any).ownerId;
+    delete (missingOwnerId as Record<string, unknown>).ownerId;
     expect(() => Organization.parse(missingOwnerId)).toThrow();
 
     const missingCreatedAt = { ...validOrg };
-    delete (missingCreatedAt as any).createdAt;
+    delete (missingCreatedAt as Record<string, unknown>).createdAt;
     expect(() => Organization.parse(missingCreatedAt)).toThrow();
 
     const missingMemberCount = { ...validOrg };
-    delete (missingMemberCount as any).memberCount;
+    delete (missingMemberCount as Record<string, unknown>).memberCount;
     expect(() => Organization.parse(missingMemberCount)).toThrow();
   });
 

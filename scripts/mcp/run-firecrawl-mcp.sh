@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# [P2][APP][CODE] Run Firecrawl Mcp
+# Tags: P2, APP, CODE
 set -euo pipefail
 
 if [[ -z "${FIRECRAWL_API_KEY:-}" ]]; then
@@ -6,4 +8,4 @@ if [[ -z "${FIRECRAWL_API_KEY:-}" ]]; then
   exit 1
 fi
 
-npx -y @mendable/firecrawl-mcp
+npx -y firecrawl-mcp

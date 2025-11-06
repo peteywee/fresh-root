@@ -74,10 +74,11 @@ export async function getUserRoles(userId: string, orgId: string): Promise<OrgRo
 
 /**
  * Check if user has required role
- * Role hierarchy: org_owner > admin > manager > scheduler > staff
+ * Role hierarchy: org_owner > admin > manager > scheduler > corporate > staff
+ * Note: corporate has read-only cross-venue access but no write permissions
  */
 export function hasRequiredRole(userRoles: OrgRole[], requiredRole: OrgRole): boolean {
-  const hierarchy: OrgRole[] = ["staff", "scheduler", "manager", "admin", "org_owner"];
+  const hierarchy: OrgRole[] = ["staff", "corporate", "scheduler", "manager", "admin", "org_owner"];
   const userLevel = Math.max(...userRoles.map((role) => hierarchy.indexOf(role)));
   const requiredLevel = hierarchy.indexOf(requiredRole);
 

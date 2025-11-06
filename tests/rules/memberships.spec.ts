@@ -1,3 +1,5 @@
+
+export {};
 // [P1][INTEGRITY][TEST] Firestore rules tests for memberships collection
 // Tags: P1, INTEGRITY, TEST, FIRESTORE, RULES, SECURITY, RBAC
 import { initializeTestEnvironment, RulesTestEnvironment } from "@firebase/rules-unit-testing";

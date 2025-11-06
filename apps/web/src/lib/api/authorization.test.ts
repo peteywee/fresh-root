@@ -75,6 +75,18 @@ describe("hasRequiredRole", () => {
     expect(hasRequiredRole(["staff", "admin"], "admin")).toBe(true);
     expect(hasRequiredRole(["staff", "scheduler"], "manager")).toBe(false);
   });
+
+  it("should allow corporate role for staff requirement", () => {
+    expect(hasRequiredRole(["corporate"], "staff")).toBe(true);
+  });
+
+  it("should deny corporate role for manager requirement", () => {
+    expect(hasRequiredRole(["corporate"], "manager")).toBe(false);
+  });
+
+  it("should allow manager role for corporate requirement", () => {
+    expect(hasRequiredRole(["manager"], "corporate")).toBe(true);
+  });
 });
 
 describe("isOrgMember", () => {

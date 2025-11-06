@@ -2,7 +2,7 @@
   "servers": {
     "firecrawl": {
       "command": "npx",
-      "args": ["-y", "@mendable/firecrawl-mcp"],
+      "args": ["-y", "firecrawl-mcp"],
       "env": {
         "FIRECRAWL_API_KEY": "${env:FIRECRAWL_API_KEY}"
       },

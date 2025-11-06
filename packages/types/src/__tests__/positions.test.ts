@@ -3,11 +3,7 @@
 
 import { describe, it, expect } from "vitest";
 
-import {
-  PositionSchema,
-  PositionCreateSchema,
-  PositionUpdateSchema,
-} from "../positions";
+import { PositionSchema, PositionCreateSchema, PositionUpdateSchema } from "../positions";
 
 describe("PositionSchema", () => {
   const validPosition = {
@@ -45,23 +41,17 @@ describe("PositionSchema", () => {
     expect(() => PositionSchema.parse({ ...validPosition, id: undefined })).toThrow();
     expect(() => PositionSchema.parse({ ...validPosition, orgId: undefined })).toThrow();
     expect(() => PositionSchema.parse({ ...validPosition, title: undefined })).toThrow();
-    expect(() =>
-      PositionSchema.parse({ ...validPosition, createdAt: undefined }),
-    ).toThrow();
-    expect(() =>
-      PositionSchema.parse({ ...validPosition, createdBy: undefined }),
-    ).toThrow();
+    expect(() => PositionSchema.parse({ ...validPosition, createdAt: undefined })).toThrow();
+    expect(() => PositionSchema.parse({ ...validPosition, createdBy: undefined })).toThrow();
   });
 
   it("should enforce title length constraints (min 1, max 100)", () => {
     expect(() => PositionSchema.parse({ ...validPosition, title: "" })).toThrow();
-    expect(() =>
-      PositionSchema.parse({ ...validPosition, title: "a".repeat(101) }),
-    ).toThrow();
+    expect(() => PositionSchema.parse({ ...validPosition, title: "a".repeat(101) })).toThrow();
     expect(PositionSchema.parse({ ...validPosition, title: "A" }).title).toBe("A");
-    expect(
-      PositionSchema.parse({ ...validPosition, title: "a".repeat(100) }).title,
-    ).toHaveLength(100);
+    expect(PositionSchema.parse({ ...validPosition, title: "a".repeat(100) }).title).toHaveLength(
+      100,
+    );
   });
 
   it("should enforce description max length (500)", () => {
@@ -76,37 +66,23 @@ describe("PositionSchema", () => {
   });
 
   it("should validate hourlyRate constraints (0 to 9999.99)", () => {
-    expect(() =>
-      PositionSchema.parse({ ...validPosition, hourlyRate: -1 }),
-    ).toThrow();
-    expect(() =>
-      PositionSchema.parse({ ...validPosition, hourlyRate: 10000 }),
-    ).toThrow();
-    expect(PositionSchema.parse({ ...validPosition, hourlyRate: 0 }).hourlyRate).toBe(
-      0,
+    expect(() => PositionSchema.parse({ ...validPosition, hourlyRate: -1 })).toThrow();
+    expect(() => PositionSchema.parse({ ...validPosition, hourlyRate: 10000 })).toThrow();
+    expect(PositionSchema.parse({ ...validPosition, hourlyRate: 0 }).hourlyRate).toBe(0);
+    expect(PositionSchema.parse({ ...validPosition, hourlyRate: 9999.99 }).hourlyRate).toBe(
+      9999.99,
     );
-    expect(
-      PositionSchema.parse({ ...validPosition, hourlyRate: 9999.99 }).hourlyRate,
-    ).toBe(9999.99);
-    expect(
-      PositionSchema.parse({ ...validPosition, hourlyRate: 15.5 }).hourlyRate,
-    ).toBe(15.5);
+    expect(PositionSchema.parse({ ...validPosition, hourlyRate: 15.5 }).hourlyRate).toBe(15.5);
   });
 
   it("should validate color as hex format", () => {
-    expect(PositionSchema.parse({ ...validPosition, color: "#FF0000" }).color).toBe(
-      "#FF0000",
-    );
-    expect(PositionSchema.parse({ ...validPosition, color: "#abc123" }).color).toBe(
-      "#abc123",
-    );
+    expect(PositionSchema.parse({ ...validPosition, color: "#FF0000" }).color).toBe("#FF0000");
+    expect(PositionSchema.parse({ ...validPosition, color: "#abc123" }).color).toBe("#abc123");
 
     expect(() => PositionSchema.parse({ ...validPosition, color: "red" })).toThrow();
     expect(() => PositionSchema.parse({ ...validPosition, color: "#FF" })).toThrow();
     expect(() => PositionSchema.parse({ ...validPosition, color: "FF0000" })).toThrow();
-    expect(() =>
-      PositionSchema.parse({ ...validPosition, color: "#GGGGGG" }),
-    ).toThrow();
+    expect(() => PositionSchema.parse({ ...validPosition, color: "#GGGGGG" })).toThrow();
   });
 
   it("should default isActive to true", () => {
@@ -117,12 +93,8 @@ describe("PositionSchema", () => {
   });
 
   it("should validate datetime format for timestamps", () => {
-    expect(() =>
-      PositionSchema.parse({ ...validPosition, createdAt: "invalid-date" }),
-    ).toThrow();
-    expect(() =>
-      PositionSchema.parse({ ...validPosition, createdAt: "2025-01-01" }),
-    ).toThrow();
+    expect(() => PositionSchema.parse({ ...validPosition, createdAt: "invalid-date" })).toThrow();
+    expect(() => PositionSchema.parse({ ...validPosition, createdAt: "2025-01-01" })).toThrow();
   });
 });
 
@@ -157,9 +129,7 @@ describe("PositionCreateSchema", () => {
   });
 
   it("should enforce title length constraints", () => {
-    expect(() =>
-      PositionCreateSchema.parse({ orgId: "org-123", title: "" }),
-    ).toThrow();
+    expect(() => PositionCreateSchema.parse({ orgId: "org-123", title: "" })).toThrow();
     expect(() =>
       PositionCreateSchema.parse({ orgId: "org-123", title: "a".repeat(101) }),
     ).toThrow();

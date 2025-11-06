@@ -32,9 +32,9 @@
     "lint": "eslint \"apps/**/src/**/*.{ts,tsx,js,jsx}\" \"apps/**/app/**/*.{ts,tsx,js,jsx}\" \"apps/**/vitest.setup.ts\" \"packages/**/src/**/*.{ts,tsx,js,jsx}\" \"functions/src/**/*.{ts,tsx,js,jsx}\" \"services/api/src/**/*.{ts,tsx,js,jsx}\" \"services/api/test/**/*.{ts,tsx,js,jsx}\" --max-warnings 200",
     "lint:fix": "pnpm -w run lint -- --fix",
     "fix": "pnpm -w run lint -- --fix && pnpm -w format",
-  "format": "pnpm -w prettier --write .",
-  "schema:parity": "node scripts/validate-schema-parity.mjs",
-  "schema:test": "pnpm --filter @fresh-schedules/types test",
+    "format": "pnpm -w prettier --write .",
+    "schema:parity": "node scripts/validate-schema-parity.mjs",
+    "schema:test": "pnpm --filter @fresh-schedules/types test",
     "typecheck": "tsc --build",
     "build": "pnpm -r --filter @apps/web... run build && pnpm -r --filter @packages/* run build && pnpm --filter functions run build",
     "emu": "firebase emulators:start --import ./.emulator-data --export-on-exit",
@@ -48,7 +48,9 @@
     "test:rules": "firebase emulators:exec --only auth,firestore,storage \"vitest run --globals --dir tests/rules --reporter=dot --exclude tests/rules/storage.spec.ts\"",
     "test:rules:ci": "firebase --config firebase.ci.json emulators:exec --only auth,firestore,storage \"vitest run --globals --dir tests/rules --reporter=dot --exclude tests/rules/storage.spec.ts\"",
     "test:rules:dev": "vitest run --globals --dir tests/rules --reporter=dot",
-    "ci": "pnpm -w install --frozen-lockfile && pnpm -w typecheck && pnpm -w lint && pnpm -w build && pnpm -w test && pnpm -w test:rules"
+    "ci": "pnpm -w install --frozen-lockfile && pnpm -w typecheck && pnpm -w lint && pnpm -w build && pnpm -w test && pnpm -w test:rules",
+    "firecrawl": "node -e \"if(!process.env.FIRECRAWL_API_KEY){console.error('FIRECRAWL_API_KEY is not set');process.exit(1)}\" && npx -y firecrawl-mcp",
+    "mcp:firecrawl": "pnpm firecrawl"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
