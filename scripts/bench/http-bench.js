@@ -1,6 +1,6 @@
+#!/usr/bin/env node
 // [P2][APP][CODE] Http Bench
 // Tags: P2, APP, CODE
-#!/usr/bin/env node
 // Lightweight wrapper around autocannon to benchmark the running Next.js dev or prod server.
 // Usage: node scripts/bench/http-bench.js --url http://localhost:3000 --connections 50 --duration 10
 

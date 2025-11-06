@@ -2,7 +2,7 @@
 
 This repo is a pnpm monorepo for a Next.js PWA backed by Firebase (auth, Firestore, Storage). The guidance below focuses on concrete, discoverable patterns and commands an AI coding agent should use when making or reviewing changes.
 
-Code owner: pateick craven
+Code owner: patrick craven
 
 - Monorepo & entrypoints
   - Root: `pnpm` is the primary tool. Use `pnpm install` then `pnpm dev` to start the primary developer flow.
@@ -66,3 +66,63 @@ Code owner: pateick craven
   - If emulator-facing code changed, run `pnpm test:rules`.
 
 If anything below is unclear or you want deeper detail on a particular area (CI, deploy, or a specific package), tell me which area and I'll expand or merge in more examples from the codebase.
+
+## Repo automations and one-click tasks
+
+Use VS Code tasks from the root workspace for consistent workflows:
+
+- Docs: Markdown Fix (apply)
+  - Runs the repository markdown fixer end-to-end (idempotent). Safe auto-fixes include code fences, headings, blank-line hygiene, list spacing and ordered list renumbering. Unordered list indentation is not auto-normalized to avoid MD005 regressions.
+  - Equivalent CLI (optional):
+
+```bash
+FILETAG_CLI=markdown.fix FILETAG_MODE=common FILETAG_DRYRUN=false FILETAG_LANGUAGE=text FILETAG_OL_STYLE=one node mcp/filetag-server.mjs
+```
+
+- Tag: Auto-tag Files
+  - Adds header tags like //[P1][APP][CODE] Description to JS/TS files based on path heuristics. Supports --dry-run and --path.
+  - The script preserves and repairs shebang lines, inserting tags immediately after a shebang.
+
+- Deps: Check (no deprecated/peers) — ensures zero deprecated packages and no unmet peer dependencies.
+- Typecheck — `pnpm -w typecheck` across workspaces.
+- Lint — `pnpm -w lint` with auto-fix when appropriate.
+- Build (all) — `pnpm -w build`.
+
+## Markdown fixer policy
+
+- Configuration:
+  - Rules defined in `.markdownlint.json` (e.g., MD001, MD009, MD010, MD018/019, MD022, MD024 siblings_only, MD025/026, MD029/030, MD031/032, MD033/034, MD038, MD040/041, MD046, MD052).
+  - Exclusions in `.markdownlintignore` (e.g., node_modules, .next, dist, build, coverage, .turbo, all MDX).
+- Behavior:
+  - Favors safe, broad, idempotent fixes: code block fencing, consistent ATX headings, blank line hygiene, single-space after list markers, and ordered list renumbering according to `FILETAG_OL_STYLE=one` by default.
+  - Unordered list indentation is intentionally left untouched to avoid MD005 regressions.
+  - Bare URLs are converted to link format; inline HTML and code spans are handled conservatively.
+- When to run:
+  - Before opening PRs that modify documentation, run the “Docs: Markdown Fix (apply)” task. For previews, set `FILETAG_DRYRUN=true` or run the task and inspect Git diffs.
+
+## Tagging system and pre-commit
+
+- Auto-tagging script: `scripts/tag-files.mjs`
+  - Adds two-line header comments with `[PRIORITY][AREA][COMPONENT]` and a `Tags:` line.
+  - Preserves and repairs shebang placement; inserts the tag header immediately after the shebang.
+  - Skips tagging itself and ignores heavy/generated directories.
+  - Usage:
+
+```bash
+node scripts/tag-files.mjs --dry-run          # preview
+node scripts/tag-files.mjs                    # apply repo-wide
+node scripts/tag-files.mjs --path apps/web    # scope to a subtree
+```
+
+- Pre-commit hook:
+  - Runs the tagging script and then lint/format. Do not commit with broken tags or formatting. If a script has a shebang, it will be preserved.
+
+## Quality gates for changes (including Copilot-authored)
+
+Every change must meet these gates locally before PR/push:
+
+- Dependencies: No deprecated packages, no unmet peer dependencies.
+- Typecheck: `pnpm -w typecheck` — PASS.
+- Lint/format: `pnpm -w lint` and Prettier — PASS (no errors). Warnings should be addressed when they are actionable.
+- Emulator rules (when applicable): `pnpm test:rules` — ensure Firestore/Storage rule changes are covered by tests.
+- Optional: Run “Docs: Markdown Fix (apply)” when touching .md files.

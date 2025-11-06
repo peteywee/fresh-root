@@ -1,6 +1,6 @@
+#!/usr/bin/env node
 // [P2][APP][CODE] Run Typecheck
 // Tags: P2, APP, CODE
-#!/usr/bin/env node
 const { spawnSync } = require("child_process");
 const { resolve } = require("path");
 const { readdirSync, statSync } = require("fs");
