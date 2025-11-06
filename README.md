@@ -41,16 +41,16 @@ Built with Next.js, Firebase, and a monorepo architecture.
 
 ## 📚 Documentation
 
-| Resource | Description |
-| -------- | ----------- |
-| 📖 **[Complete Technical Docs](./docs/COMPLETE_TECHNICAL_DOCUMENTATION.md)** | Architecture, setup, troubleshooting |
-| 🏗️ **[Architecture Diagrams](./docs/ARCHITECTURE_DIAGRAMS.md)** | System diagrams (data flow, CI/CD, auth) |
-| 🔒 **[Security Documentation](./docs/security.md)** | Security architecture, MFA, session management |
-| � **[SLO Summary](./docs/BLOCK1_SLO_SUMMARY.md)** | Service Level Objectives for Blocks 1 & 2 |
-| 📈 **[Progress Tracking](./docs/BLOCK1_BLOCK2_PROGRESS.md)** | Detailed Block 1 & 2 implementation status |
-| 🛠️ **[Technical Debt](./docs/TECHNICAL_DEBT.md)** | Current debt tracking (minimal) |
-| 📘 **[Runbooks](./docs/runbooks/)** | Operations guides (logging, backups, uptime) |
-| ⚙️ **[Setup Guide](./docs/SETUP.md)** | Step-by-step setup instructions |
+| Resource                                                                     | Description                                    |
+| ---------------------------------------------------------------------------- | ---------------------------------------------- |
+| 📖 **[Complete Technical Docs](./docs/COMPLETE_TECHNICAL_DOCUMENTATION.md)** | Architecture, setup, troubleshooting           |
+| 🏗️ **[Architecture Diagrams](./docs/ARCHITECTURE_DIAGRAMS.md)**              | System diagrams (data flow, CI/CD, auth)       |
+| 🔒 **[Security Documentation](./docs/security.md)**                          | Security architecture, MFA, session management |
+| � **[SLO Summary](./docs/BLOCK1_SLO_SUMMARY.md)**                            | Service Level Objectives for Blocks 1 & 2      |
+| 📈 **[Progress Tracking](./docs/BLOCK1_BLOCK2_PROGRESS.md)**                 | Detailed Block 1 & 2 implementation status     |
+| 🛠️ **[Technical Debt](./docs/TECHNICAL_DEBT.md)**                            | Current debt tracking (minimal)                |
+| 📘 **[Runbooks](./docs/runbooks/)**                                          | Operations guides (logging, backups, uptime)   |
+| ⚙️ **[Setup Guide](./docs/SETUP.md)**                                        | Step-by-step setup instructions                |
 
 ## 🏗️ Project Structure
 
@@ -131,10 +131,10 @@ fresh-root/
    NEXT_PUBLIC_FIREBASE_PROJECT_ID=your_project_id
    NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=your_project.appspot.com
    NEXT_PUBLIC_FIREBASE_APP_ID=your_app_id
-   
+
    # Development (optional)
    NEXT_PUBLIC_USE_EMULATORS=false
-   
+
    # Observability (production)
    NEXT_PUBLIC_SENTRY_DSN=your_sentry_dsn
    SENTRY_AUTH_TOKEN=your_sentry_auth_token
@@ -346,7 +346,7 @@ pnpm test:e2e
    ```bash
    # Firebase Hosting
    firebase deploy --only hosting
-   
+
    # Or Vercel
    vercel deploy --prod
    ```
