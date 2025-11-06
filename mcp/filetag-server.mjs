@@ -19,7 +19,7 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod";
-import Ajv2020 from "ajv/dist/2020";
+import Ajv2020 from "ajv/dist/2020.js";
 import addFormats from "ajv-formats";
 import fs from "node:fs/promises";
 import path from "node:path";
@@ -40,7 +40,7 @@ function validateJsonSchemaDraft2020(schema, data) {
     const valid = validate(data);
     return { valid, errors: valid ? null : validate.errors };
   } catch (e) {
-    return { valid: false, errors: [e.message] };
+    return { valid: false, errors: [{ message: e.message, schemaError: true }] };
   }
 }
 

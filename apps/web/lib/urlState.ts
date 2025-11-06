@@ -31,10 +31,7 @@ export function useScheduleView(defaultValue: ScheduleView = "week") {
  * URL: ?date=2025-11-06
  */
 export function useSelectedDate(defaultValue?: Date) {
-  return useQueryState(
-    "date",
-    parseAsIsoDateTime.withDefault(defaultValue || new Date()),
-  );
+  return useQueryState("date", parseAsIsoDateTime.withDefault(defaultValue || new Date()));
 }
 
 /**

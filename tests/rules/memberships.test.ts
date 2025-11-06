@@ -47,3 +47,113 @@ test("manager cannot write membership in different org", async () => {
   await expect(setDoc(ref, { orgId: "orgB", userId: "uX", roles: ["staff"], createdAt: 1, updatedAt: 1 }))
     .rejects.toBeTruthy();
 });
+
+test("✅ ALLOW: Member can read own membership", async () => {
+  // Setup membership
+  await testEnv.withSecurityRulesDisabled(async (context) => {
+    await setDoc(doc(context.firestore(), "memberships/m1"), {
+      orgId: "orgA",
+      userId: "user1",
+      roles: ["staff"],
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
+    });
+  });
+
+  const db = authed("user1", "orgA", ["staff"]);
+  await expect(getDoc(doc(db, "memberships/m1"))).resolves.toBeTruthy();
+});
+
+test("✅ ALLOW: Member can read other memberships in same org", async () => {
+  // Setup memberships
+  await testEnv.withSecurityRulesDisabled(async (context) => {
+    await setDoc(doc(context.firestore(), "memberships/m2"), {
+      orgId: "orgA",
+      userId: "user2",
+      roles: ["staff"],
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
+    });
+  });
+
+  const db = authed("user1", "orgA", ["staff"]);
+  await expect(getDoc(doc(db, "memberships/m2"))).resolves.toBeTruthy();
+});
+
+test("❌ DENY: Unauthenticated user cannot read memberships", async () => {
+  await testEnv.withSecurityRulesDisabled(async (context) => {
+    await setDoc(doc(context.firestore(), "memberships/m1"), {
+      orgId: "orgA",
+      userId: "user1",
+      roles: ["staff"],
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
+    });
+  });
+
+  const db = testEnv.unauthenticatedContext().firestore();
+  await expect(getDoc(doc(db, "memberships/m1"))).rejects.toBeTruthy();
+});
+
+test("❌ DENY: Cannot read memberships from other orgs", async () => {
+  await testEnv.withSecurityRulesDisabled(async (context) => {
+    await setDoc(doc(context.firestore(), "memberships/mB1"), {
+      orgId: "orgB",
+      userId: "userB",
+      roles: ["staff"],
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
+    });
+  });
+
+  const db = authed("user1", "orgA", ["staff"]);
+  await expect(getDoc(doc(db, "memberships/mB1"))).rejects.toBeTruthy();
+});
+
+test("❌ DENY: Member cannot update membership role (only managers)", async () => {
+  await testEnv.withSecurityRulesDisabled(async (context) => {
+    await setDoc(doc(context.firestore(), "memberships/m1"), {
+      orgId: "orgA",
+      userId: "user1",
+      roles: ["staff"],
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
+    });
+  });
+
+  const db = authed("user1", "orgA", ["staff"]);
+  const ref = doc(db, "memberships/m1");
+  await expect(
+    setDoc(ref, {
+      orgId: "orgA",
+      userId: "user1",
+      roles: ["manager"], // Trying to elevate own role
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
+    }),
+  ).rejects.toBeTruthy();
+});
+
+test("✅ ALLOW: Manager can update membership role", async () => {
+  await testEnv.withSecurityRulesDisabled(async (context) => {
+    await setDoc(doc(context.firestore(), "memberships/m3"), {
+      orgId: "orgA",
+      userId: "user3",
+      roles: ["staff"],
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
+    });
+  });
+
+  const db = authed("manager1", "orgA", ["manager"]);
+  const ref = doc(db, "memberships/m3");
+  await expect(
+    setDoc(ref, {
+      orgId: "orgA",
+      userId: "user3",
+      roles: ["scheduler"], // Manager promoting staff
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
+    }),
+  ).resolves.toBeUndefined();
+});

@@ -1,0 +1,16 @@
+{
+  "servers": {
+    "firecrawl": {
+      "command": "npx",
+      "args": ["-y", "@mendable/firecrawl-mcp"],
+      "env": {
+        "FIRECRAWL_API_KEY": "${env:FIRECRAWL_API_KEY}"
+      },
+      "metadata": {
+        "description": "Firecrawl MCP server providing scrape, search, crawl and extract tools.",
+        "homepage": "https://github.com/mendableai/firecrawl",
+        "notes": "Requires FIRECRAWL_API_KEY in environment."
+      }
+    }
+  }
+}

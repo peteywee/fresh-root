@@ -68,3 +68,65 @@ test("user cannot read another user profile", async () => {
   const ref = doc(db, "users/u7");
   await expect(getDoc(ref)).rejects.toBeTruthy();
 });
+
+test("✅ ALLOW: Member can read schedules in their org", async () => {
+  // Setup schedule
+  await testEnv.withSecurityRulesDisabled(async (context: any) => {
+    await setDoc(doc(context.firestore(), "orgs/orgA/schedules/s3"), {
+      name: "Week 1",
+      startDate: Date.now(),
+      status: "published",
+    });
+  });
+
+  const ctx = authedContext("staff1", "orgA", ["staff"]);
+  const db = ctx.firestore();
+  await expect(getDoc(doc(db, "orgs/orgA/schedules/s3"))).resolves.toBeTruthy();
+});
+
+test("❌ DENY: Cannot read schedules from other orgs", async () => {
+  await testEnv.withSecurityRulesDisabled(async (context: any) => {
+    await setDoc(doc(context.firestore(), "orgs/orgB/schedules/sB1"), {
+      name: "Week 1",
+      startDate: Date.now(),
+      status: "published",
+    });
+  });
+
+  const ctx = authedContext("staff1", "orgA", ["staff"]);
+  const db = ctx.firestore();
+  await expect(getDoc(doc(db, "orgs/orgB/schedules/sB1"))).rejects.toBeTruthy();
+});
+
+test("❌ DENY: Unauthenticated user cannot read schedules", async () => {
+  await testEnv.withSecurityRulesDisabled(async (context: any) => {
+    await setDoc(doc(context.firestore(), "orgs/orgA/schedules/s4"), {
+      name: "Week 2",
+      startDate: Date.now(),
+    });
+  });
+
+  const db = testEnv.unauthenticatedContext().firestore();
+  await expect(getDoc(doc(db, "orgs/orgA/schedules/s4"))).rejects.toBeTruthy();
+});
+
+test("✅ ALLOW: Manager can publish schedule", async () => {
+  await testEnv.withSecurityRulesDisabled(async (context: any) => {
+    await setDoc(doc(context.firestore(), "orgs/orgA/schedules/s5"), {
+      name: "Week 3",
+      startDate: Date.now(),
+      status: "draft",
+    });
+  });
+
+  const ctx = authedContext("manager1", "orgA", ["manager"]);
+  const db = ctx.firestore();
+  const ref = doc(db, "orgs/orgA/schedules/s5");
+  await expect(
+    setDoc(ref, {
+      name: "Week 3",
+      startDate: Date.now(),
+      status: "published",
+    }),
+  ).resolves.toBeUndefined();
+});
