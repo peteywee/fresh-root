@@ -1435,8 +1435,8 @@ git commit -m "fix(rules): update rules and tests together"
 
 ## Use --prod or --production
 
-   RUN pnpm install -r --offline --prod
-   \`\`\`
+RUN pnpm install -r --offline --prod
+\`\`\`
 
 1. **Not using BuildKit**
 
@@ -1450,13 +1450,13 @@ git commit -m "fix(rules): update rules and tests together"
 
 ## Copy package files first (cached if unchanged)
 
-   COPY package.json pnpm-lock.yaml ./
-   RUN pnpm install
+COPY package.json pnpm-lock.yaml ./
+RUN pnpm install
 
 ## Then copy source (changes more often)
 
-   COPY . .
-   \`\`\`
+COPY . .
+\`\`\`
 
 ---
 

@@ -14,9 +14,9 @@ const credential = await signInWithPopup(auth, googleProvider);
 const idToken = await credential.user.getIdToken();
 
 // Exchange idToken for session cookie
-const response = await fetch('/api/session', {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
+const response = await fetch("/api/session", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
   body: JSON.stringify({ idToken }),
 });
 
@@ -32,7 +32,7 @@ All API routes use `requireSession()` middleware:
 ```typescript
 // apps/web/app/api/_shared/middleware.ts
 export async function requireSession(req, handler) {
-  const sessionCookie = req.cookies.get('session')?.value;
+  const sessionCookie = req.cookies.get("session")?.value;
   if (!sessionCookie) return 401;
 
   const decodedClaims = await auth.verifySessionCookie(sessionCookie, true);
@@ -47,7 +47,7 @@ export async function requireSession(req, handler) {
 ```typescript
 // DELETE /api/session
 // Clears session cookie by setting maxAge=0
-await fetch('/api/session', { method: 'DELETE' });
+await fetch("/api/session", { method: "DELETE" });
 ```
 
 ## Multi-Factor Authentication (MFA)
@@ -57,7 +57,7 @@ await fetch('/api/session', { method: 'DELETE' });
 1. **Generate TOTP Secret**
 
 ```typescript
-POST /api/auth/mfa/setup
+POST / api / auth / mfa / setup;
 // Requires: valid session cookie
 // Returns: { secret, qrCode, otpauthUrl }
 ```
@@ -67,8 +67,10 @@ POST /api/auth/mfa/setup
 1. **Verify TOTP Token**
 
 ```typescript
-POST /api/auth/mfa/verify
-Body: { secret, token }
+POST / api / auth / mfa / verify;
+Body: {
+  (secret, token);
+}
 // Sets custom claim: mfa: true
 ```
 
@@ -142,14 +144,14 @@ rateLimit({ maxRequests: 100, windowMs: 15 * 60 * 1000 });
 
 ## Endpoints Summary
 
-| Endpoint | Method | Auth | Purpose |
-|----------|--------|------|---------|
-| `/api/session` | POST | None | Create session cookie from idToken |
-| `/api/session` | DELETE | None | Clear session cookie (logout) |
-| `/api/auth/mfa/setup` | POST | Session | Generate TOTP secret + QR code |
-| `/api/auth/mfa/verify` | POST | Session | Verify TOTP and set mfa claim |
-| `/api/items` | GET/POST | Session | Example protected endpoint |
-| `/api/organizations` | POST | Session + 2FA | Privileged operation |
+| Endpoint               | Method   | Auth          | Purpose                            |
+| ---------------------- | -------- | ------------- | ---------------------------------- |
+| `/api/session`         | POST     | None          | Create session cookie from idToken |
+| `/api/session`         | DELETE   | None          | Clear session cookie (logout)      |
+| `/api/auth/mfa/setup`  | POST     | Session       | Generate TOTP secret + QR code     |
+| `/api/auth/mfa/verify` | POST     | Session       | Verify TOTP and set mfa claim      |
+| `/api/items`           | GET/POST | Session       | Example protected endpoint         |
+| `/api/organizations`   | POST     | Session + 2FA | Privileged operation               |
 
 ## Testing
 

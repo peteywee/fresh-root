@@ -33,7 +33,8 @@ export function requireAuth(req: Request, res: Response, next: NextFunction) {
 }
 
 export function requireManager(req: Request, res: Response, next: NextFunction) {
-  const tok: UserToken | undefined = (req as Request & { userToken?: UserToken }).userToken ?? readUserToken(req) ?? undefined;
+  const tok: UserToken | undefined =
+    (req as Request & { userToken?: UserToken }).userToken ?? readUserToken(req) ?? undefined;
   if (!tok) return res.status(401).json({ error: "unauthenticated" });
   const ok =
     tok.roles.includes("org_owner") || tok.roles.includes("admin") || tok.roles.includes("manager");
@@ -44,7 +45,8 @@ export function requireManager(req: Request, res: Response, next: NextFunction) 
 
 export function sameOrgGuard(getOrgId: (req: Request) => string) {
   return (req: Request, res: Response, next: NextFunction) => {
-    const tok: UserToken | undefined = (req as Request & { userToken?: UserToken }).userToken ?? readUserToken(req) ?? undefined;
+    const tok: UserToken | undefined =
+      (req as Request & { userToken?: UserToken }).userToken ?? readUserToken(req) ?? undefined;
     if (!tok) return res.status(401).json({ error: "unauthenticated" });
     const orgId = getOrgId(req);
     if (tok.orgId !== orgId) return res.status(403).json({ error: "cross-org access denied" });

@@ -5,9 +5,9 @@
 - [x] [BLOCK1] Implement session-cookie auth flow (/api/session, verifySessionCookie, clearSessionCookie)
   - [x] Create POST /api/session endpoint (accepts ID token, returns HttpOnly cookie)
   - [x] Create DELETE /api/session endpoint (clears session cookie)
-  - [x] Add unit tests for session endpoints (apps/web/src/__tests__/session.test.ts)
+  - [x] Add unit tests for session endpoints (apps/web/src/**tests**/session.test.ts)
 - [x] [BLOCK1] Add requireSession middleware to all API routes
-  - [x] Implement requireSession in apps/web/app/api/_shared/middleware.ts
+  - [x] Implement requireSession in apps/web/app/api/\_shared/middleware.ts
   - [x] Add OpenTelemetry spans and structured logging
   - [x] Apply to items, organizations, and other protected API routes
 - [x] [BLOCK1] Add require2FAForManagers middleware for privileged writes
@@ -16,12 +16,12 @@
 - [x] [BLOCK1] Enable MFA setup flow (POST /api/auth/mfa/setup, POST /api/auth/mfa/verify)
   - [x] Implement POST /api/auth/mfa/setup (TOTP secret + QR code generation)
   - [x] Implement POST /api/auth/mfa/verify (token verification + custom claim)
-  - [x] Add unit tests for MFA endpoints (apps/web/src/__tests__/mfa.test.ts)
+  - [x] Add unit tests for MFA endpoints (apps/web/src/**tests**/mfa.test.ts)
 - [x] [BLOCK1] Create security.ts middleware stack (Helmet + rate limit + CORS + size cap)
   - [x] Implement Helmet, rate limiting, CORS, and body size limits
   - [x] Apply to all API routes
 - [x] [BLOCK1] Add 401/403 security regression tests
-  - [x] Create apps/web/src/__tests__/api-security.spec.ts (17 test cases)
+  - [x] Create apps/web/src/**tests**/api-security.spec.ts (17 test cases)
 - [x] [BLOCK1] Remove all legacy token-based write endpoints (pure client writes)
   - [x] Verified no direct client writes remain; all go through API routes
 - [x] [BLOCK1] Verify Firestore rules enforce role-based access
@@ -142,7 +142,7 @@
 - [ ] [test] Expand Vitest unit suite
 - [ ] [test] Add Playwright E2E for mobile viewport
 - [ ] [test] Mock Firebase emulators for CI
-- [ ] [test] Add tests/rules/*.spec.ts with allow/deny matrix
+- [ ] [test] Add tests/rules/\*.spec.ts with allow/deny matrix
 - [ ] [test] Measure coverage ≥ 80 %
 
 🧭 AI Scheduler Extension (Next Milestone)
@@ -167,7 +167,7 @@
 🏁 Milestone Markers
 Milestone Description When to Check Off
 
-- [ ] M0 – Hybrid Next purged + session cookies working App builds w/out /_document error and auth cookie verified
+- [ ] M0 – Hybrid Next purged + session cookies working App builds w/out /\_document error and auth cookie verified
 - [ ] M1 – Security Core complete Session + MFA + rules tests passing
 - [ ] M2 – Integrity & Reliability Core ready Zod validators + observability + backups verified
 - [ ] M3 – Experience Layer validated Perf metrics + sub-5-minute schedule achieved

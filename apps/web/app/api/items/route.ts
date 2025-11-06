@@ -27,9 +27,9 @@ export async function POST(req: NextRequest) {
       const { name } = parsed.data;
 
       // Normally you'd write to Firestore here. We'll simulate a created item.
-      const item = { 
-        id: crypto.randomUUID(), 
-        name, 
+      const item = {
+        id: crypto.randomUUID(),
+        name,
         createdAt: Date.now(),
         createdBy: authReq.user?.uid, // Include authenticated user
       };
@@ -43,11 +43,13 @@ export async function POST(req: NextRequest) {
 // Optional: GET returns a static list (safe demo)
 export async function GET(req: NextRequest) {
   return requireSession(req as AuthenticatedRequest, async (authReq) => {
-    return ok([{ 
-      id: "demo-1", 
-      name: "Sample", 
-      createdAt: 0,
-      userId: authReq.user?.uid,
-    }]);
+    return ok([
+      {
+        id: "demo-1",
+        name: "Sample",
+        createdAt: 0,
+        userId: authReq.user?.uid,
+      },
+    ]);
   });
 }

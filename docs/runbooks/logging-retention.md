@@ -27,9 +27,7 @@ STORAGE_BUCKET=gs://my-log-archive \
 
 ```json
 {
-  "rule": [
-    { "action": { "type": "Delete" }, "condition": { "age": 180 } }
-  ]
+  "rule": [{ "action": { "type": "Delete" }, "condition": { "age": 180 } }]
 }
 ```
 

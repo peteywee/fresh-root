@@ -33,7 +33,13 @@ export async function requireSession(req: Request, res: Response, next: NextFunc
     const decoded = await auth.verifySessionCookie(cookie, true);
 
     // Map decoded token -> userToken shape
-    const decodedToken = decoded as DecodedIdToken & { orgId?: string; org_id?: string; roles?: string[]; mfa?: boolean; "custom:mfa"?: boolean };
+    const decodedToken = decoded as DecodedIdToken & {
+      orgId?: string;
+      org_id?: string;
+      roles?: string[];
+      mfa?: boolean;
+      "custom:mfa"?: boolean;
+    };
     const userToken: UserToken = {
       uid: decoded.uid,
       orgId: decodedToken.orgId || decodedToken.org_id,

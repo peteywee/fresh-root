@@ -4,10 +4,10 @@
 export async function safeRegisterServiceWorker(scriptUrl = "/sw.js") {
   try {
     if (typeof window === "undefined") return;
-      if (!navigator.serviceWorker) {
-    // Service worker not available in this browser
-    return;
-  }
+    if (!navigator.serviceWorker) {
+      // Service worker not available in this browser
+      return;
+    }
 
     const ua = navigator.userAgent || "";
     const isEmbeddedWebView = /vscode|WebView|Electron|HeadlessChrome/i.test(ua);
@@ -20,7 +20,8 @@ export async function safeRegisterServiceWorker(scriptUrl = "/sw.js") {
       typeof URL !== "undefined" && new URL(location.href).searchParams.get("allow_sw") === "1";
     const storageAllows =
       typeof localStorage !== "undefined" && localStorage.getItem("ALLOW_SW") === "1";
-    const globalAllows = (window as Window & { __ALLOW_SW_IN_EMBEDDED?: boolean }).__ALLOW_SW_IN_EMBEDDED === true;
+    const globalAllows =
+      (window as Window & { __ALLOW_SW_IN_EMBEDDED?: boolean }).__ALLOW_SW_IN_EMBEDDED === true;
     if (isEmbeddedWebView && !(urlAllows || storageAllows || globalAllows)) {
       return;
     }

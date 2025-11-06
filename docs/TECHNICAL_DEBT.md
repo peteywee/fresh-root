@@ -9,7 +9,7 @@ Last updated: November 6, 2025
 ### 1. Temporary Metrics Implementation
 
 **File**: `apps/web/app/api/metrics/route.ts`
-**Issue**: In-memory metrics with comment *"temporary - will use OpenTelemetry in production"*
+**Issue**: In-memory metrics with comment _"temporary - will use OpenTelemetry in production"_
 **Impact**: Medium - Works for development but not production-ready for distributed systems
 **Recommendation**: Integrate with OpenTelemetry metrics when moving to production
 **Blockers**: None - can be done anytime before production deployment
@@ -17,7 +17,7 @@ Last updated: November 6, 2025
 ### 2. Development Bypass Flags
 
 **File**: `apps/web/proxy.ts`
-**Issue**: `BYPASS_ONBOARDING_GUARD` env flag with *"TEMPORARY"* comments
+**Issue**: `BYPASS_ONBOARDING_GUARD` env flag with _"TEMPORARY"_ comments
 **Impact**: Low - Only active in development mode
 **Recommendation**: Remove or convert to feature flag system before production
 **Blockers**: None - safe for development
