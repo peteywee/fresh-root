@@ -1,6 +1,8 @@
 # Backup Scheduler (Cloud Scheduler → Internal Endpoint)
 
-This runbook configures a daily Cloud Scheduler job that calls an internal Next.js API endpoint to trigger a Firestore export using the Firestore Admin REST API.
+This runbook configures a daily Cloud Scheduler job that calls an internal
+Next.js API endpoint to trigger a Firestore export using the Firestore Admin
+REST API.
 
 ## Prerequisites
 
@@ -16,7 +18,8 @@ This runbook configures a daily Cloud Scheduler job that calls an internal Next.
 - `BACKUP_BUCKET` — target GCS bucket for exports (must exist)
 - `BACKUP_CRON_TOKEN` — a random secret used to secure the endpoint
 
-The endpoint is `POST /api/internal/backup` and requires header `x-backup-token: $BACKUP_CRON_TOKEN`.
+The endpoint is `POST /api/internal/backup` and requires header
+`x-backup-token: $BACKUP_CRON_TOKEN`.
 
 2. Create the Cloud Scheduler job:
 
