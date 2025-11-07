@@ -1,100 +1,89 @@
-// [P1][INTEGRITY][CODE] Position Zod schemas for job positions in organizations
-// Tags: P1, INTEGRITY, CODE, VALIDATION, SCHEDULES
+// [P1][INTEGRITY][SCHEMA] Positions schema
+// Tags: P1, INTEGRITY, SCHEMA, ZOD, POSITIONS
 import { z } from "zod";
 
 /**
- * Complete position record as stored in Firestore.
- * Represents a job position within an organization.
+ * Position type categorization
+ */
+export const PositionType = z.enum(["full_time", "part_time", "contractor", "volunteer"]);
+export type PositionType = z.infer<typeof PositionType>;
+
+/**
+ * Skill level for positions
+ */
+export const SkillLevel = z.enum(["entry", "intermediate", "advanced", "expert"]);
+export type SkillLevel = z.infer<typeof SkillLevel>;
+
+/**
+ * Full Position document schema
+ * Firestore path: /positions/{orgId}/{positionId}
  */
 export const PositionSchema = z.object({
-  id: z.string().min(1, "Position ID is required"),
+  id: z.string().min(1),
   orgId: z.string().min(1, "Organization ID is required"),
-  title: z.string().min(1, "Title is required").max(100, "Title must be 100 characters or less"),
-  description: z.string().max(500, "Description must be 500 characters or less").optional(),
-  hourlyRate: z
-    .number()
-    .min(0, "Hourly rate must be non-negative")
-    .max(9999.99, "Hourly rate must be less than $10,000")
-    .optional(),
+  name: z.string().min(1, "Position name is required").max(100),
+  description: z.string().max(500).optional(),
+  type: PositionType.default("part_time"),
+  skillLevel: SkillLevel.default("entry"),
+  hourlyRate: z.number().nonnegative().optional(),
   color: z
     .string()
-    .regex(/^#[0-9A-Fa-f]{6}$/, "Color must be a valid hex color code")
+    .regex(/^#[0-9A-Fa-f]{6}$/, "Invalid hex color")
     .optional(),
   isActive: z.boolean().default(true),
-  createdAt: z.string().datetime("Invalid createdAt timestamp"),
-  updatedAt: z.string().datetime("Invalid updatedAt timestamp").optional(),
-  createdBy: z.string().min(1, "Created by user ID is required"),
+  requiredCertifications: z.array(z.string()).default([]),
+  createdBy: z.string().min(1),
+  createdAt: z.number().int().positive(),
+  updatedAt: z.number().int().positive(),
 });
-
 export type Position = z.infer<typeof PositionSchema>;
 
 /**
- * Input schema for creating a new position.
+ * Schema for creating a new position
+ * Used in POST /api/positions
  */
-export const PositionCreateSchema = z.object({
+export const CreatePositionSchema = z.object({
   orgId: z.string().min(1, "Organization ID is required"),
-  title: z.string().min(1, "Title is required").max(100, "Title must be 100 characters or less"),
-  description: z.string().max(500, "Description must be 500 characters or less").optional(),
-  hourlyRate: z
-    .number()
-    .min(0, "Hourly rate must be non-negative")
-    .max(9999.99, "Hourly rate must be less than $10,000")
-    .optional(),
+  name: z.string().min(1, "Position name is required").max(100),
+  description: z.string().max(500).optional(),
+  type: PositionType.optional().default("part_time"),
+  skillLevel: SkillLevel.optional().default("entry"),
+  hourlyRate: z.number().nonnegative().optional(),
   color: z
     .string()
-    .regex(/^#[0-9A-Fa-f]{6}$/, "Color must be a valid hex color code")
+    .regex(/^#[0-9A-Fa-f]{6}$/, "Invalid hex color")
     .optional(),
-  isActive: z.boolean().default(true),
+  requiredCertifications: z.array(z.string()).optional(),
 });
-
-export type PositionCreateInput = z.infer<typeof PositionCreateSchema>;
-
-/**
- * Input schema for updating an existing position.
- * All fields are optional for partial updates.
- */
-export const PositionUpdateSchema = z
-  .object({
-    title: z
-      .string()
-      .min(1, "Title is required")
-      .max(100, "Title must be 100 characters or less")
-      .optional(),
-    description: z.string().max(500, "Description must be 500 characters or less").optional(),
-    hourlyRate: z
-      .number()
-      .min(0, "Hourly rate must be non-negative")
-      .max(9999.99, "Hourly rate must be less than $10,000")
-      .optional(),
-    color: z
-      .string()
-      .regex(/^#[0-9A-Fa-f]{6}$/, "Color must be a valid hex color code")
-      .optional(),
-    isActive: z.boolean().optional(),
-  })
-  .strict();
-
-export type PositionUpdateInput = z.infer<typeof PositionUpdateSchema>;
+export type CreatePositionInput = z.infer<typeof CreatePositionSchema>;
 
 /**
- * Default position colors for UI (Material Design palette).
+ * Schema for updating an existing position
+ * Used in PATCH /api/positions/{id}
  */
-export const DEFAULT_POSITION_COLORS = [
-  "#1976D2", // Blue
-  "#388E3C", // Green
-  "#F57C00", // Orange
-  "#7B1FA2", // Purple
-  "#C2185B", // Pink
-  "#0097A7", // Cyan
-  "#689F38", // Light Green
-  "#E64A19", // Deep Orange
-  "#5D4037", // Brown
-  "#455A64", // Blue Grey
-];
+export const UpdatePositionSchema = z.object({
+  name: z.string().min(1).max(100).optional(),
+  description: z.string().max(500).optional(),
+  type: PositionType.optional(),
+  skillLevel: SkillLevel.optional(),
+  hourlyRate: z.number().nonnegative().optional(),
+  color: z
+    .string()
+    .regex(/^#[0-9A-Fa-f]{6}$/)
+    .optional(),
+  isActive: z.boolean().optional(),
+  requiredCertifications: z.array(z.string()).optional(),
+});
+export type UpdatePositionInput = z.infer<typeof UpdatePositionSchema>;
 
 /**
- * Helper to get a default color based on position index.
+ * Query parameters for listing positions
  */
-export function getDefaultPositionColor(index: number): string {
-  return DEFAULT_POSITION_COLORS[index % DEFAULT_POSITION_COLORS.length];
-}
+export const ListPositionsQuerySchema = z.object({
+  orgId: z.string().min(1, "Organization ID is required"),
+  isActive: z.coerce.boolean().optional(),
+  type: PositionType.optional(),
+  limit: z.coerce.number().int().positive().max(100).default(50),
+  cursor: z.string().optional(),
+});
+export type ListPositionsQuery = z.infer<typeof ListPositionsQuerySchema>;

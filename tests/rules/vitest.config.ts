@@ -5,7 +5,9 @@ import { defineConfig } from "vitest/config";
 export default defineConfig({
   test: {
     environment: "node",
-    include: ["**/*.test.ts"],
+    // Restrict to rules tests only to avoid collecting app/unit specs
+    include: ["tests/rules/**/*.spec.{ts,mts}"],
+    globals: true,
     reporters: ["dot"],
     testTimeout: 20000,
   },

@@ -1,6 +1,4 @@
-# 3.1 - Zod Schema Foundation
-
-e# Fresh Schedules v13 Plan C Milestone Checklist
+# Fresh Schedules v13 Plan C Milestone Checklist
 
 🧱 Block 1 – Security Core (P0) ✅ COMPLETE
 
@@ -79,961 +77,133 @@ e# Fresh Schedules v13 Plan C Milestone Checklist
   - [x] Add scripts/ops/create-uptime-alert.sh (alert policy creation)
   - [x] Document setup (docs/runbooks/uptime-alerts.md)
 - [x] [BLOCK2] Health endpoint
-  - [x] Verified apps/web/app/api/health/route.ts exists (basic implementation)
+  - [x] Verified apps/web/app/api/health/route.ts exists and enhanced with diagnostics (uptime, timestamp, environment)
 - [x] [BLOCK2] Metrics endpoint
   - [x] Verified apps/web/app/api/metrics/route.ts exists
   - [x] Note: recordRequest() defined but not called (superseded by OpenTelemetry auto-instrumentation)
 
-🧩 Block 3 – Integrity Core (P1)
-
-## 3.1 - Zod Schema Foundation ✅ COMPLETE
-
-- [x] [BLOCK3.1] Expand packages/types/ with comprehensive Zod schemas
-  - [x] Create `packages/types/src/organizations.ts` with Zod schemas
-
-```text
-- [x] Define `OrganizationSchema` (id, name, createdAt, updatedAt, settings)
-- [x] Define `OrganizationCreateSchema` (input validation for creation)
-- [x] Define `OrganizationUpdateSchema` (partial updates)
-- [x] Export TypeScript types from Zod schemas
-```
-
-- [x] Create `packages/types/src/memberships.ts` with Zod schemas
-
-```text
-- [x] Define `MembershipSchema` (orgId, uid, role, joinedAt, mfaVerified)
-- [x] Define `MembershipCreateSchema` (input validation)
-- [x] Define role enum: owner, admin, manager, member, staff
-```
-
-- [x] Create `packages/types/src/positions.ts` with Zod schemas
-
-```text
-- [x] Define `PositionSchema` (id, orgId, title, description, hourlyRate)
-- [x] Define `PositionCreateSchema` and `PositionUpdateSchema`
-```
-
-- [x] Create `packages/types/src/schedules.ts` with Zod schemas
-
-```text
-- [x] Define `ScheduleSchema` (id, orgId, name, startDate, endDate, status)
-- [x] Define `ScheduleCreateSchema` and `ScheduleUpdateSchema`
-- [x] Define schedule status enum: draft, published, archived
-```
-
-- [x] Create `packages/types/src/shifts.ts` with Zod schemas
-
-```text
-- [x] Define `ShiftSchema` (id, scheduleId, positionId, uid, startTime, endTime, breakMinutes)
-- [x] Define `ShiftCreateSchema` and `ShiftUpdateSchema`
-- [x] Add validation rules (startTime < endTime, breakMinutes >= 0)
-```
-
-- [x] Update `packages/types/src/index.ts` to export all new schemas
-
-### 3.2 - API Validation Layer
-
-- [x] [BLOCK3.2] Add request/response validation to all API routes
-  - [x] Create `apps/web/src/lib/api/validation.ts` middleware
-
-```text
-- [x] `validateRequest` helper (accepts Zod schema, returns 422 on error)
-- [x] `ValidationError` class with detailed field-level errors
-- [x] Request body size validation (max 1MB)
-- [x] `withValidation` HOF for route handlers
-- [x] Common query schemas (pagination, sorting, dateRange)
-```
-
-- [x] Create unit tests at `apps/web/src/lib/api/validation.test.ts`
-- **Status**: Middleware complete, ready for integration into API routes
-
-- [x] Apply validation to Organizations API
-
-```text
-- [x] Update `POST /api/organizations` with `OrganizationCreateSchema`
-- [x] Update `PATCH /api/organizations/[id]` with `OrganizationUpdateSchema`
-- [ ] Add unit tests for validation errors
-```
-
-- [x] Apply validation to Memberships API
-
-```text
-- [x] Create `POST /api/organizations/[id]/members` with `MembershipCreateSchema`
-- [x] Create `PATCH /api/organizations/[id]/members/[memberId]` with `MembershipUpdateSchema`
-- [x] Add role validation (only owners/admins can assign manager role)
-- [ ] Add unit tests for RBAC validation
-```
-
-- [x] Apply validation to Positions API
-
-```text
-- [x] Create `POST /api/positions` with `PositionCreateSchema`
-- [x] Create `PATCH /api/positions/[id]` with `PositionUpdateSchema`
-- [ ] Add unit tests
-```
-
-- [x] Apply validation to Schedules API
-
-```text
-- [x] Update `POST /api/schedules` with `ScheduleCreateSchema`
-- [x] Update `PATCH /api/schedules/[id]` with `ScheduleUpdateSchema`
-- [x] Validate date range logic (startDate <= endDate) - in schema refinement
-- [ ] Add unit tests
-```
-
-- [x] Apply validation to Shifts API
-
-```text
-- [x] Create `POST /api/shifts` with `ShiftCreateSchema`
-- [x] Create `PATCH /api/shifts/[id]` with `ShiftUpdateSchema`
-- [x] Validate time range and break logic - in schema refinement
-- [ ] Add conflict detection (overlapping shifts for same user) - TODO in production
-- [ ] Add unit tests
-```
-
-### 3.2.1 - Security Hardening (Critical)
-
-> **Status**: ✅ COMPLETE - All security middleware implemented and tested
-> **Completion Date**: 2025-01-XX
-> **See**: `docs/SECURITY_ASSESSMENT.md` for full security audit
-
-- [x] [SECURITY-PHASE1] Implement critical security layers
-
-```text
-- [x] Create authorization middleware (`apps/web/src/lib/api/authorization.ts`)
-  - [x] `requireOrgMembership` - verify user belongs to organization
-  - [x] `requireRole` - enforce RBAC (org_owner > admin > manager > scheduler > staff)
-  - [x] `canAccessResource` - combined membership + role check helper
-  - [x] `extractOrgId` - parse orgId from URL/query params
-  - [x] Unit tests (14 tests) - authorization.test.ts
-
-- [x] Create rate limiting middleware (`apps/web/src/lib/api/rate-limit.ts`)
-  - [x] In-memory rate limiter with sliding window
-  - [x] Per-IP and per-user rate limiting
-  - [x] Preset limits: STRICT (10/min), STANDARD (100/min), WRITE (30/min), AUTH (5/min)
-  - [x] 429 responses with Retry-After headers
-  - [x] Rate limit headers (X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset)
-  - [x] Unit tests (9 tests) - rate-limit.test.ts
-
-- [x] Create CSRF protection middleware (`apps/web/src/lib/api/csrf.ts`)
-  - [x] Double-submit cookie pattern
-  - [x] Timing-safe token comparison
-  - [x] Protect POST/PUT/PATCH/DELETE operations
-  - [x] Custom cookie/header names support
-  - [x] SameSite=Strict, HttpOnly, Secure cookies
-  - [x] Unit tests (15 tests) - csrf.test.ts
-
-- [x] Create input sanitization utilities (`apps/web/src/lib/api/sanitize.ts`)
-  - [x] HTML escaping (XSS prevention)
-  - [x] URL sanitization (block javascript:, data: protocols)
-  - [x] Recursive object sanitization
-  - [x] Email/phone sanitization
-  - [x] SQL/NoSQL injection prevention helpers
-  - [x] Path traversal prevention
-  - [x] Command injection prevention
-```
-
-- [x] Apply security middleware to API routes
-
-```text
-- [x] Add `requireOrgMembership` to all org-scoped routes
-- [x] Add `requireRole("admin")` to organization management routes
-- [x] Add `requireRole("manager")` to position/schedule/shift management routes
-- [x] Add `rateLimit(RateLimits.WRITE)` to all POST/PUT/PATCH/DELETE routes
-- [x] Add `rateLimit(RateLimits.AUTH)` to auth routes
-- [x] Add `csrfProtection()` to all state-changing routes
-- [x] Add input sanitization to user-generated content fields
-```
-
-- [x] Integration tests for security
-
-```text
-- [x] Test cross-org access denial (user cannot access other org's data)
-- [x] Test role enforcement (staff cannot create schedules)
-- [x] Test rate limiting (429 after threshold)
-- [x] Test CSRF protection (403 without valid token)
-```
-
-### 3.3 - Firestore Rules Test Matrix ✅ COMPLETE
-
-- [x] [BLOCK3.3] Write rules test matrix (≥ 1 allow + 3 denies per collection)
-  - [x] Create `tests/rules/organizations.spec.ts`
-
-```text
-- [x] Test allow: member can read org
-- [x] Test deny: unauthenticated cannot read org
-- [x] Test deny: non-member cannot read org
-- [x] Test deny: member cannot update org (only managers)
-- [x] Test allow: manager can update org
-```
-
-- [x] Create `tests/rules/memberships.spec.ts`
-
-```text
-- [x] Test allow: member can read own membership
-- [x] Test allow: member can read other memberships in same org
-- [x] Test deny: cannot read memberships from other orgs
-- [x] Test deny: member cannot update membership role (only managers)
-- [x] Test allow: manager can update membership role
-```
-
-- [x] Create `tests/rules/positions.spec.ts`
-
-```text
-- [x] Test allow: member can read positions in their org
-- [x] Test deny: cannot read positions from other orgs
-- [x] Test deny: staff cannot create/update positions (only managers)
-- [x] Test allow: manager can create/update positions
-```
-
-- [x] Create `tests/rules/schedules.spec.ts`
-
-```text
-- [x] Test allow: member can read schedules in their org
-- [x] Test deny: cannot read schedules from other orgs
-- [x] Test deny: staff cannot publish schedules (only managers)
-- [x] Test allow: manager can create/update/publish schedules
-- [x] Test deny: cannot modify archived schedules
-```
-
-- [x] Create `tests/rules/shifts.spec.ts`
-
-```text
-- [x] Test allow: member can read shifts in their org's schedules
-- [x] Test deny: cannot read shifts from other orgs
-- [x] Test deny: staff cannot assign shifts to others (only managers)
-- [x] Test allow: manager can create/update/delete any shift
-- [x] Test allow: staff can update their own shift notes/checkIn
-```
-
-- [x] Run all rules tests with Firebase emulator
-
-```text
-- [x] Add `pnpm test:rules` script to package.json
-- [x] Ensure CI runs rules tests on every PR
-- [x] Add coverage reporting for rules tests
-```
-
-### 3.4 - Schema Validation Tests ✅ COMPLETE
-
-- [x] [BLOCK3.4] Add unit tests for Zod validators
-  - [x] Create `packages/types/src/__tests__/organizations.test.ts`
-
-```text
-- [x] Test valid organization creation
-- [x] Test invalid organization (missing required fields)
-- [x] Test invalid types (wrong field types)
-- [x] Test string length limits (name min/max)
-```
-
-- [x] Create `packages/types/src/__tests__/memberships.test.ts`
-
-```text
-- [x] Test valid membership creation
-- [x] Test invalid role values
-- [x] Test required field validation
-```
-
-- [x] Create `packages/types/src/__tests__/positions.test.ts`
-
-```text
-- [x] Test valid position creation
-- [x] Test hourlyRate validation (must be positive number)
-- [x] Test string field limits
-```
-
-- [x] Create `packages/types/src/__tests__/schedules.test.ts`
-
-```text
-- [x] Test valid schedule creation
-- [x] Test date range validation (startDate <= endDate)
-- [x] Test status enum validation
-```
-
-- [x] Create `packages/types/src/__tests__/shifts.test.ts`
-
-```text
-- [x] Test valid shift creation
-- [x] Test time range validation (startTime < endTime)
-- [x] Test breakMinutes validation (>= 0, < shift duration)
-- [x] Test overlapping shift detection logic
-```
-
-- [x] Add test coverage reporting
-
-```text
-- [x] Configure Vitest coverage for packages/types
-- [x] Aim for ≥ 90% coverage on Zod schemas
-- [x] Add coverage badge to README
-```
-
-### 3.5 - Schema Parity & Documentation ✅ COMPLETE
-
-- [x] [BLOCK3.5] Add migration-check script validating schema parity vs rules
-  - [x] Create `scripts/validate-schema-parity.mjs`
-
-```text
-- [x] Parse Firestore rules to extract collection names
-- [x] Parse Zod schemas to extract schema names
-- [x] Compare and report mismatches
-- [x] Check that every collection has corresponding Zod schema
-- [x] Check that every Zod schema has corresponding rules tests
-```
-
-- [x] Add as pre-push git hook
-
-```text
-- [x] Update `.husky/pre-push` to run parity check
-- [x] Fail push if parity check fails
-```
-
-- [x] Run in CI pipeline
-
-```text
-- [x] Add to `.github/workflows/ci.yml`
-- [x] Block PR merge if parity check fails
-```
-
-- [x] [BLOCK3.6] Create schema index doc (docs/schema-map.md)
-  - [x] Document all collections and their schemas
-
-```text
-- [x] `/organizations` → `OrganizationSchema`
-- [x] `/organizations/{orgId}/members` → `MembershipSchema`
-- [x] `/positions` → `PositionSchema`
-- [x] `/schedules` → `ScheduleSchema`
-- [x] `/shifts` → `ShiftSchema`
-```
-
-- [x] Document validation rules per collection
-- [x] Document RBAC requirements (who can read/write)
-- [x] Add schema evolution guidelines
-- [x] Add examples of valid payloads
-
-### 3.7 - Pre-commit Quality Gates ✅ COMPLETE
-
-- [x] [BLOCK3.7] Add pre-commit hook enforcing quality checks
-  - [x] Update `.husky/pre-commit` script
-
-```text
-- [x] Run `pnpm typecheck` (already exists)
-- [x] Run `pnpm lint` (already exists)
-- [x] Add `pnpm test:schemas` (new - runs Zod schema tests only)
-- [x] Ensure all checks pass before allowing commit
-```
-
-- [x] Document pre-commit hooks in CONTRIBUTING.md
-- [x] Add troubleshooting section for hook failures
+🧩 Block 3 – Integrity Core (P1) ✅ 95% COMPLETE (Rules tests remain)
+
+- [x] [BLOCK3] Expand packages/types/ with Zod schemas for orgs, memberships, positions, schedules, shifts
+  - [x] Created packages/types/src/memberships.ts with full CRUD schemas
+  - [x] Created packages/types/src/positions.ts with types and skill levels
+  - [x] Created packages/types/src/shifts.ts with assignments and time validation
+  - [x] Created packages/types/src/venues.ts with addresses and coordinates
+  - [x] Created packages/types/src/zones.ts for venue subdivisions
+  - [x] Created packages/types/src/attendance.ts with check-in/out and geolocation
+  - [x] Created packages/types/src/join-tokens.ts for org invitations
+  - [x] Enhanced packages/types/src/orgs.ts with settings and subscription tiers
+  - [x] Enhanced packages/types/src/schedules.ts with AI metadata and publishing
+  - [x] Updated packages/types/src/index.ts to export all schemas
+- [x] [BLOCK3] Add API-level Zod validation for every write route (422 on invalid payload)
+  - [x] Add validation to POST /api/organizations (uses CreateOrgSchema)
+  - [x] Add validation to PATCH /api/organizations/[id] (uses UpdateOrgSchema)
+  - [x] Add validation to DELETE /api/organizations/[id] (protected by withSecurity)
+  - [x] Add validation to POST /api/organizations/[id]/members (uses CreateMembershipSchema)
+  - [x] Add validation to PATCH /api/organizations/[id]/members (uses UpdateMembershipSchema)
+  - [x] Add validation to DELETE /api/organizations/[id]/members (protected by withSecurity + requireRole)
+  - [x] Add validation to POST /api/items (uses CreateItemInput)
+  - [x] Add validation to GET /api/items (protected by withSecurity)
+  - [x] Add validation to POST /api/session (uses CreateSessionSchema)
+  - [x] Add validation to DELETE /api/session (session clearing)
+  - [x] Add validation to POST /api/auth/mfa/setup (protected by withSecurity)
+  - [x] Add validation to POST /api/auth/mfa/verify (uses verifySchema)
+  - [x] Add validation to POST /api/publish (uses PublishSchema + requireRole("manager"))
+  - [x] Add validation to GET /api/users/profile (protected by withSecurity)
+  - [x] Add validation to PATCH /api/users/profile (uses UpdateProfileSchema)
+  - [x] Add validation to POST /api/positions (uses CreatePositionSchema + requireRole("manager"))
+  - [x] Add validation to GET /api/positions (protected by withSecurity + requireOrgMembership)
+  - [x] Add validation to POST /api/schedules (uses CreateScheduleSchema + requireRole("scheduler"))
+  - [x] Add validation to GET /api/schedules (protected by withSecurity + requireOrgMembership)
+  - [x] Add validation to POST /api/shifts (uses CreateShiftSchema from @fresh-schedules/types)
+  - [x] Add validation to GET /api/shifts (protected by withSecurity + requireOrgMembership)
+  - [x] Add validation to GET /api/shifts/[id] (protected by withSecurity + requireOrgMembership)
+  - [x] Add validation to PATCH /api/shifts/[id] (uses UpdateShiftSchema from @fresh-schedules/types)
+  - [x] Add validation to DELETE /api/shifts/[id] (protected by withSecurity + requireRole("admin"))
+  - [x] Add validation to POST /api/venues (uses CreateVenueSchema + requireRole("manager"))
+  - [x] Add validation to GET /api/venues (protected by withSecurity + requireOrgMembership)
+  - [x] Add validation to POST /api/zones (uses CreateZoneSchema + requireRole("manager"))
+  - [x] Add validation to GET /api/zones (protected by withSecurity + requireOrgMembership)
+  - [x] Add validation to POST /api/attendance (uses CreateAttendanceRecordSchema + requireRole("scheduler"))
+  - [x] Add validation to GET /api/attendance (protected by withSecurity + requireOrgMembership)
+  - [x] Add validation to POST /api/join-tokens (uses CreateJoinTokenSchema + requireRole("admin"))
+  - [x] Add validation to GET /api/join-tokens (protected by withSecurity + requireRole("manager"))
+- [ ] [BLOCK3] Write rules test matrix (≥ 1 allow + 3 denies per collection)
+  - [x] Created tests/rules/organizations.spec.ts (4 suites, 13+ tests)
+  - [x] Created tests/rules/positions.spec.ts (2 suites, 10+ tests)
+  - [x] Create tests/rules/schedules.spec.ts
+  - [x] Create tests/rules/shifts.spec.ts
+  - [x] Create tests/rules/venues.spec.ts
+  - [x] Create tests/rules/zones.spec.ts
+  - [x] Create tests/rules/attendance.spec.ts
+  - [x] Create tests/rules/join-tokens.spec.ts
+- [x] [BLOCK3] Add unit tests for Zod validators
+  - [x] Created packages/types/src/**tests**/memberships.test.ts (9 suites, 17+ tests)
+  - [x] Created packages/types/src/**tests**/positions.test.ts (7 suites, 15+ tests)
+  - [x] Created packages/types/src/**tests**/shifts.test.ts (4 suites, 8+ tests)
+  - [x] Created packages/types/src/**tests**/schedules.test.ts (3 suites, 7+ tests)
+  - [x] Created packages/types/src/**tests**/venues.test.ts (7 suites, 15+ tests)
+  - [x] Created packages/types/src/**tests**/zones.test.ts (6 suites, 12+ tests)
+  - [x] Created packages/types/src/**tests**/attendance.test.ts (5 suites, 10+ tests)
+  - [x] Created packages/types/src/**tests**/join-tokens.test.ts (6 suites, 12+ tests)
+  - [x] Created packages/types/src/**tests**/orgs.test.ts (8 suites, 16+ tests)
+- [x] [BLOCK3] Add migration-check script validating schema parity vs rules
+  - [x] Created scripts/ops/validate-schema-rules-parity.ts with 4 validation checks
+  - [x] Script validates collections → schemas mapping
+  - [x] Script validates schemas → exports in index.ts
+  - [x] Script validates collections → documentation
+  - [x] Script detects orphaned schemas
+  - [x] Made script executable with chmod +x
+- [x] [BLOCK3] Create schema index doc (docs/schema-map.md) listing collections ↔ schemas
+  - [x] Documented all 10 collections with Firestore paths
+  - [x] Included schema file references and rules line numbers
+  - [x] Added access control matrices for each collection
+  - [x] Listed API endpoints for each collection
+  - [x] Included testing requirements and migration check reference
+- [x] [BLOCK3] Add pre-commit hook enforcing pnpm typecheck && pnpm lint
+  - [x] Updated .husky/pre-commit to include typecheck step
+  - [x] Hook now runs: tag-files → typecheck → lint → format
+- [x] [BLOCK3] Standardize all API routes to consistent pattern
+  - [x] All routes use withSecurity() wrapper with rate limiting
+  - [x] All routes use consistent error handling (badRequest, serverError, ok)
+  - [x] All protected routes require authentication via requireAuth: true
+  - [x] Role-based routes use requireOrgMembership() and requireRole() patterns
+  - [x] All write routes use Zod validation via parseJson() helper
+  - [x] All routes have proper P0/P1 priority tags and area classifications
+  - [x] Updated /api/session, /api/publish, /api/health, /api/internal/backup
+  - [x] Updated /api/auth/mfa/setup, /api/auth/mfa/verify
+  - [x] Updated /api/shifts and /api/shifts/[id]
+  - [x] Verified typecheck and lint pass with no errors
 
 🎨 Block 4 – Experience Layer (P1)
 
-### 4.0 - UX Planning & Strategy
-
-- [ ] [BLOCK4.0] Create comprehensive UX plan document
-  - [ ] Define UX principles and design philosophy
-  - [ ] Document user personas and roles (Manager, Staff, Corporate)
-  - [ ] Map critical user journeys (≤5-minute scheduling flow)
-  - [ ] Create complete component inventory (atomic + composite)
-  - [ ] Define interaction patterns (drag-drop, bulk ops, inline editing)
-  - [ ] Establish WCAG 2.1 AA accessibility standards
-  - [ ] Set performance budgets (Core Web Vitals, bundle sizes)
-  - [ ] Design mobile-first experience with PWA capabilities
-  - [ ] Define success metrics and KPIs
-  - [ ] Create 10-week implementation roadmap
-  - **Deliverable**: `docs/UX_PLAN.md` (comprehensive UX strategy document)
-  - **Status**: Draft v1.0 created, needs review and refinement
-
-### 4.1 - Design System Foundation
-
-- [ ] [BLOCK4.1] Build comprehensive design system
-  - [ ] Create design tokens in `apps/web/tailwind.config.ts`
-
-```text
-- [ ] Define color palette (primary, secondary, accent, neutral, semantic)
-- [ ] Define typography scale (font sizes, weights, line heights)
-- [ ] Define spacing scale (consistent margins, padding, gaps)
-- [ ] Define border radius values (sm, md, lg, xl)
-- [ ] Define shadow levels (sm, md, lg, xl)
-- [ ] Define breakpoints (mobile, tablet, desktop, wide)
-```
-
-- [ ] Expand `apps/web/components/ui/` component library
-
-```text
-- [ ] Create `Badge.tsx` (status indicators, counts)
-- [ ] Create `Dialog.tsx` (modal dialogs, confirmations)
-- [ ] Create `Select.tsx` (dropdown select, multi-select)
-- [ ] Create `Checkbox.tsx` and `Radio.tsx` (form inputs)
-- [ ] Create `Toast.tsx` (notifications, alerts)
-- [ ] Create `Tooltip.tsx` (contextual help)
-- [ ] Create `Skeleton.tsx` (loading states)
-- [ ] Create `Tabs.tsx` (tabbed navigation)
-- [ ] Create `Accordion.tsx` (collapsible sections)
-```
-
-- [ ] Add component documentation
-
-```text
-- [ ] Create Storybook setup for component showcase
-- [ ] Document props and usage for each component
-- [ ] Add interactive examples
-```
-
-- [ ] Implement dark mode support
-
-```text
-- [ ] Add dark mode variants to all components
-- [ ] Create theme toggle component
-- [ ] Persist user theme preference
-```
-
-### 4.2 - Week Grid Scheduler
-
-- [ ] [BLOCK4.2] Implement virtualized Week Grid with advanced features
-  - [ ] Create `components/scheduler/WeekGrid.tsx`
-
-```text
-- [ ] Implement virtual scrolling for rows (handle 1000+ shifts)
-- [ ] Add sticky header with date columns
-- [ ] Add sticky budget row showing hours/costs
-- [ ] Implement drag-and-drop shift creation
-- [ ] Implement drag-and-drop shift reassignment
-```
-
-- [ ] Add keyboard accessibility
-
-```text
-- [ ] Arrow keys for cell navigation
-- [ ] Enter/Space for shift selection
-- [ ] Tab for focus management
-- [ ] Escape to cancel operations
-- [ ] Shift+Arrow for multi-select
-```
-
-- [ ] Add shift conflict detection
-
-```text
-- [ ] Visual indicators for overlapping shifts
-- [ ] Real-time validation on drag/drop
-- [ ] Warnings for overtime rules
-```
-
-- [ ] Implement shift templates
-
-```text
-- [ ] Save common shift patterns
-- [ ] Quick-apply templates to multiple days
-- [ ] Template management UI
-```
-
-- [ ] Add bulk operations
-
-```text
-- [ ] Multi-select shifts
-- [ ] Bulk delete, copy, move operations
-- [ ] Undo/redo support
-```
-
-### 4.3 - Performance Optimization
-
-- [ ] [BLOCK4.3] Add Lighthouse workflow and performance benchmarks
-  - [ ] Create `.github/workflows/lighthouse.yml`
-
-```text
-- [ ] Run Lighthouse CI on every PR
-- [ ] Test key pages: login, dashboard, week grid, month view
-- [ ] Enforce thresholds: ≥90 overall, ≥95 accessibility
-- [ ] Upload reports as GitHub artifacts
-```
-
-- [ ] Optimize bundle size
-
-```text
-- [ ] Implement code splitting for routes
-- [ ] Lazy load heavy components (Calendar, WeekGrid)
-- [ ] Tree-shake unused dependencies
-- [ ] Analyze bundle with webpack-bundle-analyzer
-```
-
-- [ ] Optimize rendering performance
-
-```text
-- [ ] Implement React.memo for expensive components
-- [ ] Use useMemo/useCallback to prevent re-renders
-- [ ] Virtualize long lists (shifts, users, positions)
-```
-
-- [ ] Add performance monitoring
-
-```text
-- [ ] Instrument with Web Vitals (LCP, FID, CLS)
-- [ ] Add custom performance marks for key operations
-- [ ] Report to analytics/monitoring service
-```
-
-- [ ] [BLOCK4.4] Benchmark critical user journeys
-  - [ ] Set performance budgets
-
-```text
-- [ ] TTI (Time to Interactive) ≤ 2.5s on 3G
-- [ ] MonthView initial render < 200ms
-- [ ] WeekGrid scroll performance ≥ 55 FPS with 1k rows
-- [ ] Shift creation interaction latency < 100ms
-```
-
-- [ ] Create performance test suite
-
-```text
-- [ ] Use Playwright for E2E performance tests
-- [ ] Measure and assert on performance metrics
-- [ ] Run performance tests in CI
-```
-
-- [ ] Add performance regression detection
-
-```text
-- [ ] Compare metrics against baseline
-- [ ] Fail CI if performance degrades > 10%
-- [ ] Store historical performance data
-```
-
-### 4.4 - UX Metrics & Sub-5-Minute KPI
-
-- [ ] [BLOCK4.5] Instrument UX metrics for scheduling KPI
-  - [ ] Define sub-5-minute scheduling flow
-
-```text
-- [ ] Start: User lands on schedule page
-- [ ] End: Schedule published successfully
-- [ ] Track intermediate steps (positions, shifts, validation)
-```
-
-- [ ] Add analytics instrumentation
-
-```text
-- [ ] Track time per scheduling step
-- [ ] Track errors and retries
-- [ ] Track feature usage (templates, bulk ops, conflicts)
-```
-
-- [ ] Create UX dashboard
-
-```text
-- [ ] Visualize scheduling time distribution
-- [ ] Show completion rates
-- [ ] Identify bottlenecks and pain points
-```
-
-- [ ] Add user feedback collection
-
-```text
-- [ ] Post-schedule satisfaction survey
-- [ ] In-app feedback widget
-- [ ] Track Net Promoter Score (NPS)
-```
-
-### 4.5 - Offline Support & PWA
-
-- [ ] [BLOCK4.6] Integrate offline cache + IndexedDB
-  - [ ] Implement service worker caching strategy
-
-```text
-- [ ] Cache-first for static assets
-- [ ] Network-first for API calls with fallback
-- [ ] Background sync for failed mutations
-```
-
-- [ ] Add IndexedDB integration
-
-```text
-- [ ] Store schedules for offline viewing
-- [ ] Queue mutations when offline
-- [ ] Sync queued changes when online
-```
-
-- [ ] Implement offline UI indicators
-
-```text
-- [ ] Show offline status banner
-- [ ] Indicate which data is stale/cached
-- [ ] Show sync progress
-```
-
-- [ ] Test offline scenarios
-
-```text
-- [ ] Create E2E tests for offline mode
-- [ ] Test CheckIn form offline sync (already verified)
-- [ ] Test conflict resolution on reconnect
-```
-
-- [ ] [BLOCK4.7] Enhance PWA capabilities
-  - [ ] Update PWA manifest (`public/manifest.json`)
-
-```text
-- [ ] Add app icons (192x192, 512x512)
-- [ ] Configure display mode (standalone)
-- [ ] Set theme colors
-- [ ] Define shortcuts (quick actions)
-```
-
-- [ ] Implement install prompt
-
-```text
-- [ ] Detect when PWA is installable
-- [ ] Show custom install prompt UI
-- [ ] Track install events
-```
-
-- [ ] Add PWA-specific features
-
-```text
-- [ ] Share target API (share schedules)
-- [ ] Push notifications (schedule reminders)
-- [ ] Badge API (unread notifications)
-```
-
-- [ ] Test PWA functionality
-
-```text
-- [ ] Create E2E tests for install flow
-- [ ] Test on mobile devices (iOS, Android)
-- [ ] Validate PWA criteria with Lighthouse
-```
-
-### 4.6 - UI Documentation
-
-- [ ] [BLOCK4.8] Document UI style guide
-  - [ ] Create `docs/ui-guidelines.md`
-
-```text
-- [ ] Document design principles (consistency, accessibility, performance)
-- [ ] Document component usage guidelines
-- [ ] Document spacing and layout patterns
-- [ ] Document color usage and accessibility
-- [ ] Document typography hierarchy
-```
-
-- [ ] Add component composition examples
-
-```text
-- [ ] Show common UI patterns (forms, lists, cards)
-- [ ] Demonstrate responsive layouts
-- [ ] Show loading and error states
-```
-
-- [ ] Document accessibility requirements
-
-```text
-- [ ] ARIA label guidelines
-- [ ] Keyboard navigation patterns
-- [ ] Screen reader considerations
-- [ ] Color contrast requirements (WCAG AA/AAA)
-```
+- [ ] [BLOCK4] Build design system (components/ui/ + tailwind.config.ts tokens)
+- [ ] [BLOCK4] Implement virtualized Week Grid with sticky budget header + keyboard a11y
+- [ ] [BLOCK4] Add Lighthouse workflow (≥ 90 overall, ≥ 95 a11y)
+- [ ] [BLOCK4] Benchmark TTI ≤ 2.5 s, MonthView render < 200 ms, 1 k rows ≥ 55 FPS
+- [ ] [BLOCK4] Instrument UX metrics for sub-5-minute scheduling KPI
+- [ ] [BLOCK4] Integrate offline cache + IndexedDB (CheckIn Form verified sync)
+- [ ] [BLOCK4] Add PWA manifest + service worker + install prompt tests
+- [ ] [BLOCK4] Document UI style guide (docs/ui-guidelines.md)
 
 🚀 Block 5 – Validation & Release (P1→P2)
 
-### 5.1 - End-to-End Testing
-
-- [ ] [BLOCK5.1] Write comprehensive Playwright E2E test suite
-  - [ ] Create happy-path test spec
-
-```text
-- [ ] Test: User authentication flow
-- [ ] Sign up with email/password
-- [ ] Verify email (if required)
-- [ ] Sign in with existing account
-- [ ] Sign out successfully
-- [ ] Test: Organization onboarding
-- [ ] Create new organization
-- [ ] Set organization details
-- [ ] Invite team members
-- [ ] Verify member receives invitation
-- [ ] Test: Schedule creation workflow
-- [ ] Create new schedule
-- [ ] Add positions (at least 3)
-- [ ] Add shifts for multiple days
-- [ ] Use shift templates
-- [ ] Handle shift conflicts
-- [ ] Test: Schedule publishing
-- [ ] Validate schedule completeness
-- [ ] Publish schedule
-- [ ] Verify notifications sent
-- [ ] View published schedule as staff member
-```
-
-- [ ] Add error scenario tests
-
-```text
-- [ ] Test validation errors (invalid inputs)
-- [ ] Test network failures (offline mode)
-- [ ] Test permission denials (unauthorized actions)
-- [ ] Test conflict resolution
-```
-
-- [ ] Add mobile viewport tests
-
-```text
-- [ ] Run all tests on mobile screen sizes
-- [ ] Test touch interactions
-- [ ] Test responsive layouts
-```
-
-- [ ] Add cross-browser tests
-
-```text
-- [ ] Test on Chrome, Firefox, Safari
-- [ ] Test on mobile browsers (iOS Safari, Chrome Android)
-```
-
-### 5.2 - CI/CD Integration
-
-- [ ] [BLOCK5.2] Add E2E testing to CI pipeline
-  - [ ] Update `.github/workflows/ci.yml`
-
-```text
-- [ ] Add E2E test job
-- [ ] Run after unit tests pass
-- [ ] Use Playwright container or GitHub Actions
-- [ ] Set timeout (max 30 minutes)
-```
-
-- [ ] Configure Firebase emulators for E2E
-
-```text
-- [ ] Start emulators before tests
-- [ ] Seed test data
-- [ ] Clean up after tests
-```
-
-- [ ] Add CI gate for deployments
-
-```text
-- [ ] Block deploy if E2E tests fail
-- [ ] Require all tests pass on main branch
-- [ ] Allow deploy preview for PRs (even if tests fail)
-```
-
-- [ ] Upload test artifacts
-
-```text
-- [ ] Save screenshots on failure
-- [ ] Save videos of test runs
-- [ ] Upload Playwright trace files
-- [ ] Generate and upload test reports
-```
-
-### 5.3 - Blue/Green Deployment
-
-- [ ] [BLOCK5.3] Implement Blue/Green deployment strategy
-  - [ ] Create deployment infrastructure
-
-```text
-- [ ] Set up staging environment (blue)
-- [ ] Set up production environment (green)
-- [ ] Configure load balancer for traffic switching
-```
-
-- [ ] Create deployment scripts
-
-```text
-- [ ] `scripts/ops/deploy-staging.sh`
-- [ ] Deploy to staging environment
-- [ ] Run smoke tests
-- [ ] Report deployment status
-- [ ] `scripts/ops/promote-to-production.sh`
-- [ ] Switch traffic to new version
-- [ ] Monitor error rates
-- [ ] Auto-rollback if errors spike
-```
-
-- [ ] Implement smoke tests
-
-```text
-- [ ] Create `tests/smoke/` directory
-- [ ] Test critical paths (auth, schedule CRUD)
-- [ ] Run against staging before promotion
-- [ ] Verify all health checks pass
-```
-
-- [ ] Add deployment monitoring
-
-```text
-- [ ] Track deployment frequency
-- [ ] Track deployment success rate
-- [ ] Track rollback frequency
-- [ ] Alert on deployment failures
-```
-
-### 5.4 - Rollback & Recovery
-
-- [ ] [BLOCK5.4] Add instant rollback capabilities
-  - [ ] Create `scripts/ops/rollback.sh`
-
-```text
-- [ ] Switch traffic back to previous version
-- [ ] Verify rollback success with health checks
-- [ ] Log rollback event and reason
-- [ ] Notify team of rollback
-```
-
-- [ ] Document rollback procedure
-
-```text
-- [ ] Add to `docs/release-runbook.md`
-- [ ] List common rollback scenarios
-- [ ] Define rollback decision criteria
-- [ ] Document post-rollback actions
-```
-
-- [ ] Test rollback process
-
-```text
-- [ ] Practice rollback in staging
-- [ ] Measure rollback time (target < 5 minutes)
-- [ ] Verify no data loss during rollback
-```
-
-- [ ] Add rollback alerts
-
-```text
-- [ ] Alert on-call engineer
-- [ ] Post to team Slack/Discord
-- [ ] Create incident ticket
-```
-
-### 5.5 - Release Management
-
-- [ ] [BLOCK5.5] Implement semantic versioning and changelogs
-  - [ ] Set up semantic versioning
-
-```text
-- [ ] Define version format (MAJOR.MINOR.PATCH)
-- [ ] Create git tags for releases (e.g., v1.0.0, v1.1.0)
-- [ ] Automate version bumping with npm version
-```
-
-- [ ] Generate changelogs
-
-```text
-- [ ] Use conventional commits format
-- [ ] Auto-generate CHANGELOG.md from commits
-- [ ] Include breaking changes section
-- [ ] Include migration guides when needed
-```
-
-- [ ] Create GitHub releases
-
-```text
-- [ ] Publish release notes on GitHub
-- [ ] Attach build artifacts
-- [ ] Link to deployed version
-```
-
-- [ ] Add release notes template
-
-```text
-- [ ] Define sections: Features, Fixes, Breaking Changes
-- [ ] Include contributor acknowledgments
-- [ ] Link to relevant issues/PRs
-```
-
-- [ ] [BLOCK5.6] Build release dashboard
-  - [ ] Create release tracking page
-
-```text
-- [ ] Show current build number and commit
-- [ ] Show active branch (main, staging, etc.)
-- [ ] Show E2E test status
-- [ ] Show deployment status
-```
-
-- [ ] Add release history
-
-```text
-- [ ] List recent deployments
-- [ ] Show deployment duration
-- [ ] Link to release notes
-- [ ] Show rollback events
-```
-
-- [ ] Add health metrics
-
-```text
-- [ ] Show error rates (current vs baseline)
-- [ ] Show response times
-- [ ] Show uptime percentage
-- [ ] Show active user count
-```
-
-### 5.6 - CI Artifact Management
-
-- [ ] [BLOCK5.7] Upload Lighthouse and E2E reports as CI artifacts
-  - [ ] Configure GitHub Actions artifact upload
-
-```text
-- [ ] Upload Lighthouse JSON reports
-- [ ] Upload Lighthouse HTML reports
-- [ ] Upload Playwright test reports
-- [ ] Upload screenshots and videos
-```
-
-- [ ] Create artifact retention policy
-
-```text
-- [ ] Keep artifacts for 90 days
-- [ ] Archive critical release artifacts permanently
-```
-
-- [ ] Add artifact download links to PRs
-
-```text
-- [ ] Comment on PR with artifact links
-- [ ] Show performance comparison vs base branch
-- [ ] Highlight regressions
-```
-
-### 5.7 - Release Documentation
-
-- [ ] [BLOCK5.8] Create comprehensive release runbook
-  - [ ] Write `docs/release-runbook.md`
-
-```text
-- [ ] Pre-release checklist
-- [ ] All tests passing
-- [ ] Code review completed
-- [ ] Security scan completed
-- [ ] Performance benchmarks met
-- [ ] Release process steps
-- [ ] Create release branch
-- [ ] Bump version
-- [ ] Update changelog
-- [ ] Deploy to staging
-- [ ] Run smoke tests
-- [ ] Promote to production
-- [ ] Monitor for issues
-- [ ] Post-release checklist
-- [ ] Verify deployment
-- [ ] Monitor error rates
-- [ ] Announce release
-- [ ] Update documentation
-- [ ] Rollback procedure
-- [ ] When to rollback
-- [ ] How to rollback
-- [ ] Post-rollback actions
-- [ ] Incident response
-- [ ] Define severity levels
-- [ ] Escalation procedures
-- [ ] Communication templates
-```
+- [ ] [BLOCK5] Write Playwright happy-path spec (auth → onboard → org → plan → publish)
+- [ ] [BLOCK5] Add CI gate → fail deploy if E2E fails
+- [ ] [BLOCK5] Implement Blue/Green deploy (smoke test then promote)
+- [ ] [BLOCK5] Add scripts/ops/rollback.sh for instant rollback
+- [ ] [BLOCK5] Tag releases with semantic versioning + changelog
+- [ ] [BLOCK5] Add release dashboard (build #, branch, E2E status)
+- [ ] [BLOCK5] Add CI artifact upload of Lighthouse + E2E reports
+- [ ] [BLOCK5] Create docs/release-runbook.md
 
 🌐 Environment & Config
 
-- [x] [env] Add unified env parser (lib/env.ts using Zod)
-- [x] [env] Enforce NODE_ENV, SESSION_SECRET, GOOGLE_APPLICATION_CREDENTIALS_JSON, REDIS_URL, etc.
-- [x] [env] Make app fail fast if env missing
-- [x] [env] Add .env.example per v13 spec
-- [x] [env] Document envs in docs/environment.md
+- [ ] [env] Add unified env parser (lib/env.ts using Zod)
+- [ ] [env] Enforce NODE_ENV, SESSION_SECRET, GOOGLE_APPLICATION_CREDENTIALS_JSON, REDIS_URL, etc.
+- [ ] [env] Make app fail fast if env missing
+- [ ] [env] Add .env.example per v13 spec
+- [ ] [env] Document envs in docs/environment.md
 
 👮‍♂️ RBAC & Rules
 

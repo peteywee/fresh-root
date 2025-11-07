@@ -1,21 +1,20 @@
-// [P0][API][CODE] Organizations API route handler
-// Tags: P0, API, CODE, validation, zod
-import { NextRequest, NextResponse } from "next/server";
-import type { z } from "zod";
+// [P0][API][CODE] Route API route handler
+// Tags: P0, API, CODE
+import { CreateOrganizationSchema } from "@fresh-schedules/types";
+import { NextRequest } from "next/server";
+import { NextResponse } from "next/server";
 
-import { csrfProtection } from "../../../src/lib/api/csrf";
-import { rateLimit, RateLimits } from "../../../src/lib/api/rate-limit";
-import { sanitizeObject } from "../../../src/lib/api/sanitize";
-import { withValidation } from "../../../src/lib/api/validation";
-import { requireSession, AuthenticatedRequest } from "../_shared/middleware";
-import { serverError, OrganizationCreateSchema } from "../_shared/validation";
+import { withSecurity } from "../_shared/middleware";
+import { parseJson, serverError } from "../_shared/validation";
+
+// Rate limiting via withSecurity
 
 /**
  * GET /api/organizations
  * List organizations the current user belongs to
  */
-export const GET = rateLimit(RateLimits.STANDARD)(async (request: NextRequest) => {
-  return requireSession(request as AuthenticatedRequest, async (authReq) => {
+export const GET = withSecurity(
+  async (request: NextRequest, context: { params: Record<string, string>; userId: string }) => {
     try {
       // In production, fetch from database based on authenticated user
       const organizations = [
@@ -26,7 +25,7 @@ export const GET = rateLimit(RateLimits.STANDARD)(async (request: NextRequest) =
           role: "admin",
           createdAt: new Date().toISOString(),
           memberCount: 25,
-          ownerId: authReq.user?.uid,
+          ownerId: context.userId,
         },
         {
           id: "org-2",
@@ -35,48 +34,50 @@ export const GET = rateLimit(RateLimits.STANDARD)(async (request: NextRequest) =
           role: "manager",
           createdAt: new Date().toISOString(),
           memberCount: 10,
-          ownerId: authReq.user?.uid,
+          ownerId: context.userId,
         },
       ];
-
-      return NextResponse.json({ organizations, userId: authReq.user?.uid });
+      return NextResponse.json({ organizations, userId: context.userId });
     } catch {
       return serverError("Failed to fetch organizations");
     }
-  });
-});
+  },
+  { requireAuth: true, maxRequests: 100, windowMs: 60_000 },
+);
 
 /**
  * POST /api/organizations
  * Create a new organization
  */
-export const POST = rateLimit(RateLimits.WRITE)(
-  csrfProtection()(
-    withValidation(
-      OrganizationCreateSchema,
-      async (request: NextRequest, data: z.infer<typeof OrganizationCreateSchema>) => {
-        return requireSession(request as AuthenticatedRequest, async (authReq) => {
-          try {
-            // Sanitize user input
-            const sanitized = sanitizeObject(data, {
-              urlFields: ["website"],
-            });
-
-            // In production, create organization in Firestore
-            const newOrg = {
-              id: `org-${Date.now()}`,
-              ...sanitized,
-              ownerId: authReq.user?.uid,
-              createdAt: new Date().toISOString(),
-              updatedAt: new Date().toISOString(),
-            };
-
-            return NextResponse.json(newOrg, { status: 201 });
-          } catch {
-            return serverError("Failed to create organization");
-          }
-        });
-      },
-    ),
-  ),
+export const POST = withSecurity(
+  async (request: NextRequest, context: { params: Record<string, string>; userId: string }) => {
+    try {
+      const parsed = await parseJson(request, CreateOrganizationSchema);
+      if (!parsed.success) {
+        return NextResponse.json(
+          {
+            error: {
+              code: "VALIDATION_ERROR",
+              message: "Invalid organization data",
+              details: parsed.details,
+            },
+          },
+          { status: 422 },
+        );
+      }
+      // In production, create organization in database
+      const newOrg = {
+        id: `org-${Date.now()}`,
+        ...parsed.data,
+        role: "admin", // Creator is admin
+        ownerId: context.userId,
+        createdAt: new Date().toISOString(),
+        memberCount: 1,
+      };
+      return NextResponse.json(newOrg, { status: 201 });
+    } catch {
+      return serverError("Failed to create organization");
+    }
+  },
+  { requireAuth: true, maxRequests: 100, windowMs: 60_000 },
 );

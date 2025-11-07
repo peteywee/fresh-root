@@ -1,43 +1,48 @@
 // [P0][AUTH][API] MFA setup endpoint - generates TOTP secret and QR code
 // Tags: P0, AUTH, API
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
 import * as QRCode from "qrcode";
 import * as speakeasy from "speakeasy";
 
-import { requireSession, AuthenticatedRequest } from "../../../_shared/middleware";
+import { withSecurity } from "../../../_shared/middleware";
+import { ok, serverError } from "../../../_shared/validation";
+
+// Rate limiting via withSecurity options
 
 /**
  * POST /api/auth/mfa/setup
  * Generates a TOTP secret and QR code for MFA enrollment.
  * Requires valid session.
  */
-export async function POST(req: NextRequest) {
-  return requireSession(req as AuthenticatedRequest, async (authReq: AuthenticatedRequest) => {
+export const POST = withSecurity(
+  async (req: NextRequest, context: { params: Record<string, string>; userId: string }) => {
     try {
-      const { email } = authReq.user!;
+      // Derive a stable label from user id for display if email is unknown client-side
+      const userLabel = context.userId || "user";
 
       // Generate TOTP secret
       const secret = speakeasy.generateSecret({
-        name: `FreshRoot (${email})`,
+        name: `FreshRoot (${userLabel})`,
         issuer: "FreshRoot",
       });
 
       // Generate QR code as data URL
       const qrCodeDataUrl = await QRCode.toDataURL(secret.otpauth_url || "");
 
-      authReq.logger?.info("MFA setup initiated", { email });
+      console.warn("MFA setup initiated", { userId: context.userId });
 
       // Store secret temporarily in Firestore (or return to client for storage)
       // For simplicity, return to client. In production, store server-side.
-      return NextResponse.json({
+      return ok({
         success: true,
         secret: secret.base32,
         qrCode: qrCodeDataUrl,
         otpauthUrl: secret.otpauth_url,
       });
     } catch (error) {
-      authReq.logger?.error("MFA setup failed", error);
-      return NextResponse.json({ error: "Failed to generate MFA secret" }, { status: 500 });
+      console.error("MFA setup failed", error);
+      return serverError("Failed to generate MFA secret");
     }
-  });
-}
+  },
+  { requireAuth: true, maxRequests: 50, windowMs: 60_000 },
+);

@@ -21,7 +21,8 @@ describe("Security Regression Tests", () => {
 
       expect(response.status).toBe(401);
       const data = await response.json();
-      expect(data.error).toContain("Unauthorized");
+      const message = typeof data.error === "string" ? data.error : data.error?.message;
+      expect(message).toContain("Unauthorized");
     });
 
     test("POST /api/items without session returns 401", async () => {
@@ -35,7 +36,8 @@ describe("Security Regression Tests", () => {
 
       expect(response.status).toBe(401);
       const data = await response.json();
-      expect(data.error).toContain("Unauthorized");
+      const message = typeof data.error === "string" ? data.error : data.error?.message;
+      expect(message).toContain("Unauthorized");
     });
 
     test("GET /api/organizations without session returns 401", async () => {
@@ -48,7 +50,8 @@ describe("Security Regression Tests", () => {
 
       expect(response.status).toBe(401);
       const data = await response.json();
-      expect(data.error).toContain("Unauthorized");
+      const message = typeof data.error === "string" ? data.error : data.error?.message;
+      expect(message).toContain("Unauthorized");
     });
 
     test("POST /api/organizations without session returns 401", async () => {
@@ -62,7 +65,8 @@ describe("Security Regression Tests", () => {
 
       expect(response.status).toBe(401);
       const data = await response.json();
-      expect(data.error).toContain("Unauthorized");
+      const message = typeof data.error === "string" ? data.error : data.error?.message;
+      expect(message).toContain("Unauthorized");
     });
 
     test("Invalid session cookie returns 401", async () => {
@@ -76,7 +80,8 @@ describe("Security Regression Tests", () => {
 
       expect(response.status).toBe(401);
       const data = await response.json();
-      expect(data.error).toContain("Unauthorized");
+      const message = typeof data.error === "string" ? data.error : data.error?.message;
+      expect(message).toContain("Unauthorized");
     });
   });
 
@@ -113,7 +118,8 @@ describe("Security Regression Tests", () => {
 
       expect(response.status).toBe(401);
       const data = await response.json();
-      expect(data.error).toBeDefined();
+      const message = typeof data.error === "string" ? data.error : data.error?.message;
+      expect(message).toBeDefined();
     });
 
     test("POST /api/session with missing token returns 400", async () => {
@@ -127,7 +133,8 @@ describe("Security Regression Tests", () => {
 
       expect(response.status).toBe(400);
       const data = await response.json();
-      expect(data.error).toContain("Missing or invalid idToken");
+      const message = typeof data.error === "string" ? data.error : data.error?.message;
+      expect(message).toContain("Missing or invalid idToken");
     });
 
     test("DELETE /api/session clears session cookie", async () => {

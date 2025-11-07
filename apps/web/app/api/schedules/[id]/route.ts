@@ -16,9 +16,9 @@ import { serverError } from "../../_shared/validation";
  */
 export const GET = rateLimit(RateLimits.STANDARD)(
   requireOrgMembership(
-    async (request: NextRequest, context, { params }: { params: Promise<{ id: string }> }) => {
+    async (request: NextRequest, context: { params: { id: string } }) => {
       try {
-        const { id } = await params;
+        const { id } = context.params;
 
         // In production, fetch from Firestore and check permissions
         const schedule = {

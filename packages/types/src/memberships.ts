@@ -1,107 +1,68 @@
-// [P1][INTEGRITY][CODE] Membership Zod schemas for organization members
-// Tags: P1, INTEGRITY, CODE, RBAC, VALIDATION
+// [P1][INTEGRITY][SCHEMA] Memberships schema
+// Tags: P1, INTEGRITY, SCHEMA, ZOD, MEMBERSHIPS
 import { z } from "zod";
 
-import { OrgRole } from "./rbac";
+/**
+ * Membership roles within an organization
+ * Maps to Firestore custom claims and RBAC checks
+ */
+export const MembershipRole = z.enum(["org_owner", "admin", "manager", "scheduler", "staff"]);
+export type MembershipRole = z.infer<typeof MembershipRole>;
 
 /**
- * Complete membership record as stored in Firestore.
- * Represents a user's membership in an organization with their roles.
+ * Membership status lifecycle
  */
-export const MembershipRecord = z.object({
-  id: z.string().min(1, "Membership ID is required"),
+export const MembershipStatus = z.enum(["active", "suspended", "invited", "removed"]);
+export type MembershipStatus = z.infer<typeof MembershipStatus>;
+
+/**
+ * Full Membership document schema
+ * Firestore path: /memberships/{uid}_{orgId}
+ */
+export const MembershipSchema = z.object({
+  uid: z.string().min(1, "User ID is required"),
   orgId: z.string().min(1, "Organization ID is required"),
-  uid: z.string().min(1, "User ID is required"),
-  roles: z.array(OrgRole).min(1, "At least one role is required"),
-  joinedAt: z.string().datetime("Invalid joinedAt timestamp"),
-  mfaVerified: z.boolean().default(false),
+  roles: z.array(MembershipRole).min(1, "At least one role is required"),
+  status: MembershipStatus.default("active"),
   invitedBy: z.string().optional(),
-  createdAt: z.string().datetime("Invalid createdAt timestamp"),
-  updatedAt: z.string().datetime("Invalid updatedAt timestamp").optional(),
+  invitedAt: z.number().int().positive().optional(),
+  joinedAt: z.number().int().positive(),
+  updatedAt: z.number().int().positive(),
+  createdAt: z.number().int().positive(),
 });
-
-export type MembershipRecord = z.infer<typeof MembershipRecord>;
+export type Membership = z.infer<typeof MembershipSchema>;
 
 /**
- * Input schema for creating a new membership.
- * Used when adding a member to an organization.
+ * Schema for creating a new membership
+ * Used in POST /api/memberships
  */
-export const MembershipCreateSchema = z.object({
+export const CreateMembershipSchema = z.object({
   uid: z.string().min(1, "User ID is required"),
-  roles: z
-    .array(OrgRole)
-    .min(1, "At least one role is required")
-    .max(5, "Maximum 5 roles allowed")
-    .refine(
-      (roles) => {
-        // Ensure org_owner is not assigned via API (only through org creation)
-        return !roles.includes("org_owner");
-      },
-      { message: "org_owner role cannot be assigned via API" },
-    ),
-  mfaVerified: z.boolean().default(false),
+  orgId: z.string().min(1, "Organization ID is required"),
+  roles: z.array(MembershipRole).min(1, "At least one role is required"),
+  status: MembershipStatus.optional().default("invited"),
+  invitedBy: z.string().optional(),
 });
-
-export type MembershipCreateInput = z.infer<typeof MembershipCreateSchema>;
-
-/**
- * Input schema for updating an existing membership.
- * All fields are optional for partial updates.
- */
-export const MembershipUpdateSchema = z
-  .object({
-    roles: z
-      .array(OrgRole)
-      .min(1, "At least one role is required")
-      .max(5, "Maximum 5 roles allowed")
-      .refine(
-        (roles) => {
-          // Prevent org_owner from being assigned or removed via update
-          return !roles.includes("org_owner");
-        },
-        { message: "org_owner role cannot be modified via API" },
-      )
-      .optional(),
-    mfaVerified: z.boolean().optional(),
-  })
-  .strict();
-
-export type MembershipUpdateInput = z.infer<typeof MembershipUpdateSchema>;
+export type CreateMembershipInput = z.infer<typeof CreateMembershipSchema>;
 
 /**
- * Role hierarchy for permission checks.
- * Higher index = more permissions.
+ * Schema for updating an existing membership
+ * Used in PATCH /api/memberships/{id}
  */
-export const ROLE_HIERARCHY: Record<OrgRole, number> = {
-  staff: 0,
-  scheduler: 1,
-  manager: 2,
-  admin: 3,
-  org_owner: 4,
-};
+export const UpdateMembershipSchema = z.object({
+  roles: z.array(MembershipRole).min(1).optional(),
+  status: MembershipStatus.optional(),
+});
+export type UpdateMembershipInput = z.infer<typeof UpdateMembershipSchema>;
 
 /**
- * Helper to check if a role has permission to assign/modify another role.
- * Rule: You can only assign roles below your highest role.
+ * Query parameters for listing memberships
  */
-export function canAssignRole(assignerRoles: OrgRole[], targetRole: OrgRole): boolean {
-  const maxAssignerLevel = Math.max(...assignerRoles.map((r) => ROLE_HIERARCHY[r]));
-  const targetLevel = ROLE_HIERARCHY[targetRole];
-  return maxAssignerLevel > targetLevel;
-}
-
-/**
- * Helper to check if a user has at least one of the required roles.
- */
-export function hasAnyRole(userRoles: OrgRole[], requiredRoles: OrgRole[]): boolean {
-  return requiredRoles.some((role) => userRoles.includes(role));
-}
-
-/**
- * Helper to check if a user has a specific minimum role level.
- */
-export function hasMinimumRole(userRoles: OrgRole[], minimumRole: OrgRole): boolean {
-  const userMaxLevel = Math.max(...userRoles.map((r) => ROLE_HIERARCHY[r]));
-  const requiredLevel = ROLE_HIERARCHY[minimumRole];
-  return userMaxLevel >= requiredLevel;
-}
+export const ListMembershipsQuerySchema = z.object({
+  orgId: z.string().optional(),
+  uid: z.string().optional(),
+  status: MembershipStatus.optional(),
+  limit: z.coerce.number().int().positive().max(100).default(50),
+  cursor: z.string().optional(),
+});
+export type ListMembershipsQuery = z.infer<typeof ListMembershipsQuerySchema>;

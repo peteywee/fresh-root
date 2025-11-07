@@ -1,4 +1,4 @@
-name: CI (lint, typecheck, rules, api)
+name: CI (monorepo)
 
 on:
   pull_request:
@@ -35,20 +35,5 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-firebase-emulators-
 
-      - name: Install
-        run: pnpm install --frozen-lockfile || pnpm install
-
-      - name: Lint (best-effort)
-        run: pnpm -w lint || true
-
-      - name: Typecheck
-        run: pnpm -w typecheck
-
-      - name: Firestore & Storage Rules Tests (CI ports)
-        run: pnpm -w test:rules:ci
-
-      - name: API Unit Tests
-        run: pnpm --filter @fresh-schedules/api test
-
-      - name: API Build
-        run: pnpm --filter @fresh-schedules/api build
+      - name: Run CI script
+        run: pnpm run ci

@@ -1,216 +1,188 @@
-// [P1][INTEGRITY][TEST] Membership Zod schema validation tests
-// Tags: P1, INTEGRITY, TEST, zod, validation, rbac
+// [P1][INTEGRITY][TEST] Memberships schema tests
+// Tags: P1, INTEGRITY, TEST, ZOD, MEMBERSHIPS
+import { describe, expect, it } from "vitest";
 
-import { describe, it, expect } from "vitest";
+import {
+  MembershipSchema,
+  CreateMembershipSchema,
+  UpdateMembershipSchema,
+  MembershipRole,
+  MembershipStatus,
+} from "../memberships";
 
-import { MembershipRecord, MembershipCreateSchema, MembershipUpdateSchema } from "../memberships";
-
-describe("MembershipRecord schema", () => {
-  const validMembership = {
-    id: "mem-123",
-    orgId: "org-456",
-    uid: "user-789",
-    roles: ["admin", "manager"],
-    joinedAt: "2025-01-01T00:00:00Z",
-    mfaVerified: true,
-    invitedBy: "user-abc",
-    createdAt: "2025-01-01T00:00:00Z",
-    updatedAt: "2025-01-02T00:00:00Z",
-  };
-
-  it("should validate a complete valid membership record", () => {
-    const result = MembershipRecord.parse(validMembership);
-    expect(result).toEqual(validMembership);
-  });
-
-  it("should validate membership with minimal required fields", () => {
-    const minimal = {
-      id: "mem-123",
-      orgId: "org-456",
-      uid: "user-789",
-      roles: ["staff"],
-      joinedAt: "2025-01-01T00:00:00Z",
-      createdAt: "2025-01-01T00:00:00Z",
+describe("MembershipSchema", () => {
+  it("validates a complete membership", () => {
+    const validMembership = {
+      uid: "user123",
+      orgId: "org456",
+      roles: ["staff" as const],
+      status: "active" as const,
+      joinedAt: Date.now(),
+      updatedAt: Date.now(),
+      createdAt: Date.now(),
     };
-    const result = MembershipRecord.parse(minimal);
-    expect(result).toMatchObject(minimal);
-    expect(result.mfaVerified).toBe(false); // default
+
+    const result = MembershipSchema.safeParse(validMembership);
+    expect(result.success).toBe(true);
   });
 
-  it("should reject membership with missing required fields", () => {
-    const missingId = { ...validMembership };
-    delete (missingId as Record<string, unknown>).id;
-    expect(() => MembershipRecord.parse(missingId)).toThrow();
+  it("requires uid", () => {
+    const invalidMembership = {
+      orgId: "org456",
+      roles: ["staff" as const],
+      joinedAt: Date.now(),
+      updatedAt: Date.now(),
+      createdAt: Date.now(),
+    };
 
-    const missingOrgId = { ...validMembership };
-    delete (missingOrgId as Record<string, unknown>).orgId;
-    expect(() => MembershipRecord.parse(missingOrgId)).toThrow();
-
-    const missingUid = { ...validMembership };
-    delete (missingUid as Record<string, unknown>).uid;
-    expect(() => MembershipRecord.parse(missingUid)).toThrow();
-
-    const missingRoles = { ...validMembership };
-    delete (missingRoles as Record<string, unknown>).roles;
-    expect(() => MembershipRecord.parse(missingRoles)).toThrow();
+    const result = MembershipSchema.safeParse(invalidMembership);
+    expect(result.success).toBe(false);
   });
 
-  it("should reject membership with empty required strings", () => {
-    expect(() => MembershipRecord.parse({ ...validMembership, id: "" })).toThrow();
-    expect(() => MembershipRecord.parse({ ...validMembership, orgId: "" })).toThrow();
-    expect(() => MembershipRecord.parse({ ...validMembership, uid: "" })).toThrow();
+  it("requires at least one role", () => {
+    const invalidMembership = {
+      uid: "user123",
+      orgId: "org456",
+      roles: [],
+      joinedAt: Date.now(),
+      updatedAt: Date.now(),
+      createdAt: Date.now(),
+    };
+
+    const result = MembershipSchema.safeParse(invalidMembership);
+    expect(result.success).toBe(false);
   });
 
-  it("should require at least one role", () => {
-    expect(() => MembershipRecord.parse({ ...validMembership, roles: [] })).toThrow();
+  it("accepts multiple roles", () => {
+    const validMembership = {
+      uid: "user123",
+      orgId: "org456",
+      roles: ["manager" as const, "scheduler" as const],
+      status: "active" as const,
+      joinedAt: Date.now(),
+      updatedAt: Date.now(),
+      createdAt: Date.now(),
+    };
+
+    const result = MembershipSchema.safeParse(validMembership);
+    expect(result.success).toBe(true);
   });
 
-  it("should validate role enum values", () => {
-    const validRoles = ["org_owner", "admin", "manager", "scheduler", "staff"];
-    validRoles.forEach((role) => {
-      expect(MembershipRecord.parse({ ...validMembership, roles: [role] }).roles).toContain(role);
-    });
+  it("accepts optional invitedBy and invitedAt", () => {
+    const validMembership = {
+      uid: "user123",
+      orgId: "org456",
+      roles: ["staff" as const],
+      status: "invited" as const,
+      invitedBy: "admin789",
+      invitedAt: Date.now() - 1000,
+      joinedAt: Date.now(),
+      updatedAt: Date.now(),
+      createdAt: Date.now(),
+    };
 
-    expect(() => MembershipRecord.parse({ ...validMembership, roles: ["invalid_role"] })).toThrow();
-  });
-
-  it("should validate datetime format for timestamps", () => {
-    expect(() =>
-      MembershipRecord.parse({ ...validMembership, joinedAt: "invalid-date" }),
-    ).toThrow();
-    expect(() => MembershipRecord.parse({ ...validMembership, createdAt: "2025-01-01" })).toThrow();
-  });
-
-  it("should default mfaVerified to false", () => {
-    const noMfa = { ...validMembership };
-    delete (noMfa as Record<string, unknown>).mfaVerified;
-    const result = MembershipRecord.parse(noMfa);
-    expect(result.mfaVerified).toBe(false);
+    const result = MembershipSchema.safeParse(validMembership);
+    expect(result.success).toBe(true);
   });
 });
 
-describe("MembershipCreateSchema", () => {
-  it("should validate valid membership creation input", () => {
+describe("CreateMembershipSchema", () => {
+  it("validates creation payload", () => {
+    const validInput = {
+      uid: "user123",
+      orgId: "org456",
+      roles: ["staff" as const],
+    };
+
+    const result = CreateMembershipSchema.safeParse(validInput);
+    expect(result.success).toBe(true);
+  });
+
+  it("defaults status to invited", () => {
     const input = {
-      uid: "user-123",
-      roles: ["manager", "scheduler"],
-      mfaVerified: false,
+      uid: "user123",
+      orgId: "org456",
+      roles: ["staff" as const],
     };
-    const result = MembershipCreateSchema.parse(input);
-    expect(result).toEqual(input);
+
+    const result = CreateMembershipSchema.parse(input);
+    expect(result.status).toBe("invited");
   });
 
-  it("should validate with minimal required fields", () => {
-    const minimal = {
-      uid: "user-123",
-      roles: ["staff"],
+  it("requires at least one role", () => {
+    const invalidInput = {
+      uid: "user123",
+      orgId: "org456",
+      roles: [],
     };
-    const result = MembershipCreateSchema.parse(minimal);
-    expect(result.uid).toBe("user-123");
-    expect(result.roles).toEqual(["staff"]);
-    expect(result.mfaVerified).toBe(false); // default
-  });
 
-  it("should reject input with missing required uid", () => {
-    expect(() => MembershipCreateSchema.parse({ roles: ["staff"] })).toThrow();
-  });
-
-  it("should reject input with empty uid", () => {
-    expect(() => MembershipCreateSchema.parse({ uid: "", roles: ["staff"] })).toThrow();
-  });
-
-  it("should reject input with missing or empty roles", () => {
-    expect(() => MembershipCreateSchema.parse({ uid: "user-123" })).toThrow();
-    expect(() => MembershipCreateSchema.parse({ uid: "user-123", roles: [] })).toThrow();
-  });
-
-  it("should reject invalid role values", () => {
-    expect(() => MembershipCreateSchema.parse({ uid: "user-123", roles: ["invalid"] })).toThrow();
-  });
-
-  it("should reject org_owner role assignment via API", () => {
-    expect(() => MembershipCreateSchema.parse({ uid: "user-123", roles: ["org_owner"] })).toThrow(
-      /org_owner role cannot be assigned via API/,
-    );
-
-    expect(() =>
-      MembershipCreateSchema.parse({ uid: "user-123", roles: ["admin", "org_owner"] }),
-    ).toThrow(/org_owner role cannot be assigned via API/);
-  });
-
-  it("should enforce maximum 5 roles", () => {
-    expect(() =>
-      MembershipCreateSchema.parse({
-        uid: "user-123",
-        roles: ["admin", "manager", "scheduler", "staff", "admin", "manager"],
-      }),
-    ).toThrow(/Maximum 5 roles/);
-  });
-
-  it("should allow non-org_owner roles", () => {
-    const valid = {
-      uid: "user-123",
-      roles: ["admin", "manager", "scheduler"],
-    };
-    expect(MembershipCreateSchema.parse(valid).roles).toEqual(["admin", "manager", "scheduler"]);
+    const result = CreateMembershipSchema.safeParse(invalidInput);
+    expect(result.success).toBe(false);
   });
 });
 
-describe("MembershipUpdateSchema", () => {
-  it("should allow partial updates (all fields optional)", () => {
-    expect(MembershipUpdateSchema.parse({})).toEqual({});
-    expect(MembershipUpdateSchema.parse({ roles: ["manager"] })).toEqual({
-      roles: ["manager"],
-    });
-    expect(MembershipUpdateSchema.parse({ mfaVerified: true })).toEqual({
-      mfaVerified: true,
-    });
-  });
-
-  it("should validate roles when provided", () => {
-    const update = { roles: ["admin", "scheduler"] };
-    expect(MembershipUpdateSchema.parse(update).roles).toEqual(["admin", "scheduler"]);
-  });
-
-  it("should require at least one role if roles are provided", () => {
-    expect(() => MembershipUpdateSchema.parse({ roles: [] })).toThrow(
-      /At least one role is required/,
-    );
-  });
-
-  it("should reject org_owner role in updates", () => {
-    expect(() => MembershipUpdateSchema.parse({ roles: ["org_owner"] })).toThrow(/org_owner/);
-
-    expect(() => MembershipUpdateSchema.parse({ roles: ["admin", "org_owner"] })).toThrow(
-      /org_owner/,
-    );
-  });
-
-  it("should enforce maximum 5 roles when provided", () => {
-    expect(() =>
-      MembershipUpdateSchema.parse({
-        roles: ["admin", "manager", "scheduler", "staff", "admin", "manager"],
-      }),
-    ).toThrow(/Maximum 5 roles/);
-  });
-
-  it("should validate role enum values", () => {
-    expect(() => MembershipUpdateSchema.parse({ roles: ["invalid_role"] })).toThrow();
-
-    expect(MembershipUpdateSchema.parse({ roles: ["manager"] }).roles).toEqual(["manager"]);
-  });
-
-  it("should allow mfaVerified updates", () => {
-    expect(MembershipUpdateSchema.parse({ mfaVerified: true }).mfaVerified).toBe(true);
-    expect(MembershipUpdateSchema.parse({ mfaVerified: false }).mfaVerified).toBe(false);
-  });
-
-  it("should allow updating both roles and mfaVerified", () => {
-    const update = {
-      roles: ["admin"],
-      mfaVerified: true,
+describe("UpdateMembershipSchema", () => {
+  it("allows updating roles", () => {
+    const validUpdate = {
+      roles: ["manager" as const, "staff" as const],
     };
-    const result = MembershipUpdateSchema.parse(update);
-    expect(result).toEqual(update);
+
+    const result = UpdateMembershipSchema.safeParse(validUpdate);
+    expect(result.success).toBe(true);
+  });
+
+  it("allows updating status", () => {
+    const validUpdate = {
+      status: "suspended" as const,
+    };
+
+    const result = UpdateMembershipSchema.safeParse(validUpdate);
+    expect(result.success).toBe(true);
+  });
+
+  it("rejects empty roles array", () => {
+    const invalidUpdate = {
+      roles: [],
+    };
+
+    const result = UpdateMembershipSchema.safeParse(invalidUpdate);
+    expect(result.success).toBe(false);
+  });
+
+  it("allows partial updates", () => {
+    const validUpdate = {};
+
+    const result = UpdateMembershipSchema.safeParse(validUpdate);
+    expect(result.success).toBe(true);
+  });
+});
+
+describe("MembershipRole enum", () => {
+  it("accepts valid roles", () => {
+    const roles = ["org_owner", "admin", "manager", "scheduler", "staff"];
+    roles.forEach((role) => {
+      const result = MembershipRole.safeParse(role);
+      expect(result.success).toBe(true);
+    });
+  });
+
+  it("rejects invalid roles", () => {
+    const result = MembershipRole.safeParse("super_admin");
+    expect(result.success).toBe(false);
+  });
+});
+
+describe("MembershipStatus enum", () => {
+  it("accepts valid statuses", () => {
+    const statuses = ["active", "suspended", "invited", "removed"];
+    statuses.forEach((status) => {
+      const result = MembershipStatus.safeParse(status);
+      expect(result.success).toBe(true);
+    });
+  });
+
+  it("rejects invalid statuses", () => {
+    const result = MembershipStatus.safeParse("banned");
+    expect(result.success).toBe(false);
   });
 });
