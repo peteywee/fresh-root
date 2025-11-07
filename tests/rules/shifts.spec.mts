@@ -1,35 +1,23 @@
 // [P1][INTEGRITY][TEST] Shifts rules tests
 // Tags: P1, INTEGRITY, TEST, FIRESTORE, RULES, SHIFTS
-import {
-  assertFails,
-  assertSucceeds,
-  initializeTestEnvironment,
-  RulesTestEnvironment,
-} from "@firebase/rules-unit-testing";
+import { assertFails, assertSucceeds, RulesTestEnvironment } from "@firebase/rules-unit-testing";
 import { doc, getDoc, setDoc, updateDoc, deleteDoc, collection, getDocs } from "firebase/firestore";
-import { readFileSync } from "fs";
-import { resolve } from "path";
 import { describe, it, beforeAll, afterAll } from "vitest";
+
+import { initFirestoreTestEnv } from "./_setup";
 
 describe("Shifts Rules", () => {
   let testEnv: RulesTestEnvironment;
   const ORG_ID = "test-org-123";
   const SCHED_ID = "test-sched-456";
-  const OWNER_UID = "owner-user";
+  const _OWNER_UID = "owner-user";
   const MANAGER_UID = "manager-user";
   const SCHEDULER_UID = "scheduler-user";
   const STAFF_UID = "staff-user";
   const OTHER_UID = "other-user";
 
   beforeAll(async () => {
-    testEnv = await initializeTestEnvironment({
-      projectId: "test-project",
-      firestore: {
-        rules: readFileSync(resolve(__dirname, "../../firestore.rules"), "utf8"),
-        host: "127.0.0.1",
-        port: 8080,
-      },
-    });
+    testEnv = await initFirestoreTestEnv("test-project-shifts-mts");
   });
 
   afterAll(async () => {

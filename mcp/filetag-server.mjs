@@ -28,7 +28,6 @@ import os from "node:os";
 const ajv = new Ajv2020({ strict: false, allErrors: true, $data: true, allowUnionTypes: true });
 addFormats(ajv);
 
-
 const server = new McpServer({ name: "filetag", version: "0.2.0" });
 
 // ---------- Env & constants ----------

@@ -1,15 +1,10 @@
 // [P1][INTEGRITY][TEST] Join tokens rules tests
 // Tags: P1, INTEGRITY, TEST, FIRESTORE, RULES, JOIN_TOKENS
-import {
-  assertFails,
-  assertSucceeds,
-  initializeTestEnvironment,
-  RulesTestEnvironment,
-} from "@firebase/rules-unit-testing";
+import { assertFails, assertSucceeds, RulesTestEnvironment } from "@firebase/rules-unit-testing";
 import { doc, getDoc, setDoc, updateDoc, deleteDoc, collection, getDocs } from "firebase/firestore";
-import { readFileSync } from "fs";
-import { resolve } from "path";
 import { describe, it, beforeAll, afterAll } from "vitest";
+
+import { initFirestoreTestEnv } from "./_setup";
 
 describe("Join Tokens Rules", () => {
   let testEnv: RulesTestEnvironment;
@@ -21,14 +16,7 @@ describe("Join Tokens Rules", () => {
   const OTHER_UID = "other-user";
 
   beforeAll(async () => {
-    testEnv = await initializeTestEnvironment({
-      projectId: "test-project",
-      firestore: {
-        rules: readFileSync(resolve(__dirname, "../../firestore.rules"), "utf8"),
-        host: "127.0.0.1",
-        port: 8080,
-      },
-    });
+    testEnv = await initFirestoreTestEnv("test-project-join-tokens-mts");
   });
 
   afterAll(async () => {
@@ -39,7 +27,7 @@ describe("Join Tokens Rules", () => {
     it("ALLOW: org admin can read join token", async () => {
       await testEnv.withSecurityRulesDisabled(async (context) => {
         const db = context.firestore();
-        await setDoc(doc(db, `join-tokens/${ORG_ID}/join-tokens/jt-1`), {
+        await setDoc(doc(db, `join_tokens/${ORG_ID}/join_tokens/jt-1`), {
           id: "jt-1",
           orgId: ORG_ID,
           token: "abc123def456xyz789",
@@ -66,7 +54,7 @@ describe("Join Tokens Rules", () => {
         roles: ["admin"],
       });
       const db = adminContext.firestore();
-      await assertSucceeds(getDoc(doc(db, `join-tokens/${ORG_ID}/join-tokens/jt-1`)));
+      await assertSucceeds(getDoc(doc(db, `join_tokens/${ORG_ID}/join_tokens/jt-1`)));
     });
 
     it("ALLOW: org manager can read join token", async () => {
@@ -75,7 +63,7 @@ describe("Join Tokens Rules", () => {
         roles: ["manager"],
       });
       const db = managerContext.firestore();
-      await assertSucceeds(getDoc(doc(db, `join-tokens/${ORG_ID}/join-tokens/jt-1`)));
+      await assertSucceeds(getDoc(doc(db, `join_tokens/${ORG_ID}/join_tokens/jt-1`)));
     });
 
     it("DENY: staff cannot read join token", async () => {
@@ -84,7 +72,7 @@ describe("Join Tokens Rules", () => {
         roles: ["staff"],
       });
       const db = staffContext.firestore();
-      await assertFails(getDoc(doc(db, `join-tokens/${ORG_ID}/join-tokens/jt-1`)));
+      await assertFails(getDoc(doc(db, `join_tokens/${ORG_ID}/join_tokens/jt-1`)));
     });
 
     it("DENY: non-member cannot read join token", async () => {
@@ -93,13 +81,13 @@ describe("Join Tokens Rules", () => {
         roles: ["admin"],
       });
       const db = otherContext.firestore();
-      await assertFails(getDoc(doc(db, `join-tokens/${ORG_ID}/join-tokens/jt-1`)));
+      await assertFails(getDoc(doc(db, `join_tokens/${ORG_ID}/join_tokens/jt-1`)));
     });
 
     it("DENY: unauthenticated cannot read join token", async () => {
       const unauthContext = testEnv.unauthenticatedContext();
       const db = unauthContext.firestore();
-      await assertFails(getDoc(doc(db, `join-tokens/${ORG_ID}/join-tokens/jt-1`)));
+      await assertFails(getDoc(doc(db, `join_tokens/${ORG_ID}/join_tokens/jt-1`)));
     });
 
     it("DENY: listing all join tokens forbidden", async () => {
@@ -108,7 +96,7 @@ describe("Join Tokens Rules", () => {
         roles: ["admin"],
       });
       const db = adminContext.firestore();
-      await assertFails(getDocs(collection(db, `join-tokens/${ORG_ID}/join-tokens`)));
+      await assertFails(getDocs(collection(db, `join_tokens/${ORG_ID}/join_tokens`)));
     });
   });
 
@@ -120,7 +108,7 @@ describe("Join Tokens Rules", () => {
       });
       const db = adminContext.firestore();
       await assertSucceeds(
-        setDoc(doc(db, `join-tokens/${ORG_ID}/join-tokens/new-jt`), {
+        setDoc(doc(db, `join_tokens/${ORG_ID}/join_tokens/new-jt`), {
           id: "new-jt",
           orgId: ORG_ID,
           token: "newtoken123456789",
@@ -145,7 +133,7 @@ describe("Join Tokens Rules", () => {
       });
       const db = managerContext.firestore();
       await assertFails(
-        setDoc(doc(db, `join-tokens/${ORG_ID}/join-tokens/new-jt-2`), {
+        setDoc(doc(db, `join_tokens/${ORG_ID}/join_tokens/new-jt-2`), {
           id: "new-jt-2",
           orgId: ORG_ID,
           token: "token123456789",
@@ -170,7 +158,7 @@ describe("Join Tokens Rules", () => {
       });
       const db = staffContext.firestore();
       await assertFails(
-        setDoc(doc(db, `join-tokens/${ORG_ID}/join-tokens/new-jt-3`), {
+        setDoc(doc(db, `join_tokens/${ORG_ID}/join_tokens/new-jt-3`), {
           id: "new-jt-3",
           orgId: ORG_ID,
           token: "token123456789",
@@ -192,7 +180,7 @@ describe("Join Tokens Rules", () => {
       const unauthContext = testEnv.unauthenticatedContext();
       const db = unauthContext.firestore();
       await assertFails(
-        setDoc(doc(db, `join-tokens/${ORG_ID}/join-tokens/new-jt-4`), {
+        setDoc(doc(db, `join_tokens/${ORG_ID}/join_tokens/new-jt-4`), {
           id: "new-jt-4",
           orgId: ORG_ID,
           token: "token123456789",
@@ -215,7 +203,7 @@ describe("Join Tokens Rules", () => {
     beforeAll(async () => {
       await testEnv.withSecurityRulesDisabled(async (context) => {
         const db = context.firestore();
-        await setDoc(doc(db, `join-tokens/${ORG_ID}/join-tokens/jt-update`), {
+        await setDoc(doc(db, `join_tokens/${ORG_ID}/join_tokens/jt-update`), {
           id: "jt-update",
           orgId: ORG_ID,
           token: "update123456789",
@@ -240,7 +228,7 @@ describe("Join Tokens Rules", () => {
       });
       const db = adminContext.firestore();
       await assertSucceeds(
-        updateDoc(doc(db, `join-tokens/${ORG_ID}/join-tokens/jt-update`), {
+        updateDoc(doc(db, `join_tokens/${ORG_ID}/join_tokens/jt-update`), {
           status: "expired",
           updatedAt: Date.now(),
         }),
@@ -254,7 +242,7 @@ describe("Join Tokens Rules", () => {
       });
       const db = managerContext.firestore();
       await assertFails(
-        updateDoc(doc(db, `join-tokens/${ORG_ID}/join-tokens/jt-update`), {
+        updateDoc(doc(db, `join_tokens/${ORG_ID}/join_tokens/jt-update`), {
           status: "expired",
         }),
       );
@@ -267,7 +255,7 @@ describe("Join Tokens Rules", () => {
       });
       const db = staffContext.firestore();
       await assertFails(
-        updateDoc(doc(db, `join-tokens/${ORG_ID}/join-tokens/jt-update`), {
+        updateDoc(doc(db, `join_tokens/${ORG_ID}/join_tokens/jt-update`), {
           status: "expired",
         }),
       );
@@ -292,7 +280,7 @@ describe("Join Tokens Rules", () => {
       const deleteJtId = `delete-jt-${Date.now()}`;
       await testEnv.withSecurityRulesDisabled(async (context) => {
         const db = context.firestore();
-        await setDoc(doc(db, `join-tokens/${ORG_ID}/join-tokens/${deleteJtId}`), {
+        await setDoc(doc(db, `join_tokens/${ORG_ID}/join_tokens/${deleteJtId}`), {
           id: deleteJtId,
           orgId: ORG_ID,
           token: "delete123456789",
@@ -314,7 +302,7 @@ describe("Join Tokens Rules", () => {
         roles: ["admin"],
       });
       const db = adminContext.firestore();
-      await assertSucceeds(deleteDoc(doc(db, `join-tokens/${ORG_ID}/join-tokens/${deleteJtId}`)));
+      await assertSucceeds(deleteDoc(doc(db, `join_tokens/${ORG_ID}/join_tokens/${deleteJtId}`)));
     });
 
     it("DENY: manager cannot delete join token", async () => {
@@ -323,7 +311,7 @@ describe("Join Tokens Rules", () => {
         roles: ["manager"],
       });
       const db = managerContext.firestore();
-      await assertFails(deleteDoc(doc(db, `join-tokens/${ORG_ID}/join-tokens/jt-update`)));
+      await assertFails(deleteDoc(doc(db, `join_tokens/${ORG_ID}/join_tokens/jt-update`)));
     });
 
     it("DENY: staff cannot delete join token", async () => {
@@ -332,7 +320,7 @@ describe("Join Tokens Rules", () => {
         roles: ["staff"],
       });
       const db = staffContext.firestore();
-      await assertFails(deleteDoc(doc(db, `join-tokens/${ORG_ID}/join-tokens/jt-update`)));
+      await assertFails(deleteDoc(doc(db, `join_tokens/${ORG_ID}/join_tokens/jt-update`)));
     });
   });
 });

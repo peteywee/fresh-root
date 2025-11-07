@@ -1,15 +1,10 @@
 // [P1][INTEGRITY][TEST] Venues rules tests
 // Tags: P1, INTEGRITY, TEST, FIRESTORE, RULES, VENUES
-import {
-  assertFails,
-  assertSucceeds,
-  initializeTestEnvironment,
-  RulesTestEnvironment,
-} from "@firebase/rules-unit-testing";
+import { assertFails, assertSucceeds, RulesTestEnvironment } from "@firebase/rules-unit-testing";
 import { doc, getDoc, setDoc, updateDoc, deleteDoc } from "firebase/firestore";
-import { readFileSync } from "fs";
-import { resolve } from "path";
 import { describe, it, beforeAll, afterAll, beforeEach } from "vitest";
+
+import { initFirestoreTestEnv } from "./_setup";
 
 describe("Venues Rules", () => {
   let testEnv: RulesTestEnvironment;
@@ -20,14 +15,7 @@ describe("Venues Rules", () => {
   const OTHER_UID = "other-user-venues";
 
   beforeAll(async () => {
-    testEnv = await initializeTestEnvironment({
-      projectId: "test-project-venues",
-      firestore: {
-        rules: readFileSync(resolve(__dirname, "../../firestore.rules"), "utf8"),
-        host: "127.0.0.1",
-        port: 8080,
-      },
-    });
+    testEnv = await initFirestoreTestEnv("test-project-venues");
   });
 
   afterAll(async () => {
@@ -57,7 +45,7 @@ describe("Venues Rules", () => {
         roles: ["staff"],
       });
 
-      await setDoc(doc(db, `venues/${VENUE_ID}`), {
+      await setDoc(doc(db, `venues/${ORG_ID}/venues/${VENUE_ID}`), {
         id: VENUE_ID,
         orgId: ORG_ID,
         name: "Main Venue",
@@ -75,7 +63,7 @@ describe("Venues Rules", () => {
         roles: ["staff"],
       });
       const db = staffContext.firestore();
-      await assertSucceeds(getDoc(doc(db, `venues/${VENUE_ID}`)));
+      await assertSucceeds(getDoc(doc(db, `venues/${ORG_ID}/venues/${VENUE_ID}`)));
     });
 
     it("DENY: non-member cannot read venue", async () => {
@@ -84,13 +72,13 @@ describe("Venues Rules", () => {
         roles: ["staff"],
       });
       const db = otherContext.firestore();
-      await assertFails(getDoc(doc(db, `venues/${VENUE_ID}`)));
+      await assertFails(getDoc(doc(db, `venues/${ORG_ID}/venues/${VENUE_ID}`)));
     });
 
     it("DENY: unauthenticated cannot read venue", async () => {
       const unauthContext = testEnv.unauthenticatedContext();
       const db = unauthContext.firestore();
-      await assertFails(getDoc(doc(db, `venues/${VENUE_ID}`)));
+      await assertFails(getDoc(doc(db, `venues/${ORG_ID}/venues/${VENUE_ID}`)));
     });
   });
 
@@ -110,7 +98,7 @@ describe("Venues Rules", () => {
         createdAt: Date.now(),
         createdBy: MANAGER_UID,
       };
-      await assertSucceeds(setDoc(doc(db, `venues/${newVenue.id}`), newVenue));
+      await assertSucceeds(setDoc(doc(db, `venues/${ORG_ID}/venues/${newVenue.id}`), newVenue));
     });
 
     it("DENY: staff cannot create venue", async () => {
@@ -128,7 +116,7 @@ describe("Venues Rules", () => {
         createdAt: Date.now(),
         createdBy: STAFF_UID,
       };
-      await assertFails(setDoc(doc(db, `venues/${newVenue.id}`), newVenue));
+      await assertFails(setDoc(doc(db, `venues/${ORG_ID}/venues/${newVenue.id}`), newVenue));
     });
 
     it("DENY: non-member cannot create venue", async () => {
@@ -146,7 +134,7 @@ describe("Venues Rules", () => {
         createdAt: Date.now(),
         createdBy: OTHER_UID,
       };
-      await assertFails(setDoc(doc(db, `venues/${newVenue.id}`), newVenue));
+      await assertFails(setDoc(doc(db, `venues/${ORG_ID}/venues/${newVenue.id}`), newVenue));
     });
   });
 
@@ -158,7 +146,7 @@ describe("Venues Rules", () => {
       });
       const db = managerContext.firestore();
       await assertSucceeds(
-        updateDoc(doc(db, `venues/${VENUE_ID}`), {
+        updateDoc(doc(db, `venues/${ORG_ID}/venues/${VENUE_ID}`), {
           status: "inactive",
           updatedAt: Date.now(),
         }),
@@ -172,7 +160,7 @@ describe("Venues Rules", () => {
       });
       const db = staffContext.firestore();
       await assertFails(
-        updateDoc(doc(db, `venues/${VENUE_ID}`), {
+        updateDoc(doc(db, `venues/${ORG_ID}/venues/${VENUE_ID}`), {
           status: "inactive",
         }),
       );
@@ -185,7 +173,7 @@ describe("Venues Rules", () => {
       });
       const db = otherContext.firestore();
       await assertFails(
-        updateDoc(doc(db, `venues/${VENUE_ID}`), {
+        updateDoc(doc(db, `venues/${ORG_ID}/venues/${VENUE_ID}`), {
           status: "inactive",
         }),
       );
@@ -199,7 +187,7 @@ describe("Venues Rules", () => {
         roles: ["manager", "admin"],
       });
       const db = managerContext.firestore();
-      await assertSucceeds(deleteDoc(doc(db, `venues/${VENUE_ID}`)));
+      await assertSucceeds(deleteDoc(doc(db, `venues/${ORG_ID}/venues/${VENUE_ID}`)));
     });
 
     it("DENY: manager without admin cannot delete venue", async () => {
@@ -208,7 +196,7 @@ describe("Venues Rules", () => {
         roles: ["manager"],
       });
       const db = managerContext.firestore();
-      await assertFails(deleteDoc(doc(db, `venues/${VENUE_ID}`)));
+      await assertFails(deleteDoc(doc(db, `venues/${ORG_ID}/venues/${VENUE_ID}`)));
     });
 
     it("DENY: staff cannot delete venue", async () => {
@@ -217,7 +205,7 @@ describe("Venues Rules", () => {
         roles: ["staff"],
       });
       const db = staffContext.firestore();
-      await assertFails(deleteDoc(doc(db, `venues/${VENUE_ID}`)));
+      await assertFails(deleteDoc(doc(db, `venues/${ORG_ID}/venues/${VENUE_ID}`)));
     });
   });
 });

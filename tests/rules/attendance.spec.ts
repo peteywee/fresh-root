@@ -1,15 +1,10 @@
 // [P1][INTEGRITY][TEST] Attendance rules tests
 // Tags: P1, INTEGRITY, TEST, FIRESTORE, RULES, ATTENDANCE
-import {
-  assertFails,
-  assertSucceeds,
-  initializeTestEnvironment,
-  RulesTestEnvironment,
-} from "@firebase/rules-unit-testing";
+import { assertFails, assertSucceeds, RulesTestEnvironment } from "@firebase/rules-unit-testing";
 import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
-import { readFileSync } from "fs";
-import { resolve } from "path";
 import { describe, it, beforeAll, afterAll, beforeEach } from "vitest";
+
+import { initFirestoreTestEnv } from "./_setup";
 
 describe("Attendance Rules", () => {
   let testEnv: RulesTestEnvironment;
@@ -21,14 +16,7 @@ describe("Attendance Rules", () => {
   const OTHER_UID = "other-attendance";
 
   beforeAll(async () => {
-    testEnv = await initializeTestEnvironment({
-      projectId: "test-project-attendance",
-      firestore: {
-        rules: readFileSync(resolve(__dirname, "../../firestore.rules"), "utf8"),
-        host: "127.0.0.1",
-        port: 8080,
-      },
-    });
+    testEnv = await initFirestoreTestEnv("test-project-attendance-ts");
   });
 
   afterAll(async () => {
@@ -52,11 +40,11 @@ describe("Attendance Rules", () => {
         orgId: ORG_ID,
         roles: ["manager"],
       });
-      await setDoc(doc(db, `attendance_records/${ATTENDANCE_ID}`), {
+      await setDoc(doc(db, `attendance_records/${ORG_ID}/records/${ATTENDANCE_ID}`), {
         id: ATTENDANCE_ID,
         orgId: ORG_ID,
         shiftId: SHIFT_ID,
-        userId: USER_UID,
+        staffUid: USER_UID,
         status: "checked_in",
         checkInTime: Date.now(),
         createdAt: Date.now(),
@@ -71,7 +59,9 @@ describe("Attendance Rules", () => {
         roles: ["staff"],
       });
       await assertSucceeds(
-        getDoc(doc(userContext.firestore(), `attendance_records/${ATTENDANCE_ID}`)),
+        getDoc(
+          doc(userContext.firestore(), `attendance_records/${ORG_ID}/records/${ATTENDANCE_ID}`),
+        ),
       );
     });
 
@@ -81,7 +71,9 @@ describe("Attendance Rules", () => {
         roles: ["manager"],
       });
       await assertSucceeds(
-        getDoc(doc(managerContext.firestore(), `attendance_records/${ATTENDANCE_ID}`)),
+        getDoc(
+          doc(managerContext.firestore(), `attendance_records/${ORG_ID}/records/${ATTENDANCE_ID}`),
+        ),
       );
     });
 
@@ -91,13 +83,15 @@ describe("Attendance Rules", () => {
         roles: ["staff"],
       });
       await assertFails(
-        getDoc(doc(otherContext.firestore(), `attendance_records/${ATTENDANCE_ID}`)),
+        getDoc(
+          doc(otherContext.firestore(), `attendance_records/${ORG_ID}/records/${ATTENDANCE_ID}`),
+        ),
       );
     });
   });
 
   describe("Write access", () => {
-    it("ALLOW: user can create their own check-in", async () => {
+    it("DENY: user cannot create their own check-in (scheduler/manager only)", async () => {
       const userContext = testEnv.authenticatedContext(USER_UID, {
         orgId: ORG_ID,
         roles: ["staff"],
@@ -106,14 +100,14 @@ describe("Attendance Rules", () => {
         id: "attendance-new",
         orgId: ORG_ID,
         shiftId: SHIFT_ID,
-        userId: USER_UID,
+        staffUid: USER_UID,
         status: "checked_in",
         checkInTime: Date.now(),
         createdAt: Date.now(),
       };
-      await assertSucceeds(
+      await assertFails(
         setDoc(
-          doc(userContext.firestore(), `attendance_records/${newAttendance.id}`),
+          doc(userContext.firestore(), `attendance_records/${ORG_ID}/records/${newAttendance.id}`),
           newAttendance,
         ),
       );
@@ -128,29 +122,32 @@ describe("Attendance Rules", () => {
         id: "attendance-fake",
         orgId: ORG_ID,
         shiftId: SHIFT_ID,
-        userId: OTHER_UID,
+        staffUid: OTHER_UID,
         status: "checked_in",
         checkInTime: Date.now(),
         createdAt: Date.now(),
       };
       await assertFails(
         setDoc(
-          doc(userContext.firestore(), `attendance_records/${fakeAttendance.id}`),
+          doc(userContext.firestore(), `attendance_records/${ORG_ID}/records/${fakeAttendance.id}`),
           fakeAttendance,
         ),
       );
     });
 
-    it("ALLOW: user can update their own check-out", async () => {
+    it("DENY: user cannot update their own check-out (scheduler/manager only)", async () => {
       const userContext = testEnv.authenticatedContext(USER_UID, {
         orgId: ORG_ID,
         roles: ["staff"],
       });
-      await assertSucceeds(
-        updateDoc(doc(userContext.firestore(), `attendance_records/${ATTENDANCE_ID}`), {
-          status: "checked_out",
-          checkOutTime: Date.now(),
-        }),
+      await assertFails(
+        updateDoc(
+          doc(userContext.firestore(), `attendance_records/${ORG_ID}/records/${ATTENDANCE_ID}`),
+          {
+            status: "checked_out",
+            checkOutTime: Date.now(),
+          },
+        ),
       );
     });
 
@@ -160,9 +157,12 @@ describe("Attendance Rules", () => {
         roles: ["manager"],
       });
       await assertSucceeds(
-        updateDoc(doc(managerContext.firestore(), `attendance_records/${ATTENDANCE_ID}`), {
-          status: "approved",
-        }),
+        updateDoc(
+          doc(managerContext.firestore(), `attendance_records/${ORG_ID}/records/${ATTENDANCE_ID}`),
+          {
+            status: "approved",
+          },
+        ),
       );
     });
   });

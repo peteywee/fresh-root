@@ -1,15 +1,10 @@
 // [P1][INTEGRITY][TEST] Zones rules tests
 // Tags: P1, INTEGRITY, TEST, FIRESTORE, RULES, ZONES
-import {
-  assertFails,
-  assertSucceeds,
-  initializeTestEnvironment,
-  RulesTestEnvironment,
-} from "@firebase/rules-unit-testing";
+import { assertFails, assertSucceeds, RulesTestEnvironment } from "@firebase/rules-unit-testing";
 import { doc, getDoc, setDoc, updateDoc, deleteDoc } from "firebase/firestore";
-import { readFileSync } from "fs";
-import { resolve } from "path";
 import { describe, it, beforeAll, afterAll, beforeEach } from "vitest";
+
+import { initFirestoreTestEnv } from "./_setup";
 
 describe("Zones Rules", () => {
   let testEnv: RulesTestEnvironment;
@@ -21,14 +16,7 @@ describe("Zones Rules", () => {
   const OTHER_UID = "other-zones";
 
   beforeAll(async () => {
-    testEnv = await initializeTestEnvironment({
-      projectId: "test-project-zones",
-      firestore: {
-        rules: readFileSync(resolve(__dirname, "../../firestore.rules"), "utf8"),
-        host: "127.0.0.1",
-        port: 8080,
-      },
-    });
+    testEnv = await initFirestoreTestEnv("test-project-zones-ts");
   });
 
   afterAll(async () => {
@@ -52,7 +40,7 @@ describe("Zones Rules", () => {
         orgId: ORG_ID,
         roles: ["staff"],
       });
-      await setDoc(doc(db, `zones/${ZONE_ID}`), {
+      await setDoc(doc(db, `zones/${ORG_ID}/zones/${ZONE_ID}`), {
         id: ZONE_ID,
         orgId: ORG_ID,
         venueId: VENUE_ID,
@@ -69,7 +57,9 @@ describe("Zones Rules", () => {
         orgId: ORG_ID,
         roles: ["staff"],
       });
-      await assertSucceeds(getDoc(doc(staffContext.firestore(), `zones/${ZONE_ID}`)));
+      await assertSucceeds(
+        getDoc(doc(staffContext.firestore(), `zones/${ORG_ID}/zones/${ZONE_ID}`)),
+      );
     });
 
     it("DENY: non-member cannot read zone", async () => {
@@ -77,7 +67,7 @@ describe("Zones Rules", () => {
         orgId: "different-org",
         roles: ["staff"],
       });
-      await assertFails(getDoc(doc(otherContext.firestore(), `zones/${ZONE_ID}`)));
+      await assertFails(getDoc(doc(otherContext.firestore(), `zones/${ORG_ID}/zones/${ZONE_ID}`)));
     });
   });
 
@@ -95,7 +85,9 @@ describe("Zones Rules", () => {
         status: "active",
         createdAt: Date.now(),
       };
-      await assertSucceeds(setDoc(doc(managerContext.firestore(), `zones/${newZone.id}`), newZone));
+      await assertSucceeds(
+        setDoc(doc(managerContext.firestore(), `zones/${ORG_ID}/zones/${newZone.id}`), newZone),
+      );
     });
 
     it("DENY: staff cannot create zone", async () => {
@@ -111,7 +103,9 @@ describe("Zones Rules", () => {
         status: "active",
         createdAt: Date.now(),
       };
-      await assertFails(setDoc(doc(staffContext.firestore(), `zones/${newZone.id}`), newZone));
+      await assertFails(
+        setDoc(doc(staffContext.firestore(), `zones/${ORG_ID}/zones/${newZone.id}`), newZone),
+      );
     });
 
     it("ALLOW: manager can update zone", async () => {
@@ -120,7 +114,9 @@ describe("Zones Rules", () => {
         roles: ["manager"],
       });
       await assertSucceeds(
-        updateDoc(doc(managerContext.firestore(), `zones/${ZONE_ID}`), { status: "inactive" }),
+        updateDoc(doc(managerContext.firestore(), `zones/${ORG_ID}/zones/${ZONE_ID}`), {
+          status: "inactive",
+        }),
       );
     });
 
@@ -129,7 +125,9 @@ describe("Zones Rules", () => {
         orgId: ORG_ID,
         roles: ["admin"],
       });
-      await assertSucceeds(deleteDoc(doc(adminContext.firestore(), `zones/${ZONE_ID}`)));
+      await assertSucceeds(
+        deleteDoc(doc(adminContext.firestore(), `zones/${ORG_ID}/zones/${ZONE_ID}`)),
+      );
     });
   });
 });

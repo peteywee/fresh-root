@@ -4,31 +4,15 @@
 export {};
 // [P1][INTEGRITY][TEST] Firestore rules tests for memberships collection
 // Tags: P1, INTEGRITY, TEST, FIRESTORE, RULES, SECURITY, RBAC
-import { initializeTestEnvironment, RulesTestEnvironment } from "@firebase/rules-unit-testing";
-import fs from "fs";
+import { RulesTestEnvironment } from "@firebase/rules-unit-testing";
 import { beforeAll, afterAll, beforeEach, describe, test, expect } from "vitest";
+
+import { DENY_RE, initFirestoreTestEnv } from "./_setup";
 
 let testEnv: RulesTestEnvironment;
 
 beforeAll(async () => {
-  const firestoreOptions: { rules: string; host?: string; port?: number } = {
-    rules: fs.readFileSync("firestore.rules", "utf8"),
-  };
-  const firestoreHost =
-    process.env.FIRESTORE_EMULATOR_HOST || process.env.FIREBASE_FIRESTORE_EMULATOR_HOST;
-  if (firestoreHost) {
-    const [host, portStr] = firestoreHost.split(":");
-    firestoreOptions.host = host;
-    firestoreOptions.port = Number(portStr);
-  } else {
-    firestoreOptions.host = "localhost";
-    firestoreOptions.port = 8080;
-  }
-
-  testEnv = await initializeTestEnvironment({
-    projectId: "fresh-schedules-test-memberships",
-    firestore: firestoreOptions,
-  });
+  testEnv = await initFirestoreTestEnv("fresh-schedules-test-memberships");
 });
 
 afterAll(async () => {
@@ -110,7 +94,7 @@ describe("Memberships Collection - Read Access", () => {
       roles: ["org_member"],
     });
     await expect(outsiderCtx.firestore().doc(`memberships/${membershipId}`).get()).rejects.toThrow(
-      /PERMISSION_DENIED/,
+      DENY_RE,
     );
   });
 
@@ -137,9 +121,7 @@ describe("Memberships Collection - Read Access", () => {
     });
 
     const userCtx = testEnv.authenticatedContext("user1", { orgId: "orgA", roles: ["org_member"] });
-    await expect(userCtx.firestore().collection("memberships").get()).rejects.toThrow(
-      /PERMISSION_DENIED/,
-    );
+    await expect(userCtx.firestore().collection("memberships").get()).rejects.toThrow(DENY_RE);
   });
 });
 
@@ -210,7 +192,7 @@ describe("Memberships Collection - Write Access", () => {
         .update({
           roles: ["manager"],
         }),
-    ).rejects.toThrow(/PERMISSION_DENIED/);
+    ).rejects.toThrow(DENY_RE);
   });
 
   test("✅ ALLOW: Manager can update membership roles in same org", async () => {
@@ -273,6 +255,6 @@ describe("Memberships Collection - Write Access", () => {
         .update({
           roles: ["scheduler"],
         }),
-    ).rejects.toThrow(/PERMISSION_DENIED/);
+    ).rejects.toThrow(DENY_RE);
   });
 });

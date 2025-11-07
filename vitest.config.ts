@@ -13,6 +13,11 @@ export default defineConfig({
     globalSetup: path.resolve(__dirname, "vitest.global-setup.ts"),
     // Reuse the app's setup (jest-dom, router mocks, env)
     setupFiles: [path.resolve(__dirname, "apps/web/vitest.setup.ts")],
+    // Provide consistent env vars during unit tests (non-rules)
+    env: {
+      FIREBASE_PROJECT_ID: "fresh-schedules-dev",
+      SESSION_SECRET: "test-secret-please-change",
+    },
     // Limit discovery to our intended packages; avoid picking up compiled tests in services/**/dist
     include: [
       "apps/web/src/**/__tests__/**/*.{test,spec}.{ts,tsx,js,jsx}",

@@ -3,6 +3,7 @@
 
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
+import { getFirestore } from "firebase-admin/firestore";
 
 export type OrgRole = "org_owner" | "admin" | "manager" | "scheduler" | "corporate" | "staff";
 
@@ -71,4 +72,52 @@ export function requireRole(requiredRole: OrgRole) {
       return handler(request, { ...context, roles });
     };
   };
+}
+
+// Pure helper: determine if any of the user's roles satisfies the required role by hierarchy
+export function hasRequiredRole(userRoles: OrgRole[], requiredRole: OrgRole): boolean {
+  const hierarchy: OrgRole[] = ["staff", "corporate", "scheduler", "manager", "admin", "org_owner"];
+  const userLevel = userRoles.length ? Math.max(...userRoles.map((r) => hierarchy.indexOf(r))) : -1;
+  const requiredLevel = hierarchy.indexOf(requiredRole);
+  return userLevel >= requiredLevel;
+}
+
+// Data access: check if a membership document exists for the user in the org
+export async function isOrgMember(userId: string, orgId: string): Promise<boolean> {
+  const db = getFirestore();
+  const snapshot = await db
+    .collection("memberships")
+    .where("userId", "==", userId)
+    .where("orgId", "==", orgId)
+    .limit(1)
+    .get();
+  return !snapshot.empty;
+}
+
+// Data access: retrieve user roles from the membership document
+export async function getUserRoles(userId: string, orgId: string): Promise<OrgRole[] | null> {
+  const db = getFirestore();
+  const snapshot = await db
+    .collection("memberships")
+    .where("userId", "==", userId)
+    .where("orgId", "==", orgId)
+    .limit(1)
+    .get();
+  if (snapshot.empty) return null;
+  const data = snapshot.docs[0].data() as { roles?: OrgRole[] };
+  return (data.roles || []) as OrgRole[];
+}
+
+// High-level helper: check access combining membership and role requirement
+export async function canAccessResource(
+  userId: string,
+  orgId: string,
+  requiredRole: OrgRole,
+): Promise<{ allowed: boolean; roles?: OrgRole[]; reason?: string }> {
+  const member = await isOrgMember(userId, orgId);
+  if (!member) return { allowed: false, reason: "Not a member of organization" };
+  const roles = (await getUserRoles(userId, orgId)) || [];
+  const allowed = hasRequiredRole(roles, requiredRole);
+  if (!allowed) return { allowed: false, roles, reason: `Requires ${requiredRole} role or higher` };
+  return { allowed: true, roles };
 }
