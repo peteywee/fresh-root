@@ -1,7 +1,7 @@
 //[P1][API][ONBOARDING] Create Network + Corporate Endpoint
 // Tags: api, onboarding, network, corporate
 
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from "next/server";
 
 /**
  * Creates a Network and Corporate node for a corporate-centric onboarding flow.
@@ -21,11 +21,11 @@ export async function POST(req: NextRequest) {
   try {
     body = await req.json();
   } catch {
-    return NextResponse.json({ error: 'invalid_json' }, { status: 400 });
+    return NextResponse.json({ error: "invalid_json" }, { status: 400 });
   }
 
   // Expected fields: corporateName, brandName, ownsLocations, worksWithFranchisees, approxLocations, formToken.
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+   
   const _body = body; // Placeholder for future Zod validation
 
   // TODO:
@@ -37,10 +37,10 @@ export async function POST(req: NextRequest) {
   return NextResponse.json(
     {
       ok: true,
-      networkId: 'stub-network-id',
-      corpId: 'stub-corp-id',
-      status: 'pending_verification',
+      networkId: "stub-network-id",
+      corpId: "stub-corp-id",
+      status: "pending_verification",
     },
-    { status: 200 }
+    { status: 200 },
   );
 }

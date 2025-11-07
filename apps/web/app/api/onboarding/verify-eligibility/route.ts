@@ -1,7 +1,7 @@
 //[P1][API][ONBOARDING] Verify Eligibility Endpoint
 // Tags: api, onboarding, eligibility, auth
 
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from "next/server";
 
 /**
  * Checks whether the current authenticated user is eligible to create a Network.
@@ -51,8 +51,8 @@ export async function GET(_req: NextRequest) {
   return NextResponse.json(
     {
       eligible: true,
-      reason: 'stubbed_ok',
+      reason: "stubbed_ok",
     },
-    { status: 200 }
+    { status: 200 },
   );
 }
