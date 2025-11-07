@@ -36,8 +36,9 @@ export const POST = withSecurity(
         createdBy: context.userId,
       };
       return NextResponse.json(item, { status: 201 });
-    } catch (e) {
-      return serverError(e instanceof Error ? e.message : "Unexpected error");
+    } catch {
+      // Return a generic message; internal details are logged by middleware or platform logs
+      return serverError("Unexpected error");
     }
   },
   { requireAuth: true, maxRequests: 100, windowMs: 60_000 },
