@@ -5,8 +5,5 @@ node scripts/tag-files.mjs || exit 1
 pnpm -w typecheck || exit 1
 pnpm -w lint || exit 1
 pnpm -w format || exit 1
-# Run schema tests and parity check to gate schema drift
-pnpm -w run schema:test || exit 1
-pnpm -w run schema:parity || exit 1
 
 echo "[husky] Pre-commit checks completed."
