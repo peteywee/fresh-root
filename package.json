@@ -77,7 +77,6 @@
     "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^7.0.1",
-    "execa": "^9.4.0",
     "firebase": "^12.5.0",
     "firebase-tools": "^14.23.0",
     "husky": "^9.1.7",

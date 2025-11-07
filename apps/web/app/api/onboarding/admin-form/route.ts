@@ -1,18 +1,15 @@
-//[P1][API][ONBOARDING] Admin Form Endpoint
+//[P1][API][ONBOARDING] Admin Form Endpoint (server)
 // Tags: api, onboarding, admin-form, compliance
 
 import {
   CreateAdminResponsibilityFormSchema,
   type CreateAdminResponsibilityFormInput,
 } from "@fresh-schedules/types";
+import { randomBytes } from "crypto";
 import { NextRequest, NextResponse } from "next/server";
 
-/**
- * Accepts the Admin Responsibility Form payload from the onboarding wizard.
- * Backend will later attach networkId/adminUid/etc when creating the Network.
- *
- * @see docs/bible/Project_Bible_v14.0.0.md Section 4.3 (Admin Responsibility Form)
- */
+import { adminDb } from "@/src/lib/firebase.server";
+
 export async function POST(req: NextRequest) {
   let body: unknown;
 
@@ -33,21 +30,34 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const payload: CreateAdminResponsibilityFormInput = parseResult.data;
 
-  // TODO: perform basic tax id pattern validation here if desired.
+  // If admin DB not initialized, return a stub token so the UI can progress in local/dev mode
+  if (!adminDb) {
+    const formToken = "stub-form-token";
+    return NextResponse.json({ ok: true, formToken }, { status: 200 });
+  }
 
-  // TODO: persist this temporarily (session, temp collection, etc.).
-  // For now just return a stub token.
+  try {
+    // url-safe random token
+    const token = randomBytes(12).toString("base64url");
 
-  const formToken = "stub-form-token"; // replace with real token/id.
+    const formsRoot = adminDb
+      .collection("compliance")
+      .doc("adminResponsibilityForms")
+      .collection("forms");
+    const docRef = formsRoot.doc(token);
 
-  return NextResponse.json(
-    {
-      ok: true,
-      formToken,
-    },
-    { status: 200 },
-  );
+    await docRef.set({
+      ...payload,
+      createdAt: new Date().toISOString(),
+      status: "submitted",
+      token,
+    });
+
+    return NextResponse.json({ ok: true, formToken: token }, { status: 200 });
+  } catch (err) {
+    console.error("admin-form persist failed", err);
+    return NextResponse.json({ error: "internal_error" }, { status: 500 });
+  }
 }

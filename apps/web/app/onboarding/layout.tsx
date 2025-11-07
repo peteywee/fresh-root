@@ -1,3 +1,5 @@
+// [P2][APP][CODE] Layout
+// Tags: P2, APP, CODE
 "use client";
 import React from "react";
 

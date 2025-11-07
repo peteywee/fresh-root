@@ -1,23 +1,70 @@
+// [P2][APP][CODE] Page page component
+// Tags: P2, APP, CODE
 "use client";
 import React, { useState } from "react";
 
 export default function ProfileStep() {
-  
   const [fullName, setFullName] = useState("");
   const [phone, setPhone] = useState("");
   const [language, setLanguage] = useState("en");
-  const [timeZone, setTimeZone] = useState(Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC");
+  const [timeZone, setTimeZone] = useState(
+    Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC",
+  );
   const [role, setRole] = useState("manager");
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState("");
 
-  function saveAndNext(e: React.FormEvent) {
+  async function saveAndNext(e: React.FormEvent) {
     e.preventDefault();
-    const profile = { fullName, phone, language, timeZone, selfDeclaredRole: role };
-    // persist locally for now; backend wiring happens later
+    setError("");
+    const payload = {
+      displayName: fullName,
+      phoneNumber: phone,
+      preferences: { language },
+      timeZone,
+      selfDeclaredRole: role,
+    } as const;
+
+    setBusy(true);
     try {
-      localStorage.setItem("onb_profile", JSON.stringify(profile));
-    } catch {}
-    // use location assignment to avoid strict Route types in app router
-    window.location.href = "/onboarding/intent";
+      // Attempt server-side save (PATCH existing profile endpoint)
+      const res = await fetch("/api/users/profile", {
+        method: "PATCH",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      if (res.ok) {
+        // success — advance to intent
+        window.location.href = "/onboarding/intent";
+        return;
+      }
+
+      // server returned non-OK: show message but allow local fallback
+      const body = await res.json().catch(() => null);
+      setError(body?.message || `Server returned ${res.status}`);
+
+      // persist locally as fallback so wizard can continue even if auth/session not wired
+      try {
+        localStorage.setItem(
+          "onb_profile",
+          JSON.stringify({ fullName, phone, language, timeZone, selfDeclaredRole: role }),
+        );
+      } catch {}
+
+      window.location.href = "/onboarding/intent";
+    } catch (e) {
+      // network error: persist locally and continue
+      try {
+        localStorage.setItem(
+          "onb_profile",
+          JSON.stringify({ fullName, phone, language, timeZone, selfDeclaredRole: role }),
+        );
+      } catch {}
+      window.location.href = "/onboarding/intent";
+    } finally {
+      setBusy(false);
+    }
   }
 
   return (
@@ -79,8 +126,17 @@ export default function ProfileStep() {
         </select>
       </div>
 
-      <div className="flex items-center justify-end">
-        <button className="rounded bg-emerald-600 px-4 py-2 text-sm font-medium">Continue</button>
+      <div className="flex items-center justify-between">
+        {error ? <div className="text-sm text-rose-400">{error}</div> : <div />}
+        <div>
+          <button
+            type="submit"
+            disabled={busy}
+            className="rounded bg-emerald-600 px-4 py-2 text-sm font-medium disabled:opacity-60"
+          >
+            {busy ? "Saving…" : "Continue"}
+          </button>
+        </div>
       </div>
     </form>
   );

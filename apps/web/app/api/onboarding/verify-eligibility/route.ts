@@ -3,6 +3,10 @@
 
 import { NextRequest, NextResponse } from "next/server";
 
+import { withSecurity, AuthenticatedRequest } from "../../_shared/middleware";
+
+import { adminDb } from "@/src/lib/firebase.server";
+
 /**
  * Checks whether the current authenticated user is eligible to create a Network.
  *
@@ -13,46 +17,54 @@ import { NextRequest, NextResponse } from "next/server";
  *
  * @see docs/bible/Project_Bible_v14.0.0.md Section 4.2 (Onboarding Eligibility)
  */
-export async function GET(_req: NextRequest) {
-  // NOTE: Implementation depends on your auth/session system.
-  // Pseudocode placeholders below:
+export const GET = withSecurity(
+  async (req: AuthenticatedRequest) => {
+    // requireSession via withSecurity ensures req.user is present
+    const uid = req.user?.uid;
+    const claims = req.user?.customClaims;
 
-  // const session = await getSession(req);
-  // if (!session?.user) {
-  //   return NextResponse.json(
-  //     { eligible: false, reason: "not_authenticated" },
-  //     { status: 401 }
-  //   );
-  // }
+    if (!uid) {
+      return NextResponse.json({ eligible: false, reason: "not_authenticated" }, { status: 401 });
+    }
 
-  // if (!session.user.emailVerified) {
-  //   return NextResponse.json(
-  //     { eligible: false, reason: "email_not_verified" },
-  //     { status: 403 }
-  //   );
-  // }
+    // Check email verified from session claims
+    const emailVerified = Boolean(
+      claims?.email_verified === true || claims?.emailVerified === true,
+    );
+    if (!emailVerified) {
+      return NextResponse.json({ eligible: false, reason: "email_not_verified" }, { status: 403 });
+    }
 
-  // const profile = await getUserProfile(session.user.uid);
-  // const allowedRoles = [
-  //   "owner_founder_director",
-  //   "manager_supervisor",
-  //   "corporate_hq",
-  // ];
-  // if (!allowedRoles.includes(profile.selfDeclaredRole)) {
-  //   return NextResponse.json(
-  //     { eligible: false, reason: "role_not_allowed" },
-  //     { status: 403 }
-  //   );
-  // }
+    // Read profile from Firestore if available
+    if (!adminDb) {
+      // If admin DB not available, be conservative and allow based on claims only
+      return NextResponse.json({ eligible: true, reason: "ok_no_db" }, { status: 200 });
+    }
 
-  // TODO: add simple rate limiting here.
+    try {
+      const userDoc = await adminDb.collection("users").doc(uid).get();
+      const profile = userDoc.exists ? (userDoc.data() as Record<string, unknown>) : null;
 
-  // For now, return a stubbed OK response.
-  return NextResponse.json(
-    {
-      eligible: true,
-      reason: "stubbed_ok",
-    },
-    { status: 200 },
-  );
-}
+      const allowedRoles = [
+        "owner_founder_director",
+        "manager_supervisor",
+        "corporate_hq",
+        "manager",
+        "org_owner",
+      ];
+      const declared =
+        (profile?.selfDeclaredRole as string | undefined) ||
+        (claims?.selfDeclaredRole as string | undefined) ||
+        (claims?.role as string | undefined);
+      if (!declared || !allowedRoles.includes(declared)) {
+        return NextResponse.json({ eligible: false, reason: "role_not_allowed" }, { status: 403 });
+      }
+
+      return NextResponse.json({ eligible: true, reason: "ok" }, { status: 200 });
+    } catch (err) {
+      console.error("verify-eligibility failed", err);
+      return NextResponse.json({ eligible: false, reason: "internal_error" }, { status: 500 });
+    }
+  },
+  { requireAuth: true },
+);

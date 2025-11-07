@@ -1,3 +1,5 @@
+// [P2][APP][CODE] Page page component
+// Tags: P2, APP, CODE
 "use client";
 import React, { useState, useEffect } from "react";
 
@@ -45,26 +47,42 @@ export default function CreateNetworkOrg() {
       <form onSubmit={submit} className="space-y-4">
         <div>
           <label className="block text-sm text-neutral-300">Organization name</label>
-          <input value={orgName} onChange={(e) => setOrgName(e.target.value)} className="mt-1 w-full rounded bg-neutral-900 px-3 py-2 text-white" />
+          <input
+            value={orgName}
+            onChange={(e) => setOrgName(e.target.value)}
+            className="mt-1 w-full rounded bg-neutral-900 px-3 py-2 text-white"
+          />
         </div>
 
         <div>
           <label className="block text-sm text-neutral-300">Initial venue name</label>
-          <input value={venueName} onChange={(e) => setVenueName(e.target.value)} className="mt-1 w-full rounded bg-neutral-900 px-3 py-2 text-white" />
+          <input
+            value={venueName}
+            onChange={(e) => setVenueName(e.target.value)}
+            className="mt-1 w-full rounded bg-neutral-900 px-3 py-2 text-white"
+          />
         </div>
 
         <div>
           <label className="block text-sm text-neutral-300">Form token</label>
-          <input value={formToken ?? ""} onChange={(e) => setFormToken(e.target.value)} className="mt-1 w-full rounded bg-neutral-900 px-3 py-2 text-white" />
+          <input
+            value={formToken ?? ""}
+            onChange={(e) => setFormToken(e.target.value)}
+            className="mt-1 w-full rounded bg-neutral-900 px-3 py-2 text-white"
+          />
         </div>
 
         <div className="flex justify-end">
-          <button className="rounded bg-emerald-600 px-4 py-2 text-sm font-medium">{loading ? "Creating…" : "Create network"}</button>
+          <button className="rounded bg-emerald-600 px-4 py-2 text-sm font-medium">
+            {loading ? "Creating…" : "Create network"}
+          </button>
         </div>
       </form>
 
       {result && (
-        <pre className="mt-4 overflow-auto rounded bg-neutral-900 p-3 text-sm">{JSON.stringify(result, null, 2)}</pre>
+        <pre className="mt-4 overflow-auto rounded bg-neutral-900 p-3 text-sm">
+          {JSON.stringify(result, null, 2)}
+        </pre>
       )}
     </div>
   );

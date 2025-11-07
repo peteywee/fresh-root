@@ -1,3 +1,5 @@
+// [P2][APP][CODE] Page page component
+// Tags: P2, APP, CODE
 "use client";
 import React, { useState } from "react";
 
@@ -38,11 +40,17 @@ export default function JoinStep() {
         </div>
 
         <div className="flex justify-end">
-          <button className="rounded bg-emerald-600 px-4 py-2 text-sm font-medium">{loading ? "Joining…" : "Join"}</button>
+          <button className="rounded bg-emerald-600 px-4 py-2 text-sm font-medium">
+            {loading ? "Joining…" : "Join"}
+          </button>
         </div>
       </form>
 
-      {result && <pre className="mt-4 rounded bg-neutral-900 p-3 text-sm">{JSON.stringify(result, null, 2)}</pre>}
+      {result && (
+        <pre className="mt-4 rounded bg-neutral-900 p-3 text-sm">
+          {JSON.stringify(result, null, 2)}
+        </pre>
+      )}
     </div>
   );
 }

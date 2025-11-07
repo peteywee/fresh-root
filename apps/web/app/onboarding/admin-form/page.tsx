@@ -1,3 +1,5 @@
+// [P0][FIREBASE][CODE] Page page component
+// Tags: P0, FIREBASE, CODE
 "use client";
 import React, { useState, useEffect } from "react";
 
@@ -29,7 +31,11 @@ export default function AdminFormStep() {
       const res = await fetch("/api/onboarding/admin-form", {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ legalEntityName: company, taxIdNumber: taxId, businessEmail: email }),
+        body: JSON.stringify({
+          legalEntityName: company,
+          taxIdNumber: taxId,
+          businessEmail: email,
+        }),
       });
       const json = await res.json();
       if (!res.ok) {
@@ -80,10 +86,7 @@ export default function AdminFormStep() {
         </div>
 
         <div className="flex items-center justify-end gap-3">
-          <a
-            className="text-sm text-neutral-400 hover:underline"
-            href="/onboarding/intent"
-          >
+          <a className="text-sm text-neutral-400 hover:underline" href="/onboarding/intent">
             Back
           </a>
           <button
