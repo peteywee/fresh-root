@@ -3,17 +3,7 @@
 module.exports = {
   testEnvironment: "node",
   // Explicit list to avoid picking up a broken intermediate file during edits
-  testMatch: [
-    "**/tests/rules/firestore.spec.ts",
-    "**/tests/rules/memberships.spec.ts",
-    "**/tests/rules/messages_receipts.spec.ts",
-    "**/tests/rules/mfa.spec.ts",
-    "**/tests/rules/organizations.spec.ts",
-    "**/tests/rules/positions.spec.ts",
-    "**/tests/rules/schedules.spec.ts",
-    "**/tests/rules/shifts.spec.ts",
-    "**/tests/rules/storage.fixed.spec.ts",
-  ],
+  testMatch: ["**/tests/rules/**/*.spec.ts", "**/tests/rules/**/*.spec.mts"],
   transform: {
     "^.+\\.ts$": ["ts-jest", { tsconfig: "tsconfig.json", diagnostics: true }],
   },

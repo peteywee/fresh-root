@@ -51,3 +51,45 @@ export const OrganizationCreateSchema = z.object({
   description: z.string().max(500).optional(),
   settings: z.record(z.unknown()).optional(),
 });
+
+// Schedule schemas
+export const UpdateScheduleSchema = z.object({
+  name: z.string().min(1).max(100).optional(),
+  description: z.string().max(500).optional(),
+  startDate: z.string().datetime().optional(),
+  endDate: z.string().datetime().optional(),
+  status: z.enum(["draft", "published", "archived"]).optional(),
+});
+
+// Shift schemas
+export const ShiftStatus = z.enum(["draft", "published", "in_progress", "completed", "cancelled"]);
+
+export const CreateShiftSchema = z
+  .object({
+    orgId: z.string().min(1, "Organization ID is required"),
+    scheduleId: z.string().min(1, "Schedule ID is required"),
+    positionId: z.string().min(1, "Position ID is required"),
+    venueId: z.string().optional(),
+    zoneId: z.string().optional(),
+    startTime: z.number().int().positive(),
+    endTime: z.number().int().positive(),
+    requiredStaff: z.number().int().positive().default(1),
+    notes: z.string().max(1000).optional(),
+    breakMinutes: z.number().int().nonnegative().optional(),
+  })
+  .refine((data) => data.endTime > data.startTime, {
+    message: "End time must be after start time",
+    path: ["endTime"],
+  });
+
+export const UpdateShiftSchema = z.object({
+  positionId: z.string().min(1).optional(),
+  venueId: z.string().optional(),
+  zoneId: z.string().optional(),
+  startTime: z.number().int().positive().optional(),
+  endTime: z.number().int().positive().optional(),
+  status: ShiftStatus.optional(),
+  requiredStaff: z.number().int().positive().optional(),
+  notes: z.string().max(1000).optional(),
+  breakMinutes: z.number().int().nonnegative().optional(),
+});

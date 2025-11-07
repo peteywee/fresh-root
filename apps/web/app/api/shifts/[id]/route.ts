@@ -1,13 +1,12 @@
 //[P1][API][CODE] Shifts [id] API route handler
 // Tags: P1, API, CODE, validation, zod
 
-import { UpdateShiftSchema } from "@fresh-schedules/types";
 import { NextRequest, NextResponse } from "next/server";
 
 import { requireOrgMembership, requireRole } from "../../../../src/lib/api";
 import { sanitizeObject } from "../../../../src/lib/api/sanitize";
 import { withSecurity } from "../../_shared/middleware";
-import { badRequest, serverError } from "../../_shared/validation";
+import { badRequest, serverError, UpdateShiftSchema } from "../../_shared/validation";
 
 // Rate limiting via withSecurity options
 

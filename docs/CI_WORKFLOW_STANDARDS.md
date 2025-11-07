@@ -291,7 +291,7 @@ jobs:
 
 ---
 
-## Questions or Exceptions?
+## Questions or Exceptions
 
 If a workflow requires deviation from this standard (e.g., specialized deployment workflows, external integrations), document the reasoning in a comment at the top of the workflow file and link to this guide.
 
