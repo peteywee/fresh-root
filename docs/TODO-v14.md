@@ -25,7 +25,7 @@
 - [x] **[META-01]** Create a v14 TODO file
   - ✅ Create `docs/TODO-v14.md` (this file) _(completed Nov 7, 2025)_
   - ✅ Add header: "Project Bible v14.0.0 – Tenancy & Onboarding Implementation"
-  - ✅ Add note: "All [TEN-*] and [ONB-*] tasks are P0/P1 for enabling Block 4"
+  - ✅ Add note: "All [TEN-_] and [ONB-_] tasks are P0/P1 for enabling Block 4"
 
 - [x] **[META-02]** Document specification gaps
   - ✅ Create `docs/bible/GAPS_v14.0.0.md` _(completed Nov 7, 2025)_

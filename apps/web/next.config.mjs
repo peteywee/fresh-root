@@ -29,6 +29,7 @@ const nextConfig = {
   reactStrictMode: true,
   compress: true,
   productionBrowserSourceMaps: false,
+  typedRoutes: true,
   images: {
     formats: ["image/avif", "image/webp"],
     remotePatterns: [
@@ -49,12 +50,10 @@ const nextConfig = {
     },
   },
   experimental: {
-    typedRoutes: true,
     optimizePackageImports: ["react", "react-dom"],
     serverActions: { bodySizeLimit: "1mb" },
   },
   headers: async () => [{ source: "/(.*)", headers: securityHeaders }],
-  eslint: { ignoreDuringBuilds: false },
   compiler: {
     removeConsole: process.env.NODE_ENV === "production" ? { exclude: ["error", "warn"] } : false,
   },

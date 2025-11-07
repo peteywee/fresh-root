@@ -42,39 +42,39 @@ All collections under `/networks/{networkId}` enforce tenant isolation.
 
 ### Primary Entities
 
-| Entity               | Path                                              | Owner              | Used By      | Status         |
-| -------------------- | ------------------------------------------------- | ------------------ | ------------ | -------------- |
-| **Network**          | `/networks/{networkId}`                           | Platform (backend) | All blocks   | ✅ Specified   |
-| **Corporate**        | `/networks/{networkId}/corporates/{corpId}`       | Backend            | Block 4+     | ✅ Specified   |
-| **Organization**     | `/networks/{networkId}/orgs/{orgId}`              | Backend            | Block 4+     | ✅ Specified   |
-| **Venue**            | `/networks/{networkId}/venues/{venueId}`          | Backend            | Block 4+     | ✅ Specified   |
-| **User (Network)**   | `/networks/{networkId}/users/{uid}`               | User + Backend     | Block 4+     | ✅ Specified   |
-| **Membership**       | `/networks/{networkId}/memberships/{membershipId}` | Backend            | All blocks   | ✅ Specified   |
+| Entity             | Path                                               | Owner              | Used By    | Status       |
+| ------------------ | -------------------------------------------------- | ------------------ | ---------- | ------------ |
+| **Network**        | `/networks/{networkId}`                            | Platform (backend) | All blocks | ✅ Specified |
+| **Corporate**      | `/networks/{networkId}/corporates/{corpId}`        | Backend            | Block 4+   | ✅ Specified |
+| **Organization**   | `/networks/{networkId}/orgs/{orgId}`               | Backend            | Block 4+   | ✅ Specified |
+| **Venue**          | `/networks/{networkId}/venues/{venueId}`           | Backend            | Block 4+   | ✅ Specified |
+| **User (Network)** | `/networks/{networkId}/users/{uid}`                | User + Backend     | Block 4+   | ✅ Specified |
+| **Membership**     | `/networks/{networkId}/memberships/{membershipId}` | Backend            | All blocks | ✅ Specified |
 
 ### Link Collections
 
-| Link Type               | Path                                                             | Purpose                         | Status       |
-| ----------------------- | ---------------------------------------------------------------- | ------------------------------- | ------------ |
-| **CorpOrgLink**         | `/networks/{networkId}/links/corpOrgLinks/{linkId}`              | Corporate ↔ Org relationship    | ✅ Specified |
-| **OrgVenueAssignment**  | `/networks/{networkId}/links/orgVenueAssignments/{assignmentId}` | Org ↔ Venue operating assignment | ✅ Specified |
+| Link Type              | Path                                                             | Purpose                           | Status       |
+| ---------------------- | ---------------------------------------------------------------- | --------------------------------- | ------------ |
+| **CorpOrgLink**        | `/networks/{networkId}/links/corpOrgLinks/{linkId}`              | Corporate ↔ Org relationship     | ✅ Specified |
+| **OrgVenueAssignment** | `/networks/{networkId}/links/orgVenueAssignments/{assignmentId}` | Org ↔ Venue operating assignment | ✅ Specified |
 
 ### Compliance & Sensitive Data
 
-| Entity                        | Path                                                       | Access             | Status       |
-| ----------------------------- | ---------------------------------------------------------- | ------------------ | ------------ |
+| Entity                        | Path                                                       | Access              | Status       |
+| ----------------------------- | ---------------------------------------------------------- | ------------------- | ------------ |
 | **Admin Responsibility Form** | `/networks/{networkId}/compliance/adminResponsibilityForm` | Owner + super-admin | ✅ Specified |
-| **Tax ID Data**               | (embedded in AdminResponsibilityForm)                      | Encrypted at rest  | ✅ Specified |
+| **Tax ID Data**               | (embedded in AdminResponsibilityForm)                      | Encrypted at rest   | ✅ Specified |
 
 ### Operational Data (Block 3+)
 
-| Entity          | Path                                                | Owner          | Used By    | Status              |
-| --------------- | --------------------------------------------------- | -------------- | ---------- | ------------------- |
-| **Schedule**    | `/networks/{networkId}/schedules/{scheduleId}`      | Org/Manager    | Block 3, 4 | 🟡 Migration needed |
-| **Shift**       | `/networks/{networkId}/shifts/{shiftId}`            | Org/Manager    | Block 3, 4 | 🟡 Migration needed |
-| **Event**       | `/networks/{networkId}/events/{eventId}`            | Org/Manager    | Block 4+   | 🟡 Migration needed |
-| **Attendance**  | `/networks/{networkId}/attendance/{attendanceId}`   | Staff + Manager | Block 6+   | 🟡 Migration needed |
-| **Position**    | `/networks/{networkId}/positions/{positionId}`      | Org/Manager    | Block 3, 4 | 🟡 Migration needed |
-| **Zone**        | `/networks/{networkId}/zones/{zoneId}`              | Venue/Manager  | Block 4+   | 🟡 Migration needed |
+| Entity         | Path                                              | Owner           | Used By    | Status              |
+| -------------- | ------------------------------------------------- | --------------- | ---------- | ------------------- |
+| **Schedule**   | `/networks/{networkId}/schedules/{scheduleId}`    | Org/Manager     | Block 3, 4 | 🟡 Migration needed |
+| **Shift**      | `/networks/{networkId}/shifts/{shiftId}`          | Org/Manager     | Block 3, 4 | 🟡 Migration needed |
+| **Event**      | `/networks/{networkId}/events/{eventId}`          | Org/Manager     | Block 4+   | 🟡 Migration needed |
+| **Attendance** | `/networks/{networkId}/attendance/{attendanceId}` | Staff + Manager | Block 6+   | 🟡 Migration needed |
+| **Position**   | `/networks/{networkId}/positions/{positionId}`    | Org/Manager     | Block 3, 4 | 🟡 Migration needed |
+| **Zone**       | `/networks/{networkId}/zones/{zoneId}`            | Venue/Manager   | Block 4+   | 🟡 Migration needed |
 
 ---
 
@@ -88,8 +88,22 @@ All collections under `/networks/{networkId}` enforce tenant isolation.
 
 ```typescript
 type NetworkStatus = "pending_verification" | "active" | "suspended" | "closed";
-type NetworkKind = "independent_org" | "corporate_network" | "franchise_network" | "nonprofit_network" | "test_sandbox";
-type NetworkSegment = "restaurant" | "qsr" | "bar" | "hotel" | "nonprofit" | "shelter" | "church" | "retail" | "other";
+type NetworkKind =
+  | "independent_org"
+  | "corporate_network"
+  | "franchise_network"
+  | "nonprofit_network"
+  | "test_sandbox";
+type NetworkSegment =
+  | "restaurant"
+  | "qsr"
+  | "bar"
+  | "hotel"
+  | "nonprofit"
+  | "shelter"
+  | "church"
+  | "retail"
+  | "other";
 type NetworkPlan = "free" | "starter" | "growth" | "enterprise" | "internal";
 type BillingMode = "none" | "card" | "invoice" | "partner_billed";
 

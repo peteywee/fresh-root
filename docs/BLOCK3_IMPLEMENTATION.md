@@ -327,6 +327,6 @@ For more detailed, per-collection behavior, see `docs/schema-map.md` and the inl
 
 ---
 
-**Created:** Block 3 Implementation  
-**Last Updated:** 2025-11-07  
+**Created:** Block 3 Implementation
+**Last Updated:** 2025-11-07
 **Status:** 100% Complete (7/7 core tasks done)

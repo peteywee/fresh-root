@@ -316,16 +316,16 @@ Block 4 is considered **complete** when:
 
 ## Timeline (Estimate)
 
-| Week | Focus Area                              | Deliverables                                       |
-| ---- | --------------------------------------- | -------------------------------------------------- |
-| 1    | Network schemas & types                 | `networks.ts`, `corporates.ts`, `orgs.ts`, `venues.ts` |
+| Week | Focus Area                               | Deliverables                                                       |
+| ---- | ---------------------------------------- | ------------------------------------------------------------------ |
+| 1    | Network schemas & types                  | `networks.ts`, `corporates.ts`, `orgs.ts`, `venues.ts`             |
 | 2    | Onboarding API (eligibility, admin form) | `/api/onboarding/verify-eligibility`, `/api/onboarding/admin-form` |
-| 3    | Network creation APIs                   | `/api/onboarding/create-network-org`, corporate variant |
-| 4    | Onboarding UI (profile, intent, forms)  | UI routes and components for wizard               |
-| 5    | Schedule builder API                    | CRUD endpoints for schedules and shifts           |
-| 6    | Schedule builder UI (week view)         | Grid component, shift cards                       |
-| 7    | Labor management                        | Budget API, labor totals, validation warnings     |
-| 8    | Testing & polish                        | E2E tests, API tests, bug fixes                   |
+| 3    | Network creation APIs                    | `/api/onboarding/create-network-org`, corporate variant            |
+| 4    | Onboarding UI (profile, intent, forms)   | UI routes and components for wizard                                |
+| 5    | Schedule builder API                     | CRUD endpoints for schedules and shifts                            |
+| 6    | Schedule builder UI (week view)          | Grid component, shift cards                                        |
+| 7    | Labor management                         | Budget API, labor totals, validation warnings                      |
+| 8    | Testing & polish                         | E2E tests, API tests, bug fixes                                    |
 
 **Total Estimated Duration:** 8 weeks (adjustable based on team size and velocity)
 
