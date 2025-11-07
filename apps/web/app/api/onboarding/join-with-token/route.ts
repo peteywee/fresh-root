@@ -24,7 +24,10 @@ export const POST = withSecurity(
 
     // Dev fallback
     if (!adminDb) {
-      return NextResponse.json({ ok: true, membershipId: "stub-membership-id", networkId: "stub-network-id" }, { status: 200 });
+      return NextResponse.json(
+        { ok: true, membershipId: "stub-membership-id", networkId: "stub-network-id" },
+        { status: 200 },
+      );
     }
 
     const adb = adminDb;
@@ -32,7 +35,8 @@ export const POST = withSecurity(
     try {
       const tokensRoot = adb.collection("joinTokens");
       const tokenSnap = await tokensRoot.doc(String(joinToken)).get();
-      if (!tokenSnap.exists) return NextResponse.json({ error: "token_not_found" }, { status: 404 });
+      if (!tokenSnap.exists)
+        return NextResponse.json({ error: "token_not_found" }, { status: 404 });
 
       const tokenData = tokenSnap.data() as Record<string, unknown>;
       const networkId = String(tokenData.networkId || "");
@@ -56,7 +60,10 @@ export const POST = withSecurity(
         }
       });
 
-      return NextResponse.json({ ok: true, membershipId: membershipRef.id, networkId }, { status: 200 });
+      return NextResponse.json(
+        { ok: true, membershipId: membershipRef.id, networkId },
+        { status: 200 },
+      );
     } catch (err) {
       console.error("join-with-token failed", err);
       return NextResponse.json({ error: "internal_error" }, { status: 500 });
