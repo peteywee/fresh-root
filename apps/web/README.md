@@ -1,6 +1,13 @@
 # Fresh Schedules Web App
 
-The main web application for Fresh Schedules, built with Next.js 16 and React 18.
+**Version:** 1.1.0 | **Status:** ✅ Production Ready
+
+The main web application for Fresh Schedules, built with Next.js 15 and React 18.
+
+> **🎉 v1.1.0 – Blocks 1 to 3 Complete**
+>
+> This app includes Security Core (Block 1), Reliability Core (Block 2), and Integrity Core (Block 3).
+> See the [root README](../../README.md) for full project documentation and milestone details.
 
 ## Architecture: Server-First
 
@@ -27,18 +34,20 @@ This application follows a **server-first architecture**:
 
 ## Tech Stack
 
-- **Framework**: Next.js 16 (App Router)
+- **Framework**: Next.js 15 (App Router)
 - **React**: 18.3.1
-- **Language**: TypeScript
+- **Language**: TypeScript (strict mode, zero `any` types)
 - **Styling**: Tailwind CSS
+- **Validation**: Zod schemas (shared from `@fresh-schedules/types`)
 - **State Management**: Zustand
 - **Data Fetching**: React Query (TanStack Query)
 - **Forms**: HTML5 with custom components
-- **Authentication**: Firebase Auth
-- **Database**: Cloud Firestore
+- **Authentication**: Firebase Auth (session-based with MFA)
+- **Database**: Cloud Firestore (RBAC rules enforced)
 - **Storage**: Cloud Storage
-- **Testing**: Vitest + Testing Library
-- **Linting**: ESLint
+- **Observability**: Winston logging, Sentry, OpenTelemetry
+- **Testing**: Vitest + Testing Library, Playwright (E2E)
+- **Linting**: ESLint with auto-fix
 
 ## Project Structure
 

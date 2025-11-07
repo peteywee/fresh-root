@@ -50,19 +50,19 @@ Built with Next.js, Firebase, and a monorepo architecture.
 
 ## 📚 Documentation
 
-| Resource                                                                     | Description                                                  |
-| ---------------------------------------------------------------------------- | ------------------------------------------------------------ |
-| 📖 **[Complete Technical Docs](./docs/COMPLETE_TECHNICAL_DOCUMENTATION.md)** | Architecture, setup, troubleshooting                         |
-| 🏗️ **[Architecture Diagrams](./docs/ARCHITECTURE_DIAGRAMS.md)**              | System diagrams (data flow, CI/CD, auth)                     |
-| 🔒 **[Security Documentation](./docs/security.md)**                          | Security architecture, MFA, session management               |
-| 📊 **[SLO Summary](./docs/BLOCK1_SLO_SUMMARY.md)**                           | Service Level Objectives for Blocks 1–2                      |
-| 📈 **[Progress Tracking](./docs/BLOCK1_BLOCK2_PROGRESS.md)**                 | Detailed Block 1–2 implementation status                     |
-| 🧩 **[Block 3 Implementation](./docs/BLOCK3_IMPLEMENTATION.md)**             | Integrity Core summary and rules matrix                      |
-| 🤖 **[CI Workflow Standards](./docs/CI_WORKFLOW_STANDARDS.md)**              | Canonical workflow template and quality gates                |
-| 📏 **[Repo Standards](./docs/REPO_STANDARDS.md)**                            | Required tooling, versions, and policies                     |
-| 🧰 **[Runbooks](./docs/runbooks/)**                                          | Operations guides (logging, backups, uptime)                 |
-| ⚙️ **[Setup Guide](./docs/SETUP.md)**                                        | Step-by-step local setup                                     |
-| 📦 **[Service Worker & PWA](./apps/web/docs/SERVICE_WORKER.md)**             | PWA/service worker notes for the app                         |
+| Resource                                                                     | Description                                    |
+| ---------------------------------------------------------------------------- | ---------------------------------------------- |
+| 📖 **[Complete Technical Docs](./docs/COMPLETE_TECHNICAL_DOCUMENTATION.md)** | Architecture, setup, troubleshooting           |
+| 🏗️ **[Architecture Diagrams](./docs/ARCHITECTURE_DIAGRAMS.md)**              | System diagrams (data flow, CI/CD, auth)       |
+| 🔒 **[Security Documentation](./docs/security.md)**                          | Security architecture, MFA, session management |
+| 📊 **[SLO Summary](./docs/BLOCK1_SLO_SUMMARY.md)**                           | Service Level Objectives for Blocks 1–2        |
+| 📈 **[Progress Tracking](./docs/BLOCK1_BLOCK2_PROGRESS.md)**                 | Detailed Block 1–2 implementation status       |
+| 🧩 **[Block 3 Implementation](./docs/BLOCK3_IMPLEMENTATION.md)**             | Integrity Core summary and rules matrix        |
+| 🤖 **[CI Workflow Standards](./docs/CI_WORKFLOW_STANDARDS.md)**              | Canonical workflow template and quality gates  |
+| 📏 **[Repo Standards](./docs/REPO_STANDARDS.md)**                            | Required tooling, versions, and policies       |
+| 🧰 **[Runbooks](./docs/runbooks/)**                                          | Operations guides (logging, backups, uptime)   |
+| ⚙️ **[Setup Guide](./docs/SETUP.md)**                                        | Step-by-step local setup                       |
+| 📦 **[Service Worker & PWA](./apps/web/docs/SERVICE_WORKER.md)**             | PWA/service worker notes for the app           |
 
 ## 🏗️ Project Structure
 

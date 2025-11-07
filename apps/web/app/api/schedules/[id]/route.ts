@@ -1,13 +1,12 @@
 //[P1][API][CODE] Schedules [id] API route handler
 // Tags: P1, API, CODE, validation, zod
 
-import { UpdateScheduleSchema } from "@fresh-schedules/types";
 import { NextRequest, NextResponse } from "next/server";
 
 import { requireOrgMembership, requireRole } from "../../../../src/lib/api/authorization";
 import { sanitizeObject } from "../../../../src/lib/api/sanitize";
 import { withSecurity } from "../../_shared/middleware";
-import { serverError } from "../../_shared/validation";
+import { serverError, UpdateScheduleSchema } from "../../_shared/validation";
 
 /**
  * GET /api/schedules/[id]
