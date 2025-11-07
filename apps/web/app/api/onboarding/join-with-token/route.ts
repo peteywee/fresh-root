@@ -22,7 +22,13 @@ export const POST = withSecurity(
     // Local/dev fallback
     if (!adminDb) {
       return NextResponse.json(
-        { ok: true, joined: true, networkId: "stub-network-id", orgId: "stub-org-id", venueId: "stub-venue-id" },
+        {
+          ok: true,
+          joined: true,
+          networkId: "stub-network-id",
+          orgId: "stub-org-id",
+          venueId: "stub-venue-id",
+        },
         { status: 200 },
       );
     }
@@ -31,7 +37,11 @@ export const POST = withSecurity(
 
     try {
       // Search for a matching join token in any join-tokens collection (collection group)
-      const snaps = await adb.collectionGroup("join-tokens").where("token", "==", String(token)).limit(1).get();
+      const snaps = await adb
+        .collectionGroup("join-tokens")
+        .where("token", "==", String(token))
+        .limit(1)
+        .get();
       if (snaps.empty) {
         return NextResponse.json({ error: "token_not_found" }, { status: 404 });
       }
