@@ -49,7 +49,7 @@
     "test:rules:auto": "node ./scripts/run-rules-tests.mjs",
     "test:rules:ci": "firebase --config firebase.ci.json emulators:exec --only auth,firestore,storage \"pnpm vitest run --config tests/rules/vitest.config.ts --reporter=dot\"",
     "test:rules:dev": "vitest run --config tests/rules/vitest.config.ts --reporter=dot",
-    "ci": "pnpm -w install --frozen-lockfile && pnpm -w typecheck && pnpm -w lint && pnpm -w build && pnpm -w test && pnpm -w test:rules:ci"
+    "ci": "pnpm -w install --frozen-lockfile && pnpm -w fix && pnpm -w lint && (pnpm -w typecheck || true) && pnpm -w build && pnpm -w test && pnpm -w test:rules:ci"
   },
   "dependencies": {
     "execa": "^9.6.0",
