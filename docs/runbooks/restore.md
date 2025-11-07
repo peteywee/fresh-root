@@ -4,8 +4,9 @@ Tags: P1, RELIABILITY, RESTORE, FIRESTORE, BACKUP, RUNBOOK
 
 ## Overview
 
-This runbook covers restoring Firestore data from automated backups. Use this when data corruption,
-accidental deletion, or other data loss incidents occur.
+This runbook covers restoring Firestore data from automated backups. Use this
+runbook when data corruption, accidental deletion, or other data loss incidents
+occur.
 
 ## Prerequisites
 
@@ -98,5 +99,5 @@ If restore causes issues:
 ## Related Documents
 
 - Backup script: `scripts/ops/backup-firestore.sh`
-- Monitoring: [Observability Runbook]
-- Incident response: [Incident Response Plan]
+- Monitoring: Observability Runbook
+- Incident response: Incident Response Plan
