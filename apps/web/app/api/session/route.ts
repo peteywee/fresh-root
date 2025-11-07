@@ -42,11 +42,8 @@ export async function POST(req: NextRequest) {
     return response;
   } catch (error) {
     console.error("Session creation error:", error);
-    return serverError(
-      error instanceof Error ? error.message : "Invalid token or internal error",
-      undefined,
-      "UNAUTHORIZED",
-    );
+    // Return a generic message to avoid leaking internal error details
+    return serverError("Invalid token or internal error", undefined, "UNAUTHORIZED");
   }
 }
 
