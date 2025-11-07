@@ -28,7 +28,6 @@
     "types": ["node"],
     "baseUrl": ".",
     "paths": {
-      "@/*": ["apps/web/app/*"],
       "@types/*": ["packages/types/src/*"],
       "@ui/*": ["packages/ui/src/*"],
       "@config/*": ["packages/config/src/*"]
