@@ -35,6 +35,7 @@ This Bible version is designed to be **forward-compatible** with existing code a
   - Sketches the **path through Block 4 and beyond**.
 
 The intention is:
+
 > **This document is the "single source of truth" for what must be true before we treat Fresh Schedules as a production product for real organizations.**
 
 ---
@@ -213,11 +214,7 @@ Represents the **business tenant**. All data contained in a Network belongs to a
 **Fields (non-exhaustive but canonical):**
 
 ```typescript
-type NetworkStatus =
-  | "pending_verification"
-  | "active"
-  | "suspended"
-  | "closed";
+type NetworkStatus = "pending_verification" | "active" | "suspended" | "closed";
 
 type NetworkKind =
   | "independent_org"
@@ -237,42 +234,33 @@ type NetworkSegment =
   | "retail"
   | "other";
 
-type NetworkPlan =
-  | "free"
-  | "starter"
-  | "growth"
-  | "enterprise"
-  | "internal";
+type NetworkPlan = "free" | "starter" | "growth" | "enterprise" | "internal";
 
-type BillingMode =
-  | "none"
-  | "card"
-  | "invoice"
-  | "partner_billed";
+type BillingMode = "none" | "card" | "invoice" | "partner_billed";
 ```
 
 Example schema (conceptual):
 
 ```typescript
 interface Network {
-  id: string;                  // Firestore doc ID (networkId)
-  slug: string;                // URL-safe unique string: "top-shelf-service"
-  displayName: string;         // Human-readable: "Top Shelf Service Network"
-  legalName?: string;          // Legal entity, if different
+  id: string; // Firestore doc ID (networkId)
+  slug: string; // URL-safe unique string: "top-shelf-service"
+  displayName: string; // Human-readable: "Top Shelf Service Network"
+  legalName?: string; // Legal entity, if different
 
-  kind: NetworkKind;           // see above
-  segment: NetworkSegment;     // vertical
-  status: NetworkStatus;       // lifecycle status
+  kind: NetworkKind; // see above
+  segment: NetworkSegment; // vertical
+  status: NetworkStatus; // lifecycle status
 
   environment: "production" | "staging" | "sandbox" | "demo";
   primaryRegion: "US" | "CA" | "EU" | "LATAM" | "APAC" | "OTHER";
-  timeZone: string;            // IANA TZ, e.g. "America/Chicago"
-  currency: string;            // ISO code, e.g. "USD"
+  timeZone: string; // IANA TZ, e.g. "America/Chicago"
+  currency: string; // ISO code, e.g. "USD"
 
   plan: NetworkPlan;
   billingMode: BillingMode;
   billingProvider?: "stripe" | "paddle" | "manual" | "none";
-  billingCustomerId?: string;  // external id, e.g. Stripe customer
+  billingCustomerId?: string; // external id, e.g. Stripe customer
 
   maxVenues?: number | null;
   maxActiveOrgs?: number | null;
@@ -282,14 +270,14 @@ interface Network {
   // Security posture
   requireMfaForAdmins: boolean;
   ipAllowlistEnabled: boolean;
-  ipAllowlist?: string[];      // CIDRs
+  ipAllowlist?: string[]; // CIDRs
   allowedEmailDomains?: string[];
   dataResidency?: "us_only" | "eu_only" | "global" | "unspecified";
   gdprMode: boolean;
   piiMaskingMode: "none" | "mask_in_logs" | "mask_everywhere";
 
-  allowCrossOrgSharing: boolean;     // within this network
-  allowExternalCorpLinks: boolean;   // cross-network, future
+  allowCrossOrgSharing: boolean; // within this network
+  allowExternalCorpLinks: boolean; // cross-network, future
 
   // Scheduling defaults
   defaultWeekStartsOn: "monday" | "sunday";
@@ -311,9 +299,9 @@ interface Network {
   };
 
   // Ownership / relationship to the platform
-  ownerUserId: string;         // uid of person who created the network
-  ownerCorporateId?: string;   // if the entire network is under a meta-corporate
-  tags?: string[];             // arbitrary tags for ops for search/segmentation
+  ownerUserId: string; // uid of person who created the network
+  ownerCorporateId?: string; // if the entire network is under a meta-corporate
+  tags?: string[]; // arbitrary tags for ops for search/segmentation
 
   // Lifecycle timestamps
   createdAt: Timestamp;
@@ -328,13 +316,13 @@ interface Network {
 
   // Activation tracking (from GAP-2)
   activationBlockedBy?: string[]; // ["mfa_pending", "tax_id_pending", ...]
-  nextRetryAt?: Timestamp;        // when to re-check
+  nextRetryAt?: Timestamp; // when to re-check
 
   // Suspension tracking
   suspensionReason?: string;
   suspendedAt?: Timestamp;
   suspendedBy?: string;
-  mfaLostAt?: Timestamp;          // when admin MFA was detected as disabled
+  mfaLostAt?: Timestamp; // when admin MFA was detected as disabled
 }
 ```
 
@@ -366,15 +354,15 @@ networks/{networkId}/venues/{venueId}
 interface Corporate {
   id: string;
   networkId: string;
-  name: string;          // HQ or brand name
-  brandName?: string;    // public-facing brand
+  name: string; // HQ or brand name
+  brandName?: string; // public-facing brand
   websiteUrl?: string;
   contactEmail?: string;
   contactPhone?: string;
 
-  ownsLocations: boolean;         // does corp own any orgs directly?
-  worksWithFranchisees: boolean;  // does corp use independent orgs?
-  worksWithPartners: boolean;     // agencies, BPO, etc.
+  ownsLocations: boolean; // does corp own any orgs directly?
+  worksWithFranchisees: boolean; // does corp use independent orgs?
+  worksWithPartners: boolean; // agencies, BPO, etc.
 
   createdAt: Timestamp;
   createdBy: string;
@@ -444,11 +432,7 @@ networks/{networkId}/links/corpOrgLinks/{linkId}
 **Schema (conceptual):**
 
 ```typescript
-type CorpOrgRelationshipType =
-  | "owns"
-  | "serves"
-  | "partner"
-  | "none";
+type CorpOrgRelationshipType = "owns" | "serves" | "partner" | "none";
 
 type LinkStatus = "active" | "suspended" | "ended";
 
@@ -502,11 +486,11 @@ interface OrgVenueAssignment {
   // "archived": Moved to archive (older than retention window)
 
   // Temporal boundaries
-  startDate: Timestamp;     // Org begins operating venue
-  endDate?: Timestamp;      // Org stops operating venue (null = ongoing)
+  startDate: Timestamp; // Org begins operating venue
+  endDate?: Timestamp; // Org stops operating venue (null = ongoing)
 
   // Allowances
-  allowedRoles: string[];   // e.g., ["manager","scheduler","staff"]
+  allowedRoles: string[]; // e.g., ["manager","scheduler","staff"]
 
   createdAt: Timestamp;
   createdBy: string;
@@ -514,7 +498,7 @@ interface OrgVenueAssignment {
   updatedBy: string;
 
   // Audit trail
-  reason?: string;          // "contract_signed", "trial_ended", "requested_by_org", ...
+  reason?: string; // "contract_signed", "trial_ended", "requested_by_org", ...
   notes?: string;
 }
 ```
@@ -672,28 +656,28 @@ Data model:
 ```typescript
 interface AdminResponsibilityForm {
   networkId: string;
-  adminUid: string;            // The user creating the network
-  legalEntityName: string;     // Company or legal name
-  taxIdNumber: string;         // EIN, VAT or national/region equivalent
+  adminUid: string; // The user creating the network
+  legalEntityName: string; // Company or legal name
+  taxIdNumber: string; // EIN, VAT or national/region equivalent
   taxIdType: "ein" | "vat" | "ssn" | "other";
   businessEmail: string;
   businessPhone: string;
-  country: string;             // ISO country code, e.g. "US"
+  country: string; // ISO country code, e.g. "US"
 
   serviceStartTimestamp: Timestamp; // when they accepted terms
   adminSignature: {
     type: "typed" | "drawn" | "external_esign";
-    value: string;                // typed name or reference id
+    value: string; // typed name or reference id
   };
 
-  termsAcceptedVersion: string;   // e.g. "TOS-2025-01"
+  termsAcceptedVersion: string; // e.g. "TOS-2025-01"
   privacyAcceptedVersion: string; // e.g. "PRIVACY-2025-01"
   liabilityAcknowledged: boolean; // they accept that they are the controller
 
-  ipAddress: string;              // from request
-  userAgent: string;              // from request
+  ipAddress: string; // from request
+  userAgent: string; // from request
   createdAt: Timestamp;
-  createdBy: string;              // adminUid
+  createdBy: string; // adminUid
 }
 ```
 
@@ -1149,35 +1133,38 @@ Immediately after creation, a Cloud Function runs:
 
 ```typescript
 async function activateNetworkIfReady(networkId) {
-  const network = await db.collection('networks').doc(networkId).get();
+  const network = await db.collection("networks").doc(networkId).get();
   const adminUid = network.data().ownerUserId;
   const admin = await admin.auth().getUser(adminUid);
 
   const isReady =
-    network.data().adminResponsibilityForm.liabilityAcknowledged
-    && admin.customClaims?.mfa_enabled === true
-    && taxIdVerified(network)
-    && hasMinConfigVenue(network);
+    network.data().adminResponsibilityForm.liabilityAcknowledged &&
+    admin.customClaims?.mfa_enabled === true &&
+    taxIdVerified(network) &&
+    hasMinConfigVenue(network);
 
   if (isReady) {
-    await db.collection('networks').doc(networkId).update({
-      status: 'active',
+    await db.collection("networks").doc(networkId).update({
+      status: "active",
       activatedAt: Timestamp.now(),
-      activatedBy: 'system',
+      activatedBy: "system",
     });
-    sendEmail(admin.email, 'Network activated');
+    sendEmail(admin.email, "Network activated");
   } else {
     // Determine which gate failed and set a debug flag
     const blocks = [];
-    if (!admin.customClaims?.mfa_enabled) blocks.push('mfa_pending');
-    if (!taxIdVerified(network)) blocks.push('tax_id_pending');
-    if (!hasMinConfigVenue(network)) blocks.push('missing_venue');
+    if (!admin.customClaims?.mfa_enabled) blocks.push("mfa_pending");
+    if (!taxIdVerified(network)) blocks.push("tax_id_pending");
+    if (!hasMinConfigVenue(network)) blocks.push("missing_venue");
 
-    await db.collection('networks').doc(networkId).update({
-      status: 'pending_verification',
-      activationBlockedBy: blocks,
-      nextRetryAt: Timestamp.now() + Duration.minutes(5),
-    });
+    await db
+      .collection("networks")
+      .doc(networkId)
+      .update({
+        status: "pending_verification",
+        activationBlockedBy: blocks,
+        nextRetryAt: Timestamp.now() + Duration.minutes(5),
+      });
   }
 }
 ```
@@ -1185,17 +1172,17 @@ async function activateNetworkIfReady(networkId) {
 **Client-Side Messaging:**
 
 ```typescript
-if (network.status === 'pending_verification') {
+if (network.status === "pending_verification") {
   const blocks = network.activationBlockedBy || [];
 
-  if (blocks.includes('mfa_pending')) {
-    showAlert('Complete setup: Enable two-factor authentication in Security Settings');
+  if (blocks.includes("mfa_pending")) {
+    showAlert("Complete setup: Enable two-factor authentication in Security Settings");
   }
-  if (blocks.includes('tax_id_pending')) {
-    showAlert('Tax ID verification in progress (can take 24 hours)');
+  if (blocks.includes("tax_id_pending")) {
+    showAlert("Tax ID verification in progress (can take 24 hours)");
   }
-  if (blocks.includes('missing_venue')) {
-    showAlert('Add at least one venue to activate');
+  if (blocks.includes("missing_venue")) {
+    showAlert("Add at least one venue to activate");
   }
 }
 ```
@@ -1206,9 +1193,7 @@ if (network.status === 'pending_verification') {
 
 ```typescript
 async function checkNetworkMFACompliance() {
-  const activeNetworks = await db.collection('networks')
-    .where('status', '==', 'active')
-    .get();
+  const activeNetworks = await db.collection("networks").where("status", "==", "active").get();
 
   for (const networkDoc of activeNetworks.docs) {
     const adminUid = networkDoc.data().ownerUserId;
@@ -1217,10 +1202,10 @@ async function checkNetworkMFACompliance() {
     if (admin.customClaims?.mfa_enabled !== true) {
       // Admin disabled MFA
       await networkDoc.ref.update({
-        status: 'pending_review',
+        status: "pending_review",
         mfaLostAt: Timestamp.now(),
         requiresManualReview: true,
-        suspensionReason: 'Network admin MFA disabled',
+        suspensionReason: "Network admin MFA disabled",
       });
 
       await alertOps(`Network ${networkDoc.id} lost admin MFA`);
@@ -1541,16 +1526,16 @@ service cloud.firestore {
 
 ### 6.1 Block Status Table (Bible v14 View)
 
-| Block | Name                    | Scope                                               | Status (Spec v14)          | Code Tag |
-| ----- | ----------------------- | --------------------------------------------------- | -------------------------- | -------- |
-| 1     | Security Core           | Auth, sessions, 2FA, SLOs                           | ✅ Complete                | v1.1.0   |
-| 2     | Reliability Core        | Observability, backups, CI/CD, error budgets        | ✅ Complete                | v1.1.0   |
-| 3     | Integrity Core          | Zod schemas, API validation, Firestore rules        | ✅ Complete (see BLOCK3 docs) | v1.1.0   |
-| 4     | UX & Scheduling Core    | Onboarding wizard, schedule builder, labor UI       | 🟡 Spec-approved, in progress | —        |
-| 5     | PWA & Deployment        | PWA shell, offline, performance, rollout            | 🟡 Spec-level only         | —        |
-| 6     | AI & Forecast Layer     | Forecast engine, AI assistant for scheduling        | 🟡 Spec-level only         | —        |
-| 7     | Integrations & APIs     | Payroll, POS, webhooks, stable external API         | 🟡 Spec-level only         | —        |
-| 8     | Compliance & Gov        | Audit logs, DLP, legal tooling, SOC2 prep           | 🟡 Spec-level only         | —        |
+| Block | Name                 | Scope                                         | Status (Spec v14)             | Code Tag |
+| ----- | -------------------- | --------------------------------------------- | ----------------------------- | -------- |
+| 1     | Security Core        | Auth, sessions, 2FA, SLOs                     | ✅ Complete                   | v1.1.0   |
+| 2     | Reliability Core     | Observability, backups, CI/CD, error budgets  | ✅ Complete                   | v1.1.0   |
+| 3     | Integrity Core       | Zod schemas, API validation, Firestore rules  | ✅ Complete (see BLOCK3 docs) | v1.1.0   |
+| 4     | UX & Scheduling Core | Onboarding wizard, schedule builder, labor UI | 🟡 Spec-approved, in progress | —        |
+| 5     | PWA & Deployment     | PWA shell, offline, performance, rollout      | 🟡 Spec-level only            | —        |
+| 6     | AI & Forecast Layer  | Forecast engine, AI assistant for scheduling  | 🟡 Spec-level only            | —        |
+| 7     | Integrations & APIs  | Payroll, POS, webhooks, stable external API   | 🟡 Spec-level only            | —        |
+| 8     | Compliance & Gov     | Audit logs, DLP, legal tooling, SOC2 prep     | 🟡 Spec-level only            | —        |
 
 Blocks 4–8 represent the pre-launch runway from an internal MVP to a production SaaS.
 

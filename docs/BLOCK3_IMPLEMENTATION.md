@@ -1,5 +1,10 @@
 # Block 3 Implementation Summary
 
+> **Note:** Block 3 represents the **Integrity Core** baseline (complete as of v1.1.0).
+> **Bible v14.0.0** introduces **Network tenancy** as the production-level multi-tenant architecture.
+> Future implementations will migrate org-scoped paths to network-scoped paths (`/networks/{networkId}/...`).
+> See [Project Bible v14.0.0](./bible/Project_Bible_v14.0.0.md) and [TODO v14](./TODO-v14.md) for details.
+
 ## Overview
 
 Block 3 (**Integrity Core**) hardens the system around a single idea:

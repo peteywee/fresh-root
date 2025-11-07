@@ -23,12 +23,12 @@
 ### A.0 Meta / Tracking
 
 - [x] **[META-01]** Create a v14 TODO file
-  - ✅ Create `docs/TODO-v14.md` (this file) *(completed Nov 7, 2025)*
+  - ✅ Create `docs/TODO-v14.md` (this file) _(completed Nov 7, 2025)_
   - ✅ Add header: "Project Bible v14.0.0 – Tenancy & Onboarding Implementation"
   - ✅ Add note: "All [TEN-*] and [ONB-*] tasks are P0/P1 for enabling Block 4"
 
 - [x] **[META-02]** Document specification gaps
-  - ✅ Create `docs/bible/GAPS_v14.0.0.md` *(completed Nov 7, 2025)*
+  - ✅ Create `docs/bible/GAPS_v14.0.0.md` _(completed Nov 7, 2025)_
   - ✅ Identified 5 critical gaps: Cross-Network User Scoping, MFA Enforcement, OrgVenueAssignment semantics, Firestore Rules helpers, Block 4 UX spec
   - ✅ Assigned owners and deadlines for each gap
 
