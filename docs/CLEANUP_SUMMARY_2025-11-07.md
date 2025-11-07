@@ -15,6 +15,7 @@ This cleanup focused on reducing redundancy, organizing documentation, and remov
 **Issue:** Root `package.json` had duplicate `execa` and `p-retry` in both `dependencies` and `devDependencies` with different versions.
 
 **Resolution:**
+
 - Removed `execa@9.4.0` from devDependencies (kept `^9.6.0` in dependencies)
 - Removed `p-retry@6.2.0` from devDependencies (kept `^7.1.0` in dependencies)
 
@@ -23,6 +24,7 @@ This cleanup focused on reducing redundancy, organizing documentation, and remov
 ### 2. Duplicate Documentation Removed
 
 **Files Deleted:**
+
 - `docs/README.md` - Older version (Oct 31, 2025) superseded by root README.md (Nov 6, 2025)
 - `docs/PROJECT-BIBLE-v13.md` - Older version superseded by `docs/bible/Project_Bible_v13.5.md`
 
@@ -33,6 +35,7 @@ This cleanup focused on reducing redundancy, organizing documentation, and remov
 **Created:** `docs/archive/` directory
 
 **Files Moved:** (8 historical documents)
+
 1. `ERROR_FIXES_SUMMARY.md`
 2. `SECURITY_FIXES.md`
 3. `SECURITY_FIXES_SUMMARY.md`
@@ -49,6 +52,7 @@ This cleanup focused on reducing redundancy, organizing documentation, and remov
 **File:** `docs/INDEX.md`
 
 **Changes:**
+
 - Updated last modified date to November 7, 2025
 - Updated references to archived files with correct paths
 - Added note about historical documentation location
@@ -56,11 +60,13 @@ This cleanup focused on reducing redundancy, organizing documentation, and remov
 ## Statistics
 
 ### Before Cleanup
+
 - Root package.json: 89 lines with 4 duplicate dependencies
 - Top-level docs: 29 markdown files
 - Total docs: 55 markdown files
 
 ### After Cleanup
+
 - Root package.json: 86 lines with 2 duplicate dependencies removed
 - Top-level docs: 27 markdown files
 - Total docs: 53 markdown files (10 in archive)
@@ -69,18 +75,21 @@ This cleanup focused on reducing redundancy, organizing documentation, and remov
 ## Verification
 
 ### Dependency Check
+
 ```bash
 pnpm list execa p-retry
 # Confirmed: Only one version of each package now present
 ```
 
 ### Type Checking
+
 ```bash
 pnpm typecheck
 # Result: ✅ All type checks pass
 ```
 
 ### Build Status
+
 - All TypeScript configs verified
 - ESLint configs intact and functional
 - Git history preserved for all moved/deleted files
@@ -90,16 +99,19 @@ pnpm typecheck
 The following were considered but **kept** as they serve distinct purposes:
 
 ### Configuration Files
+
 - `.eslintrc.cjs` - Intentionally minimal placeholder for legacy compatibility
 - `eslint.config.mjs` - Active flat config in use
 - Multiple `tsconfig.json` files - Required for monorepo structure
 - Multiple `firebase.*.json` - Different configs for CI, test, and production
 
 ### Dependencies
+
 - `@vitejs/plugin-react` - Flagged by depcheck but actually used in `apps/web/vitest.config.ts`
 - All other dev dependencies verified as used
 
 ### Documentation
+
 - Current project tracking docs (BLOCK*, PHASE*, TODO-v13.md) - Active reference
 - Technical documentation (ARCHITECTURE_DIAGRAMS.md, COMPLETE_TECHNICAL_DOCUMENTATION.md) - Core reference
 - Setup/usage guides (SETUP.md, USAGE.md, CONTRIBUTING.md) - Actively used
@@ -107,11 +119,13 @@ The following were considered but **kept** as they serve distinct purposes:
 ## Open Issues Referenced
 
 ### Issue #43: Security and Data Integrity Foundation
+
 **Scope:** Feature request for comprehensive security enhancements
 **Status:** Beyond cleanup scope - requires dedicated implementation PR
 **Components:** Zod schemas, API validation, rate limiting, CSRF, Firestore rules
 
-### Issue #30: Strict Path Guard and Auth Improvements  
+### Issue #30: Strict Path Guard and Auth Improvements
+
 **Scope:** Feature request for CI improvements and auth enhancements
 **Status:** Beyond cleanup scope - requires dedicated implementation PR
 **Components:** Path guard CI, auth flow improvements, env validation
@@ -121,11 +135,13 @@ The following were considered but **kept** as they serve distinct purposes:
 ## Recommendations
 
 ### Immediate (Current PR)
+
 - ✅ Dependencies deduplicated
 - ✅ Documentation organized
 - ✅ Historical context preserved
 
 ### Future Considerations
+
 1. **Dependency Audit:** Run `pnpm audit` regularly to check for vulnerabilities
 2. **Documentation Review:** Quarterly review to archive outdated docs
 3. **Config Consolidation:** Consider consolidating multiple Firebase configs when appropriate
@@ -145,6 +161,7 @@ The following were considered but **kept** as they serve distinct purposes:
 This cleanup successfully reduced redundancy while maintaining all important historical context and ensuring no functionality was broken. The repository is now better organized with clear separation between active documentation and historical records.
 
 **Next Steps:**
+
 1. Merge this PR after CI passes
 2. Address Issues #43 and #30 in separate feature PRs
 3. Schedule quarterly documentation reviews

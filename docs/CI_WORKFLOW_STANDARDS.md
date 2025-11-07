@@ -88,51 +88,62 @@ jobs:
 ## Step-by-Step Rationale
 
 ### 1. Checkout (`fetch-depth: 0`)
+
 - **Why**: Full history allows accurate `git diff` in guard workflows and proper base comparison for PRs.
 - **When to override**: For artifact-only workflows (e.g., release builds), `fetch-depth: 1` is acceptable.
 
 ### 2. Tooling Setup (PNPM 9.1.0 + Node 20)
+
 - **Why**: Pinned versions eliminate "works on my machine" issues and ensure reproducibility.
 - **Rule**: Always use `pnpm/action-setup@v4` with version `9.1.0` (matches `packageManager` in `package.json`).
 
 ### 3. Caching (Optional but Recommended)
+
 - **Why**: Speeds up CI by reusing emulator binaries, build artifacts, or dependencies.
 - **Best practice**: Use `${{ hashFiles(...) }}` for cache keys to invalidate on config changes.
 
 ### 4. Install Dependencies (`--frozen-lockfile`)
+
 - **Why**: Ensures exact dependency versions from `pnpm-lock.yaml`; fails if lockfile is out of sync.
 - **Never**: Use `pnpm install` without `--frozen-lockfile` in CI.
 
 ### 5. Format & Lint (auto-fix)
+
 - **Command**: `pnpm -w fix` (runs `eslint --fix` + `prettier --write`)
 - **Why**: Auto-corrects trivial issues (trailing whitespace, import order, etc.) before strict enforcement.
 - **Note**: Changes are ephemeral in CI; developers must run `pnpm fix` locally before committing.
 
 ### 6. Lint (strict)
+
 - **Command**: `pnpm -w lint`
 - **Why**: Enforces code quality; must pass after auto-fix step.
 - **Failure behavior**: Hard fail (blocks merge).
 
 ### 7. Typecheck (non-blocking)
+
 - **Command**: `pnpm -w typecheck` with `continue-on-error: true`
 - **Why**: Logs type errors for visibility but doesn't block CI during incremental TypeScript migration.
 - **Future**: Remove `continue-on-error` once all type errors are resolved.
 
 ### 8. Test
+
 - **Command**: `pnpm -w test --if-present`
 - **Why**: Runs unit and integration tests across the monorepo.
 - **Failure behavior**: Hard fail (critical quality gate).
 
 ### 9. Build
+
 - **Command**: `pnpm -w -r build`
 - **Why**: Validates that all packages/apps compile successfully.
 - **Failure behavior**: Hard fail (broken builds never reach production).
 
 ### 10. Additional Checks (Optional)
+
 - Examples: `test:rules:ci` (Firestore security rules tests), E2E tests, deployment previews.
 - **Rule**: Only include if the workflow's purpose requires them (e.g., PR checks, not label syncs).
 
 ### 11. Post Job Cleanup
+
 - **Why**: Informational log to mark job completion; useful for debugging long-running workflows.
 - **Best practice**: Use `if: always()` to ensure it runs even on failure.
 
@@ -141,12 +152,14 @@ jobs:
 ## Workflow Categories and Required Steps
 
 ### Category: PR Validation (e.g., `ci.yml`)
+
 - **Triggers**: `pull_request` to `main` or `develop`
 - **Required steps**: 1–9 (checkout → build)
 - **Optional**: 10 (rules tests, E2E)
 - **Example**: `.github/workflows/ci.yml`
 
 ### Category: Automation Agents (e.g., `repo-agent.yml`, `eslint-ts-agent.yml`)
+
 - **Triggers**: `workflow_dispatch`, `issue_comment`
 - **Required steps**: 1–7 (checkout → typecheck)
 - **Optional**: Custom agent logic, auto-commit results
@@ -154,12 +167,14 @@ jobs:
 - **Example**: `.github/workflows/repo-agent.yml`
 
 ### Category: Guard Workflows (e.g., `path-guard.yml`, `app-runtime-guard.yml`)
+
 - **Triggers**: `pull_request` (any activity)
 - **Required steps**: 1–2 only (checkout + diff calculation)
 - **Optional**: Lint/typecheck if the guard applies changes
 - **Rule**: Never fail hard on allowlist misses if the workflow is informational.
 
 ### Category: Scheduled Maintenance (e.g., `update-deps.yml`)
+
 - **Triggers**: `schedule`, `workflow_dispatch`
 - **Required steps**: 1–6 (checkout → lint)
 - **Optional**: 7–9 if the workflow produces artifacts (e.g., dependency updates)
@@ -170,6 +185,7 @@ jobs:
 ## Common Patterns and Anti-Patterns
 
 ### ✅ DO
+
 - Use `pnpm -w <script>` to run root workspace scripts (e.g., `pnpm -w lint`).
 - Pin tool versions (`pnpm@9.1.0`, `node@20`, `actions/checkout@v4`).
 - Add `continue-on-error: true` for informational-only steps (e.g., non-blocking typecheck).
@@ -177,6 +193,7 @@ jobs:
 - Cache dependencies and external tools (emulators, playwright browsers).
 
 ### ❌ DON'T
+
 - Run `pnpm install` without `--frozen-lockfile` in CI.
 - Skip `pnpm -w fix` in workflows that modify code (leads to lint failures).
 - Use `|| true` instead of `continue-on-error: true` (obscures exit codes in logs).
@@ -203,6 +220,7 @@ When updating a workflow to match this standard:
 ## Examples
 
 ### Minimal PR Validation Workflow
+
 ```yaml
 name: CI (minimal)
 on:
@@ -229,6 +247,7 @@ jobs:
 ```
 
 ### Agent Workflow with Auto-Commit
+
 ```yaml
 name: Auto-fix Agent
 on:
@@ -266,9 +285,9 @@ jobs:
 
 ## Revision History
 
-| Date       | Author         | Change Summary                                                      |
-|------------|----------------|---------------------------------------------------------------------|
-| 2025-11-07 | GitHub Copilot | Initial version: standardized step order, non-blocking typecheck    |
+| Date       | Author         | Change Summary                                                   |
+| ---------- | -------------- | ---------------------------------------------------------------- |
+| 2025-11-07 | GitHub Copilot | Initial version: standardized step order, non-blocking typecheck |
 
 ---
 
