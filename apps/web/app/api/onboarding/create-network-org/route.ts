@@ -7,7 +7,6 @@ import { withSecurity, type AuthenticatedRequest } from "../../_shared/middlewar
 
 import { adminDb } from "@/src/lib/firebase.server";
 
-
 /**
  * Creates a Network, Org, Venue, and memberships for an org-centric onboarding flow.
  *

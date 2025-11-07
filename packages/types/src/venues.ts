@@ -35,6 +35,8 @@ export type Coordinates = z.infer<typeof CoordinatesSchema>;
  */
 export const VenueSchema = z.object({
   id: z.string().min(1),
+  // Optional network scoping for v14 tenancy model
+  networkId: z.string().min(1).optional(),
   orgId: z.string().min(1, "Organization ID is required"),
   name: z.string().min(1, "Venue name is required").max(100),
   description: z.string().max(500).optional(),
@@ -59,6 +61,7 @@ export type Venue = z.infer<typeof VenueSchema>;
  */
 export const CreateVenueSchema = z.object({
   orgId: z.string().min(1, "Organization ID is required"),
+  networkId: z.string().min(1).optional(),
   name: z.string().min(1, "Venue name is required").max(100),
   description: z.string().max(500).optional(),
   type: VenueType.optional().default("indoor"),
@@ -96,6 +99,7 @@ export type UpdateVenueInput = z.infer<typeof UpdateVenueSchema>;
  */
 export const ListVenuesQuerySchema = z.object({
   orgId: z.string().min(1, "Organization ID is required"),
+  networkId: z.string().min(1).optional(),
   isActive: z.coerce.boolean().optional(),
   type: VenueType.optional(),
   limit: z.coerce.number().int().positive().max(100).default(50),

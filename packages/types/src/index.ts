@@ -15,3 +15,5 @@ export * from "./venues";
 export * from "./zones";
 export * from "./attendance";
 export * from "./join-tokens";
+export * from "./compliance/adminResponsibilityForm";
+export * from "./networks";
