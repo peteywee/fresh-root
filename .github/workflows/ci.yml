@@ -1,39 +1,38 @@
-name: CI (monorepo)
+  - name: Set up Node.js
+    uses: actions/setup-node@v4
+    with:
+      node-version: "20"
+      cache: "pnpm"
 
-on:
-  pull_request:
-    branches: ["develop", "main"]
-  workflow_dispatch: {}
+  - name: Set up pnpm
+    uses: pnpm/action-setup@v2
+    with:
+      version: "8"
 
-permissions:
-  contents: read
+  - name: Restore firebase emulators cache
+    uses: actions/cache@v4
+    with:
+      path: ~/.cache/firebase/emulators
+      key: Linux-firebase-emulators-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+      restore-keys: Linux-firebase-emulators-
 
-jobs:
-  build-test:
-    runs-on: ubuntu-latest
+  - name: Install dependencies
+    run: pnpm install --frozen-lockfile
 
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with: { fetch-depth: 0 }
+  # WORKAROUND: ensure require-in-the-middle is present for Turbopack/next build
+  - name: CI workaround: install require-in-the-middle (no workspace changes)
+    run: pnpm add -w require-in-the-middle --no-save
 
-      - name: Use PNPM
-        uses: pnpm/action-setup@v4
-        with: { version: 9.1.0 }
+  - name: Lint
+    run: pnpm -w lint
+    continue-on-error: false
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-          cache: "pnpm"
+  - name: Test
+    run: pnpm -w test --if-present
 
-      - name: Cache Firebase Emulators
-        uses: actions/cache@v4
-        with:
-          path: ~/.cache/firebase/emulators
-          key: ${{ runner.os }}-firebase-emulators-${{ hashFiles('firebase.json') }}
-          restore-keys: |
-            ${{ runner.os }}-firebase-emulators-
+  - name: Build (monorepo)
+    run: pnpm -w -r build
 
-      - name: Run CI script
-        run: pnpm run ci
+  - name: Post job cleanup
+    if: always()
+    run: echo "CI job finished"
