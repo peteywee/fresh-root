@@ -3,30 +3,14 @@
 export {};
 // [P1][INTEGRITY][TEST] Firestore rules tests for shifts collection
 // Tags: P1, INTEGRITY, TEST, FIRESTORE, RULES, SECURITY, RBAC
-import { initializeTestEnvironment, RulesTestEnvironment } from "@firebase/rules-unit-testing";
-import fs from "fs";
+import { RulesTestEnvironment } from "@firebase/rules-unit-testing";
+
+import { DENY_RE, initFirestoreTestEnv } from "./_setup";
 
 let testEnv: RulesTestEnvironment;
 
 beforeAll(async () => {
-  const firestoreOptions: { rules: string; host?: string; port?: number } = {
-    rules: fs.readFileSync("firestore.rules", "utf8"),
-  };
-  const firestoreHost =
-    process.env.FIRESTORE_EMULATOR_HOST || process.env.FIREBASE_FIRESTORE_EMULATOR_HOST;
-  if (firestoreHost) {
-    const [host, portStr] = firestoreHost.split(":");
-    firestoreOptions.host = host;
-    firestoreOptions.port = Number(portStr);
-  } else {
-    firestoreOptions.host = "localhost";
-    firestoreOptions.port = 8080;
-  }
-
-  testEnv = await initializeTestEnvironment({
-    projectId: "fresh-schedules-test-shifts",
-    firestore: firestoreOptions,
-  });
+  testEnv = await initFirestoreTestEnv("fresh-schedules-test-shifts");
 });
 
 afterAll(async () => {
@@ -79,7 +63,7 @@ describe("Shifts Collection - Read Access", () => {
     const unauthCtx = testEnv.unauthenticatedContext();
     await expect(
       unauthCtx.firestore().doc("orgs/orgA/schedules/sched1/shifts/shift1").get(),
-    ).rejects.toThrow(/PERMISSION_DENIED/);
+    ).rejects.toThrow(DENY_RE);
   });
 
   test("❌ DENY: Cannot read shifts from other orgs", async () => {
@@ -101,7 +85,7 @@ describe("Shifts Collection - Read Access", () => {
     });
     await expect(
       outsiderCtx.firestore().doc("orgs/orgA/schedules/sched1/shifts/shift1").get(),
-    ).rejects.toThrow(/PERMISSION_DENIED/);
+    ).rejects.toThrow(DENY_RE);
   });
 
   test("✅ ALLOW: Staff can list their own shifts", async () => {
@@ -152,7 +136,7 @@ describe("Shifts Collection - Create Access", () => {
         end: "2024-01-01T17:00:00Z",
         positionId: "pos1",
       }),
-    ).rejects.toThrow(/PERMISSION_DENIED/);
+    ).rejects.toThrow(DENY_RE);
   });
 
   test("❌ DENY: Staff cannot create shifts in other orgs", async () => {
@@ -172,7 +156,7 @@ describe("Shifts Collection - Create Access", () => {
         userId: "staff1",
         start: "2024-01-01T09:00:00Z",
       }),
-    ).rejects.toThrow(/PERMISSION_DENIED/);
+    ).rejects.toThrow(DENY_RE);
   });
 
   test("✅ ALLOW: Manager can create shifts for any user", async () => {
@@ -292,7 +276,7 @@ describe("Shifts Collection - Update Access", () => {
       staffCtx.firestore().doc("orgs/orgA/schedules/sched1/shifts/shift1").update({
         notes: "Malicious update",
       }),
-    ).rejects.toThrow(/PERMISSION_DENIED/);
+    ).rejects.toThrow(DENY_RE);
   });
 
   test("❌ DENY: Staff cannot change shift assignment (userId)", async () => {

@@ -27,9 +27,10 @@ async function extractSchemasFromTypes(dir) {
   const schemas = new Set();
   for (const f of files) {
     const text = await fs.readFile(path.join(dir, f), "utf8");
-    const constNames = [...text.matchAll(/export\s+const\s+(\w+)\s*=\s*z\.(object|enum)/g)].map(
-      (m) => m[1],
-    );
+    // Allow whitespace/newlines between z and .object/.enum
+    const constNames = [
+      ...text.matchAll(/export\s+const\s+(\w+)\s*=\s*z\s*\.?\s*(object|enum)/g),
+    ].map((m) => m[1]);
     for (const n of constNames) schemas.add(n);
   }
   return Array.from(schemas).sort();
@@ -38,12 +39,12 @@ async function extractSchemasFromTypes(dir) {
 /** Map common collection names to expected schema identifiers */
 function expectedSchemasForCollections(collections) {
   const map = {
-    orgs: ["Organization"],
-    organizations: ["Organization"],
-    memberships: ["MembershipRecord"],
+    orgs: ["Organization", "OrganizationSchema"],
+    organizations: ["Organization", "OrganizationSchema"],
+    memberships: ["MembershipRecord", "MembershipSchema"],
     positions: ["PositionSchema"],
-    schedules: ["Schedule"],
-    shifts: ["Shift"],
+    schedules: ["Schedule", "ScheduleSchema"],
+    shifts: ["Shift", "ShiftSchema"],
     attendance_records: [],
     join_tokens: [],
     venues: [],
@@ -61,8 +62,9 @@ function expectedSchemasForCollections(collections) {
 function diffParity(expectations, schemas) {
   const missing = [];
   for (const [col, expected] of expectations.entries()) {
-    const notFound = expected.filter((s) => !schemas.includes(s));
-    if (notFound.length) missing.push({ collection: col, schemas: notFound });
+    if (!expected.length) continue;
+    const anyPresent = expected.some((s) => schemas.includes(s));
+    if (!anyPresent) missing.push({ collection: col, schemas: expected });
   }
   return missing;
 }

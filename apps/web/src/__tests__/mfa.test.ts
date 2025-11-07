@@ -19,7 +19,8 @@ describe("POST /api/auth/mfa/setup", () => {
 
     expect(response.status).toBe(401);
     const data = await response.json();
-    expect(data.error).toContain("Unauthorized");
+    const message = typeof data.error === "string" ? data.error : data.error?.message;
+    expect(message).toContain("Unauthorized");
   });
 
   test("returns 401 with invalid session cookie", async () => {
@@ -33,7 +34,8 @@ describe("POST /api/auth/mfa/setup", () => {
 
     expect(response.status).toBe(401);
     const data = await response.json();
-    expect(data.error).toContain("Unauthorized");
+    const message = typeof data.error === "string" ? data.error : data.error?.message;
+    expect(message).toContain("Unauthorized");
   });
 
   test.skip("returns 200 with valid session and generates TOTP secret", async () => {
@@ -76,7 +78,8 @@ describe("POST /api/auth/mfa/verify", () => {
 
     expect(response.status).toBe(401);
     const data = await response.json();
-    expect(data.error).toContain("Unauthorized");
+    const message = typeof data.error === "string" ? data.error : data.error?.message;
+    expect(message).toContain("Unauthorized");
   });
 
   test("returns 400 for missing secret", async () => {

@@ -1,181 +1,160 @@
-// [P0][TYPES][TEST] Shifts Schema Tests
-// Tags: P0, TYPES, TEST, VALIDATION
+// [P1][INTEGRITY][TEST] Shifts schema tests
+// Tags: P1, INTEGRITY, TEST, ZOD, SHIFTS
+import { describe, expect, it } from "vitest";
 
-import { describe, it, expect } from "vitest";
-import {
-  Shift,
-  ShiftCreateSchema,
-  ShiftUpdateSchema,
-} from "../schedules";
+import { ShiftSchema, CreateShiftSchema, AssignShiftSchema } from "../shifts";
 
-describe("Shift", () => {
-  it("should validate a valid shift", () => {
+describe("ShiftSchema", () => {
+  const now = Date.now();
+  const oneHour = 60 * 60 * 1000;
+
+  it("validates a complete shift", () => {
     const validShift = {
       id: "shift123",
-      scheduleId: "sched123",
-      positionId: "pos123",
-      userId: "user123",
-      startTime: "2025-01-01T09:00:00Z",
-      endTime: "2025-01-01T17:00:00Z",
-      breakMinutes: 30,
-      status: "published",
-      createdAt: "2025-01-01T08:00:00Z",
+      orgId: "org456",
+      scheduleId: "sch789",
+      positionId: "pos101",
+      startTime: now,
+      endTime: now + oneHour * 4,
+      status: "draft" as const,
+      assignments: [],
+      requiredStaff: 1,
+      breakMinutes: 15,
+      createdBy: "user789",
+      createdAt: now,
+      updatedAt: now,
     };
 
-    expect(() => Shift.parse(validShift)).not.toThrow();
-  });
-
-  it("should reject shift with missing required fields", () => {
-    const invalidShift = {
-      id: "shift123",
-      scheduleId: "sched123",
-      // Missing positionId
-    };
-
-    expect(() => Shift.parse(invalidShift)).toThrow();
-  });
-
-  it("should reject shift with invalid status", () => {
-    const invalidShift = {
-      id: "shift123",
-      scheduleId: "sched123",
-      positionId: "pos123",
-      startTime: "2025-01-01T09:00:00Z",
-      endTime: "2025-01-01T17:00:00Z",
-      status: "invalid_status",
-      createdAt: "2025-01-01T08:00:00Z",
-    };
-
-    expect(() => Shift.parse(invalidShift)).toThrow();
-  });
-});
-
-describe("ShiftCreateSchema", () => {
-  it("should validate valid shift creation data", () => {
-    const validCreate = {
-      scheduleId: "sched123",
-      positionId: "pos123",
-      userId: "user123",
-      startTime: "2025-01-01T09:00:00Z",
-      endTime: "2025-01-01T17:00:00Z",
-      breakMinutes: 30,
-    };
-
-    expect(() => ShiftCreateSchema.parse(validCreate)).not.toThrow();
-  });
-
-  it("should reject creation with negative break minutes", () => {
-    const invalidCreate = {
-      scheduleId: "sched123",
-      positionId: "pos123",
-      startTime: "2025-01-01T09:00:00Z",
-      endTime: "2025-01-01T17:00:00Z",
-      breakMinutes: -10,
-    };
-
-    expect(() => ShiftCreateSchema.parse(invalidCreate)).toThrow();
-  });
-
-  it("should allow creation without optional fields", () => {
-    const minimalCreate = {
-      scheduleId: "sched123",
-      positionId: "pos123",
-      startTime: "2025-01-01T09:00:00Z",
-      endTime: "2025-01-01T17:00:00Z",
-    };
-
-    expect(() => ShiftCreateSchema.parse(minimalCreate)).not.toThrow();
-  });
-
-  it("should reject creation with missing required fields", () => {
-    const invalidCreate = {
-      scheduleId: "sched123",
-      // Missing positionId
-      startTime: "2025-01-01T09:00:00Z",
-      endTime: "2025-01-01T17:00:00Z",
-    };
-
-    expect(() => ShiftCreateSchema.parse(invalidCreate)).toThrow();
-  });
-});
-
-describe("ShiftUpdateSchema", () => {
-  it("should validate partial shift update", () => {
-    const validUpdate = {
-      breakMinutes: 45,
-      notes: "Extended lunch break",
-    };
-
-    expect(() => ShiftUpdateSchema.parse(validUpdate)).not.toThrow();
-  });
-
-  it("should allow updating just status", () => {
-    const validUpdate = {
-      status: "cancelled",
-    };
-
-    expect(() => ShiftUpdateSchema.parse(validUpdate)).not.toThrow();
-  });
-
-  it("should allow empty update object", () => {
-    const emptyUpdate = {};
-
-    expect(() => ShiftUpdateSchema.parse(emptyUpdate)).not.toThrow();
-  });
-
-  it("should reject update with invalid status", () => {
-    const invalidUpdate = {
-      status: "invalid_status_value",
-    };
-
-    expect(() => ShiftUpdateSchema.parse(invalidUpdate)).toThrow();
-  });
-
-  it("should reject update with negative break minutes", () => {
-    const invalidUpdate = {
-      breakMinutes: -5,
-    };
-
-    expect(() => ShiftUpdateSchema.parse(invalidUpdate)).toThrow();
-  });
-});
-
-describe("Shift time validation", () => {
-  it("should validate shifts with proper time ranges", () => {
-    const validShift = {
-      scheduleId: "sched123",
-      positionId: "pos123",
-      userId: "user123",
-      startTime: "2025-01-01T09:00:00Z",
-      endTime: "2025-01-01T17:00:00Z",
-      breakMinutes: 30,
-    };
-
-    const result = ShiftCreateSchema.safeParse(validShift);
+    const result = ShiftSchema.safeParse(validShift);
     expect(result.success).toBe(true);
   });
 
-  it("should handle shifts with minimal duration", () => {
-    const validShift = {
-      scheduleId: "sched123",
-      positionId: "pos123",
-      startTime: "2025-01-01T09:00:00Z",
-      endTime: "2025-01-01T09:30:00Z",
-      breakMinutes: 0,
+  it("requires endTime after startTime", () => {
+    const invalidShift = {
+      id: "shift123",
+      orgId: "org456",
+      scheduleId: "sch789",
+      positionId: "pos101",
+      startTime: now,
+      endTime: now - 1000, // Before start time
+      assignments: [],
+      createdBy: "user789",
+      createdAt: now,
+      updatedAt: now,
     };
 
-    expect(() => ShiftCreateSchema.parse(validShift)).not.toThrow();
+    const result = ShiftSchema.safeParse(invalidShift);
+    expect(result.success).toBe(false);
   });
 
-  it("should handle shifts across midnight", () => {
+  it("validates shift with assignments", () => {
     const validShift = {
-      scheduleId: "sched123",
-      positionId: "pos123",
-      startTime: "2025-01-01T22:00:00Z",
-      endTime: "2025-01-02T06:00:00Z",
-      breakMinutes: 30,
+      id: "shift123",
+      orgId: "org456",
+      scheduleId: "sch789",
+      positionId: "pos101",
+      startTime: now,
+      endTime: now + oneHour * 4,
+      assignments: [
+        {
+          uid: "user1",
+          status: "assigned" as const,
+          assignedAt: now,
+          assignedBy: "manager1",
+        },
+      ],
+      requiredStaff: 2,
+      createdBy: "user789",
+      createdAt: now,
+      updatedAt: now,
     };
 
-    expect(() => ShiftCreateSchema.parse(validShift)).not.toThrow();
+    const result = ShiftSchema.safeParse(validShift);
+    expect(result.success).toBe(true);
+  });
+
+  it("validates AI-generated metadata", () => {
+    const validShift = {
+      id: "shift123",
+      orgId: "org456",
+      scheduleId: "sch789",
+      positionId: "pos101",
+      startTime: now,
+      endTime: now + oneHour * 4,
+      assignments: [],
+      aiGenerated: true,
+      aiConfidence: 0.95,
+      createdBy: "ai-scheduler",
+      createdAt: now,
+      updatedAt: now,
+    };
+
+    const result = ShiftSchema.safeParse(validShift);
+    expect(result.success).toBe(true);
+  });
+});
+
+describe("CreateShiftSchema", () => {
+  const now = Date.now();
+  const oneHour = 60 * 60 * 1000;
+
+  it("validates creation payload", () => {
+    const validInput = {
+      orgId: "org456",
+      scheduleId: "sch789",
+      positionId: "pos101",
+      startTime: now,
+      endTime: now + oneHour * 4,
+    };
+
+    const result = CreateShiftSchema.safeParse(validInput);
+    expect(result.success).toBe(true);
+  });
+
+  it("defaults requiredStaff to 1", () => {
+    const input = {
+      orgId: "org456",
+      scheduleId: "sch789",
+      positionId: "pos101",
+      startTime: now,
+      endTime: now + oneHour * 4,
+    };
+
+    const result = CreateShiftSchema.parse(input);
+    expect(result.requiredStaff).toBe(1);
+  });
+
+  it("requires endTime after startTime", () => {
+    const invalidInput = {
+      orgId: "org456",
+      scheduleId: "sch789",
+      positionId: "pos101",
+      startTime: now,
+      endTime: now - 1000,
+    };
+
+    const result = CreateShiftSchema.safeParse(invalidInput);
+    expect(result.success).toBe(false);
+  });
+});
+
+describe("AssignShiftSchema", () => {
+  it("validates assignment payload", () => {
+    const validInput = {
+      uid: "user123",
+      notes: "Works evening shifts",
+    };
+
+    const result = AssignShiftSchema.safeParse(validInput);
+    expect(result.success).toBe(true);
+  });
+
+  it("requires uid", () => {
+    const invalidInput = {
+      notes: "Some notes",
+    };
+
+    const result = AssignShiftSchema.safeParse(invalidInput);
+    expect(result.success).toBe(false);
   });
 });

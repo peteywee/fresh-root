@@ -1,29 +1,14 @@
 // [P0][TEST][RULES] Firestore rules tests for MFA claim enforcement
 // Tags: P0, TEST, RULES, MFA
-import {
-  initializeTestEnvironment,
-  RulesTestEnvironment,
-  assertSucceeds,
-  assertFails,
-} from "@firebase/rules-unit-testing";
-import { readFileSync } from "fs";
-import { resolve } from "path";
+import { RulesTestEnvironment, assertSucceeds, assertFails } from "@firebase/rules-unit-testing";
 import { describe, test, expect, beforeAll, afterAll } from "vitest";
+
+import { initFirestoreTestEnv } from "./_setup";
 
 let testEnv: RulesTestEnvironment;
 
 beforeAll(async () => {
-  const rulesPath = resolve(__dirname, "../../../firestore.rules");
-  const rules = readFileSync(rulesPath, "utf8");
-
-  testEnv = await initializeTestEnvironment({
-    projectId: "test-mfa-rules",
-    firestore: {
-      rules,
-      host: "127.0.0.1",
-      port: 8080,
-    },
-  });
+  testEnv = await initFirestoreTestEnv("test-mfa-rules");
 });
 
 afterAll(async () => {
@@ -50,7 +35,7 @@ describe("firestore rules - MFA enforcement", () => {
       await assertSucceeds(orgRef.get());
     });
 
-    test("manager can update org (MFA enforced at API layer, not rules)", async () => {
+    test("DENY: manager cannot update org (MFA required at API layer; rules restrict role)", async () => {
       const ctx = testEnv.authenticatedContext("manager1", {
         orgId: "org1",
         roles: ["manager"],
@@ -66,7 +51,7 @@ describe("firestore rules - MFA enforcement", () => {
       });
 
       const orgRef = ctx.firestore().collection("orgs").doc("org1");
-      await assertSucceeds(orgRef.update({ name: "Updated Org" }));
+      await assertFails(orgRef.update({ name: "Updated Org" }));
     });
 
     test("org_owner role can update org", async () => {

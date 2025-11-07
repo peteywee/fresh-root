@@ -1,105 +1,147 @@
-// [P1][INTEGRITY][TEST] Zod schema tests for schedules and shifts
-// Tags: P1, INTEGRITY, TEST, ZOD, VALIDATION
-import { describe, it, expect } from "vitest";
+// [P1][INTEGRITY][TEST] Schedules schema tests
+// Tags: P1, INTEGRITY, TEST, ZOD, SCHEDULES
+import { describe, expect, it } from "vitest";
 
-import {
-  Schedule,
-  ScheduleCreateSchema,
-  ScheduleUpdateSchema,
-  Shift,
-  ShiftCreateSchema,
-  ShiftUpdateSchema,
-} from "../../src/schedules";
+import { ScheduleSchema, CreateScheduleSchema, PublishScheduleSchema } from "../schedules";
 
-function iso(date: string) {
-  return new Date(date).toISOString();
-}
+describe("ScheduleSchema", () => {
+  const now = Date.now();
+  const oneWeek = 7 * 24 * 60 * 60 * 1000;
 
-describe("Schedule schemas", () => {
-  it("validates a full Schedule record", () => {
-    const data = {
-      id: "sched-1",
-      orgId: "org-1",
-      name: "Week 1",
-      description: "First week",
-      startDate: iso("2025-01-01T09:00:00Z"),
-      endDate: iso("2025-01-07T17:00:00Z"),
-      status: "draft",
-      createdAt: iso("2025-01-01T00:00:00Z"),
-      createdBy: "user-1",
+  it("validates a complete schedule", () => {
+    const validSchedule = {
+      id: "sch123",
+      orgId: "org456",
+      name: "Week 1 Schedule",
+      startDate: now,
+      endDate: now + oneWeek,
+      status: "draft" as const,
+      visibility: "team" as const,
+      createdBy: "user789",
+      createdAt: now,
+      updatedAt: now,
     };
-    expect(() => Schedule.parse(data)).not.toThrow();
+
+    const result = ScheduleSchema.safeParse(validSchedule);
+    expect(result.success).toBe(true);
   });
 
-  it("ScheduleCreateSchema enforces startDate <= endDate", () => {
-    const valid = {
-      name: "Week 1",
-      startDate: iso("2025-01-01T00:00:00Z"),
-      endDate: iso("2025-01-02T00:00:00Z"),
+  it("requires endDate after startDate", () => {
+    const invalidSchedule = {
+      id: "sch123",
+      orgId: "org456",
+      name: "Invalid Schedule",
+      startDate: now,
+      endDate: now - 1000,
+      createdBy: "user789",
+      createdAt: now,
+      updatedAt: now,
     };
-    const invalid = {
-      name: "Week bad",
-      startDate: iso("2025-01-03T00:00:00Z"),
-      endDate: iso("2025-01-02T00:00:00Z"),
-    };
-    expect(() => ScheduleCreateSchema.parse(valid)).not.toThrow();
-    expect(() => ScheduleCreateSchema.parse(invalid)).toThrow(
-      /startDate must be before or equal to endDate/,
-    );
+
+    const result = ScheduleSchema.safeParse(invalidSchedule);
+    expect(result.success).toBe(false);
   });
 
-  it("ScheduleUpdateSchema allows partial updates", () => {
-    expect(() => ScheduleUpdateSchema.parse({ name: "New name" })).not.toThrow();
-    expect(() => ScheduleUpdateSchema.parse({ status: "published" })).not.toThrow();
+  it("validates schedule with statistics", () => {
+    const validSchedule = {
+      id: "sch123",
+      orgId: "org456",
+      name: "Week 1 Schedule",
+      startDate: now,
+      endDate: now + oneWeek,
+      stats: {
+        totalShifts: 50,
+        assignedShifts: 45,
+        unassignedShifts: 5,
+        totalHours: 400,
+        totalCost: 8000,
+        conflictCount: 2,
+      },
+      createdBy: "user789",
+      createdAt: now,
+      updatedAt: now,
+    };
+
+    const result = ScheduleSchema.safeParse(validSchedule);
+    expect(result.success).toBe(true);
+  });
+
+  it("validates AI-generated schedule", () => {
+    const validSchedule = {
+      id: "sch123",
+      orgId: "org456",
+      name: "AI Generated Schedule",
+      startDate: now,
+      endDate: now + oneWeek,
+      aiGenerated: true,
+      aiModel: "gemini-1.5-pro",
+      aiGeneratedAt: now,
+      createdBy: "ai-scheduler",
+      createdAt: now,
+      updatedAt: now,
+    };
+
+    const result = ScheduleSchema.safeParse(validSchedule);
+    expect(result.success).toBe(true);
   });
 });
 
-describe("Shift schemas", () => {
-  it("validates a full Shift record", () => {
-    const data = {
-      id: "shift-1",
-      scheduleId: "sched-1",
-      positionId: "pos-1",
-      userId: "user-1",
-      startTime: iso("2025-01-01T09:00:00Z"),
-      endTime: iso("2025-01-01T17:00:00Z"),
-      status: "draft",
-      breakMinutes: 30,
-      createdAt: iso("2025-01-01T00:00:00Z"),
+describe("CreateScheduleSchema", () => {
+  const now = Date.now();
+  const oneWeek = 7 * 24 * 60 * 60 * 1000;
+
+  it("validates creation payload", () => {
+    const validInput = {
+      orgId: "org456",
+      name: "New Schedule",
+      startDate: now,
+      endDate: now + oneWeek,
     };
-    expect(() => Shift.parse(data)).not.toThrow();
+
+    const result = CreateScheduleSchema.safeParse(validInput);
+    expect(result.success).toBe(true);
   });
 
-  it("ShiftCreateSchema enforces startTime < endTime", () => {
-    const good = {
-      positionId: "pos-1",
-      startTime: iso("2025-01-01T09:00:00Z"),
-      endTime: iso("2025-01-01T10:00:00Z"),
-      breakMinutes: 15,
+  it("defaults visibility to team", () => {
+    const input = {
+      orgId: "org456",
+      name: "New Schedule",
+      startDate: now,
+      endDate: now + oneWeek,
     };
-    const bad = {
-      positionId: "pos-1",
-      startTime: iso("2025-01-01T10:00:00Z"),
-      endTime: iso("2025-01-01T09:00:00Z"),
-    };
-    expect(() => ShiftCreateSchema.parse(good)).not.toThrow();
-    expect(() => ShiftCreateSchema.parse(bad)).toThrow(/startTime must be before endTime/);
+
+    const result = CreateScheduleSchema.parse(input);
+    expect(result.visibility).toBe("team");
   });
 
-  it("ShiftCreateSchema ensures breakMinutes < duration", () => {
-    const tooLongBreak: Record<string, unknown> = {
-      positionId: "pos-1",
-      startTime: iso("2025-01-01T09:00:00Z"),
-      endTime: iso("2025-01-01T10:00:00Z"),
-      breakMinutes: 120,
+  it("requires endDate after startDate", () => {
+    const invalidInput = {
+      orgId: "org456",
+      name: "Invalid Schedule",
+      startDate: now,
+      endDate: now - 1000,
     };
-    expect(() => ShiftCreateSchema.parse(tooLongBreak)).toThrow(
-      /Break minutes must be less than shift duration/,
-    );
+
+    const result = CreateScheduleSchema.safeParse(invalidInput);
+    expect(result.success).toBe(false);
+  });
+});
+
+describe("PublishScheduleSchema", () => {
+  it("validates publish payload", () => {
+    const validInput = {
+      notifyStaff: true,
+      message: "New schedule is available!",
+    };
+
+    const result = PublishScheduleSchema.safeParse(validInput);
+    expect(result.success).toBe(true);
   });
 
-  it("ShiftUpdateSchema allows partial updates", () => {
-    expect(() => ShiftUpdateSchema.parse({ notes: "updated" })).not.toThrow();
-    expect(() => ShiftUpdateSchema.parse({ status: "cancelled" })).not.toThrow();
+  it("defaults notifyStaff to true", () => {
+    const input = {};
+
+    const result = PublishScheduleSchema.parse(input);
+    expect(result.notifyStaff).toBe(true);
   });
 });

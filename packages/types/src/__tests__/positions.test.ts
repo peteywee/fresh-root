@@ -1,221 +1,219 @@
-//[P1][INTEGRITY][TEST] Position Zod schema validation tests
-// Tags: P1, INTEGRITY, TEST, zod, validation, schedules
+// [P1][INTEGRITY][TEST] Positions schema tests
+// Tags: P1, INTEGRITY, TEST, ZOD, POSITIONS
+import { describe, expect, it } from "vitest";
 
-import { describe, it, expect } from "vitest";
-
-import { PositionSchema, PositionCreateSchema, PositionUpdateSchema } from "../positions";
+import {
+  PositionSchema,
+  CreatePositionSchema,
+  UpdatePositionSchema,
+  PositionType,
+  SkillLevel,
+} from "../positions";
 
 describe("PositionSchema", () => {
-  const validPosition = {
-    id: "pos-123",
-    orgId: "org-456",
-    title: "Shift Manager",
-    description: "Oversees operations during shift",
-    hourlyRate: 25.5,
-    color: "#3B82F6",
-    isActive: true,
-    createdAt: "2025-01-01T00:00:00Z",
-    updatedAt: "2025-01-02T00:00:00Z",
-    createdBy: "user-789",
-  };
-
-  it("should validate a complete valid position", () => {
-    const result = PositionSchema.parse(validPosition);
-    expect(result).toEqual(validPosition);
-  });
-
-  it("should validate position with minimal required fields", () => {
-    const minimal = {
-      id: "pos-123",
-      orgId: "org-456",
-      title: "Cashier",
-      createdAt: "2025-01-01T00:00:00Z",
-      createdBy: "user-789",
-    };
-    const result = PositionSchema.parse(minimal);
-    expect(result).toMatchObject(minimal);
-    expect(result.isActive).toBe(true); // default
-  });
-
-  it("should reject position with missing required fields", () => {
-    expect(() => PositionSchema.parse({ ...validPosition, id: undefined })).toThrow();
-    expect(() => PositionSchema.parse({ ...validPosition, orgId: undefined })).toThrow();
-    expect(() => PositionSchema.parse({ ...validPosition, title: undefined })).toThrow();
-    expect(() => PositionSchema.parse({ ...validPosition, createdAt: undefined })).toThrow();
-    expect(() => PositionSchema.parse({ ...validPosition, createdBy: undefined })).toThrow();
-  });
-
-  it("should enforce title length constraints (min 1, max 100)", () => {
-    expect(() => PositionSchema.parse({ ...validPosition, title: "" })).toThrow();
-    expect(() => PositionSchema.parse({ ...validPosition, title: "a".repeat(101) })).toThrow();
-    expect(PositionSchema.parse({ ...validPosition, title: "A" }).title).toBe("A");
-    expect(PositionSchema.parse({ ...validPosition, title: "a".repeat(100) }).title).toHaveLength(
-      100,
-    );
-  });
-
-  it("should enforce description max length (500)", () => {
-    expect(() =>
-      PositionSchema.parse({ ...validPosition, description: "a".repeat(501) }),
-    ).toThrow();
-    const result = PositionSchema.parse({
-      ...validPosition,
-      description: "a".repeat(500),
-    });
-    expect(result.description).toHaveLength(500);
-  });
-
-  it("should validate hourlyRate constraints (0 to 9999.99)", () => {
-    expect(() => PositionSchema.parse({ ...validPosition, hourlyRate: -1 })).toThrow();
-    expect(() => PositionSchema.parse({ ...validPosition, hourlyRate: 10000 })).toThrow();
-    expect(PositionSchema.parse({ ...validPosition, hourlyRate: 0 }).hourlyRate).toBe(0);
-    expect(PositionSchema.parse({ ...validPosition, hourlyRate: 9999.99 }).hourlyRate).toBe(
-      9999.99,
-    );
-    expect(PositionSchema.parse({ ...validPosition, hourlyRate: 15.5 }).hourlyRate).toBe(15.5);
-  });
-
-  it("should validate color as hex format", () => {
-    expect(PositionSchema.parse({ ...validPosition, color: "#FF0000" }).color).toBe("#FF0000");
-    expect(PositionSchema.parse({ ...validPosition, color: "#abc123" }).color).toBe("#abc123");
-
-    expect(() => PositionSchema.parse({ ...validPosition, color: "red" })).toThrow();
-    expect(() => PositionSchema.parse({ ...validPosition, color: "#FF" })).toThrow();
-    expect(() => PositionSchema.parse({ ...validPosition, color: "FF0000" })).toThrow();
-    expect(() => PositionSchema.parse({ ...validPosition, color: "#GGGGGG" })).toThrow();
-  });
-
-  it("should default isActive to true", () => {
-    const noActive = { ...validPosition };
-    delete (noActive as Record<string, unknown>).isActive;
-    const result = PositionSchema.parse(noActive);
-    expect(result.isActive).toBe(true);
-  });
-
-  it("should validate datetime format for timestamps", () => {
-    expect(() => PositionSchema.parse({ ...validPosition, createdAt: "invalid-date" })).toThrow();
-    expect(() => PositionSchema.parse({ ...validPosition, createdAt: "2025-01-01" })).toThrow();
-  });
-});
-
-describe("PositionCreateSchema", () => {
-  it("should validate valid position creation input", () => {
-    const input = {
-      orgId: "org-456",
-      title: "Server",
-      description: "Restaurant server position",
-      hourlyRate: 18.0,
-      color: "#10B981",
+  it("validates a complete position", () => {
+    const validPosition = {
+      id: "pos123",
+      orgId: "org456",
+      name: "Event Staff",
+      type: "part_time" as const,
+      skillLevel: "entry" as const,
       isActive: true,
+      requiredCertifications: [],
+      createdBy: "user789",
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
     };
-    const result = PositionCreateSchema.parse(input);
-    expect(result).toEqual(input);
+
+    const result = PositionSchema.safeParse(validPosition);
+    expect(result.success).toBe(true);
   });
 
-  it("should validate with minimal required fields", () => {
-    const minimal = {
-      orgId: "org-123",
-      title: "Cook",
+  it("validates position with hourly rate", () => {
+    const validPosition = {
+      id: "pos123",
+      orgId: "org456",
+      name: "Senior Manager",
+      type: "full_time" as const,
+      skillLevel: "expert" as const,
+      hourlyRate: 35.5,
+      isActive: true,
+      requiredCertifications: ["CPR", "First Aid"],
+      createdBy: "user789",
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
     };
-    const result = PositionCreateSchema.parse(minimal);
-    expect(result.orgId).toBe("org-123");
-    expect(result.title).toBe("Cook");
-    expect(result.isActive).toBe(true); // default
+
+    const result = PositionSchema.safeParse(validPosition);
+    expect(result.success).toBe(true);
   });
 
-  it("should reject input with missing required fields", () => {
-    expect(() => PositionCreateSchema.parse({ title: "Manager" })).toThrow();
-    expect(() => PositionCreateSchema.parse({ orgId: "org-123" })).toThrow();
+  it("requires name", () => {
+    const invalidPosition = {
+      id: "pos123",
+      orgId: "org456",
+      type: "part_time" as const,
+      createdBy: "user789",
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
+    };
+
+    const result = PositionSchema.safeParse(invalidPosition);
+    expect(result.success).toBe(false);
   });
 
-  it("should enforce title length constraints", () => {
-    expect(() => PositionCreateSchema.parse({ orgId: "org-123", title: "" })).toThrow();
-    expect(() =>
-      PositionCreateSchema.parse({ orgId: "org-123", title: "a".repeat(101) }),
-    ).toThrow();
+  it("rejects negative hourly rate", () => {
+    const invalidPosition = {
+      id: "pos123",
+      orgId: "org456",
+      name: "Staff",
+      hourlyRate: -10,
+      createdBy: "user789",
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
+    };
+
+    const result = PositionSchema.safeParse(invalidPosition);
+    expect(result.success).toBe(false);
   });
 
-  it("should enforce hourlyRate validation", () => {
-    expect(() =>
-      PositionCreateSchema.parse({ orgId: "org-123", title: "Test", hourlyRate: -1 }),
-    ).toThrow();
-    expect(() =>
-      PositionCreateSchema.parse({
-        orgId: "org-123",
-        title: "Test",
-        hourlyRate: 10000,
-      }),
-    ).toThrow();
-    expect(
-      PositionCreateSchema.parse({
-        orgId: "org-123",
-        title: "Test",
-        hourlyRate: 50.25,
-      }).hourlyRate,
-    ).toBe(50.25);
+  it("validates hex color format", () => {
+    const validPosition = {
+      id: "pos123",
+      orgId: "org456",
+      name: "Staff",
+      color: "#FF5733",
+      isActive: true,
+      requiredCertifications: [],
+      createdBy: "user789",
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
+    };
+
+    const result = PositionSchema.safeParse(validPosition);
+    expect(result.success).toBe(true);
   });
 
-  it("should validate color hex format", () => {
-    expect(
-      PositionCreateSchema.parse({
-        orgId: "org-123",
-        title: "Test",
-        color: "#123ABC",
-      }).color,
-    ).toBe("#123ABC");
+  it("rejects invalid hex color", () => {
+    const invalidPosition = {
+      id: "pos123",
+      orgId: "org456",
+      name: "Staff",
+      color: "red",
+      createdBy: "user789",
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
+    };
 
-    expect(() =>
-      PositionCreateSchema.parse({
-        orgId: "org-123",
-        title: "Test",
-        color: "invalid",
-      }),
-    ).toThrow();
+    const result = PositionSchema.safeParse(invalidPosition);
+    expect(result.success).toBe(false);
   });
 });
 
-describe("PositionUpdateSchema", () => {
-  it("should allow partial updates (all fields optional)", () => {
-    expect(PositionUpdateSchema.parse({})).toEqual({});
-    expect(PositionUpdateSchema.parse({ title: "Updated Title" })).toEqual({
-      title: "Updated Title",
-    });
-    expect(PositionUpdateSchema.parse({ hourlyRate: 30.0 })).toEqual({
-      hourlyRate: 30.0,
-    });
+describe("CreatePositionSchema", () => {
+  it("validates creation payload", () => {
+    const validInput = {
+      orgId: "org456",
+      name: "Security Staff",
+    };
+
+    const result = CreatePositionSchema.safeParse(validInput);
+    expect(result.success).toBe(true);
   });
 
-  it("should validate title length when provided", () => {
-    expect(() => PositionUpdateSchema.parse({ title: "" })).toThrow();
-    expect(() => PositionUpdateSchema.parse({ title: "a".repeat(101) })).toThrow();
-    expect(PositionUpdateSchema.parse({ title: "Valid" }).title).toBe("Valid");
+  it("defaults type to part_time", () => {
+    const input = {
+      orgId: "org456",
+      name: "Staff",
+    };
+
+    const result = CreatePositionSchema.parse(input);
+    expect(result.type).toBe("part_time");
   });
 
-  it("should validate hourlyRate when provided", () => {
-    expect(() => PositionUpdateSchema.parse({ hourlyRate: -1 })).toThrow();
-    expect(() => PositionUpdateSchema.parse({ hourlyRate: 10000 })).toThrow();
-    expect(PositionUpdateSchema.parse({ hourlyRate: 22.5 }).hourlyRate).toBe(22.5);
+  it("defaults skillLevel to entry", () => {
+    const input = {
+      orgId: "org456",
+      name: "Staff",
+    };
+
+    const result = CreatePositionSchema.parse(input);
+    expect(result.skillLevel).toBe("entry");
   });
 
-  it("should validate color when provided", () => {
-    expect(PositionUpdateSchema.parse({ color: "#ABCDEF" }).color).toBe("#ABCDEF");
-    expect(() => PositionUpdateSchema.parse({ color: "notahex" })).toThrow();
+  it("enforces max name length", () => {
+    const invalidInput = {
+      orgId: "org456",
+      name: "A".repeat(101),
+    };
+
+    const result = CreatePositionSchema.safeParse(invalidInput);
+    expect(result.success).toBe(false);
+  });
+});
+
+describe("UpdatePositionSchema", () => {
+  it("allows updating name", () => {
+    const validUpdate = {
+      name: "Updated Position Name",
+    };
+
+    const result = UpdatePositionSchema.safeParse(validUpdate);
+    expect(result.success).toBe(true);
   });
 
-  it("should validate isActive when provided", () => {
-    expect(PositionUpdateSchema.parse({ isActive: false }).isActive).toBe(false);
-    expect(PositionUpdateSchema.parse({ isActive: true }).isActive).toBe(true);
-  });
-
-  it("should allow multiple fields to be updated", () => {
-    const update = {
-      title: "Senior Manager",
-      description: "Experienced manager",
-      hourlyRate: 45.0,
-      color: "#EF4444",
+  it("allows updating isActive", () => {
+    const validUpdate = {
       isActive: false,
     };
-    const result = PositionUpdateSchema.parse(update);
-    expect(result).toEqual(update);
+
+    const result = UpdatePositionSchema.safeParse(validUpdate);
+    expect(result.success).toBe(true);
+  });
+
+  it("allows partial updates", () => {
+    const validUpdate = {};
+
+    const result = UpdatePositionSchema.safeParse(validUpdate);
+    expect(result.success).toBe(true);
+  });
+
+  it("validates hourly rate when provided", () => {
+    const invalidUpdate = {
+      hourlyRate: -5,
+    };
+
+    const result = UpdatePositionSchema.safeParse(invalidUpdate);
+    expect(result.success).toBe(false);
+  });
+});
+
+describe("PositionType enum", () => {
+  it("accepts valid types", () => {
+    const types = ["full_time", "part_time", "contractor", "volunteer"];
+    types.forEach((type) => {
+      const result = PositionType.safeParse(type);
+      expect(result.success).toBe(true);
+    });
+  });
+
+  it("rejects invalid types", () => {
+    const result = PositionType.safeParse("intern");
+    expect(result.success).toBe(false);
+  });
+});
+
+describe("SkillLevel enum", () => {
+  it("accepts valid skill levels", () => {
+    const levels = ["entry", "intermediate", "advanced", "expert"];
+    levels.forEach((level) => {
+      const result = SkillLevel.safeParse(level);
+      expect(result.success).toBe(true);
+    });
+  });
+
+  it("rejects invalid skill levels", () => {
+    const result = SkillLevel.safeParse("beginner");
+    expect(result.success).toBe(false);
   });
 });

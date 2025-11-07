@@ -1,6 +1,8 @@
 // [P0][TEST][TEST] Vitest Setup tests
 // Tags: P0, TEST, TEST
 import "@testing-library/jest-dom/vitest";
+// Polyfill IndexedDB for tests that use idb in a DOM-like environment
+import "fake-indexeddb/auto";
 import { cleanup } from "@testing-library/react";
 import { afterEach, vi } from "vitest";
 
