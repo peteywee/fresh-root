@@ -1,6 +1,6 @@
 # Project Documentation Index
 
-**Last Updated:** October 31, 2025
+**Last Updated:** November 7, 2025
 **Status:** ✅ Complete and Production Ready
 
 ## Overview
@@ -13,15 +13,16 @@ This repository contains comprehensive technical documentation covering all aspe
 
 **Main project documentation** - Quick start, features, installation, and basic usage.
 
-### 2. Development Journey & Fixes
+### 2. Development Journey & Fixes (Archived)
 
-| Document                                                         | Purpose                     | Key Topics                                                 |
-| ---------------------------------------------------------------- | --------------------------- | ---------------------------------------------------------- |
-| **[TEST_FIXES_ROUND2.md](./TEST_FIXES_ROUND2.md)**               | Critical bug fixes (Oct 31) | Storage emulator, auth tokens, Docker, ESLint, Next.js API |
-| **[BRANCH_CONSOLIDATION.md](./BRANCH_CONSOLIDATION.md)**         | Repository cleanup (Oct 31) | 7 branches merged, conflict resolution, branch deletion    |
-| **[CI_FIX_PNPM_VERSION.md](./CI_FIX_PNPM_VERSION.md)**           | GitHub Actions fix          | pnpm version mismatch resolution                           |
-| **[ERROR_FIXES_SUMMARY.md](./ERROR_FIXES_SUMMARY.md)**           | Historical fixes            | Previous rounds of bug fixes                               |
-| **[SYNC_AND_HEALING_SUMMARY.md](./SYNC_AND_HEALING_SUMMARY.md)** | Self-healing agent          | Automated error resolution                                 |
+Historical fix documentation has been moved to `docs/archive/` for reference:
+
+| Document                                                                 | Purpose                     | Key Topics                                                 |
+| ------------------------------------------------------------------------ | --------------------------- | ---------------------------------------------------------- |
+| **[archive/TEST_FIXES_ROUND2.md](./archive/TEST_FIXES_ROUND2.md)**       | Critical bug fixes (Oct 31) | Storage emulator, auth tokens, Docker, ESLint, Next.js API |
+| **[archive/BRANCH_CONSOLIDATION.md](./archive/BRANCH_CONSOLIDATION.md)** | Repository cleanup (Oct 31) | 7 branches merged, conflict resolution, branch deletion    |
+| **[archive/CI_FIX_PNPM_VERSION.md](./archive/CI_FIX_PNPM_VERSION.md)**   | GitHub Actions fix          | pnpm version mismatch resolution                           |
+| **[archive/ERROR_FIXES_SUMMARY.md](./archive/ERROR_FIXES_SUMMARY.md)**   | Historical fixes            | Previous rounds of bug fixes                               |
 
 ### 3. Project Planning & Process
 

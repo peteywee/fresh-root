@@ -69,15 +69,16 @@ jobs:
             $( [ "$AGENT_FORCE" = "true" ] && echo "--force" ) \
             $( [ "$AGENT_PLAN_ONLY" = "true" ] && echo "--plan-only" )
 
-      - name: Lint & fix (ESLint + Prettier)
-        run: |
-          pnpm -w exec eslint "apps/**/src/**/*.{ts,tsx,js,jsx}" "apps/**/app/**/*.{ts,tsx,js,jsx}" "packages/**/src/**/*.{ts,tsx,js,jsx}" "functions/src/**/*.{ts,tsx,js,jsx}"
-          pnpm -w prettier --check .
+      # Standardized quality gates (see docs/CI_WORKFLOW_STANDARDS.md)
+      - name: Format & Lint (auto-fix)
+        run: pnpm -w fix
 
-      - name: Lint & Typecheck (root)
-        run: |
-          pnpm -s run -w lint || true
-          pnpm -s run -w typecheck || true
+      - name: Lint (strict)
+        run: pnpm -w lint
+
+      - name: Typecheck (non-blocking)
+        run: pnpm -w typecheck
+        continue-on-error: true
 
       - name: Rules Tests
         run: pnpm -s run -w test:rules
