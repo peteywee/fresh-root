@@ -177,6 +177,8 @@ Enforce pnpm typecheck && pnpm lint pre-commit.
 Data validation is the bedrock of "Integrity Core." It prevents production drift and enables trustworthy AI-generated tasks.
 
 8️⃣ Onboarding Wizard (Block 4, §7.1)
+Status: ⬜ Not Started
+
 (see linked Appendix G for flow charts)
 
 8.1 Objective
@@ -245,6 +247,7 @@ CI gate fails deploy on E2E failure.
 Argument: Reliability Core ensures recoverability under load and creates auditable trails for compliance.
 
 1️⃣1️⃣ Security Core (Block 1)
+Status: ⬜ Not Started
 Session-cookie auth flow + MFA.
 
 Middleware guards for API routes.
@@ -254,6 +257,7 @@ Secrets managed via .env template.
 Argument: Security Core is the P0 foundation; no component builds above until its checks are green.
 
 1️⃣2️⃣ Validation & Release (Block 5)
+Status: ⬜ Not Started
 Playwright E2E tests (auth → onboard → org → plan → publish).
 
 CI gate → fail deploy if E2E fails.
