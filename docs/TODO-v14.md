@@ -1,18 +1,18 @@
 # Project Bible v14.0.0 – Tenancy & Onboarding Implementation
 
-**Status**: 🔄 In Progress  
-**Started**: November 7, 2025  
+**Status**: 🔄 In Progress
+**Started**: November 7, 2025
 **Target Completion**: TBD
 
-> **Note**: All `[TEN-*]` and `[ONB-*]` tasks are P0/P1 for enabling Block 4.  
+> **Note**: All `[TEN-*]` and `[ONB-*]` tasks are P0/P1 for enabling Block 4.
 > This represents Block 3.5 / Block 0 for multi-tenancy implementation.
 
 ## Progress Overview
 
-- **Roadmap A (Network + Onboarding)**: 0/38 tasks complete
+- **Roadmap A (Network + Onboarding)**: 2/40 tasks complete (5%)
 - **Roadmap B4 (Block 4 - UX & Scheduling)**: 0/10 tasks complete
 - **Roadmap B5 (Block 5 - PWA & Deployment)**: 0/9 tasks complete
-- **Total**: 0/57 tasks complete
+- **Total**: 2/59 tasks complete (3%)
 
 ---
 
@@ -22,10 +22,15 @@
 
 ### A.0 Meta / Tracking
 
-- [ ] **[META-01]** Create a v14 TODO file
-  - ✅ Create `docs/TODO-v14.md` (this file)
-  - [ ] Add header: "Project Bible v14.0.0 – Tenancy & Onboarding Implementation"
-  - [ ] Add note: "All [TEN-*] and [ONB-*] tasks are P0/P1 for enabling Block 4"
+- [x] **[META-01]** Create a v14 TODO file
+  - ✅ Create `docs/TODO-v14.md` (this file) *(completed Nov 7, 2025)*
+  - ✅ Add header: "Project Bible v14.0.0 – Tenancy & Onboarding Implementation"
+  - ✅ Add note: "All [TEN-*] and [ONB-*] tasks are P0/P1 for enabling Block 4"
+
+- [x] **[META-02]** Document specification gaps
+  - ✅ Create `docs/bible/GAPS_v14.0.0.md` *(completed Nov 7, 2025)*
+  - ✅ Identified 5 critical gaps: Cross-Network User Scoping, MFA Enforcement, OrgVenueAssignment semantics, Firestore Rules helpers, Block 4 UX spec
+  - ✅ Assigned owners and deadlines for each gap
 
 ### A.1 Bible & Docs Integration
 
@@ -444,7 +449,8 @@ Now, assuming Roadmap A is in-progress or done, let's break Blocks 4 and 5 so yo
 
 ## Related Documentation
 
-- [Project Bible v14.0.0](./bible/Project_Bible_v14.0.0.md) - Full specification
+- [Project Bible v14.0.0](./bible/Project_Bible_v14.0.0.md) - Full specification (when created)
+- [Specification Gaps v14.0.0](./bible/GAPS_v14.0.0.md) - **NEW**: Critical gaps and action items
 - [Project Bible v13.5](./bible/Project_Bible_v13.5.md) - Previous version
 - [Block 3 Implementation](./BLOCK3_IMPLEMENTATION.md) - Integrity Core
 - [Schema Map](./schema-map.md) - Current data model
@@ -452,6 +458,6 @@ Now, assuming Roadmap A is in-progress or done, let's break Blocks 4 and 5 so yo
 
 ---
 
-**Last Updated**: November 7, 2025  
-**Maintained By**: Patrick Craven  
+**Last Updated**: November 7, 2025
+**Maintained By**: Patrick Craven
 **Status**: Living document - update weekly
