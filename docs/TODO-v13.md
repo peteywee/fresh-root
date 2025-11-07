@@ -82,7 +82,7 @@
   - [x] Verified apps/web/app/api/metrics/route.ts exists
   - [x] Note: recordRequest() defined but not called (superseded by OpenTelemetry auto-instrumentation)
 
-🧩 Block 3 – Integrity Core (P1) ✅ 95% COMPLETE (Rules tests remain)
+🧩 Block 3 – Integrity Core (P1) ✅ COMPLETE
 
 - [x] [BLOCK3] Expand packages/types/ with Zod schemas for orgs, memberships, positions, schedules, shifts
   - [x] Created packages/types/src/memberships.ts with full CRUD schemas
@@ -128,15 +128,15 @@
   - [x] Add validation to GET /api/attendance (protected by withSecurity + requireOrgMembership)
   - [x] Add validation to POST /api/join-tokens (uses CreateJoinTokenSchema + requireRole("admin"))
   - [x] Add validation to GET /api/join-tokens (protected by withSecurity + requireRole("manager"))
-- [ ] [BLOCK3] Write rules test matrix (≥ 1 allow + 3 denies per collection)
+- [x] [BLOCK3] Write rules test matrix (≥ 1 allow + 3 denies per collection)
   - [x] Created tests/rules/organizations.spec.ts (4 suites, 13+ tests)
   - [x] Created tests/rules/positions.spec.ts (2 suites, 10+ tests)
-  - [ ] Create tests/rules/schedules.spec.ts
-  - [ ] Create tests/rules/shifts.spec.ts
-  - [ ] Create tests/rules/venues.spec.ts
-  - [ ] Create tests/rules/zones.spec.ts
-  - [ ] Create tests/rules/attendance.spec.ts
-  - [ ] Create tests/rules/join-tokens.spec.ts
+  - [x] Created tests/rules/schedules.spec.mts (4 suites: Read/Create/Update/Delete with org membership checks)
+  - [x] Created tests/rules/shifts.spec.mts (4 suites: Read/Create/Update/Delete with scheduler+ role enforcement)
+  - [x] Created tests/rules/venues.spec.mts (4 suites: Read/Create/Update/Delete with manager+ role enforcement)
+  - [x] Created tests/rules/zones.spec.mts (4 suites: Read/Create/Update/Delete with manager+ role enforcement)
+  - [x] Created tests/rules/attendance.spec.mts (4 suites: Read/Create/Update/Delete with scheduler+ role enforcement)
+  - [x] Created tests/rules/join-tokens.spec.mts (4 suites: Read/Create/Update/Delete with admin+ role enforcement)
 - [x] [BLOCK3] Add unit tests for Zod validators
   - [x] Created packages/types/src/**tests**/memberships.test.ts (9 suites, 17+ tests)
   - [x] Created packages/types/src/**tests**/positions.test.ts (7 suites, 15+ tests)
