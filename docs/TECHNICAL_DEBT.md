@@ -2,7 +2,7 @@
 
 ## Current Status: ✅ MINIMAL DEBT
 
-Last updated: November 6, 2025
+Last updated: November 7, 2025
 
 ## 🟡 MEDIUM Priority Items
 
@@ -43,6 +43,39 @@ Last updated: November 6, 2025
 
 ## ✅ Recently Resolved
 
+### Duplicate Dependencies (Fixed: Nov 7, 2025)
+
+- ~~execa and p-retry listed in both dependencies and devDependencies~~
+- **Resolution**: Moved to devDependencies only (execa ^9.6.0, p-retry ^7.1.0)
+- **Impact**: Eliminates version conflicts, reduces production bundle size
+
+### Duplicate Rules Test Files (Fixed: Nov 7, 2025)
+
+- ~~6 test files had both .ts and .mts versions (attendance, shifts, venues, zones, schedules, join-tokens)~~
+- **Resolution**: Kept .mts versions as standard, removed duplicate .ts files
+- **Impact**: Reduced maintenance burden by 50%, eliminated risk of divergent expectations
+
+### Path Alias Inconsistency (Fixed: Nov 7, 2025)
+
+- ~~@ alias pointed only to apps/web/app, limiting imports from apps/web/src~~
+- **Resolution**: Changed @ to map to apps/web root, enabling @/app/* and @/src/* imports
+- **Files Updated**: tsconfig.base.json, apps/web/tsconfig.json, vitest.config.ts, apps/web/vitest.config.ts
+- **Impact**: Consistent import patterns, easier cross-directory imports
+
+### Lint Warning Threshold Reduction (Nov 7, 2025)
+
+- **Change**: Reduced --max-warnings from 200 to 100 (50% reduction)
+- **Goal**: Continue reducing to 0 over time as warnings are addressed
+- **Next Steps**: 
+  - Measure current warning count with `pnpm lint`
+  - Categorize warnings by type
+  - Reduce to 50 when <75 warnings remain, then to 0
+
+### IndexedDB Polyfill (Verified: Nov 7, 2025)
+
+- **Status**: Already implemented in apps/web/vitest.setup.ts (fake-indexeddb/auto)
+- **Impact**: Tests can use idb without additional mocking
+
 ### Console Statement Violations (Fixed: Nov 6, 2025)
 
 - ~~13 console.debug/console.log violations across 3 files~~
@@ -59,7 +92,7 @@ Last updated: November 6, 2025
 
 ## 📊 Quality Metrics
 
-- **ESLint Warnings**: 0 ✅
+- **ESLint Warnings**: Target 100 (reduced from 200, goal: 0) 🎯
 - **ESLint Errors**: 0 ✅
 - **TypeScript Errors**: 0 ✅
 - **Deprecated Dependencies**: 0 ✅
@@ -68,6 +101,8 @@ Last updated: November 6, 2025
 - **Intentional `eslint-disable` Comments**: 6 (all justified)
 - **`ts-ignore` / `ts-expect-error` Usage**: 0 ✅
 - **Skipped Tests**: 0 ✅
+- **Duplicate Test Files**: 0 ✅ (fixed: removed 6 duplicate .ts files)
+- **Path Alias Consistency**: ✅ (@ now maps to apps/web root)
 
 ## 🎯 Next Actions
 

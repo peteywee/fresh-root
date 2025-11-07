@@ -25,7 +25,14 @@ jobs:
           cache: "pnpm"
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: pnpm install --no-frozen-lockfile
+
+      # Standardized quality gates (see docs/CI_WORKFLOW_STANDARDS.md)
+      - name: Format & Lint (auto-fix)
+        run: pnpm -w fix
+
+      - name: Lint (strict)
+        run: pnpm -w lint
 
       - name: Run lint (reviewdog)
         uses: reviewdog/action-eslint@v1

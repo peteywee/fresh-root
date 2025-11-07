@@ -8,6 +8,11 @@
     "noEmit": true,
     "incremental": true,
     "isolatedModules": true,
+    "baseUrl": ".",
+    "paths": {
+      // @ maps to the web app root, enabling @/app/* and @/src/* imports
+      "@/*": ["./*"]
+    },
     "plugins": [
       {
         "name": "next"

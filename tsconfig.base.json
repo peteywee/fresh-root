@@ -28,7 +28,8 @@
     "types": ["node"],
     "baseUrl": ".",
     "paths": {
-      "@/*": ["apps/web/app/*"],
+      // Note: @ alias removed from base config; each project defines its own
+      // apps/web defines @ to map to its root directory for @/app/* and @/src/* imports
       "@types/*": ["packages/types/src/*"],
       "@ui/*": ["packages/ui/src/*"],
       "@config/*": ["packages/config/src/*"]
