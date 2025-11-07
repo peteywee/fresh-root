@@ -2,7 +2,7 @@
 
 ## Current Status: ✅ MINIMAL DEBT
 
-Last updated: November 6, 2025
+Last updated: November 7, 2025
 
 ## 🟡 MEDIUM Priority Items
 
@@ -58,7 +58,7 @@ Last updated: November 6, 2025
 ### Path Alias Inconsistency (Fixed: Nov 7, 2025)
 
 - ~~@ alias pointed only to apps/web/app, limiting imports from apps/web/src~~
-- **Resolution**: Changed @ to map to apps/web root, enabling @/app/_ and @/src/_ imports
+- **Resolution**: Changed @ to map to apps/web root, enabling @/app/\* and @/src/\* imports
 - **Files Updated**: tsconfig.base.json, apps/web/tsconfig.json, vitest.config.ts, apps/web/vitest.config.ts
 - **Impact**: Consistent import patterns, easier cross-directory imports
 
@@ -92,7 +92,7 @@ Last updated: November 6, 2025
 
 ## 📊 Quality Metrics
 
-- **ESLint Warnings**: 0 ✅
+- **ESLint Warnings**: Target 100 (reduced from 200, goal: 0) 🎯
 - **ESLint Errors**: 0 ✅
 - **TypeScript Errors**: 0 ✅
 - **Deprecated Dependencies**: 0 ✅
@@ -101,6 +101,8 @@ Last updated: November 6, 2025
 - **Intentional `eslint-disable` Comments**: 6 (all justified)
 - **`ts-ignore` / `ts-expect-error` Usage**: 0 ✅
 - **Skipped Tests**: 0 ✅
+- **Duplicate Test Files**: 0 ✅ (fixed: removed 6 duplicate .ts files)
+- **Path Alias Consistency**: ✅ (@ now maps to apps/web root)
 
 ## 🎯 Next Actions
 
