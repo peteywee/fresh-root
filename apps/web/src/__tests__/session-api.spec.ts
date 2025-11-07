@@ -1,8 +1,9 @@
 // [P0][AUTH][SESSION] Session Api Spec tests
 // Tags: P0, AUTH, SESSION, TEST
 import { NextRequest } from "next/server";
+
 // If you have the `@` alias configured (Next.js tsconfig paths), this should work:
-import { POST } from "@/api/session/route";
+import { POST } from "../../app/api/session/route";
 // If that import fails, replace the line above with the relative path, e.g.:
 // import { POST } from "../../app/api/session/route";
 

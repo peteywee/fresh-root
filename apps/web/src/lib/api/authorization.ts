@@ -1,9 +1,9 @@
 //[P1][API][AUTH] Authorization and RBAC middleware (minimal)
 // Tags: authorization, rbac, middleware, security
 
-import type { NextRequest } from "next/server";
-import { NextResponse } from "next/server";
 import { getFirestore } from "firebase-admin/firestore";
+import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
 
 export type OrgRole = "org_owner" | "admin" | "manager" | "scheduler" | "corporate" | "staff";
 
