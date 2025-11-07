@@ -93,3 +93,29 @@ export const UpdateShiftSchema = z.object({
   notes: z.string().max(1000).optional(),
   breakMinutes: z.number().int().nonnegative().optional(),
 });
+
+/**
+ * Admin Responsibility Form schema for onboarding
+ * @see docs/bible/Project_Bible_v14.0.0.md Section 4.3
+ */
+export const CreateAdminResponsibilityFormSchema = z.object({
+  legalBusinessName: z.string().min(1, "Legal business name is required"),
+  taxId: z.string().min(1, "Tax ID is required"),
+  businessAddress: z.object({
+    street: z.string().min(1, "Street address is required"),
+    city: z.string().min(1, "City is required"),
+    state: z.string().min(2, "State is required").max(2),
+    zipCode: z.string().min(5, "Zip code is required"),
+  }),
+  adminName: z.string().min(1, "Administrator name is required"),
+  adminEmail: z.string().email("Valid email is required"),
+  adminPhone: z.string().min(10, "Valid phone number is required"),
+  acceptedTerms: z.boolean().refine((val) => val === true, {
+    message: "You must accept the terms and conditions",
+  }),
+  acceptedAt: z.string().datetime().optional(),
+});
+
+export type CreateAdminResponsibilityFormInput = z.infer<
+  typeof CreateAdminResponsibilityFormSchema
+>;

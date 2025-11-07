@@ -189,5 +189,99 @@ service cloud.firestore {
       allow create, update, delete: if isSignedIn() && ((hasAnyRole(['org_owner','admin']) && sameOrg(orgId)) || hasAnyRoleLegacy(orgId, ['owner','admin']));
       allow list: if false;
     }
+
+    // ---------------------------------------------------------------------------
+    // Network (tenant root) rules – v14.0.0
+    // @see docs/bible/Project_Bible_v14.0.0.md Section 5 (Security Rules)
+    // @see docs/schema-network.md
+    // ---------------------------------------------------------------------------
+
+    // Helper functions for network-level access control
+    function isNetworkMember(auth, networkId) {
+      // TODO: Check if user has a membership doc under /networks/{networkId}/memberships/{uid}
+      // For now, allow all authenticated users (stub)
+      return auth != null;
+    }
+
+    function isNetworkOwner(auth, networkId) {
+      // TODO: Check if auth.uid matches network.ownerUserId
+      // For now, stub with false (backend only)
+      return false;
+    }
+
+    function isNetworkAdmin(auth, networkId) {
+      // TODO: Check if user has network_admin or network_owner role in memberships
+      // For now, stub with false
+      return false;
+    }
+
+    function isSuperAdmin(auth) {
+      // TODO: Check custom claim for platform super admin
+      return auth.token.superAdmin == true;
+    }
+
+    function isOnboardingServiceAccount(auth) {
+      // TODO: Check if auth.uid matches a known service account UID
+      return false;
+    }
+
+    match /networks/{networkId} {
+      // Network documents are created/updated/deleted only via backend/admin SDK.
+      allow create, update, delete: if false;
+
+      // Network-level reads: allow only to authenticated members for now.
+      allow read: if request.auth != null && isNetworkMember(request.auth, networkId);
+
+      // Compliance: Admin Responsibility Form
+      match /compliance/adminResponsibilityForm {
+        // Only backend service accounts can create this.
+        allow create: if isOnboardingServiceAccount(request.auth);
+
+        // Only network owners and platform super admins can read.
+        allow read: if isNetworkOwner(request.auth, networkId)
+                 || isSuperAdmin(request.auth);
+
+        // Immutable once created.
+        allow update, delete: if false;
+      }
+
+      // Corporate nodes
+      match /corporates/{corpId} {
+        allow read: if request.auth != null && isNetworkMember(request.auth, networkId);
+        allow create, update, delete: if false; // backend only
+      }
+
+      // Organizations (network-scoped)
+      match /orgs/{orgId} {
+        allow read: if request.auth != null && isNetworkMember(request.auth, networkId);
+        allow create, update, delete: if false; // backend only for now
+      }
+
+      // Venues (network-scoped)
+      match /venues/{venueId} {
+        allow read: if request.auth != null && isNetworkMember(request.auth, networkId);
+        allow create, update, delete: if false; // backend only for now
+      }
+
+      // Links (corp-org, org-venue, etc.)
+      match /links/{linkCollection}/{linkId} {
+        allow read: if request.auth != null && isNetworkMember(request.auth, networkId);
+        allow create, update, delete: if false; // backend only
+      }
+
+      // Network-scoped user profiles
+      match /users/{uid} {
+        allow read: if request.auth != null
+                 && (request.auth.uid == uid || isNetworkAdmin(request.auth, networkId));
+        allow create, update: if request.auth != null && request.auth.uid == uid;
+        allow delete: if false;
+      }
+
+      // Network memberships
+      match /memberships/{membershipId} {
+        allow read: if request.auth != null && isNetworkMember(request.auth, networkId);
+        allow create, update, delete: if false; // backend only
+      }
+    }
   }
 }
