@@ -1,6 +1,7 @@
 //[P1][API][ONBOARDING] Join With Token Endpoint
 // Tags: api, onboarding, join, tokens
 
+import { JoinWithTokenSchema } from "@fresh-schedules/types";
 import { NextResponse } from "next/server";
 
 import { withSecurity, type AuthenticatedRequest } from "../../_shared/middleware";
@@ -16,8 +17,14 @@ export const POST = withSecurity(
       return NextResponse.json({ error: "invalid_json" }, { status: 400 });
     }
 
-    const { joinToken } = (body as Record<string, unknown>) || {};
-    if (!joinToken) return NextResponse.json({ error: "missing_join_token" }, { status: 422 });
+    const parsed = JoinWithTokenSchema.safeParse(body);
+    if (!parsed.success)
+      return NextResponse.json(
+        { error: "invalid_request", details: parsed.error.flatten() },
+        { status: 422 },
+      );
+
+    const { joinToken } = parsed.data;
 
     const uid = req.user?.uid;
     if (!uid) return NextResponse.json({ error: "not_authenticated" }, { status: 401 });

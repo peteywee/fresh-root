@@ -1,18 +1,43 @@
-//[P1][API][ONBOARDING] Admin Form Endpoint (server)
-// Tags: api, onboarding, admin-form, compliance
-
-import {
-  CreateAdminResponsibilityFormSchema,
-  type CreateAdminResponsibilityFormInput,
-} from "@fresh-schedules/types";
-import { randomBytes } from "crypto";
 import { NextRequest, NextResponse } from "next/server";
+import { AdminFormSubmissionSchema, AdminFormSubmissionInput } from "@fresh-schedules/types"; // adjust alias if needed
 
-import { adminDb } from "@/src/lib/firebase.server";
+// TODO: wire to your real storage (Redis, Firestore temp collection, etc.)
+async function saveAdminFormDraft(
+  uid: string,
+  payload: AdminFormSubmissionInput,
+  meta: { ipAddress: string; userAgent: string },
+): Promise<string> {
+  // This function should:
+  // - generate a random token/id
+  // - store { uid, payload, meta, createdAt } somewhere
+  // - return token
+  // For now, we just stub it.
+  return "stub-form-token";
+}
+
+// TODO: replace with real auth/session retrieval.
+async function getSessionUser(req: NextRequest): Promise<{
+  uid: string;
+  email: string;
+} | null> {
+  // Example:
+  // const session = await getServerSession(authOptions);
+  // if (!session?.user?.id) return null;
+  // return { uid: session.user.id, email: session.user.email! };
+  return {
+    uid: "stub-user-id",
+    email: "stub@example.com",
+  };
+}
 
 export async function POST(req: NextRequest) {
-  let body: unknown;
+  const user = await getSessionUser(req);
 
+  if (!user) {
+    return NextResponse.json({ error: "not_authenticated" }, { status: 401 });
+  }
+
+  let body: unknown;
   try {
     body = await req.json();
   } catch {
@@ -22,47 +47,43 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const parseResult = CreateAdminResponsibilityFormSchema.safeParse(body);
-  if (!parseResult.success) {
+  const parsed = AdminFormSubmissionSchema.safeParse(body);
+  if (!parsed.success) {
     return NextResponse.json(
-      { error: "validation_error", issues: parseResult.error.format() },
+      {
+        error: "validation_error",
+        issues: parsed.error.format(),
+      },
       { status: 422 },
     );
   }
 
-  const payload: CreateAdminResponsibilityFormInput = parseResult.data;
+  const payload: AdminFormSubmissionInput = parsed.data;
 
-  // If admin DB not initialized, return a stub token so the UI can progress in local/dev mode
-  if (!adminDb) {
-    const formToken = "stub-form-token";
-    return NextResponse.json({ ok: true, formToken }, { status: 200 });
+  // Basic extra sanity check: force liabilityAcknowledged to be true.
+  if (!payload.liabilityAcknowledged) {
+    return NextResponse.json(
+      {
+        error: "liability_not_acknowledged",
+        message: "You must acknowledge responsibility for the workspace to proceed.",
+      },
+      { status: 400 },
+    );
   }
 
-  try {
-    // url-safe random token
-    const token = randomBytes(12).toString("base64url");
+  const ipAddress = req.headers.get("x-forwarded-for") ?? req.headers.get("x-real-ip") ?? "unknown";
+  const userAgent = req.headers.get("user-agent") ?? "unknown";
 
-    const now = Date.now();
-    const expiresAt = now + 7 * 24 * 60 * 60 * 1000; // 7 days TTL
+  const formToken = await saveAdminFormDraft(user.uid, payload, {
+    ipAddress,
+    userAgent,
+  });
 
-    const formsRoot = adminDb
-      .collection("compliance")
-      .doc("adminResponsibilityForms")
-      .collection("forms");
-    const docRef = formsRoot.doc(token);
-
-    await docRef.set({
-      ...payload,
-      createdAt: now,
-      status: "submitted",
-      token,
-      expiresAt,
-      immutable: false,
-    });
-
-    return NextResponse.json({ ok: true, formToken: token }, { status: 200 });
-  } catch (err) {
-    console.error("admin-form persist failed", err);
-    return NextResponse.json({ error: "internal_error" }, { status: 500 });
-  }
+  return NextResponse.json(
+    {
+      ok: true,
+      formToken,
+    },
+    { status: 200 },
+  );
 }

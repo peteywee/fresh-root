@@ -36,24 +36,24 @@
 
 These are about making the spec the source of truth.
 
-- [ ] **[BIB-01]** Add v14 Bible file to repo
-  - [ ] Save `docs/bible/Project_Bible_v14.0.0.md` using the exhaustive draft
-  - [ ] Cross-link from `docs/README.md` → reference v14 as "current spec"
-  - [ ] Add to `docs/bible/index.md` → add v14 with a one-line summary
-  - [ ] Ensure previous Bible versions (v13.5, v13.6) remain for historical context
+- [x] **[BIB-01]** Add v14 Bible file to repo
+  - ✅ Save `docs/bible/Project_Bible_v14.0.0.md` using the exhaustive draft
+  - ✅ Cross-link from `docs/INDEX.md` → reference v14 as "current spec"
+  - ✅ Add to `docs/bible/index.md` → add v14 with a one-line summary
+  - ✅ Ensure previous Bible versions (v13.5, v13.6) remain for historical context
 
 - [ ] **[BIB-02]** Update block overview docs
   - [ ] In `docs/BLOCK3_IMPLEMENTATION.md`, add note: "v14 introduces Network tenancy; implementation in progress"
   - [ ] Add new `docs/BLOCK4_PLANNING.md` that references v14 for Network + onboarding requirements
 
-- [ ] **[BIB-03]** Document Network types and paths
-  - [ ] Create `docs/schema-network.md` with:
-    - [ ] Network (`networks/{networkId}`)
-    - [ ] Corporate, Org, Venue
-    - [ ] corpOrgLinks
-    - [ ] orgVenueAssignments
-    - [ ] AdminResponsibilityForm
-  - [ ] Add path map table for each entity: Path, Owner, Used by blocks, Status (implemented/planned)
+- [x] **[BIB-03]** Document Network types and paths
+  - ✅ Create `docs/schema-network.md` with:
+    - ✅ Network (`networks/{networkId}`)
+    - ✅ Corporate, Org, Venue
+    - ✅ corpOrgLinks
+    - ✅ orgVenueAssignments
+    - ✅ AdminResponsibilityForm
+  - ✅ Add path map table for each entity: Path, Owner, Used by blocks, Status (implemented/planned)
 
 ### A.2 Types & Schemas (Zod / TypeScript)
 
