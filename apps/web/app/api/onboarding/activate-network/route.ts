@@ -1,5 +1,5 @@
 //[P1][API][ONBOARDING] Activate Network Endpoint
-// Tags: api, onboarding, network
+// Tags: api, onboarding, network, activate
 
 import { NextResponse } from "next/server";
 

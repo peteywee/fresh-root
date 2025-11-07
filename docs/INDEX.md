@@ -13,7 +13,16 @@ This repository contains comprehensive technical documentation covering all aspe
 
 **Main project documentation** - Quick start, features, installation, and basic usage.
 
-### 2. Development Journey & Fixes (Archived)
+### 2. [Project Bible v14.0.0](./bible/Project_Bible_v14.0.0.md) ⭐ **CURRENT SPEC**
+
+**Production-Ready Specification** - Authoritative reference for multi-tenant architecture, Network creation,
+onboarding wizard, security gates, and compliance. This is the single source of truth for production readiness.
+See also:
+
+- [v13.5](./bible/Project_Bible_v13.5.md) - Previous version (historical context)
+- [Specification Gaps v14.0.0](./bible/GAPS_v14.0.0.md) - Critical gaps and action items
+
+### 3. Development Journey & Fixes (Archived)
 
 Historical fix documentation has been moved to `docs/archive/` for reference:
 

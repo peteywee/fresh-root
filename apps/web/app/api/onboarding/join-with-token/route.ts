@@ -1,5 +1,5 @@
 //[P1][API][ONBOARDING] Join With Token Endpoint
-// Tags: api, onboarding, join, token
+// Tags: api, onboarding, join, tokens
 
 import { NextResponse } from "next/server";
 
@@ -16,49 +16,47 @@ export const POST = withSecurity(
       return NextResponse.json({ error: "invalid_json" }, { status: 400 });
     }
 
-    const { token } = (body as Record<string, unknown>) || {};
-    if (!token) return NextResponse.json({ error: "missing_token" }, { status: 422 });
+    const { joinToken } = (body as Record<string, unknown>) || {};
+    if (!joinToken) return NextResponse.json({ error: "missing_join_token" }, { status: 422 });
 
-    // Local/dev fallback
+    const uid = req.user?.uid;
+    if (!uid) return NextResponse.json({ error: "not_authenticated" }, { status: 401 });
+
+    // Dev fallback
     if (!adminDb) {
-      return NextResponse.json(
-        {
-          ok: true,
-          joined: true,
-          networkId: "stub-network-id",
-          orgId: "stub-org-id",
-          venueId: "stub-venue-id",
-        },
-        { status: 200 },
-      );
+      return NextResponse.json({ ok: true, membershipId: "stub-membership-id", networkId: "stub-network-id" }, { status: 200 });
     }
 
     const adb = adminDb;
 
     try {
-      // Search for a matching join token in any join-tokens collection (collection group)
-      const snaps = await adb
-        .collectionGroup("join-tokens")
-        .where("token", "==", String(token))
-        .limit(1)
-        .get();
-      if (snaps.empty) {
-        return NextResponse.json({ error: "token_not_found" }, { status: 404 });
-      }
+      const tokensRoot = adb.collection("joinTokens");
+      const tokenSnap = await tokensRoot.doc(String(joinToken)).get();
+      if (!tokenSnap.exists) return NextResponse.json({ error: "token_not_found" }, { status: 404 });
 
-      const doc = snaps.docs[0];
-      const data = doc.data();
+      const tokenData = tokenSnap.data() as Record<string, unknown>;
+      const networkId = String(tokenData.networkId || "");
+      const orgId = tokenData.orgId ? String(tokenData.orgId) : null;
+      const venueId = tokenData.venueId ? String(tokenData.venueId) : null;
 
-      // Return the resolved mapping; client may perform membership creation
-      return NextResponse.json(
-        {
-          ok: true,
-          joined: true,
-          tokenId: doc.id,
-          mapping: data,
-        },
-        { status: 200 },
-      );
+      const membershipRef = adb.collection("memberships").doc();
+      await adb.runTransaction(async (tx) => {
+        tx.set(membershipRef, {
+          userId: uid,
+          networkId,
+          orgId: orgId || null,
+          venueId: venueId || null,
+          role: "member",
+          createdAt: Date.now(),
+        });
+
+        // Optionally invalidate single-use token
+        if (tokenData.singleUse === true) {
+          tx.delete(tokensRoot.doc(String(joinToken)));
+        }
+      });
+
+      return NextResponse.json({ ok: true, membershipId: membershipRef.id, networkId }, { status: 200 });
     } catch (err) {
       console.error("join-with-token failed", err);
       return NextResponse.json({ error: "internal_error" }, { status: 500 });
