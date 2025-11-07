@@ -3,35 +3,30 @@
 
 /**
  * Organization-Venue Assignment Schema (v14.0.0)
- * 
+ *
  * Defines the many-to-many relationship between Organizations and Venues.
  * Replaces legacy orgId single-parent pattern with flexible assignment model.
- * 
+ *
  * Path: networks/{networkId}/orgVenueAssignments/{assignmentId}
- * 
+ *
  * Related:
  * - Project Bible v14.0.0 Section 3.3.2 (OrgVenueAssignment - GAP-3)
  * - packages/types/src/orgs.ts
  * - packages/types/src/venues.ts
- * 
+ *
  * GAP-3 Resolution:
  * This schema enables venues to be shared across multiple organizations
  * within a network, supporting use cases like shared facilities and
  * multi-tenant venue management.
  */
 
-import { Timestamp } from 'firebase-admin/firestore';
-import { z } from 'zod';
+import { Timestamp } from "firebase-admin/firestore";
+import { z } from "zod";
 
 /**
  * Assignment status enum
  */
-export const OrgVenueAssignmentStatus = z.enum([
-  'active',
-  'inactive',
-  'pending',
-  'suspended',
-]);
+export const OrgVenueAssignmentStatus = z.enum(["active", "inactive", "pending", "suspended"]);
 export type OrgVenueAssignmentStatus = z.infer<typeof OrgVenueAssignmentStatus>;
 
 /**
@@ -39,12 +34,12 @@ export type OrgVenueAssignmentStatus = z.infer<typeof OrgVenueAssignmentStatus>;
  * Defines the relationship nature between org and venue
  */
 export const OrgVenueRole = z.enum([
-  'owner',          // Org owns the venue
-  'manager',        // Org manages the venue
-  'tenant',         // Org is a tenant at the venue
-  'partner',        // Org has a partnership with the venue
-  'guest',          // Org has guest access to the venue
-  'other',
+  "owner", // Org owns the venue
+  "manager", // Org manages the venue
+  "tenant", // Org is a tenant at the venue
+  "partner", // Org has a partnership with the venue
+  "guest", // Org has guest access to the venue
+  "other",
 ]);
 export type OrgVenueRole = z.infer<typeof OrgVenueRole>;
 
@@ -54,45 +49,45 @@ export type OrgVenueRole = z.infer<typeof OrgVenueRole>;
  */
 export const OrgVenueAssignmentSchema = z.object({
   // Identity
-  assignmentId: z.string().min(1, 'Assignment ID is required'),
-  networkId: z.string().min(1, 'Network ID is required'),
-  
+  assignmentId: z.string().min(1, "Assignment ID is required"),
+  networkId: z.string().min(1, "Network ID is required"),
+
   // Relationship
-  orgId: z.string().min(1, 'Organization ID is required'),
-  venueId: z.string().min(1, 'Venue ID is required'),
-  role: OrgVenueRole.default('tenant'),
-  
+  orgId: z.string().min(1, "Organization ID is required"),
+  venueId: z.string().min(1, "Venue ID is required"),
+  role: OrgVenueRole.default("tenant"),
+
   // Status & metadata
-  status: OrgVenueAssignmentStatus.default('active'),
+  status: OrgVenueAssignmentStatus.default("active"),
   effectiveDate: z
     .custom<Timestamp>((val) => val instanceof Timestamp, {
-      message: 'Must be a Firestore Timestamp',
+      message: "Must be a Firestore Timestamp",
     })
     .optional(),
   expirationDate: z
     .custom<Timestamp>((val) => val instanceof Timestamp, {
-      message: 'Must be a Firestore Timestamp',
+      message: "Must be a Firestore Timestamp",
     })
     .optional()
     .nullable(),
-  
+
   // Access control & permissions
   canSchedule: z.boolean().default(true),
   canManageVenue: z.boolean().default(false),
   canViewReports: z.boolean().default(true),
-  
+
   // Notes & context
   notes: z.string().max(1000).optional().nullable(),
-  
+
   // Audit fields
   createdAt: z.custom<Timestamp>((val) => val instanceof Timestamp, {
-    message: 'Must be a Firestore Timestamp',
+    message: "Must be a Firestore Timestamp",
   }),
   updatedAt: z.custom<Timestamp>((val) => val instanceof Timestamp, {
-    message: 'Must be a Firestore Timestamp',
+    message: "Must be a Firestore Timestamp",
   }),
-  createdBy: z.string().min(1, 'Created by UID is required'),
-  updatedBy: z.string().min(1, 'Updated by UID is required'),
+  createdBy: z.string().min(1, "Created by UID is required"),
+  updatedBy: z.string().min(1, "Updated by UID is required"),
 });
 
 export type OrgVenueAssignment = z.infer<typeof OrgVenueAssignmentSchema>;
@@ -102,11 +97,11 @@ export type OrgVenueAssignment = z.infer<typeof OrgVenueAssignmentSchema>;
  * Used in API payloads (POST /api/networks/{networkId}/org-venue-assignments)
  */
 export const CreateOrgVenueAssignmentSchema = z.object({
-  networkId: z.string().min(1, 'Network ID is required'),
-  orgId: z.string().min(1, 'Organization ID is required'),
-  venueId: z.string().min(1, 'Venue ID is required'),
-  role: OrgVenueRole.default('tenant'),
-  status: OrgVenueAssignmentStatus.optional().default('active'),
+  networkId: z.string().min(1, "Network ID is required"),
+  orgId: z.string().min(1, "Organization ID is required"),
+  venueId: z.string().min(1, "Venue ID is required"),
+  role: OrgVenueRole.default("tenant"),
+  status: OrgVenueAssignmentStatus.optional().default("active"),
   effectiveDate: z.string().datetime().optional(), // ISO string in API
   expirationDate: z.string().datetime().optional().nullable(),
   canSchedule: z.boolean().optional().default(true),
@@ -139,7 +134,7 @@ export type UpdateOrgVenueAssignmentInput = z.infer<typeof UpdateOrgVenueAssignm
  * Used in API query params (GET /api/networks/{networkId}/org-venue-assignments)
  */
 export const ListOrgVenueAssignmentsQuerySchema = z.object({
-  networkId: z.string().min(1, 'Network ID is required'),
+  networkId: z.string().min(1, "Network ID is required"),
   orgId: z.string().optional(),
   venueId: z.string().optional(),
   role: OrgVenueRole.optional(),

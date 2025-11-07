@@ -117,14 +117,14 @@ export type CreateVenueInput = z.infer<typeof CreateVenueSchema>;
 /**
  * Schema for updating an existing venue (v14.0.0)
  * Used in PATCH /api/venues/{id}
- * 
+ *
  * v14.0.0: Added networkId-aware fields, flattened address
  */
 export const UpdateVenueSchema = z.object({
   name: z.string().min(1).max(100).optional(),
   description: z.string().max(500).optional(),
   type: VenueType.optional(),
-  
+
   // v14.0.0: Flattened address fields
   addressLine1: z.string().max(100).optional(),
   addressLine2: z.string().max(100).optional(),
@@ -132,13 +132,13 @@ export const UpdateVenueSchema = z.object({
   state: z.string().max(50).optional(),
   postalCode: z.string().max(20).optional(),
   country: z.string().max(50).optional(),
-  
+
   // v14.0.0: Direct lat/lng + legacy
   lat: z.number().min(-90).max(90).optional(),
   lng: z.number().min(-180).max(180).optional(),
   address: AddressSchema.optional(), // Legacy
   coordinates: CoordinatesSchema.optional(), // Legacy
-  
+
   capacity: z.number().int().positive().optional(),
   capacityHint: z.number().int().positive().optional(), // v14.0.0
   isActive: z.boolean().optional(),
@@ -152,11 +152,11 @@ export type UpdateVenueInput = z.infer<typeof UpdateVenueSchema>;
 
 /**
  * Query parameters for listing venues (v14.0.0)
- * 
+ *
  * v14.0.0: Added networkId as primary scope, orgId for filtering via OrgVenueAssignments
  */
 export const ListVenuesQuerySchema = z.object({
-  networkId: z.string().min(1, 'Network ID is required'), // v14.0.0: Primary scope
+  networkId: z.string().min(1, "Network ID is required"), // v14.0.0: Primary scope
   orgId: z.string().optional(), // v14.0.0: Optional filter via OrgVenueAssignments
   isActive: z.coerce.boolean().optional(),
   type: VenueType.optional(),

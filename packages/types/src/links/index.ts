@@ -6,5 +6,5 @@
  * Re-exports all link schemas for network graph relationships
  */
 
-export * from './corpOrgLinks';
-export * from './orgVenueAssignments';
+export * from "./corpOrgLinks";
+export * from "./orgVenueAssignments";

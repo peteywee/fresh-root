@@ -6,4 +6,4 @@
  * Re-exports all compliance-related schemas
  */
 
-export * from './adminResponsibilityForm';
+export * from "./adminResponsibilityForm";
