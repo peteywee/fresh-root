@@ -64,7 +64,7 @@ Firestore Rules Update:
   }
 
   match /networks/{networkId}/schedules/{scheduleId} {
-    allow read, write: if 
+    allow read, write: if
       exists(/databases/$(database)/documents/networks/$(networkId)/memberships/$(request.auth.uid))
       && getRole(networkId) in ["scheduler", "org_owner", "network_admin"];
   }
@@ -86,7 +86,7 @@ Invariant:
 
 **Current State:**
 Section 4.4.3 says:
-  "MFA enabled for adminUid" is required for status="active"
+"MFA enabled for adminUid" is required for status="active"
 
 But does not specify:
 
@@ -138,7 +138,7 @@ MFA Requirement – Hard Gate at Onboarding:
       const network = await db.collection('networks').doc(networkId).get();
       const adminUid = network.data().ownerUserId;
       const admin = await admin.auth().getUser(adminUid);
-      
+
       const isReady =
         network.data().adminResponsibilityForm.liabilityAcknowledged
         && admin.customClaims?.mfa_enabled === true
@@ -171,7 +171,7 @@ MFA Requirement – Hard Gate at Onboarding:
 
     if (network.status === 'pending_verification') {
       const blocks = network.activationBlockedBy || [];
-      
+
       if (blocks.includes('mfa_pending')) {
         showAlert('Complete setup: Enable two-factor authentication in Security Settings');
       }
@@ -390,7 +390,7 @@ Firestore Rules:
   match /networks/{networkId}/links/orgVenueAssignments/{assignmentId} {
     allow read: if isNetworkMember(request.auth, networkId);
 
-    allow create: if 
+    allow create: if
       isOrgOwner(request.auth, orgId) &&
       hasRole(request.auth, "org_owner", "network_admin");
 
@@ -398,7 +398,7 @@ Firestore Rules:
       hasRole(request.auth, "org_owner", "network_admin") &&
       (
         // Can only set to "inactive" (one-way transition)
-        (request.resource.data.status == "inactive" && 
+        (request.resource.data.status == "inactive" &&
          resource.data.status == "active")
         ||
         // Cannot change immutable fields
@@ -616,7 +616,7 @@ Complete Rules Example (Fully Functional):
 
 **Current State:**
 Section 6.1 lists Block 4 as:
-  "Onboarding wizard, schedule builder, labor UI"
+"Onboarding wizard, schedule builder, labor UI"
 
 But only onboarding is detailed. "Schedule builder" and "labor UI" are vague.
 
@@ -644,26 +644,26 @@ Sections to be added:
   /dashboard
     - Network overview: staffing levels, schedule health, alerts
     - Quick actions: new shift, view today's schedule, team messages
-    
+
   /schedule/week
     - Week view grid: days × venues
     - Drag-drop to create/move shifts
     - Staff availability/conflicts overlay
-    
+
   /schedule/shift/{shiftId}
     - Edit shift details: time, role, venue, pay rate
     - Assign staff: pick from available, or auto-recommend
     - Message history & notes
-    
+
   /labor-hub
     - Staffing dashboard: open shifts, coverage %, overtime risk
     - Forecasting: what if I add X staff?
     - Budget tracking: cost-per-shift, labor cost vs. revenue
-    
+
   /staff
     - Team directory: profile, roles, availability, documents
     - Add/remove staff: invite, on-board, archive
-    
+
   /settings/venue/{venueId}
     - Configure venue: hours, capacity, roles, constraints
     - Staffing rules: min/max per shift, skill requirements
