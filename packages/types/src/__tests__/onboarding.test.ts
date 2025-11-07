@@ -6,8 +6,8 @@ import { CreateCorporateOnboardingSchema, JoinWithTokenSchema } from "..";
 
 describe("onboarding schemas", () => {
   it("parses valid create corporate payload", () => {
-  const payload = { corporateName: "Acme Corp", brandName: "Acme" };
-  const parsed = CreateCorporateOnboardingSchema.parse(payload);
+    const payload = { corporateName: "Acme Corp", brandName: "Acme" };
+    const parsed = CreateCorporateOnboardingSchema.parse(payload);
     expect(parsed.corporateName).toBe("Acme Corp");
   });
 

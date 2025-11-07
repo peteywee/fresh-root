@@ -29,19 +29,19 @@ One user can belong to multiple Networks via **memberships**, but all schedules,
 
 ## 2. Firestore Paths (Target Model)
 
-| Entity                     | Path Example                                                           | Notes                             | Status        |
-|---------------------------|-------------------------------------------------------------------------|-----------------------------------|---------------|
-| Network                    | `/networks/{networkId}`                                               | Tenant root                       | PLANNED/IN PROGRESS |
-| Corporate                  | `/networks/{networkId}/corporates/{corpId}`                           | Brand/HQ node                     | PLANNED       |
-| Organization               | `/networks/{networkId}/orgs/{orgId}`                                  | Operating unit                    | PLANNED       |
-| Venue                      | `/networks/{networkId}/venues/{venueId}`                              | Physical place                    | PLANNED       |
-| Corp ↔ Org Link            | `/networks/{networkId}/links/corpOrgLinks/{linkId}`                   | `relationshipType` + status       | PLANNED       |
-| Org ↔ Venue Assignment     | `/networks/{networkId}/links/orgVenueAssignments/{assignmentId}`      | Org operates at venue             | PLANNED       |
-| Network User Profile       | `/networks/{networkId}/users/{uid}`                                   | User info scoped to network       | PLANNED       |
-| Membership                 | `/networks/{networkId}/memberships/{membershipId}`                    | User roles + scopes               | PLANNED       |
-| AdminResponsibilityForm    | `/networks/{networkId}/compliance/adminResponsibilityForm`            | Legal/administrative record       | PLANNED       |
+| Entity                  | Path Example                                                     | Notes                       | Status              |
+| ----------------------- | ---------------------------------------------------------------- | --------------------------- | ------------------- |
+| Network                 | `/networks/{networkId}`                                          | Tenant root                 | PLANNED/IN PROGRESS |
+| Corporate               | `/networks/{networkId}/corporates/{corpId}`                      | Brand/HQ node               | PLANNED             |
+| Organization            | `/networks/{networkId}/orgs/{orgId}`                             | Operating unit              | PLANNED             |
+| Venue                   | `/networks/{networkId}/venues/{venueId}`                         | Physical place              | PLANNED             |
+| Corp ↔ Org Link        | `/networks/{networkId}/links/corpOrgLinks/{linkId}`              | `relationshipType` + status | PLANNED             |
+| Org ↔ Venue Assignment | `/networks/{networkId}/links/orgVenueAssignments/{assignmentId}` | Org operates at venue       | PLANNED             |
+| Network User Profile    | `/networks/{networkId}/users/{uid}`                              | User info scoped to network | PLANNED             |
+| Membership              | `/networks/{networkId}/memberships/{membershipId}`               | User roles + scopes         | PLANNED             |
+| AdminResponsibilityForm | `/networks/{networkId}/compliance/adminResponsibilityForm`       | Legal/administrative record | PLANNED             |
 
-**Rule:** Any new schedule/shift/people-related collection must either live *under* `/networks/{networkId}` or carry a `networkId` field with rules enforcing it.
+**Rule:** Any new schedule/shift/people-related collection must either live _under_ `/networks/{networkId}` or carry a `networkId` field with rules enforcing it.
 
 ---
 
@@ -172,6 +172,7 @@ Use this table to track implementation status:
 - [ ] E2E: New user can create a Network, Org, Venue via wizard and land in schedule view.
 
 Update this doc as pieces go from conceptual → implemented.
+
 # Network Schema & Paths (summary)
 
 This document summarizes the canonical Network-centric Firestore paths and the primary entities introduced in Project Bible v14.

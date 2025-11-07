@@ -24,7 +24,7 @@ export const POST = withSecurity(
       return NextResponse.json({ error: "invalid_json" }, { status: 400 });
     }
 
-  const parsed = CreateCorporateOnboardingSchema.safeParse(body);
+    const parsed = CreateCorporateOnboardingSchema.safeParse(body);
     if (!parsed.success) {
       return NextResponse.json(
         { error: "invalid_request", details: parsed.error.flatten() },
