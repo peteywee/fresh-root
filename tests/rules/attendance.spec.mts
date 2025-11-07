@@ -1,15 +1,10 @@
 // [P1][INTEGRITY][TEST] Attendance rules tests
 // Tags: P1, INTEGRITY, TEST, FIRESTORE, RULES, ATTENDANCE
-import {
-  assertFails,
-  assertSucceeds,
-  initializeTestEnvironment,
-  RulesTestEnvironment,
-} from "@firebase/rules-unit-testing";
+import { assertFails, assertSucceeds, RulesTestEnvironment } from "@firebase/rules-unit-testing";
 import { doc, getDoc, setDoc, updateDoc, deleteDoc, collection, getDocs } from "firebase/firestore";
-import { readFileSync } from "fs";
-import { resolve } from "path";
 import { describe, it, beforeAll, afterAll } from "vitest";
+
+import { initFirestoreTestEnv } from "./_setup";
 
 describe("Attendance Rules", () => {
   let testEnv: RulesTestEnvironment;
@@ -23,14 +18,7 @@ describe("Attendance Rules", () => {
   const OTHER_UID = "other-user";
 
   beforeAll(async () => {
-    testEnv = await initializeTestEnvironment({
-      projectId: "test-project",
-      firestore: {
-        rules: readFileSync(resolve(__dirname, "../../firestore.rules"), "utf8"),
-        host: "127.0.0.1",
-        port: 8080,
-      },
-    });
+    testEnv = await initFirestoreTestEnv("test-project-attendance-mts");
   });
 
   afterAll(async () => {
@@ -41,7 +29,7 @@ describe("Attendance Rules", () => {
     it("ALLOW: org member can read attendance record", async () => {
       await testEnv.withSecurityRulesDisabled(async (context) => {
         const db = context.firestore();
-        await setDoc(doc(db, `attendance/${ORG_ID}/attendance/att-1`), {
+        await setDoc(doc(db, `attendance_records/${ORG_ID}/records/att-1`), {
           id: "att-1",
           orgId: ORG_ID,
           shiftId: SHIFT_ID,
@@ -69,7 +57,7 @@ describe("Attendance Rules", () => {
         roles: ["staff"],
       });
       const db = staffContext.firestore();
-      await assertSucceeds(getDoc(doc(db, `attendance/${ORG_ID}/attendance/att-1`)));
+      await assertSucceeds(getDoc(doc(db, `attendance_records/${ORG_ID}/records/att-1`)));
     });
 
     it("DENY: non-member cannot read attendance record", async () => {
@@ -78,13 +66,13 @@ describe("Attendance Rules", () => {
         roles: ["staff"],
       });
       const db = otherContext.firestore();
-      await assertFails(getDoc(doc(db, `attendance/${ORG_ID}/attendance/att-1`)));
+      await assertFails(getDoc(doc(db, `attendance_records/${ORG_ID}/records/att-1`)));
     });
 
     it("DENY: unauthenticated cannot read attendance record", async () => {
       const unauthContext = testEnv.unauthenticatedContext();
       const db = unauthContext.firestore();
-      await assertFails(getDoc(doc(db, `attendance/${ORG_ID}/attendance/att-1`)));
+      await assertFails(getDoc(doc(db, `attendance_records/${ORG_ID}/records/att-1`)));
     });
 
     it("DENY: listing all attendance records forbidden", async () => {
@@ -93,7 +81,7 @@ describe("Attendance Rules", () => {
         roles: ["staff"],
       });
       const db = staffContext.firestore();
-      await assertFails(getDocs(collection(db, `attendance/${ORG_ID}/attendance`)));
+      await assertFails(getDocs(collection(db, `attendance_records/${ORG_ID}/records`)));
     });
   });
 
@@ -105,7 +93,7 @@ describe("Attendance Rules", () => {
       });
       const db = schedulerContext.firestore();
       await assertSucceeds(
-        setDoc(doc(db, `attendance/${ORG_ID}/attendance/new-att`), {
+        setDoc(doc(db, `attendance_records/${ORG_ID}/records/new-att`), {
           id: "new-att",
           orgId: ORG_ID,
           shiftId: SHIFT_ID,
@@ -129,7 +117,7 @@ describe("Attendance Rules", () => {
       });
       const db = managerContext.firestore();
       await assertSucceeds(
-        setDoc(doc(db, `attendance/${ORG_ID}/attendance/new-att-2`), {
+        setDoc(doc(db, `attendance_records/${ORG_ID}/records/new-att-2`), {
           id: "new-att-2",
           orgId: ORG_ID,
           shiftId: SHIFT_ID,
@@ -153,7 +141,7 @@ describe("Attendance Rules", () => {
       });
       const db = staffContext.firestore();
       await assertFails(
-        setDoc(doc(db, `attendance/${ORG_ID}/attendance/new-att-3`), {
+        setDoc(doc(db, `attendance_records/${ORG_ID}/records/new-att-3`), {
           id: "new-att-3",
           orgId: ORG_ID,
           shiftId: SHIFT_ID,
@@ -174,7 +162,7 @@ describe("Attendance Rules", () => {
       const unauthContext = testEnv.unauthenticatedContext();
       const db = unauthContext.firestore();
       await assertFails(
-        setDoc(doc(db, `attendance/${ORG_ID}/attendance/new-att-4`), {
+        setDoc(doc(db, `attendance_records/${ORG_ID}/records/new-att-4`), {
           id: "new-att-4",
           orgId: ORG_ID,
           shiftId: SHIFT_ID,
@@ -196,7 +184,7 @@ describe("Attendance Rules", () => {
     beforeAll(async () => {
       await testEnv.withSecurityRulesDisabled(async (context) => {
         const db = context.firestore();
-        await setDoc(doc(db, `attendance/${ORG_ID}/attendance/att-update`), {
+        await setDoc(doc(db, `attendance_records/${ORG_ID}/records/att-update`), {
           id: "att-update",
           orgId: ORG_ID,
           shiftId: SHIFT_ID,
@@ -220,7 +208,7 @@ describe("Attendance Rules", () => {
       });
       const db = schedulerContext.firestore();
       await assertSucceeds(
-        updateDoc(doc(db, `attendance/${ORG_ID}/attendance/att-update`), {
+        updateDoc(doc(db, `attendance_records/${ORG_ID}/records/att-update`), {
           status: "checked_in",
           actualCheckIn: Date.now(),
           checkInMethod: "manual",
@@ -236,7 +224,7 @@ describe("Attendance Rules", () => {
       });
       const db = managerContext.firestore();
       await assertSucceeds(
-        updateDoc(doc(db, `attendance/${ORG_ID}/attendance/att-update`), {
+        updateDoc(doc(db, `attendance_records/${ORG_ID}/records/att-update`), {
           breakDuration: 45,
           updatedAt: Date.now(),
         }),
@@ -250,7 +238,7 @@ describe("Attendance Rules", () => {
       });
       const db = staffContext.firestore();
       await assertFails(
-        updateDoc(doc(db, `attendance/${ORG_ID}/attendance/att-update`), {
+        updateDoc(doc(db, `attendance_records/${ORG_ID}/records/att-update`), {
           status: "checked_out",
         }),
       );
@@ -263,7 +251,7 @@ describe("Attendance Rules", () => {
       });
       const db = otherContext.firestore();
       await assertFails(
-        updateDoc(doc(db, `attendance/${ORG_ID}/attendance/att-update`), {
+        updateDoc(doc(db, `attendance_records/${ORG_ID}/records/att-update`), {
           status: "checked_out",
         }),
       );
@@ -275,7 +263,7 @@ describe("Attendance Rules", () => {
       const deleteAttId = `delete-att-${Date.now()}`;
       await testEnv.withSecurityRulesDisabled(async (context) => {
         const db = context.firestore();
-        await setDoc(doc(db, `attendance/${ORG_ID}/attendance/${deleteAttId}`), {
+        await setDoc(doc(db, `attendance_records/${ORG_ID}/records/${deleteAttId}`), {
           id: deleteAttId,
           orgId: ORG_ID,
           shiftId: SHIFT_ID,
@@ -296,7 +284,9 @@ describe("Attendance Rules", () => {
         roles: ["manager"],
       });
       const db = managerContext.firestore();
-      await assertSucceeds(deleteDoc(doc(db, `attendance/${ORG_ID}/attendance/${deleteAttId}`)));
+      await assertSucceeds(
+        deleteDoc(doc(db, `attendance_records/${ORG_ID}/records/${deleteAttId}`)),
+      );
     });
 
     it("DENY: scheduler cannot delete attendance record", async () => {
@@ -305,7 +295,7 @@ describe("Attendance Rules", () => {
         roles: ["scheduler"],
       });
       const db = schedulerContext.firestore();
-      await assertFails(deleteDoc(doc(db, `attendance/${ORG_ID}/attendance/att-update`)));
+      await assertFails(deleteDoc(doc(db, `attendance_records/${ORG_ID}/records/att-update`)));
     });
 
     it("DENY: staff cannot delete attendance record", async () => {
@@ -314,7 +304,7 @@ describe("Attendance Rules", () => {
         roles: ["staff"],
       });
       const db = staffContext.firestore();
-      await assertFails(deleteDoc(doc(db, `attendance/${ORG_ID}/attendance/att-update`)));
+      await assertFails(deleteDoc(doc(db, `attendance_records/${ORG_ID}/records/att-update`)));
     });
   });
 });

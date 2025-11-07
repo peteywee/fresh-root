@@ -1,22 +1,24 @@
 {
+  "inputs": [
+    {
+      "type": "promptString",
+      "id": "firecrawlApiKey",
+      "description": "Firecrawl API Key",
+      "password": true
+    }
+  ],
   "servers": {
     "filetag": {
       "type": "stdio",
       "command": "node",
-      "args": ["${workspaceFolder}/mcp/filetag-server.mjs"],
-      "envFile": "${workspaceFolder}/.env"
+      "args": ["${workspaceFolder}/mcp/filetag-server-enhanced.mjs"]
+    },
+    "firecrawl": {
+      "command": "npx",
+      "args": ["-y", "firecrawl-mcp"],
+      "env": {
+        "FIRECRAWL_API_KEY": "${input:firecrawlApiKey}"
+      }
     }
-  },
-  "inputs": []
-}
-{
-  "servers": {
-    "filetag": {
-      "type": "stdio",
-      "command": "node",
-      "args": ["${workspaceFolder}/mcp/filetag-server-enhanced.mjs"],
-      "envFile": "${workspaceFolder}/.env"
-    }
-  },
-  "inputs": []
+  }
 }

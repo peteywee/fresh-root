@@ -1,15 +1,10 @@
 // [P1][INTEGRITY][TEST] Organizations rules tests
 // Tags: P1, INTEGRITY, TEST, FIRESTORE, RULES, ORGANIZATIONS
-import {
-  assertFails,
-  assertSucceeds,
-  initializeTestEnvironment,
-  RulesTestEnvironment,
-} from "@firebase/rules-unit-testing";
+import { assertFails, assertSucceeds, RulesTestEnvironment } from "@firebase/rules-unit-testing";
 import { doc, getDoc, setDoc, updateDoc, deleteDoc, collection, getDocs } from "firebase/firestore";
-import { readFileSync } from "fs";
-import { resolve } from "path";
 import { describe, it, beforeAll, afterAll } from "vitest";
+
+import { initFirestoreTestEnv } from "./_setup";
 
 describe("Organizations Rules", () => {
   let testEnv: RulesTestEnvironment;
@@ -20,14 +15,7 @@ describe("Organizations Rules", () => {
   const OTHER_UID = "other-user";
 
   beforeAll(async () => {
-    testEnv = await initializeTestEnvironment({
-      projectId: "test-project",
-      firestore: {
-        rules: readFileSync(resolve(__dirname, "../../../../firestore.rules"), "utf8"),
-        host: "127.0.0.1",
-        port: 8080,
-      },
-    });
+    testEnv = await initFirestoreTestEnv("test-project");
   });
 
   afterAll(async () => {
@@ -136,13 +124,13 @@ describe("Organizations Rules", () => {
       );
     });
 
-    it("ALLOW: manager can update org", async () => {
+    it("DENY: manager cannot update org", async () => {
       const managerContext = testEnv.authenticatedContext(MANAGER_UID, {
         orgId: ORG_ID,
         roles: ["manager"],
       });
       const db = managerContext.firestore();
-      await assertSucceeds(
+      await assertFails(
         updateDoc(doc(db, `organizations/${ORG_ID}`), {
           description: "Updated description",
           updatedAt: Date.now(),

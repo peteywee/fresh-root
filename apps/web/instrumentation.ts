@@ -19,6 +19,17 @@ export function register() {
   if (started) return;
   started = true;
 
+  // === Fail-fast environment validation ===
+  // Import and validate server environment at startup
+  // This ensures the app won't start with missing or invalid configuration
+  try {
+    const { loadServerEnv } = require("./src/lib/env.server");
+    loadServerEnv();
+  } catch (error) {
+    console.error("[instrumentation] Failed to load server environment:", error);
+    throw error; // Fail fast
+  }
+
   // Minimal diagnostics
   if (process.env.OTEL_DEBUG === "1") {
     diag.setLogger(new DiagConsoleLogger(), DiagLogLevel.DEBUG);

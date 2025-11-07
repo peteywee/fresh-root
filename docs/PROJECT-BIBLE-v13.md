@@ -339,3 +339,147 @@ FIREBASE_PROJECT_ID=<id> BACKUP_BUCKET=gs://<bucket> ./scripts/ops/backup-firest
 # Deploy (Blue/Green workflow; provider-specific wiring inside deploy.yml)
 gh workflow run deploy.yml
 ```
+
+---
+
+## 7) Appendix C – Extended Scopes
+
+### C.3 Corporate Staff Path (Extended Role Derivation)
+
+**Purpose:**
+Define, authorize, and route the corporate-staff user class—administrative, HQ-level personnel who require organizational visibility but do not perform shift work.
+This path extends the Onboarding Wizard (§7.1) and integrates across independent primary scopes with orthogonal concerns.
+
+#### Primary Scope A → Auth & Identity
+
+**Implementation:**
+
+- Adds `role:"corporate"` to `users/{uid}` document
+- Role set during onboarding immediately after Firebase Auth creation
+- Controls initial redirect and claim issuance
+- **Independent**: Can create auth users with corporate role without any organization
+
+**Why:**
+Centralizing identity derivation at the authentication layer eliminates split logic between backend and UI. Every subsystem consumes one authoritative role field.
+
+#### Primary Scope B → Org & Membership
+
+**Implementation:**
+
+- Adds `role:"corporate"` to `memberships/{uid_orgId}` document
+- **Independent**: Can create organizations and memberships without auth users
+- Links users to organizations with corporate-specific permissions
+- Enables cross-venue visibility through organizational structure
+
+**Firestore Documents:**
+
+```typescript
+memberships/{uid_orgId} = {
+  role: "corporate",
+  venuesAccess: [venueIds...],
+  privileges: ["viewSchedules", "viewLabor", "exportPayroll"]
+}
+```
+
+**Firestore Rules:**
+
+```javascript
+match /memberships/{uid_orgId} {
+  allow read: if hasRole(request.auth.uid, ['manager','corporate']);
+  allow write: if hasRole(request.auth.uid, ['manager']);
+}
+```
+
+**Why:**
+Keeps data shape unified while granting controlled cross-venue visibility. Corporate users appear in the same membership index, preserving analytics integrity. Organizations can be managed independently of auth identities.
+
+#### Secondary Scope A → Finance & Analytics
+
+**Permissions Matrix:**
+
+| Capability          | Manager | Corporate | Staff |
+| ------------------- | ------- | --------- | ----- |
+| View Labor & Budget | ✅      | ✅        | ❌    |
+| Export Payroll      | ✅      | ✅        | ❌    |
+| Edit Forecasts      | ✅      | ❌        | ❌    |
+
+**Why:**
+Corporate roles must audit financial metrics but never mutate them. This implements least-privilege compliance for SOX-type audit trails.
+
+#### Secondary Scope C → Experience Layer
+
+**Routing Map:**
+
+| Role      | Redirect             | Component              |
+| --------- | -------------------- | ---------------------- |
+| manager   | /dashboard/overview  | ManagerDashboard.tsx   |
+| staff     | /dashboard/my-shifts | StaffDashboard.tsx     |
+| corporate | /dashboard/analytics | CorporateDashboard.tsx |
+
+**UX Notes:**
+
+- Role select screen adds option "Corporate Staff (HR / Accounting / Supervisor)"
+- Profile step includes department and multi-venue selector
+- Permissions preview displays 👁️ View Schedules | 📊 View Labor | 📤 Export Payroll
+
+**Why:**
+Explicit differentiation prevents HQ employees from mistakenly choosing "Manager," reducing mis-routed dashboards and support tickets.
+
+#### API Alignment
+
+| API Route              | Method | Role Access        |
+| ---------------------- | ------ | ------------------ |
+| /api/finance/export    | GET    | manager, corporate |
+| /api/analytics/reports | GET    | manager, corporate |
+| /api/schedules/publish | POST   | manager only       |
+
+**Why:**
+Mirrors RBAC table for endpoint parity; ensures frontend and backend stay synchronized through declarative role checks.
+
+#### Scope Hierarchy Diagram
+
+```text
+PRIMARY SCOPES (Independent, No Coupling):
+
+[ AUTH & IDENTITY ] ← Primary A
+   ├─ defines role=corporate in users/{uid}
+   ├─ sets auth claims
+   └─ can exist without organizations
+
+[ ORG & MEMBERSHIP ] ← Primary B
+   ├─ defines role=corporate in memberships/{uid_orgId}
+   ├─ venuesAccess[], privileges[]
+   └─ can exist without auth users
+
+SECONDARY SCOPES (Consume Primary Scopes):
+
+[ FINANCE & ANALYTICS ] ← Secondary A
+   └─ read-only dashboards (consumes both Auth + Org)
+
+[ EXPERIENCE LAYER ] ← Secondary B
+   └─ /dashboard/analytics routing (consumes both Auth + Org)
+```
+
+#### Metrics & Acceptance
+
+| Metric                        | Target  |
+| ----------------------------- | ------- |
+| Role choice completion rate   | ≥ 98 %  |
+| Corporate onboarding time     | ≤ 2 min |
+| Data consistency (role match) | 100 %   |
+| Cross-venue access accuracy   | 100 %   |
+| Wrong-dashboard tickets       | < 2 %   |
+
+#### Definition of Done
+
+- [ ] `role:"corporate"` selectable in onboarding
+- [ ] Firestore rules, API, and dashboards updated
+- [ ] QA verifies redirects and read-only permissions
+- [ ] Lighthouse a11y ≥ 95
+- [ ] Bible §7.1 cross-references this section
+
+**Status:** ✅ Ratified as Section C.3 in the Project Bible v13 Scopes Appendix
+
+---
+
+## END OF PROJECT BIBLE v13

@@ -1,28 +1,36 @@
 // [P0][AUTH][SESSION] Session Api Spec tests
 // Tags: P0, AUTH, SESSION, TEST
-import { describe, it, expect, vi } from "vitest";
+import { NextRequest } from "next/server";
 
-// Mock Admin Auth
-vi.mock("../lib/firebase.server", async () => {
-  return {
-    adminAuth: {
-      createSessionCookie: vi.fn().mockResolvedValue("cookie"),
-      verifySessionCookie: vi.fn().mockResolvedValue({ sub: "uid" }),
-      revokeRefreshTokens: vi.fn().mockResolvedValue(undefined),
-    },
-  };
-});
+// If you have the `@` alias configured (Next.js tsconfig paths), this should work:
+import { POST } from "../../app/api/session/route";
+// If that import fails, replace the line above with the relative path, e.g.:
+// import { POST } from "../../app/api/session/route";
 
 describe("/api/session", () => {
   it("rejects missing idToken", async () => {
-    const mod = await import("../../app/api/session/route");
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const res = await mod.POST(
-      new Request("http://test", { method: "POST", body: JSON.stringify({}) }) as any,
-    );
-    const json = await res.json();
+    // Build a NextRequest with an empty JSON body (no idToken)
+    const req = new NextRequest("http://localhost/api/session", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({}), // intentionally missing idToken
+    });
+
+    const res = await POST(req);
+
+    // Should be a 400 Bad Request
     expect(res.status).toBe(400);
-    // New standardized error shape
-    expect(json.error?.message ?? json.error).toMatch(/Missing idToken/);
+
+    const json = await res.json();
+
+    // New error shape: error is an OBJECT, not a string
+    expect(json.error).toBeDefined();
+    expect(typeof json.error).toBe("object");
+
+    // We only assert on the message so we don't depend on exact code structure
+    // (e.g. whether you use BAD_REQUEST, MISSING_ID_TOKEN, etc.)
+    expect(json.error.message).toMatch(/missing idtoken/i);
   });
 });

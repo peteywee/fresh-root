@@ -94,7 +94,21 @@
     "glump",
     "prefs",
     "rgba",
-    "ACAO"
+    "ACAO",
+    "touchpoints",
+    "understaffing",
+    "Understaffing",
+    "Overstaffing",
+    "grayscale",
+    "Fira",
+    "heures",
+    "Anonymization",
+    "screencasts",
+    "Homebase",
+    "Chakra",
+    "Vercel",
+    "vercel",
+    "myapp"
   ],
   "ignorePaths": [
     "node_modules",

@@ -19,9 +19,14 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod";
+import Ajv2020 from "ajv/dist/2020.js";
+import addFormats from "ajv-formats";
 import fs from "node:fs/promises";
 import path from "node:path";
 import os from "node:os";
+// ---------- JSON Schema Draft 2020-12 Validator (Ajv) ----------
+const ajv = new Ajv2020({ strict: false, allErrors: true, $data: true, allowUnionTypes: true });
+addFormats(ajv);
 
 const server = new McpServer({ name: "filetag", version: "0.2.0" });
 

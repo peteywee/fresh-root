@@ -63,13 +63,13 @@ export const OrganizationSchema = z.object({
   contactEmail: z.string().email().optional(),
   contactPhone: z.string().max(20).optional(),
 
-  // Timestamps
-  createdAt: z.number().int().positive(),
-  updatedAt: z.number().int().positive(),
+  // Timestamps (accept ISO datetime string or Unix ms number)
+  createdAt: z.union([z.number().int().positive(), z.string().datetime()]),
+  updatedAt: z.union([z.number().int().positive(), z.string().datetime()]),
 
-  // Trial/subscription
-  trialEndsAt: z.number().int().positive().optional(),
-  subscriptionEndsAt: z.number().int().positive().optional(),
+  // Trial/subscription (accept ISO datetime string or Unix ms number)
+  trialEndsAt: z.union([z.number().int().positive(), z.string().datetime()]).optional(),
+  subscriptionEndsAt: z.union([z.number().int().positive(), z.string().datetime()]).optional(),
 });
 export type Organization = z.infer<typeof OrganizationSchema>;
 
@@ -105,6 +105,11 @@ export const UpdateOrganizationSchema = z.object({
   settings: OrganizationSettingsSchema.optional(),
 });
 export type UpdateOrganizationInput = z.infer<typeof UpdateOrganizationSchema>;
+
+// Aliases for backward/test compatibility
+export const Organization = OrganizationSchema;
+export const OrganizationCreateSchema = CreateOrganizationSchema;
+export const OrganizationUpdateSchema = UpdateOrganizationSchema;
 
 /**
  * Query parameters for listing organizations

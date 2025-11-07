@@ -7,7 +7,9 @@
 
 ## Overview
 
-Successfully consolidated all feature branches (except `fbs` and `studio/sync-*` as requested) into a single `consolidate/all-features` branch for cleaner repository management.
+Successfully consolidated all feature branches (except `fbs` and `studio/sync-*` as
+requested) into a single `consolidate/all-features` branch for cleaner repository
+management.
 
 ## Branches Consolidated
 

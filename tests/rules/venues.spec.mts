@@ -1,15 +1,10 @@
 // [P1][INTEGRITY][TEST] Venues rules tests
 // Tags: P1, INTEGRITY, TEST, FIRESTORE, RULES, VENUES
-import {
-  assertFails,
-  assertSucceeds,
-  initializeTestEnvironment,
-  RulesTestEnvironment,
-} from "@firebase/rules-unit-testing";
+import { assertFails, assertSucceeds, RulesTestEnvironment } from "@firebase/rules-unit-testing";
 import { doc, getDoc, setDoc, updateDoc, deleteDoc, collection, getDocs } from "firebase/firestore";
-import { readFileSync } from "fs";
-import { resolve } from "path";
 import { describe, it, beforeAll, afterAll } from "vitest";
+
+import { initFirestoreTestEnv } from "./_setup";
 
 describe("Venues Rules", () => {
   let testEnv: RulesTestEnvironment;
@@ -20,14 +15,7 @@ describe("Venues Rules", () => {
   const OTHER_UID = "other-user";
 
   beforeAll(async () => {
-    testEnv = await initializeTestEnvironment({
-      projectId: "test-project",
-      firestore: {
-        rules: readFileSync(resolve(__dirname, "../../firestore.rules"), "utf8"),
-        host: "127.0.0.1",
-        port: 8080,
-      },
-    });
+    testEnv = await initFirestoreTestEnv("test-project-venues-mts");
   });
 
   afterAll(async () => {
@@ -211,7 +199,7 @@ describe("Venues Rules", () => {
   });
 
   describe("Delete access", () => {
-    it("ALLOW: manager can delete venue", async () => {
+    it("DENY: manager cannot delete venue (admin/owner only)", async () => {
       const deleteVenueId = `delete-venue-${Date.now()}`;
       await testEnv.withSecurityRulesDisabled(async (context) => {
         const db = context.firestore();
@@ -233,7 +221,7 @@ describe("Venues Rules", () => {
         roles: ["manager"],
       });
       const db = managerContext.firestore();
-      await assertSucceeds(deleteDoc(doc(db, `venues/${ORG_ID}/venues/${deleteVenueId}`)));
+      await assertFails(deleteDoc(doc(db, `venues/${ORG_ID}/venues/${deleteVenueId}`)));
     });
 
     it("DENY: staff cannot delete venue", async () => {

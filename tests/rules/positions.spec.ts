@@ -1,15 +1,10 @@
 // [P1][INTEGRITY][TEST] Positions rules tests
 // Tags: P1, INTEGRITY, TEST, FIRESTORE, RULES, POSITIONS
-import {
-  assertFails,
-  assertSucceeds,
-  initializeTestEnvironment,
-  RulesTestEnvironment,
-} from "@firebase/rules-unit-testing";
+import { assertFails, assertSucceeds, RulesTestEnvironment } from "@firebase/rules-unit-testing";
 import { doc, getDoc, setDoc, updateDoc, deleteDoc, collection, getDocs } from "firebase/firestore";
-import { readFileSync } from "fs";
-import { resolve } from "path";
 import { describe, it, beforeAll, afterAll } from "vitest";
+
+import { initFirestoreTestEnv } from "./_setup";
 
 describe("Positions Rules", () => {
   let testEnv: RulesTestEnvironment;
@@ -20,19 +15,12 @@ describe("Positions Rules", () => {
   const OTHER_ORG_UID = "other-org-user";
 
   beforeAll(async () => {
-    testEnv = await initializeTestEnvironment({
-      projectId: "test-project-pos",
-      firestore: {
-        rules: readFileSync(resolve(__dirname, "../../firestore.rules"), "utf8"),
-        host: "127.0.0.1",
-        port: 8080,
-      },
-    });
+    testEnv = await initFirestoreTestEnv("test-project-pos");
 
     // Setup test data
     await testEnv.withSecurityRulesDisabled(async (context) => {
       const db = context.firestore();
-      await setDoc(doc(db, `positions/${ORG_ID}/${POS_ID}`), {
+      await setDoc(doc(db, `positions/${ORG_ID}/positions/${POS_ID}`), {
         id: POS_ID,
         orgId: ORG_ID,
         name: "Event Staff",
@@ -53,7 +41,7 @@ describe("Positions Rules", () => {
         roles: ["staff"],
       });
       const db = staffContext.firestore();
-      await assertSucceeds(getDoc(doc(db, `positions/${ORG_ID}/${POS_ID}`)));
+      await assertSucceeds(getDoc(doc(db, `positions/${ORG_ID}/positions/${POS_ID}`)));
     });
 
     it("DENY: non-member cannot read position", async () => {
@@ -62,13 +50,13 @@ describe("Positions Rules", () => {
         roles: ["staff"],
       });
       const db = otherContext.firestore();
-      await assertFails(getDoc(doc(db, `positions/${ORG_ID}/${POS_ID}`)));
+      await assertFails(getDoc(doc(db, `positions/${ORG_ID}/positions/${POS_ID}`)));
     });
 
     it("DENY: unauthenticated cannot read position", async () => {
       const unauthContext = testEnv.unauthenticatedContext();
       const db = unauthContext.firestore();
-      await assertFails(getDoc(doc(db, `positions/${ORG_ID}/${POS_ID}`)));
+      await assertFails(getDoc(doc(db, `positions/${ORG_ID}/positions/${POS_ID}`)));
     });
 
     it("DENY: listing positions forbidden", async () => {
@@ -77,7 +65,7 @@ describe("Positions Rules", () => {
         roles: ["staff"],
       });
       const db = staffContext.firestore();
-      await assertFails(getDocs(collection(db, `positions/${ORG_ID}`)));
+      await assertFails(getDocs(collection(db, `positions/${ORG_ID}/positions`)));
     });
   });
 
@@ -89,7 +77,7 @@ describe("Positions Rules", () => {
       });
       const db = managerContext.firestore();
       await assertSucceeds(
-        setDoc(doc(db, `positions/${ORG_ID}/new-pos-${Date.now()}`), {
+        setDoc(doc(db, `positions/${ORG_ID}/positions/new-pos-${Date.now()}`), {
           name: "New Position",
           orgId: ORG_ID,
           type: "full_time",
@@ -105,7 +93,7 @@ describe("Positions Rules", () => {
       });
       const db = managerContext.firestore();
       await assertSucceeds(
-        updateDoc(doc(db, `positions/${ORG_ID}/${POS_ID}`), {
+        updateDoc(doc(db, `positions/${ORG_ID}/positions/${POS_ID}`), {
           name: "Updated Position",
         }),
       );
@@ -118,7 +106,7 @@ describe("Positions Rules", () => {
       });
       const db = staffContext.firestore();
       await assertFails(
-        setDoc(doc(db, `positions/${ORG_ID}/staff-pos-${Date.now()}`), {
+        setDoc(doc(db, `positions/${ORG_ID}/positions/staff-pos-${Date.now()}`), {
           name: "Unauthorized Position",
           orgId: ORG_ID,
         }),
@@ -132,7 +120,7 @@ describe("Positions Rules", () => {
       });
       const db = staffContext.firestore();
       await assertFails(
-        updateDoc(doc(db, `positions/${ORG_ID}/${POS_ID}`), {
+        updateDoc(doc(db, `positions/${ORG_ID}/positions/${POS_ID}`), {
           name: "Staff Update Attempt",
         }),
       );
@@ -145,7 +133,7 @@ describe("Positions Rules", () => {
       });
       const db = otherContext.firestore();
       await assertFails(
-        updateDoc(doc(db, `positions/${ORG_ID}/${POS_ID}`), {
+        updateDoc(doc(db, `positions/${ORG_ID}/positions/${POS_ID}`), {
           name: "Cross-org Update",
         }),
       );
@@ -155,7 +143,7 @@ describe("Positions Rules", () => {
       const deletePos = `delete-pos-${Date.now()}`;
       await testEnv.withSecurityRulesDisabled(async (context) => {
         const db = context.firestore();
-        await setDoc(doc(db, `positions/${ORG_ID}/${deletePos}`), {
+        await setDoc(doc(db, `positions/${ORG_ID}/positions/${deletePos}`), {
           name: "To Delete",
           orgId: ORG_ID,
         });
@@ -166,7 +154,7 @@ describe("Positions Rules", () => {
         roles: ["manager"],
       });
       const db = managerContext.firestore();
-      await assertSucceeds(deleteDoc(doc(db, `positions/${ORG_ID}/${deletePos}`)));
+      await assertSucceeds(deleteDoc(doc(db, `positions/${ORG_ID}/positions/${deletePos}`)));
     });
   });
 });
