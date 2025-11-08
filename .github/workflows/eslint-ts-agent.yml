@@ -1,57 +1,73 @@
-  - name: Use PNPM
-    uses: pnpm/action-setup@v4
-    with:
-      version: 9.1.0
+name: ESLint + TypeScript Agent
 
-  - name: Setup Node
-    uses: actions/setup-node@v4
-    with:
-      node-version: "20"
-      cache: "pnpm"
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
 
-  - name: Install dependencies (deterministic)
-    run: pnpm install --frozen-lockfile
+permissions:
+  contents: write
 
-  # Standardized quality gates (see docs/CI_WORKFLOW_STANDARDS.md)
-  - name: Format & Lint (auto-fix)
-    run: pnpm -w fix
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: true
 
-  - name: Lint (strict)
-    run: pnpm -w lint
+      - name: Use PNPM
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9.1.0
 
-  - name: Run lint (reviewdog)
-    uses: reviewdog/action-eslint@v1
-    with:
-      github_token: ${{ secrets.GITHUB_TOKEN }}
-      reporter: github-pr-review
-      level: error
-      eslint_flags: "apps/**/src/**/*.{ts,tsx,js,jsx} apps/**/app/**/*.{ts,tsx,js,jsx} packages/**/src/**/*.{ts,tsx,js,jsx} functions/src/**/*.{ts,tsx,js,jsx}"
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "pnpm"
 
-  # Ensure working directory is clean before any git operations
-  - name: Stash local changes created during workflow
-    if: always()
-    run: |
-      if [ -n "$(git status --porcelain)" ]; then
-        git stash push --include-untracked -m "ci: stash pre-git-op"
-        echo "Stashed changes"
-      else
-        echo "No changes to stash"
-      fi
+      - name: Install dependencies (deterministic)
+        run: pnpm install --frozen-lockfile
 
-  # Only attempt to auto-commit when the PR head is in the same repository (not a fork)
-  - name: Run git-auto-commit-action (only for same-repo PRs)
-    if: ${{ github.event.pull_request.head.repo.full_name == github.repository }}
-    uses: stefanzweifel/git-auto-commit-action@v5
-    with:
-      commit_message: "chore(eslint): auto-fix lint errors"
-      branch: ${{ github.head_ref }}
-      push: "true"
+      - name: Format & Lint (auto-fix)
+        run: pnpm -w fix
 
-  - name: Restore stashed changes (if any)
-    if: always()
-    run: |
-      if git rev-parse --verify refs/stash >/dev/null 2>&1; then
-        git stash pop || echo "No stash to pop or conflicts occurred"
-      else
-        echo "No stash present"
-      fi
+      - name: Lint (strict)
+        run: pnpm -w lint
+
+      - name: Run lint (reviewdog)
+        uses: reviewdog/action-eslint@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          reporter: github-pr-review
+          level: error
+          eslint_flags: "apps/**/src/**/*.{ts,tsx,js,jsx} apps/**/app/**/*.{ts,tsx,js,jsx} packages/**/src/**/*.{ts,tsx,js,jsx} functions/src/**/*.{ts,tsx,js,jsx}"
+
+      - name: Stash local changes created during workflow
+        if: always()
+        run: |
+          if [ -n "$(git status --porcelain)" ]; then
+            git stash push --include-untracked -m "ci: stash pre-git-op"
+            echo "Stashed changes"
+          else
+            echo "No changes to stash"
+          fi
+
+      - name: Run git-auto-commit-action (only for same-repo PRs)
+        if: ${{ github.event.pull_request.head.repo.full_name == github.repository && github.head_ref != 'main' }}
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore(eslint): auto-fix lint errors"
+          branch: ${{ github.head_ref }}
+          push: "true"
+
+      - name: Restore stashed changes (if any)
+        if: always()
+        run: |
+          if git rev-parse --verify refs/stash >/dev/null 2>&1; then
+            git stash pop || echo "No stash to pop or conflicts occurred"
+          else
+            echo "No stash present"
+          fi
