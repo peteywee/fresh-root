@@ -34,8 +34,8 @@ importers:
         specifier: ^7.53.2
         version: 7.66.0(react@18.3.1)
       zod:
-        specifier: ^4.1.12
-        version: 4.1.12
+        specifier: ^3.23.8
+        version: 3.25.76
     devDependencies:
       autoprefixer:
         specifier: ^10.4.20

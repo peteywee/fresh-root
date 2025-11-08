@@ -25,7 +25,7 @@ describe("create-network-org handler", () => {
 
     req.user = { uid: "test-uid", customClaims: { email_verified: true, role: "org_owner" } };
 
-  const res = await createNetworkOrgHandler(req);
+    const res = await createNetworkOrgHandler(req);
     const body = await res.json();
 
     expect(res.status).toBe(200);
@@ -48,10 +48,14 @@ describe("create-network-org handler", () => {
 
     // Inject a fake adminDb so the handler doesn't return the dev stub early and reaches validation
     const fakeAdminDb = {
-      collection: () => ({ doc: () => ({ collection: () => ({ doc: () => ({ get: async () => ({ exists: false }) }) }) }) }),
+      collection: () => ({
+        doc: () => ({
+          collection: () => ({ doc: () => ({ get: async () => ({ exists: false }) }) }),
+        }),
+      }),
     };
 
-  const res = await createNetworkOrgHandler(req, fakeAdminDb);
+    const res = await createNetworkOrgHandler(req, fakeAdminDb);
     expect(res.status).toBe(422);
     const body = await res.json();
     expect(body.error).toBe("missing_form_token");
