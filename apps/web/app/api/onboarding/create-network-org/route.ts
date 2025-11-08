@@ -74,6 +74,11 @@ export async function createNetworkOrgHandler(
   const { orgName, venueName, formToken } = (body as Record<string, unknown>) || {};
   if (!formToken) return NextResponse.json({ error: "missing_form_token" }, { status: 422 });
 
+  // Prevent path traversal attacks by ensuring formToken is a valid document ID segment.
+  if (String(formToken).includes("/")) {
+    return NextResponse.json({ error: "invalid_form_token" }, { status: 400 });
+  }
+
   try {
     const formRef = adminDb
       .collection("compliance")
