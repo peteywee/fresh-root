@@ -14,7 +14,8 @@ export default function CreateNetworkCorporate() {
   function handleNext(e: React.FormEvent) {
     e.preventDefault();
     // Placeholder for corporate-specific flow
-    router.push("/onboarding/admin-responsibility");
+    const navigate = (p: string) => (router as unknown as { push: (s: string) => void }).push(p);
+    navigate("/onboarding/admin-responsibility");
   }
 
   return (
