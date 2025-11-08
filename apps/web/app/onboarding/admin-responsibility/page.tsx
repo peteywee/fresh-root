@@ -1,13 +1,13 @@
 // [P0][FIREBASE][CODE] Page page component
 // Tags: P0, FIREBASE, CODE
 "use client";
-import React from "react";
 import { useOnboardingStore } from "../_stores/useOnboardingStore";
+import { useState } from "react";
 
 export default function AdminResponsibility() {
   const { role, formToken, isSubmitting, error, setRole, setFormToken, setIsSubmitting, setError } =
     useOnboardingStore();
-  const [result, setResult] = React.useState<Record<string, unknown> | null>(null);
+  const [result, setResult] = useState<Record<string, unknown> | null>(null);
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
