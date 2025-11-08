@@ -1,6 +1,6 @@
 // [P2][APP][CODE] Page page component
 // Tags: P2, APP, CODE
-"use client"
+"use client";
 
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
@@ -16,13 +16,14 @@ export default function ProfileStep() {
     e.preventDefault();
     // TODO: call update profile API (placeholder for now)
     // Example: await fetch('/api/users/profile', ...)
-    router.push("/onboarding/intent");
+    const navigate = (p: string) => (router as unknown as { push: (s: string) => void }).push(p);
+    navigate("/onboarding/intent");
   }
 
   return (
     <ProtectedRoute>
-      <div className="max-w-2xl mx-auto p-6">
-        <h1 className="text-2xl font-semibold mb-4">Profile</h1>
+      <div className="mx-auto max-w-2xl p-6">
+        <h1 className="mb-4 text-2xl font-semibold">Profile</h1>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block text-sm font-medium">Full name</label>
@@ -43,7 +44,7 @@ export default function ProfileStep() {
           </div>
 
           <div className="flex justify-end">
-            <button className="bg-blue-600 text-white px-4 py-2 rounded">Next</button>
+            <button className="rounded bg-blue-600 px-4 py-2 text-white">Next</button>
           </div>
         </form>
       </div>

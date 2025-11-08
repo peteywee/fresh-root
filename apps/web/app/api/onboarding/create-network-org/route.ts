@@ -1,140 +1,149 @@
 //[P1][API][ONBOARDING] Create Network + Org Endpoint (server)
 // Tags: api, onboarding, network, org, venue
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextResponse } from "next/server";
 
 import { withSecurity, type AuthenticatedRequest } from "../../_shared/middleware";
 
-import { adminDb } from "@/src/lib/firebase.server";
+import { adminDb as importedAdminDb } from "@/src/lib/firebase.server";
 
 /**
- * Creates a Network, Org, Venue, and memberships for an org-centric onboarding flow.
- *
- * Workflow:
- * 1. Verify formToken (admin responsibility form persisted earlier)
- * 2. Create Network doc in Firestore (status="pending_verification")
- * 3. Create Org + Venue + memberships in a transaction
+ * Inner handler exported for tests. Accepts an optional injected adminDb for testability.
  */
-export const POST = withSecurity(
-  async (req: AuthenticatedRequest) => {
-    // Require admin DB; if not available, return stubbed response for local/dev
-    if (!adminDb) {
-      return NextResponse.json(
-        {
-          ok: true,
-          networkId: "stub-network-id",
-          orgId: "stub-org-id",
-          venueId: "stub-venue-id",
-          status: "pending_verification",
-        },
-        { status: 200 },
-      );
+export async function createNetworkOrgHandler(
+  req: AuthenticatedRequest & { user?: { uid: string; customClaims?: Record<string, unknown> } },
+  // withSecurity will call the handler with (req, ctx). Tests may pass an injected adminDb
+  ctxOrInjectedAdminDb?: unknown,
+) {
+  // Determine if caller injected an adminDb (tests) or this is the Next.js ctx
+  function hasCollection(x: unknown): x is { collection: (...args: unknown[]) => unknown } {
+    return typeof x === "object" && x !== null && "collection" in x;
+  }
+
+  const injectedAdminDb = hasCollection(ctxOrInjectedAdminDb) ? ctxOrInjectedAdminDb : importedAdminDb;
+
+  // Require admin DB; if not available, return stubbed response for local/dev
+  if (!injectedAdminDb) {
+    return NextResponse.json(
+      {
+        ok: true,
+        networkId: "stub-network-id",
+        orgId: "stub-org-id",
+        venueId: "stub-venue-id",
+        status: "pending_verification",
+      },
+      { status: 200 },
+    );
+  }
+
+  const adminDb: any = injectedAdminDb;
+
+  // Authenticated request guaranteed by withSecurity (requireAuth below)
+  const uid = req.user?.uid;
+  const claims = req.user?.customClaims || {};
+
+  if (!uid) return NextResponse.json({ error: "not_authenticated" }, { status: 401 });
+
+  // Basic eligibility: email verified + allowed selfDeclaredRole
+  const emailVerified = Boolean(claims.email_verified === true || claims.emailVerified === true);
+  if (!emailVerified) return NextResponse.json({ error: "email_not_verified" }, { status: 403 });
+
+  const allowedRoles = [
+    "owner_founder_director",
+    "manager_supervisor",
+    "corporate_hq",
+    "manager",
+    "org_owner",
+  ];
+  const declared =
+    (claims.selfDeclaredRole as string | undefined) || (claims.role as string | undefined);
+  if (!declared || !allowedRoles.includes(declared)) {
+    return NextResponse.json({ error: "role_not_allowed" }, { status: 403 });
+  }
+
+  let body: unknown;
+  try {
+    body = await req.json();
+  } catch {
+    return NextResponse.json({ error: "invalid_json" }, { status: 400 });
+  }
+
+  const { orgName, venueName, formToken } = (body as Record<string, unknown>) || {};
+  if (!formToken) return NextResponse.json({ error: "missing_form_token" }, { status: 422 });
+
+  try {
+    const formRef = adminDb
+      .collection("compliance")
+      .doc("adminResponsibilityForms")
+      .collection("forms")
+      .doc(String(formToken));
+
+    const formSnap = await formRef.get();
+    if (!formSnap.exists) {
+      return NextResponse.json({ error: "form_token_not_found" }, { status: 404 });
     }
 
-    // Authenticated request guaranteed by withSecurity (requireAuth below)
-    const uid = req.user?.uid;
-    const claims = req.user?.customClaims || {};
-
-    if (!uid) return NextResponse.json({ error: "not_authenticated" }, { status: 401 });
-
-    // Basic eligibility: email verified + allowed selfDeclaredRole
-    const emailVerified = Boolean(claims.email_verified === true || claims.emailVerified === true);
-    if (!emailVerified) return NextResponse.json({ error: "email_not_verified" }, { status: 403 });
-
-    const allowedRoles = [
-      "owner_founder_director",
-      "manager_supervisor",
-      "corporate_hq",
-      "manager",
-      "org_owner",
-    ];
-    const declared =
-      (claims.selfDeclaredRole as string | undefined) || (claims.role as string | undefined);
-    if (!declared || !allowedRoles.includes(declared)) {
-      return NextResponse.json({ error: "role_not_allowed" }, { status: 403 });
+    const formData = formSnap.data() as Record<string, unknown>;
+    const now = Date.now();
+    if (typeof formData.expiresAt === "number" && formData.expiresAt < now) {
+      return NextResponse.json({ error: "form_token_expired" }, { status: 410 });
     }
 
-    let body: unknown;
-    try {
-      body = await req.json();
-    } catch {
-      return NextResponse.json({ error: "invalid_json" }, { status: 400 });
+    if (formData.immutable === true || formData.attachedTo) {
+      return NextResponse.json({ error: "form_already_attached" }, { status: 409 });
     }
 
-    const { orgName, venueName, formToken } = (body as Record<string, unknown>) || {};
-    if (!formToken) return NextResponse.json({ error: "missing_form_token" }, { status: 422 });
+    // Prepare new docs
+    const networkRef = adminDb.collection("networks").doc();
+    const orgRef = adminDb.collection("orgs").doc();
+    const venueRef = adminDb.collection("venues").doc();
 
-    try {
-      const formRef = adminDb
-        .collection("compliance")
-        .doc("adminResponsibilityForms")
-        .collection("forms")
-        .doc(String(formToken));
-
-      const formSnap = await formRef.get();
-      if (!formSnap.exists) {
-        return NextResponse.json({ error: "form_token_not_found" }, { status: 404 });
-      }
-
-      const formData = formSnap.data() as Record<string, unknown>;
-      const now = Date.now();
-      if (typeof formData.expiresAt === "number" && formData.expiresAt < now) {
-        return NextResponse.json({ error: "form_token_expired" }, { status: 410 });
-      }
-
-      if (formData.immutable === true || formData.attachedTo) {
-        return NextResponse.json({ error: "form_already_attached" }, { status: 409 });
-      }
-
-      // Prepare new docs
-      const networkRef = adminDb.collection("networks").doc();
-      const orgRef = adminDb.collection("orgs").doc();
-      const venueRef = adminDb.collection("venues").doc();
-
-      await adminDb.runTransaction(async (tx) => {
-        tx.set(networkRef, {
-          name: orgName || `Network ${new Date().toISOString()}`,
-          status: "pending_verification",
-          createdAt: Date.now(),
-          adminFormToken: formToken,
-        });
-
-        tx.set(orgRef, {
-          name: orgName || "Org",
-          networkId: networkRef.id,
-          createdAt: Date.now(),
-        });
-
-        tx.set(venueRef, {
-          name: venueName || "Main Venue",
-          orgId: orgRef.id,
-          networkId: networkRef.id,
-          createdAt: Date.now(),
-        });
-
-        // Mark form as attached and immutable
-        tx.update(formRef, {
-          attachedTo: { networkId: networkRef.id, orgId: orgRef.id, venueId: venueRef.id },
-          immutable: true,
-          status: "attached",
-          attachedAt: Date.now(),
-        });
+    await adminDb.runTransaction(async (tx: { set: (...args: unknown[]) => unknown; update: (...args: unknown[]) => unknown }) => {
+      tx.set(networkRef, {
+        name: orgName || `Network ${new Date().toISOString()}`,
+        status: "pending_verification",
+        createdAt: Date.now(),
+        adminFormToken: formToken,
       });
 
-      return NextResponse.json(
-        {
-          ok: true,
-          networkId: networkRef.id,
-          orgId: orgRef.id,
-          venueId: venueRef.id,
-          status: "pending_verification",
-        },
-        { status: 200 },
-      );
-    } catch (err) {
-      console.error("create-network-org failed", err);
-      return NextResponse.json({ error: "internal_error" }, { status: 500 });
-    }
-  },
-  { requireAuth: true },
-);
+      tx.set(orgRef, {
+        name: orgName || "Org",
+        networkId: networkRef.id,
+        createdAt: Date.now(),
+      });
+
+      tx.set(venueRef, {
+        name: venueName || "Main Venue",
+        orgId: orgRef.id,
+        networkId: networkRef.id,
+        createdAt: Date.now(),
+      });
+
+      // Mark form as attached and immutable
+      tx.update(formRef, {
+        attachedTo: { networkId: networkRef.id, orgId: orgRef.id, venueId: venueRef.id },
+        immutable: true,
+        status: "attached",
+        attachedAt: Date.now(),
+      });
+    });
+
+    return NextResponse.json(
+      {
+        ok: true,
+        networkId: networkRef.id,
+        orgId: orgRef.id,
+        venueId: venueRef.id,
+        status: "pending_verification",
+      },
+      { status: 200 },
+    );
+  } catch (err) {
+    console.error("create-network-org failed", err);
+    return NextResponse.json({ error: "internal_error" }, { status: 500 });
+  }
+}
+
+// Keep Next.js route export for runtime (secured)
+export const POST = withSecurity(createNetworkOrgHandler, { requireAuth: true });

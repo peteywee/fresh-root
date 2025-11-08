@@ -61,8 +61,9 @@ export default function AdminResponsibility() {
           localStorage.setItem("onb_formToken", String(token));
         } catch {}
         const url = "/onboarding/create-network-org?formToken=" + encodeURIComponent(String(token));
-        // router.push typing is strict in App Router — use a cast to avoid RouteImpl literal type issues
-        (router as unknown as any).push(url);
+        const navigate = (p: string) =>
+          (router as unknown as { push: (s: string) => void }).push(p);
+        navigate(url);
       }
     } catch (err) {
       setError((err as Error).message);

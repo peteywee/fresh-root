@@ -8,6 +8,7 @@ import ProtectedRoute from "../../components/ProtectedRoute";
 
 export default function IntentStep() {
   const router = useRouter();
+  const navigate = (p: string) => (router as unknown as { push: (s: string) => void }).push(p);
 
   return (
     <ProtectedRoute>
@@ -15,7 +16,7 @@ export default function IntentStep() {
         <h1 className="mb-4 text-2xl font-semibold">What's your intent?</h1>
         <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
           <button
-            onClick={() => router.push("/onboarding/join")}
+            onClick={() => navigate("/onboarding/join")}
             className="rounded border p-6 text-left"
             aria-label="Join: I was invited to join a team"
           >
@@ -24,7 +25,7 @@ export default function IntentStep() {
           </button>
 
           <button
-            onClick={() => router.push("/onboarding/create-network-org")}
+            onClick={() => navigate("/onboarding/create-network-org")}
             className="rounded border p-6 text-left"
             aria-label="Set up my team: Create an org and venue"
           >
@@ -33,7 +34,7 @@ export default function IntentStep() {
           </button>
 
           <button
-            onClick={() => router.push("/onboarding/create-network-corporate")}
+            onClick={() => navigate("/onboarding/create-network-corporate")}
             className="rounded border p-6 text-left"
             aria-label="Corporate / HQ: I manage multiple locations"
           >

@@ -9,10 +9,15 @@
 
 ## Progress Overview
 
-- **Roadmap A (Network + Onboarding)**: 2/40 tasks complete (5%)
-- **Roadmap B4 (Block 4 - UX & Scheduling)**: 0/10 tasks complete
+- **Roadmap A (Network + Onboarding)**: 6/40 tasks complete (15%)
+- **Roadmap B4 (Block 4 - UX & Scheduling)**: 1/10 tasks complete (10%)
 - **Roadmap B5 (Block 5 - PWA & Deployment)**: 0/9 tasks complete
-- **Total**: 2/59 tasks complete (3%)
+- **Total**: 7/59 tasks complete (12%)
+
+### Current status notes
+
+- Branch `merge/features/combined-20251107` pushed to origin and a pull request targeting `dev` was created: <https://github.com/peteywee/fresh-root/pull/55>
+- This PR consolidates onboarding UI scaffolding, v14 types/schemas, rules skeleton, and the vitest pin. See PR for grouped changelist and verification steps.
 
 ---
 
