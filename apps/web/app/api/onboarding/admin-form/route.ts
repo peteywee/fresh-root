@@ -9,25 +9,13 @@ import { randomBytes } from "crypto";
 import { NextRequest, NextResponse } from "next/server";
 
 import { adminDb } from "@/src/lib/firebase.server";
+import { parseJson, badRequest, ok, serverError } from "../../_shared/validation";
 
 export async function POST(req: NextRequest) {
-  let body: unknown;
-
-  try {
-    body = await req.json();
-  } catch {
-    return NextResponse.json(
-      { error: "invalid_json", message: "Request body must be valid JSON" },
-      { status: 400 },
-    );
-  }
-
-  const parseResult = CreateAdminResponsibilityFormSchema.safeParse(body);
+  const parseResult = await parseJson(req, CreateAdminResponsibilityFormSchema);
+  
   if (!parseResult.success) {
-    return NextResponse.json(
-      { error: "validation_error", issues: parseResult.error.format() },
-      { status: 422 },
-    );
+    return badRequest("Validation failed", parseResult.details, "VALIDATION_ERROR");
   }
 
   const payload: CreateAdminResponsibilityFormInput = parseResult.data;
@@ -35,7 +23,7 @@ export async function POST(req: NextRequest) {
   // If admin DB not initialized, return a stub token so the UI can progress in local/dev mode
   if (!adminDb) {
     const formToken = "stub-form-token";
-    return NextResponse.json({ ok: true, formToken }, { status: 200 });
+    return ok({ ok: true, formToken });
   }
 
   try {
@@ -55,9 +43,9 @@ export async function POST(req: NextRequest) {
       token,
     });
 
-    return NextResponse.json({ ok: true, formToken: token }, { status: 200 });
+    return ok({ ok: true, formToken: token });
   } catch (err) {
     console.error("admin-form persist failed", err);
-    return NextResponse.json({ error: "internal_error" }, { status: 500 });
+    return serverError("Failed to persist admin form");
   }
 }

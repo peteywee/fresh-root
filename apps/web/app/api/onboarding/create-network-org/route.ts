@@ -2,8 +2,10 @@
 // Tags: api, onboarding, network, org, venue
 
 import { NextResponse } from "next/server";
+import { CreateNetworkOrgSchema } from "@fresh-schedules/types";
 
 import { withSecurity, type AuthenticatedRequest } from "../../_shared/middleware";
+import { parseJson, badRequest, ok, serverError } from "../../_shared/validation";
 
 import { adminDb } from "@/src/lib/firebase.server";
 
@@ -19,27 +21,24 @@ export const POST = withSecurity(
   async (req: AuthenticatedRequest) => {
     // Require admin DB; if not available, return stubbed response for local/dev
     if (!adminDb) {
-      return NextResponse.json(
-        {
-          ok: true,
-          networkId: "stub-network-id",
-          orgId: "stub-org-id",
-          venueId: "stub-venue-id",
-          status: "pending_verification",
-        },
-        { status: 200 },
-      );
+      return ok({
+        ok: true,
+        networkId: "stub-network-id",
+        orgId: "stub-org-id",
+        venueId: "stub-venue-id",
+        status: "pending_verification",
+      });
     }
 
     // Authenticated request guaranteed by withSecurity (requireAuth below)
     const uid = req.user?.uid;
     const claims = req.user?.customClaims || {};
 
-    if (!uid) return NextResponse.json({ error: "not_authenticated" }, { status: 401 });
+    if (!uid) return badRequest("Not authenticated", undefined, "NOT_AUTHENTICATED");
 
     // Basic eligibility: email verified + allowed selfDeclaredRole
     const emailVerified = Boolean(claims.email_verified === true || claims.emailVerified === true);
-    if (!emailVerified) return NextResponse.json({ error: "email_not_verified" }, { status: 403 });
+    if (!emailVerified) return badRequest("Email not verified", undefined, "EMAIL_NOT_VERIFIED");
 
     const allowedRoles = [
       "owner_founder_director",
@@ -51,39 +50,36 @@ export const POST = withSecurity(
     const declared =
       (claims.selfDeclaredRole as string | undefined) || (claims.role as string | undefined);
     if (!declared || !allowedRoles.includes(declared)) {
-      return NextResponse.json({ error: "role_not_allowed" }, { status: 403 });
+      return badRequest("Role not allowed", undefined, "ROLE_NOT_ALLOWED");
     }
 
-    let body: unknown;
-    try {
-      body = await req.json();
-    } catch {
-      return NextResponse.json({ error: "invalid_json" }, { status: 400 });
+    const parseResult = await parseJson(req, CreateNetworkOrgSchema);
+    if (!parseResult.success) {
+      return badRequest("Validation failed", parseResult.details, "VALIDATION_ERROR");
     }
 
-    const { orgName, venueName, formToken } = (body as Record<string, unknown>) || {};
-    if (!formToken) return NextResponse.json({ error: "missing_form_token" }, { status: 422 });
+    const { orgName, venueName, formToken } = parseResult.data;
 
     try {
       const formRef = adminDb
         .collection("compliance")
         .doc("adminResponsibilityForms")
         .collection("forms")
-        .doc(String(formToken));
+        .doc(formToken);
 
       const formSnap = await formRef.get();
       if (!formSnap.exists) {
-        return NextResponse.json({ error: "form_token_not_found" }, { status: 404 });
+        return badRequest("Form token not found", undefined, "FORM_TOKEN_NOT_FOUND");
       }
 
       const formData = formSnap.data() as Record<string, unknown>;
       const now = Date.now();
       if (typeof formData.expiresAt === "number" && formData.expiresAt < now) {
-        return NextResponse.json({ error: "form_token_expired" }, { status: 410 });
+        return badRequest("Form token expired", undefined, "FORM_TOKEN_EXPIRED");
       }
 
       if (formData.immutable === true || formData.attachedTo) {
-        return NextResponse.json({ error: "form_already_attached" }, { status: 409 });
+        return badRequest("Form already attached", undefined, "FORM_ALREADY_ATTACHED");
       }
 
       // Prepare new docs
@@ -121,19 +117,16 @@ export const POST = withSecurity(
         });
       });
 
-      return NextResponse.json(
-        {
-          ok: true,
-          networkId: networkRef.id,
-          orgId: orgRef.id,
-          venueId: venueRef.id,
-          status: "pending_verification",
-        },
-        { status: 200 },
-      );
+      return ok({
+        ok: true,
+        networkId: networkRef.id,
+        orgId: orgRef.id,
+        venueId: venueRef.id,
+        status: "pending_verification",
+      });
     } catch (err) {
       console.error("create-network-org failed", err);
-      return NextResponse.json({ error: "internal_error" }, { status: 500 });
+      return serverError("Failed to create network and organization");
     }
   },
   { requireAuth: true },

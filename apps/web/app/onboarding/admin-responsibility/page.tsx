@@ -1,17 +1,20 @@
 // [P0][FIREBASE][CODE] Page page component
 // Tags: P0, FIREBASE, CODE
 "use client";
-import React, { useState } from "react";
+import React from "react";
+import { useOnboardingStore } from "../_stores/useOnboardingStore";
 
 export default function AdminResponsibility() {
-  const [role, setRole] = useState<string>("network_owner");
-  const [submitting, setSubmitting] = useState(false);
-  const [result, setResult] = useState<Record<string, unknown> | null>(null);
+  const { role, formToken, isSubmitting, error, setRole, setFormToken, setIsSubmitting, setError } =
+    useOnboardingStore();
+  const [result, setResult] = React.useState<Record<string, unknown> | null>(null);
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
-    setSubmitting(true);
+    setIsSubmitting(true);
     setResult(null);
+    setError(null);
+    
     try {
       const payload = {
         networkId: "",
@@ -34,17 +37,20 @@ export default function AdminResponsibility() {
         headers: { "content-type": "application/json" },
         body: JSON.stringify(payload),
       });
+      
       const json = await res.json();
+      
       if (json?.formToken) {
-        try {
-          localStorage.setItem("onb_formToken", String(json.formToken));
-        } catch {}
+        setFormToken(json.formToken);
       }
+      
       setResult(json);
     } catch (err) {
-      setResult({ error: (err as Error).message });
+      const errorMessage = (err as Error).message;
+      setError(errorMessage);
+      setResult({ error: errorMessage });
     } finally {
-      setSubmitting(false);
+      setIsSubmitting(false);
     }
   }
 
@@ -52,6 +58,18 @@ export default function AdminResponsibility() {
     <main className="p-6">
       <h1 className="text-2xl font-bold">Admin Responsibility Form</h1>
       <p className="mt-2">Fill and submit the admin responsibility form to obtain a form token.</p>
+
+      {formToken && (
+        <div className="mt-4 rounded bg-emerald-900/30 p-3 text-sm text-emerald-300">
+          Form token saved: {formToken}
+        </div>
+      )}
+
+      {error && (
+        <div className="mt-4 rounded bg-red-900/30 p-3 text-sm text-red-300">
+          Error: {error}
+        </div>
+      )}
 
       <form onSubmit={submit} className="mt-4 space-y-4">
         <div>
@@ -69,8 +87,11 @@ export default function AdminResponsibility() {
         </div>
 
         <div className="flex justify-end">
-          <button className="rounded bg-emerald-600 px-4 py-2 text-sm font-medium">
-            {submitting ? "Submitting…" : "Submit form"}
+          <button 
+            disabled={isSubmitting}
+            className="rounded bg-emerald-600 px-4 py-2 text-sm font-medium disabled:opacity-50"
+          >
+            {isSubmitting ? "Submitting…" : "Submit form"}
           </button>
         </div>
       </form>
