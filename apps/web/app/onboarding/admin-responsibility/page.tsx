@@ -62,7 +62,7 @@ export default function AdminResponsibility() {
         } catch {}
         const url = "/onboarding/create-network-org?formToken=" + encodeURIComponent(String(token));
         // router.push typing is strict in App Router — use a cast to avoid RouteImpl literal type issues
-        (router as unknown as any).push(url);
+        router.push(url as Route);
       }
     } catch (err) {
       setError((err as Error).message);
