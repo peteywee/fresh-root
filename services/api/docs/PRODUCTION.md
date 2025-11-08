@@ -2,7 +2,8 @@
 
 ## Overview
 
-In production, the API security middleware enforces strict controls that differ significantly from development mode. This document outlines what's required and how it behaves.
+In production, the API security middleware enforces strict controls that differ significantly from development mode.
+This document outlines what's required and how it behaves.
 
 ---
 
@@ -64,7 +65,8 @@ REDIS_URL=redis://production-redis:6379
   - Grafana Cloud: `https://otlp-gateway-prod-us-central-0.grafana.net/otlp/v1/traces`
   - Honeycomb: `https://api.honeycomb.io/v1/traces`
 - Auto-instruments: Express, HTTP, DNS, Net (FS disabled as too noisy)
-- Traces include: `http.method`, `http.url`, `http.status_code`, `http.user_agent`, `service.name`, `service.version`
+- Traces include: `http.method`, `http.url`, `http.status_code`, `http.user_agent`, `service.name`,
+  `service.version`
 
 ---
 

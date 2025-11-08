@@ -1,7 +1,7 @@
 // [P1][INTEGRITY][TEST] Attendance rules tests
 // Tags: P1, INTEGRITY, TEST, FIRESTORE, RULES, ATTENDANCE
 import { assertFails, assertSucceeds, RulesTestEnvironment } from "@firebase/rules-unit-testing";
-import { doc, getDoc, setDoc, updateDoc, deleteDoc, collection, getDocs } from "firebase/firestore";
+import { deleteDoc, doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 import { describe, it, beforeAll, afterAll } from "vitest";
 
 import { initFirestoreTestEnv } from "./_setup";
@@ -11,7 +11,6 @@ describe("Attendance Rules", () => {
   const ORG_ID = "test-org-123";
   const SCHED_ID = "test-sched-456";
   const SHIFT_ID = "test-shift-789";
-  const OWNER_UID = "owner-user";
   const MANAGER_UID = "manager-user";
   const SCHEDULER_UID = "scheduler-user";
   const STAFF_UID = "staff-user";
@@ -81,7 +80,7 @@ describe("Attendance Rules", () => {
         roles: ["staff"],
       });
       const db = staffContext.firestore();
-      await assertFails(getDocs(collection(db, `attendance_records/${ORG_ID}/records`)));
+      await assertFails(getDoc(doc(db, `attendance_records/${ORG_ID}/records`)));
     });
   });
 

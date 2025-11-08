@@ -21,10 +21,10 @@ STORAGE_BUCKET=gs://my-log-archive \
 ./scripts/ops/logging-setup.sh
 ```
 
-1. Verify logs are appearing in your GCS bucket and that the sink service account has
+2. Verify logs are appearing in your GCS bucket and that the sink service account has
    `roles/storage.objectCreator`.
 
-1. Optional: Create lifecycle rules on the GCS bucket to auto-delete archived logs after N days.
+3. Optional: Create lifecycle rules on the GCS bucket to auto-delete archived logs after N days.
 
 ```json
 {

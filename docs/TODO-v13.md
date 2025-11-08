@@ -82,7 +82,7 @@
   - [x] Verified apps/web/app/api/metrics/route.ts exists
   - [x] Note: recordRequest() defined but not called (superseded by OpenTelemetry auto-instrumentation)
 
-🧩 Block 3 – Integrity Core (P1) ✅ 95% COMPLETE (Rules tests remain)
+🧩 Block 3 – Integrity Core (P1) ✅ COMPLETE
 
 - [x] [BLOCK3] Expand packages/types/ with Zod schemas for orgs, memberships, positions, schedules, shifts
   - [x] Created packages/types/src/memberships.ts with full CRUD schemas
@@ -128,7 +128,7 @@
   - [x] Add validation to GET /api/attendance (protected by withSecurity + requireOrgMembership)
   - [x] Add validation to POST /api/join-tokens (uses CreateJoinTokenSchema + requireRole("admin"))
   - [x] Add validation to GET /api/join-tokens (protected by withSecurity + requireRole("manager"))
-- [ ] [BLOCK3] Write rules test matrix (≥ 1 allow + 3 denies per collection)
+- [x] [BLOCK3] Write rules test matrix (≥ 1 allow + 3 denies per collection; see docs/BLOCK3_IMPLEMENTATION.md)
   - [x] Created tests/rules/organizations.spec.ts (4 suites, 13+ tests)
   - [x] Created tests/rules/positions.spec.ts (2 suites, 10+ tests)
   - [x] Create tests/rules/schedules.spec.ts

@@ -58,7 +58,7 @@ Last updated: November 7, 2025
 ### Path Alias Inconsistency (Fixed: Nov 7, 2025)
 
 - ~~@ alias pointed only to apps/web/app, limiting imports from apps/web/src~~
-- **Resolution**: Changed @ to map to apps/web root, enabling @/app/* and @/src/* imports
+- **Resolution**: Changed @ to map to apps/web root, enabling @/app/\* and @/src/\* imports
 - **Files Updated**: tsconfig.base.json, apps/web/tsconfig.json, vitest.config.ts, apps/web/vitest.config.ts
 - **Impact**: Consistent import patterns, easier cross-directory imports
 
@@ -66,7 +66,7 @@ Last updated: November 7, 2025
 
 - **Change**: Reduced --max-warnings from 200 to 100 (50% reduction)
 - **Goal**: Continue reducing to 0 over time as warnings are addressed
-- **Next Steps**: 
+- **Next Steps**:
   - Measure current warning count with `pnpm lint`
   - Categorize warnings by type
   - Reduce to 50 when <75 warnings remain, then to 0

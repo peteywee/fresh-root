@@ -1,17 +1,26 @@
 # Fresh Root
 
-**Status:** ✅ Production Ready | **Version:** 1.0.0 | **Released:** November 6, 2025
+**Status:** ✅ Production Ready | **Version:** 1.1.0 | **Released:** November 7, 2025
 
 A production-ready Progressive Web App (PWA) for staff scheduling with enterprise-grade security and reliability.
 Built with Next.js, Firebase, and a monorepo architecture.
 
-> **🎉 v1.0.0 Release - Blocks 1 & 2 Complete**
+> **🎉 v1.1.0 Release – Blocks 1 to 3 Complete**
 >
-> - ✅ **Security Core**: Session auth, MFA, security middleware, comprehensive tests
-> - ✅ **Reliability Core**: Winston logging, Sentry monitoring, OpenTelemetry, automated backups
+> - ✅ **Security Core (Block 1)**: Session auth, MFA, security middleware, comprehensive tests
+> - ✅ **Reliability Core (Block 2)**: Winston logging, Sentry monitoring, OpenTelemetry, automated backups
+> - ✅ **Integrity Core (Block 3)**: Zod-first API validation, withSecurity middleware, schema parity checks, rules test matrix
 > - ✅ **Code Quality**: Zero `any` types, zero console violations, technical debt tracking
 
-## 🚀 What's New in v1.0.0
+## 🚀 What's New in v1.1.0
+
+### Block 3: Integrity Core (Complete)
+
+- Zod-first validation across API routes using shared schemas from `packages/types`
+- Canonical API security via `withSecurity` middleware (auth, rate-limit, options)
+- Rules test matrix for Firestore/Storage (≥ 1 allow + 3 deny per collection)
+- Schema parity validation scripts keep rules and Zod contracts in sync
+- CI workflow standards applied; non-blocking typecheck option adopted where appropriate
 
 ### Block 1: Security Core (9/9 Complete)
 
@@ -46,11 +55,14 @@ Built with Next.js, Firebase, and a monorepo architecture.
 | 📖 **[Complete Technical Docs](./docs/COMPLETE_TECHNICAL_DOCUMENTATION.md)** | Architecture, setup, troubleshooting           |
 | 🏗️ **[Architecture Diagrams](./docs/ARCHITECTURE_DIAGRAMS.md)**              | System diagrams (data flow, CI/CD, auth)       |
 | 🔒 **[Security Documentation](./docs/security.md)**                          | Security architecture, MFA, session management |
-| � **[SLO Summary](./docs/BLOCK1_SLO_SUMMARY.md)**                            | Service Level Objectives for Blocks 1 & 2      |
-| 📈 **[Progress Tracking](./docs/BLOCK1_BLOCK2_PROGRESS.md)**                 | Detailed Block 1 & 2 implementation status     |
-| 🛠️ **[Technical Debt](./docs/TECHNICAL_DEBT.md)**                            | Current debt tracking (minimal)                |
-| 📘 **[Runbooks](./docs/runbooks/)**                                          | Operations guides (logging, backups, uptime)   |
-| ⚙️ **[Setup Guide](./docs/SETUP.md)**                                        | Step-by-step setup instructions                |
+| 📊 **[SLO Summary](./docs/BLOCK1_SLO_SUMMARY.md)**                           | Service Level Objectives for Blocks 1–2        |
+| 📈 **[Progress Tracking](./docs/BLOCK1_BLOCK2_PROGRESS.md)**                 | Detailed Block 1–2 implementation status       |
+| 🧩 **[Block 3 Implementation](./docs/BLOCK3_IMPLEMENTATION.md)**             | Integrity Core summary and rules matrix        |
+| 🤖 **[CI Workflow Standards](./docs/CI_WORKFLOW_STANDARDS.md)**              | Canonical workflow template and quality gates  |
+| 📏 **[Repo Standards](./docs/REPO_STANDARDS.md)**                            | Required tooling, versions, and policies       |
+| 🧰 **[Runbooks](./docs/runbooks/)**                                          | Operations guides (logging, backups, uptime)   |
+| ⚙️ **[Setup Guide](./docs/SETUP.md)**                                        | Step-by-step local setup                       |
+| 📦 **[Service Worker & PWA](./apps/web/docs/SERVICE_WORKER.md)**             | PWA/service worker notes for the app           |
 
 ## 🏗️ Project Structure
 
@@ -146,7 +158,7 @@ fresh-root/
    pnpm dev
    ```
 
-   `Open<http://localhost:3000>`
+   Open <http://localhost:3000>
 
 ## 🛠️ Development
 

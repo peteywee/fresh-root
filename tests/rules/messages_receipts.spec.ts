@@ -5,8 +5,16 @@ import fs from "fs";
 
 let testEnv: RulesTestEnvironment;
 
+interface FirestoreTestOptions {
+  rules: string;
+  host?: string;
+  port?: number;
+}
+
 beforeAll(async () => {
-  const firestoreOptions: any = { rules: fs.readFileSync("firestore.rules", "utf8") };
+  const firestoreOptions: FirestoreTestOptions = {
+    rules: fs.readFileSync("firestore.rules", "utf8"),
+  };
   const firestoreHost =
     process.env.FIRESTORE_EMULATOR_HOST || process.env.FIREBASE_FIRESTORE_EMULATOR_HOST;
   if (firestoreHost) {

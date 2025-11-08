@@ -41,16 +41,18 @@ export type OrganizationSettings = z.infer<typeof OrganizationSettingsSchema>;
  */
 export const OrganizationSchema = z.object({
   id: z.string().min(1),
+  // Optional network scoping for v14 tenancy model
+  networkId: z.string().min(1).optional(),
   name: z.string().min(1, "Organization name is required").max(100),
   description: z.string().max(500).optional(),
   industry: z.string().max(100).optional(),
   size: OrganizationSize.optional(),
-  status: OrganizationStatus.default("active"),
-  subscriptionTier: SubscriptionTier.default("free"),
+  status: OrganizationStatus.optional(),
+  subscriptionTier: SubscriptionTier.optional(),
 
   // Ownership and membership
   ownerId: z.string().min(1, "Owner ID is required"),
-  memberCount: z.number().int().nonnegative().default(1),
+  memberCount: z.number().int().nonnegative(),
 
   // Settings
   settings: OrganizationSettingsSchema.optional(),
@@ -71,13 +73,14 @@ export const OrganizationSchema = z.object({
   trialEndsAt: z.union([z.number().int().positive(), z.string().datetime()]).optional(),
   subscriptionEndsAt: z.union([z.number().int().positive(), z.string().datetime()]).optional(),
 });
-export type Organization = z.infer<typeof OrganizationSchema>;
+export type OrganizationType = z.infer<typeof OrganizationSchema>;
 
 /**
  * Schema for creating a new organization
  * Used in POST /api/organizations
  */
 export const CreateOrganizationSchema = z.object({
+  networkId: z.string().min(1).optional(),
   name: z.string().min(1, "Organization name is required").max(100),
   description: z.string().max(500).optional(),
   industry: z.string().max(100).optional(),
@@ -86,13 +89,16 @@ export const CreateOrganizationSchema = z.object({
   contactPhone: z.string().max(20).optional(),
   settings: OrganizationSettingsSchema.optional(),
 });
-export type CreateOrganizationInput = z.infer<typeof CreateOrganizationSchema>;
+export type CreateOrganizationInputType = z.infer<typeof CreateOrganizationSchema>;
+export const CreateOrganizationInput = CreateOrganizationSchema;
+export const OrganizationCreateSchema = CreateOrganizationInput;
 
 /**
  * Schema for updating an existing organization
  * Used in PATCH /api/organizations/{id}
  */
 export const UpdateOrganizationSchema = z.object({
+  networkId: z.string().min(1).optional(),
   name: z.string().min(1).max(100).optional(),
   description: z.string().max(500).optional(),
   industry: z.string().max(100).optional(),
@@ -104,12 +110,17 @@ export const UpdateOrganizationSchema = z.object({
   contactPhone: z.string().max(20).optional(),
   settings: OrganizationSettingsSchema.optional(),
 });
-export type UpdateOrganizationInput = z.infer<typeof UpdateOrganizationSchema>;
+export type UpdateOrganizationInputType = z.infer<typeof UpdateOrganizationSchema>;
+export const UpdateOrganizationInput = UpdateOrganizationSchema;
+export const OrganizationUpdateSchema = UpdateOrganizationInput;
 
-// Aliases for backward/test compatibility
-export const Organization = OrganizationSchema;
-export const OrganizationCreateSchema = CreateOrganizationSchema;
-export const OrganizationUpdateSchema = UpdateOrganizationSchema;
+// Aliases for backward/test compatibility (value exports expected by tests)
+// Historically some callers expect `Organization` to allow missing `updatedAt` in
+// minimal records while `OrganizationSchema` (the canonical schema) requires it.
+// Keep both shapes to satisfy existing tests and consumers.
+export const Organization = OrganizationSchema.extend({
+  updatedAt: z.union([z.number().int().positive(), z.string().datetime()]).optional(),
+});
 
 /**
  * Query parameters for listing organizations

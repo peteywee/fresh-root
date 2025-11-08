@@ -189,5 +189,8 @@ service cloud.firestore {
       allow create, update, delete: if isSignedIn() && ((hasAnyRole(['org_owner','admin']) && sameOrg(orgId)) || hasAnyRoleLegacy(orgId, ['owner','admin']));
       allow list: if false;
     }
+
+    // ---------------------------------------------------------------------------
+    // Network (tenant root) rules – v14.0.0
   }
 }
