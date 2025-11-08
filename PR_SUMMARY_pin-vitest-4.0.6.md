@@ -1,4 +1,4 @@
-Title: Pin Vitest packages to 4.0.6 to deduplicate and avoid duplicate matcher registration
+# Pin Vitest packages to 4.0.6
 
 ## Summary
 

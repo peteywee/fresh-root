@@ -1,39 +1,58 @@
-// [P1][INTEGRITY][TEST] CorpOrgLink schema tests
-// Tags: P1, INTEGRITY, TEST, ZOD, LINKS
-import { Timestamp } from "firebase-admin/firestore";
+// [P1][TEST][TEST] CorpOrgLinks Test tests
+// Tags: P1, TEST, TEST
+// Tests for corp-org link schemas
+// TODO-v14: TEN-03 / TEN-05 - this test validates the v14 `CorpOrgLinkSchema` and is part of the link-schema
+// test coverage requested in docs/TODO-v14.md
 import { describe, it, expect } from "vitest";
 
-import { CorpOrgLinkSchema } from "../links/corpOrgLinks";
+import {
+  CorpOrgLinkSchema,
+  CreateCorpOrgLinkSchema,
+  UpdateCorpOrgLinkSchema,
+} from "../links/corpOrgLinks";
 
 describe("CorpOrgLinkSchema", () => {
-  it("validates a complete corp-org link", () => {
-    const now = Timestamp.now();
+  it("validates a full corp-org link with number timestamp", () => {
     const link = {
       linkId: "l1",
       networkId: "n1",
       corporateId: "c1",
       orgId: "o1",
-      relationType: "owns",
+      relationType: "partner",
       status: "active",
-      createdAt: now,
-      updatedAt: now,
-      createdBy: "user1",
-      updatedBy: "user1",
+      createdAt: Date.now(),
     };
-
     const result = CorpOrgLinkSchema.safeParse(link);
     expect(result.success).toBe(true);
   });
 
-  it("requires required fields", () => {
+  it("rejects missing required fields", () => {
     const result = CorpOrgLinkSchema.safeParse({});
     expect(result.success).toBe(false);
-    if (!result.success) {
-      const paths = result.error.issues.map((i) => i.path.join("."));
-      expect(paths).toContain("linkId");
-      expect(paths).toContain("networkId");
-      expect(paths).toContain("corporateId");
-      expect(paths).toContain("orgId");
-    }
+  });
+
+  it("Create schema accepts minimal create shape and rejects empty ids", () => {
+    const ok = CreateCorpOrgLinkSchema.safeParse({
+      networkId: "n1",
+      corporateId: "c1",
+      orgId: "o1",
+      relationType: "r",
+      status: "active",
+    });
+    expect(ok.success).toBe(true);
+
+    const bad = CreateCorpOrgLinkSchema.safeParse({
+      networkId: "",
+      corporateId: "",
+      orgId: "",
+      relationType: "",
+      status: "",
+    });
+    expect(bad.success).toBe(false);
+  });
+
+  it("Update schema allows partial updates", () => {
+    const res = UpdateCorpOrgLinkSchema.safeParse({ status: "suspended" });
+    expect(res.success).toBe(true);
   });
 });

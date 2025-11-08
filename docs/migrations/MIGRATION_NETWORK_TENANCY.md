@@ -1,160 +1,121 @@
-# Migration Design Doc: Network Tenancy Implementation
+# Migration to Network Tenancy
 
-**Status**: Draft
-**Date**: November 2025
+**Status**: Planned
+**Estimated Effort**: Medium (2-3 weeks)
 **Owner**: Patrick Craven
+**Last Updated**: November 7, 2025
 
 ## Overview
 
-This document outlines the strategy for migrating from org-centric data paths to network-centric paths as specified in Project Bible v14.0.0.
+This document outlines the migration strategy for transitioning from the current org-centric data model to the network-centric tenancy model introduced in Project Bible v14.0.0.
 
-## Current State (Org-Centric)
+## Current State
 
-All data is currently scoped under `/orgs/{orgId}` or `/organizations/{orgId}`:
+### Data Model
 
-- `/orgs/{orgId}/schedules/{scheduleId}`
-- `/orgs/{orgId}/positions/{positionId}`
-- `/orgs/{orgId}/venues/{venueId}`
-- `/organizations/{orgId}/messages/{messageId}`
-- `/users/{uid}` (global)
-- `/memberships/{membershipId}` (global)
+- Organizations are the root tenant entity
+- Paths: `/orgs/{orgId}/...`
+- Venues, shifts, schedules scoped under orgs
+- No explicit network concept
 
-## Target State (Network-Centric)
+### Firestore Rules
 
-All data will be scoped under `/networks/{networkId}`:
+- Rules are org-scoped
+- Memberships control access at org level
+- No network-level isolation
 
-- `/networks/{networkId}/orgs/{orgId}/schedules/{scheduleId}`
-- `/networks/{networkId}/corporates/{corpId}`
-- `/networks/{networkId}/venues/{venueId}`
-- `/networks/{networkId}/users/{uid}`
-- `/networks/{networkId}/memberships/{membershipId}`
-- `/networks/{networkId}/compliance/adminResponsibilityForm`
+## Target State
+
+### Data Model
+
+- Networks are the root tenant entity
+- Paths: `/networks/{networkId}/orgs/{orgId}/...`
+- All data scoped under networks
+- Networks contain orgs, venues, corporates, etc.
+
+### Firestore Rules
+
+- Rules are network-scoped
+- Memberships control access at network level
+- Compliance data locked down
 
 ## Migration Strategy
 
-### Phase 1: Dual-Write (Gradual Migration)
+### Phase 1: Dual Write (1 week)
 
-1. **Implement network paths alongside existing org paths**
-   - Add network rules to `firestore.rules`
-   - Keep existing org rules active
-   - New data written to both paths during transition
+- Implement network creation in onboarding
+- Write data to both old and new paths
+- Keep old paths as primary for reads
+- Monitor for data consistency
 
-2. **Backfill existing data**
-   - Create networks for existing orgs
-   - Migrate memberships to network scope
-   - Update user profiles to network scope
+### Phase 2: Gradual Migration (1-2 weeks)
 
-3. **Update application code**
-   - Modify API routes to use network paths
-   - Update client-side queries
-   - Add network context to all operations
+- Migrate one org at a time
+- Update application code to prefer new paths
+- Keep backward compatibility
+- Roll back capability per org
 
-### Phase 2: Cutover
+### Phase 3: Cleanup (1 week)
 
-1. **Enable network-only writes**
-   - Remove dual-write logic
-   - Update rules to deny org-path writes
+- Remove old paths
+- Update all code to use new paths
+- Remove dual-write logic
+- Full network tenancy
 
-2. **Migrate remaining data**
-   - Batch migrate any remaining org-scoped data
-   - Update indexes and queries
-
-3. **Remove legacy paths**
-   - Delete org-centric rules
-   - Clean up old data paths
-
-## Implementation Plan
-
-### TEN-06: Write migration design doc (This Document)
-
-- [x] Document current vs target paths
-- [x] Define migration phases
-- [x] Outline implementation steps
-
-### TEN-07: Extend Firestore rules with network root
-
-- [x] Add `/networks/{networkId}` skeleton rules
-- [x] Implement helper functions for network access control
-- [x] Ensure compliance subcollection is locked down
-
-### TEN-08: Transitional rules
-
-- [x] Keep existing `/orgs/{orgId}` rules active
-- [x] Add TODO comments for future removal
-- [x] Document transitional access patterns
-
-### TEN-09: Rules unit tests
-
-- [ ] Add `tests/rules/networks.spec.ts`
-- [ ] Test network creation restrictions
-- [ ] Test compliance document access
-- [ ] Test membership scoping
-
-## Technical Details
-
-### Helper Functions
-
-```javascript
-function isNetworkMember(auth, networkId) {
-  // Check membership under /networks/{networkId}/memberships/{uid}
-  return exists(/databases/$(database)/documents/networks/$(networkId)/memberships/$(auth.uid));
-}
-
-function isNetworkOwner(auth, networkId) {
-  // Check if auth.uid matches network.ownerUserId
-  return get(/databases/$(database)/documents/networks/$(networkId)).data.ownerUserId == auth.uid;
-}
-
-function isSuperAdmin(auth) {
-  return auth.token.superAdmin == true;
-}
-```
+## Implementation Details
 
 ### Data Migration Script
 
 ```typescript
-// Pseudo-code for migration script
-async function migrateOrgToNetwork(orgId: string, networkId: string) {
-  // 1. Create network document
-  // 2. Move org to network scope
-  // 3. Migrate memberships
-  // 4. Update user profiles
-  // 5. Migrate schedules, positions, etc.
+// Pseudocode for migration script
+async function migrateOrgToNetwork(orgId: string) {
+  const networkId = generateNetworkId();
+  const batch = firestore.batch();
+
+  // Copy org data to network
+  const orgDoc = await firestore.collection("orgs").doc(orgId).get();
+  batch.set(
+    firestore.collection("networks").doc(networkId).collection("orgs").doc(orgId),
+    orgDoc.data(),
+  );
+
+  // Copy related collections
+  // ... venues, shifts, etc.
+
+  await batch.commit();
 }
 ```
 
+### Rollback Strategy
+
+- Keep old data for 30 days
+- Automated rollback script
+- Manual verification required
+
 ## Risks & Mitigations
 
-### Risk: Data inconsistency during transition
-
-**Mitigation**: Implement dual-write with validation, rollback scripts
-
-### Risk: Performance impact
-
-**Mitigation**: Batch migrations, monitor query performance
-
-### Risk: Breaking existing functionality
-
-**Mitigation**: Feature flags, gradual rollout, comprehensive testing
+| Risk                    | Impact | Mitigation                          |
+| ----------------------- | ------ | ----------------------------------- |
+| Data loss               | High   | Dual-write phase, backups           |
+| Application downtime    | Medium | Gradual migration, feature flags    |
+| Performance degradation | Low    | Monitor metrics, optimize queries   |
+| User confusion          | Low    | Clear communication, phased rollout |
 
 ## Timeline
 
-- **Week 1-2**: Complete rules implementation and testing
-- **Week 3-4**: Implement dual-write in application code
-- **Week 5-6**: Data migration and validation
-- **Week 7-8**: Cutover and legacy cleanup
+- **Week 1**: Implement dual-write, test migration script
+- **Week 2**: Migrate test orgs, monitor performance
+- **Week 3**: Full migration, cleanup old paths
 
 ## Success Criteria
 
-- [ ] All new data written to network paths
-- [ ] Existing data accessible via both paths
-- [ ] No data loss during migration
-- [ ] All tests passing
-- [ ] Performance within acceptable bounds
-- [ ] Rollback capability maintained
+- All data migrated without loss
+- Application functions with new paths
+- Performance meets or exceeds current levels
+- No user-facing disruptions
 
 ## Related Documents
 
 - [Project Bible v14.0.0](../bible/Project_Bible_v14.0.0.md)
-- [Schema Map – Network](../schema-network.md)
-- [Firestore Rules](../../firestore.rules)
+- [Schema Network](../schema-network.md)
+- [Firestore Rules](../firestore.rules)

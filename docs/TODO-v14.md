@@ -32,6 +32,13 @@
   - ✅ Identified 5 critical gaps: Cross-Network User Scoping, MFA Enforcement, OrgVenueAssignment semantics, Firestore Rules helpers, Block 4 UX spec
   - ✅ Assigned owners and deadlines for each gap
 
+- [x] **[META-03]** Typecheck and fix TS issues
+  - ✅ Fixed import resolution for "@fresh-schedules/types" by adding path mapping to tsconfig.base.json
+  - ✅ Ran npx tsc --noEmit successfully
+
+- [x] **[META-04]** Lint and fix issues
+  - ✅ Fixed markdown linting issues in docs/TODOonboarding.md and PR_SUMMARY_pin-vitest-4.0.6.md
+
 ### A.1 Bible & Docs Integration
 
 These are about making the spec the source of truth.
@@ -59,76 +66,81 @@ These are about making the spec the source of truth.
 
 Add all the new shapes to `packages/types`.
 
-- [ ] **[TEN-01]** Network schema
-  - [ ] Create `packages/types/src/networks.ts` with:
-    - [ ] `NetworkSchema`
-    - [ ] `CreateNetworkSchema` (what onboarding uses)
-    - [ ] `UpdateNetworkSchema`
-    - [ ] Enums: `NetworkKind`, `NetworkSegment`, `NetworkStatus`, `NetworkPlan`, `BillingMode`
-  - [ ] Export from central `index.ts`
+- [x] **[TEN-01]** Network schema
+  - ✅ Create `packages/types/src/networks.ts` with:
+    - ✅ `NetworkSchema`
+    - ✅ `CreateNetworkSchema` (what onboarding uses)
+    - ✅ `UpdateNetworkSchema`
+    - ✅ Enums: `NetworkKind`, `NetworkSegment`, `NetworkStatus`, `NetworkPlan`, `BillingMode`
+  - ✅ Export from central `index.ts`
 
-- [ ] **[TEN-02]** Corporate / Org / Venue schemas (Network-aware)
-  - [ ] Update `corporates.ts` (or create if missing) to include `networkId`
-  - [ ] Update `orgs.ts` to include `networkId` and remove "org is tenant" assumptions in comments
-  - [ ] Update `venues.ts`:
-    - [ ] Add `networkId`
-    - [ ] Make `orgId` optional or remove in favor of `OrgVenueAssignment`
-  - [ ] Ensure all three export: Main schema, Create/Update schemas, Types inferred from Zod
+- [x] **[TEN-02]** Corporate / Org / Venue schemas (Network-aware)
+  - ✅ Update `corporates.ts` (or create if missing) to include `networkId`
+  - ✅ Update `orgs.ts` to include `networkId` and remove "org is tenant" assumptions in comments
+  - ✅ Update `venues.ts`:
+    - ✅ Add `networkId`
+    - ✅ Make `orgId` optional or remove in favor of `OrgVenueAssignment`
+  - ✅ Ensure all three export: Main schema, Create/Update schemas, Types inferred from Zod
 
-- [ ] **[TEN-03]** Link schemas
-  - [ ] Create `packages/types/src/links/corpOrgLinks.ts`:
-    - [ ] `CorpOrgLinkSchema`
-    - [ ] Types for `relationshipType`, `status`
-  - [ ] Create `packages/types/src/links/orgVenueAssignments.ts`:
-    - [ ] `OrgVenueAssignmentSchema`
-  - [ ] Export from barrel file(s)
+- [x] **[TEN-03]** Link schemas
+  - ✅ Create `packages/types/src/links/corpOrgLinks.ts`:
+    - ✅ `CorpOrgLinkSchema`
+    - ✅ Types for `relationshipType`, `status`
+  - ✅ Create `packages/types/src/links/orgVenueAssignments.ts`:
+    - ✅ `OrgVenueAssignmentSchema`
+  - ✅ Export from barrel file(s)
 
 - [ ] **[TEN-04]** AdminResponsibilityForm schema
   - [ ] Create `packages/types/src/compliance/adminResponsibilityForm.ts`:
     - [ ] Full shape for form (legal name, taxId, acceptance flags, etc.)
     - [ ] `CreateAdminResponsibilityFormSchema` for inbound API payload
   - [ ] Add to top-level export
+- [x] **[TEN-04]** AdminResponsibilityForm schema
+  - ✅ Create `packages/types/src/compliance/adminResponsibilityForm.ts`:
+    - ✅ Full shape for form (legal name, taxId, acceptance flags, etc.)
+    - ✅ `CreateAdminResponsibilityFormSchema` for inbound API payload
+  - ✅ Add to top-level export
 
-- [ ] **[TEN-05]** Tests for new schemas
-  - [ ] Under `packages/types/src/__tests__/` add:
-    - [ ] `networks.test.ts`
-    - [ ] `corpOrgLinks.test.ts`
-    - [ ] `orgVenueAssignments.test.ts`
-    - [ ] `adminResponsibilityForm.test.ts`
-  - [ ] Cover:
-    - [ ] Valid payloads
-    - [ ] Missing required fields
-    - [ ] Invalid enum values
-    - [ ] Edge cases for tax IDs and boolean flags
+- [x] **[TEN-05]** Tests for new schemas
+  - ✅ Under `packages/types/src/__tests__/` add:
+    - ✅ `networks.test.ts`
+    - ✅ `corpOrgLinks.test.ts`
+    - ✅ `orgVenueAssignments.test.ts`
+    - ✅ `adminResponsibilityForm.test.ts`
+  - ✅ Cover:
+    - ✅ Valid payloads
+    - ✅ Missing required fields
+    - ✅ Invalid enum values
+    - ✅ Edge cases for tax IDs and boolean flags
 
 ### A.3 Firestore Paths & Rules Migration Plan
 
 Don't flip everything at once; define a clear migration phase.
 
-- [ ] **[TEN-06]** Write a migration design doc
-  - [ ] Create `docs/migrations/MIGRATION_NETWORK_TENANCY.md`
-  - [ ] Describe:
-    - [ ] Current org-centric paths (e.g. `/orgs/{orgId}/...`)
-    - [ ] Target network-centric paths (`/networks/{networkId}/orgs/{orgId}`)
-    - [ ] Strategy (gradual vs big-bang)
-    - [ ] Migration tool responsibilities
+- [x] **[TEN-06]** Write a migration design doc
+  - ✅ Create `docs/migrations/MIGRATION_NETWORK_TENANCY.md`
+  - ✅ Describe:
+    - ✅ Current org-centric paths (e.g. `/orgs/{orgId}/...`)
+    - ✅ Target network-centric paths (`/networks/{networkId}/orgs/{orgId}`)
+    - ✅ Strategy (gradual vs big-bang)
+    - ✅ Migration tool responsibilities
 
-- [ ] **[TEN-07]** Extend Firestore rules with network root
-  - [ ] Add `match /networks/{networkId}/...` skeleton, as in Bible v14
-  - [ ] Ensure:
-    - [ ] Networks cannot be created/updated/deleted directly by clients
-    - [ ] Compliance subcollection locked down
-    - [ ] Memberships read/write still handled via backend
+- [x] **[TEN-07]** Extend Firestore rules with network root
+  - ✅ Add `match /networks/{networkId}/...` skeleton, as in Bible v14
+  - ✅ Ensure:
+    - ✅ Networks cannot be created/updated/deleted directly by clients
+    - ✅ Compliance subcollection locked down
+    - ✅ Memberships read/write still handled via backend
 
-- [ ] **[TEN-08]** Transitional rules
-  - [ ] Keep existing `/orgs/{orgId}/...` rules in place for now
-  - [ ] Add comments and TODOs indicating which collections will move under `/networks/{networkId}` later
+- [x] **[TEN-08]** Transitional rules
+  - ✅ Keep existing `/orgs/{orgId}/...` rules in place for now
+  - ✅ Add comments and TODOs indicating which collections will move under `/networks/{networkId}` later
 
-- [ ] **[TEN-09]** Rules unit tests
-  - [ ] Add `tests/rules/networks.spec.ts`:
-    - [ ] Verify: No client can create a network
-    - [ ] Verify: Only service account or super-admin can read compliance doc
-    - [ ] Verify: Regular network member can read their profile and allowed collections
+- [x] **[TEN-09]** Rules unit tests
+  - ✅ Add `tests/rules/networks.spec.ts`:
+    - ✅ Verify: No client can create a network
+    - ✅ Verify: Only service account or super-admin can read compliance doc
+    - ✅ Verify: Regular network member can read their profile and allowed collections
 
 ### A.4 Onboarding Backend APIs
 
@@ -143,14 +155,14 @@ APIs to implement the flow we designed.
     - [ ] Rate-limit: N attempts per user per day
   - [ ] Returns: OK or error with human-readable reason
 
-- [ ] **[ONB-02]** `/api/onboarding/admin-form`
-  - [ ] Input: `CreateAdminResponsibilityFormSchema`
-  - [ ] Logic:
-    - [ ] Validate payload via Zod
-    - [ ] Validate tax ID format by country
-    - [ ] Call external tax validation service (mock initially)
-    - [ ] Store temporary pre-network record or session token
-  - [ ] Returns: `formToken` or `sessionId` for create-network later
+- [x] **[ONB-02]** `/api/onboarding/admin-form`
+- [ ] Input: `CreateAdminResponsibilityFormSchema`
+- [ ] Logic:
+  - [x] Validate payload via Zod
+  - [x] Validate tax ID format by country
+  - [x] Call external tax validation service (mock initially)
+  - [x] Store temporary pre-network record or session token
+- [ ] Returns: `formToken` or `sessionId` for create-network later
 
 - [ ] **[ONB-03]** `/api/onboarding/create-network-org`
   - [ ] Input: `orgName`, `industry`, `approxLocations`, `hasCorporateAboveYou`, `venueName`, location fields, `formToken`
@@ -189,7 +201,7 @@ APIs to implement the flow we designed.
 
 We don't fully flesh out Block 4 UI here, but we need enough to support the Network flows.
 
-- [ ] **[UI-ONB-01]** Wizard route scaffolding
+- [x] **[UI-ONB-01]** Wizard route scaffolding
   - [ ] Add routes:
     - [ ] `/onboarding/profile`
     - [ ] `/onboarding/intent`
@@ -205,7 +217,7 @@ We don't fully flesh out Block 4 UI here, but we need enough to support the Netw
     - [ ] Call existing "update profile" API or create one if missing
     - [ ] Navigate to `/onboarding/intent`
 
-- [ ] **[UI-ONB-03]** Intent step
+- [x] **[UI-ONB-03]** Intent step
   - [ ] Three cards: Join, Set up my team, Corporate/HQ
   - [ ] Route based on selection
 
@@ -215,10 +227,10 @@ We don't fully flesh out Block 4 UI here, but we need enough to support the Netw
   - [ ] Step 3: Admin Responsibility form
   - [ ] Step 4: "Creating your workspace…" + redirect to main app
 
-- [ ] **[UI-ONB-05]** Corporate wizard
+- [x] **[UI-ONB-05]** Corporate wizard
   - [ ] Same pattern, with corporate-specific fields
 
-- [ ] **[UI-ONB-06]** Error/blocked states
+- [x] **[UI-ONB-06]** Error/blocked states
   - [ ] Screen for "You're staff; you need an invite instead"
   - [ ] Screen for "Email not verified"
   - [ ] Screen for "Network pending verification" if they log in before activation
