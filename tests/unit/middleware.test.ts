@@ -4,7 +4,7 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 
 // Mock the firebase-admin helper used by middleware to avoid real SDK calls.
-vi.mock("/home/patrick/fresh-root-10/fresh-root/apps/web/lib/firebase-admin", () => ({
+vi.mock("@/lib/firebase-admin", () => ({
   getFirebaseAdminAuth: () => ({
     verifySessionCookie: async (cookie: string) => {
       // Return a decoded token without mfa by default
@@ -22,7 +22,7 @@ vi.mock("/home/patrick/fresh-root-10/fresh-root/apps/web/lib/firebase-admin", ()
 import {
   requireSession,
   require2FAForManagers,
-} from "/home/patrick/fresh-root-10/fresh-root/apps/web/app/api/_shared/middleware";
+} from "@/app/api/_shared/middleware";
 
 function makeReq(overrides: Partial<any> = {}) {
   return {
