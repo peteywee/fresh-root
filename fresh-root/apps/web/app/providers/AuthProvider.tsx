@@ -51,7 +51,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           uid: fbUser.uid,
           email: fbUser.email ?? null,
           displayName: fbUser.displayName ?? null,
-          createdAt: new Date(),
+          createdAt: serverTimestamp(),
         });
       }
       setUser({
