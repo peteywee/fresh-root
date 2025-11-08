@@ -36,7 +36,7 @@ This Bible version is designed to be **forward-compatible** with existing code a
 
 The intention is:
 
-> **This document is the "single source of truth" for what must be true before we treat Fresh Schedules as a production product for real organizations.**
+> **This document is the “single source of truth” for what must be true before we treat Fresh Schedules as a production product for real organizations.**
 
 ---
 
@@ -60,7 +60,7 @@ This document does **not** attempt to:
 
 - Write actual legal ToS or DPA language. It instead defines **the technical hooks and data structures** required so lawyers can plug in their text.
 - Define every tiny UI component. Block 4+ will handle detailed UX specs route-by-route.
-- Fully specify **cross-network data sharing**. It acknowledges future "federation" and "analytics hub" work but keeps it out of production v14 scope.
+- Fully specify **cross-network data sharing**. It acknowledges future “federation” and “analytics hub” work but keeps it out of production v14 scope.
 
 ### 1.3 Intended Audience
 
@@ -75,13 +75,13 @@ This document does **not** attempt to:
 
 ### 2.1 The Three Boxes: Infra, Network, Graph
 
-We explicitly distinguish three "layers" of containment:
+We explicitly distinguish three “layers” of containment:
 
 1. **Infrastructure Box (App / Firebase Project)**
    - A single deployment of the app, bound to a Firebase project (or equivalent).
    - This is the outermost technical boundary:
      - All Firestore data, Storage buckets, and Functions belong to this environment.
-   - This box is **opaque to end users**; they do not see or care about "which Firebase project" they are on.
+   - This box is **opaque to end users**; they do not see or care about “which Firebase project” they are on.
 
 2. **Tenant Box (Network)**
    - A **Network** is the tenant root – the **business boundary** inside the app.
@@ -139,66 +139,6 @@ Within each `networkId`:
      - Acceptance of terms.
    - It is still a **guided, linear wizard** so non-technical admins can complete it within minutes.
 
-### 2.4 User Scoping & Multi-Network Context
-
-Users (identified by uid) can belong to multiple Networks via memberships.
-
-**Global Scope:**
-
-```text
-/users/{uid}
-  - Profile: fullName, email, phone, etc. (shared across all networks)
-  - Not network-specific
-```
-
-**Network-Specific Scope:**
-
-```text
-/networks/{networkId}/users/{uid}
-  - Membership record
-  - Roles: network_owner, network_admin, org_owner, org_manager, scheduler, staff
-  - Status: active, suspended, invited
-```
-
-**Client State (JavaScript/React/etc.):**
-
-```typescript
-interface AppContext {
-  currentUser: User;
-  activeNetworkId: string;
-  activeNetwork: Network;
-  memberships: Membership[];
-  switchNetwork(networkId: string): Promise<void>;
-}
-
-// On network switch:
-switchNetwork(networkId) {
-  validateMembership(uid, networkId); // Must exist
-  setActiveNetworkId(networkId);
-  clearScheduleCache(); // invalidate old network data
-  reloadMemberships(networkId);
-}
-```
-
-**Firestore Rules Update:**
-
-```javascript
-match /networks/{networkId}/memberships/{membershipId} {
-  allow read: if request.auth.uid == membershipId.uid;
-  allow write: if false; // backend only
-}
-
-match /networks/{networkId}/schedules/{scheduleId} {
-  allow read, write: if
-    exists(/databases/$(database)/documents/networks/$(networkId)/memberships/$(request.auth.uid))
-    && getRole(networkId) in ["scheduler", "org_owner", "network_admin"];
-}
-```
-
-**Invariant:**
-If a user has activeNetworkId = "net-A", all queries must filter by networkId = "net-A".
-Never return data from net-B even if the user is a member of both.
-
 ---
 
 ## 3. Data Model – Network and Graph (Production-Ready Version)
@@ -213,8 +153,12 @@ Represents the **business tenant**. All data contained in a Network belongs to a
 
 **Fields (non-exhaustive but canonical):**
 
-```typescript
-type NetworkStatus = "pending_verification" | "active" | "suspended" | "closed";
+```ts
+type NetworkStatus =
+  | "pending_verification"
+  | "active"
+  | "suspended"
+  | "closed";
 
 type NetworkKind =
   | "independent_org"
@@ -234,33 +178,41 @@ type NetworkSegment =
   | "retail"
   | "other";
 
-type NetworkPlan = "free" | "starter" | "growth" | "enterprise" | "internal";
+type NetworkPlan =
+  | "free"
+  | "starter"
+  | "growth"
+  | "enterprise"
+  | "internal";
 
-type BillingMode = "none" | "card" | "invoice" | "partner_billed";
-```
-
+type BillingMode =
+  | "none"
+  | "card"
+  | "invoice"
+  | "partner_billed";
 Example schema (conceptual):
 
-```typescript
+ts
+Copy code
 interface Network {
-  id: string; // Firestore doc ID (networkId)
-  slug: string; // URL-safe unique string: "top-shelf-service"
-  displayName: string; // Human-readable: "Top Shelf Service Network"
-  legalName?: string; // Legal entity, if different
+  id: string;                  // Firestore doc ID (networkId)
+  slug: string;                // URL-safe unique string: "top-shelf-service"
+  displayName: string;         // Human-readable: "Top Shelf Service Network"
+  legalName?: string;          // Legal entity, if different
 
-  kind: NetworkKind; // see above
-  segment: NetworkSegment; // vertical
-  status: NetworkStatus; // lifecycle status
+  kind: NetworkKind;           // see above
+  segment: NetworkSegment;     // vertical
+  status: NetworkStatus;       // lifecycle status
 
   environment: "production" | "staging" | "sandbox" | "demo";
   primaryRegion: "US" | "CA" | "EU" | "LATAM" | "APAC" | "OTHER";
-  timeZone: string; // IANA TZ, e.g. "America/Chicago"
-  currency: string; // ISO code, e.g. "USD"
+  timeZone: string;            // IANA TZ, e.g. "America/Chicago"
+  currency: string;            // ISO code, e.g. "USD"
 
   plan: NetworkPlan;
   billingMode: BillingMode;
   billingProvider?: "stripe" | "paddle" | "manual" | "none";
-  billingCustomerId?: string; // external id, e.g. Stripe customer
+  billingCustomerId?: string;  // external id, e.g. Stripe customer
 
   maxVenues?: number | null;
   maxActiveOrgs?: number | null;
@@ -270,14 +222,14 @@ interface Network {
   // Security posture
   requireMfaForAdmins: boolean;
   ipAllowlistEnabled: boolean;
-  ipAllowlist?: string[]; // CIDRs
+  ipAllowlist?: string[];      // CIDRs
   allowedEmailDomains?: string[];
   dataResidency?: "us_only" | "eu_only" | "global" | "unspecified";
   gdprMode: boolean;
   piiMaskingMode: "none" | "mask_in_logs" | "mask_everywhere";
 
-  allowCrossOrgSharing: boolean; // within this network
-  allowExternalCorpLinks: boolean; // cross-network, future
+  allowCrossOrgSharing: boolean;     // within this network
+  allowExternalCorpLinks: boolean;   // cross-network, future
 
   // Scheduling defaults
   defaultWeekStartsOn: "monday" | "sunday";
@@ -299,9 +251,9 @@ interface Network {
   };
 
   // Ownership / relationship to the platform
-  ownerUserId: string; // uid of person who created the network
-  ownerCorporateId?: string; // if the entire network is under a meta-corporate
-  tags?: string[]; // arbitrary tags for ops for search/segmentation
+  ownerUserId: string;         // uid of person who created the network
+  ownerCorporateId?: string;   // if the entire network is under a meta-corporate
+  tags?: string[];             // arbitrary tags for ops for search/segmentation
 
   // Lifecycle timestamps
   createdAt: Timestamp;
@@ -313,67 +265,59 @@ interface Network {
   billingStartsAt?: Timestamp;
   activatedAt?: Timestamp;
   activatedBy?: string;
-
-  // Activation tracking (from GAP-2)
-  activationBlockedBy?: string[]; // ["mfa_pending", "tax_id_pending", ...]
-  nextRetryAt?: Timestamp; // when to re-check
-
-  // Suspension tracking
-  suspensionReason?: string;
-  suspendedAt?: Timestamp;
-  suspendedBy?: string;
-  mfaLostAt?: Timestamp; // when admin MFA was detected as disabled
 }
-```
+Invariants:
 
-**Invariants:**
+status = "active" only after:
 
-- `status = "active"` only after:
-  - Admin Responsibility Form is completed and stored.
-  - Tax ID (if required) is verified or explicitly marked "reviewed/waived".
-  - At least one venue and one org membership exist.
-  - MFA is enabled for the network owner (see section 4).
+Admin Responsibility Form is completed and stored.
 
-- When `status != "active"`:
-  - Scheduling and messaging actions are disabled.
-  - The UI shows "Workspace pending verification" message.
+Tax ID (if required) is verified or explicitly marked “reviewed/waived”.
 
-### 3.2 Corporate, Organization, Venue
+At least one venue and one org membership exist.
 
+MFA is enabled for the network owner (see section 4).
+
+When status != "active":
+
+Scheduling and messaging actions are disabled.
+
+The UI shows “Workspace pending verification” message.
+
+3.2 Corporate, Organization, Venue
 Within a Network:
 
-```text
+text
+Copy code
 networks/{networkId}/corporates/{corpId}
 networks/{networkId}/orgs/{orgId}
 networks/{networkId}/venues/{venueId}
-```
+Corporate (conceptual):
 
-**Corporate (conceptual):**
-
-```typescript
+ts
+Copy code
 interface Corporate {
   id: string;
   networkId: string;
-  name: string; // HQ or brand name
-  brandName?: string; // public-facing brand
+  name: string;          // HQ or brand name
+  brandName?: string;    // public-facing brand
   websiteUrl?: string;
   contactEmail?: string;
   contactPhone?: string;
 
-  ownsLocations: boolean; // does corp own any orgs directly?
-  worksWithFranchisees: boolean; // does corp use independent orgs?
-  worksWithPartners: boolean; // agencies, BPO, etc.
+  ownsLocations: boolean;         // does corp own any orgs directly?
+  worksWithFranchisees: boolean;  // does corp use independent orgs?
+  worksWithPartners: boolean;     // agencies, BPO, etc.
 
   createdAt: Timestamp;
   createdBy: string;
   updatedAt: Timestamp;
   updatedBy: string;
 }
-```
+Organization (conceptual):
 
-**Organization (conceptual):**
-
-```typescript
+ts
+Copy code
 interface Organization {
   id: string;
   networkId: string;
@@ -388,11 +332,10 @@ interface Organization {
   updatedAt: Timestamp;
   updatedBy: string;
 }
-```
+Venue (conceptual):
 
-**Venue (conceptual):**
-
-```typescript
+ts
+Copy code
 interface Venue {
   id: string;
   networkId: string;
@@ -417,22 +360,22 @@ interface Venue {
   updatedAt: Timestamp;
   updatedBy: string;
 }
-```
+3.3 Link Documents
+3.3.1 Corporate ↔ Organization (corpOrgLinks)
+Path:
 
-### 3.3 Link Documents
-
-#### 3.3.1 Corporate ↔ Organization (corpOrgLinks)
-
-**Path:**
-
-```text
+text
+Copy code
 networks/{networkId}/links/corpOrgLinks/{linkId}
-```
+Schema (conceptual):
 
-**Schema (conceptual):**
-
-```typescript
-type CorpOrgRelationshipType = "owns" | "serves" | "partner" | "none";
+ts
+Copy code
+type CorpOrgRelationshipType =
+  | "owns"
+  | "serves"
+  | "partner"
+  | "none";
 
 type LinkStatus = "active" | "suspended" | "ended";
 
@@ -451,508 +394,466 @@ interface CorpOrgLink {
   updatedAt: Timestamp;
   updatedBy: string;
 }
-```
+Semantics:
 
-**Semantics:**
+"owns" – corp has direct business ownership of the org.
 
-- `"owns"` – corp has direct business ownership of the org.
-- `"serves"` – org acts as contractor/franchisee servicing the corp.
-- `"partner"` – symmetric partnership.
-- `"none"` – used rarely; typically no link doc at all implies independence.
+"serves" – org acts as contractor/franchisee servicing the corp.
 
-#### 3.3.2 Organization ↔ Venue (orgVenueAssignments) – CLARIFIED
+"partner" – symmetric partnership.
 
-**Path:**
+"none" – used rarely; typically no link doc at all implies independence.
 
-```text
+3.3.2 Organization ↔ Venue (orgVenueAssignments)
+Path:
+
+text
+Copy code
 networks/{networkId}/links/orgVenueAssignments/{assignmentId}
-```
+Schema (conceptual):
 
-**Schema (updated from GAP-3):**
-
-```typescript
-type AssignmentStatus = "active" | "inactive" | "archived";
+ts
+Copy code
+type AssignmentStatus = "active" | "inactive";
 
 interface OrgVenueAssignment {
   id: string;
   networkId: string;
   orgId: string;
   venueId: string;
-
-  // Logical state
   status: AssignmentStatus;
-  // "active":   Org is currently operating this venue
-  // "inactive": Org previously operated this venue; links removed but history kept
-  // "archived": Moved to archive (older than retention window)
-
-  // Temporal boundaries
-  startDate: Timestamp; // Org begins operating venue
-  endDate?: Timestamp; // Org stops operating venue (null = ongoing)
-
-  // Allowances
-  allowedRoles: string[]; // e.g., ["manager","scheduler","staff"]
+  startDate: Timestamp;
+  endDate?: Timestamp;
+  allowedRoles: string[];  // e.g., ["manager","scheduler","staff"]
 
   createdAt: Timestamp;
   createdBy: string;
   updatedAt: Timestamp;
   updatedBy: string;
-
-  // Audit trail
-  reason?: string; // "contract_signed", "trial_ended", "requested_by_org", ...
-  notes?: string;
 }
-```
+Semantics:
 
-**Invariants (from GAP-3):**
+An org operates at a venue via this assignment.
 
-1. **Status Controls Visibility:**
-   If status = "inactive" or "archived", this assignment is NOT used in scheduling queries.
-   It is historical only.
+The same venue can have multiple assignments over time (or in parallel, depending on business rules).
 
-2. **Temporal Bounds Are Data Only (Not Enforced):**
-   A query MUST check:
-
-   ```
-   status = "active" AND startDate <= now AND (endDate IS NULL OR now < endDate)
-   ```
-
-   The endDate field does NOT automatically deactivate an assignment.
-   To deactivate, set status = "inactive".
-
-3. **Immutable Once "inactive":**
-   Once status is set to "inactive", it cannot be set back to "active".
-   If you need to re-activate, create a new OrgVenueAssignment.
-
-**Query Patterns:**
-
-```typescript
-// Current assignments for a venue
-query: {
-  collection: 'networks/{networkId}/links/orgVenueAssignments',
-  where: [
-    ['venueId', '==', venueId],
-    ['status', '==', 'active'],
-    ['startDate', '<=', now],
-  ],
-  // Client-side filter: now < (endDate || Infinity)
-}
-
-// All historical assignments (for audit)
-query: {
-  collection: 'networks/{networkId}/links/orgVenueAssignments',
-  where: [
-    ['venueId', '==', venueId],
-  ],
-  orderBy: [['startDate', 'desc']],
-}
-```
-
-**Lifecycle & Deactivation:**
-
-Phase 1: Assignment Active
-
-```typescript
-{
-  status: "active",
-  startDate: "2025-01-15T08:00:00Z",
-  endDate: null,
-  reason: "contract_signed"
-}
-```
-
-Phase 2: Notice of Ending
-
-```typescript
-// Admin goes to UI, clicks "Remove Org from Venue"
-// Backend receives: PATCH /api/venues/{venueId}/assignments/{assignmentId}
-// Payload: { status: "inactive", endDate: now() }
-
-{
-  status: "inactive",
-  startDate: "2025-01-15T08:00:00Z",
-  endDate: "2025-06-30T17:00:00Z",
-  reason: "contract_ended",
-  updatedAt: "2025-06-30T17:00:00Z"
-}
-```
-
-Phase 3: Archival (after retention window, e.g., 2 years)
-
-```typescript
-{
-  status: "archived",
-  startDate: "2025-01-15T08:00:00Z",
-  endDate: "2025-06-30T17:00:00Z",
-  reason: "contract_ended",
-  archiveReasonedAt: "2027-06-30T17:00:00Z"
-}
-```
-
----
-
-## 4. Network Creation, Onboarding Wizard, and Admin Responsibility
-
-### 4.1 Actors
-
+4. Network Creation, Onboarding Wizard, and Admin Responsibility
+4.1 Actors
 We distinguish several actors in onboarding:
 
-- **End User (Person)**
-  - Human with an email and auth identity (Firebase uid).
+End User (Person)
 
-- **Network Owner (Admin)**
-  - The person claiming responsibility for a Network.
-  - Must complete Admin Responsibility Form.
+Human with an email and auth identity (Firebase uid).
 
-- **Staff / Crew**
-  - End users who join via join code or invite; do not create Networks.
+Network Owner (Admin)
 
-- **Corporate / HQ Admin**
-  - Person at corporate level setting up a Network with `kind="corporate_network"`.
+The person claiming responsibility for a Network.
 
-### 4.2 High-Level Onboarding Phases
+Must complete Admin Responsibility Form.
 
-1. **Identity & Profile (All Users)**
-   - Create auth user, verify email, basic profile.
+Staff / Crew
 
-2. **Intent Selection**
-   - "Join existing team" vs "Set up my team" vs "I'm at HQ / Corporate".
+End users who join via join code or invite; do not create Networks.
 
-3. **Network Creation Path**
-   - Only flows where user chooses to set up or represent a team/org/HQ may attempt to create a Network.
+Corporate / HQ Admin
 
-4. **Admin Responsibility Form + Tax ID**
-   - For Network creators only; staff never see this.
+Person at corporate level setting up a Network with kind="corporate_network".
 
-5. **Network + Org + Venue Creation**
-   - Using secure backend APIs; no direct client writes to networks.
+4.2 High-Level Onboarding Phases
+Identity & Profile (All Users)
 
-6. **Activation Gate**
-   - Flip `network.status` from `"pending_verification"` to `"active"` only after all checks.
+Create auth user, verify email, basic profile.
 
-### 4.3 Admin Responsibility Form – Spec
+Intent Selection
 
-**Path (storage):**
+“Join existing team” vs “Set up my team” vs “I’m at HQ / Corporate”.
+
+Network Creation Path
+
+Only flows where user chooses to set up or represent a team/org/HQ may attempt to create a Network.
+
+Admin Responsibility Form + Tax ID
+
+For Network creators only; staff never see this.
+
+Network + Org + Venue Creation
+
+Using secure backend APIs; no direct client writes to networks.
+
+Activation Gate
+
+Flip network.status from "pending_verification" to "active" only after all checks.
+
+4.3 Admin Responsibility Form – Spec
+Path (storage):
 
 Primary record:
-
-```
 networks/{networkId}/compliance/adminResponsibilityForm
-```
 
 Optional:
+adminResponsibilityFormHistory/{eventId} for certification history, if desired.
 
-```
-adminResponsibilityFormHistory/{eventId}
-```
-
-for certification history, if desired.
-
-#### 4.3.1 Form Fields
-
+4.3.1 Form Fields
 These fields are captured during onboarding via a dedicated step.
 
 Data model:
 
-```typescript
+ts
+Copy code
 interface AdminResponsibilityForm {
   networkId: string;
-  adminUid: string; // The user creating the network
-  legalEntityName: string; // Company or legal name
-  taxIdNumber: string; // EIN, VAT or national/region equivalent
+  adminUid: string;            // The user creating the network
+  legalEntityName: string;     // Company or legal name
+  taxIdNumber: string;         // EIN, VAT or national/region equivalent
   taxIdType: "ein" | "vat" | "ssn" | "other";
   businessEmail: string;
   businessPhone: string;
-  country: string; // ISO country code, e.g. "US"
+  country: string;             // ISO country code, e.g. "US"
 
   serviceStartTimestamp: Timestamp; // when they accepted terms
   adminSignature: {
     type: "typed" | "drawn" | "external_esign";
-    value: string; // typed name or reference id
+    value: string;                // typed name or reference id
   };
 
-  termsAcceptedVersion: string; // e.g. "TOS-2025-01"
+  termsAcceptedVersion: string;   // e.g. "TOS-2025-01"
   privacyAcceptedVersion: string; // e.g. "PRIVACY-2025-01"
   liabilityAcknowledged: boolean; // they accept that they are the controller
 
-  ipAddress: string; // from request
-  userAgent: string; // from request
+  ipAddress: string;              // from request
+  userAgent: string;              // from request
   createdAt: Timestamp;
-  createdBy: string; // adminUid
+  createdBy: string;              // adminUid
 }
-```
+4.3.2 Validation Rules
+legalEntityName: non-empty, >= 3 characters.
 
-#### 4.3.2 Validation Rules
+taxIdNumber: pattern-driven validation by country:
 
-- `legalEntityName`: non-empty, >= 3 characters.
-- `taxIdNumber`: pattern-driven validation by country:
-  - For US and `taxIdType="ein"`: 2-7 digits or typical NN-NNNNNNN shape.
-  - For EU/VAT: pattern per country prefix.
-- `businessEmail`: must be a valid email; for corporate setup, strongly prefer non-generic domains.
-- `businessPhone`: must be valid format (E.164 recommended).
-- `liabilityAcknowledged`: must be `true` or the API rejects the form.
+For US and taxIdType="ein": 2-7 digits or typical NN-NNNNNNN shape.
 
-#### 4.3.3 Legal & Responsibility Semantics (Technical View)
+For EU/VAT: pattern per country prefix.
 
+businessEmail: must be a valid email; for corporate setup, strongly prefer non-generic domains.
+
+businessPhone: must be valid format (E.164 recommended).
+
+liabilityAcknowledged: must be true or the API rejects the form.
+
+4.3.3 Legal & Responsibility Semantics (Technical View)
 The form encodes the following technical assertions (summary):
 
-1. The `legalEntityName` accepts responsibility for staff data in this Network.
-2. The `adminUid` is authorized to make this claim on behalf of that entity.
-3. The platform offers tools and reasonable defaults but does not control or audit every use.
-4. The Network owner agrees not to:
-   - Use the platform to violate employment or privacy laws.
-   - Store or misuse data that has nothing to do with scheduling / operations.
-5. The platform reserves the right to suspend the Network if abusive or illegal activity is detected.
+The legalEntityName accepts responsibility for staff data in this Network.
 
-**Note:** The actual text of the terms must be referenced by `termsAcceptedVersion` and stored separately (e.g., in a legal system or static content). This spec focuses on the data hooks.
+The adminUid is authorized to make this claim on behalf of that entity.
 
-### 4.4 Tax ID Handling
+The platform offers tools and reasonable defaults but does not control or audit every use.
 
-#### 4.4.1 Why Tax ID
+The Network owner agrees not to:
 
+Use the platform to violate employment or privacy laws.
+
+Store or misuse data that has nothing to do with scheduling / operations.
+
+The platform reserves the right to suspend the Network if abusive or illegal activity is detected.
+
+Note: The actual text of the terms must be referenced by termsAcceptedVersion and stored separately (e.g., in a legal system or static content). This spec focuses on the data hooks.
+
+4.4 Tax ID Handling
+4.4.1 Why Tax ID
 Tax ID (EIN/VAT/etc.) is required because:
 
-1. It provides a verifiable link between a Network and a real-world entity.
-2. It can be used to track abuse across multiple Networks if necessary (e.g., repeated TOS breaches).
-3. It helps ensure that people setting up Networks have some real traceability.
+It provides a verifiable link between a Network and a real-world entity.
 
-#### 4.4.2 Storage & Security
+It can be used to track abuse across multiple Networks if necessary (e.g., repeated TOS breaches).
 
+It helps ensure that people setting up Networks have some real traceability.
+
+4.4.2 Storage & Security
 Tax ID is sensitive.
 
 It must be:
 
-- Stored in a dedicated compliance sub-collection (`compliance`),
-- Restricted in Firestore rules to `network_owner` and platform super-admins,
-- Optionally encrypted at rest using an application-level encryption key (in addition to Firestore storage-level encryption).
+Stored in a dedicated compliance sub-collection (compliance),
+
+Restricted in Firestore rules to network_owner and platform super-admins,
+
+Optionally encrypted at rest using an application-level encryption key (in addition to Firestore storage-level encryption).
 
 Example:
 
-```javascript
+text
+Copy code
 match /networks/{networkId}/compliance/adminResponsibilityForm {
   allow read: if isNetworkOwner(request.auth.uid, networkId) || isSuperAdmin(request.auth.uid);
   allow create: if isOnboardingServiceAccount();
   allow update, delete: if false; // immutable once created
 }
-```
-
 Where:
 
-- `isOnboardingServiceAccount()` checks auth claims for backend service identities.
-- `isSuperAdmin(uid)` checks top-level admin list.
+isOnboardingServiceAccount() checks auth claims for backend service identities.
 
-#### 4.4.3 Verification Workflow
+isSuperAdmin(uid) checks top-level admin list.
 
+4.4.3 Verification Workflow
 On form submission:
 
-1. **For supported regions:**
-   - Call external or internal tax ID validation service.
-   - Response: "valid", "invalid", or "unable_to_verify".
+For supported regions:
 
-2. **For unsupported regions:**
-   - Mark as `verificationStatus="manual_review"`.
+Call external or internal tax ID validation service.
 
-**Network status is derived as follows:**
+Response: “valid”, “invalid”, or “unable_to_verify”.
 
-If:
+For unsupported regions:
 
-- Email verified
-- Form complete
-- Tax ID "valid" or "manual_review" accepted
-- At least one venue + membership
-- MFA enabled for adminUid
+Mark as verificationStatus="manual_review".
 
-→ `status = "active"`.
+Network status is derived as follows:
 
 If:
 
-- Form submitted but verification pending
+Email verified
 
-→ `status = "pending_verification"`.
+Form complete
+
+Tax ID “valid” or “manual_review” accepted
+
+At least one venue + membership
+
+MFA enabled for adminUid
+→ status = "active".
 
 If:
 
-- Suspicious patterns (multiple networks, mismatched countries, etc.)
+Form submitted but verification pending
+→ status = "pending_verification".
 
-→ `status = "suspended"` until reviewed.
+If:
 
-### 4.5 Onboarding Wizard – User Flows (Detailed)
+Suspicious patterns (multiple networks, mismatched countries, etc.)
+→ status = "suspended" until reviewed.
 
+4.5 Onboarding Wizard – User Flows (Detailed)
 This section describes exact flows, including:
 
-- Screens
-- API calls
-- Entities created or updated
+Screens
 
-#### 4.5.1 Phase 1 – Identity & Profile
+API calls
 
-**Route:** `/onboarding/profile`
+Entities created or updated
 
-**Inputs:**
+4.5.1 Phase 1 – Identity & Profile
+Route: /onboarding/profile
 
-- Email & password / SSO (already handled by auth provider).
-- Profile form:
-  - `fullName`
-  - `phone`
-  - `preferredLanguage`
-  - `timeZone`
-  - `selfDeclaredRole`:
-    - "owner_founder_director"
-    - "manager_supervisor"
-    - "staff_crew"
-    - "corporate_hq"
-    - "consultant_partner"
+Inputs:
 
-**Writes:**
+Email & password / SSO (already handled by auth provider).
 
-`/users/{uid}` (global or network-agnostic profile):
+Profile form:
 
-- `profile.fullName`
-- `profile.phone`
-- `profile.preferredLanguage`
-- `profile.timeZone`
-- `profile.selfDeclaredRole`
+fullName
+
+phone
+
+preferredLanguage
+
+timeZone
+
+selfDeclaredRole:
+
+"owner_founder_director"
+
+"manager_supervisor"
+
+"staff_crew"
+
+"corporate_hq"
+
+"consultant_partner"
+
+Writes:
+
+/users/{uid} (global or network-agnostic profile):
+
+profile.fullName
+
+profile.phone
+
+profile.preferredLanguage
+
+profile.timeZone
+
+profile.selfDeclaredRole
 
 No Network is created at this point.
 
-#### 4.5.2 Phase 2 – Intent Selector
+4.5.2 Phase 2 – Intent Selector
+Route: /onboarding/intent
 
-**Route:** `/onboarding/intent`
+Question: “What are you here to do?”
 
-**Question:** "What are you here to do?"
+Options (cards):
 
-**Options (cards):**
+“I’m joining my existing team”
 
-1. **"I'm joining my existing team"**
-   - Flow: Join (no network creation).
+Flow: Join (no network creation).
 
-2. **"I'm setting this up for my team / organization"**
-   - Flow: Org-centric Network creation.
+“I’m setting this up for my team / organization”
 
-3. **"I'm at HQ / Corporate / Franchise"**
-   - Flow: Corporate-centric Network creation.
+Flow: Org-centric Network creation.
 
-**Routing:**
+“I’m at HQ / Corporate / Franchise”
 
-- Join → `/onboarding/join`
-- Org → `/onboarding/create-network-org`
-- Corporate → `/onboarding/create-network-corporate`
+Flow: Corporate-centric Network creation.
+
+Routing:
+
+Join → /onboarding/join
+
+Org → /onboarding/create-network-org
+
+Corporate → /onboarding/create-network-corporate
 
 Only Org and Corporate flows can ultimately invoke Network creation.
 
-#### 4.5.3 Join Existing Team (No Network Creation)
+4.5.3 Join Existing Team (No Network Creation)
+Route: /onboarding/join
 
-**Route:** `/onboarding/join`
+Inputs:
 
-**Inputs:**
+Invite link (with token) or join code.
 
-- Invite link (with token) or join code.
+Backend Flow:
 
-**Backend Flow:**
-
-```
 POST /api/onboarding/join-with-token
-```
 
 Backend:
 
-1. Looks up `joinToken` (Block 3 types)
-2. Resolves:
-   - `networkId`
-   - `orgId` (optional)
-   - `venueId` (optional)
-   - `roles` (e.g. `["staff"]` or `["manager","scheduler"]`)
-3. Validates:
-   - Token not expired
-   - `remainingUses > 0`
-   - Not revoked
-4. Writes (on success):
-   - Ensure Network membership:
-     `networks/{networkId}/memberships/{membershipId}` for the user.
-   - Org membership (if `orgId` present).
-   - Optionally Venue mapping.
+Looks up joinToken (Block 3 types)
+
+Resolves:
+
+networkId
+
+orgId (optional)
+
+venueId (optional)
+
+roles (e.g. ["staff"] or ["manager","scheduler"])
+
+Validates:
+
+Token not expired
+
+remainingUses > 0
+
+Not revoked
+
+Writes (on success):
+
+Ensure Network membership:
+
+networks/{networkId}/memberships/{membershipId} for the user.
+
+Org membership (if orgId present).
+
+Optionally Venue mapping.
 
 No Admin Responsibility Form, no Network creation. This is purely a join path.
 
-#### 4.5.4 Org-Centric Network Creation
+4.5.4 Org-Centric Network Creation
+Route: /onboarding/create-network-org
 
-**Route:** `/onboarding/create-network-org`
-
-##### Step 1 – Security Pre-check
-
+Step 1 – Security Pre-check
 Backend endpoint:
 
-```
+text
+Copy code
 POST /api/onboarding/verify-eligibility
-```
-
 Checks:
 
-- `request.auth != null` (user must be signed in)
-- `emailVerified == true`
-- `selfDeclaredRole` in:
-  - "owner_founder_director"
-  - "manager_supervisor"
+request.auth != null (user must be signed in)
+
+emailVerified == true
+
+selfDeclaredRole in:
+
+"owner_founder_director"
+
+"manager_supervisor"
 
 If these conditions fail, the endpoint responds with:
 
-- HTTP 403 or 422, plus hints:
-  - "Please verify your email."
-  - "This flow is for owners and managers; staff should join via an invite."
+HTTP 403 or 422, plus hints:
 
-##### Step 2 – Org & Network Basics Form
+“Please verify your email.”
 
+“This flow is for owners and managers; staff should join via an invite.”
+
+Step 2 – Org & Network Basics Form
 Screen fields:
 
-- `orgName` – what staff know the team as.
-- `industry/vertical` – maps to `NetworkSegment`.
-- `approxLocations` – one of `["1","2-5","6-20","20+"]`.
-- `hasCorporateAboveYou` – boolean:
-  - "Do you report to a corporate / brand above you?" yes/no.
+orgName – what staff know the team as.
+
+industry/vertical – maps to NetworkSegment.
+
+approxLocations – one of ["1","2-5","6-20","20+"].
+
+hasCorporateAboveYou – boolean:
+
+“Do you report to a corporate / brand above you?” yes/no.
 
 These map to:
 
-`network.kind`:
+network.kind:
 
-- If `hasCorporateAboveYou = false` → `"independent_org"`
-- If `hasCorporateAboveYou = true` → `"franchise_network"` or `"nonprofit_network"` depending on segment.
+If hasCorporateAboveYou = false → "independent_org"
+
+If hasCorporateAboveYou = true → "franchise_network" or "nonprofit_network" depending on segment.
 
 This is pre-creation data; nothing written to Firestore yet aside from a temporary draft, if desired.
 
-##### Step 3 – Initial Venue (Org defines location)
-
+Step 3 – Initial Venue (Org defines location)
 Screen fields:
 
-- `venueName` (defaults to orgName or "Main Location")
-- Address fields (city, state, country at minimum).
-- `timeZone` pre-filled from user.
+venueName (defaults to orgName or “Main Location”)
+
+Address fields (city, state, country at minimum).
+
+timeZone pre-filled from user.
 
 The wizard explicitly tells the user:
 
-> "This is the primary location where your team works. You can add more locations later."
+“This is the primary location where your team works. You can add more locations later.”
 
-##### Step 4 – Admin Responsibility Form
-
-**Route:** `/onboarding/admin-responsibility`
+Step 4 – Admin Responsibility Form
+Route: /onboarding/admin-responsibility
 
 Fields (from 4.3.1):
 
-- `legalEntityName`
-- `taxIdNumber + taxIdType`
-- `businessEmail`
-- `businessPhone`
-- `country`
-- Checkbox: liability, terms, and privacy acceptance.
-- Typed signature.
+legalEntityName
+
+taxIdNumber + taxIdType
+
+businessEmail
+
+businessPhone
+
+country
+
+Checkbox: liability, terms, and privacy acceptance.
+
+Typed signature.
 
 Backend endpoint:
 
-```
+text
+Copy code
 POST /api/onboarding/admin-form
-```
-
 Payload (simplified):
 
-```json
+json
+Copy code
 {
   "legalEntityName": "...",
   "taxIdNumber": "...",
@@ -968,290 +869,177 @@ Payload (simplified):
     "value": "Jane Doe"
   }
 }
-```
-
 Backend behavior:
 
-1. Validates fields (patterns, non-empty).
-2. Looks up or requests tax ID verification.
-3. Stores a pending `AdminResponsibilityForm` in memory or a temp collection.
+Validates fields (patterns, non-empty).
 
-##### Step 5 – Network + Org + Venue Creation (Atomic Server-Side Step)
+Looks up or requests tax ID verification.
 
+Stores a pending AdminResponsibilityForm in memory or a temp collection.
+
+Step 5 – Network + Org + Venue Creation (Atomic Server-Side Step)
 Endpoint:
 
-```
+text
+Copy code
 POST /api/onboarding/create-network-org
-```
-
 This endpoint is called after the wizard completed steps 2, 3, and 4.
 
 The backend:
 
-1. Re-checks:
-   - Email verified
-   - Role eligibility
-   - No more than N networks already created by this uid (anti-abuse)
-   - `AdminResponsibilityForm` exists and is valid for this session.
+Re-checks:
 
-2. Begins an atomic operation (transaction):
-   - Creates `networks/{networkId}` with:
-     - `kind`, `segment`, `status = "pending_verification"` initially.
-     - `ownerUserId = uid`.
-   - Writes the `AdminResponsibilityForm` to:
-     `networks/{networkId}/compliance/adminResponsibilityForm`.
-   - Creates `orgs/{orgId}` under that Network.
-   - Creates `venues/{venueId}` for the initial location.
-   - Creates membership(s):
-     - Network membership:
-       - `uid` as `network_admin` or `network_owner`.
-     - Org membership:
-       - `uid` as `org_owner`.
-   - Optional `OrgVenueAssignment` linking org and venue.
+Email verified
 
-3. Returns to client:
+Role eligibility
 
-```json
+No more than N networks already created by this uid (anti-abuse)
+
+AdminResponsibilityForm exists and is valid for this session.
+
+Begins an atomic operation (transaction):
+
+Creates networks/{networkId} with:
+
+kind, segment, status = "pending_verification" initially.
+
+ownerUserId = uid.
+
+Writes the AdminResponsibilityForm to:
+
+networks/{networkId}/compliance/adminResponsibilityForm.
+
+Creates orgs/{orgId} under that Network.
+
+Creates venues/{venueId} for the initial location.
+
+Creates membership(s):
+
+Network membership:
+
+uid as network_admin or network_owner.
+
+Org membership:
+
+uid as org_owner.
+
+Optional OrgVenueAssignment linking org and venue.
+
+Returns to client:
+
+json
+Copy code
 {
   "networkId": "...",
   "orgId": "...",
   "venueId": "...",
   "status": "pending_verification" | "active"
 }
-```
-
-##### Step 6 – Activation
-
+Step 6 – Activation
 A separate backend process or synchronous logic checks:
 
-- Tax ID verification result.
-- MFA status of the admin user (enforce for network owners).
-- Minimum configuration: venue defined, membership present.
+Tax ID verification result.
+
+MFA status of the admin user (enforce for network owners).
+
+Minimum configuration: venue defined, membership present.
 
 If all good:
 
-- Sets `network.status = "active"`.
-- Sets `activatedAt` and `activatedBy`.
+Sets network.status = "active".
+
+Sets activatedAt and activatedBy.
 
 If not:
 
-- Keeps `network.status = "pending_verification"`.
-- Dashboard shows banner explaining pending state.
+Keeps network.status = "pending_verification".
 
-#### 4.5.5 Corporate-Centric Network Creation
+Dashboard shows banner explaining pending state.
 
-**Route:** `/onboarding/create-network-corporate`
+4.5.5 Corporate-Centric Network Creation
+Route: /onboarding/create-network-corporate
 
 This is structurally similar to the org flow but has some extra checks.
 
-##### Step 1 – Eligibility & Stronger Verification
-
+Step 1 – Eligibility & Stronger Verification
 Enforce business email where possible:
 
-- If the email is from a generic domain (gmail, yahoo):
-  - Warn: "Corporate setup usually uses a company email. You can proceed, but your workspace may require manual verification."
-  - Set a flag on the Network: `requiresManualCorporateVerification = true`.
+If the email is from a generic domain (gmail, yahoo):
 
-Same endpoint `POST /api/onboarding/verify-eligibility`, with added condition:
+Warn: “Corporate setup usually uses a company email. You can proceed, but your workspace may require manual verification.”
 
-- `selfDeclaredRole` must be `"corporate_hq"` or `"owner_founder_director"`.
+Set a flag on the Network: requiresManualCorporateVerification = true.
 
-##### Step 2 – Corporate Form
+Same endpoint POST /api/onboarding/verify-eligibility, with added condition:
 
+selfDeclaredRole must be "corporate_hq" or "owner_founder_director".
+
+Step 2 – Corporate Form
 Fields:
 
-- `corporateName`
-- `brandName`
-- `ownsLocations` (boolean)
-- `worksWithFranchisees` (boolean)
-- `worksWithPartners` (boolean)
-- `approxLocations` (size band)
+corporateName
+
+brandName
+
+ownsLocations (boolean)
+
+worksWithFranchisees (boolean)
+
+worksWithPartners (boolean)
+
+approxLocations (size band)
 
 These fields shape:
 
-- `network.kind = "corporate_network"`.
+network.kind = "corporate_network".
 
 Later flows (Block 4+) will use these to suggest flows:
 
-- "Add owned locations now" vs "invite franchisees later".
+“Add owned locations now” vs “invite franchisees later”.
 
-##### Step 3 – Admin Responsibility Form & Tax ID
-
+Step 3 – Admin Responsibility Form & Tax ID
 Same as Org flow, but this is mandatory with no shortcuts.
 
-##### Step 4 – Network + Corporate Creation
-
+Step 4 – Network + Corporate Creation
 Endpoint:
 
-```
+text
+Copy code
 POST /api/onboarding/create-network-corporate
-```
-
 Backend steps (transaction):
 
-1. Create Network with `kind="corporate_network"`.
-2. Attach `AdminResponsibilityForm`.
-3. Create `corporates/{corpId}` with `name` and `brandName`.
-4. Create membership(s):
-   - Network membership: `network_owner`.
-   - Corporate membership: `corp_owner`.
+Create Network with kind="corporate_network".
+
+Attach AdminResponsibilityForm.
+
+Create corporates/{corpId} with name and brandName.
+
+Create membership(s):
+
+Network membership: network_owner.
+
+Corporate membership: corp_owner.
 
 At this point, an org might not yet exist.
 Block 4+ flows will allow:
 
-- Creating internal orgs and venues under this Network; or
-- Generating join tokens for franchisees to create their own orgs inside this Network.
+Creating internal orgs and venues under this Network; or
 
-### 4.5.6 Activation Logic & MFA Gates (Detailed from GAP-2)
+Generating join tokens for franchisees to create their own orgs inside this Network.
 
-#### Network Status Transitions
+5. Firestore Rules – Network & Onboarding
+5.1 High-Level Rules
+Clients cannot create or delete Networks directly.
 
-**State Machine:**
+Compliance documents (admin forms, tax IDs) are write-only from backend.
 
-```
-pending_verification
-  ├─ Tax ID verified & MFA enabled → active
-  ├─ Suspicious signals detected → suspended
-  └─ 30 days elapsed, no action → auto_closed
+Membership documents are only created through secure APIs (onboarding / invites).
 
-active
-  ├─ Admin disables MFA → pending_review (background check triggered)
-  ├─ Abuse detected → suspended
-  └─ Admin deletes network → closed
+All collection paths must be prefixed with /networks/{networkId} for tenant-scoped data.
 
-suspended
-  └─ Manual ops review & remediation → active | closed
-
-closed (terminal)
-```
-
-#### MFA Requirement – Hard Gate at Onboarding
-
-Step 5 of onboarding (4.5.4) creates the Network in status `"pending_verification"`.
-
-Immediately after creation, a Cloud Function runs:
-
-```typescript
-async function activateNetworkIfReady(networkId) {
-  const network = await db.collection("networks").doc(networkId).get();
-  const adminUid = network.data().ownerUserId;
-  const admin = await admin.auth().getUser(adminUid);
-
-  const isReady =
-    network.data().adminResponsibilityForm.liabilityAcknowledged &&
-    admin.customClaims?.mfa_enabled === true &&
-    taxIdVerified(network) &&
-    hasMinConfigVenue(network);
-
-  if (isReady) {
-    await db.collection("networks").doc(networkId).update({
-      status: "active",
-      activatedAt: Timestamp.now(),
-      activatedBy: "system",
-    });
-    sendEmail(admin.email, "Network activated");
-  } else {
-    // Determine which gate failed and set a debug flag
-    const blocks = [];
-    if (!admin.customClaims?.mfa_enabled) blocks.push("mfa_pending");
-    if (!taxIdVerified(network)) blocks.push("tax_id_pending");
-    if (!hasMinConfigVenue(network)) blocks.push("missing_venue");
-
-    await db
-      .collection("networks")
-      .doc(networkId)
-      .update({
-        status: "pending_verification",
-        activationBlockedBy: blocks,
-        nextRetryAt: Timestamp.now() + Duration.minutes(5),
-      });
-  }
-}
-```
-
-**Client-Side Messaging:**
-
-```typescript
-if (network.status === "pending_verification") {
-  const blocks = network.activationBlockedBy || [];
-
-  if (blocks.includes("mfa_pending")) {
-    showAlert("Complete setup: Enable two-factor authentication in Security Settings");
-  }
-  if (blocks.includes("tax_id_pending")) {
-    showAlert("Tax ID verification in progress (can take 24 hours)");
-  }
-  if (blocks.includes("missing_venue")) {
-    showAlert("Add at least one venue to activate");
-  }
-}
-```
-
-#### MFA Removal After Activation (Ongoing Check)
-
-**Background Job (runs every 6 hours):**
-
-```typescript
-async function checkNetworkMFACompliance() {
-  const activeNetworks = await db.collection("networks").where("status", "==", "active").get();
-
-  for (const networkDoc of activeNetworks.docs) {
-    const adminUid = networkDoc.data().ownerUserId;
-    const admin = await admin.auth().getUser(adminUid);
-
-    if (admin.customClaims?.mfa_enabled !== true) {
-      // Admin disabled MFA
-      await networkDoc.ref.update({
-        status: "pending_review",
-        mfaLostAt: Timestamp.now(),
-        requiresManualReview: true,
-        suspensionReason: "Network admin MFA disabled",
-      });
-
-      await alertOps(`Network ${networkDoc.id} lost admin MFA`);
-    }
-  }
-}
-```
-
-**Remediation Path:**
-
-- Admin re-enables MFA → status returns to `"active"` (auto-check runs within 1h).
-- If not re-enabled within 7 days → status → `"suspended"`.
-
-#### Onboarding UX Impact
-
-At step 4 (Admin Responsibility Form), show:
-
-- ✓ "We'll require two-factor authentication to protect your data."
-- ✓ Link to MFA setup guide.
-
-After onboarding completes:
-
-If `status != "active"`, show progress bar with blockers:
-
-```
-"⏳ Setting up your workspace (2 of 4 requirements met)"
-☐ Email verified (✓ done)
-☐ Two-factor authentication (⏳ pending)
-☐ Tax ID verified (⏳ pending)
-☐ Add your first venue (☐ pending)
-```
-
----
-
-## 5. Firestore Rules – Network & Onboarding
-
-### 5.1 High-Level Rules
-
-- Clients **cannot** create or delete Networks directly.
-- Compliance documents (admin forms, tax IDs) are **write-only from backend**.
-- Membership documents are only created through secure APIs (onboarding / invites).
-- All collection paths must be prefixed with `/networks/{networkId}` for tenant-scoped data.
-
-### 5.2 Example Rules Skeleton
-
-```javascript
+5.2 Example Rules Skeleton
+text
+Copy code
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
@@ -1306,340 +1094,144 @@ service cloud.firestore {
         allow create, update, delete: if false; // backend only
       }
 
-      // OrgVenueAssignments (from GAP-3)
-      match /links/orgVenueAssignments/{assignmentId} {
-        allow read: if isNetworkMember(networkId);
-
-        allow create: if
-          isOrgOwner(request.auth, orgId) &&
-          hasRole(request.auth, "org_owner", "network_admin");
-
-        allow update: if
-          hasRole(request.auth, "org_owner", "network_admin") &&
-          (
-            // Can only set to "inactive" (one-way transition)
-            (request.resource.data.status == "inactive" &&
-             resource.data.status == "active")
-            ||
-            // Cannot change immutable fields
-            !fieldChanged("orgId") &&
-            !fieldChanged("venueId") &&
-            !fieldChanged("startDate")
-          );
-
-        allow delete: if false; // keep history; use status="archived" instead
-      }
-
       // Other collections (schedules, shifts, attendance, etc.)
       // inherit the Block 3 Integrity rules, now nested under /networks/{networkId}
     }
   }
 }
-```
-
-### 5.3 Firestore Security Rules – Helper Functions (from GAP-4)
-
-This section defines the exact implementations of helper functions used in section 5.2.
-
-#### Environment Setup
-
-**Custom Claims (set on auth creation via Admin SDK):**
-
-```json
-{
-  "role": "network_admin" | "org_owner" | "staff" | ...,
-  "mfa_enabled": boolean,
-  "networks": [networkId, ...] // optional; allows fast check
-}
-```
-
-Alternatively, if custom claims are not used:
-Query memberships collection directly (slower but more flexible).
-
-#### Helper: isNetworkMember(auth, networkId)
-
-**Implementation Option A (via Custom Claims):**
-
-```javascript
-function isNetworkMember(auth, networkId) {
-  return networkId in auth.token.claims.networks;
-}
-```
-
-**Implementation Option B (via Document Query):**
-
-```javascript
-function isNetworkMember(auth, networkId) {
-  return exists(
-    /databases/$(database)/documents/networks/$(networkId)/memberships/$(auth.uid)
-  );
-}
-```
-
-**Recommendation:** Use Option B (document query) in v14 for clarity and auditability.
-
-#### Helper: isNetworkOwner(auth, networkId)
-
-```javascript
-function isNetworkOwner(auth, networkId) {
-  let membershipRef = /databases/$(database)/documents/networks/$(networkId)/memberships/$(auth.uid);
-  return exists(membershipRef) &&
-         get(membershipRef).data.roles.hasAny(["network_owner", "network_admin"]);
-}
-```
-
-#### Helper: isOrgOwner(auth, orgId, networkId)
-
-```javascript
-function isOrgOwner(auth, orgId, networkId) {
-  let membershipRef = /databases/$(database)/documents/networks/$(networkId)/memberships/$(auth.uid);
-  return exists(membershipRef) &&
-         get(membershipRef).data.roles.hasAny(["org_owner", "network_admin"]) &&
-         get(membershipRef).data.allowedOrgs.hasAny([orgId]);
-}
-```
-
-#### Helper: hasRole(auth, networkId, ...roles)
-
-```javascript
-function hasRole(auth, networkId, roles) {
-  let membershipRef = /databases/$(database)/documents/networks/$(networkId)/memberships/$(auth.uid);
-  return exists(membershipRef) &&
-         get(membershipRef).data.roles.hasAny(roles);
-}
-```
-
-#### Helper: isOnboardingServiceAccount(auth)
-
-**Implementation Option A (via Custom Claims):**
-
-```javascript
-function isOnboardingServiceAccount(auth) {
-  return auth.token.firebase.identities["service-account"] != null;
-}
-```
-
-**Implementation Option B (via Custom Claim):**
-
-```javascript
-function isOnboardingServiceAccount(auth) {
-  return auth.token.claims.serviceRole == "onboarding";
-}
-```
-
-**Recommendation:** Use Option B; set custom claim `"serviceRole"="onboarding"` on the Cloud Functions service account.
-
-#### Helper: fieldChanged(fieldName)
-
-Helper for update rules to prevent mutation of immutable fields:
-
-```javascript
-function fieldChanged(fieldName) {
-  return request.resource.data[fieldName] != resource.data[fieldName];
-}
-```
-
-#### Complete Rules Example (Fully Functional)
-
-```javascript
-rules_version = '2';
-service cloud.firestore {
-  match /databases/{database}/documents {
-
-    // ===== HELPERS =====
-    function isNetworkMember(networkId) {
-      return exists(
-        /databases/$(database)/documents/networks/$(networkId)/memberships/$(request.auth.uid)
-      );
-    }
-
-    function isNetworkOwner(networkId) {
-      let m = get(/databases/$(database)/documents/networks/$(networkId)/memberships/$(request.auth.uid));
-      return m != null && m.data.roles.hasAny(["network_owner", "network_admin"]);
-    }
-
-    function hasRole(networkId, roles) {
-      let m = get(/databases/$(database)/documents/networks/$(networkId)/memberships/$(request.auth.uid));
-      return m != null && m.data.roles.hasAny(roles);
-    }
-
-    function isOnboarding() {
-      return request.auth.token.firebase.sign_in_provider == "service_account" ||
-             request.auth.token.claims.serviceRole == "onboarding";
-    }
-
-    function fieldChanged(fieldName) {
-      return request.resource.data[fieldName] != resource.data[fieldName];
-    }
-
-    // ===== RULES =====
-
-    match /networks/{networkId} {
-      allow read: if isNetworkMember(networkId);
-      allow create, update, delete: if false; // backend only
-
-      match /compliance/adminResponsibilityForm {
-        allow read: if isNetworkOwner(networkId);
-        allow create: if isOnboarding();
-        allow update, delete: if false; // immutable
-      }
-
-      match /corporates/{corpId} {
-        allow read: if isNetworkMember(networkId);
-        allow create, update, delete: if false;
-      }
-
-      match /orgs/{orgId} {
-        allow read: if isNetworkMember(networkId);
-        allow create, update, delete: if false;
-      }
-
-      match /venues/{venueId} {
-        allow read: if isNetworkMember(networkId);
-        allow create, update, delete: if false;
-      }
-
-      match /memberships/{membershipId} {
-        allow read: if request.auth.uid == membershipId || isNetworkOwner(networkId);
-        allow create, update, delete: if false;
-      }
-
-      match /links/{linkType}/{linkId} {
-        allow read: if isNetworkMember(networkId);
-        allow create, update, delete: if false;
-      }
-
-      // Schedules, shifts, attendance, etc. (Block 3 rules, nested here)
-      match /schedules/{scheduleId} {
-        allow read, write: if
-          isNetworkMember(networkId) &&
-          hasRole(networkId, ["scheduler", "org_owner", "network_admin"]);
-      }
-    }
-  }
-}
-```
-
----
-
-## 6. Blocks 1–3 (Completed) and Beyond
-
-### 6.1 Block Status Table (Bible v14 View)
-
-| Block | Name                 | Scope                                         | Status (Spec v14)             | Code Tag |
-| ----- | -------------------- | --------------------------------------------- | ----------------------------- | -------- |
-| 1     | Security Core        | Auth, sessions, 2FA, SLOs                     | ✅ Complete                   | v1.1.0   |
-| 2     | Reliability Core     | Observability, backups, CI/CD, error budgets  | ✅ Complete                   | v1.1.0   |
-| 3     | Integrity Core       | Zod schemas, API validation, Firestore rules  | ✅ Complete (see BLOCK3 docs) | v1.1.0   |
-| 4     | UX & Scheduling Core | Onboarding wizard, schedule builder, labor UI | 🟡 Spec-approved, in progress | —        |
-| 5     | PWA & Deployment     | PWA shell, offline, performance, rollout      | 🟡 Spec-level only            | —        |
-| 6     | AI & Forecast Layer  | Forecast engine, AI assistant for scheduling  | 🟡 Spec-level only            | —        |
-| 7     | Integrations & APIs  | Payroll, POS, webhooks, stable external API   | 🟡 Spec-level only            | —        |
-| 8     | Compliance & Gov     | Audit logs, DLP, legal tooling, SOC2 prep     | 🟡 Spec-level only            | —        |
+6. Blocks 1–3 (Completed) and Beyond
+6.1 Block Status Table (Bible v14 View)
+Block Name Scope Status (Spec v14) Code Tag
+1 Security Core Auth, sessions, 2FA, SLOs ✅ Complete v1.1.0
+2 Reliability Core Observability, backups, CI/CD, error budgets ✅ Complete v1.1.0
+3 Integrity Core Zod schemas, API validation, Firestore rules ✅ Complete (see BLOCK3 docs) v1.1.0
+4 UX & Scheduling Core Onboarding wizard, schedule builder, labor UI 🟡 Spec-approved, in progress —
+5 PWA & Deployment PWA shell, offline, performance, rollout 🟡 Spec-level only —
+6 AI & Forecast Layer Forecast engine, AI assistant for scheduling 🟡 Spec-level only —
+7 Integrations & APIs Payroll, POS, webhooks, stable external API 🟡 Spec-level only —
+8 Compliance & Gov Audit logs, DLP, legal tooling, SOC2 prep 🟡 Spec-level only —
 
 Blocks 4–8 represent the pre-launch runway from an internal MVP to a production SaaS.
 
----
+7. Future Initiatives (“Extremities”) – After Block 8
+These are deliberately out of scope for initial production launch but are acknowledged here so we don’t forget them or redesign ourselves into a corner.
 
-## 7. Future Initiatives ("Extremities") – After Block 8
+7.1 Multi-Tenant Analytics Hub
+Read-only, aggregated index of sanitized metrics across Networks.
 
-These are deliberately out of scope for initial production launch but are acknowledged here so we don't forget them or redesign ourselves into a corner.
+No raw PII; only aggregated or anonymized stats.
 
-### 7.1 Multi-Tenant Analytics Hub
+Access controlled either:
 
-- Read-only, aggregated index of sanitized metrics across Networks.
-- No raw PII; only aggregated or anonymized stats.
-- Access controlled either:
-  - By Network-level opt-in; or
-  - For internal ops only.
+By Network-level opt-in; or
 
-### 7.2 RAG / AI Training Sandbox
+For internal ops only.
 
-- All training data for internal models must be:
-  - Synthetic; or
-  - Fully anonymized and aggregated; or
-  - Sourced from networks that explicitly grant consent.
-- RAG indexes:
-  - Built on docs (Bible, block specs, policies, `docs/schema-map`).
-  - Kept separate from production schedule data.
+7.2 RAG / AI Training Sandbox
+All training data for internal models must be:
 
-### 7.3 Network Federation Connect
+Synthetic; or
 
+Fully anonymized and aggregated; or
+
+Sourced from networks that explicitly grant consent.
+
+RAG indexes:
+
+Built on docs (Bible, block specs, policies, docs/schema-map).
+
+Kept separate from production schedule data.
+
+7.3 Network Federation Connect
 A future where multiple Networks can:
 
-- Share data via signed agreements (e.g., corporate ↔ independent franchise).
-- Use explicit cross-network links instead of mixing data.
+Share data via signed agreements (e.g., corporate ↔ independent franchise).
+
+Use explicit cross-network links instead of mixing data.
 
 Requires:
 
-- New link types between `networkId`s.
-- Strong legal contracts.
-- Fine-grained controls at the field level.
+New link types between networkIds.
 
-### 7.4 Compliance Operations Dashboard
+Strong legal contracts.
 
+Fine-grained controls at the field level.
+
+7.4 Compliance Operations Dashboard
 Dashboard for Fresh Schedules internal ops:
 
-- Lists Networks, statuses, form completion, tax verification results.
-- Flags:
-  - Missing tax ID in required countries.
-  - Networks with no MFA on any admin.
-  - Networks that exceed plan limits.
-- Drives:
-  - Manual reviews.
-  - Outreach or suspension flows.
+Lists Networks, statuses, form completion, tax verification results.
 
----
+Flags:
 
-## 8. KPIs & Definition of "Production-Ready"
+Missing tax ID in required countries.
 
-### 8.1 KPIs for v14 Spec Compliance
+Networks with no MFA on any admin.
 
-**KPI-1: Tenant Boundary Correctness**
+Networks that exceed plan limits.
 
-- 100% of new Firestore collections storing schedule-related data have a `networkId` in their path or fields and are covered by rules.
+Drives:
 
-**KPI-2: Network Creation Safety**
+Manual reviews.
 
-- 0 Networks with `status="active"` exist without:
-  - Completed Admin Responsibility Form
-  - Verified email for network owner
-  - At least one Venue and one Org membership
+Outreach or suspension flows.
 
-**KPI-3: Onboarding Completion**
+8. KPIs & Definition of “Production-Ready”
+8.1 KPIs for v14 Spec Compliance
+KPI-1: Tenant Boundary Correctness
 
-- At least 90–95% of legitimate owner/manager signups complete the wizard up to the "First Schedule View" step in under 5 minutes.
+100% of new Firestore collections storing schedule-related data have a networkId in their path or fields and are covered by rules.
 
-**KPI-4: Liability Position Clarity**
+KPI-2: Network Creation Safety
 
-- Every Network has:
-  - `AdminResponsibilityForm` document with `liabilityAcknowledged=true`.
-  - `termsAcceptedVersion` and `privacyAcceptedVersion` fields set.
+0 Networks with status="active" exist without:
 
-### 8.2 Definition of "Production-Ready" for Fresh Schedules
+Completed Admin Responsibility Form
 
-Fresh Schedules is considered **production-ready** when:
+Verified email for network owner
 
-1. **Blocks 1–3** are implemented and actively enforced (they already are at v1.1.0).
+At least one Venue and one Org membership
 
-2. **Block 4** has:
-   - Secure onboarding wizard implementing Network creation as described.
-   - Basic schedule builder UX with appropriate validations.
+KPI-3: Onboarding Completion
 
-3. **Networks:**
-   - Cannot be created without Admin Responsibility Form and necessary checks.
-   - Cannot be "active" without owner MFA enabled (policy-level, not just suggested).
+At least 90–95% of legitimate owner/manager signups complete the wizard up to the “First Schedule View” step in under 5 minutes.
 
-4. **Docs:**
-   - This Bible v14.0.0 is grounded in actual routes, schemas, and rule files.
-   - Any intentional deviation between spec and implementation is tracked.
+KPI-4: Liability Position Clarity
 
-At that point, onboarding new customers is no longer ad-hoc. It's governed by this spec, and network creation is:
+Every Network has:
 
-- **Secure**,
-- **Legally bounded**, and
-- **Understandable** to a non-technical admin.
+AdminResponsibilityForm document with liabilityAcknowledged=true.
 
----
+termsAcceptedVersion and privacyAcceptedVersion fields set.
 
-**End of Project Bible v14.0.0**
+8.2 Definition of “Production-Ready” for Fresh Schedules
+Fresh Schedules is considered production-ready when:
+
+Blocks 1–3 are implemented and actively enforced (they already are at v1.1.0).
+
+Block 4 has:
+
+Secure onboarding wizard implementing Network creation as described.
+
+Basic schedule builder UX with appropriate validations.
+
+Networks:
+
+Cannot be created without Admin Responsibility Form and necessary checks.
+
+Cannot be “active” without owner MFA enabled (policy-level, not just suggested).
+
+Docs:
+
+This Bible v14.0.0 is grounded in actual routes, schemas, and rule files.
+
+Any intentional deviation between spec and implementation is tracked.
+
+At that point, onboarding new customers is no longer ad-hoc. It’s governed by this spec, and network creation is:
+
+Secure,
+
+Legally bounded, and
+
+Understandable to a non-technical admin.
+```

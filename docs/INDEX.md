@@ -21,6 +21,7 @@ See also:
 
 - [v13.5](./bible/Project_Bible_v13.5.md) - Previous version (historical context)
 - [Specification Gaps v14.0.0](./bible/GAPS_v14.0.0.md) - Critical gaps and action items
+- [Schema Map – Network](./schema-network.md) - Network-centric Firestore paths and TypeScript schemas
 
 ### 3. Development Journey & Fixes (Archived)
 

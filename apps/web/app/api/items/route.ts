@@ -36,8 +36,10 @@ export const POST = withSecurity(
         createdBy: context.userId,
       };
       return NextResponse.json(item, { status: 201 });
-    } catch (e) {
-      return serverError(e instanceof Error ? e.message : "Unexpected error");
+    } catch (err) {
+      // Log the error for debugging; return a generic message to the client
+      console.error("POST /api/items error:", err);
+      return serverError("Unexpected error");
     }
   },
   { requireAuth: true, maxRequests: 100, windowMs: 60_000 },

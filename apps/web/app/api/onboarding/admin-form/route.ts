@@ -8,9 +8,15 @@ import {
 import { randomBytes } from "crypto";
 import { NextRequest, NextResponse } from "next/server";
 
-import { adminDb } from "@/src/lib/firebase.server";
+import { adminDb as importedAdminDb } from "@/src/lib/firebase.server";
 
-export async function POST(req: NextRequest) {
+/**
+ * Inner handler exported for tests. Accepts an optional injected adminDb for testability.
+ */
+export async function adminFormHandler(
+  req: NextRequest & { user?: { uid: string } },
+  injectedAdminDb = importedAdminDb,
+) {
   let body: unknown;
 
   try {
@@ -31,6 +37,9 @@ export async function POST(req: NextRequest) {
   }
 
   const payload: CreateAdminResponsibilityFormInput = parseResult.data;
+
+  // Use injected adminDb (tests) or imported adminDb for runtime
+  const adminDb = injectedAdminDb;
 
   // If admin DB not initialized, return a stub token so the UI can progress in local/dev mode
   if (!adminDb) {
@@ -61,3 +70,6 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "internal_error" }, { status: 500 });
   }
 }
+
+// Keep Next.js route export for runtime
+export const POST = adminFormHandler;

@@ -17,7 +17,7 @@ This runbook configures an alert policy that fires when uptime checks fail for m
 sed -i 's/PROJECT_ID/my-project/g; s/CHANNEL_ID/1234567890/g' scripts/ops/uptime-alert-policy.json
 ```
 
-1. Create the alert policy via gcloud:
+2. Create the alert policy via gcloud:
 
 ```bash
 PROJECT_ID=my-project \
@@ -25,9 +25,9 @@ CHANNEL_ID=1234567890 \
 ./scripts/ops/create-uptime-alert.sh
 ```
 
-1. Test by disabling your service or changing uptime check target temporarily.
+3. Test by disabling your service or changing uptime check target temporarily.
 
-1. Verify alerts arrive in Slack/Email.
+4. Verify alerts arrive in Slack/Email.
 
 ## Notes
 

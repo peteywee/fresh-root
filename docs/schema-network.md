@@ -1,653 +1,199 @@
-# Network Schema Documentation
+# Schema Map – Network (Tenant Root) & Graph Entities
 
-**Status:** 📋 Specification (Implementation Pending)
-**Version:** Based on Bible v14.0.0
-**Last Updated:** November 7, 2025
+> Spec source: Project_Bible_v14.0.0
 
----
+This document defines the **Network-centric multi-tenancy model** and relates it to:
 
-## Purpose
+- Firestore paths
+- TypeScript/Zod schemas
+- Onboarding flows (at a high level)
 
-This document defines the **Network-centric data model** introduced in [Project Bible v14.0.0](./bible/Project_Bible_v14.0.0.md).
-It serves as the technical reference for:
-
-- Firestore path structures
-- Entity schemas and relationships
-- Collection ownership and access patterns
-- Migration from org-centric to network-centric paths
+It is the **bridge** between the Bible and actual code.
 
 ---
 
-## Core Concept: Network as Tenant Root
+## 1. Mental Model
 
-> **Network is the only true tenant boundary. All scheduling data belongs to exactly one Network.**
+- **Network** = tenant box. Nothing relevant to scheduling exists outside a Network.
+- Inside a Network:
+  - **Corporate** = HQ / brand / supervising entity.
+  - **Organization** = operating unit (store, shelter team, nonprofit branch, etc.).
+  - **Venue** = physical place where shifts happen.
+- Relationships are modeled via **link docs**:
+  - `CorpOrgLink` – corporate owns/serves/partners with org.
+  - `OrgVenueAssignment` – org operates at venue.
 
-```text
-Infrastructure (Firebase Project)
-  └─ Network (Tenant)
-       ├─ Corporate (Graph Node)
-       ├─ Organization (Graph Node)
-       ├─ Venue (Graph Node)
-       ├─ Links (Relationships)
-       ├─ Users (Network-scoped profiles)
-       ├─ Memberships (Role assignments)
-       └─ Schedules, Shifts, Attendance (Operational data)
-```
+One user can belong to multiple Networks via **memberships**, but all schedules, shifts, and attendance are always scoped to a single `networkId`.
 
 ---
 
-## Path Map
+## 2. Firestore Paths (Target Model)
 
-All collections under `/networks/{networkId}` enforce tenant isolation.
+| Entity                  | Path Example                                                     | Notes                       | Status              |
+| ----------------------- | ---------------------------------------------------------------- | --------------------------- | ------------------- |
+| Network                 | `/networks/{networkId}`                                          | Tenant root                 | PLANNED/IN PROGRESS |
+| Corporate               | `/networks/{networkId}/corporates/{corpId}`                      | Brand/HQ node               | PLANNED             |
+| Organization            | `/networks/{networkId}/orgs/{orgId}`                             | Operating unit              | PLANNED             |
+| Venue                   | `/networks/{networkId}/venues/{venueId}`                         | Physical place              | PLANNED             |
+| Corp ↔ Org Link        | `/networks/{networkId}/links/corpOrgLinks/{linkId}`              | `relationshipType` + status | PLANNED             |
+| Org ↔ Venue Assignment | `/networks/{networkId}/links/orgVenueAssignments/{assignmentId}` | Org operates at venue       | PLANNED             |
+| Network User Profile    | `/networks/{networkId}/users/{uid}`                              | User info scoped to network | PLANNED             |
+| Membership              | `/networks/{networkId}/memberships/{membershipId}`               | User roles + scopes         | PLANNED             |
+| AdminResponsibilityForm | `/networks/{networkId}/compliance/adminResponsibilityForm`       | Legal/administrative record | PLANNED             |
 
-### Primary Entities
-
-| Entity             | Path                                               | Owner              | Used By    | Status       |
-| ------------------ | -------------------------------------------------- | ------------------ | ---------- | ------------ |
-| **Network**        | `/networks/{networkId}`                            | Platform (backend) | All blocks | ✅ Specified |
-| **Corporate**      | `/networks/{networkId}/corporates/{corpId}`        | Backend            | Block 4+   | ✅ Specified |
-| **Organization**   | `/networks/{networkId}/orgs/{orgId}`               | Backend            | Block 4+   | ✅ Specified |
-| **Venue**          | `/networks/{networkId}/venues/{venueId}`           | Backend            | Block 4+   | ✅ Specified |
-| **User (Network)** | `/networks/{networkId}/users/{uid}`                | User + Backend     | Block 4+   | ✅ Specified |
-| **Membership**     | `/networks/{networkId}/memberships/{membershipId}` | Backend            | All blocks | ✅ Specified |
-
-### Link Collections
-
-| Link Type              | Path                                                             | Purpose                           | Status       |
-| ---------------------- | ---------------------------------------------------------------- | --------------------------------- | ------------ |
-| **CorpOrgLink**        | `/networks/{networkId}/links/corpOrgLinks/{linkId}`              | Corporate ↔ Org relationship     | ✅ Specified |
-| **OrgVenueAssignment** | `/networks/{networkId}/links/orgVenueAssignments/{assignmentId}` | Org ↔ Venue operating assignment | ✅ Specified |
-
-### Compliance & Sensitive Data
-
-| Entity                        | Path                                                       | Access              | Status       |
-| ----------------------------- | ---------------------------------------------------------- | ------------------- | ------------ |
-| **Admin Responsibility Form** | `/networks/{networkId}/compliance/adminResponsibilityForm` | Owner + super-admin | ✅ Specified |
-| **Tax ID Data**               | (embedded in AdminResponsibilityForm)                      | Encrypted at rest   | ✅ Specified |
-
-### Operational Data (Block 3+)
-
-| Entity         | Path                                              | Owner           | Used By    | Status              |
-| -------------- | ------------------------------------------------- | --------------- | ---------- | ------------------- |
-| **Schedule**   | `/networks/{networkId}/schedules/{scheduleId}`    | Org/Manager     | Block 3, 4 | 🟡 Migration needed |
-| **Shift**      | `/networks/{networkId}/shifts/{shiftId}`          | Org/Manager     | Block 3, 4 | 🟡 Migration needed |
-| **Event**      | `/networks/{networkId}/events/{eventId}`          | Org/Manager     | Block 4+   | 🟡 Migration needed |
-| **Attendance** | `/networks/{networkId}/attendance/{attendanceId}` | Staff + Manager | Block 6+   | 🟡 Migration needed |
-| **Position**   | `/networks/{networkId}/positions/{positionId}`    | Org/Manager     | Block 3, 4 | 🟡 Migration needed |
-| **Zone**       | `/networks/{networkId}/zones/{zoneId}`            | Venue/Manager   | Block 4+   | 🟡 Migration needed |
+**Rule:** Any new schedule/shift/people-related collection must either live _under_ `/networks/{networkId}` or carry a `networkId` field with rules enforcing it.
 
 ---
 
-## Entity Schemas
+## 3. TypeScript / Zod Schemas
 
-### 1. Network (Tenant Root)
+### 3.1 Network
 
-**Path:** `/networks/{networkId}`
+File: `packages/types/src/networks.ts`
 
-**Schema (TypeScript):**
+Core types:
 
-```typescript
-type NetworkStatus = "pending_verification" | "active" | "suspended" | "closed";
-type NetworkKind =
-  | "independent_org"
-  | "corporate_network"
-  | "franchise_network"
-  | "nonprofit_network"
-  | "test_sandbox";
-type NetworkSegment =
-  | "restaurant"
-  | "qsr"
-  | "bar"
-  | "hotel"
-  | "nonprofit"
-  | "shelter"
-  | "church"
-  | "retail"
-  | "other";
-type NetworkPlan = "free" | "starter" | "growth" | "enterprise" | "internal";
-type BillingMode = "none" | "card" | "invoice" | "partner_billed";
+- `NetworkSchema` – canonical stored document.
+- `CreateNetworkSchema` – onboarding create payload.
+- `UpdateNetworkSchema` – update payload.
+- Enums:
+  - `NetworkKind`
+  - `NetworkSegment`
+  - `NetworkStatus`
+  - `NetworkPlan`
+  - `BillingMode`
 
-interface Network {
-  id: string;
-  slug: string;
-  displayName: string;
-  legalName?: string;
+Invariants:
 
-  kind: NetworkKind;
-  segment: NetworkSegment;
-  status: NetworkStatus;
+- `status` ∈ `"pending_verification" | "active" | "suspended" | "closed"`.
+- `status = "active"` only when:
+  - Admin Responsibility Form exists and is accepted.
+  - Email is verified for `ownerUserId`.
+  - MFA is enabled for owner (policy-level).
+  - At least one Org + Venue + membership exist.
 
-  environment: "production" | "staging" | "sandbox" | "demo";
-  primaryRegion: "US" | "CA" | "EU" | "LATAM" | "APAC" | "OTHER";
-  timeZone: string;
-  currency: string;
+### 3.2 Corporate
 
-  plan: NetworkPlan;
-  billingMode: BillingMode;
-  billingProvider?: "stripe" | "paddle" | "manual" | "none";
-  billingCustomerId?: string;
+File: `packages/types/src/corporates.ts` (see full example in code section below).
 
-  maxVenues?: number | null;
-  maxActiveOrgs?: number | null;
-  maxActiveUsers?: number | null;
-  maxShiftsPerDay?: number | null;
+Fields (must include):
 
-  // Security
-  requireMfaForAdmins: boolean;
-  ipAllowlistEnabled: boolean;
-  ipAllowlist?: string[];
-  allowedEmailDomains?: string[];
-  dataResidency?: "us_only" | "eu_only" | "global" | "unspecified";
-  gdprMode: boolean;
-  piiMaskingMode: "none" | "mask_in_logs" | "mask_everywhere";
+- `id: string`
+- `networkId: string`
+- `name: string`
+- Optional:
+  - `brandName`, `websiteUrl`, `contactEmail`, `contactPhone`
+  - `ownsLocations: boolean`
+  - `worksWithFranchisees: boolean`
+  - `worksWithPartners: boolean`
 
-  allowCrossOrgSharing: boolean;
-  allowExternalCorpLinks: boolean;
+### 3.3 Organization
 
-  // Scheduling defaults
-  defaultWeekStartsOn: "monday" | "sunday";
-  defaultMinShiftLengthHours: number;
-  defaultMaxShiftLengthHours: number;
-  allowSelfScheduling: boolean;
-  allowOvertime: boolean;
-  overtimeThresholdHours: number;
+File: `packages/types/src/orgs.ts`
 
-  // Features
-  features: {
-    analytics: boolean;
-    forecasting: boolean;
-    autoScheduling: boolean;
-    attendance: boolean;
-    broadcastMessaging: boolean;
-    aiAssistant: boolean;
-    apiAccess: boolean;
-  };
+Fields (must include):
 
-  // Ownership
-  ownerUserId: string;
-  ownerCorporateId?: string;
-  tags?: string[];
+- `id: string`
+- `networkId: string`
+- `displayName: string`
+- Optional:
+  - `legalName?: string`
+  - `primaryContactUid?: string`
+  - `isIndependent: boolean` (true if no `CorpOrgLink`)
 
-  // Lifecycle
-  createdAt: Timestamp;
-  createdBy: string;
-  updatedAt: Timestamp;
-  updatedBy: string;
-  trialEndsAt?: Timestamp;
-  billingStartsAt?: Timestamp;
-  activatedAt?: Timestamp;
-  activatedBy?: string;
+### 3.4 Venue
 
-  // Activation tracking (GAP-2)
-  activationBlockedBy?: string[];
-  nextRetryAt?: Timestamp;
-  suspensionReason?: string;
-  suspendedAt?: Timestamp;
-  suspendedBy?: string;
-  mfaLostAt?: Timestamp;
-}
-```
+File: `packages/types/src/venues.ts`
 
-**Invariants:**
+Fields (must include):
 
-- `status = "active"` only if:
-  - Admin Responsibility Form complete
-  - Tax ID verified (or waived)
-  - MFA enabled for `ownerUserId`
-  - At least one venue and membership exist
+- `id: string`
+- `networkId: string`
+- `name: string`
+- Address (optional but strongly recommended):
+  - `addressLine1`, `addressLine2`, `city`, `state`, `postalCode`, `country`
+- `timeZone: string`
+- `isActive: boolean`
 
-**Firestore Rules:**
+**Note:** Venue does **not** carry `orgId` for ownership. That’s expressed with `OrgVenueAssignment` link docs.
 
-```javascript
-match /networks/{networkId} {
-  allow read: if isNetworkMember(networkId);
-  allow create, update, delete: if false; // backend only
-}
-```
+### 3.5 Link Docs
+
+File: `packages/types/src/links/corpOrgLinks.ts`
+
+- `CorpOrgRelationshipType`:
+  - `"owns" | "serves" | "partner" | "none"`
+- `CorpOrgLinkStatus`:
+  - `"active" | "suspended" | "ended"`
+- `CorpOrgLinkSchema` contains:
+  - `networkId`, `corpId`, `orgId`, `relationshipType`, `status`, `startDate`, `endDate?`.
+
+File: `packages/types/src/links/orgVenueAssignments.ts`
+
+- `OrgVenueAssignmentStatus`:
+  - `"active" | "inactive"`
+- `OrgVenueAssignmentSchema` contains:
+  - `networkId`, `orgId`, `venueId`, `status`, `startDate`, `endDate?`, `allowedRoles[]`.
+
+### 3.6 AdminResponsibilityForm
+
+File: `packages/types/src/compliance/adminResponsibilityForm.ts`
+
+- `AdminResponsibilityFormSchema` – stored under `/compliance/adminResponsibilityForm`.
+- `CreateAdminResponsibilityFormSchema` – onboarding payload (no `networkId`/`adminUid` yet).
+
+Fields:
+
+- Entity identifiers:
+  - `networkId`, `adminUid`
+- Legal / business info:
+  - `legalEntityName`, `taxIdNumber`, `taxIdType`, `businessEmail`, `businessPhone`, `country`
+- Legal acceptance:
+  - `termsAcceptedVersion`, `privacyAcceptedVersion`, `liabilityAcknowledged`
+  - `adminSignature`
+- Metadata:
+  - `serviceStartTimestamp`, `ipAddress`, `userAgent`, `createdAt`, `createdBy`
 
 ---
 
-### 2. Corporate (Graph Node)
-
-**Path:** `/networks/{networkId}/corporates/{corpId}`
-
-**Schema:**
-
-```typescript
-interface Corporate {
-  id: string;
-  networkId: string;
-  name: string;
-  brandName?: string;
-  websiteUrl?: string;
-  contactEmail?: string;
-  contactPhone?: string;
-
-  ownsLocations: boolean;
-  worksWithFranchisees: boolean;
-  worksWithPartners: boolean;
-
-  createdAt: Timestamp;
-  createdBy: string;
-  updatedAt: Timestamp;
-  updatedBy: string;
-}
-```
-
-**Firestore Rules:**
-
-```javascript
-match /corporates/{corpId} {
-  allow read: if isNetworkMember(networkId);
-  allow create, update, delete: if false; // backend only
-}
-```
-
----
-
-### 3. Organization (Graph Node)
-
-**Path:** `/networks/{networkId}/orgs/{orgId}`
-
-**Schema:**
-
-```typescript
-interface Organization {
-  id: string;
-  networkId: string;
-  displayName: string;
-  legalName?: string;
-  primaryContactUid?: string;
-  notes?: string;
-  isIndependent: boolean;
-
-  createdAt: Timestamp;
-  createdBy: string;
-  updatedAt: Timestamp;
-  updatedBy: string;
-}
-```
-
-**Firestore Rules:**
-
-```javascript
-match /orgs/{orgId} {
-  allow read: if isNetworkMember(networkId);
-  allow create, update, delete: if false; // backend only
-}
-```
-
----
-
-### 4. Venue (Graph Node)
-
-**Path:** `/networks/{networkId}/venues/{venueId}`
-
-**Schema:**
-
-```typescript
-interface Venue {
-  id: string;
-  networkId: string;
-  name: string;
-
-  addressLine1?: string;
-  addressLine2?: string;
-  city?: string;
-  state?: string;
-  postalCode?: string;
-  country?: string;
-
-  lat?: number;
-  lng?: number;
-  timeZone: string;
-
-  isActive: boolean;
-  capacityHint?: number;
-
-  createdAt: Timestamp;
-  createdBy: string;
-  updatedAt: Timestamp;
-  updatedBy: string;
-}
-```
-
-**Firestore Rules:**
-
-```javascript
-match /venues/{venueId} {
-  allow read: if isNetworkMember(networkId);
-  allow create, update, delete: if false; // backend only
-}
-```
-
----
-
-### 5. CorpOrgLink (Relationship)
-
-**Path:** `/networks/{networkId}/links/corpOrgLinks/{linkId}`
-
-**Schema:**
-
-```typescript
-type CorpOrgRelationshipType = "owns" | "serves" | "partner" | "none";
-type LinkStatus = "active" | "suspended" | "ended";
-
-interface CorpOrgLink {
-  id: string;
-  networkId: string;
-  corpId: string;
-  orgId: string;
-  relationshipType: CorpOrgRelationshipType;
-  status: LinkStatus;
-  startDate: Timestamp;
-  endDate?: Timestamp;
-
-  createdAt: Timestamp;
-  createdBy: string;
-  updatedAt: Timestamp;
-  updatedBy: string;
-}
-```
-
-**Semantics:**
-
-- `"owns"` – corp has direct business ownership
-- `"serves"` – org is contractor/franchisee
-- `"partner"` – symmetric partnership
-
-**Firestore Rules:**
-
-```javascript
-match /links/corpOrgLinks/{linkId} {
-  allow read: if isNetworkMember(networkId);
-  allow create, update, delete: if false; // backend only
-}
-```
-
----
-
-### 6. OrgVenueAssignment (Relationship) – CLARIFIED (GAP-3)
-
-**Path:** `/networks/{networkId}/links/orgVenueAssignments/{assignmentId}`
-
-**Schema:**
-
-```typescript
-type AssignmentStatus = "active" | "inactive" | "archived";
-
-interface OrgVenueAssignment {
-  id: string;
-  networkId: string;
-  orgId: string;
-  venueId: string;
-
-  status: AssignmentStatus;
-  startDate: Timestamp;
-  endDate?: Timestamp;
-
-  allowedRoles: string[];
-
-  createdAt: Timestamp;
-  createdBy: string;
-  updatedAt: Timestamp;
-  updatedBy: string;
-
-  reason?: string;
-  notes?: string;
-}
-```
-
-**Invariants (from GAP-3):**
-
-1. `status = "active"` means org is currently operating venue
-2. `status = "inactive"` means historical assignment (not used in queries)
-3. `status = "archived"` means moved to archive after retention window
-4. Once `status = "inactive"`, cannot be set back to `"active"` (create new assignment instead)
-5. Query must check: `status = "active" AND startDate <= now AND (endDate IS NULL OR now < endDate)`
-
-**Lifecycle:**
-
-```text
-active → inactive (one-way)
-inactive → archived (retention policy)
-```
-
-**Firestore Rules:**
-
-```javascript
-match /links/orgVenueAssignments/{assignmentId} {
-  allow read: if isNetworkMember(networkId);
-
-  allow create: if
-    isOrgOwner(request.auth, orgId) &&
-    hasRole(request.auth, "org_owner", "network_admin");
-
-  allow update: if
-    hasRole(request.auth, "org_owner", "network_admin") &&
-    (
-      // Can only set to "inactive" (one-way transition)
-      (request.resource.data.status == "inactive" &&
-       resource.data.status == "active")
-      ||
-      // Cannot change immutable fields
-      !fieldChanged("orgId") &&
-      !fieldChanged("venueId") &&
-      !fieldChanged("startDate")
-    );
-
-  allow delete: if false; // keep history; use status="archived" instead
-}
-```
-
----
-
-### 7. Membership (Network-scoped role assignment)
-
-**Path:** `/networks/{networkId}/memberships/{membershipId}`
-
-**Schema:**
-
-```typescript
-type MembershipRole =
-  | "network_owner"
-  | "network_admin"
-  | "org_owner"
-  | "org_manager"
-  | "scheduler"
-  | "staff";
-
-type MembershipStatus = "active" | "suspended" | "invited";
-
-interface Membership {
-  id: string;
-  networkId: string;
-  userId: string;
-  roles: MembershipRole[];
-  status: MembershipStatus;
-
-  allowedOrgs?: string[];
-  allowedVenues?: string[];
-
-  createdAt: Timestamp;
-  createdBy: string;
-  updatedAt: Timestamp;
-  updatedBy: string;
-}
-```
-
-**Firestore Rules:**
-
-```javascript
-match /memberships/{membershipId} {
-  allow read: if
-    request.auth.uid == membershipId ||
-    isNetworkOwner(networkId);
-  allow create, update, delete: if false; // backend only
-}
-```
-
----
-
-### 8. Admin Responsibility Form (Compliance)
-
-**Path:** `/networks/{networkId}/compliance/adminResponsibilityForm`
-
-**Schema:**
-
-```typescript
-interface AdminResponsibilityForm {
-  networkId: string;
-  adminUid: string;
-  legalEntityName: string;
-  taxIdNumber: string;
-  taxIdType: "ein" | "vat" | "ssn" | "other";
-  businessEmail: string;
-  businessPhone: string;
-  country: string;
-
-  serviceStartTimestamp: Timestamp;
-  adminSignature: {
-    type: "typed" | "drawn" | "external_esign";
-    value: string;
-  };
-
-  termsAcceptedVersion: string;
-  privacyAcceptedVersion: string;
-  liabilityAcknowledged: boolean;
-
-  ipAddress: string;
-  userAgent: string;
-  createdAt: Timestamp;
-  createdBy: string;
-}
-```
-
-**Security:**
-
-- Tax ID is sensitive; stored encrypted at rest
-- Only readable by network owner and super-admins
-- Immutable once created
-
-**Firestore Rules:**
-
-```javascript
-match /compliance/adminResponsibilityForm {
-  allow read: if isNetworkOwner(networkId) || isSuperAdmin(request.auth);
-  allow create: if isOnboardingServiceAccount();
-  allow update, delete: if false; // immutable
-}
-```
-
----
-
-## Access Patterns & Queries
-
-### 1. Get all networks a user belongs to
-
-```typescript
-query: {
-  collection: 'networks',
-  where: [
-    ['memberships', 'array-contains', uid]
-  ]
-}
-// Or via subcollection query:
-query: {
-  collectionGroup: 'memberships',
-  where: [
-    ['userId', '==', uid],
-    ['status', '==', 'active']
-  ]
-}
-```
-
-### 2. Get all orgs in a network
-
-```typescript
-query: {
-  collection: 'networks/{networkId}/orgs',
-  orderBy: [['displayName', 'asc']]
-}
-```
-
-### 3. Get all venues for an org
-
-```typescript
-// Via OrgVenueAssignments
-query: {
-  collection: 'networks/{networkId}/links/orgVenueAssignments',
-  where: [
-    ['orgId', '==', orgId],
-    ['status', '==', 'active'],
-    ['startDate', '<=', now]
-  ]
-}
-// Then fetch venue details by venueId
-```
-
-### 4. Get schedules for a venue
-
-```typescript
-query: {
-  collection: 'networks/{networkId}/schedules',
-  where: [
-    ['venueId', '==', venueId],
-    ['startDate', '>=', weekStart],
-    ['startDate', '<', weekEnd]
-  ]
-}
-```
-
----
-
-## Migration Strategy
-
-### Current State (Block 3)
-
-- Org-centric paths: `/orgs/{orgId}/schedules/{scheduleId}`
-- No Network concept in implementation
-
-### Target State (Block 4+)
-
-- Network-centric paths: `/networks/{networkId}/schedules/{scheduleId}`
-- All data scoped by `networkId`
-
-### Migration Phases
-
-#### Phase 1: Dual-Path Support (Transitional)
-
-- Keep existing `/orgs/{orgId}/...` paths for backward compatibility
-- Add new `/networks/{networkId}/...` paths
-- Write to both paths temporarily
-- Update Firestore rules to support both
-
-#### Phase 2: Gradual Migration
-
-- Create Network wrapper for each existing Org
-- Backfill `networkId` field into existing documents
-- Update client code to use network-scoped queries
-- Deprecate org-scoped paths
-
-#### Phase 3: Full Cutover
-
-- Remove dual-write logic
-- Delete or archive old org-scoped collections
-- Enforce network-scoped rules exclusively
-
-**Detailed migration plan:** See [MIGRATION_NETWORK_TENANCY.md](./migrations/MIGRATION_NETWORK_TENANCY.md) (to be created)
-
----
-
-## Related Documentation
-
-- [Project Bible v14.0.0](./bible/Project_Bible_v14.0.0.md) – Authoritative spec
-- [TODO v14](./TODO-v14.md) – Implementation tasks
-- [GAPS v14.0.0](./bible/GAPS_v14.0.0.md) – Specification gaps
-- [BLOCK4_PLANNING.md](./BLOCK4_PLANNING.md) – Block 4 roadmap
-
----
-
-**Last Updated:** November 7, 2025
-**Maintained By:** Patrick Craven
-**Status:** Living document – update as implementation progresses
+## 4. Implementation Checklist (Network Model)
+
+Use this table to track implementation status:
+
+- [ ] Network Firestore path and rules created.
+- [ ] Network schemas wired into backend services.
+- [ ] Corporate/Org/Venue schemas updated to include `networkId`.
+- [ ] Link doc schemas used for relationships.
+- [ ] AdminResponsibilityForm creation endpoint implemented.
+- [ ] Onboarding wizard flows call:
+  - `/api/onboarding/admin-form`
+  - `/api/onboarding/create-network-org`
+  - `/api/onboarding/create-network-corporate`
+- [ ] E2E: New user can create a Network, Org, Venue via wizard and land in schedule view.
+
+Update this doc as pieces go from conceptual → implemented.
+
+# Network Schema & Paths (summary)
+
+This document summarizes the canonical Network-centric Firestore paths and the primary entities introduced in Project Bible v14.
+
+Core paths (all under a tenant root):
+
+- networks/{networkId}
+  - Network document (tenant root)
+- networks/{networkId}/corporates/{corpId}
+- networks/{networkId}/orgs/{orgId}
+- networks/{networkId}/venues/{venueId}
+- networks/{networkId}/links/corpOrgLinks/{linkId}
+- networks/{networkId}/links/orgVenueAssignments/{assignmentId}
+- networks/{networkId}/compliance/adminResponsibilityForm
+- networks/{networkId}/users/{uid}
+- networks/{networkId}/memberships/{membershipId}
+
+Notes:
+
+- All schedule-related data must contain (or be under a path that contains) `networkId`.
+- Compliance subcollections (`/compliance`) are write-only for onboarding service accounts and readable only by network owners and platform super-admins.
+- Link documents model relationships (not nested ownerships).
+
+This file is a short companion to the full Project Bible v14: `docs/bible/Project_Bible_v14.0.0.md`.

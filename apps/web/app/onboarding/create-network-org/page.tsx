@@ -1,6 +1,7 @@
-// [P2][APP][CODE] Page page component
-// Tags: P2, APP, CODE
+// [P0][APP][CODE] Page component
+// Tags: P0, APP, CODE
 "use client";
+
 import React, { useState, useEffect } from "react";
 
 export default function CreateNetworkOrg() {
