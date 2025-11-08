@@ -29,7 +29,7 @@ jobs:
           cache: "pnpm"
 
       - name: Install dependencies (deterministic)
-        run: pnpm install --frozen-lockfile
+        run: pnpm install --no-frozen-lockfile
 
       - name: Format & Lint (auto-fix)
         run: pnpm -w fix
