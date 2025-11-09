@@ -1,38 +1,55 @@
-  - name: Set up Node.js
-    uses: actions/setup-node@v4
-    with:
-      node-version: "20"
-      cache: "pnpm"
+name: CI
 
-  - name: Set up pnpm
-    uses: pnpm/action-setup@v2
-    with:
-      version: "8"
+on:
+  push:
+    branches: [main, dev]
+  pull_request:
+    branches: [main, dev]
 
-  - name: Restore firebase emulators cache
-    uses: actions/cache@v4
-    with:
-      path: ~/.cache/firebase/emulators
-      key: Linux-firebase-emulators-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
-      restore-keys: Linux-firebase-emulators-
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
 
-  - name: Install dependencies
-    run: pnpm install --frozen-lockfile
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "pnpm"
 
-  # WORKAROUND: ensure require-in-the-middle is present for Turbopack/next build
-  - name: CI workaround: install require-in-the-middle (no workspace changes)
-    run: pnpm add -w require-in-the-middle --no-save
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: "8"
 
-  - name: Lint
-    run: pnpm -w lint
-    continue-on-error: false
+      - name: Restore firebase emulators cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/firebase/emulators
+          key: "Linux-firebase-emulators-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}"
+          restore-keys: "Linux-firebase-emulators-"
 
-  - name: Test
-    run: pnpm -w test --if-present
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
 
-  - name: Build (monorepo)
-    run: pnpm -w -r build
+      # WORKAROUND: ensure require-in-the-middle is present for Turbopack/next build
+      - name: "CI workaround: install require-in-the-middle (no workspace changes)"
+        run: pnpm add -w require-in-the-middle --no-save
 
-  - name: Post job cleanup
-    if: always()
-    run: echo "CI job finished"
+      - name: Lint
+        run: pnpm -w lint
+
+      - name: Typecheck
+        run: pnpm -w typecheck
+
+      - name: Test (safe)
+        run: pnpm -w test:safe
+
+      - name: Build (monorepo)
+        run: pnpm -w -r build
+
+      - name: Post job cleanup
+        if: always()
+        run: echo "CI job finished"

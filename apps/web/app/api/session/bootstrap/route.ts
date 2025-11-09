@@ -1,7 +1,7 @@
 // [P0][AUTH][SESSION] Route API route handler
 // Tags: P0, AUTH, SESSION
-import { NextResponse } from "next/server";
 import { Firestore } from "firebase-admin/firestore";
+import { NextResponse } from "next/server";
 
 import { withSecurity, type AuthenticatedRequest } from "../../_shared/middleware";
 
