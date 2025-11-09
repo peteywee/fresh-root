@@ -9,6 +9,9 @@ export default defineConfig({
   test: {
     globals: true,
     environment: "happy-dom",
+    // Limit workers by default in local dev to reduce memory usage.
+    // Developers can override via CLI flags if they want faster runs.
+    maxWorkers: 1,
     setupFiles: ["./vitest.setup.ts"],
     include: ["**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}"],
     coverage: {
