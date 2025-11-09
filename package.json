@@ -55,7 +55,7 @@
     "api:docker:build": "docker build -f services/api/Dockerfile -t fresh-schedules-api:latest .",
     "api:docker:run": "docker run --rm -p 4000:4000 -e FIREBASE_PROJECT_ID=demo-fresh fresh-schedules-api:latest",
     "test": "vitest run --passWithNoTests",
-  "test:safe": "NODE_OPTIONS=\"--max-old-space-size=4096\" pnpm -w vitest run --maxWorkers=1 --reporter=dot",
+    "test:safe": "NODE_OPTIONS=\"--max-old-space-size=4096\" pnpm -w vitest run --maxWorkers=1 --reporter=dot",
     "test:rules": "firebase --config firebase.test.json emulators:exec --only auth,firestore,storage \"pnpm vitest run --config tests/rules/vitest.config.ts --reporter=dot\"",
     "test:rules:auto": "node ./scripts/run-rules-tests.mjs",
     "test:rules:ci": "firebase --config firebase.ci.json emulators:exec --only auth,firestore,storage \"pnpm vitest run --config tests/rules/vitest.config.ts --reporter=dot\"",

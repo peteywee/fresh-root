@@ -1,6 +1,7 @@
 // [P0][AUTH][SESSION] Route API route handler
 // Tags: P0, AUTH, SESSION
 import { NextResponse } from "next/server";
+import { Firestore } from "firebase-admin/firestore";
 
 import { withSecurity, type AuthenticatedRequest } from "../../_shared/middleware";
 
@@ -8,7 +9,7 @@ import { adminDb as importedAdminDb } from "@/src/lib/firebase.server";
 
 export async function bootstrapSessionHandler(
   req: AuthenticatedRequest & { user?: { uid: string; customClaims?: Record<string, unknown> } },
-  injectedAdminDb = importedAdminDb,
+  injectedAdminDb?: Firestore,
 ) {
   const uid = req.user?.uid;
   if (!uid) return NextResponse.json({ error: "not_authenticated" }, { status: 401 });
@@ -28,10 +29,8 @@ export async function bootstrapSessionHandler(
     );
   }
 
-  const adminDb: unknown = injectedAdminDb;
-
   try {
-    const userSnap = await (adminDb as any).collection("users").doc(uid).get();
+    const userSnap = await injectedAdminDb.collection("users").doc(uid).get();
     const data = userSnap.exists ? (userSnap.data() as Record<string, unknown>) : null;
 
     const onboarding = data?.onboarding ?? { status: "not_started", stage: "profile" };

@@ -3,6 +3,8 @@
 // Lightweight helper to mark a user's onboarding as complete.
 // Keeps behavior minimal and safe for tests by no-oping when adminDb is not present.
 
+import { Firestore } from "firebase-admin/firestore";
+
 export type OnboardingIntent = "create_org" | "create_corporate";
 
 export async function markOnboardingComplete(params: {
@@ -20,7 +22,7 @@ export async function markOnboardingComplete(params: {
   const now = Date.now();
 
   try {
-    await (adminDb as any)
+    await (adminDb as Firestore)
       .collection("users")
       .doc(uid)
       .set(

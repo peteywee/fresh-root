@@ -192,5 +192,52 @@ service cloud.firestore {
 
     // ---------------------------------------------------------------------------
     // Network (tenant root) rules – v14.0.0
+
+    // Global compliance forms (admin responsibility, etc.) are written by Admin SDK
+    // via onboarding flows. Clients must never touch these directly.
+    match /compliance/{complianceDocId} {
+      allow read, write: if false;
+    }
+
+    // Network root documents
+    match /networks/{networkId} {
+
+      // Networks are created and managed only by the backend (Admin SDK).
+      // Do not allow clients to create/update/delete networks directly.
+      allow create, update, delete: if false;
+
+      // Authenticated users may read network metadata.
+      allow get: if isSignedIn();
+      allow list: if false;
+
+      // Future-proof: if you introduce nested collections under /networks later,
+      // define them explicitly here. For now, most org/venue data is still in
+      // top-level /orgs and /venues with a networkId field.
+      match /orgs/{orgId} {
+        allow get: if isSignedIn();
+        allow list: if false;
+        allow create, update, delete: if false;
+      }
+
+      match /venues/{venueId} {
+        allow get: if isSignedIn();
+        allow list: if false;
+        allow create, update, delete: if false;
+      }
+
+      // Network-level memberships (reserved for future v14+ work)
+      match /memberships/{membershipId} {
+        allow read: if isSignedIn();
+        allow create, update, delete: if false;
+      }
+
+      // Network-scoped compliance docs such as /networks/{id}/compliance/adminResponsibilityForm
+      match /compliance/{complianceId} {
+        // For now, keep these fully server-only. You can later relax this for
+        // network_owner or similar roles once UX is defined.
+        allow read, write: if false;
+      }
+    }
+
   }
 }

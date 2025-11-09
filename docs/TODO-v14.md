@@ -95,7 +95,6 @@ Add all the new shapes to `packages/types`.
     - ✅ `OrgVenueAssignmentSchema`
   - ✅ Export from barrel file(s)
 
-
 - [x] **[TEN-04]** AdminResponsibilityForm schema
   - ✅ Create `packages/types/src/compliance/adminResponsibilityForm.ts`:
     - ✅ Full shape for form (legal name, taxId, acceptance flags, etc.)
@@ -327,6 +326,7 @@ The following changes were implemented on branch `merge/features/combined-202511
 **CI Setup Required** (for full CI validation):
 
 Before merging, configure GitHub repository secrets (Settings → Secrets → Actions):
+
 - `FIREBASE_SERVICE_ACCOUNT`: Firebase service account JSON for Firestore admin access
 - `FIREBASE_TOKEN`: Firebase CLI token from `firebase login:ci`
 
@@ -338,7 +338,6 @@ See `docs/CI_SETUP.md` (to be added) or follow instructions in the user request 
 - E2E: sign-up → profile → network creation → redirect to app (not yet fully wired)
 - Block 4 UX: polish onboarding wizard, schedule builder (in progress)
 - Consider: per-test cleanup of global mocks if needed in future tests
-
 
 ---
 

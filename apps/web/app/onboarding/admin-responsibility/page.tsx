@@ -60,9 +60,10 @@ export default function AdminResponsibility() {
         try {
           localStorage.setItem("onb_formToken", String(token));
         } catch {}
-  const url = "/onboarding/create-network-org?formToken=" + encodeURIComponent(String(token));
-  const navigate = (p: string) => (router as unknown as { push: (s: string) => void }).push(p);
-  navigate(url);
+        const url = "/onboarding/create-network-org?formToken=" + encodeURIComponent(String(token));
+        const navigate = (p: string) =>
+          (router as unknown as { push: (s: string) => void }).push(p);
+        navigate(url);
       }
     } catch (err) {
       setError((err as Error).message);
