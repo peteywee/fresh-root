@@ -3,129 +3,196 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import { useState, FormEvent } from "react";
 
-import ProtectedRoute from "../../components/ProtectedRoute";
-import { useAuth } from "../../lib/auth-context";
+import { useOnboardingWizard } from "../_wizard/OnboardingWizardContext";
 
-export default function AdminResponsibility() {
+export default function AdminResponsibilityPage() {
   const router = useRouter();
-  const { user } = useAuth();
+  const { intent, setFormToken } = useOnboardingWizard();
 
-  const [legalName, setLegalName] = useState("");
+  const [legalEntityName, setLegalEntityName] = useState("");
   const [taxId, setTaxId] = useState("");
-  const [role, setRole] = useState<string>("network_owner");
+  const [countryCode, setCountryCode] = useState("US");
+  const [businessEmail, setBusinessEmail] = useState("");
+  const [businessPhone, setBusinessPhone] = useState("");
+  const [liabilityAcknowledged, setLiabilityAcknowledged] = useState(false);
+  const [termsAccepted, setTermsAccepted] = useState(false);
+  const [privacyAccepted, setPrivacyAccepted] = useState(false);
+  const [signature, setSignature] = useState("");
+
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  async function handleSubmit(e: React.FormEvent) {
+  async function onSubmit(e: FormEvent) {
     e.preventDefault();
-    setSubmitting(true);
     setError(null);
-
-    const payload = {
-      networkId: "", // TODO: wire real networkId when available
-      uid: user?.uid ?? "",
-      role,
-      certification: {
-        acknowledgesDataProtection: true,
-        acknowledgesGDPRCompliance: true,
-        acknowledgesAccessControl: true,
-        acknowledgesMFARequirement: true,
-        acknowledgesAuditTrail: true,
-        acknowledgesIncidentReporting: true,
-        understandsRoleScope: true,
-        agreesToTerms: true,
-      },
-      data: {
-        legalName: legalName || undefined,
-        taxId: taxId || undefined,
-      },
-    } as const;
+    setSubmitting(true);
 
     try {
+      const payload = {
+        legalEntityName,
+        taxId,
+        countryCode,
+        businessEmail,
+        businessPhone,
+        liabilityAcknowledged,
+        termsAcceptedVersion: termsAccepted ? "TOS-2025-01" : "",
+        privacyAcceptedVersion: privacyAccepted ? "PRIV-2025-01" : "",
+        adminSignature: {
+          type: "typed",
+          value: signature,
+        },
+      };
+
       const res = await fetch("/api/onboarding/admin-form", {
         method: "POST",
-        headers: { "content-type": "application/json" },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
-      const json = await res.json();
-      if (!res.ok) {
-        setError(json?.message || json?.error || "Submission failed");
+
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok || !data.formToken) {
+        setError(data.error || "Failed to submit admin responsibility form");
+        setSubmitting(false);
         return;
       }
 
-      const token = json?.formToken;
-      if (token) {
-        try {
-          localStorage.setItem("onb_formToken", String(token));
-        } catch {}
-        const url = "/onboarding/create-network-org?formToken=" + encodeURIComponent(String(token));
-        const navigate = (p: string) =>
-          (router as unknown as { push: (s: string) => void }).push(p);
-        navigate(url);
+      setFormToken(data.formToken as string);
+
+      if (intent === "create_corporate") {
+        router.push("/onboarding/create-network-corporate");
+      } else {
+        router.push("/onboarding/create-network-org");
       }
     } catch (err) {
-      setError((err as Error).message);
-    } finally {
+      console.error(err);
+      setError("Unexpected error");
       setSubmitting(false);
     }
   }
 
+  if (!intent) {
+    return (
+      <div className="space-y-4">
+        <p className="text-sm text-slate-600">We need to know what you&apos;re setting up first.</p>
+        <button
+          className="rounded-md bg-slate-900 px-4 py-2 text-sm text-white"
+          onClick={() => router.push("/onboarding/intent")}
+        >
+          Back to intent selection
+        </button>
+      </div>
+    );
+  }
+
   return (
-    <ProtectedRoute>
-      <div className="mx-auto max-w-2xl p-6">
-        <h1 className="mb-4 text-2xl font-semibold">Admin Responsibility</h1>
-        <p className="text-muted-foreground mb-4 text-sm">
-          We need a few legal details to continue.
-        </p>
+    <div className="space-y-6">
+      <h1 className="text-2xl font-semibold">Admin responsibility</h1>
+      <p className="text-sm text-slate-600">
+        This step designates who is legally responsible for this workspace and the data in it.
+      </p>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium">Legal name</label>
-            <input
-              className="mt-1 block w-full rounded border px-3 py-2"
-              value={legalName}
-              onChange={(e) => setLegalName(e.target.value)}
-            />
-          </div>
+      <form onSubmit={onSubmit} className="space-y-4">
+        <div>
+          <label className="mb-1 block text-sm font-medium">Legal entity name</label>
+          <input
+            className="w-full rounded-md border px-3 py-2 text-sm"
+            value={legalEntityName}
+            onChange={(e) => setLegalEntityName(e.target.value)}
+            required
+          />
+        </div>
 
+        <div className="grid grid-cols-2 gap-3">
           <div>
-            <label className="block text-sm font-medium">Tax ID</label>
+            <label className="mb-1 block text-sm font-medium">Tax ID</label>
             <input
-              className="mt-1 block w-full rounded border px-3 py-2"
+              className="w-full rounded-md border px-3 py-2 text-sm"
               value={taxId}
               onChange={(e) => setTaxId(e.target.value)}
+              required
             />
           </div>
-
           <div>
-            <label className="block text-sm font-medium">Role</label>
-            <select
-              value={role}
-              onChange={(e) => setRole(e.target.value)}
-              className="mt-1 block w-full rounded border px-3 py-2"
-            >
-              <option value="network_owner">Network owner</option>
-              <option value="network_admin">Network admin</option>
-              <option value="org_owner">Org owner</option>
-              <option value="org_admin">Org admin</option>
-            </select>
+            <label className="mb-1 block text-sm font-medium">Country code</label>
+            <input
+              className="w-full rounded-md border px-3 py-2 text-sm"
+              value={countryCode}
+              onChange={(e) => setCountryCode(e.target.value.toUpperCase())}
+              required
+            />
           </div>
+        </div>
 
-          {error && <div className="text-sm text-red-400">{error}</div>}
-
-          <div className="flex justify-end">
-            <button
-              type="submit"
-              className="rounded bg-emerald-600 px-4 py-2 text-sm font-medium"
-              disabled={submitting}
-            >
-              {submitting ? "Submitting…" : "Submit form"}
-            </button>
+        <div className="grid grid-cols-2 gap-3">
+          <div>
+            <label className="mb-1 block text-sm font-medium">Business email</label>
+            <input
+              className="w-full rounded-md border px-3 py-2 text-sm"
+              value={businessEmail}
+              onChange={(e) => setBusinessEmail(e.target.value)}
+              required
+            />
           </div>
-        </form>
-      </div>
-    </ProtectedRoute>
+          <div>
+            <label className="mb-1 block text-sm font-medium">Business phone</label>
+            <input
+              className="w-full rounded-md border px-3 py-2 text-sm"
+              value={businessPhone}
+              onChange={(e) => setBusinessPhone(e.target.value)}
+              required
+            />
+          </div>
+        </div>
+
+        <div className="space-y-2 text-sm">
+          <label className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              checked={liabilityAcknowledged}
+              onChange={(e) => setLiabilityAcknowledged(e.target.checked)}
+            />
+            <span>I understand I&apos;m responsible for how this workspace is used.</span>
+          </label>
+          <label className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              checked={termsAccepted}
+              onChange={(e) => setTermsAccepted(e.target.checked)}
+            />
+            <span>I agree to the Terms of Service.</span>
+          </label>
+          <label className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              checked={privacyAccepted}
+              onChange={(e) => setPrivacyAccepted(e.target.checked)}
+            />
+            <span>I agree to the Privacy Policy.</span>
+          </label>
+        </div>
+
+        <div>
+          <label className="mb-1 block text-sm font-medium">Type your full name as signature</label>
+          <input
+            className="w-full rounded-md border px-3 py-2 text-sm"
+            value={signature}
+            onChange={(e) => setSignature(e.target.value)}
+            required
+          />
+        </div>
+
+        {error && <p className="text-sm text-red-600">{error}</p>}
+
+        <button
+          type="submit"
+          disabled={submitting}
+          className="inline-flex items-center rounded-md bg-slate-900 px-4 py-2 text-sm text-white disabled:opacity-60"
+        >
+          {submitting ? "Submitting..." : "Continue"}
+        </button>
+      </form>
+    </div>
   );
 }
