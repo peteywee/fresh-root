@@ -20,6 +20,11 @@ interface NavigatorWithStandalone extends Navigator {
   standalone?: boolean;
 }
 
+/**
+ * Determines whether to use redirect-based sign-in instead of a popup.
+ * This is useful for mobile devices and browsers that block popups.
+ * @returns {boolean} True if redirect should be used, false otherwise.
+ */
 function shouldUseRedirect(): boolean {
   if (typeof navigator === "undefined") return false;
   const ua = navigator.userAgent.toLowerCase();
@@ -30,6 +35,10 @@ function shouldUseRedirect(): boolean {
   return isIOS || isSafari || isStandalone || smallScreen;
 }
 
+/**
+ * Initiates Google sign-in using either a popup or redirect, depending on the environment.
+ * It also includes a fallback to redirect if the popup fails.
+ */
 export async function loginWithGoogleSmart() {
   const provider = new GoogleAuthProvider();
   try {
@@ -50,14 +59,22 @@ export async function loginWithGoogleSmart() {
   }
 }
 
-// Open the Google popup immediately from a user gesture. This calls the SDK synchronously
-// so browsers will treat it as a user-initiated popup and not block it.
+/**
+ * Starts the Google sign-in process using a popup.
+ * This should be called from a user gesture to avoid popup blockers.
+ * @returns {Promise<unknown>} A promise that resolves with the sign-in result.
+ */
 export function startGooglePopup(): Promise<unknown> {
   const provider = new GoogleAuthProvider();
   // call signInWithPopup synchronously; the returned Promise can be awaited by the caller.
   return signInWithPopup(auth!, provider) as Promise<unknown>;
 }
 
+/**
+ * Completes the Google sign-in redirect flow.
+ * This should be called on the page that Firebase redirects to after a successful sign-in.
+ * @returns {Promise<boolean>} A promise that resolves to true if the sign-in was successful, false otherwise.
+ */
 export async function completeGoogleRedirectOnce(): Promise<boolean> {
   try {
     const res = await getRedirectResult(auth!);
@@ -68,6 +85,10 @@ export async function completeGoogleRedirectOnce(): Promise<boolean> {
   }
 }
 
+/**
+ * Sends a sign-in link to the user's email address.
+ * @param {string} email - The user's email address.
+ */
 export async function sendEmailLinkRobust(email: string) {
   try {
     if (!auth)
@@ -82,6 +103,10 @@ export async function sendEmailLinkRobust(email: string) {
   }
 }
 
+/**
+ * Completes the email link sign-in process if the current URL is a sign-in link.
+ * @returns {Promise<boolean>} A promise that resolves to true if the sign-in was successful, false otherwise.
+ */
 export async function completeEmailLinkIfPresent(): Promise<boolean> {
   if (typeof window === "undefined") return false;
   if (!isSignInWithEmailLink(auth!, window.location.href)) return false;
@@ -104,6 +129,9 @@ export async function completeEmailLinkIfPresent(): Promise<boolean> {
   return true;
 }
 
+/**
+ * Establishes a server-side session by sending the user's ID token to the backend.
+ */
 export async function establishServerSession() {
   const idToken = await auth?.currentUser?.getIdToken(true);
   if (!idToken) throw new Error("Missing idToken");
@@ -119,6 +147,9 @@ export async function establishServerSession() {
   }
 }
 
+/**
+ * Logs the user out from both the client and the server.
+ */
 export async function logoutEverywhere() {
   try {
     await fetch("/api/session", { method: "DELETE" });

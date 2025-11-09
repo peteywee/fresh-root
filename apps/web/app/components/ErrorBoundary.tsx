@@ -66,7 +66,12 @@ interface FallbackProps {
 }
 
 /**
- * Default error fallback UI
+ * The default UI to be displayed when an error is caught by the ErrorBoundary.
+ *
+ * @param {FallbackProps} props - The props for the component.
+ * @param {Error} props.error - The error that was caught.
+ * @param {() => void} props.reset - A function to reset the error boundary and re-render the children.
+ * @returns {JSX.Element} The rendered default error fallback.
  */
 function DefaultErrorFallback({ error, reset }: FallbackProps) {
   return (

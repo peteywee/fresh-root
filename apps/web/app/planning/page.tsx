@@ -1,5 +1,11 @@
 // [P2][APP][CODE] Page page component
 // Tags: P2, APP, CODE
+
+/**
+ * @description Renders the planning page.
+ * This page is a placeholder for future planning features.
+ * @returns {React.ReactElement} The planning page.
+ */
 export default function PlanningPage() {
   return (
     <div>

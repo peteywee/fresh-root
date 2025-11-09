@@ -26,8 +26,12 @@ export interface AuthenticatedRequest extends NextRequest {
 }
 
 /**
- * Middleware to require a valid session cookie on API routes.
- * Returns 401 if session is missing or invalid.
+ * A middleware that requires a valid session cookie on API routes.
+ * It returns a 401 Unauthorized response if the session is missing or invalid.
+ *
+ * @param {AuthenticatedRequest} req - The request object, potentially with user and logger attached.
+ * @param {(req: AuthenticatedRequest) => Promise<NextResponse>} handler - The handler to execute if the session is valid.
+ * @returns {Promise<NextResponse>} The response from the handler or a 401 error response.
  */
 export async function requireSession(
   req: AuthenticatedRequest,
@@ -88,8 +92,12 @@ export async function requireSession(
 }
 
 /**
- * Middleware to require 2FA for manager/admin operations.
- * Checks for 'mfa' claim in the session token.
+ * A middleware that requires Two-Factor Authentication (2FA) for manager and admin operations.
+ * It checks for the 'mfa' claim in the session token.
+ *
+ * @param {AuthenticatedRequest} req - The authenticated request object.
+ * @param {(req: AuthenticatedRequest) => Promise<NextResponse>} handler - The handler to execute if 2FA is present.
+ * @returns {Promise<NextResponse>} The response from the handler or a 403 error response.
  */
 export async function require2FAForManagers(
   req: AuthenticatedRequest,
@@ -145,6 +153,14 @@ export interface WithSecurityOptions {
   maxBodySize?: number;
 }
 
+/**
+ * A higher-order function that wraps an API route handler with a suite of security middleware.
+ *
+ * @template C
+ * @param {(req: AuthenticatedRequest | NextRequest, ctx: C) => Promise<NextResponse>} handler - The API route handler to wrap.
+ * @param {WithSecurityOptions} [options={}] - The security options.
+ * @returns {Function} The wrapped route handler with security middleware applied.
+ */
 export function withSecurity<
   C extends { params: Record<string, string> } = { params: Record<string, string> },
 >(

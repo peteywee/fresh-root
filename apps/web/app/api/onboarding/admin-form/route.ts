@@ -13,6 +13,13 @@ import { adminDb as importedAdminDb } from "@/src/lib/firebase.server";
 /**
  * Inner handler exported for tests. Accepts an optional injected adminDb for testability.
  */
+/**
+ * Handles the submission of the admin responsibility form.
+ *
+ * @param {NextRequest & { user?: { uid: string } }} req - The Next.js request object, potentially with an authenticated user.
+ * @param {typeof importedAdminDb} [injectedAdminDb=importedAdminDb] - An optional, injectable Firestore admin instance for testing.
+ * @returns {Promise<NextResponse>} A promise that resolves to the response.
+ */
 export async function adminFormHandler(
   req: NextRequest & { user?: { uid: string } },
   injectedAdminDb = importedAdminDb,

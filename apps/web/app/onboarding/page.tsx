@@ -2,6 +2,12 @@
 // Tags: P0, APP, CODE
 import Link from "next/link";
 
+/**
+ * The main index page for the onboarding flow.
+ * It provides links to the different steps in the onboarding process.
+ *
+ * @returns {JSX.Element} The rendered onboarding index page.
+ */
 export default function OnboardingIndex() {
   return (
     <main className="p-6">

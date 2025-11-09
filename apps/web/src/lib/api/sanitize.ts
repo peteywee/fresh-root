@@ -1,6 +1,12 @@
 //[P1][API][SECURITY] Input sanitization utilities
 // Tags: sanitization, xss-prevention, security
 
+/**
+ * Escapes HTML special characters in a string.
+ *
+ * @param {string} text - The input string.
+ * @returns {string} The escaped string.
+ */
 export function escapeHtml(text: string): string {
   const htmlEscapeMap: Record<string, string> = {
     "&": "&amp;",
@@ -13,14 +19,32 @@ export function escapeHtml(text: string): string {
   return text.replace(/[&<>"'/]/g, (char) => htmlEscapeMap[char] || char);
 }
 
+/**
+ * Removes HTML tags from a string.
+ *
+ * @param {string} text - The input string.
+ * @returns {string} The string with HTML tags removed.
+ */
 export function stripHtmlTags(text: string): string {
   return text.replace(/<[^>]*>/g, "");
 }
 
+/**
+ * Sanitizes a string by stripping HTML tags and escaping special characters.
+ *
+ * @param {string} text - The input string.
+ * @returns {string} The sanitized string.
+ */
 export function sanitizeText(text: string): string {
   return escapeHtml(stripHtmlTags(text));
 }
 
+/**
+ * Sanitizes a URL to prevent XSS attacks.
+ *
+ * @param {string} url - The URL to sanitize.
+ * @returns {string} The sanitized URL, or "about:blank" if the URL is unsafe.
+ */
 export function sanitizeUrl(url: string): string {
   const normalized = url.trim().toLowerCase();
   const dangerousProtocols = ["javascript:", "data:", "vbscript:", "file:"];
@@ -33,6 +57,16 @@ export function sanitizeUrl(url: string): string {
   return url;
 }
 
+/**
+ * Recursively sanitizes an object's properties.
+ *
+ * @template T
+ * @param {T} obj - The object to sanitize.
+ * @param {object} [options={}] - The sanitization options.
+ * @param {string[]} [options.skipFields=[]] - A list of fields to skip during sanitization.
+ * @param {string[]} [options.urlFields=[]] - A list of fields to treat as URLs.
+ * @returns {T} The sanitized object.
+ */
 export function sanitizeObject<T extends Record<string, unknown>>(
   obj: T,
   options: { skipFields?: string[]; urlFields?: string[] } = {},

@@ -15,9 +15,21 @@ export interface RedisClient {
   ttl(key: string): Promise<number>;
 }
 
+/**
+ * A rate limiter that uses a Redis client to store request counts.
+ * @param {RedisClient} redis - An object that implements the RedisClient interface.
+ */
 export class RedisRateLimiter {
   constructor(private redis: RedisClient) {}
 
+  /**
+   * Checks if a request is allowed under the rate limit.
+   *
+   * @param {string} key - The unique key for the request.
+   * @param {number} max - The maximum number of requests.
+   * @param {number} windowSeconds - The time window in seconds.
+   * @returns {Promise<{ allowed: boolean; remaining: number; resetAt: number }>} An object indicating if the request is allowed, the remaining requests, and when the limit resets.
+   */
   async checkLimit(
     key: string,
     max: number,
@@ -43,6 +55,12 @@ export class RedisRateLimiter {
   }
 }
 
+/**
+ * The default key generator for rate limiting, based on the request's IP address and user ID.
+ *
+ * @param {NextRequest} request - The Next.js request object.
+ * @returns {string} The generated key.
+ */
 function defaultKeyGenerator(request: NextRequest): string {
   const ip =
     request.headers.get("x-forwarded-for")?.split(",")[0] ||
@@ -52,6 +70,13 @@ function defaultKeyGenerator(request: NextRequest): string {
   return userId ? `${ip}:${userId}` : ip;
 }
 
+/**
+ * Creates a Redis-based rate limiting middleware for Next.js API routes.
+ *
+ * @param {RedisClient} redis - The Redis client to use for rate limiting.
+ * @param {RateLimitConfig} config - The rate limit configuration.
+ * @returns {Function} A middleware function that can be used in Next.js API routes.
+ */
 export function createRedisRateLimit(redis: RedisClient, config: RateLimitConfig) {
   const { max, windowSeconds, keyGenerator = defaultKeyGenerator } = config;
   const limiter = new RedisRateLimiter(redis);
@@ -89,6 +114,10 @@ export function createRedisRateLimit(redis: RedisClient, config: RateLimitConfig
   };
 }
 
+/**
+ * An adapter for the Upstash Redis client to conform to the RedisClient interface.
+ * @param {object} client - The Upstash Redis client.
+ */
 export class UpstashRedisAdapter implements RedisClient {
   constructor(
     private client: {

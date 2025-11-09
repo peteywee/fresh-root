@@ -30,6 +30,13 @@ const ErrorCtx = createContext<{
   clearErrors: () => void;
 }>({ messages: [], pushError: () => {}, popError: () => {}, clearErrors: () => {} });
 
+/**
+ * Provides an error handling context to its children.
+ *
+ * @param {object} props - The props for the component.
+ * @param {ReactNode} props.children - The child components to be wrapped by the provider.
+ * @returns {JSX.Element} The rendered error provider.
+ */
 export function ErrorProvider({ children }: { children: ReactNode }) {
   const [state, dispatch] = useReducer(reducer, { messages: [] });
 
@@ -61,6 +68,11 @@ export function ErrorProvider({ children }: { children: ReactNode }) {
   );
 }
 
+/**
+ * A custom hook to access the error handling context.
+ *
+ * @returns {{messages: string[], pushError: (m: string) => void, popError: () => void, clearErrors: () => void}} The error context, including the current error messages and functions to manipulate them.
+ */
 export function useErrorBus() {
   return useContext(ErrorCtx);
 }

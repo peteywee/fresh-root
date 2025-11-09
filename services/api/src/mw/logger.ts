@@ -6,7 +6,9 @@ import type { NextFunction, Request, Response } from "express";
 import { logger } from "../obs/log.js";
 
 /**
- * Middleware to attach a unique request ID and log all requests with latency.
+ * @description Creates an Express middleware for logging incoming requests.
+ * This middleware attaches a unique request ID to each request, logs the request and response with latency, and uses a structured logger.
+ * @returns {function(Request, Response, NextFunction): void} An Express middleware function.
  */
 export function requestLogger() {
   return (req: Request, res: Response, next: NextFunction) => {

@@ -40,7 +40,18 @@ try {
   console.warn("Firebase env validation failed:", err);
 }
 
+/**
+ * @fileoverview This file initializes the Firebase client-side SDK.
+ * It validates the necessary environment variables and exports the initialized
+ * Firebase app, auth, and firestore instances.
+ */
+
 // Initialize exactly once on the client. Only attempt initialize if cfg is valid.
+/**
+ * The initialized Firebase app instance.
+ * This is only available on the client-side.
+ * @type {FirebaseApp | undefined}
+ */
 export const firebaseApp = ((): ReturnType<typeof getApp> | undefined => {
   if (typeof window === "undefined") return undefined;
 
@@ -61,6 +72,16 @@ export const firebaseApp = ((): ReturnType<typeof getApp> | undefined => {
   return getApps().length ? getApp() : initializeApp(cfg);
 })();
 
-// Export auth and db instances
+/**
+ * The Firebase Auth instance.
+ * This is only available on the client-side.
+ * @type {Auth | undefined}
+ */
 export const auth = firebaseApp ? getAuth(firebaseApp) : undefined;
+
+/**
+ * The Firebase Firestore instance.
+ * This is only available on the client-side.
+ * @type {Firestore | undefined}
+ */
 export const db = firebaseApp ? getFirestore(firebaseApp) : undefined;

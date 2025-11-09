@@ -1,6 +1,11 @@
 // [P2][APP][CODE] RegisterServiceWorker
 // Tags: P2, APP, CODE
 // Safe service worker registration helper
+/**
+ * Safely registers a service worker, with checks for browser support, secure contexts, and embedded webviews.
+ *
+ * @param {string} [scriptUrl="/sw.js"] - The URL of the service worker script.
+ */
 export async function safeRegisterServiceWorker(scriptUrl = "/sw.js") {
   try {
     if (typeof window === "undefined") return;
@@ -52,6 +57,9 @@ export async function safeRegisterServiceWorker(scriptUrl = "/sw.js") {
   }
 }
 
+/**
+ * Unregisters all active service workers.
+ */
 export async function unregisterAllServiceWorkers() {
   if (typeof window === "undefined" || !("serviceWorker" in navigator)) return;
   try {

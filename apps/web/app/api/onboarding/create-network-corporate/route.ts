@@ -9,11 +9,10 @@ import { withSecurity, type AuthenticatedRequest } from "../../_shared/middlewar
 import { adminDb } from "@/src/lib/firebase.server";
 
 /**
- * Minimal Create Network + Corporate Endpoint (protected)
- * - verifies auth via middleware
- * - validates body with Zod
- * - if adminDb present, creates network + corporate doc in a transaction
- * - otherwise returns stub ids for local/dev
+ * Handles POST requests to `/api/onboarding/create-network-corporate` to create a new corporate network and an associated corporate entity.
+ *
+ * @param {AuthenticatedRequest} req - The authenticated Next.js request object.
+ * @returns {Promise<NextResponse>} A promise that resolves to the response.
  */
 export const POST = withSecurity(
   async (req: AuthenticatedRequest) => {

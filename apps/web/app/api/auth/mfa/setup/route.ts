@@ -10,9 +10,14 @@ import { ok, serverError } from "../../../_shared/validation";
 // Rate limiting via withSecurity options
 
 /**
- * POST /api/auth/mfa/setup
- * Generates a TOTP secret and QR code for MFA enrollment.
- * Requires valid session.
+ * Handles POST requests to `/api/auth/mfa/setup` to generate a TOTP secret and QR code for MFA enrollment.
+ * Requires a valid session.
+ *
+ * @param {NextRequest} req - The Next.js request object.
+ * @param {object} context - The context object from the router.
+ * @param {Record<string, string>} context.params - The route parameters.
+ * @param {string} context.userId - The ID of the authenticated user.
+ * @returns {Promise<NextResponse>} A promise that resolves to the response.
  */
 export const POST = withSecurity(
   async (req: NextRequest, context: { params: Record<string, string>; userId: string }) => {

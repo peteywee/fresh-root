@@ -5,8 +5,11 @@ import { getAuth } from "firebase-admin/auth";
 import { NextRequest, NextResponse } from "next/server";
 
 /**
- * Middleware: Require a valid Firebase session cookie (JWT)
- * Usage: Wrap API route handlers to enforce authentication
+ * A middleware function that requires a valid Firebase session cookie (JWT) to be present.
+ * It wraps an API route handler to enforce authentication.
+ *
+ * @param {Function} handler - The API route handler to wrap.
+ * @returns {Function} The wrapped route handler with session validation.
  */
 export function requireSession(
   handler: (

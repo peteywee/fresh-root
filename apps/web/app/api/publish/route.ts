@@ -15,8 +15,16 @@ const PublishSchema = z.object({
 });
 
 /**
- * POST /api/publish
- * Publish a schedule (requires manager+ role)
+ * Handles POST requests to `/api/publish` to publish a schedule.
+ * Requires 'manager' role or higher.
+ *
+ * @param {NextRequest} req - The Next.js request object.
+ * @param {object} context - The context object from the router.
+ * @param {Record<string, string>} context.params - The route parameters.
+ * @param {string} context.userId - The ID of the authenticated user.
+ * @param {string} context.orgId - The ID of the user's organization.
+ * @param {OrgRole[]} context.roles - The roles of the authenticated user.
+ * @returns {Promise<NextResponse>} A promise that resolves to the response.
  */
 export const POST = withSecurity(
   requireOrgMembership(

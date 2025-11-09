@@ -8,6 +8,12 @@ import { withSecurity, type AuthenticatedRequest } from "../../_shared/middlewar
 
 import { adminDb } from "@/src/lib/firebase.server";
 
+/**
+ * Handles POST requests to `/api/onboarding/join-with-token` to allow a user to join a network or organization using a join token.
+ *
+ * @param {AuthenticatedRequest} req - The authenticated Next.js request object.
+ * @returns {Promise<NextResponse>} A promise that resolves to the response.
+ */
 export const POST = withSecurity(
   async (req: AuthenticatedRequest) => {
     let body: unknown;

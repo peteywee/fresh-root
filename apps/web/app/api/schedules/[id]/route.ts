@@ -9,8 +9,14 @@ import { withSecurity } from "../../_shared/middleware";
 import { serverError, UpdateScheduleSchema } from "../../_shared/validation";
 
 /**
- * GET /api/schedules/[id]
- * Get schedule details
+ * Handles GET requests to `/api/schedules/[id]` to retrieve the details of a specific schedule.
+ *
+ * @param {NextRequest} request - The Next.js request object.
+ * @param {object} context - The context object from the router.
+ * @param {Record<string, string>} context.params - The route parameters, including the schedule ID.
+ * @param {string} context.userId - The ID of the authenticated user.
+ * @param {string} context.orgId - The ID of the user's organization.
+ * @returns {Promise<NextResponse>} A promise that resolves to the response.
  */
 export const GET = withSecurity(
   requireOrgMembership(
@@ -44,8 +50,15 @@ export const GET = withSecurity(
 );
 
 /**
- * PATCH /api/schedules/[id]
- * Update schedule details
+ * Handles PATCH requests to `/api/schedules/[id]` to update the details of a specific schedule.
+ *
+ * @param {NextRequest} request - The Next.js request object.
+ * @param {object} context - The context object from the router.
+ * @param {Record<string, string>} context.params - The route parameters, including the schedule ID.
+ * @param {string} context.userId - The ID of the authenticated user.
+ * @param {string} context.orgId - The ID of the user's organization.
+ * @param {OrgRole[]} context.roles - The roles of the authenticated user.
+ * @returns {Promise<NextResponse>} A promise that resolves to the response.
  */
 export const PATCH = withSecurity(
   requireOrgMembership(
@@ -89,8 +102,17 @@ export const PATCH = withSecurity(
 );
 
 /**
- * DELETE /api/schedules/[id]
- * Delete a schedule (only drafts can be deleted)
+ * Handles DELETE requests to `/api/schedules/[id]` to delete a specific schedule.
+ * Only draft schedules can be deleted.
+ * Requires 'admin' role or higher.
+ *
+ * @param {NextRequest} request - The Next.js request object.
+ * @param {object} context - The context object from the router.
+ * @param {Record<string, string>} context.params - The route parameters, including the schedule ID.
+ * @param {string} context.userId - The ID of the authenticated user.
+ * @param {string} context.orgId - The ID of the user's organization.
+ * @param {OrgRole[]} context.roles - The roles of the authenticated user.
+ * @returns {Promise<NextResponse>} A promise that resolves to the response.
  */
 export const DELETE = withSecurity(
   requireOrgMembership(

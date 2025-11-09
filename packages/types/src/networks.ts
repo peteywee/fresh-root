@@ -32,6 +32,37 @@ export type NetworkPlan = z.infer<typeof NetworkPlan>;
 export const BillingMode = z.enum(["none", "card", "invoice", "partner_billed"]);
 export type BillingMode = z.infer<typeof BillingMode>;
 
+/**
+ * Schema for a network, which represents a top-level tenancy construct.
+ * @property {string} id - The unique identifier for the network.
+ * @property {string} slug - A URL-friendly slug for the network.
+ * @property {string} displayName - The display name of the network.
+ * @property {string} [legalName] - The legal name of the network entity.
+ * @property {NetworkKind} kind - The kind of network.
+ * @property {NetworkSegment} segment - The industry segment of the network.
+ * @property {NetworkStatus} status - The current status of the network.
+ * @property {('production' | 'staging' | 'sandbox' | 'demo')} [environment] - The deployment environment of the network.
+ * @property {string} [primaryRegion] - The primary geographical region of the network.
+ * @property {string} [timeZone] - The primary timezone of the network.
+ * @property {string} [currency] - The default currency for the network.
+ * @property {NetworkPlan} [plan] - The subscription plan of the network.
+ * @property {BillingMode} [billingMode] - The billing mode for the network.
+ * @property {number} [maxVenues] - The maximum number of venues allowed.
+ * @property {number} [maxActiveOrgs] - The maximum number of active organizations allowed.
+ * @property {number} [maxActiveUsers] - The maximum number of active users allowed.
+ * @property {number} [maxShiftsPerDay] - The maximum number of shifts that can be created per day.
+ * @property {boolean} [requireMfaForAdmins] - Whether MFA is required for administrators.
+ * @property {boolean} [ipAllowlistEnabled] - Whether IP allowlisting is enabled.
+ * @property {string[]} [allowedEmailDomains] - A list of allowed email domains for new users.
+ * @property {object} [features] - A set of feature flags.
+ * @property {boolean} [features.analytics] - Whether analytics are enabled.
+ * @property {boolean} [features.apiAccess] - Whether API access is enabled.
+ * @property {string} [ownerUserId] - The user ID of the network owner.
+ * @property {any} [createdAt] - The timestamp of when the network was created.
+ * @property {string} [createdBy] - The user ID of the creator.
+ * @property {any} [updatedAt] - The timestamp of the last update.
+ * @property {string} [updatedBy] - The user ID of the last user who updated it.
+ */
 export const NetworkSchema = z.object({
   id: z.string().min(1),
   slug: z.string().min(1),
@@ -66,6 +97,13 @@ export const NetworkSchema = z.object({
   updatedBy: z.string().optional(),
 });
 
+/**
+ * Schema for creating a new network.
+ * @property {string} slug - The URL-friendly slug.
+ * @property {string} displayName - The display name of the network.
+ * @property {NetworkKind} kind - The kind of network.
+ * @property {NetworkSegment} segment - The industry segment of the network.
+ */
 export const CreateNetworkSchema = NetworkSchema.pick({
   slug: true,
   displayName: true,

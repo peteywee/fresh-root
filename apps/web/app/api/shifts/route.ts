@@ -11,8 +11,14 @@ import { badRequest, serverError, CreateShiftSchema } from "../_shared/validatio
 // Rate limiting is handled via withSecurity options
 
 /**
- * GET /api/shifts
- * List shifts (filter by scheduleId if provided)
+ * Handles GET requests to `/api/shifts` to list shifts, optionally filtered by schedule.
+ *
+ * @param {NextRequest} request - The Next.js request object.
+ * @param {object} context - The context object from the router.
+ * @param {Record<string, string>} context.params - The route parameters.
+ * @param {string} context.userId - The ID of the authenticated user.
+ * @param {string} context.orgId - The ID of the user's organization.
+ * @returns {Promise<NextResponse>} A promise that resolves to the response.
  */
 export const GET = withSecurity(
   requireOrgMembership(
@@ -50,8 +56,16 @@ export const GET = withSecurity(
 );
 
 /**
- * POST /api/shifts
- * Create a new shift (requires scheduler+ role)
+ * Handles POST requests to `/api/shifts` to create a new shift.
+ * Requires 'scheduler' role or higher.
+ *
+ * @param {NextRequest} request - The Next.js request object.
+ * @param {object} context - The context object from the router.
+ * @param {Record<string, string>} context.params - The route parameters.
+ * @param {string} context.userId - The ID of the authenticated user.
+ * @param {string} context.orgId - The ID of the user's organization.
+ * @param {OrgRole[]} context.roles - The roles of the authenticated user.
+ * @returns {Promise<NextResponse>} A promise that resolves to the response.
  */
 export const POST = withSecurity(
   requireOrgMembership(

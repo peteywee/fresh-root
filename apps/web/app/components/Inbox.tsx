@@ -3,6 +3,11 @@
 "use client";
 import React, { useMemo } from "react";
 
+/**
+ * A memoized component that displays a list of messages to the user.
+ *
+ * @returns {JSX.Element} The rendered inbox component.
+ */
 const Inbox = React.memo(() => {
   // Memoized messages for performance
   const messages = useMemo(

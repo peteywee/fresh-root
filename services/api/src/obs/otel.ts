@@ -4,16 +4,28 @@ import { getNodeAutoInstrumentations } from "@opentelemetry/auto-instrumentation
 import { NodeSDK } from "@opentelemetry/sdk-node";
 // (no direct semantic attr constants needed; set via env vars)
 
+/**
+ * @description Configuration for initializing the OpenTelemetry SDK.
+ */
 export interface OTelConfig {
+  /** @description The name of the service, used for identifying traces. */
   serviceName: string;
+  /** @description The version of the service. */
   serviceVersion?: string;
+  /** @description The OTLP endpoint to send traces to. */
   endpoint?: string;
+  /** @description A flag to enable or disable tracing. */
   enabled?: boolean;
 }
 
 let sdk: NodeSDK | null = null;
 
-// Dynamically resolve an available OTLP trace exporter to avoid compile-time module errors.
+/**
+ * @description Dynamically loads an available OTLP trace exporter to avoid compile-time errors
+ * if the exporter package is not installed.
+ * @returns {new (config?: any) => any} The constructor for the OTLP trace exporter.
+ * @throws {Error} If no supported OTLP trace exporter package is found.
+ */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function loadOTLPTraceExporter(): new (config?: any) => any {
   try {
@@ -34,9 +46,9 @@ function loadOTLPTraceExporter(): new (config?: any) => any {
 }
 
 /**
- * Initialize OpenTelemetry SDK with auto-instrumentation for Express, HTTP, and more.
- * Must be called BEFORE any other imports that should be instrumented.
- *
+ * @description Initializes the OpenTelemetry SDK with auto-instrumentation for Node.js applications.
+ * This function should be called before any other modules are imported to ensure all libraries are correctly instrumented.
+ * @param {OTelConfig} config - The configuration for OpenTelemetry.
  * @example
  * ```typescript
  * import { initOTel } from './obs/otel.js';
@@ -135,9 +147,8 @@ export function initOTel(config: OTelConfig): void {
 }
 
 /**
- * Get the active trace context for correlation with logs.
- * Use this to attach trace IDs to log entries.
- *
+ * @description Retrieves the active trace context, which can be used to correlate logs with traces.
+ * @returns {{traceId: string, spanId: string, traceFlags: number} | null} The trace context, or null if no active span is found.
  * @example
  * ```typescript
  * import { trace } from '@opentelemetry/api';
@@ -169,7 +180,9 @@ export function getTraceContext() {
 }
 
 /**
- * Manually flush pending traces (useful for serverless or testing).
+ * @description Manually flushes any pending traces. This is useful in serverless environments or during testing.
+ * @param {number} [_timeout=5000] - The timeout in milliseconds to wait for the flush to complete.
+ * @returns {Promise<void>} A promise that resolves when the traces have been flushed.
  */
 export async function flushTraces(_timeout: number = 5000): Promise<void> {
   if (sdk) {

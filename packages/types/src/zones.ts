@@ -18,6 +18,20 @@ export type ZoneType = z.infer<typeof ZoneType>;
 /**
  * Full Zone document schema
  * Firestore path: /zones/{orgId}/{zoneId}
+ * @property {string} id - The unique identifier for the zone.
+ * @property {string} orgId - The ID of the organization this zone belongs to.
+ * @property {string} venueId - The ID of the venue this zone is a part of.
+ * @property {string} name - The name of the zone.
+ * @property {string} [description] - A brief description of the zone.
+ * @property {ZoneType} [type=other] - The type of the zone.
+ * @property {number} [capacity] - The maximum capacity of the zone.
+ * @property {string} [floor] - The floor or level where the zone is located.
+ * @property {boolean} [isActive=true] - Whether the zone is currently active.
+ * @property {string} [color] - A hex color code associated with the zone for UI display.
+ * @property {string} [notes] - General notes about the zone.
+ * @property {string} createdBy - The user ID of the user who created the zone.
+ * @property {number} createdAt - The timestamp of when the zone was created.
+ * @property {number} updatedAt - The timestamp of when the zone was last updated.
  */
 export const ZoneSchema = z.object({
   id: z.string().min(1),
@@ -43,6 +57,15 @@ export type Zone = z.infer<typeof ZoneSchema>;
 /**
  * Schema for creating a new zone
  * Used in POST /api/zones
+ * @property {string} orgId - The ID of the organization this zone belongs to.
+ * @property {string} venueId - The ID of the venue this zone is a part of.
+ * @property {string} name - The name of the zone.
+ * @property {string} [description] - A brief description of the zone.
+ * @property {ZoneType} [type=other] - The type of the zone.
+ * @property {number} [capacity] - The maximum capacity of the zone.
+ * @property {string} [floor] - The floor or level where the zone is located.
+ * @property {string} [color] - A hex color code associated with the zone for UI display.
+ * @property {string} [notes] - General notes about the zone.
  */
 export const CreateZoneSchema = z.object({
   orgId: z.string().min(1, "Organization ID is required"),
@@ -63,6 +86,14 @@ export type CreateZoneInput = z.infer<typeof CreateZoneSchema>;
 /**
  * Schema for updating an existing zone
  * Used in PATCH /api/zones/{id}
+ * @property {string} [name] - The new name of the zone.
+ * @property {string} [description] - The new description of the zone.
+ * @property {ZoneType} [type] - The new type of the zone.
+ * @property {number} [capacity] - The new maximum capacity of the zone.
+ * @property {string} [floor] - The new floor or level of the zone.
+ * @property {boolean} [isActive] - The new active status of the zone.
+ * @property {string} [color] - The new hex color code for the zone.
+ * @property {string} [notes] - The new notes for the zone.
  */
 export const UpdateZoneSchema = z.object({
   name: z.string().min(1).max(100).optional(),
@@ -81,6 +112,12 @@ export type UpdateZoneInput = z.infer<typeof UpdateZoneSchema>;
 
 /**
  * Query parameters for listing zones
+ * @property {string} orgId - The ID of the organization to list zones for.
+ * @property {string} [venueId] - Filter zones by venue ID.
+ * @property {boolean} [isActive] - Filter zones by their active status.
+ * @property {ZoneType} [type] - Filter zones by their type.
+ * @property {number} [limit=50] - The maximum number of zones to return.
+ * @property {string} [cursor] - The cursor for pagination.
  */
 export const ListZonesQuerySchema = z.object({
   orgId: z.string().min(1, "Organization ID is required"),

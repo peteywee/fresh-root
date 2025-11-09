@@ -18,8 +18,15 @@ const CreateItemInput = z.object({
   name: z.string().min(1, "name is required"),
 });
 
-// Rate limiting via withSecurity options
-
+/**
+ * Handles POST requests to `/api/items` to create a new item.
+ *
+ * @param {NextRequest} request - The Next.js request object.
+ * @param {object} context - The context object from the router.
+ * @param {Record<string, string>} context.params - The route parameters.
+ * @param {string} context.userId - The ID of the authenticated user.
+ * @returns {Promise<NextResponse>} A promise that resolves to the response.
+ */
 export const POST = withSecurity(
   async (request: NextRequest, context: { params: Record<string, string>; userId: string }) => {
     try {
@@ -45,7 +52,15 @@ export const POST = withSecurity(
   { requireAuth: true, maxRequests: 100, windowMs: 60_000 },
 );
 
-// Optional: GET returns a static list (safe demo)
+/**
+ * Handles GET requests to `/api/items` to retrieve a list of items.
+ *
+ * @param {NextRequest} request - The Next.js request object.
+ * @param {object} context - The context object from the router.
+ * @param {Record<string, string>} context.params - The route parameters.
+ * @param {string} context.userId - The ID of the authenticated user.
+ * @returns {Promise<NextResponse>} A promise that resolves to the response.
+ */
 export const GET = withSecurity(
   async (request: NextRequest, context: { params: Record<string, string>; userId: string }) => {
     return NextResponse.json([

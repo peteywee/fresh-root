@@ -1,5 +1,11 @@
 // [P0][RBAC][TEST] Rbac Test tests
 // Tags: P0, RBAC, TEST
+/**
+ * @fileoverview This file contains tests for the Firestore security rules related to Role-Based Access Control (RBAC).
+ * It uses the Firebase Rules Unit Testing library to simulate different authenticated users and verify their access permissions.
+ */
+// [P0][RBAC][TEST] Rbac Test tests
+// Tags: P0, RBAC, TEST
 import { initializeTestEnvironment, type RulesTestEnvironment } from "@firebase/rules-unit-testing";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { readFileSync } from "fs";

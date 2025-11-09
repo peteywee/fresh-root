@@ -1,5 +1,12 @@
 // [P0][TEST][TEST] Rules Test tests
 // Tags: P0, TEST, TEST
+/**
+ * @fileoverview This file contains general tests for the Firestore security rules.
+ * It uses the Firebase Rules Unit Testing library to verify basic access control,
+ * such as authenticated vs. unauthenticated access and member vs. non-member permissions.
+ */
+// [P0][TEST][TEST] Rules Test tests
+// Tags: P0, TEST, TEST
 import { assertFails, assertSucceeds, initializeTestEnvironment } from "@firebase/rules-unit-testing";
 import type { RulesTestEnvironment } from "@firebase/rules-unit-testing";
 import { doc, getDoc, setDoc } from "firebase/firestore";

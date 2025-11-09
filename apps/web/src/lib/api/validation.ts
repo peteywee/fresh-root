@@ -12,6 +12,12 @@ const MAX_BODY_SIZE = 1024 * 1024; // 1MB
 /**
  * Custom validation error class with detailed field-level errors
  */
+/**
+ * A custom error class for validation errors.
+ *
+ * @param {Record<string, string[]>} fields - An object containing field-level error messages.
+ * @param {number} [statusCode=422] - The HTTP status code to be returned.
+ */
 export class ValidationError extends Error {
   constructor(
     public readonly fields: Record<string, string[]>,
@@ -21,6 +27,11 @@ export class ValidationError extends Error {
     this.name = "ValidationError";
   }
 
+  /**
+   * Converts the validation error to a JSON object.
+   *
+   * @returns {object} The JSON representation of the error.
+   */
   toJSON() {
     return {
       error: "Validation failed",
@@ -31,7 +42,10 @@ export class ValidationError extends Error {
 }
 
 /**
- * Convert Zod error to field-level error messages
+ * Converts a ZodError into a more structured, field-level error object.
+ *
+ * @param {ZodError} error - The ZodError to convert.
+ * @returns {Record<string, string[]>} A record of field names to an array of error messages.
  */
 function zodErrorToFieldErrors(error: ZodError): Record<string, string[]> {
   const fieldErrors: Record<string, string[]> = {};
@@ -51,15 +65,13 @@ function zodErrorToFieldErrors(error: ZodError): Record<string, string[]> {
 }
 
 /**
- * Validate request body against Zod schema
+ * Validates the request body against a Zod schema.
  *
- * @param request - Next.js request object
- * @param schema - Zod schema to validate against
- * @returns Parsed and validated data
- * @throws ValidationError if validation fails
- *
- * @example
- * const data = await validateRequest(request, OrganizationCreateSchema);
+ * @template T
+ * @param {NextRequest} request - The Next.js request object.
+ * @param {ZodSchema<T>} schema - The Zod schema to validate against.
+ * @returns {Promise<T>} The parsed and validated data.
+ * @throws {ValidationError} If validation fails.
  */
 export async function validateRequest<T>(request: NextRequest, schema: ZodSchema<T>): Promise<T> {
   // Check content type
@@ -109,15 +121,13 @@ export async function validateRequest<T>(request: NextRequest, schema: ZodSchema
 }
 
 /**
- * Validate request query parameters against Zod schema
+ * Validates the request query parameters against a Zod schema.
  *
- * @param request - Next.js request object
- * @param schema - Zod schema to validate against
- * @returns Parsed and validated query params
- * @throws ValidationError if validation fails
- *
- * @example
- * const params = validateQuery(request, z.object({ page: z.coerce.number() }));
+ * @template T
+ * @param {NextRequest} request - The Next.js request object.
+ * @param {ZodSchema<T>} schema - The Zod schema to validate against.
+ * @returns {T} The parsed and validated query parameters.
+ * @throws {ValidationError} If validation fails.
  */
 export function validateQuery<T>(request: NextRequest, schema: ZodSchema<T>): T {
   const { searchParams } = new URL(request.url);
@@ -138,31 +148,22 @@ export function validateQuery<T>(request: NextRequest, schema: ZodSchema<T>): T 
 }
 
 /**
- * Create error response from ValidationError
+ * Creates a NextResponse object from a ValidationError.
  *
- * @param error - ValidationError instance
- * @returns NextResponse with error details
+ * @param {ValidationError} error - The validation error.
+ * @returns {NextResponse} A Next.js response object with the error details.
  */
 export function createValidationErrorResponse(error: ValidationError): NextResponse {
   return NextResponse.json(error.toJSON(), { status: error.statusCode });
 }
 
 /**
- * Higher-order function to wrap API route handlers with validation
+ * A higher-order function that wraps an API route handler with validation logic.
  *
- * @param schema - Zod schema for request body validation
- * @param handler - Async handler function receiving validated data
- * @returns Next.js route handler with validation
- *
- * @example
- * export const POST = withValidation(
- *   OrganizationCreateSchema,
- *   async (request, data) => {
- *     // data is typed and validated
- *     const org = await createOrganization(data);
- *     return NextResponse.json(org);
- *   }
- * );
+ * @template T
+ * @param {ZodSchema<T>} schema - The Zod schema for request body validation.
+ * @param {(request: NextRequest, data: T) => Promise<NextResponse>} handler - The handler function to be executed with the validated data.
+ * @returns {Function} A Next.js route handler with built-in validation.
  */
 export function withValidation<T>(
   schema: ZodSchema<T>,
@@ -184,7 +185,11 @@ export function withValidation<T>(
 }
 
 /**
- * Common query parameter schemas
+ * A collection of common query parameter schemas.
+ * @property {ZodSchema} pagination - Schema for pagination parameters.
+ * @property {ZodSchema} sorting - Schema for sorting parameters.
+ * @property {ZodSchema} dateRange - Schema for date range parameters.
+ * @property {ZodSchema} search - Schema for search parameters.
  */
 export const QuerySchemas = {
   /**
@@ -220,21 +225,31 @@ export const QuerySchemas = {
 };
 
 /**
- * Validate pagination and return safe values
+ * Validates pagination query parameters and returns safe values.
+ *
+ * @param {NextRequest} request - The Next.js request object.
+ * @returns {{page: number, limit: number}} The validated pagination parameters.
  */
 export function validatePagination(request: NextRequest) {
   return validateQuery(request, QuerySchemas.pagination);
 }
 
 /**
- * Validate sorting and return safe values
+ * Validates sorting query parameters and returns safe values.
+ *
+ * @param {NextRequest} request - The Next.js request object.
+ * @returns {{sortBy?: string, sortOrder: 'asc' | 'desc'}} The validated sorting parameters.
  */
 export function validateSorting(request: NextRequest) {
   return validateQuery(request, QuerySchemas.sorting);
 }
 
 /**
- * Validate date range and ensure startDate <= endDate
+ * Validates date range query parameters and ensures that the start date is not after the end date.
+ *
+ * @param {NextRequest} request - The Next.js request object.
+ * @returns {{startDate?: Date, endDate?: Date}} The validated date range.
+ * @throws {ValidationError} If the start date is after the end date.
  */
 export function validateDateRange(request: NextRequest) {
   const range = validateQuery(request, QuerySchemas.dateRange);

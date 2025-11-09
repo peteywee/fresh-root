@@ -40,6 +40,13 @@ async function exportFirestore(projectId: string, bucket: string, collections?: 
   return res.json();
 }
 
+/**
+ * Handles POST requests to `/api/internal/backup` to trigger a Firestore export.
+ * This endpoint is protected by a static bearer token.
+ *
+ * @param {NextRequest} req - The Next.js request object.
+ * @returns {Promise<NextResponse>} A promise that resolves to the response.
+ */
 export async function POST(req: NextRequest) {
   try {
     const configuredToken = process.env.BACKUP_CRON_TOKEN;

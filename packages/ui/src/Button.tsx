@@ -9,6 +9,16 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   children: React.ReactNode;
 }
 
+/**
+ * A customizable button component with different variants and sizes.
+ *
+ * @param {object} props - The props for the component.
+ * @param {'primary' | 'secondary' | 'outline' | 'ghost'} [props.variant=primary] - The variant of the button.
+ * @param {'sm' | 'md' | 'lg'} [props.size=md] - The size of the button.
+ * @param {string} [props.className] - Additional class names for custom styling.
+ * @param {React.ReactNode} props.children - The content to be displayed inside the button.
+ * @returns {JSX.Element} The rendered button component.
+ */
 export function Button({
   variant = "primary",
   size = "md",

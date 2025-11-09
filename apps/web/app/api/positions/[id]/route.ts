@@ -11,8 +11,12 @@ import { sanitizeObject } from "../../../../src/lib/api/sanitize";
 import { serverError } from "../../_shared/validation";
 
 /**
- * GET /api/positions/[id]
- * Get position details (requires staff+ role)
+ * Handles GET requests to `/api/positions/[id]` to retrieve the details of a specific position.
+ *
+ * @param {NextRequest} request - The Next.js request object.
+ * @param {object} context - The context object from the router.
+ * @param {Record<string, string>} context.params - The route parameters, including the position ID.
+ * @returns {Promise<NextResponse>} A promise that resolves to the response.
  */
 export const GET = rateLimit(RateLimits.STANDARD)(
   requireOrgMembership(async (request, context) => {
@@ -41,8 +45,13 @@ export const GET = rateLimit(RateLimits.STANDARD)(
 );
 
 /**
- * PATCH /api/positions/[id]
- * Update position details (requires manager+ role)
+ * Handles PATCH requests to `/api/positions/[id]` to update the details of a specific position.
+ * Requires 'manager' role or higher.
+ *
+ * @param {NextRequest} request - The Next.js request object.
+ * @param {object} context - The context object from the router.
+ * @param {Record<string, string>} context.params - The route parameters, including the position ID.
+ * @returns {Promise<NextResponse>} A promise that resolves to the response.
  */
 export const PATCH = rateLimit(RateLimits.WRITE)(
   csrfProtection()(
@@ -84,8 +93,14 @@ export const PATCH = rateLimit(RateLimits.WRITE)(
 );
 
 /**
- * DELETE /api/positions/[id]
- * Delete a position (requires admin+ role, soft delete - set isActive to false)
+ * Handles DELETE requests to `/api/positions/[id]` to delete a specific position.
+ * This is a soft delete, setting the `isActive` flag to `false`.
+ * Requires 'admin' role or higher.
+ *
+ * @param {NextRequest} request - The Next.js request object.
+ * @param {object} context - The context object from the router.
+ * @param {Record<string, string>} context.params - The route parameters, including the position ID.
+ * @returns {Promise<NextResponse>} A promise that resolves to the response.
  */
 export const DELETE = rateLimit(RateLimits.WRITE)(
   csrfProtection()(

@@ -11,6 +11,17 @@ interface ModalProps {
   size?: "sm" | "md" | "lg" | "xl";
 }
 
+/**
+ * A modal component that can be used to display content in a dialog box.
+ *
+ * @param {object} props - The props for the component.
+ * @param {boolean} props.isOpen - Whether the modal is open or not.
+ * @param {() => void} props.onClose - A function to be called when the modal is closed.
+ * @param {string} [props.title] - The title of the modal.
+ * @param {React.ReactNode} props.children - The content to be displayed inside the modal.
+ * @param {'sm' | 'md' | 'lg' | 'xl'} [props.size=md] - The size of the modal.
+ * @returns {JSX.Element | null} The rendered modal component or null if it's not open.
+ */
 export function Modal({ isOpen, onClose, title, children, size = "md" }: ModalProps) {
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {

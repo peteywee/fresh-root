@@ -11,8 +11,14 @@ import { parseJson, badRequest, serverError, ok } from "../_shared/validation";
 // Rate limiting is handled via withSecurity options
 
 /**
- * GET /api/positions
- * List positions for an organization
+ * Handles GET requests to `/api/positions` to list positions for an organization.
+ *
+ * @param {NextRequest} request - The Next.js request object.
+ * @param {object} context - The context object from the router.
+ * @param {Record<string, string>} context.params - The route parameters.
+ * @param {string} context.userId - The ID of the authenticated user.
+ * @param {string} context.orgId - The ID of the user's organization.
+ * @returns {Promise<NextResponse>} A promise that resolves to the response.
  */
 export const GET = withSecurity(
   requireOrgMembership(
@@ -57,8 +63,16 @@ export const GET = withSecurity(
 );
 
 /**
- * POST /api/positions
- * Create a new position (requires manager+ role)
+ * Handles POST requests to `/api/positions` to create a new position.
+ * Requires 'manager' role or higher.
+ *
+ * @param {NextRequest} request - The Next.js request object.
+ * @param {object} context - The context object from the router.
+ * @param {Record<string, string>} context.params - The route parameters.
+ * @param {string} context.userId - The ID of the authenticated user.
+ * @param {string} context.orgId - The ID of the user's organization.
+ * @param {OrgRole[]} context.roles - The roles of the authenticated user.
+ * @returns {Promise<NextResponse>} A promise that resolves to the response.
  */
 export const POST = withSecurity(
   requireOrgMembership(

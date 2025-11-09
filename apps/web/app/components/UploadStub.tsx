@@ -4,6 +4,13 @@
 
 import React from "react";
 
+/**
+ * A stub component for file uploads. It allows a user to select a file,
+ * but it only logs the file's information to the console and does not
+ * actually upload it to a server.
+ *
+ * @returns {JSX.Element} The rendered file upload stub component.
+ */
 export default function UploadStub() {
   return (
     <div className="rounded border p-4 text-sm">

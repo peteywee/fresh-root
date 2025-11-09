@@ -17,6 +17,19 @@ export type SkillLevel = z.infer<typeof SkillLevel>;
 /**
  * Full Position document schema
  * Firestore path: /positions/{orgId}/{positionId}
+ * @property {string} id - The unique identifier for the position.
+ * @property {string} orgId - The ID of the organization this position belongs to.
+ * @property {string} name - The name of the position.
+ * @property {string} [description] - A brief description of the position.
+ * @property {PositionType} [type=part_time] - The type of employment for the position.
+ * @property {SkillLevel} [skillLevel=entry] - The required skill level for the position.
+ * @property {number} [hourlyRate] - The hourly rate for the position.
+ * @property {string} [color] - A hex color code associated with the position for UI display.
+ * @property {boolean} [isActive=true] - Whether the position is currently active.
+ * @property {string[]} [requiredCertifications] - A list of required certifications for the position.
+ * @property {string} createdBy - The user ID of the user who created the position.
+ * @property {number} createdAt - The timestamp of when the position was created.
+ * @property {number} updatedAt - The timestamp of when the position was last updated.
  */
 export const PositionSchema = z.object({
   id: z.string().min(1),
@@ -41,6 +54,14 @@ export type Position = z.infer<typeof PositionSchema>;
 /**
  * Schema for creating a new position
  * Used in POST /api/positions
+ * @property {string} orgId - The ID of the organization this position belongs to.
+ * @property {string} name - The name of the position.
+ * @property {string} [description] - A brief description of the position.
+ * @property {PositionType} [type=part_time] - The type of employment for the position.
+ * @property {SkillLevel} [skillLevel=entry] - The required skill level for the position.
+ * @property {number} [hourlyRate] - The hourly rate for the position.
+ * @property {string} [color] - A hex color code associated with the position for UI display.
+ * @property {string[]} [requiredCertifications] - A list of required certifications for the position.
  */
 export const CreatePositionSchema = z.object({
   orgId: z.string().min(1, "Organization ID is required"),
@@ -60,6 +81,14 @@ export type CreatePositionInput = z.infer<typeof CreatePositionSchema>;
 /**
  * Schema for updating an existing position
  * Used in PATCH /api/positions/{id}
+ * @property {string} [name] - The new name of the position.
+ * @property {string} [description] - The new description of the position.
+ * @property {PositionType} [type] - The new type of employment for the position.
+ * @property {SkillLevel} [skillLevel] - The new required skill level for the position.
+ * @property {number} [hourlyRate] - The new hourly rate for the position.
+ * @property {string} [color] - The new hex color code for the position.
+ * @property {boolean} [isActive] - The new active status of the position.
+ * @property {string[]} [requiredCertifications] - The new list of required certifications.
  */
 export const UpdatePositionSchema = z.object({
   name: z.string().min(1).max(100).optional(),
@@ -78,6 +107,11 @@ export type UpdatePositionInput = z.infer<typeof UpdatePositionSchema>;
 
 /**
  * Query parameters for listing positions
+ * @property {string} orgId - The ID of the organization to list positions for.
+ * @property {boolean} [isActive] - Filter positions by their active status.
+ * @property {PositionType} [type] - Filter positions by their type.
+ * @property {number} [limit=50] - The maximum number of positions to return.
+ * @property {string} [cursor] - The cursor for pagination.
  */
 export const ListPositionsQuerySchema = z.object({
   orgId: z.string().min(1, "Organization ID is required"),

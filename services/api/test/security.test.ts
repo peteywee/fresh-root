@@ -5,7 +5,9 @@ import { describe, expect, it } from "vitest";
 
 import { applySecurity } from "../src/mw/security.js";
 
-// Minimal Env stub matching the shape used by applySecurity
+/**
+ * @description A base environment configuration stub used for testing the security middleware.
+ */
 const baseEnv = {
   PORT: "0",
   NODE_ENV: "development" as const,
@@ -38,6 +40,10 @@ function startServer(
   });
 }
 
+/**
+ * @description Test suite for the security headers middleware.
+ * This suite verifies that essential security headers are set on responses.
+ */
 describe("security headers", () => {
   it("sets basic security headers", async () => {
     const srv = await startServer();
@@ -50,6 +56,10 @@ describe("security headers", () => {
   });
 });
 
+/**
+ * @description Test suite for the CORS allowlist middleware.
+ * This suite verifies that CORS headers are correctly handled based on the origin of the request.
+ */
 describe("CORS allowlist", () => {
   it("allows preflight for allowed origin and omits for disallowed", async () => {
     const allowed = "https://allowed.test";
@@ -77,6 +87,10 @@ describe("CORS allowlist", () => {
   });
 });
 
+/**
+ * @description Test suite for the body size limit middleware.
+ * This suite verifies that the server rejects payloads that exceed the configured size limit.
+ */
 describe("body size limits", () => {
   it("returns 413 for >1mb JSON payloads", async () => {
     const srv = await startServer();
@@ -92,6 +106,10 @@ describe("body size limits", () => {
   });
 });
 
+/**
+ * @description Test suite for the rate limiting middleware.
+ * This suite verifies that the server correctly limits the number of requests from a single client.
+ */
 describe("rate limiting", () => {
   it("returns 429 when exceeding limits", async () => {
     const srv = await startServer({ RATE_LIMIT_WINDOW_MS: "200", RATE_LIMIT_MAX: "2" });

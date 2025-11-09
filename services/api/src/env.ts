@@ -2,6 +2,10 @@
 // Tags: P0, SECURITY, ENV, VALIDATION
 import { z } from "zod";
 
+/**
+ * @description Defines the schema for environment variables using Zod.
+ * This ensures that the application has the required configuration to run and provides default values for optional variables.
+ */
 const EnvSchema = z.object({
   PORT: z.string().default("4000"),
   NODE_ENV: z.enum(["development", "test", "production"]).default("development"),
@@ -24,8 +28,17 @@ const EnvSchema = z.object({
   RATE_LIMIT_MAX: z.string().optional(),
 });
 
+/**
+ * @description Represents the validated and typed environment variables for the application.
+ */
 export type Env = z.infer<typeof EnvSchema>;
 
+/**
+ * @description Loads and validates the environment variables from `process.env`.
+ * If the validation fails, it logs a descriptive error message and exits the process.
+ * This function also performs additional runtime checks, such as ensuring CORS_ORIGINS is set in production.
+ * @returns {Env} The validated and typed environment variables.
+ */
 export function loadEnv(): Env {
   const parsed = EnvSchema.safeParse(process.env);
   if (!parsed.success) {
@@ -48,7 +61,11 @@ export function loadEnv(): Env {
   return env;
 }
 
-// Helper to parse comma-separated CORS origins into a trimmed array
+/**
+ * @description A helper function that parses the comma-separated `CORS_ORIGINS` environment variable into an array of strings.
+ * @param {Env} env - The application's environment variables.
+ * @returns {string[]} An array of allowed CORS origins.
+ */
 export function getCorsOrigins(env: Env): string[] {
   const val = env.CORS_ORIGINS;
   if (!val) return [];

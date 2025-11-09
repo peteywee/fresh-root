@@ -87,8 +87,8 @@ let cachedEnv: ServerEnv | null = null;
  * Load and validate server-side environment variables.
  * Fails fast with clear error messages if required variables are missing or invalid.
  *
- * @throws {Error} If environment validation fails
- * @returns Validated and typed environment object
+ * @throws {Error} If environment validation fails.
+ * @returns {ServerEnv} The validated and typed environment object.
  */
 export function loadServerEnv(): ServerEnv {
   if (cachedEnv) {
@@ -142,8 +142,8 @@ export function loadServerEnv(): ServerEnv {
 /**
  * Helper to parse comma-separated CORS origins into a trimmed array.
  *
- * @param env Server environment object
- * @returns Array of CORS origin strings
+ * @param {ServerEnv} env - The server environment object.
+ * @returns {string[]} An array of CORS origin strings.
  */
 export function getCorsOrigins(env: ServerEnv): string[] {
   const val = env.CORS_ORIGINS;
@@ -157,18 +157,18 @@ export function getCorsOrigins(env: ServerEnv): string[] {
 /**
  * Helper to check if Firebase emulators should be used.
  *
- * @param env Server environment object
- * @returns true if emulators are enabled
+ * @param {ServerEnv} env - The server environment object.
+ * @returns {boolean} True if emulators are enabled.
  */
 export function useEmulators(env: ServerEnv): boolean {
   return env.NEXT_PUBLIC_USE_EMULATORS === "true";
 }
 
 /**
- * Helper to get parsed Firebase credentials from JSON string.
+ * Helper to get parsed Firebase credentials from a JSON string.
  *
- * @param env Server environment object
- * @returns Parsed credentials object or null
+ * @param {ServerEnv} env - The server environment object.
+ * @returns {Record<string, unknown> | null} The parsed credentials object or null if invalid.
  */
 export function getFirebaseCredentials(env: ServerEnv): Record<string, unknown> | null {
   const json = env.GOOGLE_APPLICATION_CREDENTIALS_JSON;

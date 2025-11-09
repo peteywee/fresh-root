@@ -5,7 +5,11 @@ import express, { type Express, type NextFunction, type Request, type Response }
 import type { Env } from "../env.js";
 import { getCorsOrigins } from "../env.js";
 
-// Minimal helmet-like headers
+/**
+ * @description Creates an Express middleware that applies a set of minimal, security-focused HTTP headers.
+ * These headers help protect against common web vulnerabilities.
+ * @returns {function(Request, Response, NextFunction): void} An Express middleware function.
+ */
 function securityHeaders(): (req: Request, res: Response, next: NextFunction) => void {
   return (_req, res, next) => {
     res.setHeader("X-Content-Type-Options", "nosniff");
@@ -18,7 +22,12 @@ function securityHeaders(): (req: Request, res: Response, next: NextFunction) =>
   };
 }
 
-// Strict-Transport-Security only in production
+/**
+ * @description Creates an Express middleware that applies the HTTP Strict-Transport-Security (HSTS) header.
+ * This header is only applied in the production environment to enforce HTTPS.
+ * @param {Env} env - The application's environment variables.
+ * @returns {function(Request, Response, NextFunction): void} An Express middleware function.
+ */
 function hsts(env: Env): (req: Request, res: Response, next: NextFunction) => void {
   return (_req, res, next) => {
     if (env.NODE_ENV === "production") {
@@ -28,7 +37,12 @@ function hsts(env: Env): (req: Request, res: Response, next: NextFunction) => vo
   };
 }
 
-// CORS allowlist by env
+/**
+ * @description Creates an Express middleware for handling Cross-Origin Resource Sharing (CORS).
+ * It allows requests from a specified list of origins.
+ * @param {string[]} origins - A list of allowed origins.
+ * @returns {function(Request, Response, NextFunction): void} An Express middleware function.
+ */
 function corsAllowlist(
   origins: string[],
 ): (req: Request, res: Response, next: NextFunction) => void {
@@ -52,7 +66,13 @@ function corsAllowlist(
   };
 }
 
-// Simple in-memory rate limiter (per IP)
+/**
+ * @description Creates an Express middleware for rate limiting requests.
+ * This is a simple in-memory implementation that tracks hits per IP address.
+ * @param {number} windowMs - The time window in milliseconds for which requests are counted.
+ * @param {number} max - The maximum number of requests allowed per IP within the time window.
+ * @returns {function(Request, Response, NextFunction): void} An Express middleware function.
+ */
 function rateLimit(
   windowMs: number,
   max: number,
@@ -79,6 +99,12 @@ function rateLimit(
   };
 }
 
+/**
+ * @description Applies a suite of security-related middleware to the Express application.
+ * This includes security headers, HSTS, CORS, body size limits, and rate limiting.
+ * @param {Express} app - The Express application instance.
+ * @param {Env} env - The application's environment variables.
+ */
 export function applySecurity(app: Express, env: Env) {
   const origins = getCorsOrigins(env);
   const windowMs = Number(env.RATE_LIMIT_WINDOW_MS ?? 60_000);

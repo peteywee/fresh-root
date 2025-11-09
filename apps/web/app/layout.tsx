@@ -19,6 +19,13 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
+/**
+ * The root layout for the application.
+ *
+ * @param {object} props - The props for the component.
+ * @param {React.ReactNode} props.children - The child components to be rendered within the layout.
+ * @returns {JSX.Element} The rendered root layout.
+ */
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   // Server layout; zero client JS here.
   return (

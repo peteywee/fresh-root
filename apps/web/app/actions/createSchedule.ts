@@ -5,9 +5,14 @@
 type CreatePayload = { orgId: string; startDate: number };
 
 /**
- * Server action that calls the API (keeps secrets server-side).
- * In dev, we pass x-user-token (JSON) to simulate Firebase custom claims.
- * In prod, swap to a signed session/token and add a gateway in the API to decode it.
+ * A server action that creates a new schedule by calling the API.
+ * This function keeps secrets on the server-side and should not be exposed to the client.
+ *
+ * @param {CreatePayload} payload - The data for creating the schedule.
+ * @param {string} payload.orgId - The ID of the organization.
+ * @param {number} payload.startDate - The start date of the schedule.
+ * @returns {Promise<any>} A promise that resolves with the response from the API.
+ * @throws {Error} If the `orgId` has an invalid format or if the API call fails.
  */
 export async function createSchedule(payload: CreatePayload) {
   // Validate orgId to prevent SSRF (allow only alphanumeric, hyphen, underscore)

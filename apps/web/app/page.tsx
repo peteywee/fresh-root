@@ -1,5 +1,10 @@
 // [P2][APP][CODE] Page page component
 // Tags: P2, APP, CODE
+/**
+ * The main landing page for the application.
+ *
+ * @returns {JSX.Element} The rendered home page.
+ */
 export default function Home() {
   return (
     <main className="p-6">

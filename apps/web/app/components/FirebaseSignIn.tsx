@@ -9,6 +9,12 @@ import "firebaseui/dist/firebaseui.css";
 // This component mounts FirebaseUI's sign-in widget into a container.
 // It assumes you have initialized firebase in `apps/web/app/lib/firebaseClient.ts`.
 
+/**
+ * A client-side component that renders the FirebaseUI sign-in widget.
+ * This component handles the initialization and cleanup of the FirebaseUI instance.
+ *
+ * @returns {JSX.Element} The rendered div element that will contain the FirebaseUI widget.
+ */
 export default function FirebaseSignIn() {
   const containerRef = useRef<HTMLDivElement | null>(null);
 

@@ -13,6 +13,13 @@ import {
 } from "../../../src/lib/auth-helpers";
 import { reportError } from "../../../src/lib/error/reporting";
 
+/**
+ * A client-side component that handles the authentication callback for both
+ * email link and Google redirect sign-in flows. It completes the authentication
+ * process and establishes a server-side session.
+ *
+ * @returns {JSX.Element} The rendered authentication callback page.
+ */
 export default function AuthCallbackPage() {
   const router = useRouter();
   const [status, setStatus] = useState<"idle" | "working" | "done" | "error">("idle");

@@ -5,6 +5,12 @@ import { NextResponse } from "next/server";
 
 import { withSecurity, type AuthenticatedRequest } from "../../_shared/middleware";
 
+/**
+ * Handles GET requests to `/api/onboarding/verify-eligibility` to check if a user is eligible for onboarding.
+ *
+ * @param {AuthenticatedRequest} req - The authenticated Next.js request object.
+ * @returns {Promise<NextResponse>} A promise that resolves to the response.
+ */
 export const GET = withSecurity(
   async (req: AuthenticatedRequest) => {
     // requireSession already attached user info

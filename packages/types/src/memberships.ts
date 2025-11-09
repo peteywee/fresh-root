@@ -18,6 +18,15 @@ export type MembershipStatus = z.infer<typeof MembershipStatus>;
 /**
  * Full Membership document schema
  * Firestore path: /memberships/{uid}_{orgId}
+ * @property {string} uid - The user ID of the member.
+ * @property {string} orgId - The organization ID of the membership.
+ * @property {MembershipRole[]} roles - The roles assigned to the member.
+ * @property {MembershipStatus} [status=active] - The status of the membership.
+ * @property {string} [invitedBy] - The user ID of the person who invited this member.
+ * @property {number} [invitedAt] - The timestamp of when the invitation was sent.
+ * @property {number} joinedAt - The timestamp of when the member joined.
+ * @property {number} updatedAt - The timestamp of the last update.
+ * @property {number} createdAt - The timestamp of when the membership was created.
  */
 export const MembershipSchema = z.object({
   uid: z.string().min(1, "User ID is required"),
@@ -35,6 +44,11 @@ export type Membership = z.infer<typeof MembershipSchema>;
 /**
  * Schema for creating a new membership
  * Used in POST /api/memberships
+ * @property {string} uid - The user ID of the member.
+ * @property {string} orgId - The organization ID of the membership.
+ * @property {MembershipRole[]} roles - The roles to assign to the member.
+ * @property {MembershipStatus} [status=invited] - The initial status of the membership.
+ * @property {string} [invitedBy] - The user ID of the person who is inviting this member.
  */
 export const CreateMembershipSchema = z.object({
   uid: z.string().min(1, "User ID is required"),
@@ -48,6 +62,8 @@ export type CreateMembershipInput = z.infer<typeof CreateMembershipSchema>;
 /**
  * Schema for updating an existing membership
  * Used in PATCH /api/memberships/{id}
+ * @property {MembershipRole[]} [roles] - The new roles to assign to the member.
+ * @property {MembershipStatus} [status] - The new status of the membership.
  */
 export const UpdateMembershipSchema = z.object({
   roles: z.array(MembershipRole).min(1).optional(),
@@ -57,6 +73,11 @@ export type UpdateMembershipInput = z.infer<typeof UpdateMembershipSchema>;
 
 /**
  * Query parameters for listing memberships
+ * @property {string} [orgId] - Filter memberships by organization ID.
+ * @property {string} [uid] - Filter memberships by user ID.
+ * @property {MembershipStatus} [status] - Filter memberships by status.
+ * @property {number} [limit=50] - The maximum number of results to return.
+ * @property {string} [cursor] - The cursor for pagination.
  */
 export const ListMembershipsQuerySchema = z.object({
   orgId: z.string().optional(),

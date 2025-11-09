@@ -2,6 +2,14 @@
 // Tags: P2, APP, CODE
 import type { ApiError } from "../api/_shared/validation";
 
+/**
+ * A custom error class for HTTP errors.
+ *
+ * @param {number} status - The HTTP status code.
+ * @param {string} message - The error message.
+ * @param {string} [code] - An optional error code.
+ * @param {unknown} [details] - Optional additional details about the error.
+ */
 export class HttpError extends Error {
   status: number;
   code?: string;
@@ -14,7 +22,15 @@ export class HttpError extends Error {
   }
 }
 
-/** Typed fetch wrapper expecting JSON. Throws HttpError on non-2xx with normalized shape. */
+/**
+ * A typed fetch wrapper that expects a JSON response and throws an `HttpError` on non-2xx status codes.
+ *
+ * @template T
+ * @param {RequestInfo} input - The URL to fetch.
+ * @param {RequestInit} [init] - The options for the fetch request.
+ * @returns {Promise<T>} A promise that resolves to the JSON response.
+ * @throws {HttpError} If the request fails or returns a non-2xx status code.
+ */
 export async function apiFetch<T>(input: RequestInfo, init?: RequestInit): Promise<T> {
   const res = await fetch(input, {
     ...init,

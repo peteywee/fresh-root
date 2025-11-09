@@ -5,6 +5,10 @@ import { describe, it, expect } from "vitest";
 
 import { readUserToken, requireManager } from "../src/rbac.js";
 
+/**
+ * @description Test suite for the `readUserToken` function.
+ * This suite verifies that the function correctly parses the user token from the request headers.
+ */
 describe("readUserToken", () => {
   it("parses x-user-token header", () => {
     const req = {
@@ -19,6 +23,11 @@ describe("readUserToken", () => {
   });
 });
 
+/**
+ * @description Test suite for the `requireManager` middleware.
+ * This suite verifies that the middleware correctly grants access to users with manager-level roles
+ * and denies access to users without the required permissions.
+ */
 describe("requireManager", () => {
   it("allows manager", async () => {
     const req = {

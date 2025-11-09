@@ -8,6 +8,11 @@ type SimpleRedisClient = {
 };
 
 // Try Upstash first, then ioredis, otherwise fall back to in-memory map (development)
+/**
+ * @fileoverview This file provides a shared Redis adapter that can be used across the application.
+ * It automatically selects the appropriate Redis client (Upstash, ioredis, or an in-memory fallback)
+ * based on the environment variables. It also exports a factory function for creating rate limiters.
+ */
 let adapter: SimpleRedisClient;
 
 if (process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN) {
@@ -80,98 +85,13 @@ if (process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN) 
 }
 
 export default adapter;
-//[P0][API][SECURITY] Shared Redis client and rate limiter factory
-// Tags: redis, rate-limiting, upstash, production, singleton
 
-import { NextRequest, NextResponse } from "next/server";
-
-import { UpstashRedisAdapter, type RedisClient, createRedisRateLimit } from "./redis-rate-limit";
-
-// Minimal Upstash REST client implementing only incr/expire/ttl
-class UpstashRestClient implements RedisClient {
-  constructor(
-    private url: string,
-    private token: string,
-  ) {}
-
-  private async exec<T = unknown>(command: string, ...args: (string | number)[]): Promise<T> {
-    const res = await fetch(this.url, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${this.token}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify([command, ...args]),
-    });
-    if (!res.ok) {
-      throw new Error(`Upstash request failed: ${res.status}`);
-    }
-    const json = (await res.json()) as { result: T };
-    return json.result;
-  }
-
-  async incr(key: string): Promise<number> {
-    return await this.exec<number>("INCR", key);
-  }
-
-  async expire(key: string, seconds: number): Promise<void> {
-    await this.exec<number>("EXPIRE", key, seconds);
-  }
-
-  async ttl(key: string): Promise<number> {
-    return await this.exec<number>("TTL", key);
-  }
-}
-
-// Singleton adapter (Upstash if configured)
-let singletonAdapter: RedisClient | null = null;
-function getRedisAdapter(): RedisClient | null {
-  if (singletonAdapter) return singletonAdapter;
-  const url = process.env.UPSTASH_REDIS_REST_URL;
-  const token = process.env.UPSTASH_REDIS_REST_TOKEN;
-  if (url && token) {
-    const client = new UpstashRestClient(url, token);
-    singletonAdapter = new UpstashRedisAdapter(client);
-  } else {
-    singletonAdapter = null;
-  }
-  return singletonAdapter;
-}
-
-export type RateLimitConfig = {
-  max: number;
-  windowSeconds: number;
-};
-
-// In-memory fallback limiter (scoped per process)
-class InMemoryLimiter {
-  private requests = new Map<string, { count: number; resetAt: number }>();
-
-  async check(key: string, max: number, windowSeconds: number) {
-    const now = Date.now();
-    const entry = this.requests.get(key);
-    if (!entry || entry.resetAt < now) {
-      const resetAt = now + windowSeconds * 1000;
-      this.requests.set(key, { count: 1, resetAt });
-      return { allowed: true, remaining: max - 1, resetAt };
-    }
-    if (entry.count >= max) return { allowed: false, remaining: 0, resetAt: entry.resetAt };
-    entry.count++;
-    return { allowed: true, remaining: max - entry.count, resetAt: entry.resetAt };
-  }
-}
-
-const localLimiter = new InMemoryLimiter();
-
-function defaultKey(request: NextRequest) {
-  const ip =
-    request.headers.get("x-forwarded-for")?.split(",")[0] ||
-    request.headers.get("x-real-ip") ||
-    "unknown";
-  const userId = request.headers.get("x-user-id");
-  return userId ? `${ip}:${userId}` : ip;
-}
-
+/**
+ * A factory function that creates a rate limiter.
+ *
+ * @param {RateLimitConfig} config - The configuration for the rate limiter.
+ * @returns {Function} A rate limiting middleware function.
+ */
 // Factory returning an inline check: await rateLimit(req, ctx) -> NextResponse | null
 export function createRateLimiter(config: RateLimitConfig) {
   const adapter = getRedisAdapter();

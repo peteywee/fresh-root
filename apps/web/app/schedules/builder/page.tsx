@@ -5,12 +5,21 @@ import React, { useState } from "react";
 
 const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
+/**
+ * @description Renders a weekly schedule builder interface.
+ * This component allows users to view and add shifts to a 7-day calendar.
+ * @returns {React.ReactElement} The schedule builder page.
+ */
 export default function ScheduleBuilder() {
   const [shifts, setShifts] = useState([
     { id: "s1", day: 0, start: "09:00", end: "13:00", title: "Morning" },
     { id: "s2", day: 2, start: "12:00", end: "18:00", title: "Afternoon" },
   ]);
 
+  /**
+   * @description Adds a new demo shift to the schedule for a given day.
+   * @param {number} [day=0] - The index of the day (0-6) to add the shift to.
+   */
   function addDemoShift(day = 0) {
     const id = `s-${Date.now()}`;
     setShifts((s) => [...s, { id, day, start: "10:00", end: "14:00", title: "New" }]);

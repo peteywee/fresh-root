@@ -10,8 +10,13 @@ import { parseJson, serverError } from "../_shared/validation";
 // Rate limiting via withSecurity
 
 /**
- * GET /api/organizations
- * List organizations the current user belongs to
+ * Handles GET requests to `/api/organizations` to list the organizations the current user belongs to.
+ *
+ * @param {NextRequest} request - The Next.js request object.
+ * @param {object} context - The context object from the router.
+ * @param {Record<string, string>} context.params - The route parameters.
+ * @param {string} context.userId - The ID of the authenticated user.
+ * @returns {Promise<NextResponse>} A promise that resolves to the response.
  */
 export const GET = withSecurity(
   async (request: NextRequest, context: { params: Record<string, string>; userId: string }) => {
@@ -46,8 +51,13 @@ export const GET = withSecurity(
 );
 
 /**
- * POST /api/organizations
- * Create a new organization
+ * Handles POST requests to `/api/organizations` to create a new organization.
+ *
+ * @param {NextRequest} request - The Next.js request object.
+ * @param {object} context - The context object from the router.
+ * @param {Record<string, string>} context.params - The route parameters.
+ * @param {string} context.userId - The ID of the authenticated user.
+ * @returns {Promise<NextResponse>} A promise that resolves to the response.
  */
 export const POST = withSecurity(
   async (request: NextRequest, context: { params: Record<string, string>; userId: string }) => {

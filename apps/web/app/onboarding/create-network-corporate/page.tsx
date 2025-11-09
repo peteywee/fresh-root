@@ -7,10 +7,20 @@ import React, { useState } from "react";
 
 import ProtectedRoute from "../../components/ProtectedRoute";
 
+/**
+ * @description Renders the create network corporate step of the onboarding process.
+ * This component displays a form for the user to enter a corporate name.
+ * @returns {React.ReactElement} The create network corporate step page.
+ */
 export default function CreateNetworkCorporate() {
   const router = useRouter();
   const [corporateName, setCorporateName] = useState("");
 
+  /**
+   * @description Handles the form submission.
+   * Prevents the default form submission behavior and navigates to the next step in the onboarding process.
+   * @param {React.FormEvent} e - The form submission event.
+   */
   function handleNext(e: React.FormEvent) {
     e.preventDefault();
     // Placeholder for corporate-specific flow

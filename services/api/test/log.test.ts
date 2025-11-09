@@ -4,6 +4,11 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { Logger } from "../src/obs/log.js";
 
+/**
+ * @description Test suite for the Logger class.
+ * This suite verifies the logger's behavior in both production and development environments,
+ * ensuring that log messages are formatted correctly for each.
+ */
 describe("Logger", () => {
   let logger: Logger;
   let consoleLogSpy: ReturnType<typeof vi.spyOn>;

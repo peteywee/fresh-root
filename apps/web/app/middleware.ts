@@ -4,8 +4,11 @@ import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 
 /**
- * Global middleware: adds basic headers defense in depth;
- * can be extended to enforce auth/tenant routing.
+ * A global middleware that adds basic security headers to every response.
+ * This can be extended to enforce authentication, tenant routing, and other cross-cutting concerns.
+ *
+ * @param {NextRequest} _req - The Next.js request object.
+ * @returns {NextResponse} The Next.js response object with added security headers.
  */
 export function middleware(_req: NextRequest) {
   const res = NextResponse.next();

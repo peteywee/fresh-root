@@ -3,6 +3,13 @@
 "use client";
 import React, { useMemo } from "react";
 
+/**
+ * A memoized component that displays a calendar view of a given month.
+ *
+ * @param {object} props - The props for the component.
+ * @param {Date} [props.month=new Date()] - The month to be displayed.
+ * @returns {JSX.Element} The rendered month view component.
+ */
 const MonthView = React.memo(({ month = new Date() }: { month?: Date }) => {
   // Optimized month grid with memoization for performance
   const days = useMemo(() => {

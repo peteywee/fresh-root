@@ -3,7 +3,10 @@
 import { NextRequest, NextResponse } from "next/server";
 
 /**
- * Security headers middleware using Helmet-style configuration
+ * A middleware that adds a suite of security headers to the response, inspired by Helmet.
+ *
+ * @param {NextResponse} response - The Next.js response object.
+ * @returns {NextResponse} The response object with security headers added.
  */
 export function securityHeaders(response: NextResponse): NextResponse {
   // Content Security Policy
@@ -47,9 +50,11 @@ interface RateLimitEntry {
 const rateLimitStore = new Map<string, RateLimitEntry>();
 
 /**
- * Simple rate limiting middleware
- * @param maxRequests - Maximum requests per window
- * @param windowMs - Time window in milliseconds (default: 15 minutes)
+ * A simple in-memory rate limiting middleware.
+ *
+ * @param {number} [maxRequests=100] - The maximum number of requests allowed per window.
+ * @param {number} [windowMs=15 * 60 * 1000] - The time window in milliseconds.
+ * @returns {Function} A middleware function that applies rate limiting.
  */
 export function rateLimit(maxRequests = 100, windowMs = 15 * 60 * 1000) {
   return async (
@@ -116,8 +121,10 @@ export function rateLimit(maxRequests = 100, windowMs = 15 * 60 * 1000) {
 }
 
 /**
- * CORS middleware
- * @param allowedOrigins - Array of allowed origins
+ * A middleware for handling Cross-Origin Resource Sharing (CORS).
+ *
+ * @param {string[]} [allowedOrigins=[]] - An array of allowed origins.
+ * @returns {Function} A middleware function that handles CORS.
  */
 export function cors(allowedOrigins: string[] = []) {
   return async (
@@ -156,8 +163,10 @@ export function cors(allowedOrigins: string[] = []) {
 }
 
 /**
- * Request size limit middleware
- * @param maxBytes - Maximum request body size in bytes (default: 10MB)
+ * A middleware to limit the size of the request body.
+ *
+ * @param {number} [maxBytes=10 * 1024 * 1024] - The maximum request body size in bytes.
+ * @returns {Function} A middleware function that enforces the request size limit.
  */
 export function requestSizeLimit(maxBytes = 10 * 1024 * 1024) {
   return async (
@@ -183,8 +192,16 @@ export function requestSizeLimit(maxBytes = 10 * 1024 * 1024) {
 }
 
 /**
- * Combined security middleware stack
- * Applies all security measures in correct order
+ * A combined security middleware stack that applies all security measures in the correct order.
+ *
+ * @param {object} [options] - The options for the security stack.
+ * @param {object} [options.rateLimit] - The rate limit options.
+ * @param {number} [options.rateLimit.maxRequests] - The maximum number of requests.
+ * @param {number} [options.rateLimit.windowMs] - The time window in milliseconds.
+ * @param {object} [options.cors] - The CORS options.
+ * @param {string[]} [options.cors.allowedOrigins] - The allowed origins.
+ * @param {number} [options.maxBodySize] - The maximum request body size.
+ * @returns {Function} A middleware function that applies the entire security stack.
  */
 export function securityStack(options?: {
   rateLimit?: { maxRequests?: number; windowMs?: number };

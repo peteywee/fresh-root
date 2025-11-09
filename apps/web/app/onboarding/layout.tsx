@@ -3,6 +3,13 @@
 "use client";
 import React from "react";
 
+/**
+ * The layout component for the onboarding section of the application.
+ *
+ * @param {object} props - The props for the component.
+ * @param {React.ReactNode} props.children - The child components to be rendered within the layout.
+ * @returns {JSX.Element} The rendered onboarding layout.
+ */
 export default function OnboardingLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="mx-auto max-w-3xl rounded-lg border border-neutral-800 bg-[#071025]/60 p-6">

@@ -6,11 +6,21 @@ import React, { useState } from "react";
 
 import ProtectedRoute from "../../components/ProtectedRoute";
 
+/**
+ * @description Renders the join step of the onboarding process.
+ * This component displays a form for the user to enter an invite token to join a team.
+ * @returns {React.ReactElement} The join step page.
+ */
 export default function JoinStep() {
   const [token, setToken] = useState("");
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<Record<string, unknown> | null>(null);
 
+  /**
+   * @description Handles the form submission for joining a team.
+   * It sends the invite token to the server and displays the result.
+   * @param {React.FormEvent} e - The form submission event.
+   */
   async function submit(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true);

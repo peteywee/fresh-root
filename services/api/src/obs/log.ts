@@ -2,8 +2,14 @@
 // Tags: P1, RELIABILITY, OBSERVABILITY, LOGGING, JSON
 import type { Request, Response } from "express";
 
+/**
+ * @description Defines the possible log levels.
+ */
 export type LogLevel = "debug" | "info" | "warn" | "error";
 
+/**
+ * @description Represents the structure of a log entry, including metadata for context and diagnostics.
+ */
 export interface LogContext {
   level: LogLevel;
   message: string;
@@ -23,13 +29,16 @@ export interface LogContext {
 }
 
 /**
- * Structured JSON logger.
- * In production, outputs one JSON object per line for log aggregators (Datadog, CloudWatch, etc.)
- * In development, can be pretty-printed or passed through pino-pretty.
+ * @description A structured JSON logger designed for production observability.
+ * It outputs JSON logs for easy parsing by log aggregation services and provides a more readable format for development.
  */
 export class Logger {
   private readonly env: string;
 
+  /**
+   * @description Initializes a new instance of the Logger.
+   * @param {string} [env=process.env.NODE_ENV || "development"] - The application environment, which determines the log format.
+   */
   constructor(env: string = process.env.NODE_ENV || "development") {
     this.env = env;
   }
@@ -62,24 +71,48 @@ export class Logger {
     }
   }
 
+  /**
+   * @description Logs a debug-level message.
+   * @param {string} message - The log message.
+   * @param {Partial<LogContext>} [ctx] - Additional context to include with the log entry.
+   */
   debug(message: string, ctx?: Partial<LogContext>): void {
     this.write({ level: "debug", message, ...ctx });
   }
 
+  /**
+   * @description Logs an info-level message.
+   * @param {string} message - The log message.
+   * @param {Partial<LogContext>} [ctx] - Additional context to include with the log entry.
+   */
   info(message: string, ctx?: Partial<LogContext>): void {
     this.write({ level: "info", message, ...ctx });
   }
 
+  /**
+   * @description Logs a warn-level message.
+   * @param {string} message - The log message.
+   * @param {Partial<LogContext>} [ctx] - Additional context to include with the log entry.
+   */
   warn(message: string, ctx?: Partial<LogContext>): void {
     this.write({ level: "warn", message, ...ctx });
   }
 
+  /**
+   * @description Logs an error-level message.
+   * @param {string} message - The log message.
+   * @param {Partial<LogContext>} [ctx] - Additional context to include with the log entry.
+   */
   error(message: string, ctx?: Partial<LogContext>): void {
     this.write({ level: "error", message, ...ctx });
   }
 
   /**
-   * Convenience method to log HTTP requests with latency and status.
+   * @description A convenience method for logging HTTP requests, including latency, status, and user information.
+   * @param {Request} req - The Express request object.
+   * @param {Response} res - The Express response object.
+   * @param {number} latencyMs - The request latency in milliseconds.
+   * @param {Partial<LogContext>} [ctx] - Additional context to include with the log entry.
    */
   request(req: Request, res: Response, latencyMs: number, ctx?: Partial<LogContext>): void {
     const userToken = (req as Request & { userToken?: { uid: string; orgId?: string } }).userToken;

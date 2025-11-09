@@ -25,8 +25,13 @@ const UpdateOrgSchema = z.object({
 // Rate limiting via withSecurity
 
 /**
- * GET /api/organizations/[id]
- * Get organization details
+ * Handles GET requests to `/api/organizations/[id]` to retrieve the details of a specific organization.
+ *
+ * @param {NextRequest} request - The Next.js request object.
+ * @param {object} context - The context object from the router.
+ * @param {Record<string, string>} context.params - The route parameters, including the organization ID.
+ * @param {string} context.userId - The ID of the authenticated user.
+ * @returns {Promise<NextResponse>} A promise that resolves to the response.
  */
 export const GET = withSecurity(
   async (request: NextRequest, context: { params: Record<string, string>; userId: string }) => {
@@ -56,8 +61,13 @@ export const GET = withSecurity(
 );
 
 /**
- * PATCH /api/organizations/[id]
- * Update organization details
+ * Handles PATCH requests to `/api/organizations/[id]` to update the details of a specific organization.
+ *
+ * @param {NextRequest} request - The Next.js request object.
+ * @param {object} context - The context object from the router.
+ * @param {Record<string, string>} context.params - The route parameters, including the organization ID.
+ * @param {string} context.userId - The ID of the authenticated user.
+ * @returns {Promise<NextResponse>} A promise that resolves to the response.
  */
 export const PATCH = withSecurity(
   async (request: NextRequest, context: { params: Record<string, string>; userId: string }) => {
@@ -83,8 +93,14 @@ export const PATCH = withSecurity(
 );
 
 /**
- * DELETE /api/organizations/[id]
- * Delete an organization (admin only)
+ * Handles DELETE requests to `/api/organizations/[id]` to delete a specific organization.
+ * This operation is typically restricted to administrators.
+ *
+ * @param {NextRequest} request - The Next.js request object.
+ * @param {object} context - The context object from the router.
+ * @param {Record<string, string>} context.params - The route parameters, including the organization ID.
+ * @param {string} context.userId - The ID of the authenticated user.
+ * @returns {Promise<NextResponse>} A promise that resolves to the response.
  */
 export const DELETE = withSecurity(
   async (request: NextRequest, context: { params: Record<string, string>; userId: string }) => {

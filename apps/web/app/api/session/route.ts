@@ -12,8 +12,10 @@ const CreateSessionSchema = z.object({
 });
 
 /**
- * POST /api/session
- * Create a session cookie from a Firebase ID token
+ * Handles POST requests to `/api/session` to create a session cookie from a Firebase ID token.
+ *
+ * @param {NextRequest} req - The Next.js request object.
+ * @returns {Promise<NextResponse>} A promise that resolves to the response.
  */
 export async function POST(req: NextRequest) {
   try {
@@ -48,8 +50,9 @@ export async function POST(req: NextRequest) {
 }
 
 /**
- * DELETE /api/session
- * Clear the session cookie (logout)
+ * Handles DELETE requests to `/api/session` to clear the session cookie and log the user out.
+ *
+ * @returns {Promise<NextResponse>} A promise that resolves to the response.
  */
 export async function DELETE() {
   // Clear session cookie

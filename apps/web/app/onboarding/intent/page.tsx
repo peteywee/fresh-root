@@ -6,6 +6,11 @@ import { useRouter } from "next/navigation";
 
 import ProtectedRoute from "../../components/ProtectedRoute";
 
+/**
+ * @description Renders the intent step of the onboarding process.
+ * This component displays options for the user to select their intent, such as joining a team, setting up a team, or managing multiple locations.
+ * @returns {React.ReactElement} The intent step page.
+ */
 export default function IntentStep() {
   const router = useRouter();
   const navigate = (p: string) => (router as unknown as { push: (s: string) => void }).push(p);

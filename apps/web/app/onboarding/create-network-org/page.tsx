@@ -4,6 +4,11 @@
 
 import React, { useState, useEffect } from "react";
 
+/**
+ * @description Renders the create network organization step of the onboarding process.
+ * This component displays a form for the user to enter organization and venue names.
+ * @returns {React.ReactElement} The create network organization step page.
+ */
 export default function CreateNetworkOrg() {
   const [orgName, setOrgName] = useState("");
   const [venueName, setVenueName] = useState("");

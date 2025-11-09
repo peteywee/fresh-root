@@ -22,6 +22,13 @@ async function db() {
   });
 }
 
+/**
+ * Sets a key-value pair in the IndexedDB store.
+ *
+ * @param {string} key - The key for the item.
+ * @param {unknown} value - The value to be stored.
+ * @param {number} [ttlMs] - The time-to-live for the item in milliseconds.
+ */
 export async function kvSet(key: string, value: unknown, ttlMs?: number) {
   const now = Date.now();
   const expiresAt = ttlMs ? now + ttlMs : undefined;
@@ -29,6 +36,13 @@ export async function kvSet(key: string, value: unknown, ttlMs?: number) {
   await handle.put(STORE, { key, value, expiresAt });
 }
 
+/**
+ * Retrieves a value from the IndexedDB store by its key.
+ *
+ * @template T
+ * @param {string} key - The key of the item to retrieve.
+ * @returns {Promise<T | null>} A promise that resolves to the value, or `null` if not found or expired.
+ */
 export async function kvGet<T = unknown>(key: string): Promise<T | null> {
   const handle = await db();
   const row = (await handle.get(STORE, key)) as KV | undefined;
@@ -40,11 +54,19 @@ export async function kvGet<T = unknown>(key: string): Promise<T | null> {
   return row.value as T;
 }
 
+/**
+ * Deletes a key-value pair from the IndexedDB store.
+ *
+ * @param {string} key - The key of the item to delete.
+ */
 export async function kvDelete(key: string) {
   const handle = await db();
   await handle.delete(STORE, key);
 }
 
+/**
+ * Cleans up expired items from the IndexedDB store.
+ */
 export async function kvCleanupExpired() {
   const handle = await db();
   const tx = handle.transaction(STORE, "readwrite");

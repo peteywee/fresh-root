@@ -6,7 +6,10 @@ import * as Sentry from "@sentry/nextjs";
 import { logger } from "../logger";
 
 /**
- * Report error to Sentry and fallback to structured logging
+ * Reports an error to Sentry and falls back to structured logging.
+ *
+ * @param {unknown} error - The error to report.
+ * @param {Record<string, unknown>} [context] - Additional context to include with the error report.
  */
 export function reportError(error: unknown, context?: Record<string, unknown>) {
   // Always log locally with structured logger
@@ -35,7 +38,9 @@ export function reportError(error: unknown, context?: Record<string, unknown>) {
 }
 
 /**
- * Set user context for error reporting
+ * Sets the user context for error reporting.
+ *
+ * @param {{ id: string; email?: string; username?: string }} user - The user object.
  */
 export function setUserContext(user: { id: string; email?: string; username?: string }) {
   if (process.env.NEXT_PUBLIC_SENTRY_DSN) {
@@ -48,7 +53,7 @@ export function setUserContext(user: { id: string; email?: string; username?: st
 }
 
 /**
- * Clear user context (e.g., on logout)
+ * Clears the user context, for example, on logout.
  */
 export function clearUserContext() {
   if (process.env.NEXT_PUBLIC_SENTRY_DSN) {
@@ -57,7 +62,10 @@ export function clearUserContext() {
 }
 
 /**
- * Add breadcrumb for debugging context
+ * Adds a breadcrumb for debugging context in Sentry.
+ *
+ * @param {string} message - The breadcrumb message.
+ * @param {Record<string, unknown>} [data] - Additional data to include with the breadcrumb.
  */
 export function addBreadcrumb(message: string, data?: Record<string, unknown>) {
   if (process.env.NEXT_PUBLIC_SENTRY_DSN) {

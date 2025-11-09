@@ -24,7 +24,9 @@ export type ClientEnv = z.infer<typeof ClientEnvSchema>;
 
 /**
  * Validated client-side environment variables.
- * Fails fast on invalid configuration.
+ * This object contains all the client-side environment variables,
+ * validated against the `ClientEnvSchema`.
+ * It will throw an error if any required variables are missing or invalid.
  */
 export const webEnv: ClientEnv = ClientEnvSchema.parse({
   NEXT_PUBLIC_FIREBASE_API_KEY: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -37,7 +39,9 @@ export const webEnv: ClientEnv = ClientEnvSchema.parse({
 });
 
 /**
- * Helper to check if Firebase emulators should be used.
+ * A helper function to determine if the application should use Firebase emulators.
+ *
+ * @returns {boolean} `true` if emulators should be used, otherwise `false`.
  */
 export function useEmulators(): boolean {
   return webEnv.NEXT_PUBLIC_USE_EMULATORS === "true";

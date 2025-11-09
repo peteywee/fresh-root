@@ -18,8 +18,13 @@ function getUserRolesFallback(): string[] {
 }
 
 /**
- * GET /api/organizations/[id]/members
- * List all members of an organization
+ * Handles GET requests to `/api/organizations/[id]/members` to list all members of an organization.
+ *
+ * @param {NextRequest} request - The Next.js request object.
+ * @param {object} context - The context object from the router.
+ * @param {string} context.orgId - The ID of the organization.
+ * @param {string} context.userId - The ID of the authenticated user.
+ * @returns {Promise<NextResponse>} A promise that resolves to the response.
  */
 export const GET = withSecurity(
   requireOrgMembership(async (request, context) => {
@@ -47,8 +52,14 @@ export const GET = withSecurity(
 );
 
 /**
- * POST /api/organizations/[id]/members
- * Add a new member to an organization (managers only)
+ * Handles POST requests to `/api/organizations/[id]/members` to add a new member to an organization.
+ * Requires 'manager' role or higher.
+ *
+ * @param {NextRequest} request - The Next.js request object.
+ * @param {object} context - The context object from the router.
+ * @param {string} context.orgId - The ID of the organization.
+ * @param {string} context.userId - The ID of the authenticated user.
+ * @returns {Promise<NextResponse>} A promise that resolves to the response.
  */
 export const POST = withSecurity(
   requireOrgMembership(
@@ -96,13 +107,14 @@ export const POST = withSecurity(
 );
 
 /**
- * PATCH /api/organizations/[id]/members/[memberId]
- * Update a member's roles or status (managers only)
+ * Handles PATCH requests to `/api/organizations/[id]/members` to update a member's roles or status.
+ * Requires 'manager' role or higher.
  *
- * Note: This should be implemented as a separate route at:
- * /api/organizations/[id]/members/[memberId]/route.ts
- *
- * For now, we can handle basic updates here via query param
+ * @param {NextRequest} request - The Next.js request object.
+ * @param {object} context - The context object from the router.
+ * @param {string} context.orgId - The ID of the organization.
+ * @param {string} context.userId - The ID of the authenticated user.
+ * @returns {Promise<NextResponse>} A promise that resolves to the response.
  */
 export const PATCH = withSecurity(
   requireOrgMembership(
@@ -145,8 +157,14 @@ export const PATCH = withSecurity(
 );
 
 /**
- * DELETE /api/organizations/[id]/members/[memberId]
- * Remove a member from an organization (managers only)
+ * Handles DELETE requests to `/api/organizations/[id]/members` to remove a member from an organization.
+ * Requires 'manager' role or higher.
+ *
+ * @param {NextRequest} request - The Next.js request object.
+ * @param {object} context - The context object from the router.
+ * @param {string} context.orgId - The ID of the organization.
+ * @param {string} context.userId - The ID of the authenticated user.
+ * @returns {Promise<NextResponse>} A promise that resolves to the response.
  */
 export const DELETE = withSecurity(
   requireOrgMembership(

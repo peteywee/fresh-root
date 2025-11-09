@@ -6,6 +6,12 @@ import React from "react";
 
 import ProtectedRoute from "@/app/components/ProtectedRoute";
 
+/**
+ * A client-side component that displays a message to the user,
+ * informing them that their email address has not yet been verified.
+ *
+ * @returns {JSX.Element} The rendered "email not verified" page.
+ */
 export default function EmailNotVerified() {
   return (
     <ProtectedRoute>

@@ -6,6 +6,11 @@ export const metadata = {
   title: "Onboarding — Block 4",
 };
 
+/**
+ * A placeholder page component for "Block 4" of the onboarding wizard.
+ *
+ * @returns {JSX.Element} The rendered placeholder page.
+ */
 export default function Block4Page() {
   return (
     <main style={{ padding: 24 }}>

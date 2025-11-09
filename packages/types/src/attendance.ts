@@ -23,6 +23,9 @@ export type CheckMethod = z.infer<typeof CheckMethod>;
 
 /**
  * Geographic location for check-ins
+ * @property {number} lat - The latitude.
+ * @property {number} lng - The longitude.
+ * @property {number} [accuracy] - The accuracy of the location in meters.
  */
 export const LocationSchema = z.object({
   lat: z.number().min(-90).max(90),
@@ -34,6 +37,29 @@ export type Location = z.infer<typeof LocationSchema>;
 /**
  * Full Attendance record schema
  * Firestore path: /attendance_records/{orgId}/{recordId}
+ * @property {string} id - The unique identifier for the attendance record.
+ * @property {string} orgId - The ID of the organization.
+ * @property {string} shiftId - The ID of the shift this record is for.
+ * @property {string} scheduleId - The ID of the schedule this record is for.
+ * @property {string} staffUid - The user ID of the staff member.
+ * @property {AttendanceStatus} [status=scheduled] - The current status of the attendance record.
+ * @property {number} scheduledStart - The scheduled start time as a Unix timestamp.
+ * @property {number} scheduledEnd - The scheduled end time as a Unix timestamp.
+ * @property {number} [actualCheckIn] - The actual check-in time as a Unix timestamp.
+ * @property {number} [actualCheckOut] - The actual check-out time as a Unix timestamp.
+ * @property {CheckMethod} [checkInMethod] - The method used for check-in.
+ * @property {Location} [checkInLocation] - The location of the check-in.
+ * @property {CheckMethod} [checkOutMethod] - The method used for check-out.
+ * @property {Location} [checkOutLocation] - The location of the check-out.
+ * @property {number} scheduledDuration - The scheduled duration of the shift in minutes.
+ * @property {number} [actualDuration] - The actual duration of the shift in minutes.
+ * @property {number} [breakDuration=0] - The duration of the break in minutes.
+ * @property {string} [notes] - Notes from the staff member.
+ * @property {string} [managerNotes] - Notes from the manager.
+ * @property {string} [overriddenBy] - The user ID of the manager who overrode the record.
+ * @property {number} [overriddenAt] - The timestamp of when the record was overridden.
+ * @property {number} createdAt - The timestamp of when the record was created.
+ * @property {number} updatedAt - The timestamp of when the record was last updated.
  */
 export const AttendanceRecordSchema = z.object({
   id: z.string().min(1),
@@ -75,6 +101,14 @@ export type AttendanceRecord = z.infer<typeof AttendanceRecordSchema>;
 /**
  * Schema for creating a new attendance record
  * Used in POST /api/attendance
+ * @property {string} orgId - The ID of the organization.
+ * @property {string} shiftId - The ID of the shift.
+ * @property {string} scheduleId - The ID of the schedule.
+ * @property {string} staffUid - The user ID of the staff member.
+ * @property {number} scheduledStart - The scheduled start time as a Unix timestamp.
+ * @property {number} scheduledEnd - The scheduled end time as a Unix timestamp.
+ * @property {number} [breakDuration] - The duration of the break in minutes.
+ * @property {string} [notes] - Any notes for the record.
  */
 export const CreateAttendanceRecordSchema = z.object({
   orgId: z.string().min(1, "Organization ID is required"),
@@ -91,6 +125,9 @@ export type CreateAttendanceRecordInput = z.infer<typeof CreateAttendanceRecordS
 /**
  * Schema for checking in
  * Used in POST /api/attendance/{id}/check-in
+ * @property {CheckMethod} [method=manual] - The method used for check-in.
+ * @property {Location} [location] - The location of the check-in.
+ * @property {string} [notes] - Any notes for the check-in.
  */
 export const CheckInSchema = z.object({
   method: CheckMethod.default("manual"),
@@ -102,6 +139,9 @@ export type CheckInInput = z.infer<typeof CheckInSchema>;
 /**
  * Schema for checking out
  * Used in POST /api/attendance/{id}/check-out
+ * @property {CheckMethod} [method=manual] - The method used for check-out.
+ * @property {Location} [location] - The location of the check-out.
+ * @property {string} [notes] - Any notes for the check-out.
  */
 export const CheckOutSchema = z.object({
   method: CheckMethod.default("manual"),
@@ -113,6 +153,11 @@ export type CheckOutInput = z.infer<typeof CheckOutSchema>;
 /**
  * Schema for updating an attendance record (admin override)
  * Used in PATCH /api/attendance/{id}
+ * @property {AttendanceStatus} [status] - The new status of the record.
+ * @property {number} [actualCheckIn] - The new check-in time.
+ * @property {number} [actualCheckOut] - The new check-out time.
+ * @property {number} [breakDuration] - The new break duration.
+ * @property {string} [managerNotes] - Any notes from the manager.
  */
 export const UpdateAttendanceRecordSchema = z.object({
   status: AttendanceStatus.optional(),
@@ -125,6 +170,15 @@ export type UpdateAttendanceRecordInput = z.infer<typeof UpdateAttendanceRecordS
 
 /**
  * Query parameters for listing attendance records
+ * @property {string} orgId - The ID of the organization.
+ * @property {string} [scheduleId] - Filter by schedule ID.
+ * @property {string} [shiftId] - Filter by shift ID.
+ * @property {string} [staffUid] - Filter by staff member ID.
+ * @property {AttendanceStatus} [status] - Filter by status.
+ * @property {number} [startAfter] - Filter for records starting after this timestamp.
+ * @property {number} [startBefore] - Filter for records starting before this timestamp.
+ * @property {number} [limit=50] - The maximum number of records to return.
+ * @property {string} [cursor] - The cursor for pagination.
  */
 export const ListAttendanceRecordsQuerySchema = z.object({
   orgId: z.string().min(1, "Organization ID is required"),

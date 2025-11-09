@@ -4,6 +4,11 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { initOTel, getTraceContext } from "../src/obs/otel.js";
 
+/**
+ * @description Test suite for the OpenTelemetry (OTel) initialization logic.
+ * This suite verifies that the OTel SDK is initialized correctly based on the provided configuration
+ * and that it handles disabled or misconfigured states gracefully.
+ */
 describe("OpenTelemetry", () => {
   let consoleLogSpy: ReturnType<typeof vi.spyOn>;
   let consoleErrorSpy: ReturnType<typeof vi.spyOn>;

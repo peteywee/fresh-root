@@ -2,6 +2,15 @@
 // Tags: P2, OBS, OTEL
 import { trace, SpanStatusCode } from "@opentelemetry/api";
 
+/**
+ * Wraps an asynchronous function in an OpenTelemetry span.
+ *
+ * @template T
+ * @param {string} name - The name of the span.
+ * @param {() => Promise<T>} fn - The asynchronous function to be executed within the span.
+ * @param {Record<string, unknown>} [attrs] - Optional attributes to add to the span.
+ * @returns {Promise<T>} A promise that resolves with the result of the wrapped function.
+ */
 export async function withSpan<T>(
   name: string,
   fn: () => Promise<T>,

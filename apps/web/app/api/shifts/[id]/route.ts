@@ -10,6 +10,16 @@ import { badRequest, serverError, UpdateShiftSchema } from "../../_shared/valida
 
 // Rate limiting via withSecurity options
 
+/**
+ * Handles GET requests to `/api/shifts/[id]` to retrieve the details of a specific shift.
+ *
+ * @param {NextRequest} request - The Next.js request object.
+ * @param {object} context - The context object from the router.
+ * @param {Record<string, string>} context.params - The route parameters, including the shift ID.
+ * @param {string} context.userId - The ID of the authenticated user.
+ * @param {string} context.orgId - The ID of the user's organization.
+ * @returns {Promise<NextResponse>} A promise that resolves to the response.
+ */
 export const GET = withSecurity(
   requireOrgMembership(
     async (
@@ -39,6 +49,17 @@ export const GET = withSecurity(
   { requireAuth: true, maxRequests: 100, windowMs: 60_000 },
 );
 
+/**
+ * Handles PATCH requests to `/api/shifts/[id]` to update the details of a specific shift.
+ *
+ * @param {NextRequest} request - The Next.js request object.
+ * @param {object} context - The context object from the router.
+ * @param {Record<string, string>} context.params - The route parameters, including the shift ID.
+ * @param {string} context.userId - The ID of the authenticated user.
+ * @param {string} context.orgId - The ID of the user's organization.
+ * @param {OrgRole[]} context.roles - The roles of the authenticated user.
+ * @returns {Promise<NextResponse>} A promise that resolves to the response.
+ */
 export const PATCH = withSecurity(
   requireOrgMembership(
     requireRole("scheduler")(
@@ -75,6 +96,17 @@ export const PATCH = withSecurity(
   { requireAuth: true, maxRequests: 100, windowMs: 60_000 },
 );
 
+/**
+ * Handles DELETE requests to `/api/shifts/[id]` to delete a specific shift.
+ *
+ * @param {NextRequest} request - The Next.js request object.
+ * @param {object} context - The context object from the router.
+ * @param {Record<string, string>} context.params - The route parameters, including the shift ID.
+ * @param {string} context.userId - The ID of the authenticated user.
+ * @param {string} context.orgId - The ID of the user's organization.
+ * @param {OrgRole[]} context.roles - The roles of the authenticated user.
+ * @returns {Promise<NextResponse>} A promise that resolves to the response.
+ */
 export const DELETE = withSecurity(
   requireOrgMembership(
     requireRole("admin")(

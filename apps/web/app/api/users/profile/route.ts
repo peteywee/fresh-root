@@ -26,8 +26,13 @@ const UpdateProfileSchema = z.object({
 });
 
 /**
- * GET /api/users/profile
- * Get the current user's profile
+ * Handles GET requests to `/api/users/profile` to retrieve the current user's profile.
+ *
+ * @param {NextRequest} request - The Next.js request object.
+ * @param {object} context - The context object from the router.
+ * @param {Record<string, string>} context.params - The route parameters.
+ * @param {string} context.userId - The ID of the authenticated user.
+ * @returns {Promise<NextResponse>} A promise that resolves to the response.
  */
 export const GET = withSecurity(
   async (request, context: { params: Record<string, string>; userId: string }) => {
@@ -56,8 +61,13 @@ export const GET = withSecurity(
 );
 
 /**
- * PATCH /api/users/profile
- * Update the current user's profile
+ * Handles PATCH requests to `/api/users/profile` to update the current user's profile.
+ *
+ * @param {NextRequest} request - The Next.js request object.
+ * @param {object} context - The context object from the router.
+ * @param {Record<string, string>} context.params - The route parameters.
+ * @param {string} context.userId - The ID of the authenticated user.
+ * @returns {Promise<NextResponse>} A promise that resolves to the response.
  */
 export const PATCH = withSecurity(
   async (request: NextRequest, context: { params: Record<string, string>; userId: string }) => {

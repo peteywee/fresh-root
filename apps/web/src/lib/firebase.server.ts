@@ -46,12 +46,27 @@ export const adminStorage: AdminStorageType | undefined = app ? admin.storage() 
 type VerifyIdTokenReturn = AdminAuthType extends { verifyIdToken(token: string): Promise<infer R> }
   ? R
   : unknown;
+
+/**
+ * Verifies a Firebase ID token.
+ *
+ * @param {string} [token] - The ID token to verify.
+ * @returns {Promise<VerifyIdTokenReturn>} A promise that resolves with the decoded token.
+ * @throws {Error} If the admin auth SDK is not initialized or if no token is provided.
+ */
 export async function verifyIdToken(token?: string): Promise<VerifyIdTokenReturn> {
   if (!adminAuth) throw new Error("Admin auth not initialized");
   if (!token) throw new Error("No token");
   return adminAuth.verifyIdToken(token);
 }
 
+/**
+ * Checks if the given claims include manager-level permissions for a specific organization.
+ *
+ * @param {VerifyIdTokenReturn | Record<string, unknown> | undefined} claims - The user's claims.
+ * @param {string} [orgId] - The ID of the organization to check for manager permissions.
+ * @returns {boolean} `true` if the user has manager-level claims, otherwise `false`.
+ */
 export function isManagerClaims(
   claims: VerifyIdTokenReturn | Record<string, unknown> | undefined,
   orgId?: string,

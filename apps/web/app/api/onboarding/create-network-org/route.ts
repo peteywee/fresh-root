@@ -9,7 +9,11 @@ import { withSecurity, type AuthenticatedRequest } from "../../_shared/middlewar
 import { adminDb as importedAdminDb } from "@/src/lib/firebase.server";
 
 /**
- * Inner handler exported for tests. Accepts an optional injected adminDb for testability.
+ * Handles the creation of a new network and organization.
+ *
+ * @param {AuthenticatedRequest & { user?: { uid: string; customClaims?: Record<string, unknown> } }} req - The authenticated Next.js request object.
+ * @param {unknown} [ctxOrInjectedAdminDb] - The Next.js context or an injected Firestore admin instance for testing.
+ * @returns {Promise<NextResponse>} A promise that resolves to the response.
  */
 export async function createNetworkOrgHandler(
   req: AuthenticatedRequest & { user?: { uid: string; customClaims?: Record<string, unknown> } },

@@ -8,6 +8,12 @@ import React, { useState } from "react";
 import ProtectedRoute from "../../components/ProtectedRoute";
 import { useAuth } from "../../lib/auth-context";
 
+/**
+ * A client-side component that renders a form for collecting administrative responsibility information during the onboarding process.
+ * It handles form submission and navigates to the next step upon success.
+ *
+ * @returns {JSX.Element} The rendered admin responsibility form component.
+ */
 export default function AdminResponsibility() {
   const router = useRouter();
   const { user } = useAuth();

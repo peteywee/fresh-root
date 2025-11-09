@@ -4,17 +4,27 @@ import * as Sentry from "@sentry/node";
 import { nodeProfilingIntegration } from "@sentry/profiling-node";
 import type { Express } from "express";
 
+/**
+ * @description Configuration for initializing the Sentry SDK.
+ */
 export interface SentryConfig {
+  /** @description The DSN for your Sentry project. */
   dsn?: string;
+  /** @description The application environment (e.g., "production", "development"). */
   environment: string;
+  /** @description The release version of your application. */
   release?: string;
+  /** @description The sampling rate for performance traces (0 to 1). */
   tracesSampleRate?: number;
+  /** @description The sampling rate for profiling data (0 to 1). */
   profilesSampleRate?: number;
 }
 
 /**
- * Initialize Sentry SDK for Node.js/Express.
- * Must be called before any other Express middleware.
+ * @description Initializes the Sentry SDK for a Node.js/Express application.
+ * This should be called before any other Express middleware.
+ * @param {Express} app - The Express application instance.
+ * @param {SentryConfig} config - The configuration for Sentry.
  */
 export function initSentry(app: Express, config: SentryConfig): void {
   const { dsn, environment, release, tracesSampleRate = 0.1, profilesSampleRate = 0.1 } = config;
@@ -46,21 +56,30 @@ export function initSentry(app: Express, config: SentryConfig): void {
 }
 
 /**
- * Manually capture an exception (useful for caught errors you still want tracked)
+ * @description Manually captures an exception and sends it to Sentry.
+ * This is useful for tracking caught errors that you still want to be aware of.
+ * @param {Error} error - The error to capture.
+ * @param {Record<string, unknown>} [context] - Additional context to send with the error.
  */
 export function captureException(error: Error, context?: Record<string, unknown>): void {
   Sentry.captureException(error, { extra: context });
 }
 
 /**
- * Manually capture a message (useful for non-error events)
+ * @description Manually captures a message and sends it to Sentry.
+ * This is useful for tracking non-error events.
+ * @param {string} message - The message to capture.
+ * @param {Sentry.SeverityLevel} [level="info"] - The severity level of the message.
  */
 export function captureMessage(message: string, level: Sentry.SeverityLevel = "info"): void {
   Sentry.captureMessage(message, level);
 }
 
 /**
- * Flush pending events (useful in serverless or before shutdown)
+ * @description Flushes any pending Sentry events.
+ * This is useful in serverless environments or before the application shuts down.
+ * @param {number} [timeout=2000] - The maximum time to wait for the flush to complete, in milliseconds.
+ * @returns {Promise<boolean>} A promise that resolves to true if the flush was successful.
  */
 export async function flush(timeout: number = 2000): Promise<boolean> {
   return Sentry.flush(timeout);

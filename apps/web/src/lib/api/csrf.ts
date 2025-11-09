@@ -28,10 +28,23 @@ const DEFAULT_CONFIG: Required<CSRFConfig> = {
   },
 };
 
+/**
+ * Generates a random CSRF token.
+ *
+ * @param {number} [length=32] - The length of the token in bytes.
+ * @returns {string} The generated CSRF token.
+ */
 export function generateCSRFToken(length: number = 32): string {
   return randomBytes(length).toString("base64url");
 }
 
+/**
+ * Verifies a CSRF token using a timing-safe comparison.
+ *
+ * @param {string} token1 - The first token.
+ * @param {string} token2 - The second token.
+ * @returns {boolean} `true` if the tokens match, otherwise `false`.
+ */
 export function verifyCSRFToken(token1: string, token2: string): boolean {
   if (!token1 || !token2 || token1.length !== token2.length) return false;
   try {
@@ -43,12 +56,26 @@ export function verifyCSRFToken(token1: string, token2: string): boolean {
   }
 }
 
+/**
+ * Extracts the CSRF token from the request headers.
+ *
+ * @param {NextRequest} request - The Next.js request object.
+ * @param {string} headerName - The name of the header containing the token.
+ * @returns {string | null} The token, or `null` if not found.
+ */
 function extractTokenFromRequest(request: NextRequest, headerName: string): string | null {
   const headerToken = request.headers.get(headerName);
   if (headerToken) return headerToken;
   return null;
 }
 
+/**
+ * Sets the CSRF token as a cookie in the response.
+ *
+ * @param {NextResponse} response - The Next.js response object.
+ * @param {string} token - The CSRF token to set.
+ * @param {Required<CSRFConfig>} [config=DEFAULT_CONFIG] - The CSRF configuration.
+ */
 export function setCSRFCookie(
   response: NextResponse,
   token: string,
@@ -69,6 +96,13 @@ export function setCSRFCookie(
   response.headers.set("Set-Cookie", cookieValue);
 }
 
+/**
+ * A middleware that provides CSRF protection for API routes.
+ *
+ * @template Ctx
+ * @param {CSRFConfig} [config={}] - The CSRF configuration.
+ * @returns {Function} A function that takes a handler and returns a new handler with CSRF protection.
+ */
 export function csrfProtection<Ctx extends Record<string, unknown> = {}>(config: CSRFConfig = {}) {
   const fullConfig = { ...DEFAULT_CONFIG, ...config };
   type C = Ctx & { params: Record<string, string> };
@@ -112,6 +146,14 @@ export function csrfProtection<Ctx extends Record<string, unknown> = {}>(config:
   };
 }
 
+/**
+ * A middleware that ensures a CSRF token is set for the client.
+ *
+ * @template Ctx
+ * @param {Function} handler - The route handler to wrap.
+ * @param {CSRFConfig} [config={}] - The CSRF configuration.
+ * @returns {Function} The wrapped route handler.
+ */
 export function withCSRFToken<Ctx extends Record<string, unknown> = {}>(
   handler: (
     request: NextRequest,

@@ -3,8 +3,10 @@
 import { Inter } from "next/font/google";
 
 /**
- * Self-hosted variable font with swap to avoid FOIT/FOUT.
- * Using a CSS variable keeps Tailwind/theming clean.
+ * Configures the "Inter" font for the application.
+ * This self-hosted variable font is configured to use the `swap` display strategy
+ * to avoid Flash of Invisible Text (FOIT) and Flash of Unstyled Text (FOUT).
+ * It also defines a CSS variable (`--font-inter`) for easy use with Tailwind CSS.
  */
 export const inter = Inter({
   subsets: ["latin"],

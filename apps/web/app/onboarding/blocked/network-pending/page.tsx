@@ -6,6 +6,10 @@ import React from "react";
 
 import ProtectedRoute from "../../../components/ProtectedRoute";
 
+/**
+ * @description Renders the network pending page.
+ * @returns {React.ReactElement} The network pending page.
+ */
 export default function NetworkPending() {
   return (
     <ProtectedRoute>

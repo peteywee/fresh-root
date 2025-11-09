@@ -14,6 +14,15 @@ interface AppState {
   setPlanning: (updates: Partial<PlanningState>) => void;
 }
 
+/**
+ * A custom hook for accessing and managing the application's global state.
+ * This store uses `zustand` for state management and `persist` middleware to save the state to local storage.
+ *
+ * @property {PlanningState} planning - The state related to planning, including average wage, labor percentage, and forecast sales.
+ * @property {(updates: Partial<PlanningState>) => void} setPlanning - A function to update the planning state.
+ *
+ * @returns {AppState} The application state and actions.
+ */
 export const useAppStore = create<AppState>()(
   persist(
     (set) => ({

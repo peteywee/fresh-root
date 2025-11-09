@@ -3,6 +3,12 @@
 "use client";
 import React, { useState, useEffect } from "react";
 
+/**
+ * A client-side component that renders a form for collecting administrative information during the onboarding process.
+ * It handles form submission and displays the resulting form token upon success.
+ *
+ * @returns {JSX.Element} The rendered admin form step component.
+ */
 export default function AdminFormStep() {
   const [company, setCompany] = useState("");
   const [taxId, setTaxId] = useState("");

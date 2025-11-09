@@ -64,6 +64,14 @@ async function _fetchRecentSchedulesLite(orgId: string, max = 10): Promise<Sched
   });
 }
 
+/**
+ * Fetches a list of recent, lightweight schedule objects for a given organization.
+ * The result is cached for 60 seconds.
+ *
+ * @param {string} orgId - The ID of the organization.
+ * @param {number} [max=10] - The maximum number of schedules to fetch.
+ * @returns {Promise<ScheduleLite[]>} A promise that resolves to an array of schedule objects.
+ */
 export const fetchRecentSchedulesLite = (orgId: string, max = 10) =>
   cached<
     Parameters<typeof _fetchRecentSchedulesLite>,
@@ -73,6 +81,13 @@ export const fetchRecentSchedulesLite = (orgId: string, max = 10) =>
     ttl: 60,
   })(orgId, max);
 
+/**
+ * Fetches a single schedule document from Firestore.
+ *
+ * @param {string} orgId - The ID of the organization.
+ * @param {string} scheduleId - The ID of the schedule to fetch.
+ * @returns {Promise<object>} A promise that resolves to the schedule document data.
+ */
 export async function fetchScheduleDoc(orgId: string, scheduleId: string) {
   const ref = doc(db, "schedules", orgId, scheduleId);
   const s = await getDoc(ref);

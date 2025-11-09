@@ -29,6 +29,11 @@ import { requireManager, sameOrgGuard } from "./rbac.js";
 
 const { db } = initFirebase(env.FIREBASE_PROJECT_ID, env.GOOGLE_APPLICATION_CREDENTIALS_JSON);
 
+/**
+ * @description Asynchronously builds and returns a cache provider.
+ * It attempts to connect to Redis if a URL is provided, otherwise falls back to an in-memory cache.
+ * @returns {Promise<InMemoryCache | RedisCache>} A promise that resolves with a cache provider instance.
+ */
 async function buildCache() {
   const url = process.env.REDIS_URL;
   if (url) {

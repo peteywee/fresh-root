@@ -7,6 +7,12 @@ import { withSecurity, type AuthenticatedRequest } from "../../_shared/middlewar
 
 import { adminDb } from "@/src/lib/firebase.server";
 
+/**
+ * Handles POST requests to `/api/onboarding/activate-network` to activate a network.
+ *
+ * @param {AuthenticatedRequest} req - The authenticated Next.js request object.
+ * @returns {Promise<NextResponse>} A promise that resolves to the response.
+ */
 export const POST = withSecurity(
   async (req: AuthenticatedRequest) => {
     let body: unknown;

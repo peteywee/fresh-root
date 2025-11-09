@@ -30,11 +30,11 @@ export type ClientEnv = z.infer<typeof ClientEnvSchema>;
 let cachedEnv: ClientEnv | null = null;
 
 /**
- * Load and validate client-side environment variables.
- * Fails fast with clear error messages if required variables are missing or invalid.
+ * Loads and validates the client-side environment variables.
+ * This function fails fast if any required variables are missing or invalid.
  *
- * @throws {Error} If environment validation fails
- * @returns Validated and typed environment object
+ * @throws {Error} If environment validation fails.
+ * @returns {ClientEnv} The validated and typed client environment object.
  */
 export function loadClientEnv(): ClientEnv {
   if (cachedEnv) {
@@ -59,10 +59,10 @@ export function loadClientEnv(): ClientEnv {
 }
 
 /**
- * Helper to check if Firebase emulators should be used.
+ * A helper function to check if Firebase emulators should be used.
  *
- * @param env Client environment object
- * @returns true if emulators are enabled
+ * @param {ClientEnv} env - The client environment object.
+ * @returns {boolean} `true` if emulators are enabled, otherwise `false`.
  */
 export function useEmulators(env: ClientEnv): boolean {
   return env.NEXT_PUBLIC_USE_EMULATORS === "true";

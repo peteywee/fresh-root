@@ -7,11 +7,21 @@ import React, { useState } from "react";
 
 import ProtectedRoute from "../../components/ProtectedRoute";
 
+/**
+ * @description Renders the profile step of the onboarding process.
+ * This component displays a form for the user to enter their full name and phone number.
+ * @returns {React.ReactElement} The profile step page.
+ */
 export default function ProfileStep() {
   const router = useRouter();
   const [fullName, setFullName] = useState("");
   const [phone, setPhone] = useState("");
 
+  /**
+   * @description Handles the form submission.
+   * Prevents the default form submission behavior and navigates to the next step in the onboarding process.
+   * @param {React.FormEvent} e - The form submission event.
+   */
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     // TODO: call update profile API (placeholder for now)

@@ -23,7 +23,12 @@ const metrics: Metrics = {
 };
 
 /**
- * Record a request metric
+ * Records a request metric in the in-memory store.
+ *
+ * @param {string} method - The HTTP method of the request.
+ * @param {string} path - The path of the request.
+ * @param {number} duration - The duration of the request in milliseconds.
+ * @param {number} statusCode - The status code of the response.
  */
 export function recordRequest(method: string, path: string, duration: number, statusCode: number) {
   const key = `${method}_${path}`;
@@ -44,7 +49,11 @@ export function recordRequest(method: string, path: string, duration: number, st
 }
 
 /**
- * Calculate percentile from array of values
+ * Calculates the percentile of a given array of numbers.
+ *
+ * @param {number[]} arr - The array of numbers.
+ * @param {number} p - The percentile to calculate (0-100).
+ * @returns {number} The value at the given percentile.
  */
 function percentile(arr: number[], p: number): number {
   if (arr.length === 0) return 0;
@@ -54,7 +63,9 @@ function percentile(arr: number[], p: number): number {
 }
 
 /**
- * Format metrics in Prometheus text format
+ * Formats the in-memory metrics into the Prometheus text format.
+ *
+ * @returns {string} The formatted metrics as a string.
  */
 function formatPrometheusMetrics(): string {
   const lines: string[] = [];
@@ -102,6 +113,11 @@ function formatPrometheusMetrics(): string {
   return lines.join("\n") + "\n";
 }
 
+/**
+ * Handles GET requests to `/api/metrics` to expose Prometheus-compatible metrics.
+ *
+ * @returns {Promise<NextResponse>} A promise that resolves to a response with the formatted metrics.
+ */
 export async function GET() {
   // Return metrics in Prometheus text format
   const metricsText = formatPrometheusMetrics();

@@ -17,9 +17,14 @@ const verifySchema = z.object({
 });
 
 /**
- * POST /api/auth/mfa/verify
- * Verifies TOTP token and sets mfa=true custom claim.
- * Requires valid session.
+ * Handles POST requests to `/api/auth/mfa/verify` to verify a TOTP token and set the `mfa` custom claim.
+ * Requires a valid session.
+ *
+ * @param {NextRequest} req - The Next.js request object.
+ * @param {object} context - The context object from the router.
+ * @param {Record<string, string>} context.params - The route parameters.
+ * @param {string} context.userId - The ID of the authenticated user.
+ * @returns {Promise<NextResponse>} A promise that resolves to the response.
  */
 export const POST = withSecurity(
   async (req: NextRequest, context: { params: Record<string, string>; userId: string }) => {

@@ -11,8 +11,12 @@ import { sanitizeObject } from "../../../../../../src/lib/api/sanitize";
 import { serverError } from "../../../../_shared/validation";
 
 /**
- * GET /api/organizations/[id]/members/[memberId]
- * Get member details (org membership required)
+ * Handles GET requests to `/api/organizations/[id]/members/[memberId]` to retrieve the details of a specific member.
+ *
+ * @param {NextRequest} request - The Next.js request object.
+ * @param {object} context - The context object from the router.
+ * @param {Record<string, string>} context.params - The route parameters, including the organization and member IDs.
+ * @returns {Promise<NextResponse>} A promise that resolves to the response.
  */
 export const GET = rateLimit(RateLimits.STANDARD)(
   requireOrgMembership(async (request: NextRequest, context) => {
@@ -37,8 +41,14 @@ export const GET = rateLimit(RateLimits.STANDARD)(
 );
 
 /**
- * PATCH /api/organizations/[id]/members/[memberId]
- * Update member roles or settings (admin+ only)
+ * Handles PATCH requests to `/api/organizations/[id]/members/[memberId]` to update a member's roles or settings.
+ * Requires 'admin' role or higher.
+ *
+ * @param {NextRequest} request - The Next.js request object.
+ * @param {object} context - The context object from the router.
+ * @param {Record<string, string>} context.params - The route parameters, including the organization and member IDs.
+ * @param {string} context.userId - The ID of the authenticated user.
+ * @returns {Promise<NextResponse>} A promise that resolves to the response.
  */
 export const PATCH = rateLimit(RateLimits.WRITE)(
   csrfProtection()(
@@ -75,8 +85,13 @@ export const PATCH = rateLimit(RateLimits.WRITE)(
 // ...existing code...
 
 /**
- * DELETE /api/organizations/[id]/members/[memberId]
- * Remove a member from an organization (admin+ only)
+ * Handles DELETE requests to `/api/organizations/[id]/members/[memberId]` to remove a member from an organization.
+ * Requires 'admin' role or higher.
+ *
+ * @param {NextRequest} request - The Next.js request object.
+ * @param {object} context - The context object from the router.
+ * @param {Record<string, string>} context.params - The route parameters, including the organization and member IDs.
+ * @returns {Promise<NextResponse>} A promise that resolves to the response.
  */
 export const DELETE = rateLimit(RateLimits.WRITE)(
   csrfProtection()(
