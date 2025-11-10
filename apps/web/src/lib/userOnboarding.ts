@@ -43,9 +43,13 @@ export async function markOnboardingComplete(params: {
   } catch (_e) {
     // Don't surface errors to callers; keep original endpoint semantics.
     // Optionally log via a logger if available in the future.
-    console.debug(
-      "[userOnboarding] Failed to mark onboarding complete",
-      { uid, intent, networkId, orgId, venueId, error: _e }
-    );
+    console.debug("[userOnboarding] Failed to mark onboarding complete", {
+      uid,
+      intent,
+      networkId,
+      orgId,
+      venueId,
+      error: _e,
+    });
   }
 }
