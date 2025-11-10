@@ -6,5 +6,5 @@
 
 export NODE_OPTIONS="--max-old-space-size=4096"
 
-# Run vitest across the workspace with a single thread (threads disabled) and dot reporter by default.
-pnpm -w vitest run --maxWorkers=1 --reporter=dot "$@"
+# Run vitest across the workspace with threads disabled (using --no-threads), a single worker, and dot reporter by default.
+pnpm -w vitest run --no-threads --maxWorkers=1 --reporter=dot "$@"
