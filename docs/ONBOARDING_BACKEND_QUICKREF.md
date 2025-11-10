@@ -323,12 +323,13 @@ const { fullName, preferredName, ... } = parsed.data;
 
 1. **Create route file**:
 
-```bash
+````bash
 ```bash
 mkdir -p apps/web/app/api/onboarding/my-action
 touch apps/web/app/api/onboarding/my-action/route.ts
-```
-```
+````
+
+````
 
 2. **Add validation schema** to `apps/web/app/api/_shared/validation.ts`:
 
@@ -337,7 +338,7 @@ export const MyActionSchema = z.object({
   field1: z.string().min(1),
   field2: z.number(),
 });
-```
+````
 
 3. **Implement handler**:
 
@@ -472,13 +473,14 @@ curl -X POST http://localhost:3000/api/onboarding/profile \
 
 ### View Firebase Data
 
-```bash
+````bash
 ```bash
 # Open Firebase emulator UI
 open http://localhost:4000
 
 # View collections and documents in real-time
-```
+````
+
 ```
 
 ---
@@ -541,3 +543,4 @@ Before submitting PR:
 Last updated: Nov 8, 2024
 
 Maintained by: Patrick Craven
+```
