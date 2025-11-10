@@ -16,8 +16,11 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "20"
-      - name: Install pnpm
-        run: npm i -g pnpm@9
+          cache: "pnpm"
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: "9.1.0"
       - name: Install dependencies
         run: pnpm -w install --frozen-lockfile
       - name: Typecheck
@@ -39,8 +42,11 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "20"
-      - name: Install pnpm
-        run: npm i -g pnpm@9
+          cache: "pnpm"
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: "9.1.0"
       - name: Install dependencies
         run: pnpm -w install --frozen-lockfile
       - name: Check required CI secrets
