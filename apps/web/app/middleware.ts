@@ -82,14 +82,11 @@ export async function middleware(req: NextRequest) {
     res.headers.set("X-Content-Type-Options", "nosniff");
     res.headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
     return res;
-  } catch (_e) {
-    // On unexpected errors, conservatively allow the request so we don't block
-    // traffic; frontend will still see the bootstrap endpoint fail and can act.
-    const res = NextResponse.next();
-    res.headers.set("X-Frame-Options", "DENY");
-    res.headers.set("X-Content-Type-Options", "nosniff");
-    res.headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
-    return res;
+  } catch (e) {
+    // On unexpected errors, fail closed: log and redirect to sign-in.
+    console.error("middleware: error during bootstrap endpoint call", e);
+    const signInUrl = new URL("/signin", req.url);
+    return NextResponse.redirect(signInUrl);
   }
 }
 
