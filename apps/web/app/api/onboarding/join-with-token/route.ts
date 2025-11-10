@@ -7,6 +7,7 @@ import { NextResponse } from "next/server";
 import { withSecurity, type AuthenticatedRequest } from "../../_shared/middleware";
 
 import { adminDb as importedAdminDb } from "@/src/lib/firebase.server";
+import { markOnboardingComplete } from "@/src/lib/userOnboarding";
 
 type JoinTokenDoc = {
   networkId: string;
@@ -126,6 +127,20 @@ export async function joinWithTokenHandler(
       },
     );
 
+    // Mark onboarding complete for join path (best-effort)
+    try {
+      await markOnboardingComplete({
+        adminDb,
+        uid: uid as string,
+        intent: "join_existing",
+        networkId: data.networkId,
+        orgId: data.orgId,
+        venueId: undefined,
+      });
+    } catch {
+      // swallow errors to preserve original semantics
+    }
+
     return NextResponse.json(
       {
         ok: true,
@@ -141,4 +156,7 @@ export async function joinWithTokenHandler(
   }
 }
 
-export const POST = withSecurity(joinWithTokenHandler, { requireAuth: true });
+export const POST = withSecurity(
+  async (req: any) => joinWithTokenHandler(req, importedAdminDb),
+  { requireAuth: true },
+);

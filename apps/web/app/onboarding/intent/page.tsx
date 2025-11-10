@@ -1,3 +1,5 @@
+// [P0][APP][CODE] Page page component
+// Tags: P0, APP, CODE
 "use client";
 
 import { useRouter } from "next/navigation";

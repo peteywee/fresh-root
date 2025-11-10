@@ -65,13 +65,23 @@ export async function createNetworkOrgHandler(
     return NextResponse.json({ error: "invalid_json" }, { status: 400 });
   }
 
-  const { orgName, venueName, formToken } = (body as Record<string, unknown>) || {};
+  const { orgName, venueName, formToken, location } = (body as Record<string, unknown>) || {};
   if (!formToken) return NextResponse.json({ error: "missing_form_token" }, { status: 422 });
 
   // Prevent path traversal attacks by ensuring formToken is a valid document ID segment.
   if (String(formToken).includes("/")) {
     return NextResponse.json({ error: "invalid_form_token" }, { status: 400 });
   }
+
+  const locationData = (location || {}) as {
+    street1?: string;
+    street2?: string;
+    city?: string;
+    state?: string;
+    postalCode?: string;
+    countryCode?: string;
+    timeZone?: string;
+  };
 
   try {
     const formsRoot = adminDb
@@ -126,12 +136,25 @@ export async function createNetworkOrgHandler(
           createdAt,
         });
 
-        // 3) Venue
+        // 3) Venue (with optional location/timezone)
         tx.set(venueRef, {
           name: venueName || "Main Venue",
           orgId: orgRef.id,
           networkId: networkRef.id,
           createdAt,
+          ...(Object.keys(locationData).length > 0
+            ? {
+                location: {
+                  street1: locationData.street1 || "",
+                  street2: locationData.street2 || "",
+                  city: locationData.city || "",
+                  state: locationData.state || "",
+                  postalCode: locationData.postalCode || "",
+                  countryCode: locationData.countryCode || "",
+                  timeZone: locationData.timeZone || "",
+                },
+              }
+            : {}),
         });
 
         // 4) Copy admin responsibility form into a network-scoped compliance document

@@ -1,3 +1,5 @@
+// [P2][APP][CODE] Fresh Schedules Types D type definitions
+// Tags: P2, APP, CODE
 /**
  * Local type shim for the shared "@fresh-schedules/types" package.
  *

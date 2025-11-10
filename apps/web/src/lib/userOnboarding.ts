@@ -5,7 +5,7 @@
 
 import { Firestore } from "firebase-admin/firestore";
 
-export type OnboardingIntent = "create_org" | "create_corporate";
+export type OnboardingIntent = "create_org" | "create_corporate" | "join_existing";
 
 export async function markOnboardingComplete(params: {
   adminDb: unknown;
