@@ -21,11 +21,7 @@ export async function middleware(req: NextRequest) {
   // Public routes: sign-in, onboarding, assets, api
   const PUBLIC = [/^\/onboarding/, /^\/signin/, /^\/api/, /^\/_next/, /^\/favicon\.ico$/];
   if (PUBLIC.some((rx) => rx.test(pathname))) {
-    const res = NextResponse.next();
-    res.headers.set("X-Frame-Options", "DENY");
-    res.headers.set("X-Content-Type-Options", "nosniff");
-    res.headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
-    return res;
+    return setSecurityHeaders(NextResponse.next());
   }
 
   // Allow bypass in development for faster iteration
