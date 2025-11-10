@@ -28,7 +28,7 @@ export async function createNetworkCorporateHandler(
     );
   }
 
-  const adminDb: any = injectedAdminDb;
+  const adminDb = injectedAdminDb;
 
   const uid = req.user?.uid;
   const claims = req.user?.customClaims || {};
