@@ -8,7 +8,7 @@ import { Firestore } from "firebase-admin/firestore";
 export type OnboardingIntent = "create_org" | "create_corporate";
 
 export async function markOnboardingComplete(params: {
-  adminDb: unknown;
+  adminDb: import("firebase-admin/firestore").Firestore | undefined;
   uid: string;
   intent: OnboardingIntent;
   networkId: string;
