@@ -1,4 +1,6 @@
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     // [P2][APP][CODE] Page page component
+// [P2][APP][CODE] Page page component
+// Tags: P2, APP, CODE
+// [P2][APP][CODE] Page page component
 // Tags: P2, APP, CODE
 "use client";
 
