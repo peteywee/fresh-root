@@ -43,12 +43,6 @@ jobs:
         run: npm i -g pnpm@9
       - name: Install dependencies
         run: pnpm -w install --frozen-lockfile
-      - name: Check required CI secrets
-        run: |
-          if [ -z "${{ secrets.FIREBASE_SERVICE_ACCOUNT }}" ] || [ -z "${{ secrets.FIREBASE_TOKEN }}" ]; then
-            echo "Missing required Firebase CI secrets. Set FIREBASE_SERVICE_ACCOUNT and FIREBASE_TOKEN in repository secrets to run rules tests.";
-            exit 1;
-          fi
       - name: Run Firestore rules tests (emulator)
         # This uses the repo's test:rules:ci which runs emulators:exec
         env:
