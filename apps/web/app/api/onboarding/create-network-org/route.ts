@@ -101,7 +101,7 @@ export async function createNetworkOrgHandler(
     const venueRef = adminDb.collection("venues").doc();
 
     // Membership doc id in the existing global memberships collection
-    const membershipId = `${uid}_${orgRef.id}`;
+    const membershipId = `${uid}_org_${orgRef.id}`;
     const membershipRef = adminDb.collection("memberships").doc(membershipId);
 
     await adminDb.runTransaction(
