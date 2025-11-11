@@ -65,7 +65,7 @@ export async function createNetworkOrgHandler(
     return NextResponse.json({ error: "invalid_json" }, { status: 400 });
   }
 
-  const { orgName, venueName, formToken, location } = (body as Record<string, unknown>) || {};
+  const { orgName, venueName, formToken, location: locationData } = (body as Record<string, unknown>) || {};
   if (!formToken) return NextResponse.json({ error: "missing_form_token" }, { status: 422 });
 
   // Prevent path traversal attacks by ensuring formToken is a valid document ID segment.
@@ -132,16 +132,16 @@ export async function createNetworkOrgHandler(
           orgId: orgRef.id,
           networkId: networkRef.id,
           createdAt,
-          ...(Object.keys(locationData).length > 0
+          ...(locationData && typeof locationData === "object" && Object.keys(locationData as Record<string, unknown>).length > 0
             ? {
                 location: {
-                  street1: locationData.street1 || "",
-                  street2: locationData.street2 || "",
-                  city: locationData.city || "",
-                  state: locationData.state || "",
-                  postalCode: locationData.postalCode || "",
-                  countryCode: locationData.countryCode || "",
-                  timeZone: locationData.timeZone || "",
+                  street1: (locationData as Record<string, unknown>).street1 || "",
+                  street2: (locationData as Record<string, unknown>).street2 || "",
+                  city: (locationData as Record<string, unknown>).city || "",
+                  state: (locationData as Record<string, unknown>).state || "",
+                  postalCode: (locationData as Record<string, unknown>).postalCode || "",
+                  countryCode: (locationData as Record<string, unknown>).countryCode || "",
+                  timeZone: (locationData as Record<string, unknown>).timeZone || "",
                 },
               }
             : {}),
