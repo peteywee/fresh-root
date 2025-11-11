@@ -32,11 +32,11 @@ const DashboardPage = React.memo(() => {
 
   return (
     <ProtectedRoute>
-      <main className="min-h-screen animate-fade-in bg-gradient-to-br from-surface via-surface-card to-surface-accent p-6">
+      <main className="animate-fade-in from-surface via-surface-card to-surface-accent min-h-screen bg-gradient-to-br p-6">
         <div className="mx-auto max-w-7xl space-y-6">
           <header className="py-8 text-center">
-            <h1 className="mb-2 text-4xl font-bold text-primary">Dashboard</h1>
-            <p className="text-lg text-text-muted">Manage your schedules and stay updated</p>
+            <h1 className="text-primary mb-2 text-4xl font-bold">Dashboard</h1>
+            <p className="text-text-muted text-lg">Manage your schedules and stay updated</p>
           </header>
 
           <section className="mb-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
@@ -58,7 +58,7 @@ const DashboardPage = React.memo(() => {
               <div
                 className={`animate-slide-up rounded-lg px-4 py-2 text-sm ${
                   message.includes("successfully")
-                    ? "border border-secondary bg-secondary/10 text-secondary"
+                    ? "border-secondary bg-secondary/10 text-secondary border"
                     : "border border-red-500 bg-red-500/10 text-red-400"
                 }`}
               >
@@ -80,18 +80,18 @@ const DashboardPage = React.memo(() => {
             className="card animate-slide-up p-6 text-center"
             style={{ animationDelay: "0.3s" }}
           >
-            <h2 className="mb-4 text-2xl font-semibold text-primary">Quick Stats</h2>
+            <h2 className="text-primary mb-4 text-2xl font-semibold">Quick Stats</h2>
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-              <div className="rounded-lg bg-surface-accent p-4">
-                <div className="text-2xl font-bold text-primary">12</div>
+              <div className="bg-surface-accent rounded-lg p-4">
+                <div className="text-primary text-2xl font-bold">12</div>
                 <div className="text-text-muted">Active Schedules</div>
               </div>
-              <div className="rounded-lg bg-surface-accent p-4">
-                <div className="text-2xl font-bold text-secondary">5</div>
+              <div className="bg-surface-accent rounded-lg p-4">
+                <div className="text-secondary text-2xl font-bold">5</div>
                 <div className="text-text-muted">Pending Tasks</div>
               </div>
-              <div className="rounded-lg bg-surface-accent p-4">
-                <div className="text-2xl font-bold text-primary">98%</div>
+              <div className="bg-surface-accent rounded-lg p-4">
+                <div className="text-primary text-2xl font-bold">98%</div>
                 <div className="text-text-muted">Uptime</div>
               </div>
             </div>

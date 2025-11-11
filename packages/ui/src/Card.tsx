@@ -30,7 +30,7 @@ interface CardTitleProps {
 
 export function CardTitle({ children, className }: CardTitleProps) {
   return (
-    <h3 className={clsx("text-2xl font-semibold leading-none tracking-tight", className)}>
+    <h3 className={clsx("text-2xl leading-none font-semibold tracking-tight", className)}>
       {children}
     </h3>
   );

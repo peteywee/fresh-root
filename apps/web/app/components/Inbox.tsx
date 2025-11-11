@@ -45,7 +45,7 @@ const Inbox = React.memo(() => {
 
   return (
     <div className="card p-4">
-      <h3 className="mb-4 text-lg font-semibold text-primary">Inbox</h3>
+      <h3 className="text-primary mb-4 text-lg font-semibold">Inbox</h3>
       <div className="max-h-64 space-y-3 overflow-y-auto">
         {messages.map((m) => (
           <div
@@ -54,16 +54,16 @@ const Inbox = React.memo(() => {
           >
             <div className="flex items-start justify-between">
               <div className="flex-1">
-                <div className="font-medium text-text">{m.title}</div>
-                <div className="mt-1 text-sm text-text-muted">{m.body}</div>
+                <div className="text-text font-medium">{m.title}</div>
+                <div className="text-text-muted mt-1 text-sm">{m.body}</div>
               </div>
-              <div className="ml-2 text-xs text-text-muted">{m.time}</div>
+              <div className="text-text-muted ml-2 text-xs">{m.time}</div>
             </div>
           </div>
         ))}
       </div>
       {messages.length === 0 && (
-        <div className="py-8 text-center text-text-muted">
+        <div className="text-text-muted py-8 text-center">
           <div className="mb-2 text-4xl">📭</div>
           <p>No messages yet</p>
         </div>

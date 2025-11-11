@@ -48,7 +48,7 @@ export function ErrorProvider({ children }: { children: ReactNode }) {
       {children}
       {/* Minimal inline surface; swap for toast or shadcn Alert if desired */}
       {state.messages.length > 0 && (
-        <div className="fixed bottom-4 right-4 z-50 max-w-sm space-y-2 rounded border bg-white p-3 text-sm shadow">
+        <div className="fixed right-4 bottom-4 z-50 max-w-sm space-y-2 rounded border bg-white p-3 text-sm shadow">
           {state.messages.map((m, i) => (
             <div key={i}>{m}</div>
           ))}

@@ -55,7 +55,7 @@ export function Button({
     >
       {loading && (
         <svg
-          className="-ml-1 mr-2 h-4 w-4 animate-spin"
+          className="mr-2 -ml-1 h-4 w-4 animate-spin"
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
           viewBox="0 0 24 24"

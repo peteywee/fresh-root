@@ -63,30 +63,30 @@
   },
   "dependencies": {
     "execa": "^9.6.0",
-    "firebase-admin": "^13.5.0",
+    "firebase-admin": "^13.6.0",
     "p-retry": "^7.1.0",
     "zod": "^4.1.12"
   },
   "devDependencies": {
     "@firebase/rules-unit-testing": "^5.0.0",
     "@types/jest": "^30.0.0",
-    "@types/node": "^24.9.2",
+    "@types/node": "^24.10.0",
     "@types/speakeasy": "^2.0.10",
-    "@typescript-eslint/eslint-plugin": "^8.46.2",
-    "@typescript-eslint/parser": "^8.46.2",
+    "@typescript-eslint/eslint-plugin": "^8.46.4",
+    "@typescript-eslint/parser": "^8.46.4",
     "@vitejs/plugin-react": "^5.1.0",
     "concurrently": "^9.2.1",
-    "cspell": "^8.0.0",
-    "eslint": "^9.38.0",
+    "cspell": "^9.3.0",
+    "eslint": "^9.39.1",
     "eslint-config-next": "^16.0.1",
     "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^7.0.1",
     "firebase": "^12.5.0",
-    "firebase-tools": "^14.23.0",
+    "firebase-tools": "^14.24.2",
     "husky": "^9.1.7",
     "jest": "^30.2.0",
-    "markdownlint-cli": "^0.40.0",
+    "markdownlint-cli": "^0.45.0",
     "p-retry": "^6.2.0",
     "playwright": "^1.56.1",
     "postcss": "^8.5.6",
@@ -94,6 +94,6 @@
     "prettier-plugin-tailwindcss": "^0.7.1",
     "ts-jest": "^29.4.5",
     "typescript": "^5.9.3",
-    "vitest": "^4.0.6"
+    "vitest": "4.0.8"
   }
 }

@@ -100,10 +100,10 @@ const LoginForm = React.memo(() => {
   }, [router]);
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-gradient-to-br from-surface via-surface-card to-surface-accent p-6">
-      <div className="card w-full max-w-md animate-slide-up">
+    <main className="from-surface via-surface-card to-surface-accent flex min-h-screen items-center justify-center bg-gradient-to-br p-6">
+      <div className="card animate-slide-up w-full max-w-md">
         <div className="mb-6 space-y-2 text-center">
-          <h1 className="text-3xl font-bold text-primary">Welcome Back</h1>
+          <h1 className="text-primary text-3xl font-bold">Welcome Back</h1>
           <p className="text-text-muted">Sign in to access your dashboard</p>
         </div>
 
@@ -113,7 +113,7 @@ const LoginForm = React.memo(() => {
           </div>
         )}
         {status && (
-          <div className="animate-fade-in rounded-lg border border-secondary bg-secondary/10 p-3 text-sm text-secondary">
+          <div className="animate-fade-in border-secondary bg-secondary/10 text-secondary rounded-lg border p-3 text-sm">
             {status}
           </div>
         )}
@@ -145,10 +145,10 @@ const LoginForm = React.memo(() => {
           Continue with Google
         </button>
 
-        <div className="mb-4 flex items-center gap-3 text-xs text-text-muted">
-          <div className="h-px flex-1 bg-surface-accent" />
+        <div className="text-text-muted mb-4 flex items-center gap-3 text-xs">
+          <div className="bg-surface-accent h-px flex-1" />
           <span>or</span>
-          <div className="h-px flex-1 bg-surface-accent" />
+          <div className="bg-surface-accent h-px flex-1" />
         </div>
 
         <form onSubmit={onSendMagicLink} className="space-y-4">
@@ -178,7 +178,7 @@ const LoginForm = React.memo(() => {
         </form>
 
         <div className="mt-6 text-center">
-          <Link href="/" className="text-sm text-text-muted transition-colors hover:text-primary">
+          <Link href="/" className="text-text-muted hover:text-primary text-sm transition-colors">
             ← Back to home
           </Link>
         </div>

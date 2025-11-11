@@ -34,7 +34,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
           ref={ref}
           className={clsx(
             "rounded-md border px-3 py-2 text-sm shadow-sm",
-            "focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500",
+            "focus:border-transparent focus:ring-2 focus:ring-blue-500 focus:outline-none",
             "disabled:cursor-not-allowed disabled:bg-gray-100",
             error ? "border-red-500 focus:ring-red-500" : "border-gray-300",
             className,
@@ -81,7 +81,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
           ref={ref}
           className={clsx(
             "rounded-md border px-3 py-2 text-sm shadow-sm",
-            "focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500",
+            "focus:border-transparent focus:ring-2 focus:ring-blue-500 focus:outline-none",
             "disabled:cursor-not-allowed disabled:bg-gray-100",
             error ? "border-red-500 focus:ring-red-500" : "border-gray-300",
             className,

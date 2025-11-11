@@ -27,12 +27,12 @@ const MonthView = React.memo(({ month = new Date() }: { month?: Date }) => {
 
   return (
     <div className="card p-4">
-      <h3 className="mb-4 text-lg font-semibold text-primary">
+      <h3 className="text-primary mb-4 text-lg font-semibold">
         {month.toLocaleDateString("en-US", { month: "long", year: "numeric" })}
       </h3>
       <div className="grid grid-cols-7 gap-2 text-sm">
         {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
-          <div key={day} className="py-2 text-center font-medium text-text-muted">
+          <div key={day} className="text-text-muted py-2 text-center font-medium">
             {day}
           </div>
         ))}
@@ -41,7 +41,7 @@ const MonthView = React.memo(({ month = new Date() }: { month?: Date }) => {
             key={index}
             className={`flex aspect-square items-center justify-center rounded-lg transition-all duration-200 ${
               day
-                ? "cursor-pointer border border-surface-accent bg-surface-accent hover:bg-primary/10 hover:text-primary"
+                ? "border-surface-accent bg-surface-accent hover:bg-primary/10 hover:text-primary cursor-pointer border"
                 : ""
             }`}
           >

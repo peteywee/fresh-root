@@ -33,7 +33,7 @@ export function Modal({ isOpen, onClose, title, children, size = "md" }: ModalPr
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
       {/* Backdrop */}
-      <div className="absolute inset-0 bg-black bg-opacity-50" onClick={onClose} />
+      <div className="bg-opacity-50 absolute inset-0 bg-black" onClick={onClose} />
 
       {/* Modal */}
       <div
@@ -55,7 +55,7 @@ export function Modal({ isOpen, onClose, title, children, size = "md" }: ModalPr
         <div className="flex justify-end">
           <button
             onClick={onClose}
-            className="rounded-md bg-gray-100 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
+            className="rounded-md bg-gray-100 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-200 focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 focus:outline-none"
           >
             Close
           </button>
