@@ -1,3 +1,5 @@
+// [P0][TEST][TEST] Onboarding Full Flow Spec tests
+// Tags: P0, TEST, TEST
 /**
  * [P1][TEST][E2E] Onboarding Happy-Path E2E Test
  * Tags: e2e, onboarding, playwright, test

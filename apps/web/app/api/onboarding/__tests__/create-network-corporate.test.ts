@@ -1,3 +1,5 @@
+// [P0][SECURITY][TEST] Create Network Corporate Test tests
+// Tags: P0, SECURITY, TEST
 /**
  * [P1][TEST][ONBOARDING] Create Network Corporate Endpoint Tests
  * Tags: test, onboarding, network, corporate, unit

@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# [P0][APP][CODE] BLOCK3 COMPLETION REPORT
+# Tags: P0, APP, CODE
 
 #[BLOCK3_COMPLETION][SIGN_OFF][FINAL]
 # Tags: completion, sign-off, v14-freeze, block3-core

@@ -245,7 +245,7 @@ tests/rules/
 ### For Deployment
 
 1. Follow deployment guide in docs/SETUP.md
-2. Set environment variables (NEXT*PUBLIC_FIREBASE**, FIREBASE*ADMIN**)
+2. Set environment variables (NEXT*PUBLIC_FIREBASE\*\*, FIREBASE*ADMIN\*\*)
 3. Test onboarding flow in staging
 4. Monitor event logs in production
 5. Have rollback plan ready

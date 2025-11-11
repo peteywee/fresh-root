@@ -1,3 +1,5 @@
+// [P0][TEST][TEST] Verify Eligibility Test tests
+// Tags: P0, TEST, TEST
 /**
  * [P1][TEST][ONBOARDING] Verify Eligibility Endpoint Tests
  * Tags: test, onboarding, eligibility, unit

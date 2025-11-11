@@ -117,37 +117,37 @@
 
 ### Core Documentation
 
-| Document | Purpose | Audience | Status |
-| -------- | ------- | -------- | ------ |
-| **BLOCK3_SIGN_OFF.md** | Production readiness sign-off | All | ✅ Complete |
-| **docs/BLOCK3_COMPLETION.md** | Technical completion report | Tech leads, reviewers | ✅ Complete |
-| **BLOCK3_QUICK_START.md** | Developer quick start | Developers | ✅ Complete |
-| **BLOCK3_API_REFERENCE.md** | API endpoint reference | Developers, QA | ✅ Complete |
-| **docs/BLOCK3_SUMMARY.md** | Executive summary | All | ✅ Complete |
-| **BLOCK3_CHECKLIST.md** | Implementation checklist | Reviewers, QA | ✅ Complete |
-| **docs/BLOCK3_IMPLEMENTATION.md** | Implementation specs | Architects | ✅ Complete |
-| **BLOCK3_DOCUMENTATION_INDEX.md** | Navigation guide | All | ✅ Complete (this file) |
+| Document                          | Purpose                       | Audience              | Status                  |
+| --------------------------------- | ----------------------------- | --------------------- | ----------------------- |
+| **BLOCK3_SIGN_OFF.md**            | Production readiness sign-off | All                   | ✅ Complete             |
+| **docs/BLOCK3_COMPLETION.md**     | Technical completion report   | Tech leads, reviewers | ✅ Complete             |
+| **BLOCK3_QUICK_START.md**         | Developer quick start         | Developers            | ✅ Complete             |
+| **BLOCK3_API_REFERENCE.md**       | API endpoint reference        | Developers, QA        | ✅ Complete             |
+| **docs/BLOCK3_SUMMARY.md**        | Executive summary             | All                   | ✅ Complete             |
+| **BLOCK3_CHECKLIST.md**           | Implementation checklist      | Reviewers, QA         | ✅ Complete             |
+| **docs/BLOCK3_IMPLEMENTATION.md** | Implementation specs          | Architects            | ✅ Complete             |
+| **BLOCK3_DOCUMENTATION_INDEX.md** | Navigation guide              | All                   | ✅ Complete (this file) |
 
 ### Implementation Files
 
-| Component | Location | Purpose | Tests |
-| --------- | -------- | ------- | ----- |
-| **Zod Schemas** | `packages/types/src/` | Domain definitions | Type-checked |
-| **API Endpoints** | `apps/web/app/api/onboarding/` | Onboarding backend | 7 test files |
-| **Frontend Pages** | `apps/web/app/onboarding/` | Onboarding wizard UI | E2E tested |
-| **Security Rules** | `firestore.rules`, `storage.rules` | Data access control | Rules tests |
-| **Event Logging** | `apps/web/src/lib/logEvent.ts` | Audit trail | Validated |
-| **Tests** | `apps/web/app/api/onboarding/__tests__/` | Comprehensive coverage | 40+ tests |
+| Component          | Location                                 | Purpose                | Tests        |
+| ------------------ | ---------------------------------------- | ---------------------- | ------------ |
+| **Zod Schemas**    | `packages/types/src/`                    | Domain definitions     | Type-checked |
+| **API Endpoints**  | `apps/web/app/api/onboarding/`           | Onboarding backend     | 7 test files |
+| **Frontend Pages** | `apps/web/app/onboarding/`               | Onboarding wizard UI   | E2E tested   |
+| **Security Rules** | `firestore.rules`, `storage.rules`       | Data access control    | Rules tests  |
+| **Event Logging**  | `apps/web/src/lib/logEvent.ts`           | Audit trail            | Validated    |
+| **Tests**          | `apps/web/app/api/onboarding/__tests__/` | Comprehensive coverage | 40+ tests    |
 
 ### Reference Documentation
 
-| Document | Contains | Link |
-| -------- | -------- | ---- |
-| **Security** | Threat model, RBAC details | `docs/security.md` |
-| **Architecture** | System diagrams, data flow | `docs/ARCHITECTURE_DIAGRAMS.md` |
-| **Technical Debt** | Known issues, future work | `docs/TECHNICAL_DEBT.md` |
-| **Performance** | Benchmarks, optimization notes | `docs/PERFORMANCE.md` |
-| **API Standards** | Request/response format | `docs/ONBOARDING_API.md` |
+| Document           | Contains                       | Link                            |
+| ------------------ | ------------------------------ | ------------------------------- |
+| **Security**       | Threat model, RBAC details     | `docs/security.md`              |
+| **Architecture**   | System diagrams, data flow     | `docs/ARCHITECTURE_DIAGRAMS.md` |
+| **Technical Debt** | Known issues, future work      | `docs/TECHNICAL_DEBT.md`        |
+| **Performance**    | Benchmarks, optimization notes | `docs/PERFORMANCE.md`           |
+| **API Standards**  | Request/response format        | `docs/ONBOARDING_API.md`        |
 
 ---
 

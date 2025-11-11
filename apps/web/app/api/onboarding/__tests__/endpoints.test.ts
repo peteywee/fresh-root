@@ -1,3 +1,5 @@
+// [P0][TEST][TEST] Endpoints Test tests
+// Tags: P0, TEST, TEST
 /**
  * [P1][TEST][ONBOARDING] Onboarding Endpoints Unit Tests
  * Tags: test, onboarding, api, unit

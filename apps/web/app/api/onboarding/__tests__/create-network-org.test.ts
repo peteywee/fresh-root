@@ -1,3 +1,5 @@
+// [P0][TEST][TEST] Create Network Org Test tests
+// Tags: P0, TEST, TEST
 /**
  * [P1][TEST][ONBOARDING] Create Network Org Endpoint Tests
  * Tags: test, onboarding, network, org, unit

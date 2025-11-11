@@ -1,3 +1,5 @@
+// [P0][SECURITY][RATE_LIMIT] RateLimit
+// Tags: P0, SECURITY, RATE_LIMIT
 /**
  * [P1][API][SHARED] Rate-Limiting Middleware
  * Tags: api, middleware, rate-limit, security

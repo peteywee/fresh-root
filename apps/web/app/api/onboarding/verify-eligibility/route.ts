@@ -4,6 +4,17 @@
 import { NextResponse } from "next/server";
 
 import { withSecurity, type AuthenticatedRequest } from "../../_shared/middleware";
+import { withRequestLogging } from "../../_shared/logging";
+
+/**
+ * ErrorResponse is a canonical shape for API error responses.
+ * In the future, this should be imported from @fresh-schedules/types.
+ */
+interface ErrorResponse {
+  error: string;
+  code?: string;
+  details?: Record<string, unknown>;
+}
 
 // Track rate limits in-memory (per uid, last 24h)
 const rateLimitMap = new Map<string, { count: number; resetTime: number }>();
@@ -35,8 +46,11 @@ export async function verifyEligibilityHandler(
 
   // Check authentication first
   if (!uid) {
-    return NextResponse.json(
-      { error: "not_authenticated", ok: false, eligible: false },
+    return NextResponse.json<ErrorResponse>(
+      {
+        error: "Not authenticated",
+        code: "GEN_NOT_AUTHENTICATED",
+      },
       { status: 401 },
     );
   }
@@ -54,8 +68,11 @@ export async function verifyEligibilityHandler(
 
   // Validate required fields
   if (!body.email || !body.role) {
-    return NextResponse.json(
-      { error: "invalid_request", ok: false, eligible: false },
+    return NextResponse.json<ErrorResponse>(
+      {
+        error: "Missing email or role",
+        code: "ONB_ELIGIBILITY_INVALID_REQUEST",
+      },
       { status: 400 },
     );
   }
@@ -71,8 +88,11 @@ export async function verifyEligibilityHandler(
   ];
 
   if (!allowedRoles.includes(body.role)) {
-    return NextResponse.json(
-      { error: "role not allowed", ok: false, eligible: false },
+    return NextResponse.json<ErrorResponse>(
+      {
+        error: "Role not allowed for onboarding",
+        code: "ONB_ELIGIBILITY_ROLE_DENIED",
+      },
       { status: 403 },
     );
   }
@@ -96,6 +116,17 @@ export async function verifyEligibilityHandler(
   );
 }
 
-export const POST = withSecurity(verifyEligibilityHandler, {
-  requireAuth: true,
-});
+// Adapter wraps the test-friendly handler for use with withSecurity middleware
+async function apiRoute(
+  req: AuthenticatedRequest,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _ctx?: { params: Record<string, string> },
+) {
+  return verifyEligibilityHandler(req);
+}
+
+export const POST = withRequestLogging(
+  withSecurity(apiRoute, {
+    requireAuth: true,
+  }),
+);

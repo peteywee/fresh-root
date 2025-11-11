@@ -1,3 +1,5 @@
+// [P0][FIREBASE][TEST] Admin Form Test tests
+// Tags: P0, FIREBASE, TEST
 /**
  * [P1][TEST][ONBOARDING] Admin Form Endpoint Tests
  * Tags: test, onboarding, admin-form, compliance, unit

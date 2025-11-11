@@ -5,6 +5,7 @@
 import { NextResponse } from "next/server";
 
 import { withSecurity, type AuthenticatedRequest } from "../../_shared/middleware";
+import { withRequestLogging } from "../../_shared/logging";
 
 import { logEvent } from "@/src/lib/eventLog";
 import { adminDb as importedAdminDb } from "@/src/lib/firebase.server";
@@ -288,5 +289,16 @@ export async function createNetworkOrgHandler(
   }
 }
 
-// Keep Next.js route export for runtime (secured)
-export const POST = withSecurity(createNetworkOrgHandler, { requireAuth: true });
+// Keep Next.js route export for runtime (secured + logged)
+// Adapter wraps the test-friendly handler for use with withSecurity middleware
+async function apiRoute(
+  req: AuthenticatedRequest,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _ctx?: { params: Record<string, string> },
+) {
+  return createNetworkOrgHandler(req);
+}
+
+export const POST = withRequestLogging(
+  withSecurity(apiRoute, { requireAuth: true }),
+);

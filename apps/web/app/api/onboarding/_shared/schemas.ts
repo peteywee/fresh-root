@@ -1,3 +1,5 @@
+// [P0][INTEGRITY][VALIDATION] Schemas
+// Tags: P0, INTEGRITY, VALIDATION
 /**
  * [P1][API][SHARED] Onboarding API Schemas
  * Tags: api, validation, zod, onboarding

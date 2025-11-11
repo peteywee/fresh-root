@@ -1,4 +1,6 @@
 #!/usr/bin/env node
+// [P1][TEST][TEST] Test Interactive tests
+// Tags: P1, TEST, TEST
 /**
  * [P0][SCRIPT][TEST] Interactive test runner
  * Tags: P0, SCRIPT, TEST, INTERACTIVE

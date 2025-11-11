@@ -1,3 +1,5 @@
+// [P0][AUTH][TEST] Join With Token Test tests
+// Tags: P0, AUTH, TEST
 /**
  * [P1][TEST][ONBOARDING] Join With Token Endpoint Tests
  * Tags: test, onboarding, join-token, membership, unit

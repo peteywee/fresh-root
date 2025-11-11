@@ -1,3 +1,5 @@
+// [P0][TEST][TEST] Activate Network Test tests
+// Tags: P0, TEST, TEST
 /**
  * [P1][TEST][ONBOARDING] Activate Network Endpoint Tests
  * Tags: test, onboarding, network, activation, unit
