@@ -1,7 +1,7 @@
 //[P1][API][CODE] Organization Member [memberId] API route handler
 // Tags: P1, API, CODE, validation, zod, rbac
 
-import { MembershipUpdateSchema } from "@fresh-schedules/types";
+import { UpdateMembershipSchema } from "@fresh-schedules/types";
 import { NextRequest, NextResponse } from "next/server";
 
 import { requireOrgMembership, requireRole } from "../../../../../../src/lib/api/authorization";
@@ -54,7 +54,7 @@ export const PATCH = csrfProtection()(
         const { id: orgId, memberId } = await params;
 
         const body = await request.json();
-        const validated = MembershipUpdateSchema.parse(body);
+        const validated = UpdateMembershipSchema.parse(body);
         const sanitized = sanitizeObject(validated);
 
         // In production: permission checks, update Firestore

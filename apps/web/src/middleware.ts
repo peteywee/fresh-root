@@ -2,4 +2,5 @@
 // Tags: P2, API, MIDDLEWARE
 
 // Re-export from app/middleware.ts for test imports
-export { middleware, config } from "../app/middleware";
+// Note: config cannot be re-exported; it must be defined in app/middleware.ts directly
+export { middleware } from "../app/middleware";

@@ -13,46 +13,58 @@ type SimpleRedisClient = {
 };
 
 // Try Upstash first, then ioredis, otherwise fall back to in-memory map (development)
-let adapter: SimpleRedisClient;
+let adapter: SimpleRedisClient | null = null;
 
 if (process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN) {
   // Use Upstash REST client
   // Note: @upstash/redis should be installed in production environments
   // It provides incr/expire/ttl methods compatible with the simple RedisClient interface
-  const { Redis } = require("@upstash/redis");
-  const client = new Redis({
-    url: process.env.UPSTASH_REDIS_REST_URL,
-    token: process.env.UPSTASH_REDIS_REST_TOKEN,
-  });
-  adapter = {
-    async incr(key: string) {
-      const res = await client.incr(key);
-      return typeof res === "number" ? res : Number(res);
-    },
-    async expire(key: string, seconds: number) {
-      await client.expire(key, seconds);
-    },
-    async ttl(key: string) {
-      const res = await client.ttl(key);
-      return typeof res === "number" ? res : Number(res);
-    },
-  };
-} else if (process.env.REDIS_URL) {
+  try {
+    const { Redis } = require("@upstash/redis");
+    const client = new Redis({
+      url: process.env.UPSTASH_REDIS_REST_URL,
+      token: process.env.UPSTASH_REDIS_REST_TOKEN,
+    });
+    adapter = {
+      async incr(key: string) {
+        const res = await client.incr(key);
+        return typeof res === "number" ? res : Number(res);
+      },
+      async expire(key: string, seconds: number) {
+        await client.expire(key, seconds);
+      },
+      async ttl(key: string) {
+        const res = await client.ttl(key);
+        return typeof res === "number" ? res : Number(res);
+      },
+    };
+  } catch {
+    // Fall through to next condition if package not found
+  }
+} 
+
+if (!adapter && process.env.REDIS_URL) {
   // Use ioredis if available
-  const IORedis = require("ioredis");
-  const client = new IORedis(process.env.REDIS_URL);
-  adapter = {
-    async incr(key: string) {
-      return await client.incr(key);
-    },
-    async expire(key: string, seconds: number) {
-      await client.expire(key, seconds);
-    },
-    async ttl(key: string) {
-      return await client.ttl(key);
-    },
-  };
-} else {
+  try {
+    const IORedis = require("ioredis");
+    const client = new IORedis(process.env.REDIS_URL);
+    adapter = {
+      async incr(key: string) {
+        return await client.incr(key);
+      },
+      async expire(key: string, seconds: number) {
+        await client.expire(key, seconds);
+      },
+      async ttl(key: string) {
+        return await client.ttl(key);
+      },
+    };
+  } catch {
+    // Fall through to in-memory fallback if package not found
+  }
+}
+
+if (!adapter) {
   // In-memory fallback for local development. Not suitable for production.
   const map = new Map<string, { count: number; resetAt: number }>();
   adapter = {
