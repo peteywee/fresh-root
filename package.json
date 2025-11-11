@@ -62,6 +62,8 @@
     "test:rules:dev": "vitest run --config tests/rules/vitest.config.ts --reporter=dot",
     "test:e2e": "jest --config jest-playwright.config.js --testPathPattern='tests/e2e' --maxWorkers=1",
     "ci": "pnpm -w install --frozen-lockfile && pnpm -w typecheck && pnpm -w lint && pnpm -w build && pnpm -w test && pnpm -w test:rules:ci",
+    "cache:clean": "pnpm store prune && echo 'Cache cleanup complete'",
+    "cache:info": "du -sh ~/.pnpm-store 2>/dev/null || echo 'Cache location varies by OS'",
     "tag:files": "node scripts/tag-files.mjs",
     "watch:tags": "node scripts/watch-and-tag.mjs"
   },
