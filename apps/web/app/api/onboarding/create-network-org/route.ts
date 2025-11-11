@@ -1,7 +1,23 @@
 //[P1][API][ONBOARDING] Create Network + Org Endpoint (server)
 // Tags: api, onboarding, network, org, venue, membership, events
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
+/**
+ * POST /api/onboarding/create-network-org
+ * Create a new network, organization, venue, and assign the creator as org owner.
+ *
+ * Creates the foundational entities for a new account:
+ * - Network (shared infrastructure)
+ * - Organization (business entity)
+ * - Venue (physical/logical location)
+ * - Membership (creator → org owner)
+ * - Logging event (audit trail)
+ *
+ * Requires: Authentication, email verified, allowed role
+ * Request body: { networkName, orgName, venueAddress, venueTimeZone, etc. }
+ * Returns: { ok: true; networkId; orgId; venueId; status }
+ */
+
+ 
 import { NextResponse } from "next/server";
 
 import { withRequestLogging } from "../../_shared/logging";

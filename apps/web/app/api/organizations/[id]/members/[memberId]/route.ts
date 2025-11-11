@@ -1,6 +1,17 @@
 //[P1][API][CODE] Organization Member [memberId] API route handler
 // Tags: P1, API, CODE, validation, zod, rbac
 
+/**
+ * GET /api/organizations/[id]/members/[memberId]
+ * Retrieve a specific member's details from an organization (requires membership in org).
+ *
+ * PATCH /api/organizations/[id]/members/[memberId]
+ * Update a member's roles/metadata (requires admin role in organization).
+ *
+ * Requires: Organization membership, rate limiting enforced
+ * Returns: { id, orgId, uid, roles, [other metadata] }
+ */
+
 import { UpdateMembershipSchema } from "@fresh-schedules/types";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -9,11 +20,6 @@ import { csrfProtection } from "../../../../../../src/lib/api/csrf";
 import { rateLimit, RateLimits } from "../../../../../../src/lib/api/rate-limit";
 import { sanitizeObject } from "../../../../../../src/lib/api/sanitize";
 import { serverError } from "../../../../_shared/validation";
-
-/**
- * GET /api/organizations/[id]/members/[memberId]
- * Get member details (org membership required)
- */
 export const GET = requireOrgMembership(async (request: NextRequest, context) => {
   // Apply rate limiting using the inline check pattern used elsewhere
   const rateLimitResult = await rateLimit(request, RateLimits.api);

@@ -82,6 +82,6 @@ export async function adminFormHandler(
 // doesn't pass the route `context` object as the second argument (which would
 // be mistaken for an injected Firestore instance). The wrapper matches the
 // expected Next.js signature: (req, ctx) => Response
-export const POST = async (req: NextRequest, _ctx: { params?: unknown }) => {
+export const POST = async (req: NextRequest, _ctx: { params?: any }) => {
   return await adminFormHandler(req as NextRequest & { user?: { uid: string } });
 };

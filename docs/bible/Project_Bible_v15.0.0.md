@@ -1,6 +1,6 @@
 # Project Bible – v15.0.0
 
-**Purpose**  
+**Purpose**
 Define the **canonical specification** for Fresh Schedules v15, covering:
 
 - Domain model (entities, relationships, invariants)

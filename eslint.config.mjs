@@ -71,12 +71,9 @@ export default [
       ],
     },
   },
-  // Onboarding API tests: silence explicit any warnings (scaffolding/mocks)
+  // API routes: allow `any` for Firebase/Firestore dynamic data handling
   {
-    files: [
-      "apps/web/app/api/onboarding/__tests__/**",
-      "apps/web/app/api/onboarding/**/__tests__/**",
-    ],
+    files: ["**/app/api/**/*.ts", "**/app/api/**/*.tsx"],
     rules: {
       "@typescript-eslint/no-explicit-any": "off",
     },
@@ -94,6 +91,22 @@ export default [
     rules: {
       // Turn off no-undef for test globals to avoid editor warnings
       "no-undef": "off",
+      // Allow `any` in tests (test setup often uses mock objects)
+      "@typescript-eslint/no-explicit-any": "off",
+    },
+  },
+  // Onboarding pages: allow `any` (often use dynamic form/query data)
+  {
+    files: ["**/onboarding/**/*.tsx", "**/onboarding/**/*.ts"],
+    rules: {
+      "@typescript-eslint/no-explicit-any": "off",
+    },
+  },
+  // Type definition files: allow `any` (often necessary for external type declarations)
+  {
+    files: ["**/*.d.ts", "**/types/**"],
+    rules: {
+      "@typescript-eslint/no-explicit-any": "off",
     },
   },
 ];

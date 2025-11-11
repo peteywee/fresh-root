@@ -1,7 +1,22 @@
 //[P1][API][ONBOARDING] Join With Token Endpoint (server)
 // Tags: api, onboarding, join-token, membership, events
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
+/**
+ * POST /api/onboarding/join-with-token
+ * Allow an authenticated user to join an existing organization using an invite token.
+ *
+ * Validates the token, checks expiry and usage limits, then:
+ * - Creates membership record for the user
+ * - Sets appropriate role (from token or default)
+ * - Logs the join event
+ * - Marks onboarding as complete
+ *
+ * Requires: Authentication, valid join token, email verified
+ * Request body: { token: string }
+ * Returns: { ok: true; networkId; orgId; role; venue? }
+ */
+
+ 
 import { NextResponse } from "next/server";
 
 import { withSecurity, type AuthenticatedRequest } from "../../_shared/middleware";
@@ -184,7 +199,7 @@ export async function joinWithTokenHandler(
 }
 
 export const POST = withSecurity(
-  async (req: AuthenticatedRequest, _ctx: unknown) => {
+  async (req: AuthenticatedRequest, _ctx: any) => {
     return joinWithTokenHandler(req, importedAdminDb);
   },
   { requireAuth: true },

@@ -1,7 +1,22 @@
 //[P1][API][ONBOARDING] Create Network + Corporate Endpoint (server)
 // Tags: api, onboarding, network, corporate, membership, events
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
+/**
+ * POST /api/onboarding/create-network-corporate
+ * Create a new network and corporate entity, assign creator as corporate admin.
+ *
+ * Creates multi-organization infrastructure:
+ * - Network (shared infrastructure)
+ * - Corporate entity (parent organization)
+ * - Memberships (creator → corp admin, existing managers → managers)
+ * - Logging event (audit trail)
+ *
+ * Requires: Authentication, email verified, allowed role
+ * Request body: { networkName, corpName, inviteEmails[], etc. }
+ * Returns: { ok: true; networkId; corpId; status }
+ */
+
+ 
 import { NextResponse } from "next/server";
 
 import { withSecurity, type AuthenticatedRequest } from "../../_shared/middleware";
@@ -222,7 +237,7 @@ export async function createNetworkCorporateHandler(
 }
 
 export const POST = withSecurity(
-  async (req: AuthenticatedRequest, _ctx: unknown) => {
+  async (req: AuthenticatedRequest, _ctx: any) => {
     return createNetworkCorporateHandler(req, importedAdminDb);
   },
   {
