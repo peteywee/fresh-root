@@ -83,10 +83,10 @@ These items address feedback from automated code reviewers on PR #63.
 
 ## 📊 Definition of Done for Block 3
 
-✅ **All onboarding routes emit events via `logEvent`**  
-✅ **All Firestore docs validate against v14 schemas**  
-✅ **`users/{uid}.onboarding` is sole source of truth**  
-✅ **Event log operational and visible in emulator**  
+✅ **All onboarding routes emit events via `logEvent`**
+✅ **All Firestore docs validate against v14 schemas**
+✅ **`users/{uid}.onboarding` is sole source of truth**
+✅ **Event log operational and visible in emulator**
 **[] CI pipeline fully green**
 
 ---

@@ -41,6 +41,7 @@ When a bug or code smell occurs **≥ 3 times**, stop copying patterns.
 **Create a helper/factory instead** and refactor previous sites to use it.
 
 Examples:
+
 - Duplicate auth checks → extract to `requireRole()` helper
 - JSON parsing errors → extract to `parseJSON()` utility
 - Firestore field updates → extract to `updateFirestoreDoc()` helper
@@ -48,6 +49,7 @@ Examples:
 ## 4. Stop and Refactor on Third Recurrence
 
 If you see:
+
 - The same auth validation appearing 3+ times → consolidate
 - The same error handler pattern 3+ times → create middleware
 - The same Zod schema validation 3+ times → extract to shared validation module
@@ -57,6 +59,7 @@ If you see:
 ## 5. Never Bypass for Speed
 
 ❌ **Don't skip:**
+
 - File-level JSDoc headers (even "one-off" utils)
 - Type contracts from v14 schemas
 - The 3-strikes rule "just this once"
@@ -84,6 +87,7 @@ await logEvent({
 ## 7. Firestore Document Structure
 
 All documents must conform to v14 schemas:
+
 - `networks/{networkId}` ← `Network` schema from packages/types
 - `organizations/{orgId}` ← `Organization` schema from packages/types
 - `venues/{venueId}` ← `Venue` schema from packages/types
@@ -114,10 +118,11 @@ await markOnboardingComplete(uid, adminDb, {
 
 ## 10. Auto-Tagging & Pre-Commit Hooks
 
-Files are automatically tagged on commit via `.husky/pre-commit`.  
+Files are automatically tagged on commit via `.husky/pre-commit`.
 **Never manually edit tags**—let the automation handle it.
 
 For watch-mode tagging during dev:
+
 ```bash
 pnpm watch:tags
 ```
@@ -281,5 +286,3 @@ Code Owner: Patrick Craven
 - API Routes: `apps/web/app/api/onboarding/*`
 - Rules: `firestore.rules` + `packages/rules-tests/src/rules.test.ts`
 - Copilot Instructions: `/fresh-root/.github/copilot-instructions.md`
-
-[area]: #

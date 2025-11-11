@@ -11,14 +11,13 @@
  */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import type { Firestore } from "firebase-admin/firestore";
 import { NewEventSchema, type NewEvent } from "@fresh-schedules/types";
+import type { Firestore } from "firebase-admin/firestore";
 
 export async function logEvent(adminDb: Firestore | any, input: NewEvent): Promise<void> {
   if (!adminDb) {
     // In local/stub mode, just console.log instead of writing to Firestore.
     // This keeps the call sites simple and prevents crashes when adminDb is undefined.
-    // eslint-disable-next-line no-console
     console.log("[eventLog] stub event:", input);
     return;
   }
@@ -27,7 +26,7 @@ export async function logEvent(adminDb: Firestore | any, input: NewEvent): Promi
   if (!parsed.success) {
     // If the event doesn't match our schema, fail FAST in dev.
     // In production, you might want to send this to an error tracker instead.
-    // eslint-disable-next-line no-console
+    console.error("[eventLog] schema validation failed:", parsed.error);
     console.error("[eventLog] invalid event payload", parsed.error.flatten());
     return;
   }

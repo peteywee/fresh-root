@@ -6,9 +6,9 @@ import { NextResponse } from "next/server";
 
 import { withSecurity, type AuthenticatedRequest } from "../../_shared/middleware";
 
+import { logEvent } from "@/src/lib/eventLog";
 import { adminDb as importedAdminDb } from "@/src/lib/firebase.server";
 import { markOnboardingComplete } from "@/src/lib/userOnboarding";
-import { logEvent } from "@/src/lib/eventLog";
 
 /**
  * Inner handler exported for tests. Accepts an optional injected adminDb for testability.
