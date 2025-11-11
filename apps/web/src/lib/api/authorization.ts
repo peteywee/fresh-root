@@ -23,7 +23,7 @@ export function requireOrgMembership(
 ) {
   return async (
     request: NextRequest,
-    context: { params: Record<string, string> },
+    context: { params: Record<string, string> | Promise<Record<string, string>> },
   ): Promise<NextResponse> => {
     const userId = request.headers.get("x-user-id");
     if (!userId)
@@ -36,8 +36,11 @@ export function requireOrgMembership(
         { status: 400 },
       );
 
+    // Resolve params if it's a Promise (Next.js 14+)
+    const resolvedParams = await Promise.resolve(context.params);
+
     // NOTE: In a full implementation, verify membership in Firestore here.
-    return handler(request, { ...context, userId, orgId });
+    return handler(request, { params: resolvedParams, userId, orgId });
   };
 }
 
@@ -51,7 +54,11 @@ export function requireRole(requiredRole: OrgRole) {
   ) {
     return async (
       request: NextRequest,
-      context: { params: Record<string, string>; userId: string; orgId: string },
+      context: {
+        params: Record<string, string> | Promise<Record<string, string>>;
+        userId: string;
+        orgId: string;
+      },
     ): Promise<NextResponse> => {
       // Minimal: read roles from header for now (e.g., "x-roles: admin,manager")
       const rolesHeader = request.headers.get("x-roles") || "";
@@ -69,7 +76,15 @@ export function requireRole(requiredRole: OrgRole) {
         );
       }
 
-      return handler(request, { ...context, roles });
+      // Resolve params if it's a Promise (Next.js 14+)
+      const resolvedParams = await Promise.resolve(context.params);
+
+      return handler(request, {
+        params: resolvedParams,
+        userId: context.userId,
+        orgId: context.orgId,
+        roles,
+      });
     };
   };
 }

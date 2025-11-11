@@ -1,5 +1,5 @@
 //[P1][API][ONBOARDING] Create Network + Org Endpoint (server)
-// Tags: api, onboarding, network, org, venue
+// Tags: api, onboarding, network, org, venue, membership
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextResponse } from "next/server";
@@ -7,26 +7,20 @@ import { NextResponse } from "next/server";
 import { withSecurity, type AuthenticatedRequest } from "../../_shared/middleware";
 
 import { adminDb as importedAdminDb } from "@/src/lib/firebase.server";
+import { markOnboardingComplete } from "@/src/lib/userOnboarding";
 
 /**
  * Inner handler exported for tests. Accepts an optional injected adminDb for testability.
  */
 export async function createNetworkOrgHandler(
-  req: AuthenticatedRequest & { user?: { uid: string; customClaims?: Record<string, unknown> } },
-  // withSecurity will call the handler with (req, ctx). Tests may pass an injected adminDb
-  ctxOrInjectedAdminDb?: unknown,
+  req: AuthenticatedRequest & {
+    user?: { uid: string; customClaims?: Record<string, unknown> };
+  },
+  injectedAdminDb = importedAdminDb,
 ) {
-  // Determine if caller injected an adminDb (tests) or this is the Next.js ctx
-  function hasCollection(x: unknown): x is { collection: (...args: unknown[]) => unknown } {
-    return typeof x === "object" && x !== null && "collection" in x;
-  }
-
-  const injectedAdminDb = hasCollection(ctxOrInjectedAdminDb)
-    ? ctxOrInjectedAdminDb
-    : importedAdminDb;
-
-  // Require admin DB; if not available, return stubbed response for local/dev
+  // Use injected adminDb (tests) or imported adminDb for runtime
   if (!injectedAdminDb) {
+    // In dev/local mode, return a stub response so the frontend can be exercised without Firestore
     return NextResponse.json(
       {
         ok: true,
@@ -71,7 +65,7 @@ export async function createNetworkOrgHandler(
     return NextResponse.json({ error: "invalid_json" }, { status: 400 });
   }
 
-  const { orgName, venueName, formToken } = (body as Record<string, unknown>) || {};
+  const { orgName, venueName, formToken, location } = (body as Record<string, unknown>) || {};
   if (!formToken) return NextResponse.json({ error: "missing_form_token" }, { status: 422 });
 
   // Prevent path traversal attacks by ensuring formToken is a valid document ID segment.
@@ -80,11 +74,11 @@ export async function createNetworkOrgHandler(
   }
 
   try {
-    const formRef = adminDb
+    const formsRoot = adminDb
       .collection("compliance")
       .doc("adminResponsibilityForms")
-      .collection("forms")
-      .doc(String(formToken));
+      .collection("forms");
+    const formRef = formsRoot.doc(String(formToken));
 
     const formSnap = await formRef.get();
     if (!formSnap.exists) {
@@ -92,8 +86,8 @@ export async function createNetworkOrgHandler(
     }
 
     const formData = formSnap.data() as Record<string, unknown>;
-    const now = Date.now();
-    if (typeof formData.expiresAt === "number" && formData.expiresAt < now) {
+    const nowMs = Date.now();
+    if (typeof formData.expiresAt === "number" && formData.expiresAt < nowMs) {
       return NextResponse.json({ error: "form_token_expired" }, { status: 410 });
     }
 
@@ -106,40 +100,103 @@ export async function createNetworkOrgHandler(
     const orgRef = adminDb.collection("orgs").doc();
     const venueRef = adminDb.collection("venues").doc();
 
+    // Membership doc id in the existing global memberships collection
+    const membershipId = `${uid}_org_${orgRef.id}`;
+    const membershipRef = adminDb.collection("memberships").doc(membershipId);
+
     await adminDb.runTransaction(
       async (tx: {
         set: (...args: unknown[]) => unknown;
         update: (...args: unknown[]) => unknown;
       }) => {
+        const createdAt = nowMs;
+
+        // 1) Network
         tx.set(networkRef, {
           name: orgName || `Network ${new Date().toISOString()}`,
           status: "pending_verification",
-          createdAt: Date.now(),
+          createdAt,
           adminFormToken: formToken,
         });
 
+        // 2) Org
         tx.set(orgRef, {
           name: orgName || "Org",
           networkId: networkRef.id,
-          createdAt: Date.now(),
+          createdAt,
         });
 
+        // 3) Venue (with optional location/timezone)
         tx.set(venueRef, {
           name: venueName || "Main Venue",
           orgId: orgRef.id,
           networkId: networkRef.id,
-          createdAt: Date.now(),
+          createdAt,
+          ...(Object.keys(locationData).length > 0
+            ? {
+                location: {
+                  street1: locationData.street1 || "",
+                  street2: locationData.street2 || "",
+                  city: locationData.city || "",
+                  state: locationData.state || "",
+                  postalCode: locationData.postalCode || "",
+                  countryCode: locationData.countryCode || "",
+                  timeZone: locationData.timeZone || "",
+                },
+              }
+            : {}),
         });
 
-        // Mark form as attached and immutable
+        // 4) Copy admin responsibility form into a network-scoped compliance document
+        const complianceRef = networkRef.collection("compliance").doc("adminResponsibilityForm");
+
+        tx.set(complianceRef, {
+          ...formData,
+          networkId: networkRef.id,
+          orgId: orgRef.id,
+          venueId: venueRef.id,
+          attachedFromToken: formToken,
+          attachedBy: uid,
+          attachedAt: createdAt,
+        });
+
+        // 5) Mark original form as attached + immutable
         tx.update(formRef, {
-          attachedTo: { networkId: networkRef.id, orgId: orgRef.id, venueId: venueRef.id },
+          attachedTo: {
+            networkId: networkRef.id,
+            orgId: orgRef.id,
+            venueId: venueRef.id,
+          },
           immutable: true,
           status: "attached",
-          attachedAt: Date.now(),
+          attachedAt: createdAt,
+        });
+
+        // 6) Create global membership so legacy/org-based rules still work
+        tx.set(membershipRef, {
+          userId: uid,
+          orgId: orgRef.id,
+          networkId: networkRef.id,
+          roles: ["org_owner", "admin", "manager"],
+          createdAt,
+          createdBy: uid,
         });
       },
     );
+
+    // Mark the creating user's onboarding as complete (best-effort).
+    try {
+      await markOnboardingComplete({
+        adminDb,
+        uid: uid as string,
+        intent: "create_org",
+        networkId: networkRef.id,
+        orgId: orgRef.id,
+        venueId: venueRef.id,
+      });
+    } catch {
+      // Swallow errors to preserve original endpoint semantics.
+    }
 
     return NextResponse.json(
       {
@@ -158,4 +215,7 @@ export async function createNetworkOrgHandler(
 }
 
 // Keep Next.js route export for runtime (secured)
-export const POST = withSecurity(createNetworkOrgHandler, { requireAuth: true });
+export const POST = withSecurity(
+  async (req: any) => createNetworkOrgHandler(req, importedAdminDb),
+  { requireAuth: true },
+);

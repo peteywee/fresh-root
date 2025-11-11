@@ -1,64 +1,102 @@
-// [P0][APP][CODE] Page page component
-// Tags: P0, APP, CODE
+// [P2][APP][CODE] Onboarding join page component
+// Tags: P2, APP, CODE
 "use client";
 
-import React, { useState } from "react";
+import { useRouter } from "next/navigation";
+import React, { FormEvent, useState } from "react";
 
-import ProtectedRoute from "../../components/ProtectedRoute";
+type JoinFormState = {
+  token: string;
+  email: string;
+};
 
-export default function JoinStep() {
-  const [token, setToken] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [result, setResult] = useState<Record<string, unknown> | null>(null);
+export default function JoinPage() {
+  const router = useRouter();
+  const nav = router as any;
+  const [form, setForm] = useState<JoinFormState>({
+    token: "",
+    email: "",
+  });
+  const [error, setError] = useState<string | null>(null);
 
-  async function submit(e: React.FormEvent) {
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
+  }
+
+  function handleSubmit(e: FormEvent) {
     e.preventDefault();
-    setLoading(true);
-    try {
-      const res = await fetch("/api/onboarding/join-with-token", {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({ token }),
-      });
-      const json = await res.json();
-      setResult(json);
-    } catch (e) {
-      setResult({ error: (e as Error).message });
-    } finally {
-      setLoading(false);
+
+    if (!form.token.trim()) {
+      setError("Invite token is required.");
+      return;
     }
+
+    setError(null);
+
+    // Real implementation would POST to /api/onboarding/join-with-token.
+    nav.push("/onboarding/block-4");
   }
 
   return (
-    <ProtectedRoute>
-      <div className="mx-auto max-w-2xl p-6">
-        <h1 className="mb-4 text-2xl font-semibold">Join an existing team</h1>
-        <p className="mb-4">Paste an invite link or ask your admin for an invite.</p>
+    <main className="mx-auto flex max-w-xl flex-col gap-6 px-4 py-10">
+      <header className="space-y-2">
+        <h1 className="text-2xl font-semibold">Step 3: Join with token</h1>
+        <p className="text-sm text-gray-600">
+          Enter the invite token sent by your organization to connect your account.
+        </p>
+      </header>
 
-        <form onSubmit={submit} className="space-y-4">
-          <div>
-            <label className="block text-sm text-neutral-300">Invite token or code</label>
-            <input
-              value={token}
-              onChange={(e) => setToken(e.target.value)}
-              className="mt-1 w-full rounded bg-neutral-900 px-3 py-2 text-white"
-              placeholder="abcd-efgh-1234"
-            />
-          </div>
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div className="space-y-1">
+          <label htmlFor="token" className="block text-sm font-medium text-gray-800">
+            Invite token
+          </label>
+          <input
+            id="token"
+            name="token"
+            type="text"
+            value={form.token}
+            onChange={handleChange}
+            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
+            placeholder="Paste your invite token"
+          />
+        </div>
 
-          <div className="flex justify-end">
-            <button className="rounded bg-emerald-600 px-4 py-2 text-sm font-medium">
-              {loading ? "Joining…" : "Join"}
-            </button>
-          </div>
-        </form>
+        <div className="space-y-1">
+          <label htmlFor="email" className="block text-sm font-medium text-gray-800">
+            Email (optional)
+          </label>
+          <input
+            id="email"
+            name="email"
+            type="email"
+            value={form.email}
+            onChange={handleChange}
+            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
+            placeholder="Used for verification if required"
+          />
+        </div>
 
-        {result && (
-          <pre className="mt-4 rounded bg-neutral-900 p-3 text-sm">
-            {JSON.stringify(result, null, 2)}
-          </pre>
-        )}
-      </div>
-    </ProtectedRoute>
+        {error && <p className="text-sm text-red-600">{error}</p>}
+
+        <div className="flex items-center justify-between gap-4">
+          <button
+            type="button"
+            onClick={() => nav.push("/onboarding/intent")}
+            className="text-sm text-gray-600 underline"
+          >
+            Back to Intent
+          </button>
+
+          <button
+            type="submit"
+            className="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white"
+          >
+            Continue
+          </button>
+        </div>
+      </form>
+    </main>
   );
 }

@@ -1,21 +1,52 @@
-// [P0][APP][CODE] Page page component
+// [P0][APP][CODE] Staff invite blocked page component
 // Tags: P0, APP, CODE
 "use client";
 
+import { useRouter } from "next/navigation";
 import React from "react";
 
-import ProtectedRoute from "../../components/ProtectedRoute";
+export default function StaffInviteBlockedPage() {
+  const router = useRouter();
+  const nav = router as any;
 
-export default function StaffInviteBlocked() {
   return (
-    <ProtectedRoute>
-      <div className="mx-auto max-w-2xl p-6 text-center">
-        <h1 className="mb-4 text-2xl font-semibold">You need an invite</h1>
-        <p className="text-sm">
-          It looks like you're staff. Please ask your administrator for an invite link to join the
-          team.
+    <main className="mx-auto flex max-w-xl flex-col gap-6 px-4 py-10">
+      <header className="space-y-2">
+        <h1 className="text-2xl font-semibold">You need an invite</h1>
+        <p className="text-sm text-gray-600">
+          It looks like you&apos;re trying to onboard as a staff member without an invite token.
+          Staff access must be initiated by an admin or manager from an existing organization.
         </p>
+      </header>
+
+      <section className="space-y-2 rounded-md border border-yellow-200 bg-yellow-50 p-4 text-sm text-gray-800">
+        <p className="font-medium">What you can do:</p>
+        <ul className="list-disc pl-5">
+          <li>Ask your manager or admin to send you a Fresh Schedules invite.</li>
+          <li>
+            Once you receive the invite token, return here and use the{" "}
+            <span className="font-semibold">Join with token</span> step.
+          </li>
+        </ul>
+      </section>
+
+      <div className="flex items-center justify-start gap-4">
+        <button
+          type="button"
+          onClick={() => nav.push("/onboarding/join")}
+          className="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white"
+        >
+          Go to Join with token
+        </button>
+
+        <button
+          type="button"
+          onClick={() => nav.push("/onboarding")}
+          className="text-sm text-gray-600 underline"
+        >
+          Back to onboarding index
+        </button>
       </div>
-    </ProtectedRoute>
+    </main>
   );
 }

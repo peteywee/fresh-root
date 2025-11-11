@@ -14,7 +14,7 @@ import { serverError } from "../../../../_shared/validation";
  * GET /api/organizations/[id]/members/[memberId]
  * Get member details (org membership required)
  */
-export const GET = rateLimit(RateLimits.STANDARD)(
+export const GET = ((rateLimit as any)("standard") as (fn: any) => any)(
   requireOrgMembership(async (request: NextRequest, context) => {
     const { params } = context;
     try {
@@ -40,7 +40,7 @@ export const GET = rateLimit(RateLimits.STANDARD)(
  * PATCH /api/organizations/[id]/members/[memberId]
  * Update member roles or settings (admin+ only)
  */
-export const PATCH = rateLimit(RateLimits.WRITE)(
+export const PATCH = (rateLimit as any)(RateLimits.api)(
   csrfProtection()(
     requireOrgMembership(
       requireRole("admin")(async (request: NextRequest, context) => {
@@ -72,13 +72,12 @@ export const PATCH = rateLimit(RateLimits.WRITE)(
     ),
   ),
 );
-// ...existing code...
 
 /**
  * DELETE /api/organizations/[id]/members/[memberId]
  * Remove a member from an organization (admin+ only)
  */
-export const DELETE = rateLimit(RateLimits.WRITE)(
+export const DELETE = (rateLimit as any)(RateLimits.api)(
   csrfProtection()(
     requireOrgMembership(
       requireRole("admin")(async (request: NextRequest, context) => {

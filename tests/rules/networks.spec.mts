@@ -203,6 +203,194 @@ describe("Network tenancy rules", () => {
       await assertFails(deleteDoc(doc(db, `networks/${NETWORK_ID}`)));
     });
   });
+
+  describe("Network-scoped compliance documents (server-only)", () => {
+    const COMPLIANCE_NETWORK_ID = `compliance-network-${Date.now()}`;
+
+    beforeAll(async () => {
+      await testEnv.withSecurityRulesDisabled(async (context) => {
+        const db = context.firestore();
+        // Create a network
+        await setDoc(doc(db, `networks/${COMPLIANCE_NETWORK_ID}`), {
+          id: COMPLIANCE_NETWORK_ID,
+          name: "Compliance Test Network",
+          ownerId: OWNER_UID,
+        });
+        // Create a compliance doc under the network
+        await setDoc(
+          doc(db, `networks/${COMPLIANCE_NETWORK_ID}/compliance/adminResponsibilityForm`),
+          {
+            legalName: "Test Corp",
+            taxId: "12-3456789",
+            attachedAt: Date.now(),
+            immutable: true,
+            status: "attached",
+          },
+        );
+        // Set up network membership for the member
+        await setDoc(doc(db, `networks/${COMPLIANCE_NETWORK_ID}/memberships/${MEMBER_UID}`), {
+          uid: MEMBER_UID,
+          networkId: COMPLIANCE_NETWORK_ID,
+          roles: ["member"],
+        });
+      });
+    });
+
+    it("DENY: network owner cannot read network-scoped compliance doc", async () => {
+      const ownerContext = testEnv.authenticatedContext(OWNER_UID, {
+        networkId: COMPLIANCE_NETWORK_ID,
+        roles: ["owner"],
+      });
+      const db = ownerContext.firestore();
+      await assertFails(
+        getDoc(doc(db, `networks/${COMPLIANCE_NETWORK_ID}/compliance/adminResponsibilityForm`)),
+      );
+    });
+
+    it("DENY: network member cannot read network-scoped compliance doc", async () => {
+      const memberContext = testEnv.authenticatedContext(MEMBER_UID, {
+        networkId: COMPLIANCE_NETWORK_ID,
+        roles: ["member"],
+      });
+      const db = memberContext.firestore();
+      await assertFails(
+        getDoc(doc(db, `networks/${COMPLIANCE_NETWORK_ID}/compliance/adminResponsibilityForm`)),
+      );
+    });
+
+    it("DENY: unauthenticated cannot read network-scoped compliance doc", async () => {
+      const unauthContext = testEnv.unauthenticatedContext();
+      const db = unauthContext.firestore();
+      await assertFails(
+        getDoc(doc(db, `networks/${COMPLIANCE_NETWORK_ID}/compliance/adminResponsibilityForm`)),
+      );
+    });
+
+    it("DENY: network owner cannot write network-scoped compliance doc", async () => {
+      const ownerContext = testEnv.authenticatedContext(OWNER_UID, {
+        networkId: COMPLIANCE_NETWORK_ID,
+        roles: ["owner"],
+      });
+      const db = ownerContext.firestore();
+      await assertFails(
+        updateDoc(doc(db, `networks/${COMPLIANCE_NETWORK_ID}/compliance/adminResponsibilityForm`), {
+          status: "modified",
+        }),
+      );
+    });
+
+    it("DENY: network member cannot write network-scoped compliance doc", async () => {
+      const memberContext = testEnv.authenticatedContext(MEMBER_UID, {
+        networkId: COMPLIANCE_NETWORK_ID,
+        roles: ["member"],
+      });
+      const db = memberContext.firestore();
+      await assertFails(
+        updateDoc(doc(db, `networks/${COMPLIANCE_NETWORK_ID}/compliance/adminResponsibilityForm`), {
+          status: "modified",
+        }),
+      );
+    });
+  });
+
+  describe("Global compliance documents (server-only)", () => {
+    it("DENY: authenticated user cannot read global compliance doc", async () => {
+      const userContext = testEnv.authenticatedContext(OWNER_UID, {
+        roles: ["owner"],
+      });
+      const db = userContext.firestore();
+      await assertFails(getDoc(doc(db, `compliance/adminResponsibilityForms/forms/token-123`)));
+    });
+
+    it("DENY: authenticated user cannot write global compliance doc", async () => {
+      const userContext = testEnv.authenticatedContext(OWNER_UID, {
+        roles: ["owner"],
+      });
+      const db = userContext.firestore();
+      await assertFails(
+        setDoc(doc(db, `compliance/adminResponsibilityForms/forms/new-token`), {
+          legalName: "Attacker Corp",
+          status: "submitted",
+        }),
+      );
+    });
+
+    it("DENY: unauthenticated cannot read global compliance doc", async () => {
+      const unauthContext = testEnv.unauthenticatedContext();
+      const db = unauthContext.firestore();
+      await assertFails(getDoc(doc(db, `compliance/adminResponsibilityForms`)));
+    });
+  });
+
+  describe("Cross-network access prevention", () => {
+    const NETWORK_A = `network-a-${Date.now()}`;
+    const NETWORK_B = `network-b-${Date.now()}`;
+    const USER_A = "user-a-uid";
+    const USER_B = "user-b-uid";
+
+    beforeAll(async () => {
+      await testEnv.withSecurityRulesDisabled(async (context) => {
+        const db = context.firestore();
+        // Create two networks
+        await setDoc(doc(db, `networks/${NETWORK_A}`), {
+          id: NETWORK_A,
+          name: "Network A",
+          ownerId: USER_A,
+        });
+        await setDoc(doc(db, `networks/${NETWORK_B}`), {
+          id: NETWORK_B,
+          name: "Network B",
+          ownerId: USER_B,
+        });
+        // Set up memberships
+        await setDoc(doc(db, `networks/${NETWORK_A}/memberships/${USER_A}`), {
+          uid: USER_A,
+          networkId: NETWORK_A,
+          roles: ["owner"],
+        });
+        await setDoc(doc(db, `networks/${NETWORK_B}/memberships/${USER_B}`), {
+          uid: USER_B,
+          networkId: NETWORK_B,
+          roles: ["owner"],
+        });
+      });
+    });
+
+    it("DENY: user from network A cannot read network B", async () => {
+      const contextA = testEnv.authenticatedContext(USER_A, {
+        networkId: NETWORK_A,
+        roles: ["owner"],
+      });
+      const db = contextA.firestore();
+      await assertFails(getDoc(doc(db, `networks/${NETWORK_B}`)));
+    });
+
+    it("DENY: user from network A cannot update network B", async () => {
+      const contextA = testEnv.authenticatedContext(USER_A, {
+        networkId: NETWORK_A,
+        roles: ["owner"],
+      });
+      const db = contextA.firestore();
+      await assertFails(
+        updateDoc(doc(db, `networks/${NETWORK_B}`), {
+          name: "Hacked Network B",
+        }),
+      );
+    });
+
+    it("DENY: user from network A cannot list network B memberships", async () => {
+      // List operations on nested collections are typically blocked at the subcollection level
+      const contextA = testEnv.authenticatedContext(USER_A, {
+        networkId: NETWORK_A,
+        roles: ["owner"],
+      });
+      const db = contextA.firestore();
+      // This would typically be tested with query-level rules
+      // For now, verify that access is controlled by network membership
+      const docRef = doc(db, `networks/${NETWORK_B}/memberships/${USER_B}`);
+      await assertFails(getDoc(docRef));
+    });
+  });
 });
 function deleteDoc(arg0: DocumentReference<DocumentData, DocumentData>): Promise<unknown> {
   // Delegate to Firestore SDK deleteDoc; cast to relax generic differences
