@@ -86,7 +86,9 @@ export function csrfProtection<Ctx extends Record<string, unknown> = {}>(config:
 
       try {
         // runtime may expose request.cookies.get(name)
-        const maybeCookies = (request as unknown as { cookies?: { get?: (name: string) => { value?: string } } }).cookies;
+        const maybeCookies = (
+          request as unknown as { cookies?: { get?: (name: string) => { value?: string } } }
+        ).cookies;
         if (maybeCookies && typeof maybeCookies.get === "function") {
           cookieToken = maybeCookies.get(fullConfig.cookieName)?.value ?? null;
         }
@@ -148,7 +150,9 @@ export function withCSRFToken<Ctx extends Record<string, unknown> = {}>(
     // Prefer the public cookies API when available; otherwise fallback to Cookie header.
     let token: string | null = null;
     try {
-      const maybeCookies = (request as unknown as { cookies?: { get?: (name: string) => { value?: string } } }).cookies;
+      const maybeCookies = (
+        request as unknown as { cookies?: { get?: (name: string) => { value?: string } } }
+      ).cookies;
       if (maybeCookies && typeof maybeCookies.get === "function") {
         token = maybeCookies.get(fullConfig.cookieName)?.value ?? null;
       }

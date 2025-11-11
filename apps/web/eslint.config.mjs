@@ -27,9 +27,9 @@ export default [
       "react-hooks": reactHooks,
     },
     rules: {
-  "@typescript-eslint/no-unused-vars": ["warn", { argsIgnorePattern: "^_" }],
-  // Temporarily relax explicit any to warn while we remove technical-debt shims
-  "@typescript-eslint/no-explicit-any": "warn",
+      "@typescript-eslint/no-unused-vars": ["warn", { argsIgnorePattern: "^_" }],
+      // Temporarily relax explicit any to warn while we remove technical-debt shims
+      "@typescript-eslint/no-explicit-any": "warn",
       "react-hooks/rules-of-hooks": "error",
       "react-hooks/exhaustive-deps": "warn",
       "prefer-const": "warn",

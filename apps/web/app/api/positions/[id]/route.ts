@@ -68,7 +68,7 @@ export const PATCH = csrfProtection()(
           );
         }
 
-  const data = validationResult.data;
+        const data = validationResult.data;
 
         // In production, update in Firestore after verifying orgId matches
         const updatedPosition = {

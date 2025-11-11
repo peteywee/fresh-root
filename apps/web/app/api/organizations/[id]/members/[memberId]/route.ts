@@ -42,60 +42,64 @@ export const GET = requireOrgMembership(async (request: NextRequest, context) =>
  * PATCH /api/organizations/[id]/members/[memberId]
  * Update member roles or settings (admin+ only)
  */
-export const PATCH = csrfProtection()(requireOrgMembership(requireRole("admin")(
-  async (request: NextRequest, context) => {
-    // Inline rate-limiting check
-    const rateLimitResult = await rateLimit(request, RateLimits.api);
-    if (rateLimitResult) return rateLimitResult;
+export const PATCH = csrfProtection()(
+  requireOrgMembership(
+    requireRole("admin")(async (request: NextRequest, context) => {
+      // Inline rate-limiting check
+      const rateLimitResult = await rateLimit(request, RateLimits.api);
+      if (rateLimitResult) return rateLimitResult;
 
-    const { params, userId } = context;
-    try {
-      const { id: orgId, memberId } = await params;
+      const { params, userId } = context;
+      try {
+        const { id: orgId, memberId } = await params;
 
-      const body = await request.json();
-      const validated = MembershipUpdateSchema.parse(body);
-      const sanitized = sanitizeObject(validated);
+        const body = await request.json();
+        const validated = MembershipUpdateSchema.parse(body);
+        const sanitized = sanitizeObject(validated);
 
-      // In production: permission checks, update Firestore
-      const updatedMember = {
-        id: memberId,
-        orgId,
-        uid: "user-123",
-        ...sanitized,
-        updatedAt: new Date().toISOString(),
-        updatedBy: userId,
-      };
-      return NextResponse.json(updatedMember);
-    } catch (error) {
-      if (error instanceof Error && error.name === "ZodError") {
-        return NextResponse.json({ error: "Invalid member data" }, { status: 400 });
+        // In production: permission checks, update Firestore
+        const updatedMember = {
+          id: memberId,
+          orgId,
+          uid: "user-123",
+          ...sanitized,
+          updatedAt: new Date().toISOString(),
+          updatedBy: userId,
+        };
+        return NextResponse.json(updatedMember);
+      } catch (error) {
+        if (error instanceof Error && error.name === "ZodError") {
+          return NextResponse.json({ error: "Invalid member data" }, { status: 400 });
+        }
+        return serverError("Failed to update member");
       }
-      return serverError("Failed to update member");
-    }
-  }
-)));
+    }),
+  ),
+);
 
 /**
  * DELETE /api/organizations/[id]/members/[memberId]
  * Remove a member from an organization (admin+ only)
  */
-export const DELETE = csrfProtection()(requireOrgMembership(requireRole("admin")(
-  async (request: NextRequest, context) => {
-    // Inline rate-limiting check
-    const rateLimitResult = await rateLimit(request, RateLimits.api);
-    if (rateLimitResult) return rateLimitResult;
+export const DELETE = csrfProtection()(
+  requireOrgMembership(
+    requireRole("admin")(async (request: NextRequest, context) => {
+      // Inline rate-limiting check
+      const rateLimitResult = await rateLimit(request, RateLimits.api);
+      if (rateLimitResult) return rateLimitResult;
 
-    const { params } = context;
-    try {
-      const { id: orgId, memberId } = params;
-      // In production: permission checks, delete from Firestore
-      return NextResponse.json({
-        message: "Member removed successfully",
-        orgId,
-        memberId,
-      });
-    } catch {
-      return serverError("Failed to remove member");
-    }
-  }
-)));
+      const { params } = context;
+      try {
+        const { id: orgId, memberId } = params;
+        // In production: permission checks, delete from Firestore
+        return NextResponse.json({
+          message: "Member removed successfully",
+          orgId,
+          memberId,
+        });
+      } catch {
+        return serverError("Failed to remove member");
+      }
+    }),
+  ),
+);
