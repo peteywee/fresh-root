@@ -1,95 +1,7 @@
 # LAYER_02_APPLICATION_LIBS
 
-**Purpose**  
-Implements all domain-level use-cases: onboarding, scheduling, attendance, role management, and validation orchestration.
+## Purpose
 
----
-
-## 1. Scope
-
-`apps/web/src/lib/**`  
-(excluding `env*.ts` and `firebase.server.ts`)
-
----
-
-## 2. Responsibilities
-
-- Business logic orchestration (pure functions).
-- Validation using Zod schemas from Layer 00.
-- Interaction with infra adapters (Layer 01).
-- Provide clean APIs to Layer 03.
-
----
-
-## 3. Inputs
-
-- Domain schemas (00).
-- Infra clients (01).
-
----
-
-## 4. Outputs
-
-- Typed use-case functions.
-- Consistent error objects.
-
----
-
-## 5. Dependencies
-
-- `zod`
-- `@fresh-schedules/types`
-- `@firebase/*` via infra adapters
-- `p-retry` / `p-map` (optional)
-
----
-
-## 6. Consumers
-
-- Layer 03 (API Edge)
-- Layer 04 (UI clients via API wrappers)
-
----
-
-## 7. Invariants
-
-- No Next or React imports.
-- No direct HTTP handlers.
-- Deterministic, testable functions.
-
----
-
-## 8. Core Use-Cases
-
-| File                             | Description                  |
-| -------------------------------- | ---------------------------- |
-| `onboarding/createOrg.ts`        | Org creation                 |
-| `roles/createRole.ts`            | Role CRUD                    |
-| `roles/listRoles.ts`             | Role listing                 |
-| `scheduling/createShift.ts`      | Shift with Role requirements |
-| `attendance/recordAttendance.ts` | Attendance with roleId       |
-| `error/normalize.ts`             | Consistent error objects     |
-| `api/request.ts`                 | Fetch helpers (client only)  |
-
----
-
-## 9. Validation Checklist
-
-- [ ] All functions return typed Result or throw structured error.
-- [ ] No business logic in API routes.
-- [ ] Unit tests for each use-case pass.
-
----
-
-## 10. Change Log
-
-| Date       | Author         | Change            |
-| ---------- | -------------- | ----------------- |
-| YYYY-MM-DD | Patrick Craven | Initial L02 guide |
-
-# LAYER_02_APPLICATION_LIBS
-
-**Purpose**
 Application Libraries implement the **core behavior of the app**: onboarding, scheduling, attendance logic, authorization, rate limiting, and error handling, in a way that is independent of HTTP routes and UI components.
 
 This layer turns:
@@ -99,14 +11,12 @@ This layer turns:
 
 into **concrete use-cases** like:
 
-- “Create a network and org”
-- “Calculate allowed labor for a week”
-- “Record attendance safely”
-- “Enforce org membership and roles”
+- "Create a network and org"
+- "Calculate allowed labor for a week"
+- "Record attendance safely"
+- "Enforce org membership and roles"
 
----
-
-**Scope**
+## Scope
 
 This layer includes (non-exhaustive):
 
@@ -138,9 +48,7 @@ Not in scope:
 - Next.js route handlers under `app/api/**` (Layer 03).
 - React components or pages under `app/**` and `components/**` (Layer 04).
 
----
-
-**Inputs**
+## Inputs
 
 Application Libraries consume:
 
@@ -159,9 +67,7 @@ Application Libraries consume:
 
 They do **not** consume `NextRequest`, `NextResponse`, or React components directly.
 
----
-
-**Outputs**
+## Outputs
 
 Application Libraries produce:
 
@@ -186,9 +92,7 @@ Application Libraries produce:
 
 All outputs are designed to be **called** from Layer 03 (API) and indirectly from Layer 04 (UI) through service hooks.
 
----
-
-**Dependencies**
+## Dependencies
 
 Allowed dependencies:
 
@@ -209,9 +113,7 @@ Forbidden dependencies:
 
 Application logic must be framework-agnostic and testable without spinning up Next.js.
 
----
-
-**Consumers**
+## Consumers
 
 Application Libraries are consumed by:
 
@@ -223,9 +125,7 @@ Application Libraries are consumed by:
 
 This layer sits in the middle and should not be skipped. Any business operation should pass through it.
 
----
-
-**Invariants**
+## Invariants
 
 1. **No Framework Entanglement**
    - No imports from React, `next/*`, or `app/api/**` files.
@@ -251,39 +151,8 @@ This layer sits in the middle and should not be skipped. Any business operation 
    - Authorization helpers (e.g., `requireOrgMembership`) must default to **deny** on missing/invalid context.
    - No function should assume a user is allowed; permission checks are explicit.
 
----
-
-**Change Log**
+## Change Log
 
 | Date       | Author         | Change                       |
 | ---------- | -------------- | ---------------------------- |
-| YYYY-MM-DD | Patrick Craven | Initial v15 layer definition |
-
-# LAYER_02_APPLICATION_LIBS
-
-**Purpose**
-Describe exactly why this layer exists and what problems it solves.
-
-**Scope**
-Which directories, modules, or files belong to it.
-
-**Inputs**
-What it consumes (events, requests, data types).
-
-**Outputs**
-What it produces (domain entities, responses, UI state).
-
-**Dependencies**
-Which other layers or systems it depends on (always downward only).
-
-**Consumers**
-Which layers depend on this layer.
-
-**Invariants**
-Rules that must never break inside this layer.
-
-**Change Log**
-
-| Date       | Author         | Change        |
-| ---------- | -------------- | ------------- |
-| YYYY-MM-DD | Patrick Craven | Initial draft |
+| 2025-11-11 | Patrick Craven | Initial v15 layer definition |

@@ -1,111 +1,7 @@
 # LAYER_03_API_EDGE
 
-**Purpose**  
-Implements the HTTP boundary between clients and application logic.  
-Validates requests, calls Layer 02, and returns standardized responses.
+## Purpose
 
----
-
-## 1. Scope
-
-- `apps/web/app/api/**`
-- `apps/web/app/api/_shared/**`
-- `apps/web/middleware.ts`
-- `services/api/src/index.ts`
-
----
-
-## 2. Responsibilities
-
-- Parse and validate requests (Zod).
-- Enforce auth & RBAC guards.
-- Delegate to Layer 02 use-cases.
-- Shape responses for UI.
-
----
-
-## 3. Inputs
-
-- Next.js `Request` object.
-- Session context from middleware.
-
----
-
-## 4. Outputs
-
-- JSON responses conforming to standard DTOs.
-- Error payloads with consistent shape, e.g.:
-
-```ts
-{
-  ok: false;
-  code: string;
-  message: string;
-}
-```
-
----
-
-## 5. Dependencies
-
-- `next/server`
-- `zod`
-- `@fresh-schedules/types`
-- Layer 02 use-cases
-
----
-
-## 6. Consumers
-
-- Layer 04 UI clients.
-
----
-
-## 7. Invariants
-
-- No business logic in routes.
-- Validation before execution.
-- Errors standardized.
-
----
-
-## 8. Example Routes
-
-| Route                 | Action                          |
-| --------------------- | ------------------------------- |
-| `/api/roles`          | Create/List Roles               |
-| `/api/roles/[roleId]` | Update/Delete Role              |
-| `/api/attendance`     | Record Attendance (with roleId) |
-| `/api/shifts`         | Create/List Shifts (with roles) |
-
----
-
-## 9. Middleware
-
-- `requireSession()` – verifies JWT idToken.
-- `requireOrgMembership()` – ensures user belongs to org.
-- `requireRole()` – checks RBAC.
-
----
-
-## 10. Validation Checklist
-
-- All routes return typed responses.
-- Input validated with Zod.
-- Uses Layer 02, not direct Firebase calls.
-- 100% E2E pass for golden path.
-
----
-
-## 11. Change Log
-
-| Date       | Author         | Change            |
-| ---------- | -------------- | ----------------- |
-| YYYY-MM-DD | Patrick Craven | Initial L03 guide |
-
-# LAYER_03_API_EDGE
-
-**Purpose**
 The API Edge layer is the **boundary between HTTP and the application**.
 It receives HTTP/Next requests, validates and parses them, invokes Application Library use-cases, and returns HTTP responses.
 
@@ -115,9 +11,7 @@ It should contain **no business logic** beyond:
 - Authentication/authorization hookup
 - Mapping application results to HTTP responses
 
----
-
-**Scope**
+## Scope
 
 This layer includes:
 
@@ -142,9 +36,7 @@ Out of scope:
 - UI components or pages (`apps/web/app/**` views).
 - Pure business logic (should reside in `apps/web/src/lib/**`).
 
----
-
-**Inputs**
+## Inputs
 
 API Edge consumes:
 
@@ -162,9 +54,7 @@ API Edge consumes:
   - `requireSession`, `requireOrgMembership`, `requireRole`
   - `parseJson`, validation wrappers, CSRF helpers
 
----
-
-**Outputs**
+## Outputs
 
 API Edge produces:
 
@@ -181,9 +71,7 @@ API Edge produces:
    - Metrics/traces for API calls
    - No global state mutation beyond what app libs and infra handle
 
----
-
-**Dependencies**
+## Dependencies
 
 Allowed dependencies:
 
@@ -202,9 +90,7 @@ Forbidden dependencies:
 
 No route handler should contain full business logic; it should orchestrate, not compute.
 
----
-
-**Consumers**
+## Consumers
 
 API Edge is consumed by:
 
@@ -216,11 +102,9 @@ API Edge is consumed by:
 - Internal UI:
   - `apps/web/app/**` pages/components calling `/api/**` endpoints
 
-No higher “layer” in this stack; this is the external-facing edge of the system.
+No higher "layer" in this stack; this is the external-facing edge of the system.
 
----
-
-**Invariants**
+## Invariants
 
 1. **Thin Controllers**
    - Route handlers must remain small:
@@ -242,46 +126,15 @@ No higher “layer” in this stack; this is the external-facing edge of the sys
      - Always import from `@fresh-schedules/types`.
 
 5. **Framework Containment**
-   - Framework-specific details (Next’s request/response) are contained here.
+   - Framework-specific details (Next's request/response) are contained here.
    - Application Libraries and Domain Kernel do not depend on these details.
 
 6. **Observability**
    - API routes should emit necessary logs/metrics so production issues can be traced.
    - No silent failures.
 
----
-
-**Change Log**
+## Change Log
 
 | Date       | Author         | Change                       |
 | ---------- | -------------- | ---------------------------- |
-| YYYY-MM-DD | Patrick Craven | Initial v15 layer definition |
-
-# LAYER_03_API_EDGE
-
-**Purpose**
-Describe exactly why this layer exists and what problems it solves.
-
-**Scope**
-Which directories, modules, or files belong to it.
-
-**Inputs**
-What it consumes (events, requests, data types).
-
-**Outputs**
-What it produces (domain entities, responses, UI state).
-
-**Dependencies**
-Which other layers or systems it depends on (always downward only).
-
-**Consumers**
-Which layers depend on this layer.
-
-**Invariants**
-Rules that must never break inside this layer.
-
-**Change Log**
-
-| Date       | Author         | Change        |
-| ---------- | -------------- | ------------- |
-| YYYY-MM-DD | Patrick Craven | Initial draft |
+| 2025-11-11 | Patrick Craven | Initial v15 layer definition |

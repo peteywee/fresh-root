@@ -2,6 +2,7 @@
 
 **Purpose**  
 Define an **explicit, technical, step-by-step migration plan** to move Fresh Schedules from:
+
 - v13.5 → v14 → v15
 
 across:
@@ -54,8 +55,8 @@ Network
 
 **Hard change in v15:**
 
-* v14: `Attendance` = `userId + shiftId [+ status]`
-* v15: `Attendance` = `userId + shiftId + roleId [+ status]`
+- v14: `Attendance` = `userId + shiftId [+ status]`
+- v15: `Attendance` = `userId + shiftId + roleId [+ status]`
 
 Every attendance record **must** carry a `roleId`. This is not optional.
 
@@ -63,16 +64,14 @@ Every attendance record **must** carry a `roleId`. This is not optional.
 
 ### 0.3 Environments & Safety
 
-* All schema/code changes must be applied in order:
-
+- All schema/code changes must be applied in order:
   1. Local + emulators
   2. Dev/stage
   3. Prod (only when fully validated)
 
-* For Firestore:
-
-  * Use emulator for rules/dev.
-  * Plan data migrations for prod collections separately.
+- For Firestore:
+  - Use emulator for rules/dev.
+  - Plan data migrations for prod collections separately.
 
 ---
 
@@ -90,11 +89,10 @@ pnpm exec tree apps packages services -I "node_modules|.next|dist" -f > docs/mig
 
 **Acceptance criteria:**
 
-* `docs/migration/v15/PHASE1_CODE_INVENTORY.txt` exists.
-* It contains all `.ts` / `.tsx` code files under `apps/`, `packages/`, `services/`.
-* The command is recorded in:
-
-  * `docs/migration/v15/00_INDEX.md` (already done).
+- `docs/migration/v15/PHASE1_CODE_INVENTORY.txt` exists.
+- It contains all `.ts` / `.tsx` code files under `apps/`, `packages/`, `services/`.
+- The command is recorded in:
+  - `docs/migration/v15/00_INDEX.md` (already done).
 
 ---
 
@@ -107,32 +105,29 @@ pnpm exec tree apps packages services -I "node_modules|.next|dist" -f > docs/mig
 **Tasks:**
 
 1. For each entity row (Network, Org, Venue, User/Staff, Role, RBAC Role, Shift, Attendance, etc.):
+   - Fill **Bible Refs**:
+     - Section references in v13.5, v14, and v15 (once written).
 
-   * Fill **Bible Refs**:
+   - Fill **Types File(s)**:
+     - Confirm exact file path under `packages/types/src/**`.
 
-     * Section references in v13.5, v14, and v15 (once written).
-   * Fill **Types File(s)**:
-
-     * Confirm exact file path under `packages/types/src/**`.
-   * Fill **Firestore Collection / Path**:
-
-     * Confirm exact Firestore collection/subcollection paths.
+   - Fill **Firestore Collection / Path**:
+     - Confirm exact Firestore collection/subcollection paths.
 
 2. Add **any missing entities** that appear in:
-
-   * `glump.txt`
-   * `docs/schema-map.md`
-   * `docs/schema-network.md`
-   * Existing Firestore data (if known).
+   - `glump.txt`
+   - `docs/schema-map.md`
+   - `docs/schema-network.md`
+   - Existing Firestore data (if known).
 
 **Acceptance criteria:**
 
-* No entity used anywhere in code or Firebase is missing from this table.
-* Each row has at least:
+- No entity used anywhere in code or Firebase is missing from this table.
+- Each row has at least:
+  - a types file OR “TBD”
+  - a Firestore path OR “TBD”.
 
-  * a types file OR “TBD”
-  * a Firestore path OR “TBD”.
-* Role row explicitly states it sits between Shift and Attendance and is required for Attendance.
+- Role row explicitly states it sits between Shift and Attendance and is required for Attendance.
 
 ---
 
@@ -142,17 +137,16 @@ pnpm exec tree apps packages services -I "node_modules|.next|dist" -f > docs/mig
 
 **Tasks:**
 
-* Verify directory → layer mapping in section 1.1.
-* Confirm that tenant hierarchy and Role insertion are correct.
-* Ensure tags (`[P0/P1/P2]`) + domain labels correspond to actual comments in code (update code comments where needed).
+- Verify directory → layer mapping in section 1.1.
+- Confirm that tenant hierarchy and Role insertion are correct.
+- Ensure tags (`[P0/P1/P2]`) + domain labels correspond to actual comments in code (update code comments where needed).
 
 **Acceptance criteria:**
 
-* Every major directory (`packages/types`, `services/api/src`, `apps/web/src/lib`, `apps/web/app/api`, `apps/web/app`, `apps/web/components`) is assigned to exactly **one** layer.
-* The “Network → Org → Venue → Staff → Shift → Role → Attendance” hierarchy is clearly documented and matches:
-
-  * Entity inventory
-  * Role entity spec
+- Every major directory (`packages/types`, `services/api/src`, `apps/web/src/lib`, `apps/web/app/api`, `apps/web/app`, `apps/web/components`) is assigned to exactly **one** layer.
+- The “Network → Org → Venue → Staff → Shift → Role → Attendance” hierarchy is clearly documented and matches:
+  - Entity inventory
+  - Role entity spec
 
 ---
 
@@ -170,27 +164,26 @@ pnpm exec tree apps packages services -I "node_modules|.next|dist" -f > docs/mig
 2. Inspect code using `PHASE1_CODE_INVENTORY.txt` and actual files.
 3. Summarize current behavior.
 4. Decide v15:
-
-   * KEEP – v14+code okay, v15 adopts.
-   * CHANGE – v15 modifies semantics or shape.
-   * KILL – v15 removes concept.
+   - KEEP – v14+code okay, v15 adopts.
+   - CHANGE – v15 modifies semantics or shape.
+   - KILL – v15 removes concept.
 
 **Required rows include at minimum:**
 
-* Tenant model
-* Role model (RBAC roles vs scheduling roles)
-* Onboarding flow
-* Shift creation semantics
-* Attendance structure
-* PWA expectations
-* Security model (rules and RBAC)
-* Any major feature flagged in Bibles.
+- Tenant model
+- Role model (RBAC roles vs scheduling roles)
+- Onboarding flow
+- Shift creation semantics
+- Attendance structure
+- PWA expectations
+- Security model (rules and RBAC)
+- Any major feature flagged in Bibles.
 
 **Acceptance criteria:**
 
-* No major concept in Bibles is unrepresented in the GAP matrix.
-* Every row has a v15 decision.
-* Contradictions (spec vs code) are flagged with actions.
+- No major concept in Bibles is unrepresented in the GAP matrix.
+- Every row has a v15 decision.
+- Contradictions (spec vs code) are flagged with actions.
 
 ---
 
@@ -203,23 +196,22 @@ pnpm exec tree apps packages services -I "node_modules|.next|dist" -f > docs/mig
 **Tasks:**
 
 1. Complete the **Directory → Layer Map**:
+   - Ensure every `apps/web/src/lib/*`, `services/api/src/*`, and `apps/web/app/api/*` folder is assigned.
 
-   * Ensure every `apps/web/src/lib/*`, `services/api/src/*`, and `apps/web/app/api/*` folder is assigned.
 2. Complete the **Entity → Layer Responsibilities** for:
+   - Network, Org, Venue, Staff, Role, Shift, Attendance.
 
-   * Network, Org, Venue, Staff, Role, Shift, Attendance.
 3. Add any missing modules discovered during review.
 
 **Acceptance criteria:**
 
-* No important code area is “unassigned” to a layer.
-* Each entity has a clear notion of where it is:
-
-  * Defined (00)
-  * Stored (01)
-  * Used (02)
-  * Exposed (03)
-  * Displayed (04).
+- No important code area is “unassigned” to a layer.
+- Each entity has a clear notion of where it is:
+  - Defined (00)
+  - Stored (01)
+  - Used (02)
+  - Exposed (03)
+  - Displayed (04).
 
 ---
 
@@ -231,16 +223,15 @@ pnpm exec tree apps packages services -I "node_modules|.next|dist" -f > docs/mig
 
 **Tasks:**
 
-* Document, explicitly:
-
-  * Tenant model chain (with Role).
-  * Schema shapes for each entity.
-  * Role semantics (scheduling vs RBAC).
-  * Which features are v15 vs v15.x.
+- Document, explicitly:
+  - Tenant model chain (with Role).
+  - Schema shapes for each entity.
+  - Role semantics (scheduling vs RBAC).
+  - Which features are v15 vs v15.x.
 
 **Acceptance criteria:**
 
-* For any question of “how X should work in v15”, the Bible has one clear answer that matches the GAP matrix decisions.
+- For any question of “how X should work in v15”, the Bible has one clear answer that matches the GAP matrix decisions.
 
 ---
 
@@ -252,35 +243,31 @@ This is where you actually move code.
 
 **Files involved (minimum):**
 
-* `packages/types/src/index.ts`
-* `packages/types/src/roles.ts` (new)
-* `packages/types/src/attendance.ts`
-* `packages/types/src/schedules.ts`
+- `packages/types/src/index.ts`
+- `packages/types/src/roles.ts` (new)
+- `packages/types/src/attendance.ts`
+- `packages/types/src/schedules.ts`
 
 **Tasks:**
 
 1. **Create `roles.ts`**
+   - File: `packages/types/src/roles.ts`
 
-   * File: `packages/types/src/roles.ts`
+   - Content must match `ENTITY_ROLE_v15.md` spec:
 
-   * Content must match `ENTITY_ROLE_v15.md` spec:
-
-   * Must export at least:
-
-     * `RoleIdSchema`, `RoleSchema`
-     * `RoleId`, `Role` types
+   - Must export at least:
+     - `RoleIdSchema`, `RoleSchema`
+     - `RoleId`, `Role` types
 
 2. **Export Roles from Barrel**
-
-   * In `packages/types/src/index.ts`:
+   - In `packages/types/src/index.ts`:
 
      ```ts
      export * from "./roles";
      ```
 
 3. **Update Shift Schema**
-
-   * In `schedules.ts`, define:
+   - In `schedules.ts`, define:
 
      ```ts
      export const ShiftRoleRequirementSchema = z.object({
@@ -292,27 +279,26 @@ This is where you actually move code.
      export type ShiftRoleRequirement = z.infer<typeof ShiftRoleRequirementSchema>;
      ```
 
-   * Add to `ShiftSchema`:
+   - Add to `ShiftSchema`:
 
      ```ts
      roles: z.array(ShiftRoleRequirementSchema).default([]),
      ```
 
 4. **Update Attendance Schema**
-
-   * In `attendance.ts`, ensure `AttendanceRecordSchema` includes `roleId`:
+   - In `attendance.ts`, ensure `AttendanceRecordSchema` includes `roleId`:
 
      ```ts
      roleId: RoleIdSchema,
      ```
 
-   * This field is **required**, not optional.
+   - This field is **required**, not optional.
 
 **Acceptance criteria:**
 
-* TypeScript compiles (`pnpm lint` / `pnpm typecheck`).
-* Consumers can import `Role` & `RoleId` via `@fresh-schedules/types`.
-* All unit tests under `packages/types/src/__tests__` extended to cover Roles and run successfully.
+- TypeScript compiles (`pnpm lint` / `pnpm typecheck`).
+- Consumers can import `Role` & `RoleId` via `@fresh-schedules/types`.
+- All unit tests under `packages/types/src/__tests__` extended to cover Roles and run successfully.
 
 ---
 
@@ -320,52 +306,45 @@ This is where you actually move code.
 
 **Files involved (examples):**
 
-* `services/api/src/firebase.ts`
-* `services/api/src/env.ts`
-* `apps/web/src/lib/env*.ts`
-* `apps/web/src/lib/firebase.server.ts`
-* `firestore.rules`
-* `storage.rules`
-* `packages/rules-tests/**`
+- `services/api/src/firebase.ts`
+- `services/api/src/env.ts`
+- `apps/web/src/lib/env*.ts`
+- `apps/web/src/lib/firebase.server.ts`
+- `firestore.rules`
+- `storage.rules`
+- `packages/rules-tests/**`
 
 **Tasks:**
 
 1. **Decide Role Storage Path**
+   - Pick exactly one (and codify it):
+     - Option A (recommended):
+       - `/orgs/{orgId}/roles/{roleId}`
 
-   * Pick exactly one (and codify it):
+     - Option B:
+       - `/venues/{venueId}/roles/{roleId}`
 
-     * Option A (recommended):
-
-       * `/orgs/{orgId}/roles/{roleId}`
-     * Option B:
-
-       * `/venues/{venueId}/roles/{roleId}`
-
-   * Update `docs/schema-map.md` and `ENTITY_ROLE_v15.md` with the chosen path.
+   - Update `docs/schema-map.md` and `ENTITY_ROLE_v15.md` with the chosen path.
 
 2. **Update Firestore Rules**
+   - Enforce:
+     - Only authorized org admins/managers can create/update/delete roles.
+     - Staff can read roles relevant to their org/venue.
 
-   * Enforce:
-
-     * Only authorized org admins/managers can create/update/delete roles.
-     * Staff can read roles relevant to their org/venue.
-   * Ensure attendance rules require `roleId` and validate:
-
-     * That the `roleId` belongs to the same org/venue as `shiftId`.
+   - Ensure attendance rules require `roleId` and validate:
+     - That the `roleId` belongs to the same org/venue as `shiftId`.
 
 3. **Rules Tests**
-
-   * Add tests in `packages/rules-tests/**` to cover:
-
-     * Role creation allowed for org admins, denied for regular staff.
-     * Attendance writes fail if `roleId` is invalid or not in org/venue.
-     * Role visibility matches RBAC expectations.
+   - Add tests in `packages/rules-tests/**` to cover:
+     - Role creation allowed for org admins, denied for regular staff.
+     - Attendance writes fail if `roleId` is invalid or not in org/venue.
+     - Role visibility matches RBAC expectations.
 
 **Acceptance criteria:**
 
-* Firestore rules compile with no errors.
-* Rule tests are green.
-* No runtime usage of roles conflicts with rules.
+- Firestore rules compile with no errors.
+- Rule tests are green.
+- No runtime usage of roles conflicts with rules.
 
 ---
 
@@ -373,53 +352,47 @@ This is where you actually move code.
 
 **Files involved (examples):**
 
-* `apps/web/src/lib/api/index.ts`
-* `apps/web/src/lib/api/authorization.ts`
-* `apps/web/src/lib/onboarding/**`
-* `apps/web/src/lib/attendance/**` (if exists)
-* `apps/web/src/lib/roles.ts` or similar (you will create)
+- `apps/web/src/lib/api/index.ts`
+- `apps/web/src/lib/api/authorization.ts`
+- `apps/web/src/lib/onboarding/**`
+- `apps/web/src/lib/attendance/**` (if exists)
+- `apps/web/src/lib/roles.ts` or similar (you will create)
 
 **Tasks:**
 
 1. **Role Use-Case Functions**
 
    Create application-level functions (pure use-cases):
-
-   * `createRole(input, context)`
-   * `updateRole(roleId, input, context)`
-   * `archiveRole(roleId, context)`
-   * `listRoles(context)`
+   - `createRole(input, context)`
+   - `updateRole(roleId, input, context)`
+   - `archiveRole(roleId, context)`
+   - `listRoles(context)`
 
    Where:
-
-   * `input` is validated with `RoleSchema` or dedicated create/update schemas.
-   * `context` holds:
-
-     * `orgId`
-     * user identity and roles
-     * optionally `venueId`
+   - `input` is validated with `RoleSchema` or dedicated create/update schemas.
+   - `context` holds:
+     - `orgId`
+     - user identity and roles
+     - optionally `venueId`
 
 2. **Shift Use-Cases**
+   - Update any shift creation/update logic to:
+     - Accept an array of role requirements.
+     - Validate that role IDs exist and belong to the org (and venue if venue-scoped).
 
-   * Update any shift creation/update logic to:
-
-     * Accept an array of role requirements.
-     * Validate that role IDs exist and belong to the org (and venue if venue-scoped).
-   * Ensure `Shift` includes `roles: ShiftRoleRequirement[]`.
+   - Ensure `Shift` includes `roles: ShiftRoleRequirement[]`.
 
 3. **Attendance Use-Cases**
-
-   * All functions that create or update attendance must:
-
-     * Require `roleId`.
-     * Verify the role is valid for the shift’s org/venue.
-     * Use updated `AttendanceRecordSchema`.
+   - All functions that create or update attendance must:
+     - Require `roleId`.
+     - Verify the role is valid for the shift’s org/venue.
+     - Use updated `AttendanceRecordSchema`.
 
 **Acceptance criteria:**
 
-* Application-level functions in Layer 02 do not import `NextRequest` or `NextResponse`.
-* They use domain types (`Role`, `ShiftRoleRequirement`, `AttendanceRecord`) instead of `any`.
-* Tests (unit/integration) added or updated to cover Role-based flows.
+- Application-level functions in Layer 02 do not import `NextRequest` or `NextResponse`.
+- They use domain types (`Role`, `ShiftRoleRequirement`, `AttendanceRecord`) instead of `any`.
+- Tests (unit/integration) added or updated to cover Role-based flows.
 
 ---
 
@@ -427,56 +400,48 @@ This is where you actually move code.
 
 **Files involved (examples):)**
 
-* `apps/web/app/api/roles/route.ts` (new)
-* `apps/web/app/api/attendance/route.ts` (existing)
-* `apps/web/app/api/_shared/validation.ts`
-* `apps/web/app/api/_shared/middleware.ts`
+- `apps/web/app/api/roles/route.ts` (new)
+- `apps/web/app/api/attendance/route.ts` (existing)
+- `apps/web/app/api/_shared/validation.ts`
+- `apps/web/app/api/_shared/middleware.ts`
 
 **Tasks:**
 
 1. **Role API Endpoints**
 
    Implement at minimum:
+   - `POST /api/roles`:
+     - Validates payload with Role create schema.
+     - Calls `createRole`.
+     - Returns created Role.
 
-   * `POST /api/roles`:
+   - `GET /api/roles`:
+     - Uses org context.
+     - Calls `listRoles`.
+     - Returns list.
 
-     * Validates payload with Role create schema.
-     * Calls `createRole`.
-     * Returns created Role.
+   - `PATCH /api/roles/{roleId}`:
+     - Validates payload.
+     - Calls `updateRole`.
 
-   * `GET /api/roles`:
-
-     * Uses org context.
-     * Calls `listRoles`.
-     * Returns list.
-
-   * `PATCH /api/roles/{roleId}`:
-
-     * Validates payload.
-     * Calls `updateRole`.
-
-   * `DELETE` or `POST /api/roles/{roleId}/archive`:
-
-     * Calls `archiveRole`.
+   - `DELETE` or `POST /api/roles/{roleId}/archive`:
+     - Calls `archiveRole`.
 
    All routes must:
-
-   * Use `requireSession`, `requireOrgMembership`, and `requireRole` (RBAC).
-   * Handle errors consistently (badRequest, unauthorized, serverError helpers).
+   - Use `requireSession`, `requireOrgMembership`, and `requireRole` (RBAC).
+   - Handle errors consistently (badRequest, unauthorized, serverError helpers).
 
 2. **Attendance API Update**
-
-   * Ensure attendance endpoints:
-
-     * Expect `roleId` in request body.
-     * Validate `roleId` via `RoleIdSchema`.
-     * Pass `roleId` to Layer 02 use-cases.
+   - Ensure attendance endpoints:
+     - Expect `roleId` in request body.
+     - Validate `roleId` via `RoleIdSchema`.
+     - Pass `roleId` to Layer 02 use-cases.
 
 **Acceptance criteria:**
 
-* All Role endpoints respond with correct HTTP status codes and structures.
-* Attendance routes reject requests missing `roleId` with a clear 400 error.
-* No business logic (e.g., role/shift validation) is duplicated in the route; it lives in Layer 02.
+- All Role endpoints respond with correct HTTP status codes and structures.
+- Attendance routes reject requests missing `roleId` with a clear 400 error.
+- No business logic (e.g., role/shift validation) is duplicated in the route; it lives in Layer 02.
 
 ---
 
@@ -484,44 +449,41 @@ This is where you actually move code.
 
 **Files involved (examples):**
 
-* `apps/web/app/(app)/roles/**` (new) – Role management UI.
-* `apps/web/app/(app)/shifts/**` – Shift editor.
-* `apps/web/app/(app)/attendance/**` – Attendance / clock-in/out.
-* `apps/web/components/**` – generic UI.
+- `apps/web/app/(app)/roles/**` (new) – Role management UI.
+- `apps/web/app/(app)/shifts/**` – Shift editor.
+- `apps/web/app/(app)/attendance/**` – Attendance / clock-in/out.
+- `apps/web/components/**` – generic UI.
 
 **Tasks:**
 
 1. **Role Management UI**
+   - Role list view:
+     - Each role: name, description, active state, color.
 
-   * Role list view:
+   - Create / edit role form:
+     - Fields as defined in `RoleSchema`.
 
-     * Each role: name, description, active state, color.
-   * Create / edit role form:
-
-     * Fields as defined in `RoleSchema`.
-   * Archive / activate toggles.
+   - Archive / activate toggles.
 
 2. **Shift Editing UI**
+   - Role assignment UI:
+     - When editing a Shift, allow attaching roles + min/max staff.
 
-   * Role assignment UI:
-
-     * When editing a Shift, allow attaching roles + min/max staff.
-   * Display assigned roles in schedule views.
+   - Display assigned roles in schedule views.
 
 3. **Attendance UI**
+   - If user has more than one eligible role on a shift:
+     - Prompt to choose role when clocking in.
 
-   * If user has more than one eligible role on a shift:
-
-     * Prompt to choose role when clocking in.
-   * Display role alongside shift in attendance history and manager views.
+   - Display role alongside shift in attendance history and manager views.
 
 **Acceptance criteria:**
 
-* Role management works end-to-end on dev:
+- Role management works end-to-end on dev:
+  - Create role → attach role to shift → record attendance with role.
 
-  * Create role → attach role to shift → record attendance with role.
-* No UI file directly imports infra modules (`firebase-admin`, etc.).
-* All data types used in props and state are derived from `@fresh-schedules/types` or documented DTOs.
+- No UI file directly imports infra modules (`firebase-admin`, etc.).
+- All data types used in props and state are derived from `@fresh-schedules/types` or documented DTOs.
 
 ---
 
@@ -531,16 +493,14 @@ This is where you actually move code.
 
 **Tasks:**
 
-* Domain:
+- Domain:
+  - Add/verify tests for Role, ShiftRoleRequirement, Attendance with roleId.
 
-  * Add/verify tests for Role, ShiftRoleRequirement, Attendance with roleId.
-* Infra:
+- Infra:
+  - Run rules tests; confirm Role + Attendance rules behave correctly.
 
-  * Run rules tests; confirm Role + Attendance rules behave correctly.
-* E2E:
-
-  * Script golden path test:
-
+- E2E:
+  - Script golden path test:
     1. Create org & venue.
     2. Create roles.
     3. Create shift with roles.
@@ -550,8 +510,8 @@ This is where you actually move code.
 
 **Acceptance criteria:**
 
-* All tests green in CI.
-* No major blockers from golden path scenario.
+- All tests green in CI.
+- No major blockers from golden path scenario.
 
 ---
 
@@ -559,14 +519,14 @@ This is where you actually move code.
 
 **Tasks:**
 
-* Run Lighthouse or similar on main flows.
-* Confirm PWA registration is working if applicable.
-* Confirm that role-enabled flows don’t introduce obvious performance regressions.
+- Run Lighthouse or similar on main flows.
+- Confirm PWA registration is working if applicable.
+- Confirm that role-enabled flows don’t introduce obvious performance regressions.
 
 **Acceptance criteria:**
 
-* Performance / PWA scores acceptable for current scope.
-* No obvious perf regressions introduced by role-based features.
+- Performance / PWA scores acceptable for current scope.
+- No obvious perf regressions introduced by role-based features.
 
 ---
 
@@ -574,38 +534,37 @@ This is where you actually move code.
 
 **To mark v15 as frozen:**
 
-* All items in:
+- All items in:
+  - `STATUS_CHECKLIST.md` for Phases 1–4 are **checked** or explicitly deferred to v15.x (with notes).
 
-  * `STATUS_CHECKLIST.md` for Phases 1–4 are **checked** or explicitly deferred to v15.x (with notes).
-* `Project_Bible_v15.0.0.md`:
+- `Project_Bible_v15.0.0.md`:
+  - Updated with final, accurate specs matching the live code.
 
-  * Updated with final, accurate specs matching the live code.
-* Git:
-
-  * Tag created: `v15.0.0-freeze`.
+- Git:
+  - Tag created: `v15.0.0-freeze`.
 
 After freeze:
 
-* No breaking domain changes to v15 without bumping to v16.
-* Only backward-compatible patches or v15.x additions are allowed.
+- No breaking domain changes to v15 without bumping to v16.
+- Only backward-compatible patches or v15.x additions are allowed.
 
 ---
 
 ## 5. Linked Documents (for navigation)
 
-* `docs/migration/v15/00_INDEX.md`
-* `docs/migration/v15/01_ENTITY_INVENTORY.md`
-* `docs/migration/v15/02_GAP_MATRIX.md`
-* `docs/migration/v15/03_LAYER_ASSIGNMENT.md`
-* `docs/migration/v15/PHASE1_CODE_INVENTORY.txt`
-* `docs/migration/v15/PHASE1_PATTERN_MAP.md`
-* `docs/migration/v15/STATUS_CHECKLIST.md`
-* `docs/layers/LAYER_00_DOMAIN_KERNEL.md`
-* `docs/layers/LAYER_01_INFRASTRUCTURE.md`
-* `docs/layers/LAYER_02_APPLICATION_LIBS.md`
-* `docs/layers/LAYER_03_API_EDGE.md`
-* `docs/layers/LAYER_04_UI_UX.md`
-* `docs/bible/ENTITY_ROLE_v15.md`
+- `docs/migration/v15/00_INDEX.md`
+- `docs/migration/v15/01_ENTITY_INVENTORY.md`
+- `docs/migration/v15/02_GAP_MATRIX.md`
+- `docs/migration/v15/03_LAYER_ASSIGNMENT.md`
+- `docs/migration/v15/PHASE1_CODE_INVENTORY.txt`
+- `docs/migration/v15/PHASE1_PATTERN_MAP.md`
+- `docs/migration/v15/STATUS_CHECKLIST.md`
+- `docs/layers/LAYER_00_DOMAIN_KERNEL.md`
+- `docs/layers/LAYER_01_INFRASTRUCTURE.md`
+- `docs/layers/LAYER_02_APPLICATION_LIBS.md`
+- `docs/layers/LAYER_03_API_EDGE.md`
+- `docs/layers/LAYER_04_UI_UX.md`
+- `docs/bible/ENTITY_ROLE_v15.md`
 
 ---
 

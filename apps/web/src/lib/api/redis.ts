@@ -51,7 +51,7 @@ async function initializeRedisAdapter() {
       // dynamic import (via Function) so Turbopack/Next doesn't statically
       // analyze the literal package name and fail the build when package is
       // absent in the project graph.
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+
       // @ts-ignore - optional dependency
       const dynamicImport = new Function("pkg", "return import(pkg)");
       // @ts-ignore
@@ -83,7 +83,7 @@ async function initializeRedisAdapter() {
   if (process.env.REDIS_URL) {
     try {
       // Dynamic import via Function to avoid static analysis by Turbopack
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+
       // @ts-ignore - optional dependency
       const dynamicImport = new Function("pkg", "return import(pkg)");
       // @ts-ignore
