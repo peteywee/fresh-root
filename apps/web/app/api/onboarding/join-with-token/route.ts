@@ -16,7 +16,7 @@
  * Returns: { ok: true; networkId; orgId; role; venue? }
  */
 
- 
+
 import { NextResponse } from "next/server";
 
 import { withSecurity, type AuthenticatedRequest } from "../../_shared/middleware";

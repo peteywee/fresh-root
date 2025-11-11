@@ -17,7 +17,7 @@
  * Returns: { ok: true; networkId; orgId; venueId; status }
  */
 
- 
+
 import { NextResponse } from "next/server";
 
 import { withRequestLogging } from "../../_shared/logging";
@@ -82,8 +82,12 @@ export async function createNetworkOrgHandler(
     return NextResponse.json({ error: "invalid_json" }, { status: 400 });
   }
 
-  const { orgName, venueName, formToken, location } = (body as Record<string, unknown>) || {};
-
+  const {
+    orgName,
+    venueName,
+    formToken,
+    location,
+  } = (body as Record<string, unknown>) || {};
   if (!formToken) return NextResponse.json({ error: "missing_form_token" }, { status: 422 });
 
   // Prevent path traversal attacks by ensuring formToken is a valid document ID segment.
