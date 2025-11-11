@@ -49,9 +49,7 @@ export type OnboardingStatus = z.infer<typeof OnboardingStatus>;
 export const OnboardingStateSchema = z.object({
   status: OnboardingStatus,
   intent: OnboardingIntent.optional(),
-  stage: z
-    .enum(["profile", "admin_form", "network_created", "joined_workspace"])
-    .optional(),
+  stage: z.enum(["profile", "admin_form", "network_created", "joined_workspace"]).optional(),
   primaryNetworkId: z.string().optional(),
   primaryOrgId: z.string().optional(),
   primaryVenueId: z.string().optional(),

@@ -92,7 +92,9 @@ tx.set(venueRef, {
   createdBy: uid,
   createdAt,
   updatedAt: createdAt,
-  ...(location && { location: { street1, street2, city, state, postalCode, countryCode, timeZone } }),
+  ...(location && {
+    location: { street1, street2, city, state, postalCode, countryCode, timeZone },
+  }),
 });
 ```
 
@@ -207,14 +209,14 @@ tx.set(membershipRef, {
 
 All modified files have proper headers:
 
-| File | Header | JSDoc | Status |
-|------|--------|-------|--------|
-| `packages/types/src/onboarding.ts` | ✅ `[P2][APP][CODE]` | ✅ Present | ✅ OK |
-| `apps/web/app/api/onboarding/create-network-org/route.ts` | ✅ `[P1][API][ONBOARDING]` | ✅ Present | ✅ OK |
-| `apps/web/app/api/onboarding/create-network-corporate/route.ts` | ✅ `[P1][API][ONBOARDING]` | ✅ Present | ✅ OK |
-| `apps/web/app/api/onboarding/join-with-token/route.ts` | ✅ `[P1][API][ONBOARDING]` | ✅ Present | ✅ OK |
-| `apps/web/src/lib/userOnboarding.ts` | ✅ `[P1][ONBOARDING][HELPERS]` | ✅ Present | ✅ OK |
-| `packages/rules-tests/src/rules.test.ts` | ✅ `[P0][TEST]` | ✅ Present | ✅ OK |
+| File                                                            | Header                         | JSDoc      | Status |
+| --------------------------------------------------------------- | ------------------------------ | ---------- | ------ |
+| `packages/types/src/onboarding.ts`                              | ✅ `[P2][APP][CODE]`           | ✅ Present | ✅ OK  |
+| `apps/web/app/api/onboarding/create-network-org/route.ts`       | ✅ `[P1][API][ONBOARDING]`     | ✅ Present | ✅ OK  |
+| `apps/web/app/api/onboarding/create-network-corporate/route.ts` | ✅ `[P1][API][ONBOARDING]`     | ✅ Present | ✅ OK  |
+| `apps/web/app/api/onboarding/join-with-token/route.ts`          | ✅ `[P1][API][ONBOARDING]`     | ✅ Present | ✅ OK  |
+| `apps/web/src/lib/userOnboarding.ts`                            | ✅ `[P1][ONBOARDING][HELPERS]` | ✅ Present | ✅ OK  |
+| `packages/rules-tests/src/rules.test.ts`                        | ✅ `[P0][TEST]`                | ✅ Present | ✅ OK  |
 
 ### **Exports & Type Safety** ✅
 
@@ -248,58 +250,58 @@ All modified files have proper headers:
    - Token expiration test
    - Token exhaustion test (max uses)
    - Disabled token test
-   - *Recommended*: Add these tests in next iteration
+   - _Recommended_: Add these tests in next iteration
 
 2. **Timestamp Format**:
    - All code uses milliseconds (Date.now())
    - Schema expects `z.number().int().positive()` ✅ Matches
-   - *Good for now*: Future if schema changes to ISO, one search/replace will fix all routes
+   - _Good for now_: Future if schema changes to ISO, one search/replace will fix all routes
 
 3. **Org vs Network ID in Membership**:
    - Membership uses both `orgId` and `networkId`
    - Current schema supports this
-   - *Recommendation*: Document which is the "primary" key in next cleanup iteration
+   - _Recommendation_: Document which is the "primary" key in next cleanup iteration
 
 4. **Location Handling**:
    - Venue location is optional, filled with empty strings if not provided
    - Works but could consider: make location required at API level if it's always expected
-   - *Current state acceptable*: flexible for edge cases
+   - _Current state acceptable_: flexible for edge cases
 
 5. **Corporate vs Org**:
    - Corporate entity path under network (`networkRef.collection("corporate").doc(corpRef.id)`)
    - Corporate type exists in `packages/types/src/corporate.ts`
-   - *No issue*: path and type align
+   - _No issue_: path and type align
 
 ---
 
 ## Validation Checklist
 
-| Criteria | Status | Evidence |
-|----------|--------|----------|
-| `pnpm typecheck` passes | ✅ PASS | Task completed successfully |
-| All onboarding APIs use schemas from `@fresh-schedules/types` | ✅ YES | 4 routes use safe-parse |
-| Schemas have tests | ✅ YES | `__tests__/onboarding.test.ts` |
-| Created docs match Zod schemas | ✅ YES | Network/Org/Venue/Corporate/Membership all v14-shaped |
-| User onboarding state canonical helper exists | ✅ YES | `markOnboardingComplete()` in `userOnboarding.ts` |
-| Helper wired into all onboarding flows | ✅ YES | 3 routes call it post-transaction |
-| Firestore rules for join tokens | ✅ YES | `firestore.rules` lines 75+ |
-| Join-token rule tests | ✅ YES | 2 tests in `rules.test.ts` |
-| JSDoc headers present | ✅ YES | All files have proper tags |
-| No TypeScript errors | ✅ YES | Typecheck passes |
+| Criteria                                                      | Status  | Evidence                                              |
+| ------------------------------------------------------------- | ------- | ----------------------------------------------------- |
+| `pnpm typecheck` passes                                       | ✅ PASS | Task completed successfully                           |
+| All onboarding APIs use schemas from `@fresh-schedules/types` | ✅ YES  | 4 routes use safe-parse                               |
+| Schemas have tests                                            | ✅ YES  | `__tests__/onboarding.test.ts`                        |
+| Created docs match Zod schemas                                | ✅ YES  | Network/Org/Venue/Corporate/Membership all v14-shaped |
+| User onboarding state canonical helper exists                 | ✅ YES  | `markOnboardingComplete()` in `userOnboarding.ts`     |
+| Helper wired into all onboarding flows                        | ✅ YES  | 3 routes call it post-transaction                     |
+| Firestore rules for join tokens                               | ✅ YES  | `firestore.rules` lines 75+                           |
+| Join-token rule tests                                         | ✅ YES  | 2 tests in `rules.test.ts`                            |
+| JSDoc headers present                                         | ✅ YES  | All files have proper tags                            |
+| No TypeScript errors                                          | ✅ YES  | Typecheck passes                                      |
 
 ---
 
 ## Files Modified Summary
 
-| File | Change | Scope |
-|------|--------|-------|
-| `packages/types/src/onboarding.ts` | Added v14 schemas | Types |
-| `packages/types/src/__tests__/onboarding.test.ts` | Added tests | Tests |
-| `apps/web/app/api/onboarding/create-network-org/route.ts` | V14-compliant tx; markOnboardingComplete call | API |
-| `apps/web/app/api/onboarding/create-network-corporate/route.ts` | V14-compliant tx; markOnboardingComplete call | API |
-| `apps/web/app/api/onboarding/join-with-token/route.ts` | V14-compliant tx; markOnboardingComplete call | API |
-| `apps/web/src/lib/userOnboarding.ts` | Already exists; confirmed correct | Helper |
-| `packages/rules-tests/src/rules.test.ts` | Added join-token tests | Rules |
+| File                                                            | Change                                        | Scope  |
+| --------------------------------------------------------------- | --------------------------------------------- | ------ |
+| `packages/types/src/onboarding.ts`                              | Added v14 schemas                             | Types  |
+| `packages/types/src/__tests__/onboarding.test.ts`               | Added tests                                   | Tests  |
+| `apps/web/app/api/onboarding/create-network-org/route.ts`       | V14-compliant tx; markOnboardingComplete call | API    |
+| `apps/web/app/api/onboarding/create-network-corporate/route.ts` | V14-compliant tx; markOnboardingComplete call | API    |
+| `apps/web/app/api/onboarding/join-with-token/route.ts`          | V14-compliant tx; markOnboardingComplete call | API    |
+| `apps/web/src/lib/userOnboarding.ts`                            | Already exists; confirmed correct             | Helper |
+| `packages/rules-tests/src/rules.test.ts`                        | Added join-token tests                        | Rules  |
 
 ---
 
@@ -324,6 +326,6 @@ All modified files have proper headers:
 
 ---
 
-*Generated: November 10, 2025*
-*Repository: fresh-root (dev branch)*
-*Code Owner: Patrick Craven*
+_Generated: November 10, 2025_
+_Repository: fresh-root (dev branch)_
+_Code Owner: Patrick Craven_

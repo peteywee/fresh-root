@@ -65,21 +65,13 @@ export type CreateOrgOnboarding = z.infer<typeof CreateOrgOnboardingSchema>;
 /**
  * User's intent when starting onboarding.
  */
-export const OnboardingIntent = z.enum([
-  "create_org",
-  "create_corporate",
-  "join_existing",
-]);
+export const OnboardingIntent = z.enum(["create_org", "create_corporate", "join_existing"]);
 export type OnboardingIntent = z.infer<typeof OnboardingIntent>;
 
 /**
  * Current status of user's onboarding process.
  */
-export const OnboardingStatus = z.enum([
-  "not_started",
-  "in_progress",
-  "complete",
-]);
+export const OnboardingStatus = z.enum(["not_started", "in_progress", "complete"]);
 export type OnboardingStatus = z.infer<typeof OnboardingStatus>;
 
 /**
@@ -89,9 +81,7 @@ export type OnboardingStatus = z.infer<typeof OnboardingStatus>;
 export const OnboardingStateSchema = z.object({
   status: OnboardingStatus,
   intent: OnboardingIntent.optional(),
-  stage: z
-    .enum(["profile", "admin_form", "network_created", "joined_workspace"])
-    .optional(),
+  stage: z.enum(["profile", "admin_form", "network_created", "joined_workspace"]).optional(),
   primaryNetworkId: z.string().optional(),
   primaryOrgId: z.string().optional(),
   primaryVenueId: z.string().optional(),
@@ -436,4 +426,3 @@ After all tasks complete:
 - `docs/PR62_REVIEW_SUMMARY.md` - Summary of all review comments to fix first
 - `docs/TECHNICAL_DEBT.md` - Tracks debt items (onboarding consolidation listed as Phase 2 opportunity)
 - `docs/CONSOLIDATION_OPPORTUNITIES.md` - Follow-up work after freeze
-

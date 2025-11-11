@@ -41,11 +41,11 @@ node scripts/tag-files.mjs --dry-run
 
 ## File Types Supported
 
-| Extension | Header Format | Example |
-|-----------|---------------|---------|
+| Extension    | Header Format         | Example                    |
+| ------------ | --------------------- | -------------------------- |
 | `.ts`/`.tsx` | `// [P?][AREA][COMP]` | `// [P1][API][ONBOARDING]` |
-| `.js`/`.mjs` | `// [P?][AREA][COMP]` | `// [P2][UTIL][HELPERS]` |
-| `.md` | `#` | Markdown headings |
+| `.js`/`.mjs` | `// [P?][AREA][COMP]` | `// [P2][UTIL][HELPERS]`   |
+| `.md`        | `#`                   | Markdown headings          |
 
 ## Priority Levels
 
@@ -128,7 +128,3 @@ Auto-tagging skips:
 - Edit file manually and update header
 - Re-run `pnpm tag:files` to auto-fix if needed
 
-[area]: #
-[api]: #
-[util]: #
-[doc]: #

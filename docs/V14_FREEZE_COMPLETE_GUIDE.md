@@ -57,30 +57,20 @@ export type CreateOrgOnboarding = z.infer<typeof CreateOrgOnboardingSchema>;
 #### OnboardingIntent
 
 ```ts
-export const OnboardingIntent = z.enum([
-  "create_org",
-  "create_corporate",
-  "join_existing",
-]);
+export const OnboardingIntent = z.enum(["create_org", "create_corporate", "join_existing"]);
 export type OnboardingIntent = z.infer<typeof OnboardingIntent>;
 ```
 
 #### OnboardingStatus and OnboardingStateSchema
 
 ```ts
-export const OnboardingStatus = z.enum([
-  "not_started",
-  "in_progress",
-  "complete",
-]);
+export const OnboardingStatus = z.enum(["not_started", "in_progress", "complete"]);
 export type OnboardingStatus = z.infer<typeof OnboardingStatus>;
 
 export const OnboardingStateSchema = z.object({
   status: OnboardingStatus,
   intent: OnboardingIntent.optional(),
-  stage: z
-    .enum(["profile", "admin_form", "network_created", "joined_workspace"])
-    .optional(),
+  stage: z.enum(["profile", "admin_form", "network_created", "joined_workspace"]).optional(),
   primaryNetworkId: z.string().optional(),
   primaryOrgId: z.string().optional(),
   primaryVenueId: z.string().optional(),
@@ -326,7 +316,7 @@ await markOnboardingComplete({
 correct `primaryNetworkId`/`primaryOrgId`/`primaryVenueId`
 ```
 
-  - `OnboardingStateSchema.parse(userDoc.onboarding)` passes
+- `OnboardingStateSchema.parse(userDoc.onboarding)` passes
 
 **DoD (Task 3):**
 
@@ -427,16 +417,16 @@ test("unauthenticated user cannot read join token", async () => {
 
 ## Files Modified
 
-| File | Change | Scope |
-|------|--------|-------|
-| `packages/types/src/onboarding.ts` | Added v14 schemas | Types |
-| `packages/types/src/__tests__/onboarding.test.ts` | Added tests for v14 schemas | Tests |
-| `apps/web/app/api/onboarding/create-network-org/route.ts` | Uses `CreateOrgOnboardingSchema.safeParse`; creates v14-shaped Network/Org/Venue docs; calls `markOnboardingComplete` | API |
-| `apps/web/app/api/onboarding/create-network-corporate/route.ts` | Uses `CreateCorporateOnboardingSchema.safeParse`; creates v14-shaped Network/Corporate docs; calls `markOnboardingComplete` | API |
-| `apps/web/app/api/onboarding/join-with-token/route.ts` | Uses `JoinWithTokenSchema.safeParse`; updates Membership with v14 fields; calls `markOnboardingComplete` | API |
-| `apps/web/src/lib/userOnboarding.ts` | Already exists; confirmed correct | Helper |
-| `firestore.rules` | Join-token rules already in place (no changes needed) | Rules |
-| `packages/rules-tests/src/rules.test.ts` | Added 2 join-token security tests | Tests |
+| File                                                            | Change                                                                                                                      | Scope  |
+| --------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- | ------ |
+| `packages/types/src/onboarding.ts`                              | Added v14 schemas                                                                                                           | Types  |
+| `packages/types/src/__tests__/onboarding.test.ts`               | Added tests for v14 schemas                                                                                                 | Tests  |
+| `apps/web/app/api/onboarding/create-network-org/route.ts`       | Uses `CreateOrgOnboardingSchema.safeParse`; creates v14-shaped Network/Org/Venue docs; calls `markOnboardingComplete`       | API    |
+| `apps/web/app/api/onboarding/create-network-corporate/route.ts` | Uses `CreateCorporateOnboardingSchema.safeParse`; creates v14-shaped Network/Corporate docs; calls `markOnboardingComplete` | API    |
+| `apps/web/app/api/onboarding/join-with-token/route.ts`          | Uses `JoinWithTokenSchema.safeParse`; updates Membership with v14 fields; calls `markOnboardingComplete`                    | API    |
+| `apps/web/src/lib/userOnboarding.ts`                            | Already exists; confirmed correct                                                                                           | Helper |
+| `firestore.rules`                                               | Join-token rules already in place (no changes needed)                                                                       | Rules  |
+| `packages/rules-tests/src/rules.test.ts`                        | Added 2 join-token security tests                                                                                           | Tests  |
 
 ---
 

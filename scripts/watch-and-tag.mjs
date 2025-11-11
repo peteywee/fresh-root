@@ -5,7 +5,7 @@
  * @fileoverview
  * Watches for new file creation and automatically applies headers/prefixes
  * based on file type. Runs in background during development.
- * 
+ *
  * Usage: `node scripts/watch-and-tag.mjs` or `pnpm watch:tags`
  */
 
@@ -18,12 +18,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const rootDir = path.resolve(__dirname, "..");
 
 // Directories to watch
-const watchDirs = [
-  "apps/web/app",
-  "apps/web/src",
-  "packages/types/src",
-  "functions/src",
-];
+const watchDirs = ["apps/web/app", "apps/web/src", "packages/types/src", "functions/src"];
 
 // File extensions that need tagging
 const targetExtensions = [".ts", ".tsx", ".js", ".mjs", ".md"];

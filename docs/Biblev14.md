@@ -23,7 +23,7 @@ This Bible version is designed to be **forward-compatible** with existing code a
 - Block 3 – Integrity Core
 ```
 
-  - These are **implemented & tagged** in the repo.
+- These are **implemented & tagged** in the repo.
 
 - **Bible v13.6:**
   - Introduced the **Network** (tenant root) and the **Corporate / Organization / Venue graph**.
@@ -40,7 +40,7 @@ This Bible version is designed to be **forward-compatible** with existing code a
 - Security gates and onboarding flows
 ```
 
-  - Sketches the **path through Block 4 and beyond**.
+- Sketches the **path through Block 4 and beyond**.
 
 The intention is:
 
@@ -93,7 +93,7 @@ We explicitly distinguish three “layers” of containment:
 - All Firestore data, Storage buckets, and Functions belong to this environment.
 ```
 
-   - This box is **opaque to end users**; they do not see or care about “which Firebase project” they are on.
+- This box is **opaque to end users**; they do not see or care about “which Firebase project” they are on.
 
 1. **Tenant Box (Network)**
    - A **Network** is the tenant root – the **business boundary** inside the app.
@@ -109,7 +109,7 @@ We explicitly distinguish three “layers” of containment:
 - Venue
 ```
 
-   - And **relationship edges**:
+- And **relationship edges**:
 
 ```text
 - Corporate **owns** Organization(s)
@@ -117,7 +117,7 @@ We explicitly distinguish three “layers” of containment:
 - Organization **operates_at** Venue(s)
 ```
 
-   - These are modeled via **link documents**, not nested collections that imply ownership semantics.
+- These are modeled via **link documents**, not nested collections that imply ownership semantics.
 
 The key rule is:
 
@@ -150,7 +150,6 @@ Within each `networkId`:
 1. **You Are Not Responsible for Their Internal Abuse**
 
    The Network Admin Responsibility Form explicitly states:
-
    - They are responsible for who is invited and what data they store.
    - They agree not to misuse employee data.
    - They acknowledge that the platform is not liable for internal misuse that violates their own policies or laws.
@@ -165,7 +164,7 @@ Within each `networkId`:
 - Acceptance of terms.
 ```
 
-   - It is still a **guided, linear wizard** so non-technical admins can complete it within minutes.
+- It is still a **guided, linear wizard** so non-technical admins can complete it within minutes.
 
 ---
 

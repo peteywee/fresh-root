@@ -159,7 +159,9 @@ export async function createNetworkOrgHandler(
           createdBy: uid,
           createdAt,
           updatedAt: createdAt,
-          ...(location && typeof location === "object" && Object.keys(location as Record<string, unknown>).length > 0
+          ...(location &&
+          typeof location === "object" &&
+          Object.keys(location as Record<string, unknown>).length > 0
             ? {
                 location: {
                   street1: (location as Record<string, unknown>).street1 || "",

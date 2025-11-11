@@ -89,7 +89,7 @@ All UI flows, API endpoints, and data writes must match the Bible specification.
 - Create Org, Venue, Memberships
 ```
 
-  - Returns: networkId, orgId, venueId, status
+- Returns: networkId, orgId, venueId, status
 
 - [ ] `POST /api/onboarding/create-network-corporate`
   - Similar to org creation with corporate-specific fields

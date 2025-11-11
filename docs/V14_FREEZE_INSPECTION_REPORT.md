@@ -286,8 +286,8 @@ const { ...validatedFields } = parsed.data;
 - `venueId?: string` – Primary venue ID (optional)
 ```
 
-   - **Output:** Writes to `users/{uid}.onboarding` with merge strategy
-   - **Error Handling:** Swallows errors and logs debug message (non-blocking)
+- **Output:** Writes to `users/{uid}.onboarding` with merge strategy
+- **Error Handling:** Swallows errors and logs debug message (non-blocking)
 
 1. **`getUserOnboardingState(adminDb, uid)`**
    - **Purpose:** Retrieve current onboarding state for a user

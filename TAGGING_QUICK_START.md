@@ -47,11 +47,11 @@ pnpm tag:files -- --dry-run   # Preview changes
 
 ## File Types Auto-Tagged
 
-| Extension | Prefix Format |
-|-----------|---------------|
+| Extension     | Prefix Format         |
+| ------------- | --------------------- |
 | `.ts`, `.tsx` | `// [P?][AREA][COMP]` |
 | `.js`, `.mjs` | `// [P?][AREA][COMP]` |
-| `.md` | `# Title` |
+| `.md`         | `# Title`             |
 
 ## Priority Quick Reference
 

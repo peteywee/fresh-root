@@ -37,7 +37,7 @@ These are the canonical domain schemas.
 - Roles: `OrgRole` enum (`"org_owner"`, `"admin"`, `"manager"`, `"scheduler"`, `"corporate"`, `"staff"`)
 ```
 
-   - CRUD schemas:
+- CRUD schemas:
 
 ```text
 - `CreateMembershipSchema`
@@ -54,7 +54,7 @@ These are the canonical domain schemas.
 - `skillLevel`, `isActive`
 ```
 
-   - CRUD schemas:
+- CRUD schemas:
 
 ```text
 - `CreatePositionSchema`
@@ -70,14 +70,14 @@ These are the canonical domain schemas.
 - `assignedUserId`/`openShift` semantics
 ```
 
-   - CRUD schemas:
+- CRUD schemas:
 
 ```text
 - `CreateShiftSchema`
 - `UpdateShiftSchema`
 ```
 
-   - Time validation (start < end, etc.).
+- Time validation (start < end, etc.).
 
 1. **`venues.ts`**
    - Venue details:
@@ -88,7 +88,7 @@ These are the canonical domain schemas.
 - `timezone`, `isActive`
 ```
 
-   - CRUD schemas:
+- CRUD schemas:
 
 ```text
 - `CreateVenueSchema`
@@ -102,7 +102,7 @@ These are the canonical domain schemas.
 - `orgId`, `venueId`, `name`, `description`
 ```
 
-   - CRUD schemas:
+- CRUD schemas:
 
 ```text
 - `CreateZoneSchema`
@@ -118,7 +118,7 @@ These are the canonical domain schemas.
 - Optional geolocation for check-in/out
 ```
 
-   - CRUD schemas:
+- CRUD schemas:
 
 ```text
 - `CreateAttendanceRecordSchema`
@@ -132,7 +132,7 @@ These are the canonical domain schemas.
 - `orgId`, `token`, `role`, `expiresAt`, `maxUses`, `remainingUses`
 ```
 
-   - CRUD schemas:
+- CRUD schemas:
 
 ```text
 - `CreateJoinTokenSchema`
@@ -148,7 +148,7 @@ These are the canonical domain schemas.
 - `settings` (timezone, week start, self-scheduling, etc.)
 ```
 
-   - CRUD schemas:
+- CRUD schemas:
 
 ```text
 - `OrganizationSchema`

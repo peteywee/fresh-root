@@ -25,7 +25,6 @@ export function createRateLimiter(config: RateLimitConfig) {
   });
 ```
 
-
 ### 2. **XSS Vulnerability: Unsafe URL Sanitization** (Importance: 9/10)
 
 **File**: `apps/web/src/lib/api/sanitize.ts` (Line 48-57)
@@ -49,7 +48,6 @@ export function sanitizeUrl(url: string): string {
    return url;
 }
 ```
-
 
 ---
 
@@ -103,7 +101,6 @@ export function sanitizeUrl(url: string): string {
  */
 ```
 
-
 ---
 
 ## 🟢 COMPLIANCE STATUS
@@ -143,4 +140,3 @@ Once all PR #62 fixes are committed and Vercel passes:
 2. Begin v14 Onboarding Freeze work (Tasks 1-4 in todo list)
 3. Implement comprehensive type freezing across onboarding APIs
 4. Validate all created Firestore documents against schemas
-
