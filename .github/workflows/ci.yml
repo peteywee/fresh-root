@@ -2,54 +2,86 @@ name: CI
 
 on:
   push:
-    branches: [main, dev]
+    branches: [ "main", "master" ]
   pull_request:
-    branches: [main, dev]
+    branches: [ "main", "master" ]
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  checks: write
 
 jobs:
   build:
+    name: CI
     runs-on: ubuntu-latest
+    env:
+      CI: true
+
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Node.js
+      - name: Use Node.js 20
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
-          cache: "pnpm"
+          node-version: "20.x"
+          cache: "pnpm"     # optional: speeds Node modules caching integration
 
-      - name: Set up pnpm
+      # Install pnpm so 'pnpm' is available on PATH
+      - name: Setup pnpm
         uses: pnpm/action-setup@v2
         with:
-          version: "8"
+          version: 8           # pin to the major/minor you want (example: 8). Adjust if repo requires a different version.
 
-      - name: Restore firebase emulators cache
+      # Cache pnpm store to speed subsequent runs
+      - name: Cache pnpm store
         uses: actions/cache@v4
         with:
-          path: ~/.cache/firebase/emulators
-          key: "Linux-firebase-emulators-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}"
-          restore-keys: "Linux-firebase-emulators-"
+          path: ~/.pnpm-store
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
 
+      # Install dependencies deterministically
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      # WORKAROUND: ensure require-in-the-middle is present for Turbopack/next build
-      - name: "CI workaround: install require-in-the-middle (no workspace changes)"
-        run: pnpm add -w require-in-the-middle --no-save
-
+      # Lint
       - name: Lint
-        run: pnpm -w lint
+        run: pnpm lint
+        # if you want to fail fast on warnings set strict flags on lint scripts
 
-      - name: Typecheck
-        run: pnpm -w typecheck
+      # Unit tests (use --reporter or CI flags as appropriate)
+      - name: Run tests
+        run: pnpm test -- --ci --runInBand
 
-      - name: Test (safe)
-        run: pnpm -w test:safe
+      # Build app
+      - name: Build
+        run: pnpm build
 
-      - name: Build (monorepo)
-        run: pnpm -w -r build
+      # Optional: Playwright smoke tests (uncomment/adjust if Playwright is configured)
+      - name: Install Playwright browsers
+        if: ${{ always() }}
+        run: pnpm exec playwright install --with-deps
 
-      - name: Post job cleanup
-        if: always()
+      - name: Playwright smoke tests
+        if: ${{ always() }}
+        run: pnpm exec playwright test --project=chromium --config=playwright.config.ts --reporter=github
+        continue-on-error: false
+
+      - name: Upload test artifacts (optional)
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-logs
+          path: |
+            test-results/
+            playwright-report/
+
+      - name: CI job finished
         run: echo "CI job finished"

@@ -73,16 +73,6 @@ export async function createNetworkOrgHandler(
     return NextResponse.json({ error: "invalid_form_token" }, { status: 400 });
   }
 
-  const locationData = (location || {}) as {
-    street1?: string;
-    street2?: string;
-    city?: string;
-    state?: string;
-    postalCode?: string;
-    countryCode?: string;
-    timeZone?: string;
-  };
-
   try {
     const formsRoot = adminDb
       .collection("compliance")
