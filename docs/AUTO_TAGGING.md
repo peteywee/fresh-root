@@ -127,4 +127,3 @@ Auto-tagging skips:
 
 - Edit file manually and update header
 - Re-run `pnpm tag:files` to auto-fix if needed
-
