@@ -1,7 +1,7 @@
 //[P1][API][CODE] Positions [id] API route handler
 // Tags: P1, API, CODE, validation, zod
 
-import { PositionUpdateSchema } from "@fresh-schedules/types";
+import { UpdatePositionSchema } from "@fresh-schedules/types";
 import { NextResponse } from "next/server";
 
 import { requireOrgMembership, requireRole } from "../../../../src/lib/api/authorization";
@@ -60,7 +60,7 @@ export const PATCH = csrfProtection()(
         const sanitized = sanitizeObject(body);
 
         // Validate with Zod
-        const validationResult = PositionUpdateSchema.safeParse(sanitized);
+        const validationResult = UpdatePositionSchema.safeParse(sanitized);
         if (!validationResult.success) {
           return NextResponse.json(
             { error: "Invalid position data", details: validationResult.error.errors },
@@ -68,7 +68,7 @@ export const PATCH = csrfProtection()(
           );
         }
 
-        const data: any = validationResult.data;
+        const data = validationResult.data;
 
         // In production, update in Firestore after verifying orgId matches
         const updatedPosition = {

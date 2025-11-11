@@ -77,7 +77,7 @@ match /compliance/{document=**} {
 
 **New (v14) paths** (Primary):
 
-```
+```firestorepath
 /networks/{networkId}
   ├── (root doc with NetworkSchema)
   ├── /orgs/{orgId}
@@ -185,12 +185,12 @@ tx.set(legacyOrgMembershipsRef.doc(userId), {
 ### Sequence
 
 1. User submits admin responsibility form via `/api/onboarding/admin-form`
-2. Form is stored in `/adminFormDrafts/{token}` (1-hour TTL by default)
-3. User calls `/api/onboarding/create-network-org` with `formToken`
-4. API validates:
+1. Form is stored in `/adminFormDrafts/{token}` (1-hour TTL by default)
+1. User calls `/api/onboarding/create-network-org` with `formToken`
+1. API validates:
    - Email verified (from JWT custom claims)
    - Role permitted (manager/owner/corporate)
-5. **Single Firestore transaction** executes:
+1. **Single Firestore transaction** executes:
    - Consumes and validates admin form draft
    - Creates network doc in `/networks/{id}` with full NetworkSchema
    - Creates org in both `/networks/{id}/orgs/{id}` AND `/orgs/{id}`
@@ -199,7 +199,7 @@ tx.set(legacyOrgMembershipsRef.doc(userId), {
    - Creates legacy org membership for backward compat
    - Creates compliance doc in `/networks/{id}/compliance`
    - Optionally activates network immediately if `taxValidation.isValid === true`
-6. Returns `{ networkId, orgId, venueId, status }`
+1. Returns `{ networkId, orgId, venueId, status }`
 
 ### Result
 
@@ -267,9 +267,9 @@ When ready to migrate existing orgs (Phase 2), search for `"PHASE 1 DUAL-WRITE"`
 When ready to migrate existing orgs:
 
 1. **Create migration script** to move orgs from `/orgs/{id}` → `/networks/{migrationId}/orgs/{id}`
-2. **Update client code** to prefer new network-scoped paths
-3. **Monitor data consistency** during gradual rollout
-4. **Add rollback capability** per org (30-day backup retention)
+1. **Update client code** to prefer new network-scoped paths
+1. **Monitor data consistency** during gradual rollout
+1. **Add rollback capability** per org (30-day backup retention)
 
 ### How to Start Phase 2
 

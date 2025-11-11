@@ -35,11 +35,11 @@
 **Scope**:
 
 1. Create migration script (`scripts/migrate/orgs-to-networks.ts`)
-2. Iterate all existing orgs
-3. Create a new network for each org (or batch them under corporate networks)
-4. Copy org + related data (venues, shifts, schedules, members, etc.)
-5. Update Firestore rules to prefer new paths
-6. Provide rollback script (copy data back if needed)
+1. Iterate all existing orgs
+1. Create a new network for each org (or batch them under corporate networks)
+1. Copy org + related data (venues, shifts, schedules, members, etc.)
+1. Update Firestore rules to prefer new paths
+1. Provide rollback script (copy data back if needed)
 
 **Implementation Plan** (first steps):
 
@@ -82,8 +82,8 @@
    - Compliance docs (server-only access, no client reads)
    - Network-scoped orgs (Phase 2+ behavior)
    - Access control for cross-network reads (prevent leaking data)
-2. Test emulator + rules behavior with injected data
-3. Add coverage for edge cases:
+1. Test emulator + rules behavior with injected data
+1. Add coverage for edge cases:
    - Invalid network IDs (traversal attacks)
    - Missing network memberships
    - Expired compliance docs (if TTL added)
@@ -132,10 +132,10 @@
    - `/app/schedule` (schedule builder)
    - `/app/people` (team/member management)
    - `/app/settings` (network settings)
-2. Add context providers for network + org + venue selection
-3. Create sidebar navigation
-4. Fetch network/org/venue data and display in UI
-5. Implement basic network selector (if user has multiple networks)
+1. Add context providers for network + org + venue selection
+1. Create sidebar navigation
+1. Fetch network/org/venue data and display in UI
+1. Implement basic network selector (if user has multiple networks)
 
 **Implementation Plan** (first steps):
 
@@ -174,10 +174,10 @@
 **Why**:
 
 1. **Lowest Risk**: Read-only validation, no data changes
-2. **Immediate Payoff**: Catches bugs before production usage
-3. **Quick Turnaround**: 1-2 weeks vs 2-3 weeks for migration script
-4. **Foundation for Later**: Better rules = safer migration script execution
-5. **Parallel with Other Work**: Can run tests while doing Option A or C prep
+1. **Immediate Payoff**: Catches bugs before production usage
+1. **Quick Turnaround**: 1-2 weeks vs 2-3 weeks for migration script
+1. **Foundation for Later**: Better rules = safer migration script execution
+1. **Parallel with Other Work**: Can run tests while doing Option A or C prep
 
 **Secondary Priority**: Option A (Migration Script)
 
@@ -194,22 +194,20 @@
 
 ## Proposed Phase 2 Timeline
 
-```
-Week 1 (Now):
+- Week 1 (Now):
   - Finish Option B: Write comprehensive network rules tests
   - Start Option A: Design migration script (pseudocode + emulator POC)
   - Start Option C: Research + mockups for post-onboarding UX
 
-Week 2-3:
+- Week 2-3:
   - Execute Option A dry-run on emulator with real data volume
   - Refine Option B tests based on findings
   - Complete Option C route scaffolding
 
-Week 4-5:
+- Week 4-5:
   - Dry-run Option A on staging (non-prod)
   - Add monitoring + rollback procedures
   - Start Phase 3 (cleanup old paths)
-```
 
 ---
 

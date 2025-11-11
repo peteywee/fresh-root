@@ -79,105 +79,29 @@ export function csrfProtection<Ctx extends Record<string, unknown> = {}>(config:
         return handler(request, context);
       }
 
-      // Prefer parsing the Cookie header first (unit tests typically set this),
-      // then fall back to the NextRequest cookies API when available.
-      let cookieToken: string | undefined | null = null;
+      // Simplified extraction: prefer the public cookies API when available,
+      // otherwise fall back to the Cookie header. Avoid inspecting internal
+      // runtime properties to stay compatible across Next.js runtimes.
+      let cookieToken: string | null = null;
+
       try {
+        // runtime may expose request.cookies.get(name)
+        const maybeCookies = (
+          request as unknown as { cookies?: { get?: (name: string) => { value?: string } } }
+        ).cookies;
+        if (maybeCookies && typeof maybeCookies.get === "function") {
+          cookieToken = maybeCookies.get(fullConfig.cookieName)?.value ?? null;
+        }
+      } catch {
+        // ignore and fall back to header parsing
+      }
+
+      if (!cookieToken) {
         const cookiesHeader = request.headers.get("cookie") || "";
         const cookieMatch = cookiesHeader.match(new RegExp(`${fullConfig.cookieName}=([^;]+)`));
         cookieToken = cookieMatch?.[1] ?? null;
-
-        if (!cookieToken) {
-          // Some runtimes expose a cookies.get(name) method on the request
-          type MaybeCookies =
-            | {
-                get?: (name: string) => { value?: string } | undefined;
-                // Internal runtimes may expose internal header storage; allow unknown here
-                _headers?: Record<PropertyKey, unknown>;
-              }
-            | undefined;
-          const maybeCookies = (request as unknown as { cookies?: MaybeCookies }).cookies;
-          if (maybeCookies && typeof maybeCookies.get === "function") {
-            const val = maybeCookies.get(fullConfig.cookieName);
-            cookieToken = val?.value ?? null;
-          }
-        }
-      } catch (_err) {
-        const cookies = request.headers.get("cookie") || "";
-        const cookieMatch = cookies.match(new RegExp(`${fullConfig.cookieName}=([^;]+)`));
-        cookieToken = cookieMatch?.[1] ?? null;
       }
-      // Extra fallback: some runtimes keep cookie data in internal headers structures
-      // that aren't exposed via the public API. Try to inspect internal _headers
-      // presence on the request.cookies object and look for the cookie name.
-      if (!cookieToken) {
-        try {
-          type MaybeCookies =
-            | {
-                get?: (name: string) => { value?: string } | undefined;
-                _headers?: Record<PropertyKey, unknown>;
-              }
-            | undefined;
-          const maybeCookies = (request as unknown as { cookies?: MaybeCookies }).cookies;
-          if (maybeCookies && maybeCookies._headers) {
-            const headersStore = maybeCookies._headers as Record<PropertyKey, unknown>;
-            const syms = Object.getOwnPropertySymbols(headersStore || {});
-            for (const s of syms) {
-              const raw = headersStore[s];
-              if (!raw || typeof raw !== "object") continue;
 
-              // Try common string form first
-              try {
-                const asRecord = raw as Record<string, unknown>;
-                const possible =
-                  asRecord[fullConfig.cookieName] || asRecord[fullConfig.cookieName.toLowerCase()];
-                if (possible) {
-                  let derived: string | null = null;
-                  if (typeof possible === "string") derived = possible;
-                  else if (
-                    possible &&
-                    typeof (possible as { value?: unknown }).value !== "undefined"
-                  )
-                    derived = String((possible as { value?: unknown }).value);
-                  if (derived) {
-                    const m = derived.match(new RegExp(`${fullConfig.cookieName}=([^;]+)`));
-                    cookieToken = m ? m[1] : derived;
-                    if (cookieToken) break;
-                  }
-                }
-
-                // Search stringy entries on the object
-                for (const k of Object.keys(asRecord)) {
-                  const v = asRecord[k];
-                  if (typeof v === "string") {
-                    const m = v.match(new RegExp(`${fullConfig.cookieName}=([^;]+)`));
-                    if (m) {
-                      cookieToken = m[1];
-                      break;
-                    }
-                  } else if (v && typeof v === "object") {
-                    const candidate =
-                      (v as { value?: unknown }).value ??
-                      (v as { toString?: () => string }).toString?.();
-                    if (candidate && typeof candidate === "string") {
-                      const m = candidate.match(new RegExp(`${fullConfig.cookieName}=([^;]+)`));
-                      if (m) {
-                        cookieToken = m[1];
-                        break;
-                      }
-                    }
-                  }
-                }
-                if (cookieToken) break;
-              } catch (_perEntry) {
-                // best-effort; ignore per-entry errors
-              }
-            }
-          }
-        } catch (_e) {
-          /* best-effort fallback, ignore errors */
-        }
-      }
       if (!cookieToken) {
         return NextResponse.json(
           { error: "Forbidden - CSRF token missing from cookie", code: "CSRF_COOKIE_MISSING" },
@@ -223,31 +147,25 @@ export function withCSRFToken<Ctx extends Record<string, unknown> = {}>(
     request: NextRequest,
     context: Ctx & { params: Record<string, string> },
   ): Promise<NextResponse> => {
-    // Prefer cookies API when available
-    let token: string | undefined | null = null;
+    // Prefer the public cookies API when available; otherwise fallback to Cookie header.
+    let token: string | null = null;
     try {
+      const maybeCookies = (
+        request as unknown as { cookies?: { get?: (name: string) => { value?: string } } }
+      ).cookies;
+      if (maybeCookies && typeof maybeCookies.get === "function") {
+        token = maybeCookies.get(fullConfig.cookieName)?.value ?? null;
+      }
+    } catch {
+      // ignore and fall back
+    }
+
+    if (!token) {
       const cookiesHeader = request.headers.get("cookie") || "";
       const cookieMatch = cookiesHeader.match(new RegExp(`${fullConfig.cookieName}=([^;]+)`));
       token = cookieMatch?.[1] ?? null;
-
-      if (!token) {
-        type MaybeCookies =
-          | {
-              get?: (name: string) => { value?: string } | undefined;
-              _headers?: Record<PropertyKey, unknown>;
-            }
-          | undefined;
-        const maybeCookies = (request as unknown as { cookies?: MaybeCookies }).cookies;
-        if (maybeCookies && typeof maybeCookies.get === "function") {
-          const val = maybeCookies.get(fullConfig.cookieName);
-          token = val?.value ?? null;
-        }
-      }
-    } catch {
-      const cookies = request.headers.get("cookie") || "";
-      const cookieMatch = cookies.match(new RegExp(`${fullConfig.cookieName}=([^;]+)`));
-      token = cookieMatch?.[1] ?? null;
     }
+
     const hadCookie = token != null;
     if (!token) token = generateCSRFToken(fullConfig.tokenLength);
     const response = await handler(request, context);

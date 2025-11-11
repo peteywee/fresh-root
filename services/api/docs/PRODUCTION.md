@@ -61,11 +61,12 @@ REDIS_URL=redis://production-redis:6379
   - Correlates traces with logs via `traceId` and `spanId`
 - Supported backends: Jaeger, Grafana Tempo, Honeycomb, Datadog, New Relic, etc.
 - Example endpoints:
-  - Jaeger: `http://localhost:4318/v1/traces`
-  - Grafana Cloud: `https://otlp-gateway-prod-us-central-0.grafana.net/otlp/v1/traces`
-  - Honeycomb: `https://api.honeycomb.io/v1/traces`
+  - Jaeger: `<http://localhost:4318/v1/traces`>
+  - Grafana Cloud: `<https://otlp-gateway-prod-us-central-0.grafana.net/otlp/v1/traces`>
+  - Honeycomb: `<https://api.honeycomb.io/v1/traces`>
 - Auto-instruments: Express, HTTP, DNS, Net (FS disabled as too noisy)
 - Traces include: `http.method`, `http.url`, `http.status_code`, `http.user_agent`, `service.name`,
+
   `service.version`
 
 ---

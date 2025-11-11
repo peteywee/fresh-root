@@ -30,6 +30,23 @@ const nextConfig = {
   compress: true,
   productionBrowserSourceMaps: false,
   typedRoutes: true,
+  // Mark server-only packages as external so they won't be bundled by Turbopack
+  // This prevents module resolution errors for optional packages and instrumentation libs
+  serverExternalPackages: [
+    // Optional Redis adapters (not installed in all deployments)
+    "@upstash/redis",
+    "ioredis",
+    // OpenTelemetry and Sentry instrumentation (server-side only)
+    "import-in-the-middle",
+    "require-in-the-middle",
+    "@opentelemetry/instrumentation",
+    "@opentelemetry/instrumentation-http",
+    "@opentelemetry/instrumentation-express",
+    "@opentelemetry/instrumentation-fs",
+    "@opentelemetry/instrumentation-pg",
+    "@sentry/profiling-node",
+    "elastic-apm-node",
+  ],
   images: {
     formats: ["image/avif", "image/webp"],
     remotePatterns: [

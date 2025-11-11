@@ -16,10 +16,14 @@ This Bible version is designed to be **forward-compatible** with existing code a
 
 - **App Code Tag (Implementation Baseline):** `v1.1.0`
   - **Included blocks:**
-    - Block 1 – Security Core
-    - Block 2 – Reliability Core
-    - Block 3 – Integrity Core
-  - These are **implemented & tagged** in the repo.
+
+```text
+- Block 1 – Security Core
+- Block 2 – Reliability Core
+- Block 3 – Integrity Core
+```
+
+- These are **implemented & tagged** in the repo.
 
 - **Bible v13.6:**
   - Introduced the **Network** (tenant root) and the **Corporate / Organization / Venue graph**.
@@ -29,10 +33,14 @@ This Bible version is designed to be **forward-compatible** with existing code a
   - Freezes Blocks 1–3 as **production-grade baselines**.
   - Elevates **Network** to a production-level concept (even if partially implemented at first).
   - Defines **strict Network creation requirements**:
-    - Network Admin Responsibility Form
-    - Tax ID handling
-    - Security gates and onboarding flows
-  - Sketches the **path through Block 4 and beyond**.
+
+```text
+- Network Admin Responsibility Form
+- Tax ID handling
+- Security gates and onboarding flows
+```
+
+- Sketches the **path through Block 4 and beyond**.
 
 The intention is:
 
@@ -47,10 +55,10 @@ The intention is:
 This Bible exists to:
 
 1. Define **exactly how data is partitioned** (Network as tenant root).
-2. Define **who has the legal and technical authority** to create and operate a Network.
-3. Specify the **onboarding wizard and APIs** that safely create Networks, Organizations, Venues, and Memberships.
-4. Outline the **block roadmap** from the current integrity baseline (Blocks 1–3) through UX, PWA, AI, and compliance (Blocks 4–8 and extremities).
-5. Protect the platform owner (you) from:
+1. Define **who has the legal and technical authority** to create and operate a Network.
+1. Specify the **onboarding wizard and APIs** that safely create Networks, Organizations, Venues, and Memberships.
+1. Outline the **block roadmap** from the current integrity baseline (Blocks 1–3) through UX, PWA, AI, and compliance (Blocks 4–8 and extremities).
+1. Protect the platform owner (you) from:
    - Being implicitly responsible for mishandling of staff data by customers; and
    - Having undefined legal and operational boundaries around data ownership and control.
 
@@ -80,24 +88,36 @@ We explicitly distinguish three “layers” of containment:
 1. **Infrastructure Box (App / Firebase Project)**
    - A single deployment of the app, bound to a Firebase project (or equivalent).
    - This is the outermost technical boundary:
-     - All Firestore data, Storage buckets, and Functions belong to this environment.
-   - This box is **opaque to end users**; they do not see or care about “which Firebase project” they are on.
 
-2. **Tenant Box (Network)**
+```text
+- All Firestore data, Storage buckets, and Functions belong to this environment.
+```
+
+- This box is **opaque to end users**; they do not see or care about “which Firebase project” they are on.
+
+1. **Tenant Box (Network)**
    - A **Network** is the tenant root – the **business boundary** inside the app.
    - Every meaningful piece of data (schedules, shifts, staff profiles, attendance, etc.) must be associated with exactly one `networkId`.
    - Networks are **created rarely** and with **strict security + legal checks**.
 
-3. **Graph Inside the Network**
+1. **Graph Inside the Network**
    - Within a Network, we have **graph nodes**:
-     - Corporate
-     - Organization
-     - Venue
-   - And **relationship edges**:
-     - Corporate **owns** Organization(s)
-     - Organization **serves** Corporate(s)
-     - Organization **operates_at** Venue(s)
-   - These are modeled via **link documents**, not nested collections that imply ownership semantics.
+
+```text
+- Corporate
+- Organization
+- Venue
+```
+
+- And **relationship edges**:
+
+```text
+- Corporate **owns** Organization(s)
+- Organization **serves** Corporate(s)
+- Organization **operates_at** Venue(s)
+```
+
+- These are modeled via **link documents**, not nested collections that imply ownership semantics.
 
 The key rule is:
 
@@ -120,25 +140,32 @@ Within each `networkId`:
 ### 2.3 Security & Responsibility Principles
 
 1. **Single Tenant Invariant**
+
    Every schedule, shift, membership, and attendance record belongs to exactly one Network. This is enforced via path structure and rules.
 
-2. **Network Admin as Data Controller**
+1. **Network Admin as Data Controller**
+
    The individual (or legal entity) who sets up the Network is the **data controller** for that Network in legal
    and practical terms. You (Fresh Schedules / platform) act as a **data processor**.
 
-3. **You Are Not Responsible for Their Internal Abuse**
+1. **You Are Not Responsible for Their Internal Abuse**
+
    The Network Admin Responsibility Form explicitly states:
    - They are responsible for who is invited and what data they store.
    - They agree not to misuse employee data.
    - They acknowledge that the platform is not liable for internal misuse that violates their own policies or laws.
 
-4. **Security Over Convenience, but UX-Guided**
+1. **Security Over Convenience, but UX-Guided**
    - Network creation is gated behind:
-     - Verified identity,
-     - Admin Responsibility Form,
-     - Tax ID (where applicable),
-     - Acceptance of terms.
-   - It is still a **guided, linear wizard** so non-technical admins can complete it within minutes.
+
+```text
+- Verified identity,
+- Admin Responsibility Form,
+- Tax ID (where applicable),
+- Acceptance of terms.
+```
+
+- It is still a **guided, linear wizard** so non-technical admins can complete it within minutes.
 
 ---
 

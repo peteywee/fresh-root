@@ -19,3 +19,5 @@ export * from "./join-tokens";
 export * from "./compliance/adminResponsibilityForm";
 export * from "./networks";
 export * from "./onboarding";
+export * from "./events";
+export * from "./errors";

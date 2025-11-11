@@ -22,14 +22,22 @@ export function sanitizeText(text: string): string {
 }
 
 export function sanitizeUrl(url: string): string {
-  const normalized = url.trim().toLowerCase();
-  const dangerousProtocols = ["javascript:", "data:", "vbscript:", "file:"];
-  for (const protocol of dangerousProtocols) {
-    if (normalized.startsWith(protocol)) return "about:blank";
+  try {
+    // For relative URLs, provide a dummy base. If url is absolute, it's used as-is.
+    // This allows us to consistently parse both absolute and relative URLs.
+    const parsedUrl = new URL(url, "https://example.com");
+    const safeProtocols = ["https:", "http:", "mailto:"];
+
+    // If the protocol is not in the safe list, reject the URL.
+    // This handles protocols like javascript:, data:, vbscript:, file:, etc.
+    if (!safeProtocols.includes(parsedUrl.protocol)) {
+      return "about:blank";
+    }
+  } catch {
+    // The URL is malformed, which could be an attack attempt.
+    return "about:blank";
   }
-  const allowedProtocols = ["http:", "https:", "mailto:", "tel:", "//", "/"];
-  const isAllowed = allowedProtocols.some((protocol) => normalized.startsWith(protocol));
-  if (!isAllowed && normalized.includes(":")) return "about:blank";
+
   return url;
 }
 

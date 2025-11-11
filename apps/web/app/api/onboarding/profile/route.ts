@@ -67,7 +67,6 @@ export async function profileHandler(
   return NextResponse.json({ ok: true }, { status: 200 });
 }
 
-export const POST = withSecurity(
-  async (req: any, injectedAdminDb?: any) => profileHandler(req, injectedAdminDb),
-  { requireAuth: true },
-);
+export const POST = withSecurity(async (req: AuthenticatedRequest) => profileHandler(req), {
+  requireAuth: true,
+});
