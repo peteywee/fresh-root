@@ -4,8 +4,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextResponse } from "next/server";
 
-import { withSecurity, type AuthenticatedRequest } from "../../_shared/middleware";
 import { withRequestLogging } from "../../_shared/logging";
+import { withSecurity, type AuthenticatedRequest } from "../../_shared/middleware";
 
 import { logEvent } from "@/src/lib/eventLog";
 import { adminDb as importedAdminDb } from "@/src/lib/firebase.server";
@@ -293,12 +293,10 @@ export async function createNetworkOrgHandler(
 // Adapter wraps the test-friendly handler for use with withSecurity middleware
 async function apiRoute(
   req: AuthenticatedRequest,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+   
   _ctx?: { params: Record<string, string> },
 ) {
   return createNetworkOrgHandler(req);
 }
 
-export const POST = withRequestLogging(
-  withSecurity(apiRoute, { requireAuth: true }),
-);
+export const POST = withRequestLogging(withSecurity(apiRoute, { requireAuth: true }));

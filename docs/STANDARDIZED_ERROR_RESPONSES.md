@@ -12,8 +12,8 @@ All error responses should use the `ErrorResponse` type from `@fresh-schedules/t
 import { ErrorResponse } from "@fresh-schedules/types";
 
 type ErrorResponse = {
-  error: string;              // Human-readable summary
-  code?: ErrorCode;           // Stable machine-friendly code
+  error: string; // Human-readable summary
+  code?: ErrorCode; // Stable machine-friendly code
   details?: Record<string, unknown>; // Optional context
 };
 ```
@@ -103,9 +103,7 @@ export async function myHandler(req: AuthenticatedRequest) {
   // ... handler logic
 }
 
-export const POST = withRequestLogging(
-  withSecurity(myHandler, { requireAuth: true }),
-);
+export const POST = withRequestLogging(withSecurity(myHandler, { requireAuth: true }));
 ```
 
 This logs:
@@ -165,4 +163,3 @@ if (!emailVerified) {
 3. Add error codes to `packages/types/src/errors.ts` as needed
 4. Roll out to other routes incrementally
 5. Update API documentation with error codes
-

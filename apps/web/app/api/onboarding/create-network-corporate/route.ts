@@ -226,6 +226,11 @@ export async function createNetworkCorporateHandler(
   }
 }
 
-export const POST = withSecurity(createNetworkCorporateHandler, {
-  requireAuth: true,
-});
+export const POST = withSecurity(
+  async (req: AuthenticatedRequest, ctx: any) => {
+    return createNetworkCorporateHandler(req, importedAdminDb);
+  },
+  {
+    requireAuth: true,
+  },
+);

@@ -1,3 +1,5 @@
+// [P2][APP][CODE] Errors
+// Tags: P2, APP, CODE
 /**
  * [P1][TYPES][ERRORS] Shared error response types
  * Tags: types, api, errors
@@ -32,8 +34,8 @@ export const ErrorCode = z.enum([
 export type ErrorCode = z.infer<typeof ErrorCode>;
 
 export const ErrorResponseSchema = z.object({
-  error: z.string(),         // human-readable summary
-  code: ErrorCode.optional(),// stable machine-friendly code
+  error: z.string(), // human-readable summary
+  code: ErrorCode.optional(), // stable machine-friendly code
   details: z.record(z.string(), z.unknown()).optional(),
 });
 

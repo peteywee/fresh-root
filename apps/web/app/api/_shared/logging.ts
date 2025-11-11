@@ -1,3 +1,5 @@
+// [P1][OBSERVABILITY][LOGGING] Logging
+// Tags: P1, OBSERVABILITY, LOGGING
 /**
  * [P1][API][INFRA] Request logging + requestId middleware
  * Tags: api, infra, logging, observability
@@ -25,9 +27,7 @@ type Handler<TReq extends BasicReq = BasicReq> = (
 function generateRequestId(): string {
   try {
     // Node 18+ / modern runtimes
-    // @ts-expect-error - crypto might not be typed on globalThis in all envs
     if (globalThis.crypto && typeof globalThis.crypto.randomUUID === "function") {
-      // @ts-expect-error
       return globalThis.crypto.randomUUID();
     }
   } catch {
@@ -59,7 +59,7 @@ export function withRequestLogging<TReq extends BasicReq>(
     const { method = "UNKNOWN", url = "UNKNOWN" } = req;
 
     // Structured "start" log
-    // eslint-disable-next-line no-console
+     
     console.log(
       JSON.stringify({
         level: "info",
@@ -73,11 +73,13 @@ export function withRequestLogging<TReq extends BasicReq>(
 
     try {
       // Handle both single-arg and two-arg handlers
-      const res = await (handler.length > 1 ? handler(req as TReq & { requestId: string }, ctx) : (handler as Handler<TReq>)(req as TReq & { requestId: string }));
+      const res = await (handler.length > 1
+        ? handler(req as TReq & { requestId: string }, ctx)
+        : (handler as Handler<TReq>)(req as TReq & { requestId: string }));
       const durationMs = Date.now() - start;
 
       // Structured "end" log
-      // eslint-disable-next-line no-console
+       
       console.log(
         JSON.stringify({
           level: "info",
@@ -96,7 +98,7 @@ export function withRequestLogging<TReq extends BasicReq>(
       const durationMs = Date.now() - start;
 
       // Structured error log
-      // eslint-disable-next-line no-console
+       
       console.error(
         JSON.stringify({
           level: "error",

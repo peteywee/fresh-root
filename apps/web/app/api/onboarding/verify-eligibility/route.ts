@@ -3,8 +3,8 @@
 
 import { NextResponse } from "next/server";
 
-import { withSecurity, type AuthenticatedRequest } from "../../_shared/middleware";
 import { withRequestLogging } from "../../_shared/logging";
+import { withSecurity, type AuthenticatedRequest } from "../../_shared/middleware";
 
 /**
  * ErrorResponse is a canonical shape for API error responses.
@@ -119,7 +119,7 @@ export async function verifyEligibilityHandler(
 // Adapter wraps the test-friendly handler for use with withSecurity middleware
 async function apiRoute(
   req: AuthenticatedRequest,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+   
   _ctx?: { params: Record<string, string> },
 ) {
   return verifyEligibilityHandler(req);
