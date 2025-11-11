@@ -65,7 +65,12 @@ export async function createNetworkOrgHandler(
     return NextResponse.json({ error: "invalid_json" }, { status: 400 });
   }
 
-  const { orgName, venueName, formToken, location: locationData } = (body as Record<string, unknown>) || {};
+  const {
+    orgName,
+    venueName,
+    formToken,
+    location: locationData,
+  } = (body as Record<string, unknown>) || {};
   if (!formToken) return NextResponse.json({ error: "missing_form_token" }, { status: 422 });
 
   // Prevent path traversal attacks by ensuring formToken is a valid document ID segment.
@@ -132,7 +137,9 @@ export async function createNetworkOrgHandler(
           orgId: orgRef.id,
           networkId: networkRef.id,
           createdAt,
-          ...(locationData && typeof locationData === "object" && Object.keys(locationData as Record<string, unknown>).length > 0
+          ...(locationData &&
+          typeof locationData === "object" &&
+          Object.keys(locationData as Record<string, unknown>).length > 0
             ? {
                 location: {
                   street1: (locationData as Record<string, unknown>).street1 || "",

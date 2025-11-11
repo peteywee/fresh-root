@@ -7,9 +7,11 @@ Built with Next.js, Firebase, and a modern monorepo architecture.
 
 ---
 
-## � Overview
+## 🎯 Overview
 
-Fresh Root is an enterprise scheduling platform designed for teams that need reliable, secure, and observable staff management. The platform is built with security-first principles and provides comprehensive monitoring, logging, and operational support.
+Fresh Root is an enterprise scheduling platform designed for teams that need reliable, secure, and
+observable staff management. Built with security-first principles and comprehensive monitoring,
+logging, and operational support.
 
 **Key Capabilities:**
 
@@ -28,13 +30,13 @@ For comprehensive information, refer to the **[Documentation Index](./docs/DOCS_
 
 **Quick Links:**
 
-| Topic | Resource |
-|-------|----------|
-| **Getting Started** | [Setup Guide](./docs/SETUP.md) · [Contributing](./docs/CONTRIBUTING.md) |
-| **Architecture** | [Architecture Diagrams](./docs/ARCHITECTURE_DIAGRAMS.md) · [Technical Docs](./docs/COMPLETE_TECHNICAL_DOCUMENTATION.md) |
-| **Operations** | [CI Standards](./docs/CI_WORKFLOW_STANDARDS.md) · [Runbooks](./docs/runbooks/) |
-| **Security** | [Security Documentation](./docs/security.md) · [Standards](./docs/REPO_STANDARDS.md) |
-| **Development** | [Full Doc Index](./docs/DOCS_INDEX.md) |
+| Topic               | Resource                                                                                                                |
+| ------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| **Getting Started** | [Setup Guide](./docs/SETUP.md) · [Contributing](./docs/CONTRIBUTING.md)                                                 |
+| **Architecture**    | [Architecture Diagrams](./docs/ARCHITECTURE_DIAGRAMS.md) · [Technical Docs](./docs/COMPLETE_TECHNICAL_DOCUMENTATION.md) |
+| **Operations**      | [CI Standards](./docs/CI_WORKFLOW_STANDARDS.md) · [Runbooks](./docs/runbooks/)                                          |
+| **Security**        | [Security Documentation](./docs/security.md) · [Standards](./docs/REPO_STANDARDS.md)                                    |
+| **Development**     | [Full Doc Index](./docs/DOCS_INDEX.md)                                                                                  |
 
 ---
 
@@ -185,7 +187,7 @@ We welcome contributions! Please review [Contributing Guidelines](./docs/CONTRIB
 
 ### Key Directories
 
-```
+```text
 fresh-root/
 ├── apps/web/              # Next.js PWA application
 ├── packages/              # Shared libraries and types
