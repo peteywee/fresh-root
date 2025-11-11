@@ -60,7 +60,7 @@ export const PATCH = csrfProtection()(
         const sanitized = sanitizeObject(body);
 
         // Validate with Zod
-        const validationResult = PositionUpdateSchema.safeParse(sanitized);
+        const validationResult = UpdatePositionSchema.safeParse(sanitized);
         if (!validationResult.success) {
           return NextResponse.json(
             { error: "Invalid position data", details: validationResult.error.errors },

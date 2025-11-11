@@ -113,7 +113,7 @@ describe("POST /api/onboarding/create-network-corporate", () => {
 
     const response = await createNetworkCorporateHandler(mockReq, mockAdminDb);
     expect(response.status).toBe(200);
-    const data = await response.json();
+    const _data = await response.json();
 
     expect(mockAdminDb.collection).toHaveBeenCalledWith("users");
   });

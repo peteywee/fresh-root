@@ -108,7 +108,7 @@ describe("POST /api/onboarding/verify-eligibility", () => {
     });
 
     // Mock rate limit exceeded scenario
-    const mockCollection = vi.fn().mockReturnValue({
+    const _mockCollection = vi.fn().mockReturnValue({
       doc: vi.fn().mockReturnValue({
         get: vi.fn().mockResolvedValue({
           exists: true,
