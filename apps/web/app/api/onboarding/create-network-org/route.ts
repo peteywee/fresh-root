@@ -293,7 +293,7 @@ export async function createNetworkOrgHandler(
 // Adapter wraps the test-friendly handler for use with withSecurity middleware
 async function apiRoute(
   req: AuthenticatedRequest,
-   
+
   _ctx?: { params: Record<string, string> },
 ) {
   return createNetworkOrgHandler(req);

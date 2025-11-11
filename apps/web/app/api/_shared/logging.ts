@@ -59,7 +59,7 @@ export function withRequestLogging<TReq extends BasicReq>(
     const { method = "UNKNOWN", url = "UNKNOWN" } = req;
 
     // Structured "start" log
-     
+
     console.log(
       JSON.stringify({
         level: "info",
@@ -79,7 +79,7 @@ export function withRequestLogging<TReq extends BasicReq>(
       const durationMs = Date.now() - start;
 
       // Structured "end" log
-       
+
       console.log(
         JSON.stringify({
           level: "info",
@@ -98,7 +98,7 @@ export function withRequestLogging<TReq extends BasicReq>(
       const durationMs = Date.now() - start;
 
       // Structured error log
-       
+
       console.error(
         JSON.stringify({
           level: "error",
