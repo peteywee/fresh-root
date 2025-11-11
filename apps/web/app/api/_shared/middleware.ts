@@ -12,8 +12,7 @@ import {
   securityHeaders,
 } from "./security";
 import { getFirebaseAdminAuth } from "../../../lib/firebase-admin";
-import { csrfProtection } from "../../../src/lib/api/csrf";
-import { createRedisRateLimit, RedisClient } from "../../../src/lib/api/redis-rate-limit";
+import { RedisClient } from "../../../src/lib/api/redis-rate-limit";
 import { Logger } from "../../../src/lib/logger";
 
 export interface AuthenticatedRequest extends NextRequest {

@@ -190,7 +190,7 @@ export async function joinWithTokenHandler(
 }
 
 export const POST = withSecurity(
-  async (req: AuthenticatedRequest, ctx: any) => {
+  async (req: AuthenticatedRequest, _ctx: any) => {
     return joinWithTokenHandler(req, importedAdminDb);
   },
   { requireAuth: true },

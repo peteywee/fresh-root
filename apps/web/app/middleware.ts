@@ -7,7 +7,7 @@ import type { NextRequest } from "next/server";
  * Global middleware for the web app. Applies basic security headers
  * and can later enforce auth / routing rules as needed.
  */
-export function middleware(request: NextRequest) {
+export function middleware(_request: NextRequest) {
   const response = NextResponse.next();
 
   // Basic security headers (tune as needed).
