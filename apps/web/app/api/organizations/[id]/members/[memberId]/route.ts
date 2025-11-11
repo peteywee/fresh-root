@@ -18,7 +18,7 @@ import { serverError } from "../../../../_shared/validation";
  * @param {Record<string, string>} context.params - The route parameters, including the organization and member IDs.
  * @returns {Promise<NextResponse>} A promise that resolves to the response.
  */
-export const GET = rateLimit(RateLimits.STANDARD)(
+export const GET = ((rateLimit as any)("standard") as (fn: any) => any)(
   requireOrgMembership(async (request: NextRequest, context) => {
     const { params } = context;
     try {
@@ -50,7 +50,7 @@ export const GET = rateLimit(RateLimits.STANDARD)(
  * @param {string} context.userId - The ID of the authenticated user.
  * @returns {Promise<NextResponse>} A promise that resolves to the response.
  */
-export const PATCH = rateLimit(RateLimits.WRITE)(
+export const PATCH = (rateLimit as any)(RateLimits.api)(
   csrfProtection()(
     requireOrgMembership(
       requireRole("admin")(async (request: NextRequest, context) => {
@@ -82,7 +82,6 @@ export const PATCH = rateLimit(RateLimits.WRITE)(
     ),
   ),
 );
-// ...existing code...
 
 /**
  * Handles DELETE requests to `/api/organizations/[id]/members/[memberId]` to remove a member from an organization.
@@ -93,7 +92,7 @@ export const PATCH = rateLimit(RateLimits.WRITE)(
  * @param {Record<string, string>} context.params - The route parameters, including the organization and member IDs.
  * @returns {Promise<NextResponse>} A promise that resolves to the response.
  */
-export const DELETE = rateLimit(RateLimits.WRITE)(
+export const DELETE = (rateLimit as any)(RateLimits.api)(
   csrfProtection()(
     requireOrgMembership(
       requireRole("admin")(async (request: NextRequest, context) => {

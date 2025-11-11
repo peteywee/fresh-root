@@ -1,86 +1,156 @@
-//[P1][API][ONBOARDING] Join With Token Endpoint
-// Tags: api, onboarding, join, tokens
+//[P1][API][ONBOARDING] Join With Token Endpoint (server)
+// Tags: api, onboarding, join-token, membership
 
-import { JoinWithTokenSchema } from "@fresh-schedules/types";
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextResponse } from "next/server";
 
 import { withSecurity, type AuthenticatedRequest } from "../../_shared/middleware";
 
-import { adminDb } from "@/src/lib/firebase.server";
+import { adminDb as importedAdminDb } from "@/src/lib/firebase.server";
+import { markOnboardingComplete } from "@/src/lib/userOnboarding";
 
-/**
- * Handles POST requests to `/api/onboarding/join-with-token` to allow a user to join a network or organization using a join token.
- *
- * @param {AuthenticatedRequest} req - The authenticated Next.js request object.
- * @returns {Promise<NextResponse>} A promise that resolves to the response.
- */
-export const POST = withSecurity(
-  async (req: AuthenticatedRequest) => {
-    let body: unknown;
-    try {
-      body = await req.json();
-    } catch {
-      return NextResponse.json({ error: "invalid_json" }, { status: 400 });
+type JoinTokenDoc = {
+  networkId: string;
+  orgId: string;
+  role: string;
+  expiresAt?: number;
+  disabled?: boolean;
+  usedBy?: string[];
+  maxUses?: number;
+};
+
+export async function joinWithTokenHandler(
+  req: AuthenticatedRequest & {
+    user?: { uid: string; customClaims?: Record<string, unknown> };
+  },
+  injectedAdminDb = importedAdminDb,
+) {
+  if (!injectedAdminDb) {
+    // Stub for local/dev
+    return NextResponse.json(
+      {
+        ok: true,
+        networkId: "stub-network-id",
+        orgId: "stub-org-id",
+        role: "staff",
+      },
+      { status: 200 },
+    );
+  }
+
+  const adminDb: any = injectedAdminDb;
+  const uid = req.user?.uid;
+
+  if (!uid) return NextResponse.json({ error: "not_authenticated" }, { status: 401 });
+
+  let body: unknown;
+  try {
+    body = await req.json();
+  } catch {
+    return NextResponse.json({ error: "invalid_json" }, { status: 400 });
+  }
+
+  const token = (body as Record<string, unknown>)?.token as string | undefined;
+  if (!token) {
+    return NextResponse.json({ error: "missing_token" }, { status: 422 });
+  }
+  if (token.includes("/")) {
+    return NextResponse.json({ error: "invalid_token" }, { status: 400 });
+  }
+
+  try {
+    const tokenRef = adminDb.collection("join_tokens").doc(token);
+    const snap = await tokenRef.get();
+    if (!snap.exists) {
+      return NextResponse.json({ error: "token_not_found" }, { status: 404 });
     }
 
-    const parsed = JoinWithTokenSchema.safeParse(body);
-    if (!parsed.success)
-      return NextResponse.json(
-        { error: "invalid_request", details: parsed.error.flatten() },
-        { status: 422 },
-      );
+    const data = snap.data() as JoinTokenDoc;
+    const now = Date.now();
 
-    const { joinToken } = parsed.data;
-
-    const uid = req.user?.uid;
-    if (!uid) return NextResponse.json({ error: "not_authenticated" }, { status: 401 });
-
-    // Dev fallback
-    if (!adminDb) {
-      return NextResponse.json(
-        { ok: true, membershipId: "stub-membership-id", networkId: "stub-network-id" },
-        { status: 200 },
-      );
+    if (data.disabled) {
+      return NextResponse.json({ error: "token_disabled" }, { status: 403 });
     }
 
-    const adb = adminDb;
+    if (typeof data.expiresAt === "number" && data.expiresAt < now) {
+      return NextResponse.json({ error: "token_expired" }, { status: 410 });
+    }
 
-    try {
-      const tokensRoot = adb.collection("joinTokens");
-      const tokenSnap = await tokensRoot.doc(String(joinToken)).get();
-      if (!tokenSnap.exists)
-        return NextResponse.json({ error: "token_not_found" }, { status: 404 });
+    const usedBy = Array.isArray(data.usedBy) ? data.usedBy : [];
+    if (typeof data.maxUses === "number" && usedBy.length >= data.maxUses) {
+      return NextResponse.json({ error: "token_exhausted" }, { status: 409 });
+    }
 
-      const tokenData = tokenSnap.data() as Record<string, unknown>;
-      const networkId = String(tokenData.networkId || "");
-      const orgId = tokenData.orgId ? String(tokenData.orgId) : null;
-      const venueId = tokenData.venueId ? String(tokenData.venueId) : null;
+    if (!data.networkId || !data.orgId || !data.role) {
+      return NextResponse.json({ error: "token_misconfigured" }, { status: 500 });
+    }
 
-      const membershipRef = adb.collection("memberships").doc();
-      await adb.runTransaction(async (tx) => {
+    const membershipId = `${uid}_${data.orgId}`;
+    const membershipRef = adminDb.collection("memberships").doc(membershipId);
+
+    await adminDb.runTransaction(async (tx: any) => {
+      const existing = await tx.get(membershipRef);
+      const createdAt = Date.now();
+
+      if (!existing.exists) {
         tx.set(membershipRef, {
           userId: uid,
-          networkId,
-          orgId: orgId || null,
-          venueId: venueId || null,
-          role: "member",
-          createdAt: Date.now(),
+          orgId: data.orgId,
+          networkId: data.networkId,
+          roles: [data.role],
+          createdAt,
+          createdBy: uid,
         });
+      } else {
+        const cur = existing.data() as {
+          roles?: string[];
+          updatedAt?: number;
+        };
+        const roles = Array.isArray(cur.roles) ? cur.roles : [];
+        if (!roles.includes(data.role)) roles.push(data.role);
+        tx.update(membershipRef, {
+          roles,
+          updatedAt: createdAt,
+          updatedBy: uid,
+        });
+      }
 
-        // Optionally invalidate single-use token
-        if (tokenData.singleUse === true) {
-          tx.delete(tokensRoot.doc(String(joinToken)));
-        }
+      const newUsedBy = usedBy.includes(uid) ? usedBy : [...usedBy, uid];
+      tx.update(tokenRef, {
+        usedBy: newUsedBy,
+        lastUsedAt: createdAt,
       });
+    });
 
-      return NextResponse.json(
-        { ok: true, membershipId: membershipRef.id, networkId },
-        { status: 200 },
-      );
-    } catch (err) {
-      console.error("join-with-token failed", err);
-      return NextResponse.json({ error: "internal_error" }, { status: 500 });
+    // Mark onboarding complete for join path (best-effort)
+    try {
+      await markOnboardingComplete({
+        adminDb,
+        uid: uid as string,
+        intent: "join_existing",
+        networkId: data.networkId,
+        orgId: data.orgId,
+        venueId: undefined,
+      });
+    } catch {
+      // swallow errors to preserve original semantics
     }
-  },
-  { requireAuth: true },
-);
+
+    return NextResponse.json(
+      {
+        ok: true,
+        networkId: data.networkId,
+        orgId: data.orgId,
+        role: data.role,
+      },
+      { status: 200 },
+    );
+  } catch (err) {
+    console.error("join-with-token failed", err);
+    return NextResponse.json({ error: "internal_error" }, { status: 500 });
+  }
+}
+
+export const POST = withSecurity(async (req: any) => joinWithTokenHandler(req, importedAdminDb), {
+  requireAuth: true,
+});

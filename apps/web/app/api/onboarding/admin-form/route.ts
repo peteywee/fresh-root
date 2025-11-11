@@ -64,11 +64,18 @@ export async function adminFormHandler(
       .collection("forms");
     const docRef = formsRoot.doc(token);
 
+    const nowIso = new Date().toISOString();
+    const expiresAt = Date.now() + 60 * 60 * 1000; // 60 minutes TTL for onboarding form token
+
     await docRef.set({
       ...payload,
-      createdAt: new Date().toISOString(),
+      createdAt: nowIso,
       status: "submitted",
       token,
+      // v14 draft metadata used by create-network-* handlers
+      expiresAt,
+      immutable: false,
+      attachedTo: null,
     });
 
     return NextResponse.json({ ok: true, formToken: token }, { status: 200 });

@@ -87,6 +87,9 @@ export async function validateRequest<T>(request: NextRequest, schema: ZodSchema
 
   // Check body size (approximate check before parsing)
   const contentLength = request.headers.get("content-length");
+  // NOTE: debug logging removed. Enable DEBUG_VALIDATION_HEADERS=1 locally
+  // and re-run tests to reproduce header issues; diagnostics intentionally
+  // disabled in committed code to avoid noisy test output.
   if (contentLength && parseInt(contentLength, 10) > MAX_BODY_SIZE) {
     throw new ValidationError(
       {
@@ -96,17 +99,70 @@ export async function validateRequest<T>(request: NextRequest, schema: ZodSchema
     );
   }
 
-  // Parse JSON
+  // Parse raw text so we can reliably enforce size limits even when
+  // the Content-Length header is missing or not set by the test harness.
   let body: unknown;
+  // First, try to read the raw text. Some test environments may throw on text(),
+  // so fall back to request.json() in that case to preserve previous behavior.
   try {
-    body = await request.json();
-  } catch {
-    throw new ValidationError(
-      {
-        _root: ["Invalid JSON in request body"],
-      },
-      400,
-    );
+    const rawText = await request.text();
+    // debug logging removed
+
+    // Enforce size limit based on actual body length
+    if (rawText.length > MAX_BODY_SIZE) {
+      // debug logging removed
+      throw new ValidationError(
+        {
+          _root: [`Request body too large. Maximum size: ${MAX_BODY_SIZE} bytes`],
+        },
+        413,
+      );
+    }
+
+    try {
+      body = JSON.parse(rawText || "null");
+    } catch {
+      throw new ValidationError({ _root: ["Invalid JSON in request body"] }, 400);
+    }
+  } catch (textErr) {
+    // If we threw a ValidationError above (e.g. due to oversized rawText),
+    // don't swallow it — re-throw immediately.
+    if (textErr instanceof ValidationError) throw textErr as ValidationError;
+    // text() failed in this environment (some runtimes throw for large bodies).
+    // If Content-Length header indicates the body is too large, surface 413.
+    const contentLength = request.headers.get("content-length");
+    if (contentLength && parseInt(contentLength, 10) > MAX_BODY_SIZE) {
+      throw new ValidationError(
+        {
+          _root: [`Request body too large. Maximum size: ${MAX_BODY_SIZE} bytes`],
+        },
+        413,
+      );
+    }
+
+    // Try to inspect the raw ArrayBuffer length if available (some runtimes
+    // expose arrayBuffer even when text() throws). If it is too large, return 413.
+    try {
+      const buf = await request.arrayBuffer();
+      if (buf && buf.byteLength > MAX_BODY_SIZE) {
+        // debug logging removed
+        throw new ValidationError(
+          {
+            _root: [`Request body too large. Maximum size: ${MAX_BODY_SIZE} bytes`],
+          },
+          413,
+        );
+      }
+    } catch {
+      // Ignore errors reading arrayBuffer and fall back to parsing below.
+    }
+
+    // Otherwise fall back to request.json() to detect invalid JSON and produce a 400.
+    try {
+      body = await request.json();
+    } catch {
+      throw new ValidationError({ _root: ["Invalid JSON in request body"] }, 400);
+    }
   }
 
   // Validate against schema

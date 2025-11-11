@@ -1,81 +1,72 @@
 # Fresh Schedules
 
-**Status:** ✅ Production Ready | **Version:** 1.1.0 | **Released:** November 7, 2025
+**Status:** ✅ Production Ready | **Version:** 1.1.0 | **Last Updated:** November 10, 2025
 
 A production-ready Progressive Web App (PWA) for staff scheduling with enterprise-grade security and reliability.
-Built with Next.js, Firebase, and a monorepo architecture.
+Built with Next.js, Firebase, and a modern monorepo architecture.
 
-## ✨ Core Features
+---
 
-- **🔒 Enterprise Security**: Session auth, MFA, security middleware, RBAC with Firestore rules
-- **📊 Production Observability**: Structured logging, error tracking, distributed tracing, metrics
-- **⚡ Sub-5-minute Scheduling**: Streamlined staff schedule creation interface
-- **📱 Progressive Web App**: Installable, offline-capable, mobile and desktop ready
-- **🏗️ Monorepo Architecture**: pnpm workspaces, shared types, organized codebase
-- **🔐 Type-Safe**: Full TypeScript, Zod validation, zero `any` types
-- **🧪 Tested**: Unit tests, API security tests, Firebase rules tests, E2E tests
-- **🔄 CI/CD**: Automated testing, linting, security scanning via GitHub Actions
+## 🎯 Overview
 
-## 📚 Documentation
+Fresh Root is an enterprise scheduling platform designed for teams that need reliable, secure, and
+observable staff management. Built with security-first principles and comprehensive monitoring,
+logging, and operational support.
 
-| Resource                                                                     | Description                                    |
-| ---------------------------------------------------------------------------- | ---------------------------------------------- |
-| 📖 **[Complete Technical Docs](./docs/COMPLETE_TECHNICAL_DOCUMENTATION.md)** | Architecture, setup, troubleshooting           |
-| 🏗️ **[Architecture Diagrams](./docs/ARCHITECTURE_DIAGRAMS.md)**              | System diagrams (data flow, CI/CD, auth)       |
-| 🔒 **[Security Documentation](./docs/security.md)**                          | Security architecture, MFA, session management |
-| 📊 **[SLO Summary](./docs/BLOCK1_SLO_SUMMARY.md)**                           | Service Level Objectives for Blocks 1–2        |
-| 📈 **[Progress Tracking](./docs/BLOCK1_BLOCK2_PROGRESS.md)**                 | Detailed Block 1–2 implementation status       |
-| 🧩 **[Block 3 Implementation](./docs/BLOCK3_IMPLEMENTATION.md)**             | Integrity Core summary and rules matrix        |
-| 🤖 **[CI Workflow Standards](./docs/CI_WORKFLOW_STANDARDS.md)**              | Canonical workflow template and quality gates  |
-| 📏 **[Repo Standards](./docs/REPO_STANDARDS.md)**                            | Required tooling, versions, and policies       |
-| 🧰 **[Runbooks](./docs/runbooks/)**                                          | Operations guides (logging, backups, uptime)   |
-| ⚙️ **[Setup Guide](./docs/SETUP.md)**                                        | Step-by-step local setup                       |
-| 📦 **[Service Worker & PWA](./apps/web/docs/SERVICE_WORKER.md)**             | PWA/service worker notes for the app           |
+**Key Capabilities:**
 
-## 🏗️ Project Structure
+- 🔒 Enterprise-grade authentication (session-based + MFA)
+- 📊 Production observability (structured logs, error tracking, distributed tracing)
+- ⚡ Intuitive scheduling interface for rapid team coordination
+- 📱 Progressive Web App with offline support and mobile optimization
+- 🔐 Type-safe, fully tested codebase with continuous integration
+- 🏗️ Scalable monorepo architecture for team collaboration
 
-```text
-fresh-root/
-├── apps/
-│   ├── web/                     # Next.js PWA application
-│   └── server/                  # Standalone Node.js server (optional)
-├── packages/
-│   ├── types/                   # Shared TypeScript types
-│   ├── ui/                      # UI component library
-│   ├── rules-tests/             # Firebase rules testing
-│   └── config/                  # Shared configs
-├── services/
-│   └── api/                     # Dockerized API service
-├── scripts/
-│   └── ops/                     # Operational scripts (backups, uptime)
-├── tests/
-│   ├── e2e/                     # Playwright E2E tests
-│   └── rules/                   # Firebase security rules tests (MFA)
-├── docs/                        # Comprehensive documentation
-├── .github/workflows/           # CI/CD pipelines
-├── firebase.json                # Firebase configuration
-├── firestore.rules              # Firestore security rules (RBAC)
-└── storage.rules                # Storage security rules
-```
+---
 
-## ⚡ Quick Start
+## � Documentation
+
+For comprehensive information, refer to the **[Documentation Index](./docs/DOCS_INDEX.md)**.
+
+**Quick Links:**
+
+| Topic               | Resource                                                                                                                |
+| ------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| **Getting Started** | [Setup Guide](./docs/SETUP.md) · [Contributing](./docs/CONTRIBUTING.md)                                                 |
+| **Architecture**    | [Architecture Diagrams](./docs/ARCHITECTURE_DIAGRAMS.md) · [Technical Docs](./docs/COMPLETE_TECHNICAL_DOCUMENTATION.md) |
+| **Operations**      | [CI Standards](./docs/CI_WORKFLOW_STANDARDS.md) · [Runbooks](./docs/runbooks/)                                          |
+| **Security**        | [Security Documentation](./docs/security.md) · [Standards](./docs/REPO_STANDARDS.md)                                    |
+| **Development**     | [Full Doc Index](./docs/DOCS_INDEX.md)                                                                                  |
+
+---
+
+## 🏗️ Architecture
+
+Fresh Root follows a monorepo structure with clear separation of concerns:
+
+- **`apps/web/`** — Next.js PWA application with API routes and UI
+- **`packages/`** — Shared libraries: types, UI components, testing utilities
+- **`services/`** — Microservices and backend integrations
+- **`scripts/`** — Operational and development automation
+- **`tests/`** — Test suites: rules, E2E, integration tests
+- **`docs/`** — Comprehensive documentation and guides
+
+For a complete architecture overview, see [Architecture Diagrams](./docs/ARCHITECTURE_DIAGRAMS.md).
+
+---
+
+## 🚀 Getting Started
 
 ### Prerequisites
 
-- **Node.js** >= 20.10.0
-- **pnpm** >= 9.1.0 (managed via corepack)
-- **Git** >= 2.20
-- **Firebase CLI** (for deployment): `npm install -g firebase-tools`
+- Node.js (version specified in `.nvmrc`)
+- pnpm (version pinned in `package.json`)
+- Firebase CLI
+- Git
 
-### Installation
+### Quick Setup
 
-1. **Enable pnpm**:
-
-   ```bash
-   corepack enable
-   ```
-
-2. **Clone and install**:
+1. **Clone and install:**
 
    ```bash
    git clone https://github.com/peteywee/fresh-root.git
@@ -83,168 +74,162 @@ fresh-root/
    pnpm install --frozen-lockfile
    ```
 
-3. **Configure environment**:
+2. **Configure environment:**
 
-   Create `apps/web/.env.local`:
-
-   ```env
-   # Firebase Client Config
-   NEXT_PUBLIC_FIREBASE_API_KEY=your_api_key
-   NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com
-   NEXT_PUBLIC_FIREBASE_PROJECT_ID=your_project_id
-   NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=your_project.appspot.com
-   NEXT_PUBLIC_FIREBASE_APP_ID=your_app_id
-
-   # Development (optional)
-   NEXT_PUBLIC_USE_EMULATORS=false
-
-   # Observability (production)
-   NEXT_PUBLIC_SENTRY_DSN=your_sentry_dsn
-   SENTRY_AUTH_TOKEN=your_sentry_auth_token
+   ```bash
+   cp .env.example .env.local
+   # Update with your Firebase configuration
    ```
 
-4. **Start development server**:
+3. **Start development server:**
 
    ```bash
    pnpm dev
    ```
 
-   Open <http://localhost:3000>
-
-## 🛠️ Development & Testing
-
-### Available Scripts
-
-```bash
-# Development
-pnpm dev              # Start Next.js dev server (port 3000)
-pnpm build            # Build all packages for production
-pnpm start            # Start production server
-
-# Quality Checks
-pnpm typecheck        # Run TypeScript compiler checks
-pnpm lint             # Run ESLint (auto-fix enabled)
-pnpm format           # Run Prettier formatting
-
-# Testing
-pnpm test             # Run Vitest unit tests
-pnpm test:watch       # Run tests in watch mode
-pnpm test:coverage    # Run tests with coverage report
-pnpm test:rules       # Run Firebase security rules tests
-pnpm test:e2e         # Run Playwright E2E tests
-```
-
-### Development with Emulators
-
-For local development with Firebase emulators:
-
-```bash
-# Terminal 1: Start emulators
-firebase emulators:start
-
-# Terminal 2: Set env var and start app
-export NEXT_PUBLIC_USE_EMULATORS=true
-pnpm dev
-```
-
-The app will automatically connect to:
-
-- Auth Emulator: `localhost:9099`
-- Firestore Emulator: `localhost:8080`
-- Storage Emulator: `localhost:9199`
-
-### CI/CD Pipeline
-
-Every push/PR triggers automated checks:
-
-- ✅ **TypeScript** - Type checking across all workspaces
-- ✅ **ESLint** - Linting with auto-fix where possible
-- ✅ **Tests** - Unit tests, API tests, Firebase rules tests
-- ✅ **Docker Build** - API service container build
-- ✅ **CodeQL** - Security vulnerability scanning
-
-See [`.github/workflows/`](./.github/workflows/) for workflow configurations.
-
-## 🏛️ Architecture
-
-### Tech Stack
-
-- **Frontend**: Next.js 15 (App Router), React 18, Tailwind CSS
-- **Backend**: Firebase (Auth, Firestore, Storage, Functions)
-- **State Management**: React Query (TanStack Query)
-- **Validation**: Zod schemas for type-safe runtime validation
-- **Logging**: Winston (structured logging)
-- **Monitoring**: Sentry (error tracking), OpenTelemetry (tracing)
-- **Testing**: Vitest, Playwright, Firebase Emulator Suite
-- **CI/CD**: GitHub Actions
-- **Package Manager**: pnpm (monorepo with workspaces)
-
-### Key Design Decisions
-
-- **Monorepo**: Shared types, UI components, and configs across apps/packages
-- **Type Safety**: Zero `any` types, Zod validation, TypeScript strict mode
-- **Security First**: Middleware stack, MFA, RBAC, security tests
-- **Observability**: Structured logging, distributed tracing, error tracking
-- **Progressive Enhancement**: PWA features, offline capability, installable
-
-See [docs/ARCHITECTURE_DIAGRAMS.md](./docs/ARCHITECTURE_DIAGRAMS.md) for visual diagrams.
-
-## 🤝 Contributing
-
-### Development Workflow
-
-1. **Fork and clone** the repository
-2. **Create a branch**: `git checkout -b feature/my-feature`
-3. **Make changes** and add tests
-4. **Run quality checks**:
+4. **Run tests:**
 
    ```bash
-   pnpm typecheck
-   pnpm lint
-   pnpm test
+   pnpm test              # Unit tests
+   pnpm test:rules        # Firebase rules tests
+   pnpm test:e2e          # End-to-end tests
    ```
 
-5. **Commit** with conventional commits format
-6. **Push** and create a Pull Request
-
-### Code Standards
-
-- **TypeScript**: Strict mode, no `any` types allowed
-- **Validation**: Use Zod for all API input validation
-- **Testing**: Add tests for new features and bug fixes
-- **Documentation**: Update docs for significant changes
-- **Commits**: Follow [Conventional Commits](https://www.conventionalcommits.org/)
-
-## 📄 License
-
-This project is licensed under the terms specified in the [LICENSE](./LICENSE) file.
-
-## 🆘 Support & Troubleshooting
-
-### Common Issues
-
-**Emulator connection errors:**
-
-- Ensure `NEXT_PUBLIC_USE_EMULATORS=true` is set
-- Verify emulators are running: `firebase emulators:start`
-- Check firewall/network settings
-
-**Type errors after updates:**
-
-```bash
-pnpm install
-pnpm typecheck
-# If issues persist, delete node_modules and reinstall
-rm -rf node_modules packages/*/node_modules apps/*/node_modules
-pnpm install --frozen-lockfile
-```
-
-### Getting Help
-
-- 📖 **Documentation**: Check [`docs/`](./docs/) for detailed guides
-- 🐛 **Issues**: Open an issue on GitHub for bugs
-- 💬 **Discussions**: Use GitHub Discussions for questions
+For detailed setup instructions, see [Setup Guide](./docs/SETUP.md).
 
 ---
 
-**Built with ❤️ by the Fresh Root team** | [GitHub](https://github.com/peteywee/fresh-root) | v1.1.0
+## 💻 Development Workflow
+
+### Common Commands
+
+```bash
+# Development
+pnpm dev                 # Start dev server
+pnpm build              # Build for production
+pnpm typecheck          # Type checking across workspaces
+pnpm lint               # Lint all code
+
+# Testing
+pnpm test               # Run unit tests
+pnpm test:rules         # Test Firebase security rules
+pnpm test:e2e           # Run E2E tests
+
+# Deployment
+pnpm deploy:firebase    # Deploy to Firebase
+```
+
+### Branch Strategy
+
+- `main` — Stable release branch (protected)
+- `dev` — Active development (protected)
+- Feature branches — Create from `dev`, merge via PR
+
+See [Contributing Guide](./docs/CONTRIBUTING.md) for detailed workflow.
+
+---
+
+## 🔒 Security
+
+Fresh Root prioritizes security across all layers:
+
+- **Authentication**: Secure session management with TOTP-based MFA
+- **Authorization**: Role-based access control (RBAC) via Firebase rules
+- **Data Protection**: Encrypted in transit and at rest
+- **API Security**: Rate limiting, CSRF protection, input validation
+- **Monitoring**: Comprehensive audit logging and alerting
+
+See [Security Documentation](./docs/security.md) for complete security architecture and best practices.
+
+---
+
+## 📊 Production Operations
+
+The platform includes comprehensive operational support:
+
+- **Structured Logging**: Centralized logging with retention policies
+- **Error Tracking**: Real-time error reporting and aggregation
+- **Distributed Tracing**: End-to-end request tracing for debugging
+- **Automated Backups**: Regular Firestore exports with long-term retention
+- **Runbooks**: Documented procedures for common operational tasks
+
+See [Runbooks](./docs/runbooks/) for operational guides.
+
+---
+
+## 🧪 Quality & Testing
+
+Comprehensive test coverage ensures reliability:
+
+- **Unit Tests**: Core logic and utilities (Vitest)
+- **API Security Tests**: Authentication, authorization, rate limiting
+- **Firebase Rules Tests**: Security rules validation for Firestore/Storage
+- **E2E Tests**: User workflows and integrations (Playwright)
+- **CI/CD Validation**: Automated testing on every commit
+
+See [CI Workflow Standards](./docs/CI_WORKFLOW_STANDARDS.md) for quality gates.
+
+---
+
+## 🤝 Contributing
+
+We welcome contributions! Please review [Contributing Guidelines](./docs/CONTRIBUTING.md) for:
+
+- Code standards and conventions
+- Development setup
+- Pull request process
+- Testing requirements
+- Git workflow
+
+---
+
+## 📋 Project Structure
+
+### Key Directories
+
+```text
+fresh-root/
+├── apps/web/              # Next.js PWA application
+├── packages/              # Shared libraries and types
+│   ├── types/            # TypeScript type definitions
+│   ├── ui/               # UI component library
+│   ├── config/           # Shared configuration
+│   └── rules-tests/      # Firebase rules test infrastructure
+├── services/             # Microservices and APIs
+├── scripts/              # Development and operational automation
+├── tests/                # Test suites (rules, E2E)
+├── docs/                 # Documentation
+├── firestore.rules       # Firestore security rules
+├── storage.rules         # Cloud Storage security rules
+└── package.json          # Workspace dependencies and scripts
+```
+
+For detailed structure, see [Documentation Index](./docs/DOCS_INDEX.md).
+
+---
+
+## 📞 Support & Resources
+
+- **GitHub Issues** - Report bugs or request features
+- **Documentation** - Complete guides in [docs/DOCS_INDEX.md](./docs/DOCS_INDEX.md)
+- **Contributing** - See [CONTRIBUTING.md](./docs/CONTRIBUTING.md)
+
+---
+
+## 📄 License
+
+This project is licensed under the terms specified in [LICENSE](./LICENSE).
+
+---
+
+## 🔗 Related Resources
+
+- [Setup Guide](./docs/SETUP.md) - Get started locally
+- [Contributing Guide](./docs/CONTRIBUTING.md) - How to contribute
+- [Architecture Diagrams](./docs/ARCHITECTURE_DIAGRAMS.md) - System overview
+- [Security Documentation](./docs/security.md) - Security practices
+- [Full Documentation Index](./docs/DOCS_INDEX.md) - All available resources
+
+---
+
+**Last Updated:** November 10, 2025

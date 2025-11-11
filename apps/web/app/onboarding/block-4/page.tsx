@@ -1,10 +1,12 @@
 // [P2][APP][CODE] Page page component
 // Tags: P2, APP, CODE
+// Onboarding completion / success step
+"use client";
+
+import { useRouter } from "next/navigation";
 import React from "react";
 
-export const metadata = {
-  title: "Onboarding — Block 4",
-};
+import { useOnboardingWizard } from "../_wizard/OnboardingWizardContext";
 
 /**
  * A placeholder page component for "Block 4" of the onboarding wizard.
@@ -12,11 +14,54 @@ export const metadata = {
  * @returns {JSX.Element} The rendered placeholder page.
  */
 export default function Block4Page() {
+  const router = useRouter();
+  const { intent, networkId, orgId, venueId, corpId, joinedRole } = useOnboardingWizard();
+
+  const description =
+    intent === "join_existing"
+      ? "You have joined an existing workspace."
+      : "Your workspace has been created.";
+
   return (
-    <main style={{ padding: 24 }}>
-      <h1>Onboarding — Block 4</h1>
-      <p>This is a safe placeholder for Block 4 of the onboarding wizard.</p>
-      <p>Replace with the actual step content when ready.</p>
-    </main>
+    <div className="space-y-6">
+      <h1 className="text-2xl font-semibold">You&apos;re in.</h1>
+      <p className="text-sm text-slate-600">{description}</p>
+
+      <div className="space-y-1 rounded-md border px-4 py-3 text-xs text-slate-700">
+        {networkId && (
+          <div>
+            <span className="font-medium">Network ID:</span> {networkId}
+          </div>
+        )}
+        {orgId && (
+          <div>
+            <span className="font-medium">Org ID:</span> {orgId}
+          </div>
+        )}
+        {venueId && (
+          <div>
+            <span className="font-medium">Venue ID:</span> {venueId}
+          </div>
+        )}
+        {corpId && (
+          <div>
+            <span className="font-medium">Corporate ID:</span> {corpId}
+          </div>
+        )}
+        {joinedRole && (
+          <div>
+            <span className="font-medium">Role:</span> {joinedRole}
+          </div>
+        )}
+      </div>
+
+      <button
+        type="button"
+        className="inline-flex items-center rounded-md bg-slate-900 px-4 py-2 text-sm text-white"
+        onClick={() => router.push("/app")}
+      >
+        Go to the app
+      </button>
+    </div>
   );
 }

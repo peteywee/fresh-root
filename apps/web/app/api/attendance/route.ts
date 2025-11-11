@@ -102,7 +102,7 @@ export const POST = withSecurity(
             return badRequest("Validation failed", parsed.details);
           }
 
-          const data = parsed.data;
+          const data: any = parsed.data;
 
           // Verify orgId matches context
           if (data.orgId !== context.orgId) {

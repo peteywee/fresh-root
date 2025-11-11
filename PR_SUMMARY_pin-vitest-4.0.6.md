@@ -2,7 +2,7 @@
 
 ## Summary
 
-This change adds a pnpm `overrides` entry to pin Vitest and related subpackages to version 4.0.6. The project previously had multiple references to different Vitest (and @vitest/\*) versions in the lockfile which caused a runtime error during the test suite run:
+This change adds a pnpm `overrides` entry to pin Vitest and related subpackages to version 4.0.6. The project previously had multiple references to different Vitest (and @vitest/\*) versions in the lockfile which caused a runtime error during the test suite run.
 
 TypeError: Cannot redefine property: Symbol($$jest-matchers-object)
 
