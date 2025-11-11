@@ -1,6 +1,6 @@
 # Fresh Root
 
-**Status:** ✅ Production Ready | **Version:** 1.1.0 | **Last Updated:** November 10, 2025
+**Status:** ✅ Production Ready | **Version:** 1.1.0 | **Last Updated:** November 11, 2025
 
 A production-ready Progressive Web App (PWA) for staff scheduling with enterprise-grade security and reliability.
 Built with Next.js, Firebase, and a modern monorepo architecture.
@@ -109,6 +109,7 @@ pnpm dev                 # Start dev server
 pnpm build              # Build for production
 pnpm typecheck          # Type checking across workspaces
 pnpm lint               # Lint all code
+pnpm fix                # Auto-fix linting and formatting issues
 
 # Testing
 pnpm test               # Run unit tests
@@ -116,8 +117,26 @@ pnpm test:rules         # Test Firebase security rules
 pnpm test:e2e           # Run E2E tests
 
 # Deployment
+pnpm build              # Build all workspace projects
 pnpm deploy:firebase    # Deploy to Firebase
 ```
+
+### Runtime Enhancements (v1.1.0)
+
+**Redis Adapter with Smart Fallback:**
+
+- Supports Upstash REST API for serverless deployments
+- Falls back to ioredis for standard Redis deployments
+- In-memory adapter for local development (not production)
+- Dynamic imports prevent build-time failures when optional packages are absent
+- Automatic detection of available Redis configuration
+
+**Build Optimization:**
+
+- `serverExternalPackages` prevents bundling of optional server-only dependencies
+- Turbopack-compatible dynamic imports for optional packages
+- Instrumentation support for OpenTelemetry and Sentry without build overhead
+- Reduced bundle size and faster builds
 
 ### Branch Strategy
 
@@ -131,13 +150,32 @@ See [Contributing Guide](./docs/CONTRIBUTING.md) for detailed workflow.
 
 ## 🔒 Security
 
-Fresh Root prioritizes security across all layers:
+Fresh Root prioritizes security across all layers with defense-in-depth practices:
+
+### Core Security Controls
 
 - **Authentication**: Secure session management with TOTP-based MFA
 - **Authorization**: Role-based access control (RBAC) via Firebase rules
 - **Data Protection**: Encrypted in transit and at rest
-- **API Security**: Rate limiting, CSRF protection, input validation
+- **API Security**: Rate limiting (Redis + in-memory fallback), CSRF protection, input validation with Zod
 - **Monitoring**: Comprehensive audit logging and alerting
+
+### Security Headers (v1.1.0)
+
+Strict security headers prevent common attack vectors:
+
+- `X-Frame-Options: DENY` — Prevents clickjacking
+- `X-Content-Type-Options: nosniff` — Blocks MIME type sniffing
+- `Content-Security-Policy` — Restricts script/style/resource origins
+- `Strict-Transport-Security` — Enforces HTTPS with 2-year validity
+- `Cross-Origin-*` — Protects against cross-origin attacks
+- `Referrer-Policy` — Controls referrer information
+
+### Rate Limiting Strategy
+
+- **Upstash Redis (production)**: Distributed rate limiting for multi-instance deployments
+- **ioredis (high-throughput)**: Standard Redis deployments
+- **In-memory fallback (development)**: Operational development without external dependencies
 
 See [Security Documentation](./docs/security.md) for complete security architecture and best practices.
 
@@ -232,4 +270,4 @@ This project is licensed under the terms specified in [LICENSE](./LICENSE).
 
 ---
 
-**Last Updated:** November 10, 2025
+**Last Updated:** November 11, 2025
