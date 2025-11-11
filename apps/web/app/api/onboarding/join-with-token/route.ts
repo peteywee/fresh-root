@@ -1,22 +1,20 @@
 //[P1][API][ONBOARDING] Join With Token Endpoint (server)
-// Tags: api, onboarding, join-token, membership
-/**
- * @fileoverview
- * API endpoint for v14 join-with-token onboarding flow: validate token, create/update membership, and mark onboarding complete.
- * Supports token expiry, max uses, and role tracking via usedBy list.
- */
+// Tags: api, onboarding, join-token, membership, events
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextResponse } from "next/server";
 
 import { withSecurity, type AuthenticatedRequest } from "../../_shared/middleware";
-import { JoinWithTokenSchema } from "@fresh-schedules/types";
 
 import { adminDb as importedAdminDb } from "@/src/lib/firebase.server";
 import { markOnboardingComplete } from "@/src/lib/userOnboarding";
+import { logEvent } from "@/src/lib/eventLog";
 
 type JoinTokenDoc = {
   networkId: string;
   orgId: string;
   role: string;
+  venueId?: string;
   expiresAt?: number;
   disabled?: boolean;
   usedBy?: string[];
@@ -42,27 +40,19 @@ export async function joinWithTokenHandler(
     );
   }
 
-  const adminDb = injectedAdminDb as NonNullable<typeof importedAdminDb>;
+  const adminDb: any = injectedAdminDb;
   const uid = req.user?.uid;
 
   if (!uid) return NextResponse.json({ error: "not_authenticated" }, { status: 401 });
 
-  let bodyUnknown: unknown;
+  let body: unknown;
   try {
-    bodyUnknown = await req.json();
+    body = await req.json();
   } catch {
     return NextResponse.json({ error: "invalid_json" }, { status: 400 });
   }
 
-  const parsed = JoinWithTokenSchema.safeParse(bodyUnknown);
-  if (!parsed.success) {
-    return NextResponse.json(
-      { error: "validation_error", issues: parsed.error.flatten() },
-      { status: 422 },
-    );
-  }
-
-  const token = parsed.data.joinToken;
+  const token = (body as Record<string, unknown>)?.token as string | undefined;
   if (!token) {
     return NextResponse.json({ error: "missing_token" }, { status: 422 });
   }
@@ -100,53 +90,89 @@ export async function joinWithTokenHandler(
     const membershipId = `${uid}_${data.orgId}`;
     const membershipRef = adminDb.collection("memberships").doc(membershipId);
 
-    await adminDb.runTransaction(async (tx: any) => {
-      const existing = await tx.get(membershipRef);
-      const createdAt = Date.now();
+    await adminDb.runTransaction(
+      async (tx: {
+        get: (...args: unknown[]) => Promise<any>;
+        set: (...args: unknown[]) => unknown;
+        update: (...args: unknown[]) => unknown;
+      }) => {
+        const existing = await tx.get(membershipRef);
+        const createdAt = now;
 
-      if (!existing.exists) {
-        tx.set(membershipRef, {
-          userId: uid,
-          orgId: data.orgId,
-          networkId: data.networkId,
-          roles: [data.role],
-          createdAt,
-          createdBy: uid,
-        });
-      } else {
-        const cur = existing.data() as {
-          roles?: string[];
-          updatedAt?: number;
-        };
-        const roles = Array.isArray(cur.roles) ? cur.roles : [];
-        if (!roles.includes(data.role)) roles.push(data.role);
-        tx.update(membershipRef, {
-          roles,
-          updatedAt: createdAt,
-          updatedBy: uid,
-        });
-      }
+        if (!existing.exists) {
+          tx.set(membershipRef, {
+            userId: uid,
+            orgId: data.orgId,
+            networkId: data.networkId,
+            roles: [data.role],
+            createdAt,
+            updatedAt: createdAt,
+            createdBy: uid,
+          });
+        } else {
+          const cur = existing.data() as {
+            roles?: string[];
+            updatedAt?: number;
+          };
+          const roles = Array.isArray(cur.roles) ? cur.roles : [];
+          if (!roles.includes(data.role)) roles.push(data.role);
+          tx.update(membershipRef, {
+            roles,
+            updatedAt: createdAt,
+            updatedBy: uid,
+          });
+        }
 
-      const newUsedBy = usedBy.includes(uid) ? usedBy : [...usedBy, uid];
-      tx.update(tokenRef, {
-        usedBy: newUsedBy,
-        lastUsedAt: createdAt,
-      });
+        const newUsedBy = usedBy.includes(uid) ? usedBy : [...usedBy, uid];
+        tx.update(tokenRef, {
+          usedBy: newUsedBy,
+          lastUsedAt: createdAt,
+        });
+      },
+    );
+
+    // Mark onboarding complete for join path
+    await markOnboardingComplete({
+      adminDb,
+      uid,
+      intent: "join_existing",
+      networkId: data.networkId,
+      orgId: data.orgId,
+      venueId: data.venueId,
     });
 
-    // Mark onboarding complete for join path (best-effort)
-    try {
-      await markOnboardingComplete({
-        adminDb,
-        uid: uid as string,
+    // Emit platform events
+    const eventTime = Date.now();
+
+    // membership.* event
+    await logEvent(adminDb, {
+      at: eventTime,
+      category: "membership",
+      type: "membership.created",
+      actorUserId: uid,
+      networkId: data.networkId,
+      orgId: data.orgId,
+      venueId: data.venueId,
+      payload: {
+        source: "onboarding.join-with-token",
+        role: data.role,
+        via: "join_token",
+      },
+    });
+
+    // onboarding.completed (intent: join_existing)
+    await logEvent(adminDb, {
+      at: eventTime,
+      category: "onboarding",
+      type: "onboarding.completed",
+      actorUserId: uid,
+      networkId: data.networkId,
+      orgId: data.orgId,
+      venueId: data.venueId,
+      payload: {
         intent: "join_existing",
-        networkId: data.networkId,
-        orgId: data.orgId,
-        venueId: undefined,
-      });
-    } catch {
-      // swallow errors to preserve original semantics
-    }
+      },
+    });
 
     return NextResponse.json(
       {
@@ -163,7 +189,4 @@ export async function joinWithTokenHandler(
   }
 }
 
-export const POST = withSecurity(
-  async (req: AuthenticatedRequest) => joinWithTokenHandler(req, importedAdminDb),
-  { requireAuth: true },
-);
+export const POST = withSecurity(joinWithTokenHandler, { requireAuth: true });

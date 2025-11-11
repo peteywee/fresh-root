@@ -121,4 +121,3 @@ These items address feedback from automated code reviewers on PR #63.
 - **Helper**: `markOnboardingComplete()` from `apps/web/src/lib/userOnboarding.ts`
 - **Copilot rules**: `.vscode/copilot-rules.md`
 - **File snippet**: `.vscode/snippets/typescript.json` (type `fsdoc` + Tab)
-

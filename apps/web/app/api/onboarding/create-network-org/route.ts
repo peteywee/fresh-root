@@ -1,18 +1,14 @@
 //[P1][API][ONBOARDING] Create Network + Org Endpoint (server)
-// Tags: api, onboarding, network, org, venue, membership
-/**
- * @fileoverview
- * API endpoint for v14 org onboarding flow: create network, org, venue, and initial membership.
- * Uses Zod-validated CreateOrgOnboardingSchema, creates v14-compliant Firestore docs, and marks onboarding complete.
- */
+// Tags: api, onboarding, network, org, venue, membership, events
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextResponse } from "next/server";
 
 import { withSecurity, type AuthenticatedRequest } from "../../_shared/middleware";
-// Zod schema for onboarding payload validation
-import { createOrgOnboardingSchema } from "../../_shared/validation";
 
 import { adminDb as importedAdminDb } from "@/src/lib/firebase.server";
 import { markOnboardingComplete } from "@/src/lib/userOnboarding";
+import { logEvent } from "@/src/lib/eventLog";
 
 /**
  * Inner handler exported for tests. Accepts an optional injected adminDb for testability.
@@ -23,7 +19,6 @@ export async function createNetworkOrgHandler(
   },
   injectedAdminDb = importedAdminDb,
 ) {
-  // Use injected adminDb (tests) or imported adminDb for runtime
   if (!injectedAdminDb) {
     // In dev/local mode, return a stub response so the frontend can be exercised without Firestore
     return NextResponse.json(
@@ -38,7 +33,7 @@ export async function createNetworkOrgHandler(
     );
   }
 
-  const adminDb = injectedAdminDb as NonNullable<typeof importedAdminDb>;
+  const adminDb: any = injectedAdminDb;
 
   // Authenticated request guaranteed by withSecurity (requireAuth below)
   const uid = req.user?.uid;
@@ -63,28 +58,31 @@ export async function createNetworkOrgHandler(
     return NextResponse.json({ error: "role_not_allowed" }, { status: 403 });
   }
 
-  let bodyUnknown: unknown;
+  let body: unknown;
   try {
-    bodyUnknown = await req.json();
+    body = await req.json();
   } catch {
     return NextResponse.json({ error: "invalid_json" }, { status: 400 });
   }
 
-  const parsed = createOrgOnboardingSchema.safeParse(bodyUnknown);
-  if (!parsed.success) {
-    return NextResponse.json(
-      { error: "validation_error", issues: parsed.error.flatten() },
-      { status: 422 },
-    );
-  }
+  const { orgName, venueName, formToken, location } = (body as Record<string, unknown>) || {};
 
-  const { orgName, venueName, formToken, location } = parsed.data;
   if (!formToken) return NextResponse.json({ error: "missing_form_token" }, { status: 422 });
 
   // Prevent path traversal attacks by ensuring formToken is a valid document ID segment.
   if (String(formToken).includes("/")) {
     return NextResponse.json({ error: "invalid_form_token" }, { status: 400 });
   }
+
+  const locationData = (location || {}) as {
+    street1?: string;
+    street2?: string;
+    city?: string;
+    state?: string;
+    postalCode?: string;
+    countryCode?: string;
+    timeZone?: string;
+  };
 
   try {
     const formsRoot = adminDb
@@ -114,7 +112,7 @@ export async function createNetworkOrgHandler(
     const venueRef = adminDb.collection("venues").doc();
 
     // Membership doc id in the existing global memberships collection
-    const membershipId = `${uid}_org_${orgRef.id}`;
+    const membershipId = `${uid}_${orgRef.id}`;
     const membershipRef = adminDb.collection("memberships").doc(membershipId);
 
     await adminDb.runTransaction(
@@ -124,24 +122,22 @@ export async function createNetworkOrgHandler(
       }) => {
         const createdAt = nowMs;
 
-        // 1) Network (v14-compliant fields)
+        // 1) Network
         tx.set(networkRef, {
           id: networkRef.id,
-          slug: networkRef.id,
-          displayName: orgName || `Network ${new Date().toISOString()}`,
-          kind: "independent_org",
-          ownerUserId: uid,
+          name: orgName || `Network ${new Date().toISOString()}`,
           status: "pending_verification",
           createdAt,
           updatedAt: createdAt,
+          createdBy: uid,
           adminFormToken: formToken,
         });
 
-        // 2) Org (v14-compliant fields)
+        // 2) Org
         tx.set(orgRef, {
           id: orgRef.id,
-          networkId: networkRef.id,
           name: orgName || "Org",
+          networkId: networkRef.id,
           ownerId: uid,
           memberCount: 1,
           status: "trial",
@@ -149,27 +145,24 @@ export async function createNetworkOrgHandler(
           updatedAt: createdAt,
         });
 
-        // 3) Venue (v14-compliant fields, with optional location/timezone)
+        // 3) Venue (with optional location)
         tx.set(venueRef, {
           id: venueRef.id,
           name: venueName || "Main Venue",
           orgId: orgRef.id,
           networkId: networkRef.id,
-          createdBy: uid,
           createdAt,
           updatedAt: createdAt,
-          ...(location &&
-          typeof location === "object" &&
-          Object.keys(location as Record<string, unknown>).length > 0
+          ...(Object.keys(locationData).length > 0
             ? {
                 location: {
-                  street1: (location as Record<string, unknown>).street1 || "",
-                  street2: (location as Record<string, unknown>).street2 || "",
-                  city: (location as Record<string, unknown>).city || "",
-                  state: (location as Record<string, unknown>).state || "",
-                  postalCode: (location as Record<string, unknown>).postalCode || "",
-                  countryCode: (location as Record<string, unknown>).countryCode || "",
-                  timeZone: (location as Record<string, unknown>).timeZone || "",
+                  street1: locationData.street1 || "",
+                  street2: locationData.street2 || "",
+                  city: locationData.city || "",
+                  state: locationData.state || "",
+                  postalCode: locationData.postalCode || "",
+                  countryCode: locationData.countryCode || "",
+                  timeZone: locationData.timeZone || "",
                 },
               }
             : {}),
@@ -207,24 +200,77 @@ export async function createNetworkOrgHandler(
           networkId: networkRef.id,
           roles: ["org_owner", "admin", "manager"],
           createdAt,
+          updatedAt: createdAt,
           createdBy: uid,
         });
       },
     );
 
-    // Mark the creating user's onboarding as complete (best-effort).
-    try {
-      await markOnboardingComplete({
-        adminDb,
-        uid: uid as string,
+    // 7) Mark onboarding complete for this user
+    await markOnboardingComplete({
+      adminDb,
+      uid,
+      intent: "create_org",
+      networkId: networkRef.id,
+      orgId: orgRef.id,
+      venueId: venueRef.id,
+    });
+
+    // 8) Emit platform events
+    const now = Date.now();
+
+    // network.created
+    await logEvent(adminDb, {
+      at: now,
+      category: "network",
+      type: "network.created",
+      actorUserId: uid,
+      networkId: networkRef.id,
+      payload: {
+        source: "onboarding.create-network-org",
+      },
+    });
+
+    // org.created
+    await logEvent(adminDb, {
+      at: now,
+      category: "org",
+      type: "org.created",
+      actorUserId: uid,
+      networkId: networkRef.id,
+      orgId: orgRef.id,
+      payload: {
+        source: "onboarding.create-network-org",
+      },
+    });
+
+    // venue.created
+    await logEvent(adminDb, {
+      at: now,
+      category: "venue",
+      type: "venue.created",
+      actorUserId: uid,
+      networkId: networkRef.id,
+      orgId: orgRef.id,
+      venueId: venueRef.id,
+      payload: {
+        source: "onboarding.create-network-org",
+      },
+    });
+
+    // onboarding.completed (for this intent)
+    await logEvent(adminDb, {
+      at: now,
+      category: "onboarding",
+      type: "onboarding.completed",
+      actorUserId: uid,
+      networkId: networkRef.id,
+      orgId: orgRef.id,
+      venueId: venueRef.id,
+      payload: {
         intent: "create_org",
-        networkId: networkRef.id,
-        orgId: orgRef.id,
-        venueId: venueRef.id,
-      });
-    } catch {
-      // Swallow errors to preserve original endpoint semantics.
-    }
+      },
+    });
 
     return NextResponse.json(
       {
@@ -243,7 +289,4 @@ export async function createNetworkOrgHandler(
 }
 
 // Keep Next.js route export for runtime (secured)
-export const POST = withSecurity(
-  async (req: AuthenticatedRequest) => createNetworkOrgHandler(req, importedAdminDb),
-  { requireAuth: true },
-);
+export const POST = withSecurity(createNetworkOrgHandler, { requireAuth: true });
