@@ -49,9 +49,10 @@ export const PATCH = csrfProtection()(
       const rateLimitResult = await rateLimit(request, RateLimits.api);
       if (rateLimitResult) return rateLimitResult;
 
-      const { params, userId } = context;
+      const { userId } = context;
       try {
-        const { id: orgId, memberId } = await params;
+        const params = await context.params;
+        const { id: orgId, memberId } = params;
 
         const body = await request.json();
         const validated = UpdateMembershipSchema.parse(body);
@@ -88,8 +89,8 @@ export const DELETE = csrfProtection()(
       const rateLimitResult = await rateLimit(request, RateLimits.api);
       if (rateLimitResult) return rateLimitResult;
 
-      const { params } = context;
       try {
+        const params = await context.params;
         const { id: orgId, memberId } = params;
         // In production: permission checks, delete from Firestore
         return NextResponse.json({
