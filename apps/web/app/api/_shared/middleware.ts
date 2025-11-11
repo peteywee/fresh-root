@@ -146,13 +146,25 @@ export interface WithSecurityOptions {
 }
 
 export function withSecurity<
-  C extends { params: Record<string, string> } = { params: Record<string, string> },
+  C extends { params: Record<string, string> | Promise<Record<string, string>> } = {
+    params: Record<string, string> | Promise<Record<string, string>>;
+  },
 >(
-  handler: (req: AuthenticatedRequest | NextRequest, ctx: C) => Promise<NextResponse>,
+  handler: (
+    req: AuthenticatedRequest | NextRequest,
+    ctx: { params: Record<string, string>; [key: string]: unknown },
+  ) => Promise<NextResponse>,
   options: WithSecurityOptions = {},
 ): (req: AuthenticatedRequest | NextRequest, ctx: C) => Promise<NextResponse> {
   return async (req: AuthenticatedRequest | NextRequest, ctx: C) => {
     try {
+      // Resolve params if it's a Promise (Next.js 14+/16+)
+      const resolvedParams = await Promise.resolve(ctx.params);
+      const resolvedCtx = { ...ctx, params: resolvedParams } as {
+        params: Record<string, string>;
+        [key: string]: unknown;
+      };
+
       // Apply CORS
       const corsMw = cors(options.corsAllowedOrigins || []);
       const afterCors = await corsMw(req as NextRequest, async (corsReq) => {
@@ -168,17 +180,17 @@ export function withSecurity<
             // CSRF should be tested separately via csrf.ts tests
             if (options.require2FA) {
               return require2FAForManagers(rlReq as AuthenticatedRequest, async (ra) => {
-                return handler(ra as AuthenticatedRequest, ctx);
+                return handler(ra as AuthenticatedRequest, resolvedCtx);
               });
             }
 
             if (options.requireAuth) {
               return requireSession(rlReq as AuthenticatedRequest, async (ra) => {
-                return handler(ra as AuthenticatedRequest, ctx);
+                return handler(ra as AuthenticatedRequest, resolvedCtx);
               });
             }
 
-            return handler(rlReq as NextRequest, ctx);
+            return handler(rlReq as NextRequest, resolvedCtx);
           });
         });
       });

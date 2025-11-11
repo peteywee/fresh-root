@@ -12,88 +12,112 @@ type SimpleRedisClient = {
   ttl(key: string): Promise<number>;
 };
 
-// Try Upstash first, then ioredis, otherwise fall back to in-memory map (development)
-let adapter: SimpleRedisClient | null = null;
+// In-memory fallback for local development and builds. Not suitable for production.
+const memoryMap = new Map<string, { count: number; resetAt: number }>();
+const memoryAdapter: SimpleRedisClient = {
+  async incr(key: string) {
+    const now = Date.now();
+    const entry = memoryMap.get(key);
+    if (!entry || entry.resetAt < now) {
+      const resetAt = now + 60 * 1000;
+      memoryMap.set(key, { count: 1, resetAt });
+      return 1;
+    }
+    entry.count++;
+    memoryMap.set(key, entry);
+    return entry.count;
+  },
+  async expire(key: string, seconds: number) {
+    const entry = memoryMap.get(key);
+    if (entry) entry.resetAt = Date.now() + seconds * 1000;
+  },
+  async ttl(key: string) {
+    const entry = memoryMap.get(key);
+    if (!entry) return -2; // key does not exist
+    const ttl = Math.ceil((entry.resetAt - Date.now()) / 1000);
+    return ttl > 0 ? ttl : -2;
+  },
+};
 
-if (process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN) {
-  // Use Upstash REST client
-  // Note: @upstash/redis should be installed in production environments
-  // It provides incr/expire/ttl methods compatible with the simple RedisClient interface
-  try {
-    const { Redis } = require("@upstash/redis");
-    const client = new Redis({
-      url: process.env.UPSTASH_REDIS_REST_URL,
-      token: process.env.UPSTASH_REDIS_REST_TOKEN,
-    });
-    adapter = {
-      async incr(key: string) {
-        const res = await client.incr(key);
-        return typeof res === "number" ? res : Number(res);
-      },
-      async expire(key: string, seconds: number) {
-        await client.expire(key, seconds);
-      },
-      async ttl(key: string) {
-        const res = await client.ttl(key);
-        return typeof res === "number" ? res : Number(res);
-      },
-    };
-  } catch {
-    // Fall through to next condition if package not found
+// Use in-memory adapter by default; will be replaced at runtime if Redis is available
+let adapter: SimpleRedisClient = memoryAdapter;
+
+// Initialize Redis adapter at runtime (not at build time)
+// This avoids static module resolution issues during Next.js builds
+async function initializeRedisAdapter() {
+  if (process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN) {
+    try {
+      // Dynamic import to avoid build-time static resolution. Use an indirect
+      // dynamic import (via Function) so Turbopack/Next doesn't statically
+      // analyze the literal package name and fail the build when package is
+      // absent in the project graph.
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore - optional dependency
+      const dynamicImport = new Function("pkg", "return import(pkg)");
+      // @ts-ignore
+      const upstashModule = await dynamicImport("@upstash/redis");
+      const { Redis } = upstashModule;
+      const client = new Redis({
+        url: process.env.UPSTASH_REDIS_REST_URL,
+        token: process.env.UPSTASH_REDIS_REST_TOKEN,
+      });
+      adapter = {
+        async incr(key: string) {
+          const res = await client.incr(key);
+          return typeof res === "number" ? res : Number(res);
+        },
+        async expire(key: string, seconds: number) {
+          await client.expire(key, seconds);
+        },
+        async ttl(key: string) {
+          const res = await client.ttl(key);
+          return typeof res === "number" ? res : Number(res);
+        },
+      };
+      return;
+    } catch {
+      // Fall through to next option if package not found
+    }
   }
-} 
 
-if (!adapter && process.env.REDIS_URL) {
-  // Use ioredis if available
-  try {
-    const IORedis = require("ioredis");
-    const client = new IORedis(process.env.REDIS_URL);
-    adapter = {
-      async incr(key: string) {
-        return await client.incr(key);
-      },
-      async expire(key: string, seconds: number) {
-        await client.expire(key, seconds);
-      },
-      async ttl(key: string) {
-        return await client.ttl(key);
-      },
-    };
-  } catch {
-    // Fall through to in-memory fallback if package not found
+  if (process.env.REDIS_URL) {
+    try {
+      // Dynamic import via Function to avoid static analysis by Turbopack
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore - optional dependency
+      const dynamicImport = new Function("pkg", "return import(pkg)");
+      // @ts-ignore
+      const ioredisModule = await dynamicImport("ioredis");
+      const IORedis = ioredisModule.default || ioredisModule;
+      const client = new IORedis(process.env.REDIS_URL);
+      adapter = {
+        async incr(key: string) {
+          return await client.incr(key);
+        },
+        async expire(key: string, seconds: number) {
+          await client.expire(key, seconds);
+        },
+        async ttl(key: string) {
+          return await client.ttl(key);
+        },
+      };
+      return;
+    } catch {
+      // Fall through to in-memory fallback if package not found
+    }
   }
-}
 
-if (!adapter) {
-  // In-memory fallback for local development. Not suitable for production.
-  const map = new Map<string, { count: number; resetAt: number }>();
-  adapter = {
-    async incr(key: string) {
-      const now = Date.now();
-      const entry = map.get(key);
-      if (!entry || entry.resetAt < now) {
-        const resetAt = now + 60 * 1000;
-        map.set(key, { count: 1, resetAt });
-        return 1;
-      }
-      entry.count++;
-      map.set(key, entry);
-      return entry.count;
-    },
-    async expire(key: string, seconds: number) {
-      const entry = map.get(key);
-      if (entry) entry.resetAt = Date.now() + seconds * 1000;
-    },
-    async ttl(key: string) {
-      const entry = map.get(key);
-      if (!entry) return -2; // key does not exist
-      const ttl = Math.ceil((entry.resetAt - Date.now()) / 1000);
-      return ttl > 0 ? ttl : -2;
-    },
-  };
+  // Using in-memory fallback
   console.warn(
     "No Redis configuration found — using in-memory fallback. Configure UPSTASH_REDIS_REST_URL+TOKEN or REDIS_URL for production.",
   );
+}
+
+// Initialize on first import (only in Node.js runtime, not at build time)
+if (typeof window === "undefined" && process.env.NODE_ENV !== "development") {
+  initializeRedisAdapter().catch((err) => {
+    console.error("Failed to initialize Redis adapter:", err);
+  });
 }
 
 export default adapter;
@@ -197,11 +221,16 @@ export function createRateLimiter(config: RateLimitConfig) {
     const limiter = createRedisRateLimit(redisAdapter, config);
     return limiter; // (req, ctx) => Promise<NextResponse|null>
   }
-  // Fallback to in-memory per-instance limiter
+  // Fallback to in-memory per-instance limiter. Accepts ctx.params as Promise|Record
   return async function (
     request: NextRequest,
-    _context: { params: Record<string, string> },
+    _context: { params: Record<string, string> | Promise<Record<string, string>> },
   ): Promise<NextResponse | null> {
+    const resolvedParams = await Promise.resolve(_context.params);
+    // resolvedParams currently unused in the in-memory fallback, but we await it
+    // to ensure the handler matches Next.js 14+/16+ signatures and avoid type errors.
+    void resolvedParams;
+
     const { max, windowSeconds } = config;
     const key = defaultKey(request);
     const result = await localLimiter.check(key, max, windowSeconds);

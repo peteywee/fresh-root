@@ -117,7 +117,11 @@ test.describe("Onboarding Happy Path", () => {
     expect(await page.isVisible("text=Welcome")).toBe(true);
   });
 
-  test("should complete full onboarding flow: join-with-token", async ({ page }: { page: Page }) => {
+  test("should complete full onboarding flow: join-with-token", async ({
+    page,
+  }: {
+    page: Page;
+  }) => {
     // 1. Sign in
     await page.goto(`${baseUrl}/auth/login`);
     await page.fill('input[type="email"]', "join-user@example.com");
