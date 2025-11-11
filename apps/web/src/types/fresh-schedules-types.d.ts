@@ -16,7 +16,9 @@ declare module "@fresh-schedules/types" {
   // ============================================================================
   // ATTENDANCE TYPES
   // ============================================================================
-  export const AttendanceStatus: z.ZodEnum<["scheduled", "checked_in", "checked_out", "no_show", "excused_absence", "late"]>;
+  export const AttendanceStatus: z.ZodEnum<
+    ["scheduled", "checked_in", "checked_out", "no_show", "excused_absence", "late"]
+  >;
   export type AttendanceStatus = z.infer<typeof AttendanceStatus>;
 
   export const CheckMethod: z.ZodEnum<["manual", "qr_code", "nfc", "geofence", "admin_override"]>;
@@ -103,7 +105,9 @@ declare module "@fresh-schedules/types" {
   // ============================================================================
   // SCHEDULES TYPES
   // ============================================================================
-  export const ScheduleRecurrenceType: z.ZodEnum<["once", "daily", "weekly", "biweekly", "monthly", "custom"]>;
+  export const ScheduleRecurrenceType: z.ZodEnum<
+    ["once", "daily", "weekly", "biweekly", "monthly", "custom"]
+  >;
   export type ScheduleRecurrenceType = z.infer<typeof ScheduleRecurrenceType>;
 
   export const ScheduleSchema: z.ZodObject<any>;
@@ -191,10 +195,14 @@ declare module "@fresh-schedules/types" {
   export type AdminResponsibilityForm = z.infer<typeof AdminResponsibilityFormSchema>;
 
   export const CreateAdminResponsibilityFormSchema: z.ZodObject<any>;
-  export type CreateAdminResponsibilityFormInput = z.infer<typeof CreateAdminResponsibilityFormSchema>;
+  export type CreateAdminResponsibilityFormInput = z.infer<
+    typeof CreateAdminResponsibilityFormSchema
+  >;
 
   export const UpdateAdminResponsibilityFormSchema: z.ZodObject<any>;
-  export type UpdateAdminResponsibilityFormInput = z.infer<typeof UpdateAdminResponsibilityFormSchema>;
+  export type UpdateAdminResponsibilityFormInput = z.infer<
+    typeof UpdateAdminResponsibilityFormSchema
+  >;
 
   // ============================================================================
   // ONBOARDING TYPES

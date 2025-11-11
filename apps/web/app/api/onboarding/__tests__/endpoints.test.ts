@@ -10,7 +10,6 @@
  * - Uses Vitest with mock adminDb
  */
 
-import { NextResponse } from "next/server";
 import { describe, it, expect, beforeEach, vi } from "vitest";
 
 // Mock types
@@ -379,7 +378,6 @@ describe("Onboarding Endpoints", () => {
       mockDocRef.set.mockResolvedValueOnce(undefined);
 
       const uid = "new-user-1";
-      const claims = { email: "new@example.com", displayName: "New User" };
       const req = createMockRequest(uid);
 
       expect(req.user?.uid).toBe("new-user-1");

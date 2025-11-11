@@ -115,7 +115,6 @@ describe("POST /api/onboarding/create-network-org", () => {
 
     const response = await createNetworkOrgHandler(mockReq, mockAdminDb);
     expect(response.status).toBe(200);
-    const data = await response.json();
 
     // Verify onboarding status was updated
     expect(mockAdminDb.collection).toHaveBeenCalledWith("users");

@@ -5,7 +5,6 @@
  * Tags: test, onboarding, eligibility, unit
  */
 
-import { NextRequest, NextResponse } from "next/server";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 
 import { verifyEligibilityHandler } from "../verify-eligibility/route";
@@ -120,10 +119,6 @@ describe("POST /api/onboarding/verify-eligibility", () => {
         get: vi.fn().mockResolvedValue({ docs: Array(10).fill({ data: () => ({}) }) }),
       }),
     });
-
-    const adminDbWithLimit = {
-      collection: mockCollection,
-    };
 
     // This would return 429 if the rate limit check is properly implemented
     // The actual behavior depends on implementation details
