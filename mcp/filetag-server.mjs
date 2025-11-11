@@ -806,7 +806,11 @@ server.registerTool(
       if (shouldRead(f) && samples.length < 12) {
         try {
           const buf = await fs.readFile(f, "utf8");
-          samples.push({ file: path.relative(base, f), first200: buf.slice(0, maxBytes, 200) });
+          // keep up to `maxBytes`, but for reporting keep a short snippet (first 200 chars)
+          samples.push({
+            file: path.relative(base, f),
+            first200: buf.slice(0, Math.min(maxBytes, 200)),
+          });
         } catch {
           samples.push({ file: path.relative(base, f) });
         }
