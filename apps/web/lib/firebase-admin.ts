@@ -17,13 +17,13 @@ function getFirebaseProjectId(): string {
   return projectId;
 }
 
-function getServiceAccount(): any {
+function getServiceAccount(): Record<string, unknown> {
   const credsJson = process.env.GOOGLE_APPLICATION_CREDENTIALS_JSON;
   if (!credsJson) {
     throw new Error("GOOGLE_APPLICATION_CREDENTIALS_JSON must be set");
   }
   try {
-    return JSON.parse(credsJson);
+    return JSON.parse(credsJson) as Record<string, unknown>;
   } catch (e) {
     throw new Error("GOOGLE_APPLICATION_CREDENTIALS_JSON is not valid JSON");
   }

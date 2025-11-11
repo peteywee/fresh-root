@@ -108,7 +108,7 @@ The key rule is:
 Within each `networkId`:
 
 - **Network** – the tenant itself (`networks/{networkId}`).
-- **Corporate** – a brand or HQ node (`networks/{networkId}/corporates/{corpId}`).
+- **Corporate** – a brand or HQ node (`networks/{networkId}/corporate/{corpId}`).
 - **Organization** – an operating unit (`networks/{networkId}/orgs/{orgId}`).
 - **Venue** – a physical place (`networks/{networkId}/venues/{venueId}`).
 - **Links** – relationships:
@@ -123,7 +123,8 @@ Within each `networkId`:
    Every schedule, shift, membership, and attendance record belongs to exactly one Network. This is enforced via path structure and rules.
 
 2. **Network Admin as Data Controller**
-   The individual (or legal entity) who sets up the Network is the **data controller** for that Network in legal and practical terms. You (Fresh Schedules / platform) act as a **data processor**.
+   The individual (or legal entity) who sets up the Network is the **data controller** for that Network in legal
+   and practical terms. You (Fresh Schedules / platform) act as a **data processor**.
 
 3. **You Are Not Responsible for Their Internal Abuse**
    The Network Admin Responsibility Form explicitly states:
@@ -289,7 +290,7 @@ Within a Network:
 
 text
 Copy code
-networks/{networkId}/corporates/{corpId}
+networks/{networkId}/corporate/{corpId}
 networks/{networkId}/orgs/{orgId}
 networks/{networkId}/venues/{venueId}
 Corporate (conceptual):
@@ -1012,7 +1013,7 @@ Create Network with kind="corporate_network".
 
 Attach AdminResponsibilityForm.
 
-Create corporates/{corpId} with name and brandName.
+Create corporate/{corpId} with name and brandName.
 
 Create membership(s):
 
@@ -1056,8 +1057,8 @@ service cloud.firestore {
         allow update, delete: if false;
       }
 
-      // Corporates
-      match /corporates/{corpId} {
+      // corporate
+      match /corporate/{corpId} {
         allow read: if isNetworkMember(request.auth, networkId);
         allow create, update, delete: if false; // backend only
       }

@@ -1,0 +1,62 @@
+name: CI Tests
+
+on:
+  push:
+    branches: [main, master, develop, "merge/**"]
+  pull_request:
+    branches: [main, master, develop]
+
+jobs:
+  unit-and-lint:
+    name: Unit, Typecheck & Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "pnpm"
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: "9.1.0"
+      - name: Install dependencies
+        run: pnpm -w install --frozen-lockfile
+      - name: Typecheck
+        run: pnpm -w typecheck
+      - name: Lint
+        run: pnpm -w lint
+      - name: Run safe unit tests (workspace)
+        env:
+          NODE_OPTIONS: "--max-old-space-size=8192"
+        run: pnpm -w test:safe
+
+  rules-tests:
+    name: Firestore Rules Tests
+    runs-on: ubuntu-latest
+    needs: unit-and-lint
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "pnpm"
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: "9.1.0"
+      - name: Install dependencies
+        run: pnpm -w install --frozen-lockfile
+      - name: Check required CI secrets
+        run: |
+          if [ -z "${{ secrets.FIREBASE_SERVICE_ACCOUNT }}" ] || [ -z "${{ secrets.FIREBASE_TOKEN }}" ]; then
+            echo "Missing required Firebase CI secrets. Set FIREBASE_SERVICE_ACCOUNT and FIREBASE_TOKEN in repository secrets to run rules tests.";
+            exit 1;
+          fi
+      - name: Run Firestore rules tests (emulator)
+        # This uses the repo's test:rules:ci which runs emulators:exec
+        env:
+          FIRESTORE_EMULATOR_HOST: "localhost:8080"
+        run: pnpm -w test:rules:ci

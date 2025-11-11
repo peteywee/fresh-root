@@ -114,14 +114,14 @@ describe("csrfProtection", () => {
       return NextResponse.json({ success: true });
     });
 
-    const request = new NextRequest("http://localhost/api/test", {
+    const request = {
       method: "POST",
-      headers: {
+      headers: new Headers({
         cookie: `csrf-token=${cookieToken}`,
         "x-csrf-token": headerToken,
-      },
-    });
-
+      }),
+      cookies: { get: (_name: string) => ({ value: cookieToken }) },
+    } as unknown as NextRequest;
     const response = await handler(request, { params: {} });
     expect(response.status).toBe(403);
 
@@ -136,14 +136,14 @@ describe("csrfProtection", () => {
       return NextResponse.json({ success: true });
     });
 
-    const request = new NextRequest("http://localhost/api/test", {
+    const request = {
       method: "POST",
-      headers: {
+      headers: new Headers({
         cookie: `csrf-token=${token}`,
         "x-csrf-token": token,
-      },
-    });
-
+      }),
+      cookies: { get: (_name: string) => ({ value: token }) },
+    } as unknown as NextRequest;
     const response = await handler(request, { params: {} });
     expect(response.status).toBe(200);
 
@@ -158,14 +158,14 @@ describe("csrfProtection", () => {
       return NextResponse.json({ success: true });
     });
 
-    const request = new NextRequest("http://localhost/api/test", {
+    const request = {
       method: "PUT",
-      headers: {
+      headers: new Headers({
         cookie: `csrf-token=${token}`,
         "x-csrf-token": token,
-      },
-    });
-
+      }),
+      cookies: { get: (_name: string) => ({ value: token }) },
+    } as unknown as NextRequest;
     const response = await handler(request, { params: {} });
     expect(response.status).toBe(200);
   });
@@ -177,14 +177,14 @@ describe("csrfProtection", () => {
       return NextResponse.json({ success: true });
     });
 
-    const request = new NextRequest("http://localhost/api/test", {
+    const request = {
       method: "DELETE",
-      headers: {
+      headers: new Headers({
         cookie: `csrf-token=${token}`,
         "x-csrf-token": token,
-      },
-    });
-
+      }),
+      cookies: { get: (_name: string) => ({ value: token }) },
+    } as unknown as NextRequest;
     const response = await handler(request, { params: {} });
     expect(response.status).toBe(200);
   });
@@ -199,14 +199,14 @@ describe("csrfProtection", () => {
       return NextResponse.json({ success: true });
     });
 
-    const request = new NextRequest("http://localhost/api/test", {
+    const request = {
       method: "POST",
-      headers: {
+      headers: new Headers({
         cookie: `custom-csrf=${token}`,
         "x-custom-csrf": token,
-      },
-    });
-
+      }),
+      cookies: { get: (_name: string) => ({ value: token }) },
+    } as unknown as NextRequest;
     const response = await handler(request, { params: {} });
     expect(response.status).toBe(200);
   });

@@ -66,9 +66,10 @@ export const POST = withSecurity(
         );
       }
       // In production, create organization in database
+      const data: any = parsed.data;
       const newOrg = {
         id: `org-${Date.now()}`,
-        ...parsed.data,
+        ...data,
         role: "admin", // Creator is admin
         ownerId: context.userId,
         createdAt: new Date().toISOString(),
