@@ -2,9 +2,9 @@ name: CI
 
 on:
   push:
-    branches: [ "main", "master" ]
+    branches: ["main", "master"]
   pull_request:
-    branches: [ "main", "master" ]
+    branches: ["main", "master"]
   workflow_dispatch:
 
 concurrency:
@@ -30,13 +30,13 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "20.x"
-          cache: "pnpm"     # optional: speeds Node modules caching integration
+          cache: "pnpm" # optional: speeds Node modules caching integration
 
       # Install pnpm so 'pnpm' is available on PATH
       - name: Setup pnpm
         uses: pnpm/action-setup@v2
         with:
-          version: 8           # pin to the major/minor you want (example: 8). Adjust if repo requires a different version.
+          version: 9.1.0 # pin to the major/minor you want (example: 8). Adjust if repo requires a different version.
 
       # Cache pnpm store to speed subsequent runs
       - name: Cache pnpm store
