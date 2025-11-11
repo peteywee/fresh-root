@@ -31,88 +31,154 @@ These are the canonical domain schemas.
 
 1. **`memberships.ts`**
    - Membership record with:
-     - `orgId`, `userId`, `status`
-     - Roles: `OrgRole` enum (`"org_owner"`, `"admin"`, `"manager"`, `"scheduler"`, `"corporate"`, `"staff"`)
-   - CRUD schemas:
-     - `CreateMembershipSchema`
-     - `UpdateMembershipSchema`
-     - `MembershipQuerySchema` (where applicable)
 
-2. **`positions.ts`**
+```text
+- `orgId`, `userId`, `status`
+- Roles: `OrgRole` enum (`"org_owner"`, `"admin"`, `"manager"`, `"scheduler"`, `"corporate"`, `"staff"`)
+```
+
+   - CRUD schemas:
+
+```text
+- `CreateMembershipSchema`
+- `UpdateMembershipSchema`
+- `MembershipQuerySchema` (where applicable)
+```
+
+1. **`positions.ts`**
    - Position details:
-     - `orgId`, `name`, `description`
-     - `type` (e.g., `"front_of_house"`, `"back_of_house"`, `"support"`)
-     - `skillLevel`, `isActive`
-   - CRUD schemas:
-     - `CreatePositionSchema`
-     - `UpdatePositionSchema`
 
-3. **`shifts.ts`**
-   - Shift record:
-     - `orgId`, `scheduleId`, `venueId`, `zoneId`
-     - `start`, `end`, `status` (`"draft"`, `"published"`, `"canceled"`)
-     - `assignedUserId`/`openShift` semantics
+```text
+- `orgId`, `name`, `description`
+- `type` (e.g., `"front_of_house"`, `"back_of_house"`, `"support"`)
+- `skillLevel`, `isActive`
+```
+
    - CRUD schemas:
-     - `CreateShiftSchema`
-     - `UpdateShiftSchema`
+
+```text
+- `CreatePositionSchema`
+- `UpdatePositionSchema`
+```
+
+1. **`shifts.ts`**
+   - Shift record:
+
+```text
+- `orgId`, `scheduleId`, `venueId`, `zoneId`
+- `start`, `end`, `status` (`"draft"`, `"published"`, `"canceled"`)
+- `assignedUserId`/`openShift` semantics
+```
+
+   - CRUD schemas:
+
+```text
+- `CreateShiftSchema`
+- `UpdateShiftSchema`
+```
+
    - Time validation (start < end, etc.).
 
-4. **`venues.ts`**
+1. **`venues.ts`**
    - Venue details:
-     - `orgId`, `name`, `address`, `city`, `state`, `postalCode`, `country`
-     - Optional `lat`, `lng` for geolocation
-     - `timezone`, `isActive`
-   - CRUD schemas:
-     - `CreateVenueSchema`
-     - `UpdateVenueSchema`
 
-5. **`zones.ts`**
+```text
+- `orgId`, `name`, `address`, `city`, `state`, `postalCode`, `country`
+- Optional `lat`, `lng` for geolocation
+- `timezone`, `isActive`
+```
+
+   - CRUD schemas:
+
+```text
+- `CreateVenueSchema`
+- `UpdateVenueSchema`
+```
+
+1. **`zones.ts`**
    - Zone within a venue:
-     - `orgId`, `venueId`, `name`, `description`
-   - CRUD schemas:
-     - `CreateZoneSchema`
-     - `UpdateZoneSchema`
 
-6. **`attendance.ts`**
+```text
+- `orgId`, `venueId`, `name`, `description`
+```
+
+   - CRUD schemas:
+
+```text
+- `CreateZoneSchema`
+- `UpdateZoneSchema`
+```
+
+1. **`attendance.ts`**
    - Attendance records:
-     - `orgId`, `shiftId`, `userId`
-     - `checkInAt`, `checkOutAt`, `status`
-     - Optional geolocation for check-in/out
-   - CRUD schemas:
-     - `CreateAttendanceRecordSchema`
-     - `UpdateAttendanceRecordSchema`
 
-7. **`join-tokens.ts`**
+```text
+- `orgId`, `shiftId`, `userId`
+- `checkInAt`, `checkOutAt`, `status`
+- Optional geolocation for check-in/out
+```
+
+   - CRUD schemas:
+
+```text
+- `CreateAttendanceRecordSchema`
+- `UpdateAttendanceRecordSchema`
+```
+
+1. **`join-tokens.ts`**
    - Join tokens for invitations:
-     - `orgId`, `token`, `role`, `expiresAt`, `maxUses`, `remainingUses`
-   - CRUD schemas:
-     - `CreateJoinTokenSchema`
-     - `UpdateJoinTokenSchema`
 
-8. **`orgs.ts`**
+```text
+- `orgId`, `token`, `role`, `expiresAt`, `maxUses`, `remainingUses`
+```
+
+   - CRUD schemas:
+
+```text
+- `CreateJoinTokenSchema`
+- `UpdateJoinTokenSchema`
+```
+
+1. **`orgs.ts`**
    - Organization details:
-     - `name`, `slug`, `ownerId`
-     - `size`, `status`, `subscriptionTier`
-     - `settings` (timezone, week start, self-scheduling, etc.)
+
+```text
+- `name`, `slug`, `ownerId`
+- `size`, `status`, `subscriptionTier`
+- `settings` (timezone, week start, self-scheduling, etc.)
+```
+
    - CRUD schemas:
-     - `OrganizationSchema`
-     - `CreateOrganizationSchema`
-     - `UpdateOrganizationSchema`
 
-9. **`rbac.ts`**
+```text
+- `OrganizationSchema`
+- `CreateOrganizationSchema`
+- `UpdateOrganizationSchema`
+```
+
+1. **`rbac.ts`**
    - Role enums and related helpers:
-     - `OrgRole` (`"org_owner"`, `"admin"`, `"manager"`, `"scheduler"`, `"corporate"`, `"staff"`)
-     - Any shared RBAC schemas used across the app.
 
-10. **`schedules.ts`**
-    - Schedules:
-      - `orgId`, `name`, `startDate`, `endDate`, `status` (`"draft"`, `"published"`)
-    - CRUD schemas:
-      - `CreateScheduleSchema`
-      - `UpdateScheduleSchema`
+```text
+- `OrgRole` (`"org_owner"`, `"admin"`, `"manager"`, `"scheduler"`, `"corporate"`, `"staff"`)
+- Any shared RBAC schemas used across the app.
+```
 
-11. **`index.ts`**
-    - Barrel export so all schemas can be imported via `@fresh-schedules/types`.
+1. **`schedules.ts`**
+
+```text
+- Schedules:
+- `orgId`, `name`, `startDate`, `endDate`, `status` (`"draft"`, `"published"`)
+- CRUD schemas:
+- `CreateScheduleSchema`
+- `UpdateScheduleSchema`
+```
+
+1. **`index.ts`**
+
+```text
+- Barrel export so all schemas can be imported via `@fresh-schedules/types`.
+```
 
 ---
 
@@ -196,8 +262,11 @@ All of these:
   - `/attendance_records/{orgId}/records/{recordId}`
   - `/join_tokens/{tokenId}` and `/join_tokens/{orgId}/join_tokens/{tokenId}`
   - Messaging-related collections:
-    - `/messages/{messageId}`
-    - `/receipts/{receiptId}`
+
+```text
+- `/messages/{messageId}`
+- `/receipts/{receiptId}`
+```
 
 Rules are written to:
 
@@ -259,9 +328,12 @@ Each collection-focused spec includes:
 - **Schema–Rules Parity Script**:
   - Script referenced in docs (e.g. `scripts/ops/validate-schema-rules-parity.ts`).
   - Ensures:
-    - Rules paths have corresponding schemas.
-    - Schemas are referenced by API validation.
-    - Collections are documented in `docs/schema-map.md`.
+
+```text
+- Rules paths have corresponding schemas.
+- Schemas are referenced by API validation.
+- Collections are documented in `docs/schema-map.md`.
+```
 
 ---
 
@@ -330,3 +402,5 @@ For more detailed, per-collection behavior, see `docs/schema-map.md` and the inl
 **Created:** Block 3 Implementation
 **Last Updated:** 2025-11-07
 **Status:** 100% Complete (7/7 core tasks done)
+
+[integrity]: #

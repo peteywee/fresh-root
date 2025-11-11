@@ -1,10 +1,15 @@
 //[P1][API][ONBOARDING] Create Network + Corporate Endpoint (server)
 // Tags: api, onboarding, network, corporate, membership
-
+/**
+ * @fileoverview
+ * API endpoint for v14 corporate onboarding flow: create network, corporate entity, compliance doc, and membership.
+ * Validates admin responsibility form token, ensures email verification, and uses v14-compliant Firestore doc shapes.
+ */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextResponse } from "next/server";
 
 import { withSecurity, type AuthenticatedRequest } from "../../_shared/middleware";
+import { CreateCorporateOnboardingSchema } from "@fresh-schedules/types";
 
 import { adminDb as importedAdminDb } from "@/src/lib/firebase.server";
 import { markOnboardingComplete } from "@/src/lib/userOnboarding";
@@ -46,15 +51,22 @@ export async function createNetworkCorporateHandler(
     return NextResponse.json({ error: "role_not_allowed" }, { status: 403 });
   }
 
-  let body: unknown;
+  let bodyUnknown: unknown;
   try {
-    body = await req.json();
+    bodyUnknown = await req.json();
   } catch {
     return NextResponse.json({ error: "invalid_json" }, { status: 400 });
   }
 
-  const { corporateName, brandName, industry, approxLocations, formToken } =
-    (body as Record<string, unknown>) || {};
+  const parsed = CreateCorporateOnboardingSchema.safeParse(bodyUnknown);
+  if (!parsed.success) {
+    return NextResponse.json(
+      { error: "validation_error", issues: parsed.error.flatten() },
+      { status: 422 },
+    );
+  }
+
+  const { corporateName, brandName, industry, approxLocations, formToken } = parsed.data;
 
   if (!formToken) return NextResponse.json({ error: "missing_form_token" }, { status: 422 });
   if (String(formToken).includes("/")) {
@@ -90,19 +102,22 @@ export async function createNetworkCorporateHandler(
     await adminDb.runTransaction(async (tx: any) => {
       const createdAt = nowMs;
 
-      // 1) Network
+      // 1) Network (v14-compliant fields)
       tx.set(networkRef, {
-        name: corporateName || `Corporate Network ${new Date().toISOString()}`,
-        status: "pending_verification",
+        id: networkRef.id,
+        slug: networkRef.id,
+        displayName: corporateName || `Corporate Network ${new Date().toISOString()}`,
         kind: "corporate_network",
+        ownerUserId: uid,
         industry: industry || null,
         approxLocations: approxLocations || null,
+        status: "pending_verification",
         createdAt,
-        createdBy: uid,
+        updatedAt: createdAt,
         adminFormToken: formToken,
       });
 
-      // 2) Corporate node under this network
+      // 2) Corporate entity under this network (v14-compliant fields)
       tx.set(corpRef, {
         id: corpRef.id,
         networkId: networkRef.id,
@@ -110,9 +125,10 @@ export async function createNetworkCorporateHandler(
         brandName: brandName || null,
         industry: industry || null,
         approxLocations: approxLocations || null,
-        contactUserId: uid,
+        ownerId: uid,
+        status: "trial",
         createdAt,
-        createdBy: uid,
+        updatedAt: createdAt,
       });
 
       // 3) Compliance doc under network

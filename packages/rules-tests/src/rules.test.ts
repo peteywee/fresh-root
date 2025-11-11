@@ -1,5 +1,10 @@
-// [P0][TEST][TEST] Rules Test tests
-// Tags: P0, TEST, TEST
+// [P1][TEST][RULES] Firestore Rules Unit Tests
+// Tags: P1, TEST, RULES, VITEST, FIRESTORE
+/**
+ * @fileoverview
+ * Unit tests for firestore.rules: access control for orgs, join_tokens, memberships, and other collections.
+ * Uses Firebase Rules Testing SDK to verify authenticated and unauthenticated access patterns.
+ */
 import { assertFails, assertSucceeds, initializeTestEnvironment } from "@firebase/rules-unit-testing";
 import type { RulesTestEnvironment } from "@firebase/rules-unit-testing";
 import { doc, getDoc, setDoc } from "firebase/firestore";
@@ -55,3 +60,26 @@ test("non-member cannot read org", async () => {
   const ref = doc(db, "orgs", "demo-org");
   await assertFails(getDoc(ref));
 });
+
+test("authenticated user can read join token", async () => {
+  const unauthDb = testEnv.unauthenticatedContext().firestore();
+  // Seed a join token
+  await setDoc(doc(unauthDb, "join_tokens", "test-token-1"), {
+    networkId: "network-1",
+    orgId: "org-1",
+    role: "staff",
+    expiresAt: Date.now() + 86400000,
+    disabled: false,
+  });
+
+  const db = authed("u1");
+  const ref = doc(db, "join_tokens", "test-token-1");
+  await assertSucceeds(getDoc(ref));
+});
+
+test("unauthenticated user cannot read join token", async () => {
+  const db = unauth();
+  const ref = doc(db, "join_tokens", "test-token-1");
+  await assertFails(getDoc(ref));
+});
+

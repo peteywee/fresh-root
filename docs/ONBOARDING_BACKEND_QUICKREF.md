@@ -1,7 +1,9 @@
+# Onboarding Backend - Developer Quick Reference
+
 <!-- [P1][ONBOARDING][GUIDE] Developer Quick Reference
 Tags: P1, ONBOARDING, BACKEND, DEVELOPER_GUIDE -->
 
-# Onboarding Backend - Developer Quick Reference
+## Onboarding Backend - Developer Quick Reference
 
 ## Quick Start
 
@@ -21,29 +23,29 @@ pnpm dev  # Starts web app on http://localhost:3000
 ### Testing
 
 ```bash
-# Unit tests (watch mode)
+## Unit tests (watch mode)
 pnpm test
 
-# All tests (single run)
+## All tests (single run)
 pnpm vitest run
 
-# Rules tests (Firestore security rules)
+## Rules tests (Firestore security rules)
 pnpm test:rules
 
-# E2E tests
+## E2E tests
 pnpm test:e2e
 
-# Coverage
+## Coverage
 pnpm vitest run --coverage
 ```
 
 ### Local Emulation
 
 ```bash
-# Terminal 1: Start Firebase emulator
+## Terminal 1: Start Firebase emulator
 firebase emulators:start
 
-# Terminal 2: Set env var and start dev server
+## Terminal 2: Set env var and start dev server
 export NEXT_PUBLIC_USE_EMULATORS=true
 pnpm dev
 ```
@@ -255,7 +257,7 @@ Response (200 OK):
 
 ## File Structure
 
-```
+```text
 apps/web/
 ├── app/
 │   ├── api/
@@ -324,6 +326,7 @@ const { fullName, preferredName, ... } = parsed.data;
 1. **Create route file**:
 
 ````bash
+
 ```bash
 mkdir -p apps/web/app/api/onboarding/my-action
 touch apps/web/app/api/onboarding/my-action/route.ts
@@ -331,7 +334,7 @@ touch apps/web/app/api/onboarding/my-action/route.ts
 
 ````
 
-2. **Add validation schema** to `apps/web/app/api/_shared/validation.ts`:
+1. **Add validation schema** to `apps/web/app/api/_shared/validation.ts`:
 
 ```typescript
 export const MyActionSchema = z.object({
@@ -340,7 +343,7 @@ export const MyActionSchema = z.object({
 });
 ````
 
-3. **Implement handler**:
+1. **Implement handler**:
 
 ```typescript
 import { NextResponse } from "next/server";
@@ -386,7 +389,7 @@ export async function myActionHandler(
 export const POST = withSecurity(myActionHandler);
 ```
 
-4. **Add unit test** in `apps/web/src/__tests__/`:
+1. **Add unit test** in `apps/web/src/__tests__/`:
 
 ```typescript
 import { describe, it, expect, vi } from "vitest";
@@ -404,10 +407,10 @@ describe("myActionHandler", () => {
 ### Testing a Route Locally
 
 ```bash
-# Start dev server
+## Start dev server
 pnpm dev
 
-# In another terminal, make request
+## In another terminal, make request
 curl -X POST http://localhost:3000/api/onboarding/profile \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer YOUR_TOKEN" \
@@ -424,7 +427,7 @@ curl -X POST http://localhost:3000/api/onboarding/profile \
 
 Set environment variable in `.env.local`:
 
-```
+```text
 NEXT_PUBLIC_USE_EMULATORS=true
 ```
 
@@ -453,12 +456,12 @@ pnpm dev  # Shows console output
 ### Test with Invalid Data
 
 ```bash
-# Missing required field
+## Missing required field
 curl -X POST http://localhost:3000/api/onboarding/profile \
   -H "Content-Type: application/json" \
   -d '{ "fullName": "Test" }'
 
-# Returns 422 with field errors
+## Returns 422 with field errors
 {
   "error": "validation_error",
   "issues": {
@@ -474,14 +477,15 @@ curl -X POST http://localhost:3000/api/onboarding/profile \
 ### View Firebase Data
 
 ````bash
+
 ```bash
-# Open Firebase emulator UI
+## Open Firebase emulator UI
 open http://localhost:4000
 
-# View collections and documents in real-time
+## View collections and documents in real-time
 ````
 
-```
+```text
 
 ---
 
@@ -544,3 +548,5 @@ Last updated: Nov 8, 2024
 
 Maintained by: Patrick Craven
 ```
+
+[onboarding]: #

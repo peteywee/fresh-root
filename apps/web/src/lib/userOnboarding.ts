@@ -1,8 +1,10 @@
-// [P0][APP][CODE] UserOnboarding
-// Tags: P0, APP, CODE
-// Lightweight helper to mark a user's onboarding as complete.
-// Keeps behavior minimal and safe for tests by no-oping when adminDb is not present.
-
+// [P1][HELPERS][ONBOARDING] User Onboarding Helpers
+// Tags: P1, HELPERS, ONBOARDING, FIREBASE
+/**
+ * @fileoverview
+ * Helpers for managing canonical user onboarding state (users/{uid}.onboarding).
+ * markOnboardingComplete is called after all successful onboarding flows to mark completion.
+ */
 import { Firestore } from "firebase-admin/firestore";
 
 export type OnboardingIntent = "create_org" | "create_corporate" | "join_existing";

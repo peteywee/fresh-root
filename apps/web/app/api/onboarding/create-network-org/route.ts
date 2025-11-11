@@ -1,10 +1,16 @@
 //[P1][API][ONBOARDING] Create Network + Org Endpoint (server)
 // Tags: api, onboarding, network, org, venue, membership
-
+/**
+ * @fileoverview
+ * API endpoint for v14 org onboarding flow: create network, org, venue, and initial membership.
+ * Uses Zod-validated CreateOrgOnboardingSchema, creates v14-compliant Firestore docs, and marks onboarding complete.
+ */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextResponse } from "next/server";
 
 import { withSecurity, type AuthenticatedRequest } from "../../_shared/middleware";
+// Zod schema for onboarding payload validation
+import { createOrgOnboardingSchema } from "../../_shared/validation";
 
 import { adminDb as importedAdminDb } from "@/src/lib/firebase.server";
 import { markOnboardingComplete } from "@/src/lib/userOnboarding";
@@ -58,19 +64,22 @@ export async function createNetworkOrgHandler(
     return NextResponse.json({ error: "role_not_allowed" }, { status: 403 });
   }
 
-  let body: unknown;
+  let bodyUnknown: unknown;
   try {
-    body = await req.json();
+    bodyUnknown = await req.json();
   } catch {
     return NextResponse.json({ error: "invalid_json" }, { status: 400 });
   }
 
-  const {
-    orgName,
-    venueName,
-    formToken,
-    location: locationData,
-  } = (body as Record<string, unknown>) || {};
+  const parsed = createOrgOnboardingSchema.safeParse(bodyUnknown);
+  if (!parsed.success) {
+    return NextResponse.json(
+      { error: "validation_error", issues: parsed.error.flatten() },
+      { status: 422 },
+    );
+  }
+
+  const { orgName, venueName, formToken, location } = parsed.data;
   if (!formToken) return NextResponse.json({ error: "missing_form_token" }, { status: 422 });
 
   // Prevent path traversal attacks by ensuring formToken is a valid document ID segment.
@@ -116,39 +125,50 @@ export async function createNetworkOrgHandler(
       }) => {
         const createdAt = nowMs;
 
-        // 1) Network
+        // 1) Network (v14-compliant fields)
         tx.set(networkRef, {
-          name: orgName || `Network ${new Date().toISOString()}`,
+          id: networkRef.id,
+          slug: networkRef.id,
+          displayName: orgName || `Network ${new Date().toISOString()}`,
+          kind: "independent_org",
+          ownerUserId: uid,
           status: "pending_verification",
           createdAt,
+          updatedAt: createdAt,
           adminFormToken: formToken,
         });
 
-        // 2) Org
+        // 2) Org (v14-compliant fields)
         tx.set(orgRef, {
-          name: orgName || "Org",
+          id: orgRef.id,
           networkId: networkRef.id,
+          name: orgName || "Org",
+          ownerId: uid,
+          memberCount: 1,
+          status: "trial",
           createdAt,
+          updatedAt: createdAt,
         });
 
-        // 3) Venue (with optional location/timezone)
+        // 3) Venue (v14-compliant fields, with optional location/timezone)
         tx.set(venueRef, {
+          id: venueRef.id,
           name: venueName || "Main Venue",
           orgId: orgRef.id,
           networkId: networkRef.id,
+          createdBy: uid,
           createdAt,
-          ...(locationData &&
-          typeof locationData === "object" &&
-          Object.keys(locationData as Record<string, unknown>).length > 0
+          updatedAt: createdAt,
+          ...(location && typeof location === "object" && Object.keys(location as Record<string, unknown>).length > 0
             ? {
                 location: {
-                  street1: (locationData as Record<string, unknown>).street1 || "",
-                  street2: (locationData as Record<string, unknown>).street2 || "",
-                  city: (locationData as Record<string, unknown>).city || "",
-                  state: (locationData as Record<string, unknown>).state || "",
-                  postalCode: (locationData as Record<string, unknown>).postalCode || "",
-                  countryCode: (locationData as Record<string, unknown>).countryCode || "",
-                  timeZone: (locationData as Record<string, unknown>).timeZone || "",
+                  street1: (location as Record<string, unknown>).street1 || "",
+                  street2: (location as Record<string, unknown>).street2 || "",
+                  city: (location as Record<string, unknown>).city || "",
+                  state: (location as Record<string, unknown>).state || "",
+                  postalCode: (location as Record<string, unknown>).postalCode || "",
+                  countryCode: (location as Record<string, unknown>).countryCode || "",
+                  timeZone: (location as Record<string, unknown>).timeZone || "",
                 },
               }
             : {}),

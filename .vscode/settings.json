@@ -1,4 +1,7 @@
 {
+  // ---------- Copilot & Chat ----------
+  "chat.referenceFiles": [".vscode/copilot-rules.md"],
+
   // ---------- Basic whitespace & Markdown ----------
   "editor.insertSpaces": true,
   "files.trimTrailingWhitespace": true,
@@ -132,7 +135,6 @@
 
   // ---------- Format & Save ----------
   "editor.formatOnSave": true,
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit"
   },

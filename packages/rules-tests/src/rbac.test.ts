@@ -1,4 +1,4 @@
-// [P0][RBAC][TEST] Rbac Test tests
+// [P0][RBAC][TEST] RBAC tests
 // Tags: P0, RBAC, TEST
 import { initializeTestEnvironment, type RulesTestEnvironment } from "@firebase/rules-unit-testing";
 import { doc, getDoc, setDoc } from "firebase/firestore";

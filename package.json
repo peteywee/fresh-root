@@ -60,12 +60,21 @@
     "test:rules:auto": "node ./scripts/run-rules-tests.mjs",
     "test:rules:ci": "firebase --config firebase.ci.json emulators:exec --only auth,firestore,storage \"pnpm vitest run --config tests/rules/vitest.config.ts --reporter=dot\"",
     "test:rules:dev": "vitest run --config tests/rules/vitest.config.ts --reporter=dot",
-    "ci": "pnpm -w install --frozen-lockfile && pnpm -w typecheck && pnpm -w lint && pnpm -w build && pnpm -w test && pnpm -w test:rules:ci"
+    "test:e2e": "jest --config jest-playwright.config.js --testPathPattern='tests/e2e' --maxWorkers=1",
+    "ci": "pnpm -w install --frozen-lockfile && pnpm -w typecheck && pnpm -w lint && pnpm -w build && pnpm -w test && pnpm -w test:rules:ci",
+    "tag:files": "node scripts/tag-files.mjs",
+    "watch:tags": "node scripts/watch-and-tag.mjs"
   },
   "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.21.1",
+    "ajv": "^8.17.1",
+    "ajv-formats": "^3.0.1",
     "execa": "^9.6.0",
     "firebase-admin": "^13.5.0",
+    "glob": "10",
+    "markdownlint": "^0.39.0",
     "p-retry": "^7.1.0",
+    "yaml": "^2.8.1",
     "zod": "^4.1.12"
   },
   "devDependencies": {

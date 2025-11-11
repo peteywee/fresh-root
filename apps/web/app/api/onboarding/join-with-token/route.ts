@@ -1,10 +1,15 @@
 //[P1][API][ONBOARDING] Join With Token Endpoint (server)
 // Tags: api, onboarding, join-token, membership
-
+/**
+ * @fileoverview
+ * API endpoint for v14 join-with-token onboarding flow: validate token, create/update membership, and mark onboarding complete.
+ * Supports token expiry, max uses, and role tracking via usedBy list.
+ */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextResponse } from "next/server";
 
 import { withSecurity, type AuthenticatedRequest } from "../../_shared/middleware";
+import { JoinWithTokenSchema } from "@fresh-schedules/types";
 
 import { adminDb as importedAdminDb } from "@/src/lib/firebase.server";
 import { markOnboardingComplete } from "@/src/lib/userOnboarding";
@@ -43,14 +48,22 @@ export async function joinWithTokenHandler(
 
   if (!uid) return NextResponse.json({ error: "not_authenticated" }, { status: 401 });
 
-  let body: unknown;
+  let bodyUnknown: unknown;
   try {
-    body = await req.json();
+    bodyUnknown = await req.json();
   } catch {
     return NextResponse.json({ error: "invalid_json" }, { status: 400 });
   }
 
-  const token = (body as Record<string, unknown>)?.token as string | undefined;
+  const parsed = JoinWithTokenSchema.safeParse(bodyUnknown);
+  if (!parsed.success) {
+    return NextResponse.json(
+      { error: "validation_error", issues: parsed.error.flatten() },
+      { status: 422 },
+    );
+  }
+
+  const token = parsed.data.joinToken;
   if (!token) {
     return NextResponse.json({ error: "missing_token" }, { status: 422 });
   }

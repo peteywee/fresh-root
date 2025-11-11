@@ -1,5 +1,10 @@
 //[P0][API][INFRA] Shared Redis adapter singleton
 // Tags: redis, upstash, ioredis, adapter
+/**
+ * @fileoverview
+ * Provides a singleton Redis adapter for rate limiting and caching.
+ * Attempts Upstash REST client first, falls back to ioredis or in-memory storage.
+ */
 
 type SimpleRedisClient = {
   incr(key: string): Promise<number>;
@@ -174,9 +179,10 @@ function defaultKey(request: NextRequest) {
 
 // Factory returning an inline check: await rateLimit(req, ctx) -> NextResponse | null
 export function createRateLimiter(config: RateLimitConfig) {
-  const adapter = getRedisAdapter();
-  if (adapter) {
-    const limiter = createRedisRateLimit(adapter, config);
+  // Use the module-scoped adapter singleton (handles Upstash, ioredis, or in-memory fallback)
+  const redisAdapter = singletonAdapter;
+  if (redisAdapter) {
+    const limiter = createRedisRateLimit(redisAdapter, config);
     return limiter; // (req, ctx) => Promise<NextResponse|null>
   }
   // Fallback to in-memory per-instance limiter

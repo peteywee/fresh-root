@@ -4,7 +4,7 @@ This repo is a pnpm monorepo for a Next.js PWA backed by Firebase (auth, Firesto
 
 Code owner: patrick craven
 
-# How to be immediately useful in this repository
+## How to be immediately useful in this repository (2)
 
 This repository is a pnpm monorepo for a Next.js Progressive Web App (PWA) backed by Firebase (Auth, Firestore, Storage). The guidance below focuses on concrete, discoverable patterns and commands an AI coding agent or human contributor should use when making or reviewing changes.
 
@@ -61,10 +61,10 @@ Code owner: Patrick Craven
 
 ## Editing and testing checklist for PRs
 
-1.  Run `pnpm -w install --frozen-lockfile` then `pnpm dev` and ensure the app boots locally.
-2.  If you touch Firebase behavior, run emulator(s): `firebase emulators:start` with `NEXT_PUBLIC_USE_EMULATORS=true` and exercise `pnpm test:rules`.
-3.  Run unit tests and typecheck before opening a PR: `pnpm test` and `pnpm -w typecheck`.
-4.  If modifying security rules, add or update `tests/rules/` to cover access patterns.
+1. Run `pnpm -w install --frozen-lockfile` then `pnpm dev` and ensure the app boots locally.
+1. If you touch Firebase behavior, run emulator(s): `firebase emulators:start` with `NEXT_PUBLIC_USE_EMULATORS=true` and exercise `pnpm test:rules`.
+1. Run unit tests and typecheck before opening a PR: `pnpm test` and `pnpm -w typecheck`.
+1. If modifying security rules, add or update `tests/rules/` to cover access patterns.
 
 ## Hard repository rules (must follow for every change)
 
@@ -131,7 +131,7 @@ Before opening a PR, verify the following locally:
 
 - Runs the tagging script and then lint/format. Do not commit with broken tags or formatting. If a script has a shebang, it will be preserved.
 
-## Quality gates for changes (including Copilot-authored)
+## Quality gates for changes (including Copilot-authored) (2)
 
 Every change must meet these gates locally before PR/push:
 
@@ -140,3 +140,5 @@ Every change must meet these gates locally before PR/push:
 - Lint/format: `pnpm -w lint` and Prettier — PASS (no errors). Warnings should be addressed when they are actionable.
 - Emulator rules (when applicable): `pnpm test:rules` — ensure Firestore/Storage rule changes are covered by tests.
 - Optional: Run “Docs: Markdown Fix (apply)” when touching .md files.
+
+[area]: #

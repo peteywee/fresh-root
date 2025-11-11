@@ -12,8 +12,8 @@
 Block 4 delivers the **user-facing experience** that turns Fresh Schedules from a technical foundation into a usable product. This includes:
 
 1. **Secure Onboarding Wizard** – implementing Network creation, Admin Responsibility Form, and activation gates as defined in Bible v14.0.0
-2. **Schedule Builder UI** – enabling managers to create, edit, and publish schedules in ≤ 5 minutes
-3. **Labor Management** – basic budget tracking and labor cost visualization
+1. **Schedule Builder UI** – enabling managers to create, edit, and publish schedules in ≤ 5 minutes
+1. **Labor Management** – basic budget tracking and labor cost visualization
 
 ---
 
@@ -41,18 +41,21 @@ All UI flows, API endpoints, and data writes must match the Bible specification.
    - Write to: `/users/{uid}`
    - No Network created yet
 
-2. **Intent Selector** (`/onboarding/intent`)
+1. **Intent Selector** (`/onboarding/intent`)
    - Three paths:
-     - "Join existing team" → `/onboarding/join`
-     - "Set up my team" → `/onboarding/create-network-org`
-     - "Corporate/HQ" → `/onboarding/create-network-corporate`
 
-3. **Join Existing Team** (no Network creation)
+```text
+- "Join existing team" → `/onboarding/join`
+- "Set up my team" → `/onboarding/create-network-org`
+- "Corporate/HQ" → `/onboarding/create-network-corporate`
+```
+
+1. **Join Existing Team** (no Network creation)
    - Input: invite link or join code
    - API: `POST /api/onboarding/join-with-token`
    - Creates memberships only
 
-4. **Org-Centric Network Creation**
+1. **Org-Centric Network Creation**
    - Step 1: Security pre-check (`POST /api/onboarding/verify-eligibility`)
    - Step 2: Org & Network basics form
    - Step 3: Initial venue details
@@ -60,7 +63,7 @@ All UI flows, API endpoints, and data writes must match the Bible specification.
    - Step 5: Network creation (`POST /api/onboarding/create-network-org`)
    - Step 6: Activation (background process)
 
-5. **Corporate-Centric Network Creation**
+1. **Corporate-Centric Network Creation**
    - Similar to org flow with stricter email validation
    - API: `POST /api/onboarding/create-network-corporate`
 
@@ -79,9 +82,13 @@ All UI flows, API endpoints, and data writes must match the Bible specification.
 - [ ] `POST /api/onboarding/create-network-org`
   - Input: org details, venue details, formToken
   - Transaction:
-    - Create Network (status: "pending_verification")
-    - Write AdminResponsibilityForm to compliance subcollection
-    - Create Org, Venue, Memberships
+
+```text
+- Create Network (status: "pending_verification")
+- Write AdminResponsibilityForm to compliance subcollection
+- Create Org, Venue, Memberships
+```
+
   - Returns: networkId, orgId, venueId, status
 
 - [ ] `POST /api/onboarding/create-network-corporate`
@@ -184,9 +191,12 @@ Paths under `/networks/{networkId}/`:
 
 - **Validation warnings**
   - Show warnings (non-blocking):
-    - Shift length < min or > max
-    - Staff hours > threshold
-    - Budget exceeded
+
+```text
+- Shift length < min or > max
+- Staff hours > threshold
+- Budget exceeded
+```
 
 #### 3.2 API Endpoints Required
 
@@ -293,21 +303,21 @@ Block 4 is considered **complete** when:
    - Activation occurs automatically when conditions are met
    - All APIs match Bible v14.0.0 spec
 
-2. **Schedule Builder:**
+1. **Schedule Builder:**
    - Manager can create 5 shifts in ≤ 3 minutes
    - Publish workflow completes successfully
    - Draft/published state is correctly reflected
 
-3. **Labor Management:**
+1. **Labor Management:**
    - Labor budget is visible and updates dynamically
    - Warnings appear for constraint violations
 
-4. **Tests:**
+1. **Tests:**
    - API tests cover all onboarding and scheduling endpoints
    - E2E test covers full user journey
    - Rules tests enforce network-scoped access
 
-5. **Documentation:**
+1. **Documentation:**
    - All APIs documented in OpenAPI/Swagger
    - UX flows match Bible v14.0.0 diagrams
    - Known limitations documented
