@@ -1,3 +1,5 @@
+// [P0][AUTH][SESSION] Route API route handler
+// Tags: P0, AUTH, SESSION
 /**
  * [P1][API][SESSION] Session Bootstrap Endpoint (server)
  * Tags: api, session, user, profile, onboarding
@@ -26,10 +28,7 @@ export async function bootstrapSessionHandler(
   const claims = (req.user?.customClaims || {}) as Record<string, unknown>;
 
   if (!uid) {
-    return NextResponse.json(
-      { error: "not_authenticated" },
-      { status: 401 },
-    );
+    return NextResponse.json({ error: "not_authenticated" }, { status: 401 });
   }
 
   const adminDb: any = injectedAdminDb;
@@ -48,9 +47,7 @@ export async function bootstrapSessionHandler(
         {
           ok: true,
           uid,
-          emailVerified: Boolean(
-            claims.email_verified || claims.emailVerified,
-          ),
+          emailVerified: Boolean(claims.email_verified || claims.emailVerified),
           user: {
             id: uid,
             profile: {
@@ -95,9 +92,7 @@ export async function bootstrapSessionHandler(
       {
         ok: true,
         uid,
-        emailVerified: Boolean(
-          claims.email_verified || claims.emailVerified,
-        ),
+        emailVerified: Boolean(claims.email_verified || claims.emailVerified),
         user: {
           id: uid,
           profile: data.profile || null,
@@ -109,10 +104,7 @@ export async function bootstrapSessionHandler(
     );
   } catch (err) {
     console.error("session/bootstrap failed", err);
-    return NextResponse.json(
-      { error: "internal_error" },
-      { status: 500 },
-    );
+    return NextResponse.json({ error: "internal_error" }, { status: 500 });
   }
 }
 

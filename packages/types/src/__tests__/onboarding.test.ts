@@ -8,6 +8,7 @@
 import { describe, it, expect } from "vitest";
 
 import { CreateCorporateOnboardingSchema, JoinWithTokenSchema } from "..";
+import { CreateOrgOnboardingSchema, OnboardingStateSchema } from "../onboarding";
 
 describe("onboarding schemas", () => {
   it("parses valid create corporate payload", () => {
@@ -36,7 +37,6 @@ describe("CreateOrgOnboardingSchema and OnboardingStateSchema", () => {
       },
     };
 
-    const { CreateOrgOnboardingSchema, OnboardingStateSchema } = require("../onboarding");
     const parsed = CreateOrgOnboardingSchema.safeParse(payload);
     expect(parsed.success).toBe(true);
 

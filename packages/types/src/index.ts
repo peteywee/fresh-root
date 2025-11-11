@@ -6,7 +6,7 @@ export const Role = z.enum(["admin", "manager", "staff"]);
 export type Role = z.infer<typeof Role>;
 
 export * from "./rbac";
-export * from "./corporate";
+export * from "./corporates";
 export * from "./orgs";
 export * from "./schedules";
 export * from "./memberships"; // This provides the canonical Membership export

@@ -36,7 +36,7 @@ All v14 onboarding freeze tasks have been successfully implemented and verified:
 1. **CreateOrgOnboardingSchema**: Validates request body for org onboarding
    - Required: `orgName`, `venueName`, `formToken`
    - Optional: `location` (street1/2, city, state, postalCode, countryCode, timeZone)
-   - ✅ Type-safe export: `type CreateOrgOnboarding =`z.infer<typeof CreateOrgOnboardingSchema>``
+   - ✅ Type-safe export: `type CreateOrgOnboarding = z.infer<typeof CreateOrgOnboardingSchema>`
 
 1. **CreateCorporateOnboardingSchema**: Validates request body for corporate onboarding
    - Required: `corporateName`, `formToken`
@@ -57,7 +57,7 @@ All v14 onboarding freeze tasks have been successfully implemented and verified:
 
 1. **OnboardingStateSchema**: Canonical structure for `users/{uid}.onboarding`
    - Fields: `status`, `intent`, `stage`, `primaryNetworkId`, `primaryOrgId`, `primaryVenueId`, `completedAt` (milliseconds), `lastUpdatedAt` (milliseconds)
-   - ✅ Type-safe export: `type OnboardingState =`z.infer<typeof OnboardingStateSchema>``
+   - ✅ Type-safe export: `type OnboardingState = z.infer<typeof OnboardingStateSchema>`
 
 **API Route Validation Pattern:**
 All three onboarding routes now follow the same pattern:
@@ -291,7 +291,7 @@ const { ...validatedFields } = parsed.data;
 
 1. **`getUserOnboardingState(adminDb, uid)`**
    - **Purpose:** Retrieve current onboarding state for a user
-   - **Returns:** ``Record<string, unknown>` | null` – onboarding state or null if not found
+   - **Returns:** `Record<string, unknown> | null` – onboarding state or null if not found
 
 **Usage in Onboarding Routes:**
 
@@ -560,6 +560,3 @@ All recommended changes have been applied and verified. The workspace is ready f
 - Run full test suite
 - Verify Vercel preview build succeeds
 - Merge PR #62
-
-[schema]: #
-[api]: #

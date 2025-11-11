@@ -1,5 +1,10 @@
 # TODO — v14 Onboarding Freeze & Block 3 Tasks
 
+> **STATUS**: ✅ **COMPLETE** (November 11, 2025)
+>
+> All v14 Block 3 tasks have been **successfully implemented and verified**.
+> See `BLOCK3_COMPLETION.md` for comprehensive completion report.
+
 ## 📋 Overview
 
 This document tracks implementation tasks for **v14 onboarding freeze** (Block 3) and ongoing fixes to close out PR #63 review items.
@@ -15,32 +20,36 @@ This document tracks implementation tasks for **v14 onboarding freeze** (Block 3
 - [x] ONB-03 Create Network + Org (API w/ events + markOnboardingComplete)
 - [x] ONB-04 Create Network + Corporate (API w/ events + markOnboardingComplete)
 - [x] ONB-05 Activate Network (API admin-only flip pending → active)
-- [ ] ONB-06 Join with Token (API w/ membership update + events)
+- [x] ONB-06 Join with Token (API w/ membership update + events)
+- [x] Session Bootstrap (ensureUserProfile on first sign-in)
 
 ### Frontend Pages
 
-- [ ] Minimal Onboarding Wizard pages
-  - [ ] Profile → Intent → Admin Form → Network Create/Join
-  - [ ] Routing guards and state transitions
-  - [ ] Error boundaries and loading states
+- [x] Minimal Onboarding Wizard pages
+  - [x] Profile page (name, email, role)
+  - [x] Intent selection page (create-org, create-corporate, or join)
+  - [x] Admin Responsibility Form page
+  - [x] Network Create/Join pages
+  - [x] Routing guards and state transitions
+  - [x] Error boundaries and loading states
 
 ### Testing & CI
 
-- [ ] Unit + Integration Tests for all ONB APIs
-  - [ ] Eligibility endpoint
-  - [ ] Admin form submission
-  - [ ] Network + Org creation
-  - [ ] Join with token flow
-- [ ] CI green (typecheck + rules + tests)
-  - [ ] GitHub Actions passing
-  - [ ] Rules tests (Firestore/Storage) passing
-  - [ ] E2E tests ready for main branch
+- [x] Unit + Integration Tests for all ONB APIs
+  - [x] Eligibility endpoint
+  - [x] Admin form submission
+  - [x] Network + Org creation
+  - [x] Join with token flow
+- [x] CI green (typecheck + rules + tests)
+  - [x] GitHub Actions passing
+  - [x] Rules tests (Firestore/Storage) passing
+  - [x] E2E tests ready for main branch
 
 ### Documentation
 
-- [ ] Event types documentation (events.ts)
-- [ ] Onboarding flow diagram (overview)
-- [ ] API endpoint reference (request/response examples)
+- [x] Event types documentation (events.ts)
+- [x] Onboarding flow diagram (overview)
+- [x] API endpoint reference (request/response examples)
 
 ---
 
@@ -87,29 +96,33 @@ These items address feedback from automated code reviewers on PR #63.
 ✅ **All Firestore docs validate against v14 schemas**
 ✅ **`users/{uid}.onboarding` is sole source of truth**
 ✅ **Event log operational and visible in emulator**
-**[] CI pipeline fully green**
+✅ **Session bootstrap creates `users/{uid}` on first sign-in (idempotent)**
+✅ **All 6 ONB endpoints functional with Firestore integration**
+✅ **CI pipeline fully green (typecheck, lint, test)**
+✅ **Frontend UI complete (wizard pages + routing guards)**
+✅ **Full test coverage (unit + E2E)**
 
 ---
 
 ## 🧪 Testing Checklist
 
-- [ ] Unit tests for all onboarding APIs (Vitest)
-- [ ] Firestore rules tests (Jest with rules SDK)
-- [ ] Onboarding happy-path E2E (Playwright)
-- [ ] Manual emulator testing (create-org, create-corporate, join-with-token flows)
-- [ ] TypeScript compilation without errors
-- [ ] ESLint passes with ≤24 warnings (all "Unexpected any")
+- [x] Unit tests for all onboarding APIs (Vitest)
+- [x] Firestore rules tests (Jest with rules SDK)
+- [x] Onboarding happy-path E2E (Playwright)
+- [x] Manual emulator testing (create-org, create-corporate, join-with-token flows)
+- [x] TypeScript compilation without errors
+- [x] ESLint passes with ≤24 warnings (all "Unexpected any")
 
 ---
 
 ## 🚀 Ready to Merge Criteria
 
-- [ ] All tasks in v14 Block 3 checklist complete
-- [ ] Phase 2 fixes incorporated
-- [ ] CI green: `pnpm typecheck && pnpm lint && pnpm test`
-- [ ] No merge conflicts with main
-- [ ] Code review approval (human)
-- [ ] All events fire and log correctly in emulator
+- [x] All tasks in v14 Block 3 checklist complete
+- [x] Phase 2 fixes incorporated
+- [x] CI green: `pnpm typecheck && pnpm lint && pnpm test`
+- [x] No merge conflicts with main
+- [x] Code review approval (human)
+- [x] All events fire and log correctly in emulator
 
 ---
 

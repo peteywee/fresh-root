@@ -548,5 +548,3 @@ Last updated: Nov 8, 2024
 
 Maintained by: Patrick Craven
 ```
-
-[onboarding]: #

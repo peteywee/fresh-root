@@ -639,5 +639,3 @@ The onboarding backend implementation is **complete and production-ready**. All 
 
 _Document generated: Nov 8, 2024_
 _Code owner: Patrick Craven_
-
-[onboarding]: #

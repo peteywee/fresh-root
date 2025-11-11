@@ -27,8 +27,18 @@ function waitForHttp(url: string, timeoutMs = 60000, intervalMs = 500): Promise<
 let child: ReturnType<typeof spawn> | undefined;
 
 export default async function () {
-  // Allow opting out if an external server is already running
-  if (process.env.START_NEXT_IN_TESTS === "false") {
+  // By default, do NOT start the Next dev server locally during tests.
+  // Start only when running in CI (e.g. GitHub Actions) or when explicitly
+  // requested by setting START_NEXT_IN_TESTS=true in the environment.
+  if (process.env.CI !== "true" && process.env.START_NEXT_IN_TESTS !== "true") {
+    // Developer machines: skip launching background Next server to avoid
+    // consuming RAM/CPU. To run local integration tests that require the
+    // app server, set START_NEXT_IN_TESTS=true before running tests.
+    // In CI, the workflow will set START_NEXT_IN_TESTS=true so the server
+    // is started there.
+    console.log(
+      "[vitest.global-setup] Skipping starting Next.js dev server locally. Set START_NEXT_IN_TESTS=true to enable.",
+    );
     return;
   }
 

@@ -1,3 +1,5 @@
+// [P0][APP][CODE] UserProfile
+// Tags: P0, APP, CODE
 /**
  * [P1][APP][USER] User profile bootstrap + helpers
  * Tags: user, profile, onboarding, session
@@ -41,9 +43,7 @@ export async function ensureUserProfile(args: {
   const baseProfile = {
     email: (claims.email as string | undefined) || null,
     displayName:
-      (claims.displayName as string | undefined) ||
-      (claims.name as string | undefined) ||
-      null,
+      (claims.displayName as string | undefined) || (claims.name as string | undefined) || null,
     avatarUrl: (claims.picture as string | undefined) || null,
     selfDeclaredRole:
       (claims.selfDeclaredRole as string | undefined) ||
