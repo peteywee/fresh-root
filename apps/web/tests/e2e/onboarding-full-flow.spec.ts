@@ -10,12 +10,12 @@
  * - Uses Playwright for browser automation
  */
 
-import { test, expect } from "@playwright/test";
+import { test, expect, Page } from "@playwright/test";
 
 test.describe("Onboarding Happy Path", () => {
   const baseUrl = process.env.PLAYWRIGHT_TEST_BASE_URL || "http://localhost:3000";
 
-  test("should complete full onboarding flow: create-org", async ({ page }) => {
+  test("should complete full onboarding flow: create-org", async ({ page }: { page: Page }) => {
     // 1. Sign in / Navigate to onboarding
     await page.goto(`${baseUrl}/auth/login`);
     await page.fill('input[type="email"]', "test-user@example.com");
@@ -117,7 +117,7 @@ test.describe("Onboarding Happy Path", () => {
     expect(await page.isVisible("text=Welcome")).toBe(true);
   });
 
-  test("should complete full onboarding flow: join-with-token", async ({ page }) => {
+  test("should complete full onboarding flow: join-with-token", async ({ page }: { page: Page }) => {
     // 1. Sign in
     await page.goto(`${baseUrl}/auth/login`);
     await page.fill('input[type="email"]', "join-user@example.com");
@@ -178,7 +178,7 @@ test.describe("Onboarding Happy Path", () => {
     expect(page.url()).toContain("/app");
   });
 
-  test("should reject invalid join token", async ({ page }) => {
+  test("should reject invalid join token", async ({ page }: { page: Page }) => {
     await page.goto(`${baseUrl}/auth/login`);
     await page.fill('input[type="email"]', "invalid-token-user@example.com");
     await page.fill('input[type="password"]', "Test123!@#");
@@ -193,7 +193,7 @@ test.describe("Onboarding Happy Path", () => {
     expect(errorMessage).toBe(true);
   });
 
-  test("should enforce rate-limiting on verify-eligibility", async ({ page }) => {
+  test("should enforce rate-limiting on verify-eligibility", async ({ page }: { page: Page }) => {
     const testToken = "rate-limit-test-token";
 
     // Make 5 requests (should all succeed)

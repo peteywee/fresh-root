@@ -120,7 +120,7 @@ See `docs/BLOCK4_PLANNING.md` for details.
 
 ### API Handler Template
 
-```typescripttypescript
+```typescript
 import { NextResponse } from "next/server";
 import { SomeSchema } from "../../_shared/validation";
 import { withSecurity, type AuthenticatedRequest } from "../../_shared/middleware";

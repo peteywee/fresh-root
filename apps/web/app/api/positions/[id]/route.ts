@@ -1,7 +1,7 @@
 //[P1][API][CODE] Positions [id] API route handler
 // Tags: P1, API, CODE, validation, zod
 
-import { PositionUpdateSchema } from "@fresh-schedules/types";
+import { UpdatePositionSchema } from "@fresh-schedules/types";
 import { NextResponse } from "next/server";
 
 import { requireOrgMembership, requireRole } from "../../../../src/lib/api/authorization";
