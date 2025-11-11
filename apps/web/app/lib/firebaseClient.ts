@@ -1,5 +1,10 @@
 // [P0][FIREBASE][FIREBASE] FirebaseClient
 // Tags: P0, FIREBASE, FIREBASE
+/**
+ * @fileoverview
+ * Client-side Firebase initialization and configuration.
+ * Validates environment variables and provides singleton Firebase app instance.
+ */
 import { getApp, getApps, initializeApp, FirebaseOptions } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";

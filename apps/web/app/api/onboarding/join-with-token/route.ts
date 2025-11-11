@@ -1,11 +1,12 @@
 //[P1][API][ONBOARDING] Join With Token Endpoint (server)
-// Tags: api, onboarding, join-token, membership
+// Tags: api, onboarding, join-token, membership, events
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextResponse } from "next/server";
 
 import { withSecurity, type AuthenticatedRequest } from "../../_shared/middleware";
 
+import { logEvent } from "@/src/lib/eventLog";
 import { adminDb as importedAdminDb } from "@/src/lib/firebase.server";
 import { markOnboardingComplete } from "@/src/lib/userOnboarding";
 
@@ -13,6 +14,7 @@ type JoinTokenDoc = {
   networkId: string;
   orgId: string;
   role: string;
+  venueId?: string;
   expiresAt?: number;
   disabled?: boolean;
   usedBy?: string[];
@@ -88,53 +90,89 @@ export async function joinWithTokenHandler(
     const membershipId = `${uid}_${data.orgId}`;
     const membershipRef = adminDb.collection("memberships").doc(membershipId);
 
-    await adminDb.runTransaction(async (tx: any) => {
-      const existing = await tx.get(membershipRef);
-      const createdAt = Date.now();
+    await adminDb.runTransaction(
+      async (tx: {
+        get: (...args: unknown[]) => Promise<any>;
+        set: (...args: unknown[]) => unknown;
+        update: (...args: unknown[]) => unknown;
+      }) => {
+        const existing = await tx.get(membershipRef);
+        const createdAt = now;
 
-      if (!existing.exists) {
-        tx.set(membershipRef, {
-          userId: uid,
-          orgId: data.orgId,
-          networkId: data.networkId,
-          roles: [data.role],
-          createdAt,
-          createdBy: uid,
-        });
-      } else {
-        const cur = existing.data() as {
-          roles?: string[];
-          updatedAt?: number;
-        };
-        const roles = Array.isArray(cur.roles) ? cur.roles : [];
-        if (!roles.includes(data.role)) roles.push(data.role);
-        tx.update(membershipRef, {
-          roles,
-          updatedAt: createdAt,
-          updatedBy: uid,
-        });
-      }
+        if (!existing.exists) {
+          tx.set(membershipRef, {
+            userId: uid,
+            orgId: data.orgId,
+            networkId: data.networkId,
+            roles: [data.role],
+            createdAt,
+            updatedAt: createdAt,
+            createdBy: uid,
+          });
+        } else {
+          const cur = existing.data() as {
+            roles?: string[];
+            updatedAt?: number;
+          };
+          const roles = Array.isArray(cur.roles) ? cur.roles : [];
+          if (!roles.includes(data.role)) roles.push(data.role);
+          tx.update(membershipRef, {
+            roles,
+            updatedAt: createdAt,
+            updatedBy: uid,
+          });
+        }
 
-      const newUsedBy = usedBy.includes(uid) ? usedBy : [...usedBy, uid];
-      tx.update(tokenRef, {
-        usedBy: newUsedBy,
-        lastUsedAt: createdAt,
-      });
+        const newUsedBy = usedBy.includes(uid) ? usedBy : [...usedBy, uid];
+        tx.update(tokenRef, {
+          usedBy: newUsedBy,
+          lastUsedAt: createdAt,
+        });
+      },
+    );
+
+    // Mark onboarding complete for join path
+    await markOnboardingComplete({
+      adminDb,
+      uid,
+      intent: "join_existing",
+      networkId: data.networkId,
+      orgId: data.orgId,
+      venueId: data.venueId,
     });
 
-    // Mark onboarding complete for join path (best-effort)
-    try {
-      await markOnboardingComplete({
-        adminDb,
-        uid: uid as string,
+    // Emit platform events
+    const eventTime = Date.now();
+
+    // membership.* event
+    await logEvent(adminDb, {
+      at: eventTime,
+      category: "membership",
+      type: "membership.created",
+      actorUserId: uid,
+      networkId: data.networkId,
+      orgId: data.orgId,
+      venueId: data.venueId,
+      payload: {
+        source: "onboarding.join-with-token",
+        role: data.role,
+        via: "join_token",
+      },
+    });
+
+    // onboarding.completed (intent: join_existing)
+    await logEvent(adminDb, {
+      at: eventTime,
+      category: "onboarding",
+      type: "onboarding.completed",
+      actorUserId: uid,
+      networkId: data.networkId,
+      orgId: data.orgId,
+      venueId: data.venueId,
+      payload: {
         intent: "join_existing",
-        networkId: data.networkId,
-        orgId: data.orgId,
-        venueId: undefined,
-      });
-    } catch {
-      // swallow errors to preserve original semantics
-    }
+      },
+    });
 
     return NextResponse.json(
       {
@@ -151,6 +189,9 @@ export async function joinWithTokenHandler(
   }
 }
 
-export const POST = withSecurity(async (req: any) => joinWithTokenHandler(req, importedAdminDb), {
-  requireAuth: true,
-});
+export const POST = withSecurity(
+  async (req: AuthenticatedRequest, ctx: any) => {
+    return joinWithTokenHandler(req, importedAdminDb);
+  },
+  { requireAuth: true },
+);

@@ -41,7 +41,7 @@ export const AdminResponsibilityFormSchema = z.object({
   createdAt: z.any(),
   updatedAt: z.any().optional(),
   // optional free-form data blob (could include taxId, legalName, addresses)
-  data: z.record(z.any()).optional(),
+  data: z.record(z.string(), z.any()).optional(),
 });
 export type AdminResponsibilityForm = z.infer<typeof AdminResponsibilityFormSchema>;
 
@@ -51,7 +51,7 @@ export const CreateAdminResponsibilityFormSchema = AdminResponsibilityFormSchema
   role: true,
   certification: true,
   data: true,
-});
+} as const);
 export type CreateAdminResponsibilityFormInput = z.infer<
   typeof CreateAdminResponsibilityFormSchema
 >;

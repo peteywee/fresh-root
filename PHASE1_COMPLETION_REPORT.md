@@ -26,14 +26,22 @@ Following the guidance in `MIGRATION_NETWORK_TENANCY.md` and the real-world repo
 
 - Enhanced `apps/web/app/api/onboarding/create-network-org/route.ts` to:
   - Write to **NEW (v14) paths** (primary):
-    - `/networks/{id}` with full NetworkSchema (kind, segment, plan, etc.)
-    - `/networks/{id}/orgs/{id}`, `/networks/{id}/venues/{id}`
-    - `/networks/{id}/memberships/{id}` with network roles
-    - `/networks/{id}/compliance/adminResponsibilityForm`
-  - ALSO write to **OLD (backward compat) paths**:
-    - `/orgs/{id}` with `networkId` field
-    - `/venues/{id}` with `orgId`, `networkId` fields
-    - `/orgs/{id}/members/{id}` (legacy membership)
+
+```text
+- `/networks/{id}` with full NetworkSchema (kind, segment, plan, etc.)
+- `/networks/{id}/orgs/{id}`, `/networks/{id}/venues/{id}`
+- `/networks/{id}/memberships/{id}` with network roles
+- `/networks/{id}/compliance/adminResponsibilityForm`
+```
+
+- ALSO write to **OLD (backward compat) paths**:
+
+```text
+- `/orgs/{id}` with `networkId` field
+- `/venues/{id}` with `orgId`, `networkId` fields
+- `/orgs/{id}/members/{id}` (legacy membership)
+```
+
 - All writes in **single transaction** (atomicity guaranteed)
 
 #### 3. **Clear Migration Documentation** ✅
@@ -49,7 +57,7 @@ Following the guidance in `MIGRATION_NETWORK_TENANCY.md` and the real-world repo
 
 ### Why Dual-Write
 
-**Backward Compatibility Without Breaking Changes**
+### Backward Compatibility Without Breaking Changes
 
 - Existing code using org-centric paths continues to work
 - New networks use network-scoped paths (v14 model)
@@ -116,7 +124,7 @@ All changes verified:
 
 ## Files Modified
 
-```
+```text
 firestore.rules
 ├── +55 lines: Network-scoped rules + compliance protection
 └── Preserved: All existing org rules
@@ -137,16 +145,16 @@ docs/migrations/
 ### Phase 2: Migrate Existing Orgs (1-2 weeks)
 
 1. Create migration script in `scripts/migrate/`
-2. Test with sample orgs in emulator
-3. Update app code to prefer network-scoped queries
-4. Gradual rollout with rollback capability per org
+1. Test with sample orgs in emulator
+1. Update app code to prefer network-scoped queries
+1. Gradual rollout with rollback capability per org
 
 ### Phase 3: Remove Old Paths (1 week)
 
 1. Search for "PHASE 1 DUAL-WRITE" and remove dual-write blocks
-2. Delete `/orgs`, `/venues` collections (or archive)
-3. Simplify Firestore rules
-4. Remove legacy membership logic
+1. Delete `/orgs`, `/venues` collections (or archive)
+1. Simplify Firestore rules
+1. Remove legacy membership logic
 
 ---
 
@@ -166,5 +174,5 @@ The migration is **staged, strategic, and reversible** at each phase. You can pr
 **Questions for future work**:
 
 1. When should we schedule Phase 2 migration of existing orgs?
-2. Do you want to add emulator tests for network creation?
-3. Should we create a migration dashboard to track org conversion progress?
+1. Do you want to add emulator tests for network creation?
+1. Should we create a migration dashboard to track org conversion progress?

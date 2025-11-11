@@ -1,7 +1,9 @@
+# Onboarding Backend Implementation - Completion Summary
+
 <!-- [P1][ONBOARDING][DOC] Implementation Completion Summary
 Tags: P1, ONBOARDING, BACKEND, DOCUMENTATION -->
 
-# Onboarding Backend Implementation - Completion Summary
+## Onboarding Backend Implementation - Completion Summary
 
 **Status**: ✅ COMPLETE
 **Date Completed**: Nov 8, 2024
@@ -195,10 +197,10 @@ export const VerifyEligibilitySchema = z.object({
 ### Validation Flow
 
 1. **Request Received**: API route receives POST request
-2. **JSON Parse**: Safely parse request body
-3. **Schema Validation**: Apply Zod schema with `safeParse()`
-4. **Error Response**: Return 422 with detailed error info if validation fails
-5. **Proceed**: Pass validated data to business logic
+1. **JSON Parse**: Safely parse request body
+1. **Schema Validation**: Apply Zod schema with `safeParse()`
+1. **Error Response**: Return 422 with detailed error info if validation fails
+1. **Proceed**: Pass validated data to business logic
 
 ---
 
@@ -208,7 +210,7 @@ export const VerifyEligibilitySchema = z.object({
 
 #### Organizations Collection
 
-```
+```text
 organizations/{orgId}
 ├── id: string
 ├── name: string
@@ -222,7 +224,7 @@ organizations/{orgId}
 
 #### Users Collection (Profile Updates)
 
-```
+```text
 users/{uid}
 ├── profile: {
 │   ├── fullName: string
@@ -236,7 +238,7 @@ users/{uid}
 
 #### Join Tokens Collection
 
-```
+```text
 joinTokens/{tokenId}
 ├── token: string (hashed)
 ├── organizationId: string
@@ -247,7 +249,7 @@ joinTokens/{tokenId}
 
 #### Admin Responsibility Forms Collection
 
-```
+```text
 adminResponsibilityForms/{formId}
 ├── organizationId: string
 ├── userId: string
@@ -330,19 +332,19 @@ return NextResponse.json(
    - User not authenticated with Firebase
    - Returns 401 with `not_authenticated` error
 
-2. **Invalid JSON**
+1. **Invalid JSON**
    - Malformed request body
    - Returns 400 with `invalid_json` error
 
-3. **Validation Failure**
+1. **Validation Failure**
    - Field doesn't meet schema requirements
    - Returns 422 with detailed field-level issues
 
-4. **Firebase Errors**
+1. **Firebase Errors**
    - Firestore operation fails
    - Caught and returned as 500 error
 
-5. **Business Logic Errors**
+1. **Business Logic Errors**
    - Token expired, already joined, etc.
    - Returns 409 or 422 with specific error code
 
@@ -453,7 +455,7 @@ describe("profileHandler", () => {
 
 ## File Structure
 
-```
+```text
 apps/web/app/api/onboarding/
 ├── admin-form/
 │   └── route.ts           # Admin responsibility form handler
@@ -506,7 +508,7 @@ apps/web/src/__tests__/
 ```bash
 $ pnpm -w typecheck
 > tsc --build
-# ✅ No errors
+## ✅ No errors
 ```
 
 ### Linting
@@ -514,7 +516,7 @@ $ pnpm -w typecheck
 ```bash
 $ pnpm -w lint
 > eslint apps/web/app/api/onboarding/**/*.ts
-# ✅ No errors
+## ✅ No errors
 ```
 
 ### Formatting
@@ -522,16 +524,16 @@ $ pnpm -w lint
 ```bash
 $ pnpm -w format
 > pnpm prettier --write .
-# ✅ All files formatted
+## ✅ All files formatted
 ```
 
 ### Pre-commit Hooks
 
 ```bash
-# Auto-tagging: Applied file headers
-# Auto-formatting: Applied Prettier
-# Typecheck: Verified compilation
-# Lint: Verified code quality
+## Auto-tagging: Applied file headers
+## Auto-formatting: Applied Prettier
+## Typecheck: Verified compilation
+## Lint: Verified code quality
 ```
 
 ---
@@ -541,9 +543,9 @@ $ pnpm -w format
 ### Short-term (Ready to Deploy)
 
 1. ✅ Core onboarding API endpoints complete
-2. ✅ All validation and error handling in place
-3. ✅ Security middleware integrated
-4. ✅ Type-safe throughout
+1. ✅ All validation and error handling in place
+1. ✅ Security middleware integrated
+1. ✅ Type-safe throughout
 
 ### Medium-term (Next Phase)
 
@@ -551,11 +553,11 @@ $ pnpm -w format
    - Connect UI forms to API endpoints
    - Implement loading/error states
    - Add success confirmations
-2. Additional validation:
+1. Additional validation:
    - Email domain verification
    - Organization code uniqueness
    - Phone number formatting
-3. Admin dashboard:
+1. Admin dashboard:
    - Review pending onboarding submissions
    - Approve/reject applications
    - Manage organization structure
@@ -563,9 +565,9 @@ $ pnpm -w format
 ### Long-term (Future Enhancements)
 
 1. OAuth/SAML provider integration
-2. Bulk user import
-3. SSO for corporate networks
-4. Advanced admin delegation rules
+1. Bulk user import
+1. SSO for corporate networks
+1. Advanced admin delegation rules
 
 ---
 
@@ -575,7 +577,7 @@ $ pnpm -w format
 
 Required environment variables (in `.env.local`):
 
-```
+```text
 NEXT_PUBLIC_FIREBASE_PROJECT_ID=your-project
 FIREBASE_ADMIN_SDK_KEY=your-admin-key
 NEXT_PUBLIC_USE_EMULATORS=false  # Set true for local development
@@ -596,22 +598,22 @@ firebase deploy --only firestore:rules
 ### Testing Before Production
 
 ```bash
-# Install dependencies
+## Install dependencies
 pnpm -w install --frozen-lockfile
 
-# Run all tests
+## Run all tests
 pnpm test
 
-# Run firestore rules tests
+## Run firestore rules tests
 pnpm test:rules
 
-# Run E2E tests
+## Run E2E tests
 pnpm test:e2e
 
-# Type check
+## Type check
 pnpm -w typecheck
 
-# Lint check
+## Lint check
 pnpm -w lint
 ```
 

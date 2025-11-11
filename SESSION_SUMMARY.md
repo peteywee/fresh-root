@@ -13,11 +13,11 @@
 A complete, production-ready onboarding backend with 6 API endpoints:
 
 1. **Profile Setup** - `/api/onboarding/profile`
-2. **Verify Eligibility** - `/api/onboarding/verify-eligibility`
-3. **Create Organization Network** - `/api/onboarding/create-network-org`
-4. **Create Corporate Network** - `/api/onboarding/create-network-corporate`
-5. **Join with Token** - `/api/onboarding/join-with-token`
-6. **Admin Form** - `/api/onboarding/admin-form`
+1. **Verify Eligibility** - `/api/onboarding/verify-eligibility`
+1. **Create Organization Network** - `/api/onboarding/create-network-org`
+1. **Create Corporate Network** - `/api/onboarding/create-network-corporate`
+1. **Join with Token** - `/api/onboarding/join-with-token`
+1. **Admin Form** - `/api/onboarding/admin-form`
 
 ### Key Features
 
@@ -34,7 +34,7 @@ A complete, production-ready onboarding backend with 6 API endpoints:
 
 ## Commits in This Session
 
-```
+```text
 312ca90 - docs: add onboarding backend developer quick reference
 9469dec - docs: add onboarding backend completion summary
 d984175 - feat(onboarding): implement createNetworkWithOrgAndVenue helper
@@ -211,13 +211,13 @@ pnpm dev
 Before deploying to production:
 
 1. ✅ All quality gates passing
-2. ✅ Typecheck complete
-3. ✅ Linting complete
-4. ✅ Tests passing
-5. ✅ Security rules reviewed
-6. ✅ Environment variables configured
-7. ✅ Code review completed
-8. ✅ PR merged to main
+1. ✅ Typecheck complete
+1. ✅ Linting complete
+1. ✅ Tests passing
+1. ✅ Security rules reviewed
+1. ✅ Environment variables configured
+1. ✅ Code review completed
+1. ✅ PR merged to main
 
 ---
 
@@ -246,11 +246,11 @@ Before deploying to production:
 ## Notes for Code Review
 
 1. **Error Handling**: All error responses include proper HTTP status codes and error details
-2. **Type Safety**: Full TypeScript coverage with no `any` types in handlers
-3. **Security**: Middleware enforces authentication; injection pattern allows for testing
-4. **Scalability**: Centralized validation schemas make maintenance easy
-5. **Documentation**: Comprehensive guides for both developers and end users
-6. **Testing**: Handlers support dependency injection for unit testing
+1. **Type Safety**: Full TypeScript coverage with no `any` types in handlers
+1. **Security**: Middleware enforces authentication; injection pattern allows for testing
+1. **Scalability**: Centralized validation schemas make maintenance easy
+1. **Documentation**: Comprehensive guides for both developers and end users
+1. **Testing**: Handlers support dependency injection for unit testing
 
 ---
 

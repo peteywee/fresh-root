@@ -1,11 +1,12 @@
 //[P1][API][ONBOARDING] Create Network + Corporate Endpoint (server)
-// Tags: api, onboarding, network, corporate, membership
+// Tags: api, onboarding, network, corporate, membership, events
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextResponse } from "next/server";
 
 import { withSecurity, type AuthenticatedRequest } from "../../_shared/middleware";
 
+import { logEvent } from "@/src/lib/eventLog";
 import { adminDb as importedAdminDb } from "@/src/lib/firebase.server";
 import { markOnboardingComplete } from "@/src/lib/userOnboarding";
 
@@ -28,7 +29,7 @@ export async function createNetworkCorporateHandler(
     );
   }
 
-  const adminDb = injectedAdminDb;
+  const adminDb: any = injectedAdminDb;
 
   const uid = req.user?.uid;
   const claims = req.user?.customClaims || {};
@@ -61,13 +62,13 @@ export async function createNetworkCorporateHandler(
     return NextResponse.json({ error: "invalid_form_token" }, { status: 400 });
   }
 
-  try {
-    const formsRoot = adminDb
-      .collection("compliance")
-      .doc("adminResponsibilityForms")
-      .collection("forms");
-    const formRef = formsRoot.doc(String(formToken));
+  const formsRoot = adminDb
+    .collection("compliance")
+    .doc("adminResponsibilityForms")
+    .collection("forms");
+  const formRef = formsRoot.doc(String(formToken));
 
+  try {
     const formSnap = await formRef.get();
     if (!formSnap.exists) {
       return NextResponse.json({ error: "form_token_not_found" }, { status: 404 });
@@ -84,82 +85,131 @@ export async function createNetworkCorporateHandler(
     }
 
     const networkRef = adminDb.collection("networks").doc();
-    const corporateRef = networkRef.collection("corporate");
-    const corpRef = corporateRef.doc();
+    const corporateCollectionRef = networkRef.collection("corporate");
+    const corpRef = corporateCollectionRef.doc();
 
-    await adminDb.runTransaction(async (tx: any) => {
-      const createdAt = nowMs;
+    await adminDb.runTransaction(
+      async (tx: {
+        set: (...args: unknown[]) => unknown;
+        update: (...args: unknown[]) => unknown;
+      }) => {
+        const createdAt = nowMs;
 
-      // 1) Network
-      tx.set(networkRef, {
-        name: corporateName || `Corporate Network ${new Date().toISOString()}`,
-        status: "pending_verification",
-        kind: "corporate_network",
-        industry: industry || null,
-        approxLocations: approxLocations || null,
-        createdAt,
-        createdBy: uid,
-        adminFormToken: formToken,
-      });
+        // 1) Network
+        tx.set(networkRef, {
+          id: networkRef.id,
+          name: corporateName || `Corporate Network ${new Date().toISOString()}`,
+          displayName: corporateName || null,
+          status: "pending_verification",
+          kind: "corporate_network",
+          industry: industry || null,
+          approxLocations: approxLocations || null,
+          ownerUserId: uid,
+          createdAt,
+          updatedAt: createdAt,
+          createdBy: uid,
+          adminFormToken: formToken,
+        });
 
-      // 2) Corporate node under this network
-      tx.set(corpRef, {
-        id: corpRef.id,
-        networkId: networkRef.id,
-        name: corporateName || "Corporate",
-        brandName: brandName || null,
-        industry: industry || null,
-        approxLocations: approxLocations || null,
-        contactUserId: uid,
-        createdAt,
-        createdBy: uid,
-      });
+        // 2) Corporate node under this network
+        tx.set(corpRef, {
+          id: corpRef.id,
+          networkId: networkRef.id,
+          name: corporateName || "Corporate",
+          brandName: brandName || null,
+          industry: industry || null,
+          approxLocations: approxLocations || null,
+          contactUserId: uid,
+          createdAt,
+          updatedAt: createdAt,
+          createdBy: uid,
+        });
 
-      // 3) Compliance doc under network
-      const complianceRef = networkRef.collection("compliance").doc("adminResponsibilityForm");
+        // 3) Compliance doc under network
+        const complianceRef = networkRef.collection("compliance").doc("adminResponsibilityForm");
 
-      tx.set(complianceRef, {
-        ...formData,
-        networkId: networkRef.id,
-        corporateId: corpRef.id,
-        attachedFromToken: formToken,
-        attachedBy: uid,
-        attachedAt: createdAt,
-      });
+        tx.set(complianceRef, {
+          ...formData,
+          networkId: networkRef.id,
+          corporateId: corpRef.id,
+          attachedFromToken: formToken,
+          attachedBy: uid,
+          attachedAt: createdAt,
+        });
 
-      // 4) Mark original form attached + immutable
-      tx.update(formRef, {
-        attachedTo: { networkId: networkRef.id, corpId: corpRef.id },
-        immutable: true,
-        status: "attached",
-        attachedAt: createdAt,
-      });
+        // 4) Mark original form attached + immutable
+        tx.update(formRef, {
+          attachedTo: { networkId: networkRef.id, corpId: corpRef.id },
+          immutable: true,
+          status: "attached",
+          attachedAt: createdAt,
+        });
 
-      // 5) Global membership for creator
-      const membershipId = `${uid}_network_${networkRef.id}`;
-      const membershipRef = adminDb.collection("memberships").doc(membershipId);
-      tx.set(membershipRef, {
-        userId: uid,
-        networkId: networkRef.id,
-        roles: ["network_owner", "corporate_admin"],
-        createdAt,
-        createdBy: uid,
-      });
+        // 5) Global membership for creator
+        const membershipId = `${uid}_network_${networkRef.id}`;
+        const membershipRef = adminDb.collection("memberships").doc(membershipId);
+        tx.set(membershipRef, {
+          userId: uid,
+          networkId: networkRef.id,
+          roles: ["network_owner", "corporate_admin"],
+          createdAt,
+          updatedAt: createdAt,
+          createdBy: uid,
+        });
+      },
+    );
+
+    // 6) Mark onboarding complete
+    await markOnboardingComplete({
+      adminDb,
+      uid,
+      intent: "create_corporate",
+      networkId: networkRef.id,
+      orgId: corpRef.id,
+      venueId: undefined,
     });
 
-    // Best-effort: mark onboarding complete for the creator
-    try {
-      await markOnboardingComplete({
-        adminDb,
-        uid: uid as string,
+    // 7) Emit platform events
+    const now = Date.now();
+
+    // network.created
+    await logEvent(adminDb, {
+      at: now,
+      category: "network",
+      type: "network.created",
+      actorUserId: uid,
+      networkId: networkRef.id,
+      payload: {
+        source: "onboarding.create-network-corporate",
+        kind: "corporate_network",
+      },
+    });
+
+    // membership.created (network_owner / corporate_admin)
+    await logEvent(adminDb, {
+      at: now,
+      category: "membership",
+      type: "membership.created",
+      actorUserId: uid,
+      networkId: networkRef.id,
+      payload: {
+        source: "onboarding.create-network-corporate",
+        roles: ["network_owner", "corporate_admin"],
+      },
+    });
+
+    // onboarding.completed (intent: create_corporate)
+    await logEvent(adminDb, {
+      at: now,
+      category: "onboarding",
+      type: "onboarding.completed",
+      actorUserId: uid,
+      networkId: networkRef.id,
+      orgId: corpRef.id,
+      payload: {
         intent: "create_corporate",
-        networkId: networkRef.id,
-        orgId: corpRef.id,
-        venueId: undefined,
-      });
-    } catch {
-      // swallow errors to preserve original semantics
-    }
+      },
+    });
 
     return NextResponse.json(
       {
@@ -177,6 +227,10 @@ export async function createNetworkCorporateHandler(
 }
 
 export const POST = withSecurity(
-  async (req: any) => createNetworkCorporateHandler(req, importedAdminDb),
-  { requireAuth: true },
+  async (req: AuthenticatedRequest, ctx: any) => {
+    return createNetworkCorporateHandler(req, importedAdminDb);
+  },
+  {
+    requireAuth: true,
+  },
 );
