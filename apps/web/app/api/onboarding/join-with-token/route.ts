@@ -90,38 +90,37 @@ export async function joinWithTokenHandler(
 
     await adminDb.runTransaction(async (tx: any) => {
       const existing = await tx.get(membershipRef);
-        const createdAt = Date.now();
+      const createdAt = Date.now();
 
-        if (!existing.exists) {
-          tx.set(membershipRef, {
-            userId: uid,
-            orgId: data.orgId,
-            networkId: data.networkId,
-            roles: [data.role],
-            createdAt,
-            createdBy: uid,
-          });
-        } else {
-          const cur = existing.data() as {
-            roles?: string[];
-            updatedAt?: number;
-          };
-          const roles = Array.isArray(cur.roles) ? cur.roles : [];
-          if (!roles.includes(data.role)) roles.push(data.role);
-          tx.update(membershipRef, {
-            roles,
-            updatedAt: createdAt,
-            updatedBy: uid,
-          });
-        }
-
-        const newUsedBy = usedBy.includes(uid) ? usedBy : [...usedBy, uid];
-        tx.update(tokenRef, {
-          usedBy: newUsedBy,
-          lastUsedAt: createdAt,
+      if (!existing.exists) {
+        tx.set(membershipRef, {
+          userId: uid,
+          orgId: data.orgId,
+          networkId: data.networkId,
+          roles: [data.role],
+          createdAt,
+          createdBy: uid,
         });
-      },
-    );
+      } else {
+        const cur = existing.data() as {
+          roles?: string[];
+          updatedAt?: number;
+        };
+        const roles = Array.isArray(cur.roles) ? cur.roles : [];
+        if (!roles.includes(data.role)) roles.push(data.role);
+        tx.update(membershipRef, {
+          roles,
+          updatedAt: createdAt,
+          updatedBy: uid,
+        });
+      }
+
+      const newUsedBy = usedBy.includes(uid) ? usedBy : [...usedBy, uid];
+      tx.update(tokenRef, {
+        usedBy: newUsedBy,
+        lastUsedAt: createdAt,
+      });
+    });
 
     // Mark onboarding complete for join path (best-effort)
     try {

@@ -1,3 +1,5 @@
+// [P0][APP][CODE] Fresh Schedules TypeScript type definitions
+// Tags: P0, APP, CODE
 /**
  * Local type shim so that apps/web can import from "@fresh-schedules/types".
  *

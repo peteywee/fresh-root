@@ -1,3 +1,5 @@
+// [P0][APP][CODE] Create network organization page component
+// Tags: P0, APP, CODE
 "use client";
 
 import { useRouter } from "next/navigation";
@@ -43,21 +45,15 @@ export default function CreateNetworkOrgPage() {
   return (
     <main className="mx-auto flex max-w-xl flex-col gap-6 px-4 py-10">
       <header className="space-y-2">
-        <h1 className="text-2xl font-semibold">
-          Step 4: Create your organization
-        </h1>
+        <h1 className="text-2xl font-semibold">Step 4: Create your organization</h1>
         <p className="text-sm text-gray-600">
-          Define your primary organization and first venue. You can add more
-          locations later.
+          Define your primary organization and first venue. You can add more locations later.
         </p>
       </header>
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="space-y-1">
-          <label
-            htmlFor="orgName"
-            className="block text-sm font-medium text-gray-800"
-          >
+          <label htmlFor="orgName" className="block text-sm font-medium text-gray-800">
             Organization name
           </label>
           <input
@@ -72,10 +68,7 @@ export default function CreateNetworkOrgPage() {
         </div>
 
         <div className="space-y-1">
-          <label
-            htmlFor="venueName"
-            className="block text-sm font-medium text-gray-800"
-          >
+          <label htmlFor="venueName" className="block text-sm font-medium text-gray-800">
             Primary venue name
           </label>
           <input
@@ -91,10 +84,7 @@ export default function CreateNetworkOrgPage() {
 
         <div className="flex gap-3">
           <div className="flex-1 space-y-1">
-            <label
-              htmlFor="city"
-              className="block text-sm font-medium text-gray-800"
-            >
+            <label htmlFor="city" className="block text-sm font-medium text-gray-800">
               City
             </label>
             <input
@@ -107,10 +97,7 @@ export default function CreateNetworkOrgPage() {
             />
           </div>
           <div className="w-24 space-y-1">
-            <label
-              htmlFor="state"
-              className="block text-sm font-medium text-gray-800"
-            >
+            <label htmlFor="state" className="block text-sm font-medium text-gray-800">
               State
             </label>
             <input

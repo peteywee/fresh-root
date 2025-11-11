@@ -1,3 +1,5 @@
+// [P0][CODE] Create corporate network page component
+// Tags: P0, CODE
 "use client";
 
 import { useRouter } from "next/navigation";
@@ -45,21 +47,16 @@ export default function CreateNetworkCorporatePage() {
   return (
     <main className="mx-auto flex max-w-xl flex-col gap-6 px-4 py-10">
       <header className="space-y-2">
-        <h1 className="text-2xl font-semibold">
-          Step 4: Create your corporate network
-        </h1>
+        <h1 className="text-2xl font-semibold">Step 4: Create your corporate network</h1>
         <p className="text-sm text-gray-600">
-          Define your corporate entity and brand so we can link your locations
-          together under one network.
+          Define your corporate entity and brand so we can link your locations together under one
+          network.
         </p>
       </header>
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="space-y-1">
-          <label
-            htmlFor="corporateName"
-            className="block text-sm font-medium text-gray-800"
-          >
+          <label htmlFor="corporateName" className="block text-sm font-medium text-gray-800">
             Corporate entity name
           </label>
           <input
@@ -74,10 +71,7 @@ export default function CreateNetworkCorporatePage() {
         </div>
 
         <div className="space-y-1">
-          <label
-            htmlFor="brandName"
-            className="block text-sm font-medium text-gray-800"
-          >
+          <label htmlFor="brandName" className="block text-sm font-medium text-gray-800">
             Brand name
           </label>
           <input
@@ -93,10 +87,7 @@ export default function CreateNetworkCorporatePage() {
 
         <div className="flex gap-3">
           <div className="flex-1 space-y-1">
-            <label
-              htmlFor="hqCity"
-              className="block text-sm font-medium text-gray-800"
-            >
+            <label htmlFor="hqCity" className="block text-sm font-medium text-gray-800">
               HQ City
             </label>
             <input
@@ -109,10 +100,7 @@ export default function CreateNetworkCorporatePage() {
             />
           </div>
           <div className="w-24 space-y-1">
-            <label
-              htmlFor="hqState"
-              className="block text-sm font-medium text-gray-800"
-            >
+            <label htmlFor="hqState" className="block text-sm font-medium text-gray-800">
               State
             </label>
             <input
@@ -128,10 +116,7 @@ export default function CreateNetworkCorporatePage() {
         </div>
 
         <div className="space-y-1">
-          <label
-            htmlFor="locationCount"
-            className="block text-sm font-medium text-gray-800"
-          >
+          <label htmlFor="locationCount" className="block text-sm font-medium text-gray-800">
             Approximate location count
           </label>
           <input

@@ -1,3 +1,5 @@
+// [P0][APP][CODE] Staff invite blocked page component
+// Tags: P0, APP, CODE
 "use client";
 
 import { useRouter } from "next/navigation";
@@ -12,9 +14,8 @@ export default function StaffInviteBlockedPage() {
       <header className="space-y-2">
         <h1 className="text-2xl font-semibold">You need an invite</h1>
         <p className="text-sm text-gray-600">
-          It looks like you&apos;re trying to onboard as a staff member without
-          an invite token. Staff access must be initiated by an admin or manager
-          from an existing organization.
+          It looks like you&apos;re trying to onboard as a staff member without an invite token.
+          Staff access must be initiated by an admin or manager from an existing organization.
         </p>
       </header>
 

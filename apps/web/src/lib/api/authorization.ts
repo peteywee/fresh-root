@@ -79,7 +79,12 @@ export function requireRole(requiredRole: OrgRole) {
       // Resolve params if it's a Promise (Next.js 14+)
       const resolvedParams = await Promise.resolve(context.params);
 
-      return handler(request, { params: resolvedParams, userId: context.userId, orgId: context.orgId, roles });
+      return handler(request, {
+        params: resolvedParams,
+        userId: context.userId,
+        orgId: context.orgId,
+        roles,
+      });
     };
   };
 }

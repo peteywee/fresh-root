@@ -1,3 +1,5 @@
+// [P2][APP][CODE] Onboarding join page component
+// Tags: P2, APP, CODE
 "use client";
 
 import { useRouter } from "next/navigation";
@@ -41,17 +43,13 @@ export default function JoinPage() {
       <header className="space-y-2">
         <h1 className="text-2xl font-semibold">Step 3: Join with token</h1>
         <p className="text-sm text-gray-600">
-          Enter the invite token sent by your organization to connect your
-          account.
+          Enter the invite token sent by your organization to connect your account.
         </p>
       </header>
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="space-y-1">
-          <label
-            htmlFor="token"
-            className="block text-sm font-medium text-gray-800"
-          >
+          <label htmlFor="token" className="block text-sm font-medium text-gray-800">
             Invite token
           </label>
           <input
@@ -66,10 +64,7 @@ export default function JoinPage() {
         </div>
 
         <div className="space-y-1">
-          <label
-            htmlFor="email"
-            className="block text-sm font-medium text-gray-800"
-          >
+          <label htmlFor="email" className="block text-sm font-medium text-gray-800">
             Email (optional)
           </label>
           <input

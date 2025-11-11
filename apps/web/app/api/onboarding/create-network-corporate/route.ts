@@ -88,65 +88,64 @@ export async function createNetworkCorporateHandler(
     const corpRef = corporateRef.doc();
 
     await adminDb.runTransaction(async (tx: any) => {
-        const createdAt = nowMs;
+      const createdAt = nowMs;
 
-        // 1) Network
-        tx.set(networkRef, {
-          name: corporateName || `Corporate Network ${new Date().toISOString()}`,
-          status: "pending_verification",
-          kind: "corporate_network",
-          industry: industry || null,
-          approxLocations: approxLocations || null,
-          createdAt,
-          createdBy: uid,
-          adminFormToken: formToken,
-        });
+      // 1) Network
+      tx.set(networkRef, {
+        name: corporateName || `Corporate Network ${new Date().toISOString()}`,
+        status: "pending_verification",
+        kind: "corporate_network",
+        industry: industry || null,
+        approxLocations: approxLocations || null,
+        createdAt,
+        createdBy: uid,
+        adminFormToken: formToken,
+      });
 
-        // 2) Corporate node under this network
-        tx.set(corpRef, {
-          id: corpRef.id,
-          networkId: networkRef.id,
-          name: corporateName || "Corporate",
-          brandName: brandName || null,
-          industry: industry || null,
-          approxLocations: approxLocations || null,
-          contactUserId: uid,
-          createdAt,
-          createdBy: uid,
-        });
+      // 2) Corporate node under this network
+      tx.set(corpRef, {
+        id: corpRef.id,
+        networkId: networkRef.id,
+        name: corporateName || "Corporate",
+        brandName: brandName || null,
+        industry: industry || null,
+        approxLocations: approxLocations || null,
+        contactUserId: uid,
+        createdAt,
+        createdBy: uid,
+      });
 
-        // 3) Compliance doc under network
-        const complianceRef = networkRef.collection("compliance").doc("adminResponsibilityForm");
+      // 3) Compliance doc under network
+      const complianceRef = networkRef.collection("compliance").doc("adminResponsibilityForm");
 
-        tx.set(complianceRef, {
-          ...formData,
-          networkId: networkRef.id,
-          corporateId: corpRef.id,
-          attachedFromToken: formToken,
-          attachedBy: uid,
-          attachedAt: createdAt,
-        });
+      tx.set(complianceRef, {
+        ...formData,
+        networkId: networkRef.id,
+        corporateId: corpRef.id,
+        attachedFromToken: formToken,
+        attachedBy: uid,
+        attachedAt: createdAt,
+      });
 
-        // 4) Mark original form attached + immutable
-        tx.update(formRef, {
-          attachedTo: { networkId: networkRef.id, corpId: corpRef.id },
-          immutable: true,
-          status: "attached",
-          attachedAt: createdAt,
-        });
+      // 4) Mark original form attached + immutable
+      tx.update(formRef, {
+        attachedTo: { networkId: networkRef.id, corpId: corpRef.id },
+        immutable: true,
+        status: "attached",
+        attachedAt: createdAt,
+      });
 
-        // 5) Global membership for creator
-        const membershipId = `${uid}_network_${networkRef.id}`;
-        const membershipRef = adminDb.collection("memberships").doc(membershipId);
-        tx.set(membershipRef, {
-          userId: uid,
-          networkId: networkRef.id,
-          roles: ["network_owner", "corporate_admin"],
-          createdAt,
-          createdBy: uid,
-        });
-      },
-    );
+      // 5) Global membership for creator
+      const membershipId = `${uid}_network_${networkRef.id}`;
+      const membershipRef = adminDb.collection("memberships").doc(membershipId);
+      tx.set(membershipRef, {
+        userId: uid,
+        networkId: networkRef.id,
+        roles: ["network_owner", "corporate_admin"],
+        createdAt,
+        createdBy: uid,
+      });
+    });
 
     // Best-effort: mark onboarding complete for the creator
     try {
