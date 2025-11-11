@@ -5,7 +5,6 @@
  * API endpoint for v14 org onboarding flow: create network, org, venue, and initial membership.
  * Uses Zod-validated CreateOrgOnboardingSchema, creates v14-compliant Firestore docs, and marks onboarding complete.
  */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextResponse } from "next/server";
 
 import { withSecurity, type AuthenticatedRequest } from "../../_shared/middleware";
@@ -39,7 +38,7 @@ export async function createNetworkOrgHandler(
     );
   }
 
-  const adminDb: any = injectedAdminDb;
+  const adminDb = injectedAdminDb as NonNullable<typeof importedAdminDb>;
 
   // Authenticated request guaranteed by withSecurity (requireAuth below)
   const uid = req.user?.uid;
@@ -245,6 +244,6 @@ export async function createNetworkOrgHandler(
 
 // Keep Next.js route export for runtime (secured)
 export const POST = withSecurity(
-  async (req: any) => createNetworkOrgHandler(req, importedAdminDb),
+  async (req: AuthenticatedRequest) => createNetworkOrgHandler(req, importedAdminDb),
   { requireAuth: true },
 );

@@ -5,7 +5,6 @@
  * API endpoint for v14 corporate onboarding flow: create network, corporate entity, compliance doc, and membership.
  * Validates admin responsibility form token, ensures email verification, and uses v14-compliant Firestore doc shapes.
  */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextResponse } from "next/server";
 
 import { withSecurity, type AuthenticatedRequest } from "../../_shared/middleware";
@@ -33,7 +32,7 @@ export async function createNetworkCorporateHandler(
     );
   }
 
-  const adminDb = injectedAdminDb;
+  const adminDb = injectedAdminDb as NonNullable<typeof importedAdminDb>;
 
   const uid = req.user?.uid;
   const claims = req.user?.customClaims || {};
@@ -193,6 +192,6 @@ export async function createNetworkCorporateHandler(
 }
 
 export const POST = withSecurity(
-  async (req: any) => createNetworkCorporateHandler(req, importedAdminDb),
+  async (req: AuthenticatedRequest) => createNetworkCorporateHandler(req, importedAdminDb),
   { requireAuth: true },
 );

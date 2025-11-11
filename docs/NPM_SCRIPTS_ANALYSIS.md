@@ -4,46 +4,46 @@
 
 ### Active & Essential ✅
 
-| Script | Purpose | Keep? | Notes |
-|--------|---------|-------|-------|
-| `prepare` | Husky setup | ✅ | Required for git hooks |
-| `lint` | ESLint check | ✅ | Core quality gate |
-| `lint:fix` | Auto-fix lint | ✅ | Used in CI and locally |
-| `fix` | Full fix (lint + format) | ✅ | Convenience wrapper |
-| `format` | Prettier format | ✅ | Code style |
-| `typecheck` | TypeScript validation | ✅ | Critical for CI/CD |
-| `build` | Full build | ✅ | Production build |
-| `dev` | Dev server (web) | ✅ | Main development entry |
-| `test` | Unit tests (Vitest) | ✅ | Fast test feedback |
-| `test:rules` | Firestore rules tests | ✅ | Security validation |
-| `test:e2e` | Playwright E2E tests | ✅ | Integration testing |
-| `tag:files` | Auto-tag files | ✅ | New - file headers |
-| `watch:tags` | Watch-mode tagging | ✅ | New - optional |
+| Script       | Purpose                  | Keep? | Notes                  |
+| ------------ | ------------------------ | ----- | ---------------------- |
+| `prepare`    | Husky setup              | ✅    | Required for git hooks |
+| `lint`       | ESLint check             | ✅    | Core quality gate      |
+| `lint:fix`   | Auto-fix lint            | ✅    | Used in CI and locally |
+| `fix`        | Full fix (lint + format) | ✅    | Convenience wrapper    |
+| `format`     | Prettier format          | ✅    | Code style             |
+| `typecheck`  | TypeScript validation    | ✅    | Critical for CI/CD     |
+| `build`      | Full build               | ✅    | Production build       |
+| `dev`        | Dev server (web)         | ✅    | Main development entry |
+| `test`       | Unit tests (Vitest)      | ✅    | Fast test feedback     |
+| `test:rules` | Firestore rules tests    | ✅    | Security validation    |
+| `test:e2e`   | Playwright E2E tests     | ✅    | Integration testing    |
+| `tag:files`  | Auto-tag files           | ✅    | New - file headers     |
+| `watch:tags` | Watch-mode tagging       | ✅    | New - optional         |
 
 ### Potentially Outdated ⚠️
 
-| Script | Purpose | Status | Recommendation |
-|--------|---------|--------|-----------------|
-| `build:agent` | TypeScript agent build | ⚠️ | Check if agent still used |
-| `run:agent` | Run compiled agent | ⚠️ | Check if agent still used |
-| `check:deps` | Verify no deprecated deps | ✅ | Keep - good for CI |
-| `dev:all` | Run web + API concurrently | ⚠️ | **CONSOLIDATE**: Use `dev` if API not needed |
-| `emu` | Firebase emulator | ✅ | Keep - useful locally |
-| `emu:firestore` | Firestore-only emulator | ✅ | Keep - focused testing |
-| `web:dev` | Web dev (redundant) | ⚠️ | **CONSOLIDATE**: Same as `dev` |
-| `web:build` | Web build (redundant) | ⚠️ | **CONSOLIDATE**: Use `build` |
-| `web:start` | Web start (redundant) | ⚠️ | **CONSOLIDATE**: Use `start` |
-| `web:test` | Web test (redundant) | ⚠️ | **CONSOLIDATE**: Use `test` |
-| `api:dev` | API dev | ⚠️ | Check if API workspace still active |
-| `api:test` | API test | ⚠️ | Check if API workspace still active |
-| `api:build` | API build | ⚠️ | Check if API workspace still active |
-| `api:docker:build` | Docker build | ⚠️ | Check if Docker workflow still used |
-| `api:docker:run` | Docker run | ⚠️ | Check if Docker workflow still used |
-| `test:safe` | Memory-safe testing | ⚠️ | **CONSOLIDATE**: Use only if needed |
-| `test:rules:auto` | Auto rules testing | ⚠️ | **CONSOLIDATE**: Use `test:rules` |
-| `test:rules:dev` | Dev rules testing | ⚠️ | **CONSOLIDATE**: Use `test:rules` |
-| `test:rules:ci` | CI rules testing | ✅ | Keep - CI specific |
-| `ci` | Full CI pipeline | ✅ | Keep - GitHub Actions orchestrates this |
+| Script             | Purpose                    | Status | Recommendation                               |
+| ------------------ | -------------------------- | ------ | -------------------------------------------- |
+| `build:agent`      | TypeScript agent build     | ⚠️     | Check if agent still used                    |
+| `run:agent`        | Run compiled agent         | ⚠️     | Check if agent still used                    |
+| `check:deps`       | Verify no deprecated deps  | ✅     | Keep - good for CI                           |
+| `dev:all`          | Run web + API concurrently | ⚠️     | **CONSOLIDATE**: Use `dev` if API not needed |
+| `emu`              | Firebase emulator          | ✅     | Keep - useful locally                        |
+| `emu:firestore`    | Firestore-only emulator    | ✅     | Keep - focused testing                       |
+| `web:dev`          | Web dev (redundant)        | ⚠️     | **CONSOLIDATE**: Same as `dev`               |
+| `web:build`        | Web build (redundant)      | ⚠️     | **CONSOLIDATE**: Use `build`                 |
+| `web:start`        | Web start (redundant)      | ⚠️     | **CONSOLIDATE**: Use `start`                 |
+| `web:test`         | Web test (redundant)       | ⚠️     | **CONSOLIDATE**: Use `test`                  |
+| `api:dev`          | API dev                    | ⚠️     | Check if API workspace still active          |
+| `api:test`         | API test                   | ⚠️     | Check if API workspace still active          |
+| `api:build`        | API build                  | ⚠️     | Check if API workspace still active          |
+| `api:docker:build` | Docker build               | ⚠️     | Check if Docker workflow still used          |
+| `api:docker:run`   | Docker run                 | ⚠️     | Check if Docker workflow still used          |
+| `test:safe`        | Memory-safe testing        | ⚠️     | **CONSOLIDATE**: Use only if needed          |
+| `test:rules:auto`  | Auto rules testing         | ⚠️     | **CONSOLIDATE**: Use `test:rules`            |
+| `test:rules:dev`   | Dev rules testing          | ⚠️     | **CONSOLIDATE**: Use `test:rules`            |
+| `test:rules:ci`    | CI rules testing           | ✅     | Keep - CI specific                           |
+| `ci`               | Full CI pipeline           | ✅     | Keep - GitHub Actions orchestrates this      |
 
 ## Consolidation Recommendations
 
@@ -136,11 +136,11 @@ Create `scripts/cleanup-caches.mjs`:
 
 ```javascript
 #!/usr/bin/env node
-import { exec } from 'child_process';
-import { statSync, rmSync } from 'fs';
-import { homedir } from 'os';
-import path from 'path';
-import { promisify } from 'util';
+import { exec } from "child_process";
+import { statSync, rmSync } from "fs";
+import { homedir } from "os";
+import path from "path";
+import { promisify } from "util";
 
 const execAsync = promisify(exec);
 
@@ -154,18 +154,18 @@ const getCacheSize = (dir) => {
 };
 
 const LIMITS = {
-  npm: '2GB',
-  pnpm: '5GB',
-  node_modules: '10GB',
+  npm: "2GB",
+  pnpm: "5GB",
+  node_modules: "10GB",
 };
 
 const PATHS = {
-  npm: path.join(homedir(), '.npm'),
-  pnpm: path.join(homedir(), '.pnpm-store'),
+  npm: path.join(homedir(), ".npm"),
+  pnpm: path.join(homedir(), ".pnpm-store"),
 };
 
 const cleanCaches = async () => {
-  console.log('🧹 Checking Node cache sizes...\n');
+  console.log("🧹 Checking Node cache sizes...\n");
 
   // Check npm cache
   try {
@@ -174,11 +174,11 @@ const cleanCaches = async () => {
     console.log(`📦 npm cache: ${npmSizeGB}GB`);
 
     if (npmSize > 2 * 1024 * 1024 * 1024) {
-      console.log('   → Cleaning npm cache...');
-      await execAsync('npm cache clean --force');
+      console.log("   → Cleaning npm cache...");
+      await execAsync("npm cache clean --force");
     }
   } catch (error) {
-    console.log('   → npm cache not found or error');
+    console.log("   → npm cache not found or error");
   }
 
   // Check pnpm store
@@ -188,14 +188,14 @@ const cleanCaches = async () => {
     console.log(`📦 pnpm store: ${pnpmSizeGB}GB`);
 
     if (pnpmSize > 5 * 1024 * 1024 * 1024) {
-      console.log('   → Pruning pnpm store...');
-      await execAsync('pnpm store prune');
+      console.log("   → Pruning pnpm store...");
+      await execAsync("pnpm store prune");
     }
   } catch (error) {
-    console.log('   → pnpm store not found or error');
+    console.log("   → pnpm store not found or error");
   }
 
-  console.log('\n✅ Cache cleanup complete!');
+  console.log("\n✅ Cache cleanup complete!");
 };
 
 cleanCaches().catch(console.error);
@@ -221,7 +221,7 @@ name: Cache Cleanup
 
 on:
   schedule:
-    - cron: '0 0 * * 0'  # Weekly on Sunday
+    - cron: "0 0 * * 0" # Weekly on Sunday
   workflow_dispatch:
 
 jobs:

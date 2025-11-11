@@ -25,26 +25,26 @@
 
 ### Critical Issues (Phase 1 - 45 min)
 
-| # | Issue | File | Fix | Time |
-|---|-------|------|-----|------|
-| 1 | ESLint too strict | `eslint.config.mjs:31` | Change `error` → `warn` | 2 min |
-| 2 | Type shim debt | `fresh-schedules-types.d.ts` | Delete + export types | 30 min |
-| 3 | CSRF fragile | `csrf.ts` | Use public APIs | 20 min |
+| #   | Issue             | File                         | Fix                     | Time   |
+| --- | ----------------- | ---------------------------- | ----------------------- | ------ |
+| 1   | ESLint too strict | `eslint.config.mjs:31`       | Change `error` → `warn` | 2 min  |
+| 2   | Type shim debt    | `fresh-schedules-types.d.ts` | Delete + export types   | 30 min |
+| 3   | CSRF fragile      | `csrf.ts`                    | Use public APIs         | 20 min |
 
 ### Important Issues (Phase 2 - 40 min)
 
-| # | Issue | File | Fix | Time |
-|---|-------|------|-----|------|
-| 4 | Rate limit pattern | `members/[memberId]/route.ts` | Inline checking | 10 min |
-| 5 | Zod pattern broken | `join-with-token/route.ts` | Restore schema | 15 min |
-| 6 | Request typing | Multiple routes | Add `AuthenticatedRequest` | 15 min |
+| #   | Issue              | File                          | Fix                        | Time   |
+| --- | ------------------ | ----------------------------- | -------------------------- | ------ |
+| 4   | Rate limit pattern | `members/[memberId]/route.ts` | Inline checking            | 10 min |
+| 5   | Zod pattern broken | `join-with-token/route.ts`    | Restore schema             | 15 min |
+| 6   | Request typing     | Multiple routes               | Add `AuthenticatedRequest` | 15 min |
 
 ### Optional Issues (Phase 3 - 5 min)
 
-| # | Issue | File | Fix | Time |
-|---|-------|------|-----|------|
-| 7 | Any casts | `attendance/route.ts` | Remove `: any` | 5 min |
-| 8 | Turbo docs | `turbo.json` | Add comment | 5 min |
+| #   | Issue      | File                  | Fix            | Time  |
+| --- | ---------- | --------------------- | -------------- | ----- |
+| 7   | Any casts  | `attendance/route.ts` | Remove `: any` | 5 min |
+| 8   | Turbo docs | `turbo.json`          | Add comment    | 5 min |
 
 ---
 
@@ -114,9 +114,11 @@ FINAL VALIDATION
 ## 🔍 Issue Summary
 
 ### Issue 1: ESLint Rule (🔴 CRITICAL)
+
 **Why It Matters**: PR changed rule from `warn` to `error`, but codebase has 42+ `any` warnings.
 
-**What Happens**: 
+**What Happens**:
+
 ```bash
 pnpm -w lint
 # Output: 42 problems (42 errors, 0 warnings)
@@ -124,6 +126,7 @@ pnpm -w lint
 ```
 
 **The Fix**: Revert to `warn` (1 line change)
+
 ```diff
 - "@typescript-eslint/no-explicit-any": "error",
 + "@typescript-eslint/no-explicit-any": "warn",
@@ -132,9 +135,11 @@ pnpm -w lint
 ---
 
 ### Issue 2: Type Shim (🔴 CRITICAL)
+
 **Why It Matters**: All schemas typed as `any` defeats TypeScript purpose.
 
 **Current State**:
+
 ```typescript
 // File: fresh-schedules-types.d.ts
 export const CreateAttendanceRecordSchema: any;
@@ -143,7 +148,8 @@ export const CreateAdminResponsibilityFormSchema: any;
 // ... 30+ more as `any`
 ```
 
-**The Fix**: 
+**The Fix**:
+
 1. Delete `fresh-schedules-types.d.ts`
 2. Add proper exports to `packages/types/src/index.ts`
 3. Update imports in `apps/web`
@@ -151,9 +157,11 @@ export const CreateAdminResponsibilityFormSchema: any;
 ---
 
 ### Issue 3: CSRF Extraction (🔴 CRITICAL)
+
 **Why It Matters**: Uses internal Next.js APIs that can change.
 
 **Current State** (50+ lines):
+
 ```typescript
 const syms = Object.getOwnPropertySymbols(headersStore || {});
 for (const s of syms) {
@@ -163,6 +171,7 @@ for (const s of syms) {
 ```
 
 **The Fix**: Use only public APIs
+
 ```typescript
 const cookies = request.headers.get("cookie") || "";
 const cookieMatch = cookies.match(new RegExp(...));

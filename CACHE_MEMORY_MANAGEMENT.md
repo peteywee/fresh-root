@@ -37,9 +37,9 @@ prefer-offline=true             # Use offline cache when possible
 
 **Auto-triggers when:**
 
-* Cache exceeds 3GB
-* Cache entries older than 7 days
-* pnpm automatically purges orphaned packages
+- Cache exceeds 3GB
+- Cache entries older than 7 days
+- pnpm automatically purges orphaned packages
 
 ### GitHub Actions (Always Tests)
 
@@ -53,12 +53,12 @@ GitHub Actions has sufficient resources so tests don't cause memory issues.
 
 ## Memory Optimization Timeline
 
-| Step | Action | Memory Impact |
-|------|--------|---------------|
-| 1 | Push to `dev` branch | ✅ Minimal (no local tests) |
-| 2 | Create PR to `main` | ✅ Zero (pre-commit tags files only) |
-| 3 | GitHub Actions runs | ✅ Tests run on GitHub servers |
-| 4 | Cache auto-cleanup | ✅ Local cache stays < 3GB |
+| Step | Action               | Memory Impact                        |
+| ---- | -------------------- | ------------------------------------ |
+| 1    | Push to `dev` branch | ✅ Minimal (no local tests)          |
+| 2    | Create PR to `main`  | ✅ Zero (pre-commit tags files only) |
+| 3    | GitHub Actions runs  | ✅ Tests run on GitHub servers       |
+| 4    | Cache auto-cleanup   | ✅ Local cache stays < 3GB           |
 
 ## Monitoring Cache
 
@@ -89,17 +89,17 @@ rmdir /s %APPDATA%\pnpm  # Windows
 
 ## Why This Setup
 
-| Approach | Memory | CI/CD | Trade-off |
-|----------|--------|-------|-----------|
-| **Local testing** | ❌ Heavy (> 4GB) | ⚠️ Slow | Developer experience vs resources |
-| **GitHub only** ✅ | ✅ < 3GB | ✅ Fast | Offload to GitHub runners |
-| **Cache cleanup** ✅ | ✅ Auto-managed | ✅ Reliable | No manual intervention needed |
+| Approach             | Memory           | CI/CD       | Trade-off                         |
+| -------------------- | ---------------- | ----------- | --------------------------------- |
+| **Local testing**    | ❌ Heavy (> 4GB) | ⚠️ Slow     | Developer experience vs resources |
+| **GitHub only** ✅   | ✅ < 3GB         | ✅ Fast     | Offload to GitHub runners         |
+| **Cache cleanup** ✅ | ✅ Auto-managed  | ✅ Reliable | No manual intervention needed     |
 
 **You chose**: GitHub-only testing + automatic local cache cleanup = best of both worlds.
 
 ## References
 
-* `.npmrc` - Cache configuration (3GB threshold, 7-day TTL)
-* `package.json` scripts - `cache:clean`, `cache:info`
-* `.github/workflows/ci-tests.yml` - GitHub Actions pipeline
-* Local testing → GitHub (via PR) → GitHub Actions tests
+- `.npmrc` - Cache configuration (3GB threshold, 7-day TTL)
+- `package.json` scripts - `cache:clean`, `cache:info`
+- `.github/workflows/ci-tests.yml` - GitHub Actions pipeline
+- Local testing → GitHub (via PR) → GitHub Actions tests

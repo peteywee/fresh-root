@@ -68,6 +68,6 @@ export async function profileHandler(
 }
 
 export const POST = withSecurity(
-  async (req: any, injectedAdminDb?: any) => profileHandler(req, injectedAdminDb),
+  async (req: AuthenticatedRequest) => profileHandler(req),
   { requireAuth: true },
 );

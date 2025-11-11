@@ -1,5 +1,6 @@
 {
   "$schema": "https://turbo.build/schema.json",
+  "x_note": "This turbo.json uses the `tasks` syntax (Turbo v2+). If you run into `pipeline` vs `tasks` errors, upgrade Turbo to v2+ or adjust the config.",
   "tasks": {
     "lint": {
       "outputs": []

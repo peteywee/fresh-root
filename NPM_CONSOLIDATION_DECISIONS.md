@@ -62,11 +62,11 @@ ls -la services/api/Dockerfile
 
 Fill in your answers:
 
-| Component | Exists? | Still Used? | Action |
-|-----------|---------|------------|--------|
-| `scripts/agent/` | YES/NO | YES/NO | KEEP / REMOVE |
-| `@fresh-schedules/api` | YES/NO | YES/NO | KEEP / REMOVE |
-| Docker setup | YES/NO | YES/NO | KEEP / REMOVE |
+| Component              | Exists? | Still Used? | Action        |
+| ---------------------- | ------- | ----------- | ------------- |
+| `scripts/agent/`       | YES/NO  | YES/NO      | KEEP / REMOVE |
+| `@fresh-schedules/api` | YES/NO  | YES/NO      | KEEP / REMOVE |
+| Docker setup           | YES/NO  | YES/NO      | KEEP / REMOVE |
 
 ### Step 3: Apply Consolidation
 

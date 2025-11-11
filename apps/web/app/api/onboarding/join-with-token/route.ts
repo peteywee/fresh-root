@@ -5,7 +5,6 @@
  * API endpoint for v14 join-with-token onboarding flow: validate token, create/update membership, and mark onboarding complete.
  * Supports token expiry, max uses, and role tracking via usedBy list.
  */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextResponse } from "next/server";
 
 import { withSecurity, type AuthenticatedRequest } from "../../_shared/middleware";
@@ -43,7 +42,7 @@ export async function joinWithTokenHandler(
     );
   }
 
-  const adminDb: any = injectedAdminDb;
+  const adminDb = injectedAdminDb as NonNullable<typeof importedAdminDb>;
   const uid = req.user?.uid;
 
   if (!uid) return NextResponse.json({ error: "not_authenticated" }, { status: 401 });
@@ -164,6 +163,7 @@ export async function joinWithTokenHandler(
   }
 }
 
-export const POST = withSecurity(async (req: any) => joinWithTokenHandler(req, importedAdminDb), {
-  requireAuth: true,
-});
+export const POST = withSecurity(
+  async (req: AuthenticatedRequest) => joinWithTokenHandler(req, importedAdminDb),
+  { requireAuth: true },
+);
