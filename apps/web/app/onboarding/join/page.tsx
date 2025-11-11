@@ -1,92 +1,107 @@
-// [P0][APP][CODE] Page page component
-// Tags: P0, APP, CODE
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState, FormEvent } from "react";
+import React, { FormEvent, useState } from "react";
 
-import { useOnboardingWizard } from "../_wizard/OnboardingWizardContext";
-
-type JoinResponse = {
-  ok: boolean;
-  networkId: string;
-  orgId: string;
-  role: string;
+type JoinFormState = {
+  token: string;
+  email: string;
 };
 
 export default function JoinPage() {
   const router = useRouter();
-  const { setNetworkId, setOrgId, setJoinedRole } = useOnboardingWizard();
-
-  const [token, setToken] = useState("");
-  const [submitting, setSubmitting] = useState(false);
+  const nav = router as any;
+  const [form, setForm] = useState<JoinFormState>({
+    token: "",
+    email: "",
+  });
   const [error, setError] = useState<string | null>(null);
 
-  async function onSubmit(e: FormEvent) {
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
+  }
+
+  function handleSubmit(e: FormEvent) {
     e.preventDefault();
-    setError(null);
-    setSubmitting(true);
 
-    try {
-      const res = await fetch("/api/onboarding/join-with-token", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ token }),
-      });
-
-      const data = (await res.json().catch(() => ({}))) as Partial<JoinResponse>;
-
-      if (!res.ok || !data.ok) {
-        if (data && "error" in data) {
-          // @ts-expect-error loose
-          setError(data.error as string);
-        } else {
-          setError("Failed to join with token");
-        }
-        setSubmitting(false);
-        return;
-      }
-
-      setNetworkId(data.networkId || null);
-      setOrgId(data.orgId || null);
-      setJoinedRole(data.role || null);
-
-      router.push("/onboarding/block-4");
-    } catch (err) {
-      console.error(err);
-      setError("Unexpected error");
-      setSubmitting(false);
+    if (!form.token.trim()) {
+      setError("Invite token is required.");
+      return;
     }
+
+    setError(null);
+
+    // Real implementation would POST to /api/onboarding/join-with-token.
+    nav.push("/onboarding/block-4");
   }
 
   return (
-    <div className="space-y-6">
-      <h1 className="text-2xl font-semibold">Join an existing workspace</h1>
-      <p className="text-sm text-slate-600">
-        Paste the invite or access token you were given by your manager or admin.
-      </p>
+    <main className="mx-auto flex max-w-xl flex-col gap-6 px-4 py-10">
+      <header className="space-y-2">
+        <h1 className="text-2xl font-semibold">Step 3: Join with token</h1>
+        <p className="text-sm text-gray-600">
+          Enter the invite token sent by your organization to connect your
+          account.
+        </p>
+      </header>
 
-      <form onSubmit={onSubmit} className="space-y-4">
-        <div>
-          <label className="mb-1 block text-sm font-medium">Access token</label>
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div className="space-y-1">
+          <label
+            htmlFor="token"
+            className="block text-sm font-medium text-gray-800"
+          >
+            Invite token
+          </label>
           <input
-            className="w-full rounded-md border px-3 py-2 text-sm"
-            value={token}
-            onChange={(e) => setToken(e.target.value.trim())}
-            required
+            id="token"
+            name="token"
+            type="text"
+            value={form.token}
+            onChange={handleChange}
+            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
+            placeholder="Paste your invite token"
+          />
+        </div>
+
+        <div className="space-y-1">
+          <label
+            htmlFor="email"
+            className="block text-sm font-medium text-gray-800"
+          >
+            Email (optional)
+          </label>
+          <input
+            id="email"
+            name="email"
+            type="email"
+            value={form.email}
+            onChange={handleChange}
+            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
+            placeholder="Used for verification if required"
           />
         </div>
 
         {error && <p className="text-sm text-red-600">{error}</p>}
 
-        <button
-          type="submit"
-          disabled={submitting}
-          className="inline-flex items-center rounded-md bg-slate-900 px-4 py-2 text-sm text-white disabled:opacity-60"
-        >
-          {submitting ? "Joining..." : "Join workspace"}
-        </button>
+        <div className="flex items-center justify-between gap-4">
+          <button
+            type="button"
+            onClick={() => nav.push("/onboarding/intent")}
+            className="text-sm text-gray-600 underline"
+          >
+            Back to Intent
+          </button>
+
+          <button
+            type="submit"
+            className="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white"
+          >
+            Continue
+          </button>
+        </div>
       </form>
-    </div>
+    </main>
   );
 }

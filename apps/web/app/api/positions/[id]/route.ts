@@ -14,72 +14,76 @@ import { serverError } from "../../_shared/validation";
  * GET /api/positions/[id]
  * Get position details (requires staff+ role)
  */
-export const GET = rateLimit(RateLimits.STANDARD)(
-  requireOrgMembership(async (request, context) => {
-    const { params } = context;
-    try {
-      const { id } = await params;
+export const GET = requireOrgMembership(async (request, context) => {
+  // Apply rate limiting
+  const rateLimitResult = await rateLimit(request, RateLimits.api);
+  if (rateLimitResult) return rateLimitResult;
 
-      // In production, fetch from Firestore and verify orgId matches
-      const position = {
-        id,
-        orgId: context.orgId,
-        title: "Server",
-        description: "Front of house server position",
-        hourlyRate: 15.0,
-        color: "#2196F3",
-        isActive: true,
-        createdAt: new Date().toISOString(),
-        createdBy: "user-123",
-      };
+  const { params } = context;
+  try {
+    const { id } = params;
 
-      return NextResponse.json(position);
-    } catch {
-      return serverError("Failed to fetch position");
-    }
-  }),
-);
+    // In production, fetch from Firestore and verify orgId matches
+    const position = {
+      id,
+      orgId: context.orgId,
+      title: "Server",
+      description: "Front of house server position",
+      hourlyRate: 15.0,
+      color: "#2196F3",
+      isActive: true,
+      createdAt: new Date().toISOString(),
+      createdBy: "user-123",
+    };
+
+    return NextResponse.json(position);
+  } catch {
+    return serverError("Failed to fetch position");
+  }
+});
 
 /**
  * PATCH /api/positions/[id]
  * Update position details (requires manager+ role)
  */
-export const PATCH = rateLimit(RateLimits.WRITE)(
-  csrfProtection()(
-    requireOrgMembership(
-      requireRole("manager")(async (request, context) => {
-        const { params } = context;
-        try {
-          const { id } = await params;
-          const body = await request.json();
-          const sanitized = sanitizeObject(body);
+export const PATCH = csrfProtection()(
+  requireOrgMembership(
+    requireRole("manager")(async (request, context) => {
+      // Apply rate limiting
+      const rateLimitResult = await rateLimit(request, RateLimits.api);
+      if (rateLimitResult) return rateLimitResult;
 
-          // Validate with Zod
-          const validationResult = PositionUpdateSchema.safeParse(sanitized);
-          if (!validationResult.success) {
-            return NextResponse.json(
-              { error: "Invalid position data", details: validationResult.error.errors },
-              { status: 400 },
-            );
-          }
+      const { params } = context;
+      try {
+        const { id } = params;
+        const body = await request.json();
+        const sanitized = sanitizeObject(body);
 
-          const data = validationResult.data;
-
-          // In production, update in Firestore after verifying orgId matches
-          const updatedPosition = {
-            id,
-            orgId: context.orgId,
-            title: "Server",
-            ...data,
-            updatedAt: new Date().toISOString(),
-          };
-
-          return NextResponse.json(updatedPosition);
-        } catch {
-          return serverError("Failed to update position");
+        // Validate with Zod
+        const validationResult = PositionUpdateSchema.safeParse(sanitized);
+        if (!validationResult.success) {
+          return NextResponse.json(
+            { error: "Invalid position data", details: validationResult.error.errors },
+            { status: 400 },
+          );
         }
-      }),
-    ),
+
+        const data: any = validationResult.data;
+
+        // In production, update in Firestore after verifying orgId matches
+        const updatedPosition = {
+          id,
+          orgId: context.orgId,
+          title: "Server",
+          ...data,
+          updatedAt: new Date().toISOString(),
+        };
+
+        return NextResponse.json(updatedPosition);
+      } catch {
+        return serverError("Failed to update position");
+      }
+    }),
   ),
 );
 
@@ -87,23 +91,25 @@ export const PATCH = rateLimit(RateLimits.WRITE)(
  * DELETE /api/positions/[id]
  * Delete a position (requires admin+ role, soft delete - set isActive to false)
  */
-export const DELETE = rateLimit(RateLimits.WRITE)(
-  csrfProtection()(
-    requireOrgMembership(
-      requireRole("admin")(async (request, context) => {
-        const { params } = context;
-        try {
-          const { id } = await params;
+export const DELETE = csrfProtection()(
+  requireOrgMembership(
+    requireRole("admin")(async (request, context) => {
+      // Apply rate limiting
+      const rateLimitResult = await rateLimit(request, RateLimits.api);
+      if (rateLimitResult) return rateLimitResult;
 
-          // In production, soft delete by setting isActive = false after verifying orgId
-          return NextResponse.json({
-            message: "Position deleted successfully",
-            id,
-          });
-        } catch {
-          return serverError("Failed to delete position");
-        }
-      }),
-    ),
+      const { params } = context;
+      try {
+        const { id } = params;
+
+        // In production, soft delete by setting isActive = false after verifying orgId
+        return NextResponse.json({
+          message: "Position deleted successfully",
+          id,
+        });
+      } catch {
+        return serverError("Failed to delete position");
+      }
+    }),
   ),
 );

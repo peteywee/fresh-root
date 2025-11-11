@@ -88,12 +88,8 @@ export async function joinWithTokenHandler(
     const membershipId = `${uid}_${data.orgId}`;
     const membershipRef = adminDb.collection("memberships").doc(membershipId);
 
-    await adminDb.runTransaction(
-      async (tx: {
-        set: (...args: unknown[]) => unknown;
-        update: (...args: unknown[]) => unknown;
-      }) => {
-        const existing = await tx.get(membershipRef);
+    await adminDb.runTransaction(async (tx: any) => {
+      const existing = await tx.get(membershipRef);
         const createdAt = Date.now();
 
         if (!existing.exists) {

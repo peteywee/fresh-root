@@ -106,8 +106,11 @@ export async function createNetworkWithOrgAndVenue(
   // Commit batch
   if (typeof batch.commit === "function") {
     await batch.commit();
-  } else if (typeof root.commit === "function") {
-    await root.commit();
+  } else {
+    const maybeRoot: any = root;
+    if (maybeRoot && typeof maybeRoot.commit === "function") {
+      await maybeRoot.commit();
+    }
   }
 
   await markAdminFormDraftConsumed(formToken, injectedDb);

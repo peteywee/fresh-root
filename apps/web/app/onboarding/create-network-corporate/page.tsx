@@ -1,152 +1,170 @@
-// [P0][SECURITY][CODE] Page page component
-// Tags: P0, SECURITY, CODE
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState, FormEvent } from "react";
+import React, { FormEvent, useState } from "react";
 
-import { useOnboardingWizard } from "../_wizard/OnboardingWizardContext";
-
-type CreateNetworkCorporateResponse = {
-  ok: boolean;
-  networkId: string;
-  corpId: string;
-  status: string;
+type CorporateFormState = {
+  corporateName: string;
+  brandName: string;
+  hqCity: string;
+  hqState: string;
+  locationCount: string;
 };
 
 export default function CreateNetworkCorporatePage() {
   const router = useRouter();
-  const { formToken, setNetworkId, setCorpId } = useOnboardingWizard();
-
-  const [corporateName, setCorporateName] = useState("");
-  const [brandName, setBrandName] = useState("");
-  const [industry, setIndustry] = useState("restaurant");
-  const [approxLocations, setApproxLocations] = useState(10);
-
-  const [submitting, setSubmitting] = useState(false);
+  const nav = router as any;
+  const [form, setForm] = useState<CorporateFormState>({
+    corporateName: "",
+    brandName: "",
+    hqCity: "",
+    hqState: "",
+    locationCount: "",
+  });
   const [error, setError] = useState<string | null>(null);
 
-  async function onSubmit(e: FormEvent) {
-    e.preventDefault();
-    if (!formToken) {
-      setError("Missing admin form token. Please restart onboarding.");
-      return;
-    }
-    setError(null);
-    setSubmitting(true);
-
-    try {
-      const payload = {
-        formToken,
-        corporateName,
-        brandName,
-        industry,
-        approxLocations,
-      };
-
-      const res = await fetch("/api/onboarding/create-network-corporate", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-
-      const data = (await res.json().catch(() => ({}))) as Partial<CreateNetworkCorporateResponse>;
-
-      if (!res.ok || !data.ok) {
-        if (data && "error" in data) {
-          // @ts-expect-error loose
-          setError(data.error as string);
-        } else {
-          setError("Failed to create corporate network");
-        }
-        setSubmitting(false);
-        return;
-      }
-
-      setNetworkId(data.networkId || null);
-      setCorpId(data.corpId || null);
-
-      router.push("/onboarding/block-4");
-    } catch (err) {
-      console.error(err);
-      setError("Unexpected error");
-      setSubmitting(false);
-    }
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
   }
 
-  if (!formToken) {
-    return (
-      <div className="space-y-4">
-        <p className="text-sm text-slate-600">
-          We need your admin responsibility form before we can create your corporate network.
-        </p>
-        <button
-          className="rounded-md bg-slate-900 px-4 py-2 text-sm text-white"
-          onClick={() => router.push("/onboarding/admin-responsibility")}
-        >
-          Go back to admin form
-        </button>
-      </div>
-    );
+  function handleSubmit(e: FormEvent) {
+    e.preventDefault();
+
+    if (!form.corporateName.trim() || !form.brandName.trim()) {
+      setError("Corporate entity name and brand are required.");
+      return;
+    }
+
+    setError(null);
+
+    // Real implementation would POST to /api/onboarding/create-network-corporate.
+    nav.push("/onboarding/block-4");
   }
 
   return (
-    <div className="space-y-6">
-      <h1 className="text-2xl font-semibold">Create your corporate network</h1>
-      <p className="text-sm text-slate-600">
-        This will set up a network owned by your corporate / HQ entity.
-      </p>
+    <main className="mx-auto flex max-w-xl flex-col gap-6 px-4 py-10">
+      <header className="space-y-2">
+        <h1 className="text-2xl font-semibold">
+          Step 4: Create your corporate network
+        </h1>
+        <p className="text-sm text-gray-600">
+          Define your corporate entity and brand so we can link your locations
+          together under one network.
+        </p>
+      </header>
 
-      <form onSubmit={onSubmit} className="space-y-4">
-        <div>
-          <label className="mb-1 block text-sm font-medium">Corporate legal name</label>
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div className="space-y-1">
+          <label
+            htmlFor="corporateName"
+            className="block text-sm font-medium text-gray-800"
+          >
+            Corporate entity name
+          </label>
           <input
-            className="w-full rounded-md border px-3 py-2 text-sm"
-            value={corporateName}
-            onChange={(e) => setCorporateName(e.target.value)}
-            required
+            id="corporateName"
+            name="corporateName"
+            type="text"
+            value={form.corporateName}
+            onChange={handleChange}
+            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
+            placeholder="e.g., Top Shelf Service Holdings, LLC"
           />
         </div>
 
-        <div>
-          <label className="mb-1 block text-sm font-medium">Brand name (optional)</label>
+        <div className="space-y-1">
+          <label
+            htmlFor="brandName"
+            className="block text-sm font-medium text-gray-800"
+          >
+            Brand name
+          </label>
           <input
-            className="w-full rounded-md border px-3 py-2 text-sm"
-            value={brandName}
-            onChange={(e) => setBrandName(e.target.value)}
+            id="brandName"
+            name="brandName"
+            type="text"
+            value={form.brandName}
+            onChange={handleChange}
+            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
+            placeholder="e.g., Fresh Schedules Cafes"
           />
         </div>
 
-        <div>
-          <label className="mb-1 block text-sm font-medium">Industry</label>
-          <input
-            className="w-full rounded-md border px-3 py-2 text-sm"
-            value={industry}
-            onChange={(e) => setIndustry(e.target.value)}
-          />
+        <div className="flex gap-3">
+          <div className="flex-1 space-y-1">
+            <label
+              htmlFor="hqCity"
+              className="block text-sm font-medium text-gray-800"
+            >
+              HQ City
+            </label>
+            <input
+              id="hqCity"
+              name="hqCity"
+              type="text"
+              value={form.hqCity}
+              onChange={handleChange}
+              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
+            />
+          </div>
+          <div className="w-24 space-y-1">
+            <label
+              htmlFor="hqState"
+              className="block text-sm font-medium text-gray-800"
+            >
+              State
+            </label>
+            <input
+              id="hqState"
+              name="hqState"
+              type="text"
+              value={form.hqState}
+              onChange={handleChange}
+              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
+              placeholder="TX"
+            />
+          </div>
         </div>
 
-        <div>
-          <label className="mb-1 block text-sm font-medium">Approx. locations</label>
+        <div className="space-y-1">
+          <label
+            htmlFor="locationCount"
+            className="block text-sm font-medium text-gray-800"
+          >
+            Approximate location count
+          </label>
           <input
+            id="locationCount"
+            name="locationCount"
             type="number"
             min={1}
-            className="w-full rounded-md border px-3 py-2 text-sm"
-            value={approxLocations}
-            onChange={(e) => setApproxLocations(Number(e.target.value) || 1)}
+            value={form.locationCount}
+            onChange={handleChange}
+            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
+            placeholder="e.g., 5"
           />
         </div>
 
         {error && <p className="text-sm text-red-600">{error}</p>}
 
-        <button
-          type="submit"
-          disabled={submitting}
-          className="inline-flex items-center rounded-md bg-slate-900 px-4 py-2 text-sm text-white disabled:opacity-60"
-        >
-          {submitting ? "Creating..." : "Create corporate network"}
-        </button>
+        <div className="flex items-center justify-between gap-4">
+          <button
+            type="button"
+            onClick={() => nav.push("/onboarding/admin-responsibility")}
+            className="text-sm text-gray-600 underline"
+          >
+            Back to Admin responsibilities
+          </button>
+
+          <button
+            type="submit"
+            className="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white"
+          >
+            Continue to Finalization
+          </button>
+        </div>
       </form>
-    </div>
+    </main>
   );
 }

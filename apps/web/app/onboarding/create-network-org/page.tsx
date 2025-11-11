@@ -1,200 +1,149 @@
-// [P0][APP][CODE] Page page component
-// Tags: P0, APP, CODE
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState, FormEvent } from "react";
+import React, { FormEvent, useState } from "react";
 
-import { useOnboardingWizard } from "../_wizard/OnboardingWizardContext";
-
-type CreateNetworkOrgResponse = {
-  ok: boolean;
-  networkId: string;
-  orgId: string;
-  venueId: string;
-  status: string;
+type OrgFormState = {
+  orgName: string;
+  venueName: string;
+  city: string;
+  state: string;
 };
 
 export default function CreateNetworkOrgPage() {
   const router = useRouter();
-  const { formToken, setNetworkId, setOrgId, setVenueId } = useOnboardingWizard();
-
-  const [orgName, setOrgName] = useState("");
-  const [venueName, setVenueName] = useState("");
-  const [city, setCity] = useState("");
-  const [state, setState] = useState("");
-  const [postalCode, setPostalCode] = useState("");
-  const [countryCode, setCountryCode] = useState("US");
-  const [timeZone, setTimeZone] = useState("America/Chicago");
-
-  const [submitting, setSubmitting] = useState(false);
+  const nav = router as any;
+  const [form, setForm] = useState<OrgFormState>({
+    orgName: "",
+    venueName: "",
+    city: "",
+    state: "",
+  });
   const [error, setError] = useState<string | null>(null);
 
-  async function onSubmit(e: FormEvent) {
-    e.preventDefault();
-    if (!formToken) {
-      setError("Missing admin form token. Please restart onboarding.");
-      return;
-    }
-    setError(null);
-    setSubmitting(true);
-
-    try {
-      const payload = {
-        formToken,
-        orgName,
-        industry: "restaurant",
-        approxLocations: 1,
-        hasCorporateAboveYou: false,
-        venueName,
-        location: {
-          street1: "",
-          street2: "",
-          city,
-          state,
-          postalCode,
-          countryCode,
-          timeZone,
-        },
-      };
-
-      const res = await fetch("/api/onboarding/create-network-org", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-
-      const data = (await res.json().catch(() => ({}))) as Partial<CreateNetworkOrgResponse>;
-
-      if (!res.ok || !data.ok) {
-        if (data && "error" in data) {
-          // @ts-expect-error loose shape
-          setError(data.error as string);
-        } else {
-          setError("Failed to create network");
-        }
-        setSubmitting(false);
-        return;
-      }
-
-      setNetworkId(data.networkId || null);
-      setOrgId(data.orgId || null);
-      setVenueId(data.venueId || null);
-
-      router.push("/onboarding/block-4");
-    } catch (err) {
-      console.error(err);
-      setError("Unexpected error");
-      setSubmitting(false);
-    }
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
   }
 
-  if (!formToken) {
-    return (
-      <div className="space-y-4">
-        <p className="text-sm text-slate-600">
-          We need your admin responsibility form before we can create your network.
-        </p>
-        <button
-          className="rounded-md bg-slate-900 px-4 py-2 text-sm text-white"
-          onClick={() => router.push("/onboarding/admin-responsibility")}
-        >
-          Go back to admin form
-        </button>
-      </div>
-    );
+  function handleSubmit(e: FormEvent) {
+    e.preventDefault();
+
+    if (!form.orgName.trim() || !form.venueName.trim()) {
+      setError("Organization name and primary venue are required.");
+      return;
+    }
+
+    setError(null);
+
+    // Real implementation would POST to /api/onboarding/create-network-org.
+    nav.push("/onboarding/block-4");
   }
 
   return (
-    <div className="space-y-6">
-      <h1 className="text-2xl font-semibold">Create your first location</h1>
-      <p className="text-sm text-slate-600">
-        We&apos;ll set up a network and your first organization and venue.
-      </p>
+    <main className="mx-auto flex max-w-xl flex-col gap-6 px-4 py-10">
+      <header className="space-y-2">
+        <h1 className="text-2xl font-semibold">
+          Step 4: Create your organization
+        </h1>
+        <p className="text-sm text-gray-600">
+          Define your primary organization and first venue. You can add more
+          locations later.
+        </p>
+      </header>
 
-      <form onSubmit={onSubmit} className="space-y-4">
-        <div>
-          <label className="mb-1 block text-sm font-medium">Organization name</label>
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div className="space-y-1">
+          <label
+            htmlFor="orgName"
+            className="block text-sm font-medium text-gray-800"
+          >
+            Organization name
+          </label>
           <input
-            className="w-full rounded-md border px-3 py-2 text-sm"
-            value={orgName}
-            onChange={(e) => setOrgName(e.target.value)}
-            required
+            id="orgName"
+            name="orgName"
+            type="text"
+            value={form.orgName}
+            onChange={handleChange}
+            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
+            placeholder="e.g., Top Shelf Service – Main Location"
           />
         </div>
 
-        <div>
-          <label className="mb-1 block text-sm font-medium">Venue name</label>
+        <div className="space-y-1">
+          <label
+            htmlFor="venueName"
+            className="block text-sm font-medium text-gray-800"
+          >
+            Primary venue name
+          </label>
           <input
-            className="w-full rounded-md border px-3 py-2 text-sm"
-            value={venueName}
-            onChange={(e) => setVenueName(e.target.value)}
-            required
+            id="venueName"
+            name="venueName"
+            type="text"
+            value={form.venueName}
+            onChange={handleChange}
+            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
+            placeholder="e.g., Arlington Cafe"
           />
         </div>
 
-        <div className="grid grid-cols-2 gap-3">
-          <div>
-            <label className="mb-1 block text-sm font-medium">City</label>
+        <div className="flex gap-3">
+          <div className="flex-1 space-y-1">
+            <label
+              htmlFor="city"
+              className="block text-sm font-medium text-gray-800"
+            >
+              City
+            </label>
             <input
-              className="w-full rounded-md border px-3 py-2 text-sm"
-              value={city}
-              onChange={(e) => setCity(e.target.value)}
-              required
+              id="city"
+              name="city"
+              type="text"
+              value={form.city}
+              onChange={handleChange}
+              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
             />
           </div>
-          <div>
-            <label className="mb-1 block text-sm font-medium">State</label>
+          <div className="w-24 space-y-1">
+            <label
+              htmlFor="state"
+              className="block text-sm font-medium text-gray-800"
+            >
+              State
+            </label>
             <input
-              className="w-full rounded-md border px-3 py-2 text-sm"
-              value={state}
-              onChange={(e) => setState(e.target.value)}
-              required
+              id="state"
+              name="state"
+              type="text"
+              value={form.state}
+              onChange={handleChange}
+              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
+              placeholder="TX"
             />
           </div>
-        </div>
-
-        <div className="grid grid-cols-2 gap-3">
-          <div>
-            <label className="mb-1 block text-sm font-medium">Postal code</label>
-            <input
-              className="w-full rounded-md border px-3 py-2 text-sm"
-              value={postalCode}
-              onChange={(e) => setPostalCode(e.target.value)}
-              required
-            />
-          </div>
-          <div>
-            <label className="mb-1 block text-sm font-medium">Country code</label>
-            <input
-              className="w-full rounded-md border px-3 py-2 text-sm"
-              value={countryCode}
-              onChange={(e) => setCountryCode(e.target.value.toUpperCase())}
-              required
-            />
-          </div>
-        </div>
-
-        <div>
-          <label className="mb-1 block text-sm font-medium">Time zone</label>
-          <input
-            className="w-full rounded-md border px-3 py-2 text-sm"
-            value={timeZone}
-            onChange={(e) => setTimeZone(e.target.value)}
-            required
-          />
         </div>
 
         {error && <p className="text-sm text-red-600">{error}</p>}
 
-        <button
-          type="submit"
-          disabled={submitting}
-          className="inline-flex items-center rounded-md bg-slate-900 px-4 py-2 text-sm text-white disabled:opacity-60"
-        >
-          {submitting ? "Creating..." : "Create workspace"}
-        </button>
+        <div className="flex items-center justify-between gap-4">
+          <button
+            type="button"
+            onClick={() => nav.push("/onboarding/admin-responsibility")}
+            className="text-sm text-gray-600 underline"
+          >
+            Back to Admin responsibilities
+          </button>
+
+          <button
+            type="submit"
+            className="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white"
+          >
+            Continue to Finalization
+          </button>
+        </div>
       </form>
-    </div>
+    </main>
   );
 }

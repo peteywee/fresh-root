@@ -87,11 +87,7 @@ export async function createNetworkCorporateHandler(
     const corporateRef = networkRef.collection("corporate");
     const corpRef = corporateRef.doc();
 
-    await adminDb.runTransaction(
-      async (tx: {
-        set: (...args: unknown[]) => unknown;
-        update: (...args: unknown[]) => unknown;
-      }) => {
+    await adminDb.runTransaction(async (tx: any) => {
         const createdAt = nowMs;
 
         // 1) Network

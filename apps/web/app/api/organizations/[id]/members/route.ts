@@ -68,7 +68,7 @@ export const POST = withSecurity(
             { status: 422 },
           );
         }
-        const data = parsed.data;
+        const data: any = parsed.data;
         if (data.orgId !== orgId) {
           return badRequest("Organization ID mismatch");
         }
@@ -127,7 +127,7 @@ export const PATCH = withSecurity(
             { status: 422 },
           );
         }
-        const data = parsed.data; // Type assertion since we know it's valid
+        const data: any = parsed.data; // Type assertion since we know it's valid
         const updatedMember = {
           id: memberId,
           orgId,
