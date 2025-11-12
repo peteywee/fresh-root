@@ -1,0 +1,19 @@
+name: no-legacy-tree
+
+on:
+  pull_request:
+    branches:
+      - main
+      - dev
+
+jobs:
+  hygiene:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+      - run: pnpm install --frozen-lockfile
+      - name: Check for legacy duplicates
+        run: pnpm tsx scripts/ci/check-no-legacy.ts

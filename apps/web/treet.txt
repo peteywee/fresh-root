@@ -1,0 +1,368 @@
+.
+├── app
+│   ├── actions
+│   │   ├── createSchedule.ts
+│   │   └── scheduleActions.ts
+│   ├── api
+│   │   ├── attendance
+│   │   │   └── route.ts
+│   │   ├── auth
+│   │   │   └── mfa
+│   │   │       ├── setup
+│   │   │       │   └── route.ts
+│   │   │       └── verify
+│   │   │           └── route.ts
+│   │   ├── health
+│   │   │   └── route.ts
+│   │   ├── healthz
+│   │   │   └── route.ts
+│   │   ├── internal
+│   │   │   └── backup
+│   │   │       └── route.ts
+│   │   ├── items
+│   │   │   └── route.ts
+│   │   ├── join-tokens
+│   │   │   └── route.ts
+│   │   ├── metrics
+│   │   │   └── route.ts
+│   │   ├── onboarding
+│   │   │   ├── activate-network
+│   │   │   │   └── route.ts
+│   │   │   ├── admin-form
+│   │   │   │   └── route.ts
+│   │   │   ├── create-network-corporate
+│   │   │   │   └── route.ts
+│   │   │   ├── create-network-org
+│   │   │   │   ├── route-new.ts
+│   │   │   │   └── route.ts
+│   │   │   ├── join-with-token
+│   │   │   │   └── route.ts
+│   │   │   ├── profile
+│   │   │   │   └── route.ts
+│   │   │   ├── _shared
+│   │   │   │   ├── rateLimit.ts
+│   │   │   │   └── schemas.ts
+│   │   │   ├── __tests__
+│   │   │   │   ├── activate-network.test.ts
+│   │   │   │   ├── admin-form.test.ts
+│   │   │   │   ├── create-network-corporate.test.ts
+│   │   │   │   ├── create-network-org.test.ts
+│   │   │   │   ├── endpoints.test.ts
+│   │   │   │   ├── join-with-token.test.ts
+│   │   │   │   └── verify-eligibility.test.ts
+│   │   │   └── verify-eligibility
+│   │   │       └── route.ts
+│   │   ├── organizations
+│   │   │   ├── [id]
+│   │   │   │   ├── members
+│   │   │   │   │   ├── [memberId]
+│   │   │   │   │   │   └── route.ts
+│   │   │   │   │   └── route.ts
+│   │   │   │   └── route.ts
+│   │   │   └── route.ts
+│   │   ├── positions
+│   │   │   ├── [id]
+│   │   │   │   └── route.ts
+│   │   │   └── route.ts
+│   │   ├── publish
+│   │   │   └── route.ts
+│   │   ├── schedules
+│   │   │   ├── [id]
+│   │   │   │   └── route.ts
+│   │   │   └── route.ts
+│   │   ├── session
+│   │   │   ├── bootstrap
+│   │   │   │   └── route.ts
+│   │   │   └── route.ts
+│   │   ├── _shared
+│   │   │   ├── logging.ts
+│   │   │   ├── middleware.ts
+│   │   │   ├── security.ts
+│   │   │   ├── __tests__
+│   │   │   │   └── validation.test.ts
+│   │   │   └── validation.ts
+│   │   ├── shifts
+│   │   │   ├── [id]
+│   │   │   │   └── route.ts
+│   │   │   └── route.ts
+│   │   ├── _template
+│   │   │   └── route.ts
+│   │   ├── users
+│   │   │   └── profile
+│   │   │       └── route.ts
+│   │   ├── venues
+│   │   │   └── route.ts
+│   │   └── zones
+│   │       └── route.ts
+│   ├── (app)
+│   │   ├── demo
+│   │   │   └── page.tsx
+│   │   └── protected
+│   │       ├── dashboard
+│   │       │   ├── loading.tsx
+│   │       │   └── page.tsx
+│   │       ├── loading.tsx
+│   │       ├── page.tsx
+│   │       └── schedules
+│   │           ├── loading.tsx
+│   │           ├── page.server.ts
+│   │           └── page.tsx
+│   ├── (auth)
+│   │   └── login
+│   │       └── page.tsx
+│   ├── auth
+│   │   └── callback
+│   │       └── page.tsx
+│   ├── components
+│   │   ├── ErrorBoundary.tsx
+│   │   ├── FirebaseSignIn.tsx
+│   │   ├── Inbox.tsx
+│   │   ├── MonthView.tsx
+│   │   ├── ProtectedRoute.tsx
+│   │   ├── ui
+│   │   │   ├── Alert.tsx
+│   │   │   ├── Button.tsx
+│   │   │   ├── Card.tsx
+│   │   │   ├── index.ts
+│   │   │   ├── Input.tsx
+│   │   │   ├── Loading.tsx
+│   │   │   └── __tests__
+│   │   │       ├── Button.test.tsx
+│   │   │       ├── Card.test.tsx
+│   │   │       └── Input.test.tsx
+│   │   └── UploadStub.tsx
+│   ├── fonts.ts
+│   ├── globals.css
+│   ├── layout.tsx
+│   ├── lib
+│   │   ├── auth-context.tsx
+│   │   ├── cache.ts
+│   │   ├── db.ts
+│   │   ├── env.ts
+│   │   ├── firebaseClient.ts
+│   │   ├── http.ts
+│   │   ├── registerServiceWorker.ts
+│   │   ├── __tests__
+│   │   │   └── http.test.ts
+│   │   └── useCreateItem.ts
+│   ├── middleware.ts
+│   ├── onboarding
+│   │   ├── admin-form
+│   │   │   └── page.tsx
+│   │   ├── admin-responsibility
+│   │   │   └── page.tsx
+│   │   ├── block-4
+│   │   │   ├── loading.tsx
+│   │   │   └── page.tsx
+│   │   ├── blocked
+│   │   │   ├── email-not-verified
+│   │   │   │   └── page.tsx
+│   │   │   ├── network-pending
+│   │   │   │   └── page.tsx
+│   │   │   └── staff-invite
+│   │   │       └── page.tsx
+│   │   ├── create-network-corporate
+│   │   │   └── page.tsx
+│   │   ├── create-network-org
+│   │   │   └── page.tsx
+│   │   ├── intent
+│   │   │   └── page.tsx
+│   │   ├── join
+│   │   │   └── page.tsx
+│   │   ├── layout.tsx
+│   │   ├── page.tsx
+│   │   ├── profile
+│   │   │   └── page.tsx
+│   │   └── _wizard
+│   │       └── OnboardingWizardContext.tsx
+│   ├── page.tsx
+│   ├── planning
+│   │   └── page.tsx
+│   ├── providers
+│   │   ├── index.tsx
+│   │   └── queryClient.ts
+│   ├── RegisterServiceWorker.tsx
+│   └── schedules
+│       └── builder
+│           └── page.tsx
+├── components
+│   ├── Logo.tsx
+│   └── ui
+│       ├── Button.tsx
+│       ├── Card.tsx
+│       ├── Input.tsx
+│       └── Table.tsx
+├── docs
+│   ├── API.md
+│   ├── COMPONENTS.md
+│   └── SERVICE_WORKER.md
+├── eslint.config.mjs
+├── instrumentation.ts
+├── lib
+│   ├── animations.ts
+│   ├── firebase-admin.ts
+│   ├── onboarding
+│   │   ├── adminFormDrafts.mts
+│   │   ├── adminFormDrafts.ts
+│   │   ├── corporates.code-search
+│   │   └── createNetworkOrg.ts
+│   └── urlState.ts
+├── next.config.mjs
+├── next-env.d.ts
+├── node_modules
+│   ├── autoprefixer -> ../../../node_modules/.pnpm/autoprefixer@10.4.21_postcss@8.5.6/node_modules/autoprefixer
+│   ├── clsx -> ../../../node_modules/.pnpm/clsx@2.1.1/node_modules/clsx
+│   ├── @eslint
+│   │   ├── eslintrc -> ../../../../node_modules/.pnpm/@eslint+eslintrc@3.3.1/node_modules/@eslint/eslintrc
+│   │   └── js -> ../../../../node_modules/.pnpm/@eslint+js@9.38.0/node_modules/@eslint/js
+│   ├── eslint -> ../../../node_modules/.pnpm/eslint@9.38.0_jiti@1.21.7/node_modules/eslint
+│   ├── eslint-config-next -> ../../../node_modules/.pnpm/eslint-config-next@16.0.1_@typescript-eslint+parser@8.46.2_eslint@9.38.0_jiti@1.21.7__typescr_z5tksnepgo4rpdanxqkmwjrugu/node_modules/eslint-config-next
+│   ├── eslint-plugin-react -> ../../../node_modules/.pnpm/eslint-plugin-react@7.37.5_eslint@9.38.0_jiti@1.21.7_/node_modules/eslint-plugin-react
+│   ├── eslint-plugin-react-hooks -> ../../../node_modules/.pnpm/eslint-plugin-react-hooks@7.0.1_eslint@9.38.0_jiti@1.21.7_/node_modules/eslint-plugin-react-hooks
+│   ├── fake-indexeddb -> ../../../node_modules/.pnpm/fake-indexeddb@6.2.4/node_modules/fake-indexeddb
+│   ├── firebase -> ../../../node_modules/.pnpm/firebase@12.4.0/node_modules/firebase
+│   ├── firebase-admin -> ../../../node_modules/.pnpm/firebase-admin@13.6.0_encoding@0.1.13/node_modules/firebase-admin
+│   ├── firebaseui -> ../../../node_modules/.pnpm/firebaseui@6.1.0_firebase@12.4.0/node_modules/firebaseui
+│   ├── framer-motion -> ../../../node_modules/.pnpm/framer-motion@12.23.24_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/framer-motion
+│   ├── @fresh-schedules
+│   │   └── types -> ../../../../packages/types
+│   ├── google-auth-library -> ../../../node_modules/.pnpm/google-auth-library@10.5.0/node_modules/google-auth-library
+│   ├── happy-dom -> ../../../node_modules/.pnpm/happy-dom@20.0.10/node_modules/happy-dom
+│   ├── idb -> ../../../node_modules/.pnpm/idb@7.1.1/node_modules/idb
+│   ├── jsdom -> ../../../node_modules/.pnpm/jsdom@27.0.1_postcss@8.5.6/node_modules/jsdom
+│   ├── next -> ../../../node_modules/.pnpm/next@16.0.0_@babel+core@7.28.5_@opentelemetry+api@1.9.0_@playwright+test@1.56.1_react-dom@18._erinpenpmt4kmv3uwitaoiw3di/node_modules/next
+│   ├── nuqs -> ../../../node_modules/.pnpm/nuqs@2.7.2_next@16.0.0_@babel+core@7.28.5_@opentelemetry+api@1.9.0_@playwright+test@1.56.1_re_kln4gdtn57caduo25sxtp3gclm/node_modules/nuqs
+│   ├── @opentelemetry
+│   │   ├── api -> ../../../../node_modules/.pnpm/@opentelemetry+api@1.9.0/node_modules/@opentelemetry/api
+│   │   ├── auto-instrumentations-node -> ../../../../node_modules/.pnpm/@opentelemetry+auto-instrumentations-node@0.66.0_@opentelemetry+api@1.9.0_@opentelemetry+core_tmrxr3y5enujasixrgvyywzlsq/node_modules/@opentelemetry/auto-instrumentations-node
+│   │   ├── exporter-trace-otlp-http -> ../../../../node_modules/.pnpm/@opentelemetry+exporter-trace-otlp-http@0.207.0_@opentelemetry+api@1.9.0/node_modules/@opentelemetry/exporter-trace-otlp-http
+│   │   ├── resources -> ../../../../node_modules/.pnpm/@opentelemetry+resources@2.2.0_@opentelemetry+api@1.9.0/node_modules/@opentelemetry/resources
+│   │   ├── sdk-node -> ../../../../node_modules/.pnpm/@opentelemetry+sdk-node@0.207.0_@opentelemetry+api@1.9.0/node_modules/@opentelemetry/sdk-node
+│   │   ├── sdk-trace-base -> ../../../../node_modules/.pnpm/@opentelemetry+sdk-trace-base@2.2.0_@opentelemetry+api@1.9.0/node_modules/@opentelemetry/sdk-trace-base
+│   │   └── semantic-conventions -> ../../../../node_modules/.pnpm/@opentelemetry+semantic-conventions@1.37.0/node_modules/@opentelemetry/semantic-conventions
+│   ├── papaparse -> ../../../node_modules/.pnpm/papaparse@5.5.3/node_modules/papaparse
+│   ├── postcss -> ../../../node_modules/.pnpm/postcss@8.5.6/node_modules/postcss
+│   ├── process -> ../../../node_modules/.pnpm/process@0.11.10/node_modules/process
+│   ├── qrcode -> ../../../node_modules/.pnpm/qrcode@1.5.4/node_modules/qrcode
+│   ├── react -> ../../../node_modules/.pnpm/react@18.3.1/node_modules/react
+│   ├── react-dom -> ../../../node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom
+│   ├── @sentry
+│   │   └── nextjs -> ../../../../node_modules/.pnpm/@sentry+nextjs@10.25.0_@opentelemetry+context-async-hooks@2.2.0_@opentelemetry+api@1.9.0__@op_523cin73mz74se3nahuamov4ry/node_modules/@sentry/nextjs
+│   ├── speakeasy -> ../../../node_modules/.pnpm/speakeasy@2.0.0/node_modules/speakeasy
+│   ├── tailwindcss -> ../../../node_modules/.pnpm/tailwindcss@3.4.18_tsx@4.20.6_yaml@2.8.1/node_modules/tailwindcss
+│   ├── tailwindcss-animate -> ../../../node_modules/.pnpm/tailwindcss-animate@1.0.7_tailwindcss@3.4.18_tsx@4.20.6_yaml@2.8.1_/node_modules/tailwindcss-animate
+│   ├── @tanstack
+│   │   ├── react-query -> ../../../../node_modules/.pnpm/@tanstack+react-query@5.59.0_react@18.3.1/node_modules/@tanstack/react-query
+│   │   └── react-query-devtools -> ../../../../node_modules/.pnpm/@tanstack+react-query-devtools@5.59.0_@tanstack+react-query@5.59.0_react@18.3.1__react@18.3.1/node_modules/@tanstack/react-query-devtools
+│   ├── @testing-library
+│   │   ├── jest-dom -> ../../../../node_modules/.pnpm/@testing-library+jest-dom@6.9.1/node_modules/@testing-library/jest-dom
+│   │   ├── react -> ../../../../node_modules/.pnpm/@testing-library+react@16.3.0_@testing-library+dom@10.4.1_@types+react-dom@18.3.7_@types+reac_lhv3dqhyypy7i6yrxas7zeka7q/node_modules/@testing-library/react
+│   │   └── user-event -> ../../../../node_modules/.pnpm/@testing-library+user-event@14.6.1_@testing-library+dom@10.4.1/node_modules/@testing-library/user-event
+│   ├── @types
+│   │   ├── node -> ../../../../node_modules/.pnpm/@types+node@20.19.24/node_modules/@types/node
+│   │   ├── papaparse -> ../../../../node_modules/.pnpm/@types+papaparse@5.5.0/node_modules/@types/papaparse
+│   │   ├── qrcode -> ../../../../node_modules/.pnpm/@types+qrcode@1.5.6/node_modules/@types/qrcode
+│   │   ├── react -> ../../../../node_modules/.pnpm/@types+react@18.3.26/node_modules/@types/react
+│   │   ├── react-dom -> ../../../../node_modules/.pnpm/@types+react-dom@18.3.7_@types+react@18.3.26/node_modules/@types/react-dom
+│   │   └── speakeasy -> ../../../../node_modules/.pnpm/@types+speakeasy@2.0.10/node_modules/@types/speakeasy
+│   ├── typescript -> ../../../node_modules/.pnpm/typescript@5.9.3/node_modules/typescript
+│   ├── @typescript-eslint
+│   │   ├── eslint-plugin -> ../../../../node_modules/.pnpm/@typescript-eslint+eslint-plugin@8.46.2_@typescript-eslint+parser@8.46.2_eslint@9.38.0_jiti@1_mpj2sayn63s4v3a7yvxwqlglz4/node_modules/@typescript-eslint/eslint-plugin
+│   │   └── parser -> ../../../../node_modules/.pnpm/@typescript-eslint+parser@8.46.2_eslint@9.38.0_jiti@1.21.7__typescript@5.9.3/node_modules/@typescript-eslint/parser
+│   ├── @vitejs
+│   │   └── plugin-react -> ../../../../node_modules/.pnpm/@vitejs+plugin-react@5.1.0_vite@7.1.12_@types+node@20.19.24_jiti@1.21.7_terser@5.44.1_tsx@4.20.6_yaml@2.8.1_/node_modules/@vitejs/plugin-react
+│   ├── @vitest
+│   │   ├── coverage-v8 -> ../../../../node_modules/.pnpm/@vitest+coverage-v8@4.0.5_vitest@4.0.6_@types+debug@4.1.12_@types+node@20.19.24_@vitest+ui@4._zjd5pw37b5grqa2ao47xl6cuqq/node_modules/@vitest/coverage-v8
+│   │   └── ui -> ../../../../node_modules/.pnpm/@vitest+ui@4.0.6_vitest@4.0.6/node_modules/@vitest/ui
+│   ├── vitest -> ../../../node_modules/.pnpm/vitest@4.0.6_@types+debug@4.1.12_@types+node@20.19.24_@vitest+ui@4.0.6_happy-dom@20.0.10_jiti_v47pcypobrzlmragf7dayf63i4/node_modules/vitest
+│   ├── xlsx -> ../../../node_modules/.pnpm/xlsx@0.18.5/node_modules/xlsx
+│   ├── zod -> ../../../node_modules/.pnpm/zod@3.25.76/node_modules/zod
+│   └── zustand -> ../../../node_modules/.pnpm/zustand@4.5.2_@types+react@18.3.26_react@18.3.1/node_modules/zustand
+├── package.json
+├── postcss.config.cjs
+├── proxy.ts
+├── public
+│   └── manifest.json
+├── README.md
+├── sentry.client.config.ts
+├── sentry.edge.config.ts
+├── sentry.server.config.ts
+├── src
+│   ├── components
+│   │   └── auth
+│   │       └── ProtectedRoute.tsx
+│   ├── lib
+│   │   ├── actionCodeSettings.ts
+│   │   ├── api
+│   │   │   ├── authorization.test.ts
+│   │   │   ├── authorization.ts
+│   │   │   ├── csrf.test.ts
+│   │   │   ├── csrf.ts
+│   │   │   ├── index.ts
+│   │   │   ├── rate-limit.test.ts
+│   │   │   ├── rate-limit.ts
+│   │   │   ├── redis-rate-limit.ts
+│   │   │   ├── redis.ts
+│   │   │   ├── sanitize.ts
+│   │   │   ├── schedules.ts
+│   │   │   ├── session.ts
+│   │   │   ├── __tests__
+│   │   │   │   ├── security.bench.ts
+│   │   │   │   └── security-integration.test.ts
+│   │   │   ├── validation.test.ts
+│   │   │   └── validation.ts
+│   │   ├── auth
+│   │   │   └── pendingEmail.store.ts
+│   │   ├── auth-context.tsx
+│   │   ├── auth-helpers.ts
+│   │   ├── env.server.ts
+│   │   ├── env.ts
+│   │   ├── error
+│   │   │   ├── ErrorContext.tsx
+│   │   │   └── reporting.ts
+│   │   ├── eventLog.ts
+│   │   ├── exports
+│   │   ├── firebase.server.ts
+│   │   ├── imports
+│   │   │   └── _template.import.ts
+│   │   ├── labor
+│   │   │   ├── computeLaborBudget.test.ts
+│   │   │   └── computeLaborBudget.ts
+│   │   ├── logger.ts
+│   │   ├── onboarding
+│   │   │   ├── adminFormDrafts.ts
+│   │   │   ├── createNetworkOrg.test.ts
+│   │   │   └── createNetworkOrg.ts
+│   │   ├── otel.ts
+│   │   ├── storage
+│   │   │   └── kv.ts
+│   │   ├── store.ts
+│   │   ├── userOnboarding.ts
+│   │   └── userProfile.ts
+│   ├── middleware.ts
+│   ├── __tests__
+│   │   ├── api-security.spec.ts
+│   │   ├── auth-helpers.spec.ts
+│   │   ├── login-page.spec.tsx
+│   │   ├── mfa.test.ts
+│   │   ├── middleware.spec.ts
+│   │   ├── security.test.ts
+│   │   ├── session-api.spec.ts
+│   │   └── session.test.ts
+│   └── types
+│       ├── fresh-schedules-types.d.ts
+│       └── idb.d.ts
+├── tailwind.config.ts
+├── tests
+│   └── e2e
+│       └── onboarding-full-flow.spec.ts
+├── tree3.txt
+├── treet.txt
+├── tsconfig.json
+├── tsconfig.tsbuildinfo
+├── vitest.bench.config.ts
+├── vitest.config.ts
+├── vitest.d.ts
+└── vitest.setup.ts
+
+170 directories, 196 files
