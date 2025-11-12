@@ -1,6 +1,6 @@
 # Phase 2 – Schema Crosswalk (13.5 → 14 → 15)
 
-**Purpose**  
+**Purpose**
 Map Firestore schemas and domain types from legacy designs (13.5/14) to the **v15 canonical schema** so data migration can be automated and safe.
 
 This file is where we decide **exactly** how old docs are transformed.
@@ -61,6 +61,7 @@ v15 Schema column refers to concrete types / Zod schemas.
 Migration Strategy is clear enough to implement without guessing.
 
 Migration scripts listed here exist under scripts/ and are tested in the emulator.
+
 | Entity / Collection | Legacy Schema | v15 Schema | Migration Strategy | Script / Tool | Notes |
 |---------------------|---------------|-------------|--------------------|---------------|-------|
-| orgSearchIndex | *none (new)* | `orgId`, `name`, `taxId`, `address`, `contactEmail`, `phone`, `adminName`, `publicSearch (bool)`, timestamps | Build from existing Org docs. Normalize fields and insert records for searchable orgs only (`publicSearch = true`). | `scripts/build_org_search_index_v15.ts` | Facilitates staff search and join requests. Populated after Org migration. |
+| orgSearchIndex | _none (new)_ | `orgId`, `name`, `taxId`, `address`, `contactEmail`, `phone`, `adminName`, `publicSearch (bool)`, timestamps | Build from existing Org docs. Normalize fields and insert records for searchable orgs only (`publicSearch = true`). | `scripts/build_org_search_index_v15.ts` | Facilitates staff search and join requests. Populated after Org migration. |

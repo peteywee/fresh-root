@@ -90,6 +90,12 @@ Application Libraries produce:
    - Functions for reporting errors
    - Domain-specific error types or wrappers
 
+5. **Labor & Scheduling Calculations**
+
+- Pure computational helpers that derive planning constraints (e.g., allowed labor budget)
+- Example: `computeLaborBudget(forecastSales, laborPercent, avgWage)` returns `{ allowedDollars, allowedHours }`
+- These remain framework-agnostic and side-effect free, enabling easy unit testing and reuse in API + UI layers.
+
 All outputs are designed to be **called** from Layer 03 (API) and indirectly from Layer 04 (UI) through service hooks.
 
 ## Dependencies
@@ -151,8 +157,34 @@ This layer sits in the middle and should not be skipped. Any business operation 
    - Authorization helpers (e.g., `requireOrgMembership`) must default to **deny** on missing/invalid context.
    - No function should assume a user is allowed; permission checks are explicit.
 
+### Utility Spotlight: `computeLaborBudget`
+
+Purpose: Provide a deterministic planning figure for weekly labor allocation based on forecast sales, target labor percent, and average wage.
+
+Contract:
+
+- Inputs:
+  - `forecastSales: number >= 0`
+  - `laborPercent: number in [0, 100]` (percentage of sales allocated to labor)
+  - `avgWage: number > 0` (average hourly wage for staff)
+- Output: `{ allowedDollars: number, allowedHours: number }`
+  - `allowedDollars = forecastSales * (laborPercent / 100)`
+  - `allowedHours = allowedDollars / avgWage`
+- Errors: Throws `RangeError` when inputs violate their numeric constraints (negative sales, percent out of range, non-positive wage).
+
+Edge Cases Covered in Tests:
+
+- Zero sales (results in zero dollars & hours)
+- Boundary laborPercent values (0% and 100%)
+- Invalid percent (<0 or >100) rejected
+- Negative sales rejected
+- Non-positive average wage rejected
+
+Rationale: Centralizing this calculation in Layer 02 ensures consistent labor planning across API endpoints and UI views while keeping the logic pure and testable.
+
 ## Change Log
 
 | Date       | Author         | Change                       |
 | ---------- | -------------- | ---------------------------- |
 | 2025-11-11 | Patrick Craven | Initial v15 layer definition |
+| 2025-11-12 | Copilot (agent) | Added labor calculation utility section & `computeLaborBudget` spotlight |
