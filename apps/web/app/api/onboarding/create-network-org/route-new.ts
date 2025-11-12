@@ -1,12 +1,11 @@
 //[P1][API][ONBOARDING] Create Network + Org Endpoint (server)
 // Tags: api, onboarding, network, org, venue
 
- 
 import { NextResponse } from "next/server";
 
 import { withSecurity, type AuthenticatedRequest } from "../../_shared/middleware";
 
-import { adminDb as importedAdminDb } from "@/src/lib/firebase.server";
+import { adminDb as importedAdminDb } from "@/lib/firebase.server";
 
 /**
  * Inner handler exported for tests. Accepts an optional injected adminDb for testability.

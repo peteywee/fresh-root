@@ -27,7 +27,7 @@ vi.stubGlobal("process", {
 
 // Global mock for server-side firebase wrapper to avoid importing firebase-admin
 // in unit tests which can be heavy and may emit environment warnings.
-vi.mock("@/src/lib/firebase.server", () => {
+vi.mock("@/lib/firebase.server", () => {
   return {
     adminDb: undefined,
     adminSdk: {

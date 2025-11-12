@@ -8,7 +8,7 @@ import {
 import { randomBytes } from "crypto";
 import { NextRequest, NextResponse } from "next/server";
 
-import { adminDb as importedAdminDb } from "@/src/lib/firebase.server";
+import { adminDb as importedAdminDb } from "@/lib/firebase.server";
 
 /**
  * Inner handler exported for tests. Accepts an optional injected adminDb for testability.

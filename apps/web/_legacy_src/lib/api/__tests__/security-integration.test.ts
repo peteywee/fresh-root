@@ -1,6 +1,5 @@
 //[P1][API][TEST] Security integration tests
 // Tags: test, security, integration, authorization, rate-limiting, csrf
- 
 
 import { NextRequest, NextResponse } from "next/server";
 import { describe, it, expect, beforeEach, vi } from "vitest";

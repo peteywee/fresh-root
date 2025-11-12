@@ -5,7 +5,7 @@ import { z } from "zod";
 
 import { withSecurity, type AuthenticatedRequest } from "../../_shared/middleware";
 
-import { adminDb as importedAdminDb } from "@/src/lib/firebase.server";
+import { adminDb as importedAdminDb } from "@/lib/firebase.server";
 
 const ProfileSchema = z.object({
   fullName: z.string().min(1),

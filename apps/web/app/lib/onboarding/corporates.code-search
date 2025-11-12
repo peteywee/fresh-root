@@ -1,0 +1,1462 @@
+# Query: corporates
+# Flags: IgnoreExcludeSettings
+# ContextLines: 1
+
+371 results - 196 files
+
+apps/web/.next/dev/server/chunks/[root-of-the-server]__df8a5a08._.js:
+  1129  __turbopack_context__.s([
+  1130:     "CreateCorporateSchema",
+  1131:     ()=>CreateCorporateSchema,
+  1132      "JoinWithTokenSchema",
+
+  1136  ;
+  1137: const CreateCorporateSchema = __TURBOPACK__imported__module__$5b$project$5d2f$fresh$2d$root$2d$10$2f$fresh$2d$root$2f$node_modules$2f2e$pnpm$2f$zod$40$3$2e$25$2e$76$2f$node_modules$2f$zod$2f$v3$2f$external$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__$3c$export__$2a$__as__z$3e$__["z"].object({
+  1138      corporateName: __TURBOPACK__imported__module__$5b$project$5d2f$fresh$2d$root$2d$10$2f$fresh$2d$root$2f$node_modules$2f2e$pnpm$2f$zod$40$3$2e$25$2e$76$2f$node_modules$2f$zod$2f$v3$2f$external$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__$3c$export__$2a$__as__z$3e$__["z"].string().min(1),
+
+apps/web/.next/dev/server/chunks/[root-of-the-server]__df8a5a08._.js.map:
+  16      {"offset": {"line": 1018, "column": 0}, "map": {"version":3,"sources":["file:///home/patrick/fresh-root-10/fresh-root/packages/types/src/networks.ts"],"sourcesContent":["// [P1][TENANCY][SCHEMA] Network schema (single canonical export)\nimport { z } from \"zod\";\n\nexport const NetworkKind = z.enum([\n  \"independent_org\",\n  \"corporate_network\",\n  \"franchise_network\",\n  \"nonprofit_network\",\n  \"test_sandbox\",\n]);\nexport type NetworkKind = z.infer<typeof NetworkKind>;\n\nexport const NetworkSegment = z.enum([\n  \"restaurant\",\n  \"qsr\",\n  \"bar\",\n  \"hotel\",\n  \"nonprofit\",\n  \"shelter\",\n  \"church\",\n  \"retail\",\n  \"other\",\n]);\nexport type NetworkSegment = z.infer<typeof NetworkSegment>;\n\nexport const NetworkStatus = z.enum([\"pending_verification\", \"active\", \"suspended\", \"closed\"]);\nexport type NetworkStatus = z.infer<typeof NetworkStatus>;\n\nexport const NetworkPlan = z.enum([\"free\", \"starter\", \"growth\", \"enterprise\", \"internal\"]);\nexport type NetworkPlan = z.infer<typeof NetworkPlan>;\n\nexport const BillingMode = z.enum([\"none\", \"card\", \"invoice\", \"partner_billed\"]);\nexport type BillingMode = z.infer<typeof BillingMode>;\n\nexport const NetworkSchema = z.object({\n  id: z.string().min(1),\n  slug: z.string().min(1),\n  displayName: z.string().min(1),\n  legalName: z.string().optional(),\n  kind: NetworkKind,\n  segment: NetworkSegment,\n  status: NetworkStatus,\n  environment: z.enum([\"production\", \"staging\", \"sandbox\", \"demo\"]).optional(),\n  primaryRegion: z.string().optional(),\n  timeZone: z.string().optional(),\n  currency: z.string().optional(),\n  plan: NetworkPlan.optional(),\n  billingMode: BillingMode.optional(),\n  maxVenues: z.number().int().nullable().optional(),\n  maxActiveOrgs: z.number().int().nullable().optional(),\n  maxActiveUsers: z.number().int().nullable().optional(),\n  maxShiftsPerDay: z.number().int().nullable().optional(),\n  requireMfaForAdmins: z.boolean().optional(),\n  ipAllowlistEnabled: z.boolean().optional(),\n  allowedEmailDomains: z.array(z.string()).optional(),\n  features: z\n    .object({\n      analytics: z.boolean().optional(),\n      apiAccess: z.boolean().optional(),\n    })\n    .optional(),\n  ownerUserId: z.string().optional(),\n  createdAt: z.any().optional(),\n  createdBy: z.string().optional(),\n  updatedAt: z.any().optional(),\n  updatedBy: z.string().optional(),\n});\n\nexport const CreateNetworkSchema = NetworkSchema.pick({\n  slug: true,\n  displayName: true,\n  kind: true,\n  segment: true,\n});\n\nexport const UpdateNetworkSchema = NetworkSchema.partial();\n\nexport type Network = z.infer<typeof NetworkSchema>;\nexport type CreateNetworkInput = z.infer<typeof CreateNetworkSchema>;\nexport type UpdateNetworkInput = z.infer<typeof UpdateNetworkSchema>;\n\nexport default NetworkSchema;\n"],"names":[],"mappings":"AAAA,iEAAiE;;;;;;;;;;;;;;;;;;;;;AACjE;;AAEO,MAAM,cAAc,mQAAC,CAAC,IAAI,CAAC;IAChC;IACA;IACA;IACA;IACA;CACD;AAGM,MAAM,iBAAiB,mQAAC,CAAC,IAAI,CAAC;IACnC;IACA;IACA;IACA;IACA;IACA;IACA;IACA;IACA;CACD;AAGM,MAAM,gBAAgB,mQAAC,CAAC,IAAI,CAAC;IAAC;IAAwB;IAAU;IAAa;CAAS;AAGtF,MAAM,cAAc,mQAAC,CAAC,IAAI,CAAC;IAAC;IAAQ;IAAW;IAAU;IAAc;CAAW;AAGlF,MAAM,cAAc,mQAAC,CAAC,IAAI,CAAC;IAAC;IAAQ;IAAQ;IAAW;CAAiB;AAGxE,MAAM,gBAAgB,mQAAC,CAAC,MAAM,CAAC;IACpC,IAAI,mQAAC,CAAC,MAAM,GAAG,GAAG,CAAC;IACnB,MAAM,mQAAC,CAAC,MAAM,GAAG,GAAG,CAAC;IACrB,aAAa,mQAAC,CAAC,MAAM,GAAG,GAAG,CAAC;IAC5B,WAAW,mQAAC,CAAC,MAAM,GAAG,QAAQ;IAC9B,MAAM;IACN,SAAS;IACT,QAAQ;IACR,aAAa,mQAAC,CAAC,IAAI,CAAC;QAAC;QAAc;QAAW;QAAW;KAAO,EAAE,QAAQ;IAC1E,eAAe,mQAAC,CAAC,MAAM,GAAG,QAAQ;IAClC,UAAU,mQAAC,CAAC,MAAM,GAAG,QAAQ;IAC7B,UAAU,mQAAC,CAAC,MAAM,GAAG,QAAQ;IAC7B,MAAM,YAAY,QAAQ;IAC1B,aAAa,YAAY,QAAQ;IACjC,WAAW,mQAAC,CAAC,MAAM,GAAG,GAAG,GAAG,QAAQ,GAAG,QAAQ;IAC/C,eAAe,mQAAC,CAAC,MAAM,GAAG,GAAG,GAAG,QAAQ,GAAG,QAAQ;IACnD,gBAAgB,mQAAC,CAAC,MAAM,GAAG,GAAG,GAAG,QAAQ,GAAG,QAAQ;IACpD,iBAAiB,mQAAC,CAAC,MAAM,GAAG,GAAG,GAAG,QAAQ,GAAG,QAAQ;IACrD,qBAAqB,mQAAC,CAAC,OAAO,GAAG,QAAQ;IACzC,oBAAoB,mQAAC,CAAC,OAAO,GAAG,QAAQ;IACxC,qBAAqB,mQAAC,CAAC,KAAK,CAAC,mQAAC,CAAC,MAAM,IAAI,QAAQ;IACjD,UAAU,mQAAC,CACR,MAAM,CAAC;QACN,WAAW,mQAAC,CAAC,OAAO,GAAG,QAAQ;QAC/B,WAAW,mQAAC,CAAC,OAAO,GAAG,QAAQ;IACjC,GACC,QAAQ;IACX,aAAa,mQAAC,CAAC,MAAM,GAAG,QAAQ;IAChC,WAAW,mQAAC,CAAC,GAAG,GAAG,QAAQ;IAC3B,WAAW,mQAAC,CAAC,MAAM,GAAG,QAAQ;IAC9B,WAAW,mQAAC,CAAC,GAAG,GAAG,QAAQ;IAC3B,WAAW,mQAAC,CAAC,MAAM,GAAG,QAAQ;AAChC;AAEO,MAAM,sBAAsB,cAAc,IAAI,CAAC;IACpD,MAAM;IACN,aAAa;IACb,MAAM;IACN,SAAS;AACX;AAEO,MAAM,sBAAsB,cAAc,OAAO;uCAMzC","debugId":null}},
+  17:     {"offset": {"line": 1126, "column": 0}, "map": {"version":3,"sources":["file:///home/patrick/fresh-root-10/fresh-root/packages/types/src/onboarding.ts"],"sourcesContent":["// [P2][APP][CODE] Onboarding\n// Tags: P2, APP, CODE\nimport { z } from \"zod\";\n\nexport const CreateCorporateSchema = z.object({\n  corporateName: z.string().min(1),\n  brandName: z.string().optional(),\n  formToken: z.string().optional(),\n});\n\nexport const JoinWithTokenSchema = z.object({\n  joinToken: z.string().min(1),\n});\n\nexport type CreateCorporate = z.infer<typeof CreateCorporateSchema>;\nexport type JoinWithToken = z.infer<typeof JoinWithTokenSchema>;\n"],"names":[],"mappings":"AAAA,6BAA6B;AAC7B,sBAAsB;;;;;;;AACtB;;AAEO,MAAM,wBAAwB,mQAAC,CAAC,MAAM,CAAC;IAC5C,eAAe,mQAAC,CAAC,MAAM,GAAG,GAAG,CAAC;IAC9B,WAAW,mQAAC,CAAC,MAAM,GAAG,QAAQ;IAC9B,WAAW,mQAAC,CAAC,MAAM,GAAG,QAAQ;AAChC;AAEO,MAAM,sBAAsB,mQAAC,CAAC,MAAM,CAAC;IAC1C,WAAW,mQAAC,CAAC,MAAM,GAAG,GAAG,CAAC;AAC5B","debugId":null}},
+  18      {"offset": {"line": 1148, "column": 0}, "map": {"version":3,"sources":["file:///home/patrick/fresh-root-10/fresh-root/packages/types/src/index.ts"],"sourcesContent":["// [P1][INTEGRITY][SCHEMA] Package types index\n// Tags: P1, INTEGRITY, SCHEMA, INDEX\nimport { z } from \"zod\";\n\nexport const Role = z.enum([\"admin\", \"manager\", \"staff\"]);\nexport type Role = z.infer<typeof Role>;\n\nexport * from \"./rbac\";\nexport * from \"./orgs\";\nexport * from \"./schedules\";\nexport * from \"./memberships\"; // This provides the canonical Membership export\nexport * from \"./positions\";\nexport * from \"./shifts\";\nexport * from \"./venues\";\nexport * from \"./zones\";\nexport * from \"./attendance\";\nexport * from \"./join-tokens\";\nexport * from \"./compliance/adminResponsibilityForm\";\nexport * from \"./networks\";\nexport * from \"./onboarding\";\n"],"names":[],"mappings":"AAAA,8CAA8C;AAC9C,qCAAqC;;;;;AACrC;AAKA;AACA;AACA;AACA,kTAA+B,gDAAgD;AAC/E;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;;AAfO,MAAM,OAAO,mQAAC,CAAC,IAAI,CAAC;IAAC;IAAS;IAAW;CAAQ","debugId":null}},
+
+apps/web/app/api/onboarding/create-network-corporate/route.ts:
+  56        const networkRef = adb.collection("networks").doc();
+  57:       const corpRef = adb.collection("corporate").doc();
+  58
+
+apps/web/node_modules/speakeasy/CHANGELOG.md:
+  6
+  7: Speakeasy 2.0.0 is a major update based on a Speakeasy fork, [Passcode](https://github.com/mikepb/passcode), by [Michael Phan-Ba](https://github.com/mikepb), which also incorporate code from another Node.js HOTP/TOTP module, [notp](https://github.com/guyht/notp), by [Guy Halford-Thompson](https://github.com/guyht), with additional functionality and API compatibility changes made by [Mark Bao](https://github.com/markbao). Speakeasy is now also moving to its own GitHub organization.
+  8
+
+apps/web/node_modules/speakeasy/README.md:
+   24  One-time Password (TOTP) algorithm defined in [RFC 6238][rfc6238] are
+   25: supported. This project incorporate code from [passcode][], originally a
+   26  fork of Speakeasy, and [notp][].
+
+  716
+  717: This project incorporate code from [passcode][], which was originally a
+  718  fork of speakeasy, and [notp][], both of which are licensed under MIT.
+
+apps/web/node_modules/typescript/ThirdPartyNoticeText.txt:
+   2
+   3: The TypeScript software incorporate third party material from the projects listed below. The original copyright notice and the license under which Microsoft received such third party material are set forth below. Microsoft reserves all other rights not expressly granted, whether by implication, estoppel or otherwise.
+   4
+
+   9  ------------------- DefinitelyTyped --------------------
+  10: This file is based on or incorporate material from the projects listed below (collectively "Third Party Code"). Microsoft is not the original author of the Third Party Code. The original copyright notice and the license, under which Microsoft received such Third Party Code, are set forth below. Such licenses and notices are provided for informational purposes only. Microsoft, not the third party, licenses the Third Party Code to you under the terms set forth in the EULA for the Microsoft Product. Microsoft reserves all other rights not expressly granted under this agreement, whether by implication, estoppel or otherwise.
+  11  DefinitelyTyped
+
+apps/web/node_modules/zod/src/v4/core/schemas.ts:
+  3768        input,
+  3769:       inst, // incorporate params.error into issue reporting
+  3770:       path: [...(inst._zod.def.path ?? [])], // incorporate params.error into issue reporting
+  3771        continue: !inst._zod.def.abort,
+
+apps/web/node_modules/zod/v4/core/schemas.cjs:
+  1738              input,
+  1739:             inst, // incorporate params.error into issue reporting
+  1740:             path: [...(inst._zod.def.path ?? [])], // incorporate params.error into issue reporting
+  1741              continue: !inst._zod.def.abort,
+
+apps/web/node_modules/zod/v4/core/schemas.js:
+  1707              input,
+  1708:             inst, // incorporate params.error into issue reporting
+  1709:             path: [...(inst._zod.def.path ?? [])], // incorporate params.error into issue reporting
+  1710              continue: !inst._zod.def.abort,
+
+docs/Biblev14.md:
+   110  - **Network** – the tenant itself (`networks/{networkId}`).
+   111: - **Corporate** – a brand or HQ node (`networks/{networkId}/corporates/{corpId}`).
+   112  - **Organization** – an operating unit (`networks/{networkId}/orgs/{orgId}`).
+
+   291  Copy code
+   292: networks/{networkId}/corporates/{corpId}
+   293  networks/{networkId}/orgs/{orgId}
+
+  1014
+  1015: Create corporates/{corpId} with name and brandName.
+  1016
+
+  1058
+  1059:       // Corporates
+  1060:       match /corporates/{corpId} {
+  1061          allow read: if isNetworkMember(request.auth, networkId);
+
+docs/BLOCK4_PLANNING.md:
+  320  | ---- | ---------------------------------------- | ------------------------------------------------------------------ |
+  321: | 1    | Network schemas & types                  | `networks.ts`, `corporates.ts`, `orgs.ts`, `venues.ts`             |
+  322  | 2    | Onboarding API (eligibility, admin form) | `/api/onboarding/verify-eligibility`, `/api/onboarding/admin-form` |
+
+docs/schema-network.md:
+   34  | Network                 | `/networks/{networkId}`                                          | Tenant root                 | PLANNED/IN PROGRESS |
+   35: | Corporate               | `/networks/{networkId}/corporates/{corpId}`                      | Brand/HQ node               | PLANNED             |
+   36  | Organization            | `/networks/{networkId}/orgs/{orgId}`                             | Operating unit              | PLANNED             |
+
+   76
+   77: File: `packages/types/src/corporates.ts` (see full example in code section below).
+   78
+
+  183    - Network document (tenant root)
+  184: - networks/{networkId}/corporates/{corpId}
+  185  - networks/{networkId}/orgs/{orgId}
+
+docs/TODO-v14.md:
+  82  - [x] **[TEN-02]** Corporate / Org / Venue schemas (Network-aware)
+  83:   - ✅ Update `corporates.ts` (or create if missing) to include `networkId`
+  84    - ✅ Update `orgs.ts` to include `networkId` and remove "org is tenant" assumptions in comments
+
+docs/bible/GAPS_v14.0.0.md:
+  570
+  571:         match /corporates/{corpId} {
+  572            allow read: if isNetworkMember(networkId);
+
+docs/bible/Project_Bible_v14.0.0.md:
+   110  - **Network** – the tenant itself (`networks/{networkId}`).
+   111: - **Corporate** – a brand or HQ node (`networks/{networkId}/corporates/{corpId}`).
+   112  - **Organization** – an operating unit (`networks/{networkId}/orgs/{orgId}`).
+
+   291  Copy code
+   292: networks/{networkId}/corporates/{corpId}
+   293  networks/{networkId}/orgs/{orgId}
+
+  1014
+  1015: Create corporates/{corpId} with name and brandName.
+  1016
+
+  1058
+  1059:       // Corporates
+  1060:       match /corporates/{corpId} {
+  1061          allow read: if isNetworkMember(request.auth, networkId);
+
+docs/migrations/MIGRATION_NETWORK_TENANCY.md:
+  33  - All data scoped under networks
+  34: - Networks contain orgs, venues, corporates, etc.
+  35
+
+fresh-root/apps/web/node_modules/typescript/ThirdPartyNoticeText.txt:
+   2
+   3: The TypeScript software incorporate third party material from the projects listed below. The original copyright notice and the license under which Microsoft received such third party material are set forth below. Microsoft reserves all other rights not expressly granted, whether by implication, estoppel or otherwise.
+   4
+
+   9  ------------------- DefinitelyTyped --------------------
+  10: This file is based on or incorporate material from the projects listed below (collectively "Third Party Code"). Microsoft is not the original author of the Third Party Code. The original copyright notice and the license, under which Microsoft received such Third Party Code, are set forth below. Such licenses and notices are provided for informational purposes only. Microsoft, not the third party, licenses the Third Party Code to you under the terms set forth in the EULA for the Microsoft Product. Microsoft reserves all other rights not expressly granted under this agreement, whether by implication, estoppel or otherwise.
+  11  DefinitelyTyped
+
+fresh-root/apps/web/node_modules/zod/src/v4/core/schemas.ts:
+  4239        input,
+  4240:       inst, // incorporate params.error into issue reporting
+  4241:       path: [...(inst._zod.def.path ?? [])], // incorporate params.error into issue reporting
+  4242        continue: !inst._zod.def.abort,
+
+fresh-root/apps/web/node_modules/zod/v4/core/schemas.cjs:
+  1976              input,
+  1977:             inst, // incorporate params.error into issue reporting
+  1978:             path: [...(inst._zod.def.path ?? [])], // incorporate params.error into issue reporting
+  1979              continue: !inst._zod.def.abort,
+
+fresh-root/apps/web/node_modules/zod/v4/core/schemas.js:
+  1945              input,
+  1946:             inst, // incorporate params.error into issue reporting
+  1947:             path: [...(inst._zod.def.path ?? [])], // incorporate params.error into issue reporting
+  1948              continue: !inst._zod.def.abort,
+
+fresh-root/functions/node_modules/typescript/ThirdPartyNoticeText.txt:
+   2
+   3: The TypeScript software incorporate third party material from the projects listed below. The original copyright notice and the license under which Microsoft received such third party material are set forth below. Microsoft reserves all other rights not expressly granted, whether by implication, estoppel or otherwise.
+   4
+
+   9  ------------------- DefinitelyTyped --------------------
+  10: This file is based on or incorporate material from the projects listed below (collectively "Third Party Code"). Microsoft is not the original author of the Third Party Code. The original copyright notice and the license, under which Microsoft received such Third Party Code, are set forth below. Such licenses and notices are provided for informational purposes only. Microsoft, not the third party, licenses the Third Party Code to you under the terms set forth in the EULA for the Microsoft Product. Microsoft reserves all other rights not expressly granted under this agreement, whether by implication, estoppel or otherwise.
+  11  DefinitelyTyped
+
+fresh-root/node_modules/.pnpm/firebase-admin@12.7.0/node_modules/node-forge/LICENSE:
+  285  those countries, so that distribution is permitted only in or among
+  286: countries not thus excluded.  In such case, this License incorporates
+  287  the limitation as if written in the body of this License.
+
+fresh-root/node_modules/.pnpm/node-forge@1.3.1/node_modules/node-forge/LICENSE:
+  285  those countries, so that distribution is permitted only in or among
+  286: countries not thus excluded.  In such case, this License incorporates
+  287  the limitation as if written in the body of this License.
+
+fresh-root/node_modules/.pnpm/node_modules/@apps/web/node_modules/typescript/ThirdPartyNoticeText.txt:
+   2
+   3: The TypeScript software incorporate third party material from the projects listed below. The original copyright notice and the license under which Microsoft received such third party material are set forth below. Microsoft reserves all other rights not expressly granted, whether by implication, estoppel or otherwise.
+   4
+
+   9  ------------------- DefinitelyTyped --------------------
+  10: This file is based on or incorporate material from the projects listed below (collectively "Third Party Code"). Microsoft is not the original author of the Third Party Code. The original copyright notice and the license, under which Microsoft received such Third Party Code, are set forth below. Such licenses and notices are provided for informational purposes only. Microsoft, not the third party, licenses the Third Party Code to you under the terms set forth in the EULA for the Microsoft Product. Microsoft reserves all other rights not expressly granted under this agreement, whether by implication, estoppel or otherwise.
+  11  DefinitelyTyped
+
+fresh-root/node_modules/.pnpm/node_modules/@apps/web/node_modules/zod/src/v4/core/schemas.ts:
+  4239        input,
+  4240:       inst, // incorporate params.error into issue reporting
+  4241:       path: [...(inst._zod.def.path ?? [])], // incorporate params.error into issue reporting
+  4242        continue: !inst._zod.def.abort,
+
+fresh-root/node_modules/.pnpm/node_modules/@apps/web/node_modules/zod/v4/core/schemas.cjs:
+  1976              input,
+  1977:             inst, // incorporate params.error into issue reporting
+  1978:             path: [...(inst._zod.def.path ?? [])], // incorporate params.error into issue reporting
+  1979              continue: !inst._zod.def.abort,
+
+fresh-root/node_modules/.pnpm/node_modules/@apps/web/node_modules/zod/v4/core/schemas.js:
+  1945              input,
+  1946:             inst, // incorporate params.error into issue reporting
+  1947:             path: [...(inst._zod.def.path ?? [])], // incorporate params.error into issue reporting
+  1948              continue: !inst._zod.def.abort,
+
+fresh-root/node_modules/.pnpm/node_modules/@fresh/functions/node_modules/typescript/ThirdPartyNoticeText.txt:
+   2
+   3: The TypeScript software incorporate third party material from the projects listed below. The original copyright notice and the license under which Microsoft received such third party material are set forth below. Microsoft reserves all other rights not expressly granted, whether by implication, estoppel or otherwise.
+   4
+
+   9  ------------------- DefinitelyTyped --------------------
+  10: This file is based on or incorporate material from the projects listed below (collectively "Third Party Code"). Microsoft is not the original author of the Third Party Code. The original copyright notice and the license, under which Microsoft received such Third Party Code, are set forth below. Such licenses and notices are provided for informational purposes only. Microsoft, not the third party, licenses the Third Party Code to you under the terms set forth in the EULA for the Microsoft Product. Microsoft reserves all other rights not expressly granted under this agreement, whether by implication, estoppel or otherwise.
+  11  DefinitelyTyped
+
+fresh-root/node_modules/.pnpm/node_modules/@fresh-schedules/types/node_modules/typescript/ThirdPartyNoticeText.txt:
+   2
+   3: The TypeScript software incorporate third party material from the projects listed below. The original copyright notice and the license under which Microsoft received such third party material are set forth below. Microsoft reserves all other rights not expressly granted, whether by implication, estoppel or otherwise.
+   4
+
+   9  ------------------- DefinitelyTyped --------------------
+  10: This file is based on or incorporate material from the projects listed below (collectively "Third Party Code"). Microsoft is not the original author of the Third Party Code. The original copyright notice and the license, under which Microsoft received such Third Party Code, are set forth below. Such licenses and notices are provided for informational purposes only. Microsoft, not the third party, licenses the Third Party Code to you under the terms set forth in the EULA for the Microsoft Product. Microsoft reserves all other rights not expressly granted under this agreement, whether by implication, estoppel or otherwise.
+  11  DefinitelyTyped
+
+fresh-root/node_modules/.pnpm/node_modules/@fresh-schedules/types/node_modules/zod/src/v4/core/schemas.ts:
+  3768        input,
+  3769:       inst, // incorporate params.error into issue reporting
+  3770:       path: [...(inst._zod.def.path ?? [])], // incorporate params.error into issue reporting
+  3771        continue: !inst._zod.def.abort,
+
+fresh-root/node_modules/.pnpm/node_modules/@fresh-schedules/types/node_modules/zod/v4/core/schemas.cjs:
+  1738              input,
+  1739:             inst, // incorporate params.error into issue reporting
+  1740:             path: [...(inst._zod.def.path ?? [])], // incorporate params.error into issue reporting
+  1741              continue: !inst._zod.def.abort,
+
+fresh-root/node_modules/.pnpm/node_modules/@fresh-schedules/types/node_modules/zod/v4/core/schemas.js:
+  1707              input,
+  1708:             inst, // incorporate params.error into issue reporting
+  1709:             path: [...(inst._zod.def.path ?? [])], // incorporate params.error into issue reporting
+  1710              continue: !inst._zod.def.abort,
+
+fresh-root/node_modules/.pnpm/node_modules/node-forge/LICENSE:
+  285  those countries, so that distribution is permitted only in or among
+  286: countries not thus excluded.  In such case, this License incorporates
+  287  the limitation as if written in the body of this License.
+
+fresh-root/node_modules/.pnpm/node_modules/typescript/ThirdPartyNoticeText.txt:
+   2
+   3: The TypeScript software incorporate third party material from the projects listed below. The original copyright notice and the license under which Microsoft received such third party material are set forth below. Microsoft reserves all other rights not expressly granted, whether by implication, estoppel or otherwise.
+   4
+
+   9  ------------------- DefinitelyTyped --------------------
+  10: This file is based on or incorporate material from the projects listed below (collectively "Third Party Code"). Microsoft is not the original author of the Third Party Code. The original copyright notice and the license, under which Microsoft received such Third Party Code, are set forth below. Such licenses and notices are provided for informational purposes only. Microsoft, not the third party, licenses the Third Party Code to you under the terms set forth in the EULA for the Microsoft Product. Microsoft reserves all other rights not expressly granted under this agreement, whether by implication, estoppel or otherwise.
+  11  DefinitelyTyped
+
+fresh-root/node_modules/.pnpm/node_modules/zod/src/v4/core/schemas.ts:
+  4239        input,
+  4240:       inst, // incorporate params.error into issue reporting
+  4241:       path: [...(inst._zod.def.path ?? [])], // incorporate params.error into issue reporting
+  4242        continue: !inst._zod.def.abort,
+
+fresh-root/node_modules/.pnpm/node_modules/zod/v4/core/schemas.cjs:
+  1976              input,
+  1977:             inst, // incorporate params.error into issue reporting
+  1978:             path: [...(inst._zod.def.path ?? [])], // incorporate params.error into issue reporting
+  1979              continue: !inst._zod.def.abort,
+
+fresh-root/node_modules/.pnpm/node_modules/zod/v4/core/schemas.js:
+  1945              input,
+  1946:             inst, // incorporate params.error into issue reporting
+  1947:             path: [...(inst._zod.def.path ?? [])], // incorporate params.error into issue reporting
+  1948              continue: !inst._zod.def.abort,
+
+fresh-root/node_modules/.pnpm/typescript@5.9.3/node_modules/typescript/ThirdPartyNoticeText.txt:
+   2
+   3: The TypeScript software incorporate third party material from the projects listed below. The original copyright notice and the license under which Microsoft received such third party material are set forth below. Microsoft reserves all other rights not expressly granted, whether by implication, estoppel or otherwise.
+   4
+
+   9  ------------------- DefinitelyTyped --------------------
+  10: This file is based on or incorporate material from the projects listed below (collectively "Third Party Code"). Microsoft is not the original author of the Third Party Code. The original copyright notice and the license, under which Microsoft received such Third Party Code, are set forth below. Such licenses and notices are provided for informational purposes only. Microsoft, not the third party, licenses the Third Party Code to you under the terms set forth in the EULA for the Microsoft Product. Microsoft reserves all other rights not expressly granted under this agreement, whether by implication, estoppel or otherwise.
+  11  DefinitelyTyped
+
+fresh-root/node_modules/.pnpm/zod@3.25.76/node_modules/zod/src/v4/core/schemas.ts:
+  3768        input,
+  3769:       inst, // incorporate params.error into issue reporting
+  3770:       path: [...(inst._zod.def.path ?? [])], // incorporate params.error into issue reporting
+  3771        continue: !inst._zod.def.abort,
+
+fresh-root/node_modules/.pnpm/zod@3.25.76/node_modules/zod/v4/core/schemas.cjs:
+  1738              input,
+  1739:             inst, // incorporate params.error into issue reporting
+  1740:             path: [...(inst._zod.def.path ?? [])], // incorporate params.error into issue reporting
+  1741              continue: !inst._zod.def.abort,
+
+fresh-root/node_modules/.pnpm/zod@3.25.76/node_modules/zod/v4/core/schemas.js:
+  1707              input,
+  1708:             inst, // incorporate params.error into issue reporting
+  1709:             path: [...(inst._zod.def.path ?? [])], // incorporate params.error into issue reporting
+  1710              continue: !inst._zod.def.abort,
+
+fresh-root/node_modules/.pnpm/zod@4.1.12/node_modules/zod/src/v4/core/schemas.ts:
+  4239        input,
+  4240:       inst, // incorporate params.error into issue reporting
+  4241:       path: [...(inst._zod.def.path ?? [])], // incorporate params.error into issue reporting
+  4242        continue: !inst._zod.def.abort,
+
+fresh-root/node_modules/.pnpm/zod@4.1.12/node_modules/zod/v4/core/schemas.cjs:
+  1976              input,
+  1977:             inst, // incorporate params.error into issue reporting
+  1978:             path: [...(inst._zod.def.path ?? [])], // incorporate params.error into issue reporting
+  1979              continue: !inst._zod.def.abort,
+
+fresh-root/node_modules/.pnpm/zod@4.1.12/node_modules/zod/v4/core/schemas.js:
+  1945              input,
+  1946:             inst, // incorporate params.error into issue reporting
+  1947:             path: [...(inst._zod.def.path ?? [])], // incorporate params.error into issue reporting
+  1948              continue: !inst._zod.def.abort,
+
+fresh-root/packages/types/node_modules/typescript/ThirdPartyNoticeText.txt:
+   2
+   3: The TypeScript software incorporate third party material from the projects listed below. The original copyright notice and the license under which Microsoft received such third party material are set forth below. Microsoft reserves all other rights not expressly granted, whether by implication, estoppel or otherwise.
+   4
+
+   9  ------------------- DefinitelyTyped --------------------
+  10: This file is based on or incorporate material from the projects listed below (collectively "Third Party Code"). Microsoft is not the original author of the Third Party Code. The original copyright notice and the license, under which Microsoft received such Third Party Code, are set forth below. Such licenses and notices are provided for informational purposes only. Microsoft, not the third party, licenses the Third Party Code to you under the terms set forth in the EULA for the Microsoft Product. Microsoft reserves all other rights not expressly granted under this agreement, whether by implication, estoppel or otherwise.
+  11  DefinitelyTyped
+
+fresh-root/packages/types/node_modules/zod/src/v4/core/schemas.ts:
+  3768        input,
+  3769:       inst, // incorporate params.error into issue reporting
+  3770:       path: [...(inst._zod.def.path ?? [])], // incorporate params.error into issue reporting
+  3771        continue: !inst._zod.def.abort,
+
+fresh-root/packages/types/node_modules/zod/v4/core/schemas.cjs:
+  1738              input,
+  1739:             inst, // incorporate params.error into issue reporting
+  1740:             path: [...(inst._zod.def.path ?? [])], // incorporate params.error into issue reporting
+  1741              continue: !inst._zod.def.abort,
+
+fresh-root/packages/types/node_modules/zod/v4/core/schemas.js:
+  1707              input,
+  1708:             inst, // incorporate params.error into issue reporting
+  1709:             path: [...(inst._zod.def.path ?? [])], // incorporate params.error into issue reporting
+  1710              continue: !inst._zod.def.abort,
+
+functions/node_modules/typescript/ThirdPartyNoticeText.txt:
+   2
+   3: The TypeScript software incorporate third party material from the projects listed below. The original copyright notice and the license under which Microsoft received such third party material are set forth below. Microsoft reserves all other rights not expressly granted, whether by implication, estoppel or otherwise.
+   4
+
+   9  ------------------- DefinitelyTyped --------------------
+  10: This file is based on or incorporate material from the projects listed below (collectively "Third Party Code"). Microsoft is not the original author of the Third Party Code. The original copyright notice and the license, under which Microsoft received such Third Party Code, are set forth below. Such licenses and notices are provided for informational purposes only. Microsoft, not the third party, licenses the Third Party Code to you under the terms set forth in the EULA for the Microsoft Product. Microsoft reserves all other rights not expressly granted under this agreement, whether by implication, estoppel or otherwise.
+  11  DefinitelyTyped
+
+node_modules/.pnpm/@cspell+cspell-bundled-dicts@8.19.4/node_modules/@cspell/dict-en-common-misspellings/dict/dict-en-gb.json:
+  287      "coorperations->corporations",
+  288:     "coprorates->corporate",
+  289      "correltor->correlator",
+
+node_modules/.pnpm/@cspell+cspell-bundled-dicts@8.19.4/node_modules/@cspell/dict-en-common-misspellings/dict/dict-en.json:
+  32192      "incooperated->incorporated",
+  32193:     "incooperates->incorporates",
+  32194      "incoperate->incorporate",
+  32195      "incoperated->incorporated",
+  32196:     "incoperates->incorporates",
+  32197      "incoperating->incorporating",
+
+  32199      "incoporated->incorporated",
+  32200:     "incoporates->incorporates",
+  32201      "incoporating->incorporating",
+
+  32203      "incoprorated->incorporated",
+  32204:     "incoprorates->incorporates",
+  32205      "incoprorating->incorporating",
+
+  32209      "incoropate->incorporate",
+  32210:     "incoropates->incorporates",
+  32211      "incoroporated->incorporated",
+
+  32214      "incorparated->incorporated",
+  32215:     "incorparates->incorporates",
+  32216      "incorparating->incorporating",
+
+  32218      "incorperated->incorporated",
+  32219:     "incorperates->incorporates",
+  32220      "incorperating->incorporating",
+
+  32226      "incorported->incorporated",
+  32227:     "incorprates->incorporates",
+  32228      "incorproate->incorporated",
+
+node_modules/.pnpm/@cspell+dict-en-common-misspellings@2.1.8/node_modules/@cspell/dict-en-common-misspellings/dict/dict-en-gb.json:
+  287      "coorperations->corporations",
+  288:     "coprorates->corporates",
+  289      "correltor->correlator",
+
+node_modules/.pnpm/@cspell+dict-en-common-misspellings@2.1.8/node_modules/@cspell/dict-en-common-misspellings/dict/dict-en.json:
+  32192      "incooperated->incorporated",
+  32193:     "incooperates->incorporates",
+  32194      "incoperate->incorporate",
+  32195      "incoperated->incorporated",
+  32196:     "incoperates->incorporates",
+  32197      "incoperating->incorporating",
+
+  32199      "incoporated->incorporated",
+  32200:     "incoporates->incorporates",
+  32201      "incoporating->incorporating",
+
+  32203      "incoprorated->incorporated",
+  32204:     "incoprorates->incorporates",
+  32205      "incoprorating->incorporating",
+
+  32209      "incoropate->incorporate",
+  32210:     "incoropates->incorporates",
+  32211      "incoroporated->incorporated",
+
+  32214      "incorparated->incorporated",
+  32215:     "incorparates->incorporates",
+  32216      "incorparating->incorporating",
+
+  32218      "incorperated->incorporated",
+  32219:     "incorperates->incorporates",
+  32220      "incorperating->incorporating",
+
+  32226      "incorported->incorporated",
+  32227:     "incorprates->incorporates",
+  32228      "incorproate->incorporated",
+
+node_modules/.pnpm/@eslint+config-array@0.21.1/node_modules/@eslint/config-array/README.md:
+  341
+  342: The design of this project was influenced by feedback on the ESLint RFC, and incorporate ideas from:
+  343
+
+node_modules/.pnpm/@modelcontextprotocol+sdk@1.21.0/node_modules/express/History.md:
+  58
+  59: This incorporate all changes after 4.19.1 up to 4.19.2.
+  60
+
+  63
+  64: This incorporate all changes after 4.17.2 up to 4.19.1.
+  65
+
+node_modules/.pnpm/@modelcontextprotocol+sdk@1.21.0/node_modules/zod/src/v4/core/schemas.ts:
+  3768        input,
+  3769:       inst, // incorporate params.error into issue reporting
+  3770:       path: [...(inst._zod.def.path ?? [])], // incorporate params.error into issue reporting
+  3771        continue: !inst._zod.def.abort,
+
+node_modules/.pnpm/@modelcontextprotocol+sdk@1.21.0/node_modules/zod/v4/core/schemas.cjs:
+  1738              input,
+  1739:             inst, // incorporate params.error into issue reporting
+  1740:             path: [...(inst._zod.def.path ?? [])], // incorporate params.error into issue reporting
+  1741              continue: !inst._zod.def.abort,
+
+node_modules/.pnpm/@modelcontextprotocol+sdk@1.21.0/node_modules/zod/v4/core/schemas.js:
+  1707              input,
+  1708:             inst, // incorporate params.error into issue reporting
+  1709:             path: [...(inst._zod.def.path ?? [])], // incorporate params.error into issue reporting
+  1710              continue: !inst._zod.def.abort,
+
+node_modules/.pnpm/@typescript-eslint+eslint-plugin@8.46.2_@typescript-eslint+parser@8.46.2_eslint@9.38.0_jiti@1_mpj2sayn63s4v3a7yvxwqlglz4/node_modules/typescript/ThirdPartyNoticeText.txt:
+   2
+   3: The TypeScript software incorporate third party material from the projects listed below. The original copyright notice and the license under which Microsoft received such third party material are set forth below. Microsoft reserves all other rights not expressly granted, whether by implication, estoppel or otherwise.
+   4
+
+   9  ------------------- DefinitelyTyped --------------------
+  10: This file is based on or incorporate material from the projects listed below (collectively "Third Party Code"). Microsoft is not the original author of the Third Party Code. The original copyright notice and the license, under which Microsoft received such Third Party Code, are set forth below. Such licenses and notices are provided for informational purposes only. Microsoft, not the third party, licenses the Third Party Code to you under the terms set forth in the EULA for the Microsoft Product. Microsoft reserves all other rights not expressly granted under this agreement, whether by implication, estoppel or otherwise.
+  11  DefinitelyTyped
+
+node_modules/.pnpm/@typescript-eslint+eslint-plugin@8.46.2_@typescript-eslint+parser@8.46.2_eslint@9.38.0_jiti@2_ggf5mqdoatlii7olg4quxrwtje/node_modules/typescript/ThirdPartyNoticeText.txt:
+   2
+   3: The TypeScript software incorporate third party material from the projects listed below. The original copyright notice and the license under which Microsoft received such third party material are set forth below. Microsoft reserves all other rights not expressly granted, whether by implication, estoppel or otherwise.
+   4
+
+   9  ------------------- DefinitelyTyped --------------------
+  10: This file is based on or incorporate material from the projects listed below (collectively "Third Party Code"). Microsoft is not the original author of the Third Party Code. The original copyright notice and the license, under which Microsoft received such Third Party Code, are set forth below. Such licenses and notices are provided for informational purposes only. Microsoft, not the third party, licenses the Third Party Code to you under the terms set forth in the EULA for the Microsoft Product. Microsoft reserves all other rights not expressly granted under this agreement, whether by implication, estoppel or otherwise.
+  11  DefinitelyTyped
+
+node_modules/.pnpm/@typescript-eslint+parser@8.46.2_eslint@9.38.0_jiti@1.21.7__typescript@5.9.3/node_modules/typescript/ThirdPartyNoticeText.txt:
+   2
+   3: The TypeScript software incorporate third party material from the projects listed below. The original copyright notice and the license under which Microsoft received such third party material are set forth below. Microsoft reserves all other rights not expressly granted, whether by implication, estoppel or otherwise.
+   4
+
+   9  ------------------- DefinitelyTyped --------------------
+  10: This file is based on or incorporate material from the projects listed below (collectively "Third Party Code"). Microsoft is not the original author of the Third Party Code. The original copyright notice and the license, under which Microsoft received such Third Party Code, are set forth below. Such licenses and notices are provided for informational purposes only. Microsoft, not the third party, licenses the Third Party Code to you under the terms set forth in the EULA for the Microsoft Product. Microsoft reserves all other rights not expressly granted under this agreement, whether by implication, estoppel or otherwise.
+  11  DefinitelyTyped
+
+node_modules/.pnpm/@typescript-eslint+parser@8.46.2_eslint@9.38.0_jiti@2.6.1__typescript@5.9.3/node_modules/typescript/ThirdPartyNoticeText.txt:
+   2
+   3: The TypeScript software incorporate third party material from the projects listed below. The original copyright notice and the license under which Microsoft received such third party material are set forth below. Microsoft reserves all other rights not expressly granted, whether by implication, estoppel or otherwise.
+   4
+
+   9  ------------------- DefinitelyTyped --------------------
+  10: This file is based on or incorporate material from the projects listed below (collectively "Third Party Code"). Microsoft is not the original author of the Third Party Code. The original copyright notice and the license, under which Microsoft received such Third Party Code, are set forth below. Such licenses and notices are provided for informational purposes only. Microsoft, not the third party, licenses the Third Party Code to you under the terms set forth in the EULA for the Microsoft Product. Microsoft reserves all other rights not expressly granted under this agreement, whether by implication, estoppel or otherwise.
+  11  DefinitelyTyped
+
+node_modules/.pnpm/@typescript-eslint+project-service@8.46.2_typescript@5.9.3/node_modules/typescript/ThirdPartyNoticeText.txt:
+   2
+   3: The TypeScript software incorporate third party material from the projects listed below. The original copyright notice and the license under which Microsoft received such third party material are set forth below. Microsoft reserves all other rights not expressly granted, whether by implication, estoppel or otherwise.
+   4
+
+   9  ------------------- DefinitelyTyped --------------------
+  10: This file is based on or incorporate material from the projects listed below (collectively "Third Party Code"). Microsoft is not the original author of the Third Party Code. The original copyright notice and the license, under which Microsoft received such Third Party Code, are set forth below. Such licenses and notices are provided for informational purposes only. Microsoft, not the third party, licenses the Third Party Code to you under the terms set forth in the EULA for the Microsoft Product. Microsoft reserves all other rights not expressly granted under this agreement, whether by implication, estoppel or otherwise.
+  11  DefinitelyTyped
+
+node_modules/.pnpm/@typescript-eslint+tsconfig-utils@8.46.2_typescript@5.9.3/node_modules/typescript/ThirdPartyNoticeText.txt:
+   2
+   3: The TypeScript software incorporate third party material from the projects listed below. The original copyright notice and the license under which Microsoft received such third party material are set forth below. Microsoft reserves all other rights not expressly granted, whether by implication, estoppel or otherwise.
+   4
+
+   9  ------------------- DefinitelyTyped --------------------
+  10: This file is based on or incorporate material from the projects listed below (collectively "Third Party Code"). Microsoft is not the original author of the Third Party Code. The original copyright notice and the license, under which Microsoft received such Third Party Code, are set forth below. Such licenses and notices are provided for informational purposes only. Microsoft, not the third party, licenses the Third Party Code to you under the terms set forth in the EULA for the Microsoft Product. Microsoft reserves all other rights not expressly granted under this agreement, whether by implication, estoppel or otherwise.
+  11  DefinitelyTyped
+
+node_modules/.pnpm/@typescript-eslint+type-utils@8.46.2_eslint@9.38.0_jiti@1.21.7__typescript@5.9.3/node_modules/typescript/ThirdPartyNoticeText.txt:
+   2
+   3: The TypeScript software incorporate third party material from the projects listed below. The original copyright notice and the license under which Microsoft received such third party material are set forth below. Microsoft reserves all other rights not expressly granted, whether by implication, estoppel or otherwise.
+   4
+
+   9  ------------------- DefinitelyTyped --------------------
+  10: This file is based on or incorporate material from the projects listed below (collectively "Third Party Code"). Microsoft is not the original author of the Third Party Code. The original copyright notice and the license, under which Microsoft received such Third Party Code, are set forth below. Such licenses and notices are provided for informational purposes only. Microsoft, not the third party, licenses the Third Party Code to you under the terms set forth in the EULA for the Microsoft Product. Microsoft reserves all other rights not expressly granted under this agreement, whether by implication, estoppel or otherwise.
+  11  DefinitelyTyped
+
+node_modules/.pnpm/@typescript-eslint+type-utils@8.46.2_eslint@9.38.0_jiti@2.6.1__typescript@5.9.3/node_modules/typescript/ThirdPartyNoticeText.txt:
+   2
+   3: The TypeScript software incorporate third party material from the projects listed below. The original copyright notice and the license under which Microsoft received such third party material are set forth below. Microsoft reserves all other rights not expressly granted, whether by implication, estoppel or otherwise.
+   4
+
+   9  ------------------- DefinitelyTyped --------------------
+  10: This file is based on or incorporate material from the projects listed below (collectively "Third Party Code"). Microsoft is not the original author of the Third Party Code. The original copyright notice and the license, under which Microsoft received such Third Party Code, are set forth below. Such licenses and notices are provided for informational purposes only. Microsoft, not the third party, licenses the Third Party Code to you under the terms set forth in the EULA for the Microsoft Product. Microsoft reserves all other rights not expressly granted under this agreement, whether by implication, estoppel or otherwise.
+  11  DefinitelyTyped
+
+node_modules/.pnpm/@typescript-eslint+typescript-estree@8.46.2_typescript@5.9.3/node_modules/typescript/ThirdPartyNoticeText.txt:
+   2
+   3: The TypeScript software incorporate third party material from the projects listed below. The original copyright notice and the license under which Microsoft received such third party material are set forth below. Microsoft reserves all other rights not expressly granted, whether by implication, estoppel or otherwise.
+   4
+
+   9  ------------------- DefinitelyTyped --------------------
+  10: This file is based on or incorporate material from the projects listed below (collectively "Third Party Code"). Microsoft is not the original author of the Third Party Code. The original copyright notice and the license, under which Microsoft received such Third Party Code, are set forth below. Such licenses and notices are provided for informational purposes only. Microsoft, not the third party, licenses the Third Party Code to you under the terms set forth in the EULA for the Microsoft Product. Microsoft reserves all other rights not expressly granted under this agreement, whether by implication, estoppel or otherwise.
+  11  DefinitelyTyped
+
+node_modules/.pnpm/@typescript-eslint+utils@8.46.2_eslint@9.38.0_jiti@1.21.7__typescript@5.9.3/node_modules/typescript/ThirdPartyNoticeText.txt:
+   2
+   3: The TypeScript software incorporate third party material from the projects listed below. The original copyright notice and the license under which Microsoft received such third party material are set forth below. Microsoft reserves all other rights not expressly granted, whether by implication, estoppel or otherwise.
+   4
+
+   9  ------------------- DefinitelyTyped --------------------
+  10: This file is based on or incorporate material from the projects listed below (collectively "Third Party Code"). Microsoft is not the original author of the Third Party Code. The original copyright notice and the license, under which Microsoft received such Third Party Code, are set forth below. Such licenses and notices are provided for informational purposes only. Microsoft, not the third party, licenses the Third Party Code to you under the terms set forth in the EULA for the Microsoft Product. Microsoft reserves all other rights not expressly granted under this agreement, whether by implication, estoppel or otherwise.
+  11  DefinitelyTyped
+
+node_modules/.pnpm/@typescript-eslint+utils@8.46.2_eslint@9.38.0_jiti@2.6.1__typescript@5.9.3/node_modules/typescript/ThirdPartyNoticeText.txt:
+   2
+   3: The TypeScript software incorporate third party material from the projects listed below. The original copyright notice and the license under which Microsoft received such third party material are set forth below. Microsoft reserves all other rights not expressly granted, whether by implication, estoppel or otherwise.
+   4
+
+   9  ------------------- DefinitelyTyped --------------------
+  10: This file is based on or incorporate material from the projects listed below (collectively "Third Party Code"). Microsoft is not the original author of the Third Party Code. The original copyright notice and the license, under which Microsoft received such Third Party Code, are set forth below. Such licenses and notices are provided for informational purposes only. Microsoft, not the third party, licenses the Third Party Code to you under the terms set forth in the EULA for the Microsoft Product. Microsoft reserves all other rights not expressly granted under this agreement, whether by implication, estoppel or otherwise.
+  11  DefinitelyTyped
+
+node_modules/.pnpm/argparse@2.0.1/node_modules/argparse/LICENSE:
+   80  3. In the event Licensee prepares a derivative work that is based on
+   81: or incorporate Python or any part thereof, and wants to make
+   82  the derivative work available to others as provided herein, then
+
+  188  3. In the event Licensee prepares a derivative work that is based on
+  189: or incorporate Python 1.6.1 or any part thereof, and wants to make
+  190  the derivative work available to others as provided herein, then
+
+node_modules/.pnpm/body-parser@2.2.0/node_modules/body-parser/HISTORY.md:
+  36
+  37: This incorporate all changes after 1.19.1 up to 1.20.2.
+  38
+
+node_modules/.pnpm/cli-highlight@2.1.11/node_modules/highlight.js/lib/languages/pgsql.js:
+  5  Description:
+  6:     This language incorporate both PostgreSQL SQL dialect and PL/pgSQL language.
+  7      It is based on PostgreSQL version 11. Some notes:
+
+node_modules/.pnpm/cspell-lib@8.19.4/node_modules/vscode-languageserver-textdocument/thirdpartynotices.txt:
+  3
+  4: This software incorporate material from third parties.
+  5  Microsoft makes certain open source code available at https://3rdpartysource.microsoft.com,
+
+node_modules/.pnpm/deep-is@0.1.4/node_modules/deep-is/index.js:
+  82    }
+  83:   // having the same number of owned properties (keys incorporates
+  84    // hasOwnProperty)
+
+node_modules/.pnpm/eslint-config-next@16.0.1_@typescript-eslint+parser@8.46.2_eslint@9.38.0_jiti@1.21.7__typescr_z5tksnepgo4rpdanxqkmwjrugu/node_modules/typescript/ThirdPartyNoticeText.txt:
+   2
+   3: The TypeScript software incorporate third party material from the projects listed below. The original copyright notice and the license under which Microsoft received such third party material are set forth below. Microsoft reserves all other rights not expressly granted, whether by implication, estoppel or otherwise.
+   4
+
+   9  ------------------- DefinitelyTyped --------------------
+  10: This file is based on or incorporate material from the projects listed below (collectively "Third Party Code"). Microsoft is not the original author of the Third Party Code. The original copyright notice and the license, under which Microsoft received such Third Party Code, are set forth below. Such licenses and notices are provided for informational purposes only. Microsoft, not the third party, licenses the Third Party Code to you under the terms set forth in the EULA for the Microsoft Product. Microsoft reserves all other rights not expressly granted under this agreement, whether by implication, estoppel or otherwise.
+  11  DefinitelyTyped
+
+node_modules/.pnpm/eslint-config-next@16.0.1_@typescript-eslint+parser@8.46.2_eslint@9.38.0_jiti@2.6.1__typescri_l6shbyhivrerju6sffz4d7wdr4/node_modules/typescript/ThirdPartyNoticeText.txt:
+   2
+   3: The TypeScript software incorporate third party material from the projects listed below. The original copyright notice and the license under which Microsoft received such third party material are set forth below. Microsoft reserves all other rights not expressly granted, whether by implication, estoppel or otherwise.
+   4
+
+   9  ------------------- DefinitelyTyped --------------------
+  10: This file is based on or incorporate material from the projects listed below (collectively "Third Party Code"). Microsoft is not the original author of the Third Party Code. The original copyright notice and the license, under which Microsoft received such Third Party Code, are set forth below. Such licenses and notices are provided for informational purposes only. Microsoft, not the third party, licenses the Third Party Code to you under the terms set forth in the EULA for the Microsoft Product. Microsoft reserves all other rights not expressly granted under this agreement, whether by implication, estoppel or otherwise.
+  11  DefinitelyTyped
+
+node_modules/.pnpm/eslint-plugin-react-hooks@7.0.1_eslint@9.38.0_jiti@1.21.7_/node_modules/zod/src/v4/core/schemas.ts:
+  4239        input,
+  4240:       inst, // incorporate params.error into issue reporting
+  4241:       path: [...(inst._zod.def.path ?? [])], // incorporate params.error into issue reporting
+  4242        continue: !inst._zod.def.abort,
+
+node_modules/.pnpm/eslint-plugin-react-hooks@7.0.1_eslint@9.38.0_jiti@1.21.7_/node_modules/zod/v4/core/schemas.cjs:
+  1976              input,
+  1977:             inst, // incorporate params.error into issue reporting
+  1978:             path: [...(inst._zod.def.path ?? [])], // incorporate params.error into issue reporting
+  1979              continue: !inst._zod.def.abort,
+
+node_modules/.pnpm/eslint-plugin-react-hooks@7.0.1_eslint@9.38.0_jiti@1.21.7_/node_modules/zod/v4/core/schemas.js:
+  1945              input,
+  1946:             inst, // incorporate params.error into issue reporting
+  1947:             path: [...(inst._zod.def.path ?? [])], // incorporate params.error into issue reporting
+  1948              continue: !inst._zod.def.abort,
+
+node_modules/.pnpm/eslint-plugin-react-hooks@7.0.1_eslint@9.38.0_jiti@2.6.1_/node_modules/zod/src/v4/core/schemas.ts:
+  4239        input,
+  4240:       inst, // incorporate params.error into issue reporting
+  4241:       path: [...(inst._zod.def.path ?? [])], // incorporate params.error into issue reporting
+  4242        continue: !inst._zod.def.abort,
+
+node_modules/.pnpm/eslint-plugin-react-hooks@7.0.1_eslint@9.38.0_jiti@2.6.1_/node_modules/zod/v4/core/schemas.cjs:
+  1976              input,
+  1977:             inst, // incorporate params.error into issue reporting
+  1978:             path: [...(inst._zod.def.path ?? [])], // incorporate params.error into issue reporting
+  1979              continue: !inst._zod.def.abort,
+
+node_modules/.pnpm/eslint-plugin-react-hooks@7.0.1_eslint@9.38.0_jiti@2.6.1_/node_modules/zod/v4/core/schemas.js:
+  1945              input,
+  1946:             inst, // incorporate params.error into issue reporting
+  1947:             path: [...(inst._zod.def.path ?? [])], // incorporate params.error into issue reporting
+  1948              continue: !inst._zod.def.abort,
+
+node_modules/.pnpm/eslint@9.38.0_jiti@1.21.7/node_modules/@eslint/config-array/README.md:
+  341
+  342: The design of this project was influenced by feedback on the ESLint RFC, and incorporate ideas from:
+  343
+
+node_modules/.pnpm/eslint@9.38.0_jiti@2.6.1/node_modules/@eslint/config-array/README.md:
+  341
+  342: The design of this project was influenced by feedback on the ESLint RFC, and incorporate ideas from:
+  343
+
+node_modules/.pnpm/express-rate-limit@7.5.1_express@5.1.0/node_modules/express/History.md:
+  58
+  59: This incorporate all changes after 4.19.1 up to 4.19.2.
+  60
+
+  63
+  64: This incorporate all changes after 4.17.2 up to 4.19.1.
+  65
+
+node_modules/.pnpm/express@5.1.0/node_modules/body-parser/HISTORY.md:
+  36
+  37: This incorporate all changes after 1.19.1 up to 1.20.2.
+  38
+
+node_modules/.pnpm/express@5.1.0/node_modules/express/History.md:
+  58
+  59: This incorporate all changes after 4.19.1 up to 4.19.2.
+  60
+
+  63
+  64: This incorporate all changes after 4.17.2 up to 4.19.1.
+  65
+
+node_modules/.pnpm/express@5.1.0/node_modules/router/HISTORY.md:
+  34
+  35: This incorporate all changes after 1.3.5 up to 1.3.8.
+  36
+
+  41
+  42: This incorporate all changes after 1.3.3 up to 1.3.5.
+  43
+
+node_modules/.pnpm/firebase-admin@12.7.0_encoding@0.1.13/node_modules/node-forge/LICENSE:
+  285  those countries, so that distribution is permitted only in or among
+  286: countries not thus excluded.  In such case, this License incorporates
+  287  the limitation as if written in the body of this License.
+
+node_modules/.pnpm/firebase-admin@13.5.0_encoding@0.1.13/node_modules/node-forge/LICENSE:
+  285  those countries, so that distribution is permitted only in or among
+  286: countries not thus excluded.  In such case, this License incorporates
+  287  the limitation as if written in the body of this License.
+
+node_modules/.pnpm/firebase-tools@14.24.0_@types+node@24.9.2_encoding@0.1.13_typescript@5.9.3/node_modules/marked-terminal/index.cjs:
+  35856  Description:
+  35857:     This language incorporate both PostgreSQL SQL dialect and PL/pgSQL language.
+  35858      It is based on PostgreSQL version 11. Some notes:
+
+node_modules/.pnpm/firebase-tools@14.24.0_@types+node@24.9.2_encoding@0.1.13_typescript@5.9.3/node_modules/zod/src/v4/core/schemas.ts:
+  3768        input,
+  3769:       inst, // incorporate params.error into issue reporting
+  3770:       path: [...(inst._zod.def.path ?? [])], // incorporate params.error into issue reporting
+  3771        continue: !inst._zod.def.abort,
+
+node_modules/.pnpm/firebase-tools@14.24.0_@types+node@24.9.2_encoding@0.1.13_typescript@5.9.3/node_modules/zod/v4/core/schemas.cjs:
+  1738              input,
+  1739:             inst, // incorporate params.error into issue reporting
+  1740:             path: [...(inst._zod.def.path ?? [])], // incorporate params.error into issue reporting
+  1741              continue: !inst._zod.def.abort,
+
+node_modules/.pnpm/firebase-tools@14.24.0_@types+node@24.9.2_encoding@0.1.13_typescript@5.9.3/node_modules/zod/v4/core/schemas.js:
+  1707              input,
+  1708:             inst, // incorporate params.error into issue reporting
+  1709:             path: [...(inst._zod.def.path ?? [])], // incorporate params.error into issue reporting
+  1710              continue: !inst._zod.def.abort,
+
+node_modules/.pnpm/highlight.js@10.7.3/node_modules/highlight.js/lib/languages/pgsql.js:
+  5  Description:
+  6:     This language incorporate both PostgreSQL SQL dialect and PL/pgSQL language.
+  7      It is based on PostgreSQL version 11. Some notes:
+
+node_modules/.pnpm/is2@2.0.9/node_modules/deep-is/index.js:
+  82    }
+  83:   // having the same number of owned properties (keys incorporates
+  84    // hasOwnProperty)
+
+node_modules/.pnpm/js-yaml@4.1.0/node_modules/argparse/LICENSE:
+   80  3. In the event Licensee prepares a derivative work that is based on
+   81: or incorporate Python or any part thereof, and wants to make
+   82  the derivative work available to others as provided herein, then
+
+  188  3. In the event Licensee prepares a derivative work that is based on
+  189: or incorporate Python 1.6.1 or any part thereof, and wants to make
+  190  the derivative work available to others as provided herein, then
+
+node_modules/.pnpm/markdown-it@14.1.0/node_modules/argparse/LICENSE:
+   80  3. In the event Licensee prepares a derivative work that is based on
+   81: or incorporate Python or any part thereof, and wants to make
+   82  the derivative work available to others as provided herein, then
+
+  188  3. In the event Licensee prepares a derivative work that is based on
+  189: or incorporate Python 1.6.1 or any part thereof, and wants to make
+  190  the derivative work available to others as provided herein, then
+
+node_modules/.pnpm/marked-terminal@7.3.0_marked@13.0.3/node_modules/marked-terminal/index.cjs:
+  35856  Description:
+  35857:     This language incorporate both PostgreSQL SQL dialect and PL/pgSQL language.
+  35858      It is based on PostgreSQL version 11. Some notes:
+
+node_modules/.pnpm/node-forge@1.3.1/node_modules/node-forge/LICENSE:
+  285  those countries, so that distribution is permitted only in or among
+  286: countries not thus excluded.  In such case, this License incorporates
+  287  the limitation as if written in the body of this License.
+
+node_modules/.pnpm/node_modules/@apps/web/.next/dev/server/chunks/[root-of-the-server]__df8a5a08._.js:
+  1129  __turbopack_context__.s([
+  1130:     "CreateCorporateSchema",
+  1131:     ()=>CreateCorporateSchema,
+  1132      "JoinWithTokenSchema",
+
+  1136  ;
+  1137: const CreateCorporateSchema = __TURBOPACK__imported__module__$5b$project$5d2f$fresh$2d$root$2d$10$2f$fresh$2d$root$2f$node_modules$2f2e$pnpm$2f$zod$40$3$2e$25$2e$76$2f$node_modules$2f$zod$2f$v3$2f$external$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__$3c$export__$2a$__as__z$3e$__["z"].object({
+  1138      corporateName: __TURBOPACK__imported__module__$5b$project$5d2f$fresh$2d$root$2d$10$2f$fresh$2d$root$2f$node_modules$2f2e$pnpm$2f$zod$40$3$2e$25$2e$76$2f$node_modules$2f$zod$2f$v3$2f$external$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__$3c$export__$2a$__as__z$3e$__["z"].string().min(1),
+
+node_modules/.pnpm/node_modules/@apps/web/.next/dev/server/chunks/[root-of-the-server]__df8a5a08._.js.map:
+  16      {"offset": {"line": 1018, "column": 0}, "map": {"version":3,"sources":["file:///home/patrick/fresh-root-10/fresh-root/packages/types/src/networks.ts"],"sourcesContent":["// [P1][TENANCY][SCHEMA] Network schema (single canonical export)\nimport { z } from \"zod\";\n\nexport const NetworkKind = z.enum([\n  \"independent_org\",\n  \"corporate_network\",\n  \"franchise_network\",\n  \"nonprofit_network\",\n  \"test_sandbox\",\n]);\nexport type NetworkKind = z.infer<typeof NetworkKind>;\n\nexport const NetworkSegment = z.enum([\n  \"restaurant\",\n  \"qsr\",\n  \"bar\",\n  \"hotel\",\n  \"nonprofit\",\n  \"shelter\",\n  \"church\",\n  \"retail\",\n  \"other\",\n]);\nexport type NetworkSegment = z.infer<typeof NetworkSegment>;\n\nexport const NetworkStatus = z.enum([\"pending_verification\", \"active\", \"suspended\", \"closed\"]);\nexport type NetworkStatus = z.infer<typeof NetworkStatus>;\n\nexport const NetworkPlan = z.enum([\"free\", \"starter\", \"growth\", \"enterprise\", \"internal\"]);\nexport type NetworkPlan = z.infer<typeof NetworkPlan>;\n\nexport const BillingMode = z.enum([\"none\", \"card\", \"invoice\", \"partner_billed\"]);\nexport type BillingMode = z.infer<typeof BillingMode>;\n\nexport const NetworkSchema = z.object({\n  id: z.string().min(1),\n  slug: z.string().min(1),\n  displayName: z.string().min(1),\n  legalName: z.string().optional(),\n  kind: NetworkKind,\n  segment: NetworkSegment,\n  status: NetworkStatus,\n  environment: z.enum([\"production\", \"staging\", \"sandbox\", \"demo\"]).optional(),\n  primaryRegion: z.string().optional(),\n  timeZone: z.string().optional(),\n  currency: z.string().optional(),\n  plan: NetworkPlan.optional(),\n  billingMode: BillingMode.optional(),\n  maxVenues: z.number().int().nullable().optional(),\n  maxActiveOrgs: z.number().int().nullable().optional(),\n  maxActiveUsers: z.number().int().nullable().optional(),\n  maxShiftsPerDay: z.number().int().nullable().optional(),\n  requireMfaForAdmins: z.boolean().optional(),\n  ipAllowlistEnabled: z.boolean().optional(),\n  allowedEmailDomains: z.array(z.string()).optional(),\n  features: z\n    .object({\n      analytics: z.boolean().optional(),\n      apiAccess: z.boolean().optional(),\n    })\n    .optional(),\n  ownerUserId: z.string().optional(),\n  createdAt: z.any().optional(),\n  createdBy: z.string().optional(),\n  updatedAt: z.any().optional(),\n  updatedBy: z.string().optional(),\n});\n\nexport const CreateNetworkSchema = NetworkSchema.pick({\n  slug: true,\n  displayName: true,\n  kind: true,\n  segment: true,\n});\n\nexport const UpdateNetworkSchema = NetworkSchema.partial();\n\nexport type Network = z.infer<typeof NetworkSchema>;\nexport type CreateNetworkInput = z.infer<typeof CreateNetworkSchema>;\nexport type UpdateNetworkInput = z.infer<typeof UpdateNetworkSchema>;\n\nexport default NetworkSchema;\n"],"names":[],"mappings":"AAAA,iEAAiE;;;;;;;;;;;;;;;;;;;;;AACjE;;AAEO,MAAM,cAAc,mQAAC,CAAC,IAAI,CAAC;IAChC;IACA;IACA;IACA;IACA;CACD;AAGM,MAAM,iBAAiB,mQAAC,CAAC,IAAI,CAAC;IACnC;IACA;IACA;IACA;IACA;IACA;IACA;IACA;IACA;CACD;AAGM,MAAM,gBAAgB,mQAAC,CAAC,IAAI,CAAC;IAAC;IAAwB;IAAU;IAAa;CAAS;AAGtF,MAAM,cAAc,mQAAC,CAAC,IAAI,CAAC;IAAC;IAAQ;IAAW;IAAU;IAAc;CAAW;AAGlF,MAAM,cAAc,mQAAC,CAAC,IAAI,CAAC;IAAC;IAAQ;IAAQ;IAAW;CAAiB;AAGxE,MAAM,gBAAgB,mQAAC,CAAC,MAAM,CAAC;IACpC,IAAI,mQAAC,CAAC,MAAM,GAAG,GAAG,CAAC;IACnB,MAAM,mQAAC,CAAC,MAAM,GAAG,GAAG,CAAC;IACrB,aAAa,mQAAC,CAAC,MAAM,GAAG,GAAG,CAAC;IAC5B,WAAW,mQAAC,CAAC,MAAM,GAAG,QAAQ;IAC9B,MAAM;IACN,SAAS;IACT,QAAQ;IACR,aAAa,mQAAC,CAAC,IAAI,CAAC;QAAC;QAAc;QAAW;QAAW;KAAO,EAAE,QAAQ;IAC1E,eAAe,mQAAC,CAAC,MAAM,GAAG,QAAQ;IAClC,UAAU,mQAAC,CAAC,MAAM,GAAG,QAAQ;IAC7B,UAAU,mQAAC,CAAC,MAAM,GAAG,QAAQ;IAC7B,MAAM,YAAY,QAAQ;IAC1B,aAAa,YAAY,QAAQ;IACjC,WAAW,mQAAC,CAAC,MAAM,GAAG,GAAG,GAAG,QAAQ,GAAG,QAAQ;IAC/C,eAAe,mQAAC,CAAC,MAAM,GAAG,GAAG,GAAG,QAAQ,GAAG,QAAQ;IACnD,gBAAgB,mQAAC,CAAC,MAAM,GAAG,GAAG,GAAG,QAAQ,GAAG,QAAQ;IACpD,iBAAiB,mQAAC,CAAC,MAAM,GAAG,GAAG,GAAG,QAAQ,GAAG,QAAQ;IACrD,qBAAqB,mQAAC,CAAC,OAAO,GAAG,QAAQ;IACzC,oBAAoB,mQAAC,CAAC,OAAO,GAAG,QAAQ;IACxC,qBAAqB,mQAAC,CAAC,KAAK,CAAC,mQAAC,CAAC,MAAM,IAAI,QAAQ;IACjD,UAAU,mQAAC,CACR,MAAM,CAAC;QACN,WAAW,mQAAC,CAAC,OAAO,GAAG,QAAQ;QAC/B,WAAW,mQAAC,CAAC,OAAO,GAAG,QAAQ;IACjC,GACC,QAAQ;IACX,aAAa,mQAAC,CAAC,MAAM,GAAG,QAAQ;IAChC,WAAW,mQAAC,CAAC,GAAG,GAAG,QAAQ;IAC3B,WAAW,mQAAC,CAAC,MAAM,GAAG,QAAQ;IAC9B,WAAW,mQAAC,CAAC,GAAG,GAAG,QAAQ;IAC3B,WAAW,mQAAC,CAAC,MAAM,GAAG,QAAQ;AAChC;AAEO,MAAM,sBAAsB,cAAc,IAAI,CAAC;IACpD,MAAM;IACN,aAAa;IACb,MAAM;IACN,SAAS;AACX;AAEO,MAAM,sBAAsB,cAAc,OAAO;uCAMzC","debugId":null}},
+  17:     {"offset": {"line": 1126, "column": 0}, "map": {"version":3,"sources":["file:///home/patrick/fresh-root-10/fresh-root/packages/types/src/onboarding.ts"],"sourcesContent":["// [P2][APP][CODE] Onboarding\n// Tags: P2, APP, CODE\nimport { z } from \"zod\";\n\nexport const CreateCorporateSchema = z.object({\n  corporateName: z.string().min(1),\n  brandName: z.string().optional(),\n  formToken: z.string().optional(),\n});\n\nexport const JoinWithTokenSchema = z.object({\n  joinToken: z.string().min(1),\n});\n\nexport type CreateCorporate = z.infer<typeof CreateCorporateSchema>;\nexport type JoinWithToken = z.infer<typeof JoinWithTokenSchema>;\n"],"names":[],"mappings":"AAAA,6BAA6B;AAC7B,sBAAsB;;;;;;;AACtB;;AAEO,MAAM,wBAAwB,mQAAC,CAAC,MAAM,CAAC;IAC5C,eAAe,mQAAC,CAAC,MAAM,GAAG,GAAG,CAAC;IAC9B,WAAW,mQAAC,CAAC,MAAM,GAAG,QAAQ;IAC9B,WAAW,mQAAC,CAAC,MAAM,GAAG,QAAQ;AAChC;AAEO,MAAM,sBAAsB,mQAAC,CAAC,MAAM,CAAC;IAC1C,WAAW,mQAAC,CAAC,MAAM,GAAG,GAAG,CAAC;AAC5B","debugId":null}},
+  18      {"offset": {"line": 1148, "column": 0}, "map": {"version":3,"sources":["file:///home/patrick/fresh-root-10/fresh-root/packages/types/src/index.ts"],"sourcesContent":["// [P1][INTEGRITY][SCHEMA] Package types index\n// Tags: P1, INTEGRITY, SCHEMA, INDEX\nimport { z } from \"zod\";\n\nexport const Role = z.enum([\"admin\", \"manager\", \"staff\"]);\nexport type Role = z.infer<typeof Role>;\n\nexport * from \"./rbac\";\nexport * from \"./orgs\";\nexport * from \"./schedules\";\nexport * from \"./memberships\"; // This provides the canonical Membership export\nexport * from \"./positions\";\nexport * from \"./shifts\";\nexport * from \"./venues\";\nexport * from \"./zones\";\nexport * from \"./attendance\";\nexport * from \"./join-tokens\";\nexport * from \"./compliance/adminResponsibilityForm\";\nexport * from \"./networks\";\nexport * from \"./onboarding\";\n"],"names":[],"mappings":"AAAA,8CAA8C;AAC9C,qCAAqC;;;;;AACrC;AAKA;AACA;AACA;AACA,kTAA+B,gDAAgD;AAC/E;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;;AAfO,MAAM,OAAO,mQAAC,CAAC,IAAI,CAAC;IAAC;IAAS;IAAW;CAAQ","debugId":null}},
+
+node_modules/.pnpm/node_modules/@apps/web/app/api/onboarding/create-network-corporate/route.ts:
+  56        const networkRef = adb.collection("networks").doc();
+  57:       const corpRef = adb.collection("corporates").doc();
+  58
+
+node_modules/.pnpm/node_modules/@apps/web/node_modules/speakeasy/CHANGELOG.md:
+  6
+  7: Speakeasy 2.0.0 is a major update based on a Speakeasy fork, [Passcode](https://github.com/mikepb/passcode), by [Michael Phan-Ba](https://github.com/mikepb), which also incorporate code from another Node.js HOTP/TOTP module, [notp](https://github.com/guyht/notp), by [Guy Halford-Thompson](https://github.com/guyht), with additional functionality and API compatibility changes made by [Mark Bao](https://github.com/markbao). Speakeasy is now also moving to its own GitHub organization.
+  8
+
+node_modules/.pnpm/node_modules/@apps/web/node_modules/speakeasy/README.md:
+   24  One-time Password (TOTP) algorithm defined in [RFC 6238][rfc6238] are
+   25: supported. This project incorporate code from [passcode][], originally a
+   26  fork of Speakeasy, and [notp][].
+
+  716
+  717: This project incorporate code from [passcode][], which was originally a
+  718  fork of speakeasy, and [notp][], both of which are licensed under MIT.
+
+node_modules/.pnpm/node_modules/@apps/web/node_modules/typescript/ThirdPartyNoticeText.txt:
+   2
+   3: The TypeScript software incorporate third party material from the projects listed below. The original copyright notice and the license under which Microsoft received such third party material are set forth below. Microsoft reserves all other rights not expressly granted, whether by implication, estoppel or otherwise.
+   4
+
+   9  ------------------- DefinitelyTyped --------------------
+  10: This file is based on or incorporate material from the projects listed below (collectively "Third Party Code"). Microsoft is not the original author of the Third Party Code. The original copyright notice and the license, under which Microsoft received such Third Party Code, are set forth below. Such licenses and notices are provided for informational purposes only. Microsoft, not the third party, licenses the Third Party Code to you under the terms set forth in the EULA for the Microsoft Product. Microsoft reserves all other rights not expressly granted under this agreement, whether by implication, estoppel or otherwise.
+  11  DefinitelyTyped
+
+node_modules/.pnpm/node_modules/@apps/web/node_modules/zod/src/v4/core/schemas.ts:
+  3768        input,
+  3769:       inst, // incorporate params.error into issue reporting
+  3770:       path: [...(inst._zod.def.path ?? [])], // incorporate params.error into issue reporting
+  3771        continue: !inst._zod.def.abort,
+
+node_modules/.pnpm/node_modules/@apps/web/node_modules/zod/v4/core/schemas.cjs:
+  1738              input,
+  1739:             inst, // incorporate params.error into issue reporting
+  1740:             path: [...(inst._zod.def.path ?? [])], // incorporate params.error into issue reporting
+  1741              continue: !inst._zod.def.abort,
+
+node_modules/.pnpm/node_modules/@apps/web/node_modules/zod/v4/core/schemas.js:
+  1707              input,
+  1708:             inst, // incorporate params.error into issue reporting
+  1709:             path: [...(inst._zod.def.path ?? [])], // incorporate params.error into issue reporting
+  1710              continue: !inst._zod.def.abort,
+
+node_modules/.pnpm/node_modules/@cspell/dict-en-common-misspellings/dict/dict-en-gb.json:
+  287      "coorperations->corporations",
+  288:     "coprorates->corporates",
+  289      "correltor->correlator",
+
+node_modules/.pnpm/node_modules/@cspell/dict-en-common-misspellings/dict/dict-en.json:
+  32192      "incooperated->incorporated",
+  32193:     "incooperates->incorporates",
+  32194      "incoperate->incorporate",
+  32195      "incoperated->incorporated",
+  32196:     "incoperates->incorporates",
+  32197      "incoperating->incorporating",
+
+  32199      "incoporated->incorporated",
+  32200:     "incoporates->incorporates",
+  32201      "incoporating->incorporating",
+
+  32203      "incoprorated->incorporated",
+  32204:     "incoprorates->incorporates",
+  32205      "incoprorating->incorporating",
+
+  32209      "incoropate->incorporate",
+  32210:     "incoropates->incorporates",
+  32211      "incoroporated->incorporated",
+
+  32214      "incorparated->incorporated",
+  32215:     "incorparates->incorporates",
+  32216      "incorparating->incorporating",
+
+  32218      "incorperated->incorporated",
+  32219:     "incorperates->incorporates",
+  32220      "incorperating->incorporating",
+
+  32226      "incorported->incorporated",
+  32227:     "incorprates->incorporates",
+  32228      "incorproate->incorporated",
+
+node_modules/.pnpm/node_modules/@fresh-root/rules-tests/node_modules/typescript/ThirdPartyNoticeText.txt:
+   2
+   3: The TypeScript software incorporate third party material from the projects listed below. The original copyright notice and the license under which Microsoft received such third party material are set forth below. Microsoft reserves all other rights not expressly granted, whether by implication, estoppel or otherwise.
+   4
+
+   9  ------------------- DefinitelyTyped --------------------
+  10: This file is based on or incorporate material from the projects listed below (collectively "Third Party Code"). Microsoft is not the original author of the Third Party Code. The original copyright notice and the license, under which Microsoft received such Third Party Code, are set forth below. Such licenses and notices are provided for informational purposes only. Microsoft, not the third party, licenses the Third Party Code to you under the terms set forth in the EULA for the Microsoft Product. Microsoft reserves all other rights not expressly granted under this agreement, whether by implication, estoppel or otherwise.
+  11  DefinitelyTyped
+
+node_modules/.pnpm/node_modules/@fresh-schedules/api/node_modules/typescript/ThirdPartyNoticeText.txt:
+   2
+   3: The TypeScript software incorporate third party material from the projects listed below. The original copyright notice and the license under which Microsoft received such third party material are set forth below. Microsoft reserves all other rights not expressly granted, whether by implication, estoppel or otherwise.
+   4
+
+   9  ------------------- DefinitelyTyped --------------------
+  10: This file is based on or incorporate material from the projects listed below (collectively "Third Party Code"). Microsoft is not the original author of the Third Party Code. The original copyright notice and the license, under which Microsoft received such Third Party Code, are set forth below. Such licenses and notices are provided for informational purposes only. Microsoft, not the third party, licenses the Third Party Code to you under the terms set forth in the EULA for the Microsoft Product. Microsoft reserves all other rights not expressly granted under this agreement, whether by implication, estoppel or otherwise.
+  11  DefinitelyTyped
+
+node_modules/.pnpm/node_modules/@fresh-schedules/api/node_modules/zod/src/v4/core/schemas.ts:
+  3768        input,
+  3769:       inst, // incorporate params.error into issue reporting
+  3770:       path: [...(inst._zod.def.path ?? [])], // incorporate params.error into issue reporting
+  3771        continue: !inst._zod.def.abort,
+
+node_modules/.pnpm/node_modules/@fresh-schedules/api/node_modules/zod/v4/core/schemas.cjs:
+  1738              input,
+  1739:             inst, // incorporate params.error into issue reporting
+  1740:             path: [...(inst._zod.def.path ?? [])], // incorporate params.error into issue reporting
+  1741              continue: !inst._zod.def.abort,
+
+node_modules/.pnpm/node_modules/@fresh-schedules/api/node_modules/zod/v4/core/schemas.js:
+  1707              input,
+  1708:             inst, // incorporate params.error into issue reporting
+  1709:             path: [...(inst._zod.def.path ?? [])], // incorporate params.error into issue reporting
+  1710              continue: !inst._zod.def.abort,
+
+node_modules/.pnpm/node_modules/@fresh-schedules/config/node_modules/typescript/ThirdPartyNoticeText.txt:
+   2
+   3: The TypeScript software incorporate third party material from the projects listed below. The original copyright notice and the license under which Microsoft received such third party material are set forth below. Microsoft reserves all other rights not expressly granted, whether by implication, estoppel or otherwise.
+   4
+
+   9  ------------------- DefinitelyTyped --------------------
+  10: This file is based on or incorporate material from the projects listed below (collectively "Third Party Code"). Microsoft is not the original author of the Third Party Code. The original copyright notice and the license, under which Microsoft received such Third Party Code, are set forth below. Such licenses and notices are provided for informational purposes only. Microsoft, not the third party, licenses the Third Party Code to you under the terms set forth in the EULA for the Microsoft Product. Microsoft reserves all other rights not expressly granted under this agreement, whether by implication, estoppel or otherwise.
+  11  DefinitelyTyped
+
+node_modules/.pnpm/node_modules/@fresh-schedules/types/node_modules/typescript/ThirdPartyNoticeText.txt:
+   2
+   3: The TypeScript software incorporate third party material from the projects listed below. The original copyright notice and the license under which Microsoft received such third party material are set forth below. Microsoft reserves all other rights not expressly granted, whether by implication, estoppel or otherwise.
+   4
+
+   9  ------------------- DefinitelyTyped --------------------
+  10: This file is based on or incorporate material from the projects listed below (collectively "Third Party Code"). Microsoft is not the original author of the Third Party Code. The original copyright notice and the license, under which Microsoft received such Third Party Code, are set forth below. Such licenses and notices are provided for informational purposes only. Microsoft, not the third party, licenses the Third Party Code to you under the terms set forth in the EULA for the Microsoft Product. Microsoft reserves all other rights not expressly granted under this agreement, whether by implication, estoppel or otherwise.
+  11  DefinitelyTyped
+
+node_modules/.pnpm/node_modules/@fresh-schedules/types/node_modules/zod/src/v4/core/schemas.ts:
+  3768        input,
+  3769:       inst, // incorporate params.error into issue reporting
+  3770:       path: [...(inst._zod.def.path ?? [])], // incorporate params.error into issue reporting
+  3771        continue: !inst._zod.def.abort,
+
+node_modules/.pnpm/node_modules/@fresh-schedules/types/node_modules/zod/v4/core/schemas.cjs:
+  1738              input,
+  1739:             inst, // incorporate params.error into issue reporting
+  1740:             path: [...(inst._zod.def.path ?? [])], // incorporate params.error into issue reporting
+  1741              continue: !inst._zod.def.abort,
+
+node_modules/.pnpm/node_modules/@fresh-schedules/types/node_modules/zod/v4/core/schemas.js:
+  1707              input,
+  1708:             inst, // incorporate params.error into issue reporting
+  1709:             path: [...(inst._zod.def.path ?? [])], // incorporate params.error into issue reporting
+  1710              continue: !inst._zod.def.abort,
+
+node_modules/.pnpm/node_modules/@fresh-schedules/types/src/corporates.ts:
+   1: // [P0][SECURITY][CODE] Corporates
+   2  // Tags: P0, SECURITY, CODE
+
+  17
+  18: export const CorporateSchema = z.object({
+  19    id: z.string().min(1),
+
+  38
+  39: export type Corporate = z.infer<typeof CorporateSchema>;
+  40
+
+  42
+  43: export const CreateCorporateSchema = z.object({
+  44    networkId: z.string().min(1),
+
+  55
+  56: export type CreateCorporate = z.infer<typeof CreateCorporateSchema>;
+  57
+
+  59
+  60: export const UpdateCorporateSchema = z.object({
+  61    name: z.string().min(3).max(100).optional(),
+
+  71
+  72: export type UpdateCorporate = z.infer<typeof UpdateCorporateSchema>;
+  73
+
+node_modules/.pnpm/node_modules/@fresh-schedules/types/src/index.ts:
+  8  export * from "./rbac";
+  9: export * from "./corporates";
+  10  export * from "./orgs";
+
+node_modules/.pnpm/node_modules/@fresh-schedules/ui/node_modules/typescript/ThirdPartyNoticeText.txt:
+   2
+   3: The TypeScript software incorporate third party material from the projects listed below. The original copyright notice and the license under which Microsoft received such third party material are set forth below. Microsoft reserves all other rights not expressly granted, whether by implication, estoppel or otherwise.
+   4
+
+   9  ------------------- DefinitelyTyped --------------------
+  10: This file is based on or incorporate material from the projects listed below (collectively "Third Party Code"). Microsoft is not the original author of the Third Party Code. The original copyright notice and the license, under which Microsoft received such Third Party Code, are set forth below. Such licenses and notices are provided for informational purposes only. Microsoft, not the third party, licenses the Third Party Code to you under the terms set forth in the EULA for the Microsoft Product. Microsoft reserves all other rights not expressly granted under this agreement, whether by implication, estoppel or otherwise.
+  11  DefinitelyTyped
+
+node_modules/.pnpm/node_modules/@functions/app/node_modules/typescript/ThirdPartyNoticeText.txt:
+   2
+   3: The TypeScript software incorporate third party material from the projects listed below. The original copyright notice and the license under which Microsoft received such third party material are set forth below. Microsoft reserves all other rights not expressly granted, whether by implication, estoppel or otherwise.
+   4
+
+   9  ------------------- DefinitelyTyped --------------------
+  10: This file is based on or incorporate material from the projects listed below (collectively "Third Party Code"). Microsoft is not the original author of the Third Party Code. The original copyright notice and the license, under which Microsoft received such Third Party Code, are set forth below. Such licenses and notices are provided for informational purposes only. Microsoft, not the third party, licenses the Third Party Code to you under the terms set forth in the EULA for the Microsoft Product. Microsoft reserves all other rights not expressly granted under this agreement, whether by implication, estoppel or otherwise.
+  11  DefinitelyTyped
+
+node_modules/.pnpm/node_modules/@packages/mcp-server/node_modules/typescript/ThirdPartyNoticeText.txt:
+   2
+   3: The TypeScript software incorporate third party material from the projects listed below. The original copyright notice and the license under which Microsoft received such third party material are set forth below. Microsoft reserves all other rights not expressly granted, whether by implication, estoppel or otherwise.
+   4
+
+   9  ------------------- DefinitelyTyped --------------------
+  10: This file is based on or incorporate material from the projects listed below (collectively "Third Party Code"). Microsoft is not the original author of the Third Party Code. The original copyright notice and the license, under which Microsoft received such Third Party Code, are set forth below. Such licenses and notices are provided for informational purposes only. Microsoft, not the third party, licenses the Third Party Code to you under the terms set forth in the EULA for the Microsoft Product. Microsoft reserves all other rights not expressly granted under this agreement, whether by implication, estoppel or otherwise.
+  11  DefinitelyTyped
+
+node_modules/.pnpm/node_modules/deep-is/index.js:
+  82    }
+  83:   // having the same number of owned properties (keys incorporates
+  84    // hasOwnProperty)
+
+node_modules/.pnpm/node_modules/highlight.js/lib/languages/pgsql.js:
+  5  Description:
+  6:     This language incorporate both PostgreSQL SQL dialect and PL/pgSQL language.
+  7      It is based on PostgreSQL version 11. Some notes:
+
+node_modules/.pnpm/node_modules/marked-terminal/index.cjs:
+  35856  Description:
+  35857:     This language incorporate both PostgreSQL SQL dialect and PL/pgSQL language.
+  35858      It is based on PostgreSQL version 11. Some notes:
+
+node_modules/.pnpm/node_modules/node-forge/LICENSE:
+  285  those countries, so that distribution is permitted only in or among
+  286: countries not thus excluded.  In such case, this License incorporates
+  287  the limitation as if written in the body of this License.
+
+node_modules/.pnpm/node_modules/playwright-core/ThirdPartyNotices.txt:
+  4
+  5: This project incorporate components from the projects listed below. The original copyright notices and the licenses under which Microsoft received such components are set forth below. Microsoft reserves all rights not expressly granted herein, whether by implication, estoppel or otherwise.
+  6
+
+node_modules/.pnpm/node_modules/pngjs/browser.js:
+  2916    var key, i;
+  2917:   // having the same number of owned properties (keys incorporates
+  2918    // hasOwnProperty)
+
+node_modules/.pnpm/node_modules/re2/vendor/abseil-cpp/absl/base/call_once.h:
+  20  // a given function at most once, across all threads. This Abseil version is
+  21: // faster than the C++11 version and incorporate the C++17 argument-passing
+  22  // fix, so that (for example) non-const references may be passed to the invoked
+
+node_modules/.pnpm/node_modules/re2/vendor/abseil-cpp/absl/random/internal/randen.h:
+  63
+  64:   // Absorb incorporate additional seed material into the randen sponge.  After
+  65    // absorb returns, Generate must be called before the state may be consumed.
+
+node_modules/.pnpm/node_modules/re2/vendor/abseil-cpp/absl/strings/charconv.h:
+  54  //
+  55: // This interface incorporate the proposed resolutions for library issues
+  56  // DR 3080 and DR 3081.  If these are adopted with different wording,
+
+node_modules/.pnpm/node_modules/router/HISTORY.md:
+  34
+  35: This incorporate all changes after 1.3.5 up to 1.3.8.
+  36
+
+  41
+  42: This incorporate all changes after 1.3.3 up to 1.3.5.
+  43
+
+node_modules/.pnpm/node_modules/speakeasy/CHANGELOG.md:
+  6
+  7: Speakeasy 2.0.0 is a major update based on a Speakeasy fork, [Passcode](https://github.com/mikepb/passcode), by [Michael Phan-Ba](https://github.com/mikepb), which also incorporate code from another Node.js HOTP/TOTP module, [notp](https://github.com/guyht/notp), by [Guy Halford-Thompson](https://github.com/guyht), with additional functionality and API compatibility changes made by [Mark Bao](https://github.com/markbao). Speakeasy is now also moving to its own GitHub organization.
+  8
+
+node_modules/.pnpm/node_modules/speakeasy/README.md:
+   24  One-time Password (TOTP) algorithm defined in [RFC 6238][rfc6238] are
+   25: supported. This project incorporate code from [passcode][], originally a
+   26  fork of Speakeasy, and [notp][].
+
+  716
+  717: This project incorporate code from [passcode][], which was originally a
+  718  fork of speakeasy, and [notp][], both of which are licensed under MIT.
+
+node_modules/.pnpm/node_modules/vscode-languageserver-textdocument/thirdpartynotices.txt:
+  3
+  4: This software incorporate material from third parties.
+  5  Microsoft makes certain open source code available at https://3rdpartysource.microsoft.com,
+
+node_modules/.pnpm/optionator@0.9.4/node_modules/deep-is/index.js:
+  82    }
+  83:   // having the same number of owned properties (keys incorporates
+  84    // hasOwnProperty)
+
+node_modules/.pnpm/playwright-core@1.56.1/node_modules/playwright-core/ThirdPartyNotices.txt:
+  4
+  5: This project incorporate components from the projects listed below. The original copyright notices and the licenses under which Microsoft received such components are set forth below. Microsoft reserves all rights not expressly granted herein, whether by implication, estoppel or otherwise.
+  6
+
+node_modules/.pnpm/playwright@1.56.1/node_modules/playwright/ThirdPartyNotices.txt:
+  4
+  5: This project incorporate components from the projects listed below. The original copyright notices and the licenses under which Microsoft received such components are set forth below. Microsoft reserves all rights not expressly granted herein, whether by implication, estoppel or otherwise.
+  6
+
+node_modules/.pnpm/playwright@1.56.1/node_modules/playwright-core/ThirdPartyNotices.txt:
+  4
+  5: This project incorporate components from the projects listed below. The original copyright notices and the licenses under which Microsoft received such components are set forth below. Microsoft reserves all rights not expressly granted herein, whether by implication, estoppel or otherwise.
+  6
+
+node_modules/.pnpm/pngjs@5.0.0/node_modules/pngjs/browser.js:
+  2916    var key, i;
+  2917:   // having the same number of owned properties (keys incorporates
+  2918    // hasOwnProperty)
+
+node_modules/.pnpm/qrcode@1.5.4/node_modules/pngjs/browser.js:
+  2916    var key, i;
+  2917:   // having the same number of owned properties (keys incorporates
+  2918    // hasOwnProperty)
+
+node_modules/.pnpm/re2@1.22.1/node_modules/re2/vendor/abseil-cpp/absl/base/call_once.h:
+  20  // a given function at most once, across all threads. This Abseil version is
+  21: // faster than the C++11 version and incorporate the C++17 argument-passing
+  22  // fix, so that (for example) non-const references may be passed to the invoked
+
+node_modules/.pnpm/re2@1.22.1/node_modules/re2/vendor/abseil-cpp/absl/random/internal/randen.h:
+  63
+  64:   // Absorb incorporate additional seed material into the randen sponge.  After
+  65    // absorb returns, Generate must be called before the state may be consumed.
+
+node_modules/.pnpm/re2@1.22.1/node_modules/re2/vendor/abseil-cpp/absl/strings/charconv.h:
+  54  //
+  55: // This interface incorporate the proposed resolutions for library issues
+  56  // DR 3080 and DR 3081.  If these are adopted with different wording,
+
+node_modules/.pnpm/router@2.2.0/node_modules/router/HISTORY.md:
+  34
+  35: This incorporate all changes after 1.3.5 up to 1.3.8.
+  36
+
+  41
+  42: This incorporate all changes after 1.3.3 up to 1.3.5.
+  43
+
+node_modules/.pnpm/speakeasy@2.0.0/node_modules/speakeasy/CHANGELOG.md:
+  6
+  7: Speakeasy 2.0.0 is a major update based on a Speakeasy fork, [Passcode](https://github.com/mikepb/passcode), by [Michael Phan-Ba](https://github.com/mikepb), which also incorporate code from another Node.js HOTP/TOTP module, [notp](https://github.com/guyht/notp), by [Guy Halford-Thompson](https://github.com/guyht), with additional functionality and API compatibility changes made by [Mark Bao](https://github.com/markbao). Speakeasy is now also moving to its own GitHub organization.
+  8
+
+node_modules/.pnpm/speakeasy@2.0.0/node_modules/speakeasy/README.md:
+   24  One-time Password (TOTP) algorithm defined in [RFC 6238][rfc6238] are
+   25: supported. This project incorporate code from [passcode][], originally a
+   26  fork of Speakeasy, and [notp][].
+
+  716
+  717: This project incorporate code from [passcode][], which was originally a
+  718  fork of speakeasy, and [notp][], both of which are licensed under MIT.
+
+node_modules/.pnpm/sql-formatter@15.6.10/node_modules/argparse/LICENSE:
+   80  3. In the event Licensee prepares a derivative work that is based on
+   81: or incorporate Python or any part thereof, and wants to make
+   82  the derivative work available to others as provided herein, then
+
+  188  3. In the event Licensee prepares a derivative work that is based on
+  189: or incorporate Python 1.6.1 or any part thereof, and wants to make
+  190  the derivative work available to others as provided herein, then
+
+node_modules/.pnpm/superstatic@9.2.0_encoding@0.1.13/node_modules/re2/vendor/abseil-cpp/absl/base/call_once.h:
+  20  // a given function at most once, across all threads. This Abseil version is
+  21: // faster than the C++11 version and incorporate the C++17 argument-passing
+  22  // fix, so that (for example) non-const references may be passed to the invoked
+
+node_modules/.pnpm/superstatic@9.2.0_encoding@0.1.13/node_modules/re2/vendor/abseil-cpp/absl/random/internal/randen.h:
+  63
+  64:   // Absorb incorporate additional seed material into the randen sponge.  After
+  65    // absorb returns, Generate must be called before the state may be consumed.
+
+node_modules/.pnpm/superstatic@9.2.0_encoding@0.1.13/node_modules/re2/vendor/abseil-cpp/absl/strings/charconv.h:
+  54  //
+  55: // This interface incorporate the proposed resolutions for library issues
+  56  // DR 3080 and DR 3081.  If these are adopted with different wording,
+
+node_modules/.pnpm/superstatic@9.2.0_encoding@0.1.13/node_modules/router/HISTORY.md:
+  34
+  35: This incorporate all changes after 1.3.5 up to 1.3.8.
+  36
+
+  41
+  42: This incorporate all changes after 1.3.3 up to 1.3.5.
+  43
+
+node_modules/.pnpm/ts-api-utils@2.1.0_typescript@5.9.3/node_modules/typescript/ThirdPartyNoticeText.txt:
+   2
+   3: The TypeScript software incorporate third party material from the projects listed below. The original copyright notice and the license under which Microsoft received such third party material are set forth below. Microsoft reserves all other rights not expressly granted, whether by implication, estoppel or otherwise.
+   4
+
+   9  ------------------- DefinitelyTyped --------------------
+  10: This file is based on or incorporate material from the projects listed below (collectively "Third Party Code"). Microsoft is not the original author of the Third Party Code. The original copyright notice and the license, under which Microsoft received such Third Party Code, are set forth below. Such licenses and notices are provided for informational purposes only. Microsoft, not the third party, licenses the Third Party Code to you under the terms set forth in the EULA for the Microsoft Product. Microsoft reserves all other rights not expressly granted under this agreement, whether by implication, estoppel or otherwise.
+  11  DefinitelyTyped
+
+node_modules/.pnpm/ts-jest@29.4.5_@babel+core@7.28.5_@jest+transform@30.2.0_@jest+types@30.2.0_babel-jest@30.2.0_vhkhwadvxq5ndt7z24ckjelwse/node_modules/typescript/ThirdPartyNoticeText.txt:
+   2
+   3: The TypeScript software incorporate third party material from the projects listed below. The original copyright notice and the license under which Microsoft received such third party material are set forth below. Microsoft reserves all other rights not expressly granted, whether by implication, estoppel or otherwise.
+   4
+
+   9  ------------------- DefinitelyTyped --------------------
+  10: This file is based on or incorporate material from the projects listed below (collectively "Third Party Code"). Microsoft is not the original author of the Third Party Code. The original copyright notice and the license, under which Microsoft received such Third Party Code, are set forth below. Such licenses and notices are provided for informational purposes only. Microsoft, not the third party, licenses the Third Party Code to you under the terms set forth in the EULA for the Microsoft Product. Microsoft reserves all other rights not expressly granted under this agreement, whether by implication, estoppel or otherwise.
+  11  DefinitelyTyped
+
+node_modules/.pnpm/ts-node@10.9.2_@types+node@24.10.0_typescript@5.9.3/node_modules/typescript/ThirdPartyNoticeText.txt:
+   2
+   3: The TypeScript software incorporate third party material from the projects listed below. The original copyright notice and the license under which Microsoft received such third party material are set forth below. Microsoft reserves all other rights not expressly granted, whether by implication, estoppel or otherwise.
+   4
+
+   9  ------------------- DefinitelyTyped --------------------
+  10: This file is based on or incorporate material from the projects listed below (collectively "Third Party Code"). Microsoft is not the original author of the Third Party Code. The original copyright notice and the license, under which Microsoft received such Third Party Code, are set forth below. Such licenses and notices are provided for informational purposes only. Microsoft, not the third party, licenses the Third Party Code to you under the terms set forth in the EULA for the Microsoft Product. Microsoft reserves all other rights not expressly granted under this agreement, whether by implication, estoppel or otherwise.
+  11  DefinitelyTyped
+
+node_modules/.pnpm/ts-node@10.9.2_@types+node@24.9.2_typescript@5.9.3/node_modules/typescript/ThirdPartyNoticeText.txt:
+   2
+   3: The TypeScript software incorporate third party material from the projects listed below. The original copyright notice and the license under which Microsoft received such third party material are set forth below. Microsoft reserves all other rights not expressly granted, whether by implication, estoppel or otherwise.
+   4
+
+   9  ------------------- DefinitelyTyped --------------------
+  10: This file is based on or incorporate material from the projects listed below (collectively "Third Party Code"). Microsoft is not the original author of the Third Party Code. The original copyright notice and the license, under which Microsoft received such Third Party Code, are set forth below. Such licenses and notices are provided for informational purposes only. Microsoft, not the third party, licenses the Third Party Code to you under the terms set forth in the EULA for the Microsoft Product. Microsoft reserves all other rights not expressly granted under this agreement, whether by implication, estoppel or otherwise.
+  11  DefinitelyTyped
+
+node_modules/.pnpm/typescript-eslint@8.46.2_eslint@9.38.0_jiti@1.21.7__typescript@5.9.3/node_modules/typescript/ThirdPartyNoticeText.txt:
+   2
+   3: The TypeScript software incorporate third party material from the projects listed below. The original copyright notice and the license under which Microsoft received such third party material are set forth below. Microsoft reserves all other rights not expressly granted, whether by implication, estoppel or otherwise.
+   4
+
+   9  ------------------- DefinitelyTyped --------------------
+  10: This file is based on or incorporate material from the projects listed below (collectively "Third Party Code"). Microsoft is not the original author of the Third Party Code. The original copyright notice and the license, under which Microsoft received such Third Party Code, are set forth below. Such licenses and notices are provided for informational purposes only. Microsoft, not the third party, licenses the Third Party Code to you under the terms set forth in the EULA for the Microsoft Product. Microsoft reserves all other rights not expressly granted under this agreement, whether by implication, estoppel or otherwise.
+  11  DefinitelyTyped
+
+node_modules/.pnpm/typescript-eslint@8.46.2_eslint@9.38.0_jiti@2.6.1__typescript@5.9.3/node_modules/typescript/ThirdPartyNoticeText.txt:
+   2
+   3: The TypeScript software incorporate third party material from the projects listed below. The original copyright notice and the license under which Microsoft received such third party material are set forth below. Microsoft reserves all other rights not expressly granted, whether by implication, estoppel or otherwise.
+   4
+
+   9  ------------------- DefinitelyTyped --------------------
+  10: This file is based on or incorporate material from the projects listed below (collectively "Third Party Code"). Microsoft is not the original author of the Third Party Code. The original copyright notice and the license, under which Microsoft received such Third Party Code, are set forth below. Such licenses and notices are provided for informational purposes only. Microsoft, not the third party, licenses the Third Party Code to you under the terms set forth in the EULA for the Microsoft Product. Microsoft reserves all other rights not expressly granted under this agreement, whether by implication, estoppel or otherwise.
+  11  DefinitelyTyped
+
+node_modules/.pnpm/typescript@5.9.3/node_modules/typescript/ThirdPartyNoticeText.txt:
+   2
+   3: The TypeScript software incorporate third party material from the projects listed below. The original copyright notice and the license under which Microsoft received such third party material are set forth below. Microsoft reserves all other rights not expressly granted, whether by implication, estoppel or otherwise.
+   4
+
+   9  ------------------- DefinitelyTyped --------------------
+  10: This file is based on or incorporate material from the projects listed below (collectively "Third Party Code"). Microsoft is not the original author of the Third Party Code. The original copyright notice and the license, under which Microsoft received such Third Party Code, are set forth below. Such licenses and notices are provided for informational purposes only. Microsoft, not the third party, licenses the Third Party Code to you under the terms set forth in the EULA for the Microsoft Product. Microsoft reserves all other rights not expressly granted under this agreement, whether by implication, estoppel or otherwise.
+  11  DefinitelyTyped
+
+node_modules/.pnpm/vscode-languageserver-textdocument@1.0.12/node_modules/vscode-languageserver-textdocument/thirdpartynotices.txt:
+  3
+  4: This software incorporate material from third parties.
+  5  Microsoft makes certain open source code available at https://3rdpartysource.microsoft.com,
+
+node_modules/.pnpm/zod-to-json-schema@3.24.6_zod@3.25.76/node_modules/zod/src/v4/core/schemas.ts:
+  3768        input,
+  3769:       inst, // incorporate params.error into issue reporting
+  3770:       path: [...(inst._zod.def.path ?? [])], // incorporate params.error into issue reporting
+  3771        continue: !inst._zod.def.abort,
+
+node_modules/.pnpm/zod-to-json-schema@3.24.6_zod@3.25.76/node_modules/zod/v4/core/schemas.cjs:
+  1738              input,
+  1739:             inst, // incorporate params.error into issue reporting
+  1740:             path: [...(inst._zod.def.path ?? [])], // incorporate params.error into issue reporting
+  1741              continue: !inst._zod.def.abort,
+
+node_modules/.pnpm/zod-to-json-schema@3.24.6_zod@3.25.76/node_modules/zod/v4/core/schemas.js:
+  1707              input,
+  1708:             inst, // incorporate params.error into issue reporting
+  1709:             path: [...(inst._zod.def.path ?? [])], // incorporate params.error into issue reporting
+  1710              continue: !inst._zod.def.abort,
+
+node_modules/.pnpm/zod-validation-error@4.0.2_zod@4.1.12/node_modules/zod/src/v4/core/schemas.ts:
+  4239        input,
+  4240:       inst, // incorporate params.error into issue reporting
+  4241:       path: [...(inst._zod.def.path ?? [])], // incorporate params.error into issue reporting
+  4242        continue: !inst._zod.def.abort,
+
+node_modules/.pnpm/zod-validation-error@4.0.2_zod@4.1.12/node_modules/zod/v4/core/schemas.cjs:
+  1976              input,
+  1977:             inst, // incorporate params.error into issue reporting
+  1978:             path: [...(inst._zod.def.path ?? [])], // incorporate params.error into issue reporting
+  1979              continue: !inst._zod.def.abort,
+
+node_modules/.pnpm/zod-validation-error@4.0.2_zod@4.1.12/node_modules/zod/v4/core/schemas.js:
+  1945              input,
+  1946:             inst, // incorporate params.error into issue reporting
+  1947:             path: [...(inst._zod.def.path ?? [])], // incorporate params.error into issue reporting
+  1948              continue: !inst._zod.def.abort,
+
+node_modules/.pnpm/zod@3.25.76/node_modules/zod/src/v4/core/schemas.ts:
+  3768        input,
+  3769:       inst, // incorporate params.error into issue reporting
+  3770:       path: [...(inst._zod.def.path ?? [])], // incorporate params.error into issue reporting
+  3771        continue: !inst._zod.def.abort,
+
+node_modules/.pnpm/zod@3.25.76/node_modules/zod/v4/core/schemas.cjs:
+  1738              input,
+  1739:             inst, // incorporate params.error into issue reporting
+  1740:             path: [...(inst._zod.def.path ?? [])], // incorporate params.error into issue reporting
+  1741              continue: !inst._zod.def.abort,
+
+node_modules/.pnpm/zod@3.25.76/node_modules/zod/v4/core/schemas.js:
+  1707              input,
+  1708:             inst, // incorporate params.error into issue reporting
+  1709:             path: [...(inst._zod.def.path ?? [])], // incorporate params.error into issue reporting
+  1710              continue: !inst._zod.def.abort,
+
+node_modules/.pnpm/zod@4.1.12/node_modules/zod/src/v4/core/schemas.ts:
+  4239        input,
+  4240:       inst, // incorporate params.error into issue reporting
+  4241:       path: [...(inst._zod.def.path ?? [])], // incorporate params.error into issue reporting
+  4242        continue: !inst._zod.def.abort,
+
+node_modules/.pnpm/zod@4.1.12/node_modules/zod/v4/core/schemas.cjs:
+  1976              input,
+  1977:             inst, // incorporate params.error into issue reporting
+  1978:             path: [...(inst._zod.def.path ?? [])], // incorporate params.error into issue reporting
+  1979              continue: !inst._zod.def.abort,
+
+node_modules/.pnpm/zod@4.1.12/node_modules/zod/v4/core/schemas.js:
+  1945              input,
+  1946:             inst, // incorporate params.error into issue reporting
+  1947:             path: [...(inst._zod.def.path ?? [])], // incorporate params.error into issue reporting
+  1948              continue: !inst._zod.def.abort,
+
+node_modules/@eslint/config-array/README.md:
+  341
+  342: The design of this project was influenced by feedback on the ESLint RFC, and incorporate ideas from:
+  343
+
+node_modules/playwright/ThirdPartyNotices.txt:
+  4
+  5: This project incorporate components from the projects listed below. The original copyright notices and the licenses under which Microsoft received such components are set forth below. Microsoft reserves all rights not expressly granted herein, whether by implication, estoppel or otherwise.
+  6
+
+node_modules/typescript/ThirdPartyNoticeText.txt:
+   2
+   3: The TypeScript software incorporate third party material from the projects listed below. The original copyright notice and the license under which Microsoft received such third party material are set forth below. Microsoft reserves all other rights not expressly granted, whether by implication, estoppel or otherwise.
+   4
+
+   9  ------------------- DefinitelyTyped --------------------
+  10: This file is based on or incorporate material from the projects listed below (collectively "Third Party Code"). Microsoft is not the original author of the Third Party Code. The original copyright notice and the license, under which Microsoft received such Third Party Code, are set forth below. Such licenses and notices are provided for informational purposes only. Microsoft, not the third party, licenses the Third Party Code to you under the terms set forth in the EULA for the Microsoft Product. Microsoft reserves all other rights not expressly granted under this agreement, whether by implication, estoppel or otherwise.
+  11  DefinitelyTyped
+
+node_modules/zod/src/v4/core/schemas.ts:
+  4239        input,
+  4240:       inst, // incorporate params.error into issue reporting
+  4241:       path: [...(inst._zod.def.path ?? [])], // incorporate params.error into issue reporting
+  4242        continue: !inst._zod.def.abort,
+
+node_modules/zod/v4/core/schemas.cjs:
+  1976              input,
+  1977:             inst, // incorporate params.error into issue reporting
+  1978:             path: [...(inst._zod.def.path ?? [])], // incorporate params.error into issue reporting
+  1979              continue: !inst._zod.def.abort,
+
+node_modules/zod/v4/core/schemas.js:
+  1945              input,
+  1946:             inst, // incorporate params.error into issue reporting
+  1947:             path: [...(inst._zod.def.path ?? [])], // incorporate params.error into issue reporting
+  1948              continue: !inst._zod.def.abort,
+
+packages/config/node_modules/typescript/ThirdPartyNoticeText.txt:
+   2
+   3: The TypeScript software incorporate third party material from the projects listed below. The original copyright notice and the license under which Microsoft received such third party material are set forth below. Microsoft reserves all other rights not expressly granted, whether by implication, estoppel or otherwise.
+   4
+
+   9  ------------------- DefinitelyTyped --------------------
+  10: This file is based on or incorporate material from the projects listed below (collectively "Third Party Code"). Microsoft is not the original author of the Third Party Code. The original copyright notice and the license, under which Microsoft received such Third Party Code, are set forth below. Such licenses and notices are provided for informational purposes only. Microsoft, not the third party, licenses the Third Party Code to you under the terms set forth in the EULA for the Microsoft Product. Microsoft reserves all other rights not expressly granted under this agreement, whether by implication, estoppel or otherwise.
+  11  DefinitelyTyped
+
+packages/mcp-server/node_modules/typescript/ThirdPartyNoticeText.txt:
+   2
+   3: The TypeScript software incorporate third party material from the projects listed below. The original copyright notice and the license under which Microsoft received such third party material are set forth below. Microsoft reserves all other rights not expressly granted, whether by implication, estoppel or otherwise.
+   4
+
+   9  ------------------- DefinitelyTyped --------------------
+  10: This file is based on or incorporate material from the projects listed below (collectively "Third Party Code"). Microsoft is not the original author of the Third Party Code. The original copyright notice and the license, under which Microsoft received such Third Party Code, are set forth below. Such licenses and notices are provided for informational purposes only. Microsoft, not the third party, licenses the Third Party Code to you under the terms set forth in the EULA for the Microsoft Product. Microsoft reserves all other rights not expressly granted under this agreement, whether by implication, estoppel or otherwise.
+  11  DefinitelyTyped
+
+packages/rules-tests/node_modules/typescript/ThirdPartyNoticeText.txt:
+   2
+   3: The TypeScript software incorporate third party material from the projects listed below. The original copyright notice and the license under which Microsoft received such third party material are set forth below. Microsoft reserves all other rights not expressly granted, whether by implication, estoppel or otherwise.
+   4
+
+   9  ------------------- DefinitelyTyped --------------------
+  10: This file is based on or incorporate material from the projects listed below (collectively "Third Party Code"). Microsoft is not the original author of the Third Party Code. The original copyright notice and the license, under which Microsoft received such Third Party Code, are set forth below. Such licenses and notices are provided for informational purposes only. Microsoft, not the third party, licenses the Third Party Code to you under the terms set forth in the EULA for the Microsoft Product. Microsoft reserves all other rights not expressly granted under this agreement, whether by implication, estoppel or otherwise.
+  11  DefinitelyTyped
+
+packages/types/node_modules/typescript/ThirdPartyNoticeText.txt:
+   2
+   3: The TypeScript software incorporate third party material from the projects listed below. The original copyright notice and the license under which Microsoft received such third party material are set forth below. Microsoft reserves all other rights not expressly granted, whether by implication, estoppel or otherwise.
+   4
+
+   9  ------------------- DefinitelyTyped --------------------
+  10: This file is based on or incorporate material from the projects listed below (collectively "Third Party Code"). Microsoft is not the original author of the Third Party Code. The original copyright notice and the license, under which Microsoft received such Third Party Code, are set forth below. Such licenses and notices are provided for informational purposes only. Microsoft, not the third party, licenses the Third Party Code to you under the terms set forth in the EULA for the Microsoft Product. Microsoft reserves all other rights not expressly granted under this agreement, whether by implication, estoppel or otherwise.
+  11  DefinitelyTyped
+
+packages/types/node_modules/zod/src/v4/core/schemas.ts:
+  3768        input,
+  3769:       inst, // incorporate params.error into issue reporting
+  3770:       path: [...(inst._zod.def.path ?? [])], // incorporate params.error into issue reporting
+  3771        continue: !inst._zod.def.abort,
+
+packages/types/node_modules/zod/v4/core/schemas.cjs:
+  1738              input,
+  1739:             inst, // incorporate params.error into issue reporting
+  1740:             path: [...(inst._zod.def.path ?? [])], // incorporate params.error into issue reporting
+  1741              continue: !inst._zod.def.abort,
+
+packages/types/node_modules/zod/v4/core/schemas.js:
+  1707              input,
+  1708:             inst, // incorporate params.error into issue reporting
+  1709:             path: [...(inst._zod.def.path ?? [])], // incorporate params.error into issue reporting
+  1710              continue: !inst._zod.def.abort,
+
+packages/types/src/corporates.ts:
+   1: // [P0][SECURITY][CODE] Corporates
+   2  // Tags: P0, SECURITY, CODE
+
+  17
+  18: export const CorporateSchema = z.object({
+  19    id: z.string().min(1),
+
+  38
+  39: export type Corporate = z.infer<typeof CorporateSchema>;
+  40
+
+  42
+  43: export const CreateCorporateSchema = z.object({
+  44    networkId: z.string().min(1),
+
+  55
+  56: export type CreateCorporate = z.infer<typeof CreateCorporateSchema>;
+  57
+
+  59
+  60: export const UpdateCorporateSchema = z.object({
+  61    name: z.string().min(3).max(100).optional(),
+
+  71
+  72: export type UpdateCorporate = z.infer<typeof UpdateCorporateSchema>;
+  73
+
+packages/types/src/index.ts:
+  8  export * from "./rbac";
+  9: export * from "./corporates";
+  10  export * from "./orgs";
+
+packages/ui/node_modules/typescript/ThirdPartyNoticeText.txt:
+   2
+   3: The TypeScript software incorporate third party material from the projects listed below. The original copyright notice and the license under which Microsoft received such third party material are set forth below. Microsoft reserves all other rights not expressly granted, whether by implication, estoppel or otherwise.
+   4
+
+   9  ------------------- DefinitelyTyped --------------------
+  10: This file is based on or incorporate material from the projects listed below (collectively "Third Party Code"). Microsoft is not the original author of the Third Party Code. The original copyright notice and the license, under which Microsoft received such Third Party Code, are set forth below. Such licenses and notices are provided for informational purposes only. Microsoft, not the third party, licenses the Third Party Code to you under the terms set forth in the EULA for the Microsoft Product. Microsoft reserves all other rights not expressly granted under this agreement, whether by implication, estoppel or otherwise.
+  11  DefinitelyTyped
+
+services/api/node_modules/typescript/ThirdPartyNoticeText.txt:
+   2
+   3: The TypeScript software incorporate third party material from the projects listed below. The original copyright notice and the license under which Microsoft received such third party material are set forth below. Microsoft reserves all other rights not expressly granted, whether by implication, estoppel or otherwise.
+   4
+
+   9  ------------------- DefinitelyTyped --------------------
+  10: This file is based on or incorporate material from the projects listed below (collectively "Third Party Code"). Microsoft is not the original author of the Third Party Code. The original copyright notice and the license, under which Microsoft received such Third Party Code, are set forth below. Such licenses and notices are provided for informational purposes only. Microsoft, not the third party, licenses the Third Party Code to you under the terms set forth in the EULA for the Microsoft Product. Microsoft reserves all other rights not expressly granted under this agreement, whether by implication, estoppel or otherwise.
+  11  DefinitelyTyped
+
+services/api/node_modules/zod/src/v4/core/schemas.ts:
+  3768        input,
+  3769:       inst, // incorporate params.error into issue reporting
+  3770:       path: [...(inst._zod.def.path ?? [])], // incorporate params.error into issue reporting
+  3771        continue: !inst._zod.def.abort,
+
+services/api/node_modules/zod/v4/core/schemas.cjs:
+  1738              input,
+  1739:             inst, // incorporate params.error into issue reporting
+  1740:             path: [...(inst._zod.def.path ?? [])], // incorporate params.error into issue reporting
+  1741              continue: !inst._zod.def.abort,
+
+services/api/node_modules/zod/v4/core/schemas.js:
+  1707              input,
+  1708:             inst, // incorporate params.error into issue reporting
+  1709:             path: [...(inst._zod.def.path ?? [])], // incorporate params.error into issue reporting
+  1710              continue: !inst._zod.def.abort,

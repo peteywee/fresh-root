@@ -15,8 +15,8 @@ import { NextResponse } from "next/server";
 
 import { withSecurity, type AuthenticatedRequest } from "../../_shared/middleware";
 
-import { adminDb as importedAdminDb } from "@/src/lib/firebase.server";
-import { ensureUserProfile } from "@/src/lib/userProfile";
+import { adminDb as importedAdminDb } from "@/lib/firebase.server";
+import { ensureUserProfile } from "@/lib/userProfile";
 
 export async function bootstrapSessionHandler(
   req: AuthenticatedRequest & {

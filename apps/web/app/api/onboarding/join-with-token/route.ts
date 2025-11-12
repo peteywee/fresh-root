@@ -16,14 +16,13 @@
  * Returns: { ok: true; networkId; orgId; role; venue? }
  */
 
-
 import { NextResponse } from "next/server";
 
 import { withSecurity, type AuthenticatedRequest } from "../../_shared/middleware";
 
-import { logEvent } from "@/src/lib/eventLog";
-import { adminDb as importedAdminDb } from "@/src/lib/firebase.server";
-import { markOnboardingComplete } from "@/src/lib/userOnboarding";
+import { logEvent } from "@/lib/eventLog";
+import { adminDb as importedAdminDb } from "@/lib/firebase.server";
+import { markOnboardingComplete } from "@/lib/userOnboarding";
 
 type JoinTokenDoc = {
   networkId: string;

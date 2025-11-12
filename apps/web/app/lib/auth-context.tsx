@@ -1,42 +1,40 @@
 // [P0][AUTH][CODE] Auth Context
 // Tags: P0, AUTH, CODE
 "use client";
-import { User, onAuthStateChanged } from "firebase/auth";
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, { createContext, useContext, useState, useEffect } from "react";
 
-import { auth } from "./firebaseClient";
-
-interface AuthContextType {
-  user: User | null;
+type AuthState = {
+  user: Record<string, unknown> | null;
   isLoading: boolean;
-}
+};
 
-const AuthContext = createContext<AuthContextType>({
-  user: null,
-  isLoading: true,
-});
+// ...you can replace the placeholder implementation with your real auth logic...
+const AuthContext = createContext<AuthState | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<Record<string, unknown> | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    if (!auth) {
-      setIsLoading(false);
-      return;
-    }
-
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setUser(user);
-      setIsLoading(false);
-    });
-
-    return unsubscribe;
+    // Placeholder: replace with real initialization (fetch session, etc.)
+    const init = async () => {
+      // simulate async auth check
+      setTimeout(() => {
+        setUser(null);
+        setIsLoading(false);
+      }, 10);
+    };
+    void init();
   }, []);
 
   return <AuthContext.Provider value={{ user, isLoading }}>{children}</AuthContext.Provider>;
 }
 
 export function useAuth() {
-  return useContext(AuthContext);
+  const ctx = useContext(AuthContext);
+  if (!ctx) {
+    // If provider is missing, return a safe default.
+    return { user: null, isLoading: false };
+  }
+  return ctx;
 }

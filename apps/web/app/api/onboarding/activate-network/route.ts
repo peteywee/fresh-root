@@ -5,7 +5,7 @@ import { NextResponse } from "next/server";
 
 import { withSecurity, type AuthenticatedRequest } from "../../_shared/middleware";
 
-import { adminDb } from "@/src/lib/firebase.server";
+import { adminDb } from "@/lib/firebase.server";
 
 export const POST = withSecurity(
   async (req: AuthenticatedRequest) => {

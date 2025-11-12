@@ -11,8 +11,6 @@
  * - Plays nicely with existing withSecurity middleware
  */
 
- 
-
 type BasicReq = {
   method?: string;
   url?: string;

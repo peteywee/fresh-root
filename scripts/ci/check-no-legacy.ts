@@ -32,7 +32,7 @@ async function main() {
   // 1) Legacy nested root must not exist at repo root anymore
   if (await exists(path.join(ROOT, "fresh-root"))) {
     violations.push(
-      "Found legacy nested tree at ./fresh-root (must be archived under docs/archive/)."
+      "Found legacy nested tree at ./fresh-root (must be archived under docs/archive/).",
     );
   }
 

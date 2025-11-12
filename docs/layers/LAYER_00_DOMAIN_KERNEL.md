@@ -1,15 +1,12 @@
 # LAYER_00_DOMAIN_KERNEL# LAYER_00_DOMAIN_KERNEL
 
+**Purpose** **Purpose**
 
-**Purpose**  **Purpose**
-
-This layer defines the **pure, framework-agnostic domain kernel** for Fresh Schedules.  The Domain Kernel defines the **canonical business model** of Fresh Schedules.
+This layer defines the **pure, framework-agnostic domain kernel** for Fresh Schedules. The Domain Kernel defines the **canonical business model** of Fresh Schedules.
 
 It is the single source of truth for entity structure, invariants, and validation logic.It is responsible for expressing _what the world is_ (networks, orgs, venues, shifts, staff, attendance, tokens, roles) as **pure types and schemas**, independent of UI, Firebase, Next.js, or any framework.
 
-
 ---This layer is the **source of truth** for:
-
 
 ## 1. Scope- All domain entities and enums (e.g. AttendanceStatus, ShiftType, Role)
 
@@ -17,28 +14,25 @@ It is the single source of truth for entity structure, invariants, and validatio
 
 Includes only:- All derived TypeScript types inferred from those schemas.
 
-
 - Zod schemas and inferred TypeScript types.If something is “what the data _is_ or _should be_”, it belongs here.
 
 - Cross-layer constants (enums, status values).
 
 - Pure validation and transformation utilities.---
 
-
 Located in:**Scope**
 
 This layer includes:
 
-
 - `packages/types/src/index.ts`
 
-packages/types/src/**- `packages/types/src/*.ts` such as:
+packages/types/src/\*_- `packages/types/src/_.ts` such as:
 
 - `attendance.ts`
 
 - `orgs.ts`
 
-Barrel export via:  - `schedules.ts`
+Barrel export via: - `schedules.ts`
 
 - `network.ts`
 
@@ -46,7 +40,7 @@ Barrel export via:  - `schedules.ts`
 
 - `rbac.ts`
 
-packages/types/src/index.ts  - `tokens.ts`
+packages/types/src/index.ts - `tokens.ts`
 
 - `billing.ts` (if present)
 
@@ -54,11 +48,9 @@ packages/types/src/index.ts  - `tokens.ts`
 
 ---- Domain-related test files under `packages/types/src/__tests__/**` (their purpose is to validate this layer only).
 
-
 ## 2. Inputs**Not** in scope
 
-
-- Human specifications from Project Bible v15.0.0.md and ENTITY_* docs.- Any Firebase Admin calls.
+- Human specifications from Project Bible v15.0.0.md and ENTITY\_\* docs.- Any Firebase Admin calls.
 
 - No runtime or external SDKs.- Any Firestore SDK calls.
 
@@ -66,9 +58,7 @@ packages/types/src/index.ts  - `tokens.ts`
 
 ---- Any HTTP or UI-specific types.
 
-
 ## 3. Outputs---
-
 
 - Zod schemas (Zod ≥ 3.23).**Inputs**
 
@@ -76,26 +66,24 @@ packages/types/src/index.ts  - `tokens.ts`
 
 - Optional lightweight validators (pure functions).The Domain Kernel consumes:
 
-
 ---- **Product and spec intent**, primarily from:
 
 - `docs/bible/Project_Bible_v14.0.0.md`
 
-## 4. Dependencies  - `docs/Biblev14.md`
+## 4. Dependencies - `docs/Biblev14.md`
 
 - Future: `docs/bible/Project_Bible_v15.0.0.md`
 
 - `zod` only.- **Data model requirements** from:
 
-- No imports from `apps/**`, `services/**`, or any external APIs.  - `docs/schema-map.md`
-
+- No imports from `apps/**`, `services/**`, or any external APIs. - `docs/schema-map.md`
   - `docs/schema-network.md`
 
----  - (Legacy) `glump.txt` / data model notes.
+--- - (Legacy) `glump.txt` / data model notes.
 
 - External libraries:
 
-## 5. Consumers  - `zod` (for validation and schema definition)
+## 5. Consumers - `zod` (for validation and schema definition)
 
 - Minimal standard library (`Date`, `string`, `number`, etc.).
 
@@ -107,57 +95,52 @@ packages/types/src/index.ts  - `tokens.ts`
 
 - UI/UX (Layer 04): derives props and form constraints from types.---
 
-
 ---**Outputs**
-
 
 ## 6. InvariantsThe Domain Kernel produces
 
-
 - Pure, deterministic, side-effect-free code.1. **Zod Schemas**
 
-- Only Zod, TS, or constants; no framework code.   - Example:
+- Only Zod, TS, or constants; no framework code. - Example:
 
-- Every schema must infer a strongly typed TS interface via `z.infer`.     - `CreateAttendanceRecordSchema`
+- Every schema must infer a strongly typed TS interface via `z.infer`. - `CreateAttendanceRecordSchema`
 
-- Every entity in Bible v15 must exist here with a file:     - `AttendanceRecordSchema`
+- Every entity in Bible v15 must exist here with a file: - `AttendanceRecordSchema`
+  - `network.ts` - `OrgSchema`
 
-  - `network.ts`     - `OrgSchema`
+  - `orgs.ts` - `NetworkSchema`
 
-  - `orgs.ts`     - `NetworkSchema`
+  - `venues.ts` - `ShiftSchema`
 
-  - `venues.ts`     - `ShiftSchema`
+  - `users.ts` - `RoleSchema`
 
-  - `users.ts`     - `RoleSchema`
-
-  - `roles.ts`   - These schemas describe the exact shape of valid inputs and stored entities.
+  - `roles.ts` - These schemas describe the exact shape of valid inputs and stored entities.
 
   - `schedules.ts`
 
   - `attendance.ts`2. **TypeScript Types** inferred from schemas:
 
-  - `rbac.ts`   - `type AttendanceRecord = z.infer<typeof AttendanceRecordSchema>`
+  - `rbac.ts` - `type AttendanceRecord = z.infer<typeof AttendanceRecordSchema>`
 
   - `type Org = z.infer<typeof OrgSchema>`
 
----   - `type Network = z.infer<typeof NetworkSchema>`
-
+--- - `type Network = z.infer<typeof NetworkSchema>`
 
 ## 7. File Map (Minimum)3. **Enums and Union Types**
 
 - Example:
 
-| File | Responsibility |     - `AttendanceStatus = z.enum(["scheduled","early","late","no_show",...])`
+| File | Responsibility | - `AttendanceStatus = z.enum(["scheduled","early","late","no_show",...])`
 
-|------|----------------|     - Role/permission unions.
+|------|----------------| - Role/permission unions.
 
 | `index.ts` | Barrel re-export |
 
 | `network.ts` | Network entity schema |4. **Domain Contracts**
 
-| `orgs.ts` | Org schema |   - These are importable via the alias:
+| `orgs.ts` | Org schema | - These are importable via the alias:
 
-| `venues.ts` | Venue schema |     - `@fresh-schedules/types`
+| `venues.ts` | Venue schema | - `@fresh-schedules/types`
 
 | `users.ts` | User/staff schema |
 
