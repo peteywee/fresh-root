@@ -5,7 +5,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
 import { withRequestLogging } from "../../_shared/logging";
-import { withSecurity, type AuthenticatedRequest, type BasicReq } from "../../_shared/middleware";
+import { withSecurity, type AuthenticatedRequest } from "../../_shared/middleware";
 
 import { logEvent } from "@/src/lib/eventLog";
 import { adminDb as importedAdminDb } from "@/src/lib/firebase.server";
@@ -286,8 +286,8 @@ export async function createNetworkOrgHandler(
 
 // Keep Next.js route export for runtime (secured + logged)
 // Adapter wraps the test-friendly handler for use with withSecurity middleware
-async function apiRoute(req: BasicReq, ctx: Record<string, unknown>) {
+async function apiRoute(req: NextRequest, _ctx: Record<string, unknown>) {
   return createNetworkOrgHandler(req as AuthenticatedRequest);
 }
 
-export const POST = withRequestLogging(withSecurity(apiRoute as any, { requireAuth: true }));
+export const POST = withRequestLogging(withSecurity(apiRoute, { requireAuth: true }));
