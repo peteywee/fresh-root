@@ -1,7 +1,12 @@
 //[P1][API][CODE] Positions [id] API route handler
 // Tags: P1, API, CODE, validation, zod
 
-import { PositionSchema } from "@fresh-schedules/types";
+/**
+ * GET /api/positions/[id]
+ * Retrieve a specific position details (requires staff+ role)
+ */
+
+import { PositionUpdateSchema } from "@fresh-schedules/types";
 import { NextResponse } from "next/server";
 
 import { requireOrgMembership, requireRole } from "../../../../src/lib/api/authorization";
@@ -10,10 +15,6 @@ import { rateLimit, RateLimits } from "../../../../src/lib/api/rate-limit";
 import { sanitizeObject } from "../../../../src/lib/api/sanitize";
 import { serverError } from "../../_shared/validation";
 
-/**
- * GET /api/positions/[id]
- * Get position details (requires staff+ role)
- */
 export const GET = requireOrgMembership(async (request, context) => {
   // Apply rate limiting
   const rateLimitResult = await rateLimit(request, RateLimits.api);
@@ -63,7 +64,7 @@ export const PATCH = csrfProtection()(
         const validationResult = PositionSchema.safeParse(sanitized);
         if (!validationResult.success) {
           return NextResponse.json(
-            { error: "Invalid position data", details: validationResult.error.errors },
+            { error: "Invalid position data", details: validationResult.error.format() },
             { status: 400 },
           );
         }

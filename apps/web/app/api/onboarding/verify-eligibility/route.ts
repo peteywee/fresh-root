@@ -1,6 +1,19 @@
 //[P1][API][ONBOARDING] Verify Eligibility Endpoint (server)
 // Tags: api, onboarding, eligibility
 
+/**
+ * POST /api/onboarding/verify-eligibility
+ * Verify that an authenticated user is eligible to proceed with network/org onboarding.
+ *
+ * Checks for:
+ * - Valid authentication and email verification
+ * - Allowed role (owner, manager, admin, etc.)
+ * - Rate limiting (100 requests per 24h)
+ *
+ * Requires: Authentication via custom claims, email verified
+ * Returns: { allowed: boolean; reason?: string; message?: string }
+ */
+
 import { NextResponse } from "next/server";
 
 import { withRequestLogging } from "../../_shared/logging";

@@ -11,7 +11,7 @@
  * - Plays nicely with existing withSecurity middleware
  */
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
+ 
 
 type BasicReq = {
   method?: string;

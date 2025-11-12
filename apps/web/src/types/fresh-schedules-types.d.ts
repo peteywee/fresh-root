@@ -170,7 +170,7 @@ declare module "@fresh-schedules/types" {
   export type UpdateNetworkInput = z.infer<typeof UpdateNetworkSchema>;
 
   // ============================================================================
-  // CORPORATES TYPES
+  // CORPORATE TYPES
   // ============================================================================
   export const CorporateSchema: ZAnyObj;
   export type Corporate = z.infer<typeof CorporateSchema>;

@@ -50,13 +50,10 @@ The Firecrawl MCP server provides tools such as:
 Notes:
 
 - Some clients validate tool schemas using JSON Schema Draft-07. Firecrawl’s tool schemas use Draft
-
   2020-12 (with `$dynamicRef`). If your client’s validator doesn’t support `$dynamicRef`, you can
   still run the server; the client will call the tools without schema validation, or you can disable
   schema validation in the client.
-
 - If you see schema validation warnings (documented in `docs/mcp.json`), they’re safe to ignore at
-
   runtime. The tools still function.
 
 ## Troubleshooting
