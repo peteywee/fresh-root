@@ -5,9 +5,12 @@
 import { useRouter } from "next/navigation";
 import React from "react";
 
+// Narrow router type to the minimal surface we actually use to avoid any.
+type NavRouter = Pick<ReturnType<typeof useRouter>, "push">;
+
 export default function StaffInviteBlockedPage() {
   const router = useRouter();
-  const nav = router as any;
+  const nav: NavRouter = { push: router.push };
 
   return (
     <main className="mx-auto flex max-w-xl flex-col gap-6 px-4 py-10">

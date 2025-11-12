@@ -166,7 +166,7 @@ class UpstashRestClient implements RedisClient {
 
 // Singleton adapter (Upstash if configured)
 let singletonAdapter: RedisClient | null = null;
-function getRedisAdapter(): RedisClient | null {
+function _getRedisAdapter(): RedisClient | null {
   if (singletonAdapter) return singletonAdapter;
   const url = process.env.UPSTASH_REDIS_REST_URL;
   const token = process.env.UPSTASH_REDIS_REST_TOKEN;

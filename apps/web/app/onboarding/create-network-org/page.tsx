@@ -5,6 +5,9 @@
 import { useRouter } from "next/navigation";
 import React, { FormEvent, useState } from "react";
 
+// Narrow router type to only the push method we use.
+type NavRouter = Pick<ReturnType<typeof useRouter>, "push">;
+
 type OrgFormState = {
   orgName: string;
   venueName: string;
@@ -14,7 +17,7 @@ type OrgFormState = {
 
 export default function CreateNetworkOrgPage() {
   const router = useRouter();
-  const nav = router as any;
+  const nav: NavRouter = { push: router.push };
   const [form, setForm] = useState<OrgFormState>({
     orgName: "",
     venueName: "",

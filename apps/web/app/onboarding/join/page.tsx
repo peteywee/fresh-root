@@ -5,6 +5,9 @@
 import { useRouter } from "next/navigation";
 import React, { FormEvent, useState } from "react";
 
+// Narrow router to only push to avoid any casting.
+type NavRouter = Pick<ReturnType<typeof useRouter>, "push">;
+
 type JoinFormState = {
   token: string;
   email: string;
@@ -12,7 +15,7 @@ type JoinFormState = {
 
 export default function JoinPage() {
   const router = useRouter();
-  const nav = router as any;
+  const nav: NavRouter = { push: router.push };
   const [form, setForm] = useState<JoinFormState>({
     token: "",
     email: "",

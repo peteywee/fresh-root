@@ -8,11 +8,11 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 
 describe("POST /api/onboarding/join-with-token", () => {
-  let mockAdminDb: any;
+  let _mockAdminDb: any;
   let mockReq: any;
 
   beforeEach(() => {
-    mockAdminDb = {
+    _mockAdminDb = {
       collection: vi.fn().mockReturnValue({
         doc: vi.fn().mockReturnValue({
           set: vi.fn().mockResolvedValue(undefined),

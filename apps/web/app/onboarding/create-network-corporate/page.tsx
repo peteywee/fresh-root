@@ -5,6 +5,9 @@
 import { useRouter } from "next/navigation";
 import React, { FormEvent, useState } from "react";
 
+// Narrow router usage to only push to eliminate any.
+type NavRouter = Pick<ReturnType<typeof useRouter>, "push">;
+
 type CorporateFormState = {
   corporateName: string;
   brandName: string;
@@ -15,7 +18,7 @@ type CorporateFormState = {
 
 export default function CreateNetworkCorporatePage() {
   const router = useRouter();
-  const nav = router as any;
+  const nav: NavRouter = { push: router.push };
   const [form, setForm] = useState<CorporateFormState>({
     corporateName: "",
     brandName: "",

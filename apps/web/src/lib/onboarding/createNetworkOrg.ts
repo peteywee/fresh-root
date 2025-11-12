@@ -107,8 +107,9 @@ export async function createNetworkWithOrgAndVenue(
   if (typeof batch.commit === "function") {
     await batch.commit();
   } else {
-    const maybeRoot: any = root;
-    if (maybeRoot && typeof maybeRoot.commit === "function") {
+    // Fallback: some injected mock dbs may expose commit directly (non-batch style)
+    const maybeRoot = root as unknown as { commit?: () => Promise<unknown> };
+    if (maybeRoot.commit) {
       await maybeRoot.commit();
     }
   }
