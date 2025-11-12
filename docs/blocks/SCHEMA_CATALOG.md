@@ -1,0 +1,69 @@
+# Schema Catalog (generated)
+
+_Generated: 2025-11-12T04:48:15.464Z_
+
+| Schema | Kind | Top-Level Fields | File |
+|---|---|---|---|
+| `AddressSchema` | `object` | city, country, state, street, zipCode | `packages/types/src/venues.ts` |
+| `AdminResponsibilityFormSchema` | `object` | certification, createdAt, data, formId, networkId, role, status, uid, updatedAt | `packages/types/src/compliance/adminResponsibilityForm.ts` |
+| `AssignShiftSchema` | `object` | notes, uid | `packages/types/src/shifts.ts` |
+| `AttendanceRecordSchema` | `object` | actualCheckIn, actualCheckOut, actualDuration, breakDuration, checkInLocation, checkInMethod, checkOutLocation, checkOutMethod, createdAt, id, managerNotes, notes, orgId, overriddenAt, overriddenBy, scheduleId, scheduledDuration, scheduledEnd, scheduledStart, shiftId, staffUid, status, updatedAt | `packages/types/src/attendance.ts` |
+| `CertificationSchema` | `object` | acknowledgesAccessControl, acknowledgesAuditTrail, acknowledgesDataProtection, acknowledgesGDPRCompliance, acknowledgesIncidentReporting, acknowledgesMFARequirement, agreesToTerms, understandsRoleScope | `packages/types/src/compliance/adminResponsibilityForm.ts` |
+| `CheckInSchema` | `object` | location, method, notes | `packages/types/src/attendance.ts` |
+| `CheckOutSchema` | `object` | location, method, notes | `packages/types/src/attendance.ts` |
+| `CloneScheduleSchema` | `object` | endDate, includeAssignments, name, startDate | `packages/types/src/schedules.ts` |
+| `CoordinatesSchema` | `object` | lat, lng | `packages/types/src/venues.ts` |
+| `CorporateQuerySchema` | `object` | limit, name, networkId, offset, ownsLocations, worksWithFranchisees | `packages/types/src/corporates.ts` |
+| `CorporateSchema` | `object` | brandName, contactEmail, contactPhone, createdAt, createdBy, id, name, networkId, ownsLocations, updatedAt, updatedBy, websiteUrl, worksWithFranchisees, worksWithPartners | `packages/types/src/corporates.ts` |
+| `CorpOrgLinkSchema` | `object` | corporateId, createdAt, createdBy, linkId, networkId, orgId, relationType, status, updatedAt, updatedBy | `packages/types/src/links/corpOrgLinks.ts` |
+| `CreateAttendanceRecordSchema` | `object` | breakDuration, notes, orgId, scheduleId, scheduledEnd, scheduledStart, shiftId, staffUid | `packages/types/src/attendance.ts` |
+| `CreateCorporateOnboardingSchema` | `object` | brandName, corporateName, formToken | `packages/types/src/onboarding.ts` |
+| `CreateCorporateSchema` | `object` | brandName, contactEmail, contactPhone, name, networkId, ownsLocations, websiteUrl, worksWithFranchisees, worksWithPartners | `packages/types/src/corporates.ts` |
+| `CreateJoinTokenSchema` | `object` | defaultRoles, description, expiresAt, maxUses, orgId | `packages/types/src/join-tokens.ts` |
+| `CreateMembershipSchema` | `object` | invitedBy, orgId, roles, status, uid | `packages/types/src/memberships.ts` |
+| `CreateOrganizationSchema` | `object` | contactEmail, contactPhone, description, industry, name, networkId, settings, size | `packages/types/src/orgs.ts` |
+| `CreateOrgOnboardingSchema` | `object` | city, countryCode, formToken, location, orgName, postalCode, state, street1, street2, timeZone, venueName | `packages/types/src/onboarding.ts` |
+| `CreatePositionSchema` | `object` | color, description, hourlyRate, name, orgId, requiredCertifications, skillLevel, type | `packages/types/src/positions.ts` |
+| `CreateVenueSchema` | `object` | address, capacity, contactEmail, contactPhone, coordinates, description, name, networkId, notes, orgId, timezone, type | `packages/types/src/venues.ts` |
+| `CreateZoneSchema` | `object` | capacity, color, description, floor, name, notes, orgId, type, venueId | `packages/types/src/zones.ts` |
+| `ErrorResponseSchema` | `object` | code, details, error | `packages/types/src/errors.ts` |
+| `EventPayloadSchema` | `unknown` | — | `packages/types/src/events.ts` |
+| `EventSchema` | `object` | actorUserId, at, category, id, networkId, orgId, payload, type, venueId | `packages/types/src/events.ts` |
+| `JoinTokenSchema` | `object` | createdAt, createdBy, currentUses, defaultRoles, description, expiresAt, id, maxUses, orgId, status, token, updatedAt, usedBy | `packages/types/src/join-tokens.ts` |
+| `JoinWithTokenSchema` | `object` | joinToken | `packages/types/src/onboarding.ts` |
+| `ListAttendanceRecordsQuerySchema` | `object` | cursor, limit, orgId, scheduleId, shiftId, staffUid, startAfter, startBefore, status | `packages/types/src/attendance.ts` |
+| `ListJoinTokensQuerySchema` | `object` | cursor, limit, orgId, status | `packages/types/src/join-tokens.ts` |
+| `ListMembershipsQuerySchema` | `object` | cursor, limit, orgId, status, uid | `packages/types/src/memberships.ts` |
+| `ListOrganizationsQuerySchema` | `object` | cursor, limit, size, status | `packages/types/src/orgs.ts` |
+| `ListPositionsQuerySchema` | `object` | cursor, isActive, limit, orgId, type | `packages/types/src/positions.ts` |
+| `ListSchedulesQuerySchema` | `object` | cursor, limit, orgId, startAfter, startBefore, status | `packages/types/src/schedules.ts` |
+| `ListShiftsQuerySchema` | `object` | assignedTo, cursor, limit, orgId, positionId, scheduleId, startAfter, startBefore, status, venueId | `packages/types/src/shifts.ts` |
+| `ListVenuesQuerySchema` | `object` | cursor, isActive, limit, networkId, orgId, type | `packages/types/src/venues.ts` |
+| `ListZonesQuerySchema` | `object` | cursor, isActive, limit, orgId, type, venueId | `packages/types/src/zones.ts` |
+| `LocationSchema` | `object` | accuracy, lat, lng | `packages/types/src/attendance.ts` |
+| `MembershipClaimsSchema` | `object` | createdAt, orgId, roles, updatedAt, userId | `packages/types/src/rbac.ts` |
+| `MembershipSchema` | `object` | createdAt, invitedAt, invitedBy, joinedAt, orgId, roles, status, uid, updatedAt | `packages/types/src/memberships.ts` |
+| `NetworkSchema` | `object` | allowedEmailDomains, analytics, apiAccess, billingMode, createdAt, createdBy, currency, displayName, environment, features, id, ipAllowlistEnabled, kind, legalName, maxActiveOrgs, maxActiveUsers, maxShiftsPerDay, maxVenues, ownerUserId, plan, primaryRegion, requireMfaForAdmins, segment, slug, status, timeZone, updatedAt, updatedBy | `packages/types/src/networks.ts` |
+| `OnboardingStateSchema` | `object` | completedAt, intent, lastUpdatedAt, primaryNetworkId, primaryOrgId, primaryVenueId, stage, status | `packages/types/src/onboarding.ts` |
+| `OrganizationSchema` | `object` | contactEmail, contactPhone, createdAt, description, id, industry, logoUrl, memberCount, name, networkId, ownerId, settings, size, status, subscriptionEndsAt, subscriptionTier, trialEndsAt, updatedAt, websiteUrl | `packages/types/src/orgs.ts` |
+| `OrganizationSettingsSchema` | `object` | allowSelfScheduling, dateFormat, enableGeofencing, geofenceRadius, requireShiftConfirmation, timeFormat, timezone, weekStartsOn | `packages/types/src/orgs.ts` |
+| `OrgVenueAssignmentSchema` | `object` | createdAt, createdBy, id, networkId, orgId, role, status, updatedAt, updatedBy, venueId | `packages/types/src/links/orgVenueAssignments.ts` |
+| `PositionSchema` | `object` | color, createdAt, createdBy, description, hourlyRate, id, isActive, name, orgId, requiredCertifications, skillLevel, type, updatedAt | `packages/types/src/positions.ts` |
+| `PublishScheduleSchema` | `object` | message, notifyStaff | `packages/types/src/schedules.ts` |
+| `RedeemJoinTokenSchema` | `object` | token | `packages/types/src/join-tokens.ts` |
+| `ScheduleStatsSchema` | `object` | assignedShifts, conflictCount, totalCost, totalHours, totalShifts, unassignedShifts | `packages/types/src/schedules.ts` |
+| `ShiftAssignmentSchema` | `object` | assignedAt, assignedBy, confirmedAt, notes, status, uid | `packages/types/src/shifts.ts` |
+| `UpdateAttendanceRecordSchema` | `object` | actualCheckIn, actualCheckOut, breakDuration, managerNotes, status | `packages/types/src/attendance.ts` |
+| `UpdateCorporateSchema` | `object` | brandName, contactEmail, contactPhone, name, ownsLocations, websiteUrl, worksWithFranchisees, worksWithPartners | `packages/types/src/corporates.ts` |
+| `UpdateJoinTokenSchema` | `object` | description, expiresAt, maxUses, status | `packages/types/src/join-tokens.ts` |
+| `UpdateMembershipSchema` | `object` | roles, status | `packages/types/src/memberships.ts` |
+| `UpdateOrganizationSchema` | `object` | contactEmail, contactPhone, description, industry, logoUrl, name, networkId, settings, size, status, websiteUrl | `packages/types/src/orgs.ts` |
+| `UpdatePositionSchema` | `object` | color, description, hourlyRate, isActive, name, requiredCertifications, skillLevel, type | `packages/types/src/positions.ts` |
+| `UpdateScheduleSchema` | `object` | description, endDate, name, startDate, status, visibility | `packages/types/src/schedules.ts` |
+| `UpdateShiftSchema` | `object` | breakMinutes, endTime, notes, positionId, requiredStaff, startTime, status, venueId, zoneId | `packages/types/src/shifts.ts` |
+| `UpdateVenueSchema` | `object` | address, capacity, contactEmail, contactPhone, coordinates, description, isActive, name, notes, timezone, type | `packages/types/src/venues.ts` |
+| `UpdateZoneSchema` | `object` | capacity, color, description, floor, isActive, name, notes, type | `packages/types/src/zones.ts` |
+| `VenueSchema` | `object` | address, capacity, contactEmail, contactPhone, coordinates, createdAt, createdBy, description, id, isActive, name, networkId, notes, orgId, timezone, type, updatedAt | `packages/types/src/venues.ts` |
+| `ZoneSchema` | `object` | capacity, color, createdAt, createdBy, description, floor, id, isActive, name, notes, orgId, type, updatedAt, venueId | `packages/types/src/zones.ts` |
+
+> To regenerate: `pnpm tsx scripts/gen_schema_catalog.ts`
