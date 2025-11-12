@@ -1,7 +1,7 @@
 name: schema-catalog-guard
 on:
   pull_request:
-    branches: [ main, develop ]
+    branches: [main, develop]
 jobs:
   schema:
     runs-on: ubuntu-latest
