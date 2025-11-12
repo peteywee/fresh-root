@@ -1,3 +1,5 @@
+// [P1][API][CODE] Route API route handler
+// Tags: P1, API, CODE
 import { NextRequest, NextResponse } from "next/server";
 // Example shows imports you will actually use in real routes:
 // import { z } from "zod";
@@ -11,17 +13,15 @@ import { NextRequest, NextResponse } from "next/server";
  * Pattern: parse → validate → authorize → app-lib → respond
  */
 
-export const GET = async (_req: NextRequest) => {
+export const GET = async () => {
   try {
-    // const session = await requireSession(_req);
+    // const session = await requireSession(req);
     // await requireRole(session, ["manager"]);
     // const data = await doWork(/* args */);
     return NextResponse.json({ ok: true });
-  } catch (err: any) {
-    return NextResponse.json(
-      { ok: false, error: err?.message ?? "Server error" },
-      { status: 500 },
-    );
+  } catch (err: unknown) {
+    const error = err instanceof Error ? err.message : "Server error";
+    return NextResponse.json({ ok: false, error }, { status: 500 });
   }
 };
 
@@ -32,19 +32,15 @@ export const POST = async (req: NextRequest) => {
     // const parsed = SomeSchema.parse(body);
     // const result = await doWork(parsed, session);
     return NextResponse.json({ ok: true }, { status: 201 });
-  } catch (err: any) {
-    const status = err?.name === "ZodError" ? 400 : 500;
-    return NextResponse.json(
-      { ok: false, error: err?.message ?? "Server error" },
-      { status },
-    );
+  } catch (err: unknown) {
+    const status = err instanceof Error && err.name === "ZodError" ? 400 : 500;
+    const error = err instanceof Error ? err.message : "Server error";
+    return NextResponse.json({ ok: false, error }, { status });
   }
 };
 
 export const HEAD = async () => new Response(null, { status: 200 });
 
 // Optional examples; keep thin in real handlers.
-export const DELETE = async (_req: NextRequest) =>
-  NextResponse.json({ ok: true });
-export const PATCH = async (_req: NextRequest) =>
-  NextResponse.json({ ok: true });
+export const DELETE = async () => NextResponse.json({ ok: true });
+export const PATCH = async () => NextResponse.json({ ok: true });
