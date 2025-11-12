@@ -7,8 +7,6 @@ To regenerate locally:
 scripts/index/generate-file-index.sh --write
 ```
 
-_Last generated: 2025-11-12T06:38:25Z_
-
 **Total files indexed:** 565
 
 ## Apps (195)
@@ -604,4 +602,4 @@ _Last generated: 2025-11-12T06:38:25Z_
 - `types/firebase-admin.d.ts` — _2025-11-05, peteywee_
 ---
 
-_Index integrity:_ `9dcaca026cc9a80b38c22574b2a08d2cb840447acec93e67a3fa0f0122baf173`
+_Index file hash:_ `bd8ebabc066c86848a0cf065a575f305cd98b69a4f59fadfeadf0464e084aaf4`
