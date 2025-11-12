@@ -35,6 +35,9 @@ importers:
       glob:
         specifier: ^10.4.5
         version: 10.4.5
+      globby:
+        specifier: ^15.0.0
+        version: 15.0.0
       markdownlint:
         specifier: ^0.39.0
         version: 0.39.0
@@ -8525,6 +8528,13 @@ packages:
       }
     engines: { node: ">= 0.4" }
 
+  globby@15.0.0:
+    resolution:
+      {
+        integrity: sha512-oB4vkQGqlMl682wL1IlWd02tXCbquGWM4voPEI85QmNKCaw8zGTm1f1rubFgkg3Eli2PtKlFgrnmUqasbQWlkw==,
+      }
+    engines: { node: ">=20" }
+
   google-auth-library@10.5.0:
     resolution:
       {
@@ -11360,6 +11370,13 @@ packages:
         integrity: sha512-7jdwVIRtsP8MYpdXSwOS0YdD0Du+qOoF/AEPIt88PcCFrZCzx41oxku1jD88hZBwbNUIEfpqvuhjFaMAqMTWnA==,
       }
 
+  path-type@6.0.0:
+    resolution:
+      {
+        integrity: sha512-Vj7sf++t5pBD637NSfkxpHSMfWaeig5+DKWLhcqIYx6mWQz5hdJTGDVMQiJcw1ZYkhs7AazKDGpRVji1LJCZUQ==,
+      }
+    engines: { node: ">=18" }
+
   pathe@2.0.3:
     resolution:
       {
@@ -12489,6 +12506,13 @@ packages:
         integrity: sha512-g9Q1haeby36OSStwb4ntCGGGaKsaVSjQ68fBxoQcutl5fS1vuY18H3wSt3jFyFtrkx+Kz0V1G85A4MyAdDMi2Q==,
       }
     engines: { node: ">=8" }
+
+  slash@5.1.0:
+    resolution:
+      {
+        integrity: sha512-ZA6oR3T/pEyuqwMgAKT0/hAv8oAXckzbkmR0UkUosQ+Mc4RxGoJkRmwHgHufaenlyAgE1Mxgpdcrf75y6XcnDg==,
+      }
+    engines: { node: ">=14.16" }
 
   smart-buffer@4.2.0:
     resolution:
@@ -20642,6 +20666,15 @@ snapshots:
       define-properties: 1.2.1
       gopd: 1.2.0
 
+  globby@15.0.0:
+    dependencies:
+      "@sindresorhus/merge-streams": 4.0.0
+      fast-glob: 3.3.3
+      ignore: 7.0.5
+      path-type: 6.0.0
+      slash: 5.1.0
+      unicorn-magic: 0.3.0
+
   google-auth-library@10.5.0:
     dependencies:
       base64-js: 1.5.1
@@ -22637,6 +22670,8 @@ snapshots:
 
   path-to-regexp@8.3.0: {}
 
+  path-type@6.0.0: {}
+
   pathe@2.0.3: {}
 
   pg-cloudflare@1.2.7:
@@ -23388,6 +23423,8 @@ snapshots:
       unicode-emoji-modifier-base: 1.0.0
 
   slash@3.0.0: {}
+
+  slash@5.1.0: {}
 
   smart-buffer@4.2.0: {}
 

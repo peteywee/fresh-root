@@ -9,7 +9,7 @@ To regenerate locally:
 scripts/index/generate-file-index.sh --write
 ```
 
-**Total files indexed:** 566
+**Total files indexed:** 575
 
 ## Apps (195)
 
@@ -32,7 +32,7 @@ scripts/index/generate-file-index.sh --write
 - `apps/web/app/api/_shared/middleware.ts` — _2025-11-11, peteywee_
 - `apps/web/app/api/_shared/security.ts` — _2025-11-06, peteywee_
 - `apps/web/app/api/_shared/validation.ts` — _2025-11-07, peteywee_
-- `apps/web/app/api/_template/route.ts` — _2025-11-11, peteywee_
+- `apps/web/app/api/_template/route.ts` — _2025-11-12, peteywee_
 - `apps/web/app/api/attendance/route.ts` — _2025-11-11, peteywee_
 - `apps/web/app/api/auth/mfa/setup/route.ts` — _2025-11-06, peteywee_
 - `apps/web/app/api/auth/mfa/verify/route.ts` — _2025-11-06, peteywee_
@@ -302,7 +302,7 @@ scripts/index/generate-file-index.sh --write
 - `services/api/test/security.test.ts` — _2025-11-06, peteywee_
 - `services/api/tsconfig.json` — _2025-10-31, peteywee_
 
-## Docs (122)
+## Docs (128)
 
 - `docs/ARCHITECTURE_DIAGRAMS.md` — _2025-11-05, peteywee_
 - `docs/BLOCK3_CHECKLIST.md` — _2025-11-11, peteywee_
@@ -358,7 +358,7 @@ scripts/index/generate-file-index.sh --write
 - `docs/blocks/BLOCK4_PLANNING.md` — _2025-11-11, peteywee_
 - `docs/blocks/PHASE2_IMPLEMENTATION.md` — _2025-11-11, peteywee_
 - `docs/blocks/PHASE2_OPTIONS.md` — _2025-11-11, peteywee_
-- `docs/blocks/SCHEMA_CATALOG.md` — _2025-11-11, peteywee_
+- `docs/blocks/SCHEMA_CATALOG.md` — _2025-11-12, peteywee_
 - `docs/layers/LAYER_00_DOMAIN_KERNEL.md` — _2025-11-11, peteywee_
 - `docs/layers/LAYER_01_INFRASTRUCTURE.md` — _2025-11-11, peteywee_
 - `docs/layers/LAYER_02_APPLICATION_LIBS.md` — _2025-11-11, peteywee_
@@ -367,6 +367,7 @@ scripts/index/generate-file-index.sh --write
 - `docs/layers/LAYER_04_UI_UX.md` — _2025-11-11, peteywee_
 - `docs/mcp/FIRECRAWL_MCP_SETUP.md` — _2025-11-11, peteywee_
 - `docs/mcp/mcp.json` — _2025-11-11, peteywee_
+- `docs/migration/v15/MIGRATION_READINESS_CHECKLIST.md` — _2025-11-12, peteywee_
 - `docs/migration/v15/PHASE2_SCHEMA_CROSSWALK.md` — _2025-11-12, peteywee_
 - `docs/migration/v15/PHASE2_SPEC_CROSSWALK.md` — _2025-11-11, peteywee_
 - `docs/migration/v15/PHASE3_CODE_MIGRATION_CHECKLIST.md` — _2025-11-11, peteywee_
@@ -401,8 +402,10 @@ scripts/index/generate-file-index.sh --write
 - `docs/security/security.md` — _2025-11-11, peteywee_
 - `docs/standards/FILE_HEADER_STANDARD.md` — _2025-11-11, peteywee_
 - `docs/standards/IMPORT_STANDARD.md` — _2025-11-11, peteywee_
-- `docs/standards/ROUTE_API_STANDARD.md` — _2025-11-11, peteywee_
-- `docs/standards/SCHEMA_CATALOG_STANDARD.md` — _2025-11-11, peteywee_
+- `docs/standards/ROUTE_API_STANDARD.md` — _2025-11-12, peteywee_
+- `docs/standards/SCHEMA_CATALOG_STANDARD.md` — _2025-11-12, peteywee_
+- `docs/standards/TESTING_STANDARD.md` — _2025-11-12, peteywee_
+- `docs/templates/API_ROUTE_DOC_TEMPLATE.md` — _2025-11-12, peteywee_
 - `docs/templates/CI_WORKFLOW_TEMPLATE.md` — _2025-11-12, peteywee_
 - `docs/templates/CODE_FIRESTORE_RULES.md` — _2025-11-12, peteywee_
 - `docs/templates/CODE_NEXT_API_ROUTE.md` — _2025-11-12, peteywee_
@@ -412,6 +415,9 @@ scripts/index/generate-file-index.sh --write
 - `docs/templates/DOC_RUNBOOK.md` — _2025-11-12, peteywee_
 - `docs/templates/DOC_SPEC.md` — _2025-11-12, peteywee_
 - `docs/templates/README.md` — _2025-11-12, peteywee_
+- `docs/templates/SCHEMA_DOC_TEMPLATE.md` — _2025-11-12, peteywee_
+- `docs/templates/TEST_SPEC_TEMPLATE.md` — _2025-11-12, peteywee_
+- `docs/tests/COVERAGE_STRATEGY.md` — _2025-11-12, peteywee_
 - `docs/todo-groups.todo.yml` — _2025-11-06, peteywee_
 - `docs/tooling/CI_WORKFLOW_STANDARDS.md` — _2025-11-11, peteywee_
 - `docs/tooling/CONTRIBUTING.md` — _2025-11-11, peteywee_
@@ -427,7 +433,7 @@ scripts/index/generate-file-index.sh --write
 - `docs/v14/V14_FREEZE_INSPECTION_REPORT.md` — _2025-11-11, peteywee_
 - `docs/v14/V14_ONBOARDING_FREEZE_SCOPE.md` — _2025-11-11, peteywee_
 
-## Scripts (45)
+## Scripts (48)
 
 - `scripts/agent/agent.mts` — _2025-11-06, peteywee_
 - `scripts/agent/lib/logger.ts` — _2025-11-05, peteywee_
@@ -442,6 +448,7 @@ scripts/index/generate-file-index.sh --write
 - `scripts/bootstrap_tier2.sh` — _2025-11-06, peteywee_
 - `scripts/bootstrap_tier3.sh` — _2025-11-06, peteywee_
 - `scripts/build_org_search_index_v15.ts` — _2025-11-11, peteywee_
+- `scripts/ci/check-doc-parity.mjs` — _2025-11-12, peteywee_
 - `scripts/cleanup/lean-packages.mjs` — _2025-11-12, peteywee_
 - `scripts/cleanup/prune-archives.mjs` — _2025-11-12, peteywee_
 - `scripts/cleanup/purge-history-vendors.sh` — _2025-11-12, peteywee_
@@ -451,6 +458,7 @@ scripts/index/generate-file-index.sh --write
 - `scripts/index/config.mjs` — _2025-11-12, peteywee_
 - `scripts/index/generate-file-index.mjs` — _2025-11-12, peteywee_
 - `scripts/index/generate-file-index.sh` — _2025-11-12, peteywee_
+- `scripts/lint/lean.sh` — _2025-11-12, peteywee_
 - `scripts/mcp/run-firecrawl-mcp.sh` — _2025-11-06, peteywee_
 - `scripts/ops/backup-firestore.sh` — _2025-10-31, Patrick craven_
 - `scripts/ops/create-backup-scheduler.sh` — _2025-11-06, peteywee_
@@ -467,6 +475,7 @@ scripts/index/generate-file-index.sh --write
 - `scripts/setup.sh` — _2025-11-06, peteywee_
 - `scripts/tag-files.mjs` — _2025-11-06, peteywee_
 - `scripts/test-interactive.mjs` — _2025-11-11, peteywee_
+- `scripts/tests/verify-tests-present.mjs` — _2025-11-12, peteywee_
 - `scripts/validate-schema-parity.mjs` — _2025-11-06, peteywee_
 - `scripts/watch-and-tag.mjs` — _2025-11-11, peteywee_
 - `tools/diagnostics/create_custom_token.js` — _2025-11-05, peteywee_
@@ -502,7 +511,7 @@ scripts/index/generate-file-index.sh --write
 - `tests/rules/zones.spec.mts` — _2025-11-06, peteywee_
 - `tests/unit/middleware.test.ts` — _2025-11-07, peteywee_
 
-## CI / Config (56)
+## CI / Config (57)
 
 - `.github/ISSUE_TEMPLATE/_production-template.md` — _2025-11-05, peteywee_
 - `.github/ISSUE_TEMPLATE/data-004-backups-restore.md` — _2025-11-05, peteywee_
@@ -529,6 +538,7 @@ scripts/index/generate-file-index.sh --write
 - `.github/workflows/ci-tests.yml` — _2025-11-11, peteywee_
 - `.github/workflows/ci.yml` — _2025-11-10, Patrick craven_
 - `.github/workflows/codeql.yml` — _2025-10-31, Patrick craven_
+- `.github/workflows/doc-parity.yml` — _2025-11-12, peteywee_
 - `.github/workflows/eslint-ts-agent.yml` — _2025-11-07, Patrick craven_
 - `.github/workflows/eslint.yml` — _2025-11-07, peteywee_
 - `.github/workflows/file-index-guard.yml` — _2025-11-12, peteywee_
@@ -577,10 +587,10 @@ scripts/index/generate-file-index.sh --write
 - `package.json` — _2025-11-12, peteywee_
 - `storage.rules` — _2025-11-06, peteywee_
 
-## Uncategorized (24)
+## Uncategorized (23)
 
 - `.husky/post-checkout` — _2025-11-11, peteywee_
-- `.husky/pre-commit` — _2025-11-07, peteywee_
+- `.husky/pre-commit` — _2025-11-12, peteywee_
 - `.husky/pre-push` — _2025-10-31, Patrick craven_
 - `.vscode/copilot-rules.md` — _2025-11-11, peteywee_
 - `.vscode/docs/RULES.md` — _2025-10-31, Patrick craven_
@@ -591,7 +601,6 @@ scripts/index/generate-file-index.sh --write
 - `.vscode/snippets/testing.code-snippets` — _2025-10-31, Patrick craven_
 - `.vscode/tasks.json` — _2025-11-07, peteywee_
 - `.vscode/toolsets.filetag.jsonc` — _2025-10-25, peteywee_
-- `.zencoder/rules/repo.md` — _2025-11-12, peteywee_
 - `emulator-data/auth_export/accounts.json` — _2025-10-30, peteywee_
 - `emulator-data/auth_export/config.json` — _2025-10-30, peteywee_
 - `functions/package.json` — _2025-11-12, peteywee_
@@ -606,4 +615,4 @@ scripts/index/generate-file-index.sh --write
 
 ---
 
-_Index file hash:_ `d2aad1a97a814266238bdc17f4bdb46f0503b806e0b4050124ef7476899230a7`
+_Index file hash:_ `bc4a543af2e317333608b91f400c54605906de3c6941ae50d2ae3ee482b99de8`

@@ -1,4 +1,6 @@
 #!/usr/bin/env node
+// [P2][APP][CODE] Auto Symlink Docs
+// Tags: P2, APP, CODE
 /**
  * [P2][APP][CODE] Auto-symlink Generator
  *
@@ -33,9 +35,7 @@ async function makeSchemaLinks() {
   const files = await globby(["packages/types/src/**/*.ts"]);
   for (const file of files) {
     const content = await fs.readFile(file, "utf8");
-    const matches = [
-      ...content.matchAll(/export\s+const\s+(\w+Schema)\s*=\s*z\./g),
-    ];
+    const matches = [...content.matchAll(/export\s+const\s+(\w+Schema)\s*=\s*z\./g)];
     for (const [, name] of matches) {
       const link = path.join(root, "docs/schemas", `${name}.md`);
       await ensureDir(path.dirname(link));
@@ -47,9 +47,7 @@ async function makeSchemaLinks() {
 async function makeApiLinks() {
   const files = await globby(["apps/web/app/api/**/route.ts"]);
   for (const f of files) {
-    const rel = f
-      .replace(/^apps\/web\/app\/api\//, "")
-      .replace(/\/route\.ts$/, "");
+    const rel = f.replace(/^apps\/web\/app\/api\//, "").replace(/\/route\.ts$/, "");
     const link = path.join(root, "docs/api", `${rel}.md`);
     await ensureDir(path.dirname(link));
     await createSymlink(apiPaper, link);
