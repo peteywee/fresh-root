@@ -1,4 +1,10 @@
 // [P1][OPS][BACKUP] Internal endpoint to trigger Firestore export
+// [P1][OPS][BACKUP] Internal endpoint to trigger Firestore export
+import { traceFn } from "@/app/api/_shared/otel";
+// [P1][OPS][BACKUP] Internal endpoint to trigger Firestore export
+import { withGuards } from "@/app/api/_shared/security";
+// [P1][OPS][BACKUP] Internal endpoint to trigger Firestore export
+import { jsonOk, jsonError } from "@/app/api/_shared/response";
 // Tags: P1, OPS, BACKUP, FIRESTORE
 import { GoogleAuth } from "google-auth-library";
 import { NextRequest } from "next/server";

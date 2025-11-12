@@ -1,4 +1,10 @@
 // [P0][AUTH][SESSION] Session cookie management endpoints
+// [P0][AUTH][SESSION] Session cookie management endpoints
+import { traceFn } from "@/app/api/_shared/otel";
+// [P0][AUTH][SESSION] Session cookie management endpoints
+import { withGuards } from "@/app/api/_shared/security";
+// [P0][AUTH][SESSION] Session cookie management endpoints
+import { jsonOk, jsonError } from "@/app/api/_shared/response";
 // Tags: P0, AUTH, SESSION
 import { NextRequest } from "next/server";
 import { z } from "zod";

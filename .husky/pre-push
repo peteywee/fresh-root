@@ -1,7 +1,27 @@
 #!/bin/sh
 
 # Pre-push: gate on typecheck and lint (no deprecated husky.sh sourcing)
-pnpm -w typecheck || exit 1
-pnpm -w lint || exit 1
+# Add a way to skip lint/typecheck locally to avoid expensive memory usage:
+# - Set SKIP_CHECKS=1 to skip both typecheck and lint
+# - Set SKIP_LINT=1 to skip only the lint step (typecheck still runs)
+
+if [ -n "$SKIP_CHECKS" ]; then
+	echo "[husky] SKIP_CHECKS set — skipping pre-push checks."
+	exit 0
+fi
+
+# Always run typecheck by default (keeps CI safety). Set SKIP_TYPECHECK=1 to skip it.
+if [ -n "$SKIP_TYPECHECK" ]; then
+	echo "[husky] SKIP_TYPECHECK set — skipping typecheck."
+else
+	pnpm -w typecheck || exit 1
+fi
+
+# Lint can be expensive in watch mode on low-memory machines — allow opt-out.
+if [ -n "$SKIP_LINT" ]; then
+	echo "[husky] SKIP_LINT set — skipping lint step."
+else
+	pnpm -w lint || exit 1
+fi
 
 echo "[husky] Pre-push checks passed."

@@ -1,4 +1,10 @@
 // [P0][AUTH][API] MFA verification endpoint - confirms TOTP and sets custom claim
+// [P0][AUTH][API] MFA verification endpoint - confirms TOTP and sets custom claim
+import { traceFn } from "@/app/api/_shared/otel";
+// [P0][AUTH][API] MFA verification endpoint - confirms TOTP and sets custom claim
+import { withGuards } from "@/app/api/_shared/security";
+// [P0][AUTH][API] MFA verification endpoint - confirms TOTP and sets custom claim
+import { jsonOk, jsonError } from "@/app/api/_shared/response";
 // Tags: P0, AUTH, API
 import { NextRequest } from "next/server";
 import * as speakeasy from "speakeasy";

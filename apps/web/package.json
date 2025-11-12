@@ -13,7 +13,9 @@
     "test:ui": "vitest --ui",
     "test:coverage": "vitest --coverage",
     "bench": "vitest bench --config vitest.bench.config.ts",
-    "lint": "eslint . --ext .ts,.tsx"
+    "lint": "eslint_d . --ext .ts,.tsx --cache",
+    "lint:daemon": "eslint_d start || true",
+    "lint:stop": "eslint_d stop || true"
   },
   "dependencies": {
     "@fresh-schedules/types": "workspace:*",
@@ -78,5 +80,7 @@
     "tailwindcss-animate": "^1.0.7",
     "typescript": "^5.6.3",
     "vitest": "^4.0.3"
+    ,
+    "eslint_d": "^12.0.0"
   }
 }

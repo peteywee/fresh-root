@@ -1,4 +1,36 @@
 {
+  // Run ESLint only on save to reduce continuous CPU/memory usage
+  "eslint.run": "onSave",
+
+  // Enable ESLint as a formatter
+  "eslint.format.enable": true,
+
+  // Auto-fix ESLint problems on save
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
+
+  // Limit the ESLint extension to the web app workspace to reduce memory use
+  "eslint.workingDirectories": ["apps/web"],
+
+  // Use pnpm as the package manager for ESLint resolution
+  "eslint.packageManager": "pnpm",
+
+  // Prefer the workspace node_modules for resolver (helps extension find local eslint)
+  "eslint.nodePath": "${workspaceFolder}/node_modules",
+
+  // Validate these file types with ESLint
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact"
+  ],
+
+  // Helpful UX: show ESLint status in the status bar
+  "eslint.alwaysShowStatus": true
+}
+{
   // ---------- Copilot & Chat ----------
   "chat.referenceFiles": [".vscode/copilot-rules.md"],
 

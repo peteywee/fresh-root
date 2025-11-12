@@ -1,0 +1,34 @@
+name: pr-guard
+
+on:
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  guard:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+
+      # If you want to keep this "no-Node" for now, leave the below commented.
+      # - uses: pnpm/action-setup@v4
+      #   with: { version: 9 }
+      # - uses: actions/setup-node@v4
+      #   with:
+      #     node-version: '20'
+      #     cache: pnpm
+      # - run: pnpm i --frozen-lockfile
+      # - run: pnpm -w -r build
+
+      # Always block junk on main:
+      - name: Path guard (prevent workspace config/noise on main)
+        if: github.base_ref == 'main'
+        shell: bash
+        run: |
+          git diff --name-only origin/${{ github.base_ref }}... > changed.txt
+          awk '
+            /(^\.vscode\/)|(^\.idea\/)|(^docs\/blocks\/)/ { bad=1; print "Blocked on main:", $0 }
+            END{ if(bad==1) exit 1 }
+          ' changed.txt
