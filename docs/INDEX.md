@@ -7,7 +7,7 @@ To regenerate locally:
 scripts/index/generate-file-index.sh --write
 ```
 
-**Total files indexed:** 565
+**Total files indexed:** 566
 
 ## Apps (195)
 
@@ -425,7 +425,7 @@ scripts/index/generate-file-index.sh --write
 - `docs/v14/V14_FREEZE_INSPECTION_REPORT.md` — _2025-11-11, peteywee_
 - `docs/v14/V14_ONBOARDING_FREEZE_SCOPE.md` — _2025-11-11, peteywee_
 
-## Scripts (44)
+## Scripts (45)
 
 - `scripts/agent/agent.mts` — _2025-11-06, peteywee_
 - `scripts/agent/lib/logger.ts` — _2025-11-05, peteywee_
@@ -448,6 +448,7 @@ scripts/index/generate-file-index.sh --write
 - `scripts/gh-setup-labels.sh` — _2025-11-06, peteywee_
 - `scripts/index/config.mjs` — _2025-11-12, peteywee_
 - `scripts/index/generate-file-index.mjs` — _2025-11-12, peteywee_
+- `scripts/index/generate-file-index.sh` — _2025-11-12, peteywee_
 - `scripts/mcp/run-firecrawl-mcp.sh` — _2025-11-06, peteywee_
 - `scripts/ops/backup-firestore.sh` — _2025-10-31, Patrick craven_
 - `scripts/ops/create-backup-scheduler.sh` — _2025-11-06, peteywee_
@@ -602,4 +603,4 @@ scripts/index/generate-file-index.sh --write
 - `types/firebase-admin.d.ts` — _2025-11-05, peteywee_
 ---
 
-_Index file hash:_ `bd8ebabc066c86848a0cf065a575f305cd98b69a4f59fadfeadf0464e084aaf4`
+_Index file hash:_ `d2aad1a97a814266238bdc17f4bdb46f0503b806e0b4050124ef7476899230a7`
