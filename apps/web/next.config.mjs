@@ -39,11 +39,20 @@ const nextConfig = {
     // OpenTelemetry and Sentry instrumentation (server-side only)
     "import-in-the-middle",
     "require-in-the-middle",
+    // Firebase Admin and google-cloud libs are server-only (Node) and must not be
+    // bundled into Edge runtimes or client bundles. Mark them external so Turbopack
+    // doesn't try to inline CJS/Node-only code into Edge chunks.
+    "firebase-admin",
+    "@google-cloud/firestore",
+    "google-auth-library",
+    "@grpc/grpc-js",
     "@opentelemetry/instrumentation",
     "@opentelemetry/instrumentation-http",
     "@opentelemetry/instrumentation-express",
+    "@opentelemetry/instrumentation-aws-lambda",
     "@opentelemetry/instrumentation-fs",
     "@opentelemetry/instrumentation-pg",
+    "@opentelemetry/auto-instrumentations-node",
     "@sentry/profiling-node",
     "elastic-apm-node",
   ],
@@ -54,6 +63,13 @@ const nextConfig = {
       { protocol: "https", hostname: "**.firebaseapp.com" },
     ],
   },
+  // Optionally allow cross-origin dev origins. Set NEXT_ALLOWED_DEV_ORIGINS as a
+  // comma-separated list of origins (e.g. "http://127.0.0.1:3001,http://100.115.92.203").
+  // This is required by future Next.js/Turbopack versions when dev clients access
+  // the dev server from different hosts/IPs.
+  allowedDevOrigins: process.env.NEXT_ALLOWED_DEV_ORIGINS
+    ? process.env.NEXT_ALLOWED_DEV_ORIGINS.split(",").map((s) => s.trim())
+    : undefined,
   modularizeImports: {
     "lucide-react": {
       transform: "lucide-react/icons/{{member}}",
@@ -69,6 +85,16 @@ const nextConfig = {
   experimental: {
     optimizePackageImports: ["react", "react-dom"],
     serverActions: { bodySizeLimit: "1mb" },
+  },
+  // Turbopack sometimes infers the workspace root incorrectly when there are
+  // multiple lockfiles on the machine (e.g., a stray pnpm-lock.yaml in $HOME).
+  // Explicitly set the root directory for Turbopack so it resolves the monorepo
+  // workspace correctly and silences the inferred-root warning.
+  turbopack: {
+    // Path from this `apps/web` directory up to the repository root
+    // Use an absolute path to avoid incorrect inference when multiple lockfiles
+    // exist on the machine (for example a stray pnpm-lock.yaml in $HOME).
+    root: "/home/patrick/fresh-root-10/fresh-root",
   },
   headers: async () => [{ source: "/(.*)", headers: securityHeaders }],
   compiler: {
