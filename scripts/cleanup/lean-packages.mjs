@@ -1,4 +1,6 @@
 #!/usr/bin/env node
+// [P2][APP][CODE] Lean Packages
+// Tags: P2, APP, CODE
 /**
  * [MEDIUM][INFRA][AUDIT]
  * Tags: audit, dependencies, monorepo-health

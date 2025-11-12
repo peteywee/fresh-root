@@ -1,4 +1,6 @@
 #!/usr/bin/env node
+// [P2][APP][CODE] Prune Archives
+// Tags: P2, APP, CODE
 /**
  * [MEDIUM][INFRA][CLEANUP]
  * Tags: cleanup, vendor-management, quarantine

@@ -1,4 +1,6 @@
 #!/usr/bin/env node
+// [P2][APP][CODE] Scaffold From Template
+// Tags: P2, APP, CODE
 /**
  * [MEDIUM][INFRA][GEN]
  * Tags: scaffolding, templates, codegen

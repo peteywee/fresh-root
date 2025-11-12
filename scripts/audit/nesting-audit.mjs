@@ -1,4 +1,6 @@
 #!/usr/bin/env node
+// [P2][APP][CODE] Nesting Audit
+// Tags: P2, APP, CODE
 /**
  * Nesting Audit
  * Fails if we detect double-nesting (app/app, src/src), any live `apps/web/src/**`,
