@@ -90,42 +90,40 @@ export async function joinWithTokenHandler(
     const membershipId = `${uid}_${data.orgId}`;
     const membershipRef = adminDb.collection("memberships").doc(membershipId);
 
-    await adminDb.runTransaction(
-      async (tx: any) => {
-        const existing = await tx.get(membershipRef);
-        const createdAt = now;
+    await adminDb.runTransaction(async (tx: any) => {
+      const existing = await tx.get(membershipRef);
+      const createdAt = now;
 
-        if (!existing.exists) {
-          tx.set(membershipRef, {
-            userId: uid,
-            orgId: data.orgId,
-            networkId: data.networkId,
-            roles: [data.role],
-            createdAt,
-            updatedAt: createdAt,
-            createdBy: uid,
-          });
-        } else {
-          const cur = existing.data() as {
-            roles?: string[];
-            updatedAt?: number;
-          };
-          const roles = Array.isArray(cur.roles) ? cur.roles : [];
-          if (!roles.includes(data.role)) roles.push(data.role);
-          tx.update(membershipRef, {
-            roles,
-            updatedAt: createdAt,
-            updatedBy: uid,
-          });
-        }
-
-        const newUsedBy = usedBy.includes(uid) ? usedBy : [...usedBy, uid];
-        tx.update(tokenRef, {
-          usedBy: newUsedBy,
-          lastUsedAt: createdAt,
+      if (!existing.exists) {
+        tx.set(membershipRef, {
+          userId: uid,
+          orgId: data.orgId,
+          networkId: data.networkId,
+          roles: [data.role],
+          createdAt,
+          updatedAt: createdAt,
+          createdBy: uid,
         });
-      },
-    );
+      } else {
+        const cur = existing.data() as {
+          roles?: string[];
+          updatedAt?: number;
+        };
+        const roles = Array.isArray(cur.roles) ? cur.roles : [];
+        if (!roles.includes(data.role)) roles.push(data.role);
+        tx.update(membershipRef, {
+          roles,
+          updatedAt: createdAt,
+          updatedBy: uid,
+        });
+      }
+
+      const newUsedBy = usedBy.includes(uid) ? usedBy : [...usedBy, uid];
+      tx.update(tokenRef, {
+        usedBy: newUsedBy,
+        lastUsedAt: createdAt,
+      });
+    });
 
     // Mark onboarding complete for join path
     await markOnboardingComplete({

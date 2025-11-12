@@ -74,7 +74,7 @@ export function withRequestLogging<TReq extends BasicReq>(
     try {
       // Handle both single-arg and two-arg handlers
       const res = await (handler.length > 1
-  ? handler(req as TReq & { requestId: string }, ctx || {})
+        ? handler(req as TReq & { requestId: string }, ctx || {})
         : (handler as Handler<TReq>)(req as TReq & { requestId: string }));
       const durationMs = Date.now() - start;
 

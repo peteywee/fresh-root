@@ -116,93 +116,91 @@ export async function createNetworkOrgHandler(
     const membershipId = `${uid}_${orgRef.id}`;
     const membershipRef = adminDb.collection("memberships").doc(membershipId);
 
-    await adminDb.runTransaction(
-      async (tx: any) => {
-        const createdAt = nowMs;
+    await adminDb.runTransaction(async (tx: any) => {
+      const createdAt = nowMs;
 
-        // 1) Network
-        tx.set(networkRef, {
-          id: networkRef.id,
-          name: orgName || `Network ${new Date().toISOString()}`,
-          status: "pending_verification",
-          createdAt,
-          updatedAt: createdAt,
-          createdBy: uid,
-          adminFormToken: formToken,
-        });
+      // 1) Network
+      tx.set(networkRef, {
+        id: networkRef.id,
+        name: orgName || `Network ${new Date().toISOString()}`,
+        status: "pending_verification",
+        createdAt,
+        updatedAt: createdAt,
+        createdBy: uid,
+        adminFormToken: formToken,
+      });
 
-        // 2) Org
-        tx.set(orgRef, {
-          id: orgRef.id,
-          name: orgName || "Org",
-          networkId: networkRef.id,
-          ownerId: uid,
-          memberCount: 1,
-          status: "trial",
-          createdAt,
-          updatedAt: createdAt,
-        });
+      // 2) Org
+      tx.set(orgRef, {
+        id: orgRef.id,
+        name: orgName || "Org",
+        networkId: networkRef.id,
+        ownerId: uid,
+        memberCount: 1,
+        status: "trial",
+        createdAt,
+        updatedAt: createdAt,
+      });
 
-        // 3) Venue (with optional location)
-        tx.set(venueRef, {
-          id: venueRef.id,
-          name: venueName || "Main Venue",
-          orgId: orgRef.id,
-          networkId: networkRef.id,
-          createdAt,
-          updatedAt: createdAt,
-          ...(Object.keys(locationData).length > 0
-            ? {
-                location: {
-                  street1: locationData.street1 || "",
-                  street2: locationData.street2 || "",
-                  city: locationData.city || "",
-                  state: locationData.state || "",
-                  postalCode: locationData.postalCode || "",
-                  countryCode: locationData.countryCode || "",
-                  timeZone: locationData.timeZone || "",
-                },
-              }
-            : {}),
-        });
+      // 3) Venue (with optional location)
+      tx.set(venueRef, {
+        id: venueRef.id,
+        name: venueName || "Main Venue",
+        orgId: orgRef.id,
+        networkId: networkRef.id,
+        createdAt,
+        updatedAt: createdAt,
+        ...(Object.keys(locationData).length > 0
+          ? {
+              location: {
+                street1: locationData.street1 || "",
+                street2: locationData.street2 || "",
+                city: locationData.city || "",
+                state: locationData.state || "",
+                postalCode: locationData.postalCode || "",
+                countryCode: locationData.countryCode || "",
+                timeZone: locationData.timeZone || "",
+              },
+            }
+          : {}),
+      });
 
-        // 4) Copy admin responsibility form into a network-scoped compliance document
-        const complianceRef = networkRef.collection("compliance").doc("adminResponsibilityForm");
+      // 4) Copy admin responsibility form into a network-scoped compliance document
+      const complianceRef = networkRef.collection("compliance").doc("adminResponsibilityForm");
 
-        tx.set(complianceRef, {
-          ...formData,
+      tx.set(complianceRef, {
+        ...formData,
+        networkId: networkRef.id,
+        orgId: orgRef.id,
+        venueId: venueRef.id,
+        attachedFromToken: formToken,
+        attachedBy: uid,
+        attachedAt: createdAt,
+      });
+
+      // 5) Mark original form as attached + immutable
+      tx.update(formRef, {
+        attachedTo: {
           networkId: networkRef.id,
           orgId: orgRef.id,
           venueId: venueRef.id,
-          attachedFromToken: formToken,
-          attachedBy: uid,
-          attachedAt: createdAt,
-        });
+        },
+        immutable: true,
+        status: "attached",
+        attachedAt: createdAt,
+      });
 
-        // 5) Mark original form as attached + immutable
-        tx.update(formRef, {
-          attachedTo: {
-            networkId: networkRef.id,
-            orgId: orgRef.id,
-            venueId: venueRef.id,
-          },
-          immutable: true,
-          status: "attached",
-          attachedAt: createdAt,
-        });
-
-        // 6) Create global membership so legacy/org-based rules still work
-        tx.set(membershipRef, {
-          userId: uid,
-          orgId: orgRef.id,
-          networkId: networkRef.id,
-          roles: ["org_owner", "admin", "manager"],
-          createdAt,
-          updatedAt: createdAt,
-          createdBy: uid,
-        });
-      },
-    );
+      // 6) Create global membership so legacy/org-based rules still work
+      tx.set(membershipRef, {
+        userId: uid,
+        orgId: orgRef.id,
+        networkId: networkRef.id,
+        roles: ["org_owner", "admin", "manager"],
+        createdAt,
+        updatedAt: createdAt,
+        createdBy: uid,
+      });
+    });
 
     // 7) Mark onboarding complete for this user
     await markOnboardingComplete({

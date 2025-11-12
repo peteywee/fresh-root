@@ -66,7 +66,7 @@ export const POST = withSecurity(
         );
       }
       // In production, create organization in database
-  const data = parsed.data;
+      const data = parsed.data;
       const newOrg = {
         id: `org-${Date.now()}`,
         ...data,

@@ -97,49 +97,47 @@ export async function createNetworkOrgHandler(
     const orgRef = adminDb.collection("orgs").doc();
     const venueRef = adminDb.collection("venues").doc();
 
-    await adminDb.runTransaction(
-      async (tx: any) => {
-        tx.set(networkRef, {
-          name: orgName || `Network ${new Date().toISOString()}`,
-          status: "pending_verification",
-          createdAt: Date.now(),
-          adminFormToken: formToken,
-        });
+    await adminDb.runTransaction(async (tx: any) => {
+      tx.set(networkRef, {
+        name: orgName || `Network ${new Date().toISOString()}`,
+        status: "pending_verification",
+        createdAt: Date.now(),
+        adminFormToken: formToken,
+      });
 
-        tx.set(orgRef, {
-          name: orgName || "Org",
-          networkId: networkRef.id,
-          createdAt: Date.now(),
-        });
+      tx.set(orgRef, {
+        name: orgName || "Org",
+        networkId: networkRef.id,
+        createdAt: Date.now(),
+      });
 
-        tx.set(venueRef, {
-          name: venueName || "Main Venue",
-          orgId: orgRef.id,
-          networkId: networkRef.id,
-          createdAt: Date.now(),
-        });
+      tx.set(venueRef, {
+        name: venueName || "Main Venue",
+        orgId: orgRef.id,
+        networkId: networkRef.id,
+        createdAt: Date.now(),
+      });
 
-        // Copy admin responsibility form into a network-scoped compliance document
-        const complianceRef = networkRef.collection("compliance").doc("adminResponsibilityForm");
-        tx.set(complianceRef, {
-          ...formData,
-          networkId: networkRef.id,
-          orgId: orgRef.id,
-          venueId: venueRef.id,
-          attachedFromToken: formToken,
-          attachedBy: uid,
-          attachedAt: now,
-        });
+      // Copy admin responsibility form into a network-scoped compliance document
+      const complianceRef = networkRef.collection("compliance").doc("adminResponsibilityForm");
+      tx.set(complianceRef, {
+        ...formData,
+        networkId: networkRef.id,
+        orgId: orgRef.id,
+        venueId: venueRef.id,
+        attachedFromToken: formToken,
+        attachedBy: uid,
+        attachedAt: now,
+      });
 
-        // Mark form as attached and immutable
-        tx.update(formRef, {
-          attachedTo: { networkId: networkRef.id, orgId: orgRef.id, venueId: venueRef.id },
-          immutable: true,
-          status: "attached",
-          attachedAt: Date.now(),
-        });
-      },
-    );
+      // Mark form as attached and immutable
+      tx.update(formRef, {
+        attachedTo: { networkId: networkRef.id, orgId: orgRef.id, venueId: venueRef.id },
+        immutable: true,
+        status: "attached",
+        attachedAt: Date.now(),
+      });
+    });
 
     return NextResponse.json(
       {

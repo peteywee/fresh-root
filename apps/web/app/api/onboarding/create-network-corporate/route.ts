@@ -88,73 +88,71 @@ export async function createNetworkCorporateHandler(
     const corporateCollectionRef = networkRef.collection("corporate");
     const corpRef = corporateCollectionRef.doc();
 
-    await adminDb.runTransaction(
-      async (tx: any) => {
-        const createdAt = nowMs;
+    await adminDb.runTransaction(async (tx: any) => {
+      const createdAt = nowMs;
 
-        // 1) Network
-        tx.set(networkRef, {
-          id: networkRef.id,
-          name: corporateName || `Corporate Network ${new Date().toISOString()}`,
-          displayName: corporateName || null,
-          status: "pending_verification",
-          kind: "corporate_network",
-          industry: industry || null,
-          approxLocations: approxLocations || null,
-          ownerUserId: uid,
-          createdAt,
-          updatedAt: createdAt,
-          createdBy: uid,
-          adminFormToken: formToken,
-        });
+      // 1) Network
+      tx.set(networkRef, {
+        id: networkRef.id,
+        name: corporateName || `Corporate Network ${new Date().toISOString()}`,
+        displayName: corporateName || null,
+        status: "pending_verification",
+        kind: "corporate_network",
+        industry: industry || null,
+        approxLocations: approxLocations || null,
+        ownerUserId: uid,
+        createdAt,
+        updatedAt: createdAt,
+        createdBy: uid,
+        adminFormToken: formToken,
+      });
 
-        // 2) Corporate node under this network
-        tx.set(corpRef, {
-          id: corpRef.id,
-          networkId: networkRef.id,
-          name: corporateName || "Corporate",
-          brandName: brandName || null,
-          industry: industry || null,
-          approxLocations: approxLocations || null,
-          contactUserId: uid,
-          createdAt,
-          updatedAt: createdAt,
-          createdBy: uid,
-        });
+      // 2) Corporate node under this network
+      tx.set(corpRef, {
+        id: corpRef.id,
+        networkId: networkRef.id,
+        name: corporateName || "Corporate",
+        brandName: brandName || null,
+        industry: industry || null,
+        approxLocations: approxLocations || null,
+        contactUserId: uid,
+        createdAt,
+        updatedAt: createdAt,
+        createdBy: uid,
+      });
 
-        // 3) Compliance doc under network
-        const complianceRef = networkRef.collection("compliance").doc("adminResponsibilityForm");
+      // 3) Compliance doc under network
+      const complianceRef = networkRef.collection("compliance").doc("adminResponsibilityForm");
 
-        tx.set(complianceRef, {
-          ...formData,
-          networkId: networkRef.id,
-          corporateId: corpRef.id,
-          attachedFromToken: formToken,
-          attachedBy: uid,
-          attachedAt: createdAt,
-        });
+      tx.set(complianceRef, {
+        ...formData,
+        networkId: networkRef.id,
+        corporateId: corpRef.id,
+        attachedFromToken: formToken,
+        attachedBy: uid,
+        attachedAt: createdAt,
+      });
 
-        // 4) Mark original form attached + immutable
-        tx.update(formRef, {
-          attachedTo: { networkId: networkRef.id, corpId: corpRef.id },
-          immutable: true,
-          status: "attached",
-          attachedAt: createdAt,
-        });
+      // 4) Mark original form attached + immutable
+      tx.update(formRef, {
+        attachedTo: { networkId: networkRef.id, corpId: corpRef.id },
+        immutable: true,
+        status: "attached",
+        attachedAt: createdAt,
+      });
 
-        // 5) Global membership for creator
-        const membershipId = `${uid}_network_${networkRef.id}`;
-        const membershipRef = adminDb.collection("memberships").doc(membershipId);
-        tx.set(membershipRef, {
-          userId: uid,
-          networkId: networkRef.id,
-          roles: ["network_owner", "corporate_admin"],
-          createdAt,
-          updatedAt: createdAt,
-          createdBy: uid,
-        });
-      },
-    );
+      // 5) Global membership for creator
+      const membershipId = `${uid}_network_${networkRef.id}`;
+      const membershipRef = adminDb.collection("memberships").doc(membershipId);
+      tx.set(membershipRef, {
+        userId: uid,
+        networkId: networkRef.id,
+        roles: ["network_owner", "corporate_admin"],
+        createdAt,
+        updatedAt: createdAt,
+        createdBy: uid,
+      });
+    });
 
     // 6) Mark onboarding complete
     await markOnboardingComplete({
