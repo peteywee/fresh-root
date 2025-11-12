@@ -42,4 +42,3 @@ One way to build routes: predictable inputs/outputs, centralized guards, zero SD
 - Direct Firestore/Admin calls here.
 - Importing UI/components.
 - Ad hoc payload shapes.
-

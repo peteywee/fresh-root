@@ -1,5 +1,7 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { z } from 'zod';
+// [P1][API][CODE] Route API route handler
+// Tags: P1, API, CODE
+import { NextRequest, NextResponse } from "next/server";
+import { z } from "zod";
 // import { requireSession, requireOrgMembership, requireRole } from '@/src/lib/api/guards';
 // import { someUseCase } from '@/src/lib/some-module/useCases';
 // import { JsonError } from '@/src/lib/api/errors';
@@ -16,8 +18,14 @@ export async function POST(req: NextRequest) {
     const parse = PayloadSchema.safeParse(body);
     if (!parse.success) {
       return NextResponse.json(
-        { error: { code: 'BAD_REQUEST', message: 'Invalid payload', details: parse.error.flatten() } },
-        { status: 400 }
+        {
+          error: {
+            code: "BAD_REQUEST",
+            message: "Invalid payload",
+            details: parse.error.flatten(),
+          },
+        },
+        { status: 400 },
       );
     }
 
@@ -34,9 +42,9 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ data, meta: { requestId: crypto.randomUUID() } });
   } catch (e: unknown) {
     const err = {
-      code: 'INTERNAL',
-      message: 'Unexpected error',
-      details: { reason: e instanceof Error ? e.message : 'unknown' },
+      code: "INTERNAL",
+      message: "Unexpected error",
+      details: { reason: e instanceof Error ? e.message : "unknown" },
     };
     return NextResponse.json({ error: err }, { status: 500 });
   }
