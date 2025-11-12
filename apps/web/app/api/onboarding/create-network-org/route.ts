@@ -286,8 +286,8 @@ export async function createNetworkOrgHandler(
 
 // Keep Next.js route export for runtime (secured + logged)
 // Adapter wraps the test-friendly handler for use with withSecurity middleware
-async function apiRoute(req: NextRequest, _ctx: Record<string, unknown>) {
-  return createNetworkOrgHandler(req as AuthenticatedRequest);
+async function apiRoute(req: AuthenticatedRequest, ctx: Record<string, unknown>) {
+  return createNetworkOrgHandler(req);
 }
 
 export const POST = withRequestLogging(withSecurity(apiRoute, { requireAuth: true }));

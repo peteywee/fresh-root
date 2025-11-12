@@ -1,27 +1,44 @@
-// [P0][APP][ENV] Eslint Config
+// [P0][APP][ENV]
 // Tags: P0, APP, ENV
-import typescriptEslint from "@typescript-eslint/eslint-plugin";
-import typescriptParser from "@typescript-eslint/parser";
-import importPlugin from "eslint-plugin-import";
-import reactHooks from "eslint-plugin-react-hooks";
+// Flat config for ESLint ≥ v9. Centralized ignores replace .eslintignore.
+
+import js from "@eslint/js";
+import * as tseslint from "typescript-eslint";
 import react from "eslint-plugin-react";
+import reactHooks from "eslint-plugin-react-hooks";
+import unusedImports from "eslint-plugin-unused-imports";
+import globals from "globals";
 
 export default [
+  // 1) Global ignores (replaces .eslintignore)
   {
     ignores: [
-      "**/node_modules/**",
-      "**/.next/**",
-      "**/out/**",
-      "**/dist/**",
-      "**/build/**",
-      "**/coverage/**",
-      "**/docs/**",
-      "**/reports/**",
-      "**/.firebase/**",
-      "**/emulator-data/**",
-      "**/.emulator-data/**",
-      "**/.pnpm/**",
-      "**/pnpm-lock.yaml",
+      // core vendor/build
+      "node_modules/**",
+      "dist/**",
+      "build/**",
+      ".next/**",
+      "coverage/**",
+      "turbo/**",
+      "**/.turbo/**",
+
+      // caches
+      ".pnp.*",
+      "pnpm-store/**",
+      ".pnpm-store/**",
+
+      // quarantined trees (critical)
+      "_legacy/**",
+      "docs/archive/**",
+      "docs/**/node_modules/**",
+      "docs/**/.pnpm/**",
+      "docs/**/dist/**",
+      "docs/**/build/**",
+
+      // artifacts & config
+      "playwright-report/**",
+      "blob-report/**",
+      "test-results/**",
       "**/*.config.js",
       "**/*.config.ts",
       "**/*.config.mjs",
@@ -29,49 +46,66 @@ export default [
       "**/firebase-debug.log",
       "**/ui-debug.log",
       "**/firestore-debug.log",
-      "**/.turbo/**",
+      "**/.firebase/**",
+      "**/emulator-data/**",
+      "**/reports/**",
+      "**/pnpm-lock.yaml",
     ],
   },
+
+  // 2) JS recommended
+  js.configs.recommended,
+
+  // 3) TypeScript strict
+  ...tseslint.configs.strictTypeChecked,
+  ...tseslint.configs.stylisticTypeChecked,
+
+  // 4) App/Lib source rules
   {
-    files: ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx", "**/*.mts"],
+    files: ["**/*.{ts,tsx,js,jsx,mts}"],
     languageOptions: {
-      parser: typescriptParser,
+      parser: tseslint.parser,
       parserOptions: {
-        ecmaVersion: "latest",
+        projectService: true,
+        tsconfigRootDir: new URL(".", import.meta.url).pathname,
         sourceType: "module",
+        ecmaFeatures: { jsx: true },
       },
+      ecmaVersion: "latest",
     },
     plugins: {
-      "@typescript-eslint": typescriptEslint,
-      import: importPlugin,
+      "@typescript-eslint": tseslint.plugin,
+      react,
       "react-hooks": reactHooks,
-      react: react,
+      "unused-imports": unusedImports,
+    },
+    settings: {
+      react: { version: "detect" },
     },
     rules: {
-      "@typescript-eslint/no-unused-vars": [
+      // TS strictness
+      "@typescript-eslint/no-unused-vars": "off", // superseded by unused-imports
+      "unused-imports/no-unused-imports": "error",
+      "unused-imports/no-unused-vars": [
         "warn",
-        {
-          argsIgnorePattern: "^_",
-          varsIgnorePattern: "^_",
-          caughtErrorsIgnorePattern: "^_",
-        },
+        { vars: "all", varsIgnorePattern: "^_", args: "after-used", argsIgnorePattern: "^_", caughtErrorsIgnorePattern: "^_" },
       ],
-      "@typescript-eslint/no-explicit-any": "warn", // Warn on explicit any types
+      "@typescript-eslint/no-explicit-any": "warn",
+
+      // Reasonable defaults
+      "no-console": "off", // Service worker + dev logs need console
+      "no-debugger": "warn",
       "prefer-const": "warn",
-      "no-console": "off", // Disabled: service worker needs console
+
+      // React
+      "react/react-in-jsx-scope": "off",
+      "react/jsx-uses-react": "off",
       "react-hooks/rules-of-hooks": "error",
       "react-hooks/exhaustive-deps": "warn",
-      "import/order": [
-        "warn",
-        {
-          groups: [["builtin", "external"], ["internal"], ["parent", "sibling", "index"]],
-          "newlines-between": "always",
-          alphabetize: { order: "asc", caseInsensitive: true },
-        },
-      ],
     },
   },
-  // Onboarding API tests: silence explicit any warnings (scaffolding/mocks)
+
+  // 5) Onboarding API tests: silence explicit any warnings (scaffolding/mocks)
   {
     files: [
       "apps/web/app/api/onboarding/__tests__/**",
@@ -81,18 +115,22 @@ export default [
       "@typescript-eslint/no-explicit-any": "off",
     },
   },
-  // Test files: allow globals like describe/it/beforeAll provided by Vitest/Jest
+
+  // 6) Test files: allow globals & relax console
   {
-    files: ["**/*.test.*", "**/*.spec.*"],
+    files: [
+      "**/*.spec.{ts,tsx,js,jsx}",
+      "**/*.test.{ts,tsx,js,jsx}",
+      "**/__tests__/**/*.{ts,tsx,js,jsx}",
+    ],
     languageOptions: {
-      parser: typescriptParser,
-      parserOptions: {
-        ecmaVersion: "latest",
-        sourceType: "module",
+      globals: {
+        ...globals.jest,
+        ...globals.node,
       },
     },
     rules: {
-      // Turn off no-undef for test globals to avoid editor warnings
+      "no-console": "off",
       "no-undef": "off",
     },
   },
