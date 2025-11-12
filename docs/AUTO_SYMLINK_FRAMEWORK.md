@@ -301,13 +301,13 @@ Each route in `API_PAPER.md` should include:
 
 ## Performance
 
-| Operation | Duration | Frequency |
-|-----------|----------|-----------|
-| Symlink generation | ~500ms | Per commit |
-| Doc-parity check (CI) | ~2s | Per PR/push |
-| Pre-commit hook (full) | ~5-10s | Per commit |
-| Typecheck | ~3-5s | Per commit |
-| Prettier formatting | ~2-3s | Per commit |
+| Operation              | Duration | Frequency   |
+| ---------------------- | -------- | ----------- |
+| Symlink generation     | ~500ms   | Per commit  |
+| Doc-parity check (CI)  | ~2s      | Per PR/push |
+| Pre-commit hook (full) | ~5-10s   | Per commit  |
+| Typecheck              | ~3-5s    | Per commit  |
+| Prettier formatting    | ~2-3s    | Per commit  |
 
 ---
 
@@ -359,4 +359,4 @@ Before releasing a new version:
 **Created**: 2025-01-12  
 **Status**: ✅ Production-ready  
 **Commit**: f2e1955 (pushed to origin/dev)  
-**Quality Gates**: ✅ Typecheck, ✅ Tests, ✅ Formatting  
+**Quality Gates**: ✅ Typecheck, ✅ Tests, ✅ Formatting

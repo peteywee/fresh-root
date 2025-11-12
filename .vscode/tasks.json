@@ -1,109 +1,125 @@
 {
-  "version": "2.0.0",
-  "tasks": [
-    {
-      "label": "Install (frozen)",
-      "type": "shell",
-      "command": "pnpm -w install --frozen-lockfile",
-      "problemMatcher": []
-    },
-    {
-      "label": "Deps: Check (no deprecated/peers)",
-      "type": "shell",
-      "command": "pnpm -w install --frozen-lockfile",
-      "problemMatcher": [
-        {
-          "owner": "deps",
-          "severity": "error",
-          "pattern": {
-            "regexp": "^(.*deprecated.*)$",
-            "message": 1
-          }
-        },
-        {
-          "owner": "deps",
-          "severity": "error",
-          "pattern": {
-            "regexp": "^(.*Issues with peer dependencies found.*)$",
-            "message": 1
-          }
-        }
-      ]
-    },
-    {
-      "label": "Lint (auto-fix)",
-      "type": "shell",
-      "command": "pnpm -w lint --fix",
-      "problemMatcher": ["$eslint-stylish"]
-    },
-    {
-      "label": "Format (Prettier)",
-      "type": "shell",
-      "command": "pnpm -w format",
-      "problemMatcher": []
-    },
-    {
-      "label": "Typecheck",
-      "type": "shell",
-      "command": "pnpm -w typecheck",
-      "problemMatcher": ["$tsc"]
-    },
-    {
-      "label": "Test (watch)",
-      "type": "shell",
-      "command": "pnpm test",
-      "isBackground": true,
-      "problemMatcher": []
-    },
-    {
-      "label": "Test (run once)",
-      "type": "shell",
-      "command": "pnpm vitest run",
-      "problemMatcher": []
-    },
-    {
-      "label": "Test (coverage)",
-      "type": "shell",
-      "command": "pnpm vitest run --coverage",
-      "problemMatcher": []
-    },
-    {
-      "label": "Test: Rules (Firebase)",
-      "type": "shell",
-      "command": "pnpm -w test:rules",
-      "problemMatcher": []
-    },
-    {
-      "label": "Test: E2E (Playwright)",
-      "type": "shell",
-      "command": "pnpm -w test:e2e",
-      "problemMatcher": []
-    },
-    {
-      "label": "Build (all)",
-      "type": "shell",
-      "command": "pnpm -w build",
-      "problemMatcher": []
-    },
-    {
-      "label": "Docs: Markdown Lint (auto-fix)",
-      "type": "shell",
-      "command": "pnpm -w markdownlint '**/*.md' --fix --ignore node_modules --ignore .next --ignore dist --ignore build",
-      "problemMatcher": []
-    },
-    {
-      "label": "Tag: Auto-tag Files",
-      "type": "shell",
-      "command": "node scripts/tag-files.mjs",
-      "problemMatcher": []
-    },
-    {
-      "type": "npm",
-      "script": "bench",
-      "path": "apps/web",
-      "problemMatcher": ["$tsc"],
-      "label": "npm: bench - apps/web",
-      "detail": "vitest bench --config vitest.bench.config.ts"
-    }
-  ]
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Install (frozen)",
+			"type": "shell",
+			"command": "pnpm -w install --frozen-lockfile",
+			"problemMatcher": []
+		},
+		{
+			"label": "Deps: Check (no deprecated/peers)",
+			"type": "shell",
+			"command": "pnpm -w install --frozen-lockfile",
+			"problemMatcher": [
+				{
+					"owner": "deps",
+					"severity": "error",
+					"pattern": {
+						"regexp": "^(.*deprecated.*)$",
+						"message": 1
+					}
+				},
+				{
+					"owner": "deps",
+					"severity": "error",
+					"pattern": {
+						"regexp": "^(.*Issues with peer dependencies found.*)$",
+						"message": 1
+					}
+				}
+			]
+		},
+		{
+			"label": "Lint (auto-fix)",
+			"type": "shell",
+			"command": "pnpm -w lint --fix",
+			"problemMatcher": [
+				"$eslint-stylish"
+			]
+		},
+		{
+			"label": "Format (Prettier)",
+			"type": "shell",
+			"command": "pnpm -w format",
+			"problemMatcher": []
+		},
+		{
+			"label": "Typecheck",
+			"type": "shell",
+			"command": "pnpm -w typecheck",
+			"problemMatcher": [
+				"$tsc"
+			]
+		},
+		{
+			"label": "Test (watch)",
+			"type": "shell",
+			"command": "pnpm test",
+			"isBackground": true,
+			"problemMatcher": []
+		},
+		{
+			"label": "Test (run once)",
+			"type": "shell",
+			"command": "pnpm vitest run",
+			"problemMatcher": []
+		},
+		{
+			"label": "Test (coverage)",
+			"type": "shell",
+			"command": "pnpm vitest run --coverage",
+			"problemMatcher": []
+		},
+		{
+			"label": "Test: Rules (Firebase)",
+			"type": "shell",
+			"command": "pnpm -w test:rules",
+			"problemMatcher": []
+		},
+		{
+			"label": "Test: E2E (Playwright)",
+			"type": "shell",
+			"command": "pnpm -w test:e2e",
+			"problemMatcher": []
+		},
+		{
+			"label": "Build (all)",
+			"type": "shell",
+			"command": "pnpm -w build",
+			"problemMatcher": []
+		},
+		{
+			"label": "Docs: Markdown Lint (auto-fix)",
+			"type": "shell",
+			"command": "pnpm -w markdownlint '**/*.md' --fix --ignore node_modules --ignore .next --ignore dist --ignore build",
+			"problemMatcher": []
+		},
+		{
+			"label": "Tag: Auto-tag Files",
+			"type": "shell",
+			"command": "node scripts/tag-files.mjs",
+			"problemMatcher": []
+		},
+		{
+			"type": "npm",
+			"script": "bench",
+			"path": "apps/web",
+			"problemMatcher": [
+				"$tsc"
+			],
+			"label": "npm: bench - apps/web",
+			"detail": "vitest bench --config vitest.bench.config.ts"
+		},
+		{
+			"label": "Audit: Nesting (prevent double-nesting)",
+			"type": "shell",
+			"command": "node scripts/audit/nesting-audit.mjs"
+		},
+		{
+			"label": "Index: Generate file index",
+			"type": "shell",
+			"command": "scripts/index/generate-file-index.sh --write"
+		}
+	]
 }
