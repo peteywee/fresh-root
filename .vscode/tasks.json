@@ -156,6 +156,20 @@
 			"command": "node scripts/migration/gen-mini-indexes.mjs",
 			"detail": "Generate consolidated mini-indexes for Zod schemas and API routes",
 			"problemMatcher": []
+		},
+		{
+			"label": "Docs: Generate Mini-Index (Schemas)",
+			"type": "shell",
+			"command": "node scripts/migration/gen-mini-indexes.mjs",
+			"detail": "Generate mini-index for Zod schemas (docs/migration/v15/SCHEMAS_MINI_INDEX.md)",
+			"problemMatcher": []
+		},
+		{
+			"label": "Docs: Generate Mini-Index (API Routes)",
+			"type": "shell",
+			"command": "node scripts/migration/gen-mini-indexes.mjs",
+			"detail": "Generate mini-index for API routes (docs/migration/v15/API_ROUTES_MINI_INDEX.md)",
+			"problemMatcher": []
 		}
 	]
 }

@@ -46,17 +46,24 @@ Press `Ctrl+Shift+P` (or `Cmd+Shift+P` on macOS) and search for "Tasks: Run Task
 
 ### New: Quality Gates
 
-| Task                            | Command                              | Purpose                                                                 |
-| ------------------------------- | ------------------------------------ | ----------------------------------------------------------------------- |
-| **Quality: Check Doc Parity**   | `node scripts/ci/check-doc-parity.mjs` | Validate all API routes and schemas have docs and TEST SPEC links       |
-| **Quality: Verify Tests Present** | `node scripts/tests/verify-tests-present.mjs` | Ensure API routes and core modules have test coverage |
+| Task                              | Command                                       | Purpose                                                           |
+| --------------------------------- | --------------------------------------------- | ----------------------------------------------------------------- |
+| **Quality: Check Doc Parity**     | `node scripts/ci/check-doc-parity.mjs`        | Validate all API routes and schemas have docs and TEST SPEC links |
+| **Quality: Verify Tests Present** | `node scripts/tests/verify-tests-present.mjs` | Ensure API routes and core modules have test coverage             |
+
+### New: Documentation
+
+| Task                                    | Command                                      | Purpose                                                        |
+| --------------------------------------- | -------------------------------------------- | -------------------------------------------------------------- |
+| **Docs: Generate Mini-Index (Schemas)** | `node scripts/migration/gen-mini-indexes.mjs` | Generate mini-index for Zod schemas (consolidated reference)   |
+| **Docs: Generate Mini-Index (API Routes)** | `node scripts/migration/gen-mini-indexes.mjs` | Generate mini-index for API routes (consolidated reference)    |
 
 ### New: Migration Tools
 
-| Task                                | Command                                     | Purpose                                                    |
-| ----------------------------------- | ------------------------------------------- | ---------------------------------------------------------- |
-| **Migration: Check v15 Readiness**  | `node scripts/migration/migration-status.mjs` | Validate v15 migration readiness (7 quality checks)        |
-| **Migration: Generate Mini-Indexes** | `node scripts/migration/gen-mini-indexes.mjs` | Generate schema and API route mini-indexes for migration   |
+| Task                                 | Command                                       | Purpose                                                  |
+| ------------------------------------ | --------------------------------------------- | -------------------------------------------------------- |
+| **Migration: Check v15 Readiness**   | `node scripts/migration/migration-status.mjs` | Validate v15 migration readiness (7 quality checks)      |
+| **Migration: Generate Mini-Indexes** | `node scripts/migration/gen-mini-indexes.mjs` | Generate schema and API route mini-indexes for migration |
 
 ## Setup: Adding Tasks to VS Code
 
@@ -117,6 +124,9 @@ pnpm -w test:e2e
 node scripts/ci/check-doc-parity.mjs
 node scripts/tests/verify-tests-present.mjs
 
+# Generate/update mini-indexes
+node scripts/migration/gen-mini-indexes.mjs
+
 # Migration readiness check
 node scripts/migration/migration-status.mjs
 
@@ -126,15 +136,15 @@ bash scripts/cleanup/full-cleanup.sh
 
 ## Available Helper Scripts
 
-| Script                                      | Purpose                                               |
-| ------------------------------------------- | ----------------------------------------------------- |
-| `scripts/ci/check-doc-parity.mjs`           | Validate API routes/schemas have docs and TEST SPECs |
-| `scripts/tests/verify-tests-present.mjs`    | Check test file coverage (onboarding, rules, schemas) |
-| `scripts/migration/migration-status.mjs`    | Validate v15 migration readiness (7 checks)           |
-| `scripts/migration/gen-mini-indexes.mjs`    | Generate schema and API route mini-indexes            |
-| `scripts/lint/lean.sh`                      | Lean ESLint pass (skips legacy/vendor)                |
-| `scripts/cleanup/full-cleanup.sh`           | Remove legacy v14 artifacts                           |
-| `scripts/audit/nesting-audit.mjs`           | Audit for import nesting errors                       |
+| Script                                   | Purpose                                               |
+| ---------------------------------------- | ----------------------------------------------------- |
+| `scripts/ci/check-doc-parity.mjs`        | Validate API routes/schemas have docs and TEST SPECs  |
+| `scripts/tests/verify-tests-present.mjs` | Check test file coverage (onboarding, rules, schemas) |
+| `scripts/migration/migration-status.mjs` | Validate v15 migration readiness (7 checks)           |
+| `scripts/migration/gen-mini-indexes.mjs` | Generate schema and API route mini-indexes            |
+| `scripts/lint/lean.sh`                   | Lean ESLint pass (skips legacy/vendor)                |
+| `scripts/cleanup/full-cleanup.sh`        | Remove legacy v14 artifacts                           |
+| `scripts/audit/nesting-audit.mjs`        | Audit for import nesting errors                       |
 
 ---
 
