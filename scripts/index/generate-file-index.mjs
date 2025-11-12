@@ -1,4 +1,6 @@
 #!/usr/bin/env node
+// [P0][SECURITY][CODE] Generate File Index
+// Tags: P0, SECURITY, CODE
 /**
  * [MEDIUM][INFRA][INDEX]
  * Tags: index, codegen, ci-guard

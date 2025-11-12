@@ -17,22 +17,8 @@ jobs:
         with:
           fetch-depth: 0
 
-      - uses: pnpm/action-setup@v4
-        with:
-          version: 9
+      - name: Ensure executable
+        run: chmod +x scripts/index/generate-file-index.sh
 
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: pnpm
-
-      - run: pnpm install --frozen-lockfile
-
-      - name: Generate & Check
-        run: |
-          node scripts/index/generate-file-index.mjs --check || (
-            echo "::warning::File index is stale. Regenerating…"
-            node scripts/index/generate-file-index.mjs --write
-            git diff -- docs/INDEX.md || true
-            exit 1
-          )
+      - name: Check file index (zero Node deps)
+        run: scripts/index/generate-file-index.sh --check

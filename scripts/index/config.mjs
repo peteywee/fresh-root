@@ -1,3 +1,5 @@
+// [P0][APP][ENV] Config
+// Tags: P0, APP, ENV
 // [MEDIUM][INFRA][INDEX]
 // Tags: index, codegen, config
 // Centralized knobs for the file index generator.
