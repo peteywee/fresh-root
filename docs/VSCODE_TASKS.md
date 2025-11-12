@@ -44,25 +44,29 @@ Press `Ctrl+Shift+P` (or `Cmd+Shift+P` on macOS) and search for "Tasks: Run Task
 | ------------------------------------ | -------------------------------------- | ---------------------------------------------------------------- |
 | **Cleanup: Remove Legacy Artifacts** | `bash scripts/cleanup/full-cleanup.sh` | Remove v14 legacy files, emulator data, temp files (interactive) |
 
+### New: Quality Gates
+
+| Task                            | Command                              | Purpose                                                                 |
+| ------------------------------- | ------------------------------------ | ----------------------------------------------------------------------- |
+| **Quality: Check Doc Parity**   | `node scripts/ci/check-doc-parity.mjs` | Validate all API routes and schemas have docs and TEST SPEC links       |
+| **Quality: Verify Tests Present** | `node scripts/tests/verify-tests-present.mjs` | Ensure API routes and core modules have test coverage |
+
+### New: Migration Tools
+
+| Task                                | Command                                     | Purpose                                                    |
+| ----------------------------------- | ------------------------------------------- | ---------------------------------------------------------- |
+| **Migration: Check v15 Readiness**  | `node scripts/migration/migration-status.mjs` | Validate v15 migration readiness (7 quality checks)        |
+| **Migration: Generate Mini-Indexes** | `node scripts/migration/gen-mini-indexes.mjs` | Generate schema and API route mini-indexes for migration   |
+
 ## Setup: Adding Tasks to VS Code
 
-The tasks are configured in `.vscode/tasks.json` (which is `.gitignore`d). To add the cleanup task manually:
+The tasks are configured in `.vscode/tasks.json` (which is `.gitignore`d). All new tasks are automatically included:
 
-1. Press `Ctrl+Shift+D` (or `Cmd+Shift+D`)
-2. Click "Configure Task"
-3. Select "Create tasks.json from template"
-4. Add the following task before the closing `]`:
+- ✅ Quality Gate Tasks (Doc Parity, Test Coverage)
+- ✅ Migration Tools (v15 Readiness, Mini-Indexes)
+- ✅ Cleanup Tasks (Legacy Artifacts)
 
-```json
-{
-  "label": "Cleanup: Remove Legacy Artifacts",
-  "type": "shell",
-  "command": "bash scripts/cleanup/full-cleanup.sh",
-  "detail": "Remove v14 legacy files, emulator data, and temp files (interactive with confirmation)",
-  "isBackground": false,
-  "problemMatcher": []
-}
-```
+To manually add a task, press `Ctrl+Shift+D` (or `Cmd+Shift+D`), click "Configure Task", and add to the `tasks` array in `.vscode/tasks.json`.
 
 ## Running Tasks from Command Line
 
@@ -97,22 +101,40 @@ The following checks run automatically before each commit (via Husky):
 Before pushing to GitHub, run:
 
 ```bash
-pnpm -w typecheck       # Type checking
-pnpm test               # Unit tests
-pnpm -w test:rules      # Firebase rules tests
-pnpm -w test:e2e        # E2E tests
-bash scripts/cleanup/full-cleanup.sh  # Optional: cleanup legacy files
+# Type checking
+pnpm -w typecheck
+
+# Unit tests
+pnpm test
+
+# Firebase rules tests
+pnpm -w test:rules
+
+# E2E tests
+pnpm -w test:e2e
+
+# Quality gates (via VS Code tasks or CLI)
+node scripts/ci/check-doc-parity.mjs
+node scripts/tests/verify-tests-present.mjs
+
+# Migration readiness check
+node scripts/migration/migration-status.mjs
+
+# Optional: cleanup legacy files
+bash scripts/cleanup/full-cleanup.sh
 ```
 
 ## Available Helper Scripts
 
-| Script                                   | Purpose                                |
-| ---------------------------------------- | -------------------------------------- |
-| `scripts/ci/check-doc-parity.mjs`        | Validate API routes/schemas have docs  |
-| `scripts/tests/verify-tests-present.mjs` | Check test file coverage               |
-| `scripts/lint/lean.sh`                   | Lean ESLint pass (skips legacy/vendor) |
-| `scripts/cleanup/full-cleanup.sh`        | Remove legacy v14 artifacts            |
-| `scripts/audit/nesting-audit.mjs`        | Audit for import nesting errors        |
+| Script                                      | Purpose                                               |
+| ------------------------------------------- | ----------------------------------------------------- |
+| `scripts/ci/check-doc-parity.mjs`           | Validate API routes/schemas have docs and TEST SPECs |
+| `scripts/tests/verify-tests-present.mjs`    | Check test file coverage (onboarding, rules, schemas) |
+| `scripts/migration/migration-status.mjs`    | Validate v15 migration readiness (7 checks)           |
+| `scripts/migration/gen-mini-indexes.mjs`    | Generate schema and API route mini-indexes            |
+| `scripts/lint/lean.sh`                      | Lean ESLint pass (skips legacy/vendor)                |
+| `scripts/cleanup/full-cleanup.sh`           | Remove legacy v14 artifacts                           |
+| `scripts/audit/nesting-audit.mjs`           | Audit for import nesting errors                       |
 
 ---
 
