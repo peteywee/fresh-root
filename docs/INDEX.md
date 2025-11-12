@@ -1,309 +1,115 @@
-# Project Documentation Index
+# Fresh Schedules – Documentation Index (v15)
 
-**Last Updated:** November 7, 2025
-**Status:** ✅ Complete and Production Ready
-
-## Overview
-
-This repository contains comprehensive technical documentation covering all aspects of the Fresh Root project, including architecture, development journey, critical issues solved, and reproducibility guides.
-
-## Core Documentation
-
-### 1. [README.md](../README.md)
-
-**Main project documentation** - Quick start, features, installation, and basic usage.
-
-### 2. [Project Bible v14.0.0](./bible/Project_Bible_v14.0.0.md) ⭐ **CURRENT SPEC**
-
-**Production-Ready Specification** - Authoritative reference for multi-tenant architecture, Network creation,
-onboarding wizard, security gates, and compliance. This is the single source of truth for production readiness.
-See also:
-
-- [v13.5](./bible/Project_Bible_v13.5.md) - Previous version (historical context)
-- [Specification Gaps v14.0.0](./bible/GAPS_v14.0.0.md) - Critical gaps and action items
-- [Schema Map – Network](./schema-network.md) - Network-centric Firestore paths and TypeScript schemas
-
-### 3. Development Journey & Fixes (Archived)
-
-Historical fix documentation has been moved to `docs/archive/` for reference:
-
-| Document                                                                 | Purpose                     | Key Topics                                                 |
-| ------------------------------------------------------------------------ | --------------------------- | ---------------------------------------------------------- |
-| **[archive/TEST_FIXES_ROUND2.md](./archive/TEST_FIXES_ROUND2.md)**       | Critical bug fixes (Oct 31) | Storage emulator, auth tokens, Docker, ESLint, Next.js API |
-| **[archive/BRANCH_CONSOLIDATION.md](./archive/BRANCH_CONSOLIDATION.md)** | Repository cleanup (Oct 31) | 7 branches merged, conflict resolution, branch deletion    |
-| **[archive/CI_FIX_PNPM_VERSION.md](./archive/CI_FIX_PNPM_VERSION.md)**   | GitHub Actions fix          | pnpm version mismatch resolution                           |
-| **[archive/ERROR_FIXES_SUMMARY.md](./archive/ERROR_FIXES_SUMMARY.md)**   | Historical fixes            | Previous rounds of bug fixes                               |
-
-### 3. Project Planning & Process
-
-| Document                                     | Purpose                           |
-| -------------------------------------------- | --------------------------------- |
-| **[GOALS.md](./GOALS.md)**                   | Project objectives and milestones |
-| **[SCOPE.md](./SCOPE.md)**                   | Feature scope and boundaries      |
-| **[PROCESS.md](./PROCESS.md)**               | Development process and workflows |
-| **[REPO_STANDARDS.md](./REPO_STANDARDS.md)** | Code standards and conventions    |
-
-### 4. Setup & Usage Guides
-
-| Document                                                | Purpose                                |
-| ------------------------------------------------------- | -------------------------------------- |
-| **[../SETUP.md](../SETUP.md)**                          | Step-by-step setup instructions        |
-| **[../USAGE.md](../USAGE.md)**                          | Application usage guide                |
-| **[../CONTRIBUTING.md](../CONTRIBUTING.md)**            | Contribution guidelines                |
-| **[VS Code Workspace Rules](../.vscode/docs/RULES.md)** | Editor rules: no deprecated deps/peers |
-
-### 5. AI Development Context
-
-Located in `docs/ai/`:
-
-- **CHAT_CONTEXT.md** - Context for AI pair programming
-- **CHATMODE.md** - AI interaction guidelines
-- **SYSTEM_PROMPT.md** - AI system prompts
-- **TOOLS.md** - Available development tools
-
-### 6. Runbooks
-
-Located in `docs/RUNBOOKS/`:
-
-- **Onboarding.md** - New developer onboarding
-- **PublishNotify.md** - Release process
-- **Scheduling.md** - Schedule management workflows
-
-## Quick Reference
-
-### Repository Status (October 31, 2025)
-
-**Branches:** 3 active (main, dev, copilot/sub-pr-29)
-**Tests:** ✅ All passing
-**CI/CD:** ✅ Green
-**Security:** ✅ CodeQL scanning active
-**Documentation:** ✅ Comprehensive
-
-### Technology Stack
-
-| Category            | Technology          | Version   |
-| ------------------- | ------------------- | --------- |
-| **Frontend**        | Next.js             | 16.x      |
-| **UI**              | React               | 18.x      |
-| **Language**        | TypeScript          | 5.6.3     |
-| **Styling**         | Tailwind CSS        | 3.x       |
-| **Backend**         | Firebase            | 10.x      |
-| **Package Manager** | pnpm                | 9.1.0     |
-| **Testing**         | Vitest + Playwright | 2.x + 1.x |
-| **CI/CD**           | GitHub Actions      | N/A       |
-
-### Critical Files Reference
-
-| File                           | Purpose                                   |
-| ------------------------------ | ----------------------------------------- |
-| `firebase.json`                | Firebase configuration (emulators, rules) |
-| `firestore.rules`              | Database security rules (RBAC)            |
-| `storage.rules`                | Storage security rules                    |
-| `pnpm-workspace.yaml`          | Monorepo configuration                    |
-| `package.json`                 | Root dependencies (pnpm@9.1.0)            |
-| `.github/workflows/ci.yml`     | Main CI pipeline                          |
-| `.github/workflows/codeql.yml` | Security scanning                         |
-
-## Architecture Overview
-
-### System Layers
-
-````text
-┌─────────────────────────────────┐
-│     Client (Next.js PWA)        │
-│     React 18 + TypeScript       │
-└────────────┬────────────────────┘
-             │ HTTPS/REST
-             ▼
-┌─────────────────────────────────┐
-│   API Routes (Next.js)          │
-│   Zod Validation + Middleware   │
-└────────────┬────────────────────┘
-             │
-             ▼
-┌─────────────────────────────────┐
-│      Firebase Services          │
-│  Auth | Firestore | Storage     │
-└────────────┬────────────────────┘
-             │
-             ▼
-┌─────────────────────────────────┐
-│     Security Rules Engine       │
-│   firestore.rules | storage.rules│
-└─────────────────────────────────┘
-
-```text
-
-### Monorepo Structure
-
-```text
-
-fresh-root/
-├── apps/web/              # Next.js PWA
-├── packages/              # Shared packages
-│   ├── types/            # TypeScript types
-│   ├── ui/               # UI components
-│   ├── rules-tests/      # Rules testing
-│   └── config/           # Shared configs
-├── services/api/          # Dockerized API
-├── tests/                 # E2E + Rules tests
-└── .github/workflows/     # CI/CD pipelines
-````
-
-## Development Journey Highlights
-
-### Phase 1-3: Foundation (Pre-October 2025)
-
-- Next.js app with Firebase
-- Monorepo structure
-- Authentication & UI
-- Testing infrastructure
-- CI/CD pipelines
-
-### Phase 4: Repository Consolidation (October 31, 2025)
-
-**MAJOR MILESTONE**: Cleaned up repository
-
-- ✅ Consolidated 7 feature branches
-- ✅ Resolved merge conflicts (kept dev version)
-- ✅ Deleted 9 stale branches
-- ✅ Repository: 12+ branches → 3 branches
-
-### Phase 5: Critical Bug Fixes (October 31, 2025)
-
-**MAJOR MILESTONE**: Resolved 6+ critical failures
-
-1. ✅ Storage emulator configuration
-1. ✅ Auth token format in tests
-1. ✅ Collection path mismatches
-1. ✅ Docker build with optional deps
-1. ✅ PNPM version mismatch in CI
-1. ✅ ESLint import order
-1. ✅ Next.js cache API update
-
-### Current State
-
-```text
-✅ Production Ready
-✅ All tests passing
-✅ CI/CD pipeline green
-✅ Security scanning active
-✅ Documentation complete
-✅ Ready for deployment
-```
-
-## Common Tasks
-
-### Development
-
-```bash
-pnpm dev                    # Start dev server
-pnpm build                  # Build all
-pnpm typecheck             # Type checking
-pnpm lint                  # Linting
-pnpm test                  # All tests
-```
-
-### Firebase
-
-```bash
-firebase emulators:start    # Start emulators
-firebase deploy --only firestore:rules
-firebase deploy --only storage
-```
-
-### Git Operations
-
-```bash
-git branch -a              # List branches
-gh pr create               # Create PR
-gh pr view 29              # View PR
-```
-
-## Known Pitfalls & Solutions
-
-### 1. Emulator Connection Refused
-
-**Problem:** `ECONNREFUSED 127.0.0.1:8080`
-**Solution:** Start emulators with `firebase emulators:start`
-
-### 2. pnpm Version Mismatch
-
-**Problem:** CI fails with version conflict
-**Solution:** Use exact version (9.1.0) in workflows to match package.json
-
-### 3. Auth Token Format
-
-**Problem:** Rules tests fail with PERMISSION_DENIED
-**Solution:** Use `{ orgId: 'org123', roles: ['member'] }` format
-
-### 4. Docker Build Slow
-
-**Problem:** Build takes 10+ minutes
-**Solution:** Use `--no-optional` flag and BuildKit
-
-### 5. Merge Conflicts in Lockfile
-
-**Problem:** Massive conflicts in pnpm-lock.yaml
-**Solution:** Regenerate lockfile instead of manual resolution
-
-## Next Steps
-
-### Short Term (2 weeks)
-
-- [ ] E2E test coverage expansion
-- [ ] User profile editing
-- [ ] Organization settings page
-- [ ] Staging deployment
-- [ ] Monitoring setup (Sentry)
-
-### Medium Term (1 month)
-
-- [ ] Schedule templates
-- [ ] Conflict detection
-- [ ] Notification system
-- [ ] Mobile apps
-- [ ] Export functionality
-
-### Long Term (Quarter)
-
-- [ ] Multi-organization support
-- [ ] AI scheduling optimization
-- [ ] Time-off management
-- [ ] Shift swap functionality
-- [ ] Analytics dashboard
-
-## Resources
-
-### External Links
-
-- **[Firebase Console](https://console.firebase.google.com/)**
-- **[GitHub Repository](https://github.com/peteywee/fresh-root)**
-- **[Next.js Documentation](https://nextjs.org/docs)**
-- **[pnpm Documentation](https://pnpm.io/)**
-
-### Internal Tools
-
-- **MCP Server**: `packages/mcp-server/` - Model Context Protocol tools
-- **Repo Agent**: `scripts/agent/` - Automated refactoring agent
-- **Seeding Scripts**: `scripts/seed/` - Database seeding
-
-## Contributing
-
-See [CONTRIBUTING.md](../CONTRIBUTING.md) for:
-
-- Code style guidelines
-- PR process
-- Commit conventions
-- Testing requirements
-
-## License
-
-This project is licensed under the terms specified in the [LICENSE](../LICENSE) file.
+This index is the **entry point** for all project documentation. It tells you **where to look** for specs, migration plans, layer definitions, and runbooks.
 
 ---
 
-**Document Version:** 1.0
-**Maintained By:** Patrick Craven
-**Last Review:** October 31, 2025
-**Next Review:** November 15, 2025
+## Section 1 – Bibles (Specs by Version)
+
+| Version | Files | Status | Notes |
+|---------|-------|--------|-------|
+| v13.5 (Historical) | `docs/bible/Project_Bible_v13.5.md` | Historical | Early network/org/venue + onboarding concepts |
+| v14.0.0 (Historical) | `docs/bible/Project_Bible_v14.0.0.md`, `docs/Biblev14.md` | Historical (reference) | Blocks 1–3 + GAPS |
+| v15.0.0 (Canonical) | `docs/bible/Project_Bible_v15.0.0.md` | Canonical | All new work must align |
+| v15 Migration Plan | `docs/bible/Project_Bible_v15_MIGRATION_PLAN.md` | Canonical | Operational transition plan |
+
+---
+
+## Section 2 – Migration (v15)
+
+Directory: `docs/migration/v15/`
+
+| Phase | Docs | Purpose |
+|-------|------|---------|
+| Phase 1 – Discover | `PHASE1_DOCUMENT_INVENTORY.md`, `PHASE1_PATTERN_MAP.md` | Inventory + pattern freeze |
+| Phase 2 – Crosswalks | `PHASE2_SPEC_CROSSWALK.md`, `PHASE2_SCHEMA_CROSSWALK.md` | Map legacy → v15 concepts & schemas |
+| Phase 3 – Migration | `PHASE3_CODE_MIGRATION_CHECKLIST.md` (TBD), `PHASE3_DATA_MIGRATION_CHECKLIST.md` (TBD) | Execute code + data changes |
+| Phase 4 – Freeze | `PHASE4_HARDENING_AND_FREEZE.md` (TBD) | Hardening & release tag |
+
+---
+
+## Section 3 – Layers (Architecture Contracts)
+
+| Layer | Doc | Responsibility |
+|-------|-----|----------------|
+| 00 | `LAYER_00_DOMAIN_KERNEL.md` | Domain types, Zod schemas, invariants |
+| 01 | `LAYER_01_INFRASTRUCTURE.md` | Firebase Admin, env, rules, observability |
+| 02 | `LAYER_02_APP_LIBS.md` | Application logic (onboarding, scheduling, guards) |
+| 03 | `LAYER_03_API_EDGE.md` | HTTP boundaries / API routes / middleware |
+| 04 | `LAYER_04_UI_UX.md` | Pages, components, design system, UX flows |
+
+---
+
+## Section 4 – Other Important Docs
+
+Supporting material (non-exhaustive):
+
+- `docs/ARCHITECTURE_DIAGRAMS.md`
+- `docs/schema-map.md`
+- `docs/schema-network.md`
+- `docs/BLOCK1_SLO_SUMMARY.md`
+- `docs/BLOCK3_IMPLEMENTATION.md`
+- `docs/BLOCK4_PLANNING.md`
+- `docs/CLEANUP_SUMMARY_2025-11-07.md`
+- `docs/COMPLETE_TECHNICAL_DOCUMENTATION.md`
+
+---
+
+## Section 5 – How to Use This Index
+
+1. Unsure where something lives? Start here and pick Bible / Migration / Layers / Other.
+2. Changing behavior or flows? Read `Project_Bible_v15.0.0.md` → relevant layer doc → migration crosswalk(s).
+3. Migration work? Keep crosswalks & checklists updated with each change.
+4. Adding an architectural concept? Update Bible (if conceptual), layer doc (if structural), migration docs (if transitional).
+
+---
+
+## Section 6 – Ownership & Update Policy
+
+Owner: Patrick (CTO / Lead Architect) + AI assistant.
+Policy: Every architecture/domain/flow change updates this index and related migration docs.
+Historical bibles (v13.5/v14) are read‑only except status annotations.
+
+---
+
+## 4. Other Important Docs (Existing)
+
+Examples (paths may vary slightly):
+
+- `docs/ARCHITECTURE_DIAGRAMS.md`
+- `docs/schema-map.md`
+- `docs/schema-network.md`
+- `docs/BLOCK1_SLO_SUMMARY.md`
+- `docs/BLOCK3_IMPLEMENTATION.md`
+- `docs/BLOCK4_PLANNING.md`
+- `docs/CLEANUP_SUMMARY_2025-11-07.md`
+- `docs/COMPLETE_TECHNICAL_DOCUMENTATION.md`
+
+These are referenced by the v15 Bible and Migration Plan as **supporting material**.
+
+---
+
+## 5. How to Use This Index
+
+1. **You don’t know where something lives?**
+   - Start here.
+   - Choose: Bible / Migration / Layers / Other.
+
+2. **You need to change behavior or flows?**
+   - Read `Project_Bible_v15.0.0.md` first.
+   - Then find the relevant section in `docs/layers/`.
+   - Finally, look at the migration docs if this touches old behavior.
+
+3. **You’re doing migration work?**
+   - Start in `docs/migration/v15/`.
+   - Never change code without updating the corresponding checklist or crosswalk.
+
+---
+
+## 6. Ownership and Status
+
+- **Owner:** CTO / Lead Architect (currently: Patrick + AI assistant).
+- **Update policy:**
+  - Every significant code change that affects architecture, domain, or flows must be reflected here.
+  - v13.5 and v14 docs must not be edited except to mark them explicitly as “historical”.
+

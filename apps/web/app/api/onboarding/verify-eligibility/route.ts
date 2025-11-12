@@ -42,7 +42,7 @@ export async function verifyEligibilityHandler(
   adminDb?: any,
 ) {
   const uid = req.user?.uid;
-  const claims = req.user?.customClaims || {};
+  const _claims = req.user?.customClaims || {};
 
   // Check authentication first
   if (!uid) {

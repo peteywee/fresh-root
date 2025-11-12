@@ -12,8 +12,8 @@ import {
   securityHeaders,
 } from "./security";
 import { getFirebaseAdminAuth } from "../../../lib/firebase-admin";
-import { csrfProtection } from "../../../src/lib/api/csrf";
-import { createRedisRateLimit, RedisClient } from "../../../src/lib/api/redis-rate-limit";
+// Removed unused imports (csrfProtection, createRedisRateLimit) to satisfy lint no-unused-vars
+import type { RedisClient } from "../../../src/lib/api/redis-rate-limit";
 import { Logger } from "../../../src/lib/logger";
 
 export interface AuthenticatedRequest extends NextRequest {
