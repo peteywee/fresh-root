@@ -2,7 +2,7 @@
 // Tags: api, onboarding, network, org, venue, membership, events
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 import { withRequestLogging } from "../../_shared/logging";
 import { withSecurity, type AuthenticatedRequest } from "../../_shared/middleware";
@@ -287,11 +287,12 @@ export async function createNetworkOrgHandler(
 // Keep Next.js route export for runtime (secured + logged)
 // Adapter wraps the test-friendly handler for use with withSecurity middleware
 async function apiRoute(
-  req: AuthenticatedRequest,
-
-  _ctx?: { params: Record<string, string> },
+  req: NextRequest,
+  _ctx: { params: Record<string, string> | Promise<Record<string, string>> },
 ) {
-  return createNetworkOrgHandler(req);
+  return createNetworkOrgHandler(req as AuthenticatedRequest);
 }
 
-export const POST = withRequestLogging(withSecurity(apiRoute, { requireAuth: true }));
+export const POST = withRequestLogging(
+  withSecurity(apiRoute as any, { requireAuth: true }),
+);

@@ -56,7 +56,7 @@ export async function verifyEligibilityHandler(
   }
 
   // Parse request body to validate required fields
-  let body: unknown = {};
+  let body: any = {};
   if (req.json) {
     try {
       body = await req.json();
@@ -119,14 +119,13 @@ export async function verifyEligibilityHandler(
 // Adapter wraps the test-friendly handler for use with withSecurity middleware
 async function apiRoute(
   req: AuthenticatedRequest,
-
-  _ctx?: { params: Record<string, string> },
+  _ctx: { params: Record<string, string> | Promise<Record<string, string>> },
 ) {
   return verifyEligibilityHandler(req);
 }
 
 export const POST = withRequestLogging(
-  withSecurity(apiRoute, {
+  withSecurity(apiRoute as any, {
     requireAuth: true,
   }),
 );
