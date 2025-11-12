@@ -15,7 +15,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 export const GET = async () => {
   try {
-    // const session = await requireSession(req);
+    // const session = await requireSession(req); // req unused in template
     // await requireRole(session, ["manager"]);
     // const data = await doWork(/* args */);
     return NextResponse.json({ ok: true });
