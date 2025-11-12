@@ -1,51 +1,50 @@
-// [P1][API][CODE] Route API route handler
-// Tags: P1, API, CODE
 import { NextRequest, NextResponse } from "next/server";
-import { z } from "zod";
-// import { requireSession, requireOrgMembership, requireRole } from '@/src/lib/api/guards';
-// import { someUseCase } from '@/src/lib/some-module/useCases';
-// import { JsonError } from '@/src/lib/api/errors';
+// Example shows imports you will actually use in real routes:
+// import { z } from "zod";
+// import { SomeSchema } from "@fresh-schedules/types";
+// import { requireSession, requireRole } from "@/src/lib/api";
+// import { doWork } from "@/src/lib/someUseCase";
 
-// 1) Define Zod schema (import from @fresh-schedules/types in real routes)
-const PayloadSchema = z.object({
-  orgId: z.string().min(1),
-  input: z.any(),
-});
+/**
+ * Canonical thin-edge template (Layer 03).
+ *
+ * Pattern: parse → validate → authorize → app-lib → respond
+ */
 
-export async function POST(req: NextRequest) {
+export const GET = async (_req: NextRequest) => {
   try {
-    const body = await req.json().catch(() => ({}));
-    const parse = PayloadSchema.safeParse(body);
-    if (!parse.success) {
-      return NextResponse.json(
-        {
-          error: {
-            code: "BAD_REQUEST",
-            message: "Invalid payload",
-            details: parse.error.flatten(),
-          },
-        },
-        { status: 400 },
-      );
-    }
-
-    const { orgId, input } = parse.data;
-
-    // TODO: Replace placeholders below with actual session/guard imports
-    // const user = await requireSession(req);
-    // await requireOrgMembership(user, orgId);
-    // await requireRole(user, ['manager', 'owner']);
-    // const data = await someUseCase({ orgId, input, userId: user.uid });
-
-    const data = { success: true, orgId, input }; // stub response
-
-    return NextResponse.json({ data, meta: { requestId: crypto.randomUUID() } });
-  } catch (e: unknown) {
-    const err = {
-      code: "INTERNAL",
-      message: "Unexpected error",
-      details: { reason: e instanceof Error ? e.message : "unknown" },
-    };
-    return NextResponse.json({ error: err }, { status: 500 });
+    // const session = await requireSession(_req);
+    // await requireRole(session, ["manager"]);
+    // const data = await doWork(/* args */);
+    return NextResponse.json({ ok: true });
+  } catch (err: any) {
+    return NextResponse.json(
+      { ok: false, error: err?.message ?? "Server error" },
+      { status: 500 },
+    );
   }
-}
+};
+
+export const POST = async (req: NextRequest) => {
+  try {
+    // const session = await requireSession(req);
+    // const body = await req.json();
+    // const parsed = SomeSchema.parse(body);
+    // const result = await doWork(parsed, session);
+    return NextResponse.json({ ok: true }, { status: 201 });
+  } catch (err: any) {
+    const status = err?.name === "ZodError" ? 400 : 500;
+    return NextResponse.json(
+      { ok: false, error: err?.message ?? "Server error" },
+      { status },
+    );
+  }
+};
+
+export const HEAD = async () => new Response(null, { status: 200 });
+
+// Optional examples; keep thin in real handlers.
+export const DELETE = async (_req: NextRequest) =>
+  NextResponse.json({ ok: true });
+export const PATCH = async (_req: NextRequest) =>
+  NextResponse.json({ ok: true });
