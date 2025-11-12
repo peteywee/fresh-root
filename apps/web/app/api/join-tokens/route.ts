@@ -100,7 +100,7 @@ export const POST = withSecurity(
             return badRequest("Validation failed", parsed.details);
           }
 
-          const data: any = parsed.data;
+          const data = parsed.data; // inferred from schema
 
           // Verify orgId matches context
           if (data.orgId !== context.orgId) {

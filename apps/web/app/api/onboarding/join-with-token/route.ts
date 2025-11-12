@@ -40,7 +40,7 @@ export async function joinWithTokenHandler(
     );
   }
 
-  const adminDb: any = injectedAdminDb;
+  const adminDb = injectedAdminDb;
   const uid = req.user?.uid;
 
   if (!uid) return NextResponse.json({ error: "not_authenticated" }, { status: 401 });
@@ -91,11 +91,7 @@ export async function joinWithTokenHandler(
     const membershipRef = adminDb.collection("memberships").doc(membershipId);
 
     await adminDb.runTransaction(
-      async (tx: {
-        get: (...args: unknown[]) => Promise<any>;
-        set: (...args: unknown[]) => unknown;
-        update: (...args: unknown[]) => unknown;
-      }) => {
+      async (tx: any) => {
         const existing = await tx.get(membershipRef);
         const createdAt = now;
 

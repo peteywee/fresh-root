@@ -34,7 +34,7 @@ export async function createNetworkOrgHandler(
     );
   }
 
-  const adminDb: any = injectedAdminDb;
+  const adminDb = injectedAdminDb;
 
   // Authenticated request guaranteed by withSecurity (requireAuth below)
   const uid = req.user?.uid;
@@ -117,10 +117,7 @@ export async function createNetworkOrgHandler(
     const membershipRef = adminDb.collection("memberships").doc(membershipId);
 
     await adminDb.runTransaction(
-      async (tx: {
-        set: (...args: unknown[]) => unknown;
-        update: (...args: unknown[]) => unknown;
-      }) => {
+      async (tx: any) => {
         const createdAt = nowMs;
 
         // 1) Network

@@ -17,7 +17,7 @@ type BasicReq = {
   method?: string;
   url?: string;
   // Allow existing middleware to attach extra fields
-  [key: string]: any;
+  [key: string]: unknown;
 };
 
 type Handler<TReq extends BasicReq = BasicReq> = (
@@ -47,9 +47,9 @@ function generateRequestId(): string {
  *   );
  */
 export function withRequestLogging<TReq extends BasicReq>(
-  handler: Handler<TReq> | ((req: TReq, ctx: any) => Promise<Response>),
-): (req: TReq, ctx?: any) => Promise<Response> {
-  return async (req: TReq, ctx?: any): Promise<Response> => {
+  handler: Handler<TReq> | ((req: TReq, ctx: Record<string, unknown>) => Promise<Response>),
+): (req: TReq, ctx?: Record<string, unknown>) => Promise<Response> {
+  return async (req: TReq, ctx?: Record<string, unknown>): Promise<Response> => {
     const requestId = generateRequestId();
     const start = Date.now();
 
@@ -74,7 +74,7 @@ export function withRequestLogging<TReq extends BasicReq>(
     try {
       // Handle both single-arg and two-arg handlers
       const res = await (handler.length > 1
-        ? handler(req as TReq & { requestId: string }, ctx)
+  ? handler(req as TReq & { requestId: string }, ctx || {})
         : (handler as Handler<TReq>)(req as TReq & { requestId: string }));
       const durationMs = Date.now() - start;
 

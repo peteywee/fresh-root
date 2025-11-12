@@ -30,7 +30,7 @@ export async function createNetworkOrgHandler(
     );
   }
 
-  const adminDb: any = injectedAdminDb;
+  const adminDb = injectedAdminDb;
 
   // Authenticated request guaranteed by withSecurity (requireAuth below)
   const uid = req.user?.uid;
@@ -98,10 +98,7 @@ export async function createNetworkOrgHandler(
     const venueRef = adminDb.collection("venues").doc();
 
     await adminDb.runTransaction(
-      async (tx: {
-        set: (...args: unknown[]) => unknown;
-        update: (...args: unknown[]) => unknown;
-      }) => {
+      async (tx: any) => {
         tx.set(networkRef, {
           name: orgName || `Network ${new Date().toISOString()}`,
           status: "pending_verification",

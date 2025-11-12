@@ -31,7 +31,7 @@ export async function bootstrapSessionHandler(
     return NextResponse.json({ error: "not_authenticated" }, { status: 401 });
   }
 
-  const adminDb: any = injectedAdminDb;
+  const adminDb = injectedAdminDb;
 
   try {
     // 1) Ensure user profile exists and has at least baseline data

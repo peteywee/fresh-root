@@ -14,7 +14,7 @@ import { parseJson, serverError } from "../_shared/validation";
  * List organizations the current user belongs to
  */
 export const GET = withSecurity(
-  async (request: NextRequest, context: { params: Record<string, string>; userId: string }) => {
+  async (request: NextRequest, context: { params: Record<string, string>; userId?: string }) => {
     try {
       // In production, fetch from database based on authenticated user
       const organizations = [
@@ -50,7 +50,7 @@ export const GET = withSecurity(
  * Create a new organization
  */
 export const POST = withSecurity(
-  async (request: NextRequest, context: { params: Record<string, string>; userId: string }) => {
+  async (request: NextRequest, context: { params: Record<string, string>; userId?: string }) => {
     try {
       const parsed = await parseJson(request, CreateOrganizationSchema);
       if (!parsed.success) {
@@ -66,7 +66,7 @@ export const POST = withSecurity(
         );
       }
       // In production, create organization in database
-      const data: any = parsed.data;
+  const data = parsed.data;
       const newOrg = {
         id: `org-${Date.now()}`,
         ...data,

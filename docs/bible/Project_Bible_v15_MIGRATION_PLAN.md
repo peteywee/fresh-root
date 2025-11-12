@@ -176,4 +176,3 @@ Each phase has its own doc(s) under `docs/migration/v15/`.
     - Update relevant layer doc(s).
     - Update migration docs if it affects v15 scope.
     - Be reflected in v15 Bible if it changes behavior.
-

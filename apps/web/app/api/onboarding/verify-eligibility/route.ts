@@ -39,7 +39,7 @@ export async function verifyEligibilityHandler(
   req: AuthenticatedRequest & {
     user?: { uid: string; customClaims?: Record<string, unknown> };
   },
-  adminDb?: any,
+  adminDb?: unknown,
 ) {
   const uid = req.user?.uid;
   const _claims = req.user?.customClaims || {};
@@ -56,7 +56,7 @@ export async function verifyEligibilityHandler(
   }
 
   // Parse request body to validate required fields
-  let body: any = {};
+  let body: unknown = {};
   if (req.json) {
     try {
       body = await req.json();

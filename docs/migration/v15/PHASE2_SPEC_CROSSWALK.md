@@ -23,10 +23,10 @@ Each row should use this structure:
 
 ## 2. Example Rows (remove once replaced)
 
-| Concept | v13.5 Spec | v14 Spec | Code Reality | v15 Decision | Notes |
-|--------|------------|----------|--------------|--------------|-------|
-| Network / Org Model | Network → Org → Staff (early) | Expanded to Network → Corp → Org → Venue (noted gaps) | Types: `packages/types`, diagrams: `schema-network.md` | KEEP (refine) | Adopt full hierarchy; align rules + UI. |
-| Onboarding Wizard | Basic user → org create/join | Flagged as under-specified | Routes: `apps/web/app/(onboarding)/**`; logic: `apps/web/src/lib/onboarding/**` | CHANGE | Define steps + validation contract formally. |
+| Concept             | v13.5 Spec                    | v14 Spec                                              | Code Reality                                                                    | v15 Decision  | Notes                                        |
+| ------------------- | ----------------------------- | ----------------------------------------------------- | ------------------------------------------------------------------------------- | ------------- | -------------------------------------------- |
+| Network / Org Model | Network → Org → Staff (early) | Expanded to Network → Corp → Org → Venue (noted gaps) | Types: `packages/types`, diagrams: `schema-network.md`                          | KEEP (refine) | Adopt full hierarchy; align rules + UI.      |
+| Onboarding Wizard   | Basic user → org create/join  | Flagged as under-specified                            | Routes: `apps/web/app/(onboarding)/**`; logic: `apps/web/src/lib/onboarding/**` | CHANGE        | Define steps + validation contract formally. |
 
 ---
 
@@ -34,41 +34,40 @@ Each row should use this structure:
 
 Prioritize tenant + scheduling + security primitives first.
 
-| Concept | v13.5 Spec | v14 Spec | Code Reality | v15 Decision | Notes |
-|--------|------------|----------|--------------|--------------|-------|
-| Network | | | | | |
-| Corp | | | | | |
-| Org | | | | | |
-| Venue | | | | | |
-| Staff | | | | | |
-| Onboarding Wizard | | | | | |
-| Schedule Template | | | | | |
-| Shift Instance | | | | | |
-| Schedule Publish | | | | | |
-| Attendance Record | | | | | |
-| Manager Role | | | | | |
-| Staff Role | | | | | |
-| Session Handling | | | | | |
-| MFA Flow | | | | | |
-| Rate Limiting | | | | | |
-| PWA Shell | | | | | |
+| Concept           | v13.5 Spec | v14 Spec | Code Reality | v15 Decision | Notes |
+| ----------------- | ---------- | -------- | ------------ | ------------ | ----- |
+| Network           |            |          |              |              |       |
+| Corp              |            |          |              |              |       |
+| Org               |            |          |              |              |       |
+| Venue             |            |          |              |              |       |
+| Staff             |            |          |              |              |       |
+| Onboarding Wizard |            |          |              |              |       |
+| Schedule Template |            |          |              |              |       |
+| Shift Instance    |            |          |              |              |       |
+| Schedule Publish  |            |          |              |              |       |
+| Attendance Record |            |          |              |              |       |
+| Manager Role      |            |          |              |              |       |
+| Staff Role        |            |          |              |              |       |
+| Session Handling  |            |          |              |              |       |
+| MFA Flow          |            |          |              |              |       |
+| Rate Limiting     |            |          |              |              |       |
+| PWA Shell         |            |          |              |              |       |
 
 ---
 
 ## 4. Workflow for Filling Rows
 
-1. Read v13.5 + v14 Bible sections.  
-2. Inspect current code (types + implementation).  
-3. Decide KEEP / CHANGE / KILL.  
-4. Link code (path) + related layer doc.  
+1. Read v13.5 + v14 Bible sections.
+2. Inspect current code (types + implementation).
+3. Decide KEEP / CHANGE / KILL.
+4. Link code (path) + related layer doc.
 5. Open / link GitHub issue labeled `milestone:v15`.
 
 ---
 
 ## 5. Completion Definition
 
-- All core rows populated (tenant, scheduling, attendance, roles, onboarding, security, PWA).  
-- Each CHANGE/KILL has an issue.  
-- No ambiguous blank cells in Decision column.  
+- All core rows populated (tenant, scheduling, attendance, roles, onboarding, security, PWA).
+- Each CHANGE/KILL has an issue.
+- No ambiguous blank cells in Decision column.
 - Reviewed + signed off by project owner.
-

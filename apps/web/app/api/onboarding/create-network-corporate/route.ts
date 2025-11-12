@@ -29,7 +29,7 @@ export async function createNetworkCorporateHandler(
     );
   }
 
-  const adminDb: any = injectedAdminDb;
+  const adminDb = injectedAdminDb; // rely on injected type
 
   const uid = req.user?.uid;
   const claims = req.user?.customClaims || {};
@@ -89,10 +89,7 @@ export async function createNetworkCorporateHandler(
     const corpRef = corporateCollectionRef.doc();
 
     await adminDb.runTransaction(
-      async (tx: {
-        set: (...args: unknown[]) => unknown;
-        update: (...args: unknown[]) => unknown;
-      }) => {
+      async (tx: any) => {
         const createdAt = nowMs;
 
         // 1) Network

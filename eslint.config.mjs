@@ -71,6 +71,13 @@ export default [
       ],
     },
   },
+  // Onboarding API tests: silence explicit any warnings (scaffolding/mocks)
+  {
+    files: ["apps/web/app/api/onboarding/__tests__/**", "apps/web/app/api/onboarding/**/__tests__/**"],
+    rules: {
+      "@typescript-eslint/no-explicit-any": "off",
+    },
+  },
   // Test files: allow globals like describe/it/beforeAll provided by Vitest/Jest
   {
     files: ["**/*.test.*", "**/*.spec.*"],
