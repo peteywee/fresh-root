@@ -53,10 +53,10 @@ Press `Ctrl+Shift+P` (or `Cmd+Shift+P` on macOS) and search for "Tasks: Run Task
 
 ### New: Documentation
 
-| Task                                    | Command                                      | Purpose                                                        |
-| --------------------------------------- | -------------------------------------------- | -------------------------------------------------------------- |
-| **Docs: Generate Mini-Index (Schemas)** | `node scripts/migration/gen-mini-indexes.mjs` | Generate mini-index for Zod schemas (consolidated reference)   |
-| **Docs: Generate Mini-Index (API Routes)** | `node scripts/migration/gen-mini-indexes.mjs` | Generate mini-index for API routes (consolidated reference)    |
+| Task                                       | Command                                       | Purpose                                                      |
+| ------------------------------------------ | --------------------------------------------- | ------------------------------------------------------------ |
+| **Docs: Generate Mini-Index (Schemas)**    | `node scripts/migration/gen-mini-indexes.mjs` | Generate mini-index for Zod schemas (consolidated reference) |
+| **Docs: Generate Mini-Index (API Routes)** | `node scripts/migration/gen-mini-indexes.mjs` | Generate mini-index for API routes (consolidated reference)  |
 
 ### New: Migration Tools
 

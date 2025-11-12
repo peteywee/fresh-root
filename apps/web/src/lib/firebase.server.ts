@@ -5,6 +5,28 @@ import * as admin from "firebase-admin";
 // Initialize Firebase Admin SDK if not already initialized.
 function initAdmin() {
   if (admin.apps && admin.apps.length) return admin.app();
+  // Preferred: allow a base64-encoded service account JSON in env (good for CI/local secrets)
+  const saB64 = process.env.FIREBASE_ADMIN_SERVICE_ACCOUNT_B64;
+  if (saB64) {
+    try {
+      const saJson = JSON.parse(Buffer.from(saB64, "base64").toString("utf8"));
+      const {
+        project_id: projectId,
+        client_email: clientEmail,
+        private_key: privateKey,
+      } = saJson as Record<string, string>;
+      if (privateKey && clientEmail && projectId) {
+        admin.initializeApp({
+          credential: admin.credential.cert({ projectId, clientEmail, privateKey }),
+          projectId,
+        });
+        return admin.app();
+      }
+    } catch (err) {
+      // fall through to other initialization methods and surface a warning below
+      console.warn("Failed to parse FIREBASE_ADMIN_SERVICE_ACCOUNT_B64:", err);
+    }
+  }
 
   // Use explicit private key env if provided (avoid committing secrets)
   const privateKey = process.env.FIREBASE_ADMIN_PRIVATE_KEY?.replace(/\\n/g, "\n");

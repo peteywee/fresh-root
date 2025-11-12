@@ -20,7 +20,8 @@
       "@vitest/expect": "4.0.6",
       "@vitest/runner": "4.0.6",
       "@vitest/spy": "4.0.6",
-      "@vitest/ui": "4.0.6"
+      "@vitest/ui": "4.0.6",
+      "require-in-the-middle": "8.0.1"
     }
   },
   "workspaces": [
@@ -70,6 +71,7 @@
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.21.1",
+    "@opentelemetry/instrumentation": "^0.208.0",
     "ajv": "^8.17.1",
     "ajv-formats": "^3.0.1",
     "execa": "^9.6.0",
@@ -77,6 +79,7 @@
     "glob": "10",
     "globby": "^15.0.0",
     "markdownlint": "^0.39.0",
+    "next": "^16.0.1",
     "p-retry": "^7.1.0",
     "yaml": "^2.8.1",
     "zod": "^4.1.12"

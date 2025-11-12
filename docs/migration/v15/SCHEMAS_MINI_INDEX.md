@@ -38,4 +38,4 @@ Consolidated index of Zod schema definitions in `packages/types/src/`.
 
 ---
 
-Generated: 2025-11-12T08:29:12.452Z
+Generated: 2025-11-12T09:01:13.446Z

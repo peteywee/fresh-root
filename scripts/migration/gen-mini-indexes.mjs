@@ -30,10 +30,7 @@ const apiFiles = globbySync("apps/web/app/api/**/route.ts", {
 });
 
 const apiRoutes = apiFiles.map((file) => {
-  const pathParts = file
-    .replace("apps/web/app/api/", "")
-    .replace("/route.ts", "")
-    .split("/");
+  const pathParts = file.replace("apps/web/app/api/", "").replace("/route.ts", "").split("/");
   const route = "/" + pathParts.join("/");
   return {
     file: file.replace(ROOT + "/", ""),
@@ -83,12 +80,9 @@ Consolidated index of Next.js API routes in \`apps/web/app/api/\`.
 ${apiRoutes
   .filter(
     (r) =>
-      ![
-        "/onboarding",
-        "/internal",
-        "/auth",
-        "/session/bootstrap",
-      ].some((prefix) => r.route.startsWith(prefix))
+      !["/onboarding", "/internal", "/auth", "/session/bootstrap"].some((prefix) =>
+        r.route.startsWith(prefix),
+      ),
   )
   .map((r) => `- **${r.route}** → \`${r.file}\``)
   .join("\n")}

@@ -147,7 +147,7 @@ const passedCount = results.filter((r) => r.passed).length;
 
 console.log(`\n${YELLOW}Summary:${RESET}`);
 console.log(
-  `  ${passedCount}/${results.length} checks passed ${allPassed ? `${GREEN}(READY FOR v15)${RESET}` : `${WARN}(Issues to resolve)${RESET}`}`
+  `  ${passedCount}/${results.length} checks passed ${allPassed ? `${GREEN}(READY FOR v15)${RESET}` : `${WARN}(Issues to resolve)${RESET}`}`,
 );
 
 console.log(`\n${YELLOW}Next Steps:${RESET}`);
@@ -169,9 +169,7 @@ if (!allPassed) {
 }
 
 console.log(`\n${YELLOW}Reference:${RESET}`);
-console.log(
-  `  📖 Migration Checklist: docs/migration/v15/MIGRATION_READINESS_CHECKLIST.md`
-);
+console.log(`  📖 Migration Checklist: docs/migration/v15/MIGRATION_READINESS_CHECKLIST.md`);
 console.log(`  📖 Schemas Index: docs/migration/v15/SCHEMAS_MINI_INDEX.md`);
 console.log(`  📖 API Routes Index: docs/migration/v15/API_ROUTES_MINI_INDEX.md`);
 console.log("");

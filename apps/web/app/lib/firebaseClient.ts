@@ -8,6 +8,8 @@
 import { getApp, getApps, initializeApp, FirebaseOptions } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
+import { getStorage } from "firebase/storage";
+import { getAnalytics } from "firebase/analytics";
 import { z } from "zod";
 
 // Validate expected NEXT_PUBLIC_ env vars used to initialize Firebase.
@@ -16,6 +18,8 @@ const EnvSchema = z.object({
   NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN: z.string().min(1),
   NEXT_PUBLIC_FIREBASE_PROJECT_ID: z.string().min(1),
   NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET: z.string().min(1).optional(),
+  NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID: z.string().min(1).optional(),
+  NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID: z.string().optional(),
   NEXT_PUBLIC_FIREBASE_APP_ID: z.string().min(1),
 });
 
@@ -36,6 +40,8 @@ try {
     authDomain: parsed.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
     projectId: parsed.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
     storageBucket: parsed.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+    messagingSenderId: parsed.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+    measurementId: parsed.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
     appId: parsed.NEXT_PUBLIC_FIREBASE_APP_ID,
   };
 } catch (err) {
@@ -58,7 +64,9 @@ export const firebaseApp = ((): ReturnType<typeof getApp> | undefined => {
       authDomain: "localhost",
       projectId: "local-demo",
       storageBucket: undefined,
+      messagingSenderId: "000000000000",
       appId: "1:000000000000:web:000000000000",
+      measurementId: undefined,
     };
   }
 
@@ -69,3 +77,20 @@ export const firebaseApp = ((): ReturnType<typeof getApp> | undefined => {
 // Export auth and db instances
 export const auth = firebaseApp ? getAuth(firebaseApp) : undefined;
 export const db = firebaseApp ? getFirestore(firebaseApp) : undefined;
+export const storage = firebaseApp ? getStorage(firebaseApp) : undefined;
+
+// Conditionally initialize analytics when available and measurementId present
+export const analytics = ((): ReturnType<typeof getAnalytics> | undefined => {
+  try {
+    if (typeof window === "undefined") return undefined;
+    if (!firebaseApp) return undefined;
+    // Only init analytics if measurementId is present on the config
+    // @ts-ignore - access config via getApp().options
+    const measurementId = (firebaseApp as any).options?.measurementId;
+    if (!measurementId) return undefined;
+    return getAnalytics(firebaseApp);
+  } catch (err) {
+    console.warn("Firebase analytics init failed:", err);
+    return undefined;
+  }
+})();

@@ -53,10 +53,9 @@ async function main() {
 
   // 1) Onboarding API routes (MUST have tests)
   console.log("Checking Onboarding API routes (REQUIRED tests)...");
-  const onboardingRoutes = await globby(
-    ["apps/web/app/api/onboarding/**/route.ts"],
-    { gitignore: true }
-  );
+  const onboardingRoutes = await globby(["apps/web/app/api/onboarding/**/route.ts"], {
+    gitignore: true,
+  });
 
   // Check for consolidated __tests__ folder
   const onboardingTestsDir = "apps/web/app/api/onboarding/__tests__";
@@ -76,9 +75,7 @@ async function main() {
     if (hasSpecificTest || hasSomeTests) {
       results.found.push({ type: "onboarding", path: route });
       results.categories.onboarding.found++;
-      console.log(
-        `  ✅ ${routeName}${hasSpecificTest ? "" : " (covered by consolidated tests)"}`
-      );
+      console.log(`  ✅ ${routeName}${hasSpecificTest ? "" : " (covered by consolidated tests)"}`);
     } else {
       results.missing.push({ type: "onboarding", path: route, need: testPath });
       console.log(`  ❌ ${routeName} (missing: ${testPath})`);
@@ -95,7 +92,7 @@ async function main() {
       "apps/web/app/api/positions/**/route.ts",
       "apps/web/app/api/venues/**/route.ts",
     ],
-    { gitignore: true }
+    { gitignore: true },
   );
 
   for (const route of coreRoutes.slice(0, 5)) {
@@ -128,10 +125,9 @@ async function main() {
 
   // 4) Schema tests (SHOULD have tests)
   console.log("\nChecking Schema tests (recommended)...");
-  const schemaTests = await globby(
-    ["packages/types/src/__tests__/**/*.test.ts"],
-    { gitignore: true }
-  );
+  const schemaTests = await globby(["packages/types/src/__tests__/**/*.test.ts"], {
+    gitignore: true,
+  });
 
   console.log(`  📊 Schema tests: ${schemaTests.length} files`);
 
@@ -141,8 +137,7 @@ async function main() {
   console.log("=".repeat(60));
 
   const onboardingComplete =
-    results.categories.onboarding.found ===
-    results.categories.onboarding.required;
+    results.categories.onboarding.found === results.categories.onboarding.required;
   const rulesComplete = results.categories.rules.found > 0;
 
   console.log(`
