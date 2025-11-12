@@ -13,7 +13,6 @@ import { NextRequest, NextResponse } from "next/server";
  * Pattern: parse → validate → authorize → app-lib → respond
  */
 
- 
 export const GET = async () => {
   try {
     // const session = await requireSession(req);

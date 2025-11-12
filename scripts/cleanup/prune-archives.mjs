@@ -31,7 +31,10 @@ function expand(glob) {
     const out = execSync(`bash -lc 'ls -d ${glob} 2>/dev/null || true'`, {
       encoding: "utf8",
     });
-    return out.split("\n").map(s => s.trim()).filter(Boolean);
+    return out
+      .split("\n")
+      .map((s) => s.trim())
+      .filter(Boolean);
   } catch {
     return [];
   }
@@ -53,13 +56,15 @@ for (const p of candidates) {
     // approximate size using du for directories
     const du = execSync(`du -sb "${p}" | awk '{print $1}'`, { encoding: "utf8" }).trim();
     bytes += Number(du || 0);
-  } catch {/* ignore */}
+  } catch {
+    /* ignore */
+  }
 }
 
 const mb = (bytes / (1024 * 1024)).toFixed(1);
 if (DRY) {
   console.log("DRY RUN — would delete:");
-  toDelete.forEach(p => console.log(" -", p));
+  toDelete.forEach((p) => console.log(" -", p));
   console.log(`Total reclaimed (approx): ${mb} MiB`);
   console.log("Run with --apply to perform deletion.");
   process.exit(0);

@@ -1,4 +1,6 @@
 #!/usr/bin/env node
+// [P2][APP][CODE] Check Doc Parity
+// Tags: P2, APP, CODE
 /**
  * Doc and Code Parity Gate
  * Fails if any API route or exported Schema lacks a corresponding doc page and test spec.
@@ -26,9 +28,7 @@ async function ensureExists(file) {
 
 function routeToDocPath(routeFile) {
   // app/api/users/profile/route.ts -> docs/api/users/profile.md
-  const rel = routeFile
-    .replace(/^apps\/web\/app\/api\//, "")
-    .replace(/\/route\.ts$/, "");
+  const rel = routeFile.replace(/^apps\/web\/app\/api\//, "").replace(/\/route\.ts$/, "");
   return path.join("docs", "api", `${rel}.md`);
 }
 
@@ -46,8 +46,7 @@ async function main() {
   for (const rf of routeFiles) {
     const doc = routeToDocPath(rf);
     const ok = await ensureExists(doc);
-    if (!ok)
-      problems.push({ kind: "route-doc-missing", file: rf, need: doc });
+    if (!ok) problems.push({ kind: "route-doc-missing", file: rf, need: doc });
   }
 
   // 2) Exported *Schema names from packages/types
@@ -57,9 +56,7 @@ async function main() {
   const schemaExports = [];
   for (const tf of typeFiles) {
     const content = await fs.readFile(tf, "utf8");
-    const matches = [
-      ...content.matchAll(/export\s+const\s+(\w+Schema)\s*=\s*z\./g),
-    ];
+    const matches = [...content.matchAll(/export\s+const\s+(\w+Schema)\s*=\s*z\./g)];
     for (const m of matches) schemaExports.push({ file: tf, name: m[1] });
   }
   for (const s of schemaExports) {
@@ -75,10 +72,7 @@ async function main() {
   }
 
   // 3) Each doc must reference a TEST SPEC path (string match)
-  const docFiles = await globby(
-    ["docs/api/**/*.md", "docs/schemas/**/*.md"],
-    { gitignore: true }
-  );
+  const docFiles = await globby(["docs/api/**/*.md", "docs/schemas/**/*.md"], { gitignore: true });
   for (const df of docFiles) {
     const t = await fs.readFile(df, "utf8");
     if (!/TEST SPEC/i.test(t))
@@ -90,10 +84,7 @@ async function main() {
   }
 
   if (problems.length) {
-    console.error(
-      "Doc Parity Failed:\n" +
-        problems.map((p) => JSON.stringify(p)).join("\n")
-    );
+    console.error("Doc Parity Failed:\n" + problems.map((p) => JSON.stringify(p)).join("\n"));
     process.exit(1);
   } else {
     console.log("Doc Parity: OK");

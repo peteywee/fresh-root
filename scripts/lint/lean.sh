@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# [P2][APP][CODE] Lean
+# Tags: P2, APP, CODE
 set -euo pipefail
 
 # Lean ESLint pass (skip legacy/vendor)

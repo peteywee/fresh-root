@@ -1,4 +1,6 @@
 #!/usr/bin/env node
+// [P1][TEST][TEST] Verify Tests Present tests
+// Tags: P1, TEST, TEST
 /**
  * Verifies presence (not execution) of test files for:
  * - app/api/** /route.ts -> a sibling or mapped test file
@@ -14,26 +16,17 @@ function routeToTestCandidates(route) {
   const dir = path.dirname(route);
   return [
     path.join(dir, "__tests__", path.basename(dir) + ".spec.ts"),
-    path.join(
-      "apps/web/app/lib/api",
-      "__tests__",
-      path.basename(dir) + ".spec.ts"
-    ),
+    path.join("apps/web/app/lib/api", "__tests__", path.basename(dir) + ".spec.ts"),
   ];
 }
 
 function schemaToTestCandidates(schemaFile, schemaName) {
   const base = path.basename(schemaFile).replace(/\.ts$/, "");
   return [
+    schemaFile.replace(/\/src\//, "/src/__tests__/").replace(base + ".ts", base + ".test.ts"),
     schemaFile
       .replace(/\/src\//, "/src/__tests__/")
-      .replace(base + ".ts", base + ".test.ts"),
-    schemaFile
-      .replace(/\/src\//, "/src/__tests__/")
-      .replace(
-        base + ".ts",
-        schemaName.replace(/Schema$/, "").toLowerCase() + ".test.ts"
-      ),
+      .replace(base + ".ts", schemaName.replace(/Schema$/, "").toLowerCase() + ".test.ts"),
   ];
 }
 
@@ -48,11 +41,10 @@ function schemaToTestCandidates(schemaFile, schemaName) {
         fs
           .access(f)
           .then(() => true)
-          .catch(() => false)
-      )
+          .catch(() => false),
+      ),
     );
-    if (!exists.some(Boolean))
-      missing.push({ kind: "route-test-missing", route: r, try: cands });
+    if (!exists.some(Boolean)) missing.push({ kind: "route-test-missing", route: r, try: cands });
   }
 
   const typeFiles = await globby(["packages/types/src/**/*.ts"], {
@@ -60,9 +52,7 @@ function schemaToTestCandidates(schemaFile, schemaName) {
   });
   for (const tf of typeFiles) {
     const content = await fs.readFile(tf, "utf8");
-    const matches = [
-      ...content.matchAll(/export\s+const\s+(\w+Schema)\s*=\s*z\./g),
-    ];
+    const matches = [...content.matchAll(/export\s+const\s+(\w+Schema)\s*=\s*z\./g)];
     for (const m of matches) {
       const cands = schemaToTestCandidates(tf, m[1]);
       const exists = await Promise.all(
@@ -70,8 +60,8 @@ function schemaToTestCandidates(schemaFile, schemaName) {
           fs
             .access(f)
             .then(() => true)
-            .catch(() => false)
-        )
+            .catch(() => false),
+        ),
       );
       if (!exists.some(Boolean))
         missing.push({
@@ -85,8 +75,7 @@ function schemaToTestCandidates(schemaFile, schemaName) {
 
   if (missing.length) {
     console.error(
-      "Missing tests (presence check only):\n" +
-        missing.map((p) => JSON.stringify(p)).join("\n")
+      "Missing tests (presence check only):\n" + missing.map((p) => JSON.stringify(p)).join("\n"),
     );
     process.exit(1);
   } else {

@@ -22,7 +22,7 @@ if (!fs.existsSync(tplFile)) {
   console.error(`Template not found: ${tplFile}`);
   process.exit(1);
 }
-const dict = Object.fromEntries(kv.map(p => p.split("=")));
+const dict = Object.fromEntries(kv.map((p) => p.split("=")));
 
 let content = fs.readFileSync(tplFile, "utf8");
 content = content.replace(/\$\{([A-Za-z0-9_]+)\}/g, (_, k) => dict[k] ?? "");

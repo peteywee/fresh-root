@@ -14,7 +14,7 @@ const run = (cmd) => execSync(cmd, { stdio: "pipe", encoding: "utf8" }).trim();
 const badDirGlobs = [
   "'**/app/app/**'",
   "'**/src/src/**'",
-  "'apps/web/src/**'",        // should be migrated or quarantined as _legacy_src
+  "'apps/web/src/**'", // should be migrated or quarantined as _legacy_src
 ];
 
 const grepBadDirs = () => {

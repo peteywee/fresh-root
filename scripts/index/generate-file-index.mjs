@@ -27,8 +27,7 @@ const OUT = path.join(ROOT, "docs", "INDEX.md");
 
 function sh(cmd, opts = {}) {
   if (DEBUG) console.error("sh:", cmd);
-  return execSync(cmd, { encoding: "utf8", stdio: ["ignore", "pipe", "pipe"], ...opts })
-    .trim();
+  return execSync(cmd, { encoding: "utf8", stdio: ["ignore", "pipe", "pipe"], ...opts }).trim();
 }
 
 function gatherFiles() {
@@ -37,24 +36,20 @@ function gatherFiles() {
 
   // Apply excludes (cheaply) with regex
   const excludeRe = new RegExp(
-    EXCLUDES.map(g =>
-      g
-        .replace(/\*\*/g, ".*")
-        .replace(/\*/g, "[^/]*")
-        .replace(/\//g, "\\/")
-        .replace(/\./g, "\\.")
-    ).join("|")
+    EXCLUDES.map((g) =>
+      g.replace(/\*\*/g, ".*").replace(/\*/g, "[^/]*").replace(/\//g, "\\/").replace(/\./g, "\\."),
+    ).join("|"),
   );
 
-  files = files.filter(p => !excludeRe.test(p));
+  files = files.filter((p) => !excludeRe.test(p));
   return files.sort((a, b) => a.localeCompare(b));
 }
 
 function groupFiles(files) {
-  const groups = new Map(CATEGORIES.map(c => [c.name, []]));
+  const groups = new Map(CATEGORIES.map((c) => [c.name, []]));
   const uncategorized = [];
   for (const f of files) {
-    const cat = CATEGORIES.find(c => c.match(f));
+    const cat = CATEGORIES.find((c) => c.match(f));
     if (cat) groups.get(cat.name).push(f);
     else uncategorized.push(f);
   }

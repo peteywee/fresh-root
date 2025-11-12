@@ -7,7 +7,7 @@ All `apps/web/app/api/**/route.ts` files MUST follow this standard.
 **Layering**
 
 - Handlers live in **Layer 03 – API Edge**.
-- Business logic lives in **Layer 02 – App Libs (`apps/web/src/lib/**`)**.
+- Business logic lives in **Layer 02 – App Libs (`apps/web/src/lib/**`)\*\*.
 - Domain schemas live in **Layer 00 – Domain (`@fresh-schedules/types`)**.
 - Infrastructure helpers (Firebase Admin, env, etc.) are consumed via Layer 01.
 
@@ -58,7 +58,7 @@ export const POST = async (req: NextRequest) => {
 // Optional extras for health/ops/resource semantics:
 export const HEAD = async () => new Response(null, { status: 200 });
 export const DELETE = async (_req: NextRequest) => NextResponse.json({ ok: true });
-export const PATCH  = async (_req: NextRequest) => NextResponse.json({ ok: true });
+export const PATCH = async (_req: NextRequest) => NextResponse.json({ ok: true });
 ```
 
 **Location & References**
