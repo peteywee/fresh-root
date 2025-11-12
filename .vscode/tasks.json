@@ -120,6 +120,14 @@
 			"label": "Index: Generate file index",
 			"type": "shell",
 			"command": "scripts/index/generate-file-index.sh --write"
+		},
+		{
+			"label": "Cleanup: Remove Legacy Artifacts",
+			"type": "shell",
+			"command": "bash scripts/cleanup/full-cleanup.sh",
+			"detail": "Remove v14 legacy files, emulator data, and temp files (interactive with confirmation)",
+			"isBackground": false,
+			"problemMatcher": []
 		}
 	]
 }
