@@ -13,9 +13,10 @@ import { NextRequest, NextResponse } from "next/server";
  * Pattern: parse → validate → authorize → app-lib → respond
  */
 
+ 
 export const GET = async () => {
   try {
-    // const session = await requireSession(req); // req unused in template
+    // const session = await requireSession(req);
     // await requireRole(session, ["manager"]);
     // const data = await doWork(/* args */);
     return NextResponse.json({ ok: true });
