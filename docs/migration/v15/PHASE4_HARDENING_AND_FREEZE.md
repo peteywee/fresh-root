@@ -1,6 +1,6 @@
 # Phase 4 – Hardening & Freeze (v15)
 
-**Purpose**  
+**Purpose**
 Ensure v15 is **secure, performant, and operationally ready**, then establish a **code freeze** point (v15.0.0) that becomes the new baseline.
 
 ---

@@ -62,6 +62,6 @@ Migration Strategy is clear enough to implement without guessing.
 
 Migration scripts listed here exist under scripts/ and are tested in the emulator.
 
-| Entity / Collection | Legacy Schema | v15 Schema | Migration Strategy | Script / Tool | Notes |
-|---------------------|---------------|-------------|--------------------|---------------|-------|
-| orgSearchIndex | _none (new)_ | `orgId`, `name`, `taxId`, `address`, `contactEmail`, `phone`, `adminName`, `publicSearch (bool)`, timestamps | Build from existing Org docs. Normalize fields and insert records for searchable orgs only (`publicSearch = true`). | `scripts/build_org_search_index_v15.ts` | Facilitates staff search and join requests. Populated after Org migration. |
+| Entity / Collection | Legacy Schema | v15 Schema                                                                                                   | Migration Strategy                                                                                                  | Script / Tool                           | Notes                                                                      |
+| ------------------- | ------------- | ------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------- | --------------------------------------- | -------------------------------------------------------------------------- |
+| orgSearchIndex      | _none (new)_  | `orgId`, `name`, `taxId`, `address`, `contactEmail`, `phone`, `adminName`, `publicSearch (bool)`, timestamps | Build from existing Org docs. Normalize fields and insert records for searchable orgs only (`publicSearch = true`). | `scripts/build_org_search_index_v15.ts` | Facilitates staff search and join requests. Populated after Org migration. |

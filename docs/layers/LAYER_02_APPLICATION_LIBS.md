@@ -60,11 +60,12 @@ Contain application logic: onboarding flows, scheduling operations, labor math, 
 
 ## 7. Forecast Import (minimal AI parser)
 
-- Accept CSV/XLSX.  
-- Detect columns; validate to `ForecastRecord` schema.  
+- Accept CSV/XLSX.
+- Detect columns; validate to `ForecastRecord` schema.
 - Reject unsupported formats early.
 
 _Pseudocode interface:_
+
 ```ts
 export type ForecastRecord = { date: string; sales: number };
 

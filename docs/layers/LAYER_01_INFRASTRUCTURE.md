@@ -1,6 +1,6 @@
 # Layer 01 – Infrastructure Abstraction
 
-**Purpose**  
+**Purpose**
 Define low-level platform access and provider abstraction to allow future migration from Firebase to any equivalent backend.
 
 ---

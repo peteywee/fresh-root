@@ -1,6 +1,6 @@
 # Phase 3 – Code Migration Checklist (v15)
 
-**Purpose**  
+**Purpose**
 Track and enforce all code-level changes required to bring implementation in line with the **v15 Bible**, **Layer Specs**, and **Crosswalks**.
 
 ---

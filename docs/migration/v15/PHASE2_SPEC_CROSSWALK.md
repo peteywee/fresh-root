@@ -1,7 +1,7 @@
 # Phase 2 – Spec Crosswalk (13.5 → 14 → 15)
 
-**Purpose**  
-Provide a **side-by-side mapping** of key concepts across v13.5, v14, and v15 plus the actual code locations.  
+**Purpose**
+Provide a **side-by-side mapping** of key concepts across v13.5, v14, and v15 plus the actual code locations.
 For each concept, we decide: **KEEP**, **CHANGE**, or **KILL** for v15 and point to the real implementation.
 
 This is an **active artifact**. When behavior changes, this document must be updated.
@@ -67,6 +67,7 @@ Each row has a v15 Decision.
 Code Reality points to actual files.
 
 This doc is referenced from Project_Bible_v15_MIGRATION_PLAN.md as the canonical crosswalk.
+
 | Concept | v13.5 Spec | v14 Spec | Code Reality | v15 Decision | Notes |
 |----------|-------------|-----------|---------------|--------------|-------|
 | Org Search & Join | Absent | Mentioned implicitly (“invite only”) | None | CHANGE | v15 introduces searchable Org directory (`orgSearchIndex`), allowing users to request invite tokens via discovery form. |

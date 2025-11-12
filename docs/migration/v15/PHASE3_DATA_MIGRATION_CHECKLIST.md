@@ -1,6 +1,6 @@
 # Phase 3 – Data Migration Checklist (v15)
 
-**Purpose**  
+**Purpose**
 Plan and track all steps needed to migrate existing Firestore data into the **v15 canonical schema** without corruption or silent data loss.
 
 ---
