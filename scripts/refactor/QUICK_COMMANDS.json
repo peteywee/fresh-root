@@ -1,0 +1,15 @@
+{
+  "// REFACTOR SCRIPTS": "Fast orchestration for v15 refactoring",
+  "refactor:plan": "pnpm exec tsx scripts/refactor/orchestrator.mts --plan-only",
+  "refactor:dry-run": "pnpm exec tsx scripts/refactor/orchestrator.mts --dry-run",
+  "refactor:apply": "pnpm exec tsx scripts/refactor/orchestrator.mts",
+  "refactor:rollback": "pnpm exec tsx scripts/refactor/orchestrator.mts --rollback",
+  "refactor:interactive": "pnpm exec tsx scripts/refactor/interactive-orchestrator.mts",
+  "refactor:status": "cat .refactor-manifest.json | jq '.summary'",
+  "refactor:diff": "head -200 .refactor-diffs.md",
+  "// QA GATES": "Quality assurance before commit",
+  "qa:typecheck": "pnpm -w typecheck",
+  "qa:test": "pnpm vitest run",
+  "qa:lint": "pnpm -w lint",
+  "qa:full": "pnpm qa:typecheck && pnpm qa:test && pnpm qa:lint"
+}

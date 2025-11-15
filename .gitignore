@@ -92,3 +92,18 @@ tests/rules/users.test.ts
 tests/rules/storage.fixed.spec.ts
 ci-firebase-key.json
 .vscode/tasks.json
+
+# Agent-generated documentation (use *.agent.md or *.agent-*.md suffix)
+# See: docs/AGENT_GENERATED_CONVENTION.md and docs/AGENT_DOCS_NAMING_GUIDE.md
+*.agent.md
+*.agent-*.md
+docs/AGENT_GENERATED_CONVENTION.md
+docs/AGENT_DOCS_NAMING_GUIDE.md
+
+# Refactor state and artifacts
+.refactor-interactive-state.json
+.refactor-manifest.json
+.refactor-diffs.md
+.refactor-backups/
+scripts/lint/fix-markdown-issues.sh
+refactor-plan.md

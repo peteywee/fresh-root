@@ -67,7 +67,24 @@
     "cache:clean": "pnpm store prune && echo 'Cache cleanup complete'",
     "cache:info": "du -sh ~/.pnpm-store 2>/dev/null || echo 'Cache location varies by OS'",
     "tag:files": "node scripts/tag-files.mjs",
-    "watch:tags": "node scripts/watch-and-tag.mjs"
+    "watch:tags": "node scripts/watch-and-tag.mjs",
+    "refactor:plan": "pnpm exec tsx scripts/refactor/orchestrator.mts --plan-only",
+    "refactor:dry-run": "pnpm exec tsx scripts/refactor/orchestrator.mts --dry-run",
+    "refactor:apply": "pnpm exec tsx scripts/refactor/orchestrator.mts",
+    "refactor:rollback": "pnpm exec tsx scripts/refactor/orchestrator.mts --rollback",
+    "refactor:interactive": "pnpm exec tsx scripts/refactor/interactive-orchestrator.mts",
+    "refactor:status": "cat .refactor-manifest.json | jq '.summary'",
+    "refactor:diff": "head -200 .refactor-diffs.md",
+    "qa:typecheck": "pnpm -w typecheck",
+    "qa:test": "pnpm vitest run",
+    "qa:lint": "pnpm -w lint",
+    "qa:full": "pnpm qa:typecheck && pnpm qa:test && pnpm qa:lint"
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "pnpm -w typecheck --noEmit",
+      "pnpm vitest run --bail=1 --findRelatedTests"
+    ]
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.21.1",
