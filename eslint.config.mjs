@@ -154,7 +154,16 @@ export default [
     },
   },
 
-  // 6) Other packages - type checking disabled
+  // 6a) Root scripts .mjs files - no TypeScript parser
+  {
+    files: ["scripts/*.mjs"],
+    rules: {
+      "no-console": "off",
+      "no-debugger": "warn",
+    },
+  },
+
+  // 6b) Other packages - type checking disabled
   {
     files: [
       "packages/**/src/**/*.{ts,tsx}",
@@ -194,15 +203,6 @@ export default [
       "no-debugger": "warn",
       "prefer-const": "warn",
       "no-empty": "warn", // Some files have intentional empty blocks
-    },
-  },
-
-  // 6b) Root scripts .mjs files - no parser needed
-  {
-    files: ["scripts/*.mjs"],
-    rules: {
-      "no-console": "off",
-      "no-debugger": "warn",
     },
   },
 

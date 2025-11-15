@@ -261,12 +261,12 @@ class InteractiveOrchestrator {
         console.log("💾 State saved. Exiting...");
         this.rl.close();
         process.exit(0);
-        // eslint-disable-next-line no-fallthrough
+      // eslint-disable-next-line no-fallthrough
       case "7":
         console.log("❌ Aborting (no changes made)");
         this.rl.close();
         process.exit(1);
-        // eslint-disable-next-line no-fallthrough
+      // eslint-disable-next-line no-fallthrough
       default:
         console.log("❌ Invalid command");
         return false;

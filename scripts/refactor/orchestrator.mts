@@ -21,11 +21,7 @@ import { execSync } from "child_process";
 import fs from "fs/promises";
 import path from "path";
 import { fileURLToPath } from "url";
-import {
-  refactorFile,
-  generateManifest,
-  rollback,
-} from "./ast-engine.mts";
+import { refactorFile, generateManifest, rollback } from "./ast-engine.mts";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = path.resolve(__dirname, "../..");

@@ -67,8 +67,9 @@ async function initializeRedisAdapter() {
         Redis: new (opts: { url: string; token: string }) => UpstashRedisInstance;
       };
 
-
-      const upstashModule = (await dynamicImport("@upstash/redis")) as unknown as UpstashModuleShape;
+      const upstashModule = (await dynamicImport(
+        "@upstash/redis",
+      )) as unknown as UpstashModuleShape;
       const { Redis } = upstashModule;
       // env vars are present due to the surrounding if-check; use non-null assertions to keep typings strict
       const client = new Redis({
@@ -77,16 +78,13 @@ async function initializeRedisAdapter() {
       });
       adapter = {
         async incr(key: string) {
-
           const res = await client.incr(key);
           return typeof res === "number" ? res : Number(res);
         },
         async expire(key: string, seconds: number) {
-
           await client.expire(key, seconds);
         },
         async ttl(key: string) {
-
           const res = await client.ttl(key);
           return typeof res === "number" ? res : Number(res);
         },
