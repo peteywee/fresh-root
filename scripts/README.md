@@ -23,5 +23,6 @@ node scripts/refactor-all.mjs
 This will produce `refactor-plan.md` in the repository root with prompts for each matched file.
 
 Notes:
+
 - The script uses `git ls-files` to find files; ensure you're in a git working tree with files checked out.
 - If you prefer, you can run the script with `node` without making it executable.

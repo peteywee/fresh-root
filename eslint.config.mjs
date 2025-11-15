@@ -9,6 +9,9 @@ import reactHooks from "eslint-plugin-react-hooks";
 import unusedImports from "eslint-plugin-unused-imports";
 import globals from "globals";
 
+// Use absolute path to repo root for tsconfigRootDir
+const __dirname = "/home/patrick/fresh-root-10/fresh-root";
+
 export default [
   // 1) Global ignores (replaces .eslintignore)
   {
@@ -35,14 +38,10 @@ export default [
       "docs/**/dist/**",
       "docs/**/build/**",
 
-      // artifacts & config
+      // artifacts & config (non-source)
       "playwright-report/**",
       "blob-report/**",
       "test-results/**",
-      "**/*.config.js",
-      "**/*.config.ts",
-      "**/*.config.mjs",
-      "**/*.config.cjs",
       "**/firebase-debug.log",
       "**/ui-debug.log",
       "**/firestore-debug.log",
@@ -60,6 +59,23 @@ export default [
   ...tseslint.configs.strictTypeChecked,
   ...tseslint.configs.stylisticTypeChecked,
 
+  // 3.5) Config files (before strict type checking to avoid tsconfig issues)
+  {
+    files: ["**/*.config.{js,mjs,cjs,ts}"],
+    ...tseslint.configs.disableTypeChecked,
+    languageOptions: {
+      parser: tseslint.parser,
+      parserOptions: {
+        sourceType: "module",
+        ecmaFeatures: { jsx: true },
+      },
+      ecmaVersion: "latest",
+    },
+    plugins: {
+      "@typescript-eslint": tseslint.plugin,
+    },
+  },
+
   // 4) App/Lib source rules
   {
     files: ["**/*.{ts,tsx,js,jsx,mts}"],
@@ -67,7 +83,7 @@ export default [
       parser: tseslint.parser,
       parserOptions: {
         projectService: true,
-        tsconfigRootDir: new URL(".", import.meta.url).pathname,
+        tsconfigRootDir: __dirname,
         sourceType: "module",
         ecmaFeatures: { jsx: true },
       },

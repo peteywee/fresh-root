@@ -13,11 +13,9 @@ export function logApiCall(
   userId?: string,
   status?: number,
   durationMs?: number,
-  extras?: Record<string, unknown>
+  extras?: Record<string, unknown>,
 ) {
-  const enable =
-    process.env.NODE_ENV === "production" ||
-    process.env.TELEMETRY_STDOUT === "1";
+  const enable = process.env.NODE_ENV === "production" || process.env.TELEMETRY_STDOUT === "1";
 
   if (!enable) return;
 
@@ -43,8 +41,7 @@ export function logApiCall(
 function readRequestId(req: NextRequest | any): string | undefined {
   try {
     const id =
-      (typeof req?.headers?.get === "function" &&
-        req.headers.get("x-request-id")) ||
+      (typeof req?.headers?.get === "function" && req.headers.get("x-request-id")) ||
       (req?.headers?.["x-request-id"] as string | undefined) ||
       undefined;
     return id || undefined;
@@ -76,7 +73,7 @@ function getStatus(result: unknown): number {
  */
 export function withTelemetry<T extends (req: any, ...args: any[]) => Promise<any>>(
   handler: T,
-  route: string
+  route: string,
 ): T {
   return (async (req: NextRequest | any, ...args: any[]) => {
     const start = Date.now();
@@ -89,7 +86,7 @@ export function withTelemetry<T extends (req: any, ...args: any[]) => Promise<an
         (req as any)?.userToken?.uid,
         status,
         Date.now() - start,
-        { requestId: readRequestId(req) }
+        { requestId: readRequestId(req) },
       );
       return result;
     } catch (error) {
@@ -99,7 +96,7 @@ export function withTelemetry<T extends (req: any, ...args: any[]) => Promise<an
         (req as any)?.userToken?.uid,
         500,
         Date.now() - start,
-        { requestId: readRequestId(req), error: (error as Error)?.name }
+        { requestId: readRequestId(req), error: (error as Error)?.name },
       );
       throw error;
     }

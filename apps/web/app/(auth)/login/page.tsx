@@ -1,14 +1,11 @@
 // [P0][AUTH][LOGGING] Page page component
 // Tags: P0, AUTH, LOGGING
 "use client";
-
-import { isSignInWithEmailLink } from "firebase/auth";
-import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
 import React, { useCallback, useEffect, useState, Suspense } from "react";
-
+import { isSignInWithEmailLink } from "firebase/auth";
+import { useRouter, useSearchParams } from "next/navigation";
+import Link from "next/link";
 import {
-  sendEmailLinkRobust,
   startGooglePopup,
   establishServerSession,
 } from "../../../src/lib/auth-helpers";

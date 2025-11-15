@@ -1,10 +1,12 @@
 # Automated Refactoring Plan
-**Generated:** 2025-11-15T13:01:20.426Z
+
 **Files to Process:** 247
 ---
+
 This plan contains a series of prompts to run with the `Refactor Compliance Agent` in VS Code. Copy each prompt into the chat window to get the compliant version of the file.
 
 ## Refactor: apps/web/app/(app)/demo/page.tsx
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -12,6 +14,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/app/(app)/demo/page.tsx`
 
 **File Content:**
+
 ```typescript
 // [P2][APP][CODE] Page page component
 // Tags: P2, APP, CODE
@@ -241,6 +244,7 @@ export default function DemoPage() {
 
 
 ## Refactor: apps/web/app/(app)/protected/dashboard/loading.tsx
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -248,6 +252,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/app/(app)/protected/dashboard/loading.tsx`
 
 **File Content:**
+
 ```typescript
 // [P2][APP][CODE] Loading
 // Tags: P2, APP, CODE
@@ -269,6 +274,7 @@ export default function Loading() {
 
 
 ## Refactor: apps/web/app/(app)/protected/dashboard/page.tsx
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -276,6 +282,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/app/(app)/protected/dashboard/page.tsx`
 
 **File Content:**
+
 ```typescript
 // [P2][APP][CODE] Page page component
 // Tags: P2, APP, CODE
@@ -389,6 +396,7 @@ export default DashboardPage;
 
 
 ## Refactor: apps/web/app/(app)/protected/loading.tsx
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -396,6 +404,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/app/(app)/protected/loading.tsx`
 
 **File Content:**
+
 ```typescript
 // [P2][APP][CODE] Loading
 // Tags: P2, APP, CODE
@@ -414,6 +423,7 @@ export default function Loading() {
 
 
 ## Refactor: apps/web/app/(app)/protected/page.tsx
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -421,6 +431,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/app/(app)/protected/page.tsx`
 
 **File Content:**
+
 ```typescript
 // [P2][APP][CODE] Page page component
 // Tags: P2, APP, CODE
@@ -481,6 +492,7 @@ export default function ProtectedDemoPage() {
 
 
 ## Refactor: apps/web/app/(app)/protected/schedules/loading.tsx
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -488,6 +500,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/app/(app)/protected/schedules/loading.tsx`
 
 **File Content:**
+
 ```typescript
 // [P2][APP][CODE] Loading
 // Tags: P2, APP, CODE
@@ -506,6 +519,7 @@ export default function Loading() {
 
 
 ## Refactor: apps/web/app/(app)/protected/schedules/page.server.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -513,6 +527,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/app/(app)/protected/schedules/page.server.ts`
 
 **File Content:**
+
 ```typescript
 // [P1][APP][SERVER] Schedules page server data fetcher
 // Tags: P1, APP, SERVER, SCHEDULES
@@ -592,6 +607,7 @@ export async function fetchSchedules(orgId: string, _limit = 12) {
 
 
 ## Refactor: apps/web/app/(app)/protected/schedules/page.tsx
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -599,6 +615,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/app/(app)/protected/schedules/page.tsx`
 
 **File Content:**
+
 ```typescript
 // [P1][APP][PAGE] Schedules page component with real auth
 // Tags: P1, APP, PAGE, SCHEDULES, AUTH
@@ -685,6 +702,7 @@ export default async function SchedulesPage() {
 
 
 ## Refactor: apps/web/app/(auth)/login/page.tsx
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -692,6 +710,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/app/(auth)/login/page.tsx`
 
 **File Content:**
+
 ```typescript
 // [P0][AUTH][LOGGING] Page page component
 // Tags: P0, AUTH, LOGGING
@@ -898,6 +917,7 @@ export default LoginPage;
 
 
 ## Refactor: apps/web/app/RegisterServiceWorker.tsx
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -905,6 +925,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/app/RegisterServiceWorker.tsx`
 
 **File Content:**
+
 ```typescript
 // [P2][APP][CODE] RegisterServiceWorker
 // Tags: P2, APP, CODE
@@ -925,6 +946,7 @@ export default function RegisterServiceWorker({ script = "/sw.js" }: { script?: 
 
 
 ## Refactor: apps/web/app/actions/createSchedule.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -932,6 +954,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/app/actions/createSchedule.ts`
 
 **File Content:**
+
 ```typescript
 // [P0][APP][CODE] CreateSchedule
 // Tags: P0, APP, CODE
@@ -982,6 +1005,7 @@ export async function createSchedule(payload: CreatePayload) {
 
 
 ## Refactor: apps/web/app/actions/scheduleActions.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -989,6 +1013,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/app/actions/scheduleActions.ts`
 
 **File Content:**
+
 ```typescript
 // [P0][APP][CODE] ScheduleActions
 // Tags: P0, APP, CODE
@@ -1016,7 +1041,8 @@ export async function publishSchedule({
 ```
 
 
-## Refactor: apps/web/app/api/_shared/__tests__/validation.test.ts
+## Refactor: apps/web/app/api/_shared/**tests**/validation.test.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -1024,6 +1050,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/app/api/_shared/__tests__/validation.test.ts`
 
 **File Content:**
+
 ```typescript
 // [P1][INTEGRITY][VALIDATION] Validation Test tests
 // Tags: P1, INTEGRITY, VALIDATION, TEST
@@ -1112,6 +1139,7 @@ describe('API Validation utilities', () => {
 
 
 ## Refactor: apps/web/app/api/_shared/logging.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -1119,6 +1147,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/app/api/_shared/logging.ts`
 
 **File Content:**
+
 ```typescript
 // [P1][OBSERVABILITY][LOGGING] Logging
 // Tags: P1, OBSERVABILITY, LOGGING
@@ -1243,6 +1272,7 @@ export function withRequestLogging<TReq extends BasicReq>(
 
 
 ## Refactor: apps/web/app/api/_shared/middleware.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -1250,6 +1280,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/app/api/_shared/middleware.ts`
 
 **File Content:**
+
 ```typescript
 // [P0][AUTH][MIDDLEWARE] API middleware for session verification
 // Tags: P0, AUTH, MIDDLEWARE
@@ -1459,6 +1490,7 @@ export function withSecurity<
 
 
 ## Refactor: apps/web/app/api/_shared/security.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -1466,6 +1498,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/app/api/_shared/security.ts`
 
 **File Content:**
+
 ```typescript
 // [P0][SECURITY][MIDDLEWARE] Security middleware stack for API routes
 // Tags: P0, SECURITY, MIDDLEWARE
@@ -1687,6 +1720,7 @@ export function securityStack(options?: {
 
 
 ## Refactor: apps/web/app/api/_shared/validation.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -1694,6 +1728,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/app/api/_shared/validation.ts`
 
 **File Content:**
+
 ```typescript
 // [P1][INTEGRITY][VALIDATION] Validation
 // Tags: P1, INTEGRITY, VALIDATION
@@ -1821,6 +1856,7 @@ export type CreateAdminResponsibilityFormInput = z.infer<
 
 
 ## Refactor: apps/web/app/api/_template/route.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -1828,6 +1864,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/app/api/_template/route.ts`
 
 **File Content:**
+
 ```typescript
 // [P1][API][CODE] Route API route handler
 // Tags: P1, API, CODE
@@ -1879,6 +1916,7 @@ export const PATCH = () => NextResponse.json({ ok: true });
 
 
 ## Refactor: apps/web/app/api/attendance/route.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -1886,6 +1924,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/app/api/attendance/route.ts`
 
 **File Content:**
+
 ```typescript
 // [P1][API][ATTENDANCE] Attendance records API route handler
 // [P1][API][ATTENDANCE] Attendance records API route handler
@@ -2023,6 +2062,7 @@ export const POST = withSecurity(
 
 
 ## Refactor: apps/web/app/api/auth/mfa/setup/route.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -2030,6 +2070,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/app/api/auth/mfa/setup/route.ts`
 
 **File Content:**
+
 ```typescript
 // [P0][AUTH][API] MFA setup endpoint - generates TOTP secret and QR code
 // [P0][AUTH][API] MFA setup endpoint - generates TOTP secret and QR code
@@ -2090,6 +2131,7 @@ export const POST = withSecurity(
 
 
 ## Refactor: apps/web/app/api/auth/mfa/verify/route.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -2097,6 +2139,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/app/api/auth/mfa/verify/route.ts`
 
 **File Content:**
+
 ```typescript
 // [P0][AUTH][API] MFA verification endpoint - confirms TOTP and sets custom claim
 // [P0][AUTH][API] MFA verification endpoint - confirms TOTP and sets custom claim
@@ -2181,6 +2224,7 @@ export const POST = withSecurity(
 
 
 ## Refactor: apps/web/app/api/health/route.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -2188,6 +2232,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/app/api/health/route.ts`
 
 **File Content:**
+
 ```typescript
 // [P1][OBSERVABILITY][HEALTH] Health check endpoint
 // [P1][OBSERVABILITY][HEALTH] Health check endpoint
@@ -2225,6 +2270,7 @@ export function GET() {
 
 
 ## Refactor: apps/web/app/api/healthz/route.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -2232,6 +2278,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/app/api/healthz/route.ts`
 
 **File Content:**
+
 ```typescript
 // [P1][API][CODE] Route API route handler
 // [P1][API][CODE] Route API route handler
@@ -2273,6 +2320,7 @@ export async function HEAD() {
 
 
 ## Refactor: apps/web/app/api/internal/backup/route.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -2280,6 +2328,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/app/api/internal/backup/route.ts`
 
 **File Content:**
+
 ```typescript
 // [P1][OPS][BACKUP] Internal endpoint to trigger Firestore export
 // [P1][OPS][BACKUP] Internal endpoint to trigger Firestore export
@@ -2370,6 +2419,7 @@ export const runtime = "nodejs"; // Ensure Node runtime (not edge)
 
 
 ## Refactor: apps/web/app/api/items/route.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -2377,6 +2427,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/app/api/items/route.ts`
 
 **File Content:**
+
 ```typescript
 // [P1][API][CODE] Route API route handler
 // [P1][API][CODE] Route API route handler
@@ -2450,6 +2501,7 @@ export const GET = withSecurity(
 
 
 ## Refactor: apps/web/app/api/join-tokens/route.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -2457,6 +2509,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/app/api/join-tokens/route.ts`
 
 **File Content:**
+
 ```typescript
 // [P1][API][JOIN_TOKENS] Join tokens API route handler
 // [P1][API][JOIN_TOKENS] Join tokens API route handler
@@ -2606,6 +2659,7 @@ export const POST = withSecurity(
 
 
 ## Refactor: apps/web/app/api/metrics/route.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -2613,6 +2667,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/app/api/metrics/route.ts`
 
 **File Content:**
+
 ```typescript
 // [P1][OBSERVABILITY][METRICS] Prometheus-compatible metrics endpoint
 // [P1][OBSERVABILITY][METRICS] Prometheus-compatible metrics endpoint
@@ -2739,7 +2794,8 @@ export async function GET() {
 ```
 
 
-## Refactor: apps/web/app/api/onboarding/__tests__/activate-network.test.ts
+## Refactor: apps/web/app/api/onboarding/**tests**/activate-network.test.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -2747,6 +2803,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/app/api/onboarding/__tests__/activate-network.test.ts`
 
 **File Content:**
+
 ```typescript
 // [P0][TEST][TEST] Activate Network Test tests
 // Tags: P0, TEST, TEST
@@ -2873,7 +2930,8 @@ describe("POST /api/onboarding/activate-network", () => {
 ```
 
 
-## Refactor: apps/web/app/api/onboarding/__tests__/admin-form.test.ts
+## Refactor: apps/web/app/api/onboarding/**tests**/admin-form.test.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -2881,6 +2939,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/app/api/onboarding/__tests__/admin-form.test.ts`
 
 **File Content:**
+
 ```typescript
 // [P0][FIREBASE][TEST] Admin Form Test tests
 // Tags: P0, FIREBASE, TEST
@@ -3038,7 +3097,8 @@ describe("POST /api/onboarding/admin-form", () => {
 ```
 
 
-## Refactor: apps/web/app/api/onboarding/__tests__/create-network-corporate.test.ts
+## Refactor: apps/web/app/api/onboarding/**tests**/create-network-corporate.test.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -3046,6 +3106,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/app/api/onboarding/__tests__/create-network-corporate.test.ts`
 
 **File Content:**
+
 ```typescript
 // [P0][SECURITY][TEST] Create Network Corporate Test tests
 // Tags: P0, SECURITY, TEST
@@ -3224,7 +3285,8 @@ describe("POST /api/onboarding/create-network-corporate", () => {
 ```
 
 
-## Refactor: apps/web/app/api/onboarding/__tests__/create-network-org.test.ts
+## Refactor: apps/web/app/api/onboarding/**tests**/create-network-org.test.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -3232,6 +3294,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/app/api/onboarding/__tests__/create-network-org.test.ts`
 
 **File Content:**
+
 ```typescript
 // [P0][TEST][TEST] Create Network Org Test tests
 // Tags: P0, TEST, TEST
@@ -3403,7 +3466,8 @@ describe("POST /api/onboarding/create-network-org", () => {
 ```
 
 
-## Refactor: apps/web/app/api/onboarding/__tests__/endpoints.test.ts
+## Refactor: apps/web/app/api/onboarding/**tests**/endpoints.test.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -3411,6 +3475,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/app/api/onboarding/__tests__/endpoints.test.ts`
 
 **File Content:**
+
 ```typescript
 // [P0][TEST][TEST] Endpoints Test tests
 // Tags: P0, TEST, TEST
@@ -3872,7 +3937,8 @@ describe("Onboarding Endpoints", () => {
 ```
 
 
-## Refactor: apps/web/app/api/onboarding/__tests__/join-with-token.test.ts
+## Refactor: apps/web/app/api/onboarding/**tests**/join-with-token.test.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -3880,6 +3946,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/app/api/onboarding/__tests__/join-with-token.test.ts`
 
 **File Content:**
+
 ```typescript
 // [P0][AUTH][TEST] Join With Token Test tests
 // Tags: P0, AUTH, TEST
@@ -4094,7 +4161,8 @@ describe("POST /api/onboarding/join-with-token", () => {
 ```
 
 
-## Refactor: apps/web/app/api/onboarding/__tests__/verify-eligibility.test.ts
+## Refactor: apps/web/app/api/onboarding/**tests**/verify-eligibility.test.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -4102,6 +4170,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/app/api/onboarding/__tests__/verify-eligibility.test.ts`
 
 **File Content:**
+
 ```typescript
 // [P0][TEST][TEST] Verify Eligibility Test tests
 // Tags: P0, TEST, TEST
@@ -4234,6 +4303,7 @@ describe("POST /api/onboarding/verify-eligibility", () => {
 
 
 ## Refactor: apps/web/app/api/onboarding/_shared/rateLimit.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -4241,6 +4311,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/app/api/onboarding/_shared/rateLimit.ts`
 
 **File Content:**
+
 ```typescript
 // [P0][SECURITY][RATE_LIMIT] RateLimit
 // Tags: P0, SECURITY, RATE_LIMIT
@@ -4338,6 +4409,7 @@ export function withRateLimit(
 
 
 ## Refactor: apps/web/app/api/onboarding/_shared/schemas.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -4345,6 +4417,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/app/api/onboarding/_shared/schemas.ts`
 
 **File Content:**
+
 ```typescript
 // [P0][INTEGRITY][VALIDATION] Schemas
 // Tags: P0, INTEGRITY, VALIDATION
@@ -4480,6 +4553,7 @@ export type ErrorResponse = z.infer<typeof ErrorResponseSchema>;
 
 
 ## Refactor: apps/web/app/api/onboarding/activate-network/route.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -4487,6 +4561,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/app/api/onboarding/activate-network/route.ts`
 
 **File Content:**
+
 ```typescript
 //[P1][API][ONBOARDING] Activate Network Endpoint
 //[P1][API][ONBOARDING] Activate Network Endpoint
@@ -4538,6 +4613,7 @@ export const POST = withSecurity(
 
 
 ## Refactor: apps/web/app/api/onboarding/admin-form/route.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -4545,6 +4621,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/app/api/onboarding/admin-form/route.ts`
 
 **File Content:**
+
 ```typescript
 //[P1][API][ONBOARDING] Admin Form Endpoint (server)
 //[P1][API][ONBOARDING] Admin Form Endpoint (server)
@@ -4644,6 +4721,7 @@ export const POST = async (req: NextRequest, _ctx: { params?: unknown }) => {
 
 
 ## Refactor: apps/web/app/api/onboarding/create-network-corporate/route.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -4651,6 +4729,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/app/api/onboarding/create-network-corporate/route.ts`
 
 **File Content:**
+
 ```typescript
 //[P1][API][ONBOARDING] Create Network + Corporate Endpoint (server)
 //[P1][API][ONBOARDING] Create Network + Corporate Endpoint (server)
@@ -4894,6 +4973,7 @@ export const POST = withSecurity(
 
 
 ## Refactor: apps/web/app/api/onboarding/create-network-org/route-new.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -4901,6 +4981,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/app/api/onboarding/create-network-org/route-new.ts`
 
 **File Content:**
+
 ```typescript
 //[P1][API][ONBOARDING] Create Network + Org Endpoint (server)
 // Tags: api, onboarding, network, org, venue
@@ -5069,6 +5150,7 @@ export const POST = withSecurity(
 
 
 ## Refactor: apps/web/app/api/onboarding/create-network-org/route.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -5076,6 +5158,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/app/api/onboarding/create-network-org/route.ts`
 
 **File Content:**
+
 ```typescript
 //[P1][API][ONBOARDING] Create Network + Org Endpoint (server)
 //[P1][API][ONBOARDING] Create Network + Org Endpoint (server)
@@ -5381,6 +5464,7 @@ export const POST = withRequestLogging(withSecurity(apiRoute, { requireAuth: tru
 
 
 ## Refactor: apps/web/app/api/onboarding/join-with-token/route.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -5388,6 +5472,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/app/api/onboarding/join-with-token/route.ts`
 
 **File Content:**
+
 ```typescript
 //[P1][API][ONBOARDING] Join With Token Endpoint (server)
 //[P1][API][ONBOARDING] Join With Token Endpoint (server)
@@ -5591,6 +5676,7 @@ export const POST = withSecurity(
 
 
 ## Refactor: apps/web/app/api/onboarding/profile/route.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -5598,6 +5684,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/app/api/onboarding/profile/route.ts`
 
 **File Content:**
+
 ```typescript
 // [P0][API][CODE] Route API route handler
 // [P0][API][CODE] Route API route handler
@@ -5682,6 +5769,7 @@ export const POST = withSecurity(async (req: AuthenticatedRequest) => profileHan
 
 
 ## Refactor: apps/web/app/api/onboarding/verify-eligibility/route.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -5689,6 +5777,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/app/api/onboarding/verify-eligibility/route.ts`
 
 **File Content:**
+
 ```typescript
 //[P1][API][ONBOARDING] Verify Eligibility Endpoint (server)
 //[P1][API][ONBOARDING] Verify Eligibility Endpoint (server)
@@ -5832,6 +5921,7 @@ export const POST = withRequestLogging(
 
 
 ## Refactor: apps/web/app/api/organizations/[id]/members/[memberId]/route.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -5839,6 +5929,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/app/api/organizations/[id]/members/[memberId]/route.ts`
 
 **File Content:**
+
 ```typescript
 //[P1][API][CODE] Organization Member [memberId] API route handler
 //[P1][API][CODE] Organization Member [memberId] API route handler
@@ -5957,6 +6048,7 @@ export const DELETE = csrfProtection()(
 
 
 ## Refactor: apps/web/app/api/organizations/[id]/members/route.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -5964,6 +6056,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/app/api/organizations/[id]/members/route.ts`
 
 **File Content:**
+
 ```typescript
 // [P1][API][MEMBERSHIPS] Organization members API routes
 // [P1][API][MEMBERSHIPS] Organization members API routes
@@ -6150,6 +6243,7 @@ export const DELETE = withSecurity(
 
 
 ## Refactor: apps/web/app/api/organizations/[id]/route.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -6157,6 +6251,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/app/api/organizations/[id]/route.ts`
 
 **File Content:**
+
 ```typescript
 // [P0][API][CODE] Route API route handler
 // [P0][API][CODE] Route API route handler
@@ -6269,6 +6364,7 @@ export const DELETE = withSecurity(
 
 
 ## Refactor: apps/web/app/api/organizations/route.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -6276,6 +6372,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/app/api/organizations/route.ts`
 
 **File Content:**
+
 ```typescript
 // [P0][API][CODE] Route API route handler
 // [P0][API][CODE] Route API route handler
@@ -6372,6 +6469,7 @@ export const POST = withSecurity(
 
 
 ## Refactor: apps/web/app/api/positions/[id]/route.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -6379,6 +6477,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/app/api/positions/[id]/route.ts`
 
 **File Content:**
+
 ```typescript
 //[P1][API][CODE] Positions [id] API route handler
 //[P1][API][CODE] Positions [id] API route handler
@@ -6506,6 +6605,7 @@ export const DELETE = csrfProtection()(
 
 
 ## Refactor: apps/web/app/api/positions/route.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -6513,6 +6613,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/app/api/positions/route.ts`
 
 **File Content:**
+
 ```typescript
 // [P1][API][POSITIONS] Positions API route handler
 // [P1][API][POSITIONS] Positions API route handler
@@ -6635,6 +6736,7 @@ export const POST = withSecurity(
 
 
 ## Refactor: apps/web/app/api/publish/route.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -6642,6 +6744,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/app/api/publish/route.ts`
 
 **File Content:**
+
 ```typescript
 // [P0][API][SCHEDULE] Schedule publish endpoint
 // [P0][API][SCHEDULE] Schedule publish endpoint
@@ -6736,6 +6839,7 @@ export const POST = withSecurity(
 
 
 ## Refactor: apps/web/app/api/schedules/[id]/route.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -6743,6 +6847,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/app/api/schedules/[id]/route.ts`
 
 **File Content:**
+
 ```typescript
 //[P1][API][CODE] Schedules [id] API route handler
 //[P1][API][CODE] Schedules [id] API route handler
@@ -6877,6 +6982,7 @@ export const DELETE = withSecurity(
 
 
 ## Refactor: apps/web/app/api/schedules/route.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -6884,6 +6990,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/app/api/schedules/route.ts`
 
 **File Content:**
+
 ```typescript
 // [P1][API][SCHEDULES] Schedules API route handler
 // [P1][API][SCHEDULES] Schedules API route handler
@@ -7025,6 +7132,7 @@ export const POST = withSecurity(
 
 
 ## Refactor: apps/web/app/api/session/bootstrap/route.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -7032,6 +7140,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/app/api/session/bootstrap/route.ts`
 
 **File Content:**
+
 ```typescript
 // [P0][AUTH][SESSION] Route API route handler
 // [P0][AUTH][SESSION] Route API route handler
@@ -7163,6 +7272,7 @@ export const POST = withSecurity(
 
 
 ## Refactor: apps/web/app/api/session/route.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -7170,6 +7280,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/app/api/session/route.ts`
 
 **File Content:**
+
 ```typescript
 // [P0][AUTH][SESSION] Session cookie management endpoints
 // [P0][AUTH][SESSION] Session cookie management endpoints
@@ -7247,6 +7358,7 @@ export async function DELETE() {
 
 
 ## Refactor: apps/web/app/api/shifts/[id]/route.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -7254,6 +7366,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/app/api/shifts/[id]/route.ts`
 
 **File Content:**
+
 ```typescript
 //[P1][API][CODE] Shifts [id] API route handler
 //[P1][API][CODE] Shifts [id] API route handler
@@ -7367,6 +7480,7 @@ export const DELETE = withSecurity(
 
 
 ## Refactor: apps/web/app/api/shifts/route.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -7374,6 +7488,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/app/api/shifts/route.ts`
 
 **File Content:**
+
 ```typescript
 //[P1][API][CODE] Shifts API route handler
 //[P1][API][CODE] Shifts API route handler
@@ -7482,6 +7597,7 @@ export const POST = withSecurity(
 
 
 ## Refactor: apps/web/app/api/users/profile/route.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -7489,6 +7605,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/app/api/users/profile/route.ts`
 
 **File Content:**
+
 ```typescript
 // [P1][API][CODE] Route API route handler
 // [P1][API][CODE] Route API route handler
@@ -7584,6 +7701,7 @@ export const PATCH = withSecurity(
 
 
 ## Refactor: apps/web/app/api/venues/route.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -7591,6 +7709,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/app/api/venues/route.ts`
 
 **File Content:**
+
 ```typescript
 // [P1][API][VENUES] Venues API route handler
 // [P1][API][VENUES] Venues API route handler
@@ -7724,6 +7843,7 @@ export const POST = withSecurity(
 
 
 ## Refactor: apps/web/app/api/widgets/route.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -7731,6 +7851,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/app/api/widgets/route.ts`
 
 **File Content:**
+
 ```typescript
 // [P1][API][CODE] Route API route handler
 // [P1][API][CODE] Route API route handler
@@ -7767,6 +7888,7 @@ export async function POST(req: NextRequest) {
 
 
 ## Refactor: apps/web/app/api/zones/route.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -7774,6 +7896,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/app/api/zones/route.ts`
 
 **File Content:**
+
 ```typescript
 // [P1][API][ZONES] Zones API route handler
 // [P1][API][ZONES] Zones API route handler
@@ -7899,6 +8022,7 @@ export const POST = withSecurity(
 
 
 ## Refactor: apps/web/app/auth/callback/page.tsx
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -7906,6 +8030,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/app/auth/callback/page.tsx`
 
 **File Content:**
+
 ```typescript
 // [P0][AUTH][CODE] Page page component
 // Tags: P0, AUTH, CODE
@@ -7974,6 +8099,7 @@ export default function AuthCallbackPage() {
 
 
 ## Refactor: apps/web/app/components/ErrorBoundary.tsx
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -7981,6 +8107,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/app/components/ErrorBoundary.tsx`
 
 **File Content:**
+
 ```typescript
 // [P2][UI][CODE] ErrorBoundary
 // Tags: P2, UI, CODE
@@ -8106,6 +8233,7 @@ function DefaultErrorFallback({ error, reset }: FallbackProps) {
 
 
 ## Refactor: apps/web/app/components/FirebaseSignIn.tsx
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -8113,6 +8241,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/app/components/FirebaseSignIn.tsx`
 
 **File Content:**
+
 ```typescript
 // [P0][FIREBASE][FIREBASE] FirebaseSignIn
 // Tags: P0, FIREBASE, FIREBASE
@@ -8157,6 +8286,7 @@ export default function FirebaseSignIn() {
 
 
 ## Refactor: apps/web/app/components/Inbox.tsx
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -8164,6 +8294,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/app/components/Inbox.tsx`
 
 **File Content:**
+
 ```typescript
 // [P2][UI][CODE] Inbox
 // Tags: P2, UI, CODE
@@ -8247,6 +8378,7 @@ export default Inbox;
 
 
 ## Refactor: apps/web/app/components/MonthView.tsx
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -8254,6 +8386,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/app/components/MonthView.tsx`
 
 **File Content:**
+
 ```typescript
 // [P2][UI][CODE] MonthView
 // Tags: P2, UI, CODE
@@ -8318,6 +8451,7 @@ export default MonthView;
 
 
 ## Refactor: apps/web/app/components/ProtectedRoute.tsx
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -8325,6 +8459,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/app/components/ProtectedRoute.tsx`
 
 **File Content:**
+
 ```typescript
 // [P1][API][CODE] ProtectedRoute
 // Tags: P1, API, CODE
@@ -8352,6 +8487,7 @@ export default function ProtectedRoute({ children }: { children: React.ReactNode
 
 
 ## Refactor: apps/web/app/components/UploadStub.tsx
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -8359,6 +8495,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/app/components/UploadStub.tsx`
 
 **File Content:**
+
 ```typescript
 // [P2][UI][CODE] UploadStub
 // Tags: P2, UI, CODE
@@ -8388,6 +8525,7 @@ export default function UploadStub() {
 
 
 ## Refactor: apps/web/app/components/ui/Alert.tsx
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -8395,6 +8533,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/app/components/ui/Alert.tsx`
 
 **File Content:**
+
 ```typescript
 // [P2][UI][CODE] Alert
 // Tags: P2, UI, CODE
@@ -8525,6 +8664,7 @@ export function Alert({ type = "info", title, message, onClose, className }: Ale
 
 
 ## Refactor: apps/web/app/components/ui/Button.tsx
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -8532,6 +8672,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/app/components/ui/Button.tsx`
 
 **File Content:**
+
 ```typescript
 // [P2][UI][CODE] Button
 // Tags: P2, UI, CODE
@@ -8619,6 +8760,7 @@ export function Button({
 
 
 ## Refactor: apps/web/app/components/ui/Card.tsx
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -8626,6 +8768,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/app/components/ui/Card.tsx`
 
 **File Content:**
+
 ```typescript
 // [P2][UI][CODE] Card
 // Tags: P2, UI, CODE
@@ -8683,6 +8826,7 @@ export function Card({
 
 
 ## Refactor: apps/web/app/components/ui/Input.tsx
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -8690,6 +8834,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/app/components/ui/Input.tsx`
 
 **File Content:**
+
 ```typescript
 // [P2][UI][CODE] Input
 // Tags: P2, UI, CODE
@@ -8806,6 +8951,7 @@ Textarea.displayName = "Textarea";
 
 
 ## Refactor: apps/web/app/components/ui/Loading.tsx
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -8813,6 +8959,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/app/components/ui/Loading.tsx`
 
 **File Content:**
+
 ```typescript
 // [P2][UI][CODE] Loading
 // Tags: P2, UI, CODE
@@ -8887,7 +9034,8 @@ export function Loading({ text = "Loading...", fullScreen = false }: LoadingProp
 ```
 
 
-## Refactor: apps/web/app/components/ui/__tests__/Button.test.tsx
+## Refactor: apps/web/app/components/ui/**tests**/Button.test.tsx
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -8895,6 +9043,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/app/components/ui/__tests__/Button.test.tsx`
 
 **File Content:**
+
 ```typescript
 // [P1][TEST][TEST] Button Test tests
 // Tags: P1, TEST, TEST
@@ -8948,7 +9097,8 @@ describe("Button", () => {
 ```
 
 
-## Refactor: apps/web/app/components/ui/__tests__/Card.test.tsx
+## Refactor: apps/web/app/components/ui/**tests**/Card.test.tsx
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -8956,6 +9106,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/app/components/ui/__tests__/Card.test.tsx`
 
 **File Content:**
+
 ```typescript
 // [P1][TEST][TEST] Card Test tests
 // Tags: P1, TEST, TEST
@@ -9006,7 +9157,8 @@ describe('Card', () => {
 ```
 
 
-## Refactor: apps/web/app/components/ui/__tests__/Input.test.tsx
+## Refactor: apps/web/app/components/ui/**tests**/Input.test.tsx
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -9014,6 +9166,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/app/components/ui/__tests__/Input.test.tsx`
 
 **File Content:**
+
 ```typescript
 // [P1][TEST][TEST] Input Test tests
 // Tags: P1, TEST, TEST
@@ -9078,6 +9231,7 @@ describe("Textarea", () => {
 
 
 ## Refactor: apps/web/app/components/ui/index.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -9085,6 +9239,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/app/components/ui/index.ts`
 
 **File Content:**
+
 ```typescript
 // [P2][UI][CODE] Index
 // Tags: P2, UI, CODE
@@ -9108,6 +9263,7 @@ export type { AlertProps } from "./Alert";
 
 
 ## Refactor: apps/web/app/fonts.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -9115,6 +9271,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/app/fonts.ts`
 
 **File Content:**
+
 ```typescript
 // [P2][APP][CODE] Fonts
 // Tags: P2, APP, CODE
@@ -9135,6 +9292,7 @@ export const inter = Inter({
 
 
 ## Refactor: apps/web/app/layout.tsx
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -9142,6 +9300,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/app/layout.tsx`
 
 **File Content:**
+
 ```typescript
 // [P2][APP][CODE] Layout
 // Tags: P2, APP, CODE
@@ -9199,7 +9358,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 ```
 
 
-## Refactor: apps/web/app/lib/__tests__/http.test.ts
+## Refactor: apps/web/app/lib/**tests**/http.test.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -9207,6 +9367,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/app/lib/__tests__/http.test.ts`
 
 **File Content:**
+
 ```typescript
 // [P1][TEST][TEST] Http Test tests
 // Tags: P1, TEST, TEST
@@ -9263,6 +9424,7 @@ describe("apiFetch", () => {
 
 
 ## Refactor: apps/web/app/lib/auth-context.tsx
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -9270,6 +9432,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/app/lib/auth-context.tsx`
 
 **File Content:**
+
 ```typescript
 // [P0][AUTH][CODE] Auth Context
 // Tags: P0, AUTH, CODE
@@ -9318,6 +9481,7 @@ export function useAuth() {
 
 
 ## Refactor: apps/web/app/lib/cache.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -9325,6 +9489,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/app/lib/cache.ts`
 
 **File Content:**
+
 ```typescript
 // [P2][APP][CODE] Cache
 // Tags: P2, APP, CODE
@@ -9366,6 +9531,7 @@ export function invalidate(tag: string) {
 
 
 ## Refactor: apps/web/app/lib/db.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -9373,6 +9539,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/app/lib/db.ts`
 
 **File Content:**
+
 ```typescript
 // [P0][APP][CODE] Db
 // Tags: P0, APP, CODE
@@ -9461,6 +9628,7 @@ export { TAG_SCHEDULES };
 
 
 ## Refactor: apps/web/app/lib/env.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -9468,6 +9636,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/app/lib/env.ts`
 
 **File Content:**
+
 ```typescript
 // [P0][CLIENT][ENV] Client-side environment validation with fail-fast
 // Tags: P0, CLIENT, ENV, VALIDATION, NEXTJS
@@ -9561,6 +9730,7 @@ export const ENV = loadClientEnv();
 
 
 ## Refactor: apps/web/app/lib/firebaseClient.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -9568,6 +9738,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/app/lib/firebaseClient.ts`
 
 **File Content:**
+
 ```typescript
 // [P0][FIREBASE][FIREBASE] FirebaseClient
 // Tags: P0, FIREBASE, FIREBASE
@@ -9670,6 +9841,7 @@ export const analytics = ((): ReturnType<typeof getAnalytics> | undefined => {
 
 
 ## Refactor: apps/web/app/lib/http.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -9677,6 +9849,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/app/lib/http.ts`
 
 **File Content:**
+
 ```typescript
 // [P2][APP][CODE] Http
 // Tags: P2, APP, CODE
@@ -9717,6 +9890,7 @@ export async function apiFetch<T>(input: RequestInfo, init?: RequestInit): Promi
 
 
 ## Refactor: apps/web/app/lib/registerServiceWorker.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -9724,6 +9898,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/app/lib/registerServiceWorker.ts`
 
 **File Content:**
+
 ```typescript
 // [P2][APP][CODE] RegisterServiceWorker
 // Tags: P2, APP, CODE
@@ -9793,6 +9968,7 @@ export async function unregisterAllServiceWorkers() {
 
 
 ## Refactor: apps/web/app/lib/useCreateItem.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -9800,6 +9976,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/app/lib/useCreateItem.ts`
 
 **File Content:**
+
 ```typescript
 // [P2][APP][CODE] UseCreateItem
 // Tags: P2, APP, CODE
@@ -9830,6 +10007,7 @@ export function useCreateItem() {
 
 
 ## Refactor: apps/web/app/middleware.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -9837,6 +10015,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/app/middleware.ts`
 
 **File Content:**
+
 ```typescript
 // [P2][API][MIDDLEWARE] Next.js middleware for security headers
 // Tags: P2, API, MIDDLEWARE
@@ -9871,6 +10050,7 @@ export const config = {
 
 
 ## Refactor: apps/web/app/onboarding/_wizard/OnboardingWizardContext.tsx
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -9878,6 +10058,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/app/onboarding/_wizard/OnboardingWizardContext.tsx`
 
 **File Content:**
+
 ```typescript
 // [P2][APP][CODE] OnboardingWizardContext
 // Tags: P2, APP, CODE
@@ -9955,6 +10136,7 @@ export function useOnboardingWizard() {
 
 
 ## Refactor: apps/web/app/onboarding/admin-form/page.tsx
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -9962,6 +10144,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/app/onboarding/admin-form/page.tsx`
 
 **File Content:**
+
 ```typescript
 // [P0][FIREBASE][CODE] Page page component
 // Tags: P0, FIREBASE, CODE
@@ -10085,6 +10268,7 @@ export default function AdminFormStep() {
 
 
 ## Refactor: apps/web/app/onboarding/admin-responsibility/page.tsx
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -10092,6 +10276,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/app/onboarding/admin-responsibility/page.tsx`
 
 **File Content:**
+
 ```typescript
 // [P0][FIREBASE][CODE] Page page component
 // Tags: P0, FIREBASE, CODE
@@ -10296,6 +10481,7 @@ export default function AdminResponsibilityPage() {
 
 
 ## Refactor: apps/web/app/onboarding/block-4/loading.tsx
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -10303,6 +10489,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/app/onboarding/block-4/loading.tsx`
 
 **File Content:**
+
 ```typescript
 // [P2][APP][CODE] Loading
 // Tags: P2, APP, CODE
@@ -10314,6 +10501,7 @@ export default function Loading() {
 
 
 ## Refactor: apps/web/app/onboarding/block-4/page.tsx
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -10321,6 +10509,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/app/onboarding/block-4/page.tsx`
 
 **File Content:**
+
 ```typescript
 // [P2][APP][CODE] Page page component
 // Tags: P2, APP, CODE
@@ -10389,6 +10578,7 @@ export default function Block4Page() {
 
 
 ## Refactor: apps/web/app/onboarding/blocked/email-not-verified/page.tsx
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -10396,6 +10586,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/app/onboarding/blocked/email-not-verified/page.tsx`
 
 **File Content:**
+
 ```typescript
 // [P2][APP][CODE] Page page component
 // Tags: P2, APP, CODE
@@ -10423,6 +10614,7 @@ export default function EmailNotVerified() {
 
 
 ## Refactor: apps/web/app/onboarding/blocked/network-pending/page.tsx
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -10430,6 +10622,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/app/onboarding/blocked/network-pending/page.tsx`
 
 **File Content:**
+
 ```typescript
 // [P2][APP][CODE] Page page component
 // Tags: P2, APP, CODE
@@ -10457,6 +10650,7 @@ export default function NetworkPending() {
 
 
 ## Refactor: apps/web/app/onboarding/blocked/staff-invite/page.tsx
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -10464,6 +10658,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/app/onboarding/blocked/staff-invite/page.tsx`
 
 **File Content:**
+
 ```typescript
 // [P0][APP][CODE] Staff invite blocked page component
 // Tags: P0, APP, CODE
@@ -10525,6 +10720,7 @@ export default function StaffInviteBlockedPage() {
 
 
 ## Refactor: apps/web/app/onboarding/create-network-corporate/page.tsx
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -10532,6 +10728,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/app/onboarding/create-network-corporate/page.tsx`
 
 **File Content:**
+
 ```typescript
 // [P0][CODE] Create corporate network page component
 // Tags: P0, CODE
@@ -10696,6 +10893,7 @@ export default function CreateNetworkCorporatePage() {
 
 
 ## Refactor: apps/web/app/onboarding/create-network-org/page.tsx
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -10703,6 +10901,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/app/onboarding/create-network-org/page.tsx`
 
 **File Content:**
+
 ```typescript
 // [P0][APP][CODE] Create network organization page component
 // Tags: P0, APP, CODE
@@ -10848,6 +11047,7 @@ export default function CreateNetworkOrgPage() {
 
 
 ## Refactor: apps/web/app/onboarding/intent/page.tsx
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -10855,6 +11055,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/app/onboarding/intent/page.tsx`
 
 **File Content:**
+
 ```typescript
 // [P0][APP][CODE] Page page component
 // Tags: P0, APP, CODE
@@ -10977,6 +11178,7 @@ export default function IntentPage() {
 
 
 ## Refactor: apps/web/app/onboarding/join/page.tsx
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -10984,6 +11186,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/app/onboarding/join/page.tsx`
 
 **File Content:**
+
 ```typescript
 // [P2][APP][CODE] Onboarding join page component
 // Tags: P2, APP, CODE
@@ -11095,6 +11298,7 @@ export default function JoinPage() {
 
 
 ## Refactor: apps/web/app/onboarding/layout.tsx
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -11102,6 +11306,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/app/onboarding/layout.tsx`
 
 **File Content:**
+
 ```typescript
 // [P2][APP][CODE] Layout
 // Tags: P2, APP, CODE
@@ -11123,6 +11328,7 @@ export default function OnboardingLayout({ children }: { children: ReactNode }) 
 
 
 ## Refactor: apps/web/app/onboarding/page.tsx
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -11130,6 +11336,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/app/onboarding/page.tsx`
 
 **File Content:**
+
 ```typescript
 // [P0][APP][CODE] Page page component
 // Tags: P0, APP, CODE
@@ -11180,6 +11387,7 @@ export default function OnboardingIndex() {
 
 
 ## Refactor: apps/web/app/onboarding/profile/page.tsx
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -11187,6 +11395,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/app/onboarding/profile/page.tsx`
 
 **File Content:**
+
 ```typescript
 // [P2][APP][CODE] Page page component
 // Tags: P2, APP, CODE
@@ -11324,6 +11533,7 @@ export default function ProfilePage() {
 
 
 ## Refactor: apps/web/app/page.tsx
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -11331,6 +11541,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/app/page.tsx`
 
 **File Content:**
+
 ```typescript
 // [P2][APP][CODE] Page page component
 // Tags: P2, APP, CODE
@@ -11347,6 +11558,7 @@ export default function Home() {
 
 
 ## Refactor: apps/web/app/planning/page.tsx
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -11354,6 +11566,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/app/planning/page.tsx`
 
 **File Content:**
+
 ```typescript
 // [P2][APP][CODE] Page page component
 // Tags: P2, APP, CODE
@@ -11370,6 +11583,7 @@ export default function PlanningPage() {
 
 
 ## Refactor: apps/web/app/providers/index.tsx
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -11377,6 +11591,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/app/providers/index.tsx`
 
 **File Content:**
+
 ```typescript
 // [P0][APP][CODE] Index
 // Tags: P0, APP, CODE
@@ -11401,6 +11616,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
 
 
 ## Refactor: apps/web/app/providers/queryClient.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -11408,6 +11624,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/app/providers/queryClient.ts`
 
 **File Content:**
+
 ```typescript
 // [P2][APP][CODE] QueryClient
 // Tags: P2, APP, CODE
@@ -11440,6 +11657,7 @@ export function getQueryClient() {
 
 
 ## Refactor: apps/web/app/schedules/builder/page.tsx
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -11447,6 +11665,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/app/schedules/builder/page.tsx`
 
 **File Content:**
+
 ```typescript
 // [P2][UI][CODE] Page page component
 // Tags: P2, UI, CODE
@@ -11504,6 +11723,7 @@ export default function ScheduleBuilder() {
 
 
 ## Refactor: apps/web/components/Logo.tsx
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -11511,6 +11731,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/components/Logo.tsx`
 
 **File Content:**
+
 ```typescript
 // [P1][OBSERVABILITY][LOGGING] Logo
 // Tags: P1, OBSERVABILITY, LOGGING
@@ -11535,6 +11756,7 @@ export default function Logo({ className = "" }: { className?: string }) {
 
 
 ## Refactor: apps/web/components/ui/Button.tsx
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -11542,6 +11764,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/components/ui/Button.tsx`
 
 **File Content:**
+
 ```typescript
 // [P2][UI][CODE] Button
 // Tags: P2, UI, CODE
@@ -11588,6 +11811,7 @@ export default function Button({
 
 
 ## Refactor: apps/web/components/ui/Card.tsx
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -11595,6 +11819,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/components/ui/Card.tsx`
 
 **File Content:**
+
 ```typescript
 // [P2][UI][CODE] Card
 // Tags: P2, UI, CODE
@@ -11625,6 +11850,7 @@ export function CardFooter({ className = "", ...props }: React.HTMLAttributes<HT
 
 
 ## Refactor: apps/web/components/ui/Input.tsx
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -11632,6 +11858,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/components/ui/Input.tsx`
 
 **File Content:**
+
 ```typescript
 // [P2][UI][CODE] Input
 // Tags: P2, UI, CODE
@@ -11667,6 +11894,7 @@ export default function Input({ label, hint, id, className = "", ...props }: Inp
 
 
 ## Refactor: apps/web/components/ui/Table.tsx
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -11674,6 +11902,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/components/ui/Table.tsx`
 
 **File Content:**
+
 ```typescript
 // [P2][UI][CODE] Table
 // Tags: P2, UI, CODE
@@ -11703,6 +11932,7 @@ export function TD({ className = "", ...props }: React.TdHTMLAttributes<HTMLTabl
 
 
 ## Refactor: apps/web/instrumentation.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -11710,6 +11940,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/instrumentation.ts`
 
 **File Content:**
+
 ```typescript
 // [P1][OBS][OTEL] Next.js instrumentation entrypoint (server-only)
 // Tags: P1, OBS, OTEL
@@ -11805,6 +12036,7 @@ export function register() {
 
 
 ## Refactor: apps/web/lib/animations.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -11812,6 +12044,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/lib/animations.ts`
 
 **File Content:**
+
 ```typescript
 //[P2][UI][CODE] Framer Motion animation variants and utilities
 // Tags: P2, UI, CODE, animations, framer-motion
@@ -11891,6 +12124,7 @@ export const buttonInteraction = {
 
 
 ## Refactor: apps/web/lib/firebase-admin.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -11898,6 +12132,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/lib/firebase-admin.ts`
 
 **File Content:**
+
 ```typescript
 // [P0][SECURITY][FIREBASE] Firebase Admin SDK singleton for Next.js server-side operations
 // Tags: P0, SECURITY, FIREBASE, ADMIN_SDK, NEXTJS
@@ -11963,6 +12198,7 @@ export function getFirebaseAdminDb(): Firestore {
 
 
 ## Refactor: apps/web/lib/onboarding/adminFormDrafts.mts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -11970,6 +12206,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/lib/onboarding/adminFormDrafts.mts`
 
 **File Content:**
+
 ```typescript
 // [P0][FIREBASE][CODE] AdminFormDrafts
 // Tags: P0, FIREBASE, CODE
@@ -11979,6 +12216,7 @@ export * from "./adminFormDrafts";
 
 
 ## Refactor: apps/web/lib/onboarding/adminFormDrafts.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -11986,6 +12224,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/lib/onboarding/adminFormDrafts.ts`
 
 **File Content:**
+
 ```typescript
 // [P0][FIREBASE][CODE] AdminFormDrafts
 // Tags: P0, FIREBASE, CODE
@@ -12127,6 +12366,7 @@ export async function consumeAdminFormDraft(params: {
 
 
 ## Refactor: apps/web/lib/onboarding/createNetworkOrg.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -12134,6 +12374,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/lib/onboarding/createNetworkOrg.ts`
 
 **File Content:**
+
 ```typescript
 // [P0][APP][CODE] CreateNetworkOrg
 // Tags: P0, APP, CODE
@@ -12272,6 +12513,7 @@ export async function createNetworkWithOrgAndVenue(
 
 
 ## Refactor: apps/web/lib/telemetry.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -12279,6 +12521,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/lib/telemetry.ts`
 
 **File Content:**
+
 ```typescript
 // [P2][APP][OTEL] Telemetry
 // Tags: P2, APP, OTEL
@@ -12295,11 +12538,9 @@ export function logApiCall(
   userId?: string,
   status?: number,
   durationMs?: number,
-  extras?: Record<string, unknown>
+  extras?: Record<string, unknown>,
 ) {
-  const enable =
-    process.env.NODE_ENV === "production" ||
-    process.env.TELEMETRY_STDOUT === "1";
+  const enable = process.env.NODE_ENV === "production" || process.env.TELEMETRY_STDOUT === "1";
 
   if (!enable) return;
 
@@ -12325,8 +12566,7 @@ export function logApiCall(
 function readRequestId(req: NextRequest | any): string | undefined {
   try {
     const id =
-      (typeof req?.headers?.get === "function" &&
-        req.headers.get("x-request-id")) ||
+      (typeof req?.headers?.get === "function" && req.headers.get("x-request-id")) ||
       (req?.headers?.["x-request-id"] as string | undefined) ||
       undefined;
     return id || undefined;
@@ -12358,7 +12598,7 @@ function getStatus(result: unknown): number {
  */
 export function withTelemetry<T extends (req: any, ...args: any[]) => Promise<any>>(
   handler: T,
-  route: string
+  route: string,
 ): T {
   return (async (req: NextRequest | any, ...args: any[]) => {
     const start = Date.now();
@@ -12371,7 +12611,7 @@ export function withTelemetry<T extends (req: any, ...args: any[]) => Promise<an
         (req as any)?.userToken?.uid,
         status,
         Date.now() - start,
-        { requestId: readRequestId(req) }
+        { requestId: readRequestId(req) },
       );
       return result;
     } catch (error) {
@@ -12381,7 +12621,7 @@ export function withTelemetry<T extends (req: any, ...args: any[]) => Promise<an
         (req as any)?.userToken?.uid,
         500,
         Date.now() - start,
-        { requestId: readRequestId(req), error: (error as Error)?.name }
+        { requestId: readRequestId(req), error: (error as Error)?.name },
       );
       throw error;
     }
@@ -12392,6 +12632,7 @@ export function withTelemetry<T extends (req: any, ...args: any[]) => Promise<an
 
 
 ## Refactor: apps/web/lib/urlState.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -12399,6 +12640,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/lib/urlState.ts`
 
 **File Content:**
+
 ```typescript
 //[P2][UI][CODE] Type-safe URL state management with nuqs
 // Tags: P2, UI, CODE, url-state, nuqs
@@ -12513,6 +12755,7 @@ export function useScheduleFilters() {
 
 
 ## Refactor: apps/web/next-env.d.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -12520,6 +12763,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/next-env.d.ts`
 
 **File Content:**
+
 ```typescript
 // [P2][APP][ENV] Next Env D type definitions
 // Tags: P2, APP, ENV
@@ -12534,6 +12778,7 @@ import "./.next/dev/types/routes.d.ts";
 
 
 ## Refactor: apps/web/proxy.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -12541,6 +12786,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/proxy.ts`
 
 **File Content:**
+
 ```typescript
 // [P0][APP][CODE] Proxy
 // Tags: P0, APP, CODE
@@ -12583,6 +12829,7 @@ export const config = {
 
 
 ## Refactor: apps/web/sentry.client.config.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -12590,6 +12837,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/sentry.client.config.ts`
 
 **File Content:**
+
 ```typescript
 // [P0][OBS][SENTRY] Sentry client-side configuration
 // Tags: P0, OBS, SENTRY
@@ -12650,6 +12898,7 @@ if (SENTRY_DSN) {
 
 
 ## Refactor: apps/web/sentry.edge.config.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -12657,6 +12906,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/sentry.edge.config.ts`
 
 **File Content:**
+
 ```typescript
 // [P0][OBS][SENTRY] Sentry Edge Runtime configuration
 // Tags: P0, OBS, SENTRY
@@ -12677,6 +12927,7 @@ if (SENTRY_DSN) {
 
 
 ## Refactor: apps/web/sentry.server.config.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -12684,6 +12935,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/sentry.server.config.ts`
 
 **File Content:**
+
 ```typescript
 // [P0][OBS][SENTRY] Sentry server-side configuration
 // Tags: P0, OBS, SENTRY
@@ -12720,7 +12972,8 @@ if (SENTRY_DSN) {
 ```
 
 
-## Refactor: apps/web/src/__tests__/api-security.spec.ts
+## Refactor: apps/web/src/**tests**/api-security.spec.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -12728,6 +12981,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/src/__tests__/api-security.spec.ts`
 
 **File Content:**
+
 ```typescript
 // [P0][TEST][AUTH] API authentication and authorization regression tests
 // Tags: P0, TEST, AUTH
@@ -12961,7 +13215,8 @@ describe("API Security Regression Tests", () => {
 ```
 
 
-## Refactor: apps/web/src/__tests__/auth-helpers.spec.ts
+## Refactor: apps/web/src/**tests**/auth-helpers.spec.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -12969,6 +13224,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/src/__tests__/auth-helpers.spec.ts`
 
 **File Content:**
+
 ```typescript
 // [P0][AUTH][TEST] Auth Helpers Spec tests
 // Tags: P0, AUTH, TEST
@@ -13057,7 +13313,8 @@ describe('Google redirect completion idempotent', () => {
 ```
 
 
-## Refactor: apps/web/src/__tests__/login-page.spec.tsx
+## Refactor: apps/web/src/**tests**/login-page.spec.tsx
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -13065,6 +13322,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/src/__tests__/login-page.spec.tsx`
 
 **File Content:**
+
 ```typescript
 // [P1][OBSERVABILITY][LOGGING] Login Page Spec tests
 // Tags: P1, OBSERVABILITY, LOGGING, TEST
@@ -13084,7 +13342,8 @@ describe("LoginPage", () => {
 ```
 
 
-## Refactor: apps/web/src/__tests__/mfa.test.ts
+## Refactor: apps/web/src/**tests**/mfa.test.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -13092,6 +13351,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/src/__tests__/mfa.test.ts`
 
 **File Content:**
+
 ```typescript
 // [P0][TEST][AUTH] MFA endpoint tests
 // Tags: P0, TEST, AUTH, MFA
@@ -13270,7 +13530,8 @@ describe("POST /api/auth/mfa/verify", () => {
 ```
 
 
-## Refactor: apps/web/src/__tests__/middleware.spec.ts
+## Refactor: apps/web/src/**tests**/middleware.spec.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -13278,6 +13539,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/src/__tests__/middleware.spec.ts`
 
 **File Content:**
+
 ```typescript
 // [P1][TEST][MIDDLEWARE] Middleware Spec middleware
 // Tags: P1, TEST, MIDDLEWARE, TEST
@@ -13316,7 +13578,8 @@ describe("middleware", () => {
 ```
 
 
-## Refactor: apps/web/src/__tests__/security.test.ts
+## Refactor: apps/web/src/**tests**/security.test.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -13324,6 +13587,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/src/__tests__/security.test.ts`
 
 **File Content:**
+
 ```typescript
 // [P1][TEST][API] Security regression tests for API endpoints
 // Tags: P1, TEST, API
@@ -13586,7 +13850,8 @@ describe("Successful Authentication Scenarios", () => {
 ```
 
 
-## Refactor: apps/web/src/__tests__/session-api.spec.ts
+## Refactor: apps/web/src/**tests**/session-api.spec.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -13594,6 +13859,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/src/__tests__/session-api.spec.ts`
 
 **File Content:**
+
 ```typescript
 // [P0][AUTH][SESSION] Session Api Spec tests
 // Tags: P0, AUTH, SESSION, TEST
@@ -13635,7 +13901,8 @@ describe("/api/session", () => {
 ```
 
 
-## Refactor: apps/web/src/__tests__/session.test.ts
+## Refactor: apps/web/src/**tests**/session.test.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -13643,6 +13910,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/src/__tests__/session.test.ts`
 
 **File Content:**
+
 ```typescript
 // [P1][TEST][AUTH] Unit tests for session authentication endpoints
 // Tags: P1, TEST, AUTH
@@ -13787,6 +14055,7 @@ describe("DELETE /api/session", () => {
 
 
 ## Refactor: apps/web/src/components/auth/ProtectedRoute.tsx
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -13794,6 +14063,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/src/components/auth/ProtectedRoute.tsx`
 
 **File Content:**
+
 ```typescript
 // [P0][AUTH][CODE] ProtectedRoute
 // Tags: P0, AUTH, CODE
@@ -13819,6 +14089,7 @@ export default function ProtectedRoute({ children }: { children: ReactNode }) {
 
 
 ## Refactor: apps/web/src/lib/actionCodeSettings.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -13826,6 +14097,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/src/lib/actionCodeSettings.ts`
 
 **File Content:**
+
 ```typescript
 // [P0][APP][CODE] ActionCodeSettings
 // Tags: P0, APP, CODE
@@ -13842,7 +14114,8 @@ export const actionCodeSettings: ActionCodeSettings = {
 ```
 
 
-## Refactor: apps/web/src/lib/api/__tests__/security-integration.test.ts
+## Refactor: apps/web/src/lib/api/**tests**/security-integration.test.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -13850,6 +14123,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/src/lib/api/__tests__/security-integration.test.ts`
 
 **File Content:**
+
 ```typescript
 //[P1][API][TEST] Security integration tests
 // Tags: test, security, integration, authorization, rate-limiting, csrf
@@ -14353,7 +14627,8 @@ describe("Security Integration Tests", () => {
 ```
 
 
-## Refactor: apps/web/src/lib/api/__tests__/security.bench.ts
+## Refactor: apps/web/src/lib/api/**tests**/security.bench.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -14361,6 +14636,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/src/lib/api/__tests__/security.bench.ts`
 
 **File Content:**
+
 ```typescript
 // [P0][SECURITY][TEST] Security Bench tests
 // Tags: P0, SECURITY, TEST
@@ -14369,6 +14645,7 @@ Refactor this file to be 100% compliant with all project standards.
 
 
 ## Refactor: apps/web/src/lib/api/authorization.test.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -14376,6 +14653,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/src/lib/api/authorization.test.ts`
 
 **File Content:**
+
 ```typescript
 //[P1][API][TEST] Authorization middleware unit tests
 // Tags: test, authorization, rbac, vitest
@@ -14581,6 +14859,7 @@ describe("canAccessResource", () => {
 
 
 ## Refactor: apps/web/src/lib/api/authorization.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -14588,6 +14867,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/src/lib/api/authorization.ts`
 
 **File Content:**
+
 ```typescript
 //[P1][API][AUTH] Authorization and RBAC middleware (minimal)
 // Tags: authorization, rbac, middleware, security
@@ -14732,6 +15012,7 @@ export async function canAccessResource(
 
 
 ## Refactor: apps/web/src/lib/api/csrf.test.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -14739,6 +15020,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/src/lib/api/csrf.test.ts`
 
 **File Content:**
+
 ```typescript
 //[P1][API][TEST] CSRF protection middleware unit tests
 // Tags: test, csrf, security, vitest
@@ -14958,6 +15240,7 @@ describe("csrfProtection", () => {
 
 
 ## Refactor: apps/web/src/lib/api/csrf.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -14965,6 +15248,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/src/lib/api/csrf.ts`
 
 **File Content:**
+
 ```typescript
 //[P1][API][SECURITY] CSRF protection middleware
 // Tags: csrf, security, double-submit-cookie
@@ -15151,6 +15435,7 @@ export const withCsrf = csrfProtection;
 
 
 ## Refactor: apps/web/src/lib/api/index.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -15158,6 +15443,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/src/lib/api/index.ts`
 
 **File Content:**
+
 ```typescript
 // [P1][API][CODE] Index
 // Tags: P1, API, CODE
@@ -15183,6 +15469,7 @@ export function createRateLimiter(config: RateLimitConfig) {
 
 
 ## Refactor: apps/web/src/lib/api/rate-limit.test.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -15190,6 +15477,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/src/lib/api/rate-limit.test.ts`
 
 **File Content:**
+
 ```typescript
 //[P1][API][TEST] Rate limiting middleware unit tests
 // Tags: test, rate-limiting, security, vitest
@@ -15347,6 +15635,7 @@ describe("rateLimit", () => {
 
 
 ## Refactor: apps/web/src/lib/api/rate-limit.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -15354,6 +15643,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/src/lib/api/rate-limit.ts`
 
 **File Content:**
+
 ```typescript
 //[P1][API][SECURITY] Rate limiting middleware (in-memory)
 // Tags: rate-limiting, security, dos-protection
@@ -15449,6 +15739,7 @@ export const RateLimits = {
 
 
 ## Refactor: apps/web/src/lib/api/redis-rate-limit.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -15456,6 +15747,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/src/lib/api/redis-rate-limit.ts`
 
 **File Content:**
+
 ```typescript
 //[P0][API][SECURITY] Redis-based rate limiting for production
 // Tags: rate-limiting, security, redis, production, horizontal-scaling
@@ -15571,6 +15863,7 @@ export class UpstashRedisAdapter implements RedisClient {
 
 
 ## Refactor: apps/web/src/lib/api/redis.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -15578,6 +15871,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/src/lib/api/redis.ts`
 
 **File Content:**
+
 ```typescript
 //[P0][API][INFRA] Shared Redis adapter singleton
 // Tags: redis, upstash, ioredis, adapter
@@ -15843,6 +16137,7 @@ export function createRateLimiter(config: RateLimitConfig) {
 
 
 ## Refactor: apps/web/src/lib/api/sanitize.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -15850,6 +16145,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/src/lib/api/sanitize.ts`
 
 **File Content:**
+
 ```typescript
 //[P1][API][SECURITY] Input sanitization utilities
 // Tags: sanitization, xss-prevention, security
@@ -15924,6 +16220,7 @@ export function sanitizeObject<T extends Record<string, unknown>>(
 
 
 ## Refactor: apps/web/src/lib/api/schedules.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -15931,6 +16228,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/src/lib/api/schedules.ts`
 
 **File Content:**
+
 ```typescript
 // [P0][API][CODE] Schedules
 // Tags: P0, API, CODE
@@ -16015,6 +16313,7 @@ export async function publishSchedule({ orgId, scheduleId }: PublishArgs) {
 
 
 ## Refactor: apps/web/src/lib/api/session.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -16022,6 +16321,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/src/lib/api/session.ts`
 
 **File Content:**
+
 ```typescript
 //[P1][API][AUTH] Next.js-compatible session authentication middleware
 // Tags: session, jwt, nextjs, firebase, security
@@ -16066,6 +16366,7 @@ export function requireSession(
 
 
 ## Refactor: apps/web/src/lib/api/validation.test.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -16073,6 +16374,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/src/lib/api/validation.test.ts`
 
 **File Content:**
+
 ```typescript
 //[P1][API][TEST] Validation middleware unit tests
 // Tags: test, validation, api, vitest
@@ -16389,6 +16691,7 @@ describe("validateDateRange", () => {
 
 
 ## Refactor: apps/web/src/lib/api/validation.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -16396,6 +16699,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/src/lib/api/validation.ts`
 
 **File Content:**
+
 ```typescript
 //[P1][API][VALIDATION] Request validation middleware and helpers
 // Tags: zod, validation, api, middleware, error-handling
@@ -16707,6 +17011,7 @@ export function validateDateRange(request: NextRequest) {
 
 
 ## Refactor: apps/web/src/lib/auth-context.tsx
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -16714,6 +17019,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/src/lib/auth-context.tsx`
 
 **File Content:**
+
 ```typescript
 // [P0][AUTH][CODE] Auth Context
 // Tags: P0, AUTH, CODE
@@ -16760,6 +17066,7 @@ export function useAuth() {
 
 
 ## Refactor: apps/web/src/lib/auth-helpers.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -16767,6 +17074,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/src/lib/auth-helpers.ts`
 
 **File Content:**
+
 ```typescript
 // [P0][AUTH][CODE] Auth Helpers
 // Tags: P0, AUTH, CODE
@@ -16907,6 +17215,7 @@ export async function logoutEverywhere() {
 
 
 ## Refactor: apps/web/src/lib/auth/pendingEmail.store.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -16914,6 +17223,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/src/lib/auth/pendingEmail.store.ts`
 
 **File Content:**
+
 ```typescript
 // [P0][AUTH][CODE] PendingEmail Store
 // Tags: P0, AUTH, CODE
@@ -16938,6 +17248,7 @@ export async function clearPendingEmail() {
 
 
 ## Refactor: apps/web/src/lib/env.server.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -16945,6 +17256,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/src/lib/env.server.ts`
 
 **File Content:**
+
 ```typescript
 // [P0][SECURITY][ENV] Server-side environment validation with fail-fast
 // Tags: P0, SECURITY, ENV, VALIDATION, SERVER, NEXTJS
@@ -17144,6 +17456,7 @@ if (process.env.NODE_ENV !== "production") {
 
 
 ## Refactor: apps/web/src/lib/env.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -17151,6 +17464,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/src/lib/env.ts`
 
 **File Content:**
+
 ```typescript
 // [P0][SECURITY][ENV] Client-side environment validation for Next.js web app
 // Tags: P0, SECURITY, ENV, VALIDATION, NEXTJS, CLIENT
@@ -17201,6 +17515,7 @@ export function useEmulators(): boolean {
 
 
 ## Refactor: apps/web/src/lib/error/ErrorContext.tsx
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -17208,6 +17523,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/src/lib/error/ErrorContext.tsx`
 
 **File Content:**
+
 ```typescript
 // [P2][APP][CODE] ErrorContext
 // Tags: P2, APP, CODE
@@ -17280,6 +17596,7 @@ export function useErrorBus() {
 
 
 ## Refactor: apps/web/src/lib/error/reporting.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -17287,6 +17604,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/src/lib/error/reporting.ts`
 
 **File Content:**
+
 ```typescript
 // [P2][APP][CODE] Reporting
 // Tags: P2, APP, CODE
@@ -17363,6 +17681,7 @@ export function addBreadcrumb(message: string, data?: Record<string, unknown>) {
 
 
 ## Refactor: apps/web/src/lib/eventLog.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -17370,6 +17689,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/src/lib/eventLog.ts`
 
 **File Content:**
+
 ```typescript
 // [P0][OBSERVABILITY][LOGGING] EventLog
 // Tags: P0, OBSERVABILITY, LOGGING
@@ -17418,6 +17738,7 @@ export async function logEvent(adminDb: Firestore | any, input: NewEvent): Promi
 
 
 ## Refactor: apps/web/src/lib/firebase.server.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -17425,6 +17746,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/src/lib/firebase.server.ts`
 
 **File Content:**
+
 ```typescript
 // [P0][FIREBASE][FIREBASE] Firebase Server
 // Tags: P0, FIREBASE, FIREBASE
@@ -17532,6 +17854,7 @@ export function isManagerClaims(
 
 
 ## Refactor: apps/web/src/lib/imports/_template.import.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -17539,6 +17862,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/src/lib/imports/_template.import.ts`
 
 **File Content:**
+
 ```typescript
 // [P2][APP][CODE]  Template Import
 // Tags: P2, APP, CODE
@@ -17587,6 +17911,7 @@ export async function importFile(file: File): Promise<ImportResult<z.infer<typeo
 
 
 ## Refactor: apps/web/src/lib/labor/computeLaborBudget.test.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -17594,6 +17919,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/src/lib/labor/computeLaborBudget.test.ts`
 
 **File Content:**
+
 ```typescript
 // [P1][TEST][TEST] ComputeLaborBudget Test tests
 // Tags: P1, TEST, TEST
@@ -17634,6 +17960,7 @@ describe("computeLaborBudget", () => {
 
 
 ## Refactor: apps/web/src/lib/labor/computeLaborBudget.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -17641,6 +17968,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/src/lib/labor/computeLaborBudget.ts`
 
 **File Content:**
+
 ```typescript
 // [P2][APP][LABOR] Compute allowed labor dollars and hours from the sales forecast
 // Tags: labor, scheduling, budgeting, utility
@@ -17687,6 +18015,7 @@ export default computeLaborBudget;
 
 
 ## Refactor: apps/web/src/lib/logger.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -17694,6 +18023,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/src/lib/logger.ts`
 
 **File Content:**
+
 ```typescript
 // [P0][OBS][LOGGER] Shared JSON logger with structured fields
 // Tags: P0, OBS, LOGGER
@@ -17897,6 +18227,7 @@ export function requestLogger(req: NextRequest, startTime: number = Date.now()) 
 
 
 ## Refactor: apps/web/src/lib/onboarding/adminFormDrafts.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -17904,6 +18235,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/src/lib/onboarding/adminFormDrafts.ts`
 
 **File Content:**
+
 ```typescript
 // [P1][FIREBASE][HELPER] Admin form drafts helper
 // Tags: FIREBASE, ONBOARDING, HELPERS
@@ -17989,6 +18321,7 @@ export default {
 
 
 ## Refactor: apps/web/src/lib/onboarding/createNetworkOrg.test.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -17996,6 +18329,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/src/lib/onboarding/createNetworkOrg.test.ts`
 
 **File Content:**
+
 ```typescript
 // [P0][TEST][TEST] CreateNetworkOrg Test tests
 // Tags: P0, TEST, TEST
@@ -18099,6 +18433,7 @@ describe("createNetworkWithOrgAndVenue (helper)", () => {
 
 
 ## Refactor: apps/web/src/lib/onboarding/createNetworkOrg.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -18106,6 +18441,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/src/lib/onboarding/createNetworkOrg.ts`
 
 **File Content:**
+
 ```typescript
 // [P1][FIREBASE][HELPER] Create network/org/venue helper
 // Tags: FIREBASE, ONBOARDING, HELPERS
@@ -18234,6 +18570,7 @@ export default { createNetworkWithOrgAndVenue };
 
 
 ## Refactor: apps/web/src/lib/otel.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -18241,6 +18578,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/src/lib/otel.ts`
 
 **File Content:**
+
 ```typescript
 // [P2][OBS][OTEL] Helpers for manual spans
 // Tags: P2, OBS, OTEL
@@ -18290,6 +18628,7 @@ export async function withSpan<T>(
 
 
 ## Refactor: apps/web/src/lib/storage/kv.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -18297,6 +18636,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/src/lib/storage/kv.ts`
 
 **File Content:**
+
 ```typescript
 // [P2][APP][CODE] Kv
 // Tags: P2, APP, CODE
@@ -18363,6 +18703,7 @@ export async function kvCleanupExpired() {
 
 
 ## Refactor: apps/web/src/lib/store.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -18370,6 +18711,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/src/lib/store.ts`
 
 **File Content:**
+
 ```typescript
 // [P2][APP][CODE] Store
 // Tags: P2, APP, CODE
@@ -18408,6 +18750,7 @@ export const useAppStore = create<AppState>()(
 
 
 ## Refactor: apps/web/src/lib/userOnboarding.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -18415,6 +18758,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/src/lib/userOnboarding.ts`
 
 **File Content:**
+
 ```typescript
 // [P1][HELPERS][ONBOARDING] User Onboarding Helpers
 // Tags: P1, HELPERS, ONBOARDING, FIREBASE
@@ -18478,6 +18822,7 @@ export async function markOnboardingComplete(params: {
 
 
 ## Refactor: apps/web/src/lib/userProfile.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -18485,6 +18830,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/src/lib/userProfile.ts`
 
 **File Content:**
+
 ```typescript
 // [P0][APP][CODE] UserProfile
 // Tags: P0, APP, CODE
@@ -18591,6 +18937,7 @@ export async function ensureUserProfile(args: {
 
 
 ## Refactor: apps/web/src/middleware.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -18598,6 +18945,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/src/middleware.ts`
 
 **File Content:**
+
 ```typescript
 // [P2][API][MIDDLEWARE] Re-export for test compatibility
 // Tags: P2, API, MIDDLEWARE
@@ -18610,6 +18958,7 @@ export { middleware } from "../app/middleware";
 
 
 ## Refactor: apps/web/src/types/fresh-schedules-types.d.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -18617,6 +18966,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/src/types/fresh-schedules-types.d.ts`
 
 **File Content:**
+
 ```typescript
 // [P1][TYPES][SCHEMAS] Fresh-schedules types shim
 // Tags: P1, TYPES, SCHEMAS
@@ -18867,6 +19217,7 @@ declare module "@fresh-schedules/types" {
 
 
 ## Refactor: apps/web/src/types/idb.d.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -18874,6 +19225,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/src/types/idb.d.ts`
 
 **File Content:**
+
 ```typescript
 // [P2][APP][CODE] Idb D type definitions
 // Tags: P2, APP, CODE
@@ -18883,6 +19235,7 @@ declare module "idb";
 
 
 ## Refactor: apps/web/tailwind.config.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -18890,6 +19243,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/tailwind.config.ts`
 
 **File Content:**
+
 ```typescript
 // [P2][APP][ENV] Tailwind Config
 // Tags: P2, APP, ENV
@@ -18950,6 +19304,7 @@ export default config;
 
 
 ## Refactor: apps/web/tests/e2e/onboarding-full-flow.spec.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -18957,6 +19312,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/tests/e2e/onboarding-full-flow.spec.ts`
 
 **File Content:**
+
 ```typescript
 // [P0][TEST][TEST] Onboarding Full Flow Spec tests
 // Tags: P0, TEST, TEST
@@ -19185,6 +19541,7 @@ test.describe("Onboarding Happy Path", () => {
 
 
 ## Refactor: apps/web/tsconfig.json
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -19192,6 +19549,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/tsconfig.json`
 
 **File Content:**
+
 ```typescript
 {
   "extends": "../../tsconfig.json",
@@ -19222,6 +19580,7 @@ Refactor this file to be 100% compliant with all project standards.
 
 
 ## Refactor: apps/web/vitest.bench.config.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -19229,6 +19588,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/vitest.bench.config.ts`
 
 **File Content:**
+
 ```typescript
 //[P1][APP][CONFIG] Vitest benchmark configuration for performance testing
 // Tags: test, benchmark, performance, vitest
@@ -19257,6 +19617,7 @@ export default defineConfig({
 
 
 ## Refactor: apps/web/vitest.config.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -19264,6 +19625,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/vitest.config.ts`
 
 **File Content:**
+
 ```typescript
 // [P1][TEST][ENV] Vitest Config tests
 // Tags: P1, TEST, ENV, TEST
@@ -19299,6 +19661,7 @@ export default defineConfig({
 
 
 ## Refactor: apps/web/vitest.d.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -19306,6 +19669,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/vitest.d.ts`
 
 **File Content:**
+
 ```typescript
 // [P1][TEST][TEST] Vitest D tests
 // Tags: P1, TEST, TEST
@@ -19318,6 +19682,7 @@ import "@testing-library/jest-dom/vitest";
 
 
 ## Refactor: apps/web/vitest.setup.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -19325,6 +19690,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `apps/web/vitest.setup.ts`
 
 **File Content:**
+
 ```typescript
 // [P0][TEST][TEST] Vitest Setup tests
 // Tags: P0, TEST, TEST
@@ -19391,6 +19757,7 @@ vi.mock("next/navigation", () => ({
 
 
 ## Refactor: firestore.rules
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -19398,6 +19765,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `firestore.rules`
 
 **File Content:**
+
 ```typescript
 // [P1][INTEGRITY][RULES] Firestore security rules for multi-tenant RBAC
 // Tags: P1, INTEGRITY, FIRESTORE, RULES, SECURITY, RBAC, TENANT_ISOLATION
@@ -19647,6 +20015,7 @@ service cloud.firestore {
 
 
 ## Refactor: packages/config/src/index.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -19654,6 +20023,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `packages/config/src/index.ts`
 
 **File Content:**
+
 ```typescript
 // [P0][APP][ENV] Index
 // Tags: P0, APP, ENV
@@ -19693,6 +20063,7 @@ export const UI_CONFIG = {
 
 
 ## Refactor: packages/config/tsconfig.json
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -19700,6 +20071,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `packages/config/tsconfig.json`
 
 **File Content:**
+
 ```typescript
 {
   "extends": "../../tsconfig.base.json",
@@ -19722,6 +20094,7 @@ Refactor this file to be 100% compliant with all project standards.
 
 
 ## Refactor: packages/env/src/index.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -19729,6 +20102,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `packages/env/src/index.ts`
 
 **File Content:**
+
 ```typescript
 // [P0][APP][ENV] Index
 // Tags: P0, APP, ENV
@@ -19833,6 +20207,7 @@ export const ENV = {
 
 
 ## Refactor: packages/mcp-server/src/index.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -19840,6 +20215,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `packages/mcp-server/src/index.ts`
 
 **File Content:**
+
 ```typescript
 // [P2][APP][CODE] Index
 // Tags: P2, APP, CODE
@@ -19938,6 +20314,7 @@ rl.on("line", async (line) => {
 
 
 ## Refactor: packages/mcp-server/tsconfig.json
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -19945,6 +20322,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `packages/mcp-server/tsconfig.json`
 
 **File Content:**
+
 ```typescript
 {
   "extends": "../../tsconfig.json",
@@ -19965,6 +20343,7 @@ Refactor this file to be 100% compliant with all project standards.
 
 
 ## Refactor: packages/rules-tests/package.json
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -19972,6 +20351,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `packages/rules-tests/package.json`
 
 **File Content:**
+
 ```typescript
 {
   "name": "@fresh-root/rules-tests",
@@ -19995,6 +20375,7 @@ Refactor this file to be 100% compliant with all project standards.
 
 
 ## Refactor: packages/rules-tests/src/rbac.test.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -20002,6 +20383,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `packages/rules-tests/src/rbac.test.ts`
 
 **File Content:**
+
 ```typescript
 // [P0][RBAC][TEST] RBAC tests
 // Tags: P0, RBAC, TEST
@@ -20249,6 +20631,7 @@ describe("RBAC Rules Tests", () => {
 
 
 ## Refactor: packages/rules-tests/src/rules.test.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -20256,6 +20639,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `packages/rules-tests/src/rules.test.ts`
 
 **File Content:**
+
 ```typescript
 // [P1][TEST][RULES] Firestore Rules Unit Tests
 // Tags: P1, TEST, RULES, VITEST, FIRESTORE
@@ -20347,6 +20731,7 @@ test("unauthenticated user cannot read join token", async () => {
 
 
 ## Refactor: packages/rules-tests/tsconfig.json
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -20354,6 +20739,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `packages/rules-tests/tsconfig.json`
 
 **File Content:**
+
 ```typescript
 {
   "extends": "../../tsconfig.base.json",
@@ -20370,6 +20756,7 @@ Refactor this file to be 100% compliant with all project standards.
 
 
 ## Refactor: packages/rules-tests/vitest.config.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -20377,6 +20764,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `packages/rules-tests/vitest.config.ts`
 
 **File Content:**
+
 ```typescript
 // [P1][TEST][ENV] Vitest Config tests
 // Tags: P1, TEST, ENV, TEST
@@ -20393,7 +20781,8 @@ export default defineConfig({
 ```
 
 
-## Refactor: packages/types/src/__tests__/adminResponsibilityForm.test.ts
+## Refactor: packages/types/src/**tests**/adminResponsibilityForm.test.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -20401,6 +20790,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `packages/types/src/__tests__/adminResponsibilityForm.test.ts`
 
 **File Content:**
+
 ```typescript
 // [P1][INTEGRITY][TEST] AdminResponsibilityForm schema tests
 // Tags: P1, INTEGRITY, TEST, ZOD, COMPLIANCE
@@ -20465,7 +20855,8 @@ describe("AdminResponsibilityFormSchema", () => {
 ```
 
 
-## Refactor: packages/types/src/__tests__/attendance.test.ts
+## Refactor: packages/types/src/**tests**/attendance.test.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -20473,6 +20864,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `packages/types/src/__tests__/attendance.test.ts`
 
 **File Content:**
+
 ```typescript
 // [P1][INTEGRITY][TEST] Attendance schema tests
 // Tags: P1, INTEGRITY, TEST, ZOD, ATTENDANCE
@@ -20632,7 +21024,8 @@ describe("ListAttendanceRecordsQuerySchema", () => {
 ```
 
 
-## Refactor: packages/types/src/__tests__/corpOrgLinks.test.ts
+## Refactor: packages/types/src/**tests**/corpOrgLinks.test.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -20640,6 +21033,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `packages/types/src/__tests__/corpOrgLinks.test.ts`
 
 **File Content:**
+
 ```typescript
 // [P1][TEST][TEST] CorpOrgLinks Test tests
 // Tags: P1, TEST, TEST
@@ -20703,7 +21097,8 @@ describe("CorpOrgLinkSchema", () => {
 ```
 
 
-## Refactor: packages/types/src/__tests__/corpOrgLinks.v14.test.ts
+## Refactor: packages/types/src/**tests**/corpOrgLinks.v14.test.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -20711,6 +21106,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `packages/types/src/__tests__/corpOrgLinks.v14.test.ts`
 
 **File Content:**
+
 ```typescript
 // [P1][TEST][TEST] CorpOrgLinks V14 Test tests
 // Tags: P1, TEST, TEST
@@ -20724,7 +21120,8 @@ it("placeholder v14 corpOrgLinks test", () => {
 ```
 
 
-## Refactor: packages/types/src/__tests__/join-tokens.test.ts
+## Refactor: packages/types/src/**tests**/join-tokens.test.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -20732,6 +21129,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `packages/types/src/__tests__/join-tokens.test.ts`
 
 **File Content:**
+
 ```typescript
 // [P1][INTEGRITY][TEST] Join tokens schema tests
 // Tags: P1, INTEGRITY, TEST, ZOD, JOIN_TOKENS
@@ -20843,7 +21241,8 @@ describe("ListJoinTokensQuerySchema", () => {
 ```
 
 
-## Refactor: packages/types/src/__tests__/memberships.test.ts
+## Refactor: packages/types/src/**tests**/memberships.test.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -20851,6 +21250,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `packages/types/src/__tests__/memberships.test.ts`
 
 **File Content:**
+
 ```typescript
 // [P1][INTEGRITY][TEST] Memberships schema tests
 // Tags: P1, INTEGRITY, TEST, ZOD, MEMBERSHIPS
@@ -21044,7 +21444,8 @@ describe("MembershipStatus enum", () => {
 ```
 
 
-## Refactor: packages/types/src/__tests__/networks.test.ts
+## Refactor: packages/types/src/**tests**/networks.test.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -21052,6 +21453,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `packages/types/src/__tests__/networks.test.ts`
 
 **File Content:**
+
 ```typescript
 // [P1][INTEGRITY][TEST] Networks schema tests
 // Tags: P1, INTEGRITY, TEST, ZOD, NETWORKS
@@ -21112,7 +21514,8 @@ describe("NetworkSchema", () => {
 ```
 
 
-## Refactor: packages/types/src/__tests__/onboarding.test.ts
+## Refactor: packages/types/src/**tests**/onboarding.test.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -21120,6 +21523,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `packages/types/src/__tests__/onboarding.test.ts`
 
 **File Content:**
+
 ```typescript
 // [P1][TEST][ONBOARDING] Onboarding Schemas Unit Tests
 // Tags: P1, TEST, ONBOARDING, VITEST
@@ -21182,7 +21586,8 @@ describe("CreateOrgOnboardingSchema and OnboardingStateSchema", () => {
 ```
 
 
-## Refactor: packages/types/src/__tests__/org-network.test.ts
+## Refactor: packages/types/src/**tests**/org-network.test.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -21190,6 +21595,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `packages/types/src/__tests__/org-network.test.ts`
 
 **File Content:**
+
 ```typescript
 // [P1][TEST][TEST] Org Network Test tests
 // Tags: P1, TEST, TEST
@@ -21236,7 +21642,8 @@ describe("Organization networkId handling", () => {
 ```
 
 
-## Refactor: packages/types/src/__tests__/orgVenueAssignments.test.ts
+## Refactor: packages/types/src/**tests**/orgVenueAssignments.test.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -21244,6 +21651,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `packages/types/src/__tests__/orgVenueAssignments.test.ts`
 
 **File Content:**
+
 ```typescript
 // [P1][TEST][TEST] OrgVenueAssignments Test tests
 // Tags: P1, TEST, TEST
@@ -21309,7 +21717,8 @@ describe("OrgVenueAssignmentSchema", () => {
 ```
 
 
-## Refactor: packages/types/src/__tests__/orgVenueAssignments.v14.test.ts
+## Refactor: packages/types/src/**tests**/orgVenueAssignments.v14.test.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -21317,6 +21726,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `packages/types/src/__tests__/orgVenueAssignments.v14.test.ts`
 
 **File Content:**
+
 ```typescript
 // [P1][TEST][TEST] OrgVenueAssignments V14 Test tests
 // Tags: P1, TEST, TEST
@@ -21330,7 +21740,8 @@ it("placeholder v14 orgVenueAssignments test", () => {
 ```
 
 
-## Refactor: packages/types/src/__tests__/organizations.test.ts
+## Refactor: packages/types/src/**tests**/organizations.test.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -21338,6 +21749,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `packages/types/src/__tests__/organizations.test.ts`
 
 **File Content:**
+
 ```typescript
 // [P1][INTEGRITY][TEST] Organization Zod schema validation tests
 // Tags: P1, INTEGRITY, TEST, zod, validation
@@ -21540,7 +21952,8 @@ describe("OrganizationCreateSchema and OrganizationUpdateSchema aliases", () => 
 ```
 
 
-## Refactor: packages/types/src/__tests__/orgs.test.ts
+## Refactor: packages/types/src/**tests**/orgs.test.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -21548,6 +21961,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `packages/types/src/__tests__/orgs.test.ts`
 
 **File Content:**
+
 ```typescript
 // [P1][INTEGRITY][TEST] Organizations schema tests
 // Tags: P1, INTEGRITY, TEST, ZOD, ORGANIZATIONS
@@ -21679,7 +22093,8 @@ describe("ListOrganizationsQuerySchema", () => {
 ```
 
 
-## Refactor: packages/types/src/__tests__/positions.test.ts
+## Refactor: packages/types/src/**tests**/positions.test.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -21687,6 +22102,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `packages/types/src/__tests__/positions.test.ts`
 
 **File Content:**
+
 ```typescript
 // [P1][INTEGRITY][TEST] Positions schema tests
 // Tags: P1, INTEGRITY, TEST, ZOD, POSITIONS
@@ -21911,7 +22327,8 @@ describe("SkillLevel enum", () => {
 ```
 
 
-## Refactor: packages/types/src/__tests__/schedules.test.ts
+## Refactor: packages/types/src/**tests**/schedules.test.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -21919,6 +22336,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `packages/types/src/__tests__/schedules.test.ts`
 
 **File Content:**
+
 ```typescript
 // [P1][INTEGRITY][TEST] Schedules schema tests
 // Tags: P1, INTEGRITY, TEST, ZOD, SCHEDULES
@@ -22071,7 +22489,8 @@ describe("PublishScheduleSchema", () => {
 ```
 
 
-## Refactor: packages/types/src/__tests__/shifts.test.ts
+## Refactor: packages/types/src/**tests**/shifts.test.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -22079,6 +22498,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `packages/types/src/__tests__/shifts.test.ts`
 
 **File Content:**
+
 ```typescript
 // [P1][INTEGRITY][TEST] Shifts schema tests
 // Tags: P1, INTEGRITY, TEST, ZOD, SHIFTS
@@ -22244,7 +22664,8 @@ describe("AssignShiftSchema", () => {
 ```
 
 
-## Refactor: packages/types/src/__tests__/venue-network.test.ts
+## Refactor: packages/types/src/**tests**/venue-network.test.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -22252,6 +22673,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `packages/types/src/__tests__/venue-network.test.ts`
 
 **File Content:**
+
 ```typescript
 // [P1][TEST][TEST] Venue Network Test tests
 // Tags: P1, TEST, TEST
@@ -22302,7 +22724,8 @@ describe("Venue networkId handling", () => {
 ```
 
 
-## Refactor: packages/types/src/__tests__/venues.test.ts
+## Refactor: packages/types/src/**tests**/venues.test.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -22310,6 +22733,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `packages/types/src/__tests__/venues.test.ts`
 
 **File Content:**
+
 ```typescript
 // [P1][INTEGRITY][TEST] Venues schema tests
 // Tags: P1, INTEGRITY, TEST, ZOD, VENUES
@@ -22471,7 +22895,8 @@ describe("ListVenuesQuerySchema", () => {
 ```
 
 
-## Refactor: packages/types/src/__tests__/zones.test.ts
+## Refactor: packages/types/src/**tests**/zones.test.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -22479,6 +22904,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `packages/types/src/__tests__/zones.test.ts`
 
 **File Content:**
+
 ```typescript
 // [P1][INTEGRITY][TEST] Zones schema tests
 // Tags: P1, INTEGRITY, TEST, ZOD, ZONES
@@ -22619,6 +23045,7 @@ describe("ListZonesQuerySchema", () => {
 
 
 ## Refactor: packages/types/src/attendance.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -22626,6 +23053,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `packages/types/src/attendance.ts`
 
 **File Content:**
+
 ```typescript
 // [P1][INTEGRITY][SCHEMA] Attendance schema
 // Tags: P1, INTEGRITY, SCHEMA, ZOD, ATTENDANCE
@@ -22772,6 +23200,7 @@ export type ListAttendanceRecordsQuery = z.infer<typeof ListAttendanceRecordsQue
 
 
 ## Refactor: packages/types/src/compliance.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -22779,6 +23208,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `packages/types/src/compliance.ts`
 
 **File Content:**
+
 ```typescript
 // [P0][APP][CODE] Compliance
 // Tags: P0, APP, CODE
@@ -22818,6 +23248,7 @@ export type ComplianceDoc = z.infer<typeof ComplianceDocSchema>;
 
 
 ## Refactor: packages/types/src/compliance/adminResponsibilityForm.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -22825,6 +23256,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `packages/types/src/compliance/adminResponsibilityForm.ts`
 
 **File Content:**
+
 ```typescript
 // [P1][INTEGRITY][SCHEMA] Admin Responsibility Form schema
 // Tags: P1, INTEGRITY, SCHEMA, ZOD, COMPLIANCE
@@ -22890,6 +23322,7 @@ export default AdminResponsibilityFormSchema;
 
 
 ## Refactor: packages/types/src/compliance/index.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -22897,6 +23330,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `packages/types/src/compliance/index.ts`
 
 **File Content:**
+
 ```typescript
 //[P1][TYPES][BARREL] Compliance barrel export (v14.0.0)
 // Tags: barrel, exports, types
@@ -22912,6 +23346,7 @@ export * from "./adminResponsibilityForm";
 
 
 ## Refactor: packages/types/src/corporates.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -22919,6 +23354,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `packages/types/src/corporates.ts`
 
 **File Content:**
+
 ```typescript
 // [P0][SECURITY][CODE] Corporates
 // Tags: P0, SECURITY, CODE
@@ -23010,6 +23446,7 @@ export type CorporateQuery = z.infer<typeof CorporateQuerySchema>;
 
 
 ## Refactor: packages/types/src/errors.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -23017,6 +23454,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `packages/types/src/errors.ts`
 
 **File Content:**
+
 ```typescript
 // [P2][APP][CODE] Errors
 // Tags: P2, APP, CODE
@@ -23065,6 +23503,7 @@ export type ErrorResponse = z.infer<typeof ErrorResponseSchema>;
 
 
 ## Refactor: packages/types/src/events.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -23072,6 +23511,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `packages/types/src/events.ts`
 
 **File Content:**
+
 ```typescript
 // [P2][APP][CODE] Events
 // Tags: P2, APP, CODE
@@ -23146,6 +23586,7 @@ export type NewEvent = z.infer<typeof NewEventSchema>;
 
 
 ## Refactor: packages/types/src/index.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -23153,6 +23594,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `packages/types/src/index.ts`
 
 **File Content:**
+
 ```typescript
 // [P1][INTEGRITY][SCHEMA] Package types index
 // Tags: P1, INTEGRITY, SCHEMA, INDEX
@@ -23189,6 +23631,7 @@ export * as compliance from "./compliance";
 
 
 ## Refactor: packages/types/src/join-tokens.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -23196,6 +23639,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `packages/types/src/join-tokens.ts`
 
 **File Content:**
+
 ```typescript
 // [P1][INTEGRITY][SCHEMA] Join tokens schema
 // Tags: P1, INTEGRITY, SCHEMA, ZOD, JOIN_TOKENS
@@ -23288,6 +23732,7 @@ export type ListJoinTokensQuery = z.infer<typeof ListJoinTokensQuerySchema>;
 
 
 ## Refactor: packages/types/src/links/corpOrgLinks.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -23295,6 +23740,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `packages/types/src/links/corpOrgLinks.ts`
 
 **File Content:**
+
 ```typescript
 // [P1][INTEGRITY][SCHEMA] Corporate -> Organization link schemas (v14)
 // Tags: P1, INTEGRITY, SCHEMA, ZOD, LINKS
@@ -23341,6 +23787,7 @@ export default CorpOrgLinkSchema;
 
 
 ## Refactor: packages/types/src/links/corpOrgLinks.v14.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -23348,6 +23795,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `packages/types/src/links/corpOrgLinks.v14.ts`
 
 **File Content:**
+
 ```typescript
 // [P2][APP][CODE] CorpOrgLinks V14
 // Tags: P2, APP, CODE
@@ -23356,6 +23804,7 @@ Refactor this file to be 100% compliant with all project standards.
 
 
 ## Refactor: packages/types/src/links/index.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -23363,6 +23812,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `packages/types/src/links/index.ts`
 
 **File Content:**
+
 ```typescript
 //[P1][TYPES][BARREL] Links barrel export (v14.0.0)
 // Tags: barrel, exports, types
@@ -23379,6 +23829,7 @@ export * from "./orgVenueAssignments";
 
 
 ## Refactor: packages/types/src/links/orgVenueAssignments.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -23386,6 +23837,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `packages/types/src/links/orgVenueAssignments.ts`
 
 **File Content:**
+
 ```typescript
 // [P1][INTEGRITY][SCHEMA] Organization -> Venue assignment link schemas (v14)
 // Tags: P1, INTEGRITY, SCHEMA, ZOD, LINKS
@@ -23425,6 +23877,7 @@ export default OrgVenueAssignmentSchema;
 
 
 ## Refactor: packages/types/src/memberships.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -23432,6 +23885,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `packages/types/src/memberships.ts`
 
 **File Content:**
+
 ```typescript
 // [P1][INTEGRITY][SCHEMA] Memberships schema
 // Tags: P1, INTEGRITY, SCHEMA, ZOD, MEMBERSHIPS
@@ -23506,6 +23960,7 @@ export type ListMembershipsQuery = z.infer<typeof ListMembershipsQuerySchema>;
 
 
 ## Refactor: packages/types/src/messages.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -23513,6 +23968,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `packages/types/src/messages.ts`
 
 **File Content:**
+
 ```typescript
 // [P2][APP][CODE] Messages
 // Tags: P2, APP, CODE
@@ -23560,6 +24016,7 @@ export type Message = z.infer<typeof MessageSchema>;
 
 
 ## Refactor: packages/types/src/networks.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -23567,6 +24024,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `packages/types/src/networks.ts`
 
 **File Content:**
+
 ```typescript
 // [P1][TENANCY][SCHEMA] Network schema (single canonical export)
 import { z } from "zod";
@@ -23655,6 +24113,7 @@ export default NetworkSchema;
 
 
 ## Refactor: packages/types/src/onboarding.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -23662,6 +24121,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `packages/types/src/onboarding.ts`
 
 **File Content:**
+
 ```typescript
 // [P2][SCHEMA][ONBOARDING] Onboarding validation schemas
 // Tags: P2, SCHEMA, ONBOARDING, ZOD
@@ -23727,6 +24187,7 @@ export type OnboardingState = z.infer<typeof OnboardingStateSchema>;
 
 
 ## Refactor: packages/types/src/orgs.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -23734,6 +24195,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `packages/types/src/orgs.ts`
 
 **File Content:**
+
 ```typescript
 // [P1][INTEGRITY][SCHEMA] Organization schemas
 // Tags: P1, INTEGRITY, SCHEMA, ZOD, ORGANIZATIONS
@@ -23874,6 +24336,7 @@ export type ListOrganizationsQuery = z.infer<typeof ListOrganizationsQuerySchema
 
 
 ## Refactor: packages/types/src/positions.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -23881,6 +24344,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `packages/types/src/positions.ts`
 
 **File Content:**
+
 ```typescript
 // [P1][INTEGRITY][SCHEMA] Positions schema
 // Tags: P1, INTEGRITY, SCHEMA, ZOD, POSITIONS
@@ -23976,6 +24440,7 @@ export type ListPositionsQuery = z.infer<typeof ListPositionsQuerySchema>;
 
 
 ## Refactor: packages/types/src/rbac.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -23983,6 +24448,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `packages/types/src/rbac.ts`
 
 **File Content:**
+
 ```typescript
 // [P0][RBAC][CODE] Rbac
 // Tags: P0, RBAC, CODE
@@ -24014,6 +24480,7 @@ export type MembershipClaims = z.infer<typeof MembershipClaimsSchema>;
 
 
 ## Refactor: packages/types/src/receipts.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -24021,6 +24488,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `packages/types/src/receipts.ts`
 
 **File Content:**
+
 ```typescript
 // [P2][APP][CODE] Receipts
 // Tags: P2, APP, CODE
@@ -24061,6 +24529,7 @@ export type Receipt = z.infer<typeof ReceiptSchema>;
 
 
 ## Refactor: packages/types/src/schedules.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -24068,6 +24537,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `packages/types/src/schedules.ts`
 
 **File Content:**
+
 ```typescript
 // [P1][INTEGRITY][SCHEMA] Schedule schemas
 // Tags: P1, INTEGRITY, SCHEMA, ZOD, SCHEDULES
@@ -24220,6 +24690,7 @@ export type ListSchedulesQuery = z.infer<typeof ListSchedulesQuerySchema>;
 
 
 ## Refactor: packages/types/src/shifts.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -24227,6 +24698,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `packages/types/src/shifts.ts`
 
 **File Content:**
+
 ```typescript
 // [P1][INTEGRITY][SCHEMA] Shifts schema
 // Tags: P1, INTEGRITY, SCHEMA, ZOD, SHIFTS
@@ -24376,6 +24848,7 @@ export type ListShiftsQuery = z.infer<typeof ListShiftsQuerySchema>;
 
 
 ## Refactor: packages/types/src/venues.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -24383,6 +24856,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `packages/types/src/venues.ts`
 
 **File Content:**
+
 ```typescript
 // [P1][INTEGRITY][SCHEMA] Venues schema
 // Tags: P1, INTEGRITY, SCHEMA, ZOD, VENUES
@@ -24497,6 +24971,7 @@ export type ListVenuesQuery = z.infer<typeof ListVenuesQuerySchema>;
 
 
 ## Refactor: packages/types/src/widgets.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -24504,6 +24979,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `packages/types/src/widgets.ts`
 
 **File Content:**
+
 ```typescript
 // [P2][APP][CODE] Widgets
 // Tags: P2, APP, CODE
@@ -24534,6 +25010,7 @@ export type Widget = z.infer<typeof WidgetSchema>;
 
 
 ## Refactor: packages/types/src/zones.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -24541,6 +25018,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `packages/types/src/zones.ts`
 
 **File Content:**
+
 ```typescript
 // [P1][INTEGRITY][SCHEMA] Zones schema
 // Tags: P1, INTEGRITY, SCHEMA, ZOD, ZONES
@@ -24640,6 +25118,7 @@ export type ListZonesQuery = z.infer<typeof ListZonesQuerySchema>;
 
 
 ## Refactor: packages/types/tsconfig.json
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -24647,6 +25126,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `packages/types/tsconfig.json`
 
 **File Content:**
+
 ```typescript
 {
   "extends": "../../tsconfig.json",
@@ -24663,6 +25143,7 @@ Refactor this file to be 100% compliant with all project standards.
 
 
 ## Refactor: packages/ui/src/Button.tsx
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -24670,6 +25151,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `packages/ui/src/Button.tsx`
 
 **File Content:**
+
 ```typescript
 // [P2][UI][CODE] Button
 // Tags: P2, UI, CODE
@@ -24719,6 +25201,7 @@ export function Button({
 
 
 ## Refactor: packages/ui/src/Card.tsx
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -24726,6 +25209,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `packages/ui/src/Card.tsx`
 
 **File Content:**
+
 ```typescript
 // [P2][UI][CODE] Card
 // Tags: P2, UI, CODE
@@ -24778,6 +25262,7 @@ export function CardContent({ children, className }: CardContentProps) {
 
 
 ## Refactor: packages/ui/src/Input.tsx
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -24785,6 +25270,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `packages/ui/src/Input.tsx`
 
 **File Content:**
+
 ```typescript
 // [P2][UI][CODE] Input
 // Tags: P2, UI, CODE
@@ -24821,6 +25307,7 @@ Input.displayName = "Input";
 
 
 ## Refactor: packages/ui/src/Modal.tsx
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -24828,6 +25315,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `packages/ui/src/Modal.tsx`
 
 **File Content:**
+
 ```typescript
 // [P2][UI][CODE] Modal
 // Tags: P2, UI, CODE
@@ -24900,6 +25388,7 @@ export function Modal({ isOpen, onClose, title, children, size = "md" }: ModalPr
 
 
 ## Refactor: packages/ui/src/index.ts
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -24907,6 +25396,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `packages/ui/src/index.ts`
 
 **File Content:**
+
 ```typescript
 // [P2][UI][CODE] Index
 // Tags: P2, UI, CODE
@@ -24919,6 +25409,7 @@ export { Modal } from "./Modal";
 
 
 ## Refactor: packages/ui/tsconfig.json
+
 **Copy the following prompt and run it with the `Refactor Compliance Agent`:**
 markdown
 Refactor this file to be 100% compliant with all project standards.
@@ -24926,6 +25417,7 @@ Refactor this file to be 100% compliant with all project standards.
 **File Path:** `packages/ui/tsconfig.json`
 
 **File Content:**
+
 ```typescript
 {
   "extends": "../../tsconfig.base.json",
