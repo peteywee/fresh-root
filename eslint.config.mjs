@@ -79,6 +79,8 @@ export default [
       parserOptions: {
         sourceType: "module",
         ecmaFeatures: { jsx: true },
+        tsconfigRootDir: __dirname,
+        project: null, // Explicitly disable project-based type checking
       },
       ecmaVersion: "latest",
     },
@@ -94,13 +96,7 @@ export default [
   // 5) App source rules - strict type checking
   {
     files: ["apps/web/src/**/*.{ts,tsx}", "apps/web/app/**/*.{ts,tsx}"],
-    ignores: [
-      "**/__tests__/**",
-      "**/*.spec.ts",
-      "**/*.spec.tsx",
-      "**/*.test.ts",
-      "**/*.test.tsx",
-    ],
+    ignores: ["**/__tests__/**", "**/*.spec.ts", "**/*.spec.tsx", "**/*.test.ts", "**/*.test.tsx"],
     languageOptions: {
       parser: tseslint.parser,
       parserOptions: {
@@ -171,6 +167,8 @@ export default [
       parserOptions: {
         sourceType: "module",
         ecmaFeatures: { jsx: true },
+        tsconfigRootDir: __dirname,
+        project: null, // Explicitly disable project-based type checking
       },
       ecmaVersion: "latest",
     },
