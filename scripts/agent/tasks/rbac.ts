@@ -11,7 +11,7 @@ export type OrgRole = z.infer<typeof OrgRole>;
 
 export const UserClaims = z.object({
   uid: z.string(),
-  orgId: z.string(),
+  orgId: z.string().optional(),
   roles: z.array(OrgRole).nonempty()
 });
 export type UserClaims = z.infer<typeof UserClaims>;
@@ -19,9 +19,9 @@ export type UserClaims = z.infer<typeof UserClaims>;
 export const Membership = z.object({
   orgId: z.string(),
   userId: z.string(),
-  roles: z.array(OrgRole),
-  createdAt: z.number(),
-  updatedAt: z.number()
+  roles: z.array(OrgRole).nonempty(),
+  createdAt: z.number().int().nonnegative(),
+  updatedAt: z.number().int().nonnegative()
 });
 export type Membership = z.infer<typeof Membership>;
 `;

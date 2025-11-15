@@ -69,7 +69,9 @@ export function setCSRFCookie(
   response.headers.set("Set-Cookie", cookieValue);
 }
 
-export function csrfProtection<Ctx extends Record<string, unknown> = Record<string, unknown>>(config: CSRFConfig = {}) {
+export function csrfProtection<Ctx extends Record<string, unknown> = Record<string, unknown>>(
+  config: CSRFConfig = {},
+) {
   const fullConfig = { ...DEFAULT_CONFIG, ...config };
   type C = Ctx & { params: Record<string, string> };
   return function (handler: (request: NextRequest, context: C) => Promise<NextResponse>) {

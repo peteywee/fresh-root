@@ -5,7 +5,11 @@ import React, { useCallback, useEffect, useState, Suspense } from "react";
 import { isSignInWithEmailLink } from "firebase/auth";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { startGooglePopup, establishServerSession, sendEmailLinkRobust } from "../../../src/lib/auth-helpers";
+import {
+  startGooglePopup,
+  establishServerSession,
+  sendEmailLinkRobust,
+} from "../../../src/lib/auth-helpers";
 import { auth } from "../../lib/firebaseClient";
 
 const LoginForm = React.memo(() => {

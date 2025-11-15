@@ -112,41 +112,39 @@ export interface AuthContext {
   requireManager(): Promise<UserToken>;
 }
 `;
-export async function ensureRules({ root, force, planOnly, }) {
-    const paths = [
-        ["firestore.rules", FIRESTORE_RULES],
-        ["firestore.indexes.json", FIRESTORE_INDEXES],
-        ["services/api/src/cache/provider.ts", CACHE_PROVIDER],
-        ["services/api/src/auth/types.ts", AUTH_IFACE],
-    ];
-    for (const [rel, content] of paths) {
-        const file = join(root, rel);
-        if (!planOnly) {
-            const dir = dirname(file);
-            if (!existsSync(dir))
-                mkdirSync(dir, { recursive: true });
-            if (!existsSync(file) || force) {
-                await writeFile(file, content, "utf8");
-            }
-        }
+export async function ensureRules({ root, force, planOnly }) {
+  const paths = [
+    ["firestore.rules", FIRESTORE_RULES],
+    ["firestore.indexes.json", FIRESTORE_INDEXES],
+    ["services/api/src/cache/provider.ts", CACHE_PROVIDER],
+    ["services/api/src/auth/types.ts", AUTH_IFACE],
+  ];
+  for (const [rel, content] of paths) {
+    const file = join(root, rel);
+    if (!planOnly) {
+      const dir = dirname(file);
+      if (!existsSync(dir)) mkdirSync(dir, { recursive: true });
+      if (!existsSync(file) || force) {
+        await writeFile(file, content, "utf8");
+      }
     }
-    // Ensure a README for rules
-    const readmePath = join(root, "tests/rules/README.md");
-    const readme = `# Firestore Rules Tests
+  }
+  // Ensure a README for rules
+  const readmePath = join(root, "tests/rules/README.md");
+  const readme = `# Firestore Rules Tests
 
 - Uses @firebase/rules-unit-testing
 - See \`schedules.test.ts\` for patterns
 - Run: \`pnpm test:rules\`
 `;
-    if (!planOnly) {
-        const dir = dirname(readmePath);
-        if (!existsSync(dir))
-            mkdirSync(dir, { recursive: true });
-        await writeFile(readmePath, readme, "utf8");
-    }
-    // Scaffold a sample test
-    const testPath = join(root, "tests/rules/schedules.test.ts");
-    const testContent = `import { initializeTestEnvironment, assertFails, assertSucceeds } from "@firebase/rules-unit-testing";
+  if (!planOnly) {
+    const dir = dirname(readmePath);
+    if (!existsSync(dir)) mkdirSync(dir, { recursive: true });
+    await writeFile(readmePath, readme, "utf8");
+  }
+  // Scaffold a sample test
+  const testPath = join(root, "tests/rules/schedules.test.ts");
+  const testContent = `import { initializeTestEnvironment, assertFails, assertSucceeds } from "@firebase/rules-unit-testing";
 import { readFile } from "node:fs/promises";
 import { setDoc, doc, getDoc, collection, addDoc } from "firebase/firestore";
 import { getFirestore, connectFirestoreEmulator } from "firebase/firestore";
@@ -186,11 +184,9 @@ test("staff cannot write schedule", async () => {
   await expect(setDoc(ref, { orgId: "orgA", startDate: 1 })).rejects.toBeTruthy();
 });
 `;
-    if (!planOnly) {
-        const dir = dirname(testPath);
-        if (!existsSync(dir))
-            mkdirSync(dir, { recursive: true });
-        if (!existsSync(testPath) || force)
-            await writeFile(testPath, testContent, "utf8");
-    }
+  if (!planOnly) {
+    const dir = dirname(testPath);
+    if (!existsSync(dir)) mkdirSync(dir, { recursive: true });
+    if (!existsSync(testPath) || force) await writeFile(testPath, testContent, "utf8");
+  }
 }

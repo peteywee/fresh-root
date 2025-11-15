@@ -17,11 +17,7 @@
     },
     "typeRoots": ["./types", "./node_modules/@types"]
   },
-  "include": [
-    "types/**/*.d.ts",
-    "scripts/refactor/**/*.mts",
-    "scripts/agent/**/*.mts"
-  ],
+  "include": ["types/**/*.d.ts", "scripts/refactor/**/*.mts", "scripts/agent/**/*.mts"],
   "exclude": [
     "node_modules",
     "tests",

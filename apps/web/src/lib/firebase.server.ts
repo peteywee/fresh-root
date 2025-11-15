@@ -12,9 +12,12 @@ function initAdmin() {
       const parsed = JSON.parse(Buffer.from(saB64, "base64").toString("utf8")) as unknown;
       if (typeof parsed === "object" && parsed !== null) {
         const saJson = parsed as Record<string, unknown>;
-        const projectId = typeof saJson["project_id"] === "string" ? saJson["project_id"] : undefined;
-        const clientEmail = typeof saJson["client_email"] === "string" ? saJson["client_email"] : undefined;
-        const privateKey = typeof saJson["private_key"] === "string" ? saJson["private_key"] : undefined;
+        const projectId =
+          typeof saJson["project_id"] === "string" ? saJson["project_id"] : undefined;
+        const clientEmail =
+          typeof saJson["client_email"] === "string" ? saJson["client_email"] : undefined;
+        const privateKey =
+          typeof saJson["private_key"] === "string" ? saJson["private_key"] : undefined;
         if (privateKey && clientEmail && projectId) {
           admin.initializeApp({
             credential: admin.credential.cert({ projectId, clientEmail, privateKey }),

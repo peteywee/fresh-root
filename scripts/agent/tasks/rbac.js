@@ -24,64 +24,60 @@ export const Membership = z.object({
 });
 export type Membership = z.infer<typeof Membership>;
 `;
-export async function ensureRBAC({ root, force, planOnly, }) {
-    const target = join(root, "packages/types/src/rbac.ts");
-    const idx = join(root, "packages/types/src/index.ts");
-    const write = async (file, content) => {
-        if (!existsSync(dirname(file)))
-            mkdirSync(dirname(file), { recursive: true });
-        if (planOnly)
-            return;
-        await writeFile(file, content, "utf8");
+export async function ensureRBAC({ root, force, planOnly }) {
+  const target = join(root, "packages/types/src/rbac.ts");
+  const idx = join(root, "packages/types/src/index.ts");
+  const write = async (file, content) => {
+    if (!existsSync(dirname(file))) mkdirSync(dirname(file), { recursive: true });
+    if (planOnly) return;
+    await writeFile(file, content, "utf8");
+  };
+  if (!existsSync(target) || force) {
+    await write(target, RBAC_CONTENT);
+  }
+  // Ensure index export
+  let indexContent = "";
+  if (existsSync(idx)) {
+    indexContent = await readFile(idx, "utf8");
+    if (!indexContent.includes(`export * from "./rbac";`)) {
+      indexContent += `\nexport * from "./rbac";\n`;
+      if (!planOnly) await writeFile(idx, indexContent, "utf8");
+    }
+  } else {
+    indexContent = `export * from "./rbac";\n`;
+    await write(idx, indexContent);
+  }
+  // Ensure package.json for types package
+  const pkg = join(root, "packages/types/package.json");
+  if (!existsSync(pkg) || force) {
+    const content = {
+      name: "@fresh-schedules/types",
+      version: "0.0.0",
+      private: true,
+      type: "module",
+      main: "./dist/index.js",
+      types: "./dist/index.d.ts",
+      scripts: {
+        build: "tsc -p tsconfig.json",
+      },
     };
-    if (!existsSync(target) || force) {
-        await write(target, RBAC_CONTENT);
-    }
-    // Ensure index export
-    let indexContent = "";
-    if (existsSync(idx)) {
-        indexContent = await readFile(idx, "utf8");
-        if (!indexContent.includes(`export * from "./rbac";`)) {
-            indexContent += `\nexport * from "./rbac";\n`;
-            if (!planOnly)
-                await writeFile(idx, indexContent, "utf8");
-        }
-    }
-    else {
-        indexContent = `export * from "./rbac";\n`;
-        await write(idx, indexContent);
-    }
-    // Ensure package.json for types package
-    const pkg = join(root, "packages/types/package.json");
-    if (!existsSync(pkg) || force) {
-        const content = {
-            name: "@fresh-schedules/types",
-            version: "0.0.0",
-            private: true,
-            type: "module",
-            main: "./dist/index.js",
-            types: "./dist/index.d.ts",
-            scripts: {
-                build: "tsc -p tsconfig.json",
-            },
-        };
-        await write(pkg, JSON.stringify(content, null, 2));
-    }
-    // Ensure tsconfig
-    const tsconfig = join(root, "packages/types/tsconfig.json");
-    if (!existsSync(tsconfig) || force) {
-        const content = {
-            compilerOptions: {
-                target: "ES2022",
-                module: "ESNext",
-                declaration: true,
-                outDir: "./dist",
-                rootDir: "./src",
-                strict: true,
-                moduleResolution: "Node",
-            },
-            include: ["src"],
-        };
-        await write(tsconfig, JSON.stringify(content, null, 2));
-    }
+    await write(pkg, JSON.stringify(content, null, 2));
+  }
+  // Ensure tsconfig
+  const tsconfig = join(root, "packages/types/tsconfig.json");
+  if (!existsSync(tsconfig) || force) {
+    const content = {
+      compilerOptions: {
+        target: "ES2022",
+        module: "ESNext",
+        declaration: true,
+        outDir: "./dist",
+        rootDir: "./src",
+        strict: true,
+        moduleResolution: "Node",
+      },
+      include: ["src"],
+    };
+    await write(tsconfig, JSON.stringify(content, null, 2));
+  }
 }

@@ -13,75 +13,79 @@ import { ensureRules } from "./tasks/rules.js";
 import { log, ok, warn, err } from "./lib/logger.js";
 const argv = process.argv.slice(2);
 const ArgSchema = z.object({
-    issue: z.string().default("21"),
-    force: z.boolean().default(false),
-    planOnly: z.boolean().default(false),
+  issue: z.string().default("21"),
+  force: z.boolean().default(false),
+  planOnly: z.boolean().default(false),
 });
 function parseArgs() {
-    let issue = "21", force = false, planOnly = false;
-    for (let i = 0; i < argv.length; i++) {
-        const a = argv[i];
-        if (a === "--force")
-            force = true;
-        else if (a === "--plan-only")
-            planOnly = true;
-        else if (a === "--issue") {
-            issue = argv[++i];
-        }
+  let issue = "21",
+    force = false,
+    planOnly = false;
+  for (let i = 0; i < argv.length; i++) {
+    const a = argv[i];
+    if (a === "--force") force = true;
+    else if (a === "--plan-only") planOnly = true;
+    else if (a === "--issue") {
+      issue = argv[++i];
     }
-    return ArgSchema.parse({ issue, force, planOnly });
+  }
+  return ArgSchema.parse({ issue, force, planOnly });
 }
 async function gitStatusShort() {
-    const { stdout } = await execa("git", ["status", "-s"]);
-    return stdout;
+  const { stdout } = await execa("git", ["status", "-s"]);
+  return stdout;
 }
 async function gitRoot() {
-    const { stdout } = await execa("git", ["rev-parse", "--show-toplevel"]);
-    return stdout.trim();
+  const { stdout } = await execa("git", ["rev-parse", "--show-toplevel"]);
+  return stdout.trim();
 }
 async function appendIfMissing(file, content) {
-    const exists = existsSync(file);
-    if (!exists) {
-        mkdirSync(dirname(file), { recursive: true });
-        writeFileSync(file, content, "utf8");
-        return "created";
-    }
-    const prev = await readFile(file, "utf8");
-    if (prev === content)
-        return "unchanged";
-    await writeFile(file, content, "utf8");
-    return "updated";
+  const exists = existsSync(file);
+  if (!exists) {
+    mkdirSync(dirname(file), { recursive: true });
+    writeFileSync(file, content, "utf8");
+    return "created";
+  }
+  const prev = await readFile(file, "utf8");
+  if (prev === content) return "unchanged";
+  await writeFile(file, content, "utf8");
+  return "updated";
 }
 async function main() {
-    const { issue, force, planOnly } = parseArgs();
-    log(`Repo agent started. Issue #${issue} | planOnly=${planOnly} | force=${force}`);
-    const root = await gitRoot();
-    log(`git root: ${root}`);
-    // 1) Plan & validate structure
-    const structure = await ensureMonorepo({ root, planOnly });
-    ok(`Monorepo structure OK`);
-    log(plannedChangesSummary(structure));
-    // 2) RBAC schemas
-    await ensureRBAC({ root, force, planOnly });
-    ok(`RBAC schemas ensured`);
-    // 3) Firestore rules & indexes
-    await ensureRules({ root, force, planOnly });
-    ok(`Firestore rules & indexes ensured`);
-    // 4) Install if needed (best-effort)
-    if (!planOnly) {
-        await pRetry(async () => {
-            await execa("pnpm", ["install"], { stdio: "inherit" });
-        }, { retries: 1 }).catch(() => warn("pnpm install failed (non-fatal)"));
-    }
-    // 5) Typecheck and rules tests (skip in plan-only mode)
-    if (!planOnly) {
-        await execa("pnpm", ["-s", "typecheck"], { stdio: "inherit" });
-        // Rules tests require emulators - run but don't fail if emulators aren't available
-        await execa("pnpm", ["-s", "test:rules"], { stdio: "inherit" }).catch(() => warn("Rules tests failed (may need emulators running)"));
-    }
-    ok("Repo agent completed successfully.");
+  const { issue, force, planOnly } = parseArgs();
+  log(`Repo agent started. Issue #${issue} | planOnly=${planOnly} | force=${force}`);
+  const root = await gitRoot();
+  log(`git root: ${root}`);
+  // 1) Plan & validate structure
+  const structure = await ensureMonorepo({ root, planOnly });
+  ok(`Monorepo structure OK`);
+  log(plannedChangesSummary(structure));
+  // 2) RBAC schemas
+  await ensureRBAC({ root, force, planOnly });
+  ok(`RBAC schemas ensured`);
+  // 3) Firestore rules & indexes
+  await ensureRules({ root, force, planOnly });
+  ok(`Firestore rules & indexes ensured`);
+  // 4) Install if needed (best-effort)
+  if (!planOnly) {
+    await pRetry(
+      async () => {
+        await execa("pnpm", ["install"], { stdio: "inherit" });
+      },
+      { retries: 1 },
+    ).catch(() => warn("pnpm install failed (non-fatal)"));
+  }
+  // 5) Typecheck and rules tests (skip in plan-only mode)
+  if (!planOnly) {
+    await execa("pnpm", ["-s", "typecheck"], { stdio: "inherit" });
+    // Rules tests require emulators - run but don't fail if emulators aren't available
+    await execa("pnpm", ["-s", "test:rules"], { stdio: "inherit" }).catch(() =>
+      warn("Rules tests failed (may need emulators running)"),
+    );
+  }
+  ok("Repo agent completed successfully.");
 }
 main().catch((e) => {
-    err(e?.stack || String(e));
-    process.exit(1);
+  err(e?.stack || String(e));
+  process.exit(1);
 });
