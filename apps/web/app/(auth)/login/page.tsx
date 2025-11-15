@@ -5,10 +5,7 @@ import React, { useCallback, useEffect, useState, Suspense } from "react";
 import { isSignInWithEmailLink } from "firebase/auth";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
-import {
-  startGooglePopup,
-  establishServerSession,
-} from "../../../src/lib/auth-helpers";
+import { startGooglePopup, establishServerSession, sendEmailLinkRobust } from "../../../src/lib/auth-helpers";
 import { auth } from "../../lib/firebaseClient";
 
 const LoginForm = React.memo(() => {
@@ -117,7 +114,7 @@ const LoginForm = React.memo(() => {
 
         <button
           type="button"
-          onClick={onGoogle}
+          onClick={() => void onGoogle()}
           aria-label="Continue with Google"
           className="btn-primary mb-4 flex w-full items-center justify-center gap-2"
         >
@@ -148,7 +145,7 @@ const LoginForm = React.memo(() => {
           <div className="h-px flex-1 bg-surface-accent" />
         </div>
 
-        <form onSubmit={onSendMagicLink} className="space-y-4">
+        <form onSubmit={(e) => void onSendMagicLink(e)} className="space-y-4">
           <input
             type="email"
             value={email}

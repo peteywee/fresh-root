@@ -4,21 +4,21 @@
 Provide an authoritative, regenerable catalog of domain schemas (Zod) exported from `@fresh-schedules/types`.  
 This enables strict traceability: **Domain Schema ↔ Rules ↔ API Routes ↔ UI Forms**.
 
-**Source of Truth**
+## Source of Truth
 
 - `packages/types/src/**`
 
-**Included**
+## Included
 
 - All declarations matching:  
   `export const <Name>Schema = z.object(...)`  
   and unions/arrays composed of Zod objects (e.g., `z.union([z.object(...), ...])`, `z.array(z.object(...))`).
 
-**Output**
+## Output
 
 - `docs/blocks/SCHEMA_CATALOG.md` (generated)
 
-**Rules**
+## Rules
 
 1. All externally used entities MUST have Zod schemas in the Domain (Layer 00).
 2. Names MUST follow `<Entity>Schema` (e.g., `OrgSchema`, `AttendanceRecordSchema`).
@@ -27,7 +27,7 @@ This enables strict traceability: **Domain Schema ↔ Rules ↔ API Routes ↔ U
    - `docs/migration/v15/PHASE2_SCHEMA_CROSSWALK.md`
    - Firestore rules & rules tests
 
-**Generation**
+## Generation
 
 - Run locally: `pnpm tsx scripts/gen_schema_catalog.ts`
 - CI MUST regenerate and diff this document on PRs to prevent drift.
@@ -41,7 +41,7 @@ The generator writes a Markdown table:
 
 > Top-Level Fields are best-effort static extraction; nested shapes are summarized.
 
-**Related Documents**
+## Related Documents
 
 - Layer contract: `docs/layers/LAYER_00_DOMAIN_KERNEL.md`
 - Rules parity & tests: `packages/rules-tests/**`

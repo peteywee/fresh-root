@@ -1,11 +1,9 @@
 // [P2][APP][CODE] Page page component
 // Tags: P2, APP, CODE
 "use client";
-
 import React from "react";
-
-import ProtectedRoute from "../../components/ProtectedRoute";
 import { useCreateItem } from "../../lib/useCreateItem";
+import ProtectedRoute from "../../components/ProtectedRoute";
 
 export default function ProtectedDemoPage() {
   const createItem = useCreateItem();

@@ -6,7 +6,7 @@ import { join, dirname } from "node:path";
 
 const RBAC_CONTENT = `import { z } from "zod";
 
-export const OrgRole = z.enum(["org_owner","admin","manager","scheduler","staff"]);
+export const OrgRole = z.enum(["org_owner","admin","manager","scheduler","staff"] as const);
 export type OrgRole = z.infer<typeof OrgRole>;
 
 export const UserClaims = z.object({
@@ -53,7 +53,8 @@ export async function ensureRBAC({
     indexContent = await readFile(idx, "utf8");
     if (!indexContent.includes(`export * from "./rbac";`)) {
       indexContent += `\nexport * from "./rbac";\n`;
-      if (!planOnly) await writeFile(idx, indexContent, "utf8");
+      // use the helper to ensure planOnly and directory creation are honored
+      await write(idx, indexContent);
     }
   } else {
     indexContent = `export * from "./rbac";\n`;

@@ -51,4 +51,4 @@ Telemetry
 
 Set OTEL resource attrs via env: service.name=apps-web, service.version=<git SHA>.
 
-Wrap top-level handler with traceFn("route:<name>:<verb>").
+Wrap top-level handler with traceFn("route::").

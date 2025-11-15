@@ -1,10 +1,7 @@
 //[P1][API][ONBOARDING] Admin Form Endpoint (server)
 //[P1][API][ONBOARDING] Admin Form Endpoint (server)
-import { traceFn } from "@/app/api/_shared/otel";
 //[P1][API][ONBOARDING] Admin Form Endpoint (server)
-import { withGuards } from "@/app/api/_shared/security";
 //[P1][API][ONBOARDING] Admin Form Endpoint (server)
-import { jsonOk, jsonError } from "@/app/api/_shared/response";
 // Tags: api, onboarding, admin-form, compliance
 
 import {

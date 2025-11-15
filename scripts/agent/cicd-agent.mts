@@ -78,7 +78,16 @@ const REQUIRED_WORKFLOWS: Record<string, Workflow> = {
     name: "CI (Main)",
     path: "ci.yml",
     triggers: ["push", "pull_request"],
-    steps: ["checkout", "setup-pnpm", "setup-node", "install", "lint", "typecheck", "test-rules", "test-api"],
+    steps: [
+      "checkout",
+      "setup-pnpm",
+      "setup-node",
+      "install",
+      "lint",
+      "typecheck",
+      "test-rules",
+      "test-api",
+    ],
     required: true,
   },
   pr: {

@@ -93,7 +93,7 @@ Connects only to the API Edge via HTTP or typed client wrappers.
 | ---------- | -------------- | ----------------- |
 | YYYY-MM-DD | Patrick Craven | Initial L04 guide |
 
-# LAYER_04_UI_UX
+<!--# LAYER_04_UI_UX (duplicate section removed)-->
 
 **Purpose**
 The UI/UX layer renders the **user-facing experience** of Fresh Schedules.
@@ -110,7 +110,7 @@ All business rules and persistence belong in lower layers.
 
 ---
 
-**Scope**
+## Scope
 
 This layer includes:
 
@@ -139,7 +139,7 @@ Not in scope:
 
 ---
 
-**Inputs**
+## Inputs
 
 UI/UX consumes:
 
@@ -156,7 +156,7 @@ UI/UX consumes:
 
 ---
 
-**Outputs**
+## Outputs
 
 UI/UX produces:
 
@@ -177,7 +177,7 @@ The outputs of this layer are **experiences**, not data models.
 
 ---
 
-**Dependencies**
+## Dependencies
 
 Allowed dependencies:
 
@@ -198,7 +198,7 @@ The UI must not know **how** data is stored or secured; only _what_ data is and 
 
 ---
 
-**Consumers**
+## Consumers
 
 UI/UX is consumed by:
 
@@ -209,7 +209,7 @@ No code layer consumes UI/UX; it is the final surface.
 
 ---
 
-**Invariants**
+## Invariants
 
 1. **No Business Logic**
    - Calculations for labor budgets, rule enforcement, or tenant separation must not live here.
@@ -237,36 +237,42 @@ No code layer consumes UI/UX; it is the final surface.
 
 ---
 
-**Change Log**
+## Change Log
 
 | Date       | Author         | Change                       |
 | ---------- | -------------- | ---------------------------- |
 | YYYY-MM-DD | Patrick Craven | Initial v15 layer definition |
 
-# LAYER_04_UI_UX
+## LAYER_04_UI_UX (continued)
 
 **Purpose**
 Describe exactly why this layer exists and what problems it solves.
 
-**Scope**
+### Scope
+
 Which directories, modules, or files belong to it.
 
-**Inputs**
+### Inputs
+
 What it consumes (events, requests, data types).
 
-**Outputs**
+### Outputs
+
 What it produces (domain entities, responses, UI state).
 
-**Dependencies**
+### Dependencies
+
 Which other layers or systems it depends on (always downward only).
 
-**Consumers**
+### Consumers
+
 Which layers depend on this layer.
 
-**Invariants**
+### Invariants
+
 Rules that must never break inside this layer.
 
-**Change Log**
+## Change Log (continued)
 
 | Date       | Author         | Change        |
 | ---------- | -------------- | ------------- |

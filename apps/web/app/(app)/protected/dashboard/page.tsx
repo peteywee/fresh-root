@@ -1,9 +1,7 @@
 // [P2][APP][CODE] Page page component
 // Tags: P2, APP, CODE
 "use client";
-
 import React, { useCallback, useState } from "react";
-
 import { publishSchedule } from "../../../../src/lib/api/schedules";
 import Inbox from "../../../components/Inbox";
 import MonthView from "../../../components/MonthView";

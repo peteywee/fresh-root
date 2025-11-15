@@ -332,7 +332,7 @@ mkdir -p apps/web/app/api/onboarding/my-action
 touch apps/web/app/api/onboarding/my-action/route.ts
 ````
 
-````
+````text
 
 1. **Add validation schema** to `apps/web/app/api/_shared/validation.ts`:
 

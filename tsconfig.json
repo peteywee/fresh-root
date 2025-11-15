@@ -9,19 +9,34 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "strict": true,
+    "noEmit": true,
+    "allowImportingTsExtensions": true,
     "baseUrl": ".",
     "paths": {
       "@fresh-schedules/types": ["packages/types/src/index.ts"]
     },
     "typeRoots": ["./types", "./node_modules/@types"]
   },
-  "include": ["types/**/*.d.ts"],
+  "include": [
+    "types/**/*.d.ts",
+    "scripts/refactor/**/*.mts",
+    "scripts/agent/**/*.mts"
+  ],
   "exclude": [
     "node_modules",
     "tests",
     "tests/**",
-    "scripts",
-    "scripts/**",
+    "scripts/seed/**",
+    "scripts/ops/**",
+    "scripts/bench/**",
+    "scripts/ci/**",
+    "scripts/cleanup/**",
+    "scripts/gen/**",
+    "scripts/index/**",
+    "scripts/lint/**",
+    "scripts/mcp/**",
+    "scripts/migration/**",
+    "scripts/tests/**",
     "tests/e2e/**",
     "**/__tests__/**",
     "**/*.spec.ts",

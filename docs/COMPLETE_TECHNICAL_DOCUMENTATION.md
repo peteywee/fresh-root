@@ -405,7 +405,7 @@ RUN pnpm fetch --no-optional
 RUN pnpm install -r --offline --no-optional
 \`\`\`
 
-#### Files Changed
+### Files Changed
 
 - `services/api/Dockerfile`
 
@@ -460,7 +460,7 @@ GitHub Actions workflows failed immediately because `pnpm/action-setup@v4` enfor
   version: 9.1.0 # ✅ Exact match
   \`\`\`
 
-#### Files Changed
+### Files Changed
 
 - `.github/workflows/ci.yml`
 - `.github/workflows/eslint-ts-agent.yml`
@@ -1011,7 +1011,7 @@ firestore
 │ ├── createdBy: string
 │ ├── startDate: timestamp
 │ ├── endDate: timestamp
-│ ├── shifts: `array`<Shift>``
+│ ├── shifts: `array```
 │ └── published: boolean
 │
 ├── messages/{messageId}
@@ -1683,7 +1683,7 @@ docker `logs <container-id>` # View logs
 pnpm -r run build # Build all workspaces
 pnpm --filter @fresh-schedules/web dev # Run specific workspace
 pnpm list --depth 0 # List top-level deps
-pnpm `why`<package>`` # Why is package installed
+pnpm `why``` # Why is package installed
 \`\`\`
 
 ### Environment Variables

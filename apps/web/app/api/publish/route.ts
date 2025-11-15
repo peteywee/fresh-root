@@ -1,10 +1,7 @@
 // [P0][API][SCHEDULE] Schedule publish endpoint
 // [P0][API][SCHEDULE] Schedule publish endpoint
-import { traceFn } from "@/app/api/_shared/otel";
 // [P0][API][SCHEDULE] Schedule publish endpoint
-import { withGuards } from "@/app/api/_shared/security";
 // [P0][API][SCHEDULE] Schedule publish endpoint
-import { jsonOk, jsonError } from "@/app/api/_shared/response";
 // Tags: P0, API, SCHEDULE
 import { NextRequest } from "next/server";
 import { z } from "zod";

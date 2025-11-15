@@ -4,14 +4,14 @@
 Define the thin-edge handler pattern: **parse → validate → authorize → app-lib → respond**.
 All `apps/web/app/api/**/route.ts` files MUST follow this standard.
 
-**Layering**
+## Layering
 
 - Handlers live in **Layer 03 – API Edge**.
 - Business logic lives in **Layer 02 – App Libs (`apps/web/src/lib/**`)\*\*.
 - Domain schemas live in **Layer 00 – Domain (`@fresh-schedules/types`)**.
 - Infrastructure helpers (Firebase Admin, env, etc.) are consumed via Layer 01.
 
-**Required Rules**
+## Required Rules
 
 1. Handlers export explicit HTTP methods (`export const GET|POST|... = ...`).
 2. No raw Firebase Admin calls here (go through App Libs).
@@ -19,7 +19,7 @@ All `apps/web/app/api/**/route.ts` files MUST follow this standard.
 4. Map errors to a consistent JSON shape `{ ok: false, error }`.
 5. Keep routes "thin" (prefer ≤ ~60 LOC per method).
 
-**Canonical Handler Template**
+## Canonical Handler Template
 
 ```ts
 // app/api/<segment>/route.ts
@@ -61,7 +61,7 @@ export const DELETE = async (_req: NextRequest) => NextResponse.json({ ok: true 
 export const PATCH = async (_req: NextRequest) => NextResponse.json({ ok: true });
 ```
 
-**Location & References**
+## Location & References
 
 Executable example: `apps/web/app/api/_template/route.ts`
 
@@ -69,7 +69,7 @@ API Catalog: `docs/blocks/BLOCK3_API_REFERENCE.md`
 
 Layer 03 contract: `docs/layers/LAYER_03_API_EDGE.md`
 
-**Enforcement (CI)**
+## Enforcement (CI)
 
 Regenerate API catalog and diff on PRs:
 

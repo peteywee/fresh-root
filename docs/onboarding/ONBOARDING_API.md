@@ -488,7 +488,7 @@ type Event = {
 
 ## State Machine
 
-```
+```text
 [Not Started]
     ↓
 [Profile] → (verify-eligibility)

@@ -173,7 +173,7 @@ Use this table to track implementation status:
 
 Update this doc as pieces go from conceptual → implemented.
 
-# Network Schema & Paths (summary)
+## Network Schema & Paths (summary)
 
 This document summarizes the canonical Network-centric Firestore paths and the primary entities introduced in Project Bible v14.
 

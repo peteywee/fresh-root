@@ -1,10 +1,7 @@
 //[P1][API][ONBOARDING] Activate Network Endpoint
 //[P1][API][ONBOARDING] Activate Network Endpoint
-import { traceFn } from "@/app/api/_shared/otel";
 //[P1][API][ONBOARDING] Activate Network Endpoint
-import { withGuards } from "@/app/api/_shared/security";
 //[P1][API][ONBOARDING] Activate Network Endpoint
-import { jsonOk, jsonError } from "@/app/api/_shared/response";
 // Tags: api, onboarding, network, activate
 
 import { NextResponse } from "next/server";

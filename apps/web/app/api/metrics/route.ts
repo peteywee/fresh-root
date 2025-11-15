@@ -1,10 +1,7 @@
 // [P1][OBSERVABILITY][METRICS] Prometheus-compatible metrics endpoint
 // [P1][OBSERVABILITY][METRICS] Prometheus-compatible metrics endpoint
-import { traceFn } from "@/app/api/_shared/otel";
 // [P1][OBSERVABILITY][METRICS] Prometheus-compatible metrics endpoint
-import { withGuards } from "@/app/api/_shared/security";
 // [P1][OBSERVABILITY][METRICS] Prometheus-compatible metrics endpoint
-import { jsonOk, jsonError } from "@/app/api/_shared/response";
 // Tags: P1, OBSERVABILITY, METRICS
 import { NextResponse } from "next/server";
 

@@ -1,7 +1,6 @@
 // [P1][APP][SERVER] Schedules page server data fetcher
 // Tags: P1, APP, SERVER, SCHEDULES
 import { cookies } from "next/headers";
-
 import { getFirebaseAdminAuth } from "../../../../lib/firebase-admin";
 
 /**

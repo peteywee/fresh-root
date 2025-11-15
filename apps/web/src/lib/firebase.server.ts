@@ -9,18 +9,21 @@ function initAdmin() {
   const saB64 = process.env.FIREBASE_ADMIN_SERVICE_ACCOUNT_B64;
   if (saB64) {
     try {
-      const saJson = JSON.parse(Buffer.from(saB64, "base64").toString("utf8"));
-      const {
-        project_id: projectId,
-        client_email: clientEmail,
-        private_key: privateKey,
-      } = saJson as Record<string, string>;
-      if (privateKey && clientEmail && projectId) {
-        admin.initializeApp({
-          credential: admin.credential.cert({ projectId, clientEmail, privateKey }),
-          projectId,
-        });
-        return admin.app();
+      const parsed = JSON.parse(Buffer.from(saB64, "base64").toString("utf8")) as unknown;
+      if (typeof parsed === "object" && parsed !== null) {
+        const saJson = parsed as Record<string, unknown>;
+        const projectId = typeof saJson["project_id"] === "string" ? saJson["project_id"] : undefined;
+        const clientEmail = typeof saJson["client_email"] === "string" ? saJson["client_email"] : undefined;
+        const privateKey = typeof saJson["private_key"] === "string" ? saJson["private_key"] : undefined;
+        if (privateKey && clientEmail && projectId) {
+          admin.initializeApp({
+            credential: admin.credential.cert({ projectId, clientEmail, privateKey }),
+            projectId,
+          });
+          return admin.app();
+        }
+      } else {
+        console.warn("FIREBASE_ADMIN_SERVICE_ACCOUNT_B64 did not parse to an object.");
       }
     } catch (err) {
       // fall through to other initialization methods and surface a warning below

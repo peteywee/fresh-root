@@ -59,7 +59,7 @@
 
 ### Review & Decide These (6 scripts)
 
-```
+```text
 - "build:agent"      → Still using agent? Keep or remove
 - "run:agent"        → Still using agent? Keep or remove
 - "dev:all"          → API still needed? Keep or consolidate
