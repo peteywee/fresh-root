@@ -25,15 +25,12 @@ import {
   refactorFile,
   generateManifest,
   rollback,
-  generateUnifiedDiff,
-  hashContent,
-  validateLayout,
 } from "./ast-engine.mts";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = path.resolve(__dirname, "../..");
 
-interface DiffReport {
+interface _DiffReport {
   filePath: string;
   changeCount: number;
   changes: Array<{
@@ -145,7 +142,9 @@ async function orchestrate() {
   console.log(`📄 Found ${String(files.length)} files to analyze\n`);
 
   // Refactor each file
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const allChanges: Array<{ filePath: string; changes: any[] }> = [];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const manifesto: any[] = [];
 
   for (const file of files.slice(0, 10)) {

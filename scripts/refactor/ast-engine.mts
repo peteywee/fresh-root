@@ -17,7 +17,6 @@
 
 import fs from "fs/promises";
 import path from "path";
-import { execSync } from "child_process";
 import crypto from "crypto";
 
 // --- TYPES ---
@@ -68,8 +67,8 @@ interface DiffResult {
 // --- CONFIGURATION ---
 const BACKUP_DIR = ".refactor-backups";
 const MANIFEST_FILE = ".refactor-manifest.json";
-const DIFF_DIR = ".refactor-diffs";
-const REPO_ROOT = process.cwd();
+const _DIFF_DIR = ".refactor-diffs";
+const _REPO_ROOT = process.cwd();
 
 // --- HASH & BACKUP UTILITIES ---
 function hashContent(content: string): string {

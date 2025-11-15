@@ -15,27 +15,30 @@ type SimpleRedisClient = {
 // In-memory fallback for local development and builds. Not suitable for production.
 const memoryMap = new Map<string, { count: number; resetAt: number }>();
 const memoryAdapter: SimpleRedisClient = {
-  async incr(key: string) {
+  incr(key: string) {
     const now = Date.now();
     const entry = memoryMap.get(key);
     if (!entry || entry.resetAt < now) {
       const resetAt = now + 60 * 1000;
       memoryMap.set(key, { count: 1, resetAt });
-      return 1;
+      return Promise.resolve(1);
     }
     entry.count++;
     memoryMap.set(key, entry);
-    return entry.count;
+    return Promise.resolve(entry.count);
   },
-  async expire(key: string, seconds: number) {
+  expire(key: string, seconds: number) {
     const entry = memoryMap.get(key);
-    if (entry) entry.resetAt = Date.now() + seconds * 1000;
+    if (entry) {
+      entry.resetAt = Date.now() + seconds * 1000;
+    }
+    return Promise.resolve();
   },
-  async ttl(key: string) {
+  ttl(key: string) {
     const entry = memoryMap.get(key);
-    if (!entry) return -2; // key does not exist
+    if (!entry) return Promise.resolve(-2); // key does not exist
     const ttl = Math.ceil((entry.resetAt - Date.now()) / 1000);
-    return ttl > 0 ? ttl : -2;
+    return Promise.resolve(ttl > 0 ? ttl : -2);
   },
 };
 
@@ -52,24 +55,38 @@ async function initializeRedisAdapter() {
       // analyze the literal package name and fail the build when package is
       // absent in the project graph.
 
-      // @ts-ignore - optional dependency
+      // eslint-disable-next-line @typescript-eslint/no-implied-eval
       const dynamicImport = new Function("pkg", "return import(pkg)");
-      // @ts-ignore
-      const upstashModule = await dynamicImport("@upstash/redis");
+      // Narrow the dynamic import to a known shape to avoid `any` assignments.
+      type UpstashRedisInstance = {
+        incr(key: string): Promise<number | string>;
+        expire(key: string, seconds: number): Promise<number | void>;
+        ttl(key: string): Promise<number | string>;
+      };
+      type UpstashModuleShape = {
+        Redis: new (opts: { url: string; token: string }) => UpstashRedisInstance;
+      };
+
+
+      const upstashModule = (await dynamicImport("@upstash/redis")) as unknown as UpstashModuleShape;
       const { Redis } = upstashModule;
+      // env vars are present due to the surrounding if-check; use non-null assertions to keep typings strict
       const client = new Redis({
         url: process.env.UPSTASH_REDIS_REST_URL,
         token: process.env.UPSTASH_REDIS_REST_TOKEN,
       });
       adapter = {
         async incr(key: string) {
+
           const res = await client.incr(key);
           return typeof res === "number" ? res : Number(res);
         },
         async expire(key: string, seconds: number) {
+
           await client.expire(key, seconds);
         },
         async ttl(key: string) {
+
           const res = await client.ttl(key);
           return typeof res === "number" ? res : Number(res);
         },
@@ -84,20 +101,25 @@ async function initializeRedisAdapter() {
     try {
       // Dynamic import via Function to avoid static analysis by Turbopack
 
-      // @ts-ignore - optional dependency
+      // eslint-disable-next-line @typescript-eslint/no-implied-eval
       const dynamicImport = new Function("pkg", "return import(pkg)");
-      // @ts-ignore
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
       const ioredisModule = await dynamicImport("ioredis");
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
       const IORedis = ioredisModule.default || ioredisModule;
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-assignment
       const client = new IORedis(process.env.REDIS_URL);
       adapter = {
         async incr(key: string) {
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
           return await client.incr(key);
         },
         async expire(key: string, seconds: number) {
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
           await client.expire(key, seconds);
         },
         async ttl(key: string) {
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
           return await client.ttl(key);
         },
       };
@@ -166,6 +188,7 @@ class UpstashRestClient implements RedisClient {
 
 // Singleton adapter (Upstash if configured)
 let singletonAdapter: RedisClient | null = null;
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function _getRedisAdapter(): RedisClient | null {
   if (singletonAdapter) return singletonAdapter;
   const url = process.env.UPSTASH_REDIS_REST_URL;
@@ -188,7 +211,7 @@ export type RateLimitConfig = {
 class InMemoryLimiter {
   private requests = new Map<string, { count: number; resetAt: number }>();
 
-  async check(key: string, max: number, windowSeconds: number) {
+  check(key: string, max: number, windowSeconds: number) {
     const now = Date.now();
     const entry = this.requests.get(key);
     if (!entry || entry.resetAt < now) {
@@ -233,7 +256,7 @@ export function createRateLimiter(config: RateLimitConfig) {
 
     const { max, windowSeconds } = config;
     const key = defaultKey(request);
-    const result = await localLimiter.check(key, max, windowSeconds);
+    const result = localLimiter.check(key, max, windowSeconds);
     if (!result.allowed) {
       const retryAfter = Math.ceil((result.resetAt - Date.now()) / 1000);
       return NextResponse.json(

@@ -197,6 +197,15 @@ export default [
     },
   },
 
+  // 6b) Root scripts .mjs files - no parser needed
+  {
+    files: ["scripts/*.mjs"],
+    rules: {
+      "no-console": "off",
+      "no-debugger": "warn",
+    },
+  },
+
   // 7) Test files
   {
     files: [
