@@ -67,6 +67,7 @@ async function initializeRedisAdapter() {
         Redis: new (opts: { url: string; token: string }) => UpstashRedisInstance;
       };
 
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-call
       const upstashModule = (await dynamicImport(
         "@upstash/redis",
       )) as unknown as UpstashModuleShape;
