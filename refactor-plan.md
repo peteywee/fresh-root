@@ -1,5 +1,5 @@
 # Automated Refactoring Plan
-**Generated:** 2025-11-13T09:38:28.636Z
+**Generated:** 2025-11-15T13:01:20.426Z
 **Files to Process:** 247
 ---
 This plan contains a series of prompts to run with the `Refactor Compliance Agent` in VS Code. Copy each prompt into the chat window to get the compliant version of the file.
@@ -1423,27 +1423,27 @@ export function withSecurity<
       const afterCors = await corsMw(req as NextRequest, async (corsReq) => {
         // Apply request size limit
         const sizeMw = requestSizeLimit(options.maxBodySize || undefined);
-        return await sizeMw(corsReq, async (sizeReq) => {
+        return await sizeMw(corsReq as NextRequest, async (sizeReq) => {
           // Apply rate limiting
           const maxReqs = options.maxRequests ?? 100;
           const windowMs = options.windowMs ?? 15 * 60 * 1000;
           const rateLimiter = inMemoryRateLimit(maxReqs, windowMs);
-          return await rateLimiter(sizeReq, async (rlReq) => {
+          return await rateLimiter(sizeReq as NextRequest, async (rlReq) => {
             // Skip CSRF in test mode to avoid middleware composition issues
             // CSRF should be tested separately via csrf.ts tests
             if (options.require2FA) {
               return require2FAForManagers(rlReq as AuthenticatedRequest, async (ra) => {
-                return handler(ra, resolvedCtx);
+                return handler(ra as AuthenticatedRequest, resolvedCtx);
               });
             }
 
             if (options.requireAuth) {
               return requireSession(rlReq as AuthenticatedRequest, async (ra) => {
-                return handler(ra, resolvedCtx);
+                return handler(ra as AuthenticatedRequest, resolvedCtx);
               });
             }
 
-            return handler(rlReq, resolvedCtx);
+            return handler(rlReq as NextRequest, resolvedCtx);
           });
         });
       });
@@ -1831,9 +1831,6 @@ Refactor this file to be 100% compliant with all project standards.
 ```typescript
 // [P1][API][CODE] Route API route handler
 // Tags: P1, API, CODE
-import { withTelemetry } from "@/lib/telemetry";
-// [P1][API][CODE] Route API route handler
-// Tags: P1, API, CODE
 import { NextResponse } from "next/server";
 
 // Example secured handler pattern for copy-paste into new routes
@@ -1854,32 +1851,29 @@ export const GET = () => {
   return NextResponse.json({ ok: true }, { status: 200 });
 };
 
-async function POST_impl(req: Request) {
+export const POST = () => {
   try {
     // Example when you need the request in future:
-    // const session = await requireSession(req);
-    // const body = await req.json();
-    // const parsed = SomeSchema.parse(body);
-    // const result = await doWork(parsed, session);
+    // export const POST = async (req: NextRequest) => {
+    //   const session = await requireSession(req);
+    //   const body = await req.json();
+    //   const parsed = SomeSchema.parse(body);
+    //   const result = await doWork(parsed, session);
+    //   return NextResponse.json({ ok: true }, { status: 201 });
+    // };
     return NextResponse.json({ ok: true }, { status: 201 });
   } catch (err: unknown) {
-    let status = 500;
-    let message = "Server error";
-    if (err instanceof Error) {
-      status = err.name === "ZodError" ? 400 : 500;
-      message = err.message;
-    }
+    const status = err instanceof Error && err.name === "ZodError" ? 400 : 500;
+    const message = err instanceof Error ? err.message : "Server error";
     return NextResponse.json({ ok: false, error: message }, { status });
   }
-}
+};
 
 export const HEAD = () => new Response(null, { status: 200 });
 
 // Optional examples; keep thin in real handlers.
 export const DELETE = () => NextResponse.json({ ok: true });
 export const PATCH = () => NextResponse.json({ ok: true });
-
-export const POST = withTelemetry(POST_impl, "/api/_template");
 
 ```
 
@@ -1893,13 +1887,13 @@ Refactor this file to be 100% compliant with all project standards.
 
 **File Content:**
 ```typescript
-// [P0][API][CODE] Route API route handler
-// Tags: P0, API, CODE
-import { withTelemetry } from "@/lib/telemetry";
 // [P1][API][ATTENDANCE] Attendance records API route handler
 // [P1][API][ATTENDANCE] Attendance records API route handler
+import { traceFn } from "@/app/api/_shared/otel";
 // [P1][API][ATTENDANCE] Attendance records API route handler
+import { withGuards } from "@/app/api/_shared/security";
 // [P1][API][ATTENDANCE] Attendance records API route handler
+import { jsonOk, jsonError } from "@/app/api/_shared/response";
 // Tags: P1, API, ATTENDANCE, validation, zod
 
 import { CreateAttendanceRecordSchema } from "@fresh-schedules/types";
@@ -2037,13 +2031,13 @@ Refactor this file to be 100% compliant with all project standards.
 
 **File Content:**
 ```typescript
-// [P0][AUTH][MFA] Route API route handler
-// Tags: P0, AUTH, MFA
-import { withTelemetry } from "@/lib/telemetry";
 // [P0][AUTH][API] MFA setup endpoint - generates TOTP secret and QR code
 // [P0][AUTH][API] MFA setup endpoint - generates TOTP secret and QR code
+import { traceFn } from "@/app/api/_shared/otel";
 // [P0][AUTH][API] MFA setup endpoint - generates TOTP secret and QR code
+import { withGuards } from "@/app/api/_shared/security";
 // [P0][AUTH][API] MFA setup endpoint - generates TOTP secret and QR code
+import { jsonOk, jsonError } from "@/app/api/_shared/response";
 // Tags: P0, AUTH, API
 import { NextRequest } from "next/server";
 import * as QRCode from "qrcode";
@@ -2104,13 +2098,13 @@ Refactor this file to be 100% compliant with all project standards.
 
 **File Content:**
 ```typescript
-// [P0][AUTH][MFA] Route API route handler
-// Tags: P0, AUTH, MFA
-import { withTelemetry } from "@/lib/telemetry";
 // [P0][AUTH][API] MFA verification endpoint - confirms TOTP and sets custom claim
 // [P0][AUTH][API] MFA verification endpoint - confirms TOTP and sets custom claim
+import { traceFn } from "@/app/api/_shared/otel";
 // [P0][AUTH][API] MFA verification endpoint - confirms TOTP and sets custom claim
+import { withGuards } from "@/app/api/_shared/security";
 // [P0][AUTH][API] MFA verification endpoint - confirms TOTP and sets custom claim
+import { jsonOk, jsonError } from "@/app/api/_shared/response";
 // Tags: P0, AUTH, API
 import { NextRequest } from "next/server";
 import * as speakeasy from "speakeasy";
@@ -2195,13 +2189,13 @@ Refactor this file to be 100% compliant with all project standards.
 
 **File Content:**
 ```typescript
-// [P1][API][CODE] Route API route handler
-// Tags: P1, API, CODE
-import { withTelemetry } from "@/lib/telemetry";
 // [P1][OBSERVABILITY][HEALTH] Health check endpoint
 // [P1][OBSERVABILITY][HEALTH] Health check endpoint
+import { traceFn } from "@/app/api/_shared/otel";
 // [P1][OBSERVABILITY][HEALTH] Health check endpoint
+import { withGuards } from "@/app/api/_shared/security";
 // [P1][OBSERVABILITY][HEALTH] Health check endpoint
+import { jsonOk, jsonError } from "@/app/api/_shared/response";
 // Tags: P1, OBSERVABILITY, HEALTH
 import { NextResponse } from "next/server";
 
@@ -2240,12 +2234,12 @@ Refactor this file to be 100% compliant with all project standards.
 **File Content:**
 ```typescript
 // [P1][API][CODE] Route API route handler
-// Tags: P1, API, CODE
-import { withTelemetry } from "@/lib/telemetry";
 // [P1][API][CODE] Route API route handler
+import { traceFn } from "@/app/api/_shared/otel";
 // [P1][API][CODE] Route API route handler
+import { withGuards } from "@/app/api/_shared/security";
 // [P1][API][CODE] Route API route handler
-// [P1][API][CODE] Route API route handler
+import { jsonOk, jsonError } from "@/app/api/_shared/response";
 // Tags: P1, API, CODE
 /**
  * [P0][API][HEALTH] Health Check Endpoint
@@ -2258,7 +2252,7 @@ import { withTelemetry } from "@/lib/telemetry";
 
 import { NextResponse } from "next/server";
 
-const GET_impl = async () {
+export async function GET() {
   return NextResponse.json(
     {
       ok: true,
@@ -2275,8 +2269,6 @@ export async function HEAD() {
   return new Response(null, { status: 200 });
 }
 
-export const GET = withTelemetry(GET_impl, "/api/healthz");
-
 ```
 
 
@@ -2289,13 +2281,13 @@ Refactor this file to be 100% compliant with all project standards.
 
 **File Content:**
 ```typescript
-// [P0][API][CODE] Route API route handler
-// Tags: P0, API, CODE
-import { withTelemetry } from "@/lib/telemetry";
 // [P1][OPS][BACKUP] Internal endpoint to trigger Firestore export
 // [P1][OPS][BACKUP] Internal endpoint to trigger Firestore export
+import { traceFn } from "@/app/api/_shared/otel";
 // [P1][OPS][BACKUP] Internal endpoint to trigger Firestore export
+import { withGuards } from "@/app/api/_shared/security";
 // [P1][OPS][BACKUP] Internal endpoint to trigger Firestore export
+import { jsonOk, jsonError } from "@/app/api/_shared/response";
 // Tags: P1, OPS, BACKUP, FIRESTORE
 import { GoogleAuth } from "google-auth-library";
 import { NextRequest } from "next/server";
@@ -2337,7 +2329,7 @@ async function exportFirestore(projectId: string, bucket: string, collections?: 
   return res.json();
 }
 
-const POST_impl = async (req: NextRequest) {
+export async function POST(req: NextRequest) {
   try {
     const configuredToken = process.env.BACKUP_CRON_TOKEN;
     if (!configuredToken) {
@@ -2374,8 +2366,6 @@ const POST_impl = async (req: NextRequest) {
 
 export const runtime = "nodejs"; // Ensure Node runtime (not edge)
 
-export const POST = withTelemetry(POST_impl, "/api/internal/backup");
-
 ```
 
 
@@ -2389,12 +2379,12 @@ Refactor this file to be 100% compliant with all project standards.
 **File Content:**
 ```typescript
 // [P1][API][CODE] Route API route handler
-// Tags: P1, API, CODE
-import { withTelemetry } from "@/lib/telemetry";
 // [P1][API][CODE] Route API route handler
+import { traceFn } from "@/app/api/_shared/otel";
 // [P1][API][CODE] Route API route handler
+import { withGuards } from "@/app/api/_shared/security";
 // [P1][API][CODE] Route API route handler
-// [P1][API][CODE] Route API route handler
+import { jsonOk, jsonError } from "@/app/api/_shared/response";
 // Tags: P1, API, CODE
 import { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
@@ -2468,13 +2458,13 @@ Refactor this file to be 100% compliant with all project standards.
 
 **File Content:**
 ```typescript
-// [P0][AUTH][CODE] Route API route handler
-// Tags: P0, AUTH, CODE
-import { withTelemetry } from "@/lib/telemetry";
 // [P1][API][JOIN_TOKENS] Join tokens API route handler
 // [P1][API][JOIN_TOKENS] Join tokens API route handler
+import { traceFn } from "@/app/api/_shared/otel";
 // [P1][API][JOIN_TOKENS] Join tokens API route handler
+import { withGuards } from "@/app/api/_shared/security";
 // [P1][API][JOIN_TOKENS] Join tokens API route handler
+import { jsonOk, jsonError } from "@/app/api/_shared/response";
 // Tags: P1, API, JOIN_TOKENS, validation, zod
 
 import { CreateJoinTokenSchema } from "@fresh-schedules/types";
@@ -2624,13 +2614,13 @@ Refactor this file to be 100% compliant with all project standards.
 
 **File Content:**
 ```typescript
-// [P1][API][CODE] Route API route handler
-// Tags: P1, API, CODE
-import { withTelemetry } from "@/lib/telemetry";
 // [P1][OBSERVABILITY][METRICS] Prometheus-compatible metrics endpoint
 // [P1][OBSERVABILITY][METRICS] Prometheus-compatible metrics endpoint
+import { traceFn } from "@/app/api/_shared/otel";
 // [P1][OBSERVABILITY][METRICS] Prometheus-compatible metrics endpoint
+import { withGuards } from "@/app/api/_shared/security";
 // [P1][OBSERVABILITY][METRICS] Prometheus-compatible metrics endpoint
+import { jsonOk, jsonError } from "@/app/api/_shared/response";
 // Tags: P1, OBSERVABILITY, METRICS
 import { NextResponse } from "next/server";
 
@@ -2734,7 +2724,7 @@ function formatPrometheusMetrics(): string {
   return lines.join("\n") + "\n";
 }
 
-const GET_impl = async () {
+export async function GET() {
   // Return metrics in Prometheus text format
   const metricsText = formatPrometheusMetrics();
 
@@ -2745,8 +2735,6 @@ const GET_impl = async () {
     },
   });
 }
-
-export const GET = withTelemetry(GET_impl, "/api/metrics");
 
 ```
 
@@ -4500,13 +4488,13 @@ Refactor this file to be 100% compliant with all project standards.
 
 **File Content:**
 ```typescript
-// [P0][API][CODE] Route API route handler
-// Tags: P0, API, CODE
-import { withTelemetry } from "@/lib/telemetry";
 //[P1][API][ONBOARDING] Activate Network Endpoint
 //[P1][API][ONBOARDING] Activate Network Endpoint
+import { traceFn } from "@/app/api/_shared/otel";
 //[P1][API][ONBOARDING] Activate Network Endpoint
+import { withGuards } from "@/app/api/_shared/security";
 //[P1][API][ONBOARDING] Activate Network Endpoint
+import { jsonOk, jsonError } from "@/app/api/_shared/response";
 // Tags: api, onboarding, network, activate
 
 import { NextResponse } from "next/server";
@@ -4558,13 +4546,13 @@ Refactor this file to be 100% compliant with all project standards.
 
 **File Content:**
 ```typescript
-// [P0][FIREBASE][CODE] Route API route handler
-// Tags: P0, FIREBASE, CODE
-import { withTelemetry } from "@/lib/telemetry";
 //[P1][API][ONBOARDING] Admin Form Endpoint (server)
 //[P1][API][ONBOARDING] Admin Form Endpoint (server)
+import { traceFn } from "@/app/api/_shared/otel";
 //[P1][API][ONBOARDING] Admin Form Endpoint (server)
+import { withGuards } from "@/app/api/_shared/security";
 //[P1][API][ONBOARDING] Admin Form Endpoint (server)
+import { jsonOk, jsonError } from "@/app/api/_shared/response";
 // Tags: api, onboarding, admin-form, compliance
 
 import {
@@ -4648,11 +4636,9 @@ export async function adminFormHandler(
 // doesn't pass the route `context` object as the second argument (which would
 // be mistaken for an injected Firestore instance). The wrapper matches the
 // expected Next.js signature: (req, ctx) => Response
-const POST_impl = async (req: NextRequest, _ctx: { params?: unknown }) => {
+export const POST = async (req: NextRequest, _ctx: { params?: unknown }) => {
   return await adminFormHandler(req as NextRequest & { user?: { uid: string } });
 };
-
-export const POST = withTelemetry(POST_impl, "/api/onboarding/admin-form");
 
 ```
 
@@ -4666,13 +4652,13 @@ Refactor this file to be 100% compliant with all project standards.
 
 **File Content:**
 ```typescript
-// [P0][SECURITY][CODE] Route API route handler
-// Tags: P0, SECURITY, CODE
-import { withTelemetry } from "@/lib/telemetry";
 //[P1][API][ONBOARDING] Create Network + Corporate Endpoint (server)
 //[P1][API][ONBOARDING] Create Network + Corporate Endpoint (server)
+import { traceFn } from "@/app/api/_shared/otel";
 //[P1][API][ONBOARDING] Create Network + Corporate Endpoint (server)
+import { withGuards } from "@/app/api/_shared/security";
 //[P1][API][ONBOARDING] Create Network + Corporate Endpoint (server)
+import { jsonOk, jsonError } from "@/app/api/_shared/response";
 // Tags: api, onboarding, network, corporate, membership, events
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -5091,13 +5077,13 @@ Refactor this file to be 100% compliant with all project standards.
 
 **File Content:**
 ```typescript
-// [P0][API][CODE] Route API route handler
-// Tags: P0, API, CODE
-import { withTelemetry } from "@/lib/telemetry";
 //[P1][API][ONBOARDING] Create Network + Org Endpoint (server)
 //[P1][API][ONBOARDING] Create Network + Org Endpoint (server)
+import { traceFn } from "@/app/api/_shared/otel";
 //[P1][API][ONBOARDING] Create Network + Org Endpoint (server)
+import { withGuards } from "@/app/api/_shared/security";
 //[P1][API][ONBOARDING] Create Network + Org Endpoint (server)
+import { jsonOk, jsonError } from "@/app/api/_shared/response";
 // Tags: api, onboarding, network, org, venue, membership, events
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -5403,13 +5389,13 @@ Refactor this file to be 100% compliant with all project standards.
 
 **File Content:**
 ```typescript
-// [P0][AUTH][CODE] Route API route handler
-// Tags: P0, AUTH, CODE
-import { withTelemetry } from "@/lib/telemetry";
 //[P1][API][ONBOARDING] Join With Token Endpoint (server)
 //[P1][API][ONBOARDING] Join With Token Endpoint (server)
+import { traceFn } from "@/app/api/_shared/otel";
 //[P1][API][ONBOARDING] Join With Token Endpoint (server)
+import { withGuards } from "@/app/api/_shared/security";
 //[P1][API][ONBOARDING] Join With Token Endpoint (server)
+import { jsonOk, jsonError } from "@/app/api/_shared/response";
 // Tags: api, onboarding, join-token, membership, events
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -5614,12 +5600,12 @@ Refactor this file to be 100% compliant with all project standards.
 **File Content:**
 ```typescript
 // [P0][API][CODE] Route API route handler
-// Tags: P0, API, CODE
-import { withTelemetry } from "@/lib/telemetry";
 // [P0][API][CODE] Route API route handler
+import { traceFn } from "@/app/api/_shared/otel";
 // [P0][API][CODE] Route API route handler
+import { withGuards } from "@/app/api/_shared/security";
 // [P0][API][CODE] Route API route handler
-// [P0][API][CODE] Route API route handler
+import { jsonOk, jsonError } from "@/app/api/_shared/response";
 // Tags: P0, API, CODE
 import { NextResponse } from "next/server";
 import { z } from "zod";
@@ -5704,13 +5690,13 @@ Refactor this file to be 100% compliant with all project standards.
 
 **File Content:**
 ```typescript
-// [P0][API][CODE] Route API route handler
-// Tags: P0, API, CODE
-import { withTelemetry } from "@/lib/telemetry";
 //[P1][API][ONBOARDING] Verify Eligibility Endpoint (server)
 //[P1][API][ONBOARDING] Verify Eligibility Endpoint (server)
+import { traceFn } from "@/app/api/_shared/otel";
 //[P1][API][ONBOARDING] Verify Eligibility Endpoint (server)
+import { withGuards } from "@/app/api/_shared/security";
 //[P1][API][ONBOARDING] Verify Eligibility Endpoint (server)
+import { jsonOk, jsonError } from "@/app/api/_shared/response";
 // Tags: api, onboarding, eligibility
 
 import { NextResponse } from "next/server";
@@ -5854,13 +5840,13 @@ Refactor this file to be 100% compliant with all project standards.
 
 **File Content:**
 ```typescript
-// [P0][API][CODE] Route API route handler
-// Tags: P0, API, CODE
-import { withTelemetry } from "@/lib/telemetry";
 //[P1][API][CODE] Organization Member [memberId] API route handler
 //[P1][API][CODE] Organization Member [memberId] API route handler
+import { traceFn } from "@/app/api/_shared/otel";
 //[P1][API][CODE] Organization Member [memberId] API route handler
+import { withGuards } from "@/app/api/_shared/security";
 //[P1][API][CODE] Organization Member [memberId] API route handler
+import { jsonOk, jsonError } from "@/app/api/_shared/response";
 // Tags: P1, API, CODE, validation, zod, rbac
 
 import { UpdateMembershipSchema } from "@fresh-schedules/types";
@@ -5979,13 +5965,13 @@ Refactor this file to be 100% compliant with all project standards.
 
 **File Content:**
 ```typescript
-// [P1][API][CODE] Route API route handler
-// Tags: P1, API, CODE
-import { withTelemetry } from "@/lib/telemetry";
 // [P1][API][MEMBERSHIPS] Organization members API routes
 // [P1][API][MEMBERSHIPS] Organization members API routes
+import { traceFn } from "@/app/api/_shared/otel";
 // [P1][API][MEMBERSHIPS] Organization members API routes
+import { withGuards } from "@/app/api/_shared/security";
 // [P1][API][MEMBERSHIPS] Organization members API routes
+import { jsonOk, jsonError } from "@/app/api/_shared/response";
 // Tags: P1, API, MEMBERSHIPS, RBAC
 import { CreateMembershipSchema, UpdateMembershipSchema } from "@fresh-schedules/types";
 import { NextResponse } from "next/server";
@@ -6173,12 +6159,12 @@ Refactor this file to be 100% compliant with all project standards.
 **File Content:**
 ```typescript
 // [P0][API][CODE] Route API route handler
-// Tags: P0, API, CODE
-import { withTelemetry } from "@/lib/telemetry";
 // [P0][API][CODE] Route API route handler
+import { traceFn } from "@/app/api/_shared/otel";
 // [P0][API][CODE] Route API route handler
+import { withGuards } from "@/app/api/_shared/security";
 // [P0][API][CODE] Route API route handler
-// [P0][API][CODE] Route API route handler
+import { jsonOk, jsonError } from "@/app/api/_shared/response";
 // Tags: P0, API, CODE
 import { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
@@ -6292,12 +6278,12 @@ Refactor this file to be 100% compliant with all project standards.
 **File Content:**
 ```typescript
 // [P0][API][CODE] Route API route handler
-// Tags: P0, API, CODE
-import { withTelemetry } from "@/lib/telemetry";
 // [P0][API][CODE] Route API route handler
+import { traceFn } from "@/app/api/_shared/otel";
 // [P0][API][CODE] Route API route handler
+import { withGuards } from "@/app/api/_shared/security";
 // [P0][API][CODE] Route API route handler
-// [P0][API][CODE] Route API route handler
+import { jsonOk, jsonError } from "@/app/api/_shared/response";
 // Tags: P0, API, CODE
 import { CreateOrganizationSchema } from "@fresh-schedules/types";
 import { NextRequest } from "next/server";
@@ -6394,13 +6380,13 @@ Refactor this file to be 100% compliant with all project standards.
 
 **File Content:**
 ```typescript
-// [P0][API][CODE] Route API route handler
-// Tags: P0, API, CODE
-import { withTelemetry } from "@/lib/telemetry";
 //[P1][API][CODE] Positions [id] API route handler
 //[P1][API][CODE] Positions [id] API route handler
+import { traceFn } from "@/app/api/_shared/otel";
 //[P1][API][CODE] Positions [id] API route handler
+import { withGuards } from "@/app/api/_shared/security";
 //[P1][API][CODE] Positions [id] API route handler
+import { jsonOk, jsonError } from "@/app/api/_shared/response";
 // Tags: P1, API, CODE, validation, zod
 
 import { PositionSchema } from "@fresh-schedules/types";
@@ -6528,13 +6514,13 @@ Refactor this file to be 100% compliant with all project standards.
 
 **File Content:**
 ```typescript
-// [P0][API][CODE] Route API route handler
-// Tags: P0, API, CODE
-import { withTelemetry } from "@/lib/telemetry";
 // [P1][API][POSITIONS] Positions API route handler
 // [P1][API][POSITIONS] Positions API route handler
+import { traceFn } from "@/app/api/_shared/otel";
 // [P1][API][POSITIONS] Positions API route handler
+import { withGuards } from "@/app/api/_shared/security";
 // [P1][API][POSITIONS] Positions API route handler
+import { jsonOk, jsonError } from "@/app/api/_shared/response";
 // Tags: P1, API, POSITIONS, validation, zod
 
 import { CreatePositionSchema } from "@fresh-schedules/types";
@@ -6657,13 +6643,13 @@ Refactor this file to be 100% compliant with all project standards.
 
 **File Content:**
 ```typescript
-// [P0][API][CODE] Route API route handler
-// Tags: P0, API, CODE
-import { withTelemetry } from "@/lib/telemetry";
 // [P0][API][SCHEDULE] Schedule publish endpoint
 // [P0][API][SCHEDULE] Schedule publish endpoint
+import { traceFn } from "@/app/api/_shared/otel";
 // [P0][API][SCHEDULE] Schedule publish endpoint
+import { withGuards } from "@/app/api/_shared/security";
 // [P0][API][SCHEDULE] Schedule publish endpoint
+import { jsonOk, jsonError } from "@/app/api/_shared/response";
 // Tags: P0, API, SCHEDULE
 import { NextRequest } from "next/server";
 import { z } from "zod";
@@ -6758,13 +6744,13 @@ Refactor this file to be 100% compliant with all project standards.
 
 **File Content:**
 ```typescript
-// [P0][API][CODE] Route API route handler
-// Tags: P0, API, CODE
-import { withTelemetry } from "@/lib/telemetry";
 //[P1][API][CODE] Schedules [id] API route handler
 //[P1][API][CODE] Schedules [id] API route handler
+import { traceFn } from "@/app/api/_shared/otel";
 //[P1][API][CODE] Schedules [id] API route handler
+import { withGuards } from "@/app/api/_shared/security";
 //[P1][API][CODE] Schedules [id] API route handler
+import { jsonOk, jsonError } from "@/app/api/_shared/response";
 // Tags: P1, API, CODE, validation, zod
 
 import { NextRequest, NextResponse } from "next/server";
@@ -6899,13 +6885,13 @@ Refactor this file to be 100% compliant with all project standards.
 
 **File Content:**
 ```typescript
-// [P0][API][CODE] Route API route handler
-// Tags: P0, API, CODE
-import { withTelemetry } from "@/lib/telemetry";
 // [P1][API][SCHEDULES] Schedules API route handler
 // [P1][API][SCHEDULES] Schedules API route handler
+import { traceFn } from "@/app/api/_shared/otel";
 // [P1][API][SCHEDULES] Schedules API route handler
+import { withGuards } from "@/app/api/_shared/security";
 // [P1][API][SCHEDULES] Schedules API route handler
+import { jsonOk, jsonError } from "@/app/api/_shared/response";
 // Tags: P1, API, SCHEDULES, validation, zod
 
 import { CreateScheduleSchema } from "@fresh-schedules/types";
@@ -7048,12 +7034,12 @@ Refactor this file to be 100% compliant with all project standards.
 **File Content:**
 ```typescript
 // [P0][AUTH][SESSION] Route API route handler
-// Tags: P0, AUTH, SESSION
-import { withTelemetry } from "@/lib/telemetry";
 // [P0][AUTH][SESSION] Route API route handler
+import { traceFn } from "@/app/api/_shared/otel";
 // [P0][AUTH][SESSION] Route API route handler
+import { withGuards } from "@/app/api/_shared/security";
 // [P0][AUTH][SESSION] Route API route handler
-// [P0][AUTH][SESSION] Route API route handler
+import { jsonOk, jsonError } from "@/app/api/_shared/response";
 // Tags: P0, AUTH, SESSION
 /**
  * [P1][API][SESSION] Session Bootstrap Endpoint (server)
@@ -7080,7 +7066,7 @@ export async function bootstrapSessionHandler(
   injectedAdminDb?: Firestore,
 ) {
   const uid = req.user?.uid;
-  const claims = req.user?.customClaims || {};
+  const claims = (req.user?.customClaims || {}) as Record<string, unknown>;
 
   if (!uid) {
     return NextResponse.json({ error: "not_authenticated" }, { status: 401 });
@@ -7185,13 +7171,13 @@ Refactor this file to be 100% compliant with all project standards.
 
 **File Content:**
 ```typescript
-// [P0][AUTH][SESSION] Route API route handler
-// Tags: P0, AUTH, SESSION
-import { withTelemetry } from "@/lib/telemetry";
 // [P0][AUTH][SESSION] Session cookie management endpoints
 // [P0][AUTH][SESSION] Session cookie management endpoints
+import { traceFn } from "@/app/api/_shared/otel";
 // [P0][AUTH][SESSION] Session cookie management endpoints
+import { withGuards } from "@/app/api/_shared/security";
 // [P0][AUTH][SESSION] Session cookie management endpoints
+import { jsonOk, jsonError } from "@/app/api/_shared/response";
 // Tags: P0, AUTH, SESSION
 import { NextRequest } from "next/server";
 import { z } from "zod";
@@ -7208,7 +7194,7 @@ const CreateSessionSchema = z.object({
  * POST /api/session
  * Create a session cookie from a Firebase ID token
  */
-const POST_impl = async (req: NextRequest) {
+export async function POST(req: NextRequest) {
   try {
     const parsed = await parseJson(req, CreateSessionSchema);
     if (!parsed.success) {
@@ -7244,7 +7230,7 @@ const POST_impl = async (req: NextRequest) {
  * DELETE /api/session
  * Clear the session cookie (logout)
  */
-const DELETE_impl = async () {
+export async function DELETE() {
   // Clear session cookie
   const response = ok({ ok: true });
   response.cookies.set("session", "", {
@@ -7256,10 +7242,6 @@ const DELETE_impl = async () {
   });
   return response;
 }
-
-export const POST = withTelemetry(POST_impl, "/api/session");
-
-export const DELETE = withTelemetry(DELETE_impl, "/api/session");
 
 ```
 
@@ -7273,13 +7255,13 @@ Refactor this file to be 100% compliant with all project standards.
 
 **File Content:**
 ```typescript
-// [P0][API][CODE] Route API route handler
-// Tags: P0, API, CODE
-import { withTelemetry } from "@/lib/telemetry";
 //[P1][API][CODE] Shifts [id] API route handler
 //[P1][API][CODE] Shifts [id] API route handler
+import { traceFn } from "@/app/api/_shared/otel";
 //[P1][API][CODE] Shifts [id] API route handler
+import { withGuards } from "@/app/api/_shared/security";
 //[P1][API][CODE] Shifts [id] API route handler
+import { jsonOk, jsonError } from "@/app/api/_shared/response";
 // Tags: P1, API, CODE, validation, zod
 
 import { NextRequest, NextResponse } from "next/server";
@@ -7393,13 +7375,13 @@ Refactor this file to be 100% compliant with all project standards.
 
 **File Content:**
 ```typescript
-// [P0][API][CODE] Route API route handler
-// Tags: P0, API, CODE
-import { withTelemetry } from "@/lib/telemetry";
 //[P1][API][CODE] Shifts API route handler
 //[P1][API][CODE] Shifts API route handler
+import { traceFn } from "@/app/api/_shared/otel";
 //[P1][API][CODE] Shifts API route handler
+import { withGuards } from "@/app/api/_shared/security";
 //[P1][API][CODE] Shifts API route handler
+import { jsonOk, jsonError } from "@/app/api/_shared/response";
 // Tags: P1, API, CODE, validation, zod
 
 import { NextRequest, NextResponse } from "next/server";
@@ -7509,12 +7491,12 @@ Refactor this file to be 100% compliant with all project standards.
 **File Content:**
 ```typescript
 // [P1][API][CODE] Route API route handler
-// Tags: P1, API, CODE
-import { withTelemetry } from "@/lib/telemetry";
 // [P1][API][CODE] Route API route handler
+import { traceFn } from "@/app/api/_shared/otel";
 // [P1][API][CODE] Route API route handler
+import { withGuards } from "@/app/api/_shared/security";
 // [P1][API][CODE] Route API route handler
-// [P1][API][CODE] Route API route handler
+import { jsonOk, jsonError } from "@/app/api/_shared/response";
 // Tags: P1, API, CODE
 import { NextRequest } from "next/server";
 import { z } from "zod";
@@ -7610,13 +7592,13 @@ Refactor this file to be 100% compliant with all project standards.
 
 **File Content:**
 ```typescript
-// [P0][API][CODE] Route API route handler
-// Tags: P0, API, CODE
-import { withTelemetry } from "@/lib/telemetry";
 // [P1][API][VENUES] Venues API route handler
 // [P1][API][VENUES] Venues API route handler
+import { traceFn } from "@/app/api/_shared/otel";
 // [P1][API][VENUES] Venues API route handler
+import { withGuards } from "@/app/api/_shared/security";
 // [P1][API][VENUES] Venues API route handler
+import { jsonOk, jsonError } from "@/app/api/_shared/response";
 // Tags: P1, API, VENUES, validation, zod
 
 import { CreateVenueSchema } from "@fresh-schedules/types";
@@ -7751,18 +7733,18 @@ Refactor this file to be 100% compliant with all project standards.
 **File Content:**
 ```typescript
 // [P1][API][CODE] Route API route handler
-// Tags: P1, API, CODE
-import { withTelemetry } from "@/lib/telemetry";
 // [P1][API][CODE] Route API route handler
+import { traceFn } from "@/app/api/_shared/otel";
 // [P1][API][CODE] Route API route handler
+import { withGuards } from "@/app/api/_shared/security";
 // [P1][API][CODE] Route API route handler
-// [P1][API][CODE] Route API route handler
+import { jsonOk, jsonError } from "@/app/api/_shared/response";
 // Tags: P1, API, CODE
 // Template: CODE_NEXT_API_ROUTE
 //
 // Example API route implementation:
 //
-// const POST_impl = async (req: NextRequest) {
+// export async function POST(req: NextRequest) {
 //   return withRateLimit(async () => {
 //     const session = await requireSession(req);
 //     if (!session?.uid) return NextResponse.json({ error: "unauthorized" }, { status: 401 });
@@ -7781,8 +7763,6 @@ export async function POST(req: NextRequest) {
   return NextResponse.json({ ok: true }, { status: 200 });
 }
 
-export const POST = withTelemetry(POST_impl, "/api/widgets");
-
 ```
 
 
@@ -7795,13 +7775,13 @@ Refactor this file to be 100% compliant with all project standards.
 
 **File Content:**
 ```typescript
-// [P0][API][CODE] Route API route handler
-// Tags: P0, API, CODE
-import { withTelemetry } from "@/lib/telemetry";
 // [P1][API][ZONES] Zones API route handler
 // [P1][API][ZONES] Zones API route handler
+import { traceFn } from "@/app/api/_shared/otel";
 // [P1][API][ZONES] Zones API route handler
+import { withGuards } from "@/app/api/_shared/security";
 // [P1][API][ZONES] Zones API route handler
+import { jsonOk, jsonError } from "@/app/api/_shared/response";
 // Tags: P1, API, ZONES, validation, zod
 
 import { CreateZoneSchema } from "@fresh-schedules/types";
@@ -11768,10 +11748,7 @@ export function register() {
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     diagModule = require("@opentelemetry/api");
     // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const { NodeSDK } = require("@opentelemetry/sdk-node");
-    // Use the resources package directly and build a resource from plain attribute keys.
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const { Resource } = require("@opentelemetry/resources");
+    const { NodeSDK, resources } = require("@opentelemetry/sdk-node");
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const semantic = require("@opentelemetry/semantic-conventions");
     // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -11802,15 +11779,12 @@ export function register() {
         ? new ConsoleSpanExporter()
         : undefined;
 
-    // Build resource using stable attribute keys (avoid relying on non-existent exports)
-    const resource = Resource.fromAttributes({
-      "service.name": serviceName,
-      "deployment.environment": environment,
-      "service.version": commitSha || "unknown",
-    });
-
     const sdk = new NodeSDK({
-      resource,
+      resource: resources.resourceFromAttributes({
+        [semantic.SEMRESATTRS_SERVICE_NAME]: serviceName,
+        [semantic.SEMRESATTRS_DEPLOYMENT_ENVIRONMENT]: environment,
+        [semantic.SEMRESATTRS_SERVICE_VERSION]: commitSha || "unknown",
+      }),
       // When using ConsoleSpanExporter, NodeSDK will wrap it for us
       traceExporter,
       instrumentations: [getNodeAutoInstrumentations()],
@@ -12321,9 +12295,11 @@ export function logApiCall(
   userId?: string,
   status?: number,
   durationMs?: number,
-  extras?: Record<string, unknown>,
+  extras?: Record<string, unknown>
 ) {
-  const enable = process.env.NODE_ENV === "production" || process.env.TELEMETRY_STDOUT === "1";
+  const enable =
+    process.env.NODE_ENV === "production" ||
+    process.env.TELEMETRY_STDOUT === "1";
 
   if (!enable) return;
 
@@ -12349,7 +12325,8 @@ export function logApiCall(
 function readRequestId(req: NextRequest | any): string | undefined {
   try {
     const id =
-      (typeof req?.headers?.get === "function" && req.headers.get("x-request-id")) ||
+      (typeof req?.headers?.get === "function" &&
+        req.headers.get("x-request-id")) ||
       (req?.headers?.["x-request-id"] as string | undefined) ||
       undefined;
     return id || undefined;
@@ -12381,7 +12358,7 @@ function getStatus(result: unknown): number {
  */
 export function withTelemetry<T extends (req: any, ...args: any[]) => Promise<any>>(
   handler: T,
-  route: string,
+  route: string
 ): T {
   return (async (req: NextRequest | any, ...args: any[]) => {
     const start = Date.now();
@@ -12394,7 +12371,7 @@ export function withTelemetry<T extends (req: any, ...args: any[]) => Promise<an
         (req as any)?.userToken?.uid,
         status,
         Date.now() - start,
-        { requestId: readRequestId(req) },
+        { requestId: readRequestId(req) }
       );
       return result;
     } catch (error) {
@@ -12404,7 +12381,7 @@ export function withTelemetry<T extends (req: any, ...args: any[]) => Promise<an
         (req as any)?.userToken?.uid,
         500,
         Date.now() - start,
-        { requestId: readRequestId(req), error: (error as Error)?.name },
+        { requestId: readRequestId(req), error: (error as Error)?.name }
       );
       throw error;
     }
@@ -14734,7 +14711,7 @@ export async function getUserRoles(userId: string, orgId: string): Promise<OrgRo
     .get();
   if (snapshot.empty) return null;
   const data = snapshot.docs[0].data() as { roles?: OrgRole[] };
-  return data.roles || [];
+  return (data.roles || []) as OrgRole[];
 }
 
 // High-level helper: check access combining membership and role requirement
@@ -16537,7 +16514,7 @@ export async function validateRequest<T>(request: NextRequest, schema: ZodSchema
   } catch (textErr) {
     // If we threw a ValidationError above (e.g. due to oversized rawText),
     // don't swallow it — re-throw immediately.
-    if (textErr instanceof ValidationError) throw textErr;
+    if (textErr instanceof ValidationError) throw textErr as ValidationError;
     // text() failed in this environment (some runtimes throw for large bodies).
     // If Content-Length header indicates the body is too large, surface 413.
     const contentLength = request.headers.get("content-length");
@@ -16832,12 +16809,12 @@ export async function loginWithGoogleSmart() {
       await signInWithPopup(auth!, provider);
     }
   } catch (e) {
-    reportError(e, { phase: "google_sign_in" });
+    reportError(e as unknown, { phase: "google_sign_in" });
     // Fallback: try redirect if popup failed (e.g., blocked)
     try {
       await signInWithRedirect(auth!, provider);
     } catch (e2) {
-      reportError(e2, { phase: "google_sign_in_fallback" });
+      reportError(e2 as unknown, { phase: "google_sign_in_fallback" });
       throw e2;
     }
   }
@@ -16856,7 +16833,7 @@ export async function completeGoogleRedirectOnce(): Promise<boolean> {
     const res = await getRedirectResult(auth!);
     return !!res?.user;
   } catch (e) {
-    reportError(e, { phase: "google_redirect_complete" });
+    reportError(e as unknown, { phase: "google_redirect_complete" });
     return false;
   }
 }
@@ -16870,7 +16847,7 @@ export async function sendEmailLinkRobust(email: string) {
     await sendSignInLinkToEmail(auth, email, actionCodeSettings);
     await setPendingEmail(email);
   } catch (e) {
-    reportError(e, { phase: "send_email_link" });
+    reportError(e as unknown, { phase: "send_email_link" });
     throw e;
   }
 }
@@ -16889,7 +16866,7 @@ export async function completeEmailLinkIfPresent(): Promise<boolean> {
   try {
     await signInWithEmailLink(auth!, email, window.location.href);
   } catch (e) {
-    reportError(e, { phase: "complete_email_link" });
+    reportError(e as unknown, { phase: "complete_email_link" });
     throw e;
   } finally {
     await clearPendingEmail();
@@ -16916,13 +16893,13 @@ export async function logoutEverywhere() {
   try {
     await fetch("/api/session", { method: "DELETE" });
   } catch (e) {
-    reportError(e, { phase: "session_delete" });
+    reportError(e as unknown, { phase: "session_delete" });
   }
   try {
     const { signOut } = await import("firebase/auth");
     await signOut(auth!);
   } catch (e) {
-    reportError(e, { phase: "client_signout" });
+    reportError(e as unknown, { phase: "client_signout" });
   }
 }
 
@@ -17453,13 +17430,6 @@ Refactor this file to be 100% compliant with all project standards.
 // Tags: P0, FIREBASE, FIREBASE
 import * as admin from "firebase-admin";
 
-// Define type for service account JSON to avoid unsafe any assignment
-interface ServiceAccountJson {
-  project_id: string;
-  client_email: string;
-  private_key: string;
-}
-
 // Initialize Firebase Admin SDK if not already initialized.
 function initAdmin() {
   if (admin.apps && admin.apps.length) return admin.app();
@@ -17467,10 +17437,12 @@ function initAdmin() {
   const saB64 = process.env.FIREBASE_ADMIN_SERVICE_ACCOUNT_B64;
   if (saB64) {
     try {
-      const saJson = JSON.parse(
-        Buffer.from(saB64, "base64").toString("utf8"),
-      ) as ServiceAccountJson;
-      const { project_id: projectId, client_email: clientEmail, private_key: privateKey } = saJson;
+      const saJson = JSON.parse(Buffer.from(saB64, "base64").toString("utf8"));
+      const {
+        project_id: projectId,
+        client_email: clientEmail,
+        private_key: privateKey,
+      } = saJson as Record<string, string>;
       if (privateKey && clientEmail && projectId) {
         admin.initializeApp({
           credential: admin.credential.cert({ projectId, clientEmail, privateKey }),
@@ -17589,11 +17561,11 @@ export async function importFile(file: File): Promise<ImportResult<z.infer<typeo
   if (name.endsWith(".csv")) {
     const text = await file.text();
     const parsed = parse(text, { header: true, skipEmptyLines: true });
-    rows = parsed.data;
+    rows = parsed.data as unknown[];
   } else if (name.endsWith(".xlsx")) {
     const wb = XLSX.read(await file.arrayBuffer());
     const ws = wb.Sheets[wb.SheetNames[0]];
-    rows = XLSX.utils.sheet_to_json(ws);
+    rows = XLSX.utils.sheet_to_json(ws) as unknown[];
   } else {
     throw new Error("Unsupported file type");
   }
@@ -17941,7 +17913,7 @@ import type { Firestore, DocumentReference } from "firebase-admin/firestore";
 
 import { adminDb, adminSdk } from "@/src/lib/firebase.server";
 
-const db = adminDb;
+const db = adminDb as Firestore | undefined;
 
 export type AdminFormDraft = {
   id: string;
@@ -18144,7 +18116,7 @@ import { loadAdminFormDraft, markAdminFormDraftConsumed } from "./adminFormDraft
 
 import { adminDb, adminSdk } from "@/src/lib/firebase.server";
 
-const db = adminDb;
+const db = adminDb as Firestore | undefined;
 
 export type CreateNetworkOrgResult = {
   networkId: string;
@@ -18287,11 +18259,11 @@ export async function withSpan<T>(
           // OTel attributes may be string | number | boolean | Array of those
           if (Array.isArray(v)) {
             if (v.every((x) => typeof x === "string")) {
-              span.setAttribute(k, v);
+              span.setAttribute(k, v as string[]);
             } else if (v.every((x) => typeof x === "number")) {
-              span.setAttribute(k, v);
+              span.setAttribute(k, v as number[]);
             } else if (v.every((x) => typeof x === "boolean")) {
-              span.setAttribute(k, v);
+              span.setAttribute(k, v as boolean[]);
             } else {
               span.setAttribute(k, v.map(String));
             }
@@ -18451,6 +18423,7 @@ Refactor this file to be 100% compliant with all project standards.
  * Helpers for managing canonical user onboarding state (users/{uid}.onboarding).
  * markOnboardingComplete is called after all successful onboarding flows to mark completion.
  */
+import { Firestore } from "firebase-admin/firestore";
 
 export type OnboardingIntent = "create_org" | "create_corporate" | "join_existing";
 
@@ -18469,7 +18442,7 @@ export async function markOnboardingComplete(params: {
   const now = Date.now();
 
   try {
-    await adminDb
+    await (adminDb as Firestore)
       .collection("users")
       .doc(uid)
       .set(
@@ -18556,10 +18529,14 @@ export async function ensureUserProfile(args: {
   const now = Date.now();
 
   const baseProfile = {
-    email: claims.email || null,
-    displayName: claims.displayName || claims.name || null,
-    avatarUrl: claims.picture || null,
-    selfDeclaredRole: claims.selfDeclaredRole || claims.role || null,
+    email: (claims.email as string | undefined) || null,
+    displayName:
+      (claims.displayName as string | undefined) || (claims.name as string | undefined) || null,
+    avatarUrl: (claims.picture as string | undefined) || null,
+    selfDeclaredRole:
+      (claims.selfDeclaredRole as string | undefined) ||
+      (claims.role as string | undefined) ||
+      null,
   };
 
   if (!snap.exists) {
@@ -18584,7 +18561,7 @@ export async function ensureUserProfile(args: {
   }
 
   // If the doc exists, we still may want to backfill missing profile fields
-  const existing = snap.data();
+  const existing = snap.data() as any;
 
   const profile = {
     ...(existing.profile || {}),
@@ -24017,15 +23994,7 @@ export type OrgRole = z.infer<typeof OrgRole>;
 export const UserClaims = z.object({
   uid: z.string(),
   orgId: z.string(),
-  // Optional tenantId for multi-tenant deployments (if applicable)
-  tenantId: z.string().optional(),
-  // Optional email for quick identity/reference checks
-  email: z.email().optional(),
-  // Roles are required and must be non-empty
   roles: z.array(OrgRole).nonempty(),
-  // Free-form custom claims from upstream IdP / admin SDK (kept permissive)
-  // Map of string keys to unknown values.
-  customClaims: z.record(z.string(), z.unknown()).optional(),
 });
 export type UserClaims = z.infer<typeof UserClaims>;
 
