@@ -11,6 +11,7 @@
 This plan provides a **fully autonomous, executable roadmap** for bringing the Fresh Schedules codebase into complete compliance with Project Bible v15.0.0. The plan is divided into phases that can be executed independently with automated verification at each step.
 
 ### Success Metrics
+
 - ✅ All 34 API routes comply with ROUTE_API_STANDARD
 - ✅ 80%+ code coverage with comprehensive unit tests
 - ✅ E2E tests cover all critical user journeys
@@ -33,6 +34,7 @@ This plan provides a **fully autonomous, executable roadmap** for bringing the F
 **Target State:** Complete E2E coverage per TESTING_STANDARD.md §C
 
 **Actions:**
+
 ```bash
 # Files to enhance/create:
 tests/e2e/onboarding-full-flow.spec.ts       # Expand to full wizard coverage
@@ -42,6 +44,7 @@ tests/e2e/attendance-flow.spec.ts            # Clock in/out workflow
 ```
 
 **Implementation Steps:**
+
 1. ✅ Audit existing E2E tests for coverage gaps
 2. ✅ Implement missing critical journey tests:
    - Org-centric network creation (full wizard)
@@ -52,6 +55,7 @@ tests/e2e/attendance-flow.spec.ts            # Clock in/out workflow
 4. ✅ Add E2E smoke tests to pre-push hook
 
 **Verification:**
+
 ```bash
 pnpm test:e2e --reporter=list
 # Must show: 4 critical journeys × 3-5 test cases each ≈ 15-20 E2E tests passing
@@ -63,6 +67,7 @@ pnpm test:e2e --reporter=list
 **Target State:** 80% line coverage minimum (TESTING_STANDARD.md §A)
 
 **Actions:**
+
 ```bash
 # Add to vitest.config.ts:
 coverage: {
@@ -83,6 +88,7 @@ coverage: {
 ```
 
 **Implementation Steps:**
+
 1. ✅ Enable coverage reporting in vitest config
 2. ✅ Generate baseline coverage report
 3. ✅ Identify files below 80% threshold
@@ -93,6 +99,7 @@ coverage: {
 5. ✅ Add coverage gate to CI
 
 **Verification:**
+
 ```bash
 pnpm test --coverage
 # Must show: ≥80% lines, ≥80% functions, ≥75% branches
@@ -104,6 +111,7 @@ pnpm test --coverage
 **Target State:** 100% of security rules tested (TESTING_STANDARD.md §B)
 
 **Actions:**
+
 ```bash
 # Expand tests/rules/*.spec.ts:
 tests/rules/attendance-role-validation.spec.ts    # NEW - validates roleId
@@ -112,6 +120,7 @@ tests/rules/cross-org-read-prevention.spec.ts     # NEW - isolation tests
 ```
 
 **Implementation Steps:**
+
 1. ✅ Audit `firestore.rules` for all access paths
 2. ✅ Create test cases for:
    - Every `allow read/write if` condition
@@ -121,6 +130,7 @@ tests/rules/cross-org-read-prevention.spec.ts     # NEW - isolation tests
 4. ✅ Add rules test gate to CI
 
 **Verification:**
+
 ```bash
 pnpm test:rules
 # Must show: All rules paths tested, 0 uncovered rule conditions
@@ -140,6 +150,7 @@ pnpm test:rules
 **Target State:** 100% compliance with ROUTE_API_STANDARD.md
 
 **Actions:**
+
 ```typescript
 // Create: scripts/audit/api-compliance-checker.mts
 // Checks each route.ts for:
@@ -151,12 +162,14 @@ pnpm test:rules
 ```
 
 **Implementation Steps:**
+
 1. ✅ Create automated compliance checker script
 2. ✅ Run audit across all 34 routes
 3. ✅ Generate compliance report (`api-compliance-report.md`)
 4. ✅ Prioritize fixes by endpoint criticality
 
 **Verification:**
+
 ```bash
 pnpm tsx scripts/audit/api-compliance-checker.mts --report
 # Must generate: markdown report showing 34/34 routes compliant
@@ -165,6 +178,7 @@ pnpm tsx scripts/audit/api-compliance-checker.mts --report
 ### 2.2 Systematic Route Refactoring
 
 **Target Routes (Critical First):**
+
 ```
 Priority P0 (Auth/Onboarding):
 - apps/web/app/api/onboarding/create-network-org/route.ts
@@ -181,12 +195,13 @@ Priority P2 (Supporting):
 ```
 
 **Standard Route Template:**
+
 ```typescript
 // apps/web/app/api/_template/v15-compliant-route.ts
-import { withTelemetry } from '@/lib/telemetry';
-import { validateRequest } from '@/lib/api/validation';
-import { ErrorResponse } from '@/lib/api/errors';
-import { rateLimit } from '@/lib/api/rate-limit';
+import { withTelemetry } from "@/lib/telemetry";
+import { validateRequest } from "@/lib/api/validation";
+import { ErrorResponse } from "@/lib/api/errors";
+import { rateLimit } from "@/lib/api/rate-limit";
 
 // Every route MUST:
 // 1. Wrap handler with telemetry
@@ -195,10 +210,10 @@ import { rateLimit } from '@/lib/api/rate-limit';
 // 4. Apply rate limiting where appropriate
 // 5. Set security headers (via middleware)
 
-export const POST = withTelemetry('POST /api/example', async (req) => {
+export const POST = withTelemetry("POST /api/example", async (req) => {
   try {
     // Rate limit check
-    const rateLimitResult = await rateLimit(req, 'example-create');
+    const rateLimitResult = await rateLimit(req, "example-create");
     if (!rateLimitResult.ok) {
       return ErrorResponse.tooManyRequests();
     }
@@ -218,6 +233,7 @@ export const POST = withTelemetry('POST /api/example', async (req) => {
 ```
 
 **Implementation Steps:**
+
 1. ✅ Create v15-compliant route template
 2. ✅ Refactor P0 routes (auth/onboarding)
 3. ✅ Refactor P1 routes (schedules/shifts/attendance)
@@ -225,6 +241,7 @@ export const POST = withTelemetry('POST /api/example', async (req) => {
 5. ✅ Run compliance checker after each batch
 
 **Verification:**
+
 ```bash
 # After each priority group:
 pnpm tsx scripts/audit/api-compliance-checker.mts --priority P0
@@ -246,6 +263,7 @@ pnpm typecheck # Ensure no type errors
 **Target State:** Zero violations of layer dependency rules
 
 **Actions:**
+
 ```typescript
 // Create: scripts/audit/layer-dependency-checker.mts
 // Validates:
@@ -255,6 +273,7 @@ pnpm typecheck # Ensure no type errors
 ```
 
 **Implementation Steps:**
+
 1. ✅ Create layer dependency AST parser
 2. ✅ Map all imports across codebase
 3. ✅ Flag violations with file:line:import-path
@@ -262,6 +281,7 @@ pnpm typecheck # Ensure no type errors
 5. ✅ Refactor violations (extract to correct layer)
 
 **Verification:**
+
 ```bash
 pnpm tsx scripts/audit/layer-dependency-checker.mts
 # Must output: "✅ 0 layer violations detected"
@@ -270,6 +290,7 @@ pnpm tsx scripts/audit/layer-dependency-checker.mts
 ### 3.2 Layer Boundary Documentation
 
 **Actions:**
+
 ```bash
 # Create layer README files:
 packages/types/README.md          # Layer 00 - Domain Kernel
@@ -279,6 +300,7 @@ apps/web/app/README.md           # Layer 04 - UI/UX
 ```
 
 **Implementation Steps:**
+
 1. ✅ Document each layer's responsibilities
 2. ✅ Provide import examples (allowed vs forbidden)
 3. ✅ Link to Bible v15 §2 (Architecture)
@@ -297,30 +319,33 @@ apps/web/app/README.md           # Layer 04 - UI/UX
 **Target State:** Full CSP + security headers on all responses
 
 **Actions:**
+
 ```typescript
 // Enhance: apps/web/app/api/_shared/middleware.ts
 export function withSecurityHeaders(handler: RouteHandler): RouteHandler {
   return async (req) => {
     const response = await handler(req);
-    
+
     // Apply headers per SECURITY_HARDENING_STANDARD.md
-    response.headers.set('Content-Security-Policy', strictCSP);
-    response.headers.set('X-Content-Type-Options', 'nosniff');
-    response.headers.set('X-Frame-Options', 'DENY');
-    response.headers.set('Strict-Transport-Security', 'max-age=31536000');
-    
+    response.headers.set("Content-Security-Policy", strictCSP);
+    response.headers.set("X-Content-Type-Options", "nosniff");
+    response.headers.set("X-Frame-Options", "DENY");
+    response.headers.set("Strict-Transport-Security", "max-age=31536000");
+
     return response;
   };
 }
 ```
 
 **Implementation Steps:**
+
 1. ✅ Create security headers middleware
 2. ✅ Wrap all API routes with middleware
 3. ✅ Verify headers in E2E tests
 4. ✅ Add CSP violation reporting endpoint
 
 **Verification:**
+
 ```bash
 # Test with curl:
 curl -I http://localhost:3000/api/health | grep -E "(Content-Security|X-Frame|X-Content-Type)"
@@ -333,6 +358,7 @@ curl -I http://localhost:3000/api/health | grep -E "(Content-Security|X-Frame|X-
 **Target State:** `pnpm audit --prod` fails CI on high/critical vulns
 
 **Actions:**
+
 ```yaml
 # Add to .github/workflows/ci.yml:
 - name: Dependency Audit
@@ -342,11 +368,13 @@ curl -I http://localhost:3000/api/health | grep -E "(Content-Security|X-Frame|X-
 ```
 
 **Implementation Steps:**
+
 1. ✅ Add audit step to CI workflow
 2. ✅ Run baseline audit, fix existing issues
 3. ✅ Document audit policy in SECURITY.md
 
 **Verification:**
+
 ```bash
 pnpm audit --prod --audit-level=high
 # Must exit 0 (no high/critical vulnerabilities)
@@ -358,6 +386,7 @@ pnpm audit --prod --audit-level=high
 **Target State:** Every API endpoint validates input with Zod
 
 **Actions:**
+
 ```bash
 # Audit script output should show:
 # ✅ 34/34 routes have Zod validation
@@ -365,6 +394,7 @@ pnpm audit --prod --audit-level=high
 ```
 
 **Implementation Steps:**
+
 1. ✅ Run API compliance checker (from Phase 2.1)
 2. ✅ Fix any routes missing validation
 3. ✅ Create validation test template
@@ -383,34 +413,39 @@ pnpm audit --prod --audit-level=high
 **Target State:** JSON logs per TELEMETRY_LOGGING_STANDARD.md §3
 
 **Actions:**
+
 ```typescript
 // Enhance: apps/web/src/lib/logger.ts
 export const logger = {
   info: (message: string, context: LogContext) => {
-    console.log(JSON.stringify({
-      timestamp: new Date().toISOString(),
-      severity: 'INFO',
-      message,
-      context: {
-        project: 'FreshSchedules',
-        requestId: context.requestId,
-        tenancy: context.tenancy,
-        actor: context.actor,
-        metadata: context.metadata
-      }
-    }));
+    console.log(
+      JSON.stringify({
+        timestamp: new Date().toISOString(),
+        severity: "INFO",
+        message,
+        context: {
+          project: "FreshSchedules",
+          requestId: context.requestId,
+          tenancy: context.tenancy,
+          actor: context.actor,
+          metadata: context.metadata,
+        },
+      }),
+    );
   },
   // ... error, warn, debug
 };
 ```
 
 **Implementation Steps:**
+
 1. ✅ Standardize logger interface
 2. ✅ Add logger to all API routes
 3. ✅ Mask PII (passwords, tokens) in logs
 4. ✅ Add correlation IDs to requests
 
 **Verification:**
+
 ```bash
 # Start dev server, make API call, check logs:
 pnpm dev
@@ -424,16 +459,18 @@ curl -X POST http://localhost:3000/api/orgs -d '{...}'
 **Target State:** Tracing enabled on all critical paths
 
 **Actions:**
+
 ```typescript
 // Ensure: apps/web/instrumentation.ts
 export async function register() {
-  if (process.env.NEXT_RUNTIME === 'nodejs') {
-    await import('./src/lib/otel');
+  if (process.env.NEXT_RUNTIME === "nodejs") {
+    await import("./src/lib/otel");
   }
 }
 ```
 
 **Implementation Steps:**
+
 1. ✅ Verify OTEL SDK initialized
 2. ✅ Add spans to all API handlers
 3. ✅ Configure trace export (console/cloud)
@@ -450,6 +487,7 @@ export async function register() {
 ### 6.1 Unused Code Removal
 
 **Actions:**
+
 ```bash
 # Use: ts-prune or depcheck
 npx depcheck --ignores="@types/*,eslint-*"
@@ -457,6 +495,7 @@ npx ts-prune | grep -v "used in module"
 ```
 
 **Implementation Steps:**
+
 1. ✅ Identify unused exports
 2. ✅ Remove dead code (non-breaking)
 3. ✅ Remove unused dependencies
@@ -468,12 +507,14 @@ npx ts-prune | grep -v "used in module"
 **Target State:** All files have organized imports (React → 3rd party → local)
 
 **Actions:**
+
 ```bash
 # Use ESLint plugin: eslint-plugin-import
 # Configure auto-fix on save
 ```
 
 **Implementation Steps:**
+
 1. ✅ Configure import sorting rules
 2. ✅ Run `pnpm lint:fix` across codebase
 3. ✅ Verify no breakage
@@ -538,28 +579,28 @@ jobs:
       - uses: pnpm/action-setup@v2
       - name: Install
         run: pnpm install --frozen-lockfile
-      
+
       - name: Typecheck
         run: pnpm typecheck
-      
+
       - name: Unit Tests (80% coverage)
         run: pnpm test --coverage
-      
+
       - name: E2E Tests
         run: pnpm test:e2e
-      
+
       - name: Firestore Rules Tests
         run: pnpm test:rules
-      
+
       - name: API Compliance Check
         run: pnpm tsx scripts/audit/api-compliance-checker.mts
-      
+
       - name: Layer Dependency Check
         run: pnpm tsx scripts/audit/layer-dependency-checker.mts
-      
+
       - name: Security Audit
         run: pnpm audit --prod --audit-level=high
-      
+
       - name: Lint
         run: pnpm lint
 ```
@@ -611,14 +652,14 @@ git reset --hard v15-phase-N-complete
 
 ## Estimated Timeline
 
-| Phase | Hours | Can Parallelize? |
-|-------|-------|------------------|
-| 1     | 2-4   | No (foundation)  |
-| 2     | 4-6   | Yes (with Phase 3) |
-| 3     | 3-5   | Yes (with Phase 2) |
-| 4     | 2-3   | No (depends on 2) |
-| 5     | 2-3   | No (depends on 2) |
-| 6     | 2-3   | No (final cleanup) |
+| Phase     | Hours           | Can Parallelize?             |
+| --------- | --------------- | ---------------------------- |
+| 1         | 2-4             | No (foundation)              |
+| 2         | 4-6             | Yes (with Phase 3)           |
+| 3         | 3-5             | Yes (with Phase 2)           |
+| 4         | 2-3             | No (depends on 2)            |
+| 5         | 2-3             | No (depends on 2)            |
+| 6         | 2-3             | No (final cleanup)           |
 | **Total** | **15-24 hours** | **10-16 hours parallelized** |
 
 ---
