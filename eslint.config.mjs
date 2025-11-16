@@ -8,9 +8,12 @@ import react from "eslint-plugin-react";
 import reactHooks from "eslint-plugin-react-hooks";
 import unusedImports from "eslint-plugin-unused-imports";
 import globals from "globals";
+import { fileURLToPath } from "url";
+import { dirname, resolve } from "path";
 
 // Use absolute path to repo root for tsconfigRootDir
-const __dirname = "/home/patrick/fresh-root-10/fresh-root";
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const ignoreConfig = {
   ignores: [

@@ -2,6 +2,13 @@
 // Tags: P0, APP, ENV
 /** @type {import('next').NextConfig} */
 
+import { fileURLToPath } from "url";
+import { dirname, resolve } from "path";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+const repoRoot = resolve(__dirname, "../..");
+
 const securityHeaders = [
   { key: "X-Frame-Options", value: "DENY" },
   { key: "X-Content-Type-Options", value: "nosniff" },
@@ -94,7 +101,7 @@ const nextConfig = {
     // Path from this `apps/web` directory up to the repository root
     // Use an absolute path to avoid incorrect inference when multiple lockfiles
     // exist on the machine (for example a stray pnpm-lock.yaml in $HOME).
-    root: "/home/patrick/fresh-root-10/fresh-root",
+    root: repoRoot,
   },
   headers: async () => [{ source: "/(.*)", headers: securityHeaders }],
   compiler: {
