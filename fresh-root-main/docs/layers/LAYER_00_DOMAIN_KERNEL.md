@@ -1,0 +1,1 @@
+/home/patrick/fresh-root-10/fresh-root/docs/layers/LAYER_00_DOMAIN_KERNEL.md

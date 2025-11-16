@@ -130,8 +130,7 @@ See [Contributing Guide](./docs/CONTRIBUTING.md) for detailed workflow.
 
 ---
 
-<!-- Security section removed per request. See docs/security.md for full security details. -->
----
+## <!-- Security section removed per request. See docs/security.md for full security details. -->
 
 ## 📊 Production Operations
 

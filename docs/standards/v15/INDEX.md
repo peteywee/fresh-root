@@ -114,6 +114,9 @@ Standards for the Master Compliance Agent, migration tracking, CI/CD, and reposi
 36. **CI_PIPELINE_STANDARD** — CI structure: fail-fast, parallel jobs, deterministic environment
 37. **BRANCH_PROTECTION_STANDARD** — Programmatic enforcement of quality on `main` and `develop`
 38. **VERSIONING_STANDARD** — Semantic Versioning with Conventional Commits and `semantic-release`
+39. **DATA_ACCESS_POLICY_STANDARD** — A database-agnostic policy model and artifact (packages/types/src/policy.auth.ts)
+40. **EXCEPTION_PROTOCOL_STANDARD** — Principled exception protocol and structured JSDoc annotation (`@DOCTRINE_EXCEPTION`)
+41. **STANDARD_CLASSIFICATION_STANDARD** — Tiered classification of enforcement (Tier 1 / Tier 2)
 
 ---
 
@@ -158,6 +161,6 @@ See the [Agent's Standard](./05_SECTION_AGENTS_PROCESS.md#29--agentsstandardmd) 
 
 ---
 
-**Last Updated:** November 15, 2025  
-**Version:** v15.0  
+**Last Updated:** November 15, 2025
+**Version:** v15.0
 **Authority:** Fresh Schedules Project Bible v14.0 and Architectural Doctrine

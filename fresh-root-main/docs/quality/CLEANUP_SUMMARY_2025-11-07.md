@@ -1,0 +1,1 @@
+/home/patrick/fresh-root-10/fresh-root/docs/quality/CLEANUP_SUMMARY_2025-11-07.md

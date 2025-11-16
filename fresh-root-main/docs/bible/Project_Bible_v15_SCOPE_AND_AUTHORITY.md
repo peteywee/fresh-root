@@ -1,0 +1,1 @@
+/home/patrick/fresh-root-10/fresh-root/docs/bible/Project_Bible_v15_SCOPE_AND_AUTHORITY.md

@@ -78,7 +78,13 @@
     "qa:typecheck": "pnpm -w typecheck",
     "qa:test": "pnpm vitest run",
     "qa:lint": "pnpm -w lint",
-    "qa:full": "pnpm qa:typecheck && pnpm qa:test && pnpm qa:lint"
+    "qa:full": "pnpm qa:typecheck && pnpm qa:test && pnpm qa:lint",
+    "mcp:key:create": "node scripts/create-api-key.mjs",
+    "mcp:server": "node --enable-source-maps vscode-mcp-server.mjs",
+    "mcp:server:dev": "dotenv -e .env.mcp -- node --enable-source-maps vscode-mcp-server.mjs",
+    "mcp:rest": "node scripts/mcp-rest-gateway.mjs",
+    "mcp:rest:dev": "dotenv -e .env.mcp -- node scripts/mcp-rest-gateway.mjs",
+    "mcp:client": "node scripts/mcp-client.mjs"
   },
   "lint-staged": {
     "*.{ts,tsx}": [

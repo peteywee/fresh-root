@@ -1,0 +1,1 @@
+/home/patrick/fresh-root-10/fresh-root/docs/security/SECURITY_HARDENING_2025-11-06.md

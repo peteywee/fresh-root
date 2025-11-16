@@ -1,0 +1,1 @@
+/home/patrick/fresh-root-10/fresh-root/docs/standards/SCHEMA_CATALOG_STANDARD.md

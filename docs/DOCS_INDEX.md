@@ -8,12 +8,13 @@ If you’re new, start here:
 4. **Layers Contracts** → `layers/`
 5. **Crosswalks** → `migration/v15/PHASE2_*_CROSSWALK.md`
 
-### Quick Links
+## Quick Links
 
 - Runbooks → `runbooks/`
 - Security → `security/`
 - Blocks (B1-B4) → `blocks/`
 - Quality & Performance → `quality/`
 - Tooling & Processes → `tooling/`
+- Master Consolidated Index → `MASTER_DOCS_INDEX.md` (summarized navigation for major docs)
 
 **Historical**: `archive/`, `v14/`

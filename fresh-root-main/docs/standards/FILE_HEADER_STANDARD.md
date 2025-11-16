@@ -1,0 +1,1 @@
+/home/patrick/fresh-root-10/fresh-root/docs/standards/FILE_HEADER_STANDARD.md

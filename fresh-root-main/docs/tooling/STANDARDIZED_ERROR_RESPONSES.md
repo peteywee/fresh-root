@@ -1,0 +1,1 @@
+/home/patrick/fresh-root-10/fresh-root/docs/tooling/STANDARDIZED_ERROR_RESPONSES.md

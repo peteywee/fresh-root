@@ -1,0 +1,1 @@
+/home/patrick/fresh-root-10/fresh-root/docs/BLOCK3_COMPLETION_MANIFEST.md

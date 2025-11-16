@@ -1,0 +1,1 @@
+/home/patrick/fresh-root-10/fresh-root/docs/quality/TECHNICAL_DEBT.md
