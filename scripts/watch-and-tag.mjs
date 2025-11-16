@@ -48,11 +48,21 @@ function tagFile(filePath) {
   const ext = path.extname(filePath);
   if (!targetExtensions.includes(ext)) return;
 
-  // Run tagging script
-  spawn("node", ["scripts/tag-files.mjs", "--path", filePath], {
-    cwd: rootDir,
-    stdio: "inherit",
-  });
+  // Run tagging script. Capture spawn errors to avoid uncaught exceptions
+    try {
+    const env = { ...process.env };
+    if (!env.NODE_OPTIONS) env.NODE_OPTIONS = "--max-old-space-size=1024"; // tagging is small
+    const tagProc = spawn("node", ["scripts/tag-files.mjs", "--path", filePath], {
+      cwd: rootDir,
+      stdio: "inherit",
+      env,
+    });
+    tagProc.on("error", (err) => {
+      console.error(`Failed to spawn tag process for ${filePath}:`, err.message || err);
+    });
+  } catch (err) {
+    console.error(`Exception while attempting to tag ${filePath}:`, err.message || err);
+  }
 
   console.log(`✅ Tagged: ${filePath}`);
 }

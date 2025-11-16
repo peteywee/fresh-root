@@ -93,7 +93,10 @@ wss.on("connection", (ws, req) => {
             if (!ALLOW_SHELL_EXEC) {
               throw new Error("Shell execution is disabled on this server.");
             }
-            exec(target, { cwd: ws.BASE_DIR }, (error, stdout, stderr) => {
+            // Ensure shell commands invoked via the MCP server inherit a conservative Node memory limit
+            const execEnv = { ...process.env };
+            if (!execEnv.NODE_OPTIONS) execEnv.NODE_OPTIONS = "--max-old-space-size=1024";
+            exec(target, { cwd: ws.BASE_DIR, env: execEnv }, (error, stdout, stderr) => {
               ws.send(
                 JSON.stringify({
                   id,

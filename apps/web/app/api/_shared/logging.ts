@@ -13,14 +13,17 @@
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-type BasicReq = {
+import type { NextRequest } from "next/server";
+
+// Use a permissive request type that is compatible with Next.js `NextRequest`
+// while still allowing middleware to attach extra fields by index.
+type AnyRequest = NextRequest & {
   method?: string;
   url?: string;
-  // Allow existing middleware to attach extra fields
   [key: string]: unknown;
 };
 
-type Handler<TReq extends BasicReq = BasicReq> = (
+type Handler<TReq extends AnyRequest = AnyRequest> = (
   req: TReq & { requestId: string },
 ) => Promise<Response> | Response;
 
@@ -46,10 +49,8 @@ function generateRequestId(): string {
  *     withSecurity(myHandler, { requireAuth: true }),
  *   );
  */
-export function withRequestLogging<TReq extends BasicReq>(
-  handler: Handler<TReq> | ((req: TReq, ctx: Record<string, unknown>) => Promise<Response>),
-): (req: TReq, ctx?: Record<string, unknown>) => Promise<Response> {
-  return async (req: TReq, ctx?: Record<string, unknown>): Promise<Response> => {
+export function withRequestLogging(handler: any): (req: any, ctx?: any) => Promise<any> {
+  return async (req: any, ctx?: any): Promise<any> => {
     const requestId = generateRequestId();
     const start = Date.now();
 
@@ -73,9 +74,11 @@ export function withRequestLogging<TReq extends BasicReq>(
 
     try {
       // Handle both single-arg and two-arg handlers
-      const res = await (handler.length > 1
-        ? handler(req as TReq & { requestId: string }, ctx || {})
-        : (handler as Handler<TReq>)(req as TReq & { requestId: string }));
+      const res = await (typeof handler === "function"
+        ? handler.length > 1
+          ? handler(req as any, ctx || {})
+          : handler(req as any)
+        : handler);
       const durationMs = Date.now() - start;
 
       // Structured "end" log

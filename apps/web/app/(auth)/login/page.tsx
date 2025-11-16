@@ -1,7 +1,7 @@
 // [P0][AUTH][LOGGING] Page page component
 // Tags: P0, AUTH, LOGGING
 "use client";
-import React, { useCallback, useEffect, useState, Suspense } from "react";
+import { useEffect, useState, Suspense, memo, FormEvent } from "react";
 import { isSignInWithEmailLink } from "firebase/auth";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
@@ -12,7 +12,7 @@ import {
 } from "../../../src/lib/auth-helpers";
 import { auth } from "../../lib/firebaseClient";
 
-const LoginForm = React.memo(() => {
+const LoginFormComponent = () => {
   const router = useRouter();
   const params = useSearchParams();
   const [email, setEmail] = useState<string>("");
@@ -43,34 +43,31 @@ const LoginForm = React.memo(() => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const onSendMagicLink = useCallback(
-    async (e: React.FormEvent) => {
-      e.preventDefault();
-      setError("");
-      setStatus("");
-      const trimmed = email.trim();
-      if (!trimmed) {
-        setError("Please enter your email");
-        return;
-      }
-      try {
-        setSending(true);
-        // Optimistically show sending status so user sees activity immediately
-        setStatus("Sending magic link…");
-        await sendEmailLinkRobust(trimmed);
-        setStatus("Magic link sent! Check your email and click the link to finish signing in.");
-      } catch (e) {
-        console.error(e);
-        const errorMessage = e instanceof Error ? e.message : "Failed to send magic link";
-        setError(errorMessage);
-      } finally {
-        setSending(false);
-      }
-    },
-    [email],
-  );
+  const onSendMagicLink = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
+    e.preventDefault();
+    setError("");
+    setStatus("");
+    const trimmed = email.trim();
+    if (!trimmed) {
+      setError("Please enter your email");
+      return;
+    }
+    try {
+      setSending(true);
+      // Optimistically show sending status so user sees activity immediately
+      setStatus("Sending magic link…");
+      await sendEmailLinkRobust(trimmed);
+      setStatus("Magic link sent! Check your email and click the link to finish signing in.");
+    } catch (e) {
+      console.error(e);
+      const errorMessage = e instanceof Error ? e.message : "Failed to send magic link";
+      setError(errorMessage);
+    } finally {
+      setSending(false);
+    }
+  };
 
-  const onGoogle = useCallback(async () => {
+  const onGoogle = async (): Promise<void> => {
     setError("");
     setStatus("");
     try {
@@ -95,7 +92,7 @@ const LoginForm = React.memo(() => {
       const errorMessage = e instanceof Error ? e.message : "Google sign-in failed";
       setError(errorMessage);
     }
-  }, [router]);
+  };
 
   return (
     <main className="flex min-h-screen items-center justify-center bg-gradient-to-br from-surface via-surface-card to-surface-accent p-6">
@@ -183,8 +180,11 @@ const LoginForm = React.memo(() => {
       </div>
     </main>
   );
-});
+};
 
+const LoginForm = memo(LoginFormComponent);
+
+// Ensure the memoized component has a displayName for React DevTools and testing
 LoginForm.displayName = "LoginForm";
 
 const LoginPage = () => (

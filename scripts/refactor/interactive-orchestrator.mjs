@@ -143,7 +143,24 @@ class InteractiveOrchestrator {
     console.log(`\n⚡ Running: ${phase.name}`);
     console.log("─".repeat(45));
     return new Promise((resolve) => {
-      const proc = spawn(phase.command, { shell: true, stdio: "inherit" });
+      let proc;
+      try {
+        // Ensure conservative Node memory limit for spawned phases unless caller overrides
+        const env = { ...process.env };
+        if (!env.NODE_OPTIONS) env.NODE_OPTIONS = "--max-old-space-size=2048";
+        proc = spawn(phase.command, { shell: true, stdio: "inherit", env });
+      } catch (spawnErr) {
+        console.error(`Failed to spawn process for phase '${phase.name}':`, spawnErr);
+        resolve(false);
+        return;
+      }
+
+      // Handle unexpected spawn errors (ENOENT, etc.) so the orchestrator doesn't crash
+      proc.on("error", (err) => {
+        console.error(`Process error while running phase '${phase.name}':`, err);
+        resolve(false);
+      });
+
       proc.on("close", (code) => {
         if (code === 0) {
           this.state.completedPhases.push(phase.name);

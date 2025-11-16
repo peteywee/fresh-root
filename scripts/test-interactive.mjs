@@ -70,21 +70,32 @@ async function main() {
 
   console.log(`\n${description}\n`);
 
+  // Ensure a conservative Node memory limit is set unless caller requested otherwise
+  if (!env.NODE_OPTIONS) env.NODE_OPTIONS = "--max-old-space-size=2048";
+
   // Run pnpm -w test with the configured environment
-  const child = spawn(pnpmCmd, ["-w", "test"], {
-    env,
-    stdio: "inherit",
-    shell: true,
-  });
-
-  child.on("exit", (code) => {
-    process.exit(code ?? 0);
-  });
-
-  child.on("error", (err) => {
-    console.error("Failed to start test runner:", err);
+  let child;
+  try {
+    child = spawn(pnpmCmd, ["-w", "test"], {
+      env,
+      stdio: "inherit",
+      shell: true,
+    });
+  } catch (spawnErr) {
+    console.error("Failed to spawn test runner:", spawnErr);
     process.exit(1);
-  });
+  }
+
+  if (child) {
+    child.on("exit", (code) => {
+      process.exit(code ?? 0);
+    });
+
+    child.on("error", (err) => {
+      console.error("Test runner process error:", err);
+      process.exit(1);
+    });
+  }
 }
 
 main().catch((err) => {

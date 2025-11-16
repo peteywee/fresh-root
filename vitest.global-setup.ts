@@ -49,12 +49,16 @@ export default async function () {
   } catch {}
 
   // Start Next.js dev server in apps/web
-  child = spawn(process.platform === "win32" ? "pnpm.cmd" : "pnpm", ["dev"], {
-    cwd: "apps/web",
-    env: {
-      ...process.env,
-      NODE_ENV: "test",
-      NEXT_TELEMETRY_DISABLED: "1",
+  try {
+    // Provide a conservative default Node memory limit if none provided by caller
+    const defaultNodeOptions = process.env.NODE_OPTIONS || "--max-old-space-size=2048";
+    child = spawn(process.platform === "win32" ? "pnpm.cmd" : "pnpm", ["dev"], {
+      cwd: "apps/web",
+      env: {
+        ...process.env,
+        NODE_OPTIONS: defaultNodeOptions,
+        NODE_ENV: "test",
+        NEXT_TELEMETRY_DISABLED: "1",
       // Minimal server env to satisfy env.server.ts validation during tests
       // Use demo project and a deterministic secret; never used in production
       FIREBASE_PROJECT_ID: process.env.FIREBASE_PROJECT_ID || "demo-fresh",
@@ -67,8 +71,18 @@ export default async function () {
       FIREBASE_STORAGE_EMULATOR_HOST:
         process.env.FIREBASE_STORAGE_EMULATOR_HOST || "127.0.0.1:9199",
     },
-    stdio: "inherit",
-  });
+      stdio: "inherit",
+    });
+  } catch (spawnErr) {
+    console.error("Failed to spawn Next dev server:", spawnErr);
+    throw spawnErr;
+  }
+
+  if (child) {
+    child.on("error", (err) => {
+      console.error("Next dev server process error:", err);
+    });
+  }
 
   // Wait until server responds
   await waitForHttp("http://localhost:3000/api/health");
