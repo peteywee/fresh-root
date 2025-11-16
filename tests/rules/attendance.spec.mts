@@ -1,7 +1,7 @@
 // [P1][INTEGRITY][TEST] Attendance rules tests
 // Tags: P1, INTEGRITY, TEST, FIRESTORE, RULES, ATTENDANCE
 import { assertFails, assertSucceeds, RulesTestEnvironment } from "@firebase/rules-unit-testing";
-import { deleteDoc, doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
+import { deleteDoc, doc, getDoc, setDoc, updateDoc, collection, getDocs } from "firebase/firestore";
 import { describe, it, beforeAll, afterAll } from "vitest";
 
 import { initFirestoreTestEnv } from "./_setup";
@@ -80,7 +80,9 @@ describe("Attendance Rules", () => {
         roles: ["staff"],
       });
       const db = staffContext.firestore();
-      await assertFails(getDoc(doc(db, `attendance_records/${ORG_ID}/records`)));
+      // Listing is done via a collection query; use getDocs rather than getDoc on
+      // a non-document reference.
+      await assertFails(getDocs(collection(db, `attendance_records/${ORG_ID}/records`)));
     });
   });
 

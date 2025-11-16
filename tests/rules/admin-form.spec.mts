@@ -32,7 +32,9 @@ describe("Admin Responsibility Form rules", () => {
       });
     });
 
-    const svcContext = testEnv.authenticatedContext(SVC_UID, {});
+    // Ensure the token has `sub` claim so the emulator maps to request.auth.uid
+    // (some emulators require explicit `sub` for service identities in tests).
+    const svcContext = testEnv.authenticatedContext(SVC_UID, { sub: SVC_UID, user_id: SVC_UID });
     const svcDb = svcContext.firestore();
 
     await assertSucceeds(

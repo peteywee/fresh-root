@@ -214,10 +214,18 @@ export default [
       "**/__tests__/**/*.{ts,tsx,js,jsx}",
     ],
     languageOptions: {
+      parser: tseslint.parser,
+      parserOptions: {
+        sourceType: "module",
+        ecmaFeatures: { jsx: true },
+        tsconfigRootDir: __dirname,
+        project: null, // disable project-based type checking for tests
+      },
       globals: {
         ...globals.jest,
         ...globals.node,
       },
+      ecmaVersion: "latest",
     },
     rules: {
       "no-console": "off",
