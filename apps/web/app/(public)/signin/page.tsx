@@ -1,8 +1,9 @@
 // [P2][APP][CODE] Page page component
 // Tags: P2, APP, CODE
 "use client";
-import { useAuth } from "../../providers/AuthProvider";
 import { useRouter } from "next/navigation";
+
+import { useAuth } from "../../providers/AuthProvider";
 
 export default function SignInPage() {
   const { user, loading, signInGoogle } = useAuth();

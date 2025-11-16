@@ -1,7 +1,6 @@
 // [P0][AUTH][CODE] AuthProvider
 // Tags: P0, AUTH, CODE
 "use client";
-import React, { createContext, useContext, useEffect, useState } from "react";
 import {
   getAuth,
   onAuthStateChanged,
@@ -10,6 +9,8 @@ import {
   signOut as fbSignOut,
 } from "firebase/auth";
 import { getFirestore, doc, getDoc, setDoc } from "firebase/firestore";
+import React, { createContext, useContext, useEffect, useState } from "react";
+
 import { app } from "../../lib/firebaseClient";
 
 type Membership = { orgId: string; role: "admin" | "manager" | "staff" };

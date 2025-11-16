@@ -1,0 +1,56 @@
+/* stylelint-disable at-rule-no-unknown */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom styles for UI overhaul */
+@layer base {
+  html {
+    font-family:
+      "Inter",
+      system-ui,
+      -apple-system,
+      BlinkMacSystemFont,
+      "Segoe UI",
+      Roboto,
+      sans-serif;
+  }
+
+  body {
+    @apply bg-gradient-to-br from-surface to-surface-card text-text;
+    min-height: 100vh;
+  }
+}
+
+@layer components {
+  .card {
+    @apply rounded-xl border border-surface-accent bg-surface-card p-6 shadow-lg transition-all duration-300 hover:shadow-xl;
+  }
+
+  .btn-primary {
+    @apply rounded-lg bg-primary px-4 py-2 font-medium text-white transition-all duration-200 hover:scale-105 hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-surface;
+  }
+
+  .btn-secondary {
+    @apply rounded-lg bg-secondary px-4 py-2 font-medium text-white transition-all duration-200 hover:scale-105 hover:bg-secondary-dark focus:outline-none focus:ring-2 focus:ring-secondary focus:ring-offset-2 focus:ring-offset-surface;
+  }
+
+  .input-field {
+    @apply rounded-lg border border-surface-accent bg-surface-accent px-3 py-2 text-text placeholder-text-muted transition-all duration-200 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-primary;
+  }
+
+  .loading-skeleton {
+    @apply animate-pulse rounded bg-surface-accent;
+  }
+}
+
+@layer utilities {
+  .animate-fade-in {
+    animation: fadeIn 0.5s ease-in-out;
+  }
+
+  .animate-slide-up {
+    animation: slideUp 0.3s ease-out;
+  }
+}

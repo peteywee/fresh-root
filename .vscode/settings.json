@@ -258,5 +258,6 @@
       "icon": "rocket",
       "rulerColour": "#9c27b0"
     }
-  }
+  },
+  "testing.automaticallyOpenTestResults": "never"
 }
