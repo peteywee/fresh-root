@@ -1,7 +1,7 @@
 // [P1][INTEGRITY][POLICY] Abstract, database-agnostic data-access policy
 // Tags: P1, INTEGRITY, POLICY
 
-import { USER_ROLES_MAP } from './constants';
+import { USER_ROLES_MAP } from "./constants";
 
 /**
  * @fileoverview The single source of truth for data access policy.

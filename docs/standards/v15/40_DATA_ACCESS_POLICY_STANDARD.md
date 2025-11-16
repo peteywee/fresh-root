@@ -30,7 +30,7 @@ The abstract Data Access Policy is the leader; concrete implementations (Firesto
 ## Example
 
 ```ts
-import { USER_ROLES_MAP } from './constants';
+import { USER_ROLES_MAP } from "./constants";
 
 export const DataAccessPolicy = {
   collections: {
@@ -38,7 +38,7 @@ export const DataAccessPolicy = {
       read: [USER_ROLES_MAP.NETWORK_OWNER, USER_ROLES_MAP.ORG_ADMIN, USER_ROLES_MAP.STAFF],
       create: [USER_ROLES_MAP.NETWORK_OWNER],
       update: [USER_ROLES_MAP.NETWORK_OWNER, USER_ROLES_MAP.ORG_ADMIN],
-    }
-  }
-}
+    },
+  },
+};
 ```

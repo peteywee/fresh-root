@@ -1,12 +1,7 @@
 // [P1][INTEGRITY][CONSTANTS] Shared constants for the project
 // Tags: P1, INTEGRITY, CONSTANTS
 
-export const USER_ROLES = [
-  "platform_super_admin",
-  "network_owner",
-  "org_admin",
-  "staff",
-] as const;
+export const USER_ROLES = ["platform_super_admin", "network_owner", "org_admin", "staff"] as const;
 
 export type UserRole = (typeof USER_ROLES)[number];
 
