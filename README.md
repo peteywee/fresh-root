@@ -27,6 +27,7 @@ logging, and operational support.
 ## � Documentation
 
 For comprehensive information, refer to the **[Documentation Index](./docs/DOCS_INDEX.md)**.
+For a short, consolidated navigation use the **[Master Docs Index](./docs/MASTER_DOCS_INDEX.md)**.
 
 **Quick Links:**
 
@@ -129,18 +130,7 @@ See [Contributing Guide](./docs/CONTRIBUTING.md) for detailed workflow.
 
 ---
 
-## 🔒 Security
-
-Fresh Root prioritizes security across all layers:
-
-- **Authentication**: Secure session management with TOTP-based MFA
-- **Authorization**: Role-based access control (RBAC) via Firebase rules
-- **Data Protection**: Encrypted in transit and at rest
-- **API Security**: Rate limiting, CSRF protection, input validation
-- **Monitoring**: Comprehensive audit logging and alerting
-
-See [Security Documentation](./docs/security.md) for complete security architecture and best practices.
-
+<!-- Security section removed per request. See docs/security.md for full security details. -->
 ---
 
 ## 📊 Production Operations
