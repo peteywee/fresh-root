@@ -187,7 +187,6 @@ const LoginForm = memo(LoginFormComponent);
 // Ensure the memoized component has a displayName for React DevTools and testing
 (LoginForm as React.NamedExoticComponent<{}>).displayName = "LoginForm";
 
-
 const LoginPage = () => (
   <Suspense
     fallback={<div className="flex min-h-screen items-center justify-center">Loading...</div>}

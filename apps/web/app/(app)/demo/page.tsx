@@ -10,13 +10,11 @@ import { Button, Card, Input, Textarea, Loading, Spinner, Alert } from "../../co
 export default function DemoPage() {
   const [loading, setLoading] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
-  const [formData, setFormData] = useState<{ name: string; email: string; message: string }>(
-    {
-      name: "",
-      email: "",
-      message: "",
-    },
-  );
+  const [formData, setFormData] = useState<{ name: string; email: string; message: string }>({
+    name: "",
+    email: "",
+    message: "",
+  });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -27,17 +25,26 @@ export default function DemoPage() {
     }, 2000);
   };
 
-  const handleNameChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, name: e.target.value });
-  }, [formData]);
+  const handleNameChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setFormData({ ...formData, name: e.target.value });
+    },
+    [formData],
+  );
 
-  const handleEmailChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, email: e.target.value });
-  }, [formData]);
+  const handleEmailChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setFormData({ ...formData, email: e.target.value });
+    },
+    [formData],
+  );
 
-  const handleMessageChange = useCallback((e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setFormData({ ...formData, message: e.target.value });
-  }, [formData]);
+  const handleMessageChange = useCallback(
+    (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+      setFormData({ ...formData, message: e.target.value });
+    },
+    [formData],
+  );
 
   return (
     <div className="min-h-screen bg-gray-50 p-8">

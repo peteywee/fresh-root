@@ -150,10 +150,7 @@ export function withSecurity<
     params: Record<string, string> | Promise<Record<string, string>>;
   },
 >(
-  handler: (
-    req: AuthenticatedRequest | NextRequest,
-    ctx: C,
-  ) => Promise<NextResponse>,
+  handler: (req: AuthenticatedRequest | NextRequest, ctx: C) => Promise<NextResponse>,
   options: WithSecurityOptions = {},
 ): (req: AuthenticatedRequest | NextRequest, ctx: C) => Promise<NextResponse> {
   return async (req: AuthenticatedRequest | NextRequest, ctx: C) => {

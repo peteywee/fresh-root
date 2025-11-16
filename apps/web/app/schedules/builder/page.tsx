@@ -14,7 +14,7 @@ export default function ScheduleBuilder() {
 
   function addDemoShift(day = 0) {
     const id = `s-${Date.now()}`;
-    setShifts(s => [...s, { id, day, start: "10:00", end: "14:00", title: "New" }]);
+    setShifts((s) => [...s, { id, day, start: "10:00", end: "14:00", title: "New" }]);
   }
 
   return (
