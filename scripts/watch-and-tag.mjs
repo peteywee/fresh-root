@@ -49,7 +49,7 @@ function tagFile(filePath) {
   if (!targetExtensions.includes(ext)) return;
 
   // Run tagging script. Capture spawn errors to avoid uncaught exceptions
-    try {
+  try {
     const env = { ...process.env };
     if (!env.NODE_OPTIONS) env.NODE_OPTIONS = "--max-old-space-size=1024"; // tagging is small
     const tagProc = spawn("node", ["scripts/tag-files.mjs", "--path", filePath], {

@@ -18,7 +18,9 @@ type CorporateFormState = {
 
 export default function CreateNetworkCorporatePage() {
   const router = useRouter();
-  const nav: NavRouter = { push: router.push };
+  // Avoid unbound method by wrapping router.push in an arrow function
+  // so `this` will not be lost when the method is passed around.
+  const nav: NavRouter = { push: (...args: Parameters<NavRouter['push']>) => router.push(...args) };
   const [form, setForm] = useState<CorporateFormState>({
     corporateName: "",
     brandName: "",
@@ -28,9 +30,9 @@ export default function CreateNetworkCorporatePage() {
   });
   const [error, setError] = useState<string | null>(null);
 
-  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
+    setForm(prev => ({ ...prev, [name]: value }));
   }
 
   function handleSubmit(e: FormEvent) {

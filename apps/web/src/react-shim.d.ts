@@ -1,9 +1,11 @@
+// [P2][APP][CODE] React Shim D type definitions
+// Tags: P2, APP, CODE
 // Minimal React type shims for local development when `@types/react` isn't installed.
 // These live in a .d.ts so the compiler can pick them up without augmenting modules
 // inline inside TSX files. Replace with proper `@types/react` when available.
 declare module "react" {
   // Hooks (minimal signatures)
-  export function useCallback<T extends (...args: any[]) => any>(fn: T): T;
+  export function useCallback<T extends (...args: unknown[]) => any>(fn: T): T;
   export function useEffect(effect: (...args: any[]) => any, deps?: any[]): void;
   export function useState<T = any>(initial?: T): [T, (v: T) => void];
 

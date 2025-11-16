@@ -6,14 +6,15 @@ import React, { useState } from "react";
 const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
 export default function ScheduleBuilder() {
-  const [shifts, setShifts] = useState([
+  type Shift = { id: string; day: number; start: string; end: string; title: string };
+  const [shifts, setShifts] = useState<Shift[]>([
     { id: "s1", day: 0, start: "09:00", end: "13:00", title: "Morning" },
     { id: "s2", day: 2, start: "12:00", end: "18:00", title: "Afternoon" },
   ]);
 
   function addDemoShift(day = 0) {
     const id = `s-${Date.now()}`;
-    setShifts((s) => [...s, { id, day, start: "10:00", end: "14:00", title: "New" }]);
+    setShifts(s => [...s, { id, day, start: "10:00", end: "14:00", title: "New" }]);
   }
 
   return (

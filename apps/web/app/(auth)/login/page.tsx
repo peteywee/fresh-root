@@ -185,7 +185,8 @@ const LoginFormComponent = () => {
 const LoginForm = memo(LoginFormComponent);
 
 // Ensure the memoized component has a displayName for React DevTools and testing
-LoginForm.displayName = "LoginForm";
+(LoginForm as React.NamedExoticComponent<{}>).displayName = "LoginForm";
+
 
 const LoginPage = () => (
   <Suspense

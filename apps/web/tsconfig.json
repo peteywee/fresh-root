@@ -3,6 +3,7 @@
   "compilerOptions": {
     "jsx": "preserve",
     "lib": ["ES2022", "DOM"],
+
     "types": ["node"],
     "allowJs": true,
     "noEmit": true,
@@ -19,6 +20,6 @@
       }
     ]
   },
-  "include": ["app", "src", "next-env.d.ts", ".next/types/**/*.ts", "vitest.d.ts"],
+  "include": ["app", "src", "next-env.d.ts", "vitest.d.ts", ".next/types/**/*.ts"],
   "exclude": ["node_modules", "**/__tests__/**", "**/*.test.ts", "**/*.test.tsx"]
 }

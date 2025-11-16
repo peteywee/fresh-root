@@ -59,18 +59,18 @@ export default async function () {
         NODE_OPTIONS: defaultNodeOptions,
         NODE_ENV: "test",
         NEXT_TELEMETRY_DISABLED: "1",
-      // Minimal server env to satisfy env.server.ts validation during tests
-      // Use demo project and a deterministic secret; never used in production
-      FIREBASE_PROJECT_ID: process.env.FIREBASE_PROJECT_ID || "demo-fresh",
-      SESSION_SECRET:
-        process.env.SESSION_SECRET || "test-session-secret-0123456789abcdefghijklmnopqrstuvwxyz", // >=32 chars
-      // Prefer emulators in tests to avoid real network calls
-      NEXT_PUBLIC_USE_EMULATORS: process.env.NEXT_PUBLIC_USE_EMULATORS || "true",
-      FIREBASE_AUTH_EMULATOR_HOST: process.env.FIREBASE_AUTH_EMULATOR_HOST || "127.0.0.1:9099",
-      FIRESTORE_EMULATOR_HOST: process.env.FIRESTORE_EMULATOR_HOST || "127.0.0.1:8080",
-      FIREBASE_STORAGE_EMULATOR_HOST:
-        process.env.FIREBASE_STORAGE_EMULATOR_HOST || "127.0.0.1:9199",
-    },
+        // Minimal server env to satisfy env.server.ts validation during tests
+        // Use demo project and a deterministic secret; never used in production
+        FIREBASE_PROJECT_ID: process.env.FIREBASE_PROJECT_ID || "demo-fresh",
+        SESSION_SECRET:
+          process.env.SESSION_SECRET || "test-session-secret-0123456789abcdefghijklmnopqrstuvwxyz", // >=32 chars
+        // Prefer emulators in tests to avoid real network calls
+        NEXT_PUBLIC_USE_EMULATORS: process.env.NEXT_PUBLIC_USE_EMULATORS || "true",
+        FIREBASE_AUTH_EMULATOR_HOST: process.env.FIREBASE_AUTH_EMULATOR_HOST || "127.0.0.1:9099",
+        FIRESTORE_EMULATOR_HOST: process.env.FIRESTORE_EMULATOR_HOST || "127.0.0.1:8080",
+        FIREBASE_STORAGE_EMULATOR_HOST:
+          process.env.FIREBASE_STORAGE_EMULATOR_HOST || "127.0.0.1:9199",
+      },
       stdio: "inherit",
     });
   } catch (spawnErr) {

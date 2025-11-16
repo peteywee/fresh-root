@@ -152,7 +152,7 @@ export function withSecurity<
 >(
   handler: (
     req: AuthenticatedRequest | NextRequest,
-    ctx: { params: Record<string, string>; [key: string]: unknown },
+    ctx: C,
   ) => Promise<NextResponse>,
   options: WithSecurityOptions = {},
 ): (req: AuthenticatedRequest | NextRequest, ctx: C) => Promise<NextResponse> {
@@ -170,27 +170,27 @@ export function withSecurity<
       const afterCors = await corsMw(req as NextRequest, async (corsReq) => {
         // Apply request size limit
         const sizeMw = requestSizeLimit(options.maxBodySize || undefined);
-        return await sizeMw(corsReq as NextRequest, async (sizeReq) => {
+        return await sizeMw(corsReq, async (sizeReq) => {
           // Apply rate limiting
           const maxReqs = options.maxRequests ?? 100;
           const windowMs = options.windowMs ?? 15 * 60 * 1000;
           const rateLimiter = inMemoryRateLimit(maxReqs, windowMs);
-          return await rateLimiter(sizeReq as NextRequest, async (rlReq) => {
+          return await rateLimiter(sizeReq, async (rlReq) => {
             // Skip CSRF in test mode to avoid middleware composition issues
             // CSRF should be tested separately via csrf.ts tests
             if (options.require2FA) {
               return require2FAForManagers(rlReq as AuthenticatedRequest, async (ra) => {
-                return handler(ra as AuthenticatedRequest, resolvedCtx);
+                return handler(ra, resolvedCtx as unknown as C);
               });
             }
 
             if (options.requireAuth) {
               return requireSession(rlReq as AuthenticatedRequest, async (ra) => {
-                return handler(ra as AuthenticatedRequest, resolvedCtx);
+                return handler(ra, resolvedCtx as unknown as C);
               });
             }
 
-            return handler(rlReq as NextRequest, resolvedCtx);
+            return handler(rlReq, resolvedCtx as unknown as C);
           });
         });
       });

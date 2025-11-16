@@ -13,7 +13,7 @@ const MonthView = React.memo(({ month = new Date() }: { month?: Date }) => {
     const daysInMonth = lastDay.getDate();
     const startDayOfWeek = firstDay.getDay();
 
-    const daysArray = [];
+    const daysArray: Array<number | null> = [];
     // Add empty cells for days before the first day of the month
     for (let i = 0; i < startDayOfWeek; i++) {
       daysArray.push(null);

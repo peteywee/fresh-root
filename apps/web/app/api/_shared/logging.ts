@@ -55,7 +55,7 @@ export function withRequestLogging(handler: any): (req: any, ctx?: any) => Promi
     const start = Date.now();
 
     // Attach requestId to the request object for downstream handlers
-    (req as any).requestId = requestId;
+    req.requestId = requestId;
 
     const { method = "UNKNOWN", url = "UNKNOWN" } = req;
 
@@ -76,8 +76,8 @@ export function withRequestLogging(handler: any): (req: any, ctx?: any) => Promi
       // Handle both single-arg and two-arg handlers
       const res = await (typeof handler === "function"
         ? handler.length > 1
-          ? handler(req as any, ctx || {})
-          : handler(req as any)
+          ? handler(req, ctx || {})
+          : handler(req)
         : handler);
       const durationMs = Date.now() - start;
 
