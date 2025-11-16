@@ -7,23 +7,23 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import fs from 'fs/promises';
-import path from 'path';
+import fs from "fs/promises";
+import path from "path";
 
 const ROOT = process.cwd();
-const MASTER = path.join(ROOT, 'docs', 'MASTER_DOCS_INDEX.md');
-const OUT = path.join(ROOT, 'docs', 'MASTER_DOCS_INDEX_SUMMARIES.md');
+const MASTER = path.join(ROOT, "docs", "MASTER_DOCS_INDEX.md");
+const OUT = path.join(ROOT, "docs", "MASTER_DOCS_INDEX_SUMMARIES.md");
 
 // Heuristic to extract a one-line summary from a markdown file
 function extractSummary(text) {
-  if (!text) return '(empty)';
-  const lines = text.split(/\r?\n/).map(l => l.trim());
+  if (!text) return "(empty)";
+  const lines = text.split(/\r?\n/).map((l) => l.trim());
 
   // Skip optional frontmatter
   let i = 0;
-  if (lines[i] === '---') {
+  if (lines[i] === "---") {
     i++;
-    while (i < lines.length && lines[i] !== '---') i++;
+    while (i < lines.length && lines[i] !== "---") i++;
     i++; // skip trailing ---
   }
 
@@ -31,30 +31,30 @@ function extractSummary(text) {
   for (; i < lines.length; i++) {
     const l = lines[i];
     if (!l) continue;
-    if (l.startsWith('## ') || l.startsWith('### ') || l.startsWith('# ')) {
+    if (l.startsWith("## ") || l.startsWith("### ") || l.startsWith("# ")) {
       // prefer the header text following the hashes
-      return l.replace(/^#+\s*/, '').replace(/\s+$/, '');
+      return l.replace(/^#+\s*/, "").replace(/\s+$/, "");
     }
-    if (!l.startsWith('#') && !l.startsWith('```')) {
+    if (!l.startsWith("#") && !l.startsWith("```")) {
       // take this line as summary candidate
       const para = [l];
       // continue to append until blank
-      for (let j = i+1; j < lines.length && lines[j]; j++) {
+      for (let j = i + 1; j < lines.length && lines[j]; j++) {
         para.push(lines[j]);
-        if (para.join(' ').length > 180) break;
+        if (para.join(" ").length > 180) break;
       }
-      const s = para.join(' ');
-      return s.length > 180 ? s.slice(0, 177).trim() + '...' : s;
+      const s = para.join(" ");
+      return s.length > 180 ? s.slice(0, 177).trim() + "..." : s;
     }
   }
   // fallback is the first non-empty line
   for (const l of lines) if (l) return l;
-  return '(no summary)';
+  return "(no summary)";
 }
 
 (async function main() {
   try {
-    const master = await fs.readFile(MASTER, 'utf8');
+    const master = await fs.readFile(MASTER, "utf8");
 
     // find backtick-wrapped paths `docs/...`
     const regex = /`([^`]+)`/g;
@@ -63,7 +63,7 @@ function extractSummary(text) {
     while ((m = regex.exec(master))) {
       const candidate = m[1].trim();
       // only keep docs paths
-      const normalized = candidate.startsWith('docs/') ? candidate : 'docs/' + candidate;
+      const normalized = candidate.startsWith("docs/") ? candidate : "docs/" + candidate;
       seen.set(normalized, null);
     }
 
@@ -73,32 +73,32 @@ function extractSummary(text) {
       const linkRegex = /\[(?:[^\]]+)\]\(([^)]+)\)/g;
       while ((m = linkRegex.exec(master))) {
         const candidate = m[1];
-        const normalized = candidate.startsWith('docs/') ? candidate : 'docs/' + candidate;
+        const normalized = candidate.startsWith("docs/") ? candidate : "docs/" + candidate;
         seen.set(normalized, null);
       }
     }
 
     if (seen.size === 0) {
-      console.warn('No docs links found in MASTER_DOCS_INDEX.md. Nothing to do.');
+      console.warn("No docs links found in MASTER_DOCS_INDEX.md. Nothing to do.");
       return;
     }
 
     for (const p of seen.keys()) {
       const filePath = path.join(ROOT, p);
       try {
-        const content = await fs.readFile(filePath, 'utf8');
+        const content = await fs.readFile(filePath, "utf8");
         const summary = extractSummary(content);
         seen.set(p, summary);
       } catch (err) {
-        if (err.code === 'ENOENT') {
+        if (err.code === "ENOENT") {
           // if symlink under fresh-root-main exists, try that
-          const alt = path.join(ROOT, 'fresh-root-main', p);
+          const alt = path.join(ROOT, "fresh-root-main", p);
           try {
-            const content = await fs.readFile(alt, 'utf8');
+            const content = await fs.readFile(alt, "utf8");
             seen.set(p, extractSummary(content));
             continue;
           } catch (e2) {
-            seen.set(p, '(missing file)');
+            seen.set(p, "(missing file)");
             continue;
           }
         }
@@ -108,20 +108,20 @@ function extractSummary(text) {
 
     // Build a simple output
     const lines = [];
-    lines.push('# Master Docs Index — One-line summaries');
-    lines.push('');
-    lines.push('Generated: ' + new Date().toISOString());
-    lines.push('');
+    lines.push("# Master Docs Index — One-line summaries");
+    lines.push("");
+    lines.push("Generated: " + new Date().toISOString());
+    lines.push("");
 
     for (const [p, summary] of seen) {
       // Use simple concatenation to avoid escaping backticks in template literals
-      lines.push('- `' + p + '` — ' + summary);
+      lines.push("- `" + p + "` — " + summary);
     }
 
-    await fs.writeFile(OUT, lines.join('\n') + '\n', 'utf8');
-    console.log('Wrote', OUT);
+    await fs.writeFile(OUT, lines.join("\n") + "\n", "utf8");
+    console.log("Wrote", OUT);
   } catch (err) {
-    console.error('Failed:', err);
+    console.error("Failed:", err);
     process.exit(1);
   }
 })();
