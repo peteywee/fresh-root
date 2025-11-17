@@ -1,0 +1,82 @@
+[
+  {
+    "file": "apps/web/src/lib/api/__tests__/security-integration.test.ts",
+    "anyCast": 8,
+    "tsIgnore": 0,
+    "todo": 0,
+    "firestore": 10,
+    "score": 70
+  },
+  {
+    "file": "apps/web/src/lib/api/authorization.test.ts",
+    "anyCast": 6,
+    "tsIgnore": 0,
+    "todo": 0,
+    "firestore": 8,
+    "score": 54
+  },
+  {
+    "file": "scripts/tools/index-repo.mjs",
+    "anyCast": 2,
+    "tsIgnore": 2,
+    "todo": 8,
+    "firestore": 6,
+    "score": 52
+  },
+  {
+    "file": "apps/web/src/lib/api/schedules.ts",
+    "anyCast": 0,
+    "tsIgnore": 0,
+    "todo": 0,
+    "firestore": 17,
+    "score": 51
+  },
+  {
+    "file": "apps/web/src/lib/onboarding/adminFormDrafts.ts",
+    "anyCast": 0,
+    "tsIgnore": 0,
+    "todo": 0,
+    "firestore": 16,
+    "score": 48
+  },
+  {
+    "file": "apps/web/app/api/onboarding/create-network-org/route.ts",
+    "anyCast": 0,
+    "tsIgnore": 0,
+    "todo": 0,
+    "firestore": 15,
+    "score": 45
+  },
+  {
+    "file": "apps/web/src/lib/onboarding/createNetworkOrg.ts",
+    "anyCast": 0,
+    "tsIgnore": 0,
+    "todo": 0,
+    "firestore": 15,
+    "score": 45
+  },
+  {
+    "file": "apps/web/app/api/onboarding/create-network-org/route-new.ts",
+    "anyCast": 1,
+    "tsIgnore": 0,
+    "todo": 0,
+    "firestore": 13,
+    "score": 44
+  },
+  {
+    "file": "apps/web/app/api/onboarding/create-network-corporate/route.ts",
+    "anyCast": 0,
+    "tsIgnore": 0,
+    "todo": 0,
+    "firestore": 13,
+    "score": 39
+  },
+  {
+    "file": "apps/web/lib/onboarding/createNetworkOrg.ts",
+    "anyCast": 0,
+    "tsIgnore": 0,
+    "todo": 0,
+    "firestore": 13,
+    "score": 39
+  }
+]

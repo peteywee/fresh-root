@@ -1,0 +1,92 @@
+[
+  {
+    "file": "archive/tests/rules/networks.spec.mts",
+    "anyCast": 1,
+    "tsIgnore": 0,
+    "todo": 0,
+    "firestore": 104,
+    "score": 317,
+    "compliant": false
+  },
+  {
+    "file": "archive/tests/rules/join-tokens.spec.mts",
+    "anyCast": 0,
+    "tsIgnore": 0,
+    "todo": 0,
+    "firestore": 63,
+    "score": 189,
+    "compliant": false
+  },
+  {
+    "file": "archive/tests/rules/attendance.spec.mts",
+    "anyCast": 0,
+    "tsIgnore": 0,
+    "todo": 0,
+    "firestore": 58,
+    "score": 174,
+    "compliant": false
+  },
+  {
+    "file": "archive/tests/rules/schedules.spec.mts",
+    "anyCast": 0,
+    "tsIgnore": 0,
+    "todo": 0,
+    "firestore": 57,
+    "score": 171,
+    "compliant": false
+  },
+  {
+    "file": "archive/tests/rules/shifts.spec.mts",
+    "anyCast": 0,
+    "tsIgnore": 0,
+    "todo": 0,
+    "firestore": 57,
+    "score": 171,
+    "compliant": false
+  },
+  {
+    "file": "archive/tests/rules/organizations.spec.ts",
+    "anyCast": 0,
+    "tsIgnore": 0,
+    "todo": 0,
+    "firestore": 51,
+    "score": 153,
+    "compliant": false
+  },
+  {
+    "file": "archive/tests/rules/memberships.spec.ts",
+    "anyCast": 0,
+    "tsIgnore": 0,
+    "todo": 0,
+    "firestore": 49,
+    "score": 147,
+    "compliant": false
+  },
+  {
+    "file": "archive/packages/rules-tests/src/rbac.test.ts",
+    "anyCast": 0,
+    "tsIgnore": 0,
+    "todo": 0,
+    "firestore": 48,
+    "score": 144,
+    "compliant": false
+  },
+  {
+    "file": "archive/tests/rules/venues.spec.mts",
+    "anyCast": 0,
+    "tsIgnore": 0,
+    "todo": 0,
+    "firestore": 48,
+    "score": 144,
+    "compliant": false
+  },
+  {
+    "file": "archive/tests/rules/zones.spec.mts",
+    "anyCast": 0,
+    "tsIgnore": 0,
+    "todo": 0,
+    "firestore": 48,
+    "score": 144,
+    "compliant": false
+  }
+]
