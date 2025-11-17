@@ -1,7 +1,7 @@
 //[P1][API][ONBOARDING] Create Network + Corporate Endpoint (server)
 // Tags: api, onboarding, network, corporate, membership, events
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { NextResponse } from "next/server";
 
 import { withSecurity, type AuthenticatedRequest } from "../../_shared/middleware";
@@ -88,6 +88,7 @@ export async function createNetworkCorporateHandler(
     const corporateCollectionRef = networkRef.collection("corporate");
     const corpRef = corporateCollectionRef.doc();
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Firestore Transaction param
     await adminDb.runTransaction(async (tx: any) => {
       const createdAt = nowMs;
 

@@ -44,6 +44,7 @@ Developer workflow checklist
 If a script is missing from `main` but needed temporarily, add it in a feature branch and remove it after the task is complete or move it to `archive/scripts/` with a README.
 
 ---
+
 Small, practical next steps I can take now:
 
 1. Produce a candidate list of `package.json` scripts to archive and commit them into `archive/scripts/` (with backups). I will not modify `main` scripts until you approve the list.

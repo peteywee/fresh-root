@@ -1,6 +1,6 @@
 # Docs Index
 
-- .github/ISSUE_TEMPLATE/_production-template.md (todos=0)
+- .github/ISSUE_TEMPLATE/\_production-template.md (todos=0)
 - .github/ISSUE_TEMPLATE/data-004-backups-restore.md (todos=0)
 - .github/ISSUE_TEMPLATE/e2e-008-happy-path-gate.md (todos=0)
 - .github/ISSUE_TEMPLATE/obs-003-observability.md (todos=0)

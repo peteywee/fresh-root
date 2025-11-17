@@ -1,7 +1,7 @@
 //[P1][API][ONBOARDING] Create Network + Org Endpoint (server)
 // Tags: api, onboarding, network, org, venue
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { NextResponse } from "next/server";
 
 import { withSecurity, type AuthenticatedRequest } from "../../_shared/middleware";
@@ -34,7 +34,7 @@ export async function createNetworkOrgHandler(
 
   // Authenticated request guaranteed by withSecurity (requireAuth below)
   const uid = req.user?.uid;
-  const claims = (req.user as any)?.customClaims || {};
+  const claims = req.user?.customClaims || {};
 
   if (!uid) return NextResponse.json({ error: "not_authenticated" }, { status: 401 });
 
@@ -97,6 +97,7 @@ export async function createNetworkOrgHandler(
     const orgRef = adminDb.collection("orgs").doc();
     const venueRef = adminDb.collection("venues").doc();
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Firestore Transaction param
     await adminDb.runTransaction(async (tx: any) => {
       tx.set(networkRef, {
         name: orgName || `Network ${new Date().toISOString()}`,

@@ -56,4 +56,5 @@ References & next steps
 - Build a small `scripts/export-firestore.js` utility to export collections used by the chosen endpoint.
 
 ---
+
 _This is a living document. Add concrete commands, example scripts, and migration artifacts as you proceed._

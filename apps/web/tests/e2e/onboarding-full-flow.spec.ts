@@ -157,6 +157,8 @@ test.describe("Onboarding Happy Path", () => {
 
     // 6. Enter join token
     const testToken = process.env.TEST_JOIN_TOKEN || "test-token-12345";
+    // mark testToken as intentionally used/consumed for linters
+    void testToken;
     await page.goto(`${baseUrl}/onboarding/join`);
     await page.fill('input[name="token"]', testToken);
     await page.click('button:has-text("Join")');
@@ -199,6 +201,8 @@ test.describe("Onboarding Happy Path", () => {
 
   test("should enforce rate-limiting on verify-eligibility", async ({ page }: { page: Page }) => {
     const testToken = "rate-limit-test-token";
+    // mark testToken as intentionally unused for this rate-limit loop
+    void testToken;
 
     // Make 5 requests (should all succeed)
     for (let i = 0; i < 5; i++) {

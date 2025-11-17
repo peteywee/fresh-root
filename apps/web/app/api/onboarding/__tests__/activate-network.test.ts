@@ -42,6 +42,9 @@ describe("POST /api/onboarding/activate-network", () => {
     } as any;
   });
 
+  // ensure linter treats mock as used in this test file
+  void _mockAdminDb;
+
   it("should require authenticated request", async () => {
     // The endpoint uses withSecurity(requireAuth: true), so unauthenticated
     // requests will be rejected at middleware level

@@ -1,7 +1,7 @@
 //[P1][API][ONBOARDING] Create Network + Org Endpoint (server)
 // Tags: api, onboarding, network, org, venue, membership, events
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { NextResponse } from "next/server";
 
 import { withRequestLogging } from "../../_shared/logging";
@@ -116,6 +116,7 @@ export async function createNetworkOrgHandler(
     const membershipId = `${uid}_${orgRef.id}`;
     const membershipRef = adminDb.collection("memberships").doc(membershipId);
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Firestore Transaction param
     await adminDb.runTransaction(async (tx: any) => {
       const createdAt = nowMs;
 

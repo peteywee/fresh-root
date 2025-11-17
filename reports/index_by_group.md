@@ -1,7 +1,9 @@
 # Repo Index — Groups
+
 Generated: 2025-11-17T02:45:34.325Z
 
 ## other (75 files)
+
 - .env — size=6264 — todos=0 any=0 firestore=0
 - .env.example — size=1476 — todos=3 any=0 firestore=0
 - .env.local — size=3314 — todos=0 any=0 firestore=0
@@ -9,23 +11,23 @@ Generated: 2025-11-17T02:45:34.325Z
 - .firebaserc — size=52 — todos=0 any=0 firestore=0
 - .github/runtime-allowlist.txt — size=1212 — todos=0 any=0 firestore=0
 - .gitignore — size=1729 — todos=2 any=0 firestore=1
-- .husky/_/.gitignore — size=1 — todos=0 any=0 firestore=0
-- .husky/_/applypatch-msg — size=39 — todos=0 any=0 firestore=0
-- .husky/_/commit-msg — size=39 — todos=0 any=0 firestore=0
-- .husky/_/h — size=551 — todos=0 any=0 firestore=0
-- .husky/_/husky.sh — size=206 — todos=0 any=0 firestore=0
-- .husky/_/post-applypatch — size=39 — todos=0 any=0 firestore=0
-- .husky/_/post-checkout — size=39 — todos=0 any=0 firestore=0
-- .husky/_/post-commit — size=39 — todos=0 any=0 firestore=0
-- .husky/_/post-merge — size=39 — todos=0 any=0 firestore=0
-- .husky/_/post-rewrite — size=39 — todos=0 any=0 firestore=0
-- .husky/_/pre-applypatch — size=39 — todos=0 any=0 firestore=0
-- .husky/_/pre-auto-gc — size=39 — todos=0 any=0 firestore=0
-- .husky/_/pre-commit — size=39 — todos=0 any=0 firestore=0
-- .husky/_/pre-merge-commit — size=39 — todos=0 any=0 firestore=0
-- .husky/_/pre-push — size=39 — todos=0 any=0 firestore=0
-- .husky/_/pre-rebase — size=39 — todos=0 any=0 firestore=0
-- .husky/_/prepare-commit-msg — size=39 — todos=0 any=0 firestore=0
+- .husky/\_/.gitignore — size=1 — todos=0 any=0 firestore=0
+- .husky/\_/applypatch-msg — size=39 — todos=0 any=0 firestore=0
+- .husky/\_/commit-msg — size=39 — todos=0 any=0 firestore=0
+- .husky/\_/h — size=551 — todos=0 any=0 firestore=0
+- .husky/\_/husky.sh — size=206 — todos=0 any=0 firestore=0
+- .husky/\_/post-applypatch — size=39 — todos=0 any=0 firestore=0
+- .husky/\_/post-checkout — size=39 — todos=0 any=0 firestore=0
+- .husky/\_/post-commit — size=39 — todos=0 any=0 firestore=0
+- .husky/\_/post-merge — size=39 — todos=0 any=0 firestore=0
+- .husky/\_/post-rewrite — size=39 — todos=0 any=0 firestore=0
+- .husky/\_/pre-applypatch — size=39 — todos=0 any=0 firestore=0
+- .husky/\_/pre-auto-gc — size=39 — todos=0 any=0 firestore=0
+- .husky/\_/pre-commit — size=39 — todos=0 any=0 firestore=0
+- .husky/\_/pre-merge-commit — size=39 — todos=0 any=0 firestore=0
+- .husky/\_/pre-push — size=39 — todos=0 any=0 firestore=0
+- .husky/\_/pre-rebase — size=39 — todos=0 any=0 firestore=0
+- .husky/\_/prepare-commit-msg — size=39 — todos=0 any=0 firestore=0
 - .husky/post-checkout — size=251 — todos=0 any=0 firestore=0
 - .husky/pre-commit — size=329 — todos=0 any=0 firestore=0
 - .husky/pre-push — size=175 — todos=0 any=0 firestore=0
@@ -79,7 +81,8 @@ Generated: 2025-11-17T02:45:34.325Z
 - tsconfig.tsbuildinfo — size=58 — todos=0 any=0 firestore=0
 
 ## docs (145 files)
-- .github/ISSUE_TEMPLATE/_production-template.md — size=4223 — todos=0 any=0 firestore=0
+
+- .github/ISSUE_TEMPLATE/\_production-template.md — size=4223 — todos=0 any=0 firestore=0
 - .github/ISSUE_TEMPLATE/data-004-backups-restore.md — size=912 — todos=0 any=0 firestore=3
 - .github/ISSUE_TEMPLATE/e2e-008-happy-path-gate.md — size=897 — todos=0 any=0 firestore=0
 - .github/ISSUE_TEMPLATE/obs-003-observability.md — size=1236 — todos=0 any=0 firestore=1
@@ -226,6 +229,7 @@ Generated: 2025-11-17T02:45:34.325Z
 - services/api/src/config/README.md — size=210 — todos=0 any=0 firestore=0
 
 ## workflow (19 files)
+
 - .github/dependabot.yml — size=422 — todos=0 any=0 firestore=0
 - .github/labeler.yml — size=2011 — todos=0 any=0 firestore=1
 - .github/labels.yml — size=1753 — todos=0 any=0 firestore=1
@@ -247,6 +251,7 @@ Generated: 2025-11-17T02:45:34.325Z
 - pnpm-workspace.yaml — size=87 — todos=0 any=0 firestore=0
 
 ## config (44 files)
+
 - .markdownlint.json — size=612 — todos=0 any=0 firestore=0
 - .mcp.json — size=1735 — todos=0 any=0 firestore=0
 - .vscode/extensions.json — size=364 — todos=0 any=0 firestore=0
@@ -293,6 +298,7 @@ Generated: 2025-11-17T02:45:34.325Z
 - turbo.json — size=1150 — todos=0 any=0 firestore=0
 
 ## code (311 files)
+
 - apps/web/app/(app)/dashboard/page.tsx — size=62 — todos=0 any=0 firestore=0
 - apps/web/app/(app)/demo/page.tsx — size=7617 — todos=0 any=0 firestore=0
 - apps/web/app/(app)/protected/dashboard/loading.tsx — size=605 — todos=0 any=0 firestore=0
@@ -311,11 +317,11 @@ Generated: 2025-11-17T02:45:34.325Z
 - apps/web/app/RegisterServiceWorker.tsx — size=378 — todos=0 any=0 firestore=0
 - apps/web/app/actions/createSchedule.ts — size=1377 — todos=0 any=0 firestore=0
 - apps/web/app/actions/scheduleActions.ts — size=601 — todos=1 any=0 firestore=0
-- apps/web/app/api/_shared/__tests__/validation.test.ts — size=2683 — todos=0 any=0 firestore=0
-- apps/web/app/api/_shared/logging.ts — size=3141 — todos=0 any=1 firestore=0
-- apps/web/app/api/_shared/middleware.ts — size=7272 — todos=0 any=0 firestore=0
-- apps/web/app/api/_shared/security.ts — size=6428 — todos=0 any=0 firestore=0
-- apps/web/app/api/_shared/validation.ts — size=4293 — todos=0 any=0 firestore=0
+- apps/web/app/api/\_shared/**tests**/validation.test.ts — size=2683 — todos=0 any=0 firestore=0
+- apps/web/app/api/\_shared/logging.ts — size=3141 — todos=0 any=1 firestore=0
+- apps/web/app/api/\_shared/middleware.ts — size=7272 — todos=0 any=0 firestore=0
+- apps/web/app/api/\_shared/security.ts — size=6428 — todos=0 any=0 firestore=0
+- apps/web/app/api/\_shared/validation.ts — size=4293 — todos=0 any=0 firestore=0
 - apps/web/app/api/attendance/route.ts — size=4329 — todos=0 any=0 firestore=2
 - apps/web/app/api/auth/mfa/setup/route.ts — size=1643 — todos=0 any=0 firestore=1
 - apps/web/app/api/auth/mfa/verify/route.ts — size=2411 — todos=0 any=0 firestore=1
@@ -325,15 +331,15 @@ Generated: 2025-11-17T02:45:34.325Z
 - apps/web/app/api/items/route.ts — size=1884 — todos=0 any=0 firestore=1
 - apps/web/app/api/join-tokens/route.ts — size=4225 — todos=0 any=0 firestore=2
 - apps/web/app/api/metrics/route.ts — size=3931 — todos=0 any=0 firestore=0
-- apps/web/app/api/onboarding/__tests__/activate-network.test.ts — size=3628 — todos=0 any=1 firestore=1
-- apps/web/app/api/onboarding/__tests__/admin-form.test.ts — size=4589 — todos=2 any=1 firestore=1
-- apps/web/app/api/onboarding/__tests__/create-network-corporate.test.ts — size=5269 — todos=0 any=1 firestore=0
-- apps/web/app/api/onboarding/__tests__/create-network-org.test.ts — size=4883 — todos=0 any=1 firestore=0
-- apps/web/app/api/onboarding/__tests__/endpoints.test.ts — size=13410 — todos=0 any=0 firestore=3
-- apps/web/app/api/onboarding/__tests__/join-with-token.test.ts — size=5881 — todos=0 any=1 firestore=0
-- apps/web/app/api/onboarding/__tests__/verify-eligibility.test.ts — size=3793 — todos=0 any=1 firestore=0
-- apps/web/app/api/onboarding/_shared/rateLimit.ts — size=2508 — todos=0 any=0 firestore=2
-- apps/web/app/api/onboarding/_shared/schemas.ts — size=3995 — todos=0 any=0 firestore=0
+- apps/web/app/api/onboarding/**tests**/activate-network.test.ts — size=3628 — todos=0 any=1 firestore=1
+- apps/web/app/api/onboarding/**tests**/admin-form.test.ts — size=4589 — todos=2 any=1 firestore=1
+- apps/web/app/api/onboarding/**tests**/create-network-corporate.test.ts — size=5269 — todos=0 any=1 firestore=0
+- apps/web/app/api/onboarding/**tests**/create-network-org.test.ts — size=4883 — todos=0 any=1 firestore=0
+- apps/web/app/api/onboarding/**tests**/endpoints.test.ts — size=13410 — todos=0 any=0 firestore=3
+- apps/web/app/api/onboarding/**tests**/join-with-token.test.ts — size=5881 — todos=0 any=1 firestore=0
+- apps/web/app/api/onboarding/**tests**/verify-eligibility.test.ts — size=3793 — todos=0 any=1 firestore=0
+- apps/web/app/api/onboarding/\_shared/rateLimit.ts — size=2508 — todos=0 any=0 firestore=2
+- apps/web/app/api/onboarding/\_shared/schemas.ts — size=3995 — todos=0 any=0 firestore=0
 - apps/web/app/api/onboarding/activate-network/route.ts — size=1296 — todos=0 any=0 firestore=2
 - apps/web/app/api/onboarding/admin-form/route.ts — size=2820 — todos=0 any=0 firestore=5
 - apps/web/app/api/onboarding/create-network-corporate/route.ts — size=7088 — todos=0 any=0 firestore=13
@@ -370,14 +376,14 @@ Generated: 2025-11-17T02:45:34.325Z
 - apps/web/app/components/ui/Card.tsx — size=1373 — todos=0 any=0 firestore=0
 - apps/web/app/components/ui/Input.tsx — size=3315 — todos=0 any=0 firestore=0
 - apps/web/app/components/ui/Loading.tsx — size=1646 — todos=0 any=0 firestore=0
-- apps/web/app/components/ui/__tests__/Button.test.tsx — size=1598 — todos=0 any=0 firestore=0
-- apps/web/app/components/ui/__tests__/Card.test.tsx — size=1301 — todos=0 any=0 firestore=0
-- apps/web/app/components/ui/__tests__/Input.test.tsx — size=1816 — todos=0 any=0 firestore=0
+- apps/web/app/components/ui/**tests**/Button.test.tsx — size=1598 — todos=0 any=0 firestore=0
+- apps/web/app/components/ui/**tests**/Card.test.tsx — size=1301 — todos=0 any=0 firestore=0
+- apps/web/app/components/ui/**tests**/Input.test.tsx — size=1816 — todos=0 any=0 firestore=0
 - apps/web/app/components/ui/index.ts — size=533 — todos=0 any=0 firestore=0
 - apps/web/app/env.d.ts — size=63 — todos=0 any=0 firestore=0
 - apps/web/app/fonts.ts — size=354 — todos=0 any=0 firestore=0
 - apps/web/app/layout.tsx — size=559 — todos=0 any=0 firestore=0
-- apps/web/app/lib/__tests__/http.test.ts — size=1612 — todos=0 any=0 firestore=0
+- apps/web/app/lib/**tests**/http.test.ts — size=1612 — todos=0 any=0 firestore=0
 - apps/web/app/lib/auth-context.tsx — size=999 — todos=0 any=0 firestore=0
 - apps/web/app/lib/cache.ts — size=936 — todos=0 any=0 firestore=0
 - apps/web/app/lib/db.ts — size=2403 — todos=0 any=0 firestore=7
@@ -387,7 +393,7 @@ Generated: 2025-11-17T02:45:34.325Z
 - apps/web/app/lib/registerServiceWorker.ts — size=2270 — todos=0 any=0 firestore=0
 - apps/web/app/lib/useCreateItem.ts — size=611 — todos=0 any=0 firestore=0
 - apps/web/app/middleware.ts — size=1049 — todos=0 any=0 firestore=0
-- apps/web/app/onboarding/_wizard/OnboardingWizardContext.tsx — size=2015 — todos=0 any=0 firestore=0
+- apps/web/app/onboarding/\_wizard/OnboardingWizardContext.tsx — size=2015 — todos=0 any=0 firestore=0
 - apps/web/app/onboarding/admin-form/page.tsx — size=3843 — todos=0 any=0 firestore=0
 - apps/web/app/onboarding/admin-responsibility/page.tsx — size=6608 — todos=0 any=0 firestore=0
 - apps/web/app/onboarding/block-4/loading.tsx — size=150 — todos=0 any=0 firestore=0
@@ -436,18 +442,18 @@ Generated: 2025-11-17T02:45:34.325Z
 - apps/web/sentry.client.config.ts — size=1551 — todos=0 any=0 firestore=0
 - apps/web/sentry.edge.config.ts — size=483 — todos=0 any=0 firestore=0
 - apps/web/sentry.server.config.ts — size=942 — todos=0 any=0 firestore=0
-- apps/web/src/__tests__/api-security.spec.ts — size=7559 — todos=0 any=0 firestore=0
-- apps/web/src/__tests__/auth-helpers.spec.ts — size=3245 — todos=0 any=0 firestore=0
-- apps/web/src/__tests__/login-page.spec.tsx — size=512 — todos=0 any=0 firestore=0
-- apps/web/src/__tests__/mfa.test.ts — size=5642 — todos=0 any=0 firestore=0
-- apps/web/src/__tests__/middleware.spec.ts — size=1081 — todos=0 any=0 firestore=0
-- apps/web/src/__tests__/security.test.ts — size=8917 — todos=0 any=0 firestore=0
-- apps/web/src/__tests__/session-api.spec.ts — size=1266 — todos=0 any=0 firestore=0
-- apps/web/src/__tests__/session.test.ts — size=4512 — todos=0 any=0 firestore=0
+- apps/web/src/**tests**/api-security.spec.ts — size=7559 — todos=0 any=0 firestore=0
+- apps/web/src/**tests**/auth-helpers.spec.ts — size=3245 — todos=0 any=0 firestore=0
+- apps/web/src/**tests**/login-page.spec.tsx — size=512 — todos=0 any=0 firestore=0
+- apps/web/src/**tests**/mfa.test.ts — size=5642 — todos=0 any=0 firestore=0
+- apps/web/src/**tests**/middleware.spec.ts — size=1081 — todos=0 any=0 firestore=0
+- apps/web/src/**tests**/security.test.ts — size=8917 — todos=0 any=0 firestore=0
+- apps/web/src/**tests**/session-api.spec.ts — size=1266 — todos=0 any=0 firestore=0
+- apps/web/src/**tests**/session.test.ts — size=4512 — todos=0 any=0 firestore=0
 - apps/web/src/components/auth/ProtectedRoute.tsx — size=648 — todos=0 any=0 firestore=0
 - apps/web/src/lib/actionCodeSettings.ts — size=457 — todos=0 any=0 firestore=0
-- apps/web/src/lib/api/__tests__/security-integration.test.ts — size=16929 — todos=0 any=8 firestore=10
-- apps/web/src/lib/api/__tests__/security.bench.ts — size=73 — todos=0 any=0 firestore=0
+- apps/web/src/lib/api/**tests**/security-integration.test.ts — size=16929 — todos=0 any=8 firestore=10
+- apps/web/src/lib/api/**tests**/security.bench.ts — size=73 — todos=0 any=0 firestore=0
 - apps/web/src/lib/api/authorization.test.ts — size=6830 — todos=0 any=6 firestore=8
 - apps/web/src/lib/api/authorization.ts — size=5141 — todos=0 any=0 firestore=6
 - apps/web/src/lib/api/csrf.test.ts — size=6475 — todos=0 any=0 firestore=0
@@ -495,9 +501,11 @@ Generated: 2025-11-17T02:45:34.325Z
 - archive/packages/rules-tests/src/rbac.test.ts — size=7021 — todos=0 any=0 firestore=48
 
 ## rules (2 files)
+
 - firestore.rules — size=13818 — todos=0 any=0 firestore=7
 - storage.rules — size=1058 — todos=0 any=0 firestore=1
 
 ## scripts (2 files)
+
 - scripts/tag-files.mjs — size=192 — todos=0 any=0 firestore=0
 - scripts/tools/index-repo.mjs — size=4542 — todos=8 any=2 firestore=6

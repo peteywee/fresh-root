@@ -115,6 +115,9 @@ describe("POST /api/onboarding/create-network-corporate", () => {
     expect(response.status).toBe(200);
     const _data = await response.json();
 
+    // mark response data as intentionally unused for this unit test
+    void _data;
+
     expect(mockAdminDb.collection).toHaveBeenCalledWith("users");
   });
 

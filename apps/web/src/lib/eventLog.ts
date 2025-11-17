@@ -10,11 +10,11 @@
  * - Uses the v14 EventSchema from @fresh-schedules/types
  */
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { NewEventSchema, type NewEvent } from "@fresh-schedules/types";
 import type { Firestore } from "firebase-admin/firestore";
 
-export async function logEvent(adminDb: Firestore | any, input: NewEvent): Promise<void> {
+export async function logEvent(adminDb: Firestore | undefined, input: NewEvent): Promise<void> {
   if (!adminDb) {
     // In local/stub mode, log as a warning instead of writing to Firestore.
     // This keeps the call sites simple and prevents crashes when adminDb is undefined.
@@ -32,7 +32,8 @@ export async function logEvent(adminDb: Firestore | any, input: NewEvent): Promi
   }
 
   const event = parsed.data;
-  const eventsCollection = adminDb.collection("events");
+  // adminDb is defined here (checked above) — use non-null assertion for TypeScript
+  const eventsCollection = adminDb!.collection("events");
   const docRef = eventsCollection.doc();
 
   await docRef.set({

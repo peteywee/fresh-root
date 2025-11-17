@@ -63,8 +63,8 @@ export default [
           "ts-ignore": "allow-with-description",
           "ts-nocheck": true,
           "ts-check": false,
-          "minimumDescriptionLength": 6
-        }
+          minimumDescriptionLength: 6,
+        },
       ],
       "prefer-const": "warn",
       "no-console": "off", // Disabled: service worker needs console

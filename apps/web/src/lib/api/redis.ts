@@ -179,6 +179,9 @@ function _getRedisAdapter(): RedisClient | null {
   return singletonAdapter;
 }
 
+// reference helper to avoid "defined but never used" lint warnings
+void _getRedisAdapter;
+
 export type RateLimitConfig = {
   max: number;
   windowSeconds: number;

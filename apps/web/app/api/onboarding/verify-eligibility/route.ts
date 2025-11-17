@@ -44,6 +44,9 @@ export async function verifyEligibilityHandler(
   const uid = req.user?.uid;
   const _claims = req.user?.customClaims || {};
 
+  // keep claims variable referenced so linters don't report it as unused
+  void _claims;
+
   // Check authentication first
   if (!uid) {
     return NextResponse.json<ErrorResponse>(

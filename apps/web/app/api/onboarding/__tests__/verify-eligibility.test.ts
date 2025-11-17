@@ -120,6 +120,9 @@ describe("POST /api/onboarding/verify-eligibility", () => {
       }),
     });
 
+    // mark the mocked collection as intentionally unused for this test
+    void _mockCollection;
+
     // This would return 429 if the rate limit check is properly implemented
     // The actual behavior depends on implementation details
   });

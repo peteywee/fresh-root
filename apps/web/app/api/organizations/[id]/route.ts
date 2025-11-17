@@ -49,6 +49,8 @@ export const GET = withSecurity(
       };
       return NextResponse.json(organization);
     } catch (_error) {
+      // reference the caught error to avoid unused-variable lint warnings
+      void _error;
       return serverError("Failed to fetch organization");
     }
   },
@@ -76,6 +78,8 @@ export const PATCH = withSecurity(
       };
       return NextResponse.json(updatedOrg);
     } catch (_error) {
+      // reference the caught error to avoid unused-variable lint warnings
+      void _error;
       return serverError("Failed to update organization");
     }
   },

@@ -10,7 +10,7 @@
  * - Safe to call on every session bootstrap (idempotent)
  */
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import type { Firestore } from "firebase-admin/firestore";
 
 export type AuthUserClaims = {
@@ -24,7 +24,7 @@ export type AuthUserClaims = {
 };
 
 export async function ensureUserProfile(args: {
-  adminDb: Firestore | any;
+  adminDb: Firestore | undefined;
   uid: string;
   claims: AuthUserClaims;
 }): Promise<void> {
@@ -37,7 +37,7 @@ export async function ensureUserProfile(args: {
     return;
   }
 
-  const usersRef = adminDb.collection("users").doc(uid);
+  const usersRef = adminDb!.collection("users").doc(uid);
   const snap = await usersRef.get();
   const now = Date.now();
 
@@ -74,10 +74,12 @@ export async function ensureUserProfile(args: {
   }
 
   // If the doc exists, we still may want to backfill missing profile fields
-  const existing = snap.data() as any;
+  const existing = (snap.data() || {}) as Record<string, unknown>;
+
+  const existingProfile = (existing && (existing["profile"] as Record<string, unknown> | undefined)) || {};
 
   const profile = {
-    ...(existing.profile || {}),
+    ...existingProfile,
     ...baseProfile,
   };
 
