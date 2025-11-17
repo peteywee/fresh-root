@@ -20,7 +20,8 @@
       "@vitest/expect": "4.0.6",
       "@vitest/runner": "4.0.6",
       "@vitest/spy": "4.0.6",
-      "@vitest/ui": "4.0.6"
+      "@vitest/ui": "4.0.6",
+      "@sentry/core": "10.25.0"
     }
   },
   "workspaces": [
@@ -73,7 +74,7 @@
     "ajv": "^8.17.1",
     "ajv-formats": "^3.0.1",
     "execa": "^9.6.0",
-    "firebase-admin": "^13.5.0",
+    "firebase-admin": "^13.6.0",
     "glob": "10",
     "markdownlint": "^0.39.0",
     "p-retry": "^7.1.0",

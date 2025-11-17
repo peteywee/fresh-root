@@ -13,9 +13,20 @@
     "paths": {
       "@fresh-schedules/types": ["packages/types/src/index.ts"]
     },
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["apps/web/*", "apps/web/src/*"],
+      "@fresh-schedules/types": ["packages/types/src/index.ts"]
+    },
     "typeRoots": ["./types", "./node_modules/@types"]
   },
-  "include": ["types/**/*.d.ts"],
+  "include": [
+    "types/**/*.d.ts",
+    "apps/**/*",
+    "functions/**/*",
+    "packages/**/*",
+    "services/**/*"
+  ],
   "exclude": [
     "node_modules",
     "tests",
@@ -27,6 +38,8 @@
     "**/*.spec.ts",
     "**/*.spec.tsx",
     "**/*.test.ts",
-    "**/*.test.tsx"
+    "**/*.test.tsx",
+    "types/firebase-admin.d.ts"
   ]
+
 }

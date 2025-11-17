@@ -22,7 +22,7 @@ type BasicReq = {
 
 type Handler<TReq extends BasicReq = BasicReq> = (
   req: TReq & { requestId: string },
-) => Promise<Response> | Response;
+) => Promise<any> | any;
 
 function generateRequestId(): string {
   try {
@@ -47,9 +47,9 @@ function generateRequestId(): string {
  *   );
  */
 export function withRequestLogging<TReq extends BasicReq>(
-  handler: Handler<TReq> | ((req: TReq, ctx: Record<string, unknown>) => Promise<Response>),
-): (req: TReq, ctx?: Record<string, unknown>) => Promise<Response> {
-  return async (req: TReq, ctx?: Record<string, unknown>): Promise<Response> => {
+  handler: Handler<TReq> | ((req: TReq, ctx: Record<string, unknown>) => Promise<any>),
+): (req: TReq, ctx?: Record<string, unknown>) => Promise<any> {
+  return async (req: TReq, ctx?: Record<string, unknown>): Promise<any> => {
     const requestId = generateRequestId();
     const start = Date.now();
 

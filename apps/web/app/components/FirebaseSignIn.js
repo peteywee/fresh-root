@@ -1,0 +1,34 @@
+// [P0][FIREBASE][FIREBASE] FirebaseSignIn
+// Tags: P0, FIREBASE, FIREBASE
+"use client";
+import { jsx as _jsx } from "react/jsx-runtime";
+import { getAuth } from "firebase/auth";
+import * as firebaseui from "firebaseui";
+import { useEffect, useRef } from "react";
+import "firebaseui/dist/firebaseui.css";
+// This component mounts FirebaseUI's sign-in widget into a container.
+// It assumes you have initialized firebase in `apps/web/app/lib/firebaseClient.ts`.
+export default function FirebaseSignIn() {
+    const containerRef = useRef(null);
+    useEffect(() => {
+        const auth = getAuth();
+        const ui = new firebaseui.auth.AuthUI(auth);
+        ui.start(containerRef.current, {
+            // Use provider IDs as strings to avoid SDK namespace/type differences.
+            // See FirebaseUI docs for provider id strings.
+            signInOptions: ["google.com", "email", "anonymous"],
+            signInSuccessUrl: "/",
+            tosUrl: "/",
+            privacyPolicyUrl: "/",
+        });
+        return () => {
+            try {
+                ui.delete();
+            }
+            catch {
+                // ignore if already deleted
+            }
+        };
+    }, []);
+    return _jsx("div", { ref: containerRef });
+}

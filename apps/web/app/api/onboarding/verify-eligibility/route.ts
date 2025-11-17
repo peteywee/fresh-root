@@ -66,8 +66,19 @@ export async function verifyEligibilityHandler(
     }
   }
 
-  // Validate required fields
-  if (!body.email || !body.role) {
+  // Narrow and validate required fields
+  if (typeof body !== "object" || body === null) {
+    return NextResponse.json<ErrorResponse>(
+      {
+        error: "Missing email or role",
+        code: "ONB_ELIGIBILITY_INVALID_REQUEST",
+      },
+      { status: 400 },
+    );
+  }
+
+  const b = body as Record<string, unknown>;
+  if (typeof b.email !== "string" || typeof b.role !== "string") {
     return NextResponse.json<ErrorResponse>(
       {
         error: "Missing email or role",
@@ -87,7 +98,7 @@ export async function verifyEligibilityHandler(
     "admin",
   ];
 
-  if (!allowedRoles.includes(body.role)) {
+  if (!allowedRoles.includes(b.role as string)) {
     return NextResponse.json<ErrorResponse>(
       {
         error: "Role not allowed for onboarding",
@@ -107,8 +118,8 @@ export async function verifyEligibilityHandler(
     {
       ok: true,
       eligible: true,
-      email: body.email,
-      role: body.role,
+      email: b.email as string,
+      role: b.role as string,
       isStub,
       rate_limit_remaining: rateLimitRemaining,
     },

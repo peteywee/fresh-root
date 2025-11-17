@@ -146,25 +146,33 @@ export interface WithSecurityOptions {
 }
 
 export function withSecurity<
-  C extends { params: Record<string, string> | Promise<Record<string, string>> } = {
+  C extends { params: Record<string, string> | Promise<Record<string, string>>; userId?: string } = {
     params: Record<string, string> | Promise<Record<string, string>>;
+    userId?: string;
   },
 >(
   handler: (
     req: AuthenticatedRequest | NextRequest,
-    ctx: { params: Record<string, string>; [key: string]: unknown },
+    // Use a loose ctx type so handlers that require `userId` are assignable
+    ctx: any,
   ) => Promise<NextResponse>,
   options: WithSecurityOptions = {},
-): (req: AuthenticatedRequest | NextRequest, ctx: C) => Promise<NextResponse> {
-  return async (req: AuthenticatedRequest | NextRequest, ctx: C) => {
+): (req: any, ctx?: any) => Promise<any> {
+  return async (req: any, ctx: any) => {
     try {
       // Resolve params if it's a Promise (Next.js 14+/16+)
       const resolvedParams = await Promise.resolve(ctx.params);
-      const resolvedCtx = { ...ctx, params: resolvedParams } as {
+      const resolvedCtx = { ...ctx, params: resolvedParams, userId: ctx.userId } as {
         params: Record<string, string>;
+        userId?: string;
         [key: string]: unknown;
       };
 
+      // If request is authenticated, expose `userId` on the context for handlers
+      const possibleReq = req as AuthenticatedRequest;
+      if (possibleReq?.user?.uid) {
+        resolvedCtx.userId = possibleReq.user.uid;
+      }
       // Apply CORS
       const corsMw = cors(options.corsAllowedOrigins || []);
       const afterCors = await corsMw(req as NextRequest, async (corsReq) => {
@@ -180,12 +188,16 @@ export function withSecurity<
             // CSRF should be tested separately via csrf.ts tests
             if (options.require2FA) {
               return require2FAForManagers(rlReq as AuthenticatedRequest, async (ra) => {
+                // ensure userId is present for handlers that require it
+                if (ra?.user?.uid) resolvedCtx.userId = ra.user.uid;
                 return handler(ra as AuthenticatedRequest, resolvedCtx);
               });
             }
 
             if (options.requireAuth) {
               return requireSession(rlReq as AuthenticatedRequest, async (ra) => {
+                // ensure userId is present for handlers that require it
+                if (ra?.user?.uid) resolvedCtx.userId = ra.user.uid;
                 return handler(ra as AuthenticatedRequest, resolvedCtx);
               });
             }

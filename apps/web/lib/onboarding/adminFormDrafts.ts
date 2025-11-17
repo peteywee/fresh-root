@@ -1,6 +1,9 @@
 // [P0][FIREBASE][CODE] AdminFormDrafts
 // Tags: P0, FIREBASE, CODE
-import { db } from "@/lib/firebaseAdmin";
+import { getFirebaseAdminDb } from "@/lib/firebase-admin";
+import type { Transaction } from "firebase-admin/firestore";
+
+const db = getFirebaseAdminDb();
 import {
   CreateAdminResponsibilityFormSchema,
   type AdminResponsibilityForm,
@@ -98,7 +101,7 @@ export async function consumeAdminFormDraft(params: {
 
   const ref = db.collection("adminFormDrafts").doc(formToken);
 
-  return await db.runTransaction(async (tx) => {
+  return await db.runTransaction(async (tx: Transaction) => {
     const snap = await tx.get(ref);
     if (!snap.exists) return null;
 
