@@ -1,0 +1,67 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      // Debug Next.js (apps/web) with breakpoints in server & client
+      "type": "node",
+      "request": "launch",
+      "name": "Web: Next dev",
+      "cwd": "${workspaceFolder}/apps/web",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["--filter", "@apps/web", "dev"],
+      "env": {
+        "NODE_OPTIONS": "--max-old-space-size=4096",
+        "NEXT_TELEMETRY_DISABLED": "1"
+      },
+      "console": "integratedTerminal",
+      "skipFiles": ["<node_internals>/**"]
+    },
+    {
+      // Debug Vitest (all workspaces) with watch disabled by default
+      "type": "node",
+      "request": "launch",
+      "name": "Tests: Vitest (workspace)",
+      "cwd": "${workspaceFolder}",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["vitest", "run", "--reporter=verbose"],
+      "env": {
+        "NODE_OPTIONS": "--max-old-space-size=4096"
+      },
+      "console": "integratedTerminal",
+      "autoAttachChildProcesses": true
+    },
+    {
+      // Single-file test focus: put cursor in the file and run
+      "type": "node",
+      "request": "launch",
+      "name": "Tests: Current File (Vitest)",
+      "program": "${workspaceFolder}/node_modules/vitest/vitest.mjs",
+      "args": ["run", "--reporter=verbose", "${file}"],
+      "cwd": "${workspaceFolder}",
+      "env": {
+        "NODE_OPTIONS": "--max-old-space-size=4096"
+      },
+      "console": "integratedTerminal"
+    },
+    {
+      // Functions emulator (if/when you debug Cloud Functions locally)
+      "type": "node",
+      "request": "launch",
+      "name": "Firebase Emulators",
+      "cwd": "${workspaceFolder}",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["-w", "emu"],
+      "env": {
+        "NODE_OPTIONS": "--max-old-space-size=4096",
+        "FIREBASE_EMULATORS": "true"
+      },
+      "console": "integratedTerminal"
+    }
+  ],
+  "compounds": [
+    {
+      "name": "Dev: Web + Emulators",
+      "configurations": ["Firebase Emulators", "Web: Next dev"]
+    }
+  ]
+}

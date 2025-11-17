@@ -1,0 +1,12 @@
+{
+  "recommendations": [
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode",
+    "ZixuanChen.vitest-explorer",
+    "ms-vscode.js-debug-nightly",
+    "redhat.vscode-yaml",
+    "DavidAnson.vscode-markdownlint",
+    "streetsidesoftware.code-spell-checker"
+  ],
+  "unwantedRecommendations": ["github.vscode-pull-request-github", "bradlc.vscode-tailwindcss"]
+}

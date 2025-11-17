@@ -1,0 +1,52 @@
+{
+  "errors": [
+    {
+      "tool": "firecrawl_scrape",
+      "issues": [
+        "The schema uses meta-schema features ($dynamicRef) that are not yet supported by the validator. (at /$schema)"
+      ],
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "url": { "type": "string", "format": "uri" },
+          "formats": { "type": "array" },
+          "onlyMainContent": { "type": "boolean" }
+        },
+        "required": ["url"],
+        "additionalProperties": false
+      }
+    },
+    {
+      "tool": "firecrawl_map",
+      "issues": [
+        "The schema uses meta-schema features ($dynamicRef) that are not yet supported by the validator. (at /$schema)"
+      ]
+    },
+    {
+      "tool": "firecrawl_search",
+      "issues": [
+        "The schema uses meta-schema features ($dynamicRef) that are not yet supported by the validator. (at /$schema)"
+      ]
+    },
+    {
+      "tool": "firecrawl_crawl",
+      "issues": [
+        "The schema uses meta-schema features ($dynamicRef) that are not yet supported by the validator. (at /$schema)"
+      ]
+    },
+    {
+      "tool": "firecrawl_check_crawl_status",
+      "issues": [
+        "The schema uses meta-schema features ($dynamicRef) that are not yet supported by the validator. (at /$schema)"
+      ]
+    },
+    {
+      "tool": "firecrawl_extract",
+      "issues": [
+        "The schema uses meta-schema features ($dynamicRef) that are not yet supported by the validator. (at /$schema)"
+      ]
+    }
+  ],
+  "summary": "All Firecrawl tools are using JSON Schema Draft 2020-12 with $dynamicRef feature which is not supported by the current validator. Consider downgrading schemas to Draft 07 or updating the validator."
+}

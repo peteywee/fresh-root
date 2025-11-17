@@ -1,0 +1,8 @@
+#!/bin/sh
+# [P2][DEV][HOOKS] Post-checkout hook - auto-tag files after branch switch
+# Tags: P2, DEV, HOOKS, AUTOMATION
+
+. "$(dirname "$0")/_/husky.sh"
+
+# Auto-tag any new files after checkout
+node scripts/tag-files.mjs --auto-fix 2>/dev/null || true

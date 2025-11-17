@@ -1,0 +1,26 @@
+{
+  "displayName": "Uptime Check Failure - FreshRoot Web",
+  "combiner": "OR",
+  "enabled": true,
+  "notificationChannels": ["projects/PROJECT_ID/notificationChannels/CHANNEL_ID"],
+  "conditions": [
+    {
+      "displayName": "Uptime check failing > 2 min",
+      "conditionThreshold": {
+        "filter": "metric.type=\"monitoring.googleapis.com/uptime_check/check_passed\" resource.type=\"uptime_url\"",
+        "aggregations": [
+          {
+            "alignmentPeriod": "120s",
+            "perSeriesAligner": "ALIGN_PERCENT_TRUE"
+          }
+        ],
+        "comparison": "COMPARISON_LT",
+        "thresholdValue": 1,
+        "duration": "120s",
+        "trigger": {
+          "count": 1
+        }
+      }
+    }
+  ]
+}

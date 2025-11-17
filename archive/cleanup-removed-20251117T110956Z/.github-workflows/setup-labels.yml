@@ -1,0 +1,66 @@
+name: Setup Repository Labels
+
+on:
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Dry run (preview changes without applying)"
+        required: false
+        type: boolean
+        default: false
+
+permissions:
+  issues: write
+  contents: read
+
+jobs:
+  setup-labels:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup GitHub CLI
+        run: |
+          # GitHub CLI is pre-installed on ubuntu-latest runners
+          gh --version
+
+      - name: Run labels setup script
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if [ "${{ inputs.dry_run }}" = "true" ]; then
+            echo "🔍 DRY RUN MODE - Labels that would be created/updated:"
+            echo ""
+            labels=(
+              'security:#b60205'
+              'observability:#5319e7'
+              'data:#0e8a16'
+              'rules:#0052cc'
+              'ui:#1d76db'
+              'ux:#c5def5'
+              'e2e:#5319e7'
+              'release:#f7c6c7'
+              'backend:#d4c5f9'
+              'frontend:#f9d0c4'
+              'platform:#c2e0c6'
+              'P0:#d73a4a'
+              'P1:#fbca04'
+              'P2:#0e8a16'
+            )
+            for l in "${labels[@]}"; do
+              name="${l%%:*}"
+              color="${l##*:}"
+              echo "  - $name (color: #$color)"
+            done
+            echo ""
+            echo "✅ To apply these labels, re-run this workflow without dry_run"
+          else
+            echo "🏷️  Creating/updating repository labels..."
+            bash scripts/gh-setup-labels.sh
+            echo ""
+            echo "✅ Labels setup complete!"
+            echo ""
+            echo "📋 Current labels:"
+            gh label list --limit 100
+          fi
