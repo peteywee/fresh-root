@@ -91,3 +91,5 @@ apps/web/app/api/_shared/__tests__/validation.test.ts
 tests/rules/users.test.ts
 tests/rules/storage.fixed.spec.ts
 ci-firebase-key.json
+keys/
+keys/*

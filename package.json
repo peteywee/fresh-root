@@ -35,6 +35,8 @@
     "build": "pnpm -r --filter @apps/web... run build && pnpm -r --filter @packages/* run build && pnpm --filter functions run build",
     "typecheck": "tsc --build",
     "lint": "eslint \"apps/**/src/**/*.{ts,tsx,js,jsx}\" \"apps/**/app/**/*.{ts,tsx,js,jsx}\" \"apps/**/vitest.setup.ts\" \"packages/**/src/**/*.{ts,tsx,js,jsx}\" \"functions/src/**/*.{ts,tsx,js,jsx}\" \"services/api/src/**/*.{ts,tsx,js,jsx}\" \"services/api/test/**/*.{ts,tsx,js,jsx}\" --max-warnings 200",
+    "lint:strict": "node ./scripts/tools/report-any-usage.mjs && eslint \"apps/**/src/**/*.{ts,tsx,js,jsx}\" \"apps/**/app/**/*.{ts,tsx,js,jsx}\" \"apps/**/vitest.setup.ts\" \"packages/**/src/**/*.{ts,tsx,js,jsx}\" \"functions/src/**/*.{ts,tsx,js,jsx}\" \"services/api/src/**/*.{ts,tsx,js,jsx}\" --max-warnings 0",
+    "lint:staged": "lint-staged",
     "prepare": "husky",
     "build:agent": "tsc -p scripts/agent/tsconfig.json",
     "run:agent": "node --enable-source-maps ./dist/agent/agent.mjs",
@@ -68,6 +70,12 @@
     "cache:info": "du -sh ~/.pnpm-store 2>/dev/null || echo 'Cache location varies by OS'",
     "tag:files": "node scripts/tag-files.mjs",
     "watch:tags": "node scripts/watch-and-tag.mjs"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,js,jsx}": [
+      "eslint --cache --fix --max-warnings=0",
+      "git add"
+    ]
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.21.1",
@@ -114,6 +122,7 @@
     "turbo": "^2.6.0",
     "typescript": "^5.9.3",
     "vitest": "^4.0.6",
-    "vite": "^4.3.9"
+    "vite": "^4.3.9",
+    "lint-staged": "^13.0.3"
   }
 }

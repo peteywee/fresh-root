@@ -56,7 +56,16 @@ export default [
           caughtErrorsIgnorePattern: "^_",
         },
       ],
-      "@typescript-eslint/no-explicit-any": "warn", // Warn on explicit any types
+      "@typescript-eslint/no-explicit-any": "error", // Treat explicit any as ERROR in source files
+      "@typescript-eslint/ban-ts-comment": [
+        "error",
+        {
+          "ts-ignore": "allow-with-description",
+          "ts-nocheck": true,
+          "ts-check": false,
+          "minimumDescriptionLength": 6
+        }
+      ],
       "prefer-const": "warn",
       "no-console": "off", // Disabled: service worker needs console
       "react-hooks/rules-of-hooks": "error",
@@ -94,6 +103,10 @@ export default [
     rules: {
       // Turn off no-undef for test globals to avoid editor warnings
       "no-undef": "off",
+      // Allow explicit any in tests during gradual cleanup
+      "@typescript-eslint/no-explicit-any": "off",
+      // Allow ts-ignore in tests for legacy fixtures
+      "@typescript-eslint/ban-ts-comment": "off",
     },
   },
 ];

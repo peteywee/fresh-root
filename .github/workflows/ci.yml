@@ -66,11 +66,11 @@ jobs:
 
       # Optional: Playwright smoke tests (uncomment/adjust if Playwright is configured)
       - name: Install Playwright browsers
-        if: ${{ always() }}
+        if: ${{ github.event_name == 'workflow_dispatch' || github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master' }}
         run: pnpm exec playwright install --with-deps
 
       - name: Playwright smoke tests
-        if: ${{ always() }}
+        if: ${{ github.event_name == 'workflow_dispatch' || github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master' }}
         run: pnpm exec playwright test --project=chromium --config=playwright.config.ts --reporter=github
         continue-on-error: false
 
