@@ -1,9 +1,6 @@
 #!/bin/sh
-. "$(dirname "$0")/_/husky.sh"
-
 echo "Running lint-staged (pre-commit)..."
 pnpm lint:staged
-#!/bin/sh
 
 # Pre-commit: auto-tag files, ensure doc symlinks, typecheck, and format (lint runs on GH side)
 node scripts/tag-files.mjs || exit 1

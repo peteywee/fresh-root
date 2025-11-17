@@ -1,0 +1,1401 @@
+{
+  "anyCast": {
+    "total": 41,
+    "files": [
+      {
+        "file": "apps/web/src/lib/api/__tests__/security-integration.test.ts",
+        "count": 8
+      },
+      {
+        "file": "apps/web/src/lib/api/authorization.test.ts",
+        "count": 6
+      },
+      {
+        "file": "archive/tests/unit/middleware.test.ts",
+        "count": 6
+      },
+      {
+        "file": "apps/web/src/lib/onboarding/createNetworkOrg.test.ts",
+        "count": 2
+      },
+      {
+        "file": "archive/docs/PR63_REVIEW_IMPLEMENTATION.md",
+        "count": 2
+      },
+      {
+        "file": "archive/docs/onboarding/ONBOARDING_BACKEND_COMPLETION.md",
+        "count": 2
+      },
+      {
+        "file": "scripts/tools/index-repo.mjs",
+        "count": 2
+      },
+      {
+        "file": "apps/web/app/api/_shared/logging.ts",
+        "count": 1
+      },
+      {
+        "file": "apps/web/app/api/onboarding/__tests__/activate-network.test.ts",
+        "count": 1
+      },
+      {
+        "file": "apps/web/app/api/onboarding/__tests__/admin-form.test.ts",
+        "count": 1
+      },
+      {
+        "file": "apps/web/app/api/onboarding/__tests__/create-network-corporate.test.ts",
+        "count": 1
+      },
+      {
+        "file": "apps/web/app/api/onboarding/__tests__/create-network-org.test.ts",
+        "count": 1
+      },
+      {
+        "file": "apps/web/app/api/onboarding/__tests__/join-with-token.test.ts",
+        "count": 1
+      },
+      {
+        "file": "apps/web/app/api/onboarding/__tests__/verify-eligibility.test.ts",
+        "count": 1
+      },
+      {
+        "file": "apps/web/app/api/onboarding/create-network-org/route-new.ts",
+        "count": 1
+      },
+      {
+        "file": "apps/web/src/lib/userProfile.ts",
+        "count": 1
+      },
+      {
+        "file": "archive/docs/blocks/BLOCK3_QUICK_START.md",
+        "count": 1
+      },
+      {
+        "file": "archive/docs/onboarding/ONBOARDING_BACKEND_QUICKREF.md",
+        "count": 1
+      },
+      {
+        "file": "archive/scripts/bootstrap_tier3.sh",
+        "count": 1
+      },
+      {
+        "file": "archive/tests/rules/networks.spec.mts",
+        "count": 1
+      }
+    ],
+    "top10": [
+      {
+        "file": "apps/web/src/lib/api/__tests__/security-integration.test.ts",
+        "count": 8
+      },
+      {
+        "file": "apps/web/src/lib/api/authorization.test.ts",
+        "count": 6
+      },
+      {
+        "file": "archive/tests/unit/middleware.test.ts",
+        "count": 6
+      },
+      {
+        "file": "apps/web/src/lib/onboarding/createNetworkOrg.test.ts",
+        "count": 2
+      },
+      {
+        "file": "archive/docs/PR63_REVIEW_IMPLEMENTATION.md",
+        "count": 2
+      },
+      {
+        "file": "archive/docs/onboarding/ONBOARDING_BACKEND_COMPLETION.md",
+        "count": 2
+      },
+      {
+        "file": "scripts/tools/index-repo.mjs",
+        "count": 2
+      },
+      {
+        "file": "apps/web/app/api/_shared/logging.ts",
+        "count": 1
+      },
+      {
+        "file": "apps/web/app/api/onboarding/__tests__/activate-network.test.ts",
+        "count": 1
+      },
+      {
+        "file": "apps/web/app/api/onboarding/__tests__/admin-form.test.ts",
+        "count": 1
+      }
+    ]
+  },
+  "tsIgnore": {
+    "total": 6,
+    "files": [
+      {
+        "file": "apps/web/src/lib/api/redis.ts",
+        "count": 4
+      },
+      {
+        "file": "scripts/tools/index-repo.mjs",
+        "count": 2
+      }
+    ],
+    "top10": [
+      {
+        "file": "apps/web/src/lib/api/redis.ts",
+        "count": 4
+      },
+      {
+        "file": "scripts/tools/index-repo.mjs",
+        "count": 2
+      }
+    ]
+  },
+  "todo": {
+    "total": 120,
+    "files": [
+      {
+        "file": ".vscode/settings.json",
+        "count": 22
+      },
+      {
+        "file": "archive/mcp/filetag-server.mjs",
+        "count": 11
+      },
+      {
+        "file": "scripts/tools/index-repo.mjs",
+        "count": 8
+      },
+      {
+        "file": "archive/docs/quality/TECHNICAL_DEBT.md",
+        "count": 5
+      },
+      {
+        "file": "archive/docs/FINAL_SUMMARY.md",
+        "count": 4
+      },
+      {
+        "file": "archive/docs/blocks/PHASE2_OPTIONS.md",
+        "count": 4
+      },
+      {
+        "file": "archive/docs/todo-groups.todo.yml",
+        "count": 4
+      },
+      {
+        "file": "pnpm-lock.yaml",
+        "count": 4
+      },
+      {
+        "file": ".env.example",
+        "count": 3
+      },
+      {
+        "file": "archive/BLOCK3_COMPLETION_REPORT.sh",
+        "count": 3
+      },
+      {
+        "file": "archive/docs/BLOCK3_DOCUMENTATION_INDEX.md",
+        "count": 3
+      },
+      {
+        "file": "archive/docs/TODO-v13.md",
+        "count": 3
+      },
+      {
+        "file": "archive/docs/archive/SECURITY_FIXES_SUMMARY.md",
+        "count": 3
+      },
+      {
+        "file": "archive/mcp/filetag-server-enhanced.mjs",
+        "count": 3
+      },
+      {
+        "file": "archive/tests/e2e/login_publish_logout.e2e.spec.ts",
+        "count": 3
+      },
+      {
+        "file": ".gitignore",
+        "count": 2
+      },
+      {
+        "file": "apps/web/app/api/onboarding/__tests__/admin-form.test.ts",
+        "count": 2
+      },
+      {
+        "file": "archive/docs/BLOCK3_COMPLETION_MANIFEST.md",
+        "count": 2
+      },
+      {
+        "file": "archive/docs/blocks/BLOCK1_BLOCK2_PROGRESS.md",
+        "count": 2
+      },
+      {
+        "file": "archive/docs/blocks/BLOCK1_SLO_SUMMARY.md",
+        "count": 2
+      },
+      {
+        "file": "archive/docs/blocks/BLOCK3_IMPLEMENTATION.md",
+        "count": 2
+      },
+      {
+        "file": "archive/docs/blocks/BLOCK3_SUMMARY.md",
+        "count": 2
+      },
+      {
+        "file": "archive/docs/blocks/BLOCK4_PLANNING.md",
+        "count": 2
+      },
+      {
+        "file": "archive/docs/migration/v15/PHASE2_SPEC_CROSSWALK.md",
+        "count": 2
+      },
+      {
+        "file": "packages/types/src/__tests__/corpOrgLinks.test.ts",
+        "count": 2
+      },
+      {
+        "file": "packages/types/src/__tests__/orgVenueAssignments.test.ts",
+        "count": 2
+      },
+      {
+        "file": "apps/web/app/actions/scheduleActions.ts",
+        "count": 1
+      },
+      {
+        "file": "apps/web/lib/onboarding/corporates.code-search",
+        "count": 1
+      },
+      {
+        "file": "archive/docs/BLOCK3_SIGN_OFF.md",
+        "count": 1
+      },
+      {
+        "file": "archive/docs/CHANGELOG.md",
+        "count": 1
+      },
+      {
+        "file": "archive/docs/CONSOLIDATION_OPPORTUNITIES.md",
+        "count": 1
+      },
+      {
+        "file": "archive/docs/PR62_REVIEW_SUMMARY.md",
+        "count": 1
+      },
+      {
+        "file": "archive/docs/TODO-v14.md",
+        "count": 1
+      },
+      {
+        "file": "archive/docs/UX_PLAN.md",
+        "count": 1
+      },
+      {
+        "file": "archive/docs/bible/GAPS_v14.0.0.md",
+        "count": 1
+      },
+      {
+        "file": "archive/docs/blocks/PHASE2_IMPLEMENTATION.md",
+        "count": 1
+      },
+      {
+        "file": "archive/docs/onboarding/TODOonboarding.md",
+        "count": 1
+      },
+      {
+        "file": "archive/docs/quality/CLEANUP_SUMMARY_2025-11-07.md",
+        "count": 1
+      },
+      {
+        "file": "archive/docs/quality/CONSOLIDATION_OPPORTUNITIES.md",
+        "count": 1
+      },
+      {
+        "file": "packages/types/src/__tests__/corpOrgLinks.v14.test.ts",
+        "count": 1
+      },
+      {
+        "file": "packages/types/src/__tests__/orgVenueAssignments.v14.test.ts",
+        "count": 1
+      }
+    ],
+    "top10": [
+      {
+        "file": ".vscode/settings.json",
+        "count": 22
+      },
+      {
+        "file": "archive/mcp/filetag-server.mjs",
+        "count": 11
+      },
+      {
+        "file": "scripts/tools/index-repo.mjs",
+        "count": 8
+      },
+      {
+        "file": "archive/docs/quality/TECHNICAL_DEBT.md",
+        "count": 5
+      },
+      {
+        "file": "archive/docs/FINAL_SUMMARY.md",
+        "count": 4
+      },
+      {
+        "file": "archive/docs/blocks/PHASE2_OPTIONS.md",
+        "count": 4
+      },
+      {
+        "file": "archive/docs/todo-groups.todo.yml",
+        "count": 4
+      },
+      {
+        "file": "pnpm-lock.yaml",
+        "count": 4
+      },
+      {
+        "file": ".env.example",
+        "count": 3
+      },
+      {
+        "file": "archive/BLOCK3_COMPLETION_REPORT.sh",
+        "count": 3
+      }
+    ]
+  },
+  "firestore": {
+    "total": 1859,
+    "files": [
+      {
+        "file": "archive/tests/rules/networks.spec.mts",
+        "count": 104
+      },
+      {
+        "file": "archive/tests/rules/join-tokens.spec.mts",
+        "count": 63
+      },
+      {
+        "file": "archive/tests/rules/attendance.spec.mts",
+        "count": 58
+      },
+      {
+        "file": "archive/tests/rules/schedules.spec.mts",
+        "count": 57
+      },
+      {
+        "file": "archive/tests/rules/shifts.spec.mts",
+        "count": 57
+      },
+      {
+        "file": "archive/tests/rules/organizations.spec.ts",
+        "count": 51
+      },
+      {
+        "file": "archive/tests/rules/memberships.spec.ts",
+        "count": 49
+      },
+      {
+        "file": "archive/packages/rules-tests/src/rbac.test.ts",
+        "count": 48
+      },
+      {
+        "file": "archive/tests/rules/venues.spec.mts",
+        "count": 48
+      },
+      {
+        "file": "archive/tests/rules/zones.spec.mts",
+        "count": 48
+      },
+      {
+        "file": "archive/docs/COMPLETE_TECHNICAL_DOCUMENTATION.md",
+        "count": 43
+      },
+      {
+        "file": "archive/tests/rules/mfa.spec.ts",
+        "count": 39
+      },
+      {
+        "file": "archive/tests/rules/positions.spec.ts",
+        "count": 37
+      },
+      {
+        "file": "archive/docs/v14/V14_FREEZE_COMPLETE_GUIDE.md",
+        "count": 28
+      },
+      {
+        "file": "archive/.github_agents.from_root.20251117T005629Z/my-agent.md",
+        "count": 26
+      },
+      {
+        "file": "archive/docs/schema-map.md",
+        "count": 26
+      },
+      {
+        "file": "archive/tests/rules/admin-form.spec.mts",
+        "count": 26
+      },
+      {
+        "file": "archive/packages/rules-tests/src/rules.test.ts",
+        "count": 25
+      },
+      {
+        "file": "archive/docs/onboarding/ONBOARDING_BACKEND_COMPLETION.md",
+        "count": 24
+      },
+      {
+        "file": "archive/docs/v14/V14_ONBOARDING_FREEZE_SCOPE.md",
+        "count": 23
+      },
+      {
+        "file": "archive/docs/migrations/PHASE1_IMPLEMENTATION_SUMMARY.md",
+        "count": 21
+      },
+      {
+        "file": "pnpm-lock.yaml",
+        "count": 20
+      },
+      {
+        "file": "archive/docs/archive/CI_EMULATOR_FIX.md",
+        "count": 18
+      },
+      {
+        "file": "apps/web/src/lib/api/schedules.ts",
+        "count": 17
+      },
+      {
+        "file": "archive/docs/PHASE1_COMPLETION_REPORT.md",
+        "count": 17
+      },
+      {
+        "file": "archive/docs/v14/V14_FREEZE_INSPECTION_REPORT.md",
+        "count": 17
+      },
+      {
+        "file": "apps/web/src/lib/onboarding/adminFormDrafts.ts",
+        "count": 16
+      },
+      {
+        "file": "archive/docs/PHASE1_QUICK_REFERENCE.md",
+        "count": 16
+      },
+      {
+        "file": "archive/docs/archive/TEST_FIXES_ROUND2.md",
+        "count": 16
+      },
+      {
+        "file": "archive/docs/bible/GAPS_v14.0.0.md",
+        "count": 16
+      },
+      {
+        "file": "apps/web/app/api/onboarding/create-network-org/route.ts",
+        "count": 15
+      },
+      {
+        "file": "apps/web/src/lib/onboarding/createNetworkOrg.ts",
+        "count": 15
+      },
+      {
+        "file": "archive/docs/bible/Project_Bible_v15.0.0.md",
+        "count": 15
+      },
+      {
+        "file": "archive/scripts/agent/tasks/rules.ts",
+        "count": 15
+      },
+      {
+        "file": "docs/MIGRATION_FIRESTORE_TO_POSTGRES.md",
+        "count": 15
+      },
+      {
+        "file": "archive/docs/ARCHITECTURE_DIAGRAMS.md",
+        "count": 14
+      },
+      {
+        "file": "archive/docs/BLOCK3_DOCUMENTATION_INDEX.md",
+        "count": 14
+      },
+      {
+        "file": "archive/docs/blocks/BLOCK3_COMPLETION.md",
+        "count": 14
+      },
+      {
+        "file": "apps/web/app/api/onboarding/create-network-corporate/route.ts",
+        "count": 13
+      },
+      {
+        "file": "apps/web/app/api/onboarding/create-network-org/route-new.ts",
+        "count": 13
+      },
+      {
+        "file": "apps/web/lib/onboarding/createNetworkOrg.ts",
+        "count": 13
+      },
+      {
+        "file": "archive/docs/layers/LAYER_01_INFRASTRUCTURE.md",
+        "count": 13
+      },
+      {
+        "file": "archive/docs/migrations/MIGRATION_NETWORK_TENANCY.md",
+        "count": 13
+      },
+      {
+        "file": "archive/tests/rules/firestore.spec.ts",
+        "count": 13
+      },
+      {
+        "file": "archive/tests/rules/messages_receipts.spec.ts",
+        "count": 13
+      },
+      {
+        "file": "archive/docs/tooling/USAGE.md",
+        "count": 11
+      },
+      {
+        "file": ".vscode/copilot-rules.md",
+        "count": 10
+      },
+      {
+        "file": "apps/web/src/lib/api/__tests__/security-integration.test.ts",
+        "count": 10
+      },
+      {
+        "file": "archive/docs/bible/Project_Bible_v13.5.md",
+        "count": 10
+      },
+      {
+        "file": "archive/docs/runbooks/restore.md",
+        "count": 10
+      },
+      {
+        "file": "archive/scripts/seed/seed.emulator.ts",
+        "count": 10
+      },
+      {
+        "file": "archive/docs/BLOCK3_CHECKLIST.md",
+        "count": 9
+      },
+      {
+        "file": "archive/docs/BLOCK3_COMPLETION_MANIFEST.md",
+        "count": 9
+      },
+      {
+        "file": "archive/docs/BLOCK3_FINAL_SUMMARY.md",
+        "count": 9
+      },
+      {
+        "file": "archive/docs/FINAL_SUMMARY.md",
+        "count": 9
+      },
+      {
+        "file": "archive/docs/TODO-v13.md",
+        "count": 9
+      },
+      {
+        "file": "archive/docs/archive/Biblev14_legacy.md",
+        "count": 9
+      },
+      {
+        "file": "archive/docs/bible/Project_Bible_v14.0.0.md",
+        "count": 9
+      },
+      {
+        "file": "archive/docs/onboarding/ONBOARDING_BACKEND_QUICKREF.md",
+        "count": 9
+      },
+      {
+        "file": "archive/docs/v14/V14_FREEZE_FINAL_INSPECTION.md",
+        "count": 9
+      },
+      {
+        "file": "apps/web/lib/onboarding/corporates.code-search",
+        "count": 8
+      },
+      {
+        "file": "apps/web/src/lib/api/authorization.test.ts",
+        "count": 8
+      },
+      {
+        "file": "archive/docs/BLOCK3_SIGN_OFF.md",
+        "count": 8
+      },
+      {
+        "file": "archive/docs/blocks/BLOCK1_BLOCK2_PROGRESS.md",
+        "count": 8
+      },
+      {
+        "file": "archive/docs/blocks/BLOCK3_IMPLEMENTATION.md",
+        "count": 8
+      },
+      {
+        "file": "archive/docs/quality/TAGGING_SYSTEM.md",
+        "count": 8
+      },
+      {
+        "file": "archive/docs/runbooks/backup-scheduler.md",
+        "count": 8
+      },
+      {
+        "file": "services/api/src/index.ts",
+        "count": 8
+      },
+      {
+        "file": ".github/copilot-instructions.md",
+        "count": 7
+      },
+      {
+        "file": "apps/web/app/lib/db.ts",
+        "count": 7
+      },
+      {
+        "file": "apps/web/src/lib/eventLog.ts",
+        "count": 7
+      },
+      {
+        "file": "apps/web/src/lib/userOnboarding.ts",
+        "count": 7
+      },
+      {
+        "file": "archive/docs/bible/Project_Bible_v15_MIGRATION_PLAN.md",
+        "count": 7
+      },
+      {
+        "file": "archive/docs/blocks/BLOCK3_SUMMARY.md",
+        "count": 7
+      },
+      {
+        "file": "archive/scripts/ops/backup-firestore.sh",
+        "count": 7
+      },
+      {
+        "file": "archive/scripts/setup.sh",
+        "count": 7
+      },
+      {
+        "file": "archive/tests/rules/users.test.ts",
+        "count": 7
+      },
+      {
+        "file": "firestore.rules",
+        "count": 7
+      },
+      {
+        "file": "apps/web/app/api/session/bootstrap/route.ts",
+        "count": 6
+      },
+      {
+        "file": "apps/web/lib/onboarding/adminFormDrafts.ts",
+        "count": 6
+      },
+      {
+        "file": "apps/web/src/lib/api/authorization.ts",
+        "count": 6
+      },
+      {
+        "file": "archive/docs/migration/v15/PHASE2_SPEC_CROSSWALK.md",
+        "count": 6
+      },
+      {
+        "file": "archive/docs/onboarding/ONBOARDING_API.md",
+        "count": 6
+      },
+      {
+        "file": "archive/docs/security/SECURITY_HARDENING_2025-11-06.md",
+        "count": 6
+      },
+      {
+        "file": "scripts/tools/index-repo.mjs",
+        "count": 6
+      },
+      {
+        "file": "apps/web/app/api/onboarding/admin-form/route.ts",
+        "count": 5
+      },
+      {
+        "file": "apps/web/app/providers/AuthProvider.tsx",
+        "count": 5
+      },
+      {
+        "file": "apps/web/lib/firebase-admin.ts",
+        "count": 5
+      },
+      {
+        "file": "apps/web/src/lib/onboarding/createNetworkOrg.test.ts",
+        "count": 5
+      },
+      {
+        "file": "apps/web/src/lib/userProfile.ts",
+        "count": 5
+      },
+      {
+        "file": "archive/BLOCK3_COMPLETION_REPORT.sh",
+        "count": 5
+      },
+      {
+        "file": "archive/docs/archive/ERROR_FIXES_SUMMARY.md",
+        "count": 5
+      },
+      {
+        "file": "archive/docs/migration/v15/PHASE3_DATA_MIGRATION_CHECKLIST.md",
+        "count": 5
+      },
+      {
+        "file": "archive/scripts/build_org_search_index_v15.ts",
+        "count": 5
+      },
+      {
+        "file": "archive/scripts/ops/validate-schema-rules-parity.ts",
+        "count": 5
+      },
+      {
+        "file": "README.md",
+        "count": 4
+      },
+      {
+        "file": "apps/web/app/api/internal/backup/route.ts",
+        "count": 4
+      },
+      {
+        "file": "apps/web/app/api/onboarding/join-with-token/route.ts",
+        "count": 4
+      },
+      {
+        "file": "apps/web/app/api/publish/route.ts",
+        "count": 4
+      },
+      {
+        "file": "archive/docs/CHANGELOG.md",
+        "count": 4
+      },
+      {
+        "file": "archive/docs/CONSOLIDATION_OPPORTUNITIES.md",
+        "count": 4
+      },
+      {
+        "file": "archive/docs/PLANNING.md",
+        "count": 4
+      },
+      {
+        "file": "archive/docs/TODO-v14.md",
+        "count": 4
+      },
+      {
+        "file": "archive/docs/blocks/BLOCK3_QUICK_START.md",
+        "count": 4
+      },
+      {
+        "file": "archive/docs/blocks/PHASE2_OPTIONS.md",
+        "count": 4
+      },
+      {
+        "file": "archive/docs/quality/CONSOLIDATION_OPPORTUNITIES.md",
+        "count": 4
+      },
+      {
+        "file": "archive/docs/schema-network.md",
+        "count": 4
+      },
+      {
+        "file": "archive/docs/tooling/SETUP.md",
+        "count": 4
+      },
+      {
+        "file": "archive/scripts/ops/create-backup-scheduler.sh",
+        "count": 4
+      },
+      {
+        "file": "archive/scripts/validate-schema-parity.mjs",
+        "count": 4
+      },
+      {
+        "file": "archive/tests/rules/_setup.ts",
+        "count": 4
+      },
+      {
+        "file": "firebase.ci.json",
+        "count": 4
+      },
+      {
+        "file": "firebase.json",
+        "count": 4
+      },
+      {
+        "file": "firebase.test.json",
+        "count": 4
+      },
+      {
+        "file": "package.json",
+        "count": 4
+      },
+      {
+        "file": ".github/ISSUE_TEMPLATE/data-004-backups-restore.md",
+        "count": 3
+      },
+      {
+        "file": ".vscode/settings.json",
+        "count": 3
+      },
+      {
+        "file": "apps/web/README.md",
+        "count": 3
+      },
+      {
+        "file": "apps/web/app/api/onboarding/__tests__/endpoints.test.ts",
+        "count": 3
+      },
+      {
+        "file": "apps/web/app/api/organizations/[id]/members/[memberId]/route.ts",
+        "count": 3
+      },
+      {
+        "file": "archive/docs/archive/SECURITY_FIXES_SUMMARY.md",
+        "count": 3
+      },
+      {
+        "file": "archive/docs/archive/SYNC_AND_HEALING_SUMMARY.md",
+        "count": 3
+      },
+      {
+        "file": "archive/docs/layers/LAYER_04_UI_UX.md",
+        "count": 3
+      },
+      {
+        "file": "archive/docs/security/security.md",
+        "count": 3
+      },
+      {
+        "file": "archive/docs/tooling/NPM_SCRIPTS_ANALYSIS.md",
+        "count": 3
+      },
+      {
+        "file": "archive/scripts/run-rules-tests.mjs",
+        "count": 3
+      },
+      {
+        "file": "cspell.json",
+        "count": 3
+      },
+      {
+        "file": "types/firebase-admin.d.ts",
+        "count": 3
+      },
+      {
+        "file": ".github/RELEASE_NOTES_v1.1.0.md",
+        "count": 2
+      },
+      {
+        "file": ".github/workflows/ci-tests.yml",
+        "count": 2
+      },
+      {
+        "file": "apps/web/app/(app)/protected/schedules/page.server.ts",
+        "count": 2
+      },
+      {
+        "file": "apps/web/app/api/attendance/route.ts",
+        "count": 2
+      },
+      {
+        "file": "apps/web/app/api/join-tokens/route.ts",
+        "count": 2
+      },
+      {
+        "file": "apps/web/app/api/onboarding/_shared/rateLimit.ts",
+        "count": 2
+      },
+      {
+        "file": "apps/web/app/api/onboarding/activate-network/route.ts",
+        "count": 2
+      },
+      {
+        "file": "apps/web/app/api/onboarding/profile/route.ts",
+        "count": 2
+      },
+      {
+        "file": "apps/web/app/api/positions/[id]/route.ts",
+        "count": 2
+      },
+      {
+        "file": "apps/web/app/api/positions/route.ts",
+        "count": 2
+      },
+      {
+        "file": "apps/web/app/api/schedules/[id]/route.ts",
+        "count": 2
+      },
+      {
+        "file": "apps/web/app/api/schedules/route.ts",
+        "count": 2
+      },
+      {
+        "file": "apps/web/app/api/venues/route.ts",
+        "count": 2
+      },
+      {
+        "file": "apps/web/app/api/zones/route.ts",
+        "count": 2
+      },
+      {
+        "file": "apps/web/app/lib/firebaseClient.ts",
+        "count": 2
+      },
+      {
+        "file": "apps/web/src/lib/firebase.server.ts",
+        "count": 2
+      },
+      {
+        "file": "archive/.github_agents.from_root.20251117T005629Z/self-healing-agent.md",
+        "count": 2
+      },
+      {
+        "file": "archive/docs/SESSION_SUMMARY.md",
+        "count": 2
+      },
+      {
+        "file": "archive/docs/bible/Project_Bible_v15_SCOPE_AND_AUTHORITY.md",
+        "count": 2
+      },
+      {
+        "file": "archive/docs/blocks/BLOCK3_API_REFERENCE.md",
+        "count": 2
+      },
+      {
+        "file": "archive/docs/migration/v15/PHASE2_SCHEMA_CROSSWALK.md",
+        "count": 2
+      },
+      {
+        "file": "archive/docs/migration/v15/PHASE3_CODE_MIGRATION_CHECKLIST.md",
+        "count": 2
+      },
+      {
+        "file": "archive/docs/quality/PERFORMANCE.md",
+        "count": 2
+      },
+      {
+        "file": "archive/docs/security/SECURITY_ASSESSMENT.md",
+        "count": 2
+      },
+      {
+        "file": "archive/scripts/agent/agent.mts",
+        "count": 2
+      },
+      {
+        "file": "archive/scripts/bootstrap_tier1.sh",
+        "count": 2
+      },
+      {
+        "file": "docs/DEV_TASKS.md",
+        "count": 2
+      },
+      {
+        "file": "packages/types/src/memberships.ts",
+        "count": 2
+      },
+      {
+        "file": "services/api/.env.example",
+        "count": 2
+      },
+      {
+        "file": ".github/ISSUE_TEMPLATE/obs-003-observability.md",
+        "count": 1
+      },
+      {
+        "file": ".github/ISSUE_TEMPLATE/rule-005-zod-rules-matrix.md",
+        "count": 1
+      },
+      {
+        "file": ".github/labeler.yml",
+        "count": 1
+      },
+      {
+        "file": ".github/labels.yml",
+        "count": 1
+      },
+      {
+        "file": ".gitignore",
+        "count": 1
+      },
+      {
+        "file": "CODEOWNERS",
+        "count": 1
+      },
+      {
+        "file": "apps/web/.env.example",
+        "count": 1
+      },
+      {
+        "file": "apps/web/app/api/auth/mfa/setup/route.ts",
+        "count": 1
+      },
+      {
+        "file": "apps/web/app/api/auth/mfa/verify/route.ts",
+        "count": 1
+      },
+      {
+        "file": "apps/web/app/api/healthz/route.ts",
+        "count": 1
+      },
+      {
+        "file": "apps/web/app/api/items/route.ts",
+        "count": 1
+      },
+      {
+        "file": "apps/web/app/api/onboarding/__tests__/activate-network.test.ts",
+        "count": 1
+      },
+      {
+        "file": "apps/web/app/api/onboarding/__tests__/admin-form.test.ts",
+        "count": 1
+      },
+      {
+        "file": "apps/web/app/api/organizations/[id]/members/route.ts",
+        "count": 1
+      },
+      {
+        "file": "apps/web/lib/firestore.ts",
+        "count": 1
+      },
+      {
+        "file": "apps/web/vitest.setup.ts",
+        "count": 1
+      },
+      {
+        "file": "archive/docs/CACHE_MEMORY_MANAGEMENT.md",
+        "count": 1
+      },
+      {
+        "file": "archive/docs/PR62_REVIEW_SUMMARY.md",
+        "count": 1
+      },
+      {
+        "file": "archive/docs/PROCESS.md",
+        "count": 1
+      },
+      {
+        "file": "archive/docs/SCOPE.md",
+        "count": 1
+      },
+      {
+        "file": "archive/docs/ai/CHAT_CONTEXT.md",
+        "count": 1
+      },
+      {
+        "file": "archive/docs/ai/SYSTEM_PROMPT.md",
+        "count": 1
+      },
+      {
+        "file": "archive/docs/ai/TOOLS.md",
+        "count": 1
+      },
+      {
+        "file": "archive/docs/archive/SECURITY_FIXES.md",
+        "count": 1
+      },
+      {
+        "file": "archive/docs/blocks/BLOCK1_SLO_SUMMARY.md",
+        "count": 1
+      },
+      {
+        "file": "archive/docs/blocks/BLOCK4_PLANNING.md",
+        "count": 1
+      },
+      {
+        "file": "archive/docs/migration/v15/PHASE4_HARDENING_AND_FREEZE.md",
+        "count": 1
+      },
+      {
+        "file": "archive/docs/quality/CLEANUP_SUMMARY_2025-11-07.md",
+        "count": 1
+      },
+      {
+        "file": "archive/docs/todo-groups.todo.yml",
+        "count": 1
+      },
+      {
+        "file": "archive/docs/tooling/CI_WORKFLOW_STANDARDS.md",
+        "count": 1
+      },
+      {
+        "file": "archive/docs/tooling/REPO_STANDARDS.md",
+        "count": 1
+      },
+      {
+        "file": "archive/docs/tooling/environment.md",
+        "count": 1
+      },
+      {
+        "file": "archive/scripts/bootstrap_scaffold.sh",
+        "count": 1
+      },
+      {
+        "file": "archive/scripts/bootstrap_tier3.sh",
+        "count": 1
+      },
+      {
+        "file": "archive/scripts/gh-setup-labels.sh",
+        "count": 1
+      },
+      {
+        "file": "archive/tests/rules/README.md",
+        "count": 1
+      },
+      {
+        "file": "docs/CI_STRATEGY.md",
+        "count": 1
+      },
+      {
+        "file": "eslint.config.mjs",
+        "count": 1
+      },
+      {
+        "file": "packages/types/src/__tests__/adminResponsibilityForm.test.ts",
+        "count": 1
+      },
+      {
+        "file": "packages/types/src/__tests__/networks.test.ts",
+        "count": 1
+      },
+      {
+        "file": "packages/types/src/attendance.ts",
+        "count": 1
+      },
+      {
+        "file": "packages/types/src/corporates.ts",
+        "count": 1
+      },
+      {
+        "file": "packages/types/src/events.ts",
+        "count": 1
+      },
+      {
+        "file": "packages/types/src/join-tokens.ts",
+        "count": 1
+      },
+      {
+        "file": "packages/types/src/orgs.ts",
+        "count": 1
+      },
+      {
+        "file": "packages/types/src/positions.ts",
+        "count": 1
+      },
+      {
+        "file": "packages/types/src/schedules.ts",
+        "count": 1
+      },
+      {
+        "file": "packages/types/src/shifts.ts",
+        "count": 1
+      },
+      {
+        "file": "packages/types/src/venues.ts",
+        "count": 1
+      },
+      {
+        "file": "packages/types/src/zones.ts",
+        "count": 1
+      },
+      {
+        "file": "services/api/src/firebase.ts",
+        "count": 1
+      },
+      {
+        "file": "storage.rules",
+        "count": 1
+      }
+    ],
+    "top10": [
+      {
+        "file": "archive/tests/rules/networks.spec.mts",
+        "count": 104
+      },
+      {
+        "file": "archive/tests/rules/join-tokens.spec.mts",
+        "count": 63
+      },
+      {
+        "file": "archive/tests/rules/attendance.spec.mts",
+        "count": 58
+      },
+      {
+        "file": "archive/tests/rules/schedules.spec.mts",
+        "count": 57
+      },
+      {
+        "file": "archive/tests/rules/shifts.spec.mts",
+        "count": 57
+      },
+      {
+        "file": "archive/tests/rules/organizations.spec.ts",
+        "count": 51
+      },
+      {
+        "file": "archive/tests/rules/memberships.spec.ts",
+        "count": 49
+      },
+      {
+        "file": "archive/packages/rules-tests/src/rbac.test.ts",
+        "count": 48
+      },
+      {
+        "file": "archive/tests/rules/venues.spec.mts",
+        "count": 48
+      },
+      {
+        "file": "archive/tests/rules/zones.spec.mts",
+        "count": 48
+      }
+    ]
+  },
+  "rulesTesting": {
+    "total": 38,
+    "files": [
+      {
+        "file": "pnpm-lock.yaml",
+        "count": 5
+      },
+      {
+        "file": "archive/.github_agents.from_root.20251117T005629Z/my-agent.md",
+        "count": 4
+      },
+      {
+        "file": "archive/docs/COMPLETE_TECHNICAL_DOCUMENTATION.md",
+        "count": 3
+      },
+      {
+        "file": "archive/packages/rules-tests/src/rules.test.ts",
+        "count": 2
+      },
+      {
+        "file": "archive/scripts/agent/tasks/rules.ts",
+        "count": 2
+      },
+      {
+        "file": "archive/docs/blocks/BLOCK3_IMPLEMENTATION.md",
+        "count": 1
+      },
+      {
+        "file": "archive/packages/rules-tests/package.json",
+        "count": 1
+      },
+      {
+        "file": "archive/packages/rules-tests/src/rbac.test.ts",
+        "count": 1
+      },
+      {
+        "file": "archive/tests/rules/README.md",
+        "count": 1
+      },
+      {
+        "file": "archive/tests/rules/_setup.ts",
+        "count": 1
+      },
+      {
+        "file": "archive/tests/rules/admin-form.spec.mts",
+        "count": 1
+      },
+      {
+        "file": "archive/tests/rules/attendance.spec.mts",
+        "count": 1
+      },
+      {
+        "file": "archive/tests/rules/firestore.spec.ts",
+        "count": 1
+      },
+      {
+        "file": "archive/tests/rules/join-tokens.spec.mts",
+        "count": 1
+      },
+      {
+        "file": "archive/tests/rules/memberships.spec.ts",
+        "count": 1
+      },
+      {
+        "file": "archive/tests/rules/messages_receipts.spec.ts",
+        "count": 1
+      },
+      {
+        "file": "archive/tests/rules/mfa.spec.ts",
+        "count": 1
+      },
+      {
+        "file": "archive/tests/rules/networks.spec.mts",
+        "count": 1
+      },
+      {
+        "file": "archive/tests/rules/organizations.spec.ts",
+        "count": 1
+      },
+      {
+        "file": "archive/tests/rules/positions.spec.ts",
+        "count": 1
+      },
+      {
+        "file": "archive/tests/rules/schedules.spec.mts",
+        "count": 1
+      },
+      {
+        "file": "archive/tests/rules/shifts.spec.mts",
+        "count": 1
+      },
+      {
+        "file": "archive/tests/rules/storage.fixed.spec.ts",
+        "count": 1
+      },
+      {
+        "file": "archive/tests/rules/users.test.ts",
+        "count": 1
+      },
+      {
+        "file": "archive/tests/rules/venues.spec.mts",
+        "count": 1
+      },
+      {
+        "file": "archive/tests/rules/zones.spec.mts",
+        "count": 1
+      },
+      {
+        "file": "package.json",
+        "count": 1
+      }
+    ],
+    "top10": [
+      {
+        "file": "pnpm-lock.yaml",
+        "count": 5
+      },
+      {
+        "file": "archive/.github_agents.from_root.20251117T005629Z/my-agent.md",
+        "count": 4
+      },
+      {
+        "file": "archive/docs/COMPLETE_TECHNICAL_DOCUMENTATION.md",
+        "count": 3
+      },
+      {
+        "file": "archive/packages/rules-tests/src/rules.test.ts",
+        "count": 2
+      },
+      {
+        "file": "archive/scripts/agent/tasks/rules.ts",
+        "count": 2
+      },
+      {
+        "file": "archive/docs/blocks/BLOCK3_IMPLEMENTATION.md",
+        "count": 1
+      },
+      {
+        "file": "archive/packages/rules-tests/package.json",
+        "count": 1
+      },
+      {
+        "file": "archive/packages/rules-tests/src/rbac.test.ts",
+        "count": 1
+      },
+      {
+        "file": "archive/tests/rules/README.md",
+        "count": 1
+      },
+      {
+        "file": "archive/tests/rules/_setup.ts",
+        "count": 1
+      }
+    ]
+  }
+}

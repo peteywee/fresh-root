@@ -1,4 +1,6 @@
 #!/usr/bin/env node
+// [P2][APP][CODE] Process Index
+// Tags: P2, APP, CODE
 import fs from 'fs'
 import path from 'path'
 

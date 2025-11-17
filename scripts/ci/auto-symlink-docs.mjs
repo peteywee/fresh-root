@@ -10,7 +10,7 @@
 
 import { promises as fs } from "node:fs";
 import path from "node:path";
-import { globby } from "globby";
+import globby from "globby/index.cjs";
 
 const root = process.cwd();
 const schemaPaper = path.join(root, "docs/schemas/SCHEMAS_PAPER.md");
