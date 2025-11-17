@@ -2,6 +2,7 @@
 // Tags: P0, APP, ENV
 import typescriptEslint from "@typescript-eslint/eslint-plugin";
 import typescriptParser from "@typescript-eslint/parser";
+import js from "@eslint/js";
 import importPlugin from "eslint-plugin-import";
 import reactHooks from "eslint-plugin-react-hooks";
 import react from "eslint-plugin-react";
@@ -33,7 +34,7 @@ export default [
     ],
   },
   {
-    files: ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx", "**/*.mts"],
+    files: ["**/*.ts", "**/*.tsx", "**/*.mts", "**/*.cts"],
     languageOptions: {
       parser: typescriptParser,
       parserOptions: {
@@ -94,6 +95,27 @@ export default [
     rules: {
       // Turn off no-undef for test globals to avoid editor warnings
       "no-undef": "off",
+    },
+  },
+  // Scripts & tooling: plain JS — do not run type-aware TS rules
+  {
+    files: [
+      "scripts/**/*.js",
+      "scripts/**/*.mjs",
+      "scripts/**/*.cjs",
+      "tools/**/*.js",
+      "tools/**/*.mjs",
+      "tools/**/*.cjs",
+    ],
+    languageOptions: {
+      parser: js.parser,
+      ecmaVersion: "latest",
+      globals: { node: true },
+    },
+    rules: {
+      "@typescript-eslint/await-thenable": "off",
+      "@typescript-eslint/no-floating-promises": "off",
+      "@typescript-eslint/no-array-delete": "off",
     },
   },
 ];
