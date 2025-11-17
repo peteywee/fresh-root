@@ -1,6 +1,0 @@
-{
-  "functions": { "source": "functions" },
-  "hosting": { "public": "apps/web/out" },
-  "firestore": { "rules": "firestore.rules" },
-  "storage": { "rules": "storage.rules" }
-}

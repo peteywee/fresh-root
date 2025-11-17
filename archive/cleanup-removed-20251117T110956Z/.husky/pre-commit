@@ -1,9 +1,0 @@
-#!/bin/sh
-
-# Pre-commit: auto-tag files, typecheck, lint, and format
-node scripts/tag-files.mjs || exit 1
-pnpm -w typecheck || exit 1
-pnpm -w lint || exit 1
-pnpm -w format || exit 1
-
-echo "[husky] Pre-commit checks completed."
