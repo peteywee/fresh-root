@@ -1,10 +1,7 @@
 // [P0][API][CODE] Route API route handler
 // [P0][API][CODE] Route API route handler
-import { traceFn } from "@/app/api/_shared/otel";
 // [P0][API][CODE] Route API route handler
-import { withGuards } from "@/app/api/_shared/security";
 // [P0][API][CODE] Route API route handler
-import { jsonOk, jsonError } from "@/app/api/_shared/response";
 // Tags: P0, API, CODE
 import { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
@@ -55,6 +52,8 @@ export const GET = withSecurity(
       };
       return NextResponse.json(organization);
     } catch (_error) {
+      // reference the caught error to avoid unused-variable lint warnings
+      void _error;
       return serverError("Failed to fetch organization");
     }
   },
@@ -82,6 +81,8 @@ export const PATCH = withSecurity(
       };
       return NextResponse.json(updatedOrg);
     } catch (_error) {
+      // reference the caught error to avoid unused-variable lint warnings
+      void _error;
       return serverError("Failed to update organization");
     }
   },

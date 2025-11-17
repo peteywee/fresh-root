@@ -1,6 +1,5 @@
 //[P1][API][TEST] Authorization middleware unit tests
 // Tags: test, authorization, rbac, vitest
-/* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { NextRequest } from "next/server";
 import { describe, it, expect, vi } from "vitest";
@@ -99,7 +98,7 @@ describe("isOrgMember", () => {
 
     vi.mocked(getFirestore).mockReturnValue({
       collection: mockCollection,
-    } as any);
+    } as unknown);
 
     const result = await isOrgMember("user123", "org123");
     expect(result).toBe(true);
@@ -115,7 +114,7 @@ describe("isOrgMember", () => {
 
     vi.mocked(getFirestore).mockReturnValue({
       collection: mockCollection,
-    } as any);
+    } as unknown);
 
     const result = await isOrgMember("user123", "org123");
     expect(result).toBe(false);
@@ -135,7 +134,7 @@ describe("getUserRoles", () => {
 
     vi.mocked(getFirestore).mockReturnValue({
       collection: mockCollection,
-    } as any);
+    } as unknown);
 
     const result = await getUserRoles("user123", "org123");
     expect(result).toEqual(["admin", "staff"]);
@@ -150,7 +149,7 @@ describe("getUserRoles", () => {
 
     vi.mocked(getFirestore).mockReturnValue({
       collection: mockCollection,
-    } as any);
+    } as unknown);
 
     const result = await getUserRoles("user123", "org123");
     expect(result).toBeNull();
@@ -174,7 +173,7 @@ describe("canAccessResource", () => {
 
     vi.mocked(getFirestore).mockReturnValue({
       collection: mockCollection,
-    } as any);
+    } as unknown);
 
     const result = await canAccessResource("user123", "org123", "staff");
     expect(result.allowed).toBe(true);
@@ -190,7 +189,7 @@ describe("canAccessResource", () => {
 
     vi.mocked(getFirestore).mockReturnValue({
       collection: mockCollection,
-    } as any);
+    } as unknown);
 
     const result = await canAccessResource("user123", "org123", "staff");
     expect(result.allowed).toBe(false);

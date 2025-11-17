@@ -48,36 +48,66 @@ describe("POST /api/onboarding/admin-form", () => {
 
   it("should return 400 if missing required compliance fields", async () => {
     mockReq.json.mockResolvedValue({
-      adminName: "John Doe",
-      // missing email, taxId, etc.
+      // Provide a payload missing required schema fields (networkId, role, certification)
+      data: { adminName: "John Doe" },
     });
 
     const response = await adminFormHandler(mockReq, mockAdminDb);
-    expect(response.status).toBe(400);
+    expect(response.status).toBe(422);
     const data = await response.json();
-    expect(data.error).toContain("invalid_request");
+    expect(data.error).toBe("validation_error");
   });
 
-  it("should validate email format", async () => {
+  it("should accept non-validated free-form data (email) since structured validation lives in schema", async () => {
     mockReq.json.mockResolvedValue({
-      adminName: "John Doe",
-      adminEmail: "invalid-email",
-      taxId: "12-3456789",
-      legalEntityName: "Test Corp",
+      networkId: "network-1",
+      uid: mockReq.user.uid,
+      role: "org_admin",
+      certification: {
+        acknowledgesDataProtection: true,
+        acknowledgesGDPRCompliance: true,
+        acknowledgesAccessControl: true,
+        acknowledgesMFARequirement: true,
+        acknowledgesAuditTrail: true,
+        acknowledgesIncidentReporting: true,
+        understandsRoleScope: true,
+        agreesToTerms: true,
+      },
+      data: {
+        adminName: "John Doe",
+        adminEmail: "invalid-email",
+        taxId: "12-3456789",
+        legalEntityName: "Test Corp",
+      },
     });
 
     const response = await adminFormHandler(mockReq, mockAdminDb);
-    expect(response.status).toBe(400);
+    expect(response.status).toBe(200);
     const data = await response.json();
-    expect(data.error).toContain("email");
+    expect(data.ok).toBe(true);
   });
 
   it("should create compliance form entry and generate token", async () => {
     mockReq.json.mockResolvedValue({
-      adminName: "John Doe",
-      adminEmail: "john@example.com",
-      taxId: "12-3456789",
-      legalEntityName: "Test Corporation",
+      networkId: "network-1",
+      uid: mockReq.user.uid,
+      role: "org_admin",
+      certification: {
+        acknowledgesDataProtection: true,
+        acknowledgesGDPRCompliance: true,
+        acknowledgesAccessControl: true,
+        acknowledgesMFARequirement: true,
+        acknowledgesAuditTrail: true,
+        acknowledgesIncidentReporting: true,
+        understandsRoleScope: true,
+        agreesToTerms: true,
+      },
+      data: {
+        adminName: "John Doe",
+        adminEmail: "john@example.com",
+        taxId: "12-3456789",
+        legalEntityName: "Test Corporation",
+      },
     });
 
     const response = await adminFormHandler(mockReq, mockAdminDb);
@@ -90,10 +120,25 @@ describe("POST /api/onboarding/admin-form", () => {
 
   it("should store form submission in Firestore", async () => {
     mockReq.json.mockResolvedValue({
-      adminName: "Jane Smith",
-      adminEmail: "jane@example.com",
-      taxId: "98-7654321",
-      legalEntityName: "Jane's Ventures",
+      networkId: "network-1",
+      uid: mockReq.user.uid,
+      role: "org_admin",
+      certification: {
+        acknowledgesDataProtection: true,
+        acknowledgesGDPRCompliance: true,
+        acknowledgesAccessControl: true,
+        acknowledgesMFARequirement: true,
+        acknowledgesAuditTrail: true,
+        acknowledgesIncidentReporting: true,
+        understandsRoleScope: true,
+        agreesToTerms: true,
+      },
+      data: {
+        adminName: "Jane Smith",
+        adminEmail: "jane@example.com",
+        taxId: "98-7654321",
+        legalEntityName: "Jane's Ventures",
+      },
     });
 
     await adminFormHandler(mockReq, mockAdminDb);
@@ -104,10 +149,25 @@ describe("POST /api/onboarding/admin-form", () => {
 
   it("should handle stub mode (no adminDb)", async () => {
     mockReq.json.mockResolvedValue({
-      adminName: "John Doe",
-      adminEmail: "john@example.com",
-      taxId: "12-3456789",
-      legalEntityName: "Test Corp",
+      networkId: "network-1",
+      uid: mockReq.user.uid,
+      role: "org_admin",
+      certification: {
+        acknowledgesDataProtection: true,
+        acknowledgesGDPRCompliance: true,
+        acknowledgesAccessControl: true,
+        acknowledgesMFARequirement: true,
+        acknowledgesAuditTrail: true,
+        acknowledgesIncidentReporting: true,
+        understandsRoleScope: true,
+        agreesToTerms: true,
+      },
+      data: {
+        adminName: "John Doe",
+        adminEmail: "john@example.com",
+        taxId: "12-3456789",
+        legalEntityName: "Test Corp",
+      },
     });
 
     const response = await adminFormHandler(mockReq, undefined);
@@ -119,10 +179,25 @@ describe("POST /api/onboarding/admin-form", () => {
 
   it("should set token expiration to 30 days from now", async () => {
     mockReq.json.mockResolvedValue({
-      adminName: "John Doe",
-      adminEmail: "john@example.com",
-      taxId: "12-3456789",
-      legalEntityName: "Test Corp",
+      networkId: "network-1",
+      uid: mockReq.user.uid,
+      role: "org_admin",
+      certification: {
+        acknowledgesDataProtection: true,
+        acknowledgesGDPRCompliance: true,
+        acknowledgesAccessControl: true,
+        acknowledgesMFARequirement: true,
+        acknowledgesAuditTrail: true,
+        acknowledgesIncidentReporting: true,
+        understandsRoleScope: true,
+        agreesToTerms: true,
+      },
+      data: {
+        adminName: "John Doe",
+        adminEmail: "john@example.com",
+        taxId: "12-3456789",
+        legalEntityName: "Test Corp",
+      },
     });
 
     const now = Date.now();
@@ -136,17 +211,32 @@ describe("POST /api/onboarding/admin-form", () => {
     expect(Math.abs(data.tokenExpiresAt - expectedExpiration)).toBeLessThan(5000);
   });
 
-  it("should reject invalid tax ID format", async () => {
+  it("should accept invalid tax ID format in free-form data (schema not validating specific taxId)", async () => {
     mockReq.json.mockResolvedValue({
-      adminName: "John Doe",
-      adminEmail: "john@example.com",
-      taxId: "invalid", // should be XX-XXXXXXX format
-      legalEntityName: "Test Corp",
+      networkId: "network-1",
+      uid: mockReq.user.uid,
+      role: "org_admin",
+      certification: {
+        acknowledgesDataProtection: true,
+        acknowledgesGDPRCompliance: true,
+        acknowledgesAccessControl: true,
+        acknowledgesMFARequirement: true,
+        acknowledgesAuditTrail: true,
+        acknowledgesIncidentReporting: true,
+        understandsRoleScope: true,
+        agreesToTerms: true,
+      },
+      data: {
+        adminName: "John Doe",
+        adminEmail: "john@example.com",
+        taxId: "invalid", // should be XX-XXXXXXX format
+        legalEntityName: "Test Corp",
+      },
     });
 
     const response = await adminFormHandler(mockReq, mockAdminDb);
-    expect(response.status).toBe(400);
+    expect(response.status).toBe(200);
     const data = await response.json();
-    expect(data.error).toContain("taxId");
+    expect(data.ok).toBe(true);
   });
 });

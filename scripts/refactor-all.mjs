@@ -1,4 +1,6 @@
 #!/usr/bin/env node
+// [P2][APP][CODE] Refactor All
+// Tags: P2, APP, CODE
 import { execSync } from 'child_process';
 import fs from 'fs';
 import path from 'path';

@@ -1,13 +1,9 @@
 //[P1][API][ONBOARDING] Create Network + Corporate Endpoint (server)
 //[P1][API][ONBOARDING] Create Network + Corporate Endpoint (server)
-import { traceFn } from "@/app/api/_shared/otel";
 //[P1][API][ONBOARDING] Create Network + Corporate Endpoint (server)
-import { withGuards } from "@/app/api/_shared/security";
 //[P1][API][ONBOARDING] Create Network + Corporate Endpoint (server)
-import { jsonOk, jsonError } from "@/app/api/_shared/response";
 // Tags: api, onboarding, network, corporate, membership, events
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextResponse } from "next/server";
 
 import { withSecurity, type AuthenticatedRequest } from "../../_shared/middleware";
@@ -29,6 +25,8 @@ export async function createNetworkCorporateHandler(
         ok: true,
         networkId: "stub-network-id",
         corpId: "stub-corp-id",
+        corporateId: "stub-corp-id",
+        isStub: true,
         status: "pending_verification",
       },
       { status: 200 },
@@ -94,6 +92,7 @@ export async function createNetworkCorporateHandler(
     const corporateCollectionRef = networkRef.collection("corporate");
     const corpRef = corporateCollectionRef.doc();
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Firestore Transaction param
     await adminDb.runTransaction(async (tx: any) => {
       const createdAt = nowMs;
 
@@ -217,6 +216,7 @@ export async function createNetworkCorporateHandler(
         ok: true,
         networkId: networkRef.id,
         corpId: corpRef.id,
+        corporateId: corpRef.id,
         status: "pending_verification",
       },
       { status: 200 },

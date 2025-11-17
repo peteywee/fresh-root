@@ -25,6 +25,8 @@ function getServiceAccount(): Record<string, unknown> {
   try {
     return JSON.parse(credsJson) as Record<string, unknown>;
   } catch (e) {
+    // reference the original parse error to satisfy linters
+    void e;
     throw new Error("GOOGLE_APPLICATION_CREDENTIALS_JSON is not valid JSON");
   }
 }

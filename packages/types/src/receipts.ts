@@ -1,3 +1,5 @@
+// [P2][APP][CODE] Receipts
+// Tags: P2, APP, CODE
 import { z } from "zod";
 
 /**

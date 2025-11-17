@@ -1,10 +1,7 @@
 //[P1][API][ONBOARDING] Verify Eligibility Endpoint (server)
 //[P1][API][ONBOARDING] Verify Eligibility Endpoint (server)
-import { traceFn } from "@/app/api/_shared/otel";
 //[P1][API][ONBOARDING] Verify Eligibility Endpoint (server)
-import { withGuards } from "@/app/api/_shared/security";
 //[P1][API][ONBOARDING] Verify Eligibility Endpoint (server)
-import { jsonOk, jsonError } from "@/app/api/_shared/response";
 // Tags: api, onboarding, eligibility
 
 import { NextResponse } from "next/server";
@@ -49,6 +46,9 @@ export async function verifyEligibilityHandler(
 ) {
   const uid = req.user?.uid;
   const _claims = req.user?.customClaims || {};
+
+  // keep claims variable referenced so linters don't report it as unused
+  void _claims;
 
   // Check authentication first
   if (!uid) {

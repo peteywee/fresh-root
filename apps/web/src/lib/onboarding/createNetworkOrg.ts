@@ -7,14 +7,14 @@ import { loadAdminFormDraft, markAdminFormDraftConsumed } from "./adminFormDraft
 
 import { adminDb, adminSdk } from "@/src/lib/firebase.server";
 
-const db = adminDb as Firestore | undefined;
+const db = adminDb;
 
-export type CreateNetworkOrgResult = {
+export interface CreateNetworkOrgResult {
   networkId: string;
   orgId: string;
   venueId: string;
   status: string;
-};
+}
 
 export async function createNetworkWithOrgAndVenue(
   adminUid: string,

@@ -8,13 +8,13 @@ import React, { FormEvent, useState } from "react";
 // Narrow router usage to only push to eliminate any.
 type NavRouter = Pick<ReturnType<typeof useRouter>, "push">;
 
-type CorporateFormState = {
+interface CorporateFormState {
   corporateName: string;
   brandName: string;
   hqCity: string;
   hqState: string;
   locationCount: string;
-};
+}
 
 export default function CreateNetworkCorporatePage() {
   const router = useRouter();
@@ -139,7 +139,7 @@ export default function CreateNetworkCorporatePage() {
         <div className="flex items-center justify-between gap-4">
           <button
             type="button"
-            onClick={() => nav.push("/onboarding/admin-responsibility")}
+            onClick={() => { nav.push("/onboarding/admin-responsibility"); }}
             className="text-sm text-gray-600 underline"
           >
             Back to Admin responsibilities

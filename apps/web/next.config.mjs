@@ -25,6 +25,11 @@ const securityHeaders = [
   { key: "Strict-Transport-Security", value: "max-age=63072000; includeSubDomains; preload" },
 ];
 
+import path from "path";
+import { fileURLToPath } from "url";
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 const nextConfig = {
   reactStrictMode: true,
   compress: true,
@@ -94,7 +99,10 @@ const nextConfig = {
     // Path from this `apps/web` directory up to the repository root
     // Use an absolute path to avoid incorrect inference when multiple lockfiles
     // exist on the machine (for example a stray pnpm-lock.yaml in $HOME).
-    root: "/home/patrick/fresh-root-10/fresh-root",
+    // Resolve the workspace root relative to this app directory so Turbopack
+    // doesn't try to infer the wrong root on developer machines. Use a
+    // relative resolution so the config remains portable for all contributors.
+    root: path.resolve(__dirname, "../.."),
   },
   headers: async () => [{ source: "/(.*)", headers: securityHeaders }],
   compiler: {

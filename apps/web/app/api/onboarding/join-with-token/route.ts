@@ -1,13 +1,9 @@
 //[P1][API][ONBOARDING] Join With Token Endpoint (server)
 //[P1][API][ONBOARDING] Join With Token Endpoint (server)
-import { traceFn } from "@/app/api/_shared/otel";
 //[P1][API][ONBOARDING] Join With Token Endpoint (server)
-import { withGuards } from "@/app/api/_shared/security";
 //[P1][API][ONBOARDING] Join With Token Endpoint (server)
-import { jsonOk, jsonError } from "@/app/api/_shared/response";
 // Tags: api, onboarding, join-token, membership, events
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextResponse } from "next/server";
 
 import { withSecurity, type AuthenticatedRequest } from "../../_shared/middleware";
@@ -16,7 +12,7 @@ import { logEvent } from "@/src/lib/eventLog";
 import { adminDb as importedAdminDb } from "@/src/lib/firebase.server";
 import { markOnboardingComplete } from "@/src/lib/userOnboarding";
 
-type JoinTokenDoc = {
+interface JoinTokenDoc {
   networkId: string;
   orgId: string;
   role: string;
@@ -25,7 +21,7 @@ type JoinTokenDoc = {
   disabled?: boolean;
   usedBy?: string[];
   maxUses?: number;
-};
+}
 
 export async function joinWithTokenHandler(
   req: AuthenticatedRequest & {
@@ -96,6 +92,7 @@ export async function joinWithTokenHandler(
     const membershipId = `${uid}_${data.orgId}`;
     const membershipRef = adminDb.collection("memberships").doc(membershipId);
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Firestore Transaction param
     await adminDb.runTransaction(async (tx: any) => {
       const existing = await tx.get(membershipRef);
       const createdAt = now;

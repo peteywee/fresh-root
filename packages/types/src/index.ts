@@ -5,27 +5,27 @@ import { z } from "zod";
 export const Role = z.enum(["admin", "manager", "staff"]);
 export type Role = z.infer<typeof Role>;
 
-export * from "./rbac";
-export * from "./corporates";
-export * from "./orgs";
-export * from "./schedules";
-export * from "./memberships"; // This provides the canonical Membership export
-export * from "./positions";
-export * from "./shifts";
-export * from "./venues";
-export * from "./zones";
-export * from "./attendance";
-export * from "./join-tokens";
-export * from "./compliance/adminResponsibilityForm";
-export * from "./networks";
-export * from "./onboarding";
-export * from "./events";
-export * from "./errors";
+export * from "./rbac.js";
+export * from "./corporates.js";
+export * from "./orgs.js";
+export * from "./schedules.js";
+export * from "./memberships.js"; // This provides the canonical Membership export
+export * from "./positions.js";
+export * from "./shifts.js";
+export * from "./venues.js";
+export * from "./zones.js";
+export * from "./attendance.js";
+export * from "./join-tokens.js";
+export * from "./compliance/adminResponsibilityForm.js";
+export * from "./networks.js";
+export * from "./onboarding.js";
+export * from "./events.js";
+export * from "./errors.js";
 
 // Additional collections and convenience exports added by v14.5
-export * as corporates from "./corporates";
-export * as widgets from "./widgets";
-export * as messages from "./messages";
-export * as receipts from "./receipts";
-export * as compliance from "./compliance";
+export * as corporates from "./corporates.js";
+export * as widgets from "./widgets.js";
+export * as messages from "./messages.js";
+export * as receipts from "./receipts.js";
+export * as compliance from "./compliance/index.js";
 

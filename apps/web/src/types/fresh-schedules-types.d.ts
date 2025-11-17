@@ -9,7 +9,7 @@
 declare module "@fresh-schedules/types" {
   import { z } from "zod";
   // Helper alias for broad, unconstrained object shapes without using `any`
-  type ZAnyObj = z.ZodObject<{ [k: string]: z.ZodTypeAny }>;
+  type ZAnyObj = z.ZodObject<Record<string, z.ZodTypeAny>>;
 
   // Role enum
   export const Role: z.ZodEnum<["admin", "manager", "staff"]>;

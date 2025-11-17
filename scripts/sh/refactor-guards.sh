@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# [P2][APP][CODE] Refactor Guards
+# Tags: P2, APP, CODE
 set -euo pipefail
 
 ROOT="apps/web/app/api"

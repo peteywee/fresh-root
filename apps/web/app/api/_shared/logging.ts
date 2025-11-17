@@ -11,14 +11,12 @@
  * - Plays nicely with existing withSecurity middleware
  */
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-type BasicReq = {
+interface BasicReq {
   method?: string;
   url?: string;
   // Allow existing middleware to attach extra fields
   [key: string]: unknown;
-};
+}
 
 type Handler<TReq extends BasicReq = BasicReq> = (
   req: TReq & { requestId: string },
@@ -54,13 +52,14 @@ export function withRequestLogging<TReq extends BasicReq>(
     const start = Date.now();
 
     // Attach requestId to the request object for downstream handlers
-    (req as any).requestId = requestId;
+    // Use Record<string, unknown> to avoid `any` while allowing middleware to attach fields.
+    Object.assign(req as Record<string, unknown>, { requestId });
 
     const { method = "UNKNOWN", url = "UNKNOWN" } = req;
 
     // Structured "start" log
 
-    console.log(
+    console.warn(
       JSON.stringify({
         level: "info",
         msg: "request_start",
@@ -80,7 +79,7 @@ export function withRequestLogging<TReq extends BasicReq>(
 
       // Structured "end" log
 
-      console.log(
+      console.warn(
         JSON.stringify({
           level: "info",
           msg: "request_end",

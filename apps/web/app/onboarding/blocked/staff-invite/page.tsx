@@ -36,7 +36,7 @@ export default function StaffInviteBlockedPage() {
       <div className="flex items-center justify-start gap-4">
         <button
           type="button"
-          onClick={() => nav.push("/onboarding/join")}
+          onClick={() => { nav.push("/onboarding/join"); }}
           className="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white"
         >
           Go to Join with token
@@ -44,7 +44,7 @@ export default function StaffInviteBlockedPage() {
 
         <button
           type="button"
-          onClick={() => nav.push("/onboarding")}
+          onClick={() => { nav.push("/onboarding"); }}
           className="text-sm text-gray-600 underline"
         >
           Back to onboarding index

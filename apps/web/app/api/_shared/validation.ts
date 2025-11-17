@@ -4,9 +4,9 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 
 /** Standard API error payload shape */
-export type ApiError = {
+export interface ApiError {
   error: { code: string; message: string; details?: unknown };
-};
+}
 
 /** Build a 400 error response with consistent shape */
 export function badRequest(message: string, details?: unknown, code = "BAD_REQUEST") {
@@ -110,7 +110,7 @@ export const CreateAdminResponsibilityFormSchema = z.object({
   adminName: z.string().min(1, "Administrator name is required"),
   adminEmail: z.string().email("Valid email is required"),
   adminPhone: z.string().min(10, "Valid phone number is required"),
-  acceptedTerms: z.boolean().refine((val) => val === true, {
+  acceptedTerms: z.boolean().refine((val) => val, {
     message: "You must accept the terms and conditions",
   }),
   acceptedAt: z.string().datetime().optional(),

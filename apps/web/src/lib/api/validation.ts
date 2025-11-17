@@ -15,7 +15,7 @@ const MAX_BODY_SIZE = 1024 * 1024; // 1MB
 export class ValidationError extends Error {
   constructor(
     public readonly fields: Record<string, string[]>,
-    public readonly statusCode: number = 422,
+    public readonly statusCode = 422,
   ) {
     super("Validation failed");
     this.name = "ValidationError";
@@ -115,7 +115,7 @@ export async function validateRequest<T>(request: NextRequest, schema: ZodSchema
   } catch (textErr) {
     // If we threw a ValidationError above (e.g. due to oversized rawText),
     // don't swallow it — re-throw immediately.
-    if (textErr instanceof ValidationError) throw textErr as ValidationError;
+    if (textErr instanceof ValidationError) throw textErr;
     // text() failed in this environment (some runtimes throw for large bodies).
     // If Content-Length header indicates the body is too large, surface 413.
     const contentLength = request.headers.get("content-length");

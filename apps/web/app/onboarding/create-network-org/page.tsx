@@ -8,12 +8,12 @@ import React, { FormEvent, useState } from "react";
 // Narrow router type to only the push method we use.
 type NavRouter = Pick<ReturnType<typeof useRouter>, "push">;
 
-type OrgFormState = {
+interface OrgFormState {
   orgName: string;
   venueName: string;
   city: string;
   state: string;
-};
+}
 
 export default function CreateNetworkOrgPage() {
   const router = useRouter();
@@ -120,7 +120,7 @@ export default function CreateNetworkOrgPage() {
         <div className="flex items-center justify-between gap-4">
           <button
             type="button"
-            onClick={() => nav.push("/onboarding/admin-responsibility")}
+            onClick={() => { nav.push("/onboarding/admin-responsibility"); }}
             className="text-sm text-gray-600 underline"
           >
             Back to Admin responsibilities

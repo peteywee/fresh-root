@@ -138,6 +138,10 @@ export default [
     rules: {
       "no-console": "off",
       "no-undef": "off",
+      // Allow explicit any in tests during gradual cleanup
+      "@typescript-eslint/no-explicit-any": "off",
+      // Allow ts-ignore in tests for legacy fixtures
+      "@typescript-eslint/ban-ts-comment": "off",
     },
   },
 ];

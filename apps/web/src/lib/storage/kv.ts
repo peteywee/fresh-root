@@ -5,7 +5,7 @@
 
 import { openDB } from "idb";
 
-type KV = { key: string; value: unknown; expiresAt?: number };
+interface KV { key: string; value: unknown; expiresAt?: number }
 
 const DB_NAME = "fresh-schedules-kv";
 const STORE = "kv";

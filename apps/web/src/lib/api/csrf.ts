@@ -28,7 +28,7 @@ const DEFAULT_CONFIG: Required<CSRFConfig> = {
   },
 };
 
-export function generateCSRFToken(length: number = 32): string {
+export function generateCSRFToken(length = 32): string {
   return randomBytes(length).toString("base64url");
 }
 
@@ -98,7 +98,7 @@ export function csrfProtection<Ctx extends Record<string, unknown> = {}>(config:
 
       if (!cookieToken) {
         const cookiesHeader = request.headers.get("cookie") || "";
-        const cookieMatch = cookiesHeader.match(new RegExp(`${fullConfig.cookieName}=([^;]+)`));
+        const cookieMatch = new RegExp(`${fullConfig.cookieName}=([^;]+)`).exec(cookiesHeader);
         cookieToken = cookieMatch?.[1] ?? null;
       }
 
@@ -162,7 +162,7 @@ export function withCSRFToken<Ctx extends Record<string, unknown> = {}>(
 
     if (!token) {
       const cookiesHeader = request.headers.get("cookie") || "";
-      const cookieMatch = cookiesHeader.match(new RegExp(`${fullConfig.cookieName}=([^;]+)`));
+      const cookieMatch = new RegExp(`${fullConfig.cookieName}=([^;]+)`).exec(cookiesHeader);
       token = cookieMatch?.[1] ?? null;
     }
 

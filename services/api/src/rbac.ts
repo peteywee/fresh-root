@@ -3,11 +3,11 @@
 import type { Request, Response, NextFunction } from "express";
 
 // Shared shape with your Zod types: uid, orgId, roles[]
-export type UserToken = {
+export interface UserToken {
   uid: string;
   orgId: string;
   roles: string[];
-};
+}
 
 // Extract token from either:
 //  1) x-user-token (JSON string) for local/dev, OR

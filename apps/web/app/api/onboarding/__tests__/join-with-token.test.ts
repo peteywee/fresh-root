@@ -53,6 +53,9 @@ describe("POST /api/onboarding/join-with-token", () => {
     } as any;
   });
 
+  // ensure linter treats mock as used in this test file
+  void _mockAdminDb;
+
   it("should require authenticated request", async () => {
     // The endpoint uses withSecurity(requireAuth: true)
     expect(mockReq.user).toBeDefined();

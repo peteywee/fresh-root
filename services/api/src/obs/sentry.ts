@@ -62,6 +62,6 @@ export function captureMessage(message: string, level: Sentry.SeverityLevel = "i
 /**
  * Flush pending events (useful in serverless or before shutdown)
  */
-export async function flush(timeout: number = 2000): Promise<boolean> {
+export async function flush(timeout = 2000): Promise<boolean> {
   return Sentry.flush(timeout);
 }

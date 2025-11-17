@@ -155,7 +155,7 @@ const LoginForm = React.memo(() => {
           <input
             type="email"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(e) => { setEmail(e.target.value); }}
             placeholder="you@example.com"
             className="input-field w-full"
             autoComplete="email"

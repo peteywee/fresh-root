@@ -28,7 +28,7 @@ export default function AuthCallbackPage() {
         // For popup flows, getRedirectResult() is not used — the main window will already have
         // an authenticated user. If either redirect/email completed OR a current user exists,
         // establish the server session.
-        const hasCurrentUser = !!(auth && auth.currentUser);
+        const hasCurrentUser = !!(auth?.currentUser);
         if (completedEmail || completedGoogle || hasCurrentUser) {
           await establishServerSession();
         }

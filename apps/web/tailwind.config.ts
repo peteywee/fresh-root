@@ -52,3 +52,7 @@ const config: Config = {
   plugins: [],
 };
 export default config;
+
+/* --- MERGED FROM NESTED FILE --- */
+// [P2][APP][ENV] Tailwind Config
+// Tags: P2, APP, ENV

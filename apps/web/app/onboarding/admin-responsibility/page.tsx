@@ -78,7 +78,7 @@ export default function AdminResponsibilityPage() {
         <p className="text-sm text-slate-600">We need to know what you&apos;re setting up first.</p>
         <button
           className="rounded-md bg-slate-900 px-4 py-2 text-sm text-white"
-          onClick={() => router.push("/onboarding/intent")}
+          onClick={() => { router.push("/onboarding/intent"); }}
         >
           Back to intent selection
         </button>
@@ -99,7 +99,7 @@ export default function AdminResponsibilityPage() {
           <input
             className="w-full rounded-md border px-3 py-2 text-sm"
             value={legalEntityName}
-            onChange={(e) => setLegalEntityName(e.target.value)}
+            onChange={(e) => { setLegalEntityName(e.target.value); }}
             required
           />
         </div>
@@ -110,7 +110,7 @@ export default function AdminResponsibilityPage() {
             <input
               className="w-full rounded-md border px-3 py-2 text-sm"
               value={taxId}
-              onChange={(e) => setTaxId(e.target.value)}
+              onChange={(e) => { setTaxId(e.target.value); }}
               required
             />
           </div>
@@ -119,7 +119,7 @@ export default function AdminResponsibilityPage() {
             <input
               className="w-full rounded-md border px-3 py-2 text-sm"
               value={countryCode}
-              onChange={(e) => setCountryCode(e.target.value.toUpperCase())}
+              onChange={(e) => { setCountryCode(e.target.value.toUpperCase()); }}
               required
             />
           </div>
@@ -131,7 +131,7 @@ export default function AdminResponsibilityPage() {
             <input
               className="w-full rounded-md border px-3 py-2 text-sm"
               value={businessEmail}
-              onChange={(e) => setBusinessEmail(e.target.value)}
+              onChange={(e) => { setBusinessEmail(e.target.value); }}
               required
             />
           </div>
@@ -140,7 +140,7 @@ export default function AdminResponsibilityPage() {
             <input
               className="w-full rounded-md border px-3 py-2 text-sm"
               value={businessPhone}
-              onChange={(e) => setBusinessPhone(e.target.value)}
+              onChange={(e) => { setBusinessPhone(e.target.value); }}
               required
             />
           </div>
@@ -151,7 +151,7 @@ export default function AdminResponsibilityPage() {
             <input
               type="checkbox"
               checked={liabilityAcknowledged}
-              onChange={(e) => setLiabilityAcknowledged(e.target.checked)}
+              onChange={(e) => { setLiabilityAcknowledged(e.target.checked); }}
             />
             <span>I understand I&apos;m responsible for how this workspace is used.</span>
           </label>
@@ -159,7 +159,7 @@ export default function AdminResponsibilityPage() {
             <input
               type="checkbox"
               checked={termsAccepted}
-              onChange={(e) => setTermsAccepted(e.target.checked)}
+              onChange={(e) => { setTermsAccepted(e.target.checked); }}
             />
             <span>I agree to the Terms of Service.</span>
           </label>
@@ -167,7 +167,7 @@ export default function AdminResponsibilityPage() {
             <input
               type="checkbox"
               checked={privacyAccepted}
-              onChange={(e) => setPrivacyAccepted(e.target.checked)}
+              onChange={(e) => { setPrivacyAccepted(e.target.checked); }}
             />
             <span>I agree to the Privacy Policy.</span>
           </label>
@@ -178,7 +178,7 @@ export default function AdminResponsibilityPage() {
           <input
             className="w-full rounded-md border px-3 py-2 text-sm"
             value={signature}
-            onChange={(e) => setSignature(e.target.value)}
+            onChange={(e) => { setSignature(e.target.value); }}
             required
           />
         </div>

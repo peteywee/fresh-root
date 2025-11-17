@@ -4,6 +4,7 @@
   "type": "module",
   "scripts": {
     "build": "echo \"(functions) build stub\"",
+    "serve": "firebase emulators:start --only functions",
     "typecheck": "echo \"(functions) typecheck stub\"",
     "lint": "echo \"(functions) lint stub\""
   },

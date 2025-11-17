@@ -5,16 +5,16 @@ import type { DecodedIdToken } from "firebase-admin/auth";
 
 import { getAdminAuth } from "../firebase.js";
 
-export type UserToken = {
+export interface UserToken {
   uid: string;
   orgId?: string;
   roles?: string[];
   mfa?: boolean;
   [k: string]: unknown;
-};
+}
 
 function getCookie(req: Request, name: string): string | undefined {
-  const header = req.headers["cookie"];
+  const header = req.headers.cookie;
   if (!header) return undefined;
   const parts = (Array.isArray(header) ? header.join(";") : header).split(";");
   for (const p of parts) {

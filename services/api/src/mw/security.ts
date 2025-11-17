@@ -67,7 +67,7 @@ function rateLimit(
     const rec = hits.get(ip);
     if (!rec || rec.reset < now) {
       hits.set(ip, { count: 1, reset: now + windowMs });
-      return next();
+      next(); return;
     }
     rec.count += 1;
     if (rec.count > max) {

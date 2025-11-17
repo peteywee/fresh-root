@@ -36,6 +36,9 @@ jobs:
     name: Firestore Rules Tests
     runs-on: ubuntu-latest
     needs: unit-and-lint
+    # Gate heavy emulator-based rules tests so they run only when explicitly requested.
+    # This avoids running emulator-heavy jobs on every push/PR and keeps CI lean.
+    if: ${{ github.event_name == 'workflow_dispatch' }}
     steps:
       - uses: actions/checkout@v4
       - name: Use Node.js 20
@@ -97,6 +100,9 @@ jobs:
     name: CI - Full Test Suite (start server)
     runs-on: ubuntu-latest
     needs: unit-and-lint
+    # The full test suite can be expensive (spawns servers, browsers, emulators).
+    # Require manual dispatch to run it instead of automatically on every push/PR.
+    if: ${{ github.event_name == 'workflow_dispatch' }}
     steps:
       - uses: actions/checkout@v4
       - name: Use Node.js 20

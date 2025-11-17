@@ -24,21 +24,21 @@ const app = initializeApp({
 });
 const db = getFirestore(app);
 
-export type ScheduleLite = {
+export interface ScheduleLite {
   id: string;
   orgId: string;
   weekStart: string; // ISO string
   venueId: string;
   status: "draft" | "published";
-};
+}
 
-type ScheduleDocData = {
+interface ScheduleDocData {
   orgId: string;
   weekStart: { toDate: () => Date } | string;
   venueId: string;
   status: "draft" | "published";
   [key: string]: unknown;
-};
+}
 
 const TAG_SCHEDULES = (orgId: string) => `schedules:${orgId}`;
 

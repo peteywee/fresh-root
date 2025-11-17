@@ -1,10 +1,7 @@
 // [P0][AUTH][API] MFA setup endpoint - generates TOTP secret and QR code
 // [P0][AUTH][API] MFA setup endpoint - generates TOTP secret and QR code
-import { traceFn } from "@/app/api/_shared/otel";
 // [P0][AUTH][API] MFA setup endpoint - generates TOTP secret and QR code
-import { withGuards } from "@/app/api/_shared/security";
 // [P0][AUTH][API] MFA setup endpoint - generates TOTP secret and QR code
-import { jsonOk, jsonError } from "@/app/api/_shared/response";
 // Tags: P0, AUTH, API
 import { NextRequest } from "next/server";
 import * as QRCode from "qrcode";

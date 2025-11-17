@@ -8,10 +8,10 @@ import React, { FormEvent, useState } from "react";
 // Narrow router to only push to avoid any casting.
 type NavRouter = Pick<ReturnType<typeof useRouter>, "push">;
 
-type JoinFormState = {
+interface JoinFormState {
   token: string;
   email: string;
-};
+}
 
 export default function JoinPage() {
   const router = useRouter();
@@ -86,7 +86,7 @@ export default function JoinPage() {
         <div className="flex items-center justify-between gap-4">
           <button
             type="button"
-            onClick={() => nav.push("/onboarding/intent")}
+            onClick={() => { nav.push("/onboarding/intent"); }}
             className="text-sm text-gray-600 underline"
           >
             Back to Intent

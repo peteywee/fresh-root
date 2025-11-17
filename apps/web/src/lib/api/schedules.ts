@@ -4,17 +4,17 @@ import { collection, doc, getDocs, query, serverTimestamp, setDoc } from "fireba
 
 import { db } from "../../../app/lib/firebaseClient";
 
-type CreateScheduleArgs = { orgId: string; startDate: string; endDate: string };
-type PublishArgs = { orgId: string; scheduleId: string };
-type AddShiftArgs = {
+interface CreateScheduleArgs { orgId: string; startDate: string; endDate: string }
+interface PublishArgs { orgId: string; scheduleId: string }
+interface AddShiftArgs {
   orgId: string;
   scheduleId: string;
   userId: string;
   role: string;
   startTs: string;
   endTs: string;
-};
-type ListArgs = { orgId: string; scheduleId: string; startISO: string; endISO: string };
+}
+interface ListArgs { orgId: string; scheduleId: string; startISO: string; endISO: string }
 
 interface Shift {
   id: string;

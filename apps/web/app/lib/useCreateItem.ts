@@ -5,8 +5,8 @@ import { useMutation } from "@tanstack/react-query";
 
 import { apiFetch } from "./http";
 
-type Item = { id: string; name: string; createdAt: number };
-type CreateItemInput = { name: string };
+interface Item { id: string; name: string; createdAt: number }
+interface CreateItemInput { name: string }
 
 export function useCreateItem() {
   return useMutation({

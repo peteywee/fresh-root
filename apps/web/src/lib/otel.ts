@@ -15,11 +15,11 @@ export async function withSpan<T>(
           // OTel attributes may be string | number | boolean | Array of those
           if (Array.isArray(v)) {
             if (v.every((x) => typeof x === "string")) {
-              span.setAttribute(k, v as string[]);
+              span.setAttribute(k, v);
             } else if (v.every((x) => typeof x === "number")) {
-              span.setAttribute(k, v as number[]);
+              span.setAttribute(k, v);
             } else if (v.every((x) => typeof x === "boolean")) {
-              span.setAttribute(k, v as boolean[]);
+              span.setAttribute(k, v);
             } else {
               span.setAttribute(k, v.map(String));
             }

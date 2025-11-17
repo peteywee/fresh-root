@@ -61,7 +61,7 @@ export default function AdminFormStep() {
           <input
             required
             value={company}
-            onChange={(e) => setCompany(e.target.value)}
+            onChange={(e) => { setCompany(e.target.value); }}
             className="mt-1 w-full rounded bg-neutral-900 px-3 py-2 text-white"
           />
         </div>
@@ -70,7 +70,7 @@ export default function AdminFormStep() {
           <label className="block text-sm text-neutral-300">Tax ID (optional)</label>
           <input
             value={taxId}
-            onChange={(e) => setTaxId(e.target.value)}
+            onChange={(e) => { setTaxId(e.target.value); }}
             className="mt-1 w-full rounded bg-neutral-900 px-3 py-2 text-white"
           />
         </div>
@@ -79,7 +79,7 @@ export default function AdminFormStep() {
           <label className="block text-sm text-neutral-300">Business email</label>
           <input
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(e) => { setEmail(e.target.value); }}
             className="mt-1 w-full rounded bg-neutral-900 px-3 py-2 text-white"
             placeholder="admin@example.com"
           />

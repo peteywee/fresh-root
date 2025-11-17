@@ -6,11 +6,11 @@
  * Attempts Upstash REST client first, falls back to ioredis or in-memory storage.
  */
 
-type SimpleRedisClient = {
+interface SimpleRedisClient {
   incr(key: string): Promise<number>;
   expire(key: string, seconds: number): Promise<void>;
   ttl(key: string): Promise<number>;
-};
+}
 
 // In-memory fallback for local development and builds. Not suitable for production.
 const memoryMap = new Map<string, { count: number; resetAt: number }>();
@@ -54,7 +54,7 @@ async function initializeRedisAdapter() {
 
       // @ts-ignore - optional dependency
       const dynamicImport = new Function("pkg", "return import(pkg)");
-      // @ts-ignore
+      // @ts-ignore - dynamic import used to avoid static resolution by bundlers
       const upstashModule = await dynamicImport("@upstash/redis");
       const { Redis } = upstashModule;
       const client = new Redis({
@@ -86,7 +86,7 @@ async function initializeRedisAdapter() {
 
       // @ts-ignore - optional dependency
       const dynamicImport = new Function("pkg", "return import(pkg)");
-      // @ts-ignore
+      // @ts-ignore - dynamic import used to avoid static resolution by bundlers
       const ioredisModule = await dynamicImport("ioredis");
       const IORedis = ioredisModule.default || ioredisModule;
       const client = new IORedis(process.env.REDIS_URL);
@@ -179,10 +179,13 @@ function _getRedisAdapter(): RedisClient | null {
   return singletonAdapter;
 }
 
-export type RateLimitConfig = {
+// reference helper to avoid "defined but never used" lint warnings
+void _getRedisAdapter;
+
+export interface RateLimitConfig {
   max: number;
   windowSeconds: number;
-};
+}
 
 // In-memory fallback limiter (scoped per process)
 class InMemoryLimiter {

@@ -3,10 +3,10 @@
 "use client";
 import React, { createContext, useContext, useState, useEffect } from "react";
 
-type AuthState = {
+interface AuthState {
   user: Record<string, unknown> | null;
   isLoading: boolean;
-};
+}
 
 // ...you can replace the placeholder implementation with your real auth logic...
 const AuthContext = createContext<AuthState | undefined>(undefined);

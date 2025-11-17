@@ -2,7 +2,7 @@
 // Tags: P1, INTEGRITY, SCHEMA, ZOD, JOIN_TOKENS
 import { z } from "zod";
 
-import { MembershipRole } from "./memberships";
+import { MembershipRole } from "./memberships.js";
 
 /**
  * Join token status

@@ -1,10 +1,7 @@
 //[P1][API][ONBOARDING] Create Network + Org Endpoint (server)
 //[P1][API][ONBOARDING] Create Network + Org Endpoint (server)
-import { traceFn } from "@/app/api/_shared/otel";
 //[P1][API][ONBOARDING] Create Network + Org Endpoint (server)
-import { withGuards } from "@/app/api/_shared/security";
 //[P1][API][ONBOARDING] Create Network + Org Endpoint (server)
-import { jsonOk, jsonError } from "@/app/api/_shared/response";
 // Tags: api, onboarding, network, org, venue, membership, events
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -35,6 +32,7 @@ export async function createNetworkOrgHandler(
         orgId: "stub-org-id",
         venueId: "stub-venue-id",
         status: "pending_verification",
+        isStub: true,
       },
       { status: 200 },
     );

@@ -40,7 +40,8 @@ describe("POST /api/onboarding/verify-eligibility", () => {
 
     expect(response.status).toBe(401);
     const data = await response.json();
-    expect(data.error).toBe("not_authenticated");
+    expect(data.error).toBe("Not authenticated");
+    expect(data.code).toBe("GEN_NOT_AUTHENTICATED");
   });
 
   it("should return 400 if missing required fields in request body", async () => {
@@ -49,7 +50,8 @@ describe("POST /api/onboarding/verify-eligibility", () => {
 
     expect(response.status).toBe(400);
     const data = await response.json();
-    expect(data.error).toBe("invalid_request");
+    expect(data.error).toBe("Missing email or role");
+    expect(data.code).toBe("ONB_ELIGIBILITY_INVALID_REQUEST");
   });
 
   it("should return 403 if role not in ALLOWED_ROLES", async () => {
@@ -61,7 +63,8 @@ describe("POST /api/onboarding/verify-eligibility", () => {
     const response = await verifyEligibilityHandler(mockReq, mockAdminDb);
     expect(response.status).toBe(403);
     const data = await response.json();
-    expect(data.error).toContain("role");
+    expect(data.error).toBe("Role not allowed for onboarding");
+    expect(data.code).toBe("ONB_ELIGIBILITY_ROLE_DENIED");
   });
 
   it("should return 200 with eligibility_ok for valid request", async () => {
@@ -119,6 +122,9 @@ describe("POST /api/onboarding/verify-eligibility", () => {
         get: vi.fn().mockResolvedValue({ docs: Array(10).fill({ data: () => ({}) }) }),
       }),
     });
+
+    // mark the mocked collection as intentionally unused for this test
+    void _mockCollection;
 
     // This would return 429 if the rate limit check is properly implemented
     // The actual behavior depends on implementation details

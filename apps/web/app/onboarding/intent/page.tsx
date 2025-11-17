@@ -7,11 +7,11 @@ import React, { useState } from "react";
 
 import { useOnboardingWizard } from "../_wizard/OnboardingWizardContext";
 
-type EligibilityResponse = {
+interface EligibilityResponse {
   allowed: boolean;
   reason: string | null;
   effectiveRole?: string;
-};
+}
 
 export default function IntentPage() {
   const router = useRouter();
@@ -72,7 +72,7 @@ export default function IntentPage() {
       <div className="space-y-3">
         <button
           type="button"
-          onClick={() => setIntent("create_org")}
+          onClick={() => { setIntent("create_org"); }}
           className={`w-full rounded-md border px-4 py-3 text-left text-sm ${
             intent === "create_org" ? "border-slate-900 bg-slate-100" : "border-slate-300"
           }`}
@@ -82,7 +82,7 @@ export default function IntentPage() {
 
         <button
           type="button"
-          onClick={() => setIntent("create_corporate")}
+          onClick={() => { setIntent("create_corporate"); }}
           className={`w-full rounded-md border px-4 py-3 text-left text-sm ${
             intent === "create_corporate" ? "border-slate-900 bg-slate-100" : "border-slate-300"
           }`}
@@ -92,7 +92,7 @@ export default function IntentPage() {
 
         <button
           type="button"
-          onClick={() => setIntent("join_existing")}
+          onClick={() => { setIntent("join_existing"); }}
           className={`w-full rounded-md border px-4 py-3 text-left text-sm ${
             intent === "join_existing" ? "border-slate-900 bg-slate-100" : "border-slate-300"
           }`}

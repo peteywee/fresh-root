@@ -1,10 +1,7 @@
 //[P1][API][ONBOARDING] Admin Form Endpoint (server)
 //[P1][API][ONBOARDING] Admin Form Endpoint (server)
-import { traceFn } from "@/app/api/_shared/otel";
 //[P1][API][ONBOARDING] Admin Form Endpoint (server)
-import { withGuards } from "@/app/api/_shared/security";
 //[P1][API][ONBOARDING] Admin Form Endpoint (server)
-import { jsonOk, jsonError } from "@/app/api/_shared/response";
 // Tags: api, onboarding, admin-form, compliance
 
 import {
@@ -15,15 +12,21 @@ import { randomBytes } from "crypto";
 import { NextRequest, NextResponse } from "next/server";
 
 import { adminDb as importedAdminDb } from "@/src/lib/firebase.server";
+import { withRequestLogging } from "../../_shared/logging";
+import { withSecurity, type AuthenticatedRequest } from "../../_shared/middleware";
 
 /**
  * Inner handler exported for tests. Accepts an optional injected adminDb for testability.
  */
 export async function adminFormHandler(
-  req: NextRequest & { user?: { uid: string } },
+  req: AuthenticatedRequest & { user?: { uid: string } },
   injectedAdminDb = importedAdminDb,
 ) {
   let body: unknown;
+
+  // Authenticated request check: handler expects an authenticated user.
+  const uid = req.user?.uid;
+  if (!uid) return NextResponse.json({ error: "not_authenticated" }, { status: 401 });
 
   try {
     body = await req.json();
@@ -49,22 +52,19 @@ export async function adminFormHandler(
 
   // If admin DB not initialized, return a stub token so the UI can progress in local/dev mode
   if (!adminDb) {
-    const formToken = "stub-form-token";
-    return NextResponse.json({ ok: true, formToken }, { status: 200 });
+    const token = "stub-form-token";
+    const tokenExpiresAt = Date.now() + 30 * 24 * 60 * 60 * 1000;
+    return NextResponse.json({ ok: true, token, tokenExpiresAt, isStub: true }, { status: 200 });
   }
 
   try {
     // url-safe random token
     const token = randomBytes(12).toString("base64url");
 
-    const formsRoot = adminDb
-      .collection("compliance")
-      .doc("adminResponsibilityForms")
-      .collection("forms");
-    const docRef = formsRoot.doc(token);
+    const docRef = adminDb.collection("compliance_forms").doc(token);
 
     const nowIso = new Date().toISOString();
-    const expiresAt = Date.now() + 60 * 60 * 1000; // 60 minutes TTL for onboarding form token
+    const expiresAt = Date.now() + 30 * 24 * 60 * 60 * 1000; // 30 days TTL for onboarding form token
 
     await docRef.set({
       ...payload,
@@ -77,7 +77,7 @@ export async function adminFormHandler(
       attachedTo: null,
     });
 
-    return NextResponse.json({ ok: true, formToken: token }, { status: 200 });
+    return NextResponse.json({ ok: true, token, tokenExpiresAt: expiresAt }, { status: 200 });
   } catch (err) {
     console.error("admin-form persist failed", err);
     return NextResponse.json({ error: "internal_error" }, { status: 500 });
@@ -88,6 +88,9 @@ export async function adminFormHandler(
 // doesn't pass the route `context` object as the second argument (which would
 // be mistaken for an injected Firestore instance). The wrapper matches the
 // expected Next.js signature: (req, ctx) => Response
-export const POST = async (req: NextRequest, _ctx: { params?: unknown }) => {
-  return await adminFormHandler(req as NextRequest & { user?: { uid: string } });
-};
+// Route adapter + security wrapper
+async function apiRoute(req: NextRequest) {
+  return await adminFormHandler(req as any);
+}
+
+export const POST = withRequestLogging(withSecurity(apiRoute as any, { requireAuth: true }));

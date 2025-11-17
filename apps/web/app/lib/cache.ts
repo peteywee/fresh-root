@@ -6,7 +6,7 @@ import {
   unstable_noStore as noStore,
 } from "next/cache";
 
-export type CacheCfg = { tag?: string; ttl?: number; noStore?: boolean };
+export interface CacheCfg { tag?: string; ttl?: number; noStore?: boolean }
 
 /**
  * Wrap an async fetcher into a cached function with an optional tag and TTL.

@@ -24,6 +24,9 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "."),
+      "@fresh-schedules/types": path.resolve(__dirname, "../../packages/types/src"),
+      // Shim next/server for unit tests (avoids pulling in Next runtime)
+      "next/server": path.resolve(__dirname, "tests/shims/next-server.ts"),
     },
   },
 });

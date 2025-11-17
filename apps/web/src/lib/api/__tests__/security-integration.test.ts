@@ -1,6 +1,5 @@
 //[P1][API][TEST] Security integration tests
 // Tags: test, security, integration, authorization, rate-limiting, csrf
-/* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { NextRequest, NextResponse } from "next/server";
 import { describe, it, expect, beforeEach, vi } from "vitest";
@@ -44,7 +43,7 @@ describe("Security Integration Tests", () => {
 
       vi.mocked(getFirestore).mockReturnValue({
         collection: mockCollection,
-      } as any);
+      } as unknown);
 
       const handler = requireOrgMembership(async (_request, context) => {
         return NextResponse.json({ success: true, orgId: context.orgId });
@@ -70,7 +69,7 @@ describe("Security Integration Tests", () => {
 
       vi.mocked(getFirestore).mockReturnValue({
         collection: mockCollection,
-      } as any);
+      } as unknown);
 
       const handler = requireOrgMembership(async (_request, context) => {
         return NextResponse.json({ success: true, orgId: context.orgId });
@@ -109,7 +108,7 @@ describe("Security Integration Tests", () => {
 
       vi.mocked(getFirestore).mockReturnValue({
         collection: mockCollection,
-      } as any);
+      } as unknown);
 
       const result = await canAccessResource("user123", "org123", "staff");
 
@@ -137,7 +136,7 @@ describe("Security Integration Tests", () => {
 
       vi.mocked(getFirestore).mockReturnValue({
         collection: mockCollection,
-      } as any);
+      } as unknown);
 
       const handler = requireOrgMembership(
         requireRole("admin")(async (_request, context) => {
@@ -173,7 +172,7 @@ describe("Security Integration Tests", () => {
 
       vi.mocked(getFirestore).mockReturnValue({
         collection: mockCollection,
-      } as any);
+      } as unknown);
 
       const handler = requireOrgMembership(
         requireRole("admin")(async (_request, context) => {
@@ -209,7 +208,7 @@ describe("Security Integration Tests", () => {
 
       vi.mocked(getFirestore).mockReturnValue({
         collection: mockCollection,
-      } as any);
+      } as unknown);
 
       const handler = requireOrgMembership(
         requireRole("admin")(async (_request, context) => {
@@ -373,7 +372,7 @@ describe("Security Integration Tests", () => {
 
       vi.mocked(getFirestore).mockReturnValue({
         collection: mockCollection,
-      } as any);
+      } as unknown);
 
       const token = generateCSRFToken();
 
@@ -466,7 +465,7 @@ describe("Security Integration Tests", () => {
 
       vi.mocked(getFirestore).mockReturnValue({
         collection: mockCollection,
-      } as any);
+      } as unknown);
 
       const token = generateCSRFToken();
 

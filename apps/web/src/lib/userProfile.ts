@@ -10,10 +10,9 @@
  * - Safe to call on every session bootstrap (idempotent)
  */
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { Firestore } from "firebase-admin/firestore";
 
-export type AuthUserClaims = {
+export interface AuthUserClaims {
   email?: string;
   name?: string;
   displayName?: string;
@@ -21,10 +20,10 @@ export type AuthUserClaims = {
   selfDeclaredRole?: string;
   role?: string;
   [key: string]: unknown;
-};
+}
 
 export async function ensureUserProfile(args: {
-  adminDb: Firestore | any;
+  adminDb: Firestore | undefined;
   uid: string;
   claims: AuthUserClaims;
 }): Promise<void> {
@@ -32,7 +31,8 @@ export async function ensureUserProfile(args: {
 
   if (!adminDb) {
     // Stub mode, nothing to persist
-    console.log("[userProfile] stub ensureUserProfile", { uid, claims });
+    // Use warn to comply with ESLint no-console rule (warn/error allowed)
+    console.warn("[userProfile] stub ensureUserProfile", { uid, claims });
     return;
   }
 
@@ -41,13 +41,13 @@ export async function ensureUserProfile(args: {
   const now = Date.now();
 
   const baseProfile = {
-    email: (claims.email as string | undefined) || null,
+    email: (claims.email) || null,
     displayName:
-      (claims.displayName as string | undefined) || (claims.name as string | undefined) || null,
-    avatarUrl: (claims.picture as string | undefined) || null,
+      (claims.displayName) || (claims.name) || null,
+    avatarUrl: (claims.picture) || null,
     selfDeclaredRole:
-      (claims.selfDeclaredRole as string | undefined) ||
-      (claims.role as string | undefined) ||
+      (claims.selfDeclaredRole) ||
+      (claims.role) ||
       null,
   };
 
@@ -73,10 +73,13 @@ export async function ensureUserProfile(args: {
   }
 
   // If the doc exists, we still may want to backfill missing profile fields
-  const existing = snap.data() as any;
+  const existing = (snap.data() || {}) as Record<string, unknown>;
+
+  const existingProfile =
+    (existing && (existing.profile as Record<string, unknown> | undefined)) || {};
 
   const profile = {
-    ...(existing.profile || {}),
+    ...existingProfile,
     ...baseProfile,
   };
 

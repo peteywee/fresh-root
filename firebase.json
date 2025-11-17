@@ -1,11 +1,23 @@
 {
-  "projects": { "default": "YOUR_PROJECT_ID" },
+  "projects": {
+    "default": "YOUR_PROJECT_ID"
+  },
   "emulators": {
-    "auth": { "port": 9099 },
-    "firestore": { "port": 8080 },
-    "storage": { "port": 9199 },
-    "functions": { "port": 5001 },
-    "ui": { "enabled": true }
+    "auth": {
+      "port": 9099
+    },
+    "firestore": {
+      "port": 8080
+    },
+    "storage": {
+      "port": 9199
+    },
+    "functions": {
+      "port": 5001
+    },
+    "ui": {
+      "enabled": true
+    }
   },
   "firestore": {
     "rules": "firestore.rules",
@@ -14,5 +26,10 @@
   "storage": {
     "rules": "storage.rules"
   },
-  "functions": { "source": "functions" }
+  "functions": {
+    "source": "functions"
+  },
+  "hosting": {
+    "public": "apps/web/out"
+  }
 }

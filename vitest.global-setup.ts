@@ -48,8 +48,30 @@ export default async function () {
     return; // server is already up
   } catch {}
 
-  // Start Next.js dev server in apps/web
-  child = spawn(process.platform === "win32" ? "pnpm.cmd" : "pnpm", ["dev"], {
+  // Ensure the types package is built so Node.js can resolve it during Next.js startup.
+  // Some packages (like `@fresh-schedules/types`) are 'workspace:*' with `main` pointing
+  // to dist/index.js; when running Next with Node (not Vite), we must build that package
+  // so `require`/`import` can find the entrypoint. Build it first to avoid resolution errors.
+  try {
+    // Build `@fresh-schedules/types` so the Next app can import it (dist/index.js)
+    const buildTypes = spawn(process.platform === "win32" ? "pnpm.cmd" : "pnpm", ["--filter", "@fresh-schedules/types", "build"], {
+      cwd: process.cwd(),
+      env: { ...process.env },
+      stdio: "inherit",
+    });
+    // Wait for the build to complete or throw if it fails.
+    await new Promise<void>((resolve, reject) => {
+      buildTypes.once("exit", (code) => (code === 0 ? resolve() : reject(new Error(`build failed: ${code}`))));
+    });
+  } catch (err) {
+    console.warn("[vitest.global-setup] Failed to build packages: continuing anyway", err);
+  }
+
+  // Start Next.js dev server in apps/web (dev) so we get a development server
+  // that tests can hit during integration/e2e tests. Building the app in
+  // production mode runs a full build which may fail due to development-only
+  // features; prefer dev here to keep CI/debugging quick.
+  child = spawn(process.platform === "win32" ? "pnpm.cmd" : "pnpm", ["--filter", "@apps/web", "dev"], {
     cwd: "apps/web",
     env: {
       ...process.env,
@@ -71,7 +93,7 @@ export default async function () {
   });
 
   // Wait until server responds
-  await waitForHttp("http://localhost:3000/api/health");
+  await waitForHttp("http://localhost:3000/api/health", 120000, 500);
 
   // Return teardown
   return async () => {

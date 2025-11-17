@@ -1,10 +1,7 @@
 // [P0][AUTH][SESSION] Route API route handler
 // [P0][AUTH][SESSION] Route API route handler
-import { traceFn } from "@/app/api/_shared/otel";
 // [P0][AUTH][SESSION] Route API route handler
-import { withGuards } from "@/app/api/_shared/security";
 // [P0][AUTH][SESSION] Route API route handler
-import { jsonOk, jsonError } from "@/app/api/_shared/response";
 // Tags: P0, AUTH, SESSION
 /**
  * [P1][API][SESSION] Session Bootstrap Endpoint (server)
@@ -31,7 +28,7 @@ export async function bootstrapSessionHandler(
   injectedAdminDb?: Firestore,
 ) {
   const uid = req.user?.uid;
-  const claims = (req.user?.customClaims || {}) as Record<string, unknown>;
+  const claims = (req.user?.customClaims || {});
 
   if (!uid) {
     return NextResponse.json({ error: "not_authenticated" }, { status: 401 });

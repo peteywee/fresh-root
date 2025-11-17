@@ -54,7 +54,7 @@ export default function DemoPage() {
             type="success"
             title="Success!"
             message="Form submitted successfully!"
-            onClose={() => setShowAlert(false)}
+            onClose={() => { setShowAlert(false); }}
           />
         )}
 

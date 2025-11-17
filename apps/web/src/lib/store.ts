@@ -23,9 +23,9 @@ export const useAppStore = create<AppState>()(
         forecastSales: 20000,
       },
       setPlanning: (updates) =>
-        set((state) => ({
+        { set((state) => ({
           planning: { ...state.planning, ...updates },
-        })),
+        })); },
     }),
     { name: "app-storage" },
   ),

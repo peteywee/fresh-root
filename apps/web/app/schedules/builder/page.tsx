@@ -22,7 +22,7 @@ export default function ScheduleBuilder() {
         <h2 className="text-lg font-semibold">Week view (prototype)</h2>
         <div>
           <button
-            onClick={() => addDemoShift(0)}
+            onClick={() => { addDemoShift(0); }}
             className="rounded bg-emerald-600 px-3 py-1 text-sm"
           >
             Add shift

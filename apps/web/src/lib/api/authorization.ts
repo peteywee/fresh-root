@@ -120,7 +120,7 @@ export async function getUserRoles(userId: string, orgId: string): Promise<OrgRo
     .get();
   if (snapshot.empty) return null;
   const data = snapshot.docs[0].data() as { roles?: OrgRole[] };
-  return (data.roles || []) as OrgRole[];
+  return (data.roles || []);
 }
 
 // High-level helper: check access combining membership and role requirement

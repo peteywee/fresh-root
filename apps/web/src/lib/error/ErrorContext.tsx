@@ -3,7 +3,7 @@
 "use client";
 import { createContext, useContext, useMemo, useReducer, type ReactNode } from "react";
 
-type ErrorState = { messages: string[] };
+interface ErrorState { messages: string[] }
 
 type Action = { type: "PUSH"; message: string } | { type: "CLEAR" } | { type: "POP" };
 
@@ -36,9 +36,9 @@ export function ErrorProvider({ children }: { children: ReactNode }) {
   const api = useMemo(
     () => ({
       messages: state.messages,
-      pushError: (m: string) => dispatch({ type: "PUSH", message: m }),
-      popError: () => dispatch({ type: "POP" }),
-      clearErrors: () => dispatch({ type: "CLEAR" }),
+      pushError: (m: string) => { dispatch({ type: "PUSH", message: m }); },
+      popError: () => { dispatch({ type: "POP" }); },
+      clearErrors: () => { dispatch({ type: "CLEAR" }); },
     }),
     [state.messages],
   );

@@ -76,7 +76,7 @@ export function initOTel(config: OTelConfig): void {
       if (attrs.length) {
         const prior = process.env.OTEL_RESOURCE_ATTRIBUTES?.trim();
         process.env.OTEL_RESOURCE_ATTRIBUTES =
-          prior && prior.length ? `${prior},${attrs.join(",")}` : attrs.join(",");
+          prior?.length ? `${prior},${attrs.join(",")}` : attrs.join(",");
       }
     } catch {}
 
@@ -171,7 +171,7 @@ export function getTraceContext() {
 /**
  * Manually flush pending traces (useful for serverless or testing).
  */
-export async function flushTraces(_timeout: number = 5000): Promise<void> {
+export async function flushTraces(_timeout = 5000): Promise<void> {
   if (sdk) {
     await sdk.shutdown();
     console.log("[otel] traces flushed");

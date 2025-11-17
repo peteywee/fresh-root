@@ -80,17 +80,17 @@ export function isManagerClaims(
 ): boolean {
   if (!claims) return false;
   const c = claims as unknown as Record<string, unknown>;
-  if (typeof c["role"] === "string" && c["role"] === "manager") return true;
+  if (typeof c.role === "string" && c.role === "manager") return true;
   if (typeof c["custom:role"] === "string" && c["custom:role"] === "manager") return true;
   // check namespaced roles object
   const roles =
-    ((claims as unknown as Record<string, unknown>)["roles"] as
+    ((claims as unknown as Record<string, unknown>).roles as
       | Record<string, string>
       | undefined) ||
-    ((claims as unknown as Record<string, unknown>)["rolesMap"] as
+    ((claims as unknown as Record<string, unknown>).rolesMap as
       | Record<string, string>
       | undefined) ||
-    ((claims as unknown as Record<string, unknown>)["orgRoles"] as
+    ((claims as unknown as Record<string, unknown>).orgRoles as
       | Record<string, string>
       | undefined);
   if (orgId && roles && typeof roles === "object") {

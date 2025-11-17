@@ -66,7 +66,7 @@ export default function ProfilePage() {
           <input
             className="w-full rounded-md border px-3 py-2 text-sm"
             value={fullName}
-            onChange={(e) => setFullName(e.target.value)}
+            onChange={(e) => { setFullName(e.target.value); }}
             required
           />
         </div>
@@ -76,7 +76,7 @@ export default function ProfilePage() {
           <input
             className="w-full rounded-md border px-3 py-2 text-sm"
             value={preferredName}
-            onChange={(e) => setPreferredName(e.target.value)}
+            onChange={(e) => { setPreferredName(e.target.value); }}
             required
           />
         </div>
@@ -86,7 +86,7 @@ export default function ProfilePage() {
           <input
             className="w-full rounded-md border px-3 py-2 text-sm"
             value={phone}
-            onChange={(e) => setPhone(e.target.value)}
+            onChange={(e) => { setPhone(e.target.value); }}
             required
           />
         </div>
@@ -96,7 +96,7 @@ export default function ProfilePage() {
           <input
             className="w-full rounded-md border px-3 py-2 text-sm"
             value={timeZone}
-            onChange={(e) => setTimeZone(e.target.value)}
+            onChange={(e) => { setTimeZone(e.target.value); }}
             required
           />
         </div>
@@ -106,7 +106,7 @@ export default function ProfilePage() {
           <select
             className="w-full rounded-md border px-3 py-2 text-sm"
             value={selfDeclaredRole}
-            onChange={(e) => setSelfDeclaredRole(e.target.value)}
+            onChange={(e) => { setSelfDeclaredRole(e.target.value); }}
           >
             <option value="owner_founder_director">Owner / Founder / Director</option>
             <option value="manager_supervisor">Manager / Supervisor</option>

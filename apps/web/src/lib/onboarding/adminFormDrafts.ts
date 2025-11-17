@@ -6,9 +6,9 @@ import type { Firestore, DocumentReference } from "firebase-admin/firestore";
 
 import { adminDb, adminSdk } from "@/src/lib/firebase.server";
 
-const db = adminDb as Firestore | undefined;
+const db = adminDb;
 
-export type AdminFormDraft = {
+export interface AdminFormDraft {
   id: string;
   userId: string;
   payload: CreateAdminResponsibilityFormInput;
@@ -16,7 +16,7 @@ export type AdminFormDraft = {
   userAgent: string;
   createdAt: ReturnType<typeof adminSdk.firestore.Timestamp.now> | number;
   consumedAt?: ReturnType<typeof adminSdk.firestore.Timestamp.now> | null;
-};
+}
 
 function generateFormToken() {
   return randomBytes(24).toString("hex");

@@ -2,7 +2,7 @@
 // Tags: P0, APP, CODE
 "use server";
 
-type CreatePayload = { orgId: string; startDate: number };
+interface CreatePayload { orgId: string; startDate: number }
 
 /**
  * Server action that calls the API (keeps secrets server-side).

@@ -22,19 +22,9 @@ vi.mock('firebase/auth', async () => {
 beforeEach(() => {
   vi.resetAllMocks();
   
-  // Mock indexedDB for pendingEmail.store
-  const mockIDB = {
-    open: vi.fn().mockResolvedValue({
-      transaction: vi.fn().mockReturnValue({
-        objectStore: vi.fn().mockReturnValue({
-          get: vi.fn().mockResolvedValue(undefined),
-          put: vi.fn().mockResolvedValue(undefined),
-          delete: vi.fn().mockResolvedValue(undefined),
-        }),
-      }),
-    }),
-  };
-  (global as unknown as { indexedDB: typeof mockIDB }).indexedDB = mockIDB;
+  // We rely on fake-indexeddb in `vitest.setup.ts` for IndexedDB test support;
+  // avoid overwriting `indexedDB` here with an incompatible mock that does not
+  // implement `addEventListener` and other IDB-specific behavior.
   
   type MockStorage = Map<string, string> & {
     getItem: (k: string) => string | undefined;
