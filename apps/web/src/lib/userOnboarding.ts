@@ -45,7 +45,8 @@ export async function markOnboardingComplete(params: {
   } catch (_e) {
     // Don't surface errors to callers; keep original endpoint semantics.
     // Optionally log via a logger if available in the future.
-    console.debug("[userOnboarding] Failed to mark onboarding complete", {
+    // Use console.warn so it passes ESLint no-console rule (warn/error allowed).
+    console.warn("[userOnboarding] Failed to mark onboarding complete", {
       uid,
       intent,
       networkId,

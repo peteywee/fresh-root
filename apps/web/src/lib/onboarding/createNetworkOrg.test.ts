@@ -1,6 +1,6 @@
 // [P0][TEST][TEST] CreateNetworkOrg Test tests
 // Tags: P0, TEST, TEST
-/* eslint-disable @typescript-eslint/no-explicit-any */
+ 
 import { describe, it, expect, vi } from "vitest";
 
 // Prevent the real firebase-admin from being imported in tests (it prints a

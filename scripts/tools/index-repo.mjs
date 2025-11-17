@@ -1,4 +1,6 @@
 #!/usr/bin/env node
+// [P0][APP][CODE] Index Repo
+// Tags: P0, APP, CODE
 import fs from 'fs/promises';
 import path from 'path';
 

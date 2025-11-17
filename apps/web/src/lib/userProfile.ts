@@ -32,7 +32,8 @@ export async function ensureUserProfile(args: {
 
   if (!adminDb) {
     // Stub mode, nothing to persist
-    console.log("[userProfile] stub ensureUserProfile", { uid, claims });
+    // Use warn to comply with ESLint no-console rule (warn/error allowed)
+    console.warn("[userProfile] stub ensureUserProfile", { uid, claims });
     return;
   }
 

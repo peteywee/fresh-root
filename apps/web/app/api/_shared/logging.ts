@@ -60,7 +60,7 @@ export function withRequestLogging<TReq extends BasicReq>(
 
     // Structured "start" log
 
-    console.log(
+    console.warn(
       JSON.stringify({
         level: "info",
         msg: "request_start",
@@ -80,7 +80,7 @@ export function withRequestLogging<TReq extends BasicReq>(
 
       // Structured "end" log
 
-      console.log(
+      console.warn(
         JSON.stringify({
           level: "info",
           msg: "request_end",

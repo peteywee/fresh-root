@@ -54,7 +54,7 @@ async function initializeRedisAdapter() {
 
       // @ts-ignore - optional dependency
       const dynamicImport = new Function("pkg", "return import(pkg)");
-      // @ts-ignore
+      // @ts-ignore - dynamic import used to avoid static resolution by bundlers
       const upstashModule = await dynamicImport("@upstash/redis");
       const { Redis } = upstashModule;
       const client = new Redis({
@@ -86,7 +86,7 @@ async function initializeRedisAdapter() {
 
       // @ts-ignore - optional dependency
       const dynamicImport = new Function("pkg", "return import(pkg)");
-      // @ts-ignore
+      // @ts-ignore - dynamic import used to avoid static resolution by bundlers
       const ioredisModule = await dynamicImport("ioredis");
       const IORedis = ioredisModule.default || ioredisModule;
       const client = new IORedis(process.env.REDIS_URL);

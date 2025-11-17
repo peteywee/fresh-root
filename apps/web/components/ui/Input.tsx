@@ -10,7 +10,10 @@ export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> 
 }
 
 export default function Input({ label, hint, id, className = "", ...props }: InputProps) {
-  const inputId = id ?? React.useId();
+  // Call hook unconditionally and then use the provided id if present.
+  // This ensures hooks are always invoked in the same order (rules-of-hooks).
+  const generatedId = React.useId();
+  const inputId = id ?? generatedId;
   return (
     <div className="grid gap-1">
       {label && (

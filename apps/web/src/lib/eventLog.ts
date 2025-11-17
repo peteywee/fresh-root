@@ -16,9 +16,9 @@ import type { Firestore } from "firebase-admin/firestore";
 
 export async function logEvent(adminDb: Firestore | any, input: NewEvent): Promise<void> {
   if (!adminDb) {
-    // In local/stub mode, just console.log instead of writing to Firestore.
+    // In local/stub mode, log as a warning instead of writing to Firestore.
     // This keeps the call sites simple and prevents crashes when adminDb is undefined.
-    console.log("[eventLog] stub event:", input);
+    console.warn("[eventLog] stub event:", input);
     return;
   }
 
