@@ -5,7 +5,11 @@
  * Unit tests for firestore.rules: access control for orgs, join_tokens, memberships, and other collections.
  * Uses Firebase Rules Testing SDK to verify authenticated and unauthenticated access patterns.
  */
-import { assertFails, assertSucceeds, initializeTestEnvironment } from "@firebase/rules-unit-testing";
+import {
+  assertFails,
+  assertSucceeds,
+  initializeTestEnvironment,
+} from "@firebase/rules-unit-testing";
 import type { RulesTestEnvironment } from "@firebase/rules-unit-testing";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { readFileSync } from "fs";
@@ -22,8 +26,8 @@ beforeAll(async () => {
     firestore: {
       rules: readFileSync(rulesPath, "utf8"),
       host: "127.0.0.1",
-      port: 8080
-    }
+      port: 8080,
+    },
   });
 });
 
@@ -48,7 +52,11 @@ test("deny unauthenticated read of org doc", async () => {
 test("member can read their org", async () => {
   // seed membership
   const unauthDb = testEnv.unauthenticatedContext().firestore();
-  await setDoc(doc(unauthDb, "memberships", "u1_demo-org"), { uid: "u1", orgId: "demo-org", roles: ["manager"] });
+  await setDoc(doc(unauthDb, "memberships", "u1_demo-org"), {
+    uid: "u1",
+    orgId: "demo-org",
+    roles: ["manager"],
+  });
 
   const db = authed("u1");
   const ref = doc(db, "orgs", "demo-org");
@@ -82,4 +90,3 @@ test("unauthenticated user cannot read join token", async () => {
   const ref = doc(db, "join_tokens", "test-token-1");
   await assertFails(getDoc(ref));
 });
-
