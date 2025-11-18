@@ -16,15 +16,9 @@ export function extractOrgId(request: NextRequest): string | null {
 }
 
 export function requireOrgMembership(
-  handler: (
-    request: NextRequest,
-    context: { params: Record<string, string>; userId: string; orgId: string },
-  ) => Promise<NextResponse>,
+  handler: (request: NextRequest, context: any) => Promise<NextResponse>,
 ) {
-  return async (
-    request: NextRequest,
-    context: { params: Record<string, string> | Promise<Record<string, string>> },
-  ): Promise<NextResponse> => {
+  return async (request: NextRequest, context: any): Promise<NextResponse> => {
     const userId = request.headers.get("x-user-id");
     if (!userId)
       return NextResponse.json({ error: "Unauthorized - No user session" }, { status: 401 });
@@ -39,33 +33,40 @@ export function requireOrgMembership(
     // Resolve params if it's a Promise (Next.js 14+)
     const resolvedParams = await Promise.resolve(context.params);
 
-    // NOTE: In a full implementation, verify membership in Firestore here.
+    // Verify membership in Firestore here for tests and production
+    try {
+      const member = await isOrgMember(userId, orgId);
+      if (!member)
+        return NextResponse.json({ error: "Forbidden - not a member" }, { status: 403 });
+    } catch {
+      // If Firestore errors occur, treat as unauthorized/forbidden conservatively
+      return NextResponse.json({ error: "Forbidden - membership check failed" }, { status: 403 });
+    }
+
     return handler(request, { params: resolvedParams, userId, orgId });
   };
 }
 
 export function requireRole(requiredRole: OrgRole) {
   const hierarchy: OrgRole[] = ["staff", "corporate", "scheduler", "manager", "admin", "org_owner"];
-  return function (
-    handler: (
-      request: NextRequest,
-      context: { params: Record<string, string>; userId: string; orgId: string; roles: OrgRole[] },
-    ) => Promise<NextResponse>,
-  ) {
-    return async (
-      request: NextRequest,
-      context: {
-        params: Record<string, string> | Promise<Record<string, string>>;
-        userId: string;
-        orgId: string;
-      },
-    ): Promise<NextResponse> => {
-      // Minimal: read roles from header for now (e.g., "x-roles: admin,manager")
+  return function (handler: (request: NextRequest, context: any) => Promise<NextResponse>) {
+    return async (request: NextRequest, context: any): Promise<NextResponse> => {
+      // Try header first (easier for tests), otherwise fetch roles from Firestore
       const rolesHeader = request.headers.get("x-roles") || "";
-      const roles = rolesHeader
-        .split(",")
-        .map((r) => r.trim())
-        .filter(Boolean) as OrgRole[];
+      let roles: OrgRole[] = [];
+      if (rolesHeader) {
+        roles = rolesHeader
+          .split(",")
+          .map((r) => r.trim())
+          .filter(Boolean) as OrgRole[];
+      } else {
+        try {
+          const fetched = await getUserRoles(context.userId, context.orgId);
+          roles = fetched || [];
+        } catch {
+          roles = [];
+        }
+      }
 
       const userLevel = roles.length ? Math.max(...roles.map((r) => hierarchy.indexOf(r))) : -1;
       const requiredLevel = hierarchy.indexOf(requiredRole);

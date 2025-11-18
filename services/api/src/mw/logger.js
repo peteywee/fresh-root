@@ -1,6 +1,7 @@
 // [P1][RELIABILITY][OBS] Request logging middleware with reqId and latency tracking
 // Tags: P1, RELIABILITY, OBSERVABILITY, LOGGING, MIDDLEWARE
 import { randomUUID } from "crypto";
+
 import { logger } from "../obs/log.js";
 /**
  * Middleware to attach a unique request ID and log all requests with latency.

@@ -1,7 +1,7 @@
+import { clsx } from "clsx";
 import { jsx as _jsx } from "react/jsx-runtime";
 // [P2][UI][CODE] Card
 // Tags: P2, UI, CODE
-import { clsx } from "clsx";
 export function Card({ children, className }) {
     return (_jsx("div", { className: clsx("rounded-lg border bg-white p-6 shadow-sm", className), children: children }));
 }

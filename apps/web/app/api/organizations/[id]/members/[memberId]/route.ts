@@ -14,14 +14,14 @@ import { serverError } from "../../../../_shared/validation";
  * GET /api/organizations/[id]/members/[memberId]
  * Get member details (org membership required)
  */
-export const GET = requireOrgMembership(async (request: NextRequest, context) => {
+export const GET = requireOrgMembership(async (request: NextRequest, context: { params: Record<string, string>; userId?: string; orgId?: string; roles?: string[] }) => {
   // Apply rate limiting using the inline check pattern used elsewhere
   const rateLimitResult = await rateLimit(request, RateLimits.api);
   if (rateLimitResult) return rateLimitResult;
 
-  const { params } = context;
+  const _params = await Promise.resolve(context.params);
   try {
-    const { id: orgId, memberId } = await params;
+    const { id: orgId, memberId } = _params as Record<string, string>;
     // In production, fetch from Firestore and check permissions
     const member = {
       id: memberId,
@@ -36,15 +36,15 @@ export const GET = requireOrgMembership(async (request: NextRequest, context) =>
   } catch {
     return serverError("Failed to fetch member");
   }
-});
+}) as unknown as any;
 
 /**
  * PATCH /api/organizations/[id]/members/[memberId]
  * Update member roles or settings (admin+ only)
  */
-export const PATCH = csrfProtection()(
+export const PATCH = csrfProtection()( 
   requireOrgMembership(
-    requireRole("admin")(async (request: NextRequest, context) => {
+    requireRole("admin")(async (request: NextRequest, context: { params: Record<string, string>; userId?: string; orgId?: string; roles?: string[] }) => {
       // Inline rate-limiting check
       const rateLimitResult = await rateLimit(request, RateLimits.api);
       if (rateLimitResult) return rateLimitResult;
@@ -75,7 +75,7 @@ export const PATCH = csrfProtection()(
         return serverError("Failed to update member");
       }
     }),
-  ),
+  ) as unknown as any,
 );
 
 /**
@@ -84,13 +84,13 @@ export const PATCH = csrfProtection()(
  */
 export const DELETE = csrfProtection()(
   requireOrgMembership(
-    requireRole("admin")(async (request: NextRequest, context) => {
+    requireRole("admin")(async (request: NextRequest, context: { params: Record<string, string>; userId?: string; orgId?: string; roles?: string[] }) => {
       // Inline rate-limiting check
       const rateLimitResult = await rateLimit(request, RateLimits.api);
       if (rateLimitResult) return rateLimitResult;
 
       try {
-        const params = await context.params;
+        const params = await Promise.resolve(context.params) as Record<string, string>;
         const { id: orgId, memberId } = params;
         // In production: permission checks, delete from Firestore
         return NextResponse.json({
@@ -102,5 +102,5 @@ export const DELETE = csrfProtection()(
         return serverError("Failed to remove member");
       }
     }),
-  ),
+  ) as unknown as any,
 );

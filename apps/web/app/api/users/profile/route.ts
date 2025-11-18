@@ -30,7 +30,7 @@ const UpdateProfileSchema = z.object({
  * Get the current user's profile
  */
 export const GET = withSecurity(
-  async (request, context: { params: Record<string, string>; userId: string }) => {
+  async (request: NextRequest, context: { params: Record<string, string> | Promise<Record<string, string>>; userId: string }) => {
     try {
       // For now, return a mock profile based on authenticated user
       const userProfile = {
@@ -60,7 +60,7 @@ export const GET = withSecurity(
  * Update the current user's profile
  */
 export const PATCH = withSecurity(
-  async (request: NextRequest, context: { params: Record<string, string>; userId: string }) => {
+  async (request: NextRequest, context: { params: Record<string, string> | Promise<Record<string, string>>; userId: string }) => {
     try {
       const parsed = await parseJson(request, UpdateProfileSchema);
       if (!parsed.success) {

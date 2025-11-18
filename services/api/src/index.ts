@@ -38,6 +38,9 @@ async function buildCache() {
       return cache;
     } catch (e) {
       console.warn("[api] Redis unavailable, falling back to in-memory cache:", e);
+      if (env.NODE_ENV === "production") {
+        console.warn("[api] WARNING: Using in-memory cache in production. This will not be shared across instances and may cause unexpected behavior.");
+      }
     }
   }
   return new InMemoryCache();

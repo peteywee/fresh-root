@@ -1,5 +1,12 @@
 // [P0][APP][ENV] Next Config
 // Tags: P0, APP, ENV
+import path from "path";
+import { fileURLToPath } from "node:url";
+
+// Compute __dirname in ESM
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 /** @type {import('next').NextConfig} */
 
 const securityHeaders = [
@@ -28,6 +35,9 @@ const securityHeaders = [
 const nextConfig = {
   reactStrictMode: true,
   compress: true,
+  // Turbopack is disabled by default in dev for low-memory runs; avoid
+  // configuring `turbopack.root` which can cause resolution issues in some
+  // monorepo layouts during dev. If needed, re-enable with a specific root.
   productionBrowserSourceMaps: false,
   typedRoutes: true,
   // Mark server-only packages as external so they won't be bundled by Turbopack
@@ -42,10 +52,21 @@ const nextConfig = {
     "@opentelemetry/instrumentation",
     "@opentelemetry/instrumentation-http",
     "@opentelemetry/instrumentation-express",
+    "@opentelemetry/instrumentation-grpc",
+    "@opentelemetry/auto-instrumentations-node",
     "@opentelemetry/instrumentation-fs",
     "@opentelemetry/instrumentation-pg",
+    // Core API should be treated as server-only to avoid bundling into Edge runtimes
+    "@opentelemetry/api",
     "@sentry/profiling-node",
     "elastic-apm-node",
+    // Firebase admin & server auth libraries (server-only)
+    "firebase-admin",
+    "firebase-admin/firestore",
+    "google-auth-library",
+    // gRPC libraries used by some instrumentation
+    "@grpc/grpc-js",
+    "grpc",
   ],
   images: {
     formats: ["image/avif", "image/webp"],

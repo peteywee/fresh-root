@@ -14,11 +14,11 @@ export const GET = withSecurity(
   requireOrgMembership(
     async (
       request: NextRequest,
-      context: { params: Record<string, string>; userId: string; orgId: string },
+      context: { params: Record<string, string> | Promise<Record<string, string>>; userId: string; orgId: string },
     ) => {
       try {
-        const { params } = context;
-        const { id } = params;
+        const _params = await Promise.resolve(context.params);
+        const { id } = _params as Record<string, string>;
         const shift = {
           id,
           scheduleId: "sched-1",
@@ -45,15 +45,15 @@ export const PATCH = withSecurity(
       async (
         request: NextRequest,
         context: {
-          params: Record<string, string>;
+          params: Record<string, string> | Promise<Record<string, string>>;
           userId: string;
           orgId: string;
           roles: ("org_owner" | "admin" | "manager" | "scheduler" | "corporate" | "staff")[];
         },
       ) => {
         try {
-          const { params } = context;
-          const { id } = params;
+          const _params = await Promise.resolve(context.params) as Record<string, string>;
+          const { id } = _params;
           const body = await request.json();
           const validated = UpdateShiftSchema.parse(body);
           const sanitized = sanitizeObject(validated);
@@ -81,15 +81,15 @@ export const DELETE = withSecurity(
       async (
         request: NextRequest,
         context: {
-          params: Record<string, string>;
+          params: Record<string, string> | Promise<Record<string, string>>;
           userId: string;
           orgId: string;
           roles: ("org_owner" | "admin" | "manager" | "scheduler" | "corporate" | "staff")[];
         },
       ) => {
         try {
-          const { params } = context;
-          const { id } = params;
+          const _params = await Promise.resolve(context.params) as Record<string, string>;
+          const { id } = _params;
           return NextResponse.json({ message: "Shift deleted successfully", id });
         } catch {
           return serverError("Failed to delete shift");

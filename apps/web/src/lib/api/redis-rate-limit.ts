@@ -1,12 +1,16 @@
 //[P0][API][SECURITY] Redis-based rate limiting for production
 // Tags: rate-limiting, security, redis, production, horizontal-scaling
 
+import crypto from "crypto";
 import { NextRequest, NextResponse } from "next/server";
 
 export interface RateLimitConfig {
   max: number;
   windowSeconds: number;
   keyGenerator?: (request: NextRequest) => string;
+  // When Redis is unavailable, should we fail open (allow requests) or fail closed (block)?
+  // Default: failOpen=true to prioritize availability.
+  failOpen?: boolean;
 }
 
 export interface RedisClient {
@@ -16,7 +20,7 @@ export interface RedisClient {
 }
 
 export class RedisRateLimiter {
-  constructor(private redis: RedisClient) {}
+  constructor(private redis: RedisClient, private failOpen = true) {}
 
   async checkLimit(
     key: string,
@@ -37,24 +41,34 @@ export class RedisRateLimiter {
       }
       return { allowed: true, remaining: max - count, resetAt };
     } catch {
-      // Fail closed: block request if Redis is down
+      // If Redis is down, either fail-open (allow) or fail-closed (block) depending on configuration.
+      if (this.failOpen) {
+        // allow through but record a large remaining value and short reset
+        return { allowed: true, remaining: Number.MAX_SAFE_INTEGER, resetAt: now + windowSeconds * 1000 };
+      }
       return { allowed: false, remaining: 0, resetAt: now + windowSeconds * 1000 };
     }
   }
 }
 
 function defaultKeyGenerator(request: NextRequest): string {
-  const ip =
-    request.headers.get("x-forwarded-for")?.split(",")[0] ||
-    request.headers.get("x-real-ip") ||
-    "unknown";
-  const userId = request.headers.get("x-user-id");
-  return userId ? `${ip}:${userId}` : ip;
+  const ip = request.headers.get("x-forwarded-for")?.split(",")[0] || request.headers.get("x-real-ip") || "unknown";
+  const rawUser = request.headers.get("x-user-id") ?? request.headers.get("authorization");
+  const userId = rawUser ? hashKeyPart(rawUser) : undefined;
+  return userId ? `${ip}:user:${userId}` : ip;
+}
+
+function hashKeyPart(s: string) {
+  try {
+    return crypto.createHash("sha256").update(s).digest("hex").slice(0, 8);
+  } catch {
+    return s.slice(-8);
+  }
 }
 
 export function createRedisRateLimit(redis: RedisClient, config: RateLimitConfig) {
   const { max, windowSeconds, keyGenerator = defaultKeyGenerator } = config;
-  const limiter = new RedisRateLimiter(redis);
+  const limiter = new RedisRateLimiter(redis, config.failOpen !== undefined ? Boolean(config.failOpen) : true);
   return async function (
     request: NextRequest,
     _context: { params: Record<string, string> },
@@ -62,25 +76,26 @@ export function createRedisRateLimit(redis: RedisClient, config: RateLimitConfig
     const key = keyGenerator(request);
     const result = await limiter.checkLimit(key, max, windowSeconds);
     if (!result.allowed) {
-      const resetDate = new Date(result.resetAt).toISOString();
+      const resetSeconds = Math.floor(result.resetAt / 1000);
+      const retryAfter = Math.max(0, Math.ceil((result.resetAt - Date.now()) / 1000));
       return NextResponse.json(
         {
           error: {
             code: "RATE_LIMIT_EXCEEDED",
             message: "Too many requests. Please try again later.",
             details: {
-              retryAfter: Math.ceil((result.resetAt - Date.now()) / 1000),
-              resetAt: resetDate,
+              retryAfter,
+              resetAt: resetSeconds,
             },
           },
         },
         {
           status: 429,
           headers: {
-            "X-RateLimit-Limit": max.toString(),
-            "X-RateLimit-Remaining": "0",
-            "X-RateLimit-Reset": resetDate,
-            "Retry-After": Math.ceil((result.resetAt - Date.now()) / 1000).toString(),
+            "x-ratelimit-limit": max.toString(),
+            "x-ratelimit-remaining": "0",
+            "x-ratelimit-reset": String(resetSeconds),
+            "retry-after": String(retryAfter),
           },
         },
       );

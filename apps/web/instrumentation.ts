@@ -1,21 +1,17 @@
 // [P1][OBS][OTEL] Next.js instrumentation entrypoint (server-only)
 // Tags: P1, OBS, OTEL
-import { diag, DiagConsoleLogger, DiagLogLevel } from "@opentelemetry/api";
-import { NodeSDK, resources } from "@opentelemetry/sdk-node";
-import {
-  SEMRESATTRS_SERVICE_NAME,
-  SEMRESATTRS_DEPLOYMENT_ENVIRONMENT,
-  SEMRESATTRS_SERVICE_VERSION,
-} from "@opentelemetry/semantic-conventions";
-import { OTLPTraceExporter } from "@opentelemetry/exporter-trace-otlp-http";
-import { getNodeAutoInstrumentations } from "@opentelemetry/auto-instrumentations-node";
-import { ConsoleSpanExporter } from "@opentelemetry/sdk-trace-base";
-
+// Lazy-load OpenTelemetry packages inside `register` so importing this
+// module does not immediately pull heavy native deps during tests.
 let started = false;
 
 export function register() {
-  // Only run on Node runtime (not edge)
+  // Skip instrumentation during tests or when telemetry explicitly disabled
+  const isTest = process.env.NODE_ENV === "test" || !!process.env.VITEST;
   if (process.env.NEXT_RUNTIME === "edge") return;
+  if (process.env.NEXT_TELEMETRY_DISABLED === "1" || isTest) {
+    started = true;
+    return;
+  }
   if (started) return;
   started = true;
 
@@ -26,8 +22,58 @@ export function register() {
     const { loadServerEnv } = require("./src/lib/env.server");
     loadServerEnv();
   } catch (error) {
+    // In production we want fail-fast. During tests, warn and no-op so tests
+    // can run without full instrumentation environment configured.
+    if (process.env.NODE_ENV === "test" || !!process.env.VITEST) {
+       
+      console.warn("[instrumentation] loadServerEnv failed in test mode:", error);
+      return;
+    }
     console.error("[instrumentation] Failed to load server environment:", error);
-    throw error; // Fail fast
+    throw error;
+  }
+  // Lazy-load OTEL packages now that we've confirmed we should start.
+  let diag: any;
+  let DiagConsoleLogger: any;
+  let DiagLogLevel: any;
+  let NodeSDK: any;
+  let resources: any;
+  let SEMRESATTRS_SERVICE_NAME: string | symbol = "service.name";
+  let SEMRESATTRS_DEPLOYMENT_ENVIRONMENT: string | symbol = "deployment.environment";
+  let SEMRESATTRS_SERVICE_VERSION: string | symbol = "service.version";
+  let OTLPTraceExporter: any;
+  let getNodeAutoInstrumentations: any;
+  let ConsoleSpanExporter: any;
+
+  try {
+    const otelApi = require("@opentelemetry/api");
+    diag = otelApi.diag;
+    DiagConsoleLogger = otelApi.DiagConsoleLogger;
+    DiagLogLevel = otelApi.DiagLogLevel;
+
+    const sdkNode = require("@opentelemetry/sdk-node");
+    NodeSDK = sdkNode.NodeSDK;
+    resources = sdkNode.resources;
+
+    const sem = require("@opentelemetry/semantic-conventions");
+    SEMRESATTRS_SERVICE_NAME = sem.SEMRESATTRS_SERVICE_NAME || "service.name";
+    SEMRESATTRS_DEPLOYMENT_ENVIRONMENT = sem.SEMRESATTRS_DEPLOYMENT_ENVIRONMENT || "deployment.environment";
+    SEMRESATTRS_SERVICE_VERSION = sem.SEMRESATTRS_SERVICE_VERSION || "service.version";
+
+    const exporterPkg = require("@opentelemetry/exporter-trace-otlp-http");
+    OTLPTraceExporter = exporterPkg.OTLPTraceExporter;
+
+    const autoInstr = require("@opentelemetry/auto-instrumentations-node");
+    getNodeAutoInstrumentations = autoInstr.getNodeAutoInstrumentations;
+
+    const traceBase = require("@opentelemetry/sdk-trace-base");
+    ConsoleSpanExporter = traceBase.ConsoleSpanExporter;
+  } catch (err) {
+    // If OTEL packages are not installed or fail to load, log and noop.
+    // This keeps the runtime resilient in test and low-memory environments.
+     
+    console.warn("[instrumentation] OpenTelemetry packages not available, skipping instrumentation:", err && err.message ? err.message : err);
+    return;
   }
 
   // Minimal diagnostics
@@ -55,7 +101,6 @@ export function register() {
       [SEMRESATTRS_DEPLOYMENT_ENVIRONMENT]: environment,
       [SEMRESATTRS_SERVICE_VERSION]: commitSha || "unknown",
     }),
-    // When using ConsoleSpanExporter, NodeSDK will wrap it for us
     traceExporter,
     instrumentations: [getNodeAutoInstrumentations()],
   });

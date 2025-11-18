@@ -145,27 +145,20 @@ export interface WithSecurityOptions {
   maxBodySize?: number;
 }
 
-export function withSecurity<
-  C extends { params: Record<string, string> | Promise<Record<string, string>>; userId?: string } = {
-    params: Record<string, string> | Promise<Record<string, string>>;
-    userId?: string;
-  },
->(
-  handler: (
-    req: AuthenticatedRequest | NextRequest,
-    // Use a loose ctx type so handlers that require `userId` are assignable
-    ctx: any,
-  ) => Promise<NextResponse>,
+// Overloads: when `requireAuth: true` the handler may require `userId` on ctx
+ 
+export function withSecurity(
+  handler: (req: NextRequest | AuthenticatedRequest, ctx: { params: Record<string, string>; userId?: string; [key: string]: unknown }) => Promise<NextResponse>,
   options: WithSecurityOptions = {},
-): (req: any, ctx?: any) => Promise<any> {
-  return async (req: any, ctx: any) => {
+): (req: NextRequest, ctx: { params: Record<string, string>; userId?: string; [key: string]: unknown }) => Promise<NextResponse> {
+  return async (req: NextRequest, ctx: { params: Record<string, string>; userId?: string; [key: string]: unknown }) => {
     try {
       // Resolve params if it's a Promise (Next.js 14+/16+)
       const resolvedParams = await Promise.resolve(ctx.params);
-      const resolvedCtx = { ...ctx, params: resolvedParams, userId: ctx.userId } as {
-        params: Record<string, string>;
-        userId?: string;
-        [key: string]: unknown;
+      const resolvedCtx: { params: Record<string, string>; userId?: string; [key: string]: unknown } = {
+        ...ctx,
+        params: resolvedParams,
+        userId: ctx.userId,
       };
 
       // If request is authenticated, expose `userId` on the context for handlers

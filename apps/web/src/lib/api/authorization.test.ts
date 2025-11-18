@@ -1,6 +1,6 @@
 //[P1][API][TEST] Authorization middleware unit tests
 // Tags: test, authorization, rbac, vitest
-/* eslint-disable @typescript-eslint/no-explicit-any */
+ 
 
 import { NextRequest } from "next/server";
 import { describe, it, expect, vi } from "vitest";

@@ -29,9 +29,10 @@ const UpdateOrgSchema = z.object({
  * Get organization details
  */
 export const GET = withSecurity(
-  async (request: NextRequest, context: { params: Record<string, string>; userId: string }) => {
+  async (request: NextRequest, context: { params: Record<string, string> | Promise<Record<string, string>>; userId: string }) => {
     try {
-      const id = context.params.id;
+      const _params = await Promise.resolve(context.params);
+      const id = _params.id;
       // In production, fetch from database and check permissions
       const organization = {
         id,
@@ -60,9 +61,10 @@ export const GET = withSecurity(
  * Update organization details
  */
 export const PATCH = withSecurity(
-  async (request: NextRequest, context: { params: Record<string, string>; userId: string }) => {
+  async (request: NextRequest, context: { params: Record<string, string> | Promise<Record<string, string>>; userId: string }) => {
     try {
-      const id = context.params.id;
+      const _params = await Promise.resolve(context.params);
+      const id = _params.id;
       const parsed = await parseJson(request, UpdateOrgSchema);
       if (!parsed.success) {
         return badRequest("Validation failed", parsed.details);
@@ -87,9 +89,10 @@ export const PATCH = withSecurity(
  * Delete an organization (admin only)
  */
 export const DELETE = withSecurity(
-  async (request: NextRequest, context: { params: Record<string, string>; userId: string }) => {
+  async (request: NextRequest, context: { params: Record<string, string> | Promise<Record<string, string>>; userId: string }) => {
     try {
-      const id = context.params.id;
+      const _params = await Promise.resolve(context.params);
+      const id = _params.id;
       // In production, check if user is admin and delete from database
       return NextResponse.json({ message: "Organization deleted successfully", id });
     } catch {

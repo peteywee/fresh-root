@@ -16,10 +16,11 @@ export const GET = withSecurity(
   requireOrgMembership(
     async (
       request: NextRequest,
-      context: { params: Record<string, string>; userId: string; orgId: string },
+      context: { params: Record<string, string> | Promise<Record<string, string>>; userId: string; orgId: string },
     ) => {
       try {
-        const { id } = context.params;
+        const _params = await Promise.resolve(context.params);
+        const { id } = _params;
 
         // In production, fetch from Firestore and check permissions
         const schedule = {
@@ -53,14 +54,15 @@ export const PATCH = withSecurity(
       async (
         request: NextRequest,
         context: {
-          params: Record<string, string>;
+          params: Record<string, string> | Promise<Record<string, string>>;
           userId: string;
           orgId: string;
           roles: ("org_owner" | "admin" | "manager" | "scheduler" | "corporate" | "staff")[];
         },
       ) => {
         try {
-          const { id } = context.params;
+          const _params = await Promise.resolve(context.params);
+          const { id } = _params;
 
           const body = await request.json();
           const validated = UpdateScheduleSchema.parse(body);
@@ -98,14 +100,15 @@ export const DELETE = withSecurity(
       async (
         request: NextRequest,
         context: {
-          params: Record<string, string>;
+          params: Record<string, string> | Promise<Record<string, string>>;
           userId: string;
           orgId: string;
           roles: ("org_owner" | "admin" | "manager" | "scheduler" | "corporate" | "staff")[];
         },
       ) => {
         try {
-          const { id } = context.params;
+          const _params = await Promise.resolve(context.params);
+          const { id } = _params;
 
           // In production, check if schedule is draft before deleting
           return NextResponse.json({

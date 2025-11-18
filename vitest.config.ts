@@ -7,8 +7,8 @@ export default defineConfig({
   // Avoid requiring @vitejs/plugin-react at the repo root; rely on esbuild JSX
   test: {
     globals: true,
-    // Use a DOM-like environment for React component tests
-    environment: "happy-dom",
+    // Use a DOM-like environment for React component tests (jsdom is more compatible with user-event)
+    environment: "jsdom",
     // Start/stop the Next.js dev server for integration tests that hit localhost:3000
     globalSetup: path.resolve(__dirname, "vitest.global-setup.ts"),
     // Reuse the app's setup (jest-dom, router mocks, env)

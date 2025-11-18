@@ -1,15 +1,14 @@
 // [P0][FIREBASE][CODE] AdminFormDrafts
 // Tags: P0, FIREBASE, CODE
-import { getFirebaseAdminDb } from "@/lib/firebase-admin";
-import type { Transaction } from "firebase-admin/firestore";
-
-const db = getFirebaseAdminDb();
 import {
   CreateAdminResponsibilityFormSchema,
   type AdminResponsibilityForm,
   type CreateAdminResponsibilityFormInput,
 } from "@fresh-schedules/types";
+import type { DocumentReference, DocumentSnapshot, Transaction } from "firebase-admin/firestore";
 import { z } from "zod";
+
+import { getFirebaseAdminDb } from "@/lib/firebase-admin";
 
 const AdminFormDraftDocSchema = z.object({
   userId: z.string(),
@@ -57,6 +56,7 @@ export async function createAdminFormDraft(params: {
     },
   };
 
+  const db = getFirebaseAdminDb();
   const ref = db.collection("adminFormDrafts").doc();
   await ref.set(draft);
 
@@ -67,7 +67,8 @@ export async function createAdminFormDraft(params: {
  * Peek a draft without consuming it (for debugging or re-checks).
  */
 export async function getAdminFormDraft(formToken: string) {
-  const snap = await db.collection("adminFormDrafts").doc(formToken).get();
+  const db = getFirebaseAdminDb();
+  const snap = (await db.collection("adminFormDrafts").doc(formToken).get()) as DocumentSnapshot;
   if (!snap.exists) return null;
 
   const raw = snap.data();
@@ -99,13 +100,23 @@ export async function consumeAdminFormDraft(params: {
 } | null> {
   const { formToken, expectedUserId } = params;
 
-  const ref = db.collection("adminFormDrafts").doc(formToken);
+  const db = getFirebaseAdminDb();
+  const ref: DocumentReference = db.collection("adminFormDrafts").doc(formToken);
 
-  return await db.runTransaction(async (tx: Transaction) => {
-    const snap = await tx.get(ref);
+  interface ConsumeAdminFormDraftResult {
+    form: AdminResponsibilityForm;
+    taxValidation: { isValid: boolean; reason?: string };
+  }
+
+  const transactionHandler: (
+    tx: Transaction
+  ) => Promise<ConsumeAdminFormDraftResult | null> = async (
+    tx: Transaction
+  ): Promise<ConsumeAdminFormDraftResult | null> => {
+    const snap: DocumentSnapshot = await tx.get(ref as DocumentReference);
     if (!snap.exists) return null;
 
-    const raw = snap.data();
+    const raw: FirebaseFirestore.DocumentData | undefined = snap.data();
     if (!raw) return null;
 
     const parsed = AdminFormDraftDocSchema.safeParse(raw);
@@ -114,7 +125,7 @@ export async function consumeAdminFormDraft(params: {
       return null;
     }
 
-    const draft = parsed.data;
+    const draft: AdminFormDraftDoc = parsed.data;
 
     // Hard constraints
     if (draft.status !== "active") return null;
@@ -134,5 +145,7 @@ export async function consumeAdminFormDraft(params: {
         reason: draft.taxValidation.reason,
       },
     };
-  });
+  };
+
+  return (await db.runTransaction(transactionHandler)) as ConsumeAdminFormDraftResult | null;
 }

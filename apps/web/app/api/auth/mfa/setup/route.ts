@@ -15,7 +15,7 @@ import { ok, serverError } from "../../../_shared/validation";
  * Requires valid session.
  */
 export const POST = withSecurity(
-  async (req: NextRequest, context: { params: Record<string, string>; userId: string }) => {
+  async (req: NextRequest, context: { params: Record<string, string> | Promise<Record<string, string>>; userId: string }) => {
     try {
       // Derive a stable label from user id for display if email is unknown client-side
       const userLabel = context.userId || "user";

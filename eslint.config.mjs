@@ -1,121 +1,139 @@
-// [P0][APP][ENV] Eslint Config
-// Tags: P0, APP, ENV
+import { defineConfig, globalIgnores } from "eslint/config";
 import typescriptEslint from "@typescript-eslint/eslint-plugin";
-import typescriptParser from "@typescript-eslint/parser";
-import js from "@eslint/js";
-import importPlugin from "eslint-plugin-import";
+import _import from "eslint-plugin-import";
 import reactHooks from "eslint-plugin-react-hooks";
 import react from "eslint-plugin-react";
+import { fixupPluginRules } from "@eslint/compat";
+import tsParser from "@typescript-eslint/parser";
+import globals from "globals";
 
-export default [
-  {
-    ignores: [
-      "**/node_modules/**",
-      "**/.next/**",
-      "**/out/**",
-      "**/dist/**",
-      "**/build/**",
-      "**/coverage/**",
-      "**/docs/**",
-      "**/reports/**",
-      "**/.firebase/**",
-      "**/emulator-data/**",
-      "**/.emulator-data/**",
-      "**/.pnpm/**",
-      "**/pnpm-lock.yaml",
-      "**/*.config.js",
-      "**/*.config.ts",
-      "**/*.config.mjs",
-      "**/*.config.cjs",
-      "**/firebase-debug.log",
-      "**/ui-debug.log",
-      "**/firestore-debug.log",
-      "**/.turbo/**",
-    ],
-  },
-  {
+export default defineConfig([globalIgnores([
+    "**/node_modules/**/*",
+    "**/.next/**/*",
+    "**/.duplicate-backups/**/*",
+    "**/out/**/*",
+    "**/dist/**/*",
+    "**/build/**/*",
+    "**/coverage/**/*",
+    "**/docs/**/*",
+    "**/reports/**/*",
+    "**/.firebase/**/*",
+    "**/emulator-data/**/*",
+    "**/.emulator-data/**/*",
+    "**/.pnpm/**/*",
+    "**/pnpm-lock.yaml",
+    "**/*.config.js",
+    "**/*.config.ts",
+    "**/*.config.mjs",
+    "**/*.config.cjs",
+    "**/firebase-debug.log",
+    "**/ui-debug.log",
+    "**/firestore-debug.log",
+    "**/.turbo/**/*",
+]), {
     files: ["**/*.ts", "**/*.tsx", "**/*.mts", "**/*.cts"],
-    languageOptions: {
-      parser: typescriptParser,
-      parserOptions: {
-        ecmaVersion: "latest",
-        sourceType: "module",
-      },
-    },
+
     plugins: {
-      "@typescript-eslint": typescriptEslint,
-      import: importPlugin,
-      "react-hooks": reactHooks,
-      react: react,
+        "@typescript-eslint": typescriptEslint,
+        import: fixupPluginRules(_import),
+        "react-hooks": fixupPluginRules(reactHooks),
+        react,
     },
-    rules: {
-      "@typescript-eslint/no-unused-vars": [
-        "warn",
-        {
-          argsIgnorePattern: "^_",
-          varsIgnorePattern: "^_",
-          caughtErrorsIgnorePattern: "^_",
-        },
-      ],
-      "@typescript-eslint/no-explicit-any": "warn", // Warn on explicit any types
-      "prefer-const": "warn",
-      "no-console": "off", // Disabled: service worker needs console
-      "react-hooks/rules-of-hooks": "error",
-      "react-hooks/exhaustive-deps": "warn",
-      "import/order": [
-        "warn",
-        {
-          groups: [["builtin", "external"], ["internal"], ["parent", "sibling", "index"]],
-          "newlines-between": "always",
-          alphabetize: { order: "asc", caseInsensitive: true },
-        },
-      ],
-    },
-  },
-  // Onboarding API tests: silence explicit any warnings (scaffolding/mocks)
-  {
-    files: [
-      "apps/web/app/api/onboarding/__tests__/**",
-      "apps/web/app/api/onboarding/**/__tests__/**",
-    ],
-    rules: {
-      "@typescript-eslint/no-explicit-any": "off",
-    },
-  },
-  // Test files: allow globals like describe/it/beforeAll provided by Vitest/Jest
-  {
-    files: ["**/*.test.*", "**/*.spec.*"],
+
     languageOptions: {
-      parser: typescriptParser,
-      parserOptions: {
+        parser: tsParser,
         ecmaVersion: "latest",
         sourceType: "module",
-      },
     },
+
     rules: {
-      // Turn off no-undef for test globals to avoid editor warnings
-      "no-undef": "off",
+        "@typescript-eslint/no-unused-vars": ["warn", {
+            argsIgnorePattern: "^_",
+            varsIgnorePattern: "^_",
+            caughtErrorsIgnorePattern: "^_",
+        }],
+
+        "@typescript-eslint/no-explicit-any": "off",
+        "prefer-const": "warn",
+        "no-console": "off",
+        "react-hooks/rules-of-hooks": "error",
+        "react-hooks/exhaustive-deps": "warn",
+
+        "import/order": ["warn", {
+            groups: [["builtin", "external"], ["internal"], ["parent", "sibling", "index"]],
+            "newlines-between": "always",
+
+            alphabetize: {
+                order: "asc",
+                caseInsensitive: true,
+            },
+        }],
     },
-  },
-  // Scripts & tooling: plain JS — do not run type-aware TS rules
-  {
+}, {
     files: [
-      "scripts/**/*.js",
-      "scripts/**/*.mjs",
-      "scripts/**/*.cjs",
-      "tools/**/*.js",
-      "tools/**/*.mjs",
-      "tools/**/*.cjs",
+        "apps/web/app/api/onboarding/__tests__/**",
+        "apps/web/app/api/onboarding/**/__tests__/**",
     ],
-    languageOptions: {
-      parser: js.parser,
-      ecmaVersion: "latest",
-      globals: { node: true },
-    },
+
     rules: {
-      "@typescript-eslint/await-thenable": "off",
-      "@typescript-eslint/no-floating-promises": "off",
-      "@typescript-eslint/no-array-delete": "off",
+        "@typescript-eslint/no-explicit-any": "off",
     },
-  },
-];
+}, {
+    files: ["**/*.test.*", "**/*.spec.*"],
+
+    languageOptions: {
+        parser: tsParser,
+        ecmaVersion: "latest",
+        sourceType: "module",
+    },
+
+    rules: {
+        "no-undef": "off",
+    },
+}, {
+    files: [
+        "scripts/**/*.js",
+        "scripts/**/*.mjs",
+        "scripts/**/*.cjs",
+        "tools/**/*.js",
+        "tools/**/*.mjs",
+        "tools/**/*.cjs",
+    ],
+
+    languageOptions: {
+        globals: {
+            ...globals.node,
+        },
+
+        ecmaVersion: "latest",
+        sourceType: "commonjs",
+    },
+
+    rules: {
+        "@typescript-eslint/await-thenable": "off",
+        "@typescript-eslint/no-floating-promises": "off",
+        "@typescript-eslint/no-array-delete": "off",
+    },
+}, {
+    files: ["**/*.{js,cjs,mjs,jsx}"],
+
+    plugins: {
+        import: fixupPluginRules(_import),
+        "@typescript-eslint": typescriptEslint,
+    },
+
+    languageOptions: {
+        ecmaVersion: "latest",
+        sourceType: "module",
+    },
+
+    rules: {
+        "import/order": ["warn", {
+            groups: [["builtin", "external"], ["internal"], ["parent", "sibling", "index"]],
+            "newlines-between": "always",
+            alphabetize: { order: "asc", caseInsensitive: true },
+        }],
+        "@typescript-eslint/no-explicit-any": "off",
+        "@typescript-eslint/no-unused-vars": "off",
+    },
+}]);

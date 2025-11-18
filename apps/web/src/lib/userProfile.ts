@@ -10,7 +10,7 @@
  * - Safe to call on every session bootstrap (idempotent)
  */
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
+ 
 import type { Firestore } from "firebase-admin/firestore";
 
 export type AuthUserClaims = {

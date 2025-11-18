@@ -1,6 +1,7 @@
 // [P0][SECURITY][EDGE] Edge security: headers, CORS allowlist, rate limiting, body size caps
 // Tags: P0, SECURITY, EDGE, CORS, HSTS, RATE_LIMIT, MIDDLEWARE
 import express from "express";
+
 import { getCorsOrigins } from "../env.js";
 // Minimal helmet-like headers
 function securityHeaders() {
@@ -74,5 +75,8 @@ export function applySecurity(app, env) {
     app.use(express.json({ limit: "1mb" }));
     app.use(express.urlencoded({ extended: true, limit: "1mb" }));
     // Global rate limit; sensitive routes can add tighter limits inline if needed
+    if (env.NODE_ENV === "production" && !process.env.REDIS_URL) {
+        console.warn("[api] WARNING: Using in-memory rate limiter in production. Configure REDIS_URL to enable clustered rate limiting.");
+    }
     app.use(rateLimit(windowMs, max));
 }

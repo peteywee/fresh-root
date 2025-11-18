@@ -22,7 +22,7 @@ const verifySchema = z.object({
  * Requires valid session.
  */
 export const POST = withSecurity(
-  async (req: NextRequest, context: { params: Record<string, string>; userId: string }) => {
+  async (req: NextRequest, context: { params: Record<string, string> | Promise<Record<string, string>>; userId: string }) => {
     try {
       const body = await req.json();
       const { secret, token } = verifySchema.parse(body);

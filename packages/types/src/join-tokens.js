@@ -1,6 +1,7 @@
 // [P1][INTEGRITY][SCHEMA] Join tokens schema
 // Tags: P1, INTEGRITY, SCHEMA, ZOD, JOIN_TOKENS
 import { z } from "zod";
+
 import { MembershipRole } from "./memberships";
 /**
  * Join token status

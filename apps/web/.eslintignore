@@ -1,0 +1,2 @@
+# Ignore duplicate backups created during development
+.duplicate-backups/**

@@ -2,6 +2,9 @@
 // Tags: P1, APP, SERVER, SCHEDULES
 import { cookies } from "next/headers";
 
+// Mark this server page as dynamic because it reads cookies at runtime
+export const dynamic = "force-dynamic";
+
 import { getFirebaseAdminAuth } from "../../../../lib/firebase-admin";
 
 /**

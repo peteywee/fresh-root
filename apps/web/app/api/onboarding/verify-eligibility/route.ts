@@ -48,8 +48,7 @@ export async function verifyEligibilityHandler(
   if (!uid) {
     return NextResponse.json<ErrorResponse>(
       {
-        error: "Not authenticated",
-        code: "GEN_NOT_AUTHENTICATED",
+        error: "not_authenticated",
       },
       { status: 401 },
     );
@@ -70,7 +69,7 @@ export async function verifyEligibilityHandler(
   if (typeof body !== "object" || body === null) {
     return NextResponse.json<ErrorResponse>(
       {
-        error: "Missing email or role",
+        error: "invalid_request",
         code: "ONB_ELIGIBILITY_INVALID_REQUEST",
       },
       { status: 400 },
@@ -81,7 +80,7 @@ export async function verifyEligibilityHandler(
   if (typeof b.email !== "string" || typeof b.role !== "string") {
     return NextResponse.json<ErrorResponse>(
       {
-        error: "Missing email or role",
+        error: "invalid_request",
         code: "ONB_ELIGIBILITY_INVALID_REQUEST",
       },
       { status: 400 },
@@ -101,7 +100,7 @@ export async function verifyEligibilityHandler(
   if (!allowedRoles.includes(b.role as string)) {
     return NextResponse.json<ErrorResponse>(
       {
-        error: "Role not allowed for onboarding",
+        error: "role_not_allowed",
         code: "ONB_ELIGIBILITY_ROLE_DENIED",
       },
       { status: 403 },

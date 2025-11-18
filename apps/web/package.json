@@ -4,16 +4,21 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "next dev --port 3000",
-    "build": "next build",
+    "dev": "NEXT_DISABLE_TURBOPACK=1 NODE_OPTIONS=\"--max-old-space-size=2048\" next dev --port 3000",
+    "dev:normal": "next dev --port 3000",
+    "build": "NEXT_DISABLE_TURBOPACK=1 NODE_OPTIONS=\"--max-old-space-size=3072\" next build",
+    "build:normal": "next build",
     "start": "next start -p 3000",
     "typecheck": "tsc --noEmit",
-    "test": "vitest --run",
+    "test": "NODE_OPTIONS=\"--max-old-space-size=1536\" vitest --run",
+    "test:normal": "vitest --run",
+    "test:rate": "vitest --run src/lib/api/rate-limit.test.ts",
+    "test:api": "vitest --run src/lib/api",
     "test:watch": "vitest",
     "test:ui": "vitest --ui",
     "test:coverage": "vitest --coverage",
     "bench": "vitest bench --config vitest.bench.config.ts",
-    "lint": "eslint . --ext .ts,.tsx"
+    "lint": "eslint app/**/*.{ts,tsx} src/**/*.{ts,tsx} vitest.setup.ts --ext .ts,.tsx"
   },
   "dependencies": {
     "@fresh-schedules/types": "workspace:*",

@@ -18,7 +18,7 @@ export const GET = withSecurity(
   requireOrgMembership(
     async (
       request: NextRequest,
-      context: { params: Record<string, string>; userId: string; orgId: string },
+      context: { params: Record<string, string> | Promise<Record<string, string>>; userId: string; orgId: string },
     ) => {
       try {
         const { searchParams } = new URL(request.url);
@@ -59,7 +59,7 @@ export const POST = withSecurity(
       async (
         request: NextRequest,
         context: {
-          params: Record<string, string>;
+          params: Record<string, string> | Promise<Record<string, string>>;
           userId: string;
           orgId: string;
           roles: ("org_owner" | "admin" | "manager" | "scheduler" | "corporate" | "staff")[];

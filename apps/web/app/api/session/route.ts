@@ -4,7 +4,7 @@ import { NextRequest } from "next/server";
 import { z } from "zod";
 
 import { getFirebaseAdminAuth } from "../../../lib/firebase-admin";
-import { parseJson, badRequest, serverError, ok } from "../_shared/validation";
+import { parseJson, badRequest, ok, unauthorized } from "../_shared/validation";
 
 // Schema for session creation
 const CreateSessionSchema = z.object({
@@ -19,7 +19,8 @@ export async function POST(req: NextRequest) {
   try {
     const parsed = await parseJson(req, CreateSessionSchema);
     if (!parsed.success) {
-      return badRequest("Validation failed", parsed.details);
+      // Return a more specific validation message for session creation
+      return badRequest("Missing or invalid idToken", parsed.details);
     }
 
     const { idToken } = parsed.data;
@@ -42,8 +43,8 @@ export async function POST(req: NextRequest) {
     return response;
   } catch (error) {
     console.error("Session creation error:", error);
-    // Return a generic message to avoid leaking internal error details
-    return serverError("Invalid token or internal error", undefined, "UNAUTHORIZED");
+    // Return 401 for invalid tokens or authorization failures
+    return unauthorized("Invalid token or internal error");
   }
 }
 

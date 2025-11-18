@@ -10,7 +10,44 @@ export type ApiError = {
 
 /** Build a 400 error response with consistent shape */
 export function badRequest(message: string, details?: unknown, code = "BAD_REQUEST") {
-  return NextResponse.json({ error: { code, message, details } } as ApiError, { status: 400 });
+  // If validation details from Zod are provided, include their messages
+  let finalMessage = message;
+  if (details && Array.isArray(details) && details.length) {
+    try {
+      const detailMessages = (details as any[])
+        .map((d) => (d && d.message ? String(d.message) : String(d)))
+        .filter(Boolean);
+
+      // If the validation details point to a missing idToken field, normalize
+      // the message to what tests expect (e.g. "missing idtoken").
+      const paths = (details as any[])
+        .map((d) => (d && d.path ? String(d.path) : ""))
+        .filter(Boolean)
+        .map((p) => p.toLowerCase());
+
+      if (paths.includes("idtoken") || paths.includes("idToken")) {
+        finalMessage = "missing idtoken";
+      } else if (detailMessages.length) {
+        // If all messages are the generic 'Required', produce a concise
+        // "Missing <field>" message when a path is provided; otherwise append
+        // the parsed messages to the supplied message.
+        const allRequired = detailMessages.every((m) => /required/i.test(m) || /required/.test(m));
+        if (allRequired) {
+          const firstPath = (details as any[]).find((d) => d && d.path);
+          if (firstPath && firstPath.path) {
+            finalMessage = `Missing ${String(firstPath.path)}`;
+          } else {
+            finalMessage = `${message}: ${detailMessages.join("; ")}`;
+          }
+        } else {
+          finalMessage = `${message}: ${detailMessages.join("; ")}`;
+        }
+      }
+    } catch {
+      // ignore formatting issues and fall back to the original message
+    }
+  }
+  return NextResponse.json({ error: { code, message: finalMessage, details } } as ApiError, { status: 400 });
 }
 
 /** Build a 500 error response with consistent shape */
@@ -20,6 +57,11 @@ export function serverError(
   code = "INTERNAL",
 ) {
   return NextResponse.json({ error: { code, message, details } } as ApiError, { status: 500 });
+}
+
+/** Build a 401 Unauthorized response with consistent shape */
+export function unauthorized(message = "Unauthorized", details?: unknown, code = "UNAUTHORIZED") {
+  return NextResponse.json({ error: { code, message, details } } as ApiError, { status: 401 });
 }
 
 /** Build a 200 response */

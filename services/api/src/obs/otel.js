@@ -4,7 +4,7 @@ import { getNodeAutoInstrumentations } from "@opentelemetry/auto-instrumentation
 import { NodeSDK } from "@opentelemetry/sdk-node";
 let sdk = null;
 // Dynamically resolve an available OTLP trace exporter to avoid compile-time module errors.
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+ 
 function loadOTLPTraceExporter() {
     try {
         // Preferred: HTTP exporter

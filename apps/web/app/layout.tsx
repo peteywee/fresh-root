@@ -5,6 +5,7 @@ import Link from "next/link";
 
 import "./globals.css"; // ensure this exists; keep Tailwind base/utilities here
 import { inter } from "./fonts";
+import Providers from "./providers";
 import Logo from "../components/Logo";
 
 export const metadata: Metadata = {
@@ -41,7 +42,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </nav>
         </header>
 
-        <main className="mx-auto max-w-6xl px-4 py-6">{children}</main>
+        <main className="mx-auto max-w-6xl px-4 py-6">
+          <Providers>{children}</Providers>
+        </main>
 
         <footer className="mx-auto max-w-6xl px-4 py-10 text-xs text-neutral-500">
           <p>© {new Date().getFullYear()} Top Shelf Service LLC. All rights reserved.</p>

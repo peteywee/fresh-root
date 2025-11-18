@@ -14,6 +14,7 @@ initOTel({
 // [P0][SECURITY][API] Fresh Schedules API Service - Main entrypoint
 // Tags: P0, SECURITY, API, EXPRESS, ENTRYPOINT
 import express from "express";
+
 import { InMemoryCache } from "./cache/provider.js";
 import { RedisCache } from "./cache/redis.js";
 import { getAdminAuth, initFirebase } from "./firebase.js";
@@ -33,6 +34,9 @@ async function buildCache() {
         }
         catch (e) {
             console.warn("[api] Redis unavailable, falling back to in-memory cache:", e);
+            if (env.NODE_ENV === "production") {
+                console.warn("[api] WARNING: Using in-memory cache in production. This will not be shared across instances and may cause unexpected behavior.");
+            }
         }
     }
     return new InMemoryCache();

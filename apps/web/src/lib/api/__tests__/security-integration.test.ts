@@ -1,13 +1,13 @@
 //[P1][API][TEST] Security integration tests
 // Tags: test, security, integration, authorization, rate-limiting, csrf
-/* eslint-disable @typescript-eslint/no-explicit-any */
+ 
 
 import { NextRequest, NextResponse } from "next/server";
 import { describe, it, expect, beforeEach, vi } from "vitest";
 
 import { requireOrgMembership, requireRole, canAccessResource } from "../authorization";
 import { csrfProtection, generateCSRFToken } from "../csrf";
-import { rateLimit, RateLimits } from "../rate-limit";
+import { rateLimit, RateLimits } from "../rate-limit.ts";
 
 // Mock Firestore
 vi.mock("firebase-admin/firestore", () => ({

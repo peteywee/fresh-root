@@ -1,7 +1,7 @@
+import { clsx } from "clsx";
 import { jsx as _jsx } from "react/jsx-runtime";
 // [P2][UI][CODE] Button
 // Tags: P2, UI, CODE
-import { clsx } from "clsx";
 export function Button({ variant = "primary", size = "md", className, children, ...props }) {
     return (_jsx("button", { className: clsx("inline-flex items-center justify-center rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50", {
             "bg-black text-white hover:bg-gray-800 focus-visible:ring-black": variant === "primary",

@@ -21,7 +21,13 @@
       "@vitest/runner": "4.0.6",
       "@vitest/spy": "4.0.6",
       "@vitest/ui": "4.0.6",
-      "@sentry/core": "10.25.0"
+      "@sentry/core": "10.25.0",
+      "@opentelemetry/instrumentation": "0.207.0",
+      "@grpc/grpc-js": "1.9.15",
+      "@opentelemetry/instrumentation-express": "0.56.0",
+      "@opentelemetry/instrumentation-fs": "0.27.0",
+      "@opentelemetry/instrumentation-http": "0.207.0",
+      "@opentelemetry/instrumentation-pg": "0.60.0"
     }
   },
   "workspaces": [
@@ -37,6 +43,7 @@
     "check:deps": "pnpm -w install --frozen-lockfile 2>&1 | tee /dev/stderr | grep -qiE '(deprecated|Issues with peer dependencies found)' && exit 1 || exit 0",
     "lint": "eslint \"apps/**/src/**/*.{ts,tsx,js,jsx}\" \"apps/**/app/**/*.{ts,tsx,js,jsx}\" \"apps/**/vitest.setup.ts\" \"packages/**/src/**/*.{ts,tsx,js,jsx}\" \"functions/src/**/*.{ts,tsx,js,jsx}\" \"services/api/src/**/*.{ts,tsx,js,jsx}\" \"services/api/test/**/*.{ts,tsx,js,jsx}\" --max-warnings 200",
     "lint:fix": "eslint \"apps/**/src/**/*.{ts,tsx,js,jsx}\" \"apps/**/app/**/*.{ts,tsx,js,jsx}\" \"apps/**/vitest.setup.ts\" \"packages/**/src/**/*.{ts,tsx,js,jsx}\" \"functions/src/**/*.{ts,tsx,js,jsx}\" \"services/api/src/**/*.{ts,tsx,js,jsx}\" \"services/api/test/**/*.{ts,tsx,js,jsx}\" --max-warnings 200 --fix",
+    "lint:fix:problems": "eslint \"apps/**/src/**/*.{ts,tsx,js,jsx}\" \"apps/**/app/**/*.{ts,tsx,js,jsx}\" \"apps/**/vitest.setup.ts\" \"packages/**/src/**/*.{ts,tsx,js,jsx}\" \"functions/src/**/*.{ts,tsx,js,jsx}\" \"services/api/src/**/*.{ts,tsx,js,jsx}\" \"services/api/test/**/*.{ts,tsx,js,jsx}\" --max-warnings 200 --fix --fix-type problem",
     "fix": "pnpm -w run lint:fix && pnpm -w format",
     "format": "pnpm -w prettier --write .",
     "typecheck": "tsc --build",
@@ -82,10 +89,9 @@
     "zod": "^4.1.12"
   },
   "devDependencies": {
+    "@eslint/compat": "^2.0.0",
     "@firebase/rules-unit-testing": "^5.0.0",
     "@playwright/test": "^1.56.1",
-    "import-in-the-middle": "^1.7.1",
-    "require-in-the-middle": "^7.2.0",
     "@types/jest": "^30.0.0",
     "@types/node": "^24.9.2",
     "@types/speakeasy": "^2.0.10",
@@ -101,7 +107,9 @@
     "eslint-plugin-react-hooks": "^7.0.1",
     "firebase": "^12.5.0",
     "firebase-tools": "^14.23.0",
+    "globals": "^16.5.0",
     "husky": "^9.1.7",
+    "import-in-the-middle": "^1.7.1",
     "jest": "^30.2.0",
     "markdownlint-cli": "^0.40.0",
     "p-retry": "^6.2.0",
@@ -110,6 +118,7 @@
     "prettier": "^3.6.2",
     "prettier-plugin-tailwindcss": "^0.7.1",
     "prompts": "^2.4.2",
+    "require-in-the-middle": "^7.2.0",
     "ts-jest": "^29.4.5",
     "turbo": "^2.6.0",
     "typescript": "^5.9.3",

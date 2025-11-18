@@ -4,7 +4,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { describe, it, expect, beforeEach } from "vitest";
 
-import { rateLimit, RateLimits } from "./rate-limit";
+import { rateLimit, RateLimits } from "./rate-limit.ts";
 
 describe("rateLimit", () => {
   beforeEach(() => {

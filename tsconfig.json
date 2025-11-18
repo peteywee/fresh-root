@@ -11,10 +11,6 @@
     "strict": true,
     "baseUrl": ".",
     "paths": {
-      "@fresh-schedules/types": ["packages/types/src/index.ts"]
-    },
-    "baseUrl": ".",
-    "paths": {
       "@/*": ["apps/web/*", "apps/web/src/*"],
       "@fresh-schedules/types": ["packages/types/src/index.ts"]
     },

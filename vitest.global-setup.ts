@@ -76,23 +76,61 @@ export default async function () {
   // Return teardown
   return async () => {
     if (child && !child.killed) {
+      const proc = child;
       try {
-        const proc = child;
-        // Send SIGTERM and wait up to 10s for graceful shutdown
-        proc.kill("SIGTERM");
+        console.log(`[vitest.global-setup] stopping Next.js dev server pid=${proc.pid}`);
+
+        // Be polite: try SIGINT first, allow longer grace, then escalate to
+        // SIGTERM and finally SIGKILL as a last resort.
+        try {
+          proc.kill("SIGINT");
+        } catch {
+          // ignore
+        }
+
+        // Wait for exit with staged escalation
         await new Promise<void>((resolve) => {
-          const timeout = setTimeout(() => {
-            try {
-              if (!proc.killed) proc.kill("SIGKILL");
-            } catch {}
+          let finished = false;
+
+          const onExit = () => {
+            if (finished) return;
+            finished = true;
+            clearTimeout(timeoutSigterm);
+            clearTimeout(timeoutSigkill);
             resolve();
-          }, 10_000);
-          proc.once("exit", () => {
-            clearTimeout(timeout);
-            resolve();
-          });
+          };
+
+          proc.once("exit", onExit);
+
+          // After 30s, if still running, send SIGTERM
+          const timeoutSigterm = setTimeout(() => {
+            if (!proc.killed) {
+              console.warn(`[vitest.global-setup] server pid=${proc.pid} did not exit after SIGINT; sending SIGTERM`);
+              try {
+                proc.kill("SIGTERM");
+              } catch {}
+            }
+          }, 30_000);
+
+          // After an additional 10s, force SIGKILL
+          const timeoutSigkill = setTimeout(() => {
+            if (!proc.killed) {
+              console.warn(`[vitest.global-setup] server pid=${proc.pid} did not exit after SIGTERM; sending SIGKILL`);
+              try {
+                proc.kill("SIGKILL");
+              } catch {}
+            }
+            // resolve regardless after force-kill
+            if (!finished) {
+              finished = true;
+              resolve();
+            }
+          }, 40_000);
         });
-      } catch {}
+        console.log(`[vitest.global-setup] Next.js dev server pid=${proc.pid} shutdown sequence complete`);
+      } catch (err) {
+        console.error("[vitest.global-setup] error during shutdown:", err);
+      }
     }
   };
 }

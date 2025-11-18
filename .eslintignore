@@ -1,0 +1,7 @@
+# Ignore duplicate compiled/backups created during dev
+**/.duplicate-backups/**
+
+# Node modules and build output (already ignored by default, but be explicit)
+node_modules/
+.next/
+dist/

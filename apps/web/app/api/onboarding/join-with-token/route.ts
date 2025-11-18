@@ -1,7 +1,7 @@
 //[P1][API][ONBOARDING] Join With Token Endpoint (server)
 // Tags: api, onboarding, join-token, membership, events
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
+ 
 import { NextResponse } from "next/server";
 
 import { withSecurity, type AuthenticatedRequest } from "../../_shared/middleware";

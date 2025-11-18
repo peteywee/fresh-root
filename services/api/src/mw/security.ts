@@ -93,5 +93,8 @@ export function applySecurity(app: Express, env: Env) {
   app.use(express.urlencoded({ extended: true, limit: "1mb" }));
 
   // Global rate limit; sensitive routes can add tighter limits inline if needed
+  if (env.NODE_ENV === "production" && !process.env.REDIS_URL) {
+    console.warn("[api] WARNING: Using in-memory rate limiter in production. Configure REDIS_URL to enable clustered rate limiting.");
+  }
   app.use(rateLimit(windowMs, max));
 }

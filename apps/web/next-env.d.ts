@@ -1,5 +1,3 @@
-// [P2][APP][ENV] Next Env D type definitions
-// Tags: P2, APP, ENV
 /// <reference types="next" />
 /// <reference types="next/image-types/global" />
 import "./.next/types/routes.d.ts";

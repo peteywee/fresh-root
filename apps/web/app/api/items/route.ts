@@ -21,7 +21,7 @@ const CreateItemInput = z.object({
 // Rate limiting via withSecurity options
 
 export const POST = withSecurity(
-  async (request: NextRequest, context: { params: Record<string, string>; userId: string }) => {
+  async (request: NextRequest, context: { params: Record<string, string> | Promise<Record<string, string>>; userId: string }) => {
     try {
       const parsed = await parseJson(request, CreateItemInput);
       if (!parsed.success) {
@@ -47,7 +47,7 @@ export const POST = withSecurity(
 
 // Optional: GET returns a static list (safe demo)
 export const GET = withSecurity(
-  async (request: NextRequest, context: { params: Record<string, string>; userId: string }) => {
+  async (request: NextRequest, context: { params: Record<string, string> | Promise<Record<string, string>>; userId: string }) => {
     return NextResponse.json([
       {
         id: "demo-1",

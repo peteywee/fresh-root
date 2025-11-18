@@ -1,7 +1,7 @@
 //[P1][API][ONBOARDING] Create Network + Org Endpoint (server)
 // Tags: api, onboarding, network, org, venue
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
+ 
 import { NextResponse } from "next/server";
 
 import { withSecurity, type AuthenticatedRequest } from "../../_shared/middleware";

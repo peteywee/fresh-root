@@ -1,8 +1,8 @@
-import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 // [P2][UI][CODE] Modal
 // Tags: P2, UI, CODE
 import { clsx } from "clsx";
 import { useEffect } from "react";
+import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 export function Modal({ isOpen, onClose, title, children, size = "md" }) {
     useEffect(() => {
         const handleEscape = (e) => {
