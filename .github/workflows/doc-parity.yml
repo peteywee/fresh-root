@@ -2,7 +2,7 @@ name: doc-parity
 
 on:
   pull_request:
-    branches: [main, dev, develop]
+    branches: [docs-and-tests]
 
 jobs:
   parity:

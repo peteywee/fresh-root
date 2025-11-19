@@ -2,9 +2,9 @@ name: CI Tests
 
 on:
   push:
-    branches: [main, master, develop, "merge/**"]
+    branches: [dev, docs-and-tests, "merge/**"]
   pull_request:
-    branches: [main, master, develop]
+    branches: [dev, docs-and-tests]
 
 jobs:
   unit-and-lint:
