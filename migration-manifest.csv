@@ -1,0 +1,12 @@
+path,issue_type,severity,action_recommended,owner_estimate_hours,notes
+apps/web/src/lib/env.server.ts,Unsafe any / runtime type issues,High,Add proper types and return types,4,Fix runtime type safety and add tests
+apps/web/src/lib/firebase.server.ts,Unnecessary condition/optional-chain,High,Refactor to use optional chaining and fix unsafe any,3,Also check firebase admin v15 initialization
+apps/web/src/lib/*.test.ts,Parsing error (TS/tsconfig),High,Include test files in tsconfig or move tests; update vitest configs,1,Parsing errors cause tests to be skipped
+packages/types/src/*.ts,Deprecated zod API usage,Medium,Replace deprecated z.email/url/datetime with recommended zod methods,3,Automatable across files
+services/api/src/*.ts,Unsafe any / require-style import,High,Replace require() with import, type safe API calls,5,Also check OTEL/Sentry integrations
+packages/env/src/index.ts,Parsing error,High,Add to tsconfig or fix file location,1,Missing file causing parse errors
+packages/types/src/__tests__/*.ts,Parsing errors,High,Add test folder to tsconfig or include them,2,Includes many missing tests
+.vscode/settings.json,Malformed JSONC,Low,Ensure single root object,0.5,Fixed one earlier
+services/api/src/firebase.ts,Firebase admin v15 migration,High,Update admin initialization to v15 API and types,5,Resolve ServiceAccount typing and initialization patterns
+apps/web/src/lib/firebase-admin.ts,Admin v15 compatibility,High,Ensure functions that call firebase-admin use new API patterns & typed credentials,3,Check admin SDK imports and calls
+
