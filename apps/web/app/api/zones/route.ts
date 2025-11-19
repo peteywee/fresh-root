@@ -1,4 +1,10 @@
 // [P1][API][ZONES] Zones API route handler
+// [P1][API][ZONES] Zones API route handler
+import { traceFn } from "@/app/api/_shared/otel";
+// [P1][API][ZONES] Zones API route handler
+import { withGuards } from "@/app/api/_shared/security";
+// [P1][API][ZONES] Zones API route handler
+import { jsonOk, jsonError } from "@/app/api/_shared/response";
 // Tags: P1, API, ZONES, validation, zod
 
 import { CreateZoneSchema } from "@fresh-schedules/types";

@@ -36,12 +36,10 @@
 # Firebase emulator CI config (used by test:rules:ci)
 ^firebase\.ci\.json$
 
-# Documentation changes (technical docs and process/setup guides)
-^docs(/|$)
-
-# Tests affecting runtime behavior (rules, e2e)
-^tests/rules(/|$)
-^tests/e2e(/|$)
+# Documentation and tests are not runtime code; changes should go to `docs-and-tests` or `dev` branches.
+## ^docs(/|$)
+## ^tests/rules(/|$)
+## ^tests/e2e(/|$)
 
 # Backend service touched by server-first runtime integration
 ^services/api(/|$)

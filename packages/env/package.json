@@ -1,0 +1,15 @@
+{
+  "name": "@fresh-schedules/env",
+  "version": "0.0.0",
+  "private": true,
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "type": "module",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "build": "tsc -p ../../tsconfig.json --outDir dist"
+  }
+}

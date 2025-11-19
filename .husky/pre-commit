@@ -1,0 +1,11 @@
+#!/bin/sh
+
+# Pre-commit: auto-tag files, ensure doc symlinks, typecheck, and format (lint runs on GH side)
+node scripts/tag-files.mjs || exit 1
+echo "🧷 Ensuring doc symlinks..."
+pnpm exec node scripts/ci/auto-symlink-docs.mjs || exit 1
+git add docs/api docs/schemas 2>/dev/null || true
+pnpm -w typecheck || exit 1
+pnpm -w format || exit 1
+
+echo "[husky] Pre-commit checks completed."

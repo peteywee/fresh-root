@@ -1,0 +1,26 @@
+name: doc-parity
+
+on:
+  pull_request:
+    branches: [main, dev, develop]
+
+jobs:
+  parity:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+      - run: pnpm install
+      - run: pnpm add -D globby
+      - name: Check Doc Parity
+        run: node scripts/ci/check-doc-parity.mjs
+      - name: Verify Tests Present
+        run: node scripts/tests/verify-tests-present.mjs

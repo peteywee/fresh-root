@@ -1,0 +1,18 @@
+name: schema-catalog-guard
+on:
+  pull_request:
+    branches: [main, develop]
+jobs:
+  schema:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm tsx scripts/gen_schema_catalog.ts
+      - name: Fail on drift
+        run: |
+          git diff --exit-code docs/blocks/SCHEMA_CATALOG.md || \
+          (echo "Schema catalog is outdated. Run: pnpm tsx scripts/gen_schema_catalog.ts and commit the result." && exit 1)

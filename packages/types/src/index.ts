@@ -6,7 +6,7 @@ export const Role = z.enum(["admin", "manager", "staff"]);
 export type Role = z.infer<typeof Role>;
 
 export * from "./rbac";
-export * from "./corporate";
+export * from "./corporates";
 export * from "./orgs";
 export * from "./schedules";
 export * from "./memberships"; // This provides the canonical Membership export
@@ -21,3 +21,11 @@ export * from "./networks";
 export * from "./onboarding";
 export * from "./events";
 export * from "./errors";
+
+// Additional collections and convenience exports added by v14.5
+export * as corporates from "./corporates";
+export * as widgets from "./widgets";
+export * as messages from "./messages";
+export * as receipts from "./receipts";
+export * as compliance from "./compliance";
+

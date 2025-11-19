@@ -1,8 +1,14 @@
 //[P1][API][ONBOARDING] Create Network + Org Endpoint (server)
+//[P1][API][ONBOARDING] Create Network + Org Endpoint (server)
+import { traceFn } from "@/app/api/_shared/otel";
+//[P1][API][ONBOARDING] Create Network + Org Endpoint (server)
+import { withGuards } from "@/app/api/_shared/security";
+//[P1][API][ONBOARDING] Create Network + Org Endpoint (server)
+import { jsonOk, jsonError } from "@/app/api/_shared/response";
 // Tags: api, onboarding, network, org, venue, membership, events
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 import { withRequestLogging } from "../../_shared/logging";
 import { withSecurity, type AuthenticatedRequest } from "../../_shared/middleware";
@@ -286,12 +292,8 @@ export async function createNetworkOrgHandler(
 
 // Keep Next.js route export for runtime (secured + logged)
 // Adapter wraps the test-friendly handler for use with withSecurity middleware
-async function apiRoute(
-  req: AuthenticatedRequest,
-
-  _ctx?: { params: Record<string, string> },
-) {
-  return createNetworkOrgHandler(req);
+async function apiRoute(req: NextRequest, _ctx: Record<string, unknown>) {
+  return createNetworkOrgHandler(req as AuthenticatedRequest);
 }
 
 export const POST = withRequestLogging(withSecurity(apiRoute, { requireAuth: true }));
