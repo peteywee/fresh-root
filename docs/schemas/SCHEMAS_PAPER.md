@@ -98,3 +98,8 @@ This is the consolidated master reference for all Zod schemas in the project.
 ---
 
 See `.github/workflows/doc-parity.yml` for automated validation of schema documentation.
+
+
+## TEST SPEC
+
+- TODO: Add tests for this doc. Example: `apps/web/app/api/onboarding/__tests__/onboarding-consolidated.test.ts`
