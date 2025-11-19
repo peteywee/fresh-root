@@ -131,13 +131,7 @@ See [Contributing Guide](./docs/CONTRIBUTING.md) for detailed workflow.
 
 ## 🔒 Security
 
-Fresh Root prioritizes security across all layers:
-
-- **Authentication**: Secure session management with TOTP-based MFA
-- **Authorization**: Role-based access control (RBAC) via Firebase rules
-- **Data Protection**: Encrypted in transit and at rest
-- **API Security**: Rate limiting, CSRF protection, input validation
-- **Monitoring**: Comprehensive audit logging and alerting
+Fresh Root prioritizes security across all layers!
 
 See [Security Documentation](./docs/security.md) for complete security architecture and best practices.
 
