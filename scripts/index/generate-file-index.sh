@@ -153,6 +153,8 @@ if [[ "$MODE" == "check" ]]; then
   )"
   if [[ "$(cat "$OUT")" != "$FRESH" ]]; then
     echo "docs/INDEX.md is stale. Re-generate with --write." >&2
+    echo "Diff:" >&2
+    diff -u "$OUT" <(echo "$FRESH") >&2 || true
     exit 1
   fi
   echo "File index is up to date."
