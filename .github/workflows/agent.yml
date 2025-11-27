@@ -19,6 +19,10 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "24.x"
+      - name: Ensure PNPM is available
+        run: |
+          corepack enable
+          corepack prepare pnpm@9.30.0 --activate
       - name: Install dependencies (no frozen lockfile)
         run: pnpm -w install --no-frozen-lockfile
       - name: Run agent unit tests
