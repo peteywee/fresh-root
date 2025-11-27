@@ -46,7 +46,13 @@ jobs:
             git config user.email "github-actions[bot]@users.noreply.github.com"
             git add docs/INDEX.md
             git commit --no-verify -m "ci(agent): regenerate docs/INDEX.md"
-            git -c core.hooksPath=/dev/null push origin HEAD:${{ github.head_ref }}
+            # Attempt to fast-forward the remote branch before pushing; if remote has new commits, skip to avoid overwrite
+            git fetch origin ${{ github.head_ref }} || true
+            if git merge-base --is-ancestor origin/${{ github.head_ref }} HEAD; then
+              git -c core.hooksPath=/dev/null push origin HEAD:${{ github.head_ref }} || echo "Push failed (non-critical)"
+            else
+              echo "Remote branch diverged; skipping push. Please rebase branch locally to apply index changes."
+            fi
           else
             echo "docs/INDEX.md unchanged"
           fi
