@@ -1,3 +1,5 @@
+// [P0][APP][CODE] Compliance
+// Tags: P0, APP, CODE
 import { z } from "zod";
 
 /**
@@ -23,7 +25,7 @@ export const ComplianceDocSchema = z.object({
       z.object({
         uid: z.string().min(1),
         at: z.string(), // ISO
-      })
+      }),
     )
     .default([]),
 });

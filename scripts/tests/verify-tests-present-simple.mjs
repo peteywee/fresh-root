@@ -1,6 +1,8 @@
 #!/usr/bin/env node
-import { promises as fs } from 'node:fs';
-import path from 'node:path';
+// [P1][TEST][TEST] Verify Tests Present Simple tests
+// Tags: P1, TEST, TEST
+import { promises as fs } from "node:fs";
+import path from "node:path";
 
 async function walk(dir, pattern = /.*/) {
   const res = [];
@@ -16,22 +18,38 @@ async function walk(dir, pattern = /.*/) {
 }
 
 async function exists(file) {
-  try { await fs.access(file); return true; } catch { return false; }
+  try {
+    await fs.access(file);
+    return true;
+  } catch {
+    return false;
+  }
 }
 
 function getTestPath(apiRoute) {
   const parts = apiRoute.split(path.sep);
-  const routeNameIndex = parts.indexOf('route.ts');
+  const routeNameIndex = parts.indexOf("route.ts");
   if (routeNameIndex === -1) return null;
   const routeName = parts[routeNameIndex - 1];
   const parentDir = parts.slice(0, routeNameIndex - 1).join(path.sep);
-  return path.join(parentDir, '__tests__', `${routeName}.test.ts`);
+  return path.join(parentDir, "__tests__", `${routeName}.test.ts`);
 }
 
 async function main() {
   const root = process.cwd();
-  const onboardingRoutes = await walk(path.join(root, 'apps', 'web', 'app', 'api', 'onboarding'), /route\.(ts|mts)$/);
-  const onboardingTestsDir = path.join(root, 'apps', 'web', 'app', 'api', 'onboarding', '__tests__');
+  const onboardingRoutes = await walk(
+    path.join(root, "apps", "web", "app", "api", "onboarding"),
+    /route\.(ts|mts)$/,
+  );
+  const onboardingTestsDir = path.join(
+    root,
+    "apps",
+    "web",
+    "app",
+    "api",
+    "onboarding",
+    "__tests__",
+  );
   const onboardingTests = await walk(onboardingTestsDir, /\.test\.(ts|mts)$/);
   const results = { missing: [], found: 0, required: onboardingRoutes.length };
   for (const route of onboardingRoutes) {
@@ -42,18 +60,25 @@ async function main() {
     else results.missing.push(route);
   }
 
-  const rulesTests = await walk(path.join(root, 'tests', 'rules'), /\.spec\.(ts|mts)$/);
+  const rulesTests = await walk(path.join(root, "tests", "rules"), /\.spec\.(ts|mts)$/);
 
-  console.log('Onboarding tests found:', results.found, '/', results.required);
-  console.log('Rules tests found:', rulesTests.length);
+  console.log("Onboarding tests found:", results.found, "/", results.required);
+  console.log("Rules tests found:", rulesTests.length);
   if (results.found === results.required && rulesTests.length > 0) {
-    console.log('✅ Test presence OK');
+    console.log("✅ Test presence OK");
     process.exit(0);
   }
-  console.log('❌ Test presence issues');
-  if (results.missing.length) console.log('Missing onboarding tests:', results.missing.map(p=>path.relative(root,p)).join('\n'));
-  if (rulesTests.length === 0) console.log('No rules tests found');
+  console.log("❌ Test presence issues");
+  if (results.missing.length)
+    console.log(
+      "Missing onboarding tests:",
+      results.missing.map((p) => path.relative(root, p)).join("\n"),
+    );
+  if (rulesTests.length === 0) console.log("No rules tests found");
   process.exit(1);
 }
 
-main().catch((e)=>{ console.error(e); process.exit(1); });
+main().catch((e) => {
+  console.error(e);
+  process.exit(1);
+});

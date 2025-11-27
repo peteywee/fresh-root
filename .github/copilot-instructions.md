@@ -140,5 +140,3 @@ Every change must meet these gates locally before PR/push:
 - Lint/format: `pnpm -w lint` and Prettier — PASS (no errors). Warnings should be addressed when they are actionable.
 - Emulator rules (when applicable): `pnpm test:rules` — ensure Firestore/Storage rule changes are covered by tests.
 - Optional: Run “Docs: Markdown Fix (apply)” when touching .md files.
-
-[area]: #
