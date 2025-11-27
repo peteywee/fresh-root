@@ -1,3 +1,5 @@
+// [P2][APP][ENV] Cleanup Iac Configs
+// Tags: P2, APP, ENV
 // scripts/cleanup-iac-configs.mjs
 // One-time script to remove stale @iac-fresh config deps from the root package.json.
 

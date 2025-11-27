@@ -1,3 +1,5 @@
+// [P2][APP][ENV] Prettier Config
+// Tags: P2, APP, ENV
 // prettier.config.cjs
 // Local Prettier configuration for Fresh Root (no external @iac-fresh dependencies).
 

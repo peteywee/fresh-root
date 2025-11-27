@@ -1,4 +1,6 @@
 #!/usr/bin/env node
+// [P2][APP][CODE] Gen Cognition Index
+// Tags: P2, APP, CODE
 /**
  * gen_cognition_index.mjs
  *

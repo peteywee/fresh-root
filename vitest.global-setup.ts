@@ -1,3 +1,5 @@
+// [P1][TEST][TEST] Vitest Global Setup tests
+// Tags: P1, TEST, TEST
 // [P1 BLOCK 3] Vitest Global Setup
 // - Optionally boot a local Next.js dev server before tests
 // - Ensure we don't double-bind in CI / hosted runners

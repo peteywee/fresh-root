@@ -1,3 +1,5 @@
+// [P1][TEST][TEST] Vitest Setup tests
+// Tags: P1, TEST, TEST
 /**
  * Global Vitest setup for the Fresh Root monorepo.
  *

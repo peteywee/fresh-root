@@ -1,3 +1,5 @@
+// [P2][APP][ENV] Next Config
+// Tags: P2, APP, ENV
 /** @type {import("next").NextConfig} */
 
 import withPWA from "next-pwa";

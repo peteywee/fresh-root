@@ -1,3 +1,5 @@
+// [P0][SECURITY][RATE_LIMIT] Rate Limit
+// Tags: P0, SECURITY, RATE_LIMIT
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /**
  * [P1][SECURITY][API] Rate limiting helper for Next.js routes.

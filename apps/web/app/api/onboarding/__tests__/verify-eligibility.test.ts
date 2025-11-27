@@ -1,3 +1,5 @@
+// [P1][TEST][TEST] Verify Eligibility Test tests
+// Tags: P1, TEST, TEST
 import { describe, it, expect } from "vitest";
 
 // Placeholder smoke test for /api/onboarding/verify-eligibility

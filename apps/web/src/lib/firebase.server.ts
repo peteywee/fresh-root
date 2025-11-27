@@ -1,3 +1,5 @@
+// [P0][FIREBASE][FIREBASE] Firebase Server
+// Tags: P0, FIREBASE, FIREBASE
 /**
  * Minimal server-side Firebase Admin stub for tests and local development.
  *
