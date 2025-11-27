@@ -1,5 +1,7 @@
 // [P0][APP][ENV] Next Config
 // Tags: P0, APP, ENV
+import path from "node:path";
+
 /** @type {import('next').NextConfig} */
 
 const securityHeaders = [
@@ -26,6 +28,7 @@ const securityHeaders = [
 ];
 
 const nextConfig = {
+  output: "standalone",
   reactStrictMode: true,
   compress: true,
   productionBrowserSourceMaps: false,
@@ -94,7 +97,7 @@ const nextConfig = {
     // Path from this `apps/web` directory up to the repository root
     // Use an absolute path to avoid incorrect inference when multiple lockfiles
     // exist on the machine (for example a stray pnpm-lock.yaml in $HOME).
-    root: "/home/patrick/fresh-root-10/fresh-root",
+    root: path.resolve(import.meta.dirname, "../../"),
   },
   headers: async () => [{ source: "/(.*)", headers: securityHeaders }],
   compiler: {
