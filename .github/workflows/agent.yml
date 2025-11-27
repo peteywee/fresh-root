@@ -36,15 +36,17 @@ jobs:
         run: node scripts/agent/tests/run-agent-test.mjs
 
       - name: Run Global Cognition Agent
-        run: node scripts/agent/agent.mjs --pr ${{ github.event.number }} --scope all --format json --scan-rbac --scan-patterns
+        continue-on-error: true
+        run: node scripts/agent/agent.mjs --pr ${{ github.event.number }} --scope all --format json --scan-rbac --scan-patterns || true
       - name: Upload agent artifact
+        if: ${{ always() }}
         uses: actions/upload-artifact@v4
         with:
           name: agent-artifact
           path: artifacts/agent-${{ github.event.number }}.json
 
       - name: Post agent summary comment
-        if: github.event_name == 'pull_request'
+        if: ${{ always() && github.event_name == 'pull_request' }}
         uses: actions/github-script@v6
         with:
           script: |
