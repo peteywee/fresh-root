@@ -1,0 +1,35 @@
+{
+  "rbacAllowlist": [
+    "apps/web/app/api/health/route.ts",
+    "apps/web/app/api/healthz/route.ts",
+    "apps/web/app/api/metrics/route.ts",
+    "apps/web/app/api/internal/backup/route.ts",
+    "apps/web/app/api/_template/route.ts",
+    "apps/web/app/api/onboarding/admin-form/route.ts",
+    "apps/web/app/api/organizations/[id]/members/[memberId]/route.ts",
+    "apps/web/app/api/positions/[id]/route.ts",
+    "apps/web/app/api/session/route.ts",
+    "apps/web/app/api/widgets/route.ts"
+  ],
+  "rbacCheckPaths": [
+    "apps/web/app/api/organizations",
+    "apps/web/app/api/schedules",
+    "apps/web/app/api/shifts",
+    "apps/web/app/api/positions",
+    "apps/web/app/api/venues",
+    "apps/web/app/api/publish",
+    "apps/web/app/api/users"
+  ],
+  "patternAllowlist": [
+    "apps/web/src/lib/eventLog.ts",
+    "apps/web/src/lib/storage/kv.ts",
+    "apps/web/src/lib/userProfile.ts",
+    "apps/web/app/api/onboarding/create-network-corporate/route.ts",
+    "apps/web/app/api/onboarding/create-network-org/route.ts",
+    "apps/web/app/api/onboarding/create-network-org/route-new.ts",
+    "apps/web/app/api/onboarding/join-with-token/route.ts",
+    "apps/web/app/api/onboarding/profile/route.ts",
+    "apps/web/app/api/publish/route.ts",
+    "apps/web/app/api/session/bootstrap/route.ts"
+  ]
+}

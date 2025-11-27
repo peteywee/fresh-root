@@ -39,6 +39,7 @@ EXCLUDES=(
   '/\.cache/'
   '\.log$'
   '\.tmp$'
+  '^docs/INDEX.md$'
 )
 EXCLUDE_RE="$(IFS='|'; echo "${EXCLUDES[*]}")"
 
@@ -62,13 +63,13 @@ is_root()      { [[ "$1" != */* && "$1" != .github/* ]]; }
 declare -a APPS PKGS SVCS DOCS SCRPTS TESTS CICFG ROOT UNC
 
 for f in "${FILES[@]}"; do
-  if      is_apps      "$f"; then APPS+=("$f")
+  if      is_tests     "$f"; then TESTS+=("$f")
+  elif    is_ci_cfg    "$f"; then CICFG+=("$f")
+  elif    is_apps      "$f"; then APPS+=("$f")
   elif    is_packages  "$f"; then PKGS+=("$f")
   elif    is_services  "$f"; then SVCS+=("$f")
   elif    is_docs      "$f"; then DOCS+=("$f")
   elif    is_scripts   "$f"; then SCRPTS+=("$f")
-  elif    is_tests     "$f"; then TESTS+=("$f")
-  elif    is_ci_cfg    "$f"; then CICFG+=("$f")
   elif    is_root      "$f"; then ROOT+=("$f")
   else                               UNC+=("$f")
   fi
@@ -152,6 +153,8 @@ if [[ "$MODE" == "check" ]]; then
   )"
   if [[ "$(cat "$OUT")" != "$FRESH" ]]; then
     echo "docs/INDEX.md is stale. Re-generate with --write." >&2
+    echo "Diff:" >&2
+    diff -u "$OUT" <(echo "$FRESH") >&2 || true
     exit 1
   fi
   echo "File index is up to date."
