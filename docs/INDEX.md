@@ -7,12 +7,11 @@ To regenerate locally:
 scripts/index/generate-file-index.sh --write
 ```
 
-**Total files indexed:** 696
+**Total files indexed:** 456
 
-## Apps (196)
+## Apps (163)
 
 - `apps/web/.env.example` — _2025-11-06, peteywee_
-- `apps/web/README.md` — _2025-11-07, peteywee_
 - `apps/web/app/(app)/demo/page.tsx` — _2025-11-05, peteywee_
 - `apps/web/app/(app)/protected/dashboard/loading.tsx` — _2025-11-05, peteywee_
 - `apps/web/app/(app)/protected/dashboard/page.tsx` — _2025-11-06, peteywee_
@@ -25,7 +24,6 @@ scripts/index/generate-file-index.sh --write
 - `apps/web/app/RegisterServiceWorker.tsx` — _2025-11-05, peteywee_
 - `apps/web/app/actions/createSchedule.ts` — _2025-11-06, peteywee_
 - `apps/web/app/actions/scheduleActions.ts` — _2025-11-05, peteywee_
-- `apps/web/app/api/_shared/__tests__/validation.test.ts` — _2025-11-05, peteywee_
 - `apps/web/app/api/_shared/logging.ts` — _2025-11-11, peteywee_
 - `apps/web/app/api/_shared/middleware.ts` — _2025-11-11, peteywee_
 - `apps/web/app/api/_shared/security.ts` — _2025-11-06, peteywee_
@@ -40,13 +38,6 @@ scripts/index/generate-file-index.sh --write
 - `apps/web/app/api/items/route.ts` — _2025-11-12, peteywee_
 - `apps/web/app/api/join-tokens/route.ts` — _2025-11-12, peteywee_
 - `apps/web/app/api/metrics/route.ts` — _2025-11-12, peteywee_
-- `apps/web/app/api/onboarding/__tests__/activate-network.test.ts` — _2025-11-11, peteywee_
-- `apps/web/app/api/onboarding/__tests__/admin-form.test.ts` — _2025-11-11, peteywee_
-- `apps/web/app/api/onboarding/__tests__/create-network-corporate.test.ts` — _2025-11-11, peteywee_
-- `apps/web/app/api/onboarding/__tests__/create-network-org.test.ts` — _2025-11-11, peteywee_
-- `apps/web/app/api/onboarding/__tests__/endpoints.test.ts` — _2025-11-11, peteywee_
-- `apps/web/app/api/onboarding/__tests__/join-with-token.test.ts` — _2025-11-11, peteywee_
-- `apps/web/app/api/onboarding/__tests__/verify-eligibility.test.ts` — _2025-11-11, peteywee_
 - `apps/web/app/api/onboarding/_shared/rateLimit.ts` — _2025-11-11, peteywee_
 - `apps/web/app/api/onboarding/_shared/schemas.ts` — _2025-11-11, peteywee_
 - `apps/web/app/api/onboarding/activate-network/route.ts` — _2025-11-12, peteywee_
@@ -86,14 +77,10 @@ scripts/index/generate-file-index.sh --write
 - `apps/web/app/components/ui/Card.tsx` — _2025-11-05, peteywee_
 - `apps/web/app/components/ui/Input.tsx` — _2025-11-05, peteywee_
 - `apps/web/app/components/ui/Loading.tsx` — _2025-11-05, peteywee_
-- `apps/web/app/components/ui/__tests__/Button.test.tsx` — _2025-11-06, peteywee_
-- `apps/web/app/components/ui/__tests__/Card.test.tsx` — _2025-11-05, peteywee_
-- `apps/web/app/components/ui/__tests__/Input.test.tsx` — _2025-11-06, peteywee_
 - `apps/web/app/components/ui/index.ts` — _2025-11-05, peteywee_
 - `apps/web/app/fonts.ts` — _2025-11-05, peteywee_
 - `apps/web/app/globals.css` — _2025-10-31, Patrick craven_
 - `apps/web/app/layout.tsx` — _2025-11-05, peteywee_
-- `apps/web/app/lib/__tests__/http.test.ts` — _2025-11-05, peteywee_
 - `apps/web/app/lib/auth-context.tsx` — _2025-11-05, peteywee_
 - `apps/web/app/lib/cache.ts` — _2025-11-05, peteywee_
 - `apps/web/app/lib/db.ts` — _2025-11-05, peteywee_
@@ -128,9 +115,6 @@ scripts/index/generate-file-index.sh --write
 - `apps/web/components/ui/Card.tsx` — _2025-11-05, peteywee_
 - `apps/web/components/ui/Input.tsx` — _2025-11-05, peteywee_
 - `apps/web/components/ui/Table.tsx` — _2025-11-05, peteywee_
-- `apps/web/docs/API.md` — _2025-11-05, peteywee_
-- `apps/web/docs/COMPONENTS.md` — _2025-10-31, Patrick craven_
-- `apps/web/docs/SERVICE_WORKER.md` — _2025-10-31, Patrick craven_
 - `apps/web/eslint.config.mjs` — _2025-11-12, peteywee_
 - `apps/web/instrumentation.ts` — _2025-11-12, peteywee_
 - `apps/web/lib/animations.ts` — _2025-11-06, peteywee_
@@ -150,31 +134,17 @@ scripts/index/generate-file-index.sh --write
 - `apps/web/sentry.client.config.ts` — _2025-11-06, peteywee_
 - `apps/web/sentry.edge.config.ts` — _2025-11-06, peteywee_
 - `apps/web/sentry.server.config.ts` — _2025-11-06, peteywee_
-- `apps/web/src/__tests__/api-security.spec.ts` — _2025-11-06, peteywee_
-- `apps/web/src/__tests__/auth-helpers.spec.ts` — _2025-11-05, peteywee_
-- `apps/web/src/__tests__/login-page.spec.tsx` — _2025-11-05, peteywee_
-- `apps/web/src/__tests__/mfa.test.ts` — _2025-11-06, peteywee_
-- `apps/web/src/__tests__/middleware.spec.ts` — _2025-11-05, peteywee_
-- `apps/web/src/__tests__/security.test.ts` — _2025-11-06, peteywee_
-- `apps/web/src/__tests__/session-api.spec.ts` — _2025-11-06, peteywee_
-- `apps/web/src/__tests__/session.test.ts` — _2025-11-06, peteywee_
 - `apps/web/src/components/auth/ProtectedRoute.tsx` — _2025-11-05, peteywee_
 - `apps/web/src/lib/actionCodeSettings.ts` — _2025-11-05, peteywee_
-- `apps/web/src/lib/api/__tests__/security-integration.test.ts` — _2025-11-06, peteywee_
-- `apps/web/src/lib/api/__tests__/security.bench.ts` — _2025-11-06, peteywee_
-- `apps/web/src/lib/api/authorization.test.ts` — _2025-11-06, peteywee_
 - `apps/web/src/lib/api/authorization.ts` — _2025-11-10, Patrick craven_
-- `apps/web/src/lib/api/csrf.test.ts` — _2025-11-10, Patrick craven_
 - `apps/web/src/lib/api/csrf.ts` — _2025-11-11, peteywee_
 - `apps/web/src/lib/api/index.ts` — _2025-11-06, peteywee_
-- `apps/web/src/lib/api/rate-limit.test.ts` — _2025-11-06, peteywee_
 - `apps/web/src/lib/api/rate-limit.ts` — _2025-11-06, peteywee_
 - `apps/web/src/lib/api/redis-rate-limit.ts` — _2025-11-06, peteywee_
 - `apps/web/src/lib/api/redis.ts` — _2025-11-11, peteywee_
 - `apps/web/src/lib/api/sanitize.ts` — _2025-11-11, peteywee_
 - `apps/web/src/lib/api/schedules.ts` — _2025-11-05, peteywee_
 - `apps/web/src/lib/api/session.ts` — _2025-11-06, peteywee_
-- `apps/web/src/lib/api/validation.test.ts` — _2025-11-06, peteywee_
 - `apps/web/src/lib/api/validation.ts` — _2025-11-10, Patrick craven_
 - `apps/web/src/lib/auth-context.tsx` — _2025-11-06, peteywee_
 - `apps/web/src/lib/auth-helpers.ts` — _2025-11-05, peteywee_
@@ -186,11 +156,9 @@ scripts/index/generate-file-index.sh --write
 - `apps/web/src/lib/eventLog.ts` — _2025-11-11, peteywee_
 - `apps/web/src/lib/firebase.server.ts` — _2025-11-12, peteywee_
 - `apps/web/src/lib/imports/_template.import.ts` — _2025-11-11, peteywee_
-- `apps/web/src/lib/labor/computeLaborBudget.test.ts` — _2025-11-11, peteywee_
 - `apps/web/src/lib/labor/computeLaborBudget.ts` — _2025-11-11, peteywee_
 - `apps/web/src/lib/logger.ts` — _2025-11-06, peteywee_
 - `apps/web/src/lib/onboarding/adminFormDrafts.ts` — _2025-11-10, Patrick craven_
-- `apps/web/src/lib/onboarding/createNetworkOrg.test.ts` — _2025-11-10, Patrick craven_
 - `apps/web/src/lib/onboarding/createNetworkOrg.ts` — _2025-11-11, peteywee_
 - `apps/web/src/lib/otel.ts` — _2025-11-06, peteywee_
 - `apps/web/src/lib/storage/kv.ts` — _2025-11-06, peteywee_
@@ -201,49 +169,26 @@ scripts/index/generate-file-index.sh --write
 - `apps/web/src/types/fresh-schedules-types.d.ts` — _2025-11-11, peteywee_
 - `apps/web/src/types/idb.d.ts` — _2025-11-05, peteywee_
 - `apps/web/tailwind.config.ts` — _2025-11-05, peteywee_
-- `apps/web/tests/e2e/onboarding-full-flow.spec.ts` — _2025-11-11, peteywee_
 - `apps/web/tsconfig.json` — _2025-11-07, copilot-swe-agent[bot]_
 - `apps/web/vitest.bench.config.ts` — _2025-11-06, peteywee_
 - `apps/web/vitest.config.ts` — _2025-11-10, Patrick craven_
 - `apps/web/vitest.d.ts` — _2025-11-05, peteywee_
 - `apps/web/vitest.setup.ts` — _2025-11-10, Patrick craven_
 
-## Packages (68)
+## Packages (46)
 
 - `packages/config/package.json` — _2025-10-30, peteywee_
 - `packages/config/src/index.ts` — _2025-11-05, peteywee_
 - `packages/config/tsconfig.json` — _2025-10-24, peteywee_
 - `packages/env/package.json` — _2025-11-12, peteywee_
 - `packages/env/src/index.ts` — _2025-11-12, peteywee_
-- `packages/mcp-server/README.md` — _2025-11-05, peteywee_
 - `packages/mcp-server/package.json` — _2025-10-31, Patrick craven_
 - `packages/mcp-server/src/index.ts` — _2025-11-05, peteywee_
 - `packages/mcp-server/tsconfig.json` — _2025-10-29, peteywee_
 - `packages/rules-tests/package.json` — _2025-11-11, Patrick craven_
-- `packages/rules-tests/src/rbac.test.ts` — _2025-11-11, peteywee_
-- `packages/rules-tests/src/rules.test.ts` — _2025-11-11, peteywee_
 - `packages/rules-tests/tsconfig.json` — _2025-10-30, peteywee_
 - `packages/rules-tests/vitest.config.ts` — _2025-11-05, peteywee_
 - `packages/types/package.json` — _2025-11-07, peteywee_
-- `packages/types/src/__tests__/adminResponsibilityForm.test.ts` — _2025-11-07, peteywee_
-- `packages/types/src/__tests__/attendance.test.ts` — _2025-11-06, peteywee_
-- `packages/types/src/__tests__/corpOrgLinks.test.ts` — _2025-11-07, peteywee_
-- `packages/types/src/__tests__/corpOrgLinks.v14.test.ts` — _2025-11-07, peteywee_
-- `packages/types/src/__tests__/join-tokens.test.ts` — _2025-11-06, peteywee_
-- `packages/types/src/__tests__/memberships.test.ts` — _2025-11-06, peteywee_
-- `packages/types/src/__tests__/networks.test.ts` — _2025-11-07, peteywee_
-- `packages/types/src/__tests__/onboarding.test.ts` — _2025-11-11, peteywee_
-- `packages/types/src/__tests__/org-network.test.ts` — _2025-11-07, peteywee_
-- `packages/types/src/__tests__/orgVenueAssignments.test.ts` — _2025-11-07, peteywee_
-- `packages/types/src/__tests__/orgVenueAssignments.v14.test.ts` — _2025-11-07, peteywee_
-- `packages/types/src/__tests__/organizations.test.ts` — _2025-11-06, copilot-swe-agent[bot]_
-- `packages/types/src/__tests__/orgs.test.ts` — _2025-11-06, peteywee_
-- `packages/types/src/__tests__/positions.test.ts` — _2025-11-06, peteywee_
-- `packages/types/src/__tests__/schedules.test.ts` — _2025-11-06, peteywee_
-- `packages/types/src/__tests__/shifts.test.ts` — _2025-11-06, peteywee_
-- `packages/types/src/__tests__/venue-network.test.ts` — _2025-11-07, peteywee_
-- `packages/types/src/__tests__/venues.test.ts` — _2025-11-06, peteywee_
-- `packages/types/src/__tests__/zones.test.ts` — _2025-11-06, peteywee_
 - `packages/types/src/attendance.ts` — _2025-11-06, peteywee_
 - `packages/types/src/compliance.ts` — _2025-11-12, peteywee_
 - `packages/types/src/compliance/adminResponsibilityForm.ts` — _2025-11-11, peteywee_
@@ -279,17 +224,15 @@ scripts/index/generate-file-index.sh --write
 - `packages/ui/src/index.ts` — _2025-11-05, peteywee_
 - `packages/ui/tsconfig.json` — _2025-10-24, peteywee_
 
-## Services (24)
+## Services (18)
 
 - `services/api/.dockerignore` — _2025-10-30, peteywee_
 - `services/api/.env.example` — _2025-10-30, peteywee_
 - `services/api/Dockerfile` — _2025-10-31, Patrick craven_
-- `services/api/docs/PRODUCTION.md` — _2025-11-11, peteywee_
 - `services/api/package.json` — _2025-11-11, Patrick craven_
 - `services/api/src/auth/types.ts` — _2025-11-05, peteywee_
 - `services/api/src/cache/provider.ts` — _2025-11-05, peteywee_
 - `services/api/src/cache/redis.ts` — _2025-11-05, peteywee_
-- `services/api/src/config/README.md` — _2025-10-31, Patrick craven_
 - `services/api/src/env.ts` — _2025-10-31, Patrick craven_
 - `services/api/src/firebase.ts` — _2025-10-31, Patrick craven_
 - `services/api/src/index.ts` — _2025-11-05, peteywee_
@@ -300,55 +243,16 @@ scripts/index/generate-file-index.sh --write
 - `services/api/src/obs/otel.ts` — _2025-11-05, peteywee_
 - `services/api/src/obs/sentry.ts` — _2025-10-31, Patrick craven_
 - `services/api/src/rbac.ts` — _2025-11-06, peteywee_
-- `services/api/test/log.test.ts` — _2025-11-05, peteywee_
-- `services/api/test/otel.test.ts` — _2025-11-05, peteywee_
-- `services/api/test/rbac.test.ts` — _2025-11-06, peteywee_
-- `services/api/test/security.test.ts` — _2025-11-06, peteywee_
 - `services/api/tsconfig.json` — _2025-10-31, peteywee_
 
-## Docs (226)
+## Docs (131)
 
-- `docs/ARCHITECTURE_DIAGRAMS.md` — _2025-11-05, peteywee_
 - `docs/AUTO_SYMLINK_COMPLETION_REPORT.md` — _2025-11-12, peteywee_
 - `docs/AUTO_SYMLINK_FRAMEWORK.md` — _2025-11-12, peteywee_
-- `docs/BLOCK3_CHECKLIST.md` — _2025-11-11, peteywee_
-- `docs/BLOCK3_COMPLETION_MANIFEST.md` — _2025-11-11, peteywee_
-- `docs/BLOCK3_DOCUMENTATION_INDEX.md` — _2025-11-11, peteywee_
-- `docs/BLOCK3_FINAL_SUMMARY.md` — _2025-11-11, peteywee_
-- `docs/BLOCK3_SIGN_OFF.md` — _2025-11-11, peteywee_
-- `docs/CACHE_MEMORY_MANAGEMENT.md` — _2025-11-11, peteywee_
-- `docs/CHANGELOG.md` — _2025-11-11, peteywee_
-- `docs/COMPLETE_TECHNICAL_DOCUMENTATION.md` — _2025-11-06, peteywee_
-- `docs/CONSOLIDATION_OPPORTUNITIES.md` — _2025-11-10, Patrick craven_
-- `docs/DOCS_INDEX.md` — _2025-11-11, peteywee_
-- `docs/FINAL_SUMMARY.md` — _2025-11-11, peteywee_
-- `docs/GOALS.md` — _2025-10-31, Patrick craven_
-- `docs/INDEX.md` — _2025-11-19, patrick_
-- `docs/NPM_CONSOLIDATION_DECISIONS.md` — _2025-11-11, peteywee_
-- `docs/PHASE1_COMPLETION_REPORT.md` — _2025-11-11, peteywee_
-- `docs/PHASE1_QUICK_REFERENCE.md` — _2025-11-11, peteywee_
-- `docs/PLANNING.md` — _2025-11-05, peteywee_
-- `docs/PR62_REVIEW_SUMMARY.md` — _2025-11-11, peteywee_
-- `docs/PR63_REVIEW_IMPLEMENTATION.md` — _2025-11-11, peteywee_
-- `docs/PR63_REVIEW_INDEX.md` — _2025-11-11, peteywee_
-- `docs/PROCESS.md` — _2025-11-05, peteywee_
-- `docs/SCOPE.md` — _2025-10-31, Patrick craven_
-- `docs/SESSION_SUMMARY.md` — _2025-11-11, peteywee_
-- `docs/TAGGING_QUICK_START.md` — _2025-11-11, peteywee_
-- `docs/TODO-v13.md` — _2025-11-07, peteywee_
-- `docs/TODO-v14.md` — _2025-11-11, peteywee_
-- `docs/UX_PLAN.md` — _2025-11-06, peteywee_
+- `docs/INDEX.md` — _2025-11-27, patrick_
 - `docs/VERSION_v14.5.md` — _2025-11-19, patrick_
 - `docs/VSCODE_TASKS.md` — _2025-11-12, peteywee_
 - `docs/agents/GLOBAL_COGNITION_AGENT.md` — _2025-11-24, patrick_
-- `docs/ai/AGENTS/Builder.md` — _2025-11-06, peteywee_
-- `docs/ai/AGENTS/QA.md` — _2025-11-05, peteywee_
-- `docs/ai/AGENTS/ReleaseManager.md` — _2025-11-05, peteywee_
-- `docs/ai/CHATMODE.md` — _2025-11-05, peteywee_
-- `docs/ai/CHAT_CONTEXT.md` — _2025-11-05, peteywee_
-- `docs/ai/README.md` — _2025-11-05, peteywee_
-- `docs/ai/SYSTEM_PROMPT.md` — _2025-11-05, peteywee_
-- `docs/ai/TOOLS.md` — _2025-11-05, peteywee_
 - `docs/api/API_PAPER.md` — _2025-11-19, patrick_
 - `docs/api/_template.md` — _2025-11-12, peteywee_
 - `docs/api/attendance.md` — _2025-11-12, peteywee_
@@ -384,54 +288,11 @@ scripts/index/generate-file-index.sh --write
 - `docs/api/venues.md` — _2025-11-12, peteywee_
 - `docs/api/widgets.md` — _2025-11-12, peteywee_
 - `docs/api/zones.md` — _2025-11-12, peteywee_
-- `docs/bible/GAPS_v14.0.0.md` — _2025-11-07, peteywee_
-- `docs/bible/Project_Bible_v13.5.md` — _2025-11-07, peteywee_
-- `docs/bible/Project_Bible_v14.0.0.md` — _2025-11-11, peteywee_
 - `docs/bible/Project_Bible_v14.5.md` — _2025-11-11, peteywee_
-- `docs/bible/Project_Bible_v15.0.0.md` — _2025-11-11, peteywee_
-- `docs/bible/Project_Bible_v15_MIGRATION_PLAN.md` — _2025-11-11, peteywee_
-- `docs/bible/Project_Bible_v15_SCOPE_AND_AUTHORITY.md` — _2025-11-11, peteywee_
-- `docs/bible/index.md` — _2025-11-07, peteywee_
-- `docs/layers/LAYER_00_DOMAIN_KERNEL.md` — _2025-11-11, peteywee_
-- `docs/layers/LAYER_01_INFRASTRUCTURE.md` — _2025-11-11, peteywee_
-- `docs/layers/LAYER_02_APPLICATION_LIBS.md` — _2025-11-11, peteywee_
-- `docs/layers/LAYER_02_APP_LIBS.md` — _2025-11-11, peteywee_
-- `docs/layers/LAYER_03_API_EDGE.md` — _2025-11-11, peteywee_
-- `docs/layers/LAYER_04_UI_UX.md` — _2025-11-11, peteywee_
-- `docs/mcp/FIRECRAWL_MCP_SETUP.md` — _2025-11-11, peteywee_
-- `docs/mcp/mcp.json` — _2025-11-11, peteywee_
 - `docs/migration/v15/API_ROUTES_MINI_INDEX.md` — _2025-11-12, peteywee_
 - `docs/migration/v15/MIGRATION_READINESS_CHECKLIST.md` — _2025-11-12, peteywee_
 - `docs/migration/v15/PHASE2_SCHEMA_CROSSWALK.md` — _2025-11-12, peteywee_
-- `docs/migration/v15/PHASE2_SPEC_CROSSWALK.md` — _2025-11-11, peteywee_
-- `docs/migration/v15/PHASE3_CODE_MIGRATION_CHECKLIST.md` — _2025-11-11, peteywee_
-- `docs/migration/v15/PHASE3_DATA_MIGRATION_CHECKLIST.md` — _2025-11-11, peteywee_
-- `docs/migration/v15/PHASE4_HARDENING_AND_FREEZE.md` — _2025-11-11, peteywee_
 - `docs/migration/v15/SCHEMAS_MINI_INDEX.md` — _2025-11-12, peteywee_
-- `docs/migrations/MIGRATION_NETWORK_TENANCY.md` — _2025-11-07, peteywee_
-- `docs/migrations/PHASE1_IMPLEMENTATION_SUMMARY.md` — _2025-11-11, peteywee_
-- `docs/onboarding/ONBOARDING_API.md` — _2025-11-11, peteywee_
-- `docs/onboarding/ONBOARDING_BACKEND_COMPLETION.md` — _2025-11-11, peteywee_
-- `docs/onboarding/ONBOARDING_BACKEND_QUICKREF.md` — _2025-11-11, peteywee_
-- `docs/onboarding/TODOonboarding.md` — _2025-11-11, peteywee_
-- `docs/prompts/ISSUE_TEMPLATE.md` — _2025-11-05, peteywee_
-- `docs/prompts/TEMPLATES.md` — _2025-11-05, peteywee_
-- `docs/quality/AUTO_TAGGING.md` — _2025-11-11, peteywee_
-- `docs/quality/CLEANUP_SUMMARY_2025-11-07.md` — _2025-11-11, peteywee_
-- `docs/quality/CONSOLIDATION_OPPORTUNITIES.md` — _2025-11-11, peteywee_
-- `docs/quality/PERFORMANCE.md` — _2025-11-11, peteywee_
-- `docs/quality/TAGGING_SYSTEM.md` — _2025-11-11, peteywee_
-- `docs/quality/TECHNICAL_DEBT.md` — _2025-11-11, peteywee_
-- `docs/quality/slo.md` — _2025-11-11, peteywee_
-- `docs/runbooks/backup-scheduler.md` — _2025-11-11, peteywee_
-- `docs/runbooks/logging-retention.md` — _2025-11-11, peteywee_
-- `docs/runbooks/onboarding.md` — _2025-11-11, peteywee_
-- `docs/runbooks/publish-notify.md` — _2025-11-11, peteywee_
-- `docs/runbooks/restore.md` — _2025-11-07, peteywee_
-- `docs/runbooks/scheduling.md` — _2025-11-11, peteywee_
-- `docs/runbooks/uptime-alerts.md` — _2025-11-07, peteywee_
-- `docs/schema-map.md` — _2025-11-06, peteywee_
-- `docs/schema-network.md` — _2025-11-07, peteywee_
 - `docs/schemas/AddressSchema.md` — _2025-11-12, peteywee_
 - `docs/schemas/AdminResponsibilityFormSchema.md` — _2025-11-12, peteywee_
 - `docs/schemas/AssignShiftSchema.md` — _2025-11-12, peteywee_
@@ -498,9 +359,6 @@ scripts/index/generate-file-index.sh --write
 - `docs/schemas/VenueSchema.md` — _2025-11-12, peteywee_
 - `docs/schemas/WidgetSchema.md` — _2025-11-12, peteywee_
 - `docs/schemas/ZoneSchema.md` — _2025-11-12, peteywee_
-- `docs/security/SECURITY_ASSESSMENT.md` — _2025-11-11, peteywee_
-- `docs/security/SECURITY_HARDENING_2025-11-06.md` — _2025-11-11, peteywee_
-- `docs/security/security.md` — _2025-11-11, peteywee_
 - `docs/standards/FILE_HEADER_STANDARD.md` — _2025-11-11, peteywee_
 - `docs/standards/IMPORT_STANDARD.md` — _2025-11-11, peteywee_
 - `docs/standards/ROUTE_API_STANDARD.md` — _2025-11-12, peteywee_
@@ -520,41 +378,15 @@ scripts/index/generate-file-index.sh --write
 - `docs/templates/SCHEMA_DOC_TEMPLATE.md` — _2025-11-12, peteywee_
 - `docs/templates/TEST_SPEC_TEMPLATE.md` — _2025-11-12, peteywee_
 - `docs/tests/COVERAGE_STRATEGY.md` — _2025-11-12, peteywee_
-- `docs/todo-groups.todo.yml` — _2025-11-06, peteywee_
-- `docs/tooling/CI_WORKFLOW_STANDARDS.md` — _2025-11-11, peteywee_
-- `docs/tooling/CONTRIBUTING.md` — _2025-11-11, peteywee_
-- `docs/tooling/INTERACTIVE_TEST_RUNNER.md` — _2025-11-11, peteywee_
-- `docs/tooling/NPM_SCRIPTS_ANALYSIS.md` — _2025-11-11, peteywee_
-- `docs/tooling/REPO_STANDARDS.md` — _2025-11-11, peteywee_
-- `docs/tooling/SETUP.md` — _2025-11-11, peteywee_
-- `docs/tooling/STANDARDIZED_ERROR_RESPONSES.md` — _2025-11-11, peteywee_
-- `docs/tooling/USAGE.md` — _2025-11-11, peteywee_
-- `docs/tooling/environment.md` — _2025-11-11, peteywee_
-- `docs/v14/V14_FREEZE_COMPLETE_GUIDE.md` — _2025-11-11, peteywee_
-- `docs/v14/V14_FREEZE_FINAL_INSPECTION.md` — _2025-11-11, peteywee_
-- `docs/v14/V14_FREEZE_INSPECTION_REPORT.md` — _2025-11-11, peteywee_
-- `docs/v14/V14_ONBOARDING_FREEZE_SCOPE.md` — _2025-11-11, peteywee_
 
-## Scripts (64)
+## Scripts (28)
 
 - `scripts/agent/README.md` — _2025-11-26, patrick_
 - `scripts/agent/agent.mjs` — _2025-11-26, patrick_
-- `scripts/agent/agent.mts` — _2025-11-06, peteywee_
-- `scripts/agent/lib/logger.ts` — _2025-11-05, peteywee_
 - `scripts/agent/tasks/pattern-scan.mjs` — _2025-11-26, patrick_
 - `scripts/agent/tasks/rbac.mjs` — _2025-11-26, patrick_
-- `scripts/agent/tasks/rbac.ts` — _2025-11-05, peteywee_
-- `scripts/agent/tasks/restructure.ts` — _2025-11-05, peteywee_
-- `scripts/agent/tasks/rules.ts` — _2025-11-05, peteywee_
 - `scripts/agent/tests/run-agent-test.mjs` — _2025-11-26, patrick_
-- `scripts/agent/tsconfig.json` — _2025-10-30, copilot-swe-agent[bot]_
 - `scripts/audit/nesting-audit.mjs` — _2025-11-12, peteywee_
-- `scripts/bench/http-bench.js` — _2025-11-05, peteywee_
-- `scripts/bootstrap_scaffold.sh` — _2025-11-06, peteywee_
-- `scripts/bootstrap_tier1.sh` — _2025-11-06, peteywee_
-- `scripts/bootstrap_tier2.sh` — _2025-11-06, peteywee_
-- `scripts/bootstrap_tier3.sh` — _2025-11-06, peteywee_
-- `scripts/build_org_search_index_v15.ts` — _2025-11-11, peteywee_
 - `scripts/ci/add-test-spec-placeholder.mjs` — _2025-11-19, patrick_
 - `scripts/ci/auto-symlink-docs.mjs` — _2025-11-12, peteywee_
 - `scripts/ci/check-doc-parity-simple.mjs` — _2025-11-19, patrick_
@@ -566,71 +398,23 @@ scripts/index/generate-file-index.sh --write
 - `scripts/cleanup/purge-history-vendors.sh` — _2025-11-12, peteywee_
 - `scripts/cleanup/strip-legacy-vendors.sh` — _2025-11-12, peteywee_
 - `scripts/gen/scaffold-from-template.mjs` — _2025-11-12, peteywee_
-- `scripts/gh-setup-labels.sh` — _2025-11-06, peteywee_
 - `scripts/index/config.mjs` — _2025-11-12, peteywee_
 - `scripts/index/generate-file-index.mjs` — _2025-11-12, peteywee_
 - `scripts/index/generate-file-index.sh` — _2025-11-12, peteywee_
 - `scripts/lint/lean.sh` — _2025-11-12, peteywee_
-- `scripts/mcp/run-firecrawl-mcp.sh` — _2025-11-06, peteywee_
 - `scripts/migration/gen-mini-indexes.mjs` — _2025-11-12, peteywee_
 - `scripts/migration/migration-status.mjs` — _2025-11-12, peteywee_
-- `scripts/ops/backup-firestore.sh` — _2025-10-31, Patrick craven_
-- `scripts/ops/create-backup-scheduler.sh` — _2025-11-06, peteywee_
-- `scripts/ops/create-uptime-alert.sh` — _2025-11-06, peteywee_
-- `scripts/ops/create-uptime-check.sh` — _2025-11-06, peteywee_
-- `scripts/ops/logging-setup.sh` — _2025-11-06, peteywee_
 - `scripts/ops/test-firebase-admin.mjs` — _2025-11-12, peteywee_
-- `scripts/ops/uptime-alert-policy.json` — _2025-11-06, peteywee_
-- `scripts/ops/validate-schema-rules-parity.ts` — _2025-11-06, peteywee_
 - `scripts/refactor-all.mjs` — _2025-11-13, Patrick craven_
-- `scripts/run-rules-tests.mjs` — _2025-11-06, peteywee_
-- `scripts/run-tests-safe.sh` — _2025-11-10, Patrick craven_
-- `scripts/run-typecheck.js` — _2025-11-05, peteywee_
-- `scripts/seed/seed.emulator.ts` — _2025-11-05, peteywee_
-- `scripts/setup-mcp.sh` — _2025-11-06, peteywee_
-- `scripts/setup.sh` — _2025-11-06, peteywee_
 - `scripts/sh/refactor-guards.sh` — _2025-11-12, peteywee_
-- `scripts/tag-files.mjs` — _2025-11-06, peteywee_
-- `scripts/test-interactive.mjs` — _2025-11-11, peteywee_
 - `scripts/tests/verify-tests-present-simple.mjs` — _2025-11-19, patrick_
 - `scripts/tests/verify-tests-present.mjs` — _2025-11-12, peteywee_
-- `scripts/validate-schema-parity.mjs` — _2025-11-06, peteywee_
-- `scripts/watch-and-tag.mjs` — _2025-11-11, peteywee_
-- `tools/diagnostics/create_custom_token.js` — _2025-11-05, peteywee_
-- `tools/diagnostics/playwright_login.js` — _2025-11-05, peteywee_
-- `tools/health/postinstall.js` — _2025-11-05, peteywee_
-- `tools/health/preinstall.js` — _2025-11-05, peteywee_
-- `tools/sim/auth_sim.mts` — _2025-11-06, peteywee_
 
-## Tests (25)
+## Tests (1)
 
-- `tests/e2e/auth-onboarding.spec.ts` — _2025-11-05, peteywee_
-- `tests/e2e/login_publish_logout.e2e.spec.ts` — _2025-11-05, peteywee_
-- `tests/e2e/onboarding-full-flow.spec.ts` — _2025-11-11, peteywee_
-- `tests/e2e/onboarding-happy-path.spec.ts` — _2025-11-07, peteywee_
-- `tests/rules/README.md` — _2025-11-07, copilot-swe-agent[bot]_
-- `tests/rules/_setup.ts` — _2025-11-06, peteywee_
-- `tests/rules/admin-form.spec.mts` — _2025-11-07, peteywee_
-- `tests/rules/attendance.spec.mts` — _2025-11-07, peteywee_
-- `tests/rules/firestore.spec.ts` — _2025-10-31, Patrick craven_
-- `tests/rules/join-tokens.spec.mts` — _2025-11-06, peteywee_
-- `tests/rules/memberships.spec.ts` — _2025-11-06, Patrick craven_
-- `tests/rules/messages_receipts.spec.ts` — _2025-11-07, peteywee_
-- `tests/rules/mfa.spec.ts` — _2025-11-06, peteywee_
-- `tests/rules/networks.spec.mts` — _2025-11-10, Patrick craven_
-- `tests/rules/organizations.spec.ts` — _2025-11-06, peteywee_
-- `tests/rules/positions.spec.ts` — _2025-11-06, peteywee_
 - `tests/rules/rules-smoke.spec.mts` — _2025-11-19, patrick_
-- `tests/rules/schedules.spec.mts` — _2025-11-06, peteywee_
-- `tests/rules/shifts.spec.mts` — _2025-11-06, peteywee_
-- `tests/rules/storage.fixed.spec.ts` — _2025-11-05, peteywee_
-- `tests/rules/users.test.ts` — _2025-11-06, peteywee_
-- `tests/rules/venues.spec.mts` — _2025-11-06, peteywee_
-- `tests/rules/vitest.config.ts` — _2025-11-07, copilot-swe-agent[bot]_
-- `tests/rules/zones.spec.mts` — _2025-11-06, peteywee_
-- `tests/unit/middleware.test.ts` — _2025-11-07, peteywee_
 
-## CI / Config (61)
+## CI / Config (48)
 
 - `.github/ISSUE_TEMPLATE/_production-template.md` — _2025-11-05, peteywee_
 - `.github/ISSUE_TEMPLATE/data-004-backups-restore.md` — _2025-11-05, peteywee_
@@ -653,33 +437,20 @@ scripts/index/generate-file-index.sh --write
 - `.github/dependabot.yml` — _2025-11-11, Patrick craven_
 - `.github/labeler.yml` — _2025-11-05, peteywee_
 - `.github/labels.yml` — _2025-11-01, peteywee_
-- `.github/runtime-allowlist.txt` — _2025-11-05, peteywee_
+- `.github/runtime-allowlist.txt` — _2025-11-19, patrick_
 - `.github/workflows/agent.yml` — _2025-11-27, patrick_
-- `.github/workflows/app-runtime-guard.yml` — _2025-11-05, peteywee_
-- `.github/workflows/auto-label.yml` — _2025-11-05, peteywee_
 - `.github/workflows/auto-regenerate-index.yml` — _2025-11-26, patrick_
-- `.github/workflows/ci-tests.yml` — _2025-11-11, peteywee_
-- `.github/workflows/ci.yml` — _2025-11-10, Patrick craven_
-- `.github/workflows/codeql.yml` — _2025-10-31, Patrick craven_
 - `.github/workflows/doc-parity.yml` — _2025-11-12, peteywee_
-- `.github/workflows/eslint-ts-agent.yml` — _2025-11-07, Patrick craven_
-- `.github/workflows/eslint.yml` — _2025-11-07, peteywee_
 - `.github/workflows/file-index-guard.yml` — _2025-11-12, peteywee_
-- `.github/workflows/labels-sync.yml` — _2025-11-06, copilot-swe-agent[bot]_
-- `.github/workflows/path-guard.yml` — _2025-10-31, Patrick craven_
 - `.github/workflows/pr.yml` — _2025-11-12, peteywee_
-- `.github/workflows/repo-agent.yml` — _2025-11-07, peteywee_
 - `.github/workflows/schema-catalog-guard.yml` — _2025-11-11, peteywee_
-- `.github/workflows/setup-labels.yml` — _2025-10-31, Patrick craven_
-- `.github/workflows/update-deps.yml` — _2025-10-31, Patrick craven_
 - `.markdownlint.json` — _2025-11-11, peteywee_
 - `.mcp.json` — _2025-10-31, Patrick craven_
 - `.prettierrc.cjs` — _2025-11-05, peteywee_
 - `cspell.json` — _2025-11-11, peteywee_
-- `eslint.config.mjs` — _2025-11-12, peteywee_
+- `eslint.config.mjs` — _2025-11-17, patrick_
 - `firebase.ci.json` — _2025-10-31, peteywee_
 - `firebase.json` — _2025-10-31, Patrick craven_
-- `firebase.test.json` — _2025-11-06, peteywee_
 - `firestore.indexes.json` — _2025-10-30, peteywee_
 - `jest-playwright.config.js` — _2025-11-05, peteywee_
 - `jest.config.ts` — _2025-11-05, peteywee_
@@ -709,28 +480,17 @@ scripts/index/generate-file-index.sh --write
 - `package.json` — _2025-11-12, peteywee_
 - `storage.rules` — _2025-11-06, peteywee_
 
-## Uncategorized (20)
+## Uncategorized (9)
 
-- `.husky/post-checkout` — _2025-11-11, peteywee_
 - `.husky/pre-commit` — _2025-11-12, peteywee_
 - `.husky/pre-push` — _2025-11-12, peteywee_
-- `.vscode/copilot-rules.md` — _2025-11-11, peteywee_
-- `.vscode/docs/RULES.md` — _2025-10-31, Patrick craven_
-- `.vscode/extensions.json` — _2025-11-05, peteywee_
-- `.vscode/launch.json` — _2025-10-31, Patrick craven_
-- `.vscode/mcp.json` — _2025-11-07, peteywee_
 - `.vscode/settings.json` — _2025-11-12, peteywee_
-- `.vscode/snippets/testing.code-snippets` — _2025-10-31, Patrick craven_
 - `.vscode/tasks.json` — _2025-11-12, peteywee_
-- `.vscode/toolsets.filetag.jsonc` — _2025-10-25, peteywee_
 - `functions/package.json` — _2025-11-12, peteywee_
 - `functions/src/index.ts` — _2025-11-05, peteywee_
-- `mcp/filetag-server-enhanced.mjs` — _2025-11-05, peteywee_
-- `mcp/filetag-server.mjs` — _2025-11-11, Patrick craven_
-- `mcp/firecrawl.mcp.json` — _2025-11-06, peteywee_
 - `public/manifest.json` — _2025-10-24, peteywee_
 - `src/placeholder.py` — _2025-11-06, peteywee_
 - `types/firebase-admin.d.ts` — _2025-11-05, peteywee_
 ---
 
-_Index file hash:_ `f08975a881b957e8cdc4114cf59feb2b4a333f8ce902ff9774db4c127f0d3c3f`
+_Index file hash:_ `5bbb040b15f4702bdc050d6c9b310817cf3aa10fd0560b239b73ddaafa686e7e`
