@@ -46,6 +46,27 @@ jobs:
             echo "docs/INDEX.md unchanged"
           fi
 
+      - name: Notify if index changed
+        if: ${{ github.event_name == 'pull_request' }}
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const { execSync } = require('child_process');
+            let changed = false;
+            try {
+              execSync('git diff --quiet -- docs/INDEX.md');
+            } catch (e) {
+              changed = true;
+            }
+            if (!changed) return;
+            const body = `:warning: The workflow regenerated \`docs/INDEX.md\` locally for this PR. The Global Cognition Agent ran using the regenerated index, but the regenerated file was not pushed back to the branch.\n\nIf you'd like to persist the index changes to the PR, please run: \`scripts/index/generate-file-index.sh --write\` locally and push the updated file, or allow the nightly auto-regenerate index workflow to create a PR.`;
+            github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body,
+            });
+
       - name: Run Global Cognition Agent
         continue-on-error: true
         run: node scripts/agent/agent.mjs --pr ${{ github.event.number }} --scope all --format json --scan-rbac --scan-patterns || true
