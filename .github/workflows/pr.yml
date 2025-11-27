@@ -29,6 +29,6 @@ jobs:
         run: |
           git diff --name-only origin/${{ github.base_ref }}... > changed.txt
           awk '
-            /(^\.vscode\/)|(^\.idea\/)|(^docs\/blocks\/)/ { bad=1; print "Blocked on main:", $0 }
+            /(^\.vscode\/)|(^\.idea\/)/ { bad=1; print "Blocked on main:", $0 }
             END{ if(bad==1) exit 1 }
           ' changed.txt
