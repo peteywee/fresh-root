@@ -90,7 +90,7 @@ const nextConfig = {
     },
   },
   experimental: {
-    optimizePackageImports: ["react", "react-dom"],
+    optimizePackageImports: ["react", "react-dom", "@fresh-schedules/types", "@fresh-schedules/ui"],
     serverActions: { bodySizeLimit: "1mb" },
   },
   // Turbopack sometimes infers the workspace root incorrectly when there are
