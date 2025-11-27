@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // [P1][TEST][TEST] Verify Tests Present Simple tests
-// Tags: P1, TEST, TEST
+// Tags: P1, TEST
 import { promises as fs } from "node:fs";
 import path from "node:path";
 
@@ -35,6 +35,17 @@ function getTestPath(apiRoute) {
   return path.join(parentDir, "__tests__", `${routeName}.test.ts`);
 }
 
+async function isMeaningfulTest(file) {
+  try {
+    const content = await fs.readFile(file, "utf8");
+    if (content.includes("// placeholder")) return false;
+    if (!content.includes("test(") && !content.includes("it(")) return false;
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 async function main() {
   const root = process.cwd();
   const onboardingRoutes = await walk(
@@ -54,8 +65,19 @@ async function main() {
   const results = { missing: [], found: 0, required: onboardingRoutes.length };
   for (const route of onboardingRoutes) {
     const testPath = getTestPath(route);
-    const hasSpecific = await exists(testPath);
-    const hasConsolidated = onboardingTests.length > 0;
+    const hasSpecific = await exists(testPath) && await isMeaningfulTest(testPath);
+    
+    // For consolidated tests, we just check if any exist and are meaningful
+    let hasConsolidated = false;
+    if (onboardingTests.length > 0) {
+       for (const t of onboardingTests) {
+         if (await isMeaningfulTest(t)) {
+           hasConsolidated = true;
+           break;
+         }
+       }
+    }
+
     if (hasSpecific || hasConsolidated) results.found++;
     else results.missing.push(route);
   }

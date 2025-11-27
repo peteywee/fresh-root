@@ -71,8 +71,16 @@ async function main() {
   const allDocs = [...docFiles, ...schemaDocFiles];
   for (const df of allDocs) {
     const t = await fs.readFile(df, "utf8");
-    if (!/TEST SPEC/i.test(t))
+    if (!/TEST SPEC/i.test(t)) {
       problems.push({ kind: "doc-missing-test-link", file: path.relative(root, df) });
+    } else {
+      // Check for TODOs in the Test Spec section
+      // Simple heuristic: look for "TEST SPEC" followed by "TODO" within a small window or until next header
+      const testSpecMatch = t.match(/TEST SPEC[\s\S]*?(?=(#|\z))/i);
+      if (testSpecMatch && /TODO/i.test(testSpecMatch[0])) {
+         problems.push({ kind: "doc-test-spec-todo", file: path.relative(root, df) });
+      }
+    }
   }
 
   if (problems.length) {
