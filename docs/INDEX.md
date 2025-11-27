@@ -7,7 +7,7 @@ To regenerate locally:
 scripts/index/generate-file-index.sh --write
 ```
 
-**Total files indexed:** 457
+**Total files indexed:** 462
 
 ## Apps (164)
 
@@ -127,7 +127,7 @@ scripts/index/generate-file-index.sh --write
 - `apps/web/lib/urlState.ts` — _2025-11-06, peteywee_
 - `apps/web/next-env.d.ts` — _2025-11-12, peteywee_
 - `apps/web/next.config.mjs` — _2025-11-12, Patrick craven_
-- `apps/web/package.json` — _2025-11-12, peteywee_
+- `apps/web/package.json` — _2025-11-27, patrick_
 - `apps/web/postcss.config.cjs` — _2025-11-05, peteywee_
 - `apps/web/proxy.ts` — _2025-11-05, peteywee_
 - `apps/web/public/logo.svg` — _2025-11-12, peteywee_
@@ -191,26 +191,26 @@ scripts/index/generate-file-index.sh --write
 - `packages/rules-tests/vitest.config.ts` — _2025-11-05, peteywee_
 - `packages/types/package.json` — _2025-11-07, peteywee_
 - `packages/types/src/attendance.ts` — _2025-11-06, peteywee_
-- `packages/types/src/compliance.ts` — _2025-11-12, peteywee_
+- `packages/types/src/compliance.ts` — _2025-11-27, patrick_
 - `packages/types/src/compliance/adminResponsibilityForm.ts` — _2025-11-11, peteywee_
 - `packages/types/src/compliance/index.ts` — _2025-11-07, peteywee_
 - `packages/types/src/corporates.ts` — _2025-11-07, peteywee_
 - `packages/types/src/errors.ts` — _2025-11-11, peteywee_
 - `packages/types/src/events.ts` — _2025-11-11, peteywee_
-- `packages/types/src/index.ts` — _2025-11-12, peteywee_
+- `packages/types/src/index.ts` — _2025-11-27, patrick_
 - `packages/types/src/join-tokens.ts` — _2025-11-06, peteywee_
 - `packages/types/src/links/corpOrgLinks.ts` — _2025-11-07, peteywee_
 - `packages/types/src/links/corpOrgLinks.v14.ts` — _2025-11-07, peteywee_
 - `packages/types/src/links/index.ts` — _2025-11-07, peteywee_
 - `packages/types/src/links/orgVenueAssignments.ts` — _2025-11-07, peteywee_
 - `packages/types/src/memberships.ts` — _2025-11-06, peteywee_
-- `packages/types/src/messages.ts` — _2025-11-12, peteywee_
+- `packages/types/src/messages.ts` — _2025-11-27, patrick_
 - `packages/types/src/networks.ts` — _2025-11-07, peteywee_
 - `packages/types/src/onboarding.ts` — _2025-11-11, peteywee_
 - `packages/types/src/orgs.ts` — _2025-11-07, peteywee_
 - `packages/types/src/positions.ts` — _2025-11-06, peteywee_
 - `packages/types/src/rbac.ts` — _2025-11-07, peteywee_
-- `packages/types/src/receipts.ts` — _2025-11-12, peteywee_
+- `packages/types/src/receipts.ts` — _2025-11-27, patrick_
 - `packages/types/src/schedules.ts` — _2025-11-06, peteywee_
 - `packages/types/src/shifts.ts` — _2025-11-06, peteywee_
 - `packages/types/src/venues.ts` — _2025-11-07, peteywee_
@@ -380,19 +380,21 @@ scripts/index/generate-file-index.sh --write
 - `docs/templates/TEST_SPEC_TEMPLATE.md` — _2025-11-12, peteywee_
 - `docs/tests/COVERAGE_STRATEGY.md` — _2025-11-12, peteywee_
 
-## Scripts (28)
+## Scripts (30)
 
 - `scripts/agent/README.md` — _2025-11-26, patrick_
-- `scripts/agent/agent.mjs` — _2025-11-26, patrick_
-- `scripts/agent/tasks/pattern-scan.mjs` — _2025-11-26, patrick_
-- `scripts/agent/tasks/rbac.mjs` — _2025-11-26, patrick_
-- `scripts/agent/tests/run-agent-test.mjs` — _2025-11-26, patrick_
+- `scripts/agent/agent.mjs` — _2025-11-27, patrick_
+- `scripts/agent/config.json` — _2025-11-27, patrick_
+- `scripts/agent/tasks/pattern-scan.mjs` — _2025-11-27, patrick_
+- `scripts/agent/tasks/rbac.mjs` — _2025-11-27, patrick_
+- `scripts/agent/tests/run-agent-test.mjs` — _2025-11-27, patrick_
 - `scripts/audit/nesting-audit.mjs` — _2025-11-12, peteywee_
-- `scripts/ci/add-test-spec-placeholder.mjs` — _2025-11-19, patrick_
+- `scripts/ci/add-test-spec-placeholder-all.mjs` — _2025-11-27, patrick_
+- `scripts/ci/add-test-spec-placeholder.mjs` — _2025-11-27, patrick_
 - `scripts/ci/auto-symlink-docs.mjs` — _2025-11-12, peteywee_
-- `scripts/ci/check-doc-parity-simple.mjs` — _2025-11-19, patrick_
+- `scripts/ci/check-doc-parity-simple.mjs` — _2025-11-27, patrick_
 - `scripts/ci/check-doc-parity.mjs` — _2025-11-12, peteywee_
-- `scripts/ci/list-docs-missing-tests.mjs` — _2025-11-19, patrick_
+- `scripts/ci/list-docs-missing-tests.mjs` — _2025-11-27, patrick_
 - `scripts/cleanup/full-cleanup.sh` — _2025-11-12, peteywee_
 - `scripts/cleanup/lean-packages.mjs` — _2025-11-12, peteywee_
 - `scripts/cleanup/prune-archives.mjs` — _2025-11-12, peteywee_
@@ -406,14 +408,14 @@ scripts/index/generate-file-index.sh --write
 - `scripts/migration/gen-mini-indexes.mjs` — _2025-11-12, peteywee_
 - `scripts/migration/migration-status.mjs` — _2025-11-12, peteywee_
 - `scripts/ops/test-firebase-admin.mjs` — _2025-11-12, peteywee_
-- `scripts/refactor-all.mjs` — _2025-11-13, Patrick craven_
-- `scripts/sh/refactor-guards.sh` — _2025-11-12, peteywee_
-- `scripts/tests/verify-tests-present-simple.mjs` — _2025-11-19, patrick_
+- `scripts/refactor-all.mjs` — _2025-11-27, patrick_
+- `scripts/sh/refactor-guards.sh` — _2025-11-27, patrick_
+- `scripts/tests/verify-tests-present-simple.mjs` — _2025-11-27, patrick_
 - `scripts/tests/verify-tests-present.mjs` — _2025-11-12, peteywee_
 
 ## Tests (1)
 
-- `tests/rules/rules-smoke.spec.mts` — _2025-11-19, patrick_
+- `tests/rules/rules-smoke.spec.mts` — _2025-11-27, patrick_
 
 ## CI / Config (48)
 
@@ -429,21 +431,21 @@ scripts/index/generate-file-index.sh --write
 - `.github/ISSUE_TEMPLATE/ux-007-scheduler-week-grid.md` — _2025-11-05, peteywee_
 - `.github/RELEASE_NOTES_v1.1.0.md` — _2025-11-07, peteywee_
 - `.github/SECURITY_FIXES.md` — _2025-11-11, Patrick craven_
-- `.github/agents/cog.agent.md` — _2025-11-24, patrick_
+- `.github/agents/cog.agent.md` — _2025-11-27, patrick_
 - `.github/agents/eslint-ts-agent.md` — _2025-10-31, Patrick craven_
 - `.github/agents/my-agent.md` — _2025-11-05, peteywee_
-- `.github/agents/refactor-compliance.agent.md` — _2025-11-13, Patrick craven_
+- `.github/agents/refactor-compliance.agent.md` — _2025-11-27, patrick_
 - `.github/agents/self-healing-agent.md` — _2025-10-31, Patrick craven_
-- `.github/copilot-instructions.md` — _2025-11-11, peteywee_
+- `.github/copilot-instructions.md` — _2025-11-27, patrick_
 - `.github/dependabot.yml` — _2025-11-11, Patrick craven_
 - `.github/labeler.yml` — _2025-11-05, peteywee_
 - `.github/labels.yml` — _2025-11-01, peteywee_
 - `.github/runtime-allowlist.txt` — _2025-11-19, patrick_
 - `.github/workflows/agent.yml` — _2025-11-27, patrick_
-- `.github/workflows/auto-regenerate-index.yml` — _2025-11-26, patrick_
+- `.github/workflows/auto-regenerate-index.yml` — _2025-11-27, patrick_
 - `.github/workflows/doc-parity.yml` — _2025-11-12, peteywee_
 - `.github/workflows/file-index-guard.yml` — _2025-11-12, peteywee_
-- `.github/workflows/pr.yml` — _2025-11-12, peteywee_
+- `.github/workflows/pr.yml` — _2025-11-27, patrick_
 - `.github/workflows/schema-catalog-guard.yml` — _2025-11-11, peteywee_
 - `.markdownlint.json` — _2025-11-11, peteywee_
 - `.mcp.json` — _2025-10-31, Patrick craven_
@@ -456,7 +458,7 @@ scripts/index/generate-file-index.sh --write
 - `jest-playwright.config.js` — _2025-11-05, peteywee_
 - `jest.config.ts` — _2025-11-05, peteywee_
 - `jest.rules.config.js` — _2025-11-07, peteywee_
-- `pnpm-lock.yaml` — _2025-11-12, peteywee_
+- `pnpm-lock.yaml` — _2025-11-27, patrick_
 - `pnpm-workspace.yaml` — _2025-10-30, copilot-swe-agent[bot]_
 - `postcss.config.cjs` — _2025-11-05, peteywee_
 - `tailwind.config.cjs` — _2025-11-05, peteywee_
@@ -481,12 +483,15 @@ scripts/index/generate-file-index.sh --write
 - `package.json` — _2025-11-12, peteywee_
 - `storage.rules` — _2025-11-06, peteywee_
 
-## Uncategorized (9)
+## Uncategorized (12)
 
 - `.husky/pre-commit` — _2025-11-12, peteywee_
 - `.husky/pre-push` — _2025-11-12, peteywee_
 - `.vscode/settings.json` — _2025-11-12, peteywee_
 - `.vscode/tasks.json` — _2025-11-12, peteywee_
+- `artifacts/agent-86.json` — _2025-11-27, patrick_
+- `artifacts/agent-local.json` — _2025-11-27, patrick_
+- `artifacts/agent-test-run.json` — _2025-11-27, patrick_
 - `functions/package.json` — _2025-11-12, peteywee_
 - `functions/src/index.ts` — _2025-11-05, peteywee_
 - `public/manifest.json` — _2025-10-24, peteywee_
@@ -494,4 +499,4 @@ scripts/index/generate-file-index.sh --write
 - `types/firebase-admin.d.ts` — _2025-11-05, peteywee_
 ---
 
-_Index file hash:_ `3a23cdfd08d2549aa9402025a251a3c05bb3ea0f2bf6a33f538491f2596c9c85`
+_Index file hash:_ `355cd6289c6dea3c07eaf5228f1a35648907d37d3d2ea5218da083df83f43ac7`
