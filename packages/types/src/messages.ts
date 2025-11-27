@@ -32,7 +32,7 @@ export const MessageSchema = z.object({
       z.object({
         type: z.string().min(1),
         id: z.string().min(1),
-      })
+      }),
     )
     .optional(),
   readBy: z.array(z.string()).default([]),

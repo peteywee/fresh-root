@@ -25,7 +25,7 @@ export const ComplianceDocSchema = z.object({
       z.object({
         uid: z.string().min(1),
         at: z.string(), // ISO
-      })
+      }),
     )
     .default([]),
 });

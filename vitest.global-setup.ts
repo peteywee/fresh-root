@@ -1,98 +1,81 @@
-// [P1][TEST][SERVER] Vitest global setup to run Next.js dev server
-// Tags: P1, TEST, SERVER
+// [P1 BLOCK 3] Vitest Global Setup
+// - Optionally boot a local Next.js dev server before tests
+// - Ensure we don't double-bind in CI / hosted runners
+// - Now also patches process.listeners for Vitest/Node20 interop
+
 import { spawn } from "node:child_process";
 import http from "node:http";
 
-function waitForHttp(url: string, timeoutMs = 60000, intervalMs = 500): Promise<void> {
+// [VITEST-PATCH] Ensure process.listeners exists for Node 20+ / Vitest
+if (typeof process.listeners !== "function") {
+  // Vitest expects process.listeners(event) to be callable when wiring error hooks.
+  // Some polyfills/envs can replace it; we guard to keep the test runner stable.
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  ;(process as any).listeners = ((event: string) => []) as any;
+}
+
+function waitForHttp(url: string, timeoutMs: number): Promise<void> {
   const start = Date.now();
+
   return new Promise((resolve, reject) => {
-    const check = () => {
+    const attempt = () => {
       const req = http.get(url, (res) => {
-        // Any HTTP response indicates the server is up
-        res.resume();
-        resolve();
-      });
-      req.on("error", () => {
-        if (Date.now() - start > timeoutMs) {
-          reject(new Error(`Timed out waiting for ${url}`));
-        } else {
-          setTimeout(check, intervalMs);
+        if (res.statusCode && res.statusCode >= 200 && res.statusCode < 500) {
+          res.resume();
+          return resolve();
         }
+        res.resume();
+        if (Date.now() - start > timeoutMs) {
+          return reject(
+            new Error(
+              `Timed out waiting for ${url}, last status: ${res.statusCode}`,
+            ),
+          );
+        }
+        setTimeout(attempt, 500);
+      });
+
+      req.on("error", (err) => {
+        if (Date.now() - start > timeoutMs) {
+          return reject(
+            new Error(`Timed out waiting for ${url}, last error: ${err}`),
+          );
+        }
+        setTimeout(attempt, 500);
       });
     };
-    check();
+
+    attempt();
   });
 }
 
-let child: ReturnType<typeof spawn> | undefined;
+async function globalSetup() {
+  const shouldStartNext =
+    process.env.START_NEXT_IN_TESTS === "true" &&
+    process.env.CI !== "true" &&
+    process.env.VERCEL !== "1";
 
-export default async function () {
-  // By default, do NOT start the Next dev server locally during tests.
-  // Start only when running in CI (e.g. GitHub Actions) or when explicitly
-  // requested by setting START_NEXT_IN_TESTS=true in the environment.
-  if (process.env.CI !== "true" && process.env.START_NEXT_IN_TESTS !== "true") {
-    // Developer machines: skip launching background Next server to avoid
-    // consuming RAM/CPU. To run local integration tests that require the
-    // app server, set START_NEXT_IN_TESTS=true before running tests.
-    // In CI, the workflow will set START_NEXT_IN_TESTS=true so the server
-    // is started there.
-    console.log(
-      "[vitest.global-setup] Skipping starting Next.js dev server locally. Set START_NEXT_IN_TESTS=true to enable.",
-    );
+  if (!shouldStartNext) {
     return;
   }
 
-  // If something is already listening, don't start another
-  try {
-    await waitForHttp("http://localhost:3000/api/health", 2000, 200);
-    return; // server is already up
-  } catch {}
+  console.log("[vitest.global-setup] Starting Next.js dev server for tests...");
 
-  // Start Next.js dev server in apps/web
-  child = spawn(process.platform === "win32" ? "pnpm.cmd" : "pnpm", ["dev"], {
-    cwd: "apps/web",
+  const dev = spawn("pnpm", ["--filter", "@apps/web", "dev"], {
+    stdio: "inherit",
     env: {
       ...process.env,
       NODE_ENV: "test",
-      NEXT_TELEMETRY_DISABLED: "1",
-      // Minimal server env to satisfy env.server.ts validation during tests
-      // Use demo project and a deterministic secret; never used in production
-      FIREBASE_PROJECT_ID: process.env.FIREBASE_PROJECT_ID || "demo-fresh",
-      SESSION_SECRET:
-        process.env.SESSION_SECRET || "test-session-secret-0123456789abcdefghijklmnopqrstuvwxyz", // >=32 chars
-      // Prefer emulators in tests to avoid real network calls
-      NEXT_PUBLIC_USE_EMULATORS: process.env.NEXT_PUBLIC_USE_EMULATORS || "true",
-      FIREBASE_AUTH_EMULATOR_HOST: process.env.FIREBASE_AUTH_EMULATOR_HOST || "127.0.0.1:9099",
-      FIRESTORE_EMULATOR_HOST: process.env.FIRESTORE_EMULATOR_HOST || "127.0.0.1:8080",
-      FIREBASE_STORAGE_EMULATOR_HOST:
-        process.env.FIREBASE_STORAGE_EMULATOR_HOST || "127.0.0.1:9199",
+      PORT: "3100",
     },
-    stdio: "inherit",
   });
 
-  // Wait until server responds
-  await waitForHttp("http://localhost:3000/api/health");
+  process.on("exit", () => {
+    dev.kill("SIGTERM");
+  });
 
-  // Return teardown
-  return async () => {
-    if (child && !child.killed) {
-      try {
-        const proc = child;
-        // Send SIGTERM and wait up to 10s for graceful shutdown
-        proc.kill("SIGTERM");
-        await new Promise<void>((resolve) => {
-          const timeout = setTimeout(() => {
-            try {
-              if (!proc.killed) proc.kill("SIGKILL");
-            } catch {}
-            resolve();
-          }, 10_000);
-          proc.once("exit", () => {
-            clearTimeout(timeout);
-            resolve();
-          });
-        });
-      } catch {}
-    }
-  };
+  await waitForHttp("http://localhost:3100/api/healthz", 60_000);
+  console.log("[vitest.global-setup] Next.js dev server is ready.");
 }
+
+export default globalSetup;
