@@ -30,7 +30,7 @@ const securityHeaders = [
 const nextConfig = {
   output: "standalone",
   reactStrictMode: true,
-  transpilePackages: ["@fresh-schedules/types"],
+  transpilePackages: ["@fresh-schedules/types", "@fresh-schedules/ui"],
   typescript: {
     ignoreBuildErrors: true,
   },

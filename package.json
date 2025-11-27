@@ -3,7 +3,7 @@
   "version": "1.1.0",
   "private": true,
   "scripts": {
-    "postinstall": "husky install || echo \"[postinstall] husky skipped\"",
+    "postinstall": "husky || echo \"[postinstall] husky skipped\"",
     "dev": "pnpm --filter @apps/web dev",
     "dev:web": "pnpm --filter @apps/web dev",
     "dev:api": "pnpm --filter @services/api dev",
@@ -23,7 +23,7 @@
     "build:types": "pnpm --filter @fresh-schedules/types build",
     "build:functions": "pnpm --filter functions build",
     "clean": "rimraf node_modules .turbo .next dist functions/lib apps/web/.next apps/web/dist packages/types/dist services/api/dist",
-    "prepare": "husky install",
+    "prepare": "husky",
     "ci": "pnpm lint && pnpm typecheck && pnpm test && pnpm build",
     "ci:lint": "pnpm lint",
     "ci:typecheck": "pnpm typecheck",
@@ -61,8 +61,11 @@
     "dotenv": "^16.4.5",
     "eslint": "^9.38.0",
     "eslint-config-next": "^16.0.1",
+    "globby": "^16.0.0",
+    "husky": "^9.1.7",
     "prettier": "^3.3.3",
     "rimraf": "^6.0.1",
+    "tailwindcss": "^3.4.13",
     "tsx": "^4.19.1",
     "typescript": "^5.6.3",
     "vitest": "^4.0.6"
@@ -74,7 +77,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "firebase-admin": "^13.6.0",
-    "firebase-functions": "^5.1.1",
+    "firebase-functions": "^7.0.0",
     "next": "^16.0.1",
     "next-pwa": "^5.6.0",
     "next-themes": "^0.4.5",
@@ -90,6 +93,11 @@
       "@lucide/react": "npm:lucide-react@latest",
       "@iac-fresh/eslint-config": "npm:eslint-config-next@latest",
       "@iac-fresh/prettier-config": "npm:prettier@latest"
+    },
+    "peerDependencyRules": {
+      "allowedVersions": {
+        "firebaseui>firebase": "12.x"
+      }
     }
   }
 }

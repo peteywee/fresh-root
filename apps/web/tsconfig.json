@@ -12,7 +12,8 @@
     "paths": {
       // @ maps to the web app root, enabling @/app/* and @/src/* imports
       "@/*": ["./*"],
-      "@fresh-schedules/types": ["../../packages/types/src/index.ts"]
+      "@fresh-schedules/types": ["../../packages/types/src/index.ts"],
+      "@fresh-schedules/ui": ["../../packages/ui/src/index.ts"]
     },
     "plugins": [
       {
