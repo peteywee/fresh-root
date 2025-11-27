@@ -7,9 +7,9 @@ To regenerate locally:
 scripts/index/generate-file-index.sh --write
 ```
 
-**Total files indexed:** 456
+**Total files indexed:** 457
 
-## Apps (163)
+## Apps (164)
 
 - `apps/web/.env.example` — _2025-11-06, peteywee_
 - `apps/web/app/(app)/demo/page.tsx` — _2025-11-05, peteywee_
@@ -38,6 +38,7 @@ scripts/index/generate-file-index.sh --write
 - `apps/web/app/api/items/route.ts` — _2025-11-12, peteywee_
 - `apps/web/app/api/join-tokens/route.ts` — _2025-11-12, peteywee_
 - `apps/web/app/api/metrics/route.ts` — _2025-11-12, peteywee_
+- `apps/web/app/api/onboarding/__tests__/onboarding-consolidated.test.ts` — _2025-11-27, patrick_
 - `apps/web/app/api/onboarding/_shared/rateLimit.ts` — _2025-11-11, peteywee_
 - `apps/web/app/api/onboarding/_shared/schemas.ts` — _2025-11-11, peteywee_
 - `apps/web/app/api/onboarding/activate-network/route.ts` — _2025-11-12, peteywee_
@@ -493,4 +494,4 @@ scripts/index/generate-file-index.sh --write
 - `types/firebase-admin.d.ts` — _2025-11-05, peteywee_
 ---
 
-_Index file hash:_ `5bbb040b15f4702bdc050d6c9b310817cf3aa10fd0560b239b73ddaafa686e7e`
+_Index file hash:_ `3a23cdfd08d2549aa9402025a251a3c05bb3ea0f2bf6a33f538491f2596c9c85`
