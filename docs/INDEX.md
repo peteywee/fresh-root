@@ -9,7 +9,7 @@ scripts/index/generate-file-index.sh --write
 
 **Total files indexed:** 463
 
-## Apps (164)
+## Apps (155)
 
 - `apps/web/.env.example` — _2025-11-06, peteywee_
 - `apps/web/app/(app)/demo/page.tsx` — _2025-11-05, peteywee_
@@ -38,7 +38,6 @@ scripts/index/generate-file-index.sh --write
 - `apps/web/app/api/items/route.ts` — _2025-11-12, peteywee_
 - `apps/web/app/api/join-tokens/route.ts` — _2025-11-12, peteywee_
 - `apps/web/app/api/metrics/route.ts` — _2025-11-12, peteywee_
-- `apps/web/app/api/onboarding/__tests__/onboarding-consolidated.test.ts` — _2025-11-27, patrick_
 - `apps/web/app/api/onboarding/_shared/rateLimit.ts` — _2025-11-11, peteywee_
 - `apps/web/app/api/onboarding/_shared/schemas.ts` — _2025-11-11, peteywee_
 - `apps/web/app/api/onboarding/activate-network/route.ts` — _2025-11-12, peteywee_
@@ -116,7 +115,6 @@ scripts/index/generate-file-index.sh --write
 - `apps/web/components/ui/Card.tsx` — _2025-11-05, peteywee_
 - `apps/web/components/ui/Input.tsx` — _2025-11-05, peteywee_
 - `apps/web/components/ui/Table.tsx` — _2025-11-05, peteywee_
-- `apps/web/eslint.config.mjs` — _2025-11-12, peteywee_
 - `apps/web/instrumentation.ts` — _2025-11-12, peteywee_
 - `apps/web/lib/animations.ts` — _2025-11-06, peteywee_
 - `apps/web/lib/firebase-admin.ts` — _2025-11-10, Patrick craven_
@@ -128,7 +126,6 @@ scripts/index/generate-file-index.sh --write
 - `apps/web/next-env.d.ts` — _2025-11-12, peteywee_
 - `apps/web/next.config.mjs` — _2025-11-12, Patrick craven_
 - `apps/web/package.json` — _2025-11-27, patrick_
-- `apps/web/postcss.config.cjs` — _2025-11-05, peteywee_
 - `apps/web/proxy.ts` — _2025-11-05, peteywee_
 - `apps/web/public/logo.svg` — _2025-11-12, peteywee_
 - `apps/web/public/manifest.json` — _2025-10-24, peteywee_
@@ -169,26 +166,16 @@ scripts/index/generate-file-index.sh --write
 - `apps/web/src/middleware.ts` — _2025-11-11, peteywee_
 - `apps/web/src/types/fresh-schedules-types.d.ts` — _2025-11-11, peteywee_
 - `apps/web/src/types/idb.d.ts` — _2025-11-05, peteywee_
-- `apps/web/tailwind.config.ts` — _2025-11-05, peteywee_
-- `apps/web/tsconfig.json` — _2025-11-07, copilot-swe-agent[bot]_
-- `apps/web/vitest.bench.config.ts` — _2025-11-06, peteywee_
-- `apps/web/vitest.config.ts` — _2025-11-10, Patrick craven_
-- `apps/web/vitest.d.ts` — _2025-11-05, peteywee_
-- `apps/web/vitest.setup.ts` — _2025-11-10, Patrick craven_
 
-## Packages (46)
+## Packages (40)
 
 - `packages/config/package.json` — _2025-10-30, peteywee_
 - `packages/config/src/index.ts` — _2025-11-05, peteywee_
-- `packages/config/tsconfig.json` — _2025-10-24, peteywee_
 - `packages/env/package.json` — _2025-11-12, peteywee_
 - `packages/env/src/index.ts` — _2025-11-12, peteywee_
 - `packages/mcp-server/package.json` — _2025-10-31, Patrick craven_
 - `packages/mcp-server/src/index.ts` — _2025-11-05, peteywee_
-- `packages/mcp-server/tsconfig.json` — _2025-10-29, peteywee_
 - `packages/rules-tests/package.json` — _2025-11-11, Patrick craven_
-- `packages/rules-tests/tsconfig.json` — _2025-10-30, peteywee_
-- `packages/rules-tests/vitest.config.ts` — _2025-11-05, peteywee_
 - `packages/types/package.json` — _2025-11-07, peteywee_
 - `packages/types/src/attendance.ts` — _2025-11-06, peteywee_
 - `packages/types/src/compliance.ts` — _2025-11-27, patrick_
@@ -216,16 +203,14 @@ scripts/index/generate-file-index.sh --write
 - `packages/types/src/venues.ts` — _2025-11-07, peteywee_
 - `packages/types/src/widgets.ts` — _2025-11-12, peteywee_
 - `packages/types/src/zones.ts` — _2025-11-06, peteywee_
-- `packages/types/tsconfig.json` — _2025-10-24, peteywee_
 - `packages/ui/package.json` — _2025-10-30, peteywee_
 - `packages/ui/src/Button.tsx` — _2025-11-05, peteywee_
 - `packages/ui/src/Card.tsx` — _2025-11-05, peteywee_
 - `packages/ui/src/Input.tsx` — _2025-11-05, peteywee_
 - `packages/ui/src/Modal.tsx` — _2025-11-05, peteywee_
 - `packages/ui/src/index.ts` — _2025-11-05, peteywee_
-- `packages/ui/tsconfig.json` — _2025-10-24, peteywee_
 
-## Services (18)
+## Services (17)
 
 - `services/api/.dockerignore` — _2025-10-30, peteywee_
 - `services/api/.env.example` — _2025-10-30, peteywee_
@@ -244,7 +229,6 @@ scripts/index/generate-file-index.sh --write
 - `services/api/src/obs/otel.ts` — _2025-11-05, peteywee_
 - `services/api/src/obs/sentry.ts` — _2025-10-31, Patrick craven_
 - `services/api/src/rbac.ts` — _2025-11-06, peteywee_
-- `services/api/tsconfig.json` — _2025-10-31, peteywee_
 
 ## Docs (131)
 
@@ -414,11 +398,12 @@ scripts/index/generate-file-index.sh --write
 - `scripts/tests/verify-tests-present-simple.mjs` — _2025-11-27, patrick_
 - `scripts/tests/verify-tests-present.mjs` — _2025-11-12, peteywee_
 
-## Tests (1)
+## Tests (2)
 
+- `apps/web/app/api/onboarding/__tests__/onboarding-consolidated.test.ts` — _2025-11-27, patrick_
 - `tests/rules/rules-smoke.spec.mts` — _2025-11-27, patrick_
 
-## CI / Config (48)
+## CI / Config (63)
 
 - `.github/ISSUE_TEMPLATE/_production-template.md` — _2025-11-05, peteywee_
 - `.github/ISSUE_TEMPLATE/data-004-backups-restore.md` — _2025-11-05, peteywee_
@@ -451,6 +436,14 @@ scripts/index/generate-file-index.sh --write
 - `.markdownlint.json` — _2025-11-11, peteywee_
 - `.mcp.json` — _2025-10-31, Patrick craven_
 - `.prettierrc.cjs` — _2025-11-05, peteywee_
+- `apps/web/eslint.config.mjs` — _2025-11-12, peteywee_
+- `apps/web/postcss.config.cjs` — _2025-11-05, peteywee_
+- `apps/web/tailwind.config.ts` — _2025-11-05, peteywee_
+- `apps/web/tsconfig.json` — _2025-11-07, copilot-swe-agent[bot]_
+- `apps/web/vitest.bench.config.ts` — _2025-11-06, peteywee_
+- `apps/web/vitest.config.ts` — _2025-11-10, Patrick craven_
+- `apps/web/vitest.d.ts` — _2025-11-05, peteywee_
+- `apps/web/vitest.setup.ts` — _2025-11-10, Patrick craven_
 - `cspell.json` — _2025-11-11, peteywee_
 - `eslint.config.mjs` — _2025-11-17, patrick_
 - `firebase.ci.json` — _2025-10-31, peteywee_
@@ -459,9 +452,16 @@ scripts/index/generate-file-index.sh --write
 - `jest-playwright.config.js` — _2025-11-05, peteywee_
 - `jest.config.ts` — _2025-11-05, peteywee_
 - `jest.rules.config.js` — _2025-11-07, peteywee_
+- `packages/config/tsconfig.json` — _2025-10-24, peteywee_
+- `packages/mcp-server/tsconfig.json` — _2025-10-29, peteywee_
+- `packages/rules-tests/tsconfig.json` — _2025-10-30, peteywee_
+- `packages/rules-tests/vitest.config.ts` — _2025-11-05, peteywee_
+- `packages/types/tsconfig.json` — _2025-10-24, peteywee_
+- `packages/ui/tsconfig.json` — _2025-10-24, peteywee_
 - `pnpm-lock.yaml` — _2025-11-27, patrick_
 - `pnpm-workspace.yaml` — _2025-10-30, copilot-swe-agent[bot]_
 - `postcss.config.cjs` — _2025-11-05, peteywee_
+- `services/api/tsconfig.json` — _2025-10-31, peteywee_
 - `tailwind.config.cjs` — _2025-11-05, peteywee_
 - `tsconfig.base.json` — _2025-11-07, peteywee_
 - `tsconfig.json` — _2025-10-31, Patrick craven_
