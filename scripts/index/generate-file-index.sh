@@ -39,6 +39,7 @@ EXCLUDES=(
   '/\.cache/'
   '\.log$'
   '\.tmp$'
+  '^docs/INDEX.md$'
 )
 EXCLUDE_RE="$(IFS='|'; echo "${EXCLUDES[*]}")"
 

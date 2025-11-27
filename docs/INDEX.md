@@ -7,7 +7,7 @@ To regenerate locally:
 scripts/index/generate-file-index.sh --write
 ```
 
-**Total files indexed:** 462
+**Total files indexed:** 461
 
 ## Apps (164)
 
@@ -246,11 +246,10 @@ scripts/index/generate-file-index.sh --write
 - `services/api/src/rbac.ts` — _2025-11-06, peteywee_
 - `services/api/tsconfig.json` — _2025-10-31, peteywee_
 
-## Docs (131)
+## Docs (130)
 
 - `docs/AUTO_SYMLINK_COMPLETION_REPORT.md` — _2025-11-12, peteywee_
 - `docs/AUTO_SYMLINK_FRAMEWORK.md` — _2025-11-12, peteywee_
-- `docs/INDEX.md` — _2025-11-27, patrick_
 - `docs/VERSION_v14.5.md` — _2025-11-19, patrick_
 - `docs/VSCODE_TASKS.md` — _2025-11-12, peteywee_
 - `docs/agents/GLOBAL_COGNITION_AGENT.md` — _2025-11-24, patrick_
@@ -443,10 +442,10 @@ scripts/index/generate-file-index.sh --write
 - `.github/runtime-allowlist.txt` — _2025-11-19, patrick_
 - `.github/workflows/agent.yml` — _2025-11-27, patrick_
 - `.github/workflows/auto-regenerate-index.yml` — _2025-11-27, patrick_
-- `.github/workflows/doc-parity.yml` — _2025-11-12, peteywee_
+- `.github/workflows/doc-parity.yml` — _2025-11-27, patrick_
 - `.github/workflows/file-index-guard.yml` — _2025-11-12, peteywee_
 - `.github/workflows/pr.yml` — _2025-11-27, patrick_
-- `.github/workflows/schema-catalog-guard.yml` — _2025-11-11, peteywee_
+- `.github/workflows/schema-catalog-guard.yml` — _2025-11-27, patrick_
 - `.markdownlint.json` — _2025-11-11, peteywee_
 - `.mcp.json` — _2025-10-31, Patrick craven_
 - `.prettierrc.cjs` — _2025-11-05, peteywee_
@@ -499,4 +498,4 @@ scripts/index/generate-file-index.sh --write
 - `types/firebase-admin.d.ts` — _2025-11-05, peteywee_
 ---
 
-_Index file hash:_ `355cd6289c6dea3c07eaf5228f1a35648907d37d3d2ea5218da083df83f43ac7`
+_Index file hash:_ `7c79337955f38366dadb24b20aad65ac0bd01dcf78ba01368ca2a1781b807919`
