@@ -1,0 +1,26 @@
+name: Global Cognition Agent
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  schedule:
+    - cron: '0 2 * * *' # nightly at 02:00 UTC
+
+jobs:
+  run-agent:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24.x'
+      - name: Install dependencies (no frozen lockfile)
+        run: pnpm -w install --no-frozen-lockfile
+      - name: Run Global Cognition Agent
+        run: node scripts/agent/agent.mjs --pr ${{ github.event.number }} --scope all --format json --scan-rbac --scan-patterns
+      - name: Upload agent artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: agent-artifact
+          path: artifacts/agent-${{ github.event.number }}.json
