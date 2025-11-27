@@ -21,8 +21,15 @@ jobs:
           node-version: "24.x"
       - name: Ensure PNPM is available
         run: |
-          corepack enable
-          corepack prepare pnpm@9.30.0 --activate
+          set -e
+          if command -v corepack >/dev/null 2>&1; then
+            corepack enable || true
+            corepack prepare pnpm@9 --activate || true
+          fi
+          if ! command -v pnpm >/dev/null 2>&1; then
+            npm install -g pnpm@9 || true
+          fi
+          pnpm --version || true
       - name: Install dependencies (no frozen lockfile)
         run: pnpm -w install --no-frozen-lockfile
       - name: Run agent unit tests
