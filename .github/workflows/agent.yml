@@ -4,19 +4,26 @@ on:
   pull_request:
     types: [opened, synchronize, reopened]
   schedule:
-    - cron: '0 2 * * *' # nightly at 02:00 UTC
+    - cron: "0 2 * * *" # nightly at 02:00 UTC
 
 jobs:
   run-agent:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+      pull-requests: write
     steps:
       - uses: actions/checkout@v4
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '24.x'
+          node-version: "24.x"
       - name: Install dependencies (no frozen lockfile)
         run: pnpm -w install --no-frozen-lockfile
+      - name: Run agent unit tests
+        run: node scripts/agent/tests/run-agent-test.mjs
+
       - name: Run Global Cognition Agent
         run: node scripts/agent/agent.mjs --pr ${{ github.event.number }} --scope all --format json --scan-rbac --scan-patterns
       - name: Upload agent artifact
@@ -24,3 +31,27 @@ jobs:
         with:
           name: agent-artifact
           path: artifacts/agent-${{ github.event.number }}.json
+
+      - name: Post agent summary comment
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const fs = require('fs');
+            const artifact = `artifacts/agent-${{ github.event.number }}.json`;
+            if (!fs.existsSync(artifact)) {
+              console.log('Agent artifact missing, skipping comment');
+              return;
+            }
+            const content = JSON.parse(fs.readFileSync(artifact, 'utf8'));
+            let md = `## Global Cognition Agent Results\n\n`;
+            for (const c of content.checks) {
+              md += `- **${c.name}**: ${c.result ? 'PASS' : 'FAIL'}\n`;
+              if (!c.result) md += `  <details><summary>Output</summary>\n\n\n\n\n\n\n\n\n\n\n\n\n\n\`\`\`\n${c.output}\n\`\`\`\n\n</details>\n`;
+            }
+            github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: md,
+            });
