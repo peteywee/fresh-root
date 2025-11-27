@@ -7,7 +7,7 @@ To regenerate locally:
 scripts/index/generate-file-index.sh --write
 ```
 
-**Total files indexed:** 461
+**Total files indexed:** 463
 
 ## Apps (164)
 
@@ -246,7 +246,7 @@ scripts/index/generate-file-index.sh --write
 - `services/api/src/rbac.ts` — _2025-11-06, peteywee_
 - `services/api/tsconfig.json` — _2025-10-31, peteywee_
 
-## Docs (130)
+## Docs (131)
 
 - `docs/AUTO_SYMLINK_COMPLETION_REPORT.md` — _2025-11-12, peteywee_
 - `docs/AUTO_SYMLINK_FRAMEWORK.md` — _2025-11-12, peteywee_
@@ -289,6 +289,7 @@ scripts/index/generate-file-index.sh --write
 - `docs/api/widgets.md` — _2025-11-12, peteywee_
 - `docs/api/zones.md` — _2025-11-12, peteywee_
 - `docs/bible/Project_Bible_v14.5.md` — _2025-11-11, peteywee_
+- `docs/blocks/SCHEMA_CATALOG.md` — _2025-11-27, patrick_
 - `docs/migration/v15/API_ROUTES_MINI_INDEX.md` — _2025-11-12, peteywee_
 - `docs/migration/v15/MIGRATION_READINESS_CHECKLIST.md` — _2025-11-12, peteywee_
 - `docs/migration/v15/PHASE2_SCHEMA_CROSSWALK.md` — _2025-11-12, peteywee_
@@ -379,7 +380,7 @@ scripts/index/generate-file-index.sh --write
 - `docs/templates/TEST_SPEC_TEMPLATE.md` — _2025-11-12, peteywee_
 - `docs/tests/COVERAGE_STRATEGY.md` — _2025-11-12, peteywee_
 
-## Scripts (30)
+## Scripts (31)
 
 - `scripts/agent/README.md` — _2025-11-26, patrick_
 - `scripts/agent/agent.mjs` — _2025-11-27, patrick_
@@ -400,9 +401,10 @@ scripts/index/generate-file-index.sh --write
 - `scripts/cleanup/purge-history-vendors.sh` — _2025-11-12, peteywee_
 - `scripts/cleanup/strip-legacy-vendors.sh` — _2025-11-12, peteywee_
 - `scripts/gen/scaffold-from-template.mjs` — _2025-11-12, peteywee_
+- `scripts/gen_schema_catalog.ts` — _2025-11-27, patrick_
 - `scripts/index/config.mjs` — _2025-11-12, peteywee_
 - `scripts/index/generate-file-index.mjs` — _2025-11-12, peteywee_
-- `scripts/index/generate-file-index.sh` — _2025-11-12, peteywee_
+- `scripts/index/generate-file-index.sh` — _2025-11-27, patrick_
 - `scripts/lint/lean.sh` — _2025-11-12, peteywee_
 - `scripts/migration/gen-mini-indexes.mjs` — _2025-11-12, peteywee_
 - `scripts/migration/migration-status.mjs` — _2025-11-12, peteywee_
@@ -498,4 +500,4 @@ scripts/index/generate-file-index.sh --write
 - `types/firebase-admin.d.ts` — _2025-11-05, peteywee_
 ---
 
-_Index file hash:_ `7c79337955f38366dadb24b20aad65ac0bd01dcf78ba01368ca2a1781b807919`
+_Index file hash:_ `9b96d208ddad6de0f97e16119e70cd3235686c9e282fafe8f1b28a15fa9523f9`
