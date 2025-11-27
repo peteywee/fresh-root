@@ -10,7 +10,7 @@ jobs:
   run-agent:
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: write
       issues: write
       pull-requests: write
     steps:
@@ -34,6 +34,22 @@ jobs:
         run: pnpm -w install --no-frozen-lockfile
       - name: Run agent unit tests
         run: node scripts/agent/tests/run-agent-test.mjs
+
+      - name: Regenerate docs/INDEX.md and update PR branch
+        if: ${{ github.event_name == 'pull_request' }}
+        run: |
+          set -e
+          ./scripts/index/generate-file-index.sh --write
+          # Only commit and push if the index changed
+          if ! git diff --quiet -- docs/INDEX.md; then
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git add docs/INDEX.md
+            git commit -m "ci(agent): regenerate docs/INDEX.md"
+            git push origin HEAD:${{ github.head_ref }}
+          else
+            echo "docs/INDEX.md unchanged"
+          fi
 
       - name: Run Global Cognition Agent
         continue-on-error: true
