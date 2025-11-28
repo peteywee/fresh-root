@@ -1,23 +1,28 @@
-name: Patterns & Symmetry
+name: Patterns & Symmetry (Production Standard: 90+)
 
 on:
   pull_request:
-    branches: [ main, develop ]
+    branches: [ main, develop, dev ]
   push:
-    branches: [ main ]
+    branches: [ main, dev ]
 
 jobs:
   validate-patterns:
+    name: Pattern Validator (90+ threshold)
     runs-on: ubuntu-latest
+    timeout-minutes: 10
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: '20'
+          cache: 'npm'
 
       - name: Install pnpm
         uses: pnpm/action-setup@v4
@@ -25,7 +30,20 @@ jobs:
           version: 9
           run_install: true
 
-      - name: Run Pattern Validator
+      - name: Run Pattern Validator (90+ threshold)
         env:
-          FRESH_PATTERNS_MIN_SCORE: '70'
+          FRESH_PATTERNS_MIN_SCORE: '90'
         run: pnpm lint:patterns
+        continue-on-error: false
+
+      - name: Comment PR on Failure
+        if: failure() && github.event_name == 'pull_request'
+        uses: actions/github-script@v6
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `❌ **Pattern Validation Failed (90+ Standard)**\n\nYour PR does not meet the production standard.\n\n**To fix:**\n\`\`\`bash\npnpm lint:patterns:verbose\n\`\`\`\n\nCommit requirements:\n- ✅ Zero Tier 0/1 violations (security & integrity)\n- ✅ Pattern score ≥ 90 (production ready)\n- ✅ All headers present\n- ✅ All validations in place\n\n📚 [See Standards](../docs/standards/00_STANDARDS_INDEX.md)`
+            })

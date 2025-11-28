@@ -47,8 +47,9 @@
     "index:repo": "tsx scripts/index_repo.ts",
     "docs:open": "xdg-open docs/DOCS_INDEX.md || open docs/DOCS_INDEX.md || echo \"Open docs/DOCS_INDEX.md manually\"",
     "docs:ai-context": "xdg-open docs/ai/CHAT_CONTEXT.md || open docs/ai/CHAT_CONTEXT.md || echo \"Open docs/ai/CHAT_CONTEXT.md manually\"",
-    "lint:patterns": "node scripts/validate-patterns.mjs",
-    "lint:patterns:verbose": "FRESH_PATTERNS_MIN_SCORE=0 node scripts/validate-patterns.mjs --verbose"
+    "lint:patterns": "FRESH_PATTERNS_MIN_SCORE=90 node scripts/validate-patterns.mjs",
+    "lint:patterns:verbose": "FRESH_PATTERNS_MIN_SCORE=0 node scripts/validate-patterns.mjs --verbose",
+    "lint:patterns:check": "FRESH_PATTERNS_MIN_SCORE=90 node scripts/validate-patterns.mjs && echo '✅ All checks passed at 90+ standard'"
   },
   "engines": {
     "node": ">=20.10.0",

@@ -16,7 +16,9 @@
  *   🟢 TIER 3 (STYLE): -0.5 points each, informational
  *
  * THRESHOLDS (defaults, overridable via CLI/env):
- *   MIN_SCORE: 70  (below this, overall status is FAILING)
+ *   MIN_SCORE: 90  (below this, overall status is FAILING)
+ *   Tier 0 or Tier 1: Blocks CI/CD — no exceptions
+ *   Score < 90: Fails CI on main and all PRs
  */
 
 import { readFileSync, readdirSync, statSync, existsSync } from 'fs';
@@ -38,7 +40,7 @@ function parseEnvNumber(name, fallback) {
   return Number.isFinite(n) ? n : fallback;
 }
 
-const DEFAULT_MIN_SCORE = 70;
+const DEFAULT_MIN_SCORE = 90;
 const MIN_SCORE = parseEnvNumber('FRESH_PATTERNS_MIN_SCORE', DEFAULT_MIN_SCORE);
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -306,7 +308,10 @@ class PatternValidator {
 
     let status = 'FAILING';
     let statusEmoji = '❌';
-    if (score >= 90) {
+    if (score >= 95) {
+      status = 'PERFECT';
+      statusEmoji = '💎';
+    } else if (score >= 90) {
       status = 'EXCELLENT';
       statusEmoji = '🏆';
     } else if (score >= MIN_SCORE) {
@@ -369,16 +374,20 @@ class PatternValidator {
     }
     console.log('───────────────────────────────────────────────────────────────\n');
 
-    if (score < MIN_SCORE) {
+    if (tier0.length > 0 || tier1.length > 0) {
       console.log(
-        `❌ Score ${score.toFixed(1)} is below minimum threshold (${MIN_SCORE}). Treat as CI failure unless explicitly overridden.`
+        `🚫 CRITICAL: Tier 0/1 violations detected. CI WILL BLOCK. Fix security and integrity issues before merging.`
       );
-    } else if (tier0.length === 0 && tier1.length === 0) {
-      if (score >= 90) {
-        console.log('🏆 EXCELLENT: Codebase in great shape. Minor improvements optional.');
-      } else {
-        console.log('✅ PASSING: Core patterns intact. Address Tier 2/3 issues as capacity allows.');
-      }
+    } else if (score < MIN_SCORE) {
+      console.log(
+        `⚠️  Score ${score.toFixed(1)} is below minimum threshold (${MIN_SCORE}). CI WILL BLOCK. Add missing headers or fix Tier 2 issues.`
+      );
+    } else if (score >= 95) {
+      console.log('💎 PERFECT: Codebase meets all production standards. Ready to deploy.');
+    } else if (score >= 90) {
+      console.log('🏆 EXCELLENT: Core patterns solid. Address remaining Tier 3 for 100%.');
+    } else {
+      console.log('✅ PASSING: Standards met. Improvements welcome.');
     }
   }
 

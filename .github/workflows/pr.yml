@@ -1,34 +1,73 @@
-name: pr-guard
+name: PR Quality Checks (Fast Track)
 
 on:
   pull_request:
-    branches: [main, develop]
+    branches: [ develop, dev ]
+    types: [ opened, synchronize, reopened ]
 
 jobs:
-  guard:
+  pr-quality:
+    name: Pull Request Checks
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    permissions:
+      contents: read
+      pull-requests: write
+
     steps:
-      - uses: actions/checkout@v4
-        with: { fetch-depth: 0 }
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-      # If you want to keep this "no-Node" for now, leave the below commented.
-      # - uses: pnpm/action-setup@v4
-      #   with: { version: 9 }
-      # - uses: actions/setup-node@v4
-      #   with:
-      #     node-version: '20'
-      #     cache: pnpm
-      # - run: pnpm i --frozen-lockfile
-      # - run: pnpm -w -r build
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
 
-      # Always block junk on main:
-      - name: Path guard (prevent workspace config/noise on main)
-        if: github.base_ref == 'main'
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+          run_install: true
+
+      # 1. Block junk files on main (if somehow this gets to main)
+      - name: Path Guard
         shell: bash
         run: |
-          git diff --name-only origin/${{ github.base_ref }}... > changed.txt
-          awk '
-            /(^\.vscode\/)|(^\.idea\/)/ { bad=1; print "Blocked on main:", $0 }
-            END{ if(bad==1) exit 1 }
-          ' changed.txt
+          git diff --name-only origin/${{ github.base_ref }}... > changed.txt || true
+          if grep -E '^\.(vscode|idea)/' changed.txt; then
+            echo "❌ Blocked: IDE-specific files not allowed"
+            exit 1
+          fi
+          echo "✅ Path guard passed"
+
+      # 2. Pattern validation
+      - name: Pattern Validator (90+ standard)
+        env:
+          FRESH_PATTERNS_MIN_SCORE: '90'
+        run: pnpm lint:patterns
+        continue-on-error: false
+
+      # 3. TypeScript check
+      - name: Type Safety
+        run: pnpm typecheck
+        continue-on-error: false
+
+      # 4. Lint check
+      - name: Code Quality
+        run: pnpm lint
+        continue-on-error: false
+
+      - name: Add Pass Comment
+        if: success()
+        uses: actions/github-script@v6
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `✅ **PR Quality Checks: PASSED**\n\n- ✅ Patterns (score ≥ 90)\n- ✅ TypeScript (0 errors)\n- ✅ ESLint (0 blocks)\n\nReady for review and merge to main.`
+            })
