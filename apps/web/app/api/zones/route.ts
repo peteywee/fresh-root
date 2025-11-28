@@ -1,8 +1,4 @@
-// [P1][API][ZONES] Zones API route handler
-// [P1][API][ZONES] Zones API route handler
-// [P1][API][ZONES] Zones API route handler
-// [P1][API][ZONES] Zones API route handler
-// Tags: P1, API, ZONES, validation, zod
+// [P0][CORE][API] Zones list endpoint
 
 import { CreateZoneSchema } from "@fresh-schedules/types";
 import { NextRequest, NextResponse } from "next/server";

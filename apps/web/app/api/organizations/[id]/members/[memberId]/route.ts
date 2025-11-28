@@ -1,5 +1,4 @@
-// [P1][API][ORGANIZATIONS] Organization member detail route handler
-// Tags: P1, API, ORGANIZATIONS, validation, zod
+// [P0][ORGS][API] Organization member management endpoint
 
 import { UpdateMembershipSchema } from "@fresh-schedules/types";
 import { NextRequest, NextResponse } from "next/server";

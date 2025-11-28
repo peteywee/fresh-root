@@ -1,6 +1,4 @@
-// [P1][API][JOIN_TOKENS] Join tokens API route handler
-// [P1][API][JOIN_TOKENS] Join tokens API route handler
-// Tags: P1, API, JOIN_TOKENS, validation, zod
+// [P0][CORE][API] Join token generation endpoint
 
 import { CreateJoinTokenSchema } from "@fresh-schedules/types";
 import { NextRequest, NextResponse } from "next/server";

@@ -1,5 +1,4 @@
-// [P0][API][ORGANIZATIONS] Organizations detail API route handler
-// Tags: P0, API, ORGANIZATIONS, validation, zod
+// [P0][ORGS][API] Organization management endpoint
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 

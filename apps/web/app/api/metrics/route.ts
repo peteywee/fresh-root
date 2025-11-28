@@ -1,5 +1,6 @@
-// [P0][OBSERVABILITY][METRICS] Prometheus-compatible metrics endpoint
+// [P0][METRICS][API] Prometheus metrics endpoint
 import { NextResponse } from "next/server";
+
 import { withSecurity } from "../_shared/middleware";
 
 /**

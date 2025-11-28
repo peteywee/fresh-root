@@ -1,8 +1,4 @@
-// [P0][API][CODE] Route API route handler
-// [P0][API][CODE] Route API route handler
-// [P0][API][CODE] Route API route handler
-// [P0][API][CODE] Route API route handler
-// Tags: P0, API, CODE
+// [P0][ONBOARDING][API] Onboarding profile endpoint
 import { NextResponse } from "next/server";
 import { z } from "zod";
 

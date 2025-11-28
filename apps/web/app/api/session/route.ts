@@ -1,10 +1,10 @@
-// [P0][AUTH][SESSION] Session cookie management endpoints
+// [P0][SESSION][API] Session management endpoint
 import { NextRequest } from "next/server";
 import { z } from "zod";
 
 import { getFirebaseAdminAuth } from "../../../lib/firebase-admin";
-import { parseJson, badRequest, serverError, ok } from "../_shared/validation";
 import { withSecurity } from "../_shared/middleware";
+import { parseJson, badRequest, serverError, ok } from "../_shared/validation";
 
 // Schema for session creation
 const CreateSessionSchema = z.object({

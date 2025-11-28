@@ -1,5 +1,6 @@
-//[P0][INTEGRITY][SCHEMA] Compliance barrel export (v14.0.0)
+// [P1][COMPLIANCE][SCHEMA] Compliance schema definitions
 import { z } from "zod";
+
 import { AdminResponsibilityFormSchema } from "./adminResponsibilityForm";
 
 /**

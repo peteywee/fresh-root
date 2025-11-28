@@ -1,5 +1,6 @@
-// [P0][API][LIVENESS] Health Check Endpoint
+// [P0][HEALTH][API] Kubernetes liveness probe endpoint
 import { NextResponse } from "next/server";
+
 import { withSecurity } from "../_shared/middleware";
 
 /**

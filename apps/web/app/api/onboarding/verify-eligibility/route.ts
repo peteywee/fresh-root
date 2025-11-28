@@ -1,4 +1,4 @@
-//[P0][API][ONBOARDING] Verify Eligibility Endpoint
+// [P0][ONBOARDING][API] Verify eligibility endpoint
 import { NextResponse } from "next/server";
 import { z } from "zod";
 

@@ -1,4 +1,4 @@
-// [P0][AUTH][MFA] MFA Setup Endpoint - Generates TOTP secret
+// [P0][AUTH][API] MFA setup endpoint
 import { NextRequest } from "next/server";
 import * as QRCode from "qrcode";
 import * as speakeasy from "speakeasy";

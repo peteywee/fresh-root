@@ -1,10 +1,10 @@
-// [P0][OPS][BACKUP] Internal endpoint to trigger Firestore export
+// [P0][BACKUP][API] Firestore backup endpoint
 import { GoogleAuth } from "google-auth-library";
 import { NextRequest } from "next/server";
 import { z } from "zod";
 
-import { badRequest, serverError, ok } from "../../_shared/validation";
 import { withSecurity } from "../../_shared/middleware";
+import { badRequest, serverError, ok } from "../../_shared/validation";
 
 // Schema for backup request
 const BackupSchema = z.object({

@@ -1,4 +1,4 @@
-// [P0][AUTH][SESSION] Session Bootstrap Endpoint
+// [P0][SESSION][API] Session bootstrap endpoint
 import { Firestore } from "firebase-admin/firestore";
 import { NextResponse } from "next/server";
 import { z } from "zod";

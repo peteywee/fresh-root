@@ -1,8 +1,9 @@
-// [P0][API][ONBOARDING] Activate Network Endpoint
+// [P0][ONBOARDING][API] Activate network endpoint
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
 import { withSecurity, type AuthenticatedRequest } from "../../_shared/middleware";
+
 import { adminDb } from "@/src/lib/firebase.server";
 
 // Schema for activate network request

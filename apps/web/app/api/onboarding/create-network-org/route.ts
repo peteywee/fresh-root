@@ -1,8 +1,4 @@
-//[P1][API][ONBOARDING] Create Network + Org Endpoint (server)
-//[P1][API][ONBOARDING] Create Network + Org Endpoint (server)
-//[P1][API][ONBOARDING] Create Network + Org Endpoint (server)
-//[P1][API][ONBOARDING] Create Network + Org Endpoint (server)
-// Tags: api, onboarding, network, org, venue, membership, events
+// [P0][ONBOARDING][API] Create organization network endpoint
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextRequest, NextResponse } from "next/server";

@@ -1,8 +1,4 @@
-// [P1][API][ATTENDANCE] Attendance records API route handler
-// [P1][API][ATTENDANCE] Attendance records API route handler
-// [P1][API][ATTENDANCE] Attendance records API route handler
-// [P1][API][ATTENDANCE] Attendance records API route handler
-// Tags: P1, API, ATTENDANCE, validation, zod
+// [P0][ATTENDANCE][API] Attendance tracking endpoint
 
 import { CreateAttendanceRecordSchema } from "@fresh-schedules/types";
 import { NextRequest, NextResponse } from "next/server";

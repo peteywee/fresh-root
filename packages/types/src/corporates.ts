@@ -1,4 +1,4 @@
-// [P0][SECURITY][CODE] Corporates
+// [P1][TYPES][SCHEMA] Schema definitions
 // Tags: P0, SECURITY, CODE
 /**
  * Corporate Schema - Brand/HQ Graph Node within Network

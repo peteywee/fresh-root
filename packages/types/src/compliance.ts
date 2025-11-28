@@ -1,4 +1,4 @@
-// [P0][APP][CODE] Compliance
+// [P1][TYPES][SCHEMA] Schema definitions
 // Tags: P0, APP, CODE
 import { z } from "zod";
 

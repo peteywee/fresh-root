@@ -1,8 +1,4 @@
-//[P1][API][CODE] Shifts API route handler
-//[P1][API][CODE] Shifts API route handler
-//[P1][API][CODE] Shifts API route handler
-//[P1][API][CODE] Shifts API route handler
-// Tags: P1, API, CODE, validation, zod
+// [P0][SHIFT][API] Shifts list endpoint
 
 import { NextRequest, NextResponse } from "next/server";
 

@@ -1,8 +1,4 @@
-// [P1][API][POSITIONS] Positions API route handler
-// [P1][API][POSITIONS] Positions API route handler
-// [P1][API][POSITIONS] Positions API route handler
-// [P1][API][POSITIONS] Positions API route handler
-// Tags: P1, API, POSITIONS, validation, zod
+// [P0][CORE][API] Positions list endpoint
 
 import { CreatePositionSchema } from "@fresh-schedules/types";
 import { NextRequest, NextResponse } from "next/server";

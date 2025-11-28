@@ -1,4 +1,4 @@
-// [P0][API][ONBOARDING] Admin Form Endpoint (server)
+// [P0][ONBOARDING][API] Admin responsibility form endpoint
 import {
   CreateAdminResponsibilityFormSchema,
   type CreateAdminResponsibilityFormInput,
@@ -6,8 +6,9 @@ import {
 import { randomBytes } from "crypto";
 import { NextRequest, NextResponse } from "next/server";
 
-import { adminDb as importedAdminDb } from "@/src/lib/firebase.server";
 import { withSecurity } from "../../_shared/middleware";
+
+import { adminDb as importedAdminDb } from "@/src/lib/firebase.server";
 
 /**
  * Inner handler logic (not exported)

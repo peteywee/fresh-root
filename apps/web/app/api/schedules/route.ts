@@ -1,5 +1,4 @@
-// [P1][API][SCHEDULES] Schedules API route handler
-// Tags: P1, API, SCHEDULES, validation, zod
+// [P0][SCHEDULE][API] Schedules list endpoint
 
 import { CreateScheduleSchema } from "@fresh-schedules/types";
 import { Timestamp } from "firebase-admin/firestore";

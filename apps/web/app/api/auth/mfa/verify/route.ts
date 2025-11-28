@@ -1,5 +1,4 @@
-// [P0][AUTH][API] MFA verification endpoint - confirms TOTP and sets custom claim
-// Tags: P0, AUTH, API
+// [P0][AUTH][API] MFA verification endpoint
 import { NextRequest } from "next/server";
 import * as speakeasy from "speakeasy";
 import { z } from "zod";

@@ -1,5 +1,4 @@
-// [P0][API][ORGANIZATIONS] Organizations API route handler
-// Tags: P0, API, ORGANIZATIONS, validation, zod
+// [P0][ORGS][API] Organizations list endpoint
 
 import { CreateOrganizationSchema } from "@fresh-schedules/types";
 import { NextRequest, NextResponse } from "next/server";

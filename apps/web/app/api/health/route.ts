@@ -1,5 +1,6 @@
-// [P0][OBSERVABILITY][HEALTH] Health check endpoint
+// [P0][HEALTH][API] Health check endpoint
 import { NextResponse } from "next/server";
+
 import { withSecurity } from "../_shared/middleware";
 
 /**

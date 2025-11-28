@@ -1,4 +1,4 @@
-//[P0][API][ONBOARDING] Join With Token Endpoint
+// [P0][ONBOARDING][API] Join network with token endpoint
 import { NextResponse } from "next/server";
 import { z } from "zod";
 

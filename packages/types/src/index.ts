@@ -1,6 +1,7 @@
 // [P0][INTEGRITY][SCHEMA] Package types index
 // Tags: P1, INTEGRITY, SCHEMA, INDEX
 import { z } from "zod";
+
 import { AdminResponsibilityFormSchema } from "./compliance/adminResponsibilityForm";
 
 export const Role = z.enum(["admin", "manager", "staff"]);

@@ -1,8 +1,4 @@
-// [P1][API][MEMBERSHIPS] Organization members API routes
-// [P1][API][MEMBERSHIPS] Organization members API routes
-// [P1][API][MEMBERSHIPS] Organization members API routes
-// [P1][API][MEMBERSHIPS] Organization members API routes
-// Tags: P1, API, MEMBERSHIPS, RBAC
+// [P0][ORGS][API] Organization members list endpoint
 import { CreateMembershipSchema, UpdateMembershipSchema } from "@fresh-schedules/types";
 import { NextResponse } from "next/server";
 

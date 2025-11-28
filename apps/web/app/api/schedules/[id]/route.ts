@@ -1,5 +1,4 @@
-//[P1][API][CODE] Schedules [id] API route handler
-// Tags: P1, API, CODE, validation, zod
+// [P0][SCHEDULE][API] Schedule management endpoint
 
 import { NextRequest, NextResponse } from "next/server";
 

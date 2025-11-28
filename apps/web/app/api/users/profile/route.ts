@@ -1,8 +1,4 @@
-// [P1][API][CODE] Route API route handler
-// [P1][API][CODE] Route API route handler
-// [P1][API][CODE] Route API route handler
-// [P1][API][CODE] Route API route handler
-// Tags: P1, API, CODE
+// [P0][CORE][API] User profile endpoint
 import { NextRequest } from "next/server";
 import { z } from "zod";
 

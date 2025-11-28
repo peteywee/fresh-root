@@ -1,8 +1,4 @@
-// [P1][API][VENUES] Venues API route handler
-// [P1][API][VENUES] Venues API route handler
-// [P1][API][VENUES] Venues API route handler
-// [P1][API][VENUES] Venues API route handler
-// Tags: P1, API, VENUES, validation, zod
+// [P0][CORE][API] Venues list endpoint
 
 import { CreateVenueSchema } from "@fresh-schedules/types";
 import { NextRequest, NextResponse } from "next/server";

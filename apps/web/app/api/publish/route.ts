@@ -1,8 +1,4 @@
-// [P0][API][SCHEDULE] Schedule publish endpoint
-// [P0][API][SCHEDULE] Schedule publish endpoint
-// [P0][API][SCHEDULE] Schedule publish endpoint
-// [P0][API][SCHEDULE] Schedule publish endpoint
-// Tags: P0, API, SCHEDULE
+// [P0][CORE][API] Content publishing endpoint
 import { Timestamp } from "firebase-admin/firestore";
 import { NextRequest } from "next/server";
 import { z } from "zod";

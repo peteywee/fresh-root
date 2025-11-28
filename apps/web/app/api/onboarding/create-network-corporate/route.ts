@@ -1,4 +1,4 @@
-//[P0][API][ONBOARDING] Create Network + Corporate Endpoint
+// [P0][ONBOARDING][API] Create corporate network endpoint
 import { NextResponse } from "next/server";
 import { z } from "zod";
 

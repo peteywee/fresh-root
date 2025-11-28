@@ -1,5 +1,4 @@
-// [P1][API][CODE] Route API route handler
-// [P1][API][CODE] Route API route handler
+// [P0][CORE][API] Widgets management endpoint
 import { NextResponse, type NextRequest } from "next/server";
 
 // [P1][API][CODE] Route API route handler

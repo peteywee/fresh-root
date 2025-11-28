@@ -1,5 +1,4 @@
-// [P1][API][CODE] Route API route handler
-// [P1][API][CODE] Route API route handler
+// [P0][CORE][API] Template endpoint for new routes
 import { NextRequest, NextResponse } from "next/server";
 
 // [P1][API][CODE] Route API route handler

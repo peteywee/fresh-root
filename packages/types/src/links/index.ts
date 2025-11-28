@@ -1,5 +1,6 @@
-//[P0][INTEGRITY][SCHEMA] Links barrel export (v14.0.0)
+// [P1][LINKS][SCHEMA] Corporate-Organization links schema
 import { z } from "zod";
+
 import { CorpOrgLinkSchema } from "./corpOrgLinks";
 
 /**
