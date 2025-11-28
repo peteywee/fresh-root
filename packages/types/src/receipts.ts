@@ -1,3 +1,5 @@
+// [P1][TYPES][SCHEMA] Schema definitions
+// Tags: P2, APP, CODE
 import { z } from "zod";
 
 /**

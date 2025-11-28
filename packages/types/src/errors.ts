@@ -1,4 +1,4 @@
-// [P2][APP][CODE] Errors
+// [P1][TYPES][SCHEMA] Schema definitions
 // Tags: P2, APP, CODE
 /**
  * [P1][TYPES][ERRORS] Shared error response types

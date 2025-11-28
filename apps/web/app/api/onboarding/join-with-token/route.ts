@@ -1,16 +1,19 @@
+// [P0][ONBOARDING][API] Join network with token endpoint
+import { NextResponse } from "next/server";
+import { z } from "zod";
+
+import { withSecurity, type AuthenticatedRequest } from "../../_shared/middleware";
+
+// Schema for join with token request
+const JoinWithTokenSchema = z.object({
+  token: z.string(),
+});
+
 //[P1][API][ONBOARDING] Join With Token Endpoint (server)
 //[P1][API][ONBOARDING] Join With Token Endpoint (server)
-import { traceFn } from "@/app/api/_shared/otel";
-//[P1][API][ONBOARDING] Join With Token Endpoint (server)
-import { withGuards } from "@/app/api/_shared/security";
-//[P1][API][ONBOARDING] Join With Token Endpoint (server)
-import { jsonOk, jsonError } from "@/app/api/_shared/response";
 // Tags: api, onboarding, join-token, membership, events
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { NextResponse } from "next/server";
-
-import { withSecurity, type AuthenticatedRequest } from "../../_shared/middleware";
 
 import { logEvent } from "@/src/lib/eventLog";
 import { adminDb as importedAdminDb } from "@/src/lib/firebase.server";
@@ -27,7 +30,7 @@ type JoinTokenDoc = {
   maxUses?: number;
 };
 
-export async function joinWithTokenHandler(
+async function joinWithTokenHandlerImpl(
   req: AuthenticatedRequest & {
     user?: { uid: string; customClaims?: Record<string, unknown> };
   },
@@ -58,7 +61,16 @@ export async function joinWithTokenHandler(
     return NextResponse.json({ error: "invalid_json" }, { status: 400 });
   }
 
-  const token = (body as Record<string, unknown>)?.token as string | undefined;
+  // Validate input with Zod
+  const result = JoinWithTokenSchema.safeParse(body);
+  if (!result.success) {
+    return NextResponse.json(
+      { error: "validation_error", issues: result.error.issues },
+      { status: 422 },
+    );
+  }
+
+  const token = result.data.token;
   if (!token) {
     return NextResponse.json({ error: "missing_token" }, { status: 422 });
   }
@@ -191,7 +203,7 @@ export async function joinWithTokenHandler(
 
 export const POST = withSecurity(
   async (req: AuthenticatedRequest, _ctx: unknown) => {
-    return joinWithTokenHandler(req, importedAdminDb);
+    return joinWithTokenHandlerImpl(req, importedAdminDb);
   },
   { requireAuth: true },
 );

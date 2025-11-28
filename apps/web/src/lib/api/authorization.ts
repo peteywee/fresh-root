@@ -25,6 +25,9 @@ export function requireOrgMembership(
     request: NextRequest,
     context: { params: Record<string, string> | Promise<Record<string, string>> },
   ): Promise<NextResponse> => {
+    // Resolve params if it's a Promise (Next.js 14+)
+    const params = await Promise.resolve(context.params);
+    
     const userId = request.headers.get("x-user-id");
     if (!userId)
       return NextResponse.json({ error: "Unauthorized - No user session" }, { status: 401 });
@@ -36,11 +39,8 @@ export function requireOrgMembership(
         { status: 400 },
       );
 
-    // Resolve params if it's a Promise (Next.js 14+)
-    const resolvedParams = await Promise.resolve(context.params);
-
     // NOTE: In a full implementation, verify membership in Firestore here.
-    return handler(request, { params: resolvedParams, userId, orgId });
+    return handler(request, { ...context, params, userId, orgId });
   };
 }
 
@@ -49,13 +49,18 @@ export function requireRole(requiredRole: OrgRole) {
   return function (
     handler: (
       request: NextRequest,
-      context: { params: Record<string, string>; userId: string; orgId: string; roles: OrgRole[] },
+      context: {
+        params: Record<string, string>;
+        userId: string;
+        orgId: string;
+        roles: OrgRole[];
+      },
     ) => Promise<NextResponse>,
   ) {
     return async (
       request: NextRequest,
       context: {
-        params: Record<string, string> | Promise<Record<string, string>>;
+        params: Record<string, string>;
         userId: string;
         orgId: string;
       },
@@ -76,13 +81,8 @@ export function requireRole(requiredRole: OrgRole) {
         );
       }
 
-      // Resolve params if it's a Promise (Next.js 14+)
-      const resolvedParams = await Promise.resolve(context.params);
-
       return handler(request, {
-        params: resolvedParams,
-        userId: context.userId,
-        orgId: context.orgId,
+        ...context,
         roles,
       });
     };

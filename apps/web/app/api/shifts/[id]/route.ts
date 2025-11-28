@@ -1,11 +1,4 @@
-//[P1][API][CODE] Shifts [id] API route handler
-//[P1][API][CODE] Shifts [id] API route handler
-import { traceFn } from "@/app/api/_shared/otel";
-//[P1][API][CODE] Shifts [id] API route handler
-import { withGuards } from "@/app/api/_shared/security";
-//[P1][API][CODE] Shifts [id] API route handler
-import { jsonOk, jsonError } from "@/app/api/_shared/response";
-// Tags: P1, API, CODE, validation, zod
+// [P0][SHIFT][API] Shift management endpoint
 
 import { NextRequest, NextResponse } from "next/server";
 
@@ -13,6 +6,7 @@ import { requireOrgMembership, requireRole } from "../../../../src/lib/api";
 import { sanitizeObject } from "../../../../src/lib/api/sanitize";
 import { withSecurity } from "../../_shared/middleware";
 import { badRequest, serverError, UpdateShiftSchema } from "../../_shared/validation";
+
 
 // Rate limiting via withSecurity options
 
@@ -23,8 +17,7 @@ export const GET = withSecurity(
       context: { params: Record<string, string>; userId: string; orgId: string },
     ) => {
       try {
-        const { params } = context;
-        const { id } = params;
+        const { id } = context.params;
         const shift = {
           id,
           scheduleId: "sched-1",
@@ -58,8 +51,7 @@ export const PATCH = withSecurity(
         },
       ) => {
         try {
-          const { params } = context;
-          const { id } = params;
+          const { id } = context.params;
           const body = await request.json();
           const validated = UpdateShiftSchema.parse(body);
           const sanitized = sanitizeObject(validated);
@@ -94,8 +86,7 @@ export const DELETE = withSecurity(
         },
       ) => {
         try {
-          const { params } = context;
-          const { id } = params;
+          const { id } = context.params;
           return NextResponse.json({ message: "Shift deleted successfully", id });
         } catch {
           return serverError("Failed to delete shift");

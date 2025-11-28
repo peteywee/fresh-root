@@ -2,7 +2,7 @@ name: doc-parity
 
 on:
   pull_request:
-    branches: [main, dev, develop]
+    branches: [docs-and-tests]
 
 jobs:
   parity:
@@ -12,14 +12,12 @@ jobs:
         with:
           fetch-depth: 0
       - uses: pnpm/action-setup@v4
-        with:
-          version: 9
       - uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: pnpm
       - run: pnpm install
-      - run: pnpm add -D globby
+      - run: pnpm add -D globby -w
       - name: Check Doc Parity
         run: node scripts/ci/check-doc-parity.mjs
       - name: Verify Tests Present

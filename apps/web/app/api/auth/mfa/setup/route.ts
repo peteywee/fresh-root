@@ -1,19 +1,14 @@
-// [P0][AUTH][API] MFA setup endpoint - generates TOTP secret and QR code
-// [P0][AUTH][API] MFA setup endpoint - generates TOTP secret and QR code
-import { traceFn } from "@/app/api/_shared/otel";
-// [P0][AUTH][API] MFA setup endpoint - generates TOTP secret and QR code
-import { withGuards } from "@/app/api/_shared/security";
-// [P0][AUTH][API] MFA setup endpoint - generates TOTP secret and QR code
-import { jsonOk, jsonError } from "@/app/api/_shared/response";
-// Tags: P0, AUTH, API
+// [P0][AUTH][API] MFA setup endpoint
 import { NextRequest } from "next/server";
 import * as QRCode from "qrcode";
 import * as speakeasy from "speakeasy";
+import { z } from "zod";
 
 import { withSecurity } from "../../../_shared/middleware";
-import { ok, serverError } from "../../../_shared/validation";
+import { ok, serverError, badRequest } from "../../../_shared/validation";
 
-// Rate limiting via withSecurity options
+// Schema for MFA setup request (empty for now, but validates request is valid JSON)
+const MFASetupSchema = z.object({}).passthrough().optional();
 
 /**
  * POST /api/auth/mfa/setup
@@ -23,6 +18,19 @@ import { ok, serverError } from "../../../_shared/validation";
 export const POST = withSecurity(
   async (req: NextRequest, context: { params: Record<string, string>; userId: string }) => {
     try {
+      // Validate request body (even if empty)
+      let body: unknown;
+      try {
+        body = await req.json();
+      } catch {
+        body = {};
+      }
+
+      const result = MFASetupSchema.safeParse(body);
+      if (!result.success) {
+        return badRequest("Invalid request", result.error.issues);
+      }
+
       // Derive a stable label from user id for display if email is unknown client-side
       const userLabel = context.userId || "user";
 

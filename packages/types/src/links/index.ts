@@ -1,5 +1,7 @@
-//[P1][TYPES][BARREL] Links barrel export (v14.0.0)
-// Tags: barrel, exports, types
+// [P1][LINKS][SCHEMA] Corporate-Organization links schema
+import { z } from "zod";
+
+import { CorpOrgLinkSchema } from "./corpOrgLinks";
 
 /**
  * Links barrel export
@@ -8,3 +10,6 @@
 
 export * from "./corpOrgLinks";
 export * from "./orgVenueAssignments";
+
+// Type inference from Zod schemas
+export type CorpOrgLink = z.infer<typeof CorpOrgLinkSchema>;

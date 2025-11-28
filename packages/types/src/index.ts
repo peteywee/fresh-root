@@ -1,9 +1,14 @@
-// [P1][INTEGRITY][SCHEMA] Package types index
+// [P0][INTEGRITY][SCHEMA] Package types index
 // Tags: P1, INTEGRITY, SCHEMA, INDEX
 import { z } from "zod";
 
+import { AdminResponsibilityFormSchema } from "./compliance/adminResponsibilityForm";
+
 export const Role = z.enum(["admin", "manager", "staff"]);
 export type Role = z.infer<typeof Role>;
+
+// Type inference from compliance schemas
+export type AdminResponsibilityForm = z.infer<typeof AdminResponsibilityFormSchema>;
 
 export * from "./rbac";
 export * from "./corporates";
@@ -28,4 +33,3 @@ export * as widgets from "./widgets";
 export * as messages from "./messages";
 export * as receipts from "./receipts";
 export * as compliance from "./compliance";
-

@@ -1,22 +1,29 @@
+// [P0][ONBOARDING][API] Create corporate network endpoint
+import { NextResponse } from "next/server";
+import { z } from "zod";
+
+import { withSecurity, type AuthenticatedRequest } from "../../_shared/middleware";
+
+// Schema for corporate network creation
+const CreateNetworkCorporateSchema = z.object({
+  corporateName: z.string(),
+  brandName: z.string().optional(),
+  industry: z.string().optional(),
+  approxLocations: z.number().optional(),
+  formToken: z.string(),
+});
+
 //[P1][API][ONBOARDING] Create Network + Corporate Endpoint (server)
 //[P1][API][ONBOARDING] Create Network + Corporate Endpoint (server)
-import { traceFn } from "@/app/api/_shared/otel";
-//[P1][API][ONBOARDING] Create Network + Corporate Endpoint (server)
-import { withGuards } from "@/app/api/_shared/security";
-//[P1][API][ONBOARDING] Create Network + Corporate Endpoint (server)
-import { jsonOk, jsonError } from "@/app/api/_shared/response";
 // Tags: api, onboarding, network, corporate, membership, events
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { NextResponse } from "next/server";
-
-import { withSecurity, type AuthenticatedRequest } from "../../_shared/middleware";
 
 import { logEvent } from "@/src/lib/eventLog";
 import { adminDb as importedAdminDb } from "@/src/lib/firebase.server";
 import { markOnboardingComplete } from "@/src/lib/userOnboarding";
 
-export async function createNetworkCorporateHandler(
+async function createNetworkCorporateHandlerImpl(
   req: AuthenticatedRequest & {
     user?: { uid: string; customClaims?: Record<string, unknown> };
   },
@@ -60,8 +67,16 @@ export async function createNetworkCorporateHandler(
     return NextResponse.json({ error: "invalid_json" }, { status: 400 });
   }
 
-  const { corporateName, brandName, industry, approxLocations, formToken } =
-    (body as Record<string, unknown>) || {};
+  // Validate input with Zod
+  const parseResult = CreateNetworkCorporateSchema.safeParse(body);
+  if (!parseResult.success) {
+    return NextResponse.json(
+      { error: "validation_error", issues: parseResult.error.issues },
+      { status: 422 },
+    );
+  }
+
+  const { corporateName, brandName, industry, approxLocations, formToken } = parseResult.data;
 
   if (!formToken) return NextResponse.json({ error: "missing_form_token" }, { status: 422 });
   if (String(formToken).includes("/")) {
@@ -229,7 +244,7 @@ export async function createNetworkCorporateHandler(
 
 export const POST = withSecurity(
   async (req: AuthenticatedRequest, _ctx: unknown) => {
-    return createNetworkCorporateHandler(req, importedAdminDb);
+    return createNetworkCorporateHandlerImpl(req, importedAdminDb);
   },
   {
     requireAuth: true,

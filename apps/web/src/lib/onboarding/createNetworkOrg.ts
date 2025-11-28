@@ -1,11 +1,11 @@
 // [P1][FIREBASE][HELPER] Create network/org/venue helper
 // Tags: FIREBASE, ONBOARDING, HELPERS
 import type { CreateNetworkOrgPayload } from "@fresh-schedules/types";
-import type { Firestore, DocumentReference, WriteBatch } from "firebase-admin/firestore";
+import { type Firestore, type DocumentReference, type WriteBatch, Timestamp } from "firebase-admin/firestore";
 
 import { loadAdminFormDraft, markAdminFormDraftConsumed } from "./adminFormDrafts";
 
-import { adminDb, adminSdk } from "@/src/lib/firebase.server";
+import { adminDb } from "@/src/lib/firebase.server";
 
 const db = adminDb as Firestore | undefined;
 
@@ -34,7 +34,7 @@ export async function createNetworkWithOrgAndVenue(
     Record<string, unknown>
   >;
   const networkId = networkRef.id;
-  const now = adminSdk.firestore.Timestamp.now();
+  const now = Timestamp.now();
 
   const batch: WriteBatch = root.batch();
 

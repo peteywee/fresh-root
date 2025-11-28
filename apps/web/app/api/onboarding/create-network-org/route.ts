@@ -1,17 +1,19 @@
-//[P1][API][ONBOARDING] Create Network + Org Endpoint (server)
-//[P1][API][ONBOARDING] Create Network + Org Endpoint (server)
-import { traceFn } from "@/app/api/_shared/otel";
-//[P1][API][ONBOARDING] Create Network + Org Endpoint (server)
-import { withGuards } from "@/app/api/_shared/security";
-//[P1][API][ONBOARDING] Create Network + Org Endpoint (server)
-import { jsonOk, jsonError } from "@/app/api/_shared/response";
-// Tags: api, onboarding, network, org, venue, membership, events
+// [P0][ONBOARDING][API] Create organization network endpoint
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextRequest, NextResponse } from "next/server";
+import { z } from "zod";
 
 import { withRequestLogging } from "../../_shared/logging";
 import { withSecurity, type AuthenticatedRequest } from "../../_shared/middleware";
+
+// Schema for org network creation
+const CreateNetworkOrgSchema = z.object({
+  orgName: z.string(),
+  venueName: z.string().optional(),
+  location: z.object({}).passthrough().optional(),
+  formToken: z.string(),
+});
 
 import { logEvent } from "@/src/lib/eventLog";
 import { adminDb as importedAdminDb } from "@/src/lib/firebase.server";
@@ -20,7 +22,7 @@ import { markOnboardingComplete } from "@/src/lib/userOnboarding";
 /**
  * Inner handler exported for tests. Accepts an optional injected adminDb for testability.
  */
-export async function createNetworkOrgHandler(
+async function createNetworkOrgHandlerImpl(
   req: AuthenticatedRequest & {
     user?: { uid: string; customClaims?: Record<string, unknown> };
   },
@@ -72,7 +74,16 @@ export async function createNetworkOrgHandler(
     return NextResponse.json({ error: "invalid_json" }, { status: 400 });
   }
 
-  const { orgName, venueName, formToken, location } = (body as Record<string, unknown>) || {};
+  // Validate input with Zod
+  const result = CreateNetworkOrgSchema.safeParse(body);
+  if (!result.success) {
+    return NextResponse.json(
+      { error: "validation_error", issues: result.error.issues },
+      { status: 422 },
+    );
+  }
+
+  const { orgName, venueName, formToken, location } = result.data as Record<string, unknown>;
 
   if (!formToken) return NextResponse.json({ error: "missing_form_token" }, { status: 422 });
 
@@ -293,7 +304,7 @@ export async function createNetworkOrgHandler(
 // Keep Next.js route export for runtime (secured + logged)
 // Adapter wraps the test-friendly handler for use with withSecurity middleware
 async function apiRoute(req: NextRequest, _ctx: Record<string, unknown>) {
-  return createNetworkOrgHandler(req as AuthenticatedRequest);
+  return createNetworkOrgHandlerImpl(req as AuthenticatedRequest);
 }
 
 export const POST = withRequestLogging(withSecurity(apiRoute, { requireAuth: true }));

@@ -1,11 +1,8 @@
-// [P1][API][CODE] Route API route handler
-// [P1][API][CODE] Route API route handler
-import { traceFn } from "@/app/api/_shared/otel";
-// [P1][API][CODE] Route API route handler
-import { withGuards } from "@/app/api/_shared/security";
-// [P1][API][CODE] Route API route handler
-import { jsonOk, jsonError } from "@/app/api/_shared/response";
-// Tags: P1, API, CODE
+// [P0][HEALTH][API] Kubernetes liveness probe endpoint
+import { NextResponse } from "next/server";
+
+import { withSecurity } from "../_shared/middleware";
+
 /**
  * [P0][API][HEALTH] Health Check Endpoint
  * Tags: api, health, infra
@@ -15,9 +12,7 @@ import { jsonOk, jsonError } from "@/app/api/_shared/response";
  * - Does NOT hit Firestore; use for "is the web app alive" checks
  */
 
-import { NextResponse } from "next/server";
-
-export async function GET() {
+export const GET = withSecurity(async () => {
   return NextResponse.json(
     {
       ok: true,
@@ -27,9 +22,9 @@ export async function GET() {
     },
     { status: 200 },
   );
-}
+});
 
 // Some monitors use HEAD for cheaper checks
-export async function HEAD() {
-  return new Response(null, { status: 200 });
-}
+export const HEAD = withSecurity(async () => {
+  return NextResponse.json(null, { status: 200 });
+});

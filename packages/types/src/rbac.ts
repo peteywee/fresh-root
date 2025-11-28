@@ -1,4 +1,4 @@
-// [P0][RBAC][CODE] Rbac
+// [P1][TYPES][SCHEMA] Schema definitions
 // Tags: P0, RBAC, CODE
 import { z } from "zod";
 

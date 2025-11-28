@@ -1,51 +1,40 @@
-// [P1][TEST][ROOT] Root Vitest configuration
-// Tags: P1, TEST, CONFIG
+// [P1][TEST][ENV] Vitest Config tests
+// Tags: P1, TEST, ENV, TEST
 import { defineConfig } from "vitest/config";
-import path from "node:path";
+import path from "path";
 
 export default defineConfig({
-  // Avoid requiring @vitejs/plugin-react at the repo root; rely on esbuild JSX
   test: {
+    // Global defaults for the monorepo
     globals: true,
-    // Use a DOM-like environment for React component tests
-    environment: "happy-dom",
-    // Start/stop the Next.js dev server for integration tests that hit localhost:3000
-    globalSetup: path.resolve(__dirname, "vitest.global-setup.ts"),
-    // Reuse the app's setup (jest-dom, router mocks, env)
-    setupFiles: [path.resolve(__dirname, "apps/web/vitest.setup.ts")],
-    // Provide consistent env vars during unit tests (non-rules)
-    env: {
-      FIREBASE_PROJECT_ID: "fresh-schedules-dev",
-      SESSION_SECRET: "test-secret-please-change",
+
+    // "node" keeps things simple for rules/tests; UI bits can still run in node + happy-dom if they use it.
+    environment: "node",
+
+    // Avoid fork-based pools; use threads and force single-thread behaviour.
+    pool: "threads",
+    poolOptions: {
+      threads: {
+        singleThread: true,
+      },
     },
-    // Limit discovery to our intended packages; avoid picking up compiled tests in services/**/dist
+
+    // Clamp workers down to keep memory/CPU predictable in Crostini.
+    maxWorkers: 1,
+
+    // Global setup – we’ll use this to guard process.listeners and import other setup.
+    setupFiles: ["./vitest.setup.ts"],
+
+    // Test globs across your workspaces.
     include: [
-      "apps/web/src/**/__tests__/**/*.{test,spec}.{ts,tsx,js,jsx}",
-      "apps/web/app/**/__tests__/**/*.{test,spec}.{ts,tsx,js,jsx}",
-      "apps/web/src/**/*.{test,spec}.{ts,tsx,js,jsx}",
-      "apps/web/app/**/*.{test,spec}.{ts,tsx,js,jsx}",
-      "packages/**/src/**/__tests__/**/*.{test,spec}.{ts,tsx,js,jsx}",
+      "apps/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}",
+      "services/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}",
+      "packages/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}",
     ],
-    exclude: ["**/node_modules/**", "**/dist/**", "services/**", "tests/rules/**"],
-    coverage: {
-      provider: "v8",
-      reporter: ["text", "json", "html"],
-      include: [
-        "apps/web/app/**/*.{ts,tsx}",
-        "apps/web/src/**/*.{ts,tsx}",
-        "packages/**/src/**/*.{ts,tsx}",
-      ],
-      exclude: ["**/*.d.ts", "**/*.config.*", "**/__tests__/**"],
-    },
-  },
-  esbuild: {
-    jsx: "automatic",
-    jsxDev: true,
-    jsxImportSource: "react",
   },
   resolve: {
     alias: {
-      "@": path.resolve(__dirname, "apps/web"),
+      "@": path.resolve(__dirname, "."),
     },
   },
 });

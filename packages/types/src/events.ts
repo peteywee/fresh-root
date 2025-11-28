@@ -1,4 +1,4 @@
-// [P2][APP][CODE] Events
+// [P1][TYPES][SCHEMA] Schema definitions
 // Tags: P2, APP, CODE
 /**
  * [P1][PLATFORM][EVENTS] Core event types for Fresh Schedules v14

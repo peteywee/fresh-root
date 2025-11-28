@@ -114,7 +114,6 @@ This is the consolidated master reference for all API routes in the project.
 
 See `.github/workflows/doc-parity.yml` for automated validation of API documentation.
 
-
 ## TEST SPEC
 
 - TODO: Add tests for this doc. Example: `apps/web/app/api/onboarding/__tests__/onboarding-consolidated.test.ts`

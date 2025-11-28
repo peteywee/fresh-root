@@ -1,11 +1,4 @@
-// [P1][API][JOIN_TOKENS] Join tokens API route handler
-// [P1][API][JOIN_TOKENS] Join tokens API route handler
-import { traceFn } from "@/app/api/_shared/otel";
-// [P1][API][JOIN_TOKENS] Join tokens API route handler
-import { withGuards } from "@/app/api/_shared/security";
-// [P1][API][JOIN_TOKENS] Join tokens API route handler
-import { jsonOk, jsonError } from "@/app/api/_shared/response";
-// Tags: P1, API, JOIN_TOKENS, validation, zod
+// [P0][CORE][API] Join token generation endpoint
 
 import { CreateJoinTokenSchema } from "@fresh-schedules/types";
 import { NextRequest, NextResponse } from "next/server";
@@ -34,63 +27,50 @@ function generateSecureToken(): string {
  */
 export const GET = withSecurity(
   requireOrgMembership(
-    requireRole("manager")(
-      async (
-        request: NextRequest,
-        context: {
-          params: Record<string, string>;
-          userId: string;
-          orgId: string;
-          roles: ("org_owner" | "admin" | "manager" | "scheduler" | "corporate" | "staff")[];
-        },
-      ) => {
-        try {
-          const { searchParams } = new URL(request.url);
-          const orgId = searchParams.get("orgId") || context.orgId;
-          const status = searchParams.get("status");
+    async (
+      request: NextRequest,
+      context: { params: Record<string, string>; userId: string; orgId: string },
+    ) => {
+      try {
+        const { searchParams } = new URL(request.url);
+        const orgId = searchParams.get("orgId") || context.orgId;
 
-          if (!orgId) {
-            return badRequest("orgId query parameter is required");
-          }
-
-          // Mock data - in production, fetch from Firestore
-          const tokens = [
-            {
-              id: "jt-1",
-              orgId,
-              token: "abc123def456xyz789",
-              defaultRoles: ["staff"],
-              status: "active",
-              maxUses: 10,
-              currentUses: 3,
-              usedBy: ["user1", "user2", "user3"],
-              expiresAt: Date.now() + 7 * 24 * 60 * 60 * 1000,
-              description: "General staff invitation",
-              createdBy: context.userId,
-              createdAt: Date.now() - 2 * 24 * 60 * 60 * 1000,
-              updatedAt: Date.now(),
-            },
-          ];
-
-          const filtered = status ? tokens.filter((t) => t.status === status) : tokens;
-
-          return ok({ tokens: filtered, total: filtered.length });
-        } catch {
-          return serverError("Failed to fetch join tokens");
+        if (!orgId) {
+          return badRequest("orgId query parameter is required");
         }
-      },
-    ),
+
+        // Mock data - in production, fetch from Firestore
+        const tokens = [
+          {
+            id: "token-1",
+            orgId,
+            token: "JOIN-123456",
+            role: "staff",
+            expiresAt: Date.now() + 7 * 24 * 60 * 60 * 1000,
+            maxUses: 10,
+            usedCount: 2,
+            isActive: true,
+            createdBy: context.userId,
+            createdAt: Date.now() - 24 * 60 * 60 * 1000,
+          },
+        ];
+
+        return ok({ tokens, total: tokens.length });
+      } catch {
+        return serverError("Failed to fetch join tokens");
+      }
+    },
   ),
   { requireAuth: true, maxRequests: 100, windowMs: 60_000 },
 );
 
 /**
  * POST /api/join-tokens
- * Create a new join token (requires admin+ role)
+ * Create a new join token (requires manager+ role)
  */
 export const POST = withSecurity(
   requireOrgMembership(
-    requireRole("admin")(
+    requireRole("manager")(
       async (
         request: NextRequest,
         context: {
@@ -106,7 +86,7 @@ export const POST = withSecurity(
             return badRequest("Validation failed", parsed.details);
           }
 
-          const data = parsed.data; // inferred from schema
+          const data = parsed.data;
 
           // Verify orgId matches context
           if (data.orgId !== context.orgId) {

@@ -1,5 +1,4 @@
-// [P2][SCHEMA][ONBOARDING] Onboarding validation schemas
-// Tags: P2, SCHEMA, ONBOARDING, ZOD
+// [P1][ONBOARDING][SCHEMA] Onboarding workflow schema
 /**
  * @fileoverview
  * Zod schemas for user onboarding flows (v14).

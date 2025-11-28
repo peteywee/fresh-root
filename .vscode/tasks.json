@@ -5,31 +5,42 @@
 			"label": "Git: Push (skip lint)",
 			"type": "shell",
 			"command": "SKIP_LINT=1 git push origin dev --no-verify",
-			"presentation": { "reveal": "always", "panel": "shared" },
+			"presentation": {
+				"reveal": "always",
+				"panel": "shared"
+			},
 			"problemMatcher": []
 		},
 		{
 			"label": "Git: Push (skip checks)",
 			"type": "shell",
 			"command": "SKIP_CHECKS=1 git push origin dev --no-verify",
-			"presentation": { "reveal": "always", "panel": "shared" },
+			"presentation": {
+				"reveal": "always",
+				"panel": "shared"
+			},
 			"problemMatcher": []
 		},
 		{
 			"label": "Git: Push (normal)",
 			"type": "shell",
 			"command": "git push origin dev",
-			"presentation": { "reveal": "always", "panel": "shared" },
+			"presentation": {
+				"reveal": "always",
+				"panel": "shared"
+			},
 			"problemMatcher": []
 		},
 		{
 			"label": "Git: Push (web-only checks)",
 			"type": "shell",
 			"command": "pnpm --filter @apps/web run lint && git push origin dev",
-			"presentation": { "reveal": "always", "panel": "shared" },
+			"presentation": {
+				"reveal": "always",
+				"panel": "shared"
+			},
 			"problemMatcher": []
 		},
-
 		{
 			"label": "Install (frozen)",
 			"type": "shell",
@@ -41,15 +52,31 @@
 			"type": "shell",
 			"command": "pnpm -w install --frozen-lockfile",
 			"problemMatcher": [
-				{ "owner": "deps", "severity": "error", "pattern": { "regexp": "^(.*deprecated.*)$", "message": 1 } },
-				{ "owner": "deps", "severity": "error", "pattern": { "regexp": "^(.*Issues with peer dependencies found.*)$", "message": 1 } }
+				{
+					"owner": "deps",
+					"severity": "error",
+					"pattern": {
+						"regexp": "^(.*deprecated.*)$",
+						"message": 1
+					}
+				},
+				{
+					"owner": "deps",
+					"severity": "error",
+					"pattern": {
+						"regexp": "^(.*Issues with peer dependencies found.*)$",
+						"message": 1
+					}
+				}
 			]
 		},
 		{
 			"label": "Lint (auto-fix)",
 			"type": "shell",
 			"command": "pnpm -w lint --fix",
-			"problemMatcher": ["$eslint-stylish"]
+			"problemMatcher": [
+				"$eslint-stylish"
+			]
 		},
 		{
 			"label": "Format (Prettier)",
@@ -61,7 +88,9 @@
 			"label": "Typecheck",
 			"type": "shell",
 			"command": "pnpm -w typecheck",
-			"problemMatcher": ["$tsc"]
+			"problemMatcher": [
+				"$tsc"
+			]
 		},
 		{
 			"label": "Test (watch)",
@@ -116,7 +145,9 @@
 			"type": "npm",
 			"script": "bench",
 			"path": "apps/web",
-			"problemMatcher": ["$tsc"],
+			"problemMatcher": [
+				"$tsc"
+			],
 			"label": "npm: bench - apps/web",
 			"detail": "vitest bench --config vitest.bench.config.ts"
 		},
@@ -179,6 +210,11 @@
 			"command": "node scripts/migration/gen-mini-indexes.mjs",
 			"detail": "Generate mini-index for API routes (docs/migration/v15/API_ROUTES_MINI_INDEX.md)",
 			"problemMatcher": []
+		},
+		{
+			"label": "Typecheck",
+			"type": "shell",
+			"command": "pnpm -w typecheck"
 		}
 	]
 }

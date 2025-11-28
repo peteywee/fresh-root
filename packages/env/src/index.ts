@@ -67,10 +67,10 @@ export function getAdminCredentials(): {
       privateKey: parsedJson.private_key,
     };
   }
-  const pk = (env as any).FIREBASE_ADMIN_PRIVATE_KEY.replace(/\\n/g, "\n");
+  const pk = (env as Record<string, string>).FIREBASE_ADMIN_PRIVATE_KEY.replace(/\\n/g, "\n");
   return {
-    projectId: (env as any).FIREBASE_ADMIN_PROJECT_ID,
-    clientEmail: (env as any).FIREBASE_ADMIN_CLIENT_EMAIL,
+    projectId: (env as Record<string, string>).FIREBASE_ADMIN_PROJECT_ID,
+    clientEmail: (env as Record<string, string>).FIREBASE_ADMIN_CLIENT_EMAIL,
     privateKey: pk,
   };
 }

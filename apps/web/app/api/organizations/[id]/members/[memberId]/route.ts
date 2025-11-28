@@ -1,86 +1,134 @@
-//[P1][API][CODE] Organization Member [memberId] API route handler
-//[P1][API][CODE] Organization Member [memberId] API route handler
-import { traceFn } from "@/app/api/_shared/otel";
-//[P1][API][CODE] Organization Member [memberId] API route handler
-import { withGuards } from "@/app/api/_shared/security";
-//[P1][API][CODE] Organization Member [memberId] API route handler
-import { jsonOk, jsonError } from "@/app/api/_shared/response";
-// Tags: P1, API, CODE, validation, zod, rbac
+// [P0][ORGS][API] Organization member management endpoint
 
 import { UpdateMembershipSchema } from "@fresh-schedules/types";
 import { NextRequest, NextResponse } from "next/server";
 
-import { requireOrgMembership, requireRole } from "../../../../../../src/lib/api/authorization";
+import {
+  requireOrgMembership,
+  requireRole,
+  type OrgRole,
+} from "../../../../../../src/lib/api/authorization";
 import { csrfProtection } from "../../../../../../src/lib/api/csrf";
-import { rateLimit, RateLimits } from "../../../../../../src/lib/api/rate-limit";
+import { checkRateLimit, RateLimits } from "../../../../../../src/lib/api/rate-limit";
 import { sanitizeObject } from "../../../../../../src/lib/api/sanitize";
-import { serverError } from "../../../../_shared/validation";
+import { withSecurity } from "../../../../_shared/middleware";
+import { badRequest, serverError } from "../../../../_shared/validation";
+
+type MemberContextBase = {
+  params: Record<string, string>;
+  userId: string;
+  orgId: string;
+};
+
+type MemberContextWithRoles = MemberContextBase & {
+  roles: OrgRole[];
+};
+
+const SECURITY_OPTIONS = { requireAuth: true, maxRequests: 100, windowMs: 60_000 } as const;
+
+const enforceRateLimit = async (request: NextRequest) => {
+  const limit = await checkRateLimit(request, RateLimits.api);
+  if (!limit.allowed) {
+    return NextResponse.json({ error: "Too many requests" }, { status: 429 });
+  }
+  return null;
+};
+
+const buildMemberPayload = (context: MemberContextBase) => {
+  const { memberId } = context.params;
+
+  return {
+    id: memberId,
+    orgId: context.orgId,
+    uid: "user-123",
+    roles: ["admin"] as OrgRole[],
+    joinedAt: new Date().toISOString(),
+    mfaVerified: true,
+    createdAt: new Date().toISOString(),
+  };
+};
+
+const getMemberResponse = (context: MemberContextBase) =>
+  NextResponse.json(buildMemberPayload(context));
+
+const updateMemberResponse = async (request: NextRequest, context: MemberContextWithRoles) => {
+  let body: unknown;
+  try {
+    body = await request.json();
+  } catch {
+    return badRequest("Invalid JSON payload");
+  }
+
+  if (!body || typeof body !== "object" || Array.isArray(body)) {
+    return badRequest("Invalid member data");
+  }
+
+  const sanitized = sanitizeObject(body as Record<string, unknown>);
+  const validation = UpdateMembershipSchema.safeParse(sanitized);
+
+  if (!validation.success) {
+    return badRequest("Invalid member data", validation.error.issues);
+  }
+
+  return NextResponse.json({
+    ...buildMemberPayload(context),
+    ...validation.data,
+    updatedAt: new Date().toISOString(),
+    updatedBy: context.userId,
+  });
+};
+
+const deleteMemberResponse = (context: MemberContextBase) => {
+  const { memberId } = context.params;
+
+  return NextResponse.json({
+    message: "Member removed successfully",
+    orgId: context.orgId,
+    memberId,
+  });
+};
 
 /**
  * GET /api/organizations/[id]/members/[memberId]
  * Get member details (org membership required)
  */
-export const GET = requireOrgMembership(async (request: NextRequest, context) => {
-  // Apply rate limiting using the inline check pattern used elsewhere
-  const rateLimitResult = await rateLimit(request, RateLimits.api);
-  if (rateLimitResult) return rateLimitResult;
+export const GET = withSecurity(
+  requireOrgMembership(async (request: NextRequest, context: MemberContextBase) => {
+    const limited = await enforceRateLimit(request);
+    if (limited) {
+      return limited;
+    }
 
-  const { params } = context;
-  try {
-    const { id: orgId, memberId } = await params;
-    // In production, fetch from Firestore and check permissions
-    const member = {
-      id: memberId,
-      orgId,
-      uid: "user-123",
-      roles: ["admin"],
-      joinedAt: new Date().toISOString(),
-      mfaVerified: true,
-      createdAt: new Date().toISOString(),
-    };
-    return NextResponse.json(member);
-  } catch {
-    return serverError("Failed to fetch member");
-  }
-});
+    try {
+      return getMemberResponse(context);
+    } catch {
+      return serverError("Failed to fetch member");
+    }
+  }),
+  SECURITY_OPTIONS,
+);
 
 /**
  * PATCH /api/organizations/[id]/members/[memberId]
  * Update member roles or settings (admin+ only)
  */
 export const PATCH = csrfProtection()(
-  requireOrgMembership(
-    requireRole("admin")(async (request: NextRequest, context) => {
-      // Inline rate-limiting check
-      const rateLimitResult = await rateLimit(request, RateLimits.api);
-      if (rateLimitResult) return rateLimitResult;
-
-      const { userId } = context;
-      try {
-        const params = await context.params;
-        const { id: orgId, memberId } = params;
-
-        const body = await request.json();
-        const validated = UpdateMembershipSchema.parse(body);
-        const sanitized = sanitizeObject(validated);
-
-        // In production: permission checks, update Firestore
-        const updatedMember = {
-          id: memberId,
-          orgId,
-          uid: "user-123",
-          ...sanitized,
-          updatedAt: new Date().toISOString(),
-          updatedBy: userId,
-        };
-        return NextResponse.json(updatedMember);
-      } catch (error) {
-        if (error instanceof Error && error.name === "ZodError") {
-          return NextResponse.json({ error: "Invalid member data" }, { status: 400 });
+  withSecurity(
+    requireOrgMembership(
+      requireRole("admin")(async (request: NextRequest, context: MemberContextWithRoles) => {
+        const limited = await enforceRateLimit(request);
+        if (limited) {
+          return limited;
         }
-        return serverError("Failed to update member");
-      }
-    }),
+
+        try {
+          return await updateMemberResponse(request, context);
+        } catch {
+          return serverError("Failed to update member");
+        }
+      }),
+    ),
+    SECURITY_OPTIONS,
   ),
 );
 
@@ -89,24 +137,21 @@ export const PATCH = csrfProtection()(
  * Remove a member from an organization (admin+ only)
  */
 export const DELETE = csrfProtection()(
-  requireOrgMembership(
-    requireRole("admin")(async (request: NextRequest, context) => {
-      // Inline rate-limiting check
-      const rateLimitResult = await rateLimit(request, RateLimits.api);
-      if (rateLimitResult) return rateLimitResult;
+  withSecurity(
+    requireOrgMembership(
+      requireRole("admin")(async (request: NextRequest, context: MemberContextWithRoles) => {
+        const limited = await enforceRateLimit(request);
+        if (limited) {
+          return limited;
+        }
 
-      try {
-        const params = await context.params;
-        const { id: orgId, memberId } = params;
-        // In production: permission checks, delete from Firestore
-        return NextResponse.json({
-          message: "Member removed successfully",
-          orgId,
-          memberId,
-        });
-      } catch {
-        return serverError("Failed to remove member");
-      }
-    }),
+        try {
+          return deleteMemberResponse(context);
+        } catch {
+          return serverError("Failed to remove member");
+        }
+      }),
+    ),
+    SECURITY_OPTIONS,
   ),
 );

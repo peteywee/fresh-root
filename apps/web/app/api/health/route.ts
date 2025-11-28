@@ -1,19 +1,14 @@
-// [P1][OBSERVABILITY][HEALTH] Health check endpoint
-// [P1][OBSERVABILITY][HEALTH] Health check endpoint
-import { traceFn } from "@/app/api/_shared/otel";
-// [P1][OBSERVABILITY][HEALTH] Health check endpoint
-import { withGuards } from "@/app/api/_shared/security";
-// [P1][OBSERVABILITY][HEALTH] Health check endpoint
-import { jsonOk, jsonError } from "@/app/api/_shared/response";
-// Tags: P1, OBSERVABILITY, HEALTH
+// [P0][HEALTH][API] Health check endpoint
 import { NextResponse } from "next/server";
+
+import { withSecurity } from "../_shared/middleware";
 
 /**
  * GET /api/health
  * Basic health check endpoint for uptime monitoring
  * Returns 200 with ok: true if service is running
  */
-export function GET() {
+export const GET = withSecurity(async () => {
   const healthStatus = {
     ok: true,
     status: "healthy",
@@ -28,4 +23,4 @@ export function GET() {
       "Cache-Control": "no-cache, no-store, must-revalidate",
     },
   });
-}
+});

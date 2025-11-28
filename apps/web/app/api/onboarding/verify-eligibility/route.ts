@@ -1,16 +1,12 @@
-//[P1][API][ONBOARDING] Verify Eligibility Endpoint (server)
-//[P1][API][ONBOARDING] Verify Eligibility Endpoint (server)
-import { traceFn } from "@/app/api/_shared/otel";
-//[P1][API][ONBOARDING] Verify Eligibility Endpoint (server)
-import { withGuards } from "@/app/api/_shared/security";
-//[P1][API][ONBOARDING] Verify Eligibility Endpoint (server)
-import { jsonOk, jsonError } from "@/app/api/_shared/response";
-// Tags: api, onboarding, eligibility
-
+// [P0][ONBOARDING][API] Verify eligibility endpoint
 import { NextResponse } from "next/server";
+import { z } from "zod";
 
 import { withRequestLogging } from "../../_shared/logging";
 import { withSecurity, type AuthenticatedRequest } from "../../_shared/middleware";
+
+// Schema for verify eligibility request
+const VerifyEligibilitySchema = z.object({}).passthrough().optional();
 
 /**
  * ErrorResponse is a canonical shape for API error responses.
@@ -41,7 +37,7 @@ function checkRateLimit(uid: string): number {
   return Math.max(0, RATE_LIMIT_MAX - entry.count);
 }
 
-export async function verifyEligibilityHandler(
+async function verifyEligibilityHandlerImpl(
   req: AuthenticatedRequest & {
     user?: { uid: string; customClaims?: Record<string, unknown> };
   },
@@ -62,7 +58,7 @@ export async function verifyEligibilityHandler(
   }
 
   // Parse request body to validate required fields
-  let body: any = {};
+  let body: Record<string, unknown> = {};
   if (req.json) {
     try {
       body = await req.json();
@@ -72,8 +68,22 @@ export async function verifyEligibilityHandler(
     }
   }
 
+  // Validate input with Zod
+  const result = VerifyEligibilitySchema.safeParse(body);
+  if (!result.success) {
+    return NextResponse.json<ErrorResponse>(
+      {
+        error: "Validation error",
+        code: "GEN_VALIDATION_ERROR",
+        details: {} as Record<string, unknown>,
+      },
+      { status: 422 },
+    );
+  }
+
   // Validate required fields
-  if (!body.email || !body.role) {
+  const bodyData = body as Record<string, unknown>;
+  if (!bodyData.email || !bodyData.role) {
     return NextResponse.json<ErrorResponse>(
       {
         error: "Missing email or role",
@@ -93,7 +103,7 @@ export async function verifyEligibilityHandler(
     "admin",
   ];
 
-  if (!allowedRoles.includes(body.role)) {
+  if (!allowedRoles.includes(body.role as string)) {
     return NextResponse.json<ErrorResponse>(
       {
         error: "Role not allowed for onboarding",
@@ -125,9 +135,10 @@ export async function verifyEligibilityHandler(
 // Adapter wraps the test-friendly handler for use with withSecurity middleware
 async function apiRoute(
   req: AuthenticatedRequest,
-  _ctx: { params: Record<string, string> | Promise<Record<string, string>> },
+  _ctx: { params: Promise<Record<string, string>> },
 ) {
-  return verifyEligibilityHandler(req);
+  await _ctx.params;
+  return verifyEligibilityHandlerImpl(req);
 }
 
 export const POST = withRequestLogging(

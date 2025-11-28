@@ -1,4 +1,4 @@
-// [P2][APP][CODE] Widgets
+// [P1][TYPES][SCHEMA] Schema definitions
 // Tags: P2, APP, CODE
 // Template: CODE_ZOD_SCHEMA
 

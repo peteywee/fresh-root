@@ -1,15 +1,15 @@
-// [P1][OPS][BACKUP] Internal endpoint to trigger Firestore export
-// [P1][OPS][BACKUP] Internal endpoint to trigger Firestore export
-import { traceFn } from "@/app/api/_shared/otel";
-// [P1][OPS][BACKUP] Internal endpoint to trigger Firestore export
-import { withGuards } from "@/app/api/_shared/security";
-// [P1][OPS][BACKUP] Internal endpoint to trigger Firestore export
-import { jsonOk, jsonError } from "@/app/api/_shared/response";
-// Tags: P1, OPS, BACKUP, FIRESTORE
+// [P0][BACKUP][API] Firestore backup endpoint
 import { GoogleAuth } from "google-auth-library";
 import { NextRequest } from "next/server";
+import { z } from "zod";
 
+import { withSecurity } from "../../_shared/middleware";
 import { badRequest, serverError, ok } from "../../_shared/validation";
+
+// Schema for backup request
+const BackupSchema = z.object({
+  collections: z.string().optional(),
+});
 
 // Security: protect with static header token set in env and Cloud Scheduler
 const HEADER_NAME = "x-backup-token";
@@ -46,8 +46,21 @@ async function exportFirestore(projectId: string, bucket: string, collections?: 
   return res.json();
 }
 
-export async function POST(req: NextRequest) {
+export const POST = withSecurity(async (req: NextRequest) => {
   try {
+    // Validate request body
+    let body: unknown;
+    try {
+      body = await req.json();
+    } catch {
+      body = {};
+    }
+
+    const result = BackupSchema.safeParse(body);
+    if (!result.success) {
+      return badRequest("Validation failed", result.error.issues);
+    }
+
     const configuredToken = process.env.BACKUP_CRON_TOKEN;
     if (!configuredToken) {
       return serverError("Server not configured (BACKUP_CRON_TOKEN)");
@@ -73,12 +86,12 @@ export async function POST(req: NextRequest) {
           .filter(Boolean)
       : undefined;
 
-    const result = await exportFirestore(projectId, bucket, collections);
+    const opResult = await exportFirestore(projectId, bucket, collections);
 
-    return ok({ success: true, operation: result });
+    return ok({ success: true, operation: opResult });
   } catch (error) {
     return serverError(error instanceof Error ? error.message : "Backup failed");
   }
-}
+});
 
 export const runtime = "nodejs"; // Ensure Node runtime (not edge)
