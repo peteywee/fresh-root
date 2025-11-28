@@ -37,16 +37,7 @@ const IGNORE_DIRS = new Set([
   ".vercel",
 ]);
 
-const CODE_FILE_EXTS = new Set([
-  ".ts",
-  ".tsx",
-  ".js",
-  ".jsx",
-  ".mjs",
-  ".cjs",
-  ".json",
-  ".md",
-]);
+const CODE_FILE_EXTS = new Set([".ts", ".tsx", ".js", ".jsx", ".mjs", ".cjs", ".json", ".md"]);
 
 /**
  * Recursively walk a directory and return all files.
@@ -210,7 +201,7 @@ async function buildCodeIndex() {
  */
 async function buildDomainIndex(codeIndex) {
   const domainEntries = codeIndex.entries.filter(
-    (e) => e.layer === "domain" || (e.tags || []).includes("schema")
+    (e) => e.layer === "domain" || (e.tags || []).includes("schema"),
   );
 
   const transformed = domainEntries.map((e) => ({
@@ -237,10 +228,7 @@ async function buildDomainIndex(codeIndex) {
 async function buildRulesIndex() {
   const rules = [];
 
-  const docsDirs = [
-    path.join(ROOT, "docs", "standards"),
-    path.join(ROOT, "docs", "bible"),
-  ];
+  const docsDirs = [path.join(ROOT, "docs", "standards"), path.join(ROOT, "docs", "bible")];
 
   for (const dir of docsDirs) {
     let exists = false;
@@ -303,8 +291,7 @@ async function buildRulesIndex() {
 async function buildApiIndex(codeIndex) {
   const apiCandidates = codeIndex.entries.filter(
     (e) =>
-      e.layer === "api" ||
-      (e.path.startsWith("services/api") && (e.tags || []).includes("route"))
+      e.layer === "api" || (e.path.startsWith("services/api") && (e.tags || []).includes("route")),
   );
 
   const routes = [];
@@ -323,7 +310,7 @@ async function buildApiIndex(codeIndex) {
 
     // Try to detect explicit method exports: export const method = "POST"
     const methodMatch = content.match(
-      /export\s+const\s+method\s*=\s*["'`](GET|POST|PUT|PATCH|DELETE)["'`]/i
+      /export\s+const\s+method\s*=\s*["'`](GET|POST|PUT|PATCH|DELETE)["'`]/i,
     );
     if (methodMatch) {
       httpMethod = methodMatch[1].toUpperCase();
@@ -369,7 +356,7 @@ async function buildApiIndex(codeIndex) {
  */
 async function buildUiIndex(codeIndex) {
   const uiCandidates = codeIndex.entries.filter(
-    (e) => e.layer === "ui" || e.path.startsWith("apps/web")
+    (e) => e.layer === "ui" || e.path.startsWith("apps/web"),
   );
 
   const pages = [];
