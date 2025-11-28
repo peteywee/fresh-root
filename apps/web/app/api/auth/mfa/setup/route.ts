@@ -1,10 +1,3 @@
-// [P0][AUTH][API] MFA setup endpoint - generates TOTP secret and QR code
-// [P0][AUTH][API] MFA setup endpoint - generates TOTP secret and QR code
-import { traceFn } from "@/app/api/_shared/otel";
-// [P0][AUTH][API] MFA setup endpoint - generates TOTP secret and QR code
-import { withGuards } from "@/app/api/_shared/security";
-// [P0][AUTH][API] MFA setup endpoint - generates TOTP secret and QR code
-import { jsonOk, jsonError } from "@/app/api/_shared/response";
 // Tags: P0, AUTH, API
 import { NextRequest } from "next/server";
 import * as QRCode from "qrcode";
@@ -21,7 +14,10 @@ import { ok, serverError } from "../../../_shared/validation";
  * Requires valid session.
  */
 export const POST = withSecurity(
-  async (req: NextRequest, context: { params: Record<string, string>; userId: string }) => {
+  async (
+    _req: NextRequest,
+    context: { params: Record<string, string>; userId: string },
+  ) => {
     try {
       // Derive a stable label from user id for display if email is unknown client-side
       const userLabel = context.userId || "user";
@@ -39,12 +35,7 @@ export const POST = withSecurity(
 
       // Store secret temporarily in Firestore (or return to client for storage)
       // For simplicity, return to client. In production, store server-side.
-      return ok({
-        success: true,
-        secret: secret.base32,
-        qrCode: qrCodeDataUrl,
-        otpauthUrl: secret.otpauth_url,
-      });
+      return ok({ success: true, secret: secret.base32, qrCode: qrCodeDataUrl, otpauthUrl: secret.otpauth_url });
     } catch (error) {
       console.error("MFA setup failed", error);
       return serverError("Failed to generate MFA secret");

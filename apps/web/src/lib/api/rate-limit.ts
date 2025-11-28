@@ -51,7 +51,9 @@ export const RateLimits = {
   STANDARD: { max: 100, windowSeconds: 60 },
   AUTH: { max: 5, windowSeconds: 60 },
   WRITE: { max: 30, windowSeconds: 60 },
+  api: { max: 100, windowSeconds: 60 },
 } as const;
+
 
 /* -------------------------------------------------------------------------- */
 /* Default key generator                                                       */

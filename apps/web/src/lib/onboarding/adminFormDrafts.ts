@@ -2,9 +2,9 @@
 // Tags: FIREBASE, ONBOARDING, HELPERS
 import type { CreateAdminResponsibilityFormInput } from "@fresh-schedules/types";
 import { randomBytes } from "crypto";
-import type { Firestore, DocumentReference } from "firebase-admin/firestore";
+import { type Firestore, type DocumentReference, Timestamp } from "firebase-admin/firestore";
 
-import { adminDb, adminSdk } from "@/src/lib/firebase.server";
+import { adminDb } from "@/src/lib/firebase.server";
 
 const db = adminDb as Firestore | undefined;
 
@@ -14,8 +14,8 @@ export type AdminFormDraft = {
   payload: CreateAdminResponsibilityFormInput;
   ipAddress: string;
   userAgent: string;
-  createdAt: ReturnType<typeof adminSdk.firestore.Timestamp.now> | number;
-  consumedAt?: ReturnType<typeof adminSdk.firestore.Timestamp.now> | null;
+  createdAt: Timestamp | number;
+  consumedAt?: Timestamp | null;
 };
 
 function generateFormToken() {
@@ -40,7 +40,7 @@ export async function saveAdminFormDraft(
     payload,
     ipAddress: meta.ipAddress,
     userAgent: meta.userAgent,
-    createdAt: adminSdk.firestore.Timestamp.now(),
+    createdAt: Timestamp.now(),
     consumedAt: null,
   };
 
@@ -69,7 +69,7 @@ export async function markAdminFormDraftConsumed(formToken: string, injectedDb?:
   const docRef = root
     .collection("adminFormDrafts")
     .doc(formToken) as DocumentReference<AdminFormDraft>;
-  await docRef.update({ consumedAt: adminSdk.firestore.Timestamp.now() });
+  await docRef.update({ consumedAt: Timestamp.now() });
 }
 
 export default {

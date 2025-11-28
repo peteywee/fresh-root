@@ -1,12 +1,10 @@
 // [P1][API][CODE] Route API route handler
 // [P1][API][CODE] Route API route handler
-import { traceFn } from "@/app/api/_shared/otel";
-// [P1][API][CODE] Route API route handler
-import { withGuards } from "@/app/api/_shared/security";
-// [P1][API][CODE] Route API route handler
-import { jsonOk, jsonError } from "@/app/api/_shared/response";
-// Tags: P1, API, CODE
 import { NextRequest, NextResponse } from "next/server";
+
+// [P1][API][CODE] Route API route handler
+// [P1][API][CODE] Route API route handler
+// Tags: P1, API, CODE
 // Example shows imports you will actually use in real routes:
 // import { z } from "zod";
 // import { SomeSchema } from "@fresh-schedules/types";
@@ -31,7 +29,7 @@ export const GET = async () => {
   }
 };
 
-export const POST = async (req: NextRequest) => {
+export const POST = async (_req: NextRequest) => {
   try {
     // const session = await requireSession(req);
     // const body = await req.json();

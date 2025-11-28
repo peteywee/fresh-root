@@ -1,16 +1,15 @@
 // [P1][API][CODE] Route API route handler
 // [P1][API][CODE] Route API route handler
-import { traceFn } from "@/app/api/_shared/otel";
+import { NextResponse, type NextRequest } from "next/server";
+
 // [P1][API][CODE] Route API route handler
-import { withGuards } from "@/app/api/_shared/security";
 // [P1][API][CODE] Route API route handler
-import { jsonOk, jsonError } from "@/app/api/_shared/response";
 // Tags: P1, API, CODE
 // Template: CODE_NEXT_API_ROUTE
 //
 // Example API route implementation:
 //
-// export async function POST(req: NextRequest) {
+// export async function POST(_req: NextRequest) {
 //   return withRateLimit(async () => {
 //     const session = await requireSession(req);
 //     if (!session?.uid) return NextResponse.json({ error: "unauthorized" }, { status: 401 });
@@ -23,8 +22,7 @@ import { jsonOk, jsonError } from "@/app/api/_shared/response";
 //   });
 // }
 
-import { NextResponse, type NextRequest } from "next/server";
 
-export async function POST(req: NextRequest) {
+export async function POST(_req: NextRequest) {
   return NextResponse.json({ ok: true }, { status: 200 });
 }

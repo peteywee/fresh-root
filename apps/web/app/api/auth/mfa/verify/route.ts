@@ -1,18 +1,11 @@
 // [P0][AUTH][API] MFA verification endpoint - confirms TOTP and sets custom claim
-// [P0][AUTH][API] MFA verification endpoint - confirms TOTP and sets custom claim
-import { traceFn } from "@/app/api/_shared/otel";
-// [P0][AUTH][API] MFA verification endpoint - confirms TOTP and sets custom claim
-import { withGuards } from "@/app/api/_shared/security";
-// [P0][AUTH][API] MFA verification endpoint - confirms TOTP and sets custom claim
-import { jsonOk, jsonError } from "@/app/api/_shared/response";
 // Tags: P0, AUTH, API
 import { NextRequest } from "next/server";
 import * as speakeasy from "speakeasy";
 import { z } from "zod";
 
 import { getFirebaseAdminAuth } from "../../../../../lib/firebase-admin";
-import { withSecurity } from "../../../_shared/middleware";
-import type { AuthenticatedRequest } from "../../../_shared/middleware";
+import { withSecurity, type AuthenticatedRequest } from "../../../_shared/middleware";
 import { badRequest, serverError, ok } from "../../../_shared/validation";
 
 // Rate limiting via withSecurity options
@@ -28,10 +21,12 @@ const verifySchema = z.object({
  * Requires valid session.
  */
 export const POST = withSecurity(
-  async (req: NextRequest, context: { params: Record<string, string>; userId: string }) => {
+  async (
+    req: NextRequest,
+    context: { params: Record<string, string>; userId: string },
+  ) => {
     try {
-      const body = await req.json();
-      const { secret, token } = verifySchema.parse(body);
+      const { secret, token } = verifySchema.parse(await req.json());
 
       // Verify TOTP token
       const verified = speakeasy.totp.verify({
@@ -61,10 +56,7 @@ export const POST = withSecurity(
       // Store secret in Firestore for future verification (optional)
       // In production, hash the secret before storing
 
-      return ok({
-        success: true,
-        message: "MFA enabled successfully",
-      });
+      return ok({ success: true, message: "MFA enabled successfully" });
     } catch (error) {
       if (error instanceof z.ZodError) {
         return badRequest("Invalid request", error.errors);

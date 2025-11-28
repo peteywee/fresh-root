@@ -1,10 +1,7 @@
 //[P1][API][ONBOARDING] Verify Eligibility Endpoint (server)
 //[P1][API][ONBOARDING] Verify Eligibility Endpoint (server)
-import { traceFn } from "@/app/api/_shared/otel";
 //[P1][API][ONBOARDING] Verify Eligibility Endpoint (server)
-import { withGuards } from "@/app/api/_shared/security";
 //[P1][API][ONBOARDING] Verify Eligibility Endpoint (server)
-import { jsonOk, jsonError } from "@/app/api/_shared/response";
 // Tags: api, onboarding, eligibility
 
 import { NextResponse } from "next/server";
@@ -41,7 +38,7 @@ function checkRateLimit(uid: string): number {
   return Math.max(0, RATE_LIMIT_MAX - entry.count);
 }
 
-export async function verifyEligibilityHandler(
+async function verifyEligibilityHandlerImpl(
   req: AuthenticatedRequest & {
     user?: { uid: string; customClaims?: Record<string, unknown> };
   },
@@ -62,7 +59,7 @@ export async function verifyEligibilityHandler(
   }
 
   // Parse request body to validate required fields
-  let body: any = {};
+  let body: Record<string, unknown> = {};
   if (req.json) {
     try {
       body = await req.json();
@@ -93,7 +90,7 @@ export async function verifyEligibilityHandler(
     "admin",
   ];
 
-  if (!allowedRoles.includes(body.role)) {
+  if (!allowedRoles.includes(body.role as string)) {
     return NextResponse.json<ErrorResponse>(
       {
         error: "Role not allowed for onboarding",
@@ -125,9 +122,10 @@ export async function verifyEligibilityHandler(
 // Adapter wraps the test-friendly handler for use with withSecurity middleware
 async function apiRoute(
   req: AuthenticatedRequest,
-  _ctx: { params: Record<string, string> | Promise<Record<string, string>> },
+  _ctx: { params: Promise<Record<string, string>> },
 ) {
-  return verifyEligibilityHandler(req);
+  await _ctx.params;
+  return verifyEligibilityHandlerImpl(req);
 }
 
 export const POST = withRequestLogging(

@@ -17,11 +17,12 @@ type BasicReq = {
   method?: string;
   url?: string;
   // Allow existing middleware to attach extra fields
-  [key: string]: unknown;
+  [key: string]: any;
 };
 
-type Handler<TReq extends BasicReq = BasicReq> = (
+type Handler<TReq extends BasicReq = BasicReq, C = any> = (
   req: TReq & { requestId: string },
+  ctx: C,
 ) => Promise<Response> | Response;
 
 function generateRequestId(): string {
@@ -46,10 +47,10 @@ function generateRequestId(): string {
  *     withSecurity(myHandler, { requireAuth: true }),
  *   );
  */
-export function withRequestLogging<TReq extends BasicReq>(
-  handler: Handler<TReq> | ((req: TReq, ctx: Record<string, unknown>) => Promise<Response>),
-): (req: TReq, ctx?: Record<string, unknown>) => Promise<Response> {
-  return async (req: TReq, ctx?: Record<string, unknown>): Promise<Response> => {
+export function withRequestLogging<TReq extends BasicReq, C = any>(
+  handler: Handler<TReq, C> | ((req: TReq, ctx: C) => Promise<Response>),
+): (req: TReq, ctx: C) => Promise<Response> {
+  return async (req: TReq, ctx: C): Promise<Response> => {
     const requestId = generateRequestId();
     const start = Date.now();
 
@@ -73,9 +74,8 @@ export function withRequestLogging<TReq extends BasicReq>(
 
     try {
       // Handle both single-arg and two-arg handlers
-      const res = await (handler.length > 1
-        ? handler(req as TReq & { requestId: string }, ctx || {})
-        : (handler as Handler<TReq>)(req as TReq & { requestId: string }));
+      // We cast to any to avoid strict type checks on the handler call, as we know we are passing the right args
+      const res = await (handler as any)(req as TReq & { requestId: string }, ctx);
       const durationMs = Date.now() - start;
 
       // Structured "end" log

@@ -1,10 +1,4 @@
 // [P0][AUTH][SESSION] Route API route handler
-// [P0][AUTH][SESSION] Route API route handler
-import { traceFn } from "@/app/api/_shared/otel";
-// [P0][AUTH][SESSION] Route API route handler
-import { withGuards } from "@/app/api/_shared/security";
-// [P0][AUTH][SESSION] Route API route handler
-import { jsonOk, jsonError } from "@/app/api/_shared/response";
 // Tags: P0, AUTH, SESSION
 /**
  * [P1][API][SESSION] Session Bootstrap Endpoint (server)
@@ -24,7 +18,7 @@ import { withSecurity, type AuthenticatedRequest } from "../../_shared/middlewar
 import { adminDb as importedAdminDb } from "@/src/lib/firebase.server";
 import { ensureUserProfile } from "@/src/lib/userProfile";
 
-export async function bootstrapSessionHandler(
+async function bootstrapSessionHandlerImpl(
   req: AuthenticatedRequest & {
     user?: { uid: string; customClaims?: Record<string, unknown> };
   },
@@ -115,11 +109,11 @@ export async function bootstrapSessionHandler(
 }
 
 export const GET = withSecurity(
-  async (req: AuthenticatedRequest) => bootstrapSessionHandler(req, importedAdminDb),
+  async (req: AuthenticatedRequest) => bootstrapSessionHandlerImpl(req, importedAdminDb),
   { requireAuth: true },
 );
 
 export const POST = withSecurity(
-  async (req: AuthenticatedRequest) => bootstrapSessionHandler(req, importedAdminDb),
+  async (req: AuthenticatedRequest) => bootstrapSessionHandlerImpl(req, importedAdminDb),
   { requireAuth: true },
 );

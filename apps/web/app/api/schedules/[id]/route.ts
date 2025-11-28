@@ -1,10 +1,4 @@
 //[P1][API][CODE] Schedules [id] API route handler
-//[P1][API][CODE] Schedules [id] API route handler
-import { traceFn } from "@/app/api/_shared/otel";
-//[P1][API][CODE] Schedules [id] API route handler
-import { withGuards } from "@/app/api/_shared/security";
-//[P1][API][CODE] Schedules [id] API route handler
-import { jsonOk, jsonError } from "@/app/api/_shared/response";
 // Tags: P1, API, CODE, validation, zod
 
 import { NextRequest, NextResponse } from "next/server";
@@ -14,39 +8,94 @@ import { sanitizeObject } from "../../../../src/lib/api/sanitize";
 import { withSecurity } from "../../_shared/middleware";
 import { serverError, UpdateScheduleSchema } from "../../_shared/validation";
 
+type Role = "org_owner" | "admin" | "manager" | "scheduler" | "corporate" | "staff";
+
+type ScheduleContext = {
+  params: Record<string, string>;
+  userId: string;
+  orgId: string;
+};
+
+type ScheduleContextWithRoles = ScheduleContext & { roles: Role[] };
+
+const SECURITY_OPTIONS = { requireAuth: true, maxRequests: 100, windowMs: 60_000 } as const;
+
+const ensureScheduleId = (context: ScheduleContext) => {
+  const id = context.params.id;
+  if (!id) {
+    throw new Error("Missing schedule id");
+  }
+  return id;
+};
+
+const buildSchedulePayload = (id: string, orgId: string, overrides: Record<string, unknown> = {}) => ({
+  id,
+  orgId,
+  name: "Week of Jan 15",
+  description: "Weekly schedule",
+  startDate: "2025-01-15T00:00:00Z",
+  endDate: "2025-01-21T23:59:59Z",
+  status: "published",
+  createdAt: new Date().toISOString(),
+  createdBy: "user-123",
+  ...overrides,
+});
+
+const readSchedule = async (_request: NextRequest, context: ScheduleContext) => {
+  try {
+    const id = ensureScheduleId(context);
+    const schedule = buildSchedulePayload(id, context.orgId);
+    return NextResponse.json(schedule);
+  } catch {
+    return serverError("Failed to fetch schedule");
+  }
+};
+
+const updateSchedule = async (request: NextRequest, context: ScheduleContextWithRoles) => {
+  try {
+    const id = ensureScheduleId(context);
+    const payload = sanitizeObject(await request.json());
+    const parsed = UpdateScheduleSchema.safeParse(payload);
+
+    if (!parsed.success) {
+      return NextResponse.json(
+        { error: "Invalid schedule data", details: parsed.error.errors },
+        { status: 400 },
+      );
+    }
+
+    const schedule = buildSchedulePayload(id, context.orgId, {
+      ...parsed.data,
+      updatedAt: new Date().toISOString(),
+    });
+
+    return NextResponse.json(schedule);
+  } catch (error) {
+    if (error instanceof Error && error.name === "ZodError") {
+      return NextResponse.json({ error: "Invalid schedule data" }, { status: 400 });
+    }
+    return serverError("Failed to update schedule");
+  }
+};
+
+const deleteSchedule = async (_request: NextRequest, context: ScheduleContextWithRoles) => {
+  try {
+    const id = ensureScheduleId(context);
+    return NextResponse.json({ message: "Schedule deleted successfully", id });
+  } catch {
+    return serverError("Failed to delete schedule");
+  }
+};
+
 /**
  * GET /api/schedules/[id]
  * Get schedule details
  */
 export const GET = withSecurity(
-  requireOrgMembership(
-    async (
-      request: NextRequest,
-      context: { params: Record<string, string>; userId: string; orgId: string },
-    ) => {
-      try {
-        const { id } = context.params;
-
-        // In production, fetch from Firestore and check permissions
-        const schedule = {
-          id,
-          orgId: context.orgId,
-          name: "Week of Jan 15",
-          description: "Weekly schedule",
-          startDate: "2025-01-15T00:00:00Z",
-          endDate: "2025-01-21T23:59:59Z",
-          status: "published",
-          createdAt: new Date().toISOString(),
-          createdBy: "user-123",
-        };
-
-        return NextResponse.json(schedule);
-      } catch {
-        return serverError("Failed to fetch schedule");
-      }
-    },
+  requireOrgMembership(async (request: NextRequest, context: ScheduleContext) =>
+    readSchedule(request, context),
   ),
-  { requireAuth: true, maxRequests: 100, windowMs: 60_000 },
+  SECURITY_OPTIONS,
 );
 
 /**
@@ -55,43 +104,11 @@ export const GET = withSecurity(
  */
 export const PATCH = withSecurity(
   requireOrgMembership(
-    requireRole("manager")(
-      async (
-        request: NextRequest,
-        context: {
-          params: Record<string, string>;
-          userId: string;
-          orgId: string;
-          roles: ("org_owner" | "admin" | "manager" | "scheduler" | "corporate" | "staff")[];
-        },
-      ) => {
-        try {
-          const { id } = context.params;
-
-          const body = await request.json();
-          const validated = UpdateScheduleSchema.parse(body);
-          const sanitized = sanitizeObject(validated);
-
-          // In production, update in Firestore after checking permissions
-          const updatedSchedule = {
-            id,
-            orgId: context.orgId,
-            name: "Week of Jan 15",
-            ...sanitized,
-            updatedAt: new Date().toISOString(),
-          };
-
-          return NextResponse.json(updatedSchedule);
-        } catch (error) {
-          if (error instanceof Error && error.name === "ZodError") {
-            return NextResponse.json({ error: "Invalid schedule data" }, { status: 400 });
-          }
-          return serverError("Failed to update schedule");
-        }
-      },
+    requireRole("manager")(async (request: NextRequest, context: ScheduleContextWithRoles) =>
+      updateSchedule(request, context),
     ),
   ),
-  { requireAuth: true, maxRequests: 100, windowMs: 60_000 },
+  SECURITY_OPTIONS,
 );
 
 /**
@@ -100,29 +117,9 @@ export const PATCH = withSecurity(
  */
 export const DELETE = withSecurity(
   requireOrgMembership(
-    requireRole("admin")(
-      async (
-        request: NextRequest,
-        context: {
-          params: Record<string, string>;
-          userId: string;
-          orgId: string;
-          roles: ("org_owner" | "admin" | "manager" | "scheduler" | "corporate" | "staff")[];
-        },
-      ) => {
-        try {
-          const { id } = context.params;
-
-          // In production, check if schedule is draft before deleting
-          return NextResponse.json({
-            message: "Schedule deleted successfully",
-            id,
-          });
-        } catch {
-          return serverError("Failed to delete schedule");
-        }
-      },
+    requireRole("admin")(async (request: NextRequest, context: ScheduleContextWithRoles) =>
+      deleteSchedule(request, context),
     ),
   ),
-  { requireAuth: true, maxRequests: 100, windowMs: 60_000 },
+  SECURITY_OPTIONS,
 );

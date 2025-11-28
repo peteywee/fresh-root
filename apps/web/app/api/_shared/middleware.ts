@@ -145,25 +145,25 @@ export interface WithSecurityOptions {
   maxBodySize?: number;
 }
 
-export function withSecurity<
-  C extends { params: Record<string, string> | Promise<Record<string, string>> } = {
-    params: Record<string, string> | Promise<Record<string, string>>;
-  },
->(
+/**
+ * withSecurity wraps a route handler to add security middleware.
+ * The handler receives a context with resolved params (not Promise).
+ * The returned function can accept either resolved or Promise params from Next.js.
+ * This is important for compatibility with both Next.js 13 and 14+ where
+ * params may be promises.
+ */
+export function withSecurity(
   handler: (
     req: AuthenticatedRequest | NextRequest,
-    ctx: { params: Record<string, string>; [key: string]: unknown },
+    ctx: any,
   ) => Promise<NextResponse>,
   options: WithSecurityOptions = {},
-): (req: AuthenticatedRequest | NextRequest, ctx: C) => Promise<NextResponse> {
-  return async (req: AuthenticatedRequest | NextRequest, ctx: C) => {
+): (req: AuthenticatedRequest | NextRequest, ctx: any) => Promise<NextResponse> {
+  return async (req: AuthenticatedRequest | NextRequest, ctx: any) => {
     try {
       // Resolve params if it's a Promise (Next.js 14+/16+)
       const resolvedParams = await Promise.resolve(ctx.params);
-      const resolvedCtx = { ...ctx, params: resolvedParams } as {
-        params: Record<string, string>;
-        [key: string]: unknown;
-      };
+      const resolvedCtx = { ...ctx, params: resolvedParams };
 
       // Apply CORS
       const corsMw = cors(options.corsAllowedOrigins || []);

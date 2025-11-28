@@ -108,7 +108,6 @@ export default [
       "tools/**/*.cjs",
     ],
     languageOptions: {
-      parser: js.parser,
       ecmaVersion: "latest",
       globals: { node: true },
     },

@@ -1,22 +1,20 @@
 //[P1][API][ONBOARDING] Create Network + Corporate Endpoint (server)
 //[P1][API][ONBOARDING] Create Network + Corporate Endpoint (server)
-import { traceFn } from "@/app/api/_shared/otel";
-//[P1][API][ONBOARDING] Create Network + Corporate Endpoint (server)
-import { withGuards } from "@/app/api/_shared/security";
-//[P1][API][ONBOARDING] Create Network + Corporate Endpoint (server)
-import { jsonOk, jsonError } from "@/app/api/_shared/response";
-// Tags: api, onboarding, network, corporate, membership, events
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextResponse } from "next/server";
 
 import { withSecurity, type AuthenticatedRequest } from "../../_shared/middleware";
+
+//[P1][API][ONBOARDING] Create Network + Corporate Endpoint (server)
+//[P1][API][ONBOARDING] Create Network + Corporate Endpoint (server)
+// Tags: api, onboarding, network, corporate, membership, events
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { logEvent } from "@/src/lib/eventLog";
 import { adminDb as importedAdminDb } from "@/src/lib/firebase.server";
 import { markOnboardingComplete } from "@/src/lib/userOnboarding";
 
-export async function createNetworkCorporateHandler(
+async function createNetworkCorporateHandlerImpl(
   req: AuthenticatedRequest & {
     user?: { uid: string; customClaims?: Record<string, unknown> };
   },
@@ -229,7 +227,7 @@ export async function createNetworkCorporateHandler(
 
 export const POST = withSecurity(
   async (req: AuthenticatedRequest, _ctx: unknown) => {
-    return createNetworkCorporateHandler(req, importedAdminDb);
+    return createNetworkCorporateHandlerImpl(req, importedAdminDb);
   },
   {
     requireAuth: true,

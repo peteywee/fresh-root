@@ -71,11 +71,20 @@ export function setCSRFCookie(
 
 export function csrfProtection<Ctx extends Record<string, unknown> = {}>(config: CSRFConfig = {}) {
   const fullConfig = { ...DEFAULT_CONFIG, ...config };
-  type C = Ctx & { params: Record<string, string> };
-  return function (handler: (request: NextRequest, context: C) => Promise<NextResponse>) {
-    return async (request: NextRequest, context: C): Promise<NextResponse> => {
+  return function (
+    handler: (
+      request: NextRequest,
+      context: Ctx & { params: Promise<Record<string, string>> },
+    ) => Promise<NextResponse>,
+  ) {
+    return async (
+      request: NextRequest,
+      context: Ctx & { params: Promise<Record<string, string>> },
+    ): Promise<NextResponse> => {
       const method = request.method.toUpperCase();
       if (method === "GET" || method === "HEAD" || method === "OPTIONS") {
+        // Ensure params are resolvable
+        await context.params;
         return handler(request, context);
       }
 
@@ -135,17 +144,17 @@ export function csrfProtection<Ctx extends Record<string, unknown> = {}>(config:
 export function withCSRFToken<Ctx extends Record<string, unknown> = {}>(
   handler: (
     request: NextRequest,
-    context: Ctx & { params: Record<string, string> },
+    context: Ctx & { params: Promise<Record<string, string>> },
   ) => Promise<NextResponse>,
   config: CSRFConfig = {},
 ): (
   request: NextRequest,
-  context: Ctx & { params: Record<string, string> },
+  context: Ctx & { params: Promise<Record<string, string>> },
 ) => Promise<NextResponse> {
   const fullConfig = { ...DEFAULT_CONFIG, ...config };
   return async (
     request: NextRequest,
-    context: Ctx & { params: Record<string, string> },
+    context: Ctx & { params: Promise<Record<string, string>> },
   ): Promise<NextResponse> => {
     // Prefer the public cookies API when available; otherwise fallback to Cookie header.
     let token: string | null = null;
@@ -168,6 +177,9 @@ export function withCSRFToken<Ctx extends Record<string, unknown> = {}>(
 
     const hadCookie = token != null;
     if (!token) token = generateCSRFToken(fullConfig.tokenLength);
+    
+    // Ensure params are resolvable
+    await context.params;
     const response = await handler(request, context);
     if (!hadCookie) {
       setCSRFCookie(response, token, fullConfig);

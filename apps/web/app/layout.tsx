@@ -5,8 +5,8 @@ import Link from "next/link";
 
 import "./globals.css"; // ensure this exists; keep Tailwind base/utilities here
 import { inter } from "./fonts";
-import Logo from "../components/Logo";
 import Providers from "./providers"; // <--- Import the Providers component
+import Logo from "../components/Logo";
 
 export const metadata: Metadata = {
   title: "Fresh Schedules",

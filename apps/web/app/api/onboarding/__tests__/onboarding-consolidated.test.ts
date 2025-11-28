@@ -1,3 +1,5 @@
+// [P1][TEST][TEST] Onboarding Consolidated Test tests
+// Tags: P1, TEST, TEST
 import { test } from 'vitest';
 
 // Consolidated placeholder tests for onboarding routes.

@@ -1,13 +1,6 @@
-// [P0][API][CODE] Route API route handler
-// [P0][API][CODE] Route API route handler
-import { traceFn } from "@/app/api/_shared/otel";
-// [P0][API][CODE] Route API route handler
-import { withGuards } from "@/app/api/_shared/security";
-// [P0][API][CODE] Route API route handler
-import { jsonOk, jsonError } from "@/app/api/_shared/response";
-// Tags: P0, API, CODE
-import { NextRequest } from "next/server";
-import { NextResponse } from "next/server";
+// [P0][API][ORGANIZATIONS] Organizations detail API route handler
+// Tags: P0, API, ORGANIZATIONS, validation, zod
+import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 
 import { withSecurity } from "../../_shared/middleware";
@@ -35,9 +28,9 @@ const UpdateOrgSchema = z.object({
  * Get organization details
  */
 export const GET = withSecurity(
-  async (request: NextRequest, context: { params: Record<string, string>; userId: string }) => {
+  async (_request: NextRequest, context: { params: Record<string, string>; userId: string }) => {
     try {
-      const id = context.params.id;
+      const { id } = context.params;
       // In production, fetch from database and check permissions
       const organization = {
         id,
@@ -68,7 +61,7 @@ export const GET = withSecurity(
 export const PATCH = withSecurity(
   async (request: NextRequest, context: { params: Record<string, string>; userId: string }) => {
     try {
-      const id = context.params.id;
+      const { id } = context.params;
       const parsed = await parseJson(request, UpdateOrgSchema);
       if (!parsed.success) {
         return badRequest("Validation failed", parsed.details);
@@ -93,9 +86,9 @@ export const PATCH = withSecurity(
  * Delete an organization (admin only)
  */
 export const DELETE = withSecurity(
-  async (request: NextRequest, context: { params: Record<string, string>; userId: string }) => {
+  async (_request: NextRequest, context: { params: Record<string, string>; userId: string }) => {
     try {
-      const id = context.params.id;
+      const { id } = context.params;
       // In production, check if user is admin and delete from database
       return NextResponse.json({ message: "Organization deleted successfully", id });
     } catch {

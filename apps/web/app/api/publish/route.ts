@@ -1,11 +1,9 @@
 // [P0][API][SCHEDULE] Schedule publish endpoint
 // [P0][API][SCHEDULE] Schedule publish endpoint
-import { traceFn } from "@/app/api/_shared/otel";
 // [P0][API][SCHEDULE] Schedule publish endpoint
-import { withGuards } from "@/app/api/_shared/security";
 // [P0][API][SCHEDULE] Schedule publish endpoint
-import { jsonOk, jsonError } from "@/app/api/_shared/response";
 // Tags: P0, API, SCHEDULE
+import { Timestamp } from "firebase-admin/firestore";
 import { NextRequest } from "next/server";
 import { z } from "zod";
 
@@ -53,10 +51,9 @@ export const POST = withSecurity(
             return serverError("Admin DB not initialized");
           }
 
-          const FieldValue = adminSdk.firestore.FieldValue;
           const scheduleRef = adminDb.doc(`organizations/${orgId}/schedules/${scheduleId}`);
           await scheduleRef.set(
-            { state: "published", publishedAt: FieldValue.serverTimestamp() },
+            { state: "published", publishedAt: Timestamp.now() },
             { merge: true },
           );
 
@@ -69,7 +66,7 @@ export const POST = withSecurity(
             targets: "members",
             recipients: [],
             scheduleId,
-            createdAt: FieldValue.serverTimestamp(),
+            createdAt: Timestamp.now(),
           });
 
           return ok({ success: true, scheduleId, orgId });

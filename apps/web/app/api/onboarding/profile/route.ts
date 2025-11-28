@@ -1,10 +1,7 @@
 // [P0][API][CODE] Route API route handler
 // [P0][API][CODE] Route API route handler
-import { traceFn } from "@/app/api/_shared/otel";
 // [P0][API][CODE] Route API route handler
-import { withGuards } from "@/app/api/_shared/security";
 // [P0][API][CODE] Route API route handler
-import { jsonOk, jsonError } from "@/app/api/_shared/response";
 // Tags: P0, API, CODE
 import { NextResponse } from "next/server";
 import { z } from "zod";
@@ -21,7 +18,7 @@ const ProfileSchema = z.object({
   selfDeclaredRole: z.string().min(1),
 });
 
-export async function profileHandler(
+async function profileHandlerImpl(
   req: AuthenticatedRequest & { user?: { uid: string } },
   injectedAdminDb = importedAdminDb,
 ) {
@@ -73,6 +70,6 @@ export async function profileHandler(
   return NextResponse.json({ ok: true }, { status: 200 });
 }
 
-export const POST = withSecurity(async (req: AuthenticatedRequest) => profileHandler(req), {
+export const POST = withSecurity(async (req: AuthenticatedRequest) => profileHandlerImpl(req), {
   requireAuth: true,
 });

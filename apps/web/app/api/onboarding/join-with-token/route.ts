@@ -1,16 +1,14 @@
 //[P1][API][ONBOARDING] Join With Token Endpoint (server)
 //[P1][API][ONBOARDING] Join With Token Endpoint (server)
-import { traceFn } from "@/app/api/_shared/otel";
-//[P1][API][ONBOARDING] Join With Token Endpoint (server)
-import { withGuards } from "@/app/api/_shared/security";
-//[P1][API][ONBOARDING] Join With Token Endpoint (server)
-import { jsonOk, jsonError } from "@/app/api/_shared/response";
-// Tags: api, onboarding, join-token, membership, events
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextResponse } from "next/server";
 
 import { withSecurity, type AuthenticatedRequest } from "../../_shared/middleware";
+
+//[P1][API][ONBOARDING] Join With Token Endpoint (server)
+//[P1][API][ONBOARDING] Join With Token Endpoint (server)
+// Tags: api, onboarding, join-token, membership, events
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { logEvent } from "@/src/lib/eventLog";
 import { adminDb as importedAdminDb } from "@/src/lib/firebase.server";
@@ -27,7 +25,7 @@ type JoinTokenDoc = {
   maxUses?: number;
 };
 
-export async function joinWithTokenHandler(
+async function joinWithTokenHandlerImpl(
   req: AuthenticatedRequest & {
     user?: { uid: string; customClaims?: Record<string, unknown> };
   },
@@ -191,7 +189,7 @@ export async function joinWithTokenHandler(
 
 export const POST = withSecurity(
   async (req: AuthenticatedRequest, _ctx: unknown) => {
-    return joinWithTokenHandler(req, importedAdminDb);
+    return joinWithTokenHandlerImpl(req, importedAdminDb);
   },
   { requireAuth: true },
 );

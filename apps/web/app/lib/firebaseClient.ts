@@ -5,11 +5,11 @@
  * Client-side Firebase initialization and configuration.
  * Validates environment variables and provides singleton Firebase app instance.
  */
+import { getAnalytics } from "firebase/analytics";
 import { getApp, getApps, initializeApp, FirebaseOptions } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
-import { getAnalytics } from "firebase/analytics";
 import { z } from "zod";
 
 // Validate expected NEXT_PUBLIC_ env vars used to initialize Firebase.
@@ -86,7 +86,7 @@ export const analytics = ((): ReturnType<typeof getAnalytics> | undefined => {
     if (!firebaseApp) return undefined;
     // Only init analytics if measurementId is present on the config
     // @ts-ignore - access config via getApp().options
-    const measurementId = (firebaseApp as any).options?.measurementId;
+    const measurementId = (firebaseApp as FirebaseApp).options?.measurementId;
     if (!measurementId) return undefined;
     return getAnalytics(firebaseApp);
   } catch (err) {

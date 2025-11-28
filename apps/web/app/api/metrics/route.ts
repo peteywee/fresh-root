@@ -1,12 +1,10 @@
 // [P1][OBSERVABILITY][METRICS] Prometheus-compatible metrics endpoint
 // [P1][OBSERVABILITY][METRICS] Prometheus-compatible metrics endpoint
-import { traceFn } from "@/app/api/_shared/otel";
-// [P1][OBSERVABILITY][METRICS] Prometheus-compatible metrics endpoint
-import { withGuards } from "@/app/api/_shared/security";
-// [P1][OBSERVABILITY][METRICS] Prometheus-compatible metrics endpoint
-import { jsonOk, jsonError } from "@/app/api/_shared/response";
-// Tags: P1, OBSERVABILITY, METRICS
 import { NextResponse } from "next/server";
+
+// [P1][OBSERVABILITY][METRICS] Prometheus-compatible metrics endpoint
+// [P1][OBSERVABILITY][METRICS] Prometheus-compatible metrics endpoint
+// Tags: P1, OBSERVABILITY, METRICS
 
 /**
  * Metrics endpoint exposing Prometheus-compatible metrics.
@@ -31,7 +29,7 @@ const metrics: Metrics = {
 /**
  * Record a request metric
  */
-export function recordRequest(method: string, path: string, duration: number, statusCode: number) {
+function _recordRequest(method: string, path: string, duration: number, statusCode: number) {
   const key = `${method}_${path}`;
 
   // Count total requests

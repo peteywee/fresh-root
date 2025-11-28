@@ -1,10 +1,9 @@
 // [P1][API][CODE] Route API route handler
 // [P1][API][CODE] Route API route handler
-import { traceFn } from "@/app/api/_shared/otel";
+import { NextResponse } from "next/server";
+
 // [P1][API][CODE] Route API route handler
-import { withGuards } from "@/app/api/_shared/security";
 // [P1][API][CODE] Route API route handler
-import { jsonOk, jsonError } from "@/app/api/_shared/response";
 // Tags: P1, API, CODE
 /**
  * [P0][API][HEALTH] Health Check Endpoint
@@ -14,8 +13,6 @@ import { jsonOk, jsonError } from "@/app/api/_shared/response";
  * - Simple liveness probe for load balancers and uptime monitoring
  * - Does NOT hit Firestore; use for "is the web app alive" checks
  */
-
-import { NextResponse } from "next/server";
 
 export async function GET() {
   return NextResponse.json(

@@ -1,3 +1,5 @@
+// [P1][OBSERVABILITY][LOGGING] Gen Schema Catalog
+// Tags: P1, OBSERVABILITY, LOGGING, VALIDATION
 import fs from 'fs';
 import path from 'path';
 

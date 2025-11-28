@@ -8,8 +8,8 @@
  * so tests can freely mock this module without pulling in the full admin SDK.
  */
 
-import type { Firestore } from "firebase-admin/firestore";
 import type { App } from "firebase-admin/app";
+import type { Firestore } from "firebase-admin/firestore";
 
 // These are intentionally `undefined` by default so that:
 // - Unit/integration tests can vi.mock this module and supply fakes.
