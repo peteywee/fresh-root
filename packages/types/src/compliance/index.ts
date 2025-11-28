@@ -1,5 +1,6 @@
-//[P1][TYPES][BARREL] Compliance barrel export (v14.0.0)
-// Tags: barrel, exports, types
+//[P0][INTEGRITY][SCHEMA] Compliance barrel export (v14.0.0)
+import { z } from "zod";
+import { AdminResponsibilityFormSchema } from "./adminResponsibilityForm";
 
 /**
  * Compliance barrel export
@@ -7,3 +8,6 @@
  */
 
 export * from "./adminResponsibilityForm";
+
+// Type inference from Zod schemas
+export type AdminResponsibilityForm = z.infer<typeof AdminResponsibilityFormSchema>;
