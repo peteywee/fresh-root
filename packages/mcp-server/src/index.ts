@@ -25,6 +25,7 @@ repo.paths  { globs?: string[] }
 import fg from "fast-glob";
 import { parse, success, error } from "jsonrpc-lite";
 import fs from "node:fs/promises";
+import path from "node:path";
 import { createInterface } from "node:readline";
 
 type Req = { id: string | number | null; method: string; params?: unknown };
@@ -47,9 +48,17 @@ async function repoSearch(q: string, globs: string[] = ["/*"]) {
   }
   return res.slice(0, 500);
 }
-async function repoRead(path: string) {
-  const text = await fs.readFile(path, "utf8");
-  if (path.startsWith(".env")) return "[REDACTED_ENV]";
+async function repoRead(requestedPath: string) {
+  // [SECURITY] Prevent path traversal attacks (Critical)
+  const resolvedPath = path.resolve(requestedPath);
+  const repoRoot = path.resolve(process.cwd());
+
+  if (!resolvedPath.startsWith(repoRoot)) {
+    throw new Error("SECURITY_ERROR: Path traversal attempt - access denied");
+  }
+
+  if (requestedPath.startsWith(".env")) return "[REDACTED_ENV]";
+  const text = await fs.readFile(resolvedPath, "utf8");
   return text;
 }
 async function repoPaths(globs: string[] = ["/*"]) {

@@ -1,0 +1,29 @@
+# GitHub Actions workflows often have complex syntax that breaks Prettier's YAML parser
+.github/workflows/
+
+# Build and dependency artifacts
+node_modules/
+dist/
+build/
+.next/
+.turbo/
+.pnpm-store/
+
+# Environment and cache
+.env*
+!.env.example
+.cache/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+*.log
+logs/

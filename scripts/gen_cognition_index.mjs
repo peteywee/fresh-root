@@ -375,4 +375,23 @@ async function buildUiIndex(codeIndex) {
   const pages = [];
 
   for (const entry of uiCandidates) {
-    const feat
+    const features = entry.tags ? entry.tags.split("|").slice(0, 3) : [];
+
+    const route = {
+      path: entry.path,
+      features: features,
+    };
+
+    pages.push(route);
+  }
+
+  const index = {
+    generatedAt: new Date().toISOString(),
+    count: pages.length,
+    pages,
+  };
+
+  const outPath = path.join(INDEX_DIR, "UI_INDEX.json");
+  await fs.writeFile(outPath, JSON.stringify(index, null, 2) + "\n", "utf8");
+  console.log(`[cognition:index] Wrote UI_INDEX.json (${pages.length} pages)`);
+}

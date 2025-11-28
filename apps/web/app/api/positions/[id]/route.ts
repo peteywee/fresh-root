@@ -1,7 +1,7 @@
 // [P0][CORE][API] Position management endpoint
 
 import { PositionSchema } from "@fresh-schedules/types";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 import { requireOrgMembership, requireRole } from "../../../../src/lib/api/authorization";
 import { csrfProtection } from "../../../../src/lib/api/csrf";
@@ -13,17 +13,22 @@ import { serverError } from "../../_shared/validation";
  * GET /api/positions/[id]
  * Get position details (requires staff+ role)
  */
-export const GET = requireOrgMembership(async (request, context) => {
+export const GET = requireOrgMembership(async (request: NextRequest, context: any) => {
   // Apply rate limiting
   const rateLimitResult = await checkRateLimit(request, RateLimits.api);
   if (!rateLimitResult.allowed) {
     return NextResponse.json(
       { error: "Rate limit exceeded" },
-      { status: 429, headers: { "Retry-After": String(Math.ceil((rateLimitResult.resetAt - Date.now()) / 1000)) } }
+      {
+        status: 429,
+        headers: {
+          "Retry-After": String(Math.ceil((rateLimitResult.resetAt - Date.now()) / 1000)),
+        },
+      },
     );
   }
 
-  const { params } = context;
+  const params = context.params;
   try {
     const { id } = params;
 
@@ -52,17 +57,22 @@ export const GET = requireOrgMembership(async (request, context) => {
  */
 export const PATCH = csrfProtection()(
   requireOrgMembership(
-    requireRole("manager")(async (request, context) => {
+    requireRole("manager")(async (request: NextRequest, context: any) => {
       // Apply rate limiting
       const rateLimitResult = await checkRateLimit(request, RateLimits.api);
-  if (!rateLimitResult.allowed) {
-    return NextResponse.json(
-      { error: "Rate limit exceeded" },
-      { status: 429, headers: { "Retry-After": String(Math.ceil((rateLimitResult.resetAt - Date.now()) / 1000)) } }
-    );
-  }
+      if (!rateLimitResult.allowed) {
+        return NextResponse.json(
+          { error: "Rate limit exceeded" },
+          {
+            status: 429,
+            headers: {
+              "Retry-After": String(Math.ceil((rateLimitResult.resetAt - Date.now()) / 1000)),
+            },
+          },
+        );
+      }
 
-      const { params } = context;
+      const params = context.params;
       try {
         const { id } = params;
         const body = await request.json();
@@ -102,17 +112,22 @@ export const PATCH = csrfProtection()(
  */
 export const DELETE = csrfProtection()(
   requireOrgMembership(
-    requireRole("admin")(async (request, context) => {
+    requireRole("admin")(async (request: NextRequest, context: any) => {
       // Apply rate limiting
       const rateLimitResult = await checkRateLimit(request, RateLimits.api);
-  if (!rateLimitResult.allowed) {
-    return NextResponse.json(
-      { error: "Rate limit exceeded" },
-      { status: 429, headers: { "Retry-After": String(Math.ceil((rateLimitResult.resetAt - Date.now()) / 1000)) } }
-    );
-  }
+      if (!rateLimitResult.allowed) {
+        return NextResponse.json(
+          { error: "Rate limit exceeded" },
+          {
+            status: 429,
+            headers: {
+              "Retry-After": String(Math.ceil((rateLimitResult.resetAt - Date.now()) / 1000)),
+            },
+          },
+        );
+      }
 
-      const { params } = context;
+      const params = context.params;
       try {
         const { id } = params;
 

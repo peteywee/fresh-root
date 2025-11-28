@@ -1,11 +1,11 @@
 // [P1][TEST][TEST] Onboarding Consolidated Test tests
 // Tags: P1, TEST, TEST
-import { test } from 'vitest';
+import { test } from "vitest";
 
 // Consolidated placeholder tests for onboarding routes.
 // These tests are just placeholders to satisfy the "test presence" gate.
 // Add route-specific, integration, and security tests as needed.
 
-test('onboarding routes placeholder', () => {
+test("onboarding routes placeholder", () => {
   // This test simply exists to satisfy the presence check.
 });

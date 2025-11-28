@@ -7,7 +7,6 @@ import { sanitizeObject } from "../../../../src/lib/api/sanitize";
 import { withSecurity } from "../../_shared/middleware";
 import { badRequest, serverError, UpdateShiftSchema } from "../../_shared/validation";
 
-
 // Rate limiting via withSecurity options
 
 export const GET = withSecurity(

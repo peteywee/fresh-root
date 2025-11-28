@@ -19,13 +19,13 @@ These documents define what's running in production:
 
 For developers working on new features:
 
-| Component | Documentation | Branch | Purpose |
-|-----------|---------------|--------|---------|
-| **Security Standards** | [Tier 0 Fixes](./PHASE_1_TIER_0_FIXES.md) | dev | Security wrapper requirements |
-| **Integrity Standards** | [Tier 1 Fixes](./PHASE_2_TIER_1_FIXES.md) | dev | Type safety & Zod patterns |
-| **Architecture** | [Symmetry Framework](./standards/SYMMETRY_FRAMEWORK.md) | dev | File layer fingerprints |
-| **Patterns** | [Standards Index](./standards/00_STANDARDS_INDEX.md) | dev | Complete standards system |
-| **CI/CD** | [Guard Main](../.github/workflows/guard-main.yml) | main | Production gate workflow |
+| Component               | Documentation                                           | Branch | Purpose                       |
+| ----------------------- | ------------------------------------------------------- | ------ | ----------------------------- |
+| **Security Standards**  | [Tier 0 Fixes](./PHASE_1_TIER_0_FIXES.md)               | dev    | Security wrapper requirements |
+| **Integrity Standards** | [Tier 1 Fixes](./PHASE_2_TIER_1_FIXES.md)               | dev    | Type safety & Zod patterns    |
+| **Architecture**        | [Symmetry Framework](./standards/SYMMETRY_FRAMEWORK.md) | dev    | File layer fingerprints       |
+| **Patterns**            | [Standards Index](./standards/00_STANDARDS_INDEX.md)    | dev    | Complete standards system     |
+| **CI/CD**               | [Guard Main](../.github/workflows/guard-main.yml)       | main   | Production gate workflow      |
 
 ### 📊 Metrics & Scoring
 
@@ -45,14 +45,16 @@ Build Status:         SUCCESS ✅
 ### 🚀 Runtime Components
 
 #### Security (Tier 0 - Production Ready)
+
 - ✅ **6 Protected Endpoints** - All have `withSecurity` wrapper
   - health, healthz, metrics, internal/backup, session, onboarding/admin-form
 - ✅ **7 Validated Write Endpoints** - All validate input with Zod
-  - auth/mfa/setup, onboarding/*, session/bootstrap
+  - auth/mfa/setup, onboarding/\*, session/bootstrap
 
 **CI Gate:** Guard-main enforces zero exceptions
 
 #### Integrity (Tier 1 - Production Ready)
+
 - ✅ **4 Schema Files** - All export Zod + z.infer types
   - compliance, links, onboarding types
 - ✅ **Type Safety** - Single source of truth for all entities
@@ -60,12 +62,14 @@ Build Status:         SUCCESS ✅
 **CI Gate:** Guard-main enforces zero exceptions
 
 #### Architecture (Tier 2 - Complete)
+
 - ✅ **3 Complete Triads** - Schema ↔ API ↔ Rules alignment
   - Schedule, Organization, Shift
 
 **CI Gate:** Automatically validated
 
 #### Code Quality (TypeScript & ESLint)
+
 - ✅ **Zero Compilation Errors** - All code type-safe
 - ✅ **Zero Blocking ESLint Errors** - Code quality enforced
 - ✅ **Build Success** - Artifacts verified
@@ -79,11 +83,13 @@ Build Status:         SUCCESS ✅
 ### Branch Strategy
 
 **main** (production):
+
 - Contains: Working runtime code, production gates, deployment docs
 - Read-only access via guard-main.yml (no direct commits)
 - Only accepts PRs from dev branch that pass all checks
 
 **dev** (development):
+
 - Contains: Development standards, phase plans, implementation guides
 - Writable for feature branches
 - All changes vetted by ci-patterns.yml + pr.yml before merge to main
@@ -115,22 +121,24 @@ Build Status:         SUCCESS ✅
 
 ### Files That Link Development to Production
 
-| File | Location | Purpose | Links |
-|------|----------|---------|-------|
-| guard-main.yml | .github/workflows | Production gate | Links to: 90+ score requirement, Tier 0/1 rules |
-| ci-patterns.yml | .github/workflows | Dev validation | Links to: Standards index, phase plans |
-| pr.yml | .github/workflows | PR fast-track | Links to: Type requirements, security rules |
-| validate-patterns.mjs | scripts | Pattern validator | Links to: All standards documents |
+| File                  | Location          | Purpose           | Links                                           |
+| --------------------- | ----------------- | ----------------- | ----------------------------------------------- |
+| guard-main.yml        | .github/workflows | Production gate   | Links to: 90+ score requirement, Tier 0/1 rules |
+| ci-patterns.yml       | .github/workflows | Dev validation    | Links to: Standards index, phase plans          |
+| pr.yml                | .github/workflows | PR fast-track     | Links to: Type requirements, security rules     |
+| validate-patterns.mjs | scripts           | Pattern validator | Links to: All standards documents               |
 
 ### How to Read the Links
 
 **When CI fails on main:**
+
 1. Check guard-main.yml logs (guards/production-gate)
 2. Links point to: dev branch documentation
 3. Fix locally following dev documentation
 4. Create PR from dev again
 
 **When CI fails on dev:**
+
 1. Check pr.yml or ci-patterns.yml logs
 2. Links point to: standards and phase plans
 3. Fix following referenced documentation
@@ -149,6 +157,7 @@ FRESH_PATTERNS_MIN_SCORE=90 pnpm lint:patterns
 ```
 
 Expected output:
+
 ```
 💎 SCORE: 130.0 points — PERFECT
   🔴 Tier 0 (Security):    0 ✅
@@ -164,6 +173,7 @@ pnpm lint:patterns:verbose
 ```
 
 Expected output:
+
 ```
 All patterns and standards compliance visible
 See: docs/standards/00_STANDARDS_INDEX.md for interpretation

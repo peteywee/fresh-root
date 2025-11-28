@@ -16,9 +16,7 @@ const anyProcess = process as any;
 
 // Capture the original implementation if it's valid.
 const originalListeners =
-  typeof anyProcess.listeners === "function"
-    ? anyProcess.listeners.bind(process)
-    : undefined;
+  typeof anyProcess.listeners === "function" ? anyProcess.listeners.bind(process) : undefined;
 
 // Ensure process.listeners is a function right away.
 if (!originalListeners) {

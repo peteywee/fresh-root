@@ -65,17 +65,17 @@ async function main() {
   const results = { missing: [], found: 0, required: onboardingRoutes.length };
   for (const route of onboardingRoutes) {
     const testPath = getTestPath(route);
-    const hasSpecific = await exists(testPath) && await isMeaningfulTest(testPath);
-    
+    const hasSpecific = (await exists(testPath)) && (await isMeaningfulTest(testPath));
+
     // For consolidated tests, we just check if any exist and are meaningful
     let hasConsolidated = false;
     if (onboardingTests.length > 0) {
-       for (const t of onboardingTests) {
-         if (await isMeaningfulTest(t)) {
-           hasConsolidated = true;
-           break;
-         }
-       }
+      for (const t of onboardingTests) {
+        if (await isMeaningfulTest(t)) {
+          hasConsolidated = true;
+          break;
+        }
+      }
     }
 
     if (hasSpecific || hasConsolidated) results.found++;

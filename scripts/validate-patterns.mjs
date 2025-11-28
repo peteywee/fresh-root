@@ -21,13 +21,13 @@
  *   Score < 90: Fails CI on main and all PRs
  */
 
-import { readFileSync, readdirSync, statSync, existsSync } from 'fs';
-import { join, relative, extname, basename, dirname } from 'path';
-import { fileURLToPath } from 'url';
+import { readFileSync, readdirSync, statSync, existsSync } from "fs";
+import { join, relative, extname, basename, dirname } from "path";
+import { fileURLToPath } from "url";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-const ROOT = join(__dirname, '..');
+const ROOT = join(__dirname, "..");
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Configuration: thresholds
@@ -41,7 +41,7 @@ function parseEnvNumber(name, fallback) {
 }
 
 const DEFAULT_MIN_SCORE = 90;
-const MIN_SCORE = parseEnvNumber('FRESH_PATTERNS_MIN_SCORE', DEFAULT_MIN_SCORE);
+const MIN_SCORE = parseEnvNumber("FRESH_PATTERNS_MIN_SCORE", DEFAULT_MIN_SCORE);
 
 // ─────────────────────────────────────────────────────────────────────────────
 // CONFIGURATION: Pattern Definitions (kept inline for now)
@@ -54,30 +54,32 @@ const PATTERNS = {
     pathMatch: /packages\/types\/src\/.*\.ts$/,
     checks: [
       {
-        name: 'Header Present',
+        name: "Header Present",
         tier: 3,
-        severity: 'info',
+        severity: "info",
         test: (content) => /^\/\/ \[P\d\]\[.+\]\[SCHEMA\]/m.test(content),
-        message: 'Missing standard header: // [P#][CATEGORY][SCHEMA] description'
+        message: "Missing standard header: // [P#][CATEGORY][SCHEMA] description",
       },
       {
-        name: 'Zod Import',
+        name: "Zod Import",
         tier: 1,
-        severity: 'error',
+        severity: "error",
         test: (content) => /import \{\s*z\s*\} from ['"]zod['"]/.test(content),
-        message: 'Missing Zod import: import { z } from "zod"'
+        message: 'Missing Zod import: import { z } from "zod"',
       },
       {
-        name: 'Type Inference Pattern',
+        name: "Type Inference Pattern",
         tier: 1,
-        severity: 'error',
+        severity: "error",
         test: (content) => {
-          const hasInfer = /export type\s+\w+\s*=\s*z\.infer<\s*typeof\s+\w+Schema\s*>/.test(content);
+          const hasInfer = /export type\s+\w+\s*=\s*z\.infer<\s*typeof\s+\w+Schema\s*>/.test(
+            content,
+          );
           return hasInfer;
         },
-        message: 'Types must be inferred from Zod schemas using z.infer<typeof NameSchema>'
-      }
-    ]
+        message: "Types must be inferred from Zod schemas using z.infer<typeof NameSchema>",
+      },
+    ],
   },
 
   // Layer 02: API Routes
@@ -86,35 +88,35 @@ const PATTERNS = {
     pathMatch: /apps\/web\/app\/api\/.*\/route\.ts$/,
     checks: [
       {
-        name: 'Header Present',
+        name: "Header Present",
         tier: 3,
-        severity: 'info',
+        severity: "info",
         test: (content) => /^\/\/ \[P\d\]\[.+\]\[API\]/m.test(content),
-        message: 'Missing standard header: // [P#][API][CODE] description'
+        message: "Missing standard header: // [P#][API][CODE] description",
       },
       {
-        name: 'Security Wrapper',
+        name: "Security Wrapper",
         tier: 0,
-        severity: 'error',
+        severity: "error",
         test: (content) => /(withSecurity|requireOrgMembership|requireSession)/.test(content),
-        message: 'API route missing security wrapper (withSecurity/requireOrgMembership/requireSession)'
+        message:
+          "API route missing security wrapper (withSecurity/requireOrgMembership/requireSession)",
       },
       {
-        name: 'Write Validation',
+        name: "Write Validation",
         tier: 0,
-        severity: 'error',
+        severity: "error",
         test: (content) => {
           // If file has POST or PATCH, require evidence of validation
           const hasWrite = /(POST|PATCH|PUT)\s*=/.test(content);
           if (!hasWrite) return true;
           const hasValidation =
-            /parseJson\(|safeParse\(|\.parse\(/.test(content) ||
-            /Schema\s*\.parse\(/.test(content);
+            /parseJson\(|safeParse\(|\.parse\(/.test(content) || /Schema\s*\.parse\(/.test(content);
           return hasValidation;
         },
-        message: 'Write API routes must validate input using Zod before use'
-      }
-    ]
+        message: "Write API routes must validate input using Zod before use",
+      },
+    ],
   },
 
   // Layer 01: Firestore Rules
@@ -123,38 +125,39 @@ const PATTERNS = {
     pathMatch: /firestore\.rules$/,
     checks: [
       {
-        name: 'Root Deny Present',
+        name: "Root Deny Present",
         tier: 0,
-        severity: 'error',
-        test: (content) => /match \/databases\/\{database\}\/documents \{\s*\/\/? default deny/i.test(content) ||
-                            /allow\s+read,\s*write:\s*if\s+false;/.test(content),
-        message: 'Firestore rules must deny by default at root'
-      }
+        severity: "error",
+        test: (content) =>
+          /match \/databases\/\{database\}\/documents \{\s*\/\/? default deny/i.test(content) ||
+          /allow\s+read,\s*write:\s*if\s+false;/.test(content),
+        message: "Firestore rules must deny by default at root",
+      },
       // Additional rules checks can be added here as needed
-    ]
-  }
+    ],
+  },
 };
 
 // Triad entities: schema/API/rules coverage
 const TRIAD_ENTITIES = [
   {
-    name: 'Schedule',
-    schema: 'packages/types/src/schedules.ts',
-    api: 'apps/web/app/api/schedules/route.ts',
-    rulesPattern: /match \/schedules\//
+    name: "Schedule",
+    schema: "packages/types/src/schedules.ts",
+    api: "apps/web/app/api/schedules/route.ts",
+    rulesPattern: /match \/schedules\//,
   },
   {
-    name: 'Organization',
-    schema: 'packages/types/src/orgs.ts',
-    api: 'apps/web/app/api/organizations/route.ts',
-    rulesPattern: /match \/orgs\//
+    name: "Organization",
+    schema: "packages/types/src/orgs.ts",
+    api: "apps/web/app/api/organizations/route.ts",
+    rulesPattern: /match \/orgs\//,
   },
   {
-    name: 'Shift',
-    schema: 'packages/types/src/shifts.ts',
-    api: 'apps/web/app/api/shifts/route.ts',
-    rulesPattern: /match \/shifts\//
-  }
+    name: "Shift",
+    schema: "packages/types/src/shifts.ts",
+    api: "apps/web/app/api/shifts/route.ts",
+    rulesPattern: /match \/shifts\//,
+  },
   // Extend as needed: Venue, Position, Staff, etc.
 ];
 
@@ -164,9 +167,9 @@ const TRIAD_ENTITIES = [
 
 function readFileSafe(path) {
   try {
-    return readFileSync(path, 'utf8');
+    return readFileSync(path, "utf8");
   } catch {
-    return '';
+    return "";
   }
 }
 
@@ -183,7 +186,7 @@ function walkDir(root, targetPath, files = []) {
     }
   } catch (err) {
     // Skip broken symlinks and inaccessible paths
-    if (err.code !== 'ENOENT' && err.code !== 'EACCES') {
+    if (err.code !== "ENOENT" && err.code !== "EACCES") {
       throw err;
     }
   }
@@ -198,13 +201,13 @@ class PatternValidator {
   constructor(rootDir, options = {}) {
     this.rootDir = rootDir;
     this.options = {
-      verbose: !!options.verbose
+      verbose: !!options.verbose,
     };
     this.results = {
       errors: [],
       warnings: [],
       info: [],
-      triadStatus: []
+      triadStatus: [],
     };
   }
 
@@ -238,11 +241,11 @@ class PatternValidator {
           name: check.name,
           message: check.message,
           tier: check.tier,
-          severity: check.severity
+          severity: check.severity,
         };
-        if (check.tier === 0 || check.severity === 'error') {
+        if (check.tier === 0 || check.severity === "error") {
           this.results.errors.push(record);
-        } else if (check.tier === 1 || check.severity === 'warn' || check.severity === 'warning') {
+        } else if (check.tier === 1 || check.severity === "warn" || check.severity === "warning") {
           this.results.warnings.push(record);
         } else {
           this.results.info.push(record);
@@ -263,9 +266,9 @@ class PatternValidator {
   }
 
   validateTriad() {
-    this.log('\nChecking Triad of Trust...\n');
+    this.log("\nChecking Triad of Trust...\n");
 
-    const rulesPath = join(this.rootDir, 'firestore.rules');
+    const rulesPath = join(this.rootDir, "firestore.rules");
     const rulesContent = readFileSafe(rulesPath);
 
     for (const entity of TRIAD_ENTITIES) {
@@ -273,7 +276,7 @@ class PatternValidator {
         entity: entity.name,
         schema: false,
         api: false,
-        rules: false
+        rules: false,
       };
 
       const schemaPath = join(this.rootDir, entity.schema);
@@ -299,103 +302,105 @@ class PatternValidator {
     score -= tier2.length * 2;
     score -= tier3.length * 0.5;
 
-    const completeTriads = this.results.triadStatus.filter((t) => t.schema && t.api && t.rules).length;
+    const completeTriads = this.results.triadStatus.filter(
+      (t) => t.schema && t.api && t.rules,
+    ).length;
     score += completeTriads * 5;
     if (tier0.length === 0) score += 10;
     if (tier1.length === 0) score += 5;
 
     score = Math.max(0, score);
 
-    let status = 'FAILING';
-    let statusEmoji = '❌';
+    let status = "FAILING";
+    let statusEmoji = "❌";
     if (score >= 95) {
-      status = 'PERFECT';
-      statusEmoji = '💎';
+      status = "PERFECT";
+      statusEmoji = "💎";
     } else if (score >= 90) {
-      status = 'EXCELLENT';
-      statusEmoji = '🏆';
+      status = "EXCELLENT";
+      statusEmoji = "🏆";
     } else if (score >= MIN_SCORE) {
-      status = 'PASSING';
-      statusEmoji = '✅';
+      status = "PASSING";
+      statusEmoji = "✅";
     }
 
-    console.log('\n═══════════════════════════════════════════════════════════════');
+    console.log("\n═══════════════════════════════════════════════════════════════");
     console.log(`${statusEmoji} SCORE: ${score.toFixed(1)} points — ${status}`);
-    console.log('───────────────────────────────────────────────────────────────');
+    console.log("───────────────────────────────────────────────────────────────");
     console.log(`  🔴 Tier 0 (Security):    ${tier0.length}`);
     console.log(`  🟠 Tier 1 (Integrity):   ${tier1.length}`);
     console.log(`  🟡 Tier 2 (Architecture): ${tier2.length}`);
     console.log(`  🟢 Tier 3 (Style):       ${tier3.length}`);
     console.log(`  🎯 Complete Triads:      ${completeTriads}`);
     console.log(`  🧱 MIN_SCORE threshold:  ${MIN_SCORE}`);
-    console.log('═══════════════════════════════════════════════════════════════\n');
+    console.log("═══════════════════════════════════════════════════════════════\n");
 
     if (tier0.length > 0) {
-      console.log('🔴 Tier 0 Violations (Security):');
+      console.log("🔴 Tier 0 Violations (Security):");
       for (const e of tier0) {
         console.log(`  - [${e.file}] ${e.name}: ${e.message}`);
       }
-      console.log('');
+      console.log("");
     }
 
     if (tier1.length > 0) {
-      console.log('🟠 Tier 1 Violations (Integrity):');
+      console.log("🟠 Tier 1 Violations (Integrity):");
       for (const e of tier1) {
         console.log(`  - [${e.file}] ${e.name}: ${e.message}`);
       }
-      console.log('');
+      console.log("");
     }
 
     if (tier2.length > 0) {
-      console.log('🟡 Tier 2 Warnings (Architecture):');
+      console.log("🟡 Tier 2 Warnings (Architecture):");
       for (const e of tier2) {
         console.log(`  - [${e.file}] ${e.name}: ${e.message}`);
       }
-      console.log('');
+      console.log("");
     }
 
     if (tier3.length > 0) {
-      console.log('🟢 Tier 3 Info (Style):');
+      console.log("🟢 Tier 3 Info (Style):");
       for (const e of tier3) {
         console.log(`  - [${e.file}] ${e.name}: ${e.message}`);
       }
-      console.log('');
+      console.log("");
     }
 
-    console.log('📐 TRIAD OF TRUST STATUS:');
-    console.log('───────────────────────────────────────────────────────────────');
-    console.log('  Entity        │ Schema │ API │ Rules');
-    console.log('  ──────────────┼────────┼─────┼──────');
+    console.log("📐 TRIAD OF TRUST STATUS:");
+    console.log("───────────────────────────────────────────────────────────────");
+    console.log("  Entity        │ Schema │ API │ Rules");
+    console.log("  ──────────────┼────────┼─────┼──────");
     for (const t of this.results.triadStatus) {
-      const pad = (s, n) => (s + ' '.repeat(n)).slice(0, n);
+      const pad = (s, n) => (s + " ".repeat(n)).slice(0, n);
       console.log(
-        `  ${pad(t.entity, 13)} │   ${t.schema ? '✅' : '❌'}   │  ${t.api ? '✅' : '❌'} │  ${t.rules ? '✅' : '❌'}`
+        `  ${pad(t.entity, 13)} │   ${t.schema ? "✅" : "❌"}   │  ${t.api ? "✅" : "❌"} │  ${t.rules ? "✅" : "❌"}`,
       );
     }
-    console.log('───────────────────────────────────────────────────────────────\n');
+    console.log("───────────────────────────────────────────────────────────────\n");
 
     if (tier0.length > 0 || tier1.length > 0) {
       console.log(
-        `🚫 CRITICAL: Tier 0/1 violations detected. CI WILL BLOCK. Fix security and integrity issues before merging.`
+        `🚫 CRITICAL: Tier 0/1 violations detected. CI WILL BLOCK. Fix security and integrity issues before merging.`,
       );
     } else if (score < MIN_SCORE) {
       console.log(
-        `⚠️  Score ${score.toFixed(1)} is below minimum threshold (${MIN_SCORE}). CI WILL BLOCK. Add missing headers or fix Tier 2 issues.`
+        `⚠️  Score ${score.toFixed(1)} is below minimum threshold (${MIN_SCORE}). CI WILL BLOCK. Add missing headers or fix Tier 2 issues.`,
       );
     } else if (score >= 95) {
-      console.log('💎 PERFECT: Codebase meets all production standards. Ready to deploy.');
+      console.log("💎 PERFECT: Codebase meets all production standards. Ready to deploy.");
     } else if (score >= 90) {
-      console.log('🏆 EXCELLENT: Core patterns solid. Address remaining Tier 3 for 100%.');
+      console.log("🏆 EXCELLENT: Core patterns solid. Address remaining Tier 3 for 100%.");
     } else {
-      console.log('✅ PASSING: Standards met. Improvements welcome.');
+      console.log("✅ PASSING: Standards met. Improvements welcome.");
     }
   }
 
   run(targetPath = this.rootDir) {
-    console.log('╔══════════════════════════════════════════════════════════════╗');
-    console.log('║         FRESH SCHEDULES PATTERN VALIDATOR                    ║');
-    console.log('║         Symmetry Framework v2.0 — Tiered Severity            ║');
-    console.log('╚══════════════════════════════════════════════════════════════╝\n');
+    console.log("╔══════════════════════════════════════════════════════════════╗");
+    console.log("║         FRESH SCHEDULES PATTERN VALIDATOR                    ║");
+    console.log("║         Symmetry Framework v2.0 — Tiered Severity            ║");
+    console.log("╚══════════════════════════════════════════════════════════════╝\n");
 
     console.log(`Scanning: ${targetPath}\n`);
 
@@ -415,7 +420,9 @@ class PatternValidator {
     score -= tier2 * 2;
     score -= tier3 * 0.5;
 
-    const completeTriads = this.results.triadStatus.filter((t) => t.schema && t.api && t.rules).length;
+    const completeTriads = this.results.triadStatus.filter(
+      (t) => t.schema && t.api && t.rules,
+    ).length;
     score += completeTriads * 5;
     if (tier0Count === 0) score += 10;
     if (tier1Count === 0) score += 5;
@@ -437,8 +444,8 @@ class PatternValidator {
 // ─────────────────────────────────────────────────────────────────────────────
 
 const args = process.argv.slice(2);
-const verbose = args.includes('--verbose') || args.includes('-v');
-const targetArg = args.find((a) => !a.startsWith('-'));
+const verbose = args.includes("--verbose") || args.includes("-v");
+const targetArg = args.find((a) => !a.startsWith("-"));
 const targetPath = targetArg ? join(ROOT, targetArg) : ROOT;
 
 const validator = new PatternValidator(ROOT, { verbose });
