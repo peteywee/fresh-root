@@ -1,4 +1,4 @@
-# Fresh Schedules Context Manifest v2.0
+c# Fresh Schedules Context Manifest v2.0
 
 > This is the **2-minute briefing** for working in the Fresh Schedules codebase.
 
