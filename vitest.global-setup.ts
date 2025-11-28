@@ -13,7 +13,7 @@ if (typeof process.listeners !== "function") {
   // Vitest expects process.listeners(event) to be callable when wiring error hooks.
   // Some polyfills/envs can replace it; we guard to keep the test runner stable.
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  ;(process as any).listeners = ((event: string) => []) as any;
+  (process as any).listeners = ((event: string) => []) as any;
 }
 
 function waitForHttp(url: string, timeoutMs: number): Promise<void> {
@@ -28,20 +28,14 @@ function waitForHttp(url: string, timeoutMs: number): Promise<void> {
         }
         res.resume();
         if (Date.now() - start > timeoutMs) {
-          return reject(
-            new Error(
-              `Timed out waiting for ${url}, last status: ${res.statusCode}`,
-            ),
-          );
+          return reject(new Error(`Timed out waiting for ${url}, last status: ${res.statusCode}`));
         }
         setTimeout(attempt, 500);
       });
 
       req.on("error", (err) => {
         if (Date.now() - start > timeoutMs) {
-          return reject(
-            new Error(`Timed out waiting for ${url}, last error: ${err}`),
-          );
+          return reject(new Error(`Timed out waiting for ${url}, last error: ${err}`));
         }
         setTimeout(attempt, 500);
       });

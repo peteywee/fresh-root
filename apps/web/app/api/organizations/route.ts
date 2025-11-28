@@ -14,34 +14,36 @@ import { badRequest, ok, parseJson, serverError } from "../_shared/validation";
  * List organizations the current user belongs to
  */
 export const GET = withSecurity(
-  requireOrgMembership(async (request: NextRequest, context: { params: Record<string, string>; userId: string }) => {
-    try {
-      const { searchParams } = new URL(request.url);
-      const userId = searchParams.get("userId") || context.userId;
+  requireOrgMembership(
+    async (request: NextRequest, context: { params: Record<string, string>; userId: string }) => {
+      try {
+        const { searchParams } = new URL(request.url);
+        const userId = searchParams.get("userId") || context.userId;
 
-      if (!userId) {
-        return badRequest("userId query parameter is required");
+        if (!userId) {
+          return badRequest("userId query parameter is required");
+        }
+
+        // Mock data - in production, fetch from Firestore scoped by user
+        const organizations = [
+          {
+            id: "org-1",
+            name: "Acme Corp",
+            slug: "acme-corp",
+            role: "admin",
+            memberCount: 15,
+            logoUrl: null,
+            createdAt: Date.now() - 365 * 24 * 60 * 60 * 1000,
+            updatedAt: Date.now(),
+          },
+        ];
+
+        return ok({ organizations, total: organizations.length });
+      } catch {
+        return serverError("Failed to fetch organizations");
       }
-
-      // Mock data - in production, fetch from Firestore scoped by user
-      const organizations = [
-        {
-          id: "org-1",
-          name: "Acme Corp",
-          slug: "acme-corp",
-          role: "admin",
-          memberCount: 15,
-          logoUrl: null,
-          createdAt: Date.now() - 365 * 24 * 60 * 60 * 1000,
-          updatedAt: Date.now(),
-        },
-      ];
-
-      return ok({ organizations, total: organizations.length });
-    } catch {
-      return serverError("Failed to fetch organizations");
-    }
-  }),
+    },
+  ),
   { requireAuth: true, maxRequests: 100, windowMs: 60_000 },
 );
 

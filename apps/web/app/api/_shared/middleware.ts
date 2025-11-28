@@ -153,10 +153,7 @@ export interface WithSecurityOptions {
  * params may be promises.
  */
 export function withSecurity(
-  handler: (
-    req: AuthenticatedRequest | NextRequest,
-    ctx: any,
-  ) => Promise<NextResponse>,
+  handler: (req: AuthenticatedRequest | NextRequest, ctx: any) => Promise<NextResponse>,
   options: WithSecurityOptions = {},
 ): (req: AuthenticatedRequest | NextRequest, ctx: any) => Promise<NextResponse> {
   return async (req: AuthenticatedRequest | NextRequest, ctx: any) => {

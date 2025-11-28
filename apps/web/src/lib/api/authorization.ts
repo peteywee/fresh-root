@@ -23,11 +23,11 @@ export function requireOrgMembership(
 ) {
   return async (
     request: NextRequest,
-    context: { params: Record<string, string> | Promise<Record<string, string>> },
+    context: { params: Promise<Record<string, string>> },
   ): Promise<NextResponse> => {
     // Resolve params if it's a Promise (Next.js 14+)
-    const params = await Promise.resolve(context.params);
-    
+    const params = await context.params;
+
     const userId = request.headers.get("x-user-id");
     if (!userId)
       return NextResponse.json({ error: "Unauthorized - No user session" }, { status: 401 });
@@ -40,7 +40,7 @@ export function requireOrgMembership(
       );
 
     // NOTE: In a full implementation, verify membership in Firestore here.
-    return handler(request, { ...context, params, userId, orgId });
+    return handler(request, { params, userId, orgId });
   };
 }
 

@@ -17,36 +17,42 @@
 These endpoints are currently exposed without authentication/authorization. Each needs a security wrapper added at the top level.
 
 #### Task 1.1: `apps/web/app/api/health/route.ts`
+
 - **Issue:** No security wrapper
-- **Fix:** Wrap handler with `withSecurity` 
+- **Fix:** Wrap handler with `withSecurity`
 - **Status:** ⏳ TODO
 - **Expected:** GET handler protected
 
 #### Task 1.2: `apps/web/app/api/healthz/route.ts`
+
 - **Issue:** No security wrapper
 - **Fix:** Wrap handler with `withSecurity`
 - **Status:** ⏳ TODO
 - **Expected:** GET handler protected
 
 #### Task 1.3: `apps/web/app/api/metrics/route.ts`
+
 - **Issue:** No security wrapper
 - **Fix:** Wrap handler with `withSecurity`
 - **Status:** ⏳ TODO
 - **Expected:** GET handler protected
 
 #### Task 1.4: `apps/web/app/api/internal/backup/route.ts`
+
 - **Issue:** No security wrapper
 - **Fix:** Wrap handler with `withSecurity` (or more restrictive wrapper for internal use)
 - **Status:** ⏳ TODO
 - **Expected:** GET handler protected
 
 #### Task 1.5: `apps/web/app/api/session/route.ts`
+
 - **Issue:** No security wrapper
 - **Fix:** Wrap handler with `withSecurity`
 - **Status:** ⏳ TODO
 - **Expected:** All handlers protected
 
 #### Task 1.6: `apps/web/app/api/onboarding/admin-form/route.ts`
+
 - **Issue:** No security wrapper
 - **Fix:** Wrap handler with `withSecurity` or `requireRole('admin')`
 - **Status:** ⏳ TODO
@@ -55,6 +61,7 @@ These endpoints are currently exposed without authentication/authorization. Each
 **Pattern to apply:**
 
 Before:
+
 ```ts
 export async function GET(request: NextRequest) {
   // handler logic
@@ -62,6 +69,7 @@ export async function GET(request: NextRequest) {
 ```
 
 After:
+
 ```ts
 export const GET = withSecurity(async (context: NextRequest) => {
   // handler logic
@@ -77,6 +85,7 @@ export const GET = withSecurity(async (context: NextRequest) => {
 These POST/PATCH endpoints need input validation added. Look for Zod schema imports and validation calls.
 
 #### Task 2.1: `apps/web/app/api/auth/mfa/setup/route.ts`
+
 - **Issue:** POST without validation
 - **Fix:** Add `PostSchema` validation before processing
 - **Pattern:** `const result = PostSchema.safeParse(body); if (!result.success) return error;`
@@ -84,31 +93,37 @@ These POST/PATCH endpoints need input validation added. Look for Zod schema impo
 - **Current:** Check if schema exists in types
 
 #### Task 2.2: `apps/web/app/api/onboarding/activate-network/route.ts`
+
 - **Issue:** POST without validation
 - **Fix:** Add input validation schema
 - **Status:** ⏳ TODO
 
 #### Task 2.3: `apps/web/app/api/onboarding/create-network-corporate/route.ts`
+
 - **Issue:** POST without validation
 - **Fix:** Add input validation schema
 - **Status:** ⏳ TODO
 
 #### Task 2.4: `apps/web/app/api/onboarding/create-network-org/route.ts`
+
 - **Issue:** POST without validation
 - **Fix:** Add input validation schema
 - **Status:** ⏳ TODO
 
 #### Task 2.5: `apps/web/app/api/onboarding/join-with-token/route.ts`
+
 - **Issue:** POST without validation
 - **Fix:** Add input validation schema
 - **Status:** ⏳ TODO
 
 #### Task 2.6: `apps/web/app/api/onboarding/verify-eligibility/route.ts`
+
 - **Issue:** POST without validation
 - **Fix:** Add input validation schema
 - **Status:** ⏳ TODO
 
 #### Task 2.7: `apps/web/app/api/session/bootstrap/route.ts`
+
 - **Issue:** POST without validation
 - **Fix:** Add input validation schema
 - **Status:** ⏳ TODO
@@ -116,6 +131,7 @@ These POST/PATCH endpoints need input validation added. Look for Zod schema impo
 **Pattern to apply:**
 
 Before:
+
 ```ts
 export const POST = withSecurity(async (context) => {
   const body = await parseJson(context.request);
@@ -124,19 +140,20 @@ export const POST = withSecurity(async (context) => {
 ```
 
 After:
+
 ```ts
 export const POST = withSecurity(async (context) => {
   const body = await parseJson(context.request);
-  
+
   // Validate input
   const result = RequestSchema.safeParse(body);
   if (!result.success) {
     return NextResponse.json(
       { error: "Invalid input", issues: result.error.issues },
-      { status: 400 }
+      { status: 400 },
     );
   }
-  
+
   const validated = result.data;
   // Now use validated data
 });
@@ -147,12 +164,14 @@ export const POST = withSecurity(async (context) => {
 ## Execution Plan
 
 ### Step 1: Identify and Fix Part 1 (Security Wrappers)
+
 1. Open each file in Part 1 (6 files)
 2. Check current structure
 3. Apply `withSecurity` wrapper
 4. Test that validator no longer reports security wrapper missing
 
 ### Step 2: Identify and Fix Part 2 (Validation)
+
 1. Open each file in Part 2 (7 files)
 2. Find or create Zod schema in `packages/types/src/`
 3. Add validation logic before processing body
@@ -160,15 +179,18 @@ export const POST = withSecurity(async (context) => {
 5. Test that validator no longer reports validation missing
 
 ### Step 3: Verify All Fixes
+
 ```bash
 FRESH_PATTERNS_MIN_SCORE=0 pnpm lint:patterns --verbose
 ```
 
 Expected output:
+
 - 🔴 Tier 0 (Security): 0 ✅
 - 🟠 Tier 1 (Integrity): 7 (not fixed yet)
 
 ### Step 4: Commit Phase 1 Changes
+
 ```bash
 git add -A
 git commit -m "fix: resolve all 13 Tier 0 security violations
@@ -199,6 +221,7 @@ After applying all fixes, verify:
 ## Success Criteria
 
 ✅ **Phase 1 Complete** when:
+
 - Tier 0 count: 0
 - Tier 1 count: 7 (unchanged, will fix in Phase 2)
 - Pattern score: ~25+ points
@@ -219,6 +242,7 @@ After applying all fixes, verify:
 ## Timeline
 
 **Estimated time to complete:** 1-2 hours
+
 - Part 1 (wrappers): 30 min
 - Part 2 (validation): 60-90 min
 - Verification & commit: 15 min

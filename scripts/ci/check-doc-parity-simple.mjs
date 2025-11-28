@@ -78,7 +78,7 @@ async function main() {
       // Simple heuristic: look for "TEST SPEC" followed by "TODO" within a small window or until next header
       const testSpecMatch = t.match(/TEST SPEC[\s\S]*?(?=(#|\z))/i);
       if (testSpecMatch && /TODO/i.test(testSpecMatch[0])) {
-         problems.push({ kind: "doc-test-spec-todo", file: path.relative(root, df) });
+        problems.push({ kind: "doc-test-spec-todo", file: path.relative(root, df) });
       }
     }
   }

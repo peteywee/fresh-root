@@ -11,10 +11,7 @@ export function traceFn(
   // In production, this would send spans to an OTEL collector
 }
 
-export function logError(
-  _error: Error,
-  _context: Record<string, unknown>,
-): void {
+export function logError(_error: Error, _context: Record<string, unknown>): void {
   // Placeholder for error logging with context
   // In production, this would send errors to a centralized logging service
 }

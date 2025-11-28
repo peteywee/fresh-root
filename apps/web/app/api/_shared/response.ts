@@ -18,7 +18,11 @@ export type ApiResponse<T = unknown> = {
   };
 };
 
-export function success<T>(data: T, status = 200, meta?: ApiResponse["meta"]): NextResponse<ApiResponse<T>> {
+export function success<T>(
+  data: T,
+  status = 200,
+  meta?: ApiResponse["meta"],
+): NextResponse<ApiResponse<T>> {
   return NextResponse.json({ data, meta }, { status });
 }
 
@@ -56,7 +60,10 @@ export function notFound(message = "Not Found"): NextResponse<ApiResponse> {
   return error("NOT_FOUND", message, 404);
 }
 
-export function internalError(message = "Internal Server Error", details?: unknown): NextResponse<ApiResponse> {
+export function internalError(
+  message = "Internal Server Error",
+  details?: unknown,
+): NextResponse<ApiResponse> {
   return error("INTERNAL_SERVER_ERROR", message, 500, details);
 }
 
@@ -66,4 +73,3 @@ export function fromZodError(err: ZodError): NextResponse<ApiResponse> {
 
 export const jsonOk = success;
 export const jsonError = error;
-

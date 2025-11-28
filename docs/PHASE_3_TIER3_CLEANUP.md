@@ -12,10 +12,12 @@
 ## Issue Summary
 
 **Tier 3 violations are style/cosmetic only:**
+
 - Missing standard headers on API routes
 - Missing headers on schema files
 
 **Current violations:**
+
 - ~32 API routes missing header: `// [P#][API][CODE] Description`
 - ~13 schema files missing header: `// [P#][SCHEMA][DOMAIN] Description`
 
@@ -26,6 +28,7 @@
 ### API Route Header
 
 All route.ts files should start with:
+
 ```ts
 // [P0][API][CODE] Brief description of endpoint
 // Tags: tag1, tag2 (optional)
@@ -34,6 +37,7 @@ import { ... }
 ```
 
 **Example:**
+
 ```ts
 // [P0][API][CODE] Health check endpoint
 // Tags: monitoring, public
@@ -46,21 +50,23 @@ export async function GET(request: NextRequest) {
 ### Schema Header
 
 All schema files should start with:
+
 ```ts
 // [P1][SCHEMA][DOMAIN] Brief description of entity
 // Tags: tag1, tag2 (optional)
 
-import { z } from "zod"
+import { z } from "zod";
 ```
 
 **Example:**
+
 ```ts
 // [P1][SCHEMA][DOMAIN] Compliance reporting schema
 // Tags: compliance, validation
 
 export const ComplianceSchema = z.object({
   // ...
-})
+});
 ```
 
 ---
@@ -68,6 +74,7 @@ export const ComplianceSchema = z.object({
 ## Files to Update
 
 ### API Routes (Priority: Low)
+
 The following routes need headers added:
 
 ```
@@ -159,6 +166,7 @@ Edit each file individually to add appropriate header based on content.
 ## Execution Steps
 
 1. **Review current state:**
+
    ```bash
    pnpm lint:patterns:verbose | grep "Header Present"
    ```
@@ -166,19 +174,22 @@ Edit each file individually to add appropriate header based on content.
 2. **Apply headers using script or manual edits**
 
 3. **Verify:**
+
    ```bash
    FRESH_PATTERNS_MIN_SCORE=0 pnpm lint:patterns --verbose
    ```
+
    Expected: 🟢 Tier 3 (Style): 0
 
 4. **Commit:**
+
    ```bash
    git commit -m "style: add standard headers to all API routes and schemas
-   
+
    Add consistent file headers following SYMMETRY_FRAMEWORK pattern:
    - // [P0][API][CODE] for route handlers
    - // [P1][SCHEMA][DOMAIN] for schema definitions
-   
+
    Tier 3 violations: 45 → 0 ✅
    Pattern score improved to 70+ ✅"
    ```
@@ -197,6 +208,7 @@ Edit each file individually to add appropriate header based on content.
 ## Success Criteria
 
 ✅ **Phase 3 Complete** when:
+
 - Tier 0: 0 ✅
 - Tier 1: 0 ✅
 - Tier 3: 0 ✅
@@ -209,6 +221,7 @@ Edit each file individually to add appropriate header based on content.
 ## Priority
 
 🟡 **Optional** — Not required for security/integrity
+
 - Improves developer experience
 - Standardizes codebase appearance
 - Enables better tooling/automation
@@ -220,6 +233,7 @@ Edit each file individually to add appropriate header based on content.
 ## Timeline
 
 **Estimated time to complete:** 30-45 minutes
+
 - Script generation: 10 min
 - Review & adjust: 15 min
 - Verification: 10 min

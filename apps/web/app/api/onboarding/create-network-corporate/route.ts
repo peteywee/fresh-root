@@ -101,6 +101,14 @@ async function createNetworkCorporateHandlerImpl(
       return NextResponse.json({ error: "form_token_expired" }, { status: 410 });
     }
 
+    // [SECURITY] Verify token ownership - prevent privilege escalation (Critical)
+    if (formData.createdBy !== uid) {
+      return NextResponse.json(
+        { error: "token_ownership_mismatch", details: "This form token was not created by you" },
+        { status: 403 },
+      );
+    }
+
     if (formData.immutable === true || formData.attachedTo) {
       return NextResponse.json({ error: "form_already_attached" }, { status: 409 });
     }

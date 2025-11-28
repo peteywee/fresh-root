@@ -2,8 +2,8 @@ name: Main Branch Guard (Production Gate)
 
 on:
   pull_request:
-    branches: [ main ]
-    types: [ opened, synchronize, reopened ]
+    branches: [main]
+    types: [opened, synchronize, reopened]
 
 jobs:
   main-gate:
@@ -23,8 +23,8 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
-          cache: 'npm'
+          node-version: "20"
+          cache: "npm"
 
       - name: Install pnpm
         uses: pnpm/action-setup@v4
@@ -35,7 +35,7 @@ jobs:
       # 1. Pattern Validation - Tier 0/1 must be zero, score >= 90
       - name: Pattern Validator (90+ production standard)
         env:
-          FRESH_PATTERNS_MIN_SCORE: '90'
+          FRESH_PATTERNS_MIN_SCORE: "90"
         run: pnpm lint:patterns
         continue-on-error: false
 

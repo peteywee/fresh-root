@@ -27,7 +27,11 @@ const ensureScheduleId = (context: ScheduleContext) => {
   return id;
 };
 
-const buildSchedulePayload = (id: string, orgId: string, overrides: Record<string, unknown> = {}) => ({
+const buildSchedulePayload = (
+  id: string,
+  orgId: string,
+  overrides: Record<string, unknown> = {},
+) => ({
   id,
   orgId,
   name: "Week of Jan 15",

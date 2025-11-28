@@ -30,12 +30,7 @@ export default defineConfig({
       provider: "v8",
       reporter: ["text", "json", "html"],
       include: ["app/**/*.{ts,tsx}", "src/**/*.{ts,tsx}"],
-      exclude: [
-        "**/*.d.ts",
-        "**/*.config.*",
-        "**/node_modules/**",
-        "**/__tests__/**",
-      ],
+      exclude: ["**/*.d.ts", "**/*.config.*", "**/node_modules/**", "**/__tests__/**"],
     },
   },
   resolve: {

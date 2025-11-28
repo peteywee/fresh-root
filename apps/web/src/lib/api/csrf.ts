@@ -177,7 +177,7 @@ export function withCSRFToken<Ctx extends Record<string, unknown> = {}>(
 
     const hadCookie = token != null;
     if (!token) token = generateCSRFToken(fullConfig.tokenLength);
-    
+
     // Ensure params are resolvable
     await context.params;
     const response = await handler(request, context);

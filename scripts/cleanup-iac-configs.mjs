@@ -14,10 +14,7 @@ if (!fs.existsSync(pkgPath)) {
 
 const pkg = JSON.parse(fs.readFileSync(pkgPath, "utf8"));
 
-const targets = [
-  "@iac-fresh/eslint-config",
-  "@iac-fresh/prettier-config",
-];
+const targets = ["@iac-fresh/eslint-config", "@iac-fresh/prettier-config"];
 
 let changed = false;
 

@@ -21,7 +21,6 @@ import { NextResponse, type NextRequest } from "next/server";
 //   });
 // }
 
-
 export async function POST(_req: NextRequest) {
   return NextResponse.json({ ok: true }, { status: 200 });
 }

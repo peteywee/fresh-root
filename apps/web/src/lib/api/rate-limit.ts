@@ -54,7 +54,6 @@ export const RateLimits = {
   api: { max: 100, windowSeconds: 60 },
 } as const;
 
-
 /* -------------------------------------------------------------------------- */
 /* Default key generator                                                       */
 /* -------------------------------------------------------------------------- */
@@ -76,10 +75,7 @@ export function defaultKeyGenerator(request: any): string {
       ? request.headers
       : new Headers(request.headers ?? undefined);
 
-  const ip =
-    headers.get("x-forwarded-for") ??
-    headers.get("x-real-ip") ??
-    "unknown-ip";
+  const ip = headers.get("x-forwarded-for") ?? headers.get("x-real-ip") ?? "unknown-ip";
 
   const userId = headers.get("x-user-id") ?? undefined;
 
@@ -211,13 +207,10 @@ export function rateLimit<
       };
 
       if (!result.allowed) {
-        return new NextResponse(
-          JSON.stringify({ error: "Too many requests" }),
-          {
-            status: 429,
-            headers: rateHeaders,
-          },
-        );
+        return new NextResponse(JSON.stringify({ error: "Too many requests" }), {
+          status: 429,
+          headers: rateHeaders,
+        });
       }
 
       const response = (await handler(request, context)) as NextResponse;

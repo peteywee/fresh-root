@@ -17,9 +17,9 @@ All first-class files (schemas, APIs, rules, critical UI) SHOULD begin with:
 
 Examples:
 
-* `// [P1][SCHEMA][DOMAIN] Schedule entity schema`
-* `// [P0][API][CODE] Shift assignment API`
-* `// [P0][RULES][SECURITY] Firestore rules for schedules`
+- `// [P1][SCHEMA][DOMAIN] Schedule entity schema`
+- `// [P0][API][CODE] Shift assignment API`
+- `// [P0][RULES][SECURITY] Firestore rules for schedules`
 
 This header is validated as a **Tier 3 (style)** check.
 
@@ -31,21 +31,20 @@ This header is validated as a **Tier 3 (style)** check.
 
 **Location:**
 
-* `packages/types/src/**/*.ts`
+- `packages/types/src/**/*.ts`
 
 **Fingerprint:**
 
 1. Imports:
+   - `import { z } from "zod"` (Tier 1 if missing).
 
-   * `import { z } from "zod"` (Tier 1 if missing).
 2. Exports:
+   - `export const <Name>Schema = z.object({ ... })`
+   - `export type <Name> = z.infer<typeof <Name>Schema>`
 
-   * `export const <Name>Schema = z.object({ ... })`
-   * `export type <Name> = z.infer<typeof <Name>Schema>`
 3. Naming:
-
-   * Schema name ends with `Schema`.
-   * Type matches entity name without `Schema`.
+   - Schema name ends with `Schema`.
+   - Type matches entity name without `Schema`.
 
 ---
 
@@ -53,20 +52,19 @@ This header is validated as a **Tier 3 (style)** check.
 
 **Location:**
 
-* `apps/web/app/api/**/route.ts`
+- `apps/web/app/api/**/route.ts`
 
 **Fingerprint:**
 
 1. Header: `[API][CODE]` header present.
 2. Guards:
+   - Top-level wrapper such as `withSecurity`, `requireOrgMembership`, or equivalent.
 
-   * Top-level wrapper such as `withSecurity`, `requireOrgMembership`, or equivalent.
 3. Validation:
+   - Each write operation (POST/PATCH/PUT) validates with Zod before use.
 
-   * Each write operation (POST/PATCH/PUT) validates with Zod before use.
 4. Response:
-
-   * Returns typed JSON or NextResponse with clear shape.
+   - Returns typed JSON or NextResponse with clear shape.
 
 ---
 
@@ -74,25 +72,22 @@ This header is validated as a **Tier 3 (style)** check.
 
 **Location:**
 
-* `firestore.rules`
+- `firestore.rules`
 
 **Fingerprint:**
 
 1. Root:
+   - Paranoid top-level match that denies by default.
 
-   * Paranoid top-level match that denies by default.
 2. Helpers:
+   - Functions that:
+     - Enforce tenant isolation.
+     - Limit query scope.
 
-   * Functions that:
-
-     * Enforce tenant isolation.
-     * Limit query scope.
 3. Entity blocks:
-
-   * `match /<entity>/...` blocks:
-
-     * Enforce org scoping.
-     * Restrict write conditions.
+   - `match /<entity>/...` blocks:
+     - Enforce org scoping.
+     - Restrict write conditions.
 
 ---
 
@@ -100,18 +95,17 @@ This header is validated as a **Tier 3 (style)** check.
 
 **Location:**
 
-* `apps/web/app/**/page.tsx`
-* Shared components under `apps/web/app/(components|features)/**`
+- `apps/web/app/**/page.tsx`
+- Shared components under `apps/web/app/(components|features)/**`
 
 **Fingerprint:**
 
 1. Imports:
+   - Typed hooks and services (not raw fetch).
 
-   * Typed hooks and services (not raw fetch).
 2. Respect:
-
-   * Does not duplicate validation logic already in schemas.
-   * Reads API types instead of inventing new shapes.
+   - Does not duplicate validation logic already in schemas.
+   - Reads API types instead of inventing new shapes.
 
 ---
 
@@ -119,8 +113,8 @@ This header is validated as a **Tier 3 (style)** check.
 
 Use these signals:
 
-* **Strong symmetry:** All files for a feature share the same structural patterns.
-* **Broken symmetry:** A file deviates from its layer fingerprint (missing header, bypassing guards, etc.).
+- **Strong symmetry:** All files for a feature share the same structural patterns.
+- **Broken symmetry:** A file deviates from its layer fingerprint (missing header, bypassing guards, etc.).
 
 Broken symmetry is not always a bug, but it is always a **cue to investigate**.
 
@@ -131,12 +125,11 @@ Broken symmetry is not always a bug, but it is always a **cue to investigate**.
 `scripts/validate-patterns.mjs` enforces parts of this framework by:
 
 1. Checking:
-
-   * Headers
-   * Imports
-   * Naming patterns
-   * Guards
-   * Validation calls
+   - Headers
+   - Imports
+   - Naming patterns
+   - Guards
+   - Validation calls
 
 2. Assigning tiered penalties and computing a score.
 

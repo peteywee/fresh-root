@@ -54,7 +54,6 @@ export default function Block4Page() {
         type="button"
         className="inline-flex items-center rounded-md bg-slate-900 px-4 py-2 text-sm text-white"
         onClick={() => router.push("/")}
-
       >
         Go to the app
       </button>

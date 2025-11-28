@@ -2,8 +2,8 @@ name: PR Quality Checks (Fast Track)
 
 on:
   pull_request:
-    branches: [ develop, dev ]
-    types: [ opened, synchronize, reopened ]
+    branches: [develop, dev]
+    types: [opened, synchronize, reopened]
 
 jobs:
   pr-quality:
@@ -23,8 +23,8 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
-          cache: 'npm'
+          node-version: "20"
+          cache: "npm"
 
       - name: Install pnpm
         uses: pnpm/action-setup@v4
@@ -46,7 +46,7 @@ jobs:
       # 2. Pattern validation
       - name: Pattern Validator (90+ standard)
         env:
-          FRESH_PATTERNS_MIN_SCORE: '90'
+          FRESH_PATTERNS_MIN_SCORE: "90"
         run: pnpm lint:patterns
         continue-on-error: false
 

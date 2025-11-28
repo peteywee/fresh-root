@@ -5,6 +5,7 @@
 ✅ **COMPLETE:** FRESH Engine standards framework v2.0 deployed, baseline benchmark captured, and repository cleaned.
 
 **Current Status:** Ready for Phase 1 (Tier 0 Security fixes)
+
 - Commit: `95f790c` on `dev` branch
 - 18 stale branches deleted
 - Baseline: 13 Tier 0, 7 Tier 1 issues identified
@@ -175,6 +176,7 @@ Remote branches: Same 5 only
 **7 issues to resolve:**
 
 Zod imports and type inference patterns missing in:
+
 - `packages/types/src/compliance/index.ts`
 - `packages/types/src/links/corpOrgLinks.v14.ts`
 - `packages/types/src/links/index.ts`
@@ -206,21 +208,25 @@ Add to all route.ts files:
 ## Success Criteria
 
 ✅ **Standards Deployed**
+
 - All 6 documents in place
 - Validator functional
 - CI workflow active
 
 ✅ **Baseline Captured**
+
 - Starting point documented
 - Benchmark metrics established
 - Historical record saved
 
 ✅ **Repository Cleaned**
+
 - Stale branches removed
 - Branch count reduced from 33 → 5
 - Clean development state
 
 🚀 **Ready for Tier 0 Migration**
+
 - Validator can automatically detect violations
 - CI will enforce new rules on future PRs
 - Roadmap clear for improvements
@@ -255,6 +261,7 @@ Add to all route.ts files:
 ### For CI/CD
 
 The validator automatically runs on:
+
 - All PRs to `main` or `develop`
 - All pushes to `main`
 
@@ -274,12 +281,12 @@ FRESH_PATTERNS_MIN_SCORE=50 pnpm lint:patterns
 
 Over time, monitor these KPIs:
 
-| Metric | Baseline | Target | Status |
-|--------|----------|--------|--------|
-| Tier 0 Count | 13 | 0 | ⏳ Pending Phase 1 |
-| Tier 1 Count | 7 | 0 | ⏳ Pending Phase 2 |
-| Score | 0.0 | 70+ | ⏳ In progress |
-| Complete Triads | 3/3 | 3/3 | ✅ Complete |
+| Metric          | Baseline | Target | Status             |
+| --------------- | -------- | ------ | ------------------ |
+| Tier 0 Count    | 13       | 0      | ⏳ Pending Phase 1 |
+| Tier 1 Count    | 7        | 0      | ⏳ Pending Phase 2 |
+| Score           | 0.0      | 70+    | ⏳ In progress     |
+| Complete Triads | 3/3      | 3/3    | ✅ Complete        |
 
 ---
 

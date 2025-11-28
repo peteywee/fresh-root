@@ -6,7 +6,6 @@ import { requireOrgMembership, requireRole } from "../../../../../src/lib/api/au
 import { withSecurity } from "../../../_shared/middleware";
 import { parseJson, badRequest, ok, serverError } from "../../../_shared/validation";
 
-
 // Rate limiting via withSecurity options
 
 /**

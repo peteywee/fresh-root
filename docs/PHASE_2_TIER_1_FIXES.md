@@ -12,46 +12,54 @@
 ## Issue Breakdown
 
 ### Issue 1: `packages/types/src/compliance/index.ts`
+
 - **Violations:**
   1. Missing Zod import
   2. Missing type inference pattern
 - **Fix:** Add Zod schema and inferred type
 - **Pattern:**
+
   ```ts
-  import { z } from "zod"
-  
+  import { z } from "zod";
+
   export const ComplianceSchema = z.object({
     // define fields
-  })
-  
-  export type Compliance = z.infer<typeof ComplianceSchema>
+  });
+
+  export type Compliance = z.infer<typeof ComplianceSchema>;
   ```
 
 ### Issue 2: `packages/types/src/index.ts`
+
 - **Violations:**
   1. Missing type inference pattern
 - **Fix:** Check what types are exported; ensure they use z.infer pattern
 - **Note:** This may be a re-export file; apply pattern consistently
 
 ### Issue 3: `packages/types/src/links/corpOrgLinks.v14.ts`
+
 - **Violations:**
   1. Missing Zod import
   2. Missing type inference pattern
 - **Fix:** Add Zod schema and inferred type for this versioned entity
 
 ### Issue 4: `packages/types/src/links/corpOrgLinks.v14.ts` (same file)
+
 - **Note:** Counted twice in validator output; both violations in same file
 
 ### Issue 5: `packages/types/src/links/index.ts`
+
 - **Violations:**
   1. Missing Zod import
   2. Missing type inference pattern
 - **Fix:** Add Zod schema and inferred type
 
 ### Issue 6: `packages/types/src/links/index.ts` (same file)
+
 - **Note:** Counted twice; both violations in same file
 
 ### Issue 7: (summary)
+
 - **Total unique files to fix:** 3
   1. `packages/types/src/compliance/index.ts` (2 violations)
   2. `packages/types/src/links/corpOrgLinks.v14.ts` (2 violations)
@@ -64,6 +72,7 @@
 ### Step 1: Review Current Files
 
 Check what exists in each file:
+
 ```bash
 cat packages/types/src/compliance/index.ts
 cat packages/types/src/links/corpOrgLinks.v14.ts
@@ -76,16 +85,16 @@ If currently re-exporting types without schemas:
 
 ```ts
 // Before
-export type Compliance = { /* fields */ }
+export type Compliance = { /* fields */ };
 
 // After
-import { z } from "zod"
+import { z } from "zod";
 
 export const ComplianceSchema = z.object({
   // Define fields based on current type
-})
+});
 
-export type Compliance = z.infer<typeof ComplianceSchema>
+export type Compliance = z.infer<typeof ComplianceSchema>;
 ```
 
 ### Step 3: Fix `links/corpOrgLinks.v14.ts`
@@ -99,11 +108,13 @@ Same pattern — ensure all exports follow `Schema + z.infer<typeof Schema>` pat
 ### Step 5: Verify
 
 Run validator:
+
 ```bash
 FRESH_PATTERNS_MIN_SCORE=0 pnpm lint:patterns --verbose
 ```
 
 Expected output:
+
 - 🔴 Tier 0 (Security): 0 ✅
 - 🟠 Tier 1 (Integrity): 0 ✅
 - 🎯 Complete Triads: 3/3 ✅
@@ -141,6 +152,7 @@ Score improved from ~25 to ~32 points"
 ## Success Criteria
 
 ✅ **Phase 2 Complete** when:
+
 - Tier 0 count: 0 ✅
 - Tier 1 count: 0 ✅
 - Score: ~32+ points
@@ -151,6 +163,7 @@ Score improved from ~25 to ~32 points"
 ## After Phase 2
 
 With Tier 0 and Tier 1 complete, you'll have:
+
 - ✅ 0 security violations
 - ✅ 0 integrity violations
 - 🟡 45 style/header violations (optional Phase 3)
@@ -163,6 +176,7 @@ With Tier 0 and Tier 1 complete, you'll have:
 ## Timeline
 
 **Estimated time to complete:** 30-45 minutes
+
 - Review & fix files: 20-30 min
 - Verification: 10 min
 - Commit: 5 min
