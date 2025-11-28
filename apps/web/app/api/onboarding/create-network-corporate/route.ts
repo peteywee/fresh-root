@@ -1,8 +1,17 @@
-//[P1][API][ONBOARDING] Create Network + Corporate Endpoint (server)
-//[P1][API][ONBOARDING] Create Network + Corporate Endpoint (server)
+//[P0][API][ONBOARDING] Create Network + Corporate Endpoint
 import { NextResponse } from "next/server";
+import { z } from "zod";
 
 import { withSecurity, type AuthenticatedRequest } from "../../_shared/middleware";
+
+// Schema for corporate network creation
+const CreateNetworkCorporateSchema = z.object({
+  corporateName: z.string(),
+  brandName: z.string().optional(),
+  industry: z.string().optional(),
+  approxLocations: z.number().optional(),
+  formToken: z.string(),
+});
 
 //[P1][API][ONBOARDING] Create Network + Corporate Endpoint (server)
 //[P1][API][ONBOARDING] Create Network + Corporate Endpoint (server)
@@ -58,8 +67,16 @@ async function createNetworkCorporateHandlerImpl(
     return NextResponse.json({ error: "invalid_json" }, { status: 400 });
   }
 
-  const { corporateName, brandName, industry, approxLocations, formToken } =
-    (body as Record<string, unknown>) || {};
+  // Validate input with Zod
+  const parseResult = CreateNetworkCorporateSchema.safeParse(body);
+  if (!parseResult.success) {
+    return NextResponse.json(
+      { error: "validation_error", issues: parseResult.error.issues },
+      { status: 422 },
+    );
+  }
+
+  const { corporateName, brandName, industry, approxLocations, formToken } = parseResult.data;
 
   if (!formToken) return NextResponse.json({ error: "missing_form_token" }, { status: 422 });
   if (String(formToken).includes("/")) {

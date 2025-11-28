@@ -1,3 +1,5 @@
+// [P1][OBSERVABILITY][OTEL] Otel
+// Tags: P1, OBSERVABILITY, OTEL
 // OpenTelemetry tracing utilities
 export function traceFn(
   _method: string,

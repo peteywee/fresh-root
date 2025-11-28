@@ -1,4 +1,6 @@
 #!/usr/bin/env node
+// [P2][APP][CODE] Validate Patterns
+// Tags: P2, APP, CODE
 /**
  * @fileoverview Pattern Validator - Detects symmetry violations in Fresh Schedules codebase
  * @layer Process

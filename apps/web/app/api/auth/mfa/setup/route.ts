@@ -1,12 +1,14 @@
-// Tags: P0, AUTH, API
+// [P0][AUTH][MFA] MFA Setup Endpoint - Generates TOTP secret
 import { NextRequest } from "next/server";
 import * as QRCode from "qrcode";
 import * as speakeasy from "speakeasy";
+import { z } from "zod";
 
 import { withSecurity } from "../../../_shared/middleware";
-import { ok, serverError } from "../../../_shared/validation";
+import { ok, serverError, badRequest } from "../../../_shared/validation";
 
-// Rate limiting via withSecurity options
+// Schema for MFA setup request (empty for now, but validates request is valid JSON)
+const MFASetupSchema = z.object({}).passthrough().optional();
 
 /**
  * POST /api/auth/mfa/setup
@@ -14,11 +16,21 @@ import { ok, serverError } from "../../../_shared/validation";
  * Requires valid session.
  */
 export const POST = withSecurity(
-  async (
-    _req: NextRequest,
-    context: { params: Record<string, string>; userId: string },
-  ) => {
+  async (req: NextRequest, context: { params: Record<string, string>; userId: string }) => {
     try {
+      // Validate request body (even if empty)
+      let body: unknown;
+      try {
+        body = await req.json();
+      } catch {
+        body = {};
+      }
+
+      const result = MFASetupSchema.safeParse(body);
+      if (!result.success) {
+        return badRequest("Invalid request", result.error.issues);
+      }
+
       // Derive a stable label from user id for display if email is unknown client-side
       const userLabel = context.userId || "user";
 
@@ -35,7 +47,12 @@ export const POST = withSecurity(
 
       // Store secret temporarily in Firestore (or return to client for storage)
       // For simplicity, return to client. In production, store server-side.
-      return ok({ success: true, secret: secret.base32, qrCode: qrCodeDataUrl, otpauthUrl: secret.otpauth_url });
+      return ok({
+        success: true,
+        secret: secret.base32,
+        qrCode: qrCodeDataUrl,
+        otpauthUrl: secret.otpauth_url,
+      });
     } catch (error) {
       console.error("MFA setup failed", error);
       return serverError("Failed to generate MFA secret");

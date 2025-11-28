@@ -1,13 +1,12 @@
-//[P1][API][ONBOARDING] Verify Eligibility Endpoint (server)
-//[P1][API][ONBOARDING] Verify Eligibility Endpoint (server)
-//[P1][API][ONBOARDING] Verify Eligibility Endpoint (server)
-//[P1][API][ONBOARDING] Verify Eligibility Endpoint (server)
-// Tags: api, onboarding, eligibility
-
+//[P0][API][ONBOARDING] Verify Eligibility Endpoint
 import { NextResponse } from "next/server";
+import { z } from "zod";
 
 import { withRequestLogging } from "../../_shared/logging";
 import { withSecurity, type AuthenticatedRequest } from "../../_shared/middleware";
+
+// Schema for verify eligibility request
+const VerifyEligibilitySchema = z.object({}).passthrough().optional();
 
 /**
  * ErrorResponse is a canonical shape for API error responses.
@@ -69,8 +68,22 @@ async function verifyEligibilityHandlerImpl(
     }
   }
 
+  // Validate input with Zod
+  const result = VerifyEligibilitySchema.safeParse(body);
+  if (!result.success) {
+    return NextResponse.json<ErrorResponse>(
+      {
+        error: "Validation error",
+        code: "GEN_VALIDATION_ERROR",
+        details: {} as Record<string, unknown>,
+      },
+      { status: 422 },
+    );
+  }
+
   // Validate required fields
-  if (!body.email || !body.role) {
+  const bodyData = body as Record<string, unknown>;
+  if (!bodyData.email || !bodyData.role) {
     return NextResponse.json<ErrorResponse>(
       {
         error: "Missing email or role",

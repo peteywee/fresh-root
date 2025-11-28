@@ -1,6 +1,4 @@
-//[P1][API][ONBOARDING] Admin Form Endpoint (server)
-// Tags: api, onboarding, admin-form, compliance
-
+// [P0][API][ONBOARDING] Admin Form Endpoint (server)
 import {
   CreateAdminResponsibilityFormSchema,
   type CreateAdminResponsibilityFormInput,
@@ -9,6 +7,7 @@ import { randomBytes } from "crypto";
 import { NextRequest, NextResponse } from "next/server";
 
 import { adminDb as importedAdminDb } from "@/src/lib/firebase.server";
+import { withSecurity } from "../../_shared/middleware";
 
 /**
  * Inner handler logic (not exported)
@@ -67,10 +66,7 @@ async function adminFormHandlerImpl(
   }
 }
 
-// Keep Next.js route export for runtime; wrap the testable handler so Next.js
-// doesn't pass the route `context` object as the second argument (which would
-// be mistaken for an injected Firestore instance). The wrapper matches the
-// expected Next.js signature: (req, ctx) => Response
-export const POST = async (req: NextRequest, _ctx: { params: Promise<Record<string, string>> }) => {
+// Wrap with security
+export const GET = withSecurity(async (req: NextRequest) => {
   return await adminFormHandlerImpl(req as NextRequest & { user?: { uid: string } });
-};
+});

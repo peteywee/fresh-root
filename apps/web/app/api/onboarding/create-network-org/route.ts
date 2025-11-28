@@ -6,9 +6,18 @@
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextRequest, NextResponse } from "next/server";
+import { z } from "zod";
 
 import { withRequestLogging } from "../../_shared/logging";
 import { withSecurity, type AuthenticatedRequest } from "../../_shared/middleware";
+
+// Schema for org network creation
+const CreateNetworkOrgSchema = z.object({
+  orgName: z.string(),
+  venueName: z.string().optional(),
+  location: z.object({}).passthrough().optional(),
+  formToken: z.string(),
+});
 
 import { logEvent } from "@/src/lib/eventLog";
 import { adminDb as importedAdminDb } from "@/src/lib/firebase.server";
@@ -69,7 +78,16 @@ async function createNetworkOrgHandlerImpl(
     return NextResponse.json({ error: "invalid_json" }, { status: 400 });
   }
 
-  const { orgName, venueName, formToken, location } = (body as Record<string, unknown>) || {};
+  // Validate input with Zod
+  const result = CreateNetworkOrgSchema.safeParse(body);
+  if (!result.success) {
+    return NextResponse.json(
+      { error: "validation_error", issues: result.error.issues },
+      { status: 422 },
+    );
+  }
+
+  const { orgName, venueName, formToken, location } = result.data as Record<string, unknown>;
 
   if (!formToken) return NextResponse.json({ error: "missing_form_token" }, { status: 422 });
 

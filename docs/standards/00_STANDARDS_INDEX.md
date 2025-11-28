@@ -71,6 +71,7 @@ The Pattern Validator uses:
 - **FAILING:** score < **70**
 
 > CI defaults:
+>
 > - Require: **0 Tier 0**, **0 Tier 1**, and score ≥ **70**.
 
 These thresholds are enforced by `scripts/validate-patterns.mjs` and used in `.github/workflows/ci-patterns.yml`.

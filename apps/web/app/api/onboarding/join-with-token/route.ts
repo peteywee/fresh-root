@@ -1,8 +1,13 @@
-//[P1][API][ONBOARDING] Join With Token Endpoint (server)
-//[P1][API][ONBOARDING] Join With Token Endpoint (server)
+//[P0][API][ONBOARDING] Join With Token Endpoint
 import { NextResponse } from "next/server";
+import { z } from "zod";
 
 import { withSecurity, type AuthenticatedRequest } from "../../_shared/middleware";
+
+// Schema for join with token request
+const JoinWithTokenSchema = z.object({
+  token: z.string(),
+});
 
 //[P1][API][ONBOARDING] Join With Token Endpoint (server)
 //[P1][API][ONBOARDING] Join With Token Endpoint (server)
@@ -56,7 +61,16 @@ async function joinWithTokenHandlerImpl(
     return NextResponse.json({ error: "invalid_json" }, { status: 400 });
   }
 
-  const token = (body as Record<string, unknown>)?.token as string | undefined;
+  // Validate input with Zod
+  const result = JoinWithTokenSchema.safeParse(body);
+  if (!result.success) {
+    return NextResponse.json(
+      { error: "validation_error", issues: result.error.issues },
+      { status: 422 },
+    );
+  }
+
+  const token = result.data.token;
   if (!token) {
     return NextResponse.json({ error: "missing_token" }, { status: 422 });
   }

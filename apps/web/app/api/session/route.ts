@@ -1,13 +1,10 @@
 // [P0][AUTH][SESSION] Session cookie management endpoints
-// [P0][AUTH][SESSION] Session cookie management endpoints
-// [P0][AUTH][SESSION] Session cookie management endpoints
-// [P0][AUTH][SESSION] Session cookie management endpoints
-// Tags: P0, AUTH, SESSION
 import { NextRequest } from "next/server";
 import { z } from "zod";
 
 import { getFirebaseAdminAuth } from "../../../lib/firebase-admin";
 import { parseJson, badRequest, serverError, ok } from "../_shared/validation";
+import { withSecurity } from "../_shared/middleware";
 
 // Schema for session creation
 const CreateSessionSchema = z.object({
@@ -18,7 +15,7 @@ const CreateSessionSchema = z.object({
  * POST /api/session
  * Create a session cookie from a Firebase ID token
  */
-export async function POST(req: NextRequest) {
+export const POST = withSecurity(async (req: NextRequest) => {
   try {
     const parsed = await parseJson(req, CreateSessionSchema);
     if (!parsed.success) {
@@ -48,13 +45,13 @@ export async function POST(req: NextRequest) {
     // Return a generic message to avoid leaking internal error details
     return serverError("Invalid token or internal error", undefined, "UNAUTHORIZED");
   }
-}
+});
 
 /**
  * DELETE /api/session
  * Clear the session cookie (logout)
  */
-export async function DELETE() {
+export const DELETE = withSecurity(async () => {
   // Clear session cookie
   const response = ok({ ok: true });
   response.cookies.set("session", "", {
@@ -65,4 +62,4 @@ export async function DELETE() {
     maxAge: 0,
   });
   return response;
-}
+});

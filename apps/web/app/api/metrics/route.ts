@@ -1,10 +1,6 @@
-// [P1][OBSERVABILITY][METRICS] Prometheus-compatible metrics endpoint
-// [P1][OBSERVABILITY][METRICS] Prometheus-compatible metrics endpoint
+// [P0][OBSERVABILITY][METRICS] Prometheus-compatible metrics endpoint
 import { NextResponse } from "next/server";
-
-// [P1][OBSERVABILITY][METRICS] Prometheus-compatible metrics endpoint
-// [P1][OBSERVABILITY][METRICS] Prometheus-compatible metrics endpoint
-// Tags: P1, OBSERVABILITY, METRICS
+import { withSecurity } from "../_shared/middleware";
 
 /**
  * Metrics endpoint exposing Prometheus-compatible metrics.
@@ -106,7 +102,7 @@ function formatPrometheusMetrics(): string {
   return lines.join("\n") + "\n";
 }
 
-export async function GET() {
+export const GET = withSecurity(async () => {
   // Return metrics in Prometheus text format
   const metricsText = formatPrometheusMetrics();
 
@@ -116,4 +112,4 @@ export async function GET() {
       "Content-Type": "text/plain; version=0.0.4; charset=utf-8",
     },
   });
-}
+});

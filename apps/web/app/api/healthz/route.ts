@@ -1,10 +1,7 @@
-// [P1][API][CODE] Route API route handler
-// [P1][API][CODE] Route API route handler
+// [P0][API][LIVENESS] Health Check Endpoint
 import { NextResponse } from "next/server";
+import { withSecurity } from "../_shared/middleware";
 
-// [P1][API][CODE] Route API route handler
-// [P1][API][CODE] Route API route handler
-// Tags: P1, API, CODE
 /**
  * [P0][API][HEALTH] Health Check Endpoint
  * Tags: api, health, infra
@@ -14,7 +11,7 @@ import { NextResponse } from "next/server";
  * - Does NOT hit Firestore; use for "is the web app alive" checks
  */
 
-export async function GET() {
+export const GET = withSecurity(async () => {
   return NextResponse.json(
     {
       ok: true,
@@ -24,9 +21,9 @@ export async function GET() {
     },
     { status: 200 },
   );
-}
+});
 
 // Some monitors use HEAD for cheaper checks
-export async function HEAD() {
-  return new Response(null, { status: 200 });
-}
+export const HEAD = withSecurity(async () => {
+  return NextResponse.json(null, { status: 200 });
+});

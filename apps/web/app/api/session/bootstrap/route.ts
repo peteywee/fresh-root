@@ -1,19 +1,12 @@
-// [P0][AUTH][SESSION] Route API route handler
-// Tags: P0, AUTH, SESSION
-/**
- * [P1][API][SESSION] Session Bootstrap Endpoint (server)
- * Tags: api, session, user, profile, onboarding
- *
- * Overview:
- * - Called by the client after auth to bootstrap the session
- * - Ensures users/{uid} exists with a baseline profile and onboarding block
- * - Returns profile + onboarding + basic flags for the client
- */
-
+// [P0][AUTH][SESSION] Session Bootstrap Endpoint
 import { Firestore } from "firebase-admin/firestore";
 import { NextResponse } from "next/server";
+import { z } from "zod";
 
 import { withSecurity, type AuthenticatedRequest } from "../../_shared/middleware";
+
+// Schema for bootstrap request (accept any payload)
+const BootstrapSchema = z.object({}).passthrough().optional();
 
 import { adminDb as importedAdminDb } from "@/src/lib/firebase.server";
 import { ensureUserProfile } from "@/src/lib/userProfile";
@@ -24,6 +17,22 @@ async function bootstrapSessionHandlerImpl(
   },
   injectedAdminDb?: Firestore,
 ) {
+  // Validate request body
+  let body: unknown = {};
+  try {
+    body = await req.json();
+  } catch {
+    body = {};
+  }
+
+  const result = BootstrapSchema.safeParse(body);
+  if (!result.success) {
+    return NextResponse.json(
+      { error: "validation_error", issues: result.error.issues },
+      { status: 422 },
+    );
+  }
+
   const uid = req.user?.uid;
   const claims = (req.user?.customClaims || {}) as Record<string, unknown>;
 
