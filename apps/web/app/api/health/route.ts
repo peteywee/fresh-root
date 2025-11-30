@@ -8,6 +8,8 @@ import { withSecurity } from "../_shared/middleware";
  * Basic health check endpoint for uptime monitoring
  * Returns 200 with ok: true if service is running
  */
+export const dynamic = "force-dynamic";
+
 export const GET = withSecurity(async () => {
   const healthStatus = {
     ok: true,

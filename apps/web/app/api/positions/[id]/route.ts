@@ -1,4 +1,5 @@
 // [P0][CORE][API] Position management endpoint
+export const dynamic = "force-dynamic";
 
 import { PositionSchema } from "@fresh-schedules/types";
 import { NextRequest, NextResponse } from "next/server";

@@ -10,8 +10,10 @@
  * @see docs/schema-network.md
  */
 
-import { Timestamp } from "firebase-admin/firestore";
 import { z } from "zod";
+
+// Type-only import for Firestore Timestamp (avoid runtime dependency)
+type Timestamp = any;
 
 // ===== MAIN CORPORATE SCHEMA =====
 

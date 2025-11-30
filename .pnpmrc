@@ -1,0 +1,11 @@
+# Memory optimization for low-memory environments
+node-linker=hoisted
+fetching-timeout=60000
+fetch-retry-maxtimeout=60000
+fetch-retry-mintimeout=10000
+shamefully-flatten=false
+
+# Reduce parallel downloads to save memory
+fetch-timeout=60000
+
+# Use mmap for file I/O when possible (faster, less memory)

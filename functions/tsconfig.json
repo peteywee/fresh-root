@@ -1,0 +1,18 @@
+{
+  // Narrow, Functions-specific TS config so we don't inherit irrelevant globals
+  "extends": "../tsconfig.json",
+
+  "compilerOptions": {
+    // Override any global "types" like "ioredis"
+    "types": ["node"],
+
+    // You can add function-specific options here later if needed
+    // (e.g., "noUnusedLocals": true, "noUnusedParameters": true)
+  },
+
+  // Only compile the Functions sources; adjust if your layout differs
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.tsx"
+  ]
+}

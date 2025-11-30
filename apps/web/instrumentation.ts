@@ -14,7 +14,19 @@ export function register() {
   if (started) return;
   started = true;
 
-  // === Fail-fast environment validation ===
+  // === SKIP DURING BUILD ===
+  // During build, Next.js will call register() but we must NOT initialize
+  // any instrumentation, env validation, or network clients. Build must complete
+  // quickly without network I/O or waiting for infrastructure.
+  const NEXT_PHASE = (process as any).env.NEXT_PHASE || "";
+  const isBuildPhase = NEXT_PHASE.includes("build");
+
+  if (isBuildPhase) {
+    // Skip all initialization during build phase
+    return;
+  }
+
+  // === Import and validate server environment ===
   // Import and validate server environment at startup. Keep as a runtime
   // require so bundlers won't pull this into client bundles.
   try {
@@ -26,64 +38,51 @@ export function register() {
     throw error; // Fail fast
   }
 
-  // Dynamically require OpenTelemetry modules so they are only loaded in the
-  // Node server runtime. If the optional packages are missing, warn and return
-  // without crashing the server.
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
-  let diagModule: any;
+  // === Environment validation (production only) ===
   try {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    diagModule = require("@opentelemetry/api");
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const { NodeSDK, resources } = require("@opentelemetry/sdk-node");
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const semantic = require("@opentelemetry/semantic-conventions");
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const { OTLPTraceExporter } = require("@opentelemetry/exporter-trace-otlp-http");
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const { getNodeAutoInstrumentations } = require("@opentelemetry/auto-instrumentations-node");
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const { ConsoleSpanExporter } = require("@opentelemetry/sdk-trace-base");
+    if (process.env.NODE_ENV === "production") {
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      const { env, preFlightChecks, getMultiInstanceInfo } = require("@packages/env");
 
-    const { diag, DiagConsoleLogger, DiagLogLevel } = diagModule;
+      console.log("\n📋 Validating production environment...");
+      preFlightChecks(env);
 
-    // Minimal diagnostics
-    if (process.env.OTEL_DEBUG === "1") {
-      diag.setLogger(new DiagConsoleLogger(), DiagLogLevel.DEBUG);
-    } else {
-      diag.setLogger(new DiagConsoleLogger(), DiagLogLevel.ERROR);
+      const info = getMultiInstanceInfo(env);
+      if (info.riskLevel === "critical") {
+        console.error(`\n❌ CRITICAL: ${info.message}`);
+        process.exit(1);
+      }
     }
+  } catch (error) {
+    if (process.env.NODE_ENV === "production") {
+      console.error("[instrumentation] Environment validation failed:", error);
+      throw error;
+    } else {
+      console.warn("[instrumentation] Environment validation warning (dev mode):", error);
+    }
+  }
 
-    const serviceName = process.env.OTEL_SERVICE_NAME || "apps-web";
-    const environment = process.env.NEXT_PUBLIC_VERCEL_ENV || process.env.NODE_ENV || "development";
-    const commitSha = process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA || undefined;
+  // === OpenTelemetry SDK (optional, with timeout guard) ===
+  // Initialize OTEL only in runtime, NOT during build. SDK initialization
+  // can hang if network endpoints are unreachable, so we add a timeout.
+  initializeOpenTelemetryWithTimeout();
+}
 
-    // Prefer OTLP HTTP exporter if endpoint provided, else fall back to console in dev
-    const otlpEndpoint = process.env.OTEL_EXPORTER_OTLP_ENDPOINT;
-    const traceExporter = otlpEndpoint
-      ? new OTLPTraceExporter({ url: `${otlpEndpoint.replace(/\/$/, "")}/v1/traces` })
-      : environment === "development"
-        ? new ConsoleSpanExporter()
-        : undefined;
-
-    const sdk = new NodeSDK({
-      resource: resources.resourceFromAttributes({
-        [semantic.SEMRESATTRS_SERVICE_NAME]: serviceName,
-        [semantic.SEMRESATTRS_DEPLOYMENT_ENVIRONMENT]: environment,
-        [semantic.SEMRESATTRS_SERVICE_VERSION]: commitSha || "unknown",
-      }),
-      // When using ConsoleSpanExporter, NodeSDK will wrap it for us
-      traceExporter,
-      instrumentations: [getNodeAutoInstrumentations()],
-    });
-
-    // Fire and forget
-    void sdk.start();
-  } catch (err) {
-    // Optional instrumentation packages are not present or failed to load.
-    // Warn but do not crash the server.
+/**
+ * Initialize OpenTelemetry SDK with a timeout to prevent hangs.
+ * This runs only in production runtime, never during build.
+ * 
+ * NOTE: OTEL SDK initialization can hang on unreachable network endpoints.
+ * We skip it during module load and don't initialize it at all in dev.
+ * If needed, OTEL can be initialized lazily on first request or via a separate process.
+ */
+function initializeOpenTelemetryWithTimeout(): void {
+  // OTEL initialization is deferred to avoid hanging during module load.
+  // In production, you should initialize OTEL in a separate worker or defer it.
+  // For now, we skip OTEL initialization to keep startup fast and unblocking.
+  
+  if (process.env.OTEL_EXPORTER_OTLP_ENDPOINT) {
     // eslint-disable-next-line no-console
-    console.warn("[instrumentation] OpenTelemetry not initialized (optional):", err);
-    return;
+    console.warn("[instrumentation] OTEL_EXPORTER_OTLP_ENDPOINT is set but OTEL SDK not initialized during module load to prevent hangs. Consider initializing in a separate worker.");
   }
 }

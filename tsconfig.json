@@ -11,7 +11,8 @@
     "strict": true,
     "baseUrl": ".",
     "paths": {
-      "@fresh-schedules/types": ["packages/types/src/index.ts"]
+      "@fresh-schedules/types": ["packages/types/src/index.ts"],
+      "@packages/env": ["packages/env/src/index.ts"]
     },
     "typeRoots": ["./types", "./node_modules/@types"]
   },
