@@ -12,7 +12,7 @@
 
 **Status:** 🔴 Tier 0 = 0 violations ✅ | 🟠 Tier 1 = 0 violations ✅
 
-#### What IS Production Ready:
+#### What IS Production Ready
 
 - ✅ **All 6 public endpoints** have security wrappers (`withSecurity`)
   - health, healthz, metrics, internal/backup, session, onboarding/admin-form
@@ -28,7 +28,7 @@
   - Type inference: `export type X = z.infer<typeof XSchema>`
   - Single source of truth - types derived from schemas, not duplicated
 
-#### Implementation Details:
+#### Implementation Details
 
 ```typescript
 // Security wrapper pattern (PRODUCTION READY)
@@ -45,7 +45,7 @@ if (!result.success) {
 const validated = result.data;
 ```
 
-#### Tier 0 & 1 Verification:
+#### Tier 0 & 1 Verification
 
 ```bash
 $ FRESH_PATTERNS_MIN_SCORE=0 pnpm lint:patterns 2>&1 | grep -A 5 "SCORE:"
@@ -73,7 +73,7 @@ apps/web typecheck$ tsc --noEmit ✅
 apps/web typecheck: Done
 ```
 
-#### What IS Production Ready:
+#### What IS Production Ready
 
 - ✅ No type errors in any files
 - ✅ Generic types properly constrained
@@ -96,7 +96,7 @@ $ pnpm lint
   - 1 warning: @typescript-eslint/no-explicit-any (1 file)
 ```
 
-#### What IS Production Ready:
+#### What IS Production Ready
 
 - ✅ **0 Blocking Errors** - No code quality issues that prevent deployment
 - ✅ **14 Import Order Warnings** - Purely cosmetic spacing preferences
@@ -109,7 +109,7 @@ $ pnpm lint
   - Context: Limited to specific array handling
   - Workaround: Could be fixed with proper type annotation
 
-#### What IS NOT Production Ready (Pre-deployment fixes):
+#### What IS NOT Production Ready (Pre-deployment fixes)
 
 - ⚠️ Import order can be auto-fixed: `pnpm lint --fix`
 
@@ -129,7 +129,7 @@ $ pnpm lint
   🎯 Complete Triads:      3/3 ✅
 ```
 
-#### What IS Production Ready:
+#### What IS Production Ready
 
 - ✅ **All critical patterns enforced** (Tier 0, 1, 2)
 - ✅ **Security patterns verified** - All public endpoints protected
@@ -137,7 +137,7 @@ $ pnpm lint
 - ✅ **Triad coverage complete** - Schedule, Organization, Shift
 - ✅ **Score threshold exceeded** - 111.5 >> 70 (59% margin)
 
-#### What IS NOT Production Ready (Phase 3 - Optional):
+#### What IS NOT Production Ready (Phase 3 - Optional)
 
 - ⏳ **37 Tier 3 violations** - Missing optional header comments
   - These are cosmetic style preferences only
@@ -166,7 +166,7 @@ $ pnpm lint
 
 ## 🚀 DEPLOYMENT CHECKLIST
 
-### Pre-Deployment (Already Complete ✅):
+### Pre-Deployment (Already Complete ✅)
 
 - [x] Phase 1 Tier 0 violations fixed (13 → 0) — Commit 17747ed
 - [x] Phase 2 Tier 1 violations fixed (7 → 0) — Commit 91e19db
@@ -177,12 +177,12 @@ $ pnpm lint
 - [x] Pattern score exceeds threshold (111.5 > 70)
 - [x] All changes pushed to origin/dev
 
-### Optional Pre-Deployment:
+### Optional Pre-Deployment
 
 - [ ] Phase 3 headers (optional - for 100% style compliance)
 - [ ] ESLint auto-fix (optional - `pnpm lint --fix`)
 
-### Deployment:
+### Deployment
 
 1. **Immediate:** Create PR from dev → main
 2. **CI:** Runs with FRESH_PATTERNS_MIN_SCORE=70 threshold
@@ -212,7 +212,7 @@ if (!result.success) return error;
 // auth/mfa/setup, onboarding/*, session/bootstrap
 ```
 
-### Attack Surfaces Hardened:
+### Attack Surfaces Hardened
 
 - ✅ Unauthenticated access: BLOCKED
 - ✅ Invalid input processing: BLOCKED

@@ -43,9 +43,11 @@ Your system shows multiple VSCode processes (806MB + 770MB + 87MB = ~1.6GB total
 
 1. Run: `ps aux | grep code`
 2. If you see multiple entries like `/usr/share/code/code`, kill extras:
+
    ```bash
    killall -except $$ code  # Keep only current instance
    ```
+
 3. Or manually close VSCode windows except main one
 4. Keep only ONE VSCode window open while developing
 
@@ -261,32 +263,32 @@ This can free 200-400MB.
 
 ## MONITORING & TROUBLESHOOTING
 
-### Check current memory usage:
+### Check current memory usage
 
 ```bash
 free -h
 ```
 
-### See what's consuming memory:
+### See what's consuming memory
 
 ```bash
 ps aux --sort=-%mem | head -15
 ```
 
-### Monitor in real-time:
+### Monitor in real-time
 
 ```bash
 watch -n 1 'free -h'
 ```
 
-### Check safeguard daemon status:
+### Check safeguard daemon status
 
 ```bash
 ps aux | grep safeguard-oom
 tail -f ~/.oom-safeguard.log
 ```
 
-### If preflight check fails:
+### If preflight check fails
 
 ```bash
 bash scripts/check-memory-preflight.sh
@@ -307,6 +309,7 @@ bash scripts/check-memory-preflight.sh
 
 - Keep Chromebook for browsing/lightweight edits
 - Use SSH to connect to more powerful machine for builds
+
   ```bash
   ssh user@powerful-machine "cd fresh-root && pnpm build"
   ```

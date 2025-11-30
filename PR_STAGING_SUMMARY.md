@@ -306,7 +306,7 @@ Please verify:
 - [ ] Firestore indexes align with your anticipated query patterns
 - [ ] No unintended side effects from lazy-loaded OTEL init
 
-### Questions?
+### Questions
 
 Refer to:
 

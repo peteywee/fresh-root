@@ -28,7 +28,7 @@
 | VSCode Usage      | 806MB+    | ⚠️ High, unbounded              |
 | Build Parallelism | Unlimited | ⚠️ Causes memory spike          |
 
-### Why Code 9?
+### Why Code 9
 
 When system runs out of memory:
 
@@ -167,7 +167,7 @@ tail -f ~/.oom-safeguard.log
 
 ## Failure Scenarios & Recovery
 
-### If still getting OOM crashes:
+### If still getting OOM crashes
 
 1. **Check swap is active**
 
@@ -195,7 +195,7 @@ tail -f ~/.oom-safeguard.log
    - Browser: Close extra tabs
    - Other services: Stop unused daemons
 
-### If OOM Safeguard fails:
+### If OOM Safeguard fails
 
 ```bash
 # Restart it
