@@ -22,6 +22,7 @@ Complete infrastructure hardening with production-ready observability, rate limi
 **4 Mermaid diagrams providing visual reference for infrastructure**:
 
 #### 1a. Strategic Execution Roadmap (Gantt)
+
 ```
 Timeline: Phase -1 (Reality) → Phase 0 (Safety) → Phase 1 (Foundation) → Launch
 - Customer discovery validation (Dec 1-8)
@@ -32,6 +33,7 @@ Timeline: Phase -1 (Reality) → Phase 0 (Safety) → Phase 1 (Foundation) → L
 ```
 
 #### 1b. Rate Limiting & Observability Flow (Flowchart)
+
 ```
 Dual-mode limiter:
   - Redis for production multi-instance
@@ -41,6 +43,7 @@ Dual-mode limiter:
 ```
 
 #### 1c. OpenTelemetry Tracing Hierarchy (Graph)
+
 ```
 Request span tree:
   - Root HTTP span (all routes)
@@ -52,6 +55,7 @@ Request span tree:
 ```
 
 #### 1d. Production Validation & Env Config (Sequence)
+
 ```
 Complete lifecycle:
   - Build phase (optional strict validation)
@@ -71,7 +75,7 @@ Complete lifecycle:
 
 ```typescript
 // Atomic Join Flow
-export { joinOrganization } from './joinOrganization';
+export { joinOrganization } from "./joinOrganization";
 
 // Denormalization Triggers (N+1 Query Fix)
 export {
@@ -80,19 +84,19 @@ export {
   onUserProfileUpdate,
   onScheduleUpdate,
   reconcileOrgStats,
-} from './triggers/denormalization';
+} from "./triggers/denormalization";
 ```
 
 **Details**:
 
-| Function | Purpose | Status |
-| --- | --- | --- |
-| `joinOrganization` | Atomic org join with Auth + Firestore transaction boundary + compensating transaction (delete user on failure) | ✅ Implemented |
-| `onZoneWrite` | Updates venue.cachedZones to avoid N+1 zone lookups | ✅ Implemented |
-| `onMembershipWrite` | Updates org.memberCount and related denormalized fields | ✅ Implemented |
-| `onUserProfileUpdate` | Propagates user fields to all membership docs | ✅ Implemented |
-| `onScheduleUpdate` | Keeps denormalized schedule summary fields in sync | ✅ Implemented |
-| `reconcileOrgStats` | Scheduled function (daily) recalculates org stats as safety net | ✅ Implemented |
+| Function              | Purpose                                                                                                        | Status         |
+| --------------------- | -------------------------------------------------------------------------------------------------------------- | -------------- |
+| `joinOrganization`    | Atomic org join with Auth + Firestore transaction boundary + compensating transaction (delete user on failure) | ✅ Implemented |
+| `onZoneWrite`         | Updates venue.cachedZones to avoid N+1 zone lookups                                                            | ✅ Implemented |
+| `onMembershipWrite`   | Updates org.memberCount and related denormalized fields                                                        | ✅ Implemented |
+| `onUserProfileUpdate` | Propagates user fields to all membership docs                                                                  | ✅ Implemented |
+| `onScheduleUpdate`    | Keeps denormalized schedule summary fields in sync                                                             | ✅ Implemented |
+| `reconcileOrgStats`   | Scheduled function (daily) recalculates org stats as safety net                                                | ✅ Implemented |
 
 **Impact**: Functions ready for Firebase deployment; atomic join prevents duplicate users; denormalization fixes N+1 performance issues at scale.
 
@@ -103,6 +107,7 @@ export {
 **Location**: `apps/web/src/lib/api/rate-limit.ts`
 
 **Features**:
+
 - Redis-backed limiter for production multi-instance deployments
 - In-memory fallback for dev/single-instance
 - Configurable limits per route
@@ -111,13 +116,11 @@ export {
 **Status**: ✅ All routes wired; 429 observability in place
 
 **Example usage**:
+
 ```typescript
-export const POST = withRateLimit(
-  { rpsLimit: 10 },
-  async (req) => {
-    // Route handler
-  }
-);
+export const POST = withRateLimit({ rpsLimit: 10 }, async (req) => {
+  // Route handler
+});
 ```
 
 ---
@@ -127,11 +130,13 @@ export const POST = withRateLimit(
 **Location**: `packages/env/src/index.ts` + `packages/env/src/production.ts`
 
 **Validation**:
+
 - Zod schema with required/optional field gating
 - Optional fields: `REDIS_URL`, `OTEL_EXPORTER_OTLP_ENDPOINT`
 - Fail-fast on misconfiguration
 
 **Example**:
+
 ```typescript
 // Build-time (optional fields)
 const env = envSchema.parse(process.env); // PASS if FIREBASE_PROJECT_ID present
@@ -147,12 +152,14 @@ assertProduction(); // FAIL if REDIS_URL or OTEL endpoint missing
 **Location**: `apps/web/app/api/_shared/otel-init.ts` + `apps/web/app/api/_shared/otel.ts`
 
 **Features**:
+
 - Lazy-loaded SDK initialization (no module-load hangs)
 - Request span + inner critical spans
 - Automatic attribute collection (orgId, userId, route, latency)
 - Searchable in Jaeger/Honeycomb
 
 **Key Fixes**:
+
 - SDK `.start()` returns `void`, not `Promise` → no await loops
 - Env imports only inside functions → no blocking during build
 
@@ -187,11 +194,11 @@ assertProduction(); // FAIL if REDIS_URL or OTEL endpoint missing
 
 ## Commits in This PR
 
-| Commit | Message | Changes |
-| --- | --- | --- |
-| `fcb2c7c` | Add db:seed and test:integration npm scripts | 2 new scripts (seed emulator, integration tests) |
+| Commit    | Message                                           | Changes                                              |
+| --------- | ------------------------------------------------- | ---------------------------------------------------- |
+| `fcb2c7c` | Add db:seed and test:integration npm scripts      | 2 new scripts (seed emulator, integration tests)     |
 | `f136c90` | Add canonical functions/src/index.ts with exports | 6 functions exported (joinOrganization + 5 triggers) |
-| `7809e9c` | Add architecture diagrams (4 Mermaid visuals) | Architecture documentation complete |
+| `7809e9c` | Add architecture diagrams (4 Mermaid visuals)     | Architecture documentation complete                  |
 
 ---
 
@@ -241,18 +248,19 @@ pnpm dev
 
 ## Key References
 
-| Document | Purpose |
-| --- | --- |
-| `docs/standards/OBSERVABILITY_AND_TRACING_STANDARD.md` | Observability policy (when to span, what to measure) |
-| `docs/RATE_LIMIT_IMPLEMENTATION.md` | Rate limiting strategy (dual-mode, fallback, observability) |
-| `docs/PRODUCTION_ENV_VALIDATION.md` | Environment validation approach (Zod schema, gating) |
-| `docs/ARCHITECTURE_DIAGRAMS.md` | Visual architecture reference (NEW - 4 diagrams) |
+| Document                                               | Purpose                                                     |
+| ------------------------------------------------------ | ----------------------------------------------------------- |
+| `docs/standards/OBSERVABILITY_AND_TRACING_STANDARD.md` | Observability policy (when to span, what to measure)        |
+| `docs/RATE_LIMIT_IMPLEMENTATION.md`                    | Rate limiting strategy (dual-mode, fallback, observability) |
+| `docs/PRODUCTION_ENV_VALIDATION.md`                    | Environment validation approach (Zod schema, gating)        |
+| `docs/ARCHITECTURE_DIAGRAMS.md`                        | Visual architecture reference (NEW - 4 diagrams)            |
 
 ---
 
 ## Breaking Changes
 
 **None**. All changes are:
+
 - Backwards compatible with existing routes
 - Optional feature gates (Redis, OTEL)
 - Additive only (new functions exported, diagrams added)
@@ -261,12 +269,12 @@ pnpm dev
 
 ## Performance Impact
 
-| Metric | Before | After | Impact |
-| --- | --- | --- | --- |
-| Dev startup | ~6.5s | ~5.4s | ✅ -15% faster |
-| Memory usage | 6.3GB → OOM | 1GB steady | ✅ -84% OOM eliminated |
-| Rate limit check | N/A | <1ms (Redis) / <0.1ms (in-memory) | ✅ Negligible |
-| OTEL span overhead | N/A | <1ms per request | ✅ Negligible |
+| Metric             | Before      | After                             | Impact                 |
+| ------------------ | ----------- | --------------------------------- | ---------------------- |
+| Dev startup        | ~6.5s       | ~5.4s                             | ✅ -15% faster         |
+| Memory usage       | 6.3GB → OOM | 1GB steady                        | ✅ -84% OOM eliminated |
+| Rate limit check   | N/A         | <1ms (Redis) / <0.1ms (in-memory) | ✅ Negligible          |
+| OTEL span overhead | N/A         | <1ms per request                  | ✅ Negligible          |
 
 ---
 
@@ -290,6 +298,7 @@ pnpm dev
 ### For Code Review
 
 Please verify:
+
 - [ ] Architecture diagrams are clear and technically accurate
 - [ ] Cloud function exports match your intended API surface
 - [ ] Rate limiting fallback strategy (in-memory if no Redis) is acceptable
@@ -300,6 +309,7 @@ Please verify:
 ### Questions?
 
 Refer to:
+
 1. **Observability**: See `docs/standards/OBSERVABILITY_AND_TRACING_STANDARD.md` (§2-4)
 2. **Rate Limiting**: See `docs/RATE_LIMIT_IMPLEMENTATION.md`
 3. **Environment**: See `packages/env/src/index.ts` for schema definition
