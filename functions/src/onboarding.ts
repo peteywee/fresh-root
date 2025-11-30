@@ -1,3 +1,5 @@
+// [P0][APP][CODE] Onboarding
+// Tags: P0, APP, CODE
 import { getApps, initializeApp } from "firebase-admin/app";
 import { getAuth, UserRecord } from "firebase-admin/auth";
 import { Firestore, getFirestore } from "firebase-admin/firestore";
@@ -57,9 +59,7 @@ interface Membership {
 /**
  * Validate a join token document and convert it to a typed object.
  */
-function validateJoinToken(
-  tokenSnapshot: FirebaseFirestore.DocumentSnapshot
-): JoinToken {
+function validateJoinToken(tokenSnapshot: FirebaseFirestore.DocumentSnapshot): JoinToken {
   if (!tokenSnapshot.exists) {
     throw new HttpsError("invalid-argument", "Invitation token not found.");
   }
@@ -68,15 +68,12 @@ function validateJoinToken(
   if (!data.orgId || typeof data.orgId !== "string") {
     throw new HttpsError(
       "failed-precondition",
-      "Invitation token is misconfigured: missing orgId."
+      "Invitation token is misconfigured: missing orgId.",
     );
   }
 
   if (data.disabled) {
-    throw new HttpsError(
-      "failed-precondition",
-      "This invitation token has been disabled."
-    );
+    throw new HttpsError("failed-precondition", "This invitation token has been disabled.");
   }
 
   const maxUses = typeof data.maxUses === "number" ? data.maxUses : 1;
@@ -85,22 +82,19 @@ function validateJoinToken(
   if (maxUses <= 0) {
     throw new HttpsError(
       "failed-precondition",
-      "Invitation token is misconfigured: maxUses must be positive."
+      "Invitation token is misconfigured: maxUses must be positive.",
     );
   }
 
   if (uses >= maxUses) {
     throw new HttpsError(
       "failed-precondition",
-      "This invitation token has already been fully used."
+      "This invitation token has already been fully used.",
     );
   }
 
   if (data.expiresAt && data.expiresAt.toMillis() < Date.now()) {
-    throw new HttpsError(
-      "failed-precondition",
-      "This invitation token has expired."
-    );
+    throw new HttpsError("failed-precondition", "This invitation token has expired.");
   }
 
   return {
@@ -241,10 +235,7 @@ export const joinOrganization = onCall<JoinOrganizationRequest>(
         throw err;
       }
 
-      throw new HttpsError(
-        "internal",
-        "Join failed unexpectedly. Please try again."
-      );
+      throw new HttpsError("internal", "Join failed unexpectedly. Please try again.");
     }
-  }
+  },
 );

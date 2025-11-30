@@ -62,16 +62,14 @@ export const onZoneWrite = onDocumentWritten(
         // Ensure the venue exists – if not, bail gracefully.
         const venueSnap = await tx.get(venueRef);
         if (!venueSnap.exists) {
-          logger.warn(
-            "onZoneWrite: venue does not exist; skipping cachedZones update",
-            { orgId, venueId }
-          );
+          logger.warn("onZoneWrite: venue does not exist; skipping cachedZones update", {
+            orgId,
+            venueId,
+          });
           return;
         }
 
-        const zonesCollection = db.collection(
-          `orgs/${orgId}/venues/${venueId}/zones`
-        );
+        const zonesCollection = db.collection(`orgs/${orgId}/venues/${venueId}/zones`);
 
         const zonesSnap = await tx.get(zonesCollection);
 
@@ -104,5 +102,5 @@ export const onZoneWrite = onDocumentWritten(
       // Let Functions retry according to its retry policy.
       throw error;
     }
-  }
+  },
 );

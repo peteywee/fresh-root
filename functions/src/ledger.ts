@@ -1,16 +1,11 @@
+// [P0][APP][CODE] Ledger
+// Tags: P0, APP, CODE
 import { onDocumentUpdated } from "firebase-functions/v2/firestore";
 import * as logger from "firebase-functions/logger";
 import { initializeApp, getApps } from "firebase-admin/app";
-import {
-  getFirestore,
-  Firestore,
-  Timestamp,
-} from "firebase-admin/firestore";
+import { getFirestore, Firestore, Timestamp } from "firebase-admin/firestore";
 
-import {
-  calculateShiftPay,
-  ShiftPayBreakdown,
-} from "./domain/billing";
+import { calculateShiftPay, ShiftPayBreakdown } from "./domain/billing";
 
 /**
  * Admin initialization guard.
@@ -97,25 +92,19 @@ export const onAttendanceApproved = onDocumentUpdated(
     }
 
     if (!after.clockIn || !after.clockOut) {
-      logger.warn(
-        "onAttendanceApproved: clockIn/clockOut missing, cannot compute pay",
-        {
-          orgId,
-          attendanceId,
-        }
-      );
+      logger.warn("onAttendanceApproved: clockIn/clockOut missing, cannot compute pay", {
+        orgId,
+        attendanceId,
+      });
       return;
     }
 
     const userId = after.userId;
     if (!userId) {
-      logger.warn(
-        "onAttendanceApproved: attendance missing userId, skipping ledger",
-        {
-          orgId,
-          attendanceId,
-        }
-      );
+      logger.warn("onAttendanceApproved: attendance missing userId, skipping ledger", {
+        orgId,
+        attendanceId,
+      });
       return;
     }
 
@@ -134,17 +123,13 @@ export const onAttendanceApproved = onDocumentUpdated(
       if (!hourlyRate || !overtimeThresholdMinutes || !overtimeMultiplier) {
         // Load partnership as a fallback source of default rates.
         if (after.partnershipId) {
-          const partnershipRef = db.doc(
-            `orgs/${orgId}/partnerships/${after.partnershipId}`
-          );
+          const partnershipRef = db.doc(`orgs/${orgId}/partnerships/${after.partnershipId}`);
           const partnershipSnap = await partnershipRef.get();
           if (partnershipSnap.exists) {
             const pdata = partnershipSnap.data() as PartnershipDoc;
             hourlyRate = hourlyRate ?? pdata.defaultHourlyRate;
-            overtimeThresholdMinutes =
-              overtimeThresholdMinutes ?? pdata.overtimeThresholdMinutes;
-            overtimeMultiplier =
-              overtimeMultiplier ?? pdata.overtimeMultiplier;
+            overtimeThresholdMinutes = overtimeThresholdMinutes ?? pdata.overtimeThresholdMinutes;
+            overtimeMultiplier = overtimeMultiplier ?? pdata.overtimeMultiplier;
           } else {
             logger.warn(
               "onAttendanceApproved: partnership not found, falling back to attendance-only rates",
@@ -152,7 +137,7 @@ export const onAttendanceApproved = onDocumentUpdated(
                 orgId,
                 attendanceId,
                 partnershipId: after.partnershipId,
-              }
+              },
             );
           }
         }
@@ -165,21 +150,18 @@ export const onAttendanceApproved = onDocumentUpdated(
           {
             orgId,
             attendanceId,
-          }
+          },
         );
         return;
       }
 
       const durationMinutes = diffMinutes(after.clockIn, after.clockOut);
       if (durationMinutes <= 0) {
-        logger.warn(
-          "onAttendanceApproved: non-positive duration, skipping ledger",
-          {
-            orgId,
-            attendanceId,
-            durationMinutes,
-          }
-        );
+        logger.warn("onAttendanceApproved: non-positive duration, skipping ledger", {
+          orgId,
+          attendanceId,
+          durationMinutes,
+        });
         return;
       }
 
@@ -233,5 +215,5 @@ export const onAttendanceApproved = onDocumentUpdated(
       // Let Functions retry according to its retry policy.
       throw error;
     }
-  }
+  },
 );

@@ -10,25 +10,28 @@
 ## Root Cause Analysis
 
 ### System Logs (dmesg)
+
 ```
 [262855.818653] oom-kill:constraint=CONSTRAINT_NONE,nodemask=(null),cpuset=lxc.payload.penguin
-[262855.824699] Out of memory: Killed process 23712 (code) total-vm:1480237304kB, 
+[262855.824699] Out of memory: Killed process 23712 (code) total-vm:1480237304kB,
                 anon-rss:1522712kB (1.5GB), uid:1000
 [263149.966261] virtio_balloon virtio6: Out of puff! Can't get 1 pages
 ```
 
 ### Problem Summary
-| Component | Value | Status |
-|-----------|-------|--------|
-| Total RAM | 6.3GB | ⚠️ Undersized (8GB recommended) |
-| Free RAM | 1.7GB | ⚠️ Below safety threshold |
-| Swap Space | 0MB | 🔴 CRITICAL - No swap |
-| VSCode Usage | 806MB+ | ⚠️ High, unbounded |
-| Build Parallelism | Unlimited | ⚠️ Causes memory spike |
+
+| Component         | Value     | Status                          |
+| ----------------- | --------- | ------------------------------- |
+| Total RAM         | 6.3GB     | ⚠️ Undersized (8GB recommended) |
+| Free RAM          | 1.7GB     | ⚠️ Below safety threshold       |
+| Swap Space        | 0MB       | 🔴 CRITICAL - No swap           |
+| VSCode Usage      | 806MB+    | ⚠️ High, unbounded              |
+| Build Parallelism | Unlimited | ⚠️ Causes memory spike          |
 
 ### Why Code 9?
 
 When system runs out of memory:
+
 1. Linux OOM Killer activates (out of last resort)
 2. Identifies highest oom_score process (VSCode: oom_score_adj=300)
 3. Sends SIGKILL (signal 9) - cannot be caught
@@ -153,12 +156,12 @@ tail -f ~/.oom-safeguard.log
 
 ## Expected Behavior After Safeguards
 
-| Scenario | Before | After |
-|----------|--------|-------|
-| Build spike to 2GB | CRASH (code 9) | Graceful slow down |
-| VSCode grows to 800MB | CRASH (code 9) | Capped at 512MB (TS server) |
-| All RAM consumed | CRASH (code 9) | Swap kicks in, performance <1% |
-| No swap present | Risk | Protected by safeguard daemon |
+| Scenario              | Before         | After                          |
+| --------------------- | -------------- | ------------------------------ |
+| Build spike to 2GB    | CRASH (code 9) | Graceful slow down             |
+| VSCode grows to 800MB | CRASH (code 9) | Capped at 512MB (TS server)    |
+| All RAM consumed      | CRASH (code 9) | Swap kicks in, performance <1% |
+| No swap present       | Risk           | Protected by safeguard daemon  |
 
 ---
 
@@ -167,11 +170,13 @@ tail -f ~/.oom-safeguard.log
 ### If still getting OOM crashes:
 
 1. **Check swap is active**
+
    ```bash
    swapon --show
    ```
 
 2. **Increase swap to 4GB** (if 2GB not enough)
+
    ```bash
    sudo fallocate -l 2G /swapfile2
    sudo mkswap /swapfile2
@@ -179,6 +184,7 @@ tail -f ~/.oom-safeguard.log
    ```
 
 3. **Reduce build parallelism** (more conservative)
+
    ```bash
    SWC_NUM_THREADS=1
    NODE_OPTIONS="--max-old-space-size=1024"
@@ -204,30 +210,33 @@ tail -100 ~/.oom-safeguard.log
 
 ## Configuration Files Modified
 
-| File | Changes | Purpose |
-|------|---------|---------|
-| `.vscode/settings.json` | Added TS memory cap + syntactic analysis flag | VSCode memory bounds |
-| `scripts/safeguard-oom.sh` | NEW (2.4KB) | Runtime OOM protection |
-| `scripts/check-memory-preflight.sh` | NEW (1.8KB) | Pre-flight verification |
-| `OOM_PREVENTION.md` | NEW (2.1KB) | User guide + procedures |
+| File                                | Changes                                       | Purpose                 |
+| ----------------------------------- | --------------------------------------------- | ----------------------- |
+| `.vscode/settings.json`             | Added TS memory cap + syntactic analysis flag | VSCode memory bounds    |
+| `scripts/safeguard-oom.sh`          | NEW (2.4KB)                                   | Runtime OOM protection  |
+| `scripts/check-memory-preflight.sh` | NEW (1.8KB)                                   | Pre-flight verification |
+| `OOM_PREVENTION.md`                 | NEW (2.1KB)                                   | User guide + procedures |
 
 ---
 
 ## Success Criteria
 
 ✅ **All safeguards deployed**
+
 - VSCode memory capped
 - Node build memory bounded
 - OOM daemon available
 - Preflight check ready
 
 ✅ **Manual actions required**
+
 - [ ] Add 2GB swap space
 - [ ] Restart VSCode
 - [ ] Run `bash scripts/check-memory-preflight.sh`
 - [ ] Start `bash scripts/safeguard-oom.sh` in background
 
 ✅ **Verification**
+
 - [ ] `free -h` shows swap space
 - [ ] Preflight check passes
 - [ ] `pnpm dev` starts without crashes

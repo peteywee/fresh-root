@@ -105,7 +105,7 @@ async function createNetworkCorporateHandlerImpl(
     if (formData.createdBy !== uid) {
       return NextResponse.json(
         { error: "token_ownership_mismatch", details: "This form token was not created by you" },
-        { status: 403 }
+        { status: 403 },
       );
     }
 

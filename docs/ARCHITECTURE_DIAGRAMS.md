@@ -13,7 +13,7 @@ gantt
     title Fresh Schedules: Survival and Scale Roadmap
     dateFormat  YYYY-MM-DD
     axisFormat  %d
-    
+
     section PHASE -1: REALITY
     Stop Coding - Code Freeze      :crit, done, 2025-11-30, 1d
     Customer Discovery - 5 Calls   :active, 2025-12-01, 7d
@@ -29,7 +29,7 @@ gantt
     Billing Logic Extraction       :2025-12-15, 4d
     Denormalization Triggers       :2025-12-18, 4d
     Integration Tests Jest         :2025-12-20, 5d
-    
+
     section LAUNCH
     Deploy to Production           :milestone, 2025-12-30, 0d
 ```
@@ -45,28 +45,28 @@ flowchart TD
     A[API Request] --> B{Route Protected?}
     B -->|No| C[Pass Through]
     B -->|Yes| D[withRateLimit Wrapper]
-    
+
     D --> E{Redis Available?}
     E -->|Yes - Production| F[Redis Rate Limiter]
     E -->|No - Dev/Local| G[In-Memory Rate Limiter]
-    
+
     F --> H{Check Limit}
     G --> H
-    
+
     H -->|Key Exists & Under Limit| I[Increment Counter]
     H -->|Key Exists & Over Limit| J[429 Too Many Requests]
     H -->|Key Missing| K[Create New Key<br/>with TTL]
-    
+
     I --> L[Continue Handler]
     K --> L
     J --> M[Log Rate Limit Event<br/>with Span Attributes]
-    
+
     L --> N[withSpan Wrapper<br/>Critical Logic]
     N --> O[Trace Attributes:<br/>orgId, userId, route]
-    
+
     M --> P[Observable in Jaeger/Honeycomb]
     O --> P
-    
+
     style F fill:#4CAF50
     style G fill:#2196F3
     style P fill:#FF9800
@@ -84,19 +84,19 @@ graph TB
     A --> C["rbac.checkPermissions<br/>Span"]
     A --> D["Firestore Transaction<br/>Span"]
     A --> E["Denormalization Trigger<br/>Span"]
-    
+
     B --> B1["Attributes:<br/>user.uid<br/>session.token"]
     C --> C1["Attributes:<br/>tenant.orgId<br/>user.role"]
     D --> D1["Attributes:<br/>collection.name<br/>operation.type"]
     E --> E1["Attributes:<br/>trigger.type<br/>doc.id"]
-    
+
     B1 --> F["Trace to OTEL Backend<br/>Jaeger / Honeycomb"]
     C1 --> F
     D1 --> F
     E1 --> F
-    
+
     F --> G["Search & Filter:<br/>by orgId, userId,<br/>route, latency"]
-    
+
     style A fill:#FFE082
     style B fill:#81C784
     style C fill:#81C784
@@ -119,34 +119,34 @@ sequenceDiagram
     participant Env as Env Schema<br/>Zod Validation
     participant App as App Handler
     participant Prod as Production Check
-    
+
     Build ->> Build: NEXT_PHASE=build<br/>(optional fields)
     Build -->> Runtime: Skip strict validation
-    
+
     Runtime ->> Env: Load process.env
     Env ->> Env: Parse required fields:<br/>FIREBASE_PROJECT_ID
-    
+
     Env ->> Runtime: Optional fields OK?<br/>REDIS_URL<br/>OTEL_EXPORTER_OTLP_ENDPOINT
-    
+
     Runtime -->> App: ✅ Env validated<br/>Features gated
-    
+
     App ->> Prod: Route handler fires
     Prod ->> Prod: assertProduction()?<br/>NODE_ENV=production
-    
+
     alt Redis Available
         Prod ->> Prod: Use Redis rate limiter
     else Redis Missing
         Prod ->> Prod: Fallback to in-memory<br/>(single-instance only)
     end
-    
+
     alt OTEL Endpoint Available
         Prod ->> Prod: Initialize OTEL SDK<br/>lazy-loaded
     else OTEL Missing
         Prod ->> Prod: Tracing no-ops<br/>but code continues
     end
-    
+
     Prod -->> App: ✅ Production<br/>operational guarantee
-    
+
     style Build fill:#90CAF9
     style Runtime fill:#81C784
     style Env fill:#FFB74D
@@ -157,12 +157,12 @@ sequenceDiagram
 
 ## Key Takeaways
 
-| Diagram | Purpose | Usage |
-| --- | --- | --- |
-| **1. Gantt** | Strategic timeline for phases and milestones | Project planning, stakeholder alignment |
-| **2. Rate Limit Flow** | How dual-mode rate limiting works with observability | Engineering onboarding, debugging rate limit issues |
-| **3. OTEL Spans** | Hierarchical tracing and attribute collection | Observability standard compliance, trace design |
-| **4. Validation Sequence** | Environment config lifecycle and production guarantees | Infrastructure validation, deployment checklist |
+| Diagram                    | Purpose                                                | Usage                                               |
+| -------------------------- | ------------------------------------------------------ | --------------------------------------------------- |
+| **1. Gantt**               | Strategic timeline for phases and milestones           | Project planning, stakeholder alignment             |
+| **2. Rate Limit Flow**     | How dual-mode rate limiting works with observability   | Engineering onboarding, debugging rate limit issues |
+| **3. OTEL Spans**          | Hierarchical tracing and attribute collection          | Observability standard compliance, trace design     |
+| **4. Validation Sequence** | Environment config lifecycle and production guarantees | Infrastructure validation, deployment checklist     |
 
 ---
 

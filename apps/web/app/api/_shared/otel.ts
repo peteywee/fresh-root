@@ -24,7 +24,7 @@ export function traceFn(
   method: string,
   path: string,
   durationMs: number,
-  statusCode: number
+  statusCode: number,
 ): void {
   // If OTEL isn't configured, this is a no-op.
   ensureOtelStarted();
@@ -34,14 +34,14 @@ export function traceFn(
       "http.method": method.toUpperCase(),
       "http.route": path,
       "http.status_code": statusCode,
-      "http.server.duration_ms": durationMs
-    }
+      "http.server.duration_ms": durationMs,
+    },
   });
 
   if (statusCode >= 500) {
     span.setStatus({
       code: SpanStatusCode.ERROR,
-      message: `HTTP ${statusCode}`
+      message: `HTTP ${statusCode}`,
     });
   } else {
     span.setStatus({ code: SpanStatusCode.OK });
@@ -61,7 +61,7 @@ export function traceFn(
 export async function withSpan<T>(
   name: string,
   attributes: Attributes,
-  fn: (span: import("@opentelemetry/api").Span) => Promise<T>
+  fn: (span: import("@opentelemetry/api").Span) => Promise<T>,
 ): Promise<T> {
   ensureOtelStarted();
 
@@ -80,7 +80,7 @@ export async function withSpan<T>(
     } catch (err: any) {
       span.setStatus({
         code: SpanStatusCode.ERROR,
-        message: err?.message ?? "Unknown error"
+        message: err?.message ?? "Unknown error",
       });
       span.recordException(err);
       throw err;

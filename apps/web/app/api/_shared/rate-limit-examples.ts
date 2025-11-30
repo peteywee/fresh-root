@@ -215,5 +215,4 @@ PRODUCTION WITHOUT REDIS:
    max: 1000, windowSeconds: 3600, keyPrefix: "hourly"
 */
 
-export { };
-
+export {};

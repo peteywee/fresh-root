@@ -24,11 +24,7 @@
  */
 
 import { NextRequest, NextResponse } from "next/server";
-import {
-  buildRateLimitKey,
-  getRateLimiter,
-  type RateLimitOptions
-} from "@/src/lib/api/rate-limit";
+import { buildRateLimitKey, getRateLimiter, type RateLimitOptions } from "@/src/lib/api/rate-limit";
 
 interface RateLimitConfig extends RateLimitOptions {
   /**
@@ -50,20 +46,18 @@ interface RateLimitConfig extends RateLimitOptions {
  */
 export function withRateLimit(
   handler: (req: NextRequest) => Promise<NextResponse>,
-  config: RateLimitConfig
+  config: RateLimitConfig,
 ): (req: NextRequest) => Promise<NextResponse> {
   const limiter = getRateLimiter({
     max: config.max,
     windowSeconds: config.windowSeconds,
-    keyPrefix: config.keyPrefix ?? "api"
+    keyPrefix: config.keyPrefix ?? "api",
   });
 
   return async (req: NextRequest): Promise<NextResponse> => {
     // Derive client identity from headers; you can refine this to use session.
     const ip =
-      (req.headers.get("x-forwarded-for") ?? "").split(",")[0].trim() ||
-      (req as any).ip ||
-      null;
+      (req.headers.get("x-forwarded-for") ?? "").split(",")[0].trim() || (req as any).ip || null;
 
     // TODO: if you have requireSession upstream, you can attach user/org to
     //       request context and read them here instead of relying on IP.
@@ -72,7 +66,7 @@ export function withRateLimit(
       route: config.route,
       ip,
       userId: null,
-      orgId: null
+      orgId: null,
     });
 
     const result = await limiter.consume(key, 1);
@@ -81,18 +75,16 @@ export function withRateLimit(
       return NextResponse.json(
         {
           error: "Too Many Requests",
-          message: "Rate limit exceeded. Please try again later."
+          message: "Rate limit exceeded. Please try again later.",
         },
         {
           status: 429,
           headers: {
-            "Retry-After": Math.ceil(
-              (result.resetAt - Date.now()) / 1000
-            ).toString(),
+            "Retry-After": Math.ceil((result.resetAt - Date.now()) / 1000).toString(),
             "X-RateLimit-Limit": config.max.toString(),
-            "X-RateLimit-Remaining": result.remaining.toString()
-          }
-        }
+            "X-RateLimit-Remaining": result.remaining.toString(),
+          },
+        },
       );
     }
 

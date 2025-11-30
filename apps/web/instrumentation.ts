@@ -71,7 +71,7 @@ export function register() {
 /**
  * Initialize OpenTelemetry SDK with a timeout to prevent hangs.
  * This runs only in production runtime, never during build.
- * 
+ *
  * NOTE: OTEL SDK initialization can hang on unreachable network endpoints.
  * We skip it during module load and don't initialize it at all in dev.
  * If needed, OTEL can be initialized lazily on first request or via a separate process.
@@ -80,9 +80,11 @@ function initializeOpenTelemetryWithTimeout(): void {
   // OTEL initialization is deferred to avoid hanging during module load.
   // In production, you should initialize OTEL in a separate worker or defer it.
   // For now, we skip OTEL initialization to keep startup fast and unblocking.
-  
+
   if (process.env.OTEL_EXPORTER_OTLP_ENDPOINT) {
     // eslint-disable-next-line no-console
-    console.warn("[instrumentation] OTEL_EXPORTER_OTLP_ENDPOINT is set but OTEL SDK not initialized during module load to prevent hangs. Consider initializing in a separate worker.");
+    console.warn(
+      "[instrumentation] OTEL_EXPORTER_OTLP_ENDPOINT is set but OTEL SDK not initialized during module load to prevent hangs. Consider initializing in a separate worker.",
+    );
   }
 }

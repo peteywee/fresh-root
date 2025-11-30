@@ -1,3 +1,5 @@
+// [P0][APP][ENV] Index
+// Tags: P0, APP, ENV
 /**
  * packages/env/src/index.ts
  *
@@ -28,7 +30,7 @@ export const EnvSchema = z.object({
 
   // --- OpenTelemetry exporter endpoint ---
   // Optional. When set, OTEL tracing will be active.
-  OTEL_EXPORTER_OTLP_ENDPOINT: z.string().url().optional()
+  OTEL_EXPORTER_OTLP_ENDPOINT: z.string().url().optional(),
 });
 
 /**
@@ -44,6 +46,14 @@ export type Env = typeof env;
 
 // Re-export production validation utilities
 export {
-    assertNotProduction, assertProduction, getMultiInstanceInfo, isMultiInstanceEnabled, isProduction, preFlightChecks, validateDevelopmentEnv,
-    validateEnvironmentAtStartup, validateProductionEnv, type ProdEnv
+  assertNotProduction,
+  assertProduction,
+  getMultiInstanceInfo,
+  isMultiInstanceEnabled,
+  isProduction,
+  preFlightChecks,
+  validateDevelopmentEnv,
+  validateEnvironmentAtStartup,
+  validateProductionEnv,
+  type ProdEnv,
 } from "./production";

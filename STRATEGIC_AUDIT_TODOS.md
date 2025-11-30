@@ -12,6 +12,7 @@ Fresh Root is production-ready with **3 critical infrastructure gaps** blocking 
 **Total Remediation Time:** 54 hours (1.5 sprints for 2 engineers)
 
 **Ship Status:**
+
 - ✅ **Single-Instance Production:** Ready today
 - ⚠️ **Multi-Instance Production:** Ready after Critical TODOs (18-24 hours)
 - ⚠️ **Enterprise Production:** Ready after 30-day roadmap
@@ -21,6 +22,7 @@ Fresh Root is production-ready with **3 critical infrastructure gaps** blocking 
 ## 📋 CRITICAL TODOS (Week 1 - Blocking Multi-Instance Production)
 
 ### ⚠️ TODO-001: Redis Rate Limiting Implementation
+
 **Priority:** CRITICAL
 **Effort:** 4-8 hours
 **Owner:** DevOps/Backend
@@ -30,6 +32,7 @@ Fresh Root is production-ready with **3 critical infrastructure gaps** blocking 
 Current in-memory rate limiting won't scale horizontally. Load-balanced deployments can bypass rate limits (each instance tracks separately).
 
 **Tasks:**
+
 - [ ] Install Redis client packages
   ```bash
   pnpm add ioredis @types/ioredis
@@ -57,6 +60,7 @@ Current in-memory rate limiting won't scale horizontally. Load-balanced deployme
   - [ ] Confirm 100 success + 100 rate-limited (429)
 
 **Files to Modify:**
+
 - `rate-limit.ts` - Add Redis backend
 - `apps/web/app/api/_shared/middleware.ts` - Use Redis in production
 - `.env.example` - Document REDIS_URL
@@ -64,6 +68,7 @@ Current in-memory rate limiting won't scale horizontally. Load-balanced deployme
 - `MEMORY_MANAGEMENT.md` - Document Redis setup
 
 **Verification Command:**
+
 ```bash
 # After deployment to 2+ instances
 for i in {1..200}; do curl -X POST https://api.example.com/api/test; done | grep -c "429"
@@ -71,6 +76,7 @@ for i in {1..200}; do curl -X POST https://api.example.com/api/test; done | grep
 ```
 
 **Definition of Done:**
+
 - ✅ Redis client integrated
 - ✅ Rate limiting works across multiple instances
 - ✅ Fallback to in-memory when Redis unavailable
@@ -80,6 +86,7 @@ for i in {1..200}; do curl -X POST https://api.example.com/api/test; done | grep
 ---
 
 ### ⚠️ TODO-002: OpenTelemetry Tracing Implementation
+
 **Priority:** HIGH
 **Effort:** 4-6 hours
 **Owner:** DevOps/Backend
@@ -89,6 +96,7 @@ for i in {1..200}; do curl -X POST https://api.example.com/api/test; done | grep
 No distributed tracing means debugging production issues is impossible. Need end-to-end request tracing for SLA monitoring.
 
 **Tasks:**
+
 - [ ] Install OpenTelemetry packages
   ```bash
   pnpm add @opentelemetry/sdk-node @opentelemetry/exporter-trace-otlp-http \
@@ -128,9 +136,11 @@ No distributed tracing means debugging production issues is impossible. Need end
   - [ ] Document span naming conventions
 
 **Files to Create:**
+
 - `apps/web/app/api/_shared/otel-init.ts` - OTEL initialization
 
 **Files to Modify:**
+
 - `apps/web/app/api/_shared/otel.ts` - ✅ DONE
 - `apps/web/instrumentation.ts` - Add OTEL startup
 - `apps/web/app/api/_shared/middleware.ts` - Use withSpan()
@@ -139,9 +149,11 @@ No distributed tracing means debugging production issues is impossible. Need end
 - `package.json` - Add OTEL packages
 
 **Files to Create (Documentation):**
+
 - `docs/OBSERVABILITY_SETUP.md` - Observability guide
 
 **Verification Command:**
+
 ```bash
 # Start local Jaeger
 docker run -d -p16686:16686 -p4318:4318 jaegertracing/all-in-one:latest
@@ -155,6 +167,7 @@ open http://localhost:16686
 ```
 
 **Definition of Done:**
+
 - ✅ OTEL SDK initialized
 - ✅ Traces exported to OTLP endpoint
 - ✅ Spans visible in Jaeger UI
@@ -164,6 +177,7 @@ open http://localhost:16686
 ---
 
 ### ⚠️ TODO-003: Environment Variable Validation
+
 **Priority:** MEDIUM
 **Effort:** 2 hours
 **Owner:** Backend
@@ -173,6 +187,7 @@ open http://localhost:16686
 Production incidents often caused by missing/invalid environment variables. Fail fast at startup with clear error messages.
 
 **Tasks:**
+
 - [ ] Create Zod schema in `packages/env/src/index.ts`
   - [ ] Define all required environment variables
   - [ ] Add validation rules (URLs, enums, min/max)
@@ -194,10 +209,11 @@ Production incidents often caused by missing/invalid environment variables. Fail
   - [ ] Add troubleshooting section
 
 **Required Environment Variables:**
+
 ```typescript
 const EnvSchema = z.object({
   // Node
-  NODE_ENV: z.enum(['development', 'production', 'test']),
+  NODE_ENV: z.enum(["development", "production", "test"]),
 
   // Firebase
   NEXT_PUBLIC_FIREBASE_API_KEY: z.string().min(1),
@@ -211,8 +227,8 @@ const EnvSchema = z.object({
 
   // Optional: OpenTelemetry
   OTEL_EXPORTER_OTLP_ENDPOINT: z.string().url().optional(),
-  OTEL_SERVICE_NAME: z.string().default('fresh-root-web'),
-  OTEL_ENABLED: z.enum(['true', 'false']).default('false'),
+  OTEL_SERVICE_NAME: z.string().default("fresh-root-web"),
+  OTEL_ENABLED: z.enum(["true", "false"]).default("false"),
 
   // Optional: Sentry
   SENTRY_DSN: z.string().url().optional(),
@@ -220,15 +236,18 @@ const EnvSchema = z.object({
 ```
 
 **Files to Create:**
+
 - `packages/env/src/index.ts` - Zod schema
 - `apps/web/src/env.ts` - Validator
 
 **Files to Modify:**
+
 - `apps/web/instrumentation.ts` - Call validator
 - `.env.example` - Complete documentation
 - `README.md` - Reference environment setup
 
 **Verification Command:**
+
 ```bash
 # Test with missing variable
 unset NEXT_PUBLIC_FIREBASE_API_KEY
@@ -242,6 +261,7 @@ pnpm dev
 ```
 
 **Definition of Done:**
+
 - ✅ Zod schema covers all environment variables
 - ✅ Validation runs at app startup
 - ✅ Clear error messages on failure
@@ -253,6 +273,7 @@ pnpm dev
 ## 📊 HIGH PRIORITY TODOS (Week 2-3 - Before Day 30)
 
 ### TODO-004: Firestore Rules Test Coverage
+
 **Priority:** HIGH
 **Effort:** 8 hours
 **Owner:** QA/Backend
@@ -263,6 +284,7 @@ pnpm dev
 Firestore rule changes can silently break authorization. Comprehensive tests prevent security vulnerabilities.
 
 **Tasks:**
+
 - [ ] Set up Firestore Rules testing infrastructure
   - [ ] Review `packages/rules-tests/` setup
   - [ ] Configure Firebase emulator
@@ -294,17 +316,20 @@ Firestore rule changes can silently break authorization. Comprehensive tests pre
   - [ ] Target 80%+ rule coverage
 
 **Files to Create:**
+
 - `packages/rules-tests/src/schedules.test.ts` - Schedule rules tests
 - `packages/rules-tests/src/shifts.test.ts` - Shift rules tests
 - `packages/rules-tests/src/organizations.test.ts` - Org rules tests
 - `packages/rules-tests/src/users.test.ts` - User rules tests
 
 **Files to Modify:**
+
 - `packages/rules-tests/package.json` - Add test scripts
 - `.github/workflows/ci.yml` - Add rules testing job
 - `firestore.rules` - Add coverage annotations
 
 **Verification Command:**
+
 ```bash
 pnpm --filter @rules/firestore test
 # Expected: All tests pass
@@ -315,6 +340,7 @@ firebase emulators:exec --only firestore \
 ```
 
 **Definition of Done:**
+
 - ✅ 80%+ rule coverage
 - ✅ Permission boundary tests passing
 - ✅ Tenant isolation tests passing
@@ -325,6 +351,7 @@ firebase emulators:exec --only firestore \
 ---
 
 ### TODO-005: API Endpoint Test Coverage
+
 **Priority:** MEDIUM
 **Effort:** 12 hours
 **Owner:** QA/Backend
@@ -335,6 +362,7 @@ firebase emulators:exec --only firestore \
 Current coverage: 6 tests for 34 routes (18%). Need tests to prevent regression bugs.
 
 **Tasks:**
+
 - [ ] Set up API testing infrastructure
   - [ ] Review existing test setup in `apps/web/app/api/onboarding/__tests__/`
   - [ ] Create test utilities for authenticated requests
@@ -374,6 +402,7 @@ Current coverage: 6 tests for 34 routes (18%). Need tests to prevent regression 
   - [ ] Block PRs with <60% coverage
 
 **Files to Create:**
+
 - `apps/web/app/api/schedules/__tests__/route.test.ts`
 - `apps/web/app/api/schedules/__tests__/[id]/route.test.ts`
 - `apps/web/app/api/shifts/__tests__/route.test.ts`
@@ -382,11 +411,13 @@ Current coverage: 6 tests for 34 routes (18%). Need tests to prevent regression 
 - `apps/web/app/api/__tests__/test-utils.ts` - Shared test utilities
 
 **Files to Modify:**
+
 - `vitest.config.ts` - Add coverage configuration
 - `.github/workflows/ci.yml` - Add coverage reporting
 - `README.md` - Add coverage badge
 
 **Verification Command:**
+
 ```bash
 pnpm test:coverage
 # Expected: Coverage report shows 60%+ for API routes
@@ -396,6 +427,7 @@ pnpm test --run
 ```
 
 **Definition of Done:**
+
 - ✅ 60%+ API route coverage
 - ✅ Core CRUD operations tested
 - ✅ Authorization edge cases tested
@@ -406,6 +438,7 @@ pnpm test --run
 ---
 
 ### TODO-006: Log Aggregation Configuration
+
 **Priority:** MEDIUM
 **Effort:** 4 hours
 **Owner:** DevOps
@@ -415,6 +448,7 @@ pnpm test --run
 Currently logs only go to stdout. Need centralized logging for debugging production issues.
 
 **Tasks:**
+
 - [ ] Choose log aggregation service
   - [ ] Option 1: Self-hosted ELK stack
   - [ ] Option 2: Datadog (SaaS)
@@ -443,15 +477,18 @@ Currently logs only go to stdout. Need centralized logging for debugging product
   - [ ] Document alert thresholds
 
 **Files to Modify:**
+
 - `apps/web/src/lib/logger.ts` - Enhance structured logging
 - `docker-compose.yml` - Add log aggregation service (if self-hosted)
 - `.env.production` - Add log aggregation credentials
 
 **Files to Create:**
+
 - `docs/OBSERVABILITY_SETUP.md` - Logging guide
 - `docs/runbooks/LOG_QUERIES.md` - Common log queries
 
 **Verification Command:**
+
 ```bash
 # Make API request
 curl http://localhost:3000/api/schedules
@@ -461,6 +498,7 @@ curl http://localhost:3000/api/schedules
 ```
 
 **Definition of Done:**
+
 - ✅ Log aggregation service configured
 - ✅ Logs centralized and searchable
 - ✅ Alerts configured
@@ -472,12 +510,14 @@ curl http://localhost:3000/api/schedules
 ## 🚀 MEDIUM PRIORITY TODOS (30-Day Roadmap)
 
 ### TODO-007: Monitoring Dashboards
+
 **Priority:** MEDIUM
 **Effort:** 4 hours
 **Owner:** DevOps
 **Status:** 🔴 NOT STARTED
 
 **Tasks:**
+
 - [ ] Choose monitoring platform (Grafana/Datadog/New Relic)
 - [ ] Create system health dashboard
   - [ ] CPU/Memory usage per instance
@@ -497,6 +537,7 @@ curl http://localhost:3000/api/schedules
 - [ ] Document dashboard usage
 
 **Definition of Done:**
+
 - ✅ Dashboards created
 - ✅ Alerts configured
 - ✅ Team trained on dashboard usage
@@ -505,12 +546,14 @@ curl http://localhost:3000/api/schedules
 ---
 
 ### TODO-008: E2E Test Suite (Playwright)
+
 **Priority:** MEDIUM
 **Effort:** 20 hours
 **Owner:** QA
 **Status:** 🔴 NOT STARTED
 
 **Tasks:**
+
 - [ ] Set up Playwright
   - [ ] Install Playwright: `pnpm add -D @playwright/test`
   - [ ] Initialize config: `pnpm exec playwright install`
@@ -529,12 +572,14 @@ curl http://localhost:3000/api/schedules
 - [ ] Document E2E testing practices
 
 **Files to Create:**
+
 - `tests/e2e/login-flow.spec.ts`
 - `tests/e2e/schedule-creation.spec.ts`
 - `tests/e2e/time-off-approval.spec.ts`
 - `playwright.config.ts`
 
 **Definition of Done:**
+
 - ✅ 5 critical flows tested
 - ✅ Visual regression testing configured
 - ✅ Integrated with CI/CD
@@ -543,12 +588,14 @@ curl http://localhost:3000/api/schedules
 ---
 
 ### TODO-009: API Documentation (OpenAPI)
+
 **Priority:** MEDIUM
 **Effort:** 8 hours
 **Owner:** Backend
 **Status:** 🔴 NOT STARTED
 
 **Tasks:**
+
 - [ ] Install OpenAPI tools
   - [ ] `pnpm add next-swagger-doc swagger-ui-react`
 - [ ] Generate OpenAPI spec from Zod schemas
@@ -567,10 +614,12 @@ curl http://localhost:3000/api/schedules
   - [ ] Include authentication flow
 
 **Files to Create:**
+
 - `apps/web/app/api/docs/route.ts` - Swagger UI endpoint
 - `apps/web/lib/openapi.ts` - OpenAPI spec generator
 
 **Definition of Done:**
+
 - ✅ OpenAPI spec generated
 - ✅ Swagger UI accessible
 - ✅ All endpoints documented
@@ -579,12 +628,14 @@ curl http://localhost:3000/api/schedules
 ---
 
 ### TODO-010: Performance Profiling
+
 **Priority:** LOW
 **Effort:** 8 hours
 **Owner:** Backend
 **Status:** 🔴 NOT STARTED
 
 **Tasks:**
+
 - [ ] Set up profiling tools
   - [ ] Add `clinic.js` for Node.js profiling
   - [ ] Add Lighthouse CI for frontend profiling
@@ -604,6 +655,7 @@ curl http://localhost:3000/api/schedules
 - [ ] Document performance benchmarks
 
 **Definition of Done:**
+
 - ✅ Performance bottlenecks identified
 - ✅ Optimizations implemented
 - ✅ Performance budgets set
@@ -612,12 +664,14 @@ curl http://localhost:3000/api/schedules
 ---
 
 ### TODO-011: Security Penetration Testing
+
 **Priority:** LOW
 **Effort:** External engagement (16-40 hours)
 **Owner:** Security/External firm
 **Status:** 🔴 NOT STARTED
 
 **Tasks:**
+
 - [ ] Hire external security firm
   - [ ] Get quotes from 3+ firms
   - [ ] Choose firm with Firebase/Next.js experience
@@ -642,6 +696,7 @@ curl http://localhost:3000/api/schedules
   - [ ] Share with enterprise customers
 
 **Definition of Done:**
+
 - ✅ Penetration test completed
 - ✅ All critical issues remediated
 - ✅ Security report received
@@ -650,12 +705,14 @@ curl http://localhost:3000/api/schedules
 ---
 
 ### TODO-012: Disaster Recovery Procedures
+
 **Priority:** LOW
 **Effort:** 6 hours
 **Owner:** DevOps
 **Status:** 🔴 NOT STARTED
 
 **Tasks:**
+
 - [ ] Document backup procedures
   - [ ] Firestore backup schedule (already automated?)
   - [ ] Configuration backup (env vars, secrets)
@@ -677,11 +734,13 @@ curl http://localhost:3000/api/schedules
   - [ ] Escalation procedures
 
 **Files to Create:**
+
 - `docs/runbooks/DISASTER_RECOVERY.md`
 - `docs/runbooks/FIRESTORE_RESTORE.md`
 - `docs/runbooks/INCIDENT_RESPONSE.md`
 
 **Definition of Done:**
+
 - ✅ Runbooks created
 - ✅ Restore procedures tested
 - ✅ RTO/RPO documented
@@ -692,11 +751,13 @@ curl http://localhost:3000/api/schedules
 ## 📈 90-DAY STRATEGIC INITIATIVES
 
 ### TODO-013: Horizontal Scaling Infrastructure (30 days)
+
 **Priority:** STRATEGIC
 **Effort:** 40 hours
 **Owner:** DevOps/Architecture
 
 **Tasks:**
+
 - [ ] Redis for rate limiting (TODO-001)
 - [ ] Redis for session storage
   - [ ] Migrate from Firebase session cookies to Redis sessions
@@ -717,6 +778,7 @@ curl http://localhost:3000/api/schedules
   - [ ] Add `/api/metrics` endpoint (Prometheus format)
 
 **Definition of Done:**
+
 - ✅ Application scales horizontally
 - ✅ No single points of failure
 - ✅ Load balancer configured
@@ -725,11 +787,13 @@ curl http://localhost:3000/api/schedules
 ---
 
 ### TODO-014: Service Separation (60 days)
+
 **Priority:** STRATEGIC
 **Effort:** 80 hours
 **Owner:** Architecture/Backend
 
 **Tasks:**
+
 - [ ] Extract `services/api/` as autonomous service
   - [ ] Define service boundaries
   - [ ] Create API contract (OpenAPI)
@@ -750,6 +814,7 @@ curl http://localhost:3000/api/schedules
   - [ ] Add authentication at gateway
 
 **Definition of Done:**
+
 - ✅ Services deployed independently
 - ✅ Event-driven communication working
 - ✅ Service mesh configured (if chosen)
@@ -758,11 +823,13 @@ curl http://localhost:3000/api/schedules
 ---
 
 ### TODO-015: Advanced Observability (90 days)
+
 **Priority:** STRATEGIC
 **Effort:** 40 hours
 **Owner:** DevOps/SRE
 
 **Tasks:**
+
 - [ ] Distributed tracing across all services
   - [ ] OpenTelemetry in all services (TODO-002)
   - [ ] Trace propagation working
@@ -781,6 +848,7 @@ curl http://localhost:3000/api/schedules
   - [ ] Create cost allocation reports
 
 **Definition of Done:**
+
 - ✅ Full distributed tracing
 - ✅ Business metrics dashboard
 - ✅ Anomaly detection working
@@ -793,6 +861,7 @@ curl http://localhost:3000/api/schedules
 Before marking overall project as complete, verify:
 
 ### Pre-Production Checklist
+
 - [ ] Pattern validator: 90+ score
 - [ ] TypeScript compilation: 0 errors
 - [ ] ESLint: 0 errors
@@ -802,6 +871,7 @@ Before marking overall project as complete, verify:
 - [ ] Environment validation working
 
 ### 30-Day Checklist
+
 - [ ] Firestore rules: 80%+ test coverage
 - [ ] API routes: 60%+ test coverage
 - [ ] Log aggregation configured
@@ -809,6 +879,7 @@ Before marking overall project as complete, verify:
 - [ ] Alerts configured
 
 ### 90-Day Checklist
+
 - [ ] E2E test suite (5+ critical flows)
 - [ ] API documentation (OpenAPI/Swagger)
 - [ ] Performance profiling complete
@@ -820,12 +891,14 @@ Before marking overall project as complete, verify:
 ## 📊 PROGRESS TRACKING
 
 ### Overall Status
+
 - **Critical TODOs:** 0/3 complete (0%)
 - **High Priority TODOs:** 0/3 complete (0%)
 - **Medium Priority TODOs:** 0/6 complete (0%)
 - **Strategic Initiatives:** 0/3 complete (0%)
 
 ### Timeline
+
 - **Week 1:** Critical infrastructure (TODO-001, TODO-002, TODO-003)
 - **Week 2-3:** Testing & observability (TODO-004, TODO-005, TODO-006)
 - **Week 4-8:** Medium priority items
@@ -849,15 +922,13 @@ Before starting implementation, need answers to:
 ## 🎯 RECOMMENDED PRIORITIZATION
 
 **If launching in 1 week:**
+
 1. TODO-001: Redis rate limiting (CRITICAL)
 2. TODO-002: OpenTelemetry tracing (HIGH)
 3. TODO-003: Environment validation (MEDIUM)
 
 **If launching in 1 month:**
-Add:
-4. TODO-004: Firestore rules tests (HIGH)
-5. TODO-006: Log aggregation (MEDIUM)
-6. TODO-007: Monitoring dashboards (MEDIUM)
+Add: 4. TODO-004: Firestore rules tests (HIGH) 5. TODO-006: Log aggregation (MEDIUM) 6. TODO-007: Monitoring dashboards (MEDIUM)
 
 **If launching in 3 months:**
 Add all remaining items for production-grade enterprise deployment.
