@@ -49,7 +49,11 @@
     "docs:ai-context": "xdg-open docs/ai/CHAT_CONTEXT.md || open docs/ai/CHAT_CONTEXT.md || echo \"Open docs/ai/CHAT_CONTEXT.md manually\"",
     "lint:patterns": "FRESH_PATTERNS_MIN_SCORE=90 node scripts/validate-patterns.mjs",
     "lint:patterns:verbose": "FRESH_PATTERNS_MIN_SCORE=0 node scripts/validate-patterns.mjs --verbose",
-    "lint:patterns:check": "FRESH_PATTERNS_MIN_SCORE=90 node scripts/validate-patterns.mjs && echo '✅ All checks passed at 90+ standard'"
+    "lint:patterns:check": "FRESH_PATTERNS_MIN_SCORE=90 node scripts/validate-patterns.mjs && echo '✅ All checks passed at 90+ standard'",
+    "pulse": "tsx system-pulse.ts",
+    "cleanup:memory": "bash scripts/cleanup-memory.sh",
+    "preflight:memory": "bash scripts/check-memory-preflight.sh",
+    "safeguard:oom": "bash scripts/safeguard-oom.sh"
   },
   "engines": {
     "node": ">=20.10.0",
@@ -57,6 +61,7 @@
   },
   "packageManager": "pnpm@9.12.1",
   "devDependencies": {
+    "@types/ioredis": "^5.0.0",
     "@types/node": "^24.10.1",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
@@ -81,6 +86,7 @@
     "clsx": "^2.1.1",
     "firebase-admin": "^13.6.0",
     "firebase-functions": "^7.0.0",
+    "ioredis": "^5.8.2",
     "next": "^16.0.5",
     "next-pwa": "^5.6.0",
     "next-themes": "^0.4.5",
@@ -102,5 +108,8 @@
         "firebaseui>firebase": "12.x"
       }
     }
+  },
+  "peerDependencies": {
+    "@types/ioredis": "^5.0.0"
   }
 }
