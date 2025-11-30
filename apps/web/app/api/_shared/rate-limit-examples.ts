@@ -1,3 +1,5 @@
+// [P0][SECURITY][RATE_LIMIT] Rate Limit Examples
+// Tags: P0, SECURITY, RATE_LIMIT
 /**
  * apps/web/app/api/_shared/rate-limit-examples.ts
  *

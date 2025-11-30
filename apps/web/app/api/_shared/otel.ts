@@ -1,3 +1,5 @@
+// [P1][OBSERVABILITY][OTEL] Otel
+// Tags: P1, OBSERVABILITY, OTEL
 /**
  * apps/web/app/api/_shared/otel.ts
  *

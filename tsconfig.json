@@ -14,7 +14,8 @@
       "@fresh-schedules/types": ["packages/types/src/index.ts"],
       "@packages/env": ["packages/env/src/index.ts"]
     },
-    "typeRoots": ["./types", "./node_modules/@types"]
+    "typeRoots": ["./types", "./node_modules/@types"],
+    "types": ["node"]
   },
   "include": ["types/**/*.d.ts"],
   "exclude": [

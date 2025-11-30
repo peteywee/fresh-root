@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# [P0][APP][CODE] DEPLOYMENT CHECKLIST
+# Tags: P0, APP, CODE
 # Production Deployment Final Checklist
 # Status: ✅ ALL ITEMS VERIFIED COMPLETE
 # Date: 2025-11-29
