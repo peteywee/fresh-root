@@ -18,6 +18,7 @@ This document serves as a standard quality gate for all Copilot agent work. All 
 - **Status:** ✅ **PASS** - No errors detected
 - **Last Run:** November 28, 2025
 - **Evidence:**
+
   ```
   packages/types typecheck: Done
   apps/web typecheck: Done
@@ -30,6 +31,7 @@ This document serves as a standard quality gate for all Copilot agent work. All 
 - **Status:** ✅ **PASS** - 6/6 test files, 6/6 tests passed
 - **Last Run:** November 28, 2025
 - **Evidence:**
+
   ```
   ✓ create-network-corporate.test.ts (1 test)
   ✓ create-network-org.test.ts (1 test)
@@ -124,6 +126,7 @@ This document serves as a standard quality gate for all Copilot agent work. All 
 - **Requirement:** Uniform API error responses across all endpoints
 - **Status:** ✅ **PASS**
 - **Pattern:**
+
   ```typescript
   badRequest(message, details?, code?) → 400
   serverError(message?, details?, code?) → 500

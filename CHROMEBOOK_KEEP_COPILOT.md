@@ -136,14 +136,14 @@ Realistic timing on Chromebook (6.3GB RAM):
 
 ## When to Use Each Strategy
 
-### Use This (Keep Copilot) if:
+### Use This (Keep Copilot) if
 
 - ✅ You value AI assistance for coding
 - ✅ Builds <5 minutes acceptable
 - ✅ You can afford ~10% speed loss
 - ✅ You want stability without complex workarounds
 
-### Use Disable-Copilot if:
+### Use Disable-Copilot if
 
 - 🚫 Builds are critical path (CI/CD production)
 - 🚫 You need maximum speed
@@ -292,7 +292,7 @@ After applying this strategy:
 
 ## Long-Term Considerations
 
-### If You Plan to Keep This System:
+### If You Plan to Keep This System
 
 **Short term (now)**: Use this strategy, accept 10% slower builds.
 

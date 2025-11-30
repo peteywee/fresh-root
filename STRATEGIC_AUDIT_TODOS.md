@@ -34,9 +34,11 @@ Current in-memory rate limiting won't scale horizontally. Load-balanced deployme
 **Tasks:**
 
 - [ ] Install Redis client packages
+
   ```bash
   pnpm add ioredis @types/ioredis
   ```
+
 - [ ] Create `RedisRateLimiter` class in `rate-limit.ts`
   - [ ] Implement `checkLimit()` method using Redis INCR/EXPIRE
   - [ ] Add connection pooling configuration
@@ -98,11 +100,13 @@ No distributed tracing means debugging production issues is impossible. Need end
 **Tasks:**
 
 - [ ] Install OpenTelemetry packages
+
   ```bash
   pnpm add @opentelemetry/sdk-node @opentelemetry/exporter-trace-otlp-http \
            @opentelemetry/instrumentation-http @opentelemetry/instrumentation-express \
            @opentelemetry/resources @opentelemetry/semantic-conventions
   ```
+
 - [x] Update `apps/web/app/api/_shared/otel.ts` (COMPLETED)
   - [x] Implement `traceFn()` helper
   - [x] Implement `withSpan()` helper
@@ -123,12 +127,14 @@ No distributed tracing means debugging production issues is impossible. Need end
   - [ ] Wrap `require2FAForManagers()` in span
   - [ ] Add span attributes (uid, orgId, route)
 - [ ] Set up local Jaeger for testing
+
   ```bash
   docker run -d -p16686:16686 -p4318:4318 jaegertracing/all-in-one:latest
   ```
+
 - [ ] Verify traces appear in Jaeger UI
   - [ ] Make API request
-  - [ ] Check Jaeger UI at http://localhost:16686
+  - [ ] Check Jaeger UI at <http://localhost:16686>
   - [ ] Verify span hierarchy (auth → handler → db)
 - [ ] Document observability setup
   - [ ] Create `docs/OBSERVABILITY_SETUP.md`

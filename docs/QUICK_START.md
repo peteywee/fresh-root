@@ -170,19 +170,19 @@ git checkout -b feature/my-feature
 
 ## Your Role
 
-### If you're an Operations Manager:
+### If you're an Operations Manager
 
 → Go to [PRODUCTION_READINESS_EXECUTIVE_SUMMARY.md](./PRODUCTION_READINESS_EXECUTIVE_SUMMARY.md)
 
-### If you're a Developer:
+### If you're a Developer
 
 → Go to dev branch, read [docs/standards/00_STANDARDS_INDEX.md](../../dev/docs/standards/00_STANDARDS_INDEX.md)
 
-### If you're Deploying:
+### If you're Deploying
 
 → Go to [PRODUCTION_DEPLOYMENT_GUIDE.md](./PRODUCTION_DEPLOYMENT_GUIDE.md)
 
-### If you're Auditing:
+### If you're Auditing
 
 → Go to [BRANCH_LINKING_GUIDE.md](./BRANCH_LINKING_GUIDE.md)
 

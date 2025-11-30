@@ -72,7 +72,7 @@ echo 'ulimit -v 6291456' >> ~/.bashrc
 
 ## Troubleshooting
 
-### Still getting OOM crashes?
+### Still getting OOM crashes
 
 1. **Check swap is active**:
 
@@ -104,7 +104,7 @@ echo 'ulimit -v 6291456' >> ~/.bashrc
    - Browser: Close extra tabs
    - Terminal: Kill unused shells
 
-### Memory is still high after swap added?
+### Memory is still high after swap added
 
 ```bash
 # Check which process is using most memory
