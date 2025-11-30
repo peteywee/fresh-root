@@ -1,3 +1,5 @@
+// [P0][SECURITY][MIDDLEWARE] Rate Limit Middleware middleware
+// Tags: P0, SECURITY, MIDDLEWARE, RATE_LIMIT
 /**
  * apps/web/app/api/_shared/rate-limit-middleware.ts
  *
