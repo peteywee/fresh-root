@@ -1,3 +1,5 @@
+// [P2][APP][CODE] Index
+// Tags: P2, APP, CODE
 /* =============================================================================
  * functions/src/index.ts
  *
@@ -28,7 +30,6 @@
 
 // TODO: PASTE YOUR EXISTING EXPORTS ABOVE THIS LINE (IF YOU HAVE ANY).
 
-
 /* -------------------------------------------------------------------------- */
 /* Atomic Join Flow (Critical Fix for C1)                                     */
 /* -------------------------------------------------------------------------- */
@@ -43,8 +44,7 @@
  *
  * Source: functions/src/joinOrganization.ts
  */
-export { joinOrganization } from './joinOrganization';
-
+export { joinOrganization } from "./joinOrganization";
 
 /* -------------------------------------------------------------------------- */
 /* Denormalization Triggers (Critical Fix for C6 - N+1 Queries)               */
@@ -74,9 +74,9 @@ export { joinOrganization } from './joinOrganization';
  * Source: functions/src/triggers/denormalization.ts
  */
 export {
-  onZoneWrite,
   onMembershipWrite,
-  onUserProfileUpdate,
   onScheduleUpdate,
+  onUserProfileUpdate,
+  onZoneWrite,
   reconcileOrgStats,
-} from './triggers/denormalization';
+} from "./triggers/denormalization";

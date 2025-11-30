@@ -40,6 +40,7 @@ export default function Layout({ children }) {
 ```
 
 **What it does**:
+
 - Validates all required production config
 - Checks multi-instance setup
 - Throws if critical infrastructure missing
@@ -142,6 +143,7 @@ preFlightChecks(env);
 ```
 
 **Use in**:
+
 - `instrumentation.ts` (Next.js)
 - `pages/_app.tsx` (Pages Router)
 - `app/layout.tsx` (App Router)
@@ -158,12 +160,12 @@ import { assertProduction, env } from "@packages/env";
 
 export async function captureMetrics(data: unknown) {
   assertProduction(env);
-  
+
   // TypeScript now knows:
   // - NODE_ENV is "production"
   // - REDIS_URL exists (not undefined)
   // - All required fields are present
-  
+
   const redis = new Redis(env.REDIS_URL);
   // Safe to use production-only APIs
 }
@@ -182,7 +184,7 @@ import { assertNotProduction, env } from "@packages/env";
 
 export function seedDatabase() {
   assertNotProduction(env);
-  
+
   // Now safe to seed test data
   // This will crash if accidentally called in production
   db.seed(testData);
@@ -217,6 +219,7 @@ if (info.riskLevel === "critical") {
 ```
 
 **Risk Levels**:
+
 - **safe**: Multi-instance prod with Redis ✅
 - **safe**: Single-instance dev ✅
 - **warn**: Multi-instance dev (unnecessary) ⚠️
@@ -330,14 +333,14 @@ export function withRateLimit(handler, config) {
   if (!isMultiInstanceEnabled(env)) {
     console.warn(
       `⚠️ Rate limiting on "${config.route}" is per-instance (in-memory). ` +
-      `Set REDIS_URL for distributed limiting.`
+        `Set REDIS_URL for distributed limiting.`,
     );
   }
 
   const limiter = getRateLimiter({
     max: config.max,
     windowSeconds: config.windowSeconds,
-    keyPrefix: config.keyPrefix ?? "api"
+    keyPrefix: config.keyPrefix ?? "api",
   });
 
   return async (req: NextRequest): Promise<NextResponse> => {
@@ -357,7 +360,7 @@ console.log("\n📋 Environment Validation\n");
 
 try {
   preFlightChecks(env);
-  
+
   const info = getMultiInstanceInfo(env);
   console.log(`\n${info.message}\n`);
 
@@ -374,6 +377,7 @@ try {
 ```
 
 Run before deployment:
+
 ```bash
 pnpm tsx scripts/validate-env.ts
 ```
@@ -417,12 +421,12 @@ NEXT_PUBLIC_FIREBASE_API_KEY=...
 
 ```typescript
 async function syncToDataWarehouse() {
-  assertProduction(env);  // ← Throws in dev!
+  assertProduction(env); // ← Throws in dev!
   // ...
 }
 
 // Calling in dev
-syncToDataWarehouse();  // ❌ Crash
+syncToDataWarehouse(); // ❌ Crash
 ```
 
 **Fix**: Don't call production-only functions in dev, or skip them conditionally.
@@ -432,7 +436,7 @@ syncToDataWarehouse();  // ❌ Crash
 ### ❌ Mistake 3: Assuming Redis is Set
 
 ```typescript
-const redis = new Redis(env.REDIS_URL);  // ← Could be undefined!
+const redis = new Redis(env.REDIS_URL); // ← Could be undefined!
 
 // In production without Redis:
 // TypeError: Cannot read property 'connect' of undefined
@@ -444,13 +448,13 @@ const redis = new Redis(env.REDIS_URL);  // ← Could be undefined!
 
 ## Summary
 
-| Use Case | Function | When |
-|----------|----------|------|
-| Check startup | `preFlightChecks(env)` | App initialization |
-| Production-only code | `assertProduction(env)` | Function guard |
-| Dev-only code | `assertNotProduction(env)` | Function guard |
-| Multi-instance status | `getMultiInstanceInfo(env)` | Health checks, logging |
-| Simple bool check | `isProduction(env)` | Conditionals |
-| Redis enabled | `isMultiInstanceEnabled(env)` | Feature detection |
+| Use Case              | Function                      | When                   |
+| --------------------- | ----------------------------- | ---------------------- |
+| Check startup         | `preFlightChecks(env)`        | App initialization     |
+| Production-only code  | `assertProduction(env)`       | Function guard         |
+| Dev-only code         | `assertNotProduction(env)`    | Function guard         |
+| Multi-instance status | `getMultiInstanceInfo(env)`   | Health checks, logging |
+| Simple bool check     | `isProduction(env)`           | Conditionals           |
+| Redis enabled         | `isMultiInstanceEnabled(env)` | Feature detection      |
 
 **Key principle**: Fail fast and loudly. Better to crash at startup than silently break in production.

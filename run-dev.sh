@@ -1,4 +1,6 @@
 #!/bin/bash
+# [P2][APP][CODE] Run Dev
+# Tags: P2, APP, CODE
 # Production-ready dev server launcher with memory management
 
 # Set strict memory limits

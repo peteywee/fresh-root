@@ -49,15 +49,15 @@ export function ensureOtelStarted(): void {
   const { env } = require("@/src/env");
 
   const exporter = new OTLPTraceExporter({
-    url: env.OTEL_EXPORTER_OTLP_ENDPOINT as string
+    url: env.OTEL_EXPORTER_OTLP_ENDPOINT as string,
   });
 
   sdk = new NodeSDK({
     traceExporter: exporter,
     resource: resources.resourceFromAttributes({
       [SemanticResourceAttributes.SERVICE_NAME]: "fresh-root-web-api",
-      [SemanticResourceAttributes.DEPLOYMENT_ENVIRONMENT]: env.NODE_ENV
-    })
+      [SemanticResourceAttributes.DEPLOYMENT_ENVIRONMENT]: env.NODE_ENV,
+    }),
   });
 
   // Start the SDK synchronously

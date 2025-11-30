@@ -1,0 +1,157 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // ==========================================================================
+    // HELPER FUNCTIONS
+    // ==========================================================================
+    
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+    
+    // Check if user is a member of the organization
+    function isOrgMember(orgId) {
+      return isAuthenticated() && exists(/databases/$(database)/documents/memberships/$(request.auth.uid + '_' + orgId));
+    }
+    
+    // Get the user's role in an organization
+    function getOrgRole(orgId) {
+      return get(/databases/$(database)/documents/memberships/$(request.auth.uid + '_' + orgId)).data.role;
+    }
+    
+    // Check if user has required role (hierarchy: owner > admin > manager > staff > viewer)
+    function hasRole(orgId, requiredRole) {
+      let roleHierarchy = {
+        'owner': 100,
+        'admin': 80,
+        'manager': 60,
+        'staff': 40,
+        'viewer': 20
+      };
+      let userRole = getOrgRole(orgId);
+      return roleHierarchy[userRole] >= roleHierarchy[requiredRole];
+    }
+    
+    // Cloud Functions use service accounts - allow their writes
+    function isServiceAccount() {
+      return request.auth.token.firebase.sign_in_provider == 'custom';
+    }
+    
+    // ==========================================================================
+    // USER PROFILES
+    // ==========================================================================
+    
+    match /users/{userId} {
+      allow read: if isAuthenticated();
+      allow create: if isOwner(userId);
+      allow update: if isOwner(userId) || isServiceAccount();
+      allow delete: if false; // Never delete user profiles
+    }
+    
+    // ==========================================================================
+    // MEMBERSHIPS
+    // ==========================================================================
+    
+    match /memberships/{membershipId} {
+      allow read: if isAuthenticated() && (
+        resource.data.uid == request.auth.uid ||
+        isOrgMember(resource.data.orgId)
+      );
+      // Only Cloud Functions can create/update memberships (joinOrganization function)
+      allow create, update: if isServiceAccount();
+      allow delete: if isServiceAccount() || (
+        isOrgMember(resource.data.orgId) && hasRole(resource.data.orgId, 'admin')
+      );
+    }
+    
+    // ==========================================================================
+    // JOIN TOKENS
+    // ==========================================================================
+    
+    match /join_tokens/{tokenId} {
+      // Anyone with the token ID can read it (to validate)
+      allow read: if true;
+      // Only admins can create/manage tokens
+      allow create: if isAuthenticated() && isOrgMember(request.resource.data.orgId) && hasRole(request.resource.data.orgId, 'admin');
+      // Only Cloud Functions update tokens (on use)
+      allow update: if isServiceAccount();
+      allow delete: if isAuthenticated() && isOrgMember(resource.data.orgId) && hasRole(resource.data.orgId, 'admin');
+    }
+    
+    // ==========================================================================
+    // ORGANIZATIONS
+    // ==========================================================================
+    
+    match /organizations/{orgId} {
+      allow read: if isOrgMember(orgId);
+      allow create: if isAuthenticated(); // Anyone can create an org
+      allow update: if isOrgMember(orgId) && hasRole(orgId, 'admin') || isServiceAccount();
+      allow delete: if isOrgMember(orgId) && hasRole(orgId, 'owner');
+      
+      // --------------------------------------------------------------------------
+      // VENUES (nested under organizations)
+      // --------------------------------------------------------------------------
+      
+      match /venues/{venueId} {
+        allow read: if isOrgMember(orgId);
+        allow create, update: if isOrgMember(orgId) && hasRole(orgId, 'manager') || isServiceAccount();
+        allow delete: if isOrgMember(orgId) && hasRole(orgId, 'admin');
+        
+        // Zones nested under venues
+        match /zones/{zoneId} {
+          allow read: if isOrgMember(orgId);
+          allow create, update: if isOrgMember(orgId) && hasRole(orgId, 'manager') || isServiceAccount();
+          allow delete: if isOrgMember(orgId) && hasRole(orgId, 'admin');
+        }
+      }
+      
+      // --------------------------------------------------------------------------
+      // POSITIONS
+      // --------------------------------------------------------------------------
+      
+      match /positions/{positionId} {
+        allow read: if isOrgMember(orgId);
+        allow create, update: if isOrgMember(orgId) && hasRole(orgId, 'manager');
+        allow delete: if isOrgMember(orgId) && hasRole(orgId, 'admin');
+      }
+      
+      // --------------------------------------------------------------------------
+      // SCHEDULES
+      // --------------------------------------------------------------------------
+      
+      match /schedules/{scheduleId} {
+        allow read: if isOrgMember(orgId);
+        allow create: if isOrgMember(orgId) && hasRole(orgId, 'manager');
+        allow update: if isOrgMember(orgId) && hasRole(orgId, 'manager') || isServiceAccount();
+        allow delete: if isOrgMember(orgId) && hasRole(orgId, 'admin');
+        
+        // Shifts nested under schedules
+        match /shifts/{shiftId} {
+          allow read: if isOrgMember(orgId);
+          allow create, update: if isOrgMember(orgId) && hasRole(orgId, 'manager') || isServiceAccount();
+          allow delete: if isOrgMember(orgId) && hasRole(orgId, 'manager');
+        }
+      }
+      
+      // --------------------------------------------------------------------------
+      // ATTENDANCE
+      // --------------------------------------------------------------------------
+      
+      match /attendance/{attendanceId} {
+        allow read: if isOrgMember(orgId);
+        // Staff can create their own attendance, managers can create for anyone
+        allow create: if isOrgMember(orgId) && (
+          request.resource.data.staffId == request.auth.uid || 
+          hasRole(orgId, 'manager')
+        );
+        allow update: if isOrgMember(orgId) && hasRole(orgId, 'manager');
+        allow delete: if isOrgMember(orgId) && hasRole(orgId, 'admin');
+      }
+    }
+  }
+}

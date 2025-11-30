@@ -1,4 +1,6 @@
 #!/bin/bash
+# [P2][APP][CODE] Cleanup Memory
+# Tags: P2, APP, CODE
 # Memory cleanup and safeguard script
 # Clears caches, kills heavy processes, and optimizes for low-memory environments
 

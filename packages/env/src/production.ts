@@ -1,3 +1,5 @@
+// [P0][APP][ENV] Production
+// Tags: P0, APP, ENV
 /**
  * packages/env/src/production.ts
  *
@@ -31,7 +33,7 @@ export const ProdEnvSchema = z.object({
   NODE_ENV: z.literal("production"),
   REDIS_URL: z.string().url().describe("Redis URL required for production"),
   NEXT_PUBLIC_FIREBASE_API_KEY: z.string().min(1),
-  FIREBASE_PROJECT_ID: z.string().min(1)
+  FIREBASE_PROJECT_ID: z.string().min(1),
 });
 
 export type ProdEnv = z.infer<typeof ProdEnvSchema>;
@@ -80,7 +82,7 @@ export function validateProductionEnv(env: Env): ProdEnv {
   if (!isProduction(env)) {
     throw new Error(
       `Expected NODE_ENV="production" but got "${env.NODE_ENV}". ` +
-      `Use validateDevelopmentEnv() for non-production environments.`
+        `Use validateDevelopmentEnv() for non-production environments.`,
     );
   }
 
@@ -94,11 +96,11 @@ export function validateProductionEnv(env: Env): ProdEnv {
 
       throw new Error(
         `Production environment validation failed:\n  ${missing}\n\n` +
-        `Required for production:\n` +
-        `  - REDIS_URL (for multi-instance rate limiting, caching, sessions)\n` +
-        `  - NEXT_PUBLIC_FIREBASE_API_KEY\n` +
-        `  - FIREBASE_PROJECT_ID\n` +
-        `  - NODE_ENV="production"`
+          `Required for production:\n` +
+          `  - REDIS_URL (for multi-instance rate limiting, caching, sessions)\n` +
+          `  - NEXT_PUBLIC_FIREBASE_API_KEY\n` +
+          `  - FIREBASE_PROJECT_ID\n` +
+          `  - NODE_ENV="production"`,
       );
     }
     throw err;
@@ -119,7 +121,7 @@ export function validateDevelopmentEnv(env: Env): void {
   if (isProduction(env)) {
     throw new Error(
       `NODE_ENV is "production" but using development validator. ` +
-      `Use validateProductionEnv() instead.`
+        `Use validateProductionEnv() instead.`,
     );
   }
 }
@@ -148,7 +150,7 @@ export function validateEnvironmentAtStartup(env: Env): void {
 
     console.log(
       "✅ Production environment validated. " +
-      "Multi-instance support enabled (Redis configured)."
+        "Multi-instance support enabled (Redis configured).",
     );
   } else {
     // Loose validation for development
@@ -156,13 +158,12 @@ export function validateEnvironmentAtStartup(env: Env): void {
 
     if (isMultiInstanceEnabled(env)) {
       console.log(
-        "✅ Development environment with Redis configured. " +
-        "Using distributed rate limiting."
+        "✅ Development environment with Redis configured. " + "Using distributed rate limiting.",
       );
     } else {
       console.log(
         "⚠️ Development environment without Redis. " +
-        "Using in-memory rate limiting (single process only)."
+          "Using in-memory rate limiting (single process only).",
       );
     }
   }
@@ -197,7 +198,7 @@ export function getMultiInstanceInfo(env: Env): {
     return {
       isMultiInstance: true,
       riskLevel: "safe",
-      message: "Multi-instance production deployment with Redis. Rate limiting is distributed."
+      message: "Multi-instance production deployment with Redis. Rate limiting is distributed.",
     };
   }
 
@@ -205,7 +206,7 @@ export function getMultiInstanceInfo(env: Env): {
     return {
       isMultiInstance: true,
       riskLevel: "warn",
-      message: "Redis enabled in development. Using distributed rate limiting (unnecessary)."
+      message: "Redis enabled in development. Using distributed rate limiting (unnecessary).",
     };
   }
 
@@ -216,14 +217,14 @@ export function getMultiInstanceInfo(env: Env): {
       message:
         "CRITICAL: Production deployment without Redis. " +
         "Rate limiting is per-instance (BROKEN for multi-instance).\n" +
-        "Set REDIS_URL for distributed rate limiting."
+        "Set REDIS_URL for distributed rate limiting.",
     };
   }
 
   return {
     isMultiInstance: false,
     riskLevel: "safe",
-    message: "Single-instance development. In-memory rate limiting is sufficient."
+    message: "Single-instance development. In-memory rate limiting is sufficient.",
   };
 }
 
@@ -252,7 +253,7 @@ export function preFlightChecks(env: Env): void {
         validateEnvironmentAtStartup(env);
         return true;
       },
-      message: "Environment configuration validated"
+      message: "Environment configuration validated",
     },
     {
       name: "Multi-instance check",
@@ -263,15 +264,15 @@ export function preFlightChecks(env: Env): void {
         }
         return true;
       },
-      message: "Multi-instance configuration OK"
+      message: "Multi-instance configuration OK",
     },
     {
       name: "Firebase config",
       check: () => {
         return Boolean(env.NEXT_PUBLIC_FIREBASE_API_KEY && env.FIREBASE_PROJECT_ID);
       },
-      message: "Firebase credentials configured"
-    }
+      message: "Firebase credentials configured",
+    },
   ];
 
   for (const { name, check, message } of checks) {
@@ -309,10 +310,10 @@ export function assertProduction(env: Env): asserts env is ProdEnv {
   if (!isProduction(env)) {
     throw new Error(
       `Production-only code called in ${env.NODE_ENV} environment. ` +
-      `This should only run with NODE_ENV="production".`
+        `This should only run with NODE_ENV="production".`,
     );
   }
-  
+
   // Also validate required production fields
   validateProductionEnv(env);
 }
@@ -335,7 +336,7 @@ export function assertNotProduction(env: Env): void {
   if (isProduction(env)) {
     throw new Error(
       `Development-only code called in production environment. ` +
-      `This should never run with NODE_ENV="production".`
+        `This should never run with NODE_ENV="production".`,
     );
   }
 }

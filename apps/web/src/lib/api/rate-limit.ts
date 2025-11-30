@@ -81,7 +81,7 @@ class InMemoryRateLimiter implements RateLimiter {
       // New window
       bucket = {
         count: 0,
-        resetAt: now + windowMs
+        resetAt: now + windowMs,
       };
     }
 
@@ -95,7 +95,7 @@ class InMemoryRateLimiter implements RateLimiter {
       allowed,
       remaining,
       resetAt: bucket.resetAt,
-      key: bucketKey
+      key: bucketKey,
     };
   }
 
@@ -139,14 +139,13 @@ class RedisRateLimiter implements RateLimiter {
     const remaining = Math.max(this.options.max - count, 0);
 
     const ttlSeconds = await this.redis.ttl(bucketKey);
-    const resetAt =
-      ttlSeconds > 0 ? now + ttlSeconds * 1000 : now + windowSeconds * 1000;
+    const resetAt = ttlSeconds > 0 ? now + ttlSeconds * 1000 : now + windowSeconds * 1000;
 
     return {
       allowed,
       remaining,
       resetAt,
-      key: bucketKey
+      key: bucketKey,
     };
   }
 
@@ -173,8 +172,8 @@ export function getRateLimiter(
   options: RateLimitOptions = {
     max: 100,
     windowSeconds: 60,
-    keyPrefix: "api"
-  }
+    keyPrefix: "api",
+  },
 ): RateLimiter {
   if (cachedLimiter) {
     return cachedLimiter;
@@ -186,7 +185,7 @@ export function getRateLimiter(
   if (isProd && hasRedis) {
     const redis = new Redis(env.REDIS_URL as string, {
       maxRetriesPerRequest: 1,
-      enableReadyCheck: true
+      enableReadyCheck: true,
     });
 
     cachedLimiter = new RedisRateLimiter({ redis, env }, options);
@@ -215,7 +214,7 @@ export function buildRateLimitKey(params: {
     params.route,
     params.ip ?? "ip:unknown",
     params.userId ? `user:${params.userId}` : "user:anon",
-    params.orgId ? `org:${params.orgId}` : "org:unknown"
+    params.orgId ? `org:${params.orgId}` : "org:unknown",
   ];
 
   return segments.join("|");
@@ -234,7 +233,7 @@ export function buildRateLimitKey(params: {
 export const RateLimits = {
   strict: { max: 5, windowSeconds: 60 },
   api: { max: 100, windowSeconds: 60 },
-  generous: { max: 1000, windowSeconds: 60 }
+  generous: { max: 1000, windowSeconds: 60 },
 };
 
 /**
@@ -243,7 +242,7 @@ export const RateLimits = {
  */
 export async function checkRateLimit(
   req: any,
-  preset: { max: number; windowSeconds: number }
+  preset: { max: number; windowSeconds: number },
 ): Promise<RateLimitResult> {
   const limiter = getRateLimiter(preset);
   const ip =
@@ -254,7 +253,7 @@ export async function checkRateLimit(
   const key = buildRateLimitKey({
     feature: "api",
     route: req.method ? `${req.method} ${req.nextUrl?.pathname ?? "/"}` : "unknown",
-    ip
+    ip,
   });
 
   return limiter.consume(key, 1);

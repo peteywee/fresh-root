@@ -75,12 +75,14 @@ echo 'ulimit -v 6291456' >> ~/.bashrc
 ### Still getting OOM crashes?
 
 1. **Check swap is active**:
+
    ```bash
    swapon --show
    free -h
    ```
 
 2. **Increase swap** (if 2GB not enough):
+
    ```bash
    # Add another 2GB
    sudo fallocate -l 2G /swapfile2
@@ -90,6 +92,7 @@ echo 'ulimit -v 6291456' >> ~/.bashrc
    ```
 
 3. **Reduce parallel build tasks**:
+
    ```bash
    # In .env.local
    SWC_NUM_THREADS=1

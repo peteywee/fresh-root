@@ -22,7 +22,6 @@ The expectation is that you can read TypeScript and understand distributed syste
 1. **Money / contractual outcomes**
 
    Examples:
-
    - Schedule creation/update logic that affects labour cost, hours, compliance.
    - Time-off approval/denial flows.
    - Any logic that propagates to staff notifications or external systems.
@@ -30,7 +29,6 @@ The expectation is that you can read TypeScript and understand distributed syste
 2. **Security & data isolation**
 
    Examples:
-
    - Tenant isolation checks (orgId, corporate network boundaries).
    - RBAC decision points (who can publish/delete/update).
    - Access control for destructive actions (e.g. delete schedule, revoke access).
@@ -38,7 +36,6 @@ The expectation is that you can read TypeScript and understand distributed syste
 3. **Latency-sensitive user flows**
 
    Examples:
-
    - Onboarding endpoints: `create-network-org`, `create-network-corporate`, `activate-network`.
    - Schedule/shifts reads that drive the main dashboards.
    - Any hot path that is part of the "schedule in <5 minutes" promise.
@@ -46,7 +43,6 @@ The expectation is that you can read TypeScript and understand distributed syste
 4. **External dependencies**
 
    Examples:
-
    - Future integrations: payroll, messaging, payments, analytics.
    - Any third-party API call that can time out, fail, or get rate-limited.
 
@@ -76,24 +72,20 @@ This is **mandatory** for all API routes; do not remove or bypass it.
 Use it to wrap:
 
 1. **Auth and RBAC gates**
-
    - `requireSession` implementations.
    - Role/permission checks before mutating data.
    - Any cross-tenant boundary enforcement.
 
 2. **Domain operations**
-
    - Schedule creation/update/publish pipelines.
    - Labour budget and hours computation.
    - Time-off flows and other HR-adjacent workflows.
 
 3. **External calls**
-
    - Any non-trivial call across the network (present or future integrations).
    - Any Redis operations that represent a business decision rather than simple caching.
 
 4. **Known hot spots**
-
    - Any code path that has historically been slow or flaky.
    - Any code path that runs in O(N) over schedules/shifts and might become an issue at scale.
 
@@ -101,7 +93,7 @@ Use it to wrap:
 
 Do **not** wrap trivial helpers or obvious one-liners in spans.
 
-Examples of things that do *not* get their own span:
+Examples of things that do _not_ get their own span:
 
 - Pure data reshaping, formatting, or validation helpers.
 - Small, local utility functions that are clearly cheap and not business-sensitive.
@@ -120,7 +112,7 @@ Examples of things that do *not* get their own span:
 
 Example structure (illustrative, not exact code):
 
-```ts
+````ts
 // High-level: created by middleware
 HTTP POST /api/schedules
   ├─ auth.requireSession
@@ -271,7 +263,7 @@ mkdir -p docs/standards
 cat > docs/standards/OBSERVABILITY_AND_TRACING_STANDARD.md << 'EOF'
 # Observability & Tracing Standard
 
-**Audience**: Senior engineers working on Fresh Root.  
+**Audience**: Senior engineers working on Fresh Root.
 **Goal**: Make production behaviour observable without drowning the codebase in noise.
 
 This document defines:
@@ -534,3 +526,4 @@ Don’t wrap every tiny helper. Focus spans where they matter.
 
 If you can answer “yes” to all of the above, your change meets the observability standard.
 
+````
