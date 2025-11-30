@@ -1,4 +1,5 @@
 // [P0][ORGS][API] Organization member management endpoint
+export const dynamic = "force-dynamic";
 
 import { UpdateMembershipSchema } from "@fresh-schedules/types";
 import { NextRequest, NextResponse } from "next/server";

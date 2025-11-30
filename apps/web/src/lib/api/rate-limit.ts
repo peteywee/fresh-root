@@ -1,40 +1,42 @@
-// [P0][SECURITY][RATE_LIMIT] Rate Limit
-// Tags: P0, SECURITY, RATE_LIMIT
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /**
- * [P1][SECURITY][API] Rate limiting helper for Next.js routes.
+ * apps/web/src/lib/api/rate-limit.ts
  *
- * This module is intentionally simple and test-friendly:
- * - Uses an in-memory store by default (good enough for unit/integration tests).
- * - Exposes a `rateLimit` higher-order function that wraps route handlers.
- * - Exposes `RateLimits` presets that tests assert against.
+ * Distributed rate limiting helper for Next.js API routes.
  *
- * In production you can later swap the backend to Redis behind the same interface
- * without changing the public API used by routes and tests.
+ * - In development / test: uses an in-memory map.
+ * - In production with REDIS_URL set: uses a Redis-backed limiter that is
+ *   safe across multiple instances.
  */
 
-/* -------------------------------------------------------------------------- */
-/* Imports                                                                     */
-/* -------------------------------------------------------------------------- */
-
-import { NextResponse, type NextRequest } from "next/server";
+import type { Env } from "@/src/env";
+import { env } from "@/src/env";
+import Redis from "ioredis";
 
 /* -------------------------------------------------------------------------- */
-/* Public types                                                                */
+/* Types                                                                      */
 /* -------------------------------------------------------------------------- */
 
 export interface RateLimitOptions {
-  /** Maximum number of requests allowed per window for a given key. */
-  max: number;
-  /** Window duration in seconds. */
-  windowSeconds: number;
   /**
-   * Optional key generator – allows callers/tests to override the default
-   * IP + path (+ user) based key derivation.
+   * Maximum number of allowed requests per window.
    */
-  keyGenerator?: (request: NextRequest | Request | undefined) => string;
+  max: number;
+
+  /**
+   * Window size in seconds.
+   */
+  windowSeconds: number;
+
+  /**
+   * Optional prefix to namespace keys (per route, per feature).
+   */
+  keyPrefix?: string;
 }
 
+/**
+ * Result returned by a limiter after consuming a token.
+ */
 export interface RateLimitResult {
   allowed: boolean;
   remaining: number;
@@ -42,184 +44,216 @@ export interface RateLimitResult {
   key: string;
 }
 
-/* -------------------------------------------------------------------------- */
-/* Presets (these are asserted in tests)                                      */
-/* -------------------------------------------------------------------------- */
-
-export const RateLimits = {
-  STRICT: { max: 10, windowSeconds: 60 },
-  STANDARD: { max: 100, windowSeconds: 60 },
-  AUTH: { max: 5, windowSeconds: 60 },
-  WRITE: { max: 30, windowSeconds: 60 },
-  api: { max: 100, windowSeconds: 60 },
-} as const;
-
-/* -------------------------------------------------------------------------- */
-/* Default key generator                                                       */
-/* -------------------------------------------------------------------------- */
-
 /**
- * Defensive key generator:
- * - Works with NextRequest or plain Request objects (like in Vitest).
- * - Uses path + IP, and includes user ID if present on headers.
+ * Abstract limiter interface. Both in-memory and Redis limiters implement this.
  */
-export function defaultKeyGenerator(request: any): string {
-  if (!request) {
-    // Fallback for badly stubbed tests – still deterministic
-    return "global:/unknown:ip:unknown";
-  }
-
-  // Normalise headers
-  const headers: Headers =
-    request.headers instanceof Headers
-      ? request.headers
-      : new Headers(request.headers ?? undefined);
-
-  const ip = headers.get("x-forwarded-for") ?? headers.get("x-real-ip") ?? "unknown-ip";
-
-  const userId = headers.get("x-user-id") ?? undefined;
-
-  // Path handling for NextRequest vs plain Request
-  let pathname = "/unknown";
-  if (request.nextUrl?.pathname) {
-    pathname = request.nextUrl.pathname;
-  } else if (typeof request.url === "string") {
-    try {
-      const url = new URL(request.url);
-      pathname = url.pathname;
-    } catch {
-      // ignore – keep default
-    }
-  }
-
-  const userSuffix = userId ? `:user:${userId}` : "";
-  return `${pathname}:ip:${ip}${userSuffix}`;
+export interface RateLimiter {
+  consume(key: string, cost?: number): Promise<RateLimitResult>;
 }
 
 /* -------------------------------------------------------------------------- */
-/* In-memory backend                                                           */
+/* In-memory implementation (dev/test, single-instance only)                  */
 /* -------------------------------------------------------------------------- */
 
-type Bucket = {
+interface MemoryBucket {
   count: number;
-  resetAt: number;
-};
+  resetAt: number; // epoch ms
+}
 
-class InMemoryRateLimiter {
-  private buckets = new Map<string, Bucket>();
+class InMemoryRateLimiter implements RateLimiter {
+  private readonly options: RateLimitOptions;
+  private readonly buckets = new Map<string, MemoryBucket>();
 
-  constructor(private readonly now: () => number = () => Date.now()) {}
+  constructor(options: RateLimitOptions) {
+    this.options = options;
+  }
 
-  async checkLimit(
-    request: NextRequest | Request | undefined,
-    options: RateLimitOptions,
-  ): Promise<RateLimitResult> {
-    const keyGen = options.keyGenerator ?? defaultKeyGenerator;
-    const key = keyGen(request);
-    const now = this.now();
-    const windowMs = options.windowSeconds * 1000;
+  public async consume(key: string, cost: number = 1): Promise<RateLimitResult> {
+    const now = Date.now();
+    const windowMs = this.options.windowSeconds * 1000;
+    const bucketKey = this.buildKey(key);
 
-    const existing = this.buckets.get(key);
+    let bucket = this.buckets.get(bucketKey);
 
-    if (!existing || existing.resetAt <= now) {
-      // Start a new window
-      const resetAt = now + windowMs;
-      this.buckets.set(key, { count: 1, resetAt });
-      return {
-        allowed: true,
-        remaining: options.max - 1,
-        resetAt,
-        key,
+    if (!bucket || bucket.resetAt <= now) {
+      // New window
+      bucket = {
+        count: 0,
+        resetAt: now + windowMs
       };
     }
 
-    if (existing.count >= options.max) {
-      // Over limit
-      return {
-        allowed: false,
-        remaining: 0,
-        resetAt: existing.resetAt,
-        key,
-      };
-    }
+    bucket.count += cost;
+    this.buckets.set(bucketKey, bucket);
 
-    // Within limit
-    existing.count += 1;
-    this.buckets.set(key, existing);
+    const allowed = bucket.count <= this.options.max;
+    const remaining = Math.max(this.options.max - bucket.count, 0);
 
     return {
-      allowed: true,
-      remaining: Math.max(options.max - existing.count, 0),
-      resetAt: existing.resetAt,
-      key,
+      allowed,
+      remaining,
+      resetAt: bucket.resetAt,
+      key: bucketKey
     };
   }
 
-  /** For tests if you ever need to reset the internal state. */
-  clear() {
-    this.buckets.clear();
+  private buildKey(key: string): string {
+    const prefix = this.options.keyPrefix ?? "rate";
+    return `${prefix}:${key}`;
   }
 }
 
 /* -------------------------------------------------------------------------- */
-/* Singleton backend                                                           */
+/* Redis implementation (prod, multi-instance safe)                           */
 /* -------------------------------------------------------------------------- */
 
-const globalLimiter = new InMemoryRateLimiter();
+interface RedisRateLimiterDeps {
+  redis: Redis;
+  env: Env;
+}
 
-/**
- * Exposed only for advanced tests / diagnostics. Most tests should go through
- * `rateLimit` HOF instead of calling `checkLimit` directly.
- */
-export async function checkRateLimit(
-  request: NextRequest | Request | undefined,
-  options: RateLimitOptions,
-): Promise<RateLimitResult> {
-  return globalLimiter.checkLimit(request, options);
+class RedisRateLimiter implements RateLimiter {
+  private readonly redis: Redis;
+  private readonly options: RateLimitOptions;
+
+  constructor(deps: RedisRateLimiterDeps, options: RateLimitOptions) {
+    this.redis = deps.redis;
+    this.options = options;
+  }
+
+  public async consume(key: string, cost: number = 1): Promise<RateLimitResult> {
+    const now = Date.now();
+    const windowSeconds = this.options.windowSeconds;
+    const bucketKey = this.buildKey(key, windowSeconds);
+
+    const count = await this.redis.incrby(bucketKey, cost);
+
+    if (count === cost) {
+      // First time this key is seen in this window; set TTL.
+      await this.redis.expire(bucketKey, windowSeconds);
+    }
+
+    const allowed = count <= this.options.max;
+    const remaining = Math.max(this.options.max - count, 0);
+
+    const ttlSeconds = await this.redis.ttl(bucketKey);
+    const resetAt =
+      ttlSeconds > 0 ? now + ttlSeconds * 1000 : now + windowSeconds * 1000;
+
+    return {
+      allowed,
+      remaining,
+      resetAt,
+      key: bucketKey
+    };
+  }
+
+  private buildKey(key: string, windowSeconds: number): string {
+    const prefix = this.options.keyPrefix ?? "rate";
+    const windowBucket = Math.floor(Date.now() / (windowSeconds * 1000));
+    return `${prefix}:${key}:${windowBucket}`;
+  }
 }
 
 /* -------------------------------------------------------------------------- */
-/* Public HOF                                                                  */
+/* Factory / Public API                                                       */
 /* -------------------------------------------------------------------------- */
 
+let cachedLimiter: RateLimiter | null = null;
+
 /**
- * Wrap a Next.js route handler with rate limiting.
+ * Create or reuse the global RateLimiter based on environment.
  *
- * Usage pattern that your tests already assume:
- *
- * ```ts
- * const handler = rateLimit({ max: 3, windowSeconds: 60 })(async (req) => {
- *   return NextResponse.json({ success: true });
- * });
- * ```
+ * - If REDIS_URL is set and NODE_ENV === "production": use RedisRateLimiter.
+ * - Otherwise: use InMemoryRateLimiter.
  */
-export function rateLimit<
-  THandler extends (request: NextRequest, context?: any) => Promise<NextResponse> | NextResponse,
->(options: RateLimitOptions) {
-  return function withRateLimit(handler: THandler): THandler {
-    return (async (request: NextRequest, context?: any) => {
-      const result = await checkRateLimit(request, options);
+export function getRateLimiter(
+  options: RateLimitOptions = {
+    max: 100,
+    windowSeconds: 60,
+    keyPrefix: "api"
+  }
+): RateLimiter {
+  if (cachedLimiter) {
+    return cachedLimiter;
+  }
 
-      const rateHeaders: Record<string, string> = {
-        "X-RateLimit-Key": result.key,
-        "X-RateLimit-Remaining": String(result.remaining),
-        "X-RateLimit-Reset": String(result.resetAt),
-      };
+  const isProd = env.NODE_ENV === "production";
+  const hasRedis = Boolean(env.REDIS_URL);
 
-      if (!result.allowed) {
-        return new NextResponse(JSON.stringify({ error: "Too many requests" }), {
-          status: 429,
-          headers: rateHeaders,
-        });
-      }
+  if (isProd && hasRedis) {
+    const redis = new Redis(env.REDIS_URL as string, {
+      maxRetriesPerRequest: 1,
+      enableReadyCheck: true
+    });
 
-      const response = (await handler(request, context)) as NextResponse;
+    cachedLimiter = new RedisRateLimiter({ redis, env }, options);
+  } else {
+    cachedLimiter = new InMemoryRateLimiter(options);
+  }
 
-      for (const [key, value] of Object.entries(rateHeaders)) {
-        response.headers.set(key, value);
-      }
+  return cachedLimiter;
+}
 
-      return response;
-    }) as unknown as THandler;
-  };
+/**
+ * Convenience helper to build a consistent rate limit key.
+ *
+ * You can use a combination of route, IP, user, and org IDs depending on
+ * how strict you want rate limiting to be.
+ */
+export function buildRateLimitKey(params: {
+  feature: string;
+  route: string;
+  ip?: string | null;
+  userId?: string | null;
+  orgId?: string | null;
+}): string {
+  const segments = [
+    params.feature,
+    params.route,
+    params.ip ?? "ip:unknown",
+    params.userId ? `user:${params.userId}` : "user:anon",
+    params.orgId ? `org:${params.orgId}` : "org:unknown"
+  ];
+
+  return segments.join("|");
+}
+
+/* ============================================================================ */
+/* Legacy / Backwards-Compatible Exports                                      */
+/* ============================================================================ */
+
+/**
+ * Legacy rate limit presets.
+ * Use for compatibility with existing code.
+ *
+ * @deprecated Use getRateLimiter({ max, windowSeconds }) instead for explicit config
+ */
+export const RateLimits = {
+  strict: { max: 5, windowSeconds: 60 },
+  api: { max: 100, windowSeconds: 60 },
+  generous: { max: 1000, windowSeconds: 60 }
+};
+
+/**
+ * Legacy checkRateLimit function.
+ * @deprecated Use getRateLimiter().consume() instead
+ */
+export async function checkRateLimit(
+  req: any,
+  preset: { max: number; windowSeconds: number }
+): Promise<RateLimitResult> {
+  const limiter = getRateLimiter(preset);
+  const ip =
+    (req.headers?.get("x-forwarded-for") ?? "").split(",")[0].trim() ||
+    (req as any).ip ||
+    "unknown";
+
+  const key = buildRateLimitKey({
+    feature: "api",
+    route: req.method ? `${req.method} ${req.nextUrl?.pathname ?? "/"}` : "unknown",
+    ip
+  });
+
+  return limiter.consume(key, 1);
 }

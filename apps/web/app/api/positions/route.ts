@@ -1,11 +1,12 @@
 // [P0][CORE][API] Positions list endpoint
+export const dynamic = "force-dynamic";
 
 import { CreatePositionSchema } from "@fresh-schedules/types";
 import { NextRequest, NextResponse } from "next/server";
 
 import { requireOrgMembership, requireRole } from "../../../src/lib/api";
 import { withSecurity } from "../_shared/middleware";
-import { parseJson, badRequest, serverError, ok } from "../_shared/validation";
+import { badRequest, ok, parseJson, serverError } from "../_shared/validation";
 
 // Rate limiting is handled via withSecurity options
 
