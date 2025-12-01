@@ -227,6 +227,7 @@ export const queueWorker = onMessagePublished(
 ```
 
 **Problems:**
+
 - At-least-once semantics (duplicates possible)
 - No built-in deadletter handling
 - Manual implementation of rate limiting
