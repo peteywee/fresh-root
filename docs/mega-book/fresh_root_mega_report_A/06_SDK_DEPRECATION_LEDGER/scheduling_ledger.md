@@ -136,6 +136,7 @@ const task = onSchedule(
 **Location:** `functions/scheduled/`
 
 **Current files:**
+
 - `cleanup.ts` — Expired session cleanup
 - `billing-reset.ts` — Daily user quota reset
 - `maintenance.ts` — Database maintenance tasks
