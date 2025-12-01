@@ -48,10 +48,10 @@ export const GET = createOrgEndpoint({
  */
 export const POST = createOrgEndpoint({
   roles: ["manager"],
-  handler: async ({ request, context, params }) => {
+  input: CreateVenueSchema,
+  handler: async ({ input, context, params }) => {
     try {
-      const body = await request.json();
-      const validated = CreateVenueSchema.parse(body);
+      const validated = input;
       
       const venue = {
         id: `venue-${Date.now()}`,

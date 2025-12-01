@@ -16,41 +16,26 @@ const ActivateNetworkSchema = z.object({
  * Activate a network after onboarding
  */
 export const POST = createAuthenticatedEndpoint({
-  handler: async ({ request, context }) => {
+  input: ActivateNetworkSchema,
+  handler: async ({ input, context }) => {
     try {
-      const body = await request.json();
-      const result = ActivateNetworkSchema.safeParse(body);
-
-      if (!result.success) {
-        return badRequest("validation_error");
-      }
-
-      const { networkId } = result.data;
+      const { networkId } = input;
 
       // Local/dev fallback
       if (!adminDb) {
-        return ok({
-          ok: true,
-          networkId,
-          status: "active",
-          activatedAt: Date.now(),
-        });
+        return ok({ ok: true, networkId, status: "active" });
       }
 
       const adb = adminDb;
-      const networkRef = adb.collection("networks").doc(String(networkId));
-      await networkRef.update({
-        status: "active",
-        activatedAt: Date.now(),
-        activatedBy: context.auth?.userId,
-      });
 
-      return ok({
-        ok: true,
-        networkId,
-        status: "active",
-        activatedAt: Date.now(),
-      });
+      try {
+        const networkRef = adb.collection("networks").doc(String(networkId));
+        await networkRef.update({ status: "active", activatedAt: Date.now() });
+        return ok({ ok: true, networkId, status: "active" });
+      } catch (err) {
+        console.error("activate-network failed", err);
+        return serverError("Internal error");
+      }
     } catch {
       return serverError("Failed to activate network");
     }

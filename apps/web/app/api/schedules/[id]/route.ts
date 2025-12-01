@@ -38,6 +38,7 @@ export const GET = createOrgEndpoint({
 /**
  * PATCH /api/schedules/[id]
  * Update a schedule
+ * Note: Requires 'manager' role for broader Series-A access
  */
 export const PATCH = createOrgEndpoint({
   roles: ["manager"],
@@ -69,6 +70,7 @@ export const PATCH = createOrgEndpoint({
 /**
  * DELETE /api/schedules/[id]
  * Delete a schedule
+ * Note: Requires 'manager' role for broader Series-A access
  */
 export const DELETE = createOrgEndpoint({
   roles: ["manager"],
