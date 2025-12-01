@@ -1,4 +1,6 @@
 #!/usr/bin/env node
+// [P2][APP][CODE] Release Series A
+// Tags: P2, APP, CODE
 /**
  * Minimal release script for Series A
  * - Bumps package.json version to 1.2.0
