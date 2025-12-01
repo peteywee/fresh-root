@@ -1,0 +1,24 @@
+name: file-index-guard
+
+on:
+  pull_request:
+    branches:
+      - main
+      - dev
+  push:
+    branches:
+      - dev
+
+jobs:
+  verify-index:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Ensure executable
+        run: chmod +x scripts/index/generate-file-index.sh
+
+      - name: Check file index (zero Node deps)
+        run: scripts/index/generate-file-index.sh --check
