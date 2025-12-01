@@ -547,3 +547,18 @@ export function createAdminEndpoint<TInput = unknown, TOutput = unknown>(
 
 export { z } from "zod";
 export type { ZodSchema } from "zod";
+
+// =============================================================================
+// REDIS & RATE LIMITING
+// =============================================================================
+
+export * from "./redis";
+export type { RedisClient, RateLimitConfig, RateLimitResult } from "./redis";
+export { checkRateLimit, createRateLimitMiddleware } from "./redis";
+
+// TODO: Add Route Factory pattern here next
+// - validateInput(schema: ZodSchema, data: unknown)
+// - withRateLimit(handler, config)
+// - withAuth(handler, required: boolean)
+// - withOrgContext(handler, required: boolean)
+// - withAuditLog(handler, event: string)
