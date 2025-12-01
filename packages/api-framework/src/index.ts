@@ -562,3 +562,40 @@ export { checkRateLimit, createRateLimitMiddleware } from "./redis";
 // - withAuth(handler, required: boolean)
 // - withOrgContext(handler, required: boolean)
 // - withAuditLog(handler, event: string)
+
+// =============================================================================
+// SPECIALIZED ENDPOINT FACTORY: Rate-Limited Public Endpoint
+// =============================================================================
+
+/**
+ * createRateLimitedEndpoint
+ * 
+ * Factory for public endpoints that require rate limiting without authentication.
+ * Useful for APIs like webhooks, public reports, or throttled free-tier endpoints.
+ * 
+ * EXAMPLE:
+ * ```typescript
+ * export const GET = createRateLimitedEndpoint({
+ *   rateLimit: { maxRequests: 10, windowMs: 60000 },
+ *   handler: async ({ request, context }) => {
+ *     const ip = request.headers.get('x-forwarded-for') || 'unknown';
+ *     return NextResponse.json({ message: 'OK' });
+ *   }
+ * });
+ * ```
+ */
+export function createRateLimitedEndpoint<TOutput = unknown>(
+  config: Omit<EndpointConfig<unknown, TOutput>, 'auth' | 'org'> & {
+    handler: (params: {
+      request: NextRequest;
+      context: RequestContext;
+      params: Record<string, string>;
+    }) => Promise<NextResponse>;
+  },
+): (req: NextRequest, ctx: any) => Promise<NextResponse> {
+  return createEndpoint({
+    auth: 'none',
+    org: 'none',
+    ...config,
+  });
+}
