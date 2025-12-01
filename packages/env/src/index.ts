@@ -19,7 +19,9 @@ export const EnvSchema = z.object({
   NODE_ENV: z.enum(["development", "test", "production"]).default("development"),
 
   // --- Firebase core (minimal; extend as needed to match your real config) ---
-  NEXT_PUBLIC_FIREBASE_API_KEY: z.string().min(1),
+  // NOTE: Made optional to allow builds in CI environments without secrets.
+  // Runtime validation in production ensures these are present before app starts.
+  NEXT_PUBLIC_FIREBASE_API_KEY: z.string().min(1).optional(),
   // NOTE: FIREBASE_PROJECT_ID is validated only in production runtime,
   // not at build time. This allows builds to succeed without secrets.
   FIREBASE_PROJECT_ID: z.string().min(1).optional(),
