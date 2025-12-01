@@ -1,29 +1,32 @@
-// [P0][HEALTH][API] Kubernetes liveness probe endpoint
-import { NextResponse } from "next/server";
+// [P0][HEALTH][API] Health check endpoint
 
-import { withSecurity } from "../_shared/middleware";
+import { createPublicEndpoint } from "@fresh-schedules/api-framework";
+import { ok } from "../_shared/validation";
 
 /**
- * [P0][API][HEALTH] Health Check Endpoint
- * Tags: api, health, infra
- *
- * Overview:
- * - Simple liveness probe for load balancers and uptime monitoring
- * - Does NOT hit Firestore; use for "is the web app alive" checks
+ * GET /api/healthz
+ * Health check endpoint
  */
-
-export const GET = createAuthenticatedEndpoint({
-  handler: async ({ request, input, context, params }) => async () => {
-  return NextResponse.json(
-    {
-      ok: true,
+export const GET = createPublicEndpoint({
+  rateLimit: {
+    maxRequests: 1000,
+    windowMs: 60000,
+  },
+  handler: async ({ context }) => {
+    return ok({
       status: "healthy",
-      // You can hard-code or inject a version string later
-      version: "v14-core",
-    }
+      timestamp: Date.now(),
+      requestId: context.requestId,
+    });
+  },
 });
 
-// Some monitors use HEAD for cheaper checks
-export const HEAD = withSecurity(async () => {
-  return NextResponse.json(null, { status: 200 });
+/**
+ * HEAD /api/healthz
+ * Health check HEAD
+ */
+export const HEAD = createPublicEndpoint({
+  handler: async ({ context }) => {
+    return ok({ status: "healthy" });
+  },
 });
