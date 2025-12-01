@@ -1,10 +1,10 @@
 // [P0][CORE][API] Position management endpoint
 export const dynamic = "force-dynamic";
+import { createOrgEndpoint } from "@fresh-schedules/api-framework";
 
 import { PositionSchema } from "@fresh-schedules/types";
 import { NextRequest, NextResponse } from "next/server";
 
-import { requireOrgMembership, requireRole } from "../../../../src/lib/api/authorization";
 import { csrfProtection } from "../../../../src/lib/api/csrf";
 import { checkRateLimit, RateLimits } from "../../../../src/lib/api/rate-limit";
 import { sanitizeObject } from "../../../../src/lib/api/sanitize";
@@ -14,7 +14,8 @@ import { serverError } from "../../_shared/validation";
  * GET /api/positions/[id]
  * Get position details (requires staff+ role)
  */
-export const GET = requireOrgMembership(async (request: NextRequest, context: any) => {
+export const GET = createOrgEndpoint({
+  handler: async ({ request, input, context, params }) => {
   // Apply rate limiting
   const rateLimitResult = await checkRateLimit(request, RateLimits.api);
   if (!rateLimitResult.allowed) {
