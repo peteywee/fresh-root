@@ -26,7 +26,6 @@
   },
   "packageManager": "pnpm@9.12.1",
   "devDependencies": {
-    "@types/ioredis": "^5.0.0",
     "@types/node": "^24.10.1",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
@@ -45,8 +44,8 @@
     "vitest": "^4.0.14"
   },
   "dependencies": {
-    "@fresh-schedules/types": "0.1.0",
-    "@lucide/react": "^0.460.0",
+    "@fresh-schedules/types": "workspace:*",
+    "lucide-react": "^0.460.0",
     "@tanstack/react-query": "^5.90.11",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
@@ -65,8 +64,6 @@
   },
   "pnpm": {
     "overrides": {
-      "@fresh-schedules/types": "link:packages/types",
-      "@lucide/react": "npm:lucide-react@latest",
       "@iac-fresh/eslint-config": "npm:eslint-config-next@latest",
       "@iac-fresh/prettier-config": "npm:prettier@latest"
     },
@@ -75,8 +72,5 @@
         "firebaseui>firebase": "12.x"
       }
     }
-  },
-  "peerDependencies": {
-    "@types/ioredis": "^5.0.0"
   }
 }
