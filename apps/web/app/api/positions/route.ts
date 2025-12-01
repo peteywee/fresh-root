@@ -5,6 +5,7 @@ import { CreatePositionSchema } from "@fresh-schedules/types";
 import { NextRequest, NextResponse } from "next/server";
 
 import { requireOrgMembership, requireRole } from "../../../src/lib/api";
+import { createOrgEndpoint } from "@fresh-schedules/api-framework";
 import { withSecurity } from "../_shared/middleware";
 import { badRequest, ok, parseJson, serverError } from "../_shared/validation";
 
@@ -14,12 +15,8 @@ import { badRequest, ok, parseJson, serverError } from "../_shared/validation";
  * GET /api/positions
  * List positions for an organization
  */
-export const GET = withSecurity(
-  requireOrgMembership(
-    async (
-      request: NextRequest,
-      context: { params: Record<string, string>; userId: string; orgId: string },
-    ) => {
+export const GET = createOrgEndpoint({
+  handler: async ({ request, context, params }) => {
       try {
         const { searchParams } = new URL(request.url);
         const orgId = searchParams.get("orgId") || context.orgId;
@@ -41,7 +38,7 @@ export const GET = withSecurity(
             color: "#3B82F6",
             isActive: true,
             requiredCertifications: [],
-            createdBy: context.userId,
+            createdBy: context.auth?.userId,
             createdAt: Date.now() - 7 * 24 * 60 * 60 * 1000,
             updatedAt: Date.now(),
           },
@@ -52,26 +49,17 @@ export const GET = withSecurity(
         return serverError("Failed to fetch positions");
       }
     },
-  ),
-  { requireAuth: true, maxRequests: 100, windowMs: 60_000 },
-);
+  },
+  rateLimit: { maxRequests: 100, windowMs: 60000 },
+});
 
 /**
  * POST /api/positions
  * Create a new position (requires manager+ role)
  */
-export const POST = withSecurity(
-  requireOrgMembership(
-    requireRole("manager")(
-      async (
-        request: NextRequest,
-        context: {
-          params: Record<string, string>;
-          userId: string;
-          orgId: string;
-          roles: ("org_owner" | "admin" | "manager" | "scheduler" | "corporate" | "staff")[];
-        },
-      ) => {
+export const POST = createOrgEndpoint({
+  roles: ["manager"],
+  handler: async ({ request, context, params }) => {
         try {
           const parsed = await parseJson(request, CreatePositionSchema);
           if (!parsed.success) {
@@ -91,7 +79,7 @@ export const POST = withSecurity(
             ...data,
             isActive: true,
             requiredCertifications: data.requiredCertifications || [],
-            createdBy: context.userId,
+            createdBy: context.auth?.userId,
             createdAt: Date.now(),
             updatedAt: Date.now(),
           };
@@ -104,7 +92,6 @@ export const POST = withSecurity(
           return serverError("Failed to create position");
         }
       },
-    ),
-  ),
-  { requireAuth: true, maxRequests: 100, windowMs: 60_000 },
-);
+  },
+  rateLimit: { maxRequests: 100, windowMs: 60000 },
+});

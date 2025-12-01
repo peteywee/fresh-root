@@ -3,6 +3,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
 import { requireOrgMembership, requireRole } from "../../../src/lib/api";
+import { createOrgEndpoint } from "@fresh-schedules/api-framework";
 import { sanitizeObject } from "../../../src/lib/api/sanitize";
 import { withSecurity } from "../_shared/middleware";
 import { badRequest, serverError, CreateShiftSchema } from "../_shared/validation";
@@ -13,12 +14,8 @@ import { badRequest, serverError, CreateShiftSchema } from "../_shared/validatio
  * GET /api/shifts
  * List shifts (filter by scheduleId if provided)
  */
-export const GET = withSecurity(
-  requireOrgMembership(
-    async (
-      request: NextRequest,
-      context: { params: Record<string, string>; userId: string; orgId: string },
-    ) => {
+export const GET = createOrgEndpoint({
+  handler: async ({ request, context, params }) => {
       try {
         const { searchParams } = new URL(request.url);
         const scheduleId = searchParams.get("scheduleId");
@@ -44,26 +41,16 @@ export const GET = withSecurity(
         return serverError("Failed to fetch shifts");
       }
     },
-  ),
-  { requireAuth: true, maxRequests: 100, windowMs: 60_000 },
-);
+  rateLimit: { maxRequests: 100, windowMs: 60000 },
+});
 
 /**
  * POST /api/shifts
  * Create a new shift (requires scheduler+ role)
  */
-export const POST = withSecurity(
-  requireOrgMembership(
-    requireRole("scheduler")(
-      async (
-        request: NextRequest,
-        context: {
-          params: Record<string, string>;
-          userId: string;
-          orgId: string;
-          roles: ("org_owner" | "admin" | "manager" | "scheduler" | "corporate" | "staff")[];
-        },
-      ) => {
+export const POST = createOrgEndpoint({
+  roles: ["scheduler"],
+  handler: async ({ request, context, params }) => {
         try {
           const { searchParams } = new URL(request.url);
           const scheduleIdFromQuery = searchParams.get("scheduleId");
@@ -78,7 +65,7 @@ export const POST = withSecurity(
             id: `shift-${Date.now()}`,
             status: "draft" as const,
             createdAt: new Date().toISOString(),
-            createdBy: context.userId,
+            createdBy: context.auth?.userId,
             ...sanitized,
           };
           return NextResponse.json(newShift, { status: 201 });
@@ -88,8 +75,6 @@ export const POST = withSecurity(
           }
           return serverError("Failed to create shift");
         }
-      },
-    ),
-  ),
-  { requireAuth: true, maxRequests: 100, windowMs: 60_000 },
-);
+        },
+      rateLimit: { maxRequests: 100, windowMs: 60000 },
+});

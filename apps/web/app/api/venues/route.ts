@@ -4,7 +4,7 @@ import { CreateVenueSchema } from "@fresh-schedules/types";
 import { NextRequest, NextResponse } from "next/server";
 
 import { requireOrgMembership, requireRole } from "../../../src/lib/api";
-import { withSecurity } from "../_shared/middleware";
+import { createOrgEndpoint } from "@fresh-schedules/api-framework";
 import { parseJson, badRequest, serverError, ok } from "../_shared/validation";
 
 // Rate limiting is handled via withSecurity options
@@ -13,12 +13,8 @@ import { parseJson, badRequest, serverError, ok } from "../_shared/validation";
  * GET /api/venues
  * List venues for an organization
  */
-export const GET = withSecurity(
-  requireOrgMembership(
-    async (
-      request: NextRequest,
-      context: { params: Record<string, string>; userId: string; orgId: string },
-    ) => {
+export const GET = createOrgEndpoint({
+  handler: async ({ request, context, params }) => {
       try {
         const { searchParams } = new URL(request.url);
         const orgId = searchParams.get("orgId") || context.orgId;
@@ -51,7 +47,7 @@ export const GET = withSecurity(
             timezone: "America/Los_Angeles",
             contactPhone: "+1-555-0100",
             contactEmail: "venue@example.com",
-            createdBy: context.userId,
+            createdBy: context.auth?.userId,
             createdAt: Date.now() - 60 * 24 * 60 * 60 * 1000,
             updatedAt: Date.now(),
           },
@@ -62,26 +58,17 @@ export const GET = withSecurity(
         return serverError("Failed to fetch venues");
       }
     },
-  ),
-  { requireAuth: true, maxRequests: 100, windowMs: 60_000 },
-);
+  },
+  rateLimit: { maxRequests: 100, windowMs: 60000 },
+});
 
 /**
  * POST /api/venues
  * Create a new venue (requires manager+ role)
  */
-export const POST = withSecurity(
-  requireOrgMembership(
-    requireRole("manager")(
-      async (
-        request: NextRequest,
-        context: {
-          params: Record<string, string>;
-          userId: string;
-          orgId: string;
-          roles: ("org_owner" | "admin" | "manager" | "scheduler" | "corporate" | "staff")[];
-        },
-      ) => {
+export const POST = createOrgEndpoint({
+  roles: ["manager"],
+  handler: async ({ request, context, params }) => {
         try {
           const parsed = await parseJson(request, CreateVenueSchema);
           if (!parsed.success) {
@@ -101,7 +88,7 @@ export const POST = withSecurity(
             ...data,
             isActive: true,
             timezone: data.timezone || "America/New_York",
-            createdBy: context.userId,
+            createdBy: context.auth?.userId,
             createdAt: Date.now(),
             updatedAt: Date.now(),
           };
@@ -114,7 +101,6 @@ export const POST = withSecurity(
           return serverError("Failed to create venue");
         }
       },
-    ),
-  ),
-  { requireAuth: true, maxRequests: 100, windowMs: 60_000 },
-);
+  },
+  rateLimit: { maxRequests: 100, windowMs: 60000 },
+});
