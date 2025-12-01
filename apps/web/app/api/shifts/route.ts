@@ -1,80 +1,67 @@
-// [P0][SHIFT][API] Shifts list endpoint
+// [P0][SHIFTS][API] Shifts list endpoint
+export const dynamic = "force-dynamic";
 
 import { NextRequest, NextResponse } from "next/server";
+import { CreateShiftSchema } from "@fresh-schedules/types";
 
-import { requireOrgMembership, requireRole } from "../../../src/lib/api";
 import { createOrgEndpoint } from "@fresh-schedules/api-framework";
-import { sanitizeObject } from "../../../src/lib/api/sanitize";
-import { withSecurity } from "../_shared/middleware";
-import { badRequest, serverError, CreateShiftSchema } from "../_shared/validation";
-
-// Rate limiting is handled via withSecurity options
+import { badRequest, ok, serverError } from "../_shared/validation";
 
 /**
  * GET /api/shifts
- * List shifts (filter by scheduleId if provided)
+ * List shifts for an organization
  */
 export const GET = createOrgEndpoint({
   handler: async ({ request, context, params }) => {
-      try {
-        const { searchParams } = new URL(request.url);
-        const scheduleId = searchParams.get("scheduleId");
-        const orgId = searchParams.get("orgId") || context.orgId;
-        if (!orgId) {
-          return badRequest("orgId query parameter is required");
-        }
-        const shifts = [
-          {
-            id: "shift-1",
-            scheduleId: scheduleId ?? "sched-1",
-            positionId: "pos-1",
-            userId: "user-123",
-            startTime: "2025-01-15T09:00:00Z",
-            endTime: "2025-01-15T17:00:00Z",
-            status: "published",
-            breakMinutes: 30,
-            createdAt: new Date().toISOString(),
-          },
-        ];
-        return NextResponse.json({ shifts, orgId });
-      } catch {
-        return serverError("Failed to fetch shifts");
+    try {
+      const { searchParams } = new URL(request.url);
+      const orgId = searchParams.get("orgId") || context.org?.orgId;
+
+      if (!orgId) {
+        return badRequest("orgId query parameter is required");
       }
-    },
-  rateLimit: { maxRequests: 100, windowMs: 60000 },
+
+      // Mock data - in production, fetch from Firestore
+      const shifts = [
+        {
+          id: "shift-1",
+          orgId,
+          name: "Morning Shift",
+          startTime: 8 * 60,
+          endTime: 16 * 60,
+          isActive: true,
+        },
+      ];
+
+      return ok({ shifts, total: shifts.length });
+    } catch {
+      return serverError("Failed to fetch shifts");
+    }
+  },
 });
 
 /**
  * POST /api/shifts
- * Create a new shift (requires scheduler+ role)
+ * Create new shift
  */
 export const POST = createOrgEndpoint({
-  roles: ["scheduler"],
+  roles: ["manager"],
   handler: async ({ request, context, params }) => {
-        try {
-          const { searchParams } = new URL(request.url);
-          const scheduleIdFromQuery = searchParams.get("scheduleId");
-          const body = await request.json();
-          const validated = CreateShiftSchema.parse(body);
-          const sanitized = sanitizeObject(validated);
-          const scheduleId = scheduleIdFromQuery || validated.scheduleId;
-          if (!scheduleId) {
-            return badRequest("scheduleId is required in query or body");
-          }
-          const newShift = {
-            id: `shift-${Date.now()}`,
-            status: "draft" as const,
-            createdAt: new Date().toISOString(),
-            createdBy: context.auth?.userId,
-            ...sanitized,
-          };
-          return NextResponse.json(newShift, { status: 201 });
-        } catch (error) {
-          if (error instanceof Error && error.name === "ZodError") {
-            return badRequest("Invalid shift data");
-          }
-          return serverError("Failed to create shift");
-        }
-        },
-      rateLimit: { maxRequests: 100, windowMs: 60000 },
+    try {
+      const body = await request.json();
+      const validated = CreateShiftSchema.parse(body);
+      
+      const shift = {
+        id: `shift-${Date.now()}`,
+        orgId: context.org?.orgId,
+        ...validated,
+        createdBy: context.auth?.userId,
+        createdAt: Date.now(),
+      };
+
+      return NextResponse.json(shift, { status: 201 });
+    } catch {
+      return serverError("Failed to create shift");
+    }
+  },
 });

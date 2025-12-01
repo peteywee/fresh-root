@@ -1,50 +1,58 @@
 // [P0][ONBOARDING][API] Activate network endpoint
+
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
-import { withSecurity, type AuthenticatedRequest } from "../../_shared/middleware";
-
+import { createAuthenticatedEndpoint } from "@fresh-schedules/api-framework";
+import { ok, serverError, badRequest } from "../../_shared/validation";
 import { adminDb } from "@/src/lib/firebase.server";
 
-// Schema for activate network request
 const ActivateNetworkSchema = z.object({
   networkId: z.string().or(z.number()),
 });
 
+/**
+ * POST /api/onboarding/activate-network
+ * Activate a network after onboarding
+ */
 export const POST = createAuthenticatedEndpoint({
-  handler: async ({ request, input, context, params }) => async (req: AuthenticatedRequest) => {
-  let body: unknown;
-  try {
-    body = await request.json();
-  } catch {
-    return NextResponse.json({ error: "invalid_json" }
-});
-  }
+  handler: async ({ request, context }) => {
+    try {
+      const body = await request.json();
+      const result = ActivateNetworkSchema.safeParse(body);
 
-  // Validate input
-  const result = ActivateNetworkSchema.safeParse(body);
-  if (!result.success) {
-    return NextResponse.json(
-      { error: "validation_error", issues: result.error.issues },
-      { status: 422 },
-    );
-  }
+      if (!result.success) {
+        return badRequest("validation_error");
+      }
 
-  const { networkId } = result.data;
+      const { networkId } = result.data;
 
-  // Local/dev fallback
-  if (!adminDb) {
-    return NextResponse.json({ ok: true, networkId, status: "active" }, { status: 200 });
-  }
+      // Local/dev fallback
+      if (!adminDb) {
+        return ok({
+          ok: true,
+          networkId,
+          status: "active",
+          activatedAt: Date.now(),
+        });
+      }
 
-  const adb = adminDb;
+      const adb = adminDb;
+      const networkRef = adb.collection("networks").doc(String(networkId));
+      await networkRef.update({
+        status: "active",
+        activatedAt: Date.now(),
+        activatedBy: context.auth?.userId,
+      });
 
-  try {
-    const networkRef = adb.collection("networks").doc(String(networkId));
-    await networkRef.update({ status: "active", activatedAt: Date.now() });
-    return NextResponse.json({ ok: true, networkId, status: "active" }, { status: 200 });
-  } catch (err) {
-    console.error("activate-network failed", err);
-    return NextResponse.json({ error: "internal_error" }, { status: 500 });
-  }
+      return ok({
+        ok: true,
+        networkId,
+        status: "active",
+        activatedAt: Date.now(),
+      });
+    } catch {
+      return serverError("Failed to activate network");
+    }
+  },
 });

@@ -1,61 +1,64 @@
-// [P0][ORGS][API] Organization management endpoint
-import { NextRequest, NextResponse } from "next/server";
-import { z } from "zod";
+// [P0][ORG][DETAIL][API] Organization detail endpoint
 
-import { withSecurity } from "../../_shared/middleware";
-import { parseJson, badRequest, serverError } from "../../_shared/validation";
-import { createAuthenticatedEndpoint } from "@fresh-schedules/api-framework";
-
-// Schema for updating organization
-const UpdateOrgSchema = z.object({
-  name: z.string().min(1).max(100).optional(),
-  description: z.string().max(500).optional(),
-  industry: z.string().optional(),
-  size: z.enum(["1-10", "11-50", "51-200", "201-500", "500+"]).optional(),
-  settings: z
-    .object({
-      allowPublicSchedules: z.boolean().optional(),
-      requireShiftApproval: z.boolean().optional(),
-      defaultShiftDuration: z.number().positive().optional(),
-    })
-    .optional(),
-});
-
-// Rate limiting via withSecurity
+import { createOrgEndpoint } from "@fresh-schedules/api-framework";
+import { ok, serverError } from "../../_shared/validation";
 
 /**
  * GET /api/organizations/[id]
  * Get organization details
  */
-export const GET = (withSecurity(
-  async (_request: NextRequest, context: { params: Record<string, string>; userId: string })  = createAuthenticatedEndpoint({
-  rateLimit: { maxRequests: 100, windowMs: 60 },
-  handler: async ({ request, input, context, params }) => 
-}));;
-
-/**
- * DELETE /api/organizations/[id]
- * Delete an organization (admin only)
- */
-export const DELETE = (withSecurity(
-  async (_request: NextRequest, context: { params: Record<string, string>; userId: string })  = createAuthenticatedEndpoint({
-  handler: async ({ request, input, context, params }) => ({ request, input, context, params }) => 
-}));;
-
-/**
- * DELETE /api/organizations/[id]
- * Delete an organization (admin only)
- */
-export const DELETE = withSecurity(
-  async (_request: NextRequest, context: { params: Record<string, string>; userId: string }
-})); => {
+export const GET = createOrgEndpoint({
+  handler: async ({ context, params }) => {
     try {
-      const { id } = context.params;
-      // In production, check if user is admin and delete from database
-      return NextResponse.json({ message: "Organization deleted successfully", id });
+      const { id } = params;
+      const org = {
+        id,
+        name: "Sample Organization",
+        ownerId: context.auth?.userId,
+        memberCount: 1,
+        createdAt: Date.now(),
+      };
+      return ok(org);
+    } catch {
+      return serverError("Failed to fetch organization");
+    }
+  },
+});
+
+/**
+ * PATCH /api/organizations/[id]
+ * Update organization
+ */
+export const PATCH = createOrgEndpoint({
+  roles: ["admin"],
+  handler: async ({ request, context, params }) => {
+    try {
+      const body = await request.json();
+      const { name, settings } = body;
+      const updated = {
+        id: params.id,
+        name,
+        settings,
+        updatedBy: context.auth?.userId,
+      };
+      return ok(updated);
+    } catch {
+      return serverError("Failed to update organization");
+    }
+  },
+});
+
+/**
+ * DELETE /api/organizations/[id]
+ * Delete organization
+ */
+export const DELETE = createOrgEndpoint({
+  roles: ["admin"],
+  handler: async ({ context, params }) => {
+    try {
+      return ok({ deleted: true, id: params.id });
     } catch {
       return serverError("Failed to delete organization");
     }
   },
-  { requireAuth: true, maxRequests: 100, windowMs: 60_000 },
-);
+});

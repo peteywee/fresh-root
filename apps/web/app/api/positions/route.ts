@@ -1,15 +1,11 @@
 // [P0][CORE][API] Positions list endpoint
 export const dynamic = "force-dynamic";
 
-import { CreatePositionSchema } from "@fresh-schedules/types";
 import { NextRequest, NextResponse } from "next/server";
+import { CreatePositionSchema } from "@fresh-schedules/types";
 
-import { requireOrgMembership, requireRole } from "../../../src/lib/api";
 import { createOrgEndpoint } from "@fresh-schedules/api-framework";
-import { withSecurity } from "../_shared/middleware";
-import { badRequest, ok, parseJson, serverError } from "../_shared/validation";
-
-// Rate limiting is handled via withSecurity options
+import { badRequest, ok, serverError } from "../_shared/validation";
 
 /**
  * GET /api/positions
@@ -17,81 +13,59 @@ import { badRequest, ok, parseJson, serverError } from "../_shared/validation";
  */
 export const GET = createOrgEndpoint({
   handler: async ({ request, context, params }) => {
-      try {
-        const { searchParams } = new URL(request.url);
-        const orgId = searchParams.get("orgId") || context.orgId;
+    try {
+      const { searchParams } = new URL(request.url);
+      const orgId = searchParams.get("orgId") || context.org?.orgId;
 
-        if (!orgId) {
-          return badRequest("orgId query parameter is required");
-        }
-
-        // Mock data - in production, fetch from Firestore
-        const positions = [
-          {
-            id: "pos-1",
-            orgId,
-            name: "Event Manager",
-            description: "Manages event operations",
-            type: "full_time",
-            skillLevel: "advanced",
-            hourlyRate: 35,
-            color: "#3B82F6",
-            isActive: true,
-            requiredCertifications: [],
-            createdBy: context.auth?.userId,
-            createdAt: Date.now() - 7 * 24 * 60 * 60 * 1000,
-            updatedAt: Date.now(),
-          },
-        ];
-
-        return ok({ positions, total: positions.length });
-      } catch {
-        return serverError("Failed to fetch positions");
+      if (!orgId) {
+        return badRequest("orgId query parameter is required");
       }
-    },
+
+      // Mock data - in production, fetch from Firestore
+      const positions = [
+        {
+          id: "pos-1",
+          orgId,
+          name: "Event Manager",
+          description: "Manages event operations",
+          type: "full_time",
+          skillLevel: "advanced",
+          hourlyRate: 35,
+          color: "#3B82F6",
+          isActive: true,
+          requiredCertifications: [],
+        },
+      ];
+
+      return ok({ positions, total: positions.length });
+    } catch {
+      return serverError("Failed to fetch positions");
+    }
   },
-  rateLimit: { maxRequests: 100, windowMs: 60000 },
 });
 
 /**
  * POST /api/positions
- * Create a new position (requires manager+ role)
+ * Create new position
  */
 export const POST = createOrgEndpoint({
   roles: ["manager"],
   handler: async ({ request, context, params }) => {
-        try {
-          const parsed = await parseJson(request, CreatePositionSchema);
-          if (!parsed.success) {
-            return badRequest("Validation failed", parsed.details);
-          }
+    try {
+      const body = await request.json();
+      const validated = CreatePositionSchema.parse(body);
+      
+      const position = {
+        id: `pos-${Date.now()}`,
+        orgId: context.org?.orgId,
+        ...validated,
+        createdBy: context.auth?.userId,
+        createdAt: Date.now(),
+      };
 
-          const data = parsed.data;
-
-          // Verify orgId matches context
-          if (data.orgId !== context.orgId) {
-            return badRequest("Organization ID mismatch", null, "FORBIDDEN");
-          }
-
-          // In production, create in Firestore
-          const newPosition = {
-            id: `pos-${Date.now()}`,
-            ...data,
-            isActive: true,
-            requiredCertifications: data.requiredCertifications || [],
-            createdBy: context.auth?.userId,
-            createdAt: Date.now(),
-            updatedAt: Date.now(),
-          };
-
-          return NextResponse.json(newPosition, { status: 201 });
-        } catch (error) {
-          if (error instanceof Error && error.name === "ZodError") {
-            return badRequest("Invalid position data");
-          }
-          return serverError("Failed to create position");
-        }
-      },
+      return NextResponse.json(position, { status: 201 });
+    } catch {
+      return serverError("Failed to create position");
+    }
   },
-  rateLimit: { maxRequests: 100, windowMs: 60000 },
 });

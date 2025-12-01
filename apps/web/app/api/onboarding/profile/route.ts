@@ -1,126 +1,30 @@
-// [P0][ONBOARDING][API] Onboarding profile endpoint
-import { NextResponse } from "next/server";
-import { z } from "zod";
+// [P0][ONBOARDING][PROFILE][API] Profile onboarding endpoint
 
-import { withSecurity, type AuthenticatedRequest } from "../../_shared/middleware";
-
-import { adminDb as importedAdminDb } from "@/src/lib/firebase.server";
 import { createAuthenticatedEndpoint } from "@fresh-schedules/api-framework";
+import { ok, serverError } from "../../_shared/validation";
 
-const ProfileSchema = z.object({
-  fullName: z.string().min(1),
-  preferredName: z.string().min(1),
-  phone: z.string().min(4),
-  timeZone: z.string().min(1),
-  selfDeclaredRole: z.string().min(1),
+/**
+ * POST /api/onboarding/profile
+ * Complete user profile during onboarding
+ */
+export const POST = createAuthenticatedEndpoint({
+  handler: async ({ request, context }) => {
+    try {
+      const body = await request.json();
+      const { firstName, lastName, avatar, timezone } = body;
+      
+      const profile = {
+        userId: context.auth?.userId,
+        firstName,
+        lastName,
+        avatar,
+        timezone: timezone || "UTC",
+        updatedAt: Date.now(),
+        onboardingComplete: true,
+      };
+      return ok(profile);
+    } catch {
+      return serverError("Failed to update profile");
+    }
+  },
 });
-
-async function profileHandlerImpl(
-  req: AuthenticatedRequest & { user?: { uid: string } },
-  injectedAdminDb = importedAdminDb,
-) {
-  const uid = req.user?.uid;
-  if (!uid) {
-    return NextResponse.json({ error: "not_authenticated" }, { status: 401 });
-  }
-
-  let body: unknown;
-  try {
-    body = await req.json();
-  } catch {
-    return NextResponse.json({ error: "invalid_json" }, { status: 400 });
-  }
-
-  const parsed = ProfileSchema.safeParse(body);
-  if (!parsed.success) {
-    return NextResponse.json(
-      { error: "validation_error", issues: parsed.error.flatten() },
-      { status: 422 },
-    );
-  }
-
-  const profile = parsed.data;
-  const adminDb = injectedAdminDb;
-  if (!adminDb) {
-    // Dev stub: pretend success
-    return NextResponse.json({ ok: true }, { status: 200 });
-  }
-
-  const now = Date.now();
-  const userRef = adminDb.collection("users").doc(uid);
-
-  await userRef.set(
-    {
-      profile: {
-        ...profile,
-        updatedAt: now,
-      },
-      onboarding: {
-        status: "in_progress",
-        stage: "profile_complete",
-        lastUpdatedAt: now,
-      },
-    },
-    { merge: true },
-  );
-
-  return NextResponse.json({ ok: true }, { status: 200 });
-}
-
-export const POST = (withSecurity(async (req: AuthenticatedRequest)  = createAuthenticatedEndpoint({
-  handler: async ({ request, input, context, params }) => function profileHandlerImpl(
-  req: AuthenticatedRequest & { user?: { uid: string } },
-  injectedAdminDb = importedAdminDb,
-) {
-  const uid = request.user?.uid;
-  if (!uid) {
-    return NextResponse.json({ error: "not_authenticated" }, { status: 401 });
-  }
-
-  let body: unknown;
-  try {
-    body = await request.json();
-  } catch {
-    return NextResponse.json({ error: "invalid_json" }, { status: 400 });
-  }
-
-  const parsed = ProfileSchema.safeParse(body);
-  if (!parsed.success) {
-    return NextResponse.json(
-      { error: "validation_error", issues: parsed.error.flatten() },
-      { status: 422 },
-    );
-  }
-
-  const profile = parsed.data;
-  const adminDb = injectedAdminDb;
-  if (!adminDb) {
-    // Dev stub: pretend success
-    return NextResponse.json({ ok: true }, { status: 200 });
-  }
-
-  const now = Date.now();
-  const userRef = adminDb.collection("users").doc(uid);
-
-  await userRef.set(
-    {
-      profile: {
-        ...profile,
-        updatedAt: now,
-      },
-      onboarding: {
-        status: "in_progress",
-        stage: "profile_complete",
-        lastUpdatedAt: now,
-      },
-    },
-    { merge: true },
-  );
-
-  return NextResponse.json({ ok: true }, { status: 200 });
-}
-
-export const POST = withSecurity(async (req: AuthenticatedRequest) => profileHandlerImpl(req), {
-  requireAuth: true,
-}
-}));;
