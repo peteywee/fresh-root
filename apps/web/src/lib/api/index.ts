@@ -4,16 +4,12 @@
 export * from "./session";
 export * from "./authorization";
 export * from "./csrf";
-export { default as redisAdapter } from "./redis";
-export { createRedisRateLimit } from "./redis-rate-limit";
 
-import redisAdapter from "./redis";
-import type { RateLimitConfig } from "./redis-rate-limit";
-import { createRedisRateLimit } from "./redis-rate-limit";
-
-/**
- * Convenience factory: create a rate limiter using the shared redis adapter
- */
-export function createRateLimiter(config: RateLimitConfig) {
-  return createRedisRateLimit(redisAdapter, config);
-}
+// Redis and rate limiting now imported from the framework SDK
+export {
+  checkRateLimit,
+  createRateLimitMiddleware,
+  type RedisClient,
+  type RateLimitConfig,
+  type RateLimitResult,
+} from "@fresh-schedules/api-framework";
