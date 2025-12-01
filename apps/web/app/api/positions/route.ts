@@ -5,7 +5,8 @@ import { CreatePositionSchema } from "@fresh-schedules/types";
 import { NextRequest, NextResponse } from "next/server";
 
 import { requireOrgMembership, requireRole } from "../../../src/lib/api";
-import { createOrgEndpoint } from "@fresh-schedules/api-framework";
+import { withSecurity } from "../_shared/middleware";
+import { badRequest, ok, parseJson, serverError } from "../_shared/validation";
 
 // Rate limiting is handled via withSecurity options
 
@@ -13,16 +14,14 @@ import { createOrgEndpoint } from "@fresh-schedules/api-framework";
  * GET /api/positions
  * List positions for an organization
  */
-export const GET = createOrgEndpoint({
-  handler: async ({ request, input, context, params }) => {
+export const GET = withSecurity(
+  requireOrgMembership(
     async (
       request: NextRequest,
       context: { params: Record<string, string>; userId: string; orgId: string },
     ) => {
       try {
-        const { searchParams } = new URL(request.url;
-  }
-});
+        const { searchParams } = new URL(request.url);
         const orgId = searchParams.get("orgId") || context.orgId;
 
         if (!orgId) {
@@ -61,9 +60,10 @@ export const GET = createOrgEndpoint({
  * POST /api/positions
  * Create a new position (requires manager+ role)
  */
-export const POST = createOrgEndpoint({
-  handler: async ({ request, input, context, params }) => {
-    async (
+export const POST = withSecurity(
+  requireOrgMembership(
+    requireRole("manager")(
+      async (
         request: NextRequest,
         context: {
           params: Record<string, string>;
@@ -73,9 +73,7 @@ export const POST = createOrgEndpoint({
         },
       ) => {
         try {
-          const parsed = await parseJson(request, CreatePositionSchema;
-  }
-});
+          const parsed = await parseJson(request, CreatePositionSchema);
           if (!parsed.success) {
             return badRequest("Validation failed", parsed.details);
           }

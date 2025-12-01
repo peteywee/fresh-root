@@ -6,8 +6,9 @@ import {
 import { randomBytes } from "crypto";
 import { NextRequest, NextResponse } from "next/server";
 
+import { withSecurity } from "../../_shared/middleware";
+
 import { adminDb as importedAdminDb } from "@/src/lib/firebase.server";
-import { createPublicEndpoint } from "@fresh-schedules/api-framework";
 
 /**
  * Inner handler logic (not exported)
@@ -67,10 +68,6 @@ async function adminFormHandlerImpl(
 }
 
 // Wrap with security
-export const GET = createPublicEndpoint({
-  handler: async ({ request, input, context, params }) => {
-    async (req: NextRequest) => {
-  return await adminFormHandlerImpl(req as NextRequest & { user?: { uid: string } };
-  }
-});
+export const GET = withSecurity(async (req: NextRequest) => {
+  return await adminFormHandlerImpl(req as NextRequest & { user?: { uid: string } });
 });

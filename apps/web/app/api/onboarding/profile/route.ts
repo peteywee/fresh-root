@@ -2,8 +2,9 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
+import { withSecurity, type AuthenticatedRequest } from "../../_shared/middleware";
+
 import { adminDb as importedAdminDb } from "@/src/lib/firebase.server";
-import { createAuthenticatedEndpoint } from "@fresh-schedules/api-framework";
 
 const ProfileSchema = z.object({
   fullName: z.string().min(1),
@@ -65,10 +66,6 @@ async function profileHandlerImpl(
   return NextResponse.json({ ok: true }, { status: 200 });
 }
 
-export const POST = createAuthenticatedEndpoint({
-  handler: async ({ request, input, context, params }) => {
-    async (req: AuthenticatedRequest) => profileHandlerImpl(req), {
+export const POST = withSecurity(async (req: AuthenticatedRequest) => profileHandlerImpl(req), {
   requireAuth: true,
-};
-  }
 });

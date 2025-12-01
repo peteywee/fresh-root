@@ -3,7 +3,9 @@ import { NextRequest } from "next/server";
 import * as QRCode from "qrcode";
 import * as speakeasy from "speakeasy";
 import { z } from "zod";
-import { createAuthenticatedEndpoint } from "@fresh-schedules/api-framework";
+
+import { withSecurity } from "../../../_shared/middleware";
+import { ok, serverError, badRequest } from "../../../_shared/validation";
 
 // Schema for MFA setup request (empty for now, but validates request is valid JSON)
 const MFASetupSchema = z.object({}).passthrough().optional();
@@ -13,16 +15,13 @@ const MFASetupSchema = z.object({}).passthrough().optional();
  * Generates a TOTP secret and QR code for MFA enrollment.
  * Requires valid session.
  */
-export const POST = createAuthenticatedEndpoint({
-  handler: async ({ request, input, context, params }) => {
-    async (req: NextRequest, context: { params: Record<string, string>; userId: string }) => {
+export const POST = withSecurity(
+  async (req: NextRequest, context: { params: Record<string, string>; userId: string }) => {
     try {
       // Validate request body (even if empty)
       let body: unknown;
       try {
-        body = await req.json(;
-  }
-});
+        body = await req.json();
       } catch {
         body = {};
       }

@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 
 import { withRequestLogging } from "../../_shared/logging";
-import { createAuthenticatedEndpoint } from "@fresh-schedules/api-framework";
+import { withSecurity, type AuthenticatedRequest } from "../../_shared/middleware";
 
 // Schema for verify eligibility request
 const VerifyEligibilitySchema = z.object({}).passthrough().optional();

@@ -2,22 +2,19 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
+import { withSecurity, type AuthenticatedRequest } from "../../_shared/middleware";
+
 import { adminDb } from "@/src/lib/firebase.server";
-import { createPublicEndpoint } from "@fresh-schedules/api-framework";
 
 // Schema for activate network request
 const ActivateNetworkSchema = z.object({
   networkId: z.string().or(z.number()),
 });
 
-export const POST = createPublicEndpoint({
-  handler: async ({ request, input, context, params }) => {
-    async (req: AuthenticatedRequest) => {
+export const POST = withSecurity(async (req: AuthenticatedRequest) => {
   let body: unknown;
   try {
-    body = await req.json(;
-  }
-});
+    body = await req.json();
   } catch {
     return NextResponse.json({ error: "invalid_json" }, { status: 400 });
   }

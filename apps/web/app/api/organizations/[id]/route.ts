@@ -1,7 +1,9 @@
 // [P0][ORGS][API] Organization management endpoint
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
-import { createAuthenticatedEndpoint } from "@fresh-schedules/api-framework";
+
+import { withSecurity } from "../../_shared/middleware";
+import { parseJson, badRequest, serverError } from "../../_shared/validation";
 
 // Schema for updating organization
 const UpdateOrgSchema = z.object({
@@ -24,9 +26,8 @@ const UpdateOrgSchema = z.object({
  * GET /api/organizations/[id]
  * Get organization details
  */
-export const GET = createAuthenticatedEndpoint({
-  handler: async ({ request, input, context, params }) => {
-    async (_request: NextRequest, context: { params: Record<string, string>; userId: string }) => {
+export const GET = withSecurity(
+  async (_request: NextRequest, context: { params: Record<string, string>; userId: string }) => {
     try {
       const { id } = context.params;
       // In production, fetch from database and check permissions
@@ -44,9 +45,7 @@ export const GET = createAuthenticatedEndpoint({
         },
         memberCount: 25,
       };
-      return NextResponse.json(organization;
-  }
-});
+      return NextResponse.json(organization);
     } catch (_error) {
       return serverError("Failed to fetch organization");
     }
@@ -58,14 +57,11 @@ export const GET = createAuthenticatedEndpoint({
  * PATCH /api/organizations/[id]
  * Update organization details
  */
-export const PATCH = createAuthenticatedEndpoint({
-  handler: async ({ request, input, context, params }) => {
-    async (request: NextRequest, context: { params: Record<string, string>; userId: string }) => {
+export const PATCH = withSecurity(
+  async (request: NextRequest, context: { params: Record<string, string>; userId: string }) => {
     try {
       const { id } = context.params;
-      const parsed = await parseJson(request, UpdateOrgSchema;
-  }
-});
+      const parsed = await parseJson(request, UpdateOrgSchema);
       if (!parsed.success) {
         return badRequest("Validation failed", parsed.details);
       }
@@ -88,15 +84,12 @@ export const PATCH = createAuthenticatedEndpoint({
  * DELETE /api/organizations/[id]
  * Delete an organization (admin only)
  */
-export const DELETE = createAuthenticatedEndpoint({
-  handler: async ({ request, input, context, params }) => {
-    async (_request: NextRequest, context: { params: Record<string, string>; userId: string }) => {
+export const DELETE = withSecurity(
+  async (_request: NextRequest, context: { params: Record<string, string>; userId: string }) => {
     try {
       const { id } = context.params;
       // In production, check if user is admin and delete from database
-      return NextResponse.json({ message: "Organization deleted successfully", id };
-  }
-});
+      return NextResponse.json({ message: "Organization deleted successfully", id });
     } catch {
       return serverError("Failed to delete organization");
     }

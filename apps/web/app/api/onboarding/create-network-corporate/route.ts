@@ -2,6 +2,8 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
+import { withSecurity, type AuthenticatedRequest } from "../../_shared/middleware";
+
 // Schema for corporate network creation
 const CreateNetworkCorporateSchema = z.object({
   corporateName: z.string(),
@@ -20,7 +22,6 @@ const CreateNetworkCorporateSchema = z.object({
 import { logEvent } from "@/src/lib/eventLog";
 import { adminDb as importedAdminDb } from "@/src/lib/firebase.server";
 import { markOnboardingComplete } from "@/src/lib/userOnboarding";
-import { createAuthenticatedEndpoint } from "@fresh-schedules/api-framework";
 
 async function createNetworkCorporateHandlerImpl(
   req: AuthenticatedRequest & {
@@ -249,12 +250,9 @@ async function createNetworkCorporateHandlerImpl(
   }
 }
 
-export const POST = createAuthenticatedEndpoint({
-  handler: async ({ request, input, context, params }) => {
-    async (req: AuthenticatedRequest, _ctx: unknown) => {
-    return createNetworkCorporateHandlerImpl(req, importedAdminDb;
-  }
-});
+export const POST = withSecurity(
+  async (req: AuthenticatedRequest, _ctx: unknown) => {
+    return createNetworkCorporateHandlerImpl(req, importedAdminDb);
   },
   {
     requireAuth: true,
