@@ -66,6 +66,7 @@ export function createMockAuthContext(overrides: Partial<AuthContext> = {}): Aut
     userId: "test-user-123",
     email: "test@example.com",
     emailVerified: true,
+    customClaims: {},
     ...overrides,
   };
 }
@@ -223,6 +224,6 @@ export const testUsers = {
 };
 
 export const testOrgs = {
-  acme: createMockOrgContext({ orgId: "org-acme", role: "owner" }),
+  acme: createMockOrgContext({ orgId: "org-acme", role: "org_owner" }),
   beta: createMockOrgContext({ orgId: "org-beta", role: "admin" }),
 };
