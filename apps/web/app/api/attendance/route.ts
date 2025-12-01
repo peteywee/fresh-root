@@ -64,11 +64,11 @@ export const GET = createAuthenticatedEndpoint({
 
 /**
  * POST /api/attendance
- * Create a new attendance record (requires scheduler+ role)
+ * Create a new attendance record (requires manager+ role)
  */
 export const POST = createAuthenticatedEndpoint({
   org: "required",
-  roles: ["scheduler"],
+  roles: ["manager"],
   input: CreateAttendanceRecordSchema,
   rateLimit: { maxRequests: 100, windowMs: 60_000 },
   handler: async ({ input, context }) => {

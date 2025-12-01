@@ -10,9 +10,12 @@
  * - Consistent limits across all ONB flows
  */
 
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-import type { AuthenticatedRequest } from "../../_shared/middleware";
+// Type for authenticated request with user info (replacing old middleware type)
+interface AuthenticatedRequest extends NextRequest {
+  user?: { uid: string; customClaims?: Record<string, unknown> };
+}
 
 const MAX_REQUESTS_PER_WINDOW = 5;
 const WINDOW_MS = 60000; // 1 minute
@@ -54,17 +57,9 @@ export function checkRateLimit(uid: string): {
 }
 
 export function withRateLimit(
-  handler: (
-    req: AuthenticatedRequest & {
-      user?: { uid: string; customClaims?: Record<string, unknown> };
-    },
-  ) => Promise<NextResponse>,
+  handler: (req: AuthenticatedRequest) => Promise<NextResponse>,
 ) {
-  return async (
-    req: AuthenticatedRequest & {
-      user?: { uid: string; customClaims?: Record<string, unknown> };
-    },
-  ) => {
+  return async (req: AuthenticatedRequest) => {
     const uid = req.user?.uid;
     if (!uid) {
       return NextResponse.json({ error: "not_authenticated" }, { status: 401 });

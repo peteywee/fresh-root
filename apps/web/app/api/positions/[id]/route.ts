@@ -2,144 +2,61 @@
 export const dynamic = "force-dynamic";
 
 import { PositionSchema } from "@fresh-schedules/types";
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
+import { createAuthenticatedEndpoint } from "@fresh-schedules/api-framework";
 
-import { requireOrgMembership, requireRole } from "../../../../src/lib/api/authorization";
-import { csrfProtection } from "../../../../src/lib/api/csrf";
-import { checkRateLimit, RateLimits } from "../../../../src/lib/api/rate-limit";
-import { sanitizeObject } from "../../../../src/lib/api/sanitize";
-import { serverError } from "../../_shared/validation";
-
-/**
- * GET /api/positions/[id]
- * Get position details (requires staff+ role)
- */
-export const GET = requireOrgMembership(async (request: NextRequest, context: any) => {
-  // Apply rate limiting
-  const rateLimitResult = await checkRateLimit(request, RateLimits.api);
-  if (!rateLimitResult.allowed) {
-    return NextResponse.json(
-      { error: "Rate limit exceeded" },
-      {
-        status: 429,
-        headers: {
-          "Retry-After": String(Math.ceil((rateLimitResult.resetAt - Date.now()) / 1000)),
-        },
-      },
-    );
-  }
-
-  const params = context.params;
-  try {
-    const { id } = params;
-
-    // In production, fetch from Firestore and verify orgId matches
-    const position = {
-      id,
-      orgId: context.orgId,
-      title: "Server",
-      description: "Front of house server position",
-      hourlyRate: 15.0,
-      color: "#2196F3",
-      isActive: true,
-      createdAt: new Date().toISOString(),
-      createdBy: "user-123",
-    };
-
-    return NextResponse.json(position);
-  } catch {
-    return serverError("Failed to fetch position");
-  }
+export const GET = createAuthenticatedEndpoint({
+  org: "required",
+  rateLimit: { maxRequests: 100, windowMs: 60_000 },
+  handler: async ({ params, context }) => {
+    try {
+      const { id } = params;
+      const orgId = context.org!.orgId;
+      const position = {
+        id,
+        orgId,
+        title: "Server",
+        description: "Front of house server position",
+        hourlyRate: 15.0,
+        color: "#2196F3",
+        isActive: true,
+        createdAt: new Date().toISOString(),
+        createdBy: "user-123",
+      };
+      return NextResponse.json(position, { status: 200 });
+    } catch {
+      return NextResponse.json({ error: "Failed to fetch position" }, { status: 500 });
+    }
+  },
 });
 
-/**
- * PATCH /api/positions/[id]
- * Update position details (requires manager+ role)
- */
-export const PATCH = csrfProtection()(
-  requireOrgMembership(
-    requireRole("manager")(async (request: NextRequest, context: any) => {
-      // Apply rate limiting
-      const rateLimitResult = await checkRateLimit(request, RateLimits.api);
-      if (!rateLimitResult.allowed) {
-        return NextResponse.json(
-          { error: "Rate limit exceeded" },
-          {
-            status: 429,
-            headers: {
-              "Retry-After": String(Math.ceil((rateLimitResult.resetAt - Date.now()) / 1000)),
-            },
-          },
-        );
-      }
+export const PATCH = createAuthenticatedEndpoint({
+  org: "required",
+  roles: ["manager"],
+  input: PositionSchema,
+  rateLimit: { maxRequests: 100, windowMs: 60_000 },
+  handler: async ({ input, params, context }) => {
+    try {
+      const { id } = params;
+      const orgId = context.org!.orgId;
+      const updatedPosition = { id, orgId, title: "Server", ...input, updatedAt: new Date().toISOString() };
+      return NextResponse.json(updatedPosition, { status: 200 });
+    } catch {
+      return NextResponse.json({ error: "Failed to update position" }, { status: 500 });
+    }
+  },
+});
 
-      const params = context.params;
-      try {
-        const { id } = params;
-        const body = await request.json();
-        const sanitized = sanitizeObject(body);
-
-        // Validate with Zod
-        const validationResult = PositionSchema.safeParse(sanitized);
-        if (!validationResult.success) {
-          return NextResponse.json(
-            { error: "Invalid position data", details: validationResult.error.errors },
-            { status: 400 },
-          );
-        }
-
-        const data = validationResult.data;
-
-        // In production, update in Firestore after verifying orgId matches
-        const updatedPosition = {
-          id,
-          orgId: context.orgId,
-          title: "Server",
-          ...data,
-          updatedAt: new Date().toISOString(),
-        };
-
-        return NextResponse.json(updatedPosition);
-      } catch {
-        return serverError("Failed to update position");
-      }
-    }),
-  ),
-);
-
-/**
- * DELETE /api/positions/[id]
- * Delete a position (requires admin+ role, soft delete - set isActive to false)
- */
-export const DELETE = csrfProtection()(
-  requireOrgMembership(
-    requireRole("admin")(async (request: NextRequest, context: any) => {
-      // Apply rate limiting
-      const rateLimitResult = await checkRateLimit(request, RateLimits.api);
-      if (!rateLimitResult.allowed) {
-        return NextResponse.json(
-          { error: "Rate limit exceeded" },
-          {
-            status: 429,
-            headers: {
-              "Retry-After": String(Math.ceil((rateLimitResult.resetAt - Date.now()) / 1000)),
-            },
-          },
-        );
-      }
-
-      const params = context.params;
-      try {
-        const { id } = params;
-
-        // In production, soft delete by setting isActive = false after verifying orgId
-        return NextResponse.json({
-          message: "Position deleted successfully",
-          id,
-        });
-      } catch {
-        return serverError("Failed to delete position");
-      }
-    }),
-  ),
-);
+export const DELETE = createAuthenticatedEndpoint({
+  org: "required",
+  roles: ["admin"],
+  rateLimit: { maxRequests: 100, windowMs: 60_000 },
+  handler: async ({ params }) => {
+    try {
+      const { id } = params;
+      return NextResponse.json({ message: "Position deleted successfully", id }, { status: 200 });
+    } catch {
+      return NextResponse.json({ error: "Failed to delete position" }, { status: 500 });
+    }
+  },
+});

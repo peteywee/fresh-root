@@ -1,7 +1,6 @@
 // [P0][METRICS][API] Prometheus metrics endpoint
 import { NextResponse } from "next/server";
-
-import { withSecurity } from "../_shared/middleware";
+import { createPublicEndpoint } from "@fresh-schedules/api-framework";
 
 /**
  * Metrics endpoint exposing Prometheus-compatible metrics.
@@ -103,14 +102,16 @@ function formatPrometheusMetrics(): string {
   return lines.join("\n") + "\n";
 }
 
-export const GET = withSecurity(async () => {
-  // Return metrics in Prometheus text format
-  const metricsText = formatPrometheusMetrics();
+export const GET = createPublicEndpoint({
+  handler: async () => {
+    // Return metrics in Prometheus text format
+    const metricsText = formatPrometheusMetrics();
 
-  return new NextResponse(metricsText, {
-    status: 200,
-    headers: {
-      "Content-Type": "text/plain; version=0.0.4; charset=utf-8",
-    },
-  });
+    return new NextResponse(metricsText, {
+      status: 200,
+      headers: {
+        "Content-Type": "text/plain; version=0.0.4; charset=utf-8",
+      },
+    });
+  },
 });

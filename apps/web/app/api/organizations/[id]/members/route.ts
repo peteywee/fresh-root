@@ -1,173 +1,114 @@
 // [P0][ORGS][API] Organization members list endpoint
 import { CreateMembershipSchema, UpdateMembershipSchema } from "@fresh-schedules/types";
 import { NextResponse } from "next/server";
+import { createAuthenticatedEndpoint } from "@fresh-schedules/api-framework";
 
-import { requireOrgMembership, requireRole } from "../../../../../src/lib/api/authorization";
-import { withSecurity } from "../../../_shared/middleware";
-import { parseJson, badRequest, ok, serverError } from "../../../_shared/validation";
-
-// Rate limiting via withSecurity options
-
-/**
- * Helper to get roles from custom claims
- */
-// Helper left for potential future enhancements
 function getUserRolesFallback(): string[] {
   return ["staff"];
 }
 
-/**
- * GET /api/organizations/[id]/members
- * List all members of an organization
- */
-export const GET = withSecurity(
-  requireOrgMembership(async (request, context) => {
+export const GET = createAuthenticatedEndpoint({
+  org: "required",
+  rateLimit: { maxRequests: 100, windowMs: 60_000 },
+  handler: async ({ context }) => {
     try {
-      const orgId = context.orgId;
-      const members = [
-        {
-          id: `${context.userId}_${orgId}`,
-          uid: context.userId,
-          orgId,
-          roles: getUserRolesFallback(),
-          status: "active",
-          joinedAt: Date.now() - 30 * 24 * 60 * 60 * 1000,
-          createdAt: Date.now() - 30 * 24 * 60 * 60 * 1000,
-          updatedAt: Date.now(),
-        },
-      ];
-      return ok({ members, total: members.length });
+      const orgId = context.org!.orgId;
+      const userId = context.auth!.userId;
+      const members = [{
+        id: `${userId}_${orgId}`,
+        uid: userId,
+        orgId,
+        roles: getUserRolesFallback(),
+        status: "active",
+        joinedAt: Date.now() - 30 * 24 * 60 * 60 * 1000,
+        createdAt: Date.now() - 30 * 24 * 60 * 60 * 1000,
+        updatedAt: Date.now(),
+      }];
+      return NextResponse.json({ members, total: members.length }, { status: 200 });
     } catch (error) {
       console.error("Failed to fetch members:", error);
-      return serverError("Failed to fetch members");
+      return NextResponse.json({ error: "Failed to fetch members" }, { status: 500 });
     }
-  }),
-  { requireAuth: true, maxRequests: 100, windowMs: 60_000 },
-);
+  },
+});
 
-/**
- * POST /api/organizations/[id]/members
- * Add a new member to an organization (managers only)
- */
-export const POST = withSecurity(
-  requireOrgMembership(
-    requireRole("manager")(async (request, context) => {
-      try {
-        const orgId = context.orgId;
-        const parsed = await parseJson(request, CreateMembershipSchema);
-        if (!parsed.success) {
-          return NextResponse.json(
-            {
-              error: {
-                code: "VALIDATION_ERROR",
-                message: "Invalid membership data",
-                details: parsed.details,
-              },
-            },
-            { status: 422 },
-          );
-        }
-        const data = parsed.data;
-        if (data.orgId !== orgId) {
-          return badRequest("Organization ID mismatch");
-        }
-        const now = Date.now();
-        const newMember = {
-          id: `${data.uid}_${orgId}`,
-          uid: data.uid,
-          orgId,
-          roles: data.roles,
-          status: data.status || "invited",
-          invitedBy: context.userId,
-          invitedAt: now,
-          joinedAt: now,
-          createdAt: now,
-          updatedAt: now,
-        };
-        return NextResponse.json(newMember, { status: 201 });
-      } catch (error) {
-        console.error("Failed to add member:", error);
-        return serverError("Failed to add member");
+export const POST = createAuthenticatedEndpoint({
+  org: "required",
+  roles: ["manager"],
+  input: CreateMembershipSchema,
+  rateLimit: { maxRequests: 100, windowMs: 60_000 },
+  handler: async ({ input, context }) => {
+    try {
+      const orgId = context.org!.orgId;
+      const userId = context.auth!.userId;
+      const data = input;
+      if (data.orgId !== orgId) {
+        return NextResponse.json({ error: "Organization ID mismatch" }, { status: 400 });
       }
-    }),
-  ),
-  { requireAuth: true, maxRequests: 100, windowMs: 60_000 },
-);
+      const now = Date.now();
+      const newMember = {
+        id: `${data.uid}_${orgId}`,
+        uid: data.uid,
+        orgId,
+        roles: data.roles,
+        status: data.status || "invited",
+        invitedBy: userId,
+        invitedAt: now,
+        joinedAt: now,
+        createdAt: now,
+        updatedAt: now,
+      };
+      return NextResponse.json(newMember, { status: 201 });
+    } catch (error) {
+      console.error("Failed to add member:", error);
+      return NextResponse.json({ error: "Failed to add member" }, { status: 500 });
+    }
+  },
+});
 
-/**
- * PATCH /api/organizations/[id]/members/[memberId]
- * Update a member's roles or status (managers only)
- *
- * Note: This should be implemented as a separate route at:
- * /api/organizations/[id]/members/[memberId]/route.ts
- *
- * For now, we can handle basic updates here via query param
- */
-export const PATCH = withSecurity(
-  requireOrgMembership(
-    requireRole("manager")(async (request, context) => {
-      try {
-        const orgId = context.orgId;
-        const { searchParams } = new URL(request.url);
-        const memberId = searchParams.get("memberId");
-        if (!memberId) {
-          return badRequest("Member ID required");
-        }
-        const parsed = await parseJson(request, UpdateMembershipSchema);
-        if (!parsed.success) {
-          return NextResponse.json(
-            {
-              error: {
-                code: "VALIDATION_ERROR",
-                message: "Invalid membership update data",
-                details: parsed.details,
-              },
-            },
-            { status: 422 },
-          );
-        }
-        const data = parsed.data; // validated via schema
-        const updatedMember = {
-          id: memberId,
-          orgId,
-          ...data,
-          updatedAt: Date.now(),
-        };
-        return ok(updatedMember);
-      } catch (error) {
-        console.error("Failed to update member:", error);
-        return serverError("Failed to update member");
+export const PATCH = createAuthenticatedEndpoint({
+  org: "required",
+  roles: ["manager"],
+  input: UpdateMembershipSchema,
+  rateLimit: { maxRequests: 100, windowMs: 60_000 },
+  handler: async ({ request, input, context }) => {
+    try {
+      const orgId = context.org!.orgId;
+      const { searchParams } = new URL(request.url);
+      const memberId = searchParams.get("memberId");
+      if (!memberId) {
+        return NextResponse.json({ error: "Member ID required" }, { status: 400 });
       }
-    }),
-  ),
-  { requireAuth: true, maxRequests: 100, windowMs: 60_000 },
-);
+      const data = input;
+      const updatedMember = { id: memberId, orgId, ...data, updatedAt: Date.now() };
+      return NextResponse.json(updatedMember, { status: 200 });
+    } catch (error) {
+      console.error("Failed to update member:", error);
+      return NextResponse.json({ error: "Failed to update member" }, { status: 500 });
+    }
+  },
+});
 
-/**
- * DELETE /api/organizations/[id]/members/[memberId]
- * Remove a member from an organization (managers only)
- */
-export const DELETE = withSecurity(
-  requireOrgMembership(
-    requireRole("manager")(async (request, context) => {
-      try {
-        const orgId = context.orgId;
-        const { searchParams } = new URL(request.url);
-        const memberId = searchParams.get("memberId");
-        if (!memberId) {
-          return badRequest("Member ID required");
-        }
-        // Prevent self-removal
-        if (memberId === `${context.userId}_${orgId}`) {
-          return badRequest("Cannot remove yourself from the organization");
-        }
-        // In production, soft delete or update status in Firestore
-        return ok({ message: "Member removed successfully", memberId });
-      } catch (error) {
-        console.error("Failed to remove member:", error);
-        return serverError("Failed to remove member");
+export const DELETE = createAuthenticatedEndpoint({
+  org: "required",
+  roles: ["manager"],
+  rateLimit: { maxRequests: 100, windowMs: 60_000 },
+  handler: async ({ request, context }) => {
+    try {
+      const orgId = context.org!.orgId;
+      const userId = context.auth!.userId;
+      const { searchParams } = new URL(request.url);
+      const memberId = searchParams.get("memberId");
+      if (!memberId) {
+        return NextResponse.json({ error: "Member ID required" }, { status: 400 });
       }
-    }),
-  ),
-  { requireAuth: true, maxRequests: 100, windowMs: 60_000 },
-);
+      if (memberId === `${userId}_${orgId}`) {
+        return NextResponse.json({ error: "Cannot remove yourself from the organization" }, { status: 400 });
+      }
+      return NextResponse.json({ message: "Member removed successfully", memberId }, { status: 200 });
+    } catch (error) {
+      console.error("Failed to remove member:", error);
+      return NextResponse.json({ error: "Failed to remove member" }, { status: 500 });
+    }
+  },
+});

@@ -1,131 +1,82 @@
 // [P0][SCHEDULE][API] Schedules list endpoint
-
 import { CreateScheduleSchema } from "@fresh-schedules/types";
 import { Timestamp } from "firebase-admin/firestore";
-import { NextRequest } from "next/server";
-
-import { requireOrgMembership, requireRole } from "../../../src/lib/api";
-import { withSecurity } from "../_shared/middleware";
-import { badRequest, ok, parseJson, serverError } from "../_shared/validation";
+import { NextResponse } from "next/server";
+import { createAuthenticatedEndpoint } from "@fresh-schedules/api-framework";
 
 import { adminDb } from "@/src/lib/firebase.server";
-
-type Role = "org_owner" | "admin" | "manager" | "scheduler" | "corporate" | "staff";
-
-type SchedulesContext = {
-  params: Record<string, string>;
-  userId: string;
-  orgId: string;
-};
-
-type SchedulesMutationContext = SchedulesContext & { roles: Role[] };
-
-const LIST_SECURITY_OPTIONS = { requireAuth: true, maxRequests: 100, windowMs: 60_000 } as const;
-const MUTATION_SECURITY_OPTIONS = { requireAuth: true, maxRequests: 50, windowMs: 60_000 } as const;
 
 const parsePositiveInt = (value: string | null, fallback: number) => {
   const parsed = Number.parseInt(value ?? "", 10);
   return Number.isFinite(parsed) && parsed >= 0 ? parsed : fallback;
 };
 
-const getPagination = (request: NextRequest) => {
-  const { searchParams } = new URL(request.url);
-  return {
-    limit: parsePositiveInt(searchParams.get("limit"), 20),
-    offset: parsePositiveInt(searchParams.get("offset"), 0),
-  };
-};
+export const GET = createAuthenticatedEndpoint({
+  org: "required",
+  rateLimit: { maxRequests: 100, windowMs: 60_000 },
+  handler: async ({ request, context }) => {
+    const { searchParams } = new URL(request.url);
+    const limit = parsePositiveInt(searchParams.get("limit"), 20);
+    const offset = parsePositiveInt(searchParams.get("offset"), 0);
+    const orgId = context.org!.orgId;
 
-const getAdminDbOrError = () => {
-  if (!adminDb) {
-    return { error: serverError("Admin DB not initialized") } as const;
-  }
-  return { db: adminDb } as const;
-};
+    if (!adminDb) {
+      return NextResponse.json({ error: "Admin DB not initialized" }, { status: 500 });
+    }
 
-const listSchedules = async (request: NextRequest, context: SchedulesContext) => {
-  const pagination = getPagination(request);
-  const { db, error } = getAdminDbOrError();
-  if (error) {
-    return error;
-  }
+    try {
+      const snapshot = await adminDb
+        .collection(`organizations/${orgId}/schedules`)
+        .orderBy("createdAt", "desc")
+        .limit(limit)
+        .offset(offset)
+        .get();
 
-  try {
-    const snapshot = await db
-      .collection(`organizations/${context.orgId}/schedules`)
-      .orderBy("createdAt", "desc")
-      .limit(pagination.limit)
-      .offset(pagination.offset)
-      .get();
+      const schedules = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
 
-    const schedules = snapshot.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    }));
+      return NextResponse.json({ data: schedules, limit, offset }, { status: 200 });
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "Unexpected error";
+      return NextResponse.json({ error: message }, { status: 500 });
+    }
+  },
+});
 
-    return ok({ data: schedules, ...pagination });
-  } catch (err: unknown) {
-    const message = err instanceof Error ? err.message : "Unexpected error";
-    return serverError(message);
-  }
-};
+export const POST = createAuthenticatedEndpoint({
+  org: "required",
+  roles: ["manager"],
+  input: CreateScheduleSchema,
+  rateLimit: { maxRequests: 50, windowMs: 60_000 },
+  handler: async ({ input, context }) => {
+    const orgId = context.org!.orgId;
+    const userId = context.auth!.userId;
 
-const createSchedule = async (request: NextRequest, context: SchedulesMutationContext) => {
-  const parsed = await parseJson(request, CreateScheduleSchema);
-  if (!parsed.success) {
-    return badRequest("Invalid payload", parsed.details);
-  }
+    if (!adminDb) {
+      return NextResponse.json({ error: "Admin DB not initialized" }, { status: 500 });
+    }
 
-  const { db, error } = getAdminDbOrError();
-  if (error) {
-    return error;
-  }
+    try {
+      const { name, startDate, endDate } = input;
+      const scheduleRef = adminDb.collection(`organizations/${orgId}/schedules`).doc();
+      const now = Timestamp.now();
 
-  try {
-    const { name, startDate, endDate } = parsed.data;
-    const scheduleRef = db.collection(`organizations/${context.orgId}/schedules`).doc();
-    const now = Timestamp.now();
+      const schedule = {
+        id: scheduleRef.id,
+        name,
+        startDate: Timestamp.fromDate(new Date(startDate)),
+        endDate: Timestamp.fromDate(new Date(endDate)),
+        state: "draft",
+        createdAt: now,
+        updatedAt: now,
+        createdBy: userId,
+      };
 
-    const schedule = {
-      id: scheduleRef.id,
-      name,
-      startDate: Timestamp.fromDate(new Date(startDate)),
-      endDate: Timestamp.fromDate(new Date(endDate)),
-      state: "draft",
-      createdAt: now,
-      updatedAt: now,
-      createdBy: context.userId,
-    };
+      await scheduleRef.set(schedule);
 
-    await scheduleRef.set(schedule);
-
-    return ok({ success: true, schedule });
-  } catch (err: unknown) {
-    const message = err instanceof Error ? err.message : "Unexpected error";
-    return serverError(message);
-  }
-};
-
-/**
- * GET /api/schedules
- * List schedules for an organization
- */
-export const GET = withSecurity(
-  requireOrgMembership((request: NextRequest, context: SchedulesContext) =>
-    listSchedules(request, context),
-  ),
-  LIST_SECURITY_OPTIONS,
-);
-
-/**
- * POST /api/schedules
- * Create a new schedule (requires scheduler+ role)
- */
-export const POST = withSecurity(
-  requireOrgMembership(
-    requireRole("scheduler")((request: NextRequest, context: SchedulesMutationContext) =>
-      createSchedule(request, context),
-    ),
-  ),
-  MUTATION_SECURITY_OPTIONS,
-);
+      return NextResponse.json({ success: true, schedule }, { status: 201 });
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "Unexpected error";
+      return NextResponse.json({ error: message }, { status: 500 });
+    }
+  },
+});

@@ -1,97 +1,71 @@
 // [P0][SHIFT][API] Shift management endpoint
+import { NextResponse } from "next/server";
+import { z } from "zod";
+import { createAuthenticatedEndpoint } from "@fresh-schedules/api-framework";
 
-import { NextRequest, NextResponse } from "next/server";
+const UpdateShiftSchema = z.object({
+  startTime: z.string().optional(),
+  endTime: z.string().optional(),
+  userId: z.string().optional(),
+  positionId: z.string().optional(),
+  status: z.enum(["draft", "published", "confirmed", "cancelled"]).optional(),
+  notes: z.string().optional(),
+  breakMinutes: z.number().optional(),
+});
 
-import { requireOrgMembership, requireRole } from "../../../../src/lib/api";
-import { sanitizeObject } from "../../../../src/lib/api/sanitize";
-import { withSecurity } from "../../_shared/middleware";
-import { badRequest, serverError, UpdateShiftSchema } from "../../_shared/validation";
+export const GET = createAuthenticatedEndpoint({
+  org: "required",
+  rateLimit: { maxRequests: 100, windowMs: 60_000 },
+  handler: async ({ params }) => {
+    try {
+      const { id } = params;
+      const shift = {
+        id,
+        scheduleId: "sched-1",
+        positionId: "pos-1",
+        userId: "user-123",
+        startTime: "2025-01-15T09:00:00Z",
+        endTime: "2025-01-15T17:00:00Z",
+        status: "published",
+        breakMinutes: 30,
+        createdAt: new Date().toISOString(),
+      };
+      return NextResponse.json(shift, { status: 200 });
+    } catch {
+      return NextResponse.json({ error: "Failed to fetch shift" }, { status: 500 });
+    }
+  },
+});
 
-// Rate limiting via withSecurity options
-
-export const GET = withSecurity(
-  requireOrgMembership(
-    async (
-      request: NextRequest,
-      context: { params: Record<string, string>; userId: string; orgId: string },
-    ) => {
-      try {
-        const { id } = context.params;
-        const shift = {
-          id,
-          scheduleId: "sched-1",
-          positionId: "pos-1",
-          userId: "user-123",
-          startTime: "2025-01-15T09:00:00Z",
-          endTime: "2025-01-15T17:00:00Z",
-          status: "published",
-          breakMinutes: 30,
-          createdAt: new Date().toISOString(),
-        };
-        return NextResponse.json(shift);
-      } catch {
-        return serverError("Failed to fetch shift");
+export const PATCH = createAuthenticatedEndpoint({
+  org: "required",
+  roles: ["manager"],
+  input: UpdateShiftSchema,
+  rateLimit: { maxRequests: 100, windowMs: 60_000 },
+  handler: async ({ input, params }) => {
+    try {
+      const { id } = params;
+      const updated = { id, ...input, updatedAt: new Date().toISOString() };
+      return NextResponse.json(updated, { status: 200 });
+    } catch (error) {
+      if (error instanceof Error && error.name === "ZodError") {
+        return NextResponse.json({ error: "Invalid shift update" }, { status: 400 });
       }
-    },
-  ),
-  { requireAuth: true, maxRequests: 100, windowMs: 60_000 },
-);
+      return NextResponse.json({ error: "Failed to update shift" }, { status: 500 });
+    }
+  },
+});
 
-export const PATCH = withSecurity(
-  requireOrgMembership(
-    requireRole("scheduler")(
-      async (
-        request: NextRequest,
-        context: {
-          params: Record<string, string>;
-          userId: string;
-          orgId: string;
-          roles: ("org_owner" | "admin" | "manager" | "scheduler" | "corporate" | "staff")[];
-        },
-      ) => {
-        try {
-          const { id } = context.params;
-          const body = await request.json();
-          const validated = UpdateShiftSchema.parse(body);
-          const sanitized = sanitizeObject(validated);
-          const updated = {
-            id,
-            ...sanitized,
-            updatedAt: new Date().toISOString(),
-          };
-          return NextResponse.json(updated);
-        } catch (error) {
-          if (error instanceof Error && error.name === "ZodError") {
-            return badRequest("Invalid shift update");
-          }
-          return serverError("Failed to update shift");
-        }
-      },
-    ),
-  ),
-  { requireAuth: true, maxRequests: 100, windowMs: 60_000 },
-);
-
-export const DELETE = withSecurity(
-  requireOrgMembership(
-    requireRole("admin")(
-      async (
-        request: NextRequest,
-        context: {
-          params: Record<string, string>;
-          userId: string;
-          orgId: string;
-          roles: ("org_owner" | "admin" | "manager" | "scheduler" | "corporate" | "staff")[];
-        },
-      ) => {
-        try {
-          const { id } = context.params;
-          return NextResponse.json({ message: "Shift deleted successfully", id });
-        } catch {
-          return serverError("Failed to delete shift");
-        }
-      },
-    ),
-  ),
-  { requireAuth: true, maxRequests: 100, windowMs: 60_000 },
-);
+export const DELETE = createAuthenticatedEndpoint({
+  org: "required",
+  roles: ["admin"],
+  rateLimit: { maxRequests: 100, windowMs: 60_000 },
+  handler: async ({ params }) => {
+    try {
+      const { id } = params;
+      return NextResponse.json({ message: "Shift deleted successfully", id }, { status: 200 });
+    } catch {
+      return NextResponse.json({ error: "Failed to delete shift" }, { status: 500 });
+    }
+  },
+});

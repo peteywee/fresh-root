@@ -1,10 +1,7 @@
 // [P0][CORE][API] Item management endpoint
-import { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import { z } from "zod";
-
-import { withSecurity } from "../_shared/middleware";
-import { parseJson, badRequest, serverError } from "../_shared/validation";
+import { createAuthenticatedEndpoint } from "@fresh-schedules/api-framework";
 
 /**
  * A simple example endpoint to demonstrate:
@@ -17,44 +14,36 @@ const CreateItemInput = z.object({
   name: z.string().min(1, "name is required"),
 });
 
-// Rate limiting via withSecurity options
-
-export const POST = withSecurity(
-  async (request: NextRequest, context: { params: Record<string, string>; userId: string }) => {
+export const POST = createAuthenticatedEndpoint({
+  input: CreateItemInput,
+  rateLimit: { maxRequests: 100, windowMs: 60_000 },
+  handler: async ({ input, context }) => {
     try {
-      const parsed = await parseJson(request, CreateItemInput);
-      if (!parsed.success) {
-        return badRequest("Validation failed", parsed.details);
-      }
-      const { name } = parsed.data;
-      // Normally you'd write to Firestore here. We'll simulate a created item.
+      const { name } = input;
       const item = {
         id: crypto.randomUUID(),
         name,
         createdAt: Date.now(),
-        createdBy: context.userId,
+        createdBy: context.auth?.userId,
       };
       return NextResponse.json(item, { status: 201 });
     } catch (err) {
-      // Log the error for debugging; return a generic message to the client
       console.error("POST /api/items error:", err);
-      return serverError("Unexpected error");
+      return NextResponse.json({ error: "Unexpected error" }, { status: 500 });
     }
   },
-  { requireAuth: true, maxRequests: 100, windowMs: 60_000 },
-);
+});
 
-// Optional: GET returns a static list (safe demo)
-export const GET = withSecurity(
-  async (request: NextRequest, context: { params: Record<string, string>; userId: string }) => {
+export const GET = createAuthenticatedEndpoint({
+  rateLimit: { maxRequests: 100, windowMs: 60_000 },
+  handler: async ({ context }) => {
     return NextResponse.json([
       {
         id: "demo-1",
         name: "Sample",
         createdAt: 0,
-        userId: context.userId,
+        userId: context.auth?.userId,
       },
-    ]);
+    ], { status: 200 });
   },
-  { requireAuth: true, maxRequests: 100, windowMs: 60_000 },
-);
+});
