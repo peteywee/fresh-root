@@ -46,10 +46,10 @@ export const GET = createOrgEndpoint({
  */
 export const POST = createOrgEndpoint({
   roles: ["manager"],
-  handler: async ({ request, context, params }) => {
+  input: CreateShiftSchema,
+  handler: async ({ input, context, params }) => {
     try {
-      const body = await request.json();
-      const validated = CreateShiftSchema.parse(body);
+      const validated = input;
       
       const shift = {
         id: `shift-${Date.now()}`,

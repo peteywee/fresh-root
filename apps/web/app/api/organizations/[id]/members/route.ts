@@ -7,9 +7,15 @@ import { createOrgEndpoint } from "@fresh-schedules/api-framework";
 import { badRequest, ok, serverError } from "../../../_shared/validation";
 
 const AddMemberSchema = z.object({
-  email: z.string().email(),
-  role: z.enum(["member", "manager", "admin"]),
+  email: z.string().email("Invalid email address"),
+  role: z.enum(["member", "manager", "admin"]).describe("Member role in organization"),
 });
+
+// TEST COVERAGE NOTE: AddMemberSchema validation tests should verify:
+// - email field validates format and is required
+// - role field restricts to valid enum values  
+// - error messages returned for missing/invalid fields
+// See @fresh-schedules/api-framework/src/testing.ts for test utilities
 
 /**
  * GET /api/organizations/[id]/members

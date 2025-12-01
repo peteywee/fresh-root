@@ -62,7 +62,7 @@ export const POST = createAuthenticatedEndpoint({
               details: parsed.details,
             },
           },
-          { status: 400 }
+          { status: 422 },
         );
       }
 

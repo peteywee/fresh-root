@@ -1,5 +1,7 @@
 // [P0][SHIFTS][DETAIL][API] Shift detail endpoint
 
+import { UpdateShiftSchema } from "@fresh-schedules/types";
+
 import { createOrgEndpoint } from "@fresh-schedules/api-framework";
 import { badRequest, ok, serverError } from "../../_shared/validation";
 
@@ -31,10 +33,10 @@ export const GET = createOrgEndpoint({
  */
 export const PATCH = createOrgEndpoint({
   roles: ["manager"],
-  handler: async ({ request, context, params }) => {
+  input: UpdateShiftSchema,
+  handler: async ({ input, context, params }) => {
     try {
-      const body = await request.json();
-      const { name, startTime, endTime } = body;
+      const { name, startTime, endTime } = input;
       const updated = {
         id: params.id,
         name,
