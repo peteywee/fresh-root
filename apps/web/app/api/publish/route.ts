@@ -5,8 +5,7 @@ import { z } from "zod";
 
 import { requireOrgMembership, requireRole } from "../../../src/lib/api/authorization";
 import { adminDb, adminSdk } from "../../../src/lib/firebase.server";
-import { withSecurity } from "../_shared/middleware";
-import { parseJson, badRequest, serverError, ok } from "../_shared/validation";
+import { createOrgEndpoint } from "@fresh-schedules/api-framework";
 
 const PublishSchema = z.object({
   scheduleId: z.string().min(1, "scheduleId is required"),
@@ -18,10 +17,9 @@ const PublishSchema = z.object({
  * POST /api/publish
  * Publish a schedule (requires manager+ role)
  */
-export const POST = withSecurity(
-  requireOrgMembership(
-    requireRole("manager")(
-      async (
+export const POST = createOrgEndpoint({
+  handler: async ({ request, input, context, params }) => {
+    async (
         req: NextRequest,
         context: {
           params: Record<string, string>;
@@ -31,7 +29,9 @@ export const POST = withSecurity(
         },
       ) => {
         try {
-          const parsed = await parseJson(req, PublishSchema);
+          const parsed = await parseJson(req, PublishSchema;
+  }
+});
           if (!parsed.success) {
             return badRequest("Invalid payload", parsed.details);
           }

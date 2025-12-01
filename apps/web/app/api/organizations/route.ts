@@ -4,8 +4,7 @@ import { CreateOrganizationSchema } from "@fresh-schedules/types";
 import { NextRequest, NextResponse } from "next/server";
 
 import { requireOrgMembership } from "../../../src/lib/api";
-import { withSecurity } from "../_shared/middleware";
-import { badRequest, ok, parseJson, serverError } from "../_shared/validation";
+import { createOrgEndpoint } from "@fresh-schedules/api-framework";
 
 // Rate limiting via withSecurity
 
@@ -13,11 +12,13 @@ import { badRequest, ok, parseJson, serverError } from "../_shared/validation";
  * GET /api/organizations
  * List organizations the current user belongs to
  */
-export const GET = withSecurity(
-  requireOrgMembership(
+export const GET = createOrgEndpoint({
+  handler: async ({ request, input, context, params }) => {
     async (request: NextRequest, context: { params: Record<string, string>; userId: string }) => {
       try {
-        const { searchParams } = new URL(request.url);
+        const { searchParams } = new URL(request.url;
+  }
+});
         const userId = searchParams.get("userId") || context.userId;
 
         if (!userId) {
@@ -51,10 +52,13 @@ export const GET = withSecurity(
  * POST /api/organizations
  * Create a new organization
  */
-export const POST = withSecurity(
-  async (request: NextRequest, context: { params: Record<string, string>; userId: string }) => {
+export const POST = createOrgEndpoint({
+  handler: async ({ request, input, context, params }) => {
+    async (request: NextRequest, context: { params: Record<string, string>; userId: string }) => {
     try {
-      const parsed = await parseJson(request, CreateOrganizationSchema);
+      const parsed = await parseJson(request, CreateOrganizationSchema;
+  }
+});
       if (!parsed.success) {
         return NextResponse.json(
           {

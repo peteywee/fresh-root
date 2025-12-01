@@ -12,8 +12,7 @@ import {
 import { csrfProtection } from "../../../../../../src/lib/api/csrf";
 import { checkRateLimit, RateLimits } from "../../../../../../src/lib/api/rate-limit";
 import { sanitizeObject } from "../../../../../../src/lib/api/sanitize";
-import { withSecurity } from "../../../../_shared/middleware";
-import { badRequest, serverError } from "../../../../_shared/validation";
+import { createOrgEndpoint } from "@fresh-schedules/api-framework";
 
 type MemberContextBase = {
   params: Record<string, string>;
@@ -93,9 +92,12 @@ const deleteMemberResponse = (context: MemberContextBase) => {
  * GET /api/organizations/[id]/members/[memberId]
  * Get member details (org membership required)
  */
-export const GET = withSecurity(
-  requireOrgMembership(async (request: NextRequest, context: MemberContextBase) => {
-    const limited = await enforceRateLimit(request);
+export const GET = createOrgEndpoint({
+  handler: async ({ request, input, context, params }) => {
+    async (request: NextRequest, context: MemberContextBase) => {
+    const limited = await enforceRateLimit(request;
+  }
+});
     if (limited) {
       return limited;
     }

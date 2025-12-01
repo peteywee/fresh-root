@@ -4,8 +4,7 @@ import { CreateJoinTokenSchema } from "@fresh-schedules/types";
 import { NextRequest, NextResponse } from "next/server";
 
 import { requireOrgMembership, requireRole } from "../../../src/lib/api";
-import { withSecurity } from "../_shared/middleware";
-import { parseJson, badRequest, serverError, ok } from "../_shared/validation";
+import { createOrgEndpoint } from "@fresh-schedules/api-framework";
 
 // Rate limiting is handled via withSecurity options
 
@@ -25,14 +24,16 @@ function generateSecureToken(): string {
  * GET /api/join-tokens
  * List join tokens for an organization
  */
-export const GET = withSecurity(
-  requireOrgMembership(
+export const GET = createOrgEndpoint({
+  handler: async ({ request, input, context, params }) => {
     async (
       request: NextRequest,
       context: { params: Record<string, string>; userId: string; orgId: string },
     ) => {
       try {
-        const { searchParams } = new URL(request.url);
+        const { searchParams } = new URL(request.url;
+  }
+});
         const orgId = searchParams.get("orgId") || context.orgId;
 
         if (!orgId) {
@@ -68,10 +69,9 @@ export const GET = withSecurity(
  * POST /api/join-tokens
  * Create a new join token (requires manager+ role)
  */
-export const POST = withSecurity(
-  requireOrgMembership(
-    requireRole("manager")(
-      async (
+export const POST = createOrgEndpoint({
+  handler: async ({ request, input, context, params }) => {
+    async (
         request: NextRequest,
         context: {
           params: Record<string, string>;
@@ -81,7 +81,9 @@ export const POST = withSecurity(
         },
       ) => {
         try {
-          const parsed = await parseJson(request, CreateJoinTokenSchema);
+          const parsed = await parseJson(request, CreateJoinTokenSchema;
+  }
+});
           if (!parsed.success) {
             return badRequest("Validation failed", parsed.details);
           }

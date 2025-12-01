@@ -2,9 +2,7 @@
 import { GoogleAuth } from "google-auth-library";
 import { NextRequest } from "next/server";
 import { z } from "zod";
-
-import { withSecurity } from "../../_shared/middleware";
-import { badRequest, serverError, ok } from "../../_shared/validation";
+import { createPublicEndpoint } from "@fresh-schedules/api-framework";
 
 // Schema for backup request
 const BackupSchema = z.object({
@@ -46,12 +44,16 @@ async function exportFirestore(projectId: string, bucket: string, collections?: 
   return res.json();
 }
 
-export const POST = withSecurity(async (req: NextRequest) => {
+export const POST = createPublicEndpoint({
+  handler: async ({ request, input, context, params }) => {
+    async (req: NextRequest) => {
   try {
     // Validate request body
     let body: unknown;
     try {
-      body = await req.json();
+      body = await req.json(;
+  }
+});
     } catch {
       body = {};
     }

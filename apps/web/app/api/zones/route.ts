@@ -4,8 +4,7 @@ import { CreateZoneSchema } from "@fresh-schedules/types";
 import { NextRequest, NextResponse } from "next/server";
 
 import { requireOrgMembership, requireRole } from "../../../src/lib/api";
-import { withSecurity } from "../_shared/middleware";
-import { parseJson, badRequest, serverError, ok } from "../_shared/validation";
+import { createOrgEndpoint } from "@fresh-schedules/api-framework";
 
 // Rate limiting is handled via withSecurity options
 
@@ -13,14 +12,16 @@ import { parseJson, badRequest, serverError, ok } from "../_shared/validation";
  * GET /api/zones
  * List zones for an organization or venue
  */
-export const GET = withSecurity(
-  requireOrgMembership(
+export const GET = createOrgEndpoint({
+  handler: async ({ request, input, context, params }) => {
     async (
       request: NextRequest,
       context: { params: Record<string, string>; userId: string; orgId: string },
     ) => {
       try {
-        const { searchParams } = new URL(request.url);
+        const { searchParams } = new URL(request.url;
+  }
+});
         const orgId = searchParams.get("orgId") || context.orgId;
         const venueId = searchParams.get("venueId");
 
@@ -62,10 +63,9 @@ export const GET = withSecurity(
  * POST /api/zones
  * Create a new zone (requires manager+ role)
  */
-export const POST = withSecurity(
-  requireOrgMembership(
-    requireRole("manager")(
-      async (
+export const POST = createOrgEndpoint({
+  handler: async ({ request, input, context, params }) => {
+    async (
         request: NextRequest,
         context: {
           params: Record<string, string>;
@@ -75,7 +75,9 @@ export const POST = withSecurity(
         },
       ) => {
         try {
-          const parsed = await parseJson(request, CreateZoneSchema);
+          const parsed = await parseJson(request, CreateZoneSchema;
+  }
+});
           if (!parsed.success) {
             return badRequest("Validation failed", parsed.details);
           }

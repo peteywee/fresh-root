@@ -2,9 +2,7 @@
 import { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import { z } from "zod";
-
-import { withSecurity } from "../_shared/middleware";
-import { parseJson, badRequest, serverError } from "../_shared/validation";
+import { createAuthenticatedEndpoint } from "@fresh-schedules/api-framework";
 
 /**
  * A simple example endpoint to demonstrate:
@@ -19,10 +17,13 @@ const CreateItemInput = z.object({
 
 // Rate limiting via withSecurity options
 
-export const POST = withSecurity(
-  async (request: NextRequest, context: { params: Record<string, string>; userId: string }) => {
+export const POST = createAuthenticatedEndpoint({
+  handler: async ({ request, input, context, params }) => {
+    async (request: NextRequest, context: { params: Record<string, string>; userId: string }) => {
     try {
-      const parsed = await parseJson(request, CreateItemInput);
+      const parsed = await parseJson(request, CreateItemInput;
+  }
+});
       if (!parsed.success) {
         return badRequest("Validation failed", parsed.details);
       }
@@ -45,8 +46,9 @@ export const POST = withSecurity(
 );
 
 // Optional: GET returns a static list (safe demo)
-export const GET = withSecurity(
-  async (request: NextRequest, context: { params: Record<string, string>; userId: string }) => {
+export const GET = createAuthenticatedEndpoint({
+  handler: async ({ request, input, context, params }) => {
+    async (request: NextRequest, context: { params: Record<string, string>; userId: string }) => {
     return NextResponse.json([
       {
         id: "demo-1",
@@ -54,7 +56,9 @@ export const GET = withSecurity(
         createdAt: 0,
         userId: context.userId,
       },
-    ]);
+    ];
+  }
+});
   },
   { requireAuth: true, maxRequests: 100, windowMs: 60_000 },
 );
