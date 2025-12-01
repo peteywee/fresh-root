@@ -5,7 +5,6 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 
 import { withRequestLogging } from "../../_shared/logging";
-import { withSecurity, type AuthenticatedRequest } from "../../_shared/middleware";
 
 // Schema for org network creation
 const CreateNetworkOrgSchema = z.object({
@@ -18,6 +17,7 @@ const CreateNetworkOrgSchema = z.object({
 import { logEvent } from "@/src/lib/eventLog";
 import { adminDb as importedAdminDb } from "@/src/lib/firebase.server";
 import { markOnboardingComplete } from "@/src/lib/userOnboarding";
+import { createAuthenticatedEndpoint } from "@fresh-schedules/api-framework";
 
 /**
  * Inner handler exported for tests. Accepts an optional injected adminDb for testability.
@@ -315,4 +315,8 @@ async function apiRoute(req: NextRequest, _ctx: Record<string, unknown>) {
   return createNetworkOrgHandlerImpl(req as AuthenticatedRequest);
 }
 
-export const POST = withRequestLogging(withSecurity(apiRoute, { requireAuth: true }));
+export const POST = createAuthenticatedEndpoint({
+  handler: async ({ request, input, context, params }) => {
+    return apiRoute(request as NextRequest, context);
+  }
+});

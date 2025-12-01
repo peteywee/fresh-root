@@ -3,13 +3,12 @@ import { Firestore } from "firebase-admin/firestore";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
-import { withSecurity, type AuthenticatedRequest } from "../../_shared/middleware";
-
 // Schema for bootstrap request (accept any payload)
 const BootstrapSchema = z.object({}).passthrough().optional();
 
 import { adminDb as importedAdminDb } from "@/src/lib/firebase.server";
 import { ensureUserProfile } from "@/src/lib/userProfile";
+import { createAuthenticatedEndpoint } from "@fresh-schedules/api-framework";
 
 async function bootstrapSessionHandlerImpl(
   req: AuthenticatedRequest & {
@@ -117,12 +116,16 @@ async function bootstrapSessionHandlerImpl(
   }
 }
 
-export const GET = withSecurity(
-  async (req: AuthenticatedRequest) => bootstrapSessionHandlerImpl(req, importedAdminDb),
-  { requireAuth: true },
-);
+export const GET = createAuthenticatedEndpoint({
+  handler: async ({ request, input, context, params }) => {
+    async (req: AuthenticatedRequest) => bootstrapSessionHandlerImpl(req, importedAdminDb),
+  { requireAuth: true };
+  }
+});
 
-export const POST = withSecurity(
-  async (req: AuthenticatedRequest) => bootstrapSessionHandlerImpl(req, importedAdminDb),
-  { requireAuth: true },
-);
+export const POST = createAuthenticatedEndpoint({
+  handler: async ({ request, input, context, params }) => {
+    async (req: AuthenticatedRequest) => bootstrapSessionHandlerImpl(req, importedAdminDb),
+  { requireAuth: true };
+  }
+});

@@ -3,8 +3,7 @@ import { CreateMembershipSchema, UpdateMembershipSchema } from "@fresh-schedules
 import { NextResponse } from "next/server";
 
 import { requireOrgMembership, requireRole } from "../../../../../src/lib/api/authorization";
-import { withSecurity } from "../../../_shared/middleware";
-import { parseJson, badRequest, ok, serverError } from "../../../_shared/validation";
+import { createOrgEndpoint } from "@fresh-schedules/api-framework";
 
 // Rate limiting via withSecurity options
 
@@ -20,8 +19,9 @@ function getUserRolesFallback(): string[] {
  * GET /api/organizations/[id]/members
  * List all members of an organization
  */
-export const GET = withSecurity(
-  requireOrgMembership(async (request, context) => {
+export const GET = createOrgEndpoint({
+  handler: async ({ request, input, context, params }) => {
+    async (request, context) => {
     try {
       const orgId = context.orgId;
       const members = [
@@ -36,7 +36,9 @@ export const GET = withSecurity(
           updatedAt: Date.now(),
         },
       ];
-      return ok({ members, total: members.length });
+      return ok({ members, total: members.length };
+  }
+});
     } catch (error) {
       console.error("Failed to fetch members:", error);
       return serverError("Failed to fetch members");
@@ -49,12 +51,14 @@ export const GET = withSecurity(
  * POST /api/organizations/[id]/members
  * Add a new member to an organization (managers only)
  */
-export const POST = withSecurity(
-  requireOrgMembership(
-    requireRole("manager")(async (request, context) => {
+export const POST = createOrgEndpoint({
+  handler: async ({ request, input, context, params }) => {
+    async (request, context) => {
       try {
         const orgId = context.orgId;
-        const parsed = await parseJson(request, CreateMembershipSchema);
+        const parsed = await parseJson(request, CreateMembershipSchema;
+  }
+});
         if (!parsed.success) {
           return NextResponse.json(
             {
@@ -103,12 +107,14 @@ export const POST = withSecurity(
  *
  * For now, we can handle basic updates here via query param
  */
-export const PATCH = withSecurity(
-  requireOrgMembership(
-    requireRole("manager")(async (request, context) => {
+export const PATCH = createOrgEndpoint({
+  handler: async ({ request, input, context, params }) => {
+    async (request, context) => {
       try {
         const orgId = context.orgId;
-        const { searchParams } = new URL(request.url);
+        const { searchParams } = new URL(request.url;
+  }
+});
         const memberId = searchParams.get("memberId");
         if (!memberId) {
           return badRequest("Member ID required");
@@ -147,12 +153,14 @@ export const PATCH = withSecurity(
  * DELETE /api/organizations/[id]/members/[memberId]
  * Remove a member from an organization (managers only)
  */
-export const DELETE = withSecurity(
-  requireOrgMembership(
-    requireRole("manager")(async (request, context) => {
+export const DELETE = createOrgEndpoint({
+  handler: async ({ request, input, context, params }) => {
+    async (request, context) => {
       try {
         const orgId = context.orgId;
-        const { searchParams } = new URL(request.url);
+        const { searchParams } = new URL(request.url;
+  }
+});
         const memberId = searchParams.get("memberId");
         if (!memberId) {
           return badRequest("Member ID required");
