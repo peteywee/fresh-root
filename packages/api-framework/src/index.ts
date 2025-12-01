@@ -35,12 +35,11 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { ZodSchema, ZodError } from "zod";
+import { OrgRole } from "@fresh-schedules/types";
 
 // =============================================================================
 // TYPES
 // =============================================================================
-
-export type OrgRole = "owner" | "admin" | "manager" | "staff" | "viewer";
 
 export interface AuthContext {
   userId: string;
@@ -182,6 +181,7 @@ async function verifyAuth(request: NextRequest): Promise<AuthContext | null> {
       userId: decodedToken.uid,
       email: decodedToken.email || "",
       emailVerified: decodedToken.email_verified || false,
+      customClaims: decodedToken.customClaims || {},
     };
   } catch {
     return null;
@@ -234,11 +234,12 @@ async function loadOrgContext(userId: string, request: NextRequest): Promise<Org
  */
 function hasRequiredRole(userRole: OrgRole, requiredRoles: OrgRole[]): boolean {
   const roleHierarchy: Record<OrgRole, number> = {
-    owner: 100,
+    org_owner: 100,
     admin: 80,
     manager: 60,
+    scheduler: 50,
+    corporate: 45,
     staff: 40,
-    viewer: 20,
   };
 
   const userLevel = roleHierarchy[userRole];
@@ -538,7 +539,7 @@ export function createAdminEndpoint<TInput = unknown, TOutput = unknown>(
     ...config,
     auth: "required",
     org: "required",
-    roles: ["admin", "owner"],
+    roles: ["admin", "org_owner"],
   });
 }
 
@@ -548,6 +549,7 @@ export function createAdminEndpoint<TInput = unknown, TOutput = unknown>(
 
 export { z } from "zod";
 export type { ZodSchema } from "zod";
+export type { OrgRole };
 
 // =============================================================================
 // REDIS & RATE LIMITING

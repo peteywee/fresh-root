@@ -1,6 +1,6 @@
 {
   "name": "fresh-root",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "private": true,
   "scripts": {
     "dev": "turbo run dev",
@@ -16,7 +16,8 @@
     "deploy:functions": "firebase deploy --only functions",
     "deploy:hosting": "firebase deploy --only hosting",
     "// --- SDK ---": "",
-    "build:sdk": "pnpm --filter \"@fresh-schedules/api-framework\" build"
+    "build:sdk": "pnpm --filter \"@fresh-schedules/api-framework\" build",
+    "release:series-a": "node ./scripts/release-series-a.mjs"
   },
   "engines": {
     "node": ">=20.10.0",

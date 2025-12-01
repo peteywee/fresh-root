@@ -1,4 +1,6 @@
 #!/usr/bin/env node
+// [P0][SECURITY][CODE] Migrate Routes
+// Tags: P0, SECURITY, CODE
 /**
  * Route Migration Service Worker
  * Automates the conversion of withSecurity pattern to SDK factories

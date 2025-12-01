@@ -31,7 +31,7 @@ export const POST = createAuthenticatedEndpoint({
         id: crypto.randomUUID(),
         name,
         createdAt: Date.now(),
-        createdBy: context.userId,
+        createdBy: context.auth!.userId,
       };
       return NextResponse.json(item, { status: 201 });
     } catch (err) {
@@ -50,7 +50,7 @@ export const GET = createAuthenticatedEndpoint({
         id: "demo-1",
         name: "Sample",
         createdAt: 0,
-        userId: context.userId,
+        userId: context.auth!.userId,
       },
     ]);
   },

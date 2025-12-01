@@ -8,16 +8,7 @@ import { createAuthenticatedEndpoint, createOrgEndpoint } from "@fresh-schedules
 import { badRequest, ok, parseJson, serverError } from "../_shared/validation";
 
 import { adminDb } from "@/src/lib/firebase.server";
-
-type Role = "org_owner" | "admin" | "manager" | "scheduler" | "corporate" | "staff";
-
-type SchedulesContext = {
-  params: Record<string, string>;
-  userId: string;
-  orgId: string;
-};
-
-type SchedulesMutationContext = SchedulesContext & { roles: Role[] };
+import { RequestContext } from "@fresh-schedules/api-framework";
 
 const LIST_SECURITY_OPTIONS = { requireAuth: true, maxRequests: 100, windowMs: 60_000 } as const;
 const MUTATION_SECURITY_OPTIONS = { requireAuth: true, maxRequests: 50, windowMs: 60_000 } as const;
@@ -42,7 +33,7 @@ const getAdminDbOrError = () => {
   return { db: adminDb } as const;
 };
 
-const listSchedules = async (request: NextRequest, context: SchedulesContext) => {
+const listSchedules = async (request: NextRequest, context: RequestContext) => {
   const pagination = getPagination(request);
   const { db, error } = getAdminDbOrError();
   if (error) {
@@ -51,7 +42,7 @@ const listSchedules = async (request: NextRequest, context: SchedulesContext) =>
 
   try {
     const snapshot = await db
-      .collection(`organizations/${context.orgId}/schedules`)
+      .collection(`organizations/${context.org!.orgId}/schedules`)
       .orderBy("createdAt", "desc")
       .limit(pagination.limit)
       .offset(pagination.offset)
@@ -69,7 +60,7 @@ const listSchedules = async (request: NextRequest, context: SchedulesContext) =>
   }
 };
 
-const createSchedule = async (request: NextRequest, context: SchedulesMutationContext) => {
+const createSchedule = async (request: NextRequest, context: RequestContext) => {
   const parsed = await parseJson(request, CreateScheduleSchema);
   if (!parsed.success) {
     return badRequest("Invalid payload", parsed.details);
@@ -82,7 +73,7 @@ const createSchedule = async (request: NextRequest, context: SchedulesMutationCo
 
   try {
     const { name, startDate, endDate } = parsed.data;
-    const scheduleRef = db.collection(`organizations/${context.orgId}/schedules`).doc();
+    const scheduleRef = db.collection(`organizations/${context.org!.orgId}/schedules`).doc();
     const now = Timestamp.now();
 
     const schedule = {
@@ -93,7 +84,7 @@ const createSchedule = async (request: NextRequest, context: SchedulesMutationCo
       state: "draft",
       createdAt: now,
       updatedAt: now,
-      createdBy: context.userId,
+      createdBy: context.auth!.userId,
     };
 
     await scheduleRef.set(schedule);
@@ -111,8 +102,8 @@ const createSchedule = async (request: NextRequest, context: SchedulesMutationCo
  */
 export const GET = createOrgEndpoint({
   rateLimit: { maxRequests: 100, windowMs: 60_000 },
-  handler: async ({ request, input, context, params }) => {
-    return listSchedules(request as NextRequest, context as SchedulesContext);
+  handler: async ({ request, context }) => {
+    return listSchedules(request, context);
   }
 });
 
@@ -120,11 +111,10 @@ export const GET = createOrgEndpoint({
  * POST /api/schedules
  * Create a new schedule (requires scheduler+ role)
  */
-export const POST = createAuthenticatedEndpoint({
-  org: 'required',
+export const POST = createOrgEndpoint({
   roles: ['scheduler'],
   rateLimit: { maxRequests: 50, windowMs: 60_000 },
-  handler: async ({ request, input, context, params }) => {
-    return createSchedule(request as NextRequest, context as SchedulesMutationContext);
+  handler: async ({ request, context }) => {
+    return createSchedule(request, context);
   }
 });

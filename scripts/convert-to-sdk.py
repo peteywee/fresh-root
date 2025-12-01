@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# [P2][APP][CODE] Convert To Sdk
+# Tags: P2, APP, CODE
 """
 Convert remaining routes from withSecurity to SDK factories.
 Handles complex nested patterns properly.
