@@ -13,7 +13,7 @@
     "test:ui": "vitest --ui",
     "test:coverage": "vitest --coverage",
     "bench": "vitest bench --config vitest.bench.config.ts",
-    "lint": "eslint_d . --ext .ts,.tsx --cache",
+    "lint": "eslint . --ext .ts,.tsx --cache",
     "lint:daemon": "eslint_d start || true",
     "lint:stop": "eslint_d stop || true"
   },
