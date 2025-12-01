@@ -47,7 +47,7 @@ export function createMockRequest(url: string, options: MockRequestOptions = {})
     init.body = JSON.stringify(body);
   }
 
-  const request = new NextRequest(urlObj.toString(), init);
+  const request = new NextRequest(urlObj.toString(), init as RequestInit & { signal?: AbortSignal });
 
   // Mock cookies
   Object.entries(cookies).forEach(([name, value]) => {
@@ -208,39 +208,8 @@ export function createMockFirestore() {
 // RESPONSE HELPERS
 // =============================================================================
 
-export async function parseJsonResponse<T>(response: Response): Promise<T> {
-  const text = await response.text();
-  try {
-    return JSON.parse(text);
-  } catch {
-    throw new Error(`Failed to parse response: ${text}`);
-  }
-}
-
-export async function expectSuccess<T>(
-  response: Response,
-  expectedData?: Partial<T>,
-): Promise<{ data: T; meta: { requestId: string } }> {
-  expect(response.status).toBe(200);
-  const json = await parseJsonResponse<{ data: T; meta: { requestId: string } }>(response);
-  if (expectedData) {
-    expect(json.data).toMatchObject(expectedData);
-  }
-  return json;
-}
-
-export async function expectError(
-  response: Response,
-  expectedCode: string,
-  expectedStatus: number,
-): Promise<{ error: { code: string; message: string; requestId: string } }> {
-  expect(response.status).toBe(expectedStatus);
-  const json = await parseJsonResponse<{
-    error: { code: string; message: string; requestId: string };
-  }>(response);
-  expect(json.error.code).toBe(expectedCode);
-  return json;
-}
+// Moved to testing-helpers.ts to avoid importing vitest/expect in non-test code
+export { expectSuccess, expectError, parseJsonResponse } from "./testing-helpers";
 
 // =============================================================================
 // TEST FIXTURES
