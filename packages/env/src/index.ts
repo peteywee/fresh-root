@@ -21,6 +21,7 @@ export const EnvSchema = z.object({
   // --- Firebase core (minimal; extend as needed to match your real config) ---
   // NOTE: Made optional to allow builds in CI environments without secrets.
   // Runtime validation in production ensures these are present before app starts.
+  // See validateEnvironmentAtStartup() and ProdEnvSchema for production requirements.
   NEXT_PUBLIC_FIREBASE_API_KEY: z.string().min(1).optional(),
   // NOTE: FIREBASE_PROJECT_ID is validated only in production runtime,
   // not at build time. This allows builds to succeed without secrets.
@@ -34,6 +35,22 @@ export const EnvSchema = z.object({
   // Optional. When set, OTEL tracing will be active.
   OTEL_EXPORTER_OTLP_ENDPOINT: z.string().url().optional(),
 });
+
+/**
+ * Runtime check for Firebase configuration.
+ * Call this at app startup to ensure Firebase keys are available.
+ * In development, this may be a no-op if using emulators.
+ * 
+ * @throws Error if Firebase API key is missing in production
+ */
+export function requireFirebaseConfig(env: Env): void {
+  if (env.NODE_ENV === "production" && !env.NEXT_PUBLIC_FIREBASE_API_KEY) {
+    throw new Error(
+      "NEXT_PUBLIC_FIREBASE_API_KEY is required in production. " +
+      "Please set this environment variable before deploying."
+    );
+  }
+}
 
 /**
  * Parse and freeze process.env once at startup.
