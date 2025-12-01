@@ -3,9 +3,8 @@
 import { CreateScheduleSchema } from "@fresh-schedules/types";
 import { Timestamp } from "firebase-admin/firestore";
 import { NextRequest } from "next/server";
+import { createAuthenticatedEndpoint, createOrgEndpoint } from "@fresh-schedules/api-framework";
 
-import { requireOrgMembership, requireRole } from "../../../src/lib/api";
-import { withSecurity } from "../_shared/middleware";
 import { badRequest, ok, parseJson, serverError } from "../_shared/validation";
 
 import { adminDb } from "@/src/lib/firebase.server";
@@ -110,22 +109,22 @@ const createSchedule = async (request: NextRequest, context: SchedulesMutationCo
  * GET /api/schedules
  * List schedules for an organization
  */
-export const GET = withSecurity(
-  requireOrgMembership((request: NextRequest, context: SchedulesContext) =>
-    listSchedules(request, context),
-  ),
-  LIST_SECURITY_OPTIONS,
-);
+export const GET = createOrgEndpoint({
+  rateLimit: { maxRequests: 100, windowMs: 60_000 },
+  handler: async ({ request, input, context, params }) => {
+    return listSchedules(request as NextRequest, context as SchedulesContext);
+  }
+});
 
 /**
  * POST /api/schedules
  * Create a new schedule (requires scheduler+ role)
  */
-export const POST = withSecurity(
-  requireOrgMembership(
-    requireRole("scheduler")((request: NextRequest, context: SchedulesMutationContext) =>
-      createSchedule(request, context),
-    ),
-  ),
-  MUTATION_SECURITY_OPTIONS,
-);
+export const POST = createAuthenticatedEndpoint({
+  org: 'required',
+  roles: ['scheduler'],
+  rateLimit: { maxRequests: 50, windowMs: 60_000 },
+  handler: async ({ request, input, context, params }) => {
+    return createSchedule(request as NextRequest, context as SchedulesMutationContext);
+  }
+});
