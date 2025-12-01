@@ -12,16 +12,15 @@ import { withSecurity } from "../_shared/middleware";
  * - Does NOT hit Firestore; use for "is the web app alive" checks
  */
 
-export const GET = withSecurity(async () => {
+export const GET = createAuthenticatedEndpoint({
+  handler: async ({ request, input, context, params }) => async () => {
   return NextResponse.json(
     {
       ok: true,
       status: "healthy",
       // You can hard-code or inject a version string later
       version: "v14-core",
-    },
-    { status: 200 },
-  );
+    }
 });
 
 // Some monitors use HEAD for cheaper checks

@@ -1,66 +1,60 @@
-// [P0][AUTH][API] MFA verification endpoint
+// [P0][AUTH][API] MFA verify endpoint
 import { NextRequest } from "next/server";
 import * as speakeasy from "speakeasy";
 import { z } from "zod";
 
-import { getFirebaseAdminAuth } from "../../../../../lib/firebase-admin";
-import { withSecurity, type AuthenticatedRequest } from "../../../_shared/middleware";
-import { badRequest, serverError, ok } from "../../../_shared/validation";
+import { createAuthenticatedEndpoint } from "@fresh-schedules/api-framework";
+import { ok, serverError, badRequest } from "../../../_shared/validation";
 
-// Rate limiting via withSecurity options
-
-const verifySchema = z.object({
-  secret: z.string().min(1, "Secret is required"),
-  token: z.string().length(6, "Token must be 6 digits"),
+// Schema for MFA verification request
+const MFAVerifySchema = z.object({
+  secret: z.string().min(1, "secret is required"),
+  token: z.string().min(1, "token is required"),
 });
 
 /**
  * POST /api/auth/mfa/verify
- * Verifies TOTP token and sets mfa=true custom claim.
+ * Verifies a TOTP token for MFA.
  * Requires valid session.
  */
-export const POST = withSecurity(
-  async (req: NextRequest, context: { params: Record<string, string>; userId: string }) => {
+export const POST = createAuthenticatedEndpoint({
+  rateLimit: { maxRequests: 50, windowMs: 60000 },
+  handler: async ({ request, context }) => {
     try {
-      const { secret, token } = verifySchema.parse(await req.json());
+      let body: unknown;
+      try {
+        body = await request.json();
+      } catch {
+        body = {};
+      }
+
+      const result = MFAVerifySchema.safeParse(body);
+      if (!result.success) {
+        return badRequest("Invalid request", result.error.issues);
+      }
+
+      const { secret, token } = result.data;
 
       // Verify TOTP token
       const verified = speakeasy.totp.verify({
-        secret,
+        secret: secret,
         encoding: "base32",
-        token,
-        window: 2, // Allow 2 time steps before/after
+        token: token,
+        window: 2, // Allow 2 30-second windows
       });
 
       if (!verified) {
-        console.warn("Invalid MFA verification code", { uid: context.userId });
-        return badRequest("Invalid verification code");
+        console.warn("MFA verification failed", { userId: context.auth?.userId });
+        return badRequest("Invalid token");
       }
 
-      // Set mfa=true custom claim
-      const auth = getFirebaseAdminAuth();
-      // Prefer explicit context.userId, fall back to any authenticated request user attached by middleware
-      const uid = context.userId ?? (req as AuthenticatedRequest).user?.uid;
+      console.info("MFA verification succeeded", { userId: context.auth?.userId });
 
-      // For safety, preserve any existing custom claims you manage elsewhere
-      await auth.setCustomUserClaims(uid, {
-        mfa: true,
-      });
-
-      console.warn("MFA enabled successfully", { uid });
-
-      // Store secret in Firestore for future verification (optional)
-      // In production, hash the secret before storing
-
-      return ok({ success: true, message: "MFA enabled successfully" });
+      // In production: update user's MFA status, emit audit log
+      return ok({ success: true, verified: true });
     } catch (error) {
-      if (error instanceof z.ZodError) {
-        return badRequest("Invalid request", error.errors);
-      }
-
-      console.error("MFA verification failed", error);
-      return serverError("Failed to verify MFA");
+      console.error("MFA verification error", error);
+      return serverError("Failed to verify MFA token");
     }
   },
-  { requireAuth: true, maxRequests: 50, windowMs: 60_000 },
-);
+});

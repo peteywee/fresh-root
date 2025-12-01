@@ -315,9 +315,4 @@ async function apiRoute(req: NextRequest, _ctx: Record<string, unknown>) {
   return createNetworkOrgHandlerImpl(req as AuthenticatedRequest);
 }
 
-export const POST = createAuthenticatedEndpoint({
-  handler: async ({ request, input, context, params }) => {
-    console.info('[REQUEST]', { method: request.method, path: new URL(request.url).pathname, requestId: context?.requestId || 'unknown' });
-    return apiRoute(request as NextRequest, { params });
-  }
-});;
+export const POST = withRequestLogging(withSecurity(apiRoute, { requireAuth: true }));

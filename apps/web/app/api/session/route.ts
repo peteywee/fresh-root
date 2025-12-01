@@ -3,7 +3,7 @@ import { NextRequest } from "next/server";
 import { z } from "zod";
 
 import { getFirebaseAdminAuth } from "../../../lib/firebase-admin";
-import { withSecurity } from "../_shared/middleware";
+import { createPublicEndpoint } from "@fresh-schedules/api-framework";
 import { parseJson, badRequest, serverError, ok } from "../_shared/validation";
 
 // Schema for session creation
@@ -15,7 +15,8 @@ const CreateSessionSchema = z.object({
  * POST /api/session
  * Create a session cookie from a Firebase ID token
  */
-export const POST = withSecurity(async (req: NextRequest) => {
+export const POST = createPublicEndpoint({
+  handler: async ({ request }) => {
   try {
     const parsed = await parseJson(req, CreateSessionSchema);
     if (!parsed.success) {
@@ -45,13 +46,15 @@ export const POST = withSecurity(async (req: NextRequest) => {
     // Return a generic message to avoid leaking internal error details
     return serverError("Invalid token or internal error", undefined, "UNAUTHORIZED");
   }
+  },
 });
 
 /**
  * DELETE /api/session
  * Clear the session cookie (logout)
  */
-export const DELETE = withSecurity(async () => {
+export const DELETE = createPublicEndpoint({
+  handler: async () => {
   // Clear session cookie
   const response = ok({ ok: true });
   response.cookies.set("session", "", {
@@ -62,4 +65,5 @@ export const DELETE = withSecurity(async () => {
     maxAge: 0,
   });
   return response;
+  },
 });

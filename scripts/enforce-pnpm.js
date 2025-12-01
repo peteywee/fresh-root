@@ -1,4 +1,6 @@
 #!/usr/bin/env node
+// [P2][APP][CODE] Enforce Pnpm
+// Tags: P2, APP, CODE
 
 /**
  * FRESH-ROOT: pnpm-only enforcement hook

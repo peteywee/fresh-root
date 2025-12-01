@@ -4,7 +4,7 @@ import { CreateZoneSchema } from "@fresh-schedules/types";
 import { NextRequest, NextResponse } from "next/server";
 
 import { requireOrgMembership, requireRole } from "../../../src/lib/api";
-import { withSecurity } from "../_shared/middleware";
+import { createOrgEndpoint } from "@fresh-schedules/api-framework";
 import { parseJson, badRequest, serverError, ok } from "../_shared/validation";
 
 // Rate limiting is handled via withSecurity options
@@ -13,12 +13,8 @@ import { parseJson, badRequest, serverError, ok } from "../_shared/validation";
  * GET /api/zones
  * List zones for an organization or venue
  */
-export const GET = withSecurity(
-  requireOrgMembership(
-    async (
-      request: NextRequest,
-      context: { params: Record<string, string>; userId: string; orgId: string },
-    ) => {
+export const GET = createOrgEndpoint({
+  handler: async ({ request, context, params }) => {
       try {
         const { searchParams } = new URL(request.url);
         const orgId = searchParams.get("orgId") || context.orgId;
@@ -41,7 +37,7 @@ export const GET = withSecurity(
             floor: "1",
             isActive: true,
             color: "#10B981",
-            createdBy: context.userId,
+            createdBy: context.auth?.userId,
             createdAt: Date.now() - 45 * 24 * 60 * 60 * 1000,
             updatedAt: Date.now(),
           },
@@ -53,27 +49,17 @@ export const GET = withSecurity(
       } catch {
         return serverError("Failed to fetch zones");
       }
-    },
-  ),
-  { requireAuth: true, maxRequests: 100, windowMs: 60_000 },
-);
+  },
+  rateLimit: { maxRequests: 100, windowMs: 60000 },
+});
 
 /**
  * POST /api/zones
  * Create a new zone (requires manager+ role)
  */
-export const POST = withSecurity(
-  requireOrgMembership(
-    requireRole("manager")(
-      async (
-        request: NextRequest,
-        context: {
-          params: Record<string, string>;
-          userId: string;
-          orgId: string;
-          roles: ("org_owner" | "admin" | "manager" | "scheduler" | "corporate" | "staff")[];
-        },
-      ) => {
+export const POST = createOrgEndpoint({
+  roles: ["manager"],
+  handler: async ({ request, context, params }) => {
         try {
           const parsed = await parseJson(request, CreateZoneSchema);
           if (!parsed.success) {
@@ -93,7 +79,7 @@ export const POST = withSecurity(
             ...data,
             isActive: true,
             type: data.type || "other",
-            createdBy: context.userId,
+            createdBy: context.auth?.userId,
             createdAt: Date.now(),
             updatedAt: Date.now(),
           };
@@ -105,8 +91,6 @@ export const POST = withSecurity(
           }
           return serverError("Failed to create zone");
         }
-      },
-    ),
-  ),
-  { requireAuth: true, maxRequests: 100, windowMs: 60_000 },
-);
+  },
+  rateLimit: { maxRequests: 100, windowMs: 60000 },
+});
