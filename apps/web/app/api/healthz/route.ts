@@ -1,6 +1,7 @@
 // [P0][HEALTH][API] Kubernetes liveness probe endpoint
 import { NextResponse } from "next/server";
-import { createPublicEndpoint } from "@fresh-schedules/api-framework";
+
+import { withSecurity } from "../_shared/middleware";
 
 /**
  * [P0][API][HEALTH] Health Check Endpoint
@@ -11,9 +12,7 @@ import { createPublicEndpoint } from "@fresh-schedules/api-framework";
  * - Does NOT hit Firestore; use for "is the web app alive" checks
  */
 
-export const GET = createPublicEndpoint({
-  handler: async ({ request, input, context, params }) => {
-    async () => {
+export const GET = withSecurity(async () => {
   return NextResponse.json(
     {
       ok: true,
@@ -21,16 +20,11 @@ export const GET = createPublicEndpoint({
       // You can hard-code or inject a version string later
       version: "v14-core",
     },
-    { status: 200 };
-  }
-});
+    { status: 200 },
+  );
 });
 
 // Some monitors use HEAD for cheaper checks
-export const HEAD = createPublicEndpoint({
-  handler: async ({ request, input, context, params }) => {
-    async () => {
-  return NextResponse.json(null, { status: 200 };
-  }
-});
+export const HEAD = withSecurity(async () => {
+  return NextResponse.json(null, { status: 200 });
 });

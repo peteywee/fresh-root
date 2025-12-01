@@ -2,6 +2,8 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
+import { withSecurity, type AuthenticatedRequest } from "../../_shared/middleware";
+
 // Schema for join with token request
 const JoinWithTokenSchema = z.object({
   token: z.string(),
@@ -16,7 +18,6 @@ const JoinWithTokenSchema = z.object({
 import { logEvent } from "@/src/lib/eventLog";
 import { adminDb as importedAdminDb } from "@/src/lib/firebase.server";
 import { markOnboardingComplete } from "@/src/lib/userOnboarding";
-import { createAuthenticatedEndpoint } from "@fresh-schedules/api-framework";
 
 type JoinTokenDoc = {
   networkId: string;
@@ -200,12 +201,9 @@ async function joinWithTokenHandlerImpl(
   }
 }
 
-export const POST = createAuthenticatedEndpoint({
-  handler: async ({ request, input, context, params }) => {
-    async (req: AuthenticatedRequest, _ctx: unknown) => {
-    return joinWithTokenHandlerImpl(req, importedAdminDb;
-  }
-});
+export const POST = withSecurity(
+  async (req: AuthenticatedRequest, _ctx: unknown) => {
+    return joinWithTokenHandlerImpl(req, importedAdminDb);
   },
   { requireAuth: true },
 );

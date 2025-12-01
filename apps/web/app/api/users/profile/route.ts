@@ -1,7 +1,9 @@
 // [P0][CORE][API] User profile endpoint
 import { NextRequest } from "next/server";
 import { z } from "zod";
-import { createAuthenticatedEndpoint } from "@fresh-schedules/api-framework";
+
+import { withSecurity } from "../../_shared/middleware";
+import { parseJson, badRequest, ok, serverError } from "../../_shared/validation";
 
 // Rate limiting via withSecurity options
 
@@ -26,9 +28,8 @@ const UpdateProfileSchema = z.object({
  * GET /api/users/profile
  * Get the current user's profile
  */
-export const GET = createAuthenticatedEndpoint({
-  handler: async ({ request, input, context, params }) => {
-    async (request, context: { params: Record<string, string>; userId: string }) => {
+export const GET = withSecurity(
+  async (request, context: { params: Record<string, string>; userId: string }) => {
     try {
       // For now, return a mock profile based on authenticated user
       const userProfile = {
@@ -45,9 +46,7 @@ export const GET = createAuthenticatedEndpoint({
           language: "en",
         },
       };
-      return ok(userProfile;
-  }
-});
+      return ok(userProfile);
     } catch {
       return serverError("Failed to fetch user profile");
     }
@@ -59,13 +58,10 @@ export const GET = createAuthenticatedEndpoint({
  * PATCH /api/users/profile
  * Update the current user's profile
  */
-export const PATCH = createAuthenticatedEndpoint({
-  handler: async ({ request, input, context, params }) => {
-    async (request: NextRequest, context: { params: Record<string, string>; userId: string }) => {
+export const PATCH = withSecurity(
+  async (request: NextRequest, context: { params: Record<string, string>; userId: string }) => {
     try {
-      const parsed = await parseJson(request, UpdateProfileSchema;
-  }
-});
+      const parsed = await parseJson(request, UpdateProfileSchema);
       if (!parsed.success) {
         return badRequest("Validation failed", parsed.details);
       }

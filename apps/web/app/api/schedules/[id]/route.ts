@@ -4,7 +4,8 @@ import { NextRequest, NextResponse } from "next/server";
 
 import { requireOrgMembership, requireRole } from "../../../../src/lib/api/authorization";
 import { sanitizeObject } from "../../../../src/lib/api/sanitize";
-import { createOrgEndpoint } from "@fresh-schedules/api-framework";
+import { withSecurity } from "../../_shared/middleware";
+import { serverError, UpdateScheduleSchema } from "../../_shared/validation";
 
 type Role = "org_owner" | "admin" | "manager" | "scheduler" | "corporate" | "staff";
 
@@ -93,39 +94,35 @@ const deleteSchedule = async (_request: NextRequest, context: ScheduleContextWit
  * GET /api/schedules/[id]
  * Get schedule details
  */
-export const GET = createOrgEndpoint({
-  handler: async ({ request, input, context, params }) => {
-    async (request: NextRequest, context: ScheduleContext) =>
+export const GET = withSecurity(
+  requireOrgMembership(async (request: NextRequest, context: ScheduleContext) =>
     readSchedule(request, context),
   ),
-  SECURITY_OPTIONS;
-  }
-});
+  SECURITY_OPTIONS,
+);
 
 /**
  * PATCH /api/schedules/[id]
  * Update schedule details
  */
-export const PATCH = createOrgEndpoint({
-  handler: async ({ request, input, context, params }) => {
-    async (request: NextRequest, context: ScheduleContextWithRoles) =>
+export const PATCH = withSecurity(
+  requireOrgMembership(
+    requireRole("manager")(async (request: NextRequest, context: ScheduleContextWithRoles) =>
       updateSchedule(request, context),
     ),
   ),
-  SECURITY_OPTIONS;
-  }
-});
+  SECURITY_OPTIONS,
+);
 
 /**
  * DELETE /api/schedules/[id]
  * Delete a schedule (only drafts can be deleted)
  */
-export const DELETE = createOrgEndpoint({
-  handler: async ({ request, input, context, params }) => {
-    async (request: NextRequest, context: ScheduleContextWithRoles) =>
+export const DELETE = withSecurity(
+  requireOrgMembership(
+    requireRole("admin")(async (request: NextRequest, context: ScheduleContextWithRoles) =>
       deleteSchedule(request, context),
     ),
   ),
-  SECURITY_OPTIONS;
-  }
-});
+  SECURITY_OPTIONS,
+);
