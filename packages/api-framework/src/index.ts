@@ -34,7 +34,7 @@
  */
 
 import { NextRequest, NextResponse } from "next/server";
-import { z, ZodSchema, ZodError } from "zod";
+import { ZodSchema, ZodError } from "zod";
 
 // =============================================================================
 // TYPES
