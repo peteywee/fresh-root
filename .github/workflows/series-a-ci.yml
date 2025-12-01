@@ -1,0 +1,115 @@
+name: Series A CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main, dev]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # 1. THE GATEKEEPER (fast quality checks)
+  validate:
+    name: 🛡️ Quality Gate
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      # Core SDK must build first. If this fails, nothing ships.
+      - name: Build Core SDK
+        run: pnpm build:sdk
+
+      - name: Typecheck (monorepo)
+        run: pnpm typecheck
+
+      - name: Lint (strict)
+        run: pnpm lint
+
+  # 2. THE PROVING GROUND (tests)
+  test:
+    name: 🧪 Test Suite
+    needs: validate
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Firebase Tools (for emulator tests)
+        run: npm install -g firebase-tools
+
+      - name: Run tests
+        run: pnpm test
+
+  # 3. THE SHIPYARD (prod build on main)
+  build:
+    name: 🏗️ Production Build
+    needs: validate
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build Web App
+        run: pnpm --filter "@apps/web" build
+        env:
+          NEXT_PUBLIC_FIREBASE_API_KEY: "build-time-value"
+          NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN: "build-time-value"
+          NEXT_PUBLIC_FIREBASE_PROJECT_ID: "build-time-value"
+
+      - name: Build Cloud Functions
+        run: pnpm --filter "functions" build

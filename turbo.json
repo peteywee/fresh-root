@@ -1,49 +1,24 @@
 {
   "$schema": "https://turbo.build/schema.json",
-  "globalEnv": [
-    "NODE_ENV",
-    "VERCEL_ENV",
-    "CI",
-    "FIREBASE_PROJECT_ID",
-    "FIREBASE_ADMIN_CLIENT_EMAIL",
-    "FIREBASE_ADMIN_PRIVATE_KEY",
-    "FIREBASE_AUTH_EMULATOR_HOST",
-    "FIRESTORE_EMULATOR_HOST",
-    "STORAGE_EMULATOR_HOST",
-    "NEXT_PUBLIC_FIREBASE_API_KEY",
-    "NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN",
-    "NEXT_PUBLIC_FIREBASE_PROJECT_ID",
-    "NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET",
-    "NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID",
-    "NEXT_PUBLIC_FIREBASE_APP_ID",
-    "NEXT_PUBLIC_USE_EMULATORS",
-    "SESSION_SECRET",
-    "UPSTASH_REDIS_REST_URL",
-    "UPSTASH_REDIS_REST_TOKEN",
-    "REDIS_URL",
-    "PORT",
-    "LOG_LEVEL",
-    "SENTRY_DSN",
-    "SENTRY_ENVIRONMENT",
-    "OTEL_SDK_DISABLED"
-  ],
-  "tasks": {
-    "lint": {
-      "outputs": []
-    },
-    "typecheck": {
-      "outputs": []
+  "pipeline": {
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": [
+        "apps/web/.next/**",
+        "!apps/web/.next/cache/**",
+        "packages/**/dist/**",
+        "functions/lib/**"
+      ]
     },
     "test": {
-      "outputs": ["coverage/"]
+      "dependsOn": ["^build"]
     },
-    "build": {
-      "dependsOn": ["^build", "typecheck"],
-      "outputs": [".next/", "dist/", "build/"]
+    "lint": {},
+    "typecheck": {},
+    "dev": {
+      "cache": false,
+      "persistent": true
     },
-    "e2e": {
-      "dependsOn": ["build"],
-      "outputs": [".playwright/", "test-results/"]
-    }
+    "clean": {}
   }
 }
