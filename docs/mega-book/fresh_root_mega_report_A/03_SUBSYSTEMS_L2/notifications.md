@@ -1,12 +1,13 @@
 # L2 — Notifications & Communication
 
 > **Status:** Skeleton generated.  
-> This file is intended to hold the full 9-panel deep dive for this subsystem, including:  
-> - Critical findings  
-> - High/Medium/Low findings  
-> - Architectural recommendations  
-> - Examples (good, bad, legacy)  
-> - Reverse-engineered SDK surfaces (where applicable)  
+> This file is intended to hold the full 9-panel deep dive for this subsystem, including:
+>
+> - Critical findings
+> - High/Medium/Low findings
+> - Architectural recommendations
+> - Examples (good, bad, legacy)
+> - Reverse-engineered SDK surfaces (where applicable)
 
 ## 1. Role in the System
 
