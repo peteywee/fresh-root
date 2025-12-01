@@ -1,5 +1,6 @@
 // [P0][CORE][API] Template endpoint for new routes
 import { NextRequest, NextResponse } from "next/server";
+import { createPublicEndpoint } from "@fresh-schedules/api-framework";
 
 // [P1][API][CODE] Route API route handler
 // [P1][API][CODE] Route API route handler
@@ -16,33 +17,29 @@ import { NextRequest, NextResponse } from "next/server";
  * Pattern: parse → validate → authorize → app-lib → respond
  */
 
-export const GET = async () => {
-  try {
-    // const session = await requireSession(req);
-    // await requireRole(session, ["manager"]);
-    // const data = await doWork(/* args */);
-    return NextResponse.json({ ok: true });
-  } catch (err: unknown) {
-    const error = err instanceof Error ? err.message : "Server error";
-    return NextResponse.json({ ok: false, error }, { status: 500 });
-  }
-};
+export const GET = createPublicEndpoint({
+  handler: async ({ request, context }) => {
+    try {
+      const url = new URL(request.url);
+      const message = url.searchParams.get("message") ?? "Hello from SDK endpoint";
+      return NextResponse.json({ ok: true, message });
+    } catch (err: unknown) {
+      const error = err instanceof Error ? err.message : "Server error";
+      return NextResponse.json({ ok: false, error }, { status: 500 });
+    }
+  },
+});
 
-export const POST = async (_req: NextRequest) => {
-  try {
-    // const session = await requireSession(req);
-    // const body = await req.json();
-    // const parsed = SomeSchema.parse(body);
-    // const result = await doWork(parsed, session);
-    return NextResponse.json({ ok: true }, { status: 201 });
-  } catch (err: unknown) {
-    const status = err instanceof Error && err.name === "ZodError" ? 400 : 500;
-    const error = err instanceof Error ? err.message : "Server error";
-    return NextResponse.json({ ok: false, error }, { status });
-  }
-};
+export const POST = createPublicEndpoint({
+  handler: async ({ request }) => {
+    const payload = await request.json().catch(() => ({}));
+    return NextResponse.json({ ok: true, payload }, { status: 201 });
+  },
+});
 
-export const HEAD = async () => new Response(null, { status: 200 });
+export const HEAD = createPublicEndpoint({
+  handler: async () => new Response(null, { status: 200 }),
+});
 
 // Optional examples; keep thin in real handlers.
 export const DELETE = async () => NextResponse.json({ ok: true });

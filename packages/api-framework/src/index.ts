@@ -46,6 +46,7 @@ export interface AuthContext {
   userId: string;
   email: string;
   emailVerified: boolean;
+  customClaims: Record<string, unknown>;
 }
 
 export interface OrgContext {
