@@ -6,6 +6,8 @@ import {
   type DocumentReference,
   type WriteBatch,
   Timestamp,
+  doc,
+  collection,
 } from "firebase-admin/firestore";
 
 import { loadAdminFormDraft, markAdminFormDraftConsumed } from "./adminFormDrafts";
@@ -21,6 +23,57 @@ export type CreateNetworkOrgResult = {
   status: string;
 };
 
+// Type definitions for batch documents
+interface NetworkDoc {
+  id: string;
+  slug: string;
+  displayName: string;
+  legalName: string | null;
+  status: "pending_verification" | "active";
+  ownerUserId: string;
+  createdAt: Timestamp;
+  createdBy: string;
+  updatedAt: Timestamp;
+  updatedBy: string;
+}
+
+interface ComplianceDoc {
+  networkId: string;
+  adminUid: string;
+  [key: string]: unknown;
+  ipAddress?: string;
+  userAgent?: string;
+  createdAt: Timestamp;
+  createdBy: string;
+}
+
+interface OrgDoc {
+  id: string;
+  networkId: string;
+  displayName: string;
+  primaryContactUid: string;
+  createdAt: Timestamp;
+  createdBy: string;
+}
+
+interface VenueDoc {
+  id: string;
+  networkId: string;
+  name: string;
+  timeZone: string;
+  createdAt: Timestamp;
+  createdBy: string;
+}
+
+interface MembershipDoc {
+  id: string;
+  networkId: string;
+  userId: string;
+  roles: string[];
+  createdAt: Timestamp;
+  createdBy: string;
+}
+
 export async function createNetworkWithOrgAndVenue(
   adminUid: string,
   payload: CreateNetworkOrgPayload,
@@ -35,19 +88,17 @@ export async function createNetworkWithOrgAndVenue(
   if (!draft) throw new Error("admin_form_not_found");
   if (draft.userId !== adminUid) throw new Error("admin_form_ownership_mismatch");
 
-  const networkRef = root.collection("networks").doc() as DocumentReference<
-    Record<string, unknown>
-  >;
+  const networkRef = doc(collection(root, "networks")) as DocumentReference<NetworkDoc>;
   const networkId = networkRef.id;
   const now = Timestamp.now();
 
   const batch: WriteBatch = root.batch();
 
-  const networkDoc = {
+  const networkDoc: NetworkDoc = {
     id: networkId,
     slug: networkId,
     displayName: basics?.orgName ?? networkId,
-    legalName: draft.payload.data?.legalName ?? basics?.orgName ?? null,
+    legalName: (draft.payload as { data?: { legalName?: string } })?.data?.legalName ?? basics?.orgName ?? null,
     status: "pending_verification",
     ownerUserId: adminUid,
     createdAt: now,
@@ -58,10 +109,11 @@ export async function createNetworkWithOrgAndVenue(
 
   batch.set(networkRef, networkDoc);
 
-  const complianceRef = networkRef
-    .collection("compliance")
-    .doc("adminResponsibilityForm") as DocumentReference<Record<string, unknown>>;
-  const formDoc = {
+  const complianceRef = doc(
+    collection(networkRef, "compliance"),
+    "adminResponsibilityForm"
+  ) as DocumentReference<ComplianceDoc>;
+  const formDoc: ComplianceDoc = {
     networkId,
     adminUid,
     ...draft.payload,
@@ -72,52 +124,43 @@ export async function createNetworkWithOrgAndVenue(
   };
   batch.set(complianceRef, formDoc);
 
-  const orgRef = networkRef.collection("orgs").doc() as DocumentReference<Record<string, unknown>>;
+  const orgRef = doc(collection(networkRef, "orgs")) as DocumentReference<OrgDoc>;
   const orgId = orgRef.id;
-  batch.set(orgRef, {
+  const orgDoc: OrgDoc = {
     id: orgId,
     networkId,
     displayName: basics?.orgName ?? "Org",
     primaryContactUid: adminUid,
     createdAt: now,
     createdBy: adminUid,
-  });
+  };
+  batch.set(orgRef, orgDoc);
 
-  const venueRef = networkRef.collection("venues").doc() as DocumentReference<
-    Record<string, unknown>
-  >;
+  const venueRef = doc(collection(networkRef, "venues")) as DocumentReference<VenueDoc>;
   const venueId = venueRef.id;
-  batch.set(venueRef, {
+  const venueDoc: VenueDoc = {
     id: venueId,
     networkId,
     name: venue?.venueName ?? "Main Venue",
     timeZone: venue?.timeZone ?? "UTC",
     createdAt: now,
     createdBy: adminUid,
-  });
+  };
+  batch.set(venueRef, venueDoc);
 
-  const membershipRef = networkRef.collection("memberships").doc() as DocumentReference<
-    Record<string, unknown>
-  >;
-  batch.set(membershipRef, {
+  const membershipRef = doc(collection(networkRef, "memberships")) as DocumentReference<MembershipDoc>;
+  const membershipDoc: MembershipDoc = {
     id: membershipRef.id,
     networkId,
     userId: adminUid,
     roles: ["network_owner"],
     createdAt: now,
     createdBy: adminUid,
-  });
+  };
+  batch.set(membershipRef, membershipDoc);
 
   // Commit batch
-  if (typeof batch.commit === "function") {
-    await batch.commit();
-  } else {
-    // Fallback: some injected mock dbs may expose commit directly (non-batch style)
-    const maybeRoot = root as unknown as { commit?: () => Promise<unknown> };
-    if (maybeRoot.commit) {
-      await maybeRoot.commit();
-    }
-  }
+  await batch.commit();
 
   await markAdminFormDraftConsumed(formToken, injectedDb);
 
