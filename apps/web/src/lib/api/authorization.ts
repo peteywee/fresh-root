@@ -1,11 +1,26 @@
-//[P1][API][AUTH] Authorization and RBAC middleware (minimal)
+//[P1][API][AUTH] Authorization and RBAC middleware (improved with typed queries)
 // Tags: authorization, rbac, middleware, security
 
 import { getFirestore } from "firebase-admin/firestore";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
+import { queryWithType } from "@/lib/firebase/typed-wrappers";
+
 export type OrgRole = "org_owner" | "admin" | "manager" | "scheduler" | "corporate" | "staff";
+
+/**
+ * Membership document from Firestore
+ */
+export interface MembershipDoc {
+  id: string;
+  userId: string;
+  orgId: string;
+  roles: OrgRole[];
+  joinedAt: number;
+  status: "active" | "inactive";
+  [key: string]: unknown;
+}
 
 export function extractOrgId(request: NextRequest): string | null {
   const url = new URL(request.url);
@@ -89,7 +104,9 @@ export function requireRole(requiredRole: OrgRole) {
   };
 }
 
-// Pure helper: determine if any of the user's roles satisfies the required role by hierarchy
+/**
+ * Pure helper: determine if any of the user's roles satisfies the required role by hierarchy
+ */
 export function hasRequiredRole(userRoles: OrgRole[], requiredRole: OrgRole): boolean {
   const hierarchy: OrgRole[] = ["staff", "corporate", "scheduler", "manager", "admin", "org_owner"];
   const userLevel = userRoles.length ? Math.max(...userRoles.map((r) => hierarchy.indexOf(r))) : -1;
@@ -97,42 +114,82 @@ export function hasRequiredRole(userRoles: OrgRole[], requiredRole: OrgRole): bo
   return userLevel >= requiredLevel;
 }
 
-// Data access: check if a membership document exists for the user in the org
+/**
+ * Data access: check if a membership document exists for the user in the org
+ * Uses typed query wrapper for type safety
+ */
 export async function isOrgMember(userId: string, orgId: string): Promise<boolean> {
-  const db = getFirestore();
-  const snapshot = await db
-    .collection("memberships")
-    .where("userId", "==", userId)
-    .where("orgId", "==", orgId)
-    .limit(1)
-    .get();
-  return !snapshot.empty;
+  try {
+    const db = getFirestore();
+    const membershipsRef = db.collection("memberships");
+    
+    // Use typed query to fetch with proper type safety
+    const result = await queryWithType<MembershipDoc>(
+      db,
+      membershipsRef
+        .where("userId", "==", userId)
+        .where("orgId", "==", orgId)
+        .limit(1),
+    );
+    
+    return result.success && result.data.length > 0;
+  } catch (error) {
+    console.error("Error checking org membership:", error);
+    return false;
+  }
 }
 
-// Data access: retrieve user roles from the membership document
+/**
+ * Data access: retrieve user roles from the membership document
+ * Uses typed query wrapper for type safety
+ */
 export async function getUserRoles(userId: string, orgId: string): Promise<OrgRole[] | null> {
-  const db = getFirestore();
-  const snapshot = await db
-    .collection("memberships")
-    .where("userId", "==", userId)
-    .where("orgId", "==", orgId)
-    .limit(1)
-    .get();
-  if (snapshot.empty) return null;
-  const data = snapshot.docs[0].data() as { roles?: OrgRole[] };
-  return (data.roles || []) as OrgRole[];
+  try {
+    const db = getFirestore();
+    const membershipsRef = db.collection("memberships");
+    
+    // Use typed query to fetch with proper type safety
+    const result = await queryWithType<MembershipDoc>(
+      db,
+      membershipsRef
+        .where("userId", "==", userId)
+        .where("orgId", "==", orgId)
+        .limit(1),
+    );
+    
+    if (!result.success || result.data.length === 0) return null;
+    
+    const membership = result.data[0];
+    return (membership.roles || []) as OrgRole[];
+  } catch (error) {
+    console.error("Error retrieving user roles:", error);
+    return null;
+  }
 }
 
-// High-level helper: check access combining membership and role requirement
+/**
+ * High-level helper: check access combining membership and role requirement
+ * Uses typed data access functions for type safety throughout
+ */
 export async function canAccessResource(
   userId: string,
   orgId: string,
   requiredRole: OrgRole,
 ): Promise<{ allowed: boolean; roles?: OrgRole[]; reason?: string }> {
-  const member = await isOrgMember(userId, orgId);
-  if (!member) return { allowed: false, reason: "Not a member of organization" };
-  const roles = (await getUserRoles(userId, orgId)) || [];
-  const allowed = hasRequiredRole(roles, requiredRole);
-  if (!allowed) return { allowed: false, roles, reason: `Requires ${requiredRole} role or higher` };
-  return { allowed: true, roles };
+  try {
+    const member = await isOrgMember(userId, orgId);
+    if (!member) return { allowed: false, reason: "Not a member of organization" };
+    
+    const roles = (await getUserRoles(userId, orgId)) || [];
+    const allowed = hasRequiredRole(roles, requiredRole);
+    
+    if (!allowed) {
+      return { allowed: false, roles, reason: `Requires ${requiredRole} role or higher` };
+    }
+    
+    return { allowed: true, roles };
+  } catch (error) {
+    console.error("Error checking resource access:", error);
+    return { allowed: false, reason: "Internal error checking permissions" };
+  }
 }

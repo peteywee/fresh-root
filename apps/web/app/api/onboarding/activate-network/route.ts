@@ -1,15 +1,31 @@
-// [P0][ONBOARDING][API] Activate network endpoint
+// [P0][ONBOARDING][API] Activate network endpoint (with typed wrapper)
 
 import { NextResponse } from "next/server";
 import { z } from "zod";
+import { Timestamp } from "firebase-admin/firestore";
 
 import { createAuthenticatedEndpoint } from "@fresh-schedules/api-framework";
 import { ok, serverError, badRequest } from "../../_shared/validation";
 import { adminDb } from "@/src/lib/firebase.server";
+import { updateDocWithType } from "@/lib/firebase/typed-wrappers";
 
 const ActivateNetworkSchema = z.object({
   networkId: z.string().or(z.number()),
 });
+
+/**
+ * Network document from Firestore
+ */
+export interface NetworkDoc {
+  id: string;
+  name: string;
+  status: "active" | "inactive" | "pending";
+  activatedAt?: number | Timestamp;
+  createdAt: number | Timestamp;
+  updatedAt: number | Timestamp;
+  ownerId: string;
+  [key: string]: unknown;
+}
 
 /**
  * POST /api/onboarding/activate-network
@@ -30,7 +46,18 @@ export const POST = createAuthenticatedEndpoint({
 
       try {
         const networkRef = adb.collection("networks").doc(String(networkId));
-        await networkRef.update({ status: "active", activatedAt: Date.now() });
+        
+        // Use typed wrapper for safe update
+        await updateDocWithType<NetworkDoc>(
+          adb,
+          networkRef,
+          {
+            status: "active",
+            activatedAt: Timestamp.now(),
+            updatedAt: Timestamp.now(),
+          },
+        );
+        
         return ok({ ok: true, networkId, status: "active" });
       } catch (err) {
         console.error("activate-network failed", err);

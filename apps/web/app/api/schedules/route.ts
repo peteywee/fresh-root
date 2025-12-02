@@ -1,4 +1,4 @@
-// [P0][SCHEDULE][API] Schedules list endpoint
+// [P0][SCHEDULE][API] Schedules list endpoint (with improved type definitions)
 
 import { CreateScheduleSchema } from "@fresh-schedules/types";
 import { Timestamp } from "firebase-admin/firestore";
@@ -9,7 +9,7 @@ import { badRequest, ok, parseJson, serverError } from "../_shared/validation";
 
 import { adminDb } from "@/src/lib/firebase.server";
 import type { RequestContext } from "@fresh-schedules/api-framework";
-import { setDocWithType } from "@/lib/firebase/typed-wrappers";
+import { setDocWithType, queryWithType } from "@/lib/firebase/typed-wrappers";
 
 const parsePositiveInt = (value: string | null, fallback: number) => {
   const parsed = Number.parseInt(value ?? "", 10);
@@ -31,19 +31,38 @@ const getAdminDbOrError = () => {
   return { db: adminDb } as const;
 };
 
-interface ScheduleData {
+/**
+ * Schedule document type for Firestore
+ */
+export interface ScheduleDoc {
   id: string;
   orgId: string;
   name: string;
   startDate: Timestamp;
   endDate: Timestamp;
-  state: string;
+  state: "draft" | "published" | "archived";
   createdAt: Timestamp;
   updatedAt: Timestamp;
   createdBy: string;
+  publishedAt?: Timestamp;
   [key: string]: unknown;
 }
 
+/**
+ * Shift document type for Firestore
+ */
+export interface ShiftDoc {
+  id: string;
+  userId: string;
+  role: string;
+  startTs: string;
+  endTs: string;
+  createdAt: Timestamp;
+}
+
+/**
+ * List schedules for an organization with pagination and type safety
+ */
 const listSchedules = async (request: NextRequest, context: RequestContext) => {
   const pagination = getPagination(request);
   const { db, error } = getAdminDbOrError();
@@ -52,25 +71,33 @@ const listSchedules = async (request: NextRequest, context: RequestContext) => {
   }
 
   try {
-    const snapshot = await db
-      .collection(`organizations/${context.org!.orgId}/schedules`)
-      .orderBy("createdAt", "desc")
-      .limit(pagination.limit)
-      .offset(pagination.offset)
-      .get();
+    const schedulesCollection = db.collection(
+      `organizations/${context.org!.orgId}/schedules`,
+    );
 
-    const schedules = snapshot.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    }));
+    // Use typed query for better type safety
+    const result = await queryWithType<ScheduleDoc>(
+      db,
+      schedulesCollection
+        .orderBy("createdAt", "desc")
+        .limit(pagination.limit)
+        .offset(pagination.offset),
+    );
 
-    return ok({ data: schedules, ...pagination });
+    if (!result.success) {
+      return serverError("Failed to fetch schedules");
+    }
+
+    return ok({ data: result.data, ...pagination });
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : "Unexpected error";
     return serverError(message);
   }
 };
 
+/**
+ * Create a new schedule with full type safety
+ */
 const createSchedule = async (request: NextRequest, context: RequestContext) => {
   const parsed = await parseJson(request, CreateScheduleSchema);
   if (!parsed.success) {
@@ -87,7 +114,7 @@ const createSchedule = async (request: NextRequest, context: RequestContext) => 
     const scheduleRef = db.collection(`organizations/${context.org!.orgId}/schedules`).doc();
     const now = Timestamp.now();
 
-    const schedule: ScheduleData = {
+    const schedule: ScheduleDoc = {
       id: scheduleRef.id,
       orgId: context.org!.orgId,
       name,
@@ -99,7 +126,7 @@ const createSchedule = async (request: NextRequest, context: RequestContext) => 
       createdBy: context.auth!.userId,
     };
 
-    await setDocWithType<ScheduleData>(db, scheduleRef, schedule);
+    await setDocWithType<ScheduleDoc>(db, scheduleRef, schedule);
 
     return ok({ success: true, schedule });
   } catch (err: unknown) {
