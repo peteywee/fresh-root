@@ -12,6 +12,8 @@ import {
   query,
   orderBy,
   limit,
+  type Query,
+  type DocumentReference,
 } from "firebase/firestore";
 
 import { cached } from "./cache";
@@ -42,22 +44,31 @@ type ScheduleDocData = {
 
 const TAG_SCHEDULES = (orgId: string) => `schedules:${orgId}`;
 
+/**
+ * Helper to convert Firestore timestamp to ISO string
+ */
+function toISOString(dateValue: { toDate?: () => Date } | string): string {
+  if (typeof dateValue === "object" && dateValue !== null) {
+    const typed = dateValue as { toDate?: unknown };
+    if (typeof typed.toDate === "function") {
+      return (typed.toDate as () => Date)().toISOString();
+    }
+  }
+  return dateValue as string;
+}
+
 async function _fetchRecentSchedulesLite(orgId: string, max = 10): Promise<ScheduleLite[]> {
   // Ensure indexes exist: (weekStart DESC, venueId ASC) on schedules/{orgId}/{scheduleId}
   const ref = collection(db, "schedules", orgId, "schedules");
   const q = query(ref, orderBy("weekStart", "desc"), limit(max));
   const snap = await getDocs(q);
+  
   return snap.docs.map((d) => {
     const data = d.data() as ScheduleDocData;
     return {
       id: d.id,
       orgId: data.orgId,
-      weekStart:
-        typeof data.weekStart === "object" &&
-        data.weekStart !== null &&
-        typeof (data.weekStart as { toDate?: unknown }).toDate === "function"
-          ? (data.weekStart as { toDate: () => Date }).toDate().toISOString()
-          : (data.weekStart as string),
+      weekStart: toISOString(data.weekStart),
       venueId: data.venueId,
       status: data.status,
     };
@@ -74,9 +85,24 @@ export const fetchRecentSchedulesLite = (orgId: string, max = 10) =>
   })(orgId, max);
 
 export async function fetchScheduleDoc(orgId: string, scheduleId: string) {
-  const ref = doc(db, "schedules", orgId, scheduleId);
+  const ref: DocumentReference<ScheduleDocData> = doc(
+    db,
+    "schedules",
+    orgId,
+    scheduleId
+  ) as DocumentReference<ScheduleDocData>;
+  
   const s = await getDoc(ref);
-  return { id: s.id, ...(s.data() as ScheduleDocData) };
+  const data = s.data();
+  
+  if (!data) {
+    throw new Error(`Schedule not found: ${scheduleId}`);
+  }
+  
+  return { 
+    id: s.id, 
+    ...data 
+  };
 }
 
 export { TAG_SCHEDULES };
