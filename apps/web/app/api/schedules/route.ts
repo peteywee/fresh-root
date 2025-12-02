@@ -2,16 +2,14 @@
 
 import { CreateScheduleSchema } from "@fresh-schedules/types";
 import { Timestamp } from "firebase-admin/firestore";
-import { NextRequest } from "next/server";
-import { createAuthenticatedEndpoint, createOrgEndpoint } from "@fresh-schedules/api-framework";
+import { createOrgEndpoint } from "@fresh-schedules/api-framework";
+import type { NextRequest } from "next/server";
 
 import { badRequest, ok, parseJson, serverError } from "../_shared/validation";
 
 import { adminDb } from "@/src/lib/firebase.server";
-import { RequestContext } from "@fresh-schedules/api-framework";
-
-const LIST_SECURITY_OPTIONS = { requireAuth: true, maxRequests: 100, windowMs: 60_000 } as const;
-const MUTATION_SECURITY_OPTIONS = { requireAuth: true, maxRequests: 50, windowMs: 60_000 } as const;
+import type { RequestContext } from "@fresh-schedules/api-framework";
+import { setDocWithType } from "@/lib/firebase/typed-wrappers";
 
 const parsePositiveInt = (value: string | null, fallback: number) => {
   const parsed = Number.parseInt(value ?? "", 10);
@@ -32,6 +30,19 @@ const getAdminDbOrError = () => {
   }
   return { db: adminDb } as const;
 };
+
+interface ScheduleData {
+  id: string;
+  orgId: string;
+  name: string;
+  startDate: Timestamp;
+  endDate: Timestamp;
+  state: string;
+  createdAt: Timestamp;
+  updatedAt: Timestamp;
+  createdBy: string;
+  [key: string]: unknown;
+}
 
 const listSchedules = async (request: NextRequest, context: RequestContext) => {
   const pagination = getPagination(request);
@@ -76,8 +87,9 @@ const createSchedule = async (request: NextRequest, context: RequestContext) => 
     const scheduleRef = db.collection(`organizations/${context.org!.orgId}/schedules`).doc();
     const now = Timestamp.now();
 
-    const schedule = {
+    const schedule: ScheduleData = {
       id: scheduleRef.id,
+      orgId: context.org!.orgId,
       name,
       startDate: Timestamp.fromDate(new Date(startDate)),
       endDate: Timestamp.fromDate(new Date(endDate)),
@@ -87,7 +99,7 @@ const createSchedule = async (request: NextRequest, context: RequestContext) => 
       createdBy: context.auth!.userId,
     };
 
-    await scheduleRef.set(schedule);
+    await setDocWithType<ScheduleData>(db, scheduleRef, schedule);
 
     return ok({ success: true, schedule });
   } catch (err: unknown) {

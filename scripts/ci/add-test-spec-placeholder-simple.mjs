@@ -1,4 +1,6 @@
 #!/usr/bin/env node
+// [P1][TEST][TEST] Add Test Spec Placeholder Simple tests
+// Tags: P1, TEST, TEST
 // Adds a basic 'TEST SPEC' section to docs files that are missing it, without external dependencies.
 import { promises as fs } from 'node:fs';
 import path from 'node:path';
