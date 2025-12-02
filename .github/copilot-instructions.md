@@ -1,6 +1,6 @@
 # How to be immediately useful in this repository
 
-pnpm monorepo for a Next.js PWA backed by Firebase (Auth, Firestore, Storage). Code owner: Patrick Craven.
+This is a pnpm monorepo for a Next.js PWA backed by Firebase (Auth, Firestore, Storage). Code owner: Patrick Craven.
 
 ## Architecture at a glance
 
@@ -58,6 +58,8 @@ All domain types live in `packages/types/src/`. Define Zod schema first, infer T
 
 ```typescript
 // packages/types/src/entity.ts
+import { z } from "zod";
+
 export const EntitySchema = z.object({ id: z.string(), name: z.string() });
 export type Entity = z.infer<typeof EntitySchema>;
 export const CreateEntitySchema = EntitySchema.omit({ id: true });
