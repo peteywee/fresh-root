@@ -5,6 +5,7 @@ import { randomBytes } from "crypto";
 import { type Firestore, type DocumentReference, Timestamp } from "firebase-admin/firestore";
 
 import { adminDb } from "@/src/lib/firebase.server";
+import { setDocWithType, getDocWithType, updateDocWithType } from "@/lib/firebase/typed-wrappers";
 
 const db = adminDb as Firestore | undefined;
 
@@ -44,7 +45,7 @@ export async function saveAdminFormDraft(
     consumedAt: null,
   };
 
-  await docRef.set(draft);
+  await setDocWithType<AdminFormDraft>(root, docRef, draft);
   return token;
 }
 
@@ -57,10 +58,8 @@ export async function loadAdminFormDraft(
   if (!root) return null;
 
   const docRef = root.collection("adminFormDrafts").doc(formToken);
-  const snap = await docRef.get();
-  if (!snap.exists) return null;
-  const data = snap.data() as AdminFormDraft;
-  return data;
+  const draft = await getDocWithType<AdminFormDraft>(root, docRef);
+  return draft;
 }
 
 export async function markAdminFormDraftConsumed(formToken: string, injectedDb?: Firestore) {
@@ -69,7 +68,7 @@ export async function markAdminFormDraftConsumed(formToken: string, injectedDb?:
   const docRef = root
     .collection("adminFormDrafts")
     .doc(formToken) as DocumentReference<AdminFormDraft>;
-  await docRef.update({ consumedAt: Timestamp.now() });
+  await updateDocWithType<AdminFormDraft>(root, docRef, { consumedAt: Timestamp.now() });
 }
 
 export default {
