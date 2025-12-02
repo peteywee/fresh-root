@@ -18,7 +18,7 @@ const CreateSessionSchema = z.object({
 export const POST = createPublicEndpoint({
   handler: async ({ request }) => {
   try {
-    const parsed = await parseJson(req, CreateSessionSchema);
+    const parsed = await parseJson(request, CreateSessionSchema);
     if (!parsed.success) {
       return badRequest("Validation failed", parsed.details);
     }

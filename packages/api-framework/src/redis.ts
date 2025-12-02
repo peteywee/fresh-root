@@ -93,11 +93,14 @@ class UpstashClient implements RedisClient {
  */
 async function createUnifiedRedisClient(): Promise<RedisClient> {
   // Try Upstash REST first
-  if (process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN) {
+  const upstashUrl = process.env.UPSTASH_REDIS_REST_URL;
+  const upstashToken = process.env.UPSTASH_REDIS_REST_TOKEN;
+  
+  if (upstashUrl && upstashToken) {
     try {
       return new UpstashClient(
-        process.env.UPSTASH_REDIS_REST_URL,
-        process.env.UPSTASH_REDIS_REST_TOKEN,
+        upstashUrl,
+        upstashToken,
       );
     } catch (err) {
       console.warn("Failed to initialize Upstash client:", err);
