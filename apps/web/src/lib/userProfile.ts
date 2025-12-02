@@ -12,6 +12,9 @@
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { Firestore } from "firebase-admin/firestore";
+import { doc } from "firebase-admin/firestore";
+import { getDocWithType, setDocWithType } from "@/lib/firebase/typed-wrappers";
+import { z } from "zod";
 
 export type AuthUserClaims = {
   email?: string;
@@ -22,6 +25,30 @@ export type AuthUserClaims = {
   role?: string;
   [key: string]: unknown;
 };
+
+const UserProfileSchema = z.object({
+  id: z.string(),
+  createdAt: z.number(),
+  updatedAt: z.number(),
+  profile: z.object({
+    email: z.string().nullable(),
+    displayName: z.string().nullable(),
+    avatarUrl: z.string().nullable(),
+    selfDeclaredRole: z.string().nullable(),
+  }),
+  onboarding: z.object({
+    status: z.string(),
+    stage: z.string(),
+    intent: z.any().nullable(),
+    primaryNetworkId: z.string().nullable(),
+    primaryOrgId: z.string().nullable(),
+    primaryVenueId: z.string().nullable(),
+    completedAt: z.any().nullable(),
+    lastUpdatedAt: z.number(),
+  }),
+});
+
+export type UserProfileDoc = z.infer<typeof UserProfileSchema>;
 
 export async function ensureUserProfile(args: {
   adminDb: Firestore | any;
@@ -36,8 +63,7 @@ export async function ensureUserProfile(args: {
     return;
   }
 
-  const usersRef = adminDb.collection("users").doc(uid);
-  const snap = await usersRef.get();
+  const ref = doc(adminDb, "users", uid);
   const now = Date.now();
 
   const baseProfile = {
@@ -51,9 +77,11 @@ export async function ensureUserProfile(args: {
       null,
   };
 
-  if (!snap.exists) {
+  const existing = await getDocWithType<UserProfileDoc>(adminDb, ref);
+
+  if (!existing) {
     // First-time sign-in → create full user doc with initial onboarding state
-    await usersRef.set({
+    const newProfile: UserProfileDoc = {
       id: uid,
       createdAt: now,
       updatedAt: now,
@@ -68,19 +96,21 @@ export async function ensureUserProfile(args: {
         completedAt: null,
         lastUpdatedAt: now,
       },
-    });
+    };
+    
+    await setDocWithType<UserProfileDoc>(adminDb, ref, newProfile);
     return;
   }
 
   // If the doc exists, we still may want to backfill missing profile fields
-  const existing = snap.data() as any;
-
   const profile = {
     ...(existing.profile || {}),
     ...baseProfile,
   };
 
-  await usersRef.set(
+  await setDocWithType<UserProfileDoc>(
+    adminDb,
+    ref,
     {
       profile,
       updatedAt: now,
@@ -95,6 +125,6 @@ export async function ensureUserProfile(args: {
         lastUpdatedAt: now,
       },
     },
-    { merge: true },
+    { merge: true }
   );
 }

@@ -1,11 +1,18 @@
 // [P0][FIREBASE][CODE] AdminFormDrafts
 // Tags: P0, FIREBASE, CODE
-import { db } from "@/lib/firebaseAdmin";
+import { getFirebaseAdminDb } from "@/lib/firebase-admin";
+import {
+  getDocWithType,
+  setDocWithType,
+  updateDocWithType,
+  transactionWithType,
+} from "@/lib/firebase/typed-wrappers";
 import {
   CreateAdminResponsibilityFormSchema,
   type AdminResponsibilityForm,
   type CreateAdminResponsibilityFormInput,
 } from "@fresh-schedules/types";
+import { doc } from "firebase-admin/firestore";
 import { z } from "zod";
 
 const AdminFormDraftDocSchema = z.object({
@@ -54,8 +61,10 @@ export async function createAdminFormDraft(params: {
     },
   };
 
-  const ref = db.collection("adminFormDrafts").doc();
-  await ref.set(draft);
+  const db = getFirebaseAdminDb();
+  const ref = doc(db, "adminFormDrafts", crypto.randomUUID());
+  
+  await setDocWithType<AdminFormDraftDoc>(db, ref, draft);
 
   return { formToken: ref.id };
 }
@@ -64,23 +73,16 @@ export async function createAdminFormDraft(params: {
  * Peek a draft without consuming it (for debugging or re-checks).
  */
 export async function getAdminFormDraft(formToken: string) {
-  const snap = await db.collection("adminFormDrafts").doc(formToken).get();
-  if (!snap.exists) return null;
+  const db = getFirebaseAdminDb();
+  const ref = doc(db, "adminFormDrafts", formToken);
+  
+  const draft = await getDocWithType<AdminFormDraftDoc>(db, ref);
+  if (!draft) return null;
 
-  const raw = snap.data();
-  if (!raw) return null;
-
-  const parsed = AdminFormDraftDocSchema.safeParse(raw);
-  if (!parsed.success) {
-    console.error("Invalid adminFormDraft document", parsed.error.format());
-    return null;
-  }
-
-  const draft = parsed.data;
   if (draft.status !== "active") return null;
   if (draft.expiresAt.getTime() < Date.now()) return null;
 
-  return { id: snap.id, ...draft };
+  return { id: formToken, ...draft };
 }
 
 /**
@@ -95,14 +97,16 @@ export async function consumeAdminFormDraft(params: {
   taxValidation: { isValid: boolean; reason?: string };
 } | null> {
   const { formToken, expectedUserId } = params;
+  const db = getFirebaseAdminDb();
+  const ref = doc(db, "adminFormDrafts", formToken);
 
-  const ref = db.collection("adminFormDrafts").doc(formToken);
+  return await transactionWithType<
+    { form: AdminResponsibilityForm; taxValidation: { isValid: boolean; reason?: string } } | null
+  >(db, async (tx) => {
+    const draft = await tx.get(ref);
+    if (!draft.exists) return null;
 
-  return await db.runTransaction(async (tx) => {
-    const snap = await tx.get(ref);
-    if (!snap.exists) return null;
-
-    const raw = snap.data();
+    const raw = draft.data();
     if (!raw) return null;
 
     const parsed = AdminFormDraftDocSchema.safeParse(raw);
@@ -111,12 +115,12 @@ export async function consumeAdminFormDraft(params: {
       return null;
     }
 
-    const draft = parsed.data;
+    const data = parsed.data;
 
     // Hard constraints
-    if (draft.status !== "active") return null;
-    if (draft.expiresAt.getTime() < Date.now()) return null;
-    if (expectedUserId && draft.userId !== expectedUserId) return null;
+    if (data.status !== "active") return null;
+    if (data.expiresAt.getTime() < Date.now()) return null;
+    if (expectedUserId && data.userId !== expectedUserId) return null;
 
     // Mark as consumed, but keep record for audit
     tx.update(ref, {
@@ -125,10 +129,10 @@ export async function consumeAdminFormDraft(params: {
     });
 
     return {
-      form: draft.form as AdminResponsibilityForm,
+      form: data.form as AdminResponsibilityForm,
       taxValidation: {
-        isValid: draft.taxValidation.isValid,
-        reason: draft.taxValidation.reason,
+        isValid: data.taxValidation.isValid,
+        reason: data.taxValidation.reason,
       },
     };
   });
