@@ -24,9 +24,12 @@ export const POST = createAuthenticatedEndpoint({
       if (orgId !== contextOrgId) {
         return NextResponse.json({ error: "Organization ID mismatch" }, { status: 403 });
       }
-      const scheduleRef = adminDb!.doc(`organizations/${orgId}/schedules/${scheduleId}`);
+      if (!adminDb) {
+        return NextResponse.json({ error: "Admin DB not initialized" }, { status: 500 });
+      }
+      const scheduleRef = adminDb.doc(`organizations/${orgId}/schedules/${scheduleId}`);
       await scheduleRef.set({ state: "published", publishedAt: Timestamp.now() }, { merge: true });
-      const msgRef = adminDb!.collection(`organizations/${orgId}/messages`).doc();
+      const msgRef = adminDb.collection(`organizations/${orgId}/messages`).doc();
       await msgRef.set({
         type: "publish_notice",
         title: "Schedule Published",
