@@ -4,7 +4,7 @@ import { z } from "zod";
 import { NextResponse } from "next/server";
 import { createAuthenticatedEndpoint } from "@fresh-schedules/api-framework";
 
-import { adminDb, adminSdk } from "../../../src/lib/firebase.server";
+import { adminDb } from "../../../src/lib/firebase.server";
 
 const PublishSchema = z.object({
   scheduleId: z.string().min(1, "scheduleId is required"),
@@ -24,12 +24,9 @@ export const POST = createAuthenticatedEndpoint({
       if (orgId !== contextOrgId) {
         return NextResponse.json({ error: "Organization ID mismatch" }, { status: 403 });
       }
-      if (!adminDb || !adminSdk) {
-        return NextResponse.json({ error: "Admin DB not initialized" }, { status: 500 });
-      }
-      const scheduleRef = adminDb.doc(`organizations/${orgId}/schedules/${scheduleId}`);
+      const scheduleRef = adminDb!.doc(`organizations/${orgId}/schedules/${scheduleId}`);
       await scheduleRef.set({ state: "published", publishedAt: Timestamp.now() }, { merge: true });
-      const msgRef = adminDb.collection(`organizations/${orgId}/messages`).doc();
+      const msgRef = adminDb!.collection(`organizations/${orgId}/messages`).doc();
       await msgRef.set({
         type: "publish_notice",
         title: "Schedule Published",
