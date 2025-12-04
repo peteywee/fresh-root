@@ -23,6 +23,9 @@ pnpm --filter @fresh-root/markdown-fixer dev ./docs
 pnpm --filter @fresh-root/markdown-fixer fix ./docs
 ```
 
+Options:
+- `-v, --verbose`: Print debug output and show diffs for changed files
+
 API
 
 ```ts

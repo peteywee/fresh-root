@@ -1,19 +1,33 @@
-import { unified } from "unified";
-import remarkParse from "remark-parse";
-import remarkStringify from "remark-stringify";
+// [P2][APP][CODE] Fixer
+// Tags: P2, APP, CODE
+// Optional remark/unified imports are dynamically loaded to provide polite errors when deps are missing.
 
 export async function fixFiles(input: string) {
   let changed = false;
-  // Use remark to parse and then stringify to normalize core markdown rules.
-  const processor = unified().use(remarkParse).use(remarkStringify, {
-    bullet: "-",
-    fences: true,
-    listItemIndent: "1",
-    rule: "-",
-    strong: "**",
-  });
-  const file = await processor.process(input);
-  let content = String(file);
+  // Use remark/unified to parse and then stringify to normalize core markdown rules.
+  // Dynamically import so our CLI can degrade gracefully in environments where deps are not installed.
+  let processor: any;
+  try {
+    const unified = await import("unified");
+    const remarkParse = await import("remark-parse");
+    const remarkStringify = await import("remark-stringify");
+    processor = unified.unified().use(remarkParse.default || remarkParse).use(
+      remarkStringify.default || remarkStringify,
+      {
+        bullet: "-",
+        fences: true,
+        listItemIndent: "1",
+        rule: "-",
+        strong: "**",
+      }
+    );
+  } catch (err) {
+    console.error("Optional markdown parsing libraries not found (unified/remark). Run 'pnpm -w install' to enable richer fixes.");
+    // fall back to using regex-based changes only
+    processor = null;
+  }
+  const file = processor ? await processor.process(input) : null;
+  let content = file ? String(file) : input;
 
   // Additional targeted fixes using regex and heuristics:
   // 1. Normalize headings: Ensure single space after # and no trailing #
@@ -41,7 +55,7 @@ export async function fixFiles(input: string) {
   // 5. Normalize ordered list numbers (simple heuristic)
   // Convert 1., 2., etc to 1. 2. sequentially when lines start with \d+.
   const lines = content.split('\n');
-  let updatedLines = lines.slice();
+  const updatedLines = lines.slice();
   let i = 0;
   while (i < lines.length) {
     const match = lines[i].match(/^(\s*)(\d+)\.\s+/);
