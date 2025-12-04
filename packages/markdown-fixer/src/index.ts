@@ -1,0 +1,1 @@
+export { fixFiles } from './fixer';
