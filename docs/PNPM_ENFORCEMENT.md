@@ -4,7 +4,7 @@
 
 **CRITICAL:** This monorepo uses **pnpm exclusively**. Using npm or yarn will break dependency resolution and cause deployment failures.
 
-### Why pnpm?
+### Why pnpm
 
 1. **Monorepo Support**: Native workspace management across 8+ packages
 2. **Strict Dependency Resolution**: Prevents transitive dependency issues

@@ -7,15 +7,17 @@
 
 ## 1. Role in the System
 
-The scheduling subsystem is the temporal orchestration engine that coordinates asynchronous task execution across the platform. It bridges the event-driven architecture (pubsub, real-time triggers) with deterministic, time-based operations (cron jobs, deferred tasks, maintenance cycles). 
+The scheduling subsystem is the temporal orchestration engine that coordinates asynchronous task execution across the platform. It bridges the event-driven architecture (pubsub, real-time triggers) with deterministic, time-based operations (cron jobs, deferred tasks, maintenance cycles).
 
 **Core responsibilities:**
+
 - Managing delayed execution patterns (firestore task scheduling)
 - Coordinating distributed asynchronous work
 - Ensuring reliable retry semantics across service boundaries
 - Providing visibility into temporal resource allocation
 
 This subsystem is **critical to operational resilience** because it handles:
+
 - Background maintenance (database cleanup, index rebuilding)
 - User-facing delayed actions (scheduled posts, deferred notifications)
 - Platform-level housekeeping (quota resets, batch processing)
@@ -38,12 +40,14 @@ This subsystem is **critical to operational resilience** because it handles:
 
 **Problem:** The task scheduling system lacks centralized exponential backoff validation. While individual function deployments specify `retryConfig`, there's no runtime enforcement preventing misconfigured backoff multipliers (e.g., `backoffMultiplier: 0.5`) that could cause rapid retry storms.
 
-**Impact:** 
+**Impact:**
+
 - Runaway task execution can exhaust quota during transient failures
 - Cascade failures when scheduler itself experiences degradation
 - Difficulty recovering when service dependencies are briefly unavailable
 
 **Evidence:**
+
 ```typescript
 // firestore/scheduled-tasks.ts
 export async function scheduleMaintenanceTask(
@@ -60,6 +64,7 @@ export async function scheduleMaintenanceTask(
 ```
 
 **Resolution Path:**
+
 1. Introduce `SchedulingPolicy` codec that validates backoff bounds
 2. Enforce `backoffMultiplier ∈ [1.5, 4.0]` at scheduling time
 3. Test with chaos engineering: trigger transient failures during high load
@@ -71,11 +76,13 @@ export async function scheduleMaintenanceTask(
 **Problem:** Scheduled tasks inherit the full Cloud Functions context (service account permissions, environment variables). While isolation is architecturally intended, there's no mechanism to restrict task execution to a limited permission set.
 
 **Impact:**
+
 - Tasks can access resources beyond their intended scope
 - Blast radius increases during task hijacking
 - Audit trail doesn't clearly show task-specific vs. system-wide actions
 
 **Evidence:**
+
 ```typescript
 // functions/scheduled/cleanup.ts
 export const cleanupExpiredSessions = onSchedule(
@@ -90,10 +97,12 @@ export const cleanupExpiredSessions = onSchedule(
 ```
 
 **Architectural Principle Violated:**
+
 - **Principle:** "Each scheduled task operates with least-privilege permissions"
 - **Reality:** All tasks inherit orchestrator permissions
 
 **Resolution Path:**
+
 1. Introduce task-scoped service accounts (via Workload Identity)
 2. Define capability profiles: `CLEANUP_ONLY`, `MONITORING_READ`, `USER_DATA_WRITE`
 3. Enforce capability checks at task invocation boundary
@@ -105,11 +114,13 @@ export const cleanupExpiredSessions = onSchedule(
 **Problem:** There's no distributed locking mechanism for tasks that must execute exactly-once across multiple deployment zones. If a task is scheduled simultaneously in two regions, both will execute.
 
 **Impact:**
+
 - Duplicate billing events during concurrent execution
 - Race conditions in global state updates (e.g., user tier resets)
 - Costly repairs required post-incident
 
 **Example Scenario:**
+
 ```
 Time T1: Task scheduled in us-central1
 Time T2: Auto-scaling triggers deployment in eu-west1
@@ -118,6 +129,7 @@ Time T3: Both regions execute billing-reset task
 ```
 
 **Resolution Path:**
+
 1. Implement Redis-backed distributed lock (e.g., Redlock algorithm)
 2. Integrate lock acquisition into task execution wrapper
 3. Define lock timeout policies (fail-open vs. fail-closed)
@@ -127,6 +139,7 @@ Time T3: Both regions execute billing-reset task
 ### 🟡 MEDIUM: Inconsistent Observability Across Execution Contexts
 
 **Problem:** Scheduled task execution traces vary significantly depending on deployment context:
+
 - **Emulator:** Console logs only, no structured tracing
 - **Local functions:** Winston logger with file output
 - **Production:** Cloud Logging with custom structured fields
@@ -134,6 +147,7 @@ Time T3: Both regions execute billing-reset task
 This inconsistency makes debugging difficult and makes it easy to miss logs.
 
 **Current Patterns:**
+
 ```typescript
 // functions/lib/logging.ts
 export function getLogger(context: FunctionContext) {
@@ -148,6 +162,7 @@ export function getLogger(context: FunctionContext) {
 ```
 
 **Resolution Path:**
+
 1. Introduce unified `ObservabilityContext` codec
 2. Define standard structured fields: `{taskId, scheduleTime, executionTime, retryCount}`
 3. Map output transport based on runtime environment uniformly
@@ -159,15 +174,18 @@ export function getLogger(context: FunctionContext) {
 **Problem:** Under peak load, scheduled tasks experience significant drift from their intended execution time. A task scheduled for `2 AM` might execute at `2:15 AM`, causing cascading delays for dependent operations.
 
 **Contributing Factors:**
+
 - Cloud Pub/Sub processing delays during queue saturation
 - Firebase Cloud Functions cold start overhead (10–30s)
 - No priority-based task execution queue
 
 **Observed Drift Data:**
+
 - Off-peak: ±2 minutes
 - Peak hours: ±15–30 minutes
 
 **Resolution Path:**
+
 1. Implement priority queue abstraction (urgent, normal, background)
 2. Pre-warm function instances during predictable load spikes
 3. Monitor drift as SLI: `P99 execution time - scheduled time < 5 minutes`
@@ -212,6 +230,7 @@ export type IsolationLevel =
 ```
 
 **Implementation Steps:**
+
 1. Create `SchedulingPolicies` codec with validation
 2. Extend Cloud Functions triggers with wrapper layer
 3. Introduce capability profiles in service account setup
@@ -261,6 +280,7 @@ export const resetUserTiers = onSchedule("0 0 * * MON", async () => {
 ```
 
 **Deployment Checklist:**
+
 - [ ] Deploy Redis cluster to staging
 - [ ] Implement `AcquireLockFailure` handling
 - [ ] Define lock acquisition timeout (recommend 30s)
@@ -304,6 +324,7 @@ export type TaskExecutionLog = Readonly<{
 ```
 
 **Deployment:**
+
 1. Create logger middleware that injects structured fields
 2. Configure Cloud Logging to parse codec
 3. Build dashboards filtering by `taskType` and `status`
@@ -392,6 +413,7 @@ export const processUserEvents = onSchedule(
 ```
 
 **Issues:**
+
 - Retry multiplier < 1.5 violates policy
 - No lock → duplicate execution
 - Synchronous processing causes timeouts
@@ -475,12 +497,14 @@ export type OnSchedule = (
 ```
 
 **Constraints:**
+
 - Schedule string must be valid cron or recognized descriptor
 - `timeZone` defaults to America/Los_Angeles
 - `retryCount` defaults to 1; max is typically 5 per Cloud Tasks limits
 - Minimum schedule frequency is 15 minutes
 
 **Real-World Validation:**
+
 ```typescript
 // ✓ Valid
 onSchedule("0 2 * * *", handler); // Daily 2 AM (UTC)
@@ -597,8 +621,10 @@ Track unresolved decisions and design questions.
 ## 9. Related Documentation
 
 **Deprecation & Migration:**
+
 - See `06_SDK_DEPRECATION_LEDGER/scheduling_ledger.md` for comprehensive deprecation mapping, legacy component analysis, and phased migration roadmap through Q3 2026
 
 **Complementary Subsystems:**
+
 - `04_COMPONENTS_L3/task-coordination.md` — Multi-step workflow orchestration
 - `04_COMPONENTS_L3/logging-standards.md` — Structured logging codec specifications

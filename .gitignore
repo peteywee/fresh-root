@@ -92,4 +92,4 @@ tests/rules/users.test.ts
 tests/rules/storage.fixed.spec.ts
 ci-firebase-key.json
 .vscode/tasks.json
-.vscode/settings.json
+repomix-output.*

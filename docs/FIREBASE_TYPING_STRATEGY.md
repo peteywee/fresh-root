@@ -20,7 +20,8 @@ status: Active
 
 **Objective:** Suppress Firebase-related unsafe-* ESLint rules for known SDK limitations
 
-**Files Affected:** 
+**Files Affected:**
+
 - app/api/**/*.ts (40+ route handlers)
 - src/lib/**/*.ts (utility functions)
 - lib/**/*.ts (helpers)
@@ -29,6 +30,7 @@ status: Active
 - instrumentation.ts
 
 **ESLint Config Changes:**
+
 ```javascript
 {
   files: [
@@ -62,11 +64,13 @@ status: Active
 ### Status: ACTIVE (Background process running)
 
 **no-unused-vars (43 errors) - 30 min**
+
 - Type assertions were removed, leaving unused imports
 - Auto-fixable via `pnpm lint -- --fix`
 - Expected reduction: ~40 errors
 
 **no-unused-imports cleanup:**
+
 - Remove bare imports that are no longer needed
 - Automatic via eslint-plugin-unused-imports
 - Expected reduction: ~5-10 errors
@@ -82,15 +86,18 @@ status: Active
 **Pattern:** Async functions without actual await operations
 
 **Files with Issue:**
+
 - app/api/*/route.ts (multiple endpoint handlers)
 - app/actions/*.ts (server actions)
 
 **Fix Strategy:**
+
 1. Remove `async` keyword if no awaits exist
 2. Add actual `await` if operation can be async
 3. Refactor to use proper Promise chaining if needed
 
 **Example:**
+
 ```typescript
 // BEFORE (error)
 export const POST = async (req: Request) => {
@@ -115,6 +122,7 @@ export const POST = (req: Request) => {
 **Objective:** Provide type-safe Firebase API access without modifying SDK
 
 **Pattern:**
+
 ```typescript
 // Wrapper for snap.data()
 export function snapData<T extends Record<string, unknown>>(
@@ -129,12 +137,14 @@ const userData = snapData<UserProfile>(snap);
 ```
 
 **Benefits:**
+
 - Eliminates `any` type propagation
 - Single point of Firebase API abstraction
 - Easier to migrate if Firebase improves types
 - Enables IDE autocomplete
 
 **Files to Create:**
+
 - `src/lib/firebase/wrappers.ts` - Typed API wrappers
 - `src/lib/firebase/types.ts` - Type definitions
 - `src/lib/firebase/index.ts` - Export barrel
@@ -178,7 +188,7 @@ const userData = snapData<UserProfile>(snap);
 
 ## References
 
-- **Firebase Typing Issue:** https://github.com/firebase/firebase-js-sdk/issues/7598
+- **Firebase Typing Issue:** <https://github.com/firebase/firebase-js-sdk/issues/7598>
 - **ESLint Config:** apps/web/eslint.config.mjs
 - **Firebase Files:** apps/web/src/lib/, apps/web/app/api/
 - **Type Definitions:** types/firebase-admin.d.ts

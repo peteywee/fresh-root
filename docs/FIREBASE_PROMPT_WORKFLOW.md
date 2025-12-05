@@ -23,6 +23,7 @@ Current lint status: 379 errors in apps/web due to Firebase SDK v12 `any` typing
 **Purpose:** Establish baseline Copilot configuration for monorepo pattern
 
 **What It Does:**
+
 - Analyzes tech stack (TypeScript, Next.js, Firebase, monorepo)
 - Creates/updates `.github/copilot-instructions.md`
 - Suggests instruction files for language-specific patterns
@@ -31,6 +32,7 @@ Current lint status: 379 errors in apps/web due to Firebase SDK v12 `any` typing
 **When to Run:** NOW (foundational)
 
 **Input to Provide:**
+
 ```
 Tech Stack: TypeScript, Next.js 16, Firebase 12/13, pnpm monorepo
 Project Type: Enterprise PWA - Staff Scheduling
@@ -47,6 +49,7 @@ Development Style: Strict standards (ESLint, TypeScript strict mode)
 **Purpose:** Define detailed Firebase typing modernization implementation plan
 
 **What It Does:**
+
 - Breaks down Firebase typing issues into actionable tasks
 - Creates step-by-step implementation roadmap
 - Identifies dependencies and risk areas
@@ -55,6 +58,7 @@ Development Style: Strict standards (ESLint, TypeScript strict mode)
 **When to Run:** AFTER Step 1 (use established Copilot context)
 
 **Input to Provide:**
+
 ```
 Feature: Firebase SDK v12 Typing Modernization
 
@@ -83,6 +87,7 @@ Constraints:
 **Purpose:** Systematically refactor Firebase code to reduce unsafe-* errors
 
 **What It Does:**
+
 - Analyzes patterns in Firebase API usage
 - Suggests refactoring approaches
 - Identifies opportunities for wrapper functions
@@ -91,6 +96,7 @@ Constraints:
 **When to Run:** AFTER Step 2 (with implementation plan from Step 1)
 
 **Input to Provide:**
+
 ```
 Files to Review:
 - apps/web/src/lib/userProfile.ts (snap.data() usage)
@@ -117,6 +123,7 @@ Code Quality Standards:
 **Purpose:** Document Firebase patterns and typing best practices for team
 
 **What It Does:**
+
 - Creates how-to guides for Firebase usage patterns
 - Documents type-safe wrappers
 - Provides reference implementation examples
@@ -125,6 +132,7 @@ Code Quality Standards:
 **When to Run:** AFTER Step 3 (after refactoring is complete)
 
 **Input to Provide:**
+
 ```
 Topic: Firebase SDK v12 Type-Safe Usage Patterns
 
@@ -154,6 +162,7 @@ Output:
 **Purpose:** Store Firebase modernization learnings for team reuse
 
 **What It Does:**
+
 - Captures key learnings from modernization effort
 - Documents Firebase SDK limitations and workarounds
 - Records monorepo-specific patterns
@@ -162,6 +171,7 @@ Output:
 **When to Run:** AFTER Step 4 (final phase)
 
 **Input to Provide:**
+
 ```
 Learnings to Store:
 
@@ -192,42 +202,49 @@ Learnings to Store:
 ## Execution Checklist
 
 ### Pre-Execution
+
 - [x] Background process running (pnpm lint --fix)
 - [x] Firebase typing strategy documented
 - [x] Prompts downloaded to `.github/prompts/`
 - [x] Repository context analyzed
 
 ### Step 1: GitHub Copilot Starter
+
 - [ ] Open prompt: `/github-copilot-starter`
 - [ ] Provide tech stack information
 - [ ] Review suggested copilot-instructions.md
 - [ ] Apply recommendations to repository
 
 ### Step 2: Create Implementation Plan  
+
 - [ ] Open prompt: `/create-implementation-plan`
 - [ ] Provide Firebase modernization context
 - [ ] Review generated implementation plan
 - [ ] Extract actionable milestones
 
 ### Step 3: Review and Refactor
+
 - [ ] Open prompt: `/review-and-refactor`
 - [ ] Select Firebase files from app/api/ and src/lib/
 - [ ] Review proposed refactorings
 - [ ] Apply type-safe improvements
 
 ### Step 4: Documentation Writer
+
 - [ ] Open prompt: `/documentation-writer`
 - [ ] Specify Firebase patterns topic
 - [ ] Generate team-ready documentation
 - [ ] Add to docs/ folder
 
 ### Step 5: Memory Keeper
+
 - [ ] Open prompt: `/remember`
 - [ ] Provide learnings from modernization
 - [ ] Store in memory instructions
 - [ ] Reference in team communications
 
 ### Post-Execution
+
 - [ ] Monitor background lint process completion
 - [ ] Verify error count reduction (379 → <200)
 - [ ] Confirm 5/6 packages passing
@@ -238,16 +255,19 @@ Learnings to Store:
 ## Success Metrics
 
 **Lint Errors:**
+
 - ✅ Before: 379 errors
 - 🎯 Target: <200 errors (>50% reduction)
 - 📊 Phases: Phase 1 (195 suppressed) + Phase 2 (40 auto-fixed) + Phase 3 (30+ manual)
 
 **Code Quality:**
+
 - ✅ 5/6 packages passing eslint
 - ✅ No new type errors introduced
 - ✅ Firebase APIs used safely
 
 **Team Enablement:**
+
 - ✅ Copilot instructions established
 - ✅ Implementation plan documented
 - ✅ Type-safe patterns documented

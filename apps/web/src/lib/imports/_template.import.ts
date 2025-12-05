@@ -4,7 +4,8 @@ import { parse } from "papaparse";
 import * as XLSX from "xlsx";
 import { z } from "zod";
 
-export const RowSchema = z.record(z.any()); // replace with concrete schema per import type
+// Use string keys and allow any values for template imports; callers should replace with concrete schema
+export const RowSchema = z.record(z.string(), z.any()); // replace with concrete schema per import type
 
 export type ImportResult<T> = {
   records: T[];

@@ -1,0 +1,26 @@
+{
+  "date": "2025-12-05T00:00:00Z",
+  "checks": {
+    "secrets_scan": {
+      "status": "fail",
+      "reason": "Tracked file `.env.local` contains values and is present in working tree. Remove and rotate secrets.",
+      "matches": [
+        "./.env.local: NEXT_PUBLIC_FIREBASE_API_KEY (present)",
+        "./.env.local: SESSION_SECRET (present)"
+      ]
+    },
+    "typecheck": {
+      "status": "pass",
+      "notes": "pnpm -w typecheck completed with no TypeScript errors after targeted fixes."
+    },
+    "pattern_validator": {
+      "status": "fail",
+      "reason": "Tier-0 security violations detected (missing security wrappers and write validation).",
+      "tier0_count": 49
+    },
+    "lockfile_changes": {
+      "status": "pass",
+      "notes": "`pnpm-lock.yaml` was updated by install. Review diff before committing."
+    }
+  }
+}

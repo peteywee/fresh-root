@@ -10,8 +10,10 @@
 ## 📁 Protocol Files (In Order of Reference)
 
 ### 1. **agents/CREWOPS_QUICK_REFERENCE.md** (7.8 KB) ⭐ START HERE
+
 **For**: Users new to the protocol  
 **Contains**:
+
 - Session bootstrap message
 - What happens automatically
 - Keyword modifiers quick reference
@@ -24,8 +26,10 @@
 ---
 
 ### 2. **agents/crewops.md** (24 KB) 📖 THE COMPLETE MANUAL
+
 **For**: Understanding the protocol deeply  
 **Contains**:
+
 - Constitution (7 non-negotiable laws)
 - Crew hierarchy & roles (Section 3)
 - Swarm protocol: Phases A→E (Section 4)
@@ -40,8 +44,10 @@
 ---
 
 ### 3. **agents/CREWOPS_ACTIVATION.md** (9.6 KB) ⚙️ AUTO-ENGAGEMENT FRAMEWORK
+
 **For**: How the protocol automatically loads  
 **Contains**:
+
 - Activation sequence (Stage 1, 2, 3)
 - Non-trivial prompt detection rules
 - Phase execution workflow (A→E)
@@ -55,8 +61,10 @@
 ---
 
 ### 4. **agents/CREWOPS_ACTIVATION_STATUS.md** (8.9 KB) 📊 STATUS TRACKING
+
 **For**: Verification and configuration  
 **Contains**:
+
 - What's active and where
 - How the protocol works
 - When it engages (bootstrap + non-trivial)
@@ -70,8 +78,10 @@
 ---
 
 ### 5. **agents/CREWOPS_IMPLEMENTATION_COMPLETE.md** (12 KB) ✅ COMPLETION SUMMARY
+
 **For**: Overview of what's active  
 **Contains**:
+
 - Summary of all 4 files
 - Activation flow (automatic)
 - Protocol phases A→E
@@ -88,6 +98,7 @@
 ## 🎯 Reading Paths
 
 ### For Immediate Use
+
 ```
 1. Read: CREWOPS_QUICK_REFERENCE.md (5 min)
 2. Ask a question
@@ -96,6 +107,7 @@
 ```
 
 ### For Understanding
+
 ```
 1. Read: CREWOPS_QUICK_REFERENCE.md
 2. Read: CREWOPS_ACTIVATION.md (understand bootstrap)
@@ -104,6 +116,7 @@
 ```
 
 ### For Deep Dive
+
 ```
 1. Read: CREWOPS_QUICK_REFERENCE.md
 2. Read: crewops.md (complete manual)
@@ -149,6 +162,7 @@ Task complete with audit trail
 ## 🎭 Key Concepts (Quick Reference)
 
 ### Constitution (7 Laws)
+
 1. **Anti-Vaporware**: No mock code
 2. **Truth & Evidence**: Verify with tools
 3. **Security Supremacy**: Red Team veto power
@@ -158,6 +172,7 @@ Task complete with audit trail
 7. **Constraints as Window**: Present alternatives
 
 ### Crew Roles (6 Mandatory)
+
 1. **Orchestrator**: Route + arbitrate + synthesize
 2. **Product Owner**: Success criteria + constraints
 3. **Systems Architect**: Design + interfaces
@@ -166,6 +181,7 @@ Task complete with audit trail
 6. **QA/Test Engineer**: Validation + testing
 
 ### Phases (A→E)
+
 - **A**: Context Saturation (READ)
 - **B+C**: Planning + Team Assembly (DESIGN)
 - **D**: Action Matrix (ACT)
@@ -173,12 +189,14 @@ Task complete with audit trail
 - **Validation**: Green gates + DoD
 
 ### Evidence Hierarchy
+
 1. Tool observation (highest)
 2. Primary docs
 3. Secondary sources
 4. Assumptions (lowest, labeled)
 
 ### Keyword Modifiers (Optional)
+
 - CREWOPS_OK: Acknowledge binding
 - CREWOPS_DESIGN_ONLY: Plan only
 - CREWOPS_AUDIT: Find problems
@@ -243,12 +261,15 @@ Then: **Ask your next question.** Protocol does the rest.
 ## 📞 How to Engage Protocol
 
 ### Option 1: Just Ask
+
 ```
 I need to build a new feature for org-scoped rate limiting.
 ```
+
 Protocol auto-engages. ✅
 
 ### Option 2: Acknowledge Binding (Explicit)
+
 ```
 Goal: Build a new feature for org-scoped rate limiting
 Constraints: Must work with existing auth, 2-day timeline
@@ -256,13 +277,16 @@ Deliverable: code
 
 CREWOPS_OK
 ```
+
 Protocol engages with explicit acknowledgment. ✅
 
 ### Option 3: Customize Behavior (Optional)
+
 ```
 I need a security design for the payment flow.
 CREWOPS_DESIGN_ONLY
 ```
+
 Protocol engages, but stops after Phase C (no code). ✅
 
 ---
@@ -270,16 +294,19 @@ Protocol engages, but stops after Phase C (no code). ✅
 ## 🔗 Cross-References
 
 **In crewops.md**:
+
 - Section 0.1.5: Links to CREWOPS_ACTIVATION.md
 - Section 6.5: Tool Use Discipline
 - Section 6.6: MCP Integration
 - Section 16-18: Tool & MCP Governance
 
 **In CREWOPS_ACTIVATION.md**:
+
 - Stage 1: Session bootstrap flow
 - Stage 3: Protocol engagement flow
 
 **In CREWOPS_ACTIVATION_STATUS.md**:
+
 - Activation Sequence: Detailed steps
 - Protocol Flow: Visual workflow
 - Worker Matrix: Tool assignments
@@ -306,6 +333,7 @@ Protocol engages, but stops after Phase C (no code). ✅
 ## 🎯 Success Criteria
 
 Protocol is successful when:
+
 - ✅ Automatically engages on non-trivial prompts
 - ✅ Phases A→E execute without user intervention
 - ✅ Tools deploy automatically per role

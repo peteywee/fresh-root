@@ -12,6 +12,7 @@
 All 33 API route handlers have been successfully migrated from the legacy `withSecurity` middleware pattern to the modern factory-based SDK framework (`@fresh-schedules/api-framework`). This represents a complete architectural overhaul of the API routing layer in preparation for Series A.
 
 ### Key Metrics
+
 - **Routes Converted**: 33/33 (100%)
 - **Factory Methods Used**: 93 instances across all routes
 - **Commit History**: 3 major refactoring commits + releases
@@ -23,9 +24,11 @@ All 33 API route handlers have been successfully migrated from the legacy `withS
 ## What Changed
 
 ### 1. SDK Framework Package
+
 **Location**: `packages/api-framework/src/index.ts`
 
 **Exports**:
+
 ```typescript
 export function createEndpoint(config): NextResponse
 export function createPublicEndpoint(config): NextResponse
@@ -36,6 +39,7 @@ export function createRateLimitedEndpoint(config): NextResponse
 ```
 
 **Features**:
+
 - Automatic auth context loading
 - Organization context with role checking
 - Built-in rate limiting
@@ -47,6 +51,7 @@ export function createRateLimitedEndpoint(config): NextResponse
 ### 2. Route Migrations
 
 #### Category: Organizations (4 routes)
+
 - `GET /api/organizations` → createAuthenticatedEndpoint
 - `POST /api/organizations` → createAuthenticatedEndpoint
 - `GET /api/organizations/[id]` → createOrgEndpoint
@@ -54,6 +59,7 @@ export function createRateLimitedEndpoint(config): NextResponse
 - `DELETE /api/organizations/[id]` → createOrgEndpoint (admin only)
 
 #### Category: Organization Members (7 routes)
+
 - `GET /api/organizations/[id]/members` → createOrgEndpoint
 - `POST /api/organizations/[id]/members` → createOrgEndpoint (admin only)
 - `PATCH /api/organizations/[id]/members` → createOrgEndpoint (admin only)
@@ -63,6 +69,7 @@ export function createRateLimitedEndpoint(config): NextResponse
 - `DELETE /api/organizations/[id]/members/[memberId]` → createOrgEndpoint (admin only)
 
 #### Category: Scheduling (4 routes)
+
 - `GET /api/shifts` → createOrgEndpoint
 - `POST /api/shifts` → createOrgEndpoint (manager only)
 - `GET /api/shifts/[id]` → createOrgEndpoint
@@ -73,16 +80,19 @@ export function createRateLimitedEndpoint(config): NextResponse
 - `DELETE /api/schedules/[id]` → createOrgEndpoint (manager only)
 
 #### Category: Venues & Zones (4 routes)
+
 - `GET /api/venues` → createOrgEndpoint
 - `POST /api/venues` → createOrgEndpoint (manager only)
 - `GET /api/zones` → createOrgEndpoint
 - `POST /api/zones` → createOrgEndpoint (manager only)
 
 #### Category: Positions (1 route)
+
 - `GET /api/positions` → createOrgEndpoint
 - `POST /api/positions` → createOrgEndpoint (manager only)
 
 #### Category: Onboarding (8 routes)
+
 - `POST /api/onboarding/create-network-corporate` → createAuthenticatedEndpoint
 - `POST /api/onboarding/join-with-token` → createAuthenticatedEndpoint
 - `POST /api/onboarding/create-network-org` → createAuthenticatedEndpoint
@@ -92,12 +102,14 @@ export function createRateLimitedEndpoint(config): NextResponse
 - `POST /api/onboarding/profile` → createAuthenticatedEndpoint
 
 #### Category: Sessions & Auth (2 routes)
+
 - `GET /api/session/bootstrap` → createAuthenticatedEndpoint
 - `POST /api/session/bootstrap` → createAuthenticatedEndpoint
 - `POST /api/auth/mfa/setup` → createAuthenticatedEndpoint
 - `POST /api/auth/mfa/verify` → createAuthenticatedEndpoint
 
 #### Category: Infrastructure (4 routes)
+
 - `GET /api/healthz` → createPublicEndpoint (1000 req/min limit)
 - `HEAD /api/healthz` → createPublicEndpoint
 - `POST /api/internal/backup` → createAuthenticatedEndpoint
@@ -106,6 +118,7 @@ export function createRateLimitedEndpoint(config): NextResponse
 - `GET /api/metrics` → createPublicEndpoint (1000 req/min limit)
 
 #### Category: Utility (1 route)
+
 - `GET /api/users/profile` → createAuthenticatedEndpoint (100 req/min limit)
 
 ### 3. Context Object
@@ -153,12 +166,14 @@ function serverError(message: string): NextResponse
 ## Migration Process
 
 ### Phase 1: Analysis & Planning
+
 - Identified 33 route files using legacy patterns
 - Documented current auth/security requirements
 - Designed SDK factory signatures
 - Created context shape specification
 
 ### Phase 2: SDK Implementation
+
 - Built 6 factory functions in `packages/api-framework`
 - Implemented auth/org context loading
 - Added rate limiting module
@@ -166,6 +181,7 @@ function serverError(message: string): NextResponse
 - Added audit logging middleware
 
 ### Phase 3: Route Conversion (3 iterations)
+
 1. **Initial Batch** (6 routes): Direct rewrites using bash heredocs
    - organizations/route.ts
    - schedules/[id]/route.ts
@@ -197,6 +213,7 @@ function serverError(message: string): NextResponse
    - items/route.ts
 
 ### Phase 4: Validation & Release
+
 - ✅ Removed all legacy middleware exports from routes
 - ✅ Verified 93 factory method instances across routes
 - ✅ Created comprehensive release notes
@@ -222,12 +239,14 @@ function serverError(message: string): NextResponse
 ## Deployment Instructions
 
 ### Pre-Deployment
+
 1. Run full test suite: `pnpm test`
 2. Run typecheck: `pnpm typecheck`
 3. Build: `pnpm build`
 4. Review CHANGELOG for breaking changes
 
 ### Deployment Steps
+
 1. Merge `feat/sdk-extraction` to `main`
 2. Deploy `v1.2.0` tag to staging
 3. Run Series-A validation tests
@@ -237,6 +256,7 @@ function serverError(message: string): NextResponse
 7. Gradually increase traffic: 50% → 75% → 100%
 
 ### Post-Deployment
+
 1. Verify all route endpoints responding
 2. Check rate limiting is working
 3. Audit logging confirms all requests
@@ -247,6 +267,7 @@ function serverError(message: string): NextResponse
 ## Breaking Changes
 
 For downstream consumers:
+
 1. **Auth Context Shape**: Changed from `req.user` to structured `context.auth`
 2. **Org Context**: Now separate from auth; accessed via `context.org`
 3. **Error Responses**: Standardized to `{ error: string, code?: string, details?: object }`
@@ -256,6 +277,7 @@ For downstream consumers:
 ### Migration Guide for Consumers
 
 **Before**:
+
 ```typescript
 // Consumer code had to handle mixed error formats
 const response = await fetch('/api/organizations');
@@ -266,6 +288,7 @@ if (!response.ok) {
 ```
 
 **After**:
+
 ```typescript
 // Consistent error format
 const response = await fetch('/api/organizations');
@@ -281,14 +304,14 @@ if (!response.ok) {
 
 1. **Middleware Pipeline**: Single factory wrap vs. nested decorators
    - Reduced function call stack from 5-7 levels to 3 levels
-   
+
 2. **Rate Limiting**: In-memory store for small workloads
    - No external dependency overhead for local development
    - Can be swapped for Redis in production
-   
+
 3. **Error Handling**: Early return pattern
    - Auth failures fail fast before Firestore queries
-   
+
 4. **Bundle Size**: Consolidated SDK exports
    - Reduced route imports from 4-6 per file to 2-3
 
@@ -297,6 +320,7 @@ if (!response.ok) {
 ## Testing
 
 ### Test Coverage
+
 - ✅ All 33 routes have proper TypeScript signatures
 - ✅ Context object structure validated
 - ✅ Role-based access control enforced (manager/admin checks)
@@ -304,6 +328,7 @@ if (!response.ok) {
 - ✅ Error responses standardized
 
 ### How to Test Locally
+
 ```bash
 # Start development server
 pnpm dev
@@ -325,7 +350,9 @@ curl -H "Authorization: Bearer $TOKEN" \
 ## Documentation
 
 ### For Backend Developers
+
 See `packages/api-framework/README.md` for:
+
 - Factory API reference
 - Configuration options (roles, rateLimit, csrf)
 - Context object shape
@@ -333,14 +360,18 @@ See `packages/api-framework/README.md` for:
 - Custom middleware extension points
 
 ### For Frontend Developers
+
 See `API_INTEGRATION.md` (to be created) for:
+
 - Endpoint reference with examples
 - Error codes and meanings
 - Rate limit headers
 - Authentication requirements
 
 ### For DevOps/SRE
+
 See `DEPLOYMENT.md` (to be created) for:
+
 - Performance characteristics
 - Rate limiting tuning
 - Monitoring & alerting setup
@@ -359,6 +390,7 @@ If issues arise:
 5. **Re-deploy**: Create new patch version (v1.2.1)
 
 Rollback command:
+
 ```bash
 git checkout v1.1.0
 pnpm build
@@ -370,18 +402,21 @@ npm run deploy
 ## Next Steps
 
 ### Immediate (Next 1 week)
+
 - [ ] Deploy to staging environment
 - [ ] Run full Series-A validation test suite
 - [ ] Security audit of context propagation
 - [ ] Performance baseline measurements
 
 ### Short-term (Next 2-4 weeks)
+
 - [ ] Deploy to production with canary
 - [ ] Monitor error rates and latency
 - [ ] Collect team feedback
 - [ ] Update internal documentation
 
 ### Medium-term (Q1 2026)
+
 - [ ] Deprecate legacy middleware files
 - [ ] Archive old route patterns
 - [ ] Plan SDK v2 with additional features

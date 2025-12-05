@@ -31,6 +31,7 @@
 **Why it exists:** Pre-framework solution for delayed task execution and retry management.
 
 **Current usage:**
+
 ```typescript
 // LEGACY PATTERN
 import { scheduleTask } from "@/services/scheduler/firestore-tasks";
@@ -43,12 +44,14 @@ await scheduleTask(db, {
 ```
 
 **Problems:**
+
 - Manual retry logic doesn't integrate with Cloud Tasks
 - No built-in exponential backoff validation
 - Requires explicit cron job to poll `_scheduler` collection
 - Scaling issues under high task volume
 
 **Migration path:**
+
 ```typescript
 // NEW PATTERN: Framework-native scheduling
 import { onSchedule } from "firebase-functions/v2/scheduler";
@@ -82,6 +85,7 @@ export const archiveInvoices = onSchedule(
 **What it is:** Manual exponential backoff implementation with circuit breaker pattern.
 
 **Legacy code:**
+
 ```typescript
 // DEPRECATED
 export async function retryWithBackoff(
@@ -106,11 +110,13 @@ export async function retryWithBackoff(
 ```
 
 **Issues:**
+
 - No validation of `backoffMultiplier` (can explode or converge to zero)
 - Redundant with framework retry logic
 - Difficult to reason about in tracing
 
 **Replacement:**
+
 ```typescript
 // NEW PATTERN: Declare retry policy at deploy time
 const task = onSchedule(
@@ -143,6 +149,7 @@ const task = onSchedule(
 - `reporting.ts` — Report generation
 
 **Current pattern:**
+
 ```typescript
 // functions/scheduled/cleanup.ts
 export const cleanupExpiredSessions = onSchedule(
@@ -159,12 +166,14 @@ export const cleanupExpiredSessions = onSchedule(
 ```
 
 **Architectural issues:**
+
 - Each task implements its own error handling
 - No centralized observability
 - Inconsistent logging across files
 - No validation of cron expressions
 
 **Unified approach:**
+
 ```typescript
 // Proposed: Single registry with shared middleware
 import { createScheduledTask, TaskConfig } from "@/lib/scheduling/registry";
@@ -204,6 +213,7 @@ export const scheduledTasks = tasks.map(config =>
 **Why deprecated:** Google Cloud Tasks provides native queuing with better semantics.
 
 **Legacy pattern:**
+
 ```typescript
 // DEPRECATED: Custom queue
 import { enqueueTask } from "@/services/queue";
@@ -234,6 +244,7 @@ export const queueWorker = onMessagePublished(
 - Difficult to reason about ordering
 
 **Modern replacement:**
+
 ```typescript
 // NEW PATTERN: Cloud Tasks
 import { v2 } from "@google-cloud/tasks";
@@ -268,11 +279,13 @@ export async function handleUserSignup(userId: string) {
 
 ### 2.5 Ad-Hoc Lock Coordination
 
-**Locations:** 
+**Locations:**
+
 - `functions/scheduled/maintenance.ts` (Firestore-based lock)
 - `src/services/scheduler/locks.ts` (homegrown implementation)
 
 **Legacy pattern:**
+
 ```typescript
 // DEPRECATED: Firestore-based distributed lock
 export async function acquireLock(lockId: string, ttlMs: number) {
@@ -296,12 +309,14 @@ export async function acquireLock(lockId: string, ttlMs: number) {
 ```
 
 **Issues:**
+
 - Transaction overhead on every attempt
 - No automatic cleanup of expired locks
 - Vulnerable to clock skew across zones
 - Firestore contention under high concurrency
 
 **Recommended approach:**
+
 ```typescript
 // NEW PATTERN: Redis-backed distributed lock (Redlock)
 import Redis from "ioredis";
@@ -420,6 +435,7 @@ export const performDailyMaintenance = onSchedule(
 ```
 
 **Problems:**
+
 - Manual lock management (error-prone)
 - Unvalidated retry config
 - Bare console logging (not queryable)
@@ -512,6 +528,7 @@ export const performDailyMaintenance = onSchedule(
 ```
 
 **Improvements:**
+
 - Framework handles retry policy validation
 - Distributed lock via Redis (atomic, efficient)
 - Structured logging (queryable in Cloud Logging)
@@ -634,6 +651,7 @@ export const processInvoiceTask = onRequest(
 ```
 
 **Improvements:**
+
 - Built-in retry with exponential backoff
 - Automatic deadletter queue
 - Service-to-service auth (OIDC token)
@@ -695,8 +713,8 @@ export const processInvoiceTask = onRequest(
 - **L2 Architecture:** See `03_SUBSYSTEMS_L2/scheduling.md` for comprehensive subsystem analysis
 - **Task Dependency Graph:** See `04_COMPONENTS_L3/task-coordination.md` for multi-step workflows
 - **Observability Standards:** See `04_COMPONENTS_L3/logging-standards.md` for structured logging codec
-- **Cloud Tasks Documentation:** https://cloud.google.com/tasks/docs
-- **Redlock Algorithm:** https://redis.io/docs/manual/patterns/distributed-locks/
+- **Cloud Tasks Documentation:** <https://cloud.google.com/tasks/docs>
+- **Redlock Algorithm:** <https://redis.io/docs/manual/patterns/distributed-locks/>
 
 ---
 

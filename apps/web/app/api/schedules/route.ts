@@ -1,6 +1,7 @@
 // [P0][SCHEDULE][API] Schedules list endpoint (with improved type definitions)
 
 import { CreateScheduleSchema } from "@fresh-schedules/types";
+import type { CreateScheduleInput } from "@fresh-schedules/types";
 import { Timestamp } from "firebase-admin/firestore";
 import { createOrgEndpoint } from "@fresh-schedules/api-framework";
 import type { NextRequest } from "next/server";
@@ -110,20 +111,22 @@ const createSchedule = async (request: NextRequest, context: RequestContext) => 
   }
 
   try {
-    const { name, startDate, endDate } = parsed.data;
+    // parsed may not be fully narrowed by TypeScript across module boundaries; assert shape
+    const successParsed = parsed as { success: true; data: CreateScheduleInput };
+    const { name, startDate, endDate } = successParsed.data;
     const scheduleRef = db.collection(`organizations/${context.org!.orgId}/schedules`).doc();
     const now = Timestamp.now();
 
     const schedule: ScheduleDoc = {
       id: scheduleRef.id,
-      orgId: context.org!.orgId,
-      name,
-      startDate: Timestamp.fromDate(new Date(startDate)),
-      endDate: Timestamp.fromDate(new Date(endDate)),
+      orgId: String(context.org!.orgId),
+      name: String(name),
+      startDate: Timestamp.fromDate(new Date(Number(startDate))),
+      endDate: Timestamp.fromDate(new Date(Number(endDate))),
       state: "draft",
       createdAt: now,
       updatedAt: now,
-      createdBy: context.auth!.userId,
+      createdBy: String(context.auth!.userId),
     };
 
     await setDocWithType<ScheduleDoc>(db, scheduleRef, schedule);

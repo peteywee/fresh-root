@@ -10,6 +10,7 @@
 ## 📚 Files in This Directory (Read Order)
 
 ### **START HERE**
+
 1. **[03_QUICK_REFERENCE.md](./03_QUICK_REFERENCE.md)** — Quick start guide (5 min read)
    - Session bootstrap message
    - What happens automatically
@@ -17,6 +18,7 @@
    - Typical workflow example
 
 ### **UNDERSTAND THE PROTOCOL**
+
 2. **[01_CREWOPS_MANUAL.md](./01_CREWOPS_MANUAL.md)** — Complete protocol manual (binding authority)
    - Constitution (7 binding laws)
    - Crew hierarchy & roles
@@ -34,6 +36,7 @@
    - Emergency fallback procedures
 
 ### **CONFIGURATION & REFERENCE**
+
 4. **[04_ACTIVATION_STATUS.md](./04_ACTIVATION_STATUS.md)** — Status & configuration tracking
    - What's active and where
    - Binding priority order
@@ -85,6 +88,7 @@
 **Primary Documentation**: `docs/crewops/` (this directory)  
 **Legacy Location**: `agents/` (for backwards compatibility; contains pointers to here)  
 **Cross-Referenced By**:
+
 - `agents/README.md` (updated to point here)
 - `agents/crewops.md` (stub linking to 01_CREWOPS_MANUAL.md)
 

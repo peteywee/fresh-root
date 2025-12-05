@@ -9,6 +9,7 @@ This document tracks recurring error patterns across FRESH-ROOT and establishes 
 ## Error Pattern Analysis: Recent Session
 
 ### Summary
+
 **Date**: December 1, 2025  
 **Total Errors Found**: 427 TypeScript errors (all in `@apps/web`)  
 **Root Cause**: SDK factory migration (commit 6639062) introduced broken code refactoring  
@@ -44,6 +45,7 @@ export const POST = createAuthenticatedEndpoint({
 **Why It Happened**: Refactor merged two different handler patterns (old `withSecurity` and new `createAuthenticatedEndpoint`)
 
 **Prevention Rule**:
+
 - ✅ Use code review checklist for refactors affecting >5 files
 - ✅ Run `pnpm typecheck` before committing refactors
 - ✅ Use `git diff` to spot doubled code blocks during rebase/merge
@@ -66,6 +68,7 @@ body = await req.json();
 **Files Affected**: All 22 route files in `app/api/*`
 
 **Prevention Rule**:
+
 - ✅ Enable IDE bracket-matching highlighting
 - ✅ Use Prettier's bracket-tracking formatter
 - ✅ Add pre-commit ESLint rule: `no-missing-parens` (custom rule)
@@ -86,6 +89,7 @@ try {
 ```
 
 **Prevention Rule**:
+
 - ✅ ESLint rule: `no-empty-try-catch` with mandatory catch
 - ✅ Require `catch` or `finally` after every `try`
 - ✅ TypeScript: Enable `strict` mode to catch incomplete statements
@@ -256,9 +260,9 @@ cat error-report.txt | wc -l  # Should stay at 13 (React version only)
 
 ## References
 
-- **TypeScript Error Codes**: https://www.typescriptlang.org/docs/handbook/error-index.html
-- **ESLint Rules**: https://eslint.org/docs/rules/
-- **Husky Docs**: https://typicode.github.io/husky/
+- **TypeScript Error Codes**: <https://www.typescriptlang.org/docs/handbook/error-index.html>
+- **ESLint Rules**: <https://eslint.org/docs/rules/>
+- **Husky Docs**: <https://typicode.github.io/husky/>
 - **Series-A Standards**: See `docs/PRODUCTION_READINESS.md`
 
 ---

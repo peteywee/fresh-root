@@ -5,6 +5,7 @@
 **TYPE:** Route/Function with inline Firestore writes
 
 **LOCATION_OLD** (representative):
+
 - `apps/web/app/api/schedules/create/route.ts`
 - `functions/src/schedules/createScheduleInline.ts`
 
