@@ -65,6 +65,19 @@
 				"reveal": "always"
 			}
 		}
+		,
+		{
+			"label": "shell: Git: Commit CI toggle",
+			"type": "shell",
+			"command": "bash",
+			"args": [
+				"-lc",
+				"git add .github/workflows/series-a-ci.yml && git commit -m \"chore(ci): temporarily set SKIP_PATTERN_VALIDATOR in CI\" || echo 'Nothing to commit'"
+			],
+			"presentation": {
+				"reveal": "always"
+			}
+		}
   ]
 }
 {

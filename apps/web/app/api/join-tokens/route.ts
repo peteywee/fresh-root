@@ -2,6 +2,7 @@
 
 import { createOrgEndpoint } from "@fresh-schedules/api-framework";
 import { ok, serverError } from "../_shared/validation";
+import { CreateJoinTokenSchema } from "@fresh-schedules/types";
 
 /**
  * GET /api/join-tokens
@@ -34,17 +35,16 @@ export const GET = createOrgEndpoint({
  */
 export const POST = createOrgEndpoint({
   roles: ["admin"],
-  handler: async ({ request, context, params }) => {
+  input: CreateJoinTokenSchema,
+  handler: async ({ input, context }) => {
     try {
-      const body = await request.json();
-      const { expiresIn } = body;
       const token = {
         id: `token-${Date.now()}`,
         orgId: context.org?.orgId,
         token: Math.random().toString(36).substring(2, 15),
         createdBy: context.auth?.userId,
         createdAt: Date.now(),
-        expiresAt: Date.now() + (expiresIn || 604800000),
+        expiresAt: input.expiresAt ?? Date.now() + 604800000,
       };
       return ok(token);
     } catch {

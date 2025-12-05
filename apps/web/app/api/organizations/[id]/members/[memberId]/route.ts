@@ -2,6 +2,7 @@
 
 import { createOrgEndpoint } from "@fresh-schedules/api-framework";
 import { ok, serverError } from "../../../../_shared/validation";
+import { UpdateMemberApiSchema } from "@fresh-schedules/types";
 
 /**
  * GET /api/organizations/[id]/members/[memberId]
@@ -31,10 +32,10 @@ export const GET = createOrgEndpoint({
  */
 export const PATCH = createOrgEndpoint({
   roles: ["admin"],
-  handler: async ({ request, context, params }) => {
+  input: UpdateMemberApiSchema,
+  handler: async ({ input, context, params }) => {
     try {
-      const body = await request.json();
-      const { role, permissions } = body;
+      const { role, permissions } = input;
       const updated = {
         id: params.memberId,
         orgId: params.id,

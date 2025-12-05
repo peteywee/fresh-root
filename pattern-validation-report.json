@@ -1,0 +1,83 @@
+{
+  "errors": [
+    {
+      "file": "apps/web/app/api/_template/route.ts",
+      "pattern": "API_ROUTE",
+      "name": "Write Validation",
+      "message": "Write API routes must validate input using Zod before use",
+      "tier": 0,
+      "severity": "error"
+    },
+    {
+      "file": "apps/web/app/api/items/route.ts",
+      "pattern": "API_ROUTE",
+      "name": "Write Validation",
+      "message": "Write API routes must validate input using Zod before use",
+      "tier": 0,
+      "severity": "error"
+    },
+    {
+      "file": "apps/web/app/api/join-tokens/route.ts",
+      "pattern": "API_ROUTE",
+      "name": "Write Validation",
+      "message": "Write API routes must validate input using Zod before use",
+      "tier": 0,
+      "severity": "error"
+    },
+    {
+      "file": "apps/web/app/api/onboarding/create-network-corporate/route.ts",
+      "pattern": "API_ROUTE",
+      "name": "Write Validation",
+      "message": "Write API routes must validate input using Zod before use",
+      "tier": 0,
+      "severity": "error"
+    },
+    {
+      "file": "apps/web/app/api/onboarding/join-with-token/route.ts",
+      "pattern": "API_ROUTE",
+      "name": "Write Validation",
+      "message": "Write API routes must validate input using Zod before use",
+      "tier": 0,
+      "severity": "error"
+    },
+    {
+      "file": "apps/web/app/api/onboarding/profile/route.ts",
+      "pattern": "API_ROUTE",
+      "name": "Write Validation",
+      "message": "Write API routes must validate input using Zod before use",
+      "tier": 0,
+      "severity": "error"
+    },
+    {
+      "file": "apps/web/app/api/organizations/[id]/members/[memberId]/route.ts",
+      "pattern": "API_ROUTE",
+      "name": "Write Validation",
+      "message": "Write API routes must validate input using Zod before use",
+      "tier": 0,
+      "severity": "error"
+    }
+  ],
+  "warnings": [],
+  "info": [],
+  "triadStatus": [
+    {
+      "entity": "Schedule",
+      "schema": true,
+      "api": true,
+      "rules": true
+    },
+    {
+      "entity": "Organization",
+      "schema": true,
+      "api": true,
+      "rules": true
+    },
+    {
+      "entity": "Shift",
+      "schema": true,
+      "api": true,
+      "rules": true
+    }
+  ],
+  "minScore": 90
+}

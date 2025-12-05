@@ -2,16 +2,17 @@
 
 import { createAuthenticatedEndpoint } from "@fresh-schedules/api-framework";
 import { ok, serverError } from "../../_shared/validation";
+import { OnboardingJoinWithTokenSchema } from "@fresh-schedules/types";
 
 /**
  * POST /api/onboarding/join-with-token
  * Join an organization using an invite token
  */
 export const POST = createAuthenticatedEndpoint({
-  handler: async ({ request, context }) => {
+  input: OnboardingJoinWithTokenSchema,
+  handler: async ({ input, context }) => {
     try {
-      const body = await request.json();
-      const { token, invitationId } = body;
+      const { token, invitationId } = input;
 
       const result = {
         userId: context.auth?.userId,

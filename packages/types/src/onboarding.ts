@@ -74,3 +74,27 @@ export const OnboardingStateSchema = z.object({
   lastUpdatedAt: z.number().int().positive().optional(),
 });
 export type OnboardingState = z.infer<typeof OnboardingStateSchema>;
+
+// Schema used by POST /api/onboarding/create-network-corporate
+export const CreateCorporateNetworkSchema = z.object({
+  companyName: z.string().min(1),
+  industry: z.string().optional(),
+  size: z.string().optional(),
+});
+export type CreateCorporateNetworkInput = z.infer<typeof CreateCorporateNetworkSchema>;
+
+// Schema for joining via token during onboarding flows
+export const OnboardingJoinWithTokenSchema = z.object({
+  token: z.string().min(1),
+  invitationId: z.string().optional(),
+});
+export type OnboardingJoinWithTokenInput = z.infer<typeof OnboardingJoinWithTokenSchema>;
+
+// Schema for completing profile during onboarding
+export const OnboardingProfileSchema = z.object({
+  firstName: z.string().min(1),
+  lastName: z.string().min(1),
+  avatar: z.string().optional(),
+  timezone: z.string().optional(),
+});
+export type OnboardingProfileInput = z.infer<typeof OnboardingProfileSchema>;

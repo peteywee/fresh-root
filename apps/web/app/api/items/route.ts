@@ -5,6 +5,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 import { createOrgEndpoint } from "@fresh-schedules/api-framework";
 import { badRequest, ok, serverError } from "../_shared/validation";
+import { CreateItemSchema } from "@fresh-schedules/types";
 
 /**
  * GET /api/items
@@ -46,16 +47,13 @@ export const GET = createOrgEndpoint({
  */
 export const POST = createOrgEndpoint({
   roles: ["manager"],
-  handler: async ({ request, context, params }) => {
+  input: CreateItemSchema,
+  handler: async ({ input, context }) => {
     try {
-      const body = await request.json();
-      // CreateItemSchema not available - using raw body
-      const validated = body;
-
       const item = {
         id: `item-${Date.now()}`,
         orgId: context.org?.orgId,
-        ...validated,
+        ...input,
         createdBy: context.auth?.userId,
         createdAt: Date.now(),
       };

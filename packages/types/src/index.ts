@@ -23,6 +23,7 @@ export * from "./venues";
 export * from "./zones";
 export * from "./attendance";
 export * from "./join-tokens";
+export * from "./items";
 export * from "./compliance/adminResponsibilityForm";
 export * from "./networks";
 export * from "./onboarding";

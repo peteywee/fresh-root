@@ -2,16 +2,17 @@
 
 import { createAuthenticatedEndpoint } from "@fresh-schedules/api-framework";
 import { ok, serverError } from "../../_shared/validation";
+import { OnboardingProfileSchema } from "@fresh-schedules/types";
 
 /**
  * POST /api/onboarding/profile
  * Complete user profile during onboarding
  */
 export const POST = createAuthenticatedEndpoint({
-  handler: async ({ request, context }) => {
+  input: OnboardingProfileSchema,
+  handler: async ({ input, context }) => {
     try {
-      const body = await request.json();
-      const { firstName, lastName, avatar, timezone } = body;
+      const { firstName, lastName, avatar, timezone } = input;
 
       const profile = {
         userId: context.auth?.userId,

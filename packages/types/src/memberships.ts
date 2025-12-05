@@ -55,6 +55,13 @@ export const UpdateMembershipSchema = z.object({
 });
 export type UpdateMembershipInput = z.infer<typeof UpdateMembershipSchema>;
 
+// API payload for updating a member via org member routes
+export const UpdateMemberApiSchema = z.object({
+  role: MembershipRole.optional(),
+  permissions: z.array(z.string()).optional(),
+});
+export type UpdateMemberApiInput = z.infer<typeof UpdateMemberApiSchema>;
+
 /**
  * Query parameters for listing memberships
  */
