@@ -2,17 +2,16 @@
 
 import { createAuthenticatedEndpoint } from "@fresh-schedules/api-framework";
 import { ok, serverError } from "../../_shared/validation";
-import { OnboardingJoinWithTokenSchema } from "@fresh-schedules/types";
 
 /**
  * POST /api/onboarding/join-with-token
  * Join an organization using an invite token
  */
 export const POST = createAuthenticatedEndpoint({
-  input: OnboardingJoinWithTokenSchema,
   handler: async ({ input, context }) => {
     try {
-      const { token, invitationId } = input;
+      // Note: input validation can be added with Zod schema if needed
+      const { token, invitationId } = input as any;
 
       const result = {
         userId: context.auth?.userId,

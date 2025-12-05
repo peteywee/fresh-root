@@ -2,17 +2,17 @@
 
 import { createAuthenticatedEndpoint } from "@fresh-schedules/api-framework";
 import { ok, serverError } from "../../_shared/validation";
-import { CreateCorporateNetworkSchema } from "@fresh-schedules/types";
+import { CreateCorporateOnboardingSchema } from "@fresh-schedules/types";
 
 /**
  * POST /api/onboarding/create-network-corporate
  * Create a corporate network
  */
 export const POST = createAuthenticatedEndpoint({
-  input: CreateCorporateNetworkSchema,
+  input: CreateCorporateOnboardingSchema,
   handler: async ({ input, context }) => {
     try {
-      const { companyName, industry, size } = input;
+      const { corporateName, brandName, formToken } = input;
       const network = {
         id: `network-${Date.now()}`,
         type: "corporate",

@@ -15,12 +15,13 @@
 
 import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
+import { getFirestore, FieldValue, Timestamp } from "firebase-admin/firestore";
 import { z } from "zod";
 
 // Avoid initializing Firestore/auth at module-evaluation time so tests can
-// initialize the Admin SDK (emulator) in test setup before use.
 function getDb() {
-  return admin.firestore();
+  return getFirestore();
+}
 }
 
 function getAuth() {
@@ -216,9 +217,8 @@ export async function joinOrganizationHandler(
       if (currentTokenData.currentUses >= currentTokenData.maxUses) {
         throw new JoinError("Token exhausted", "TOKEN_EXHAUSTED", 400);
       }
-
       const membershipRef = dbClient.collection("memberships").doc();
-      const now = admin.firestore.Timestamp.now();
+      const now = Timestamp.now();
 
       transaction.set(membershipRef, {
         uid: user.uid,
@@ -233,13 +233,14 @@ export async function joinOrganizationHandler(
         updatedAt: now,
       });
 
-      const inc = dbClient.FieldValue && dbClient.FieldValue.increment ? dbClient.FieldValue.increment(1) : admin.firestore.FieldValue.increment(1);
+      const inc = FieldValue.increment(1);
       transaction.update(tokenRef, {
         currentUses: inc,
         lastUsedAt: now,
         ...(currentTokenData.currentUses + 1 >= currentTokenData.maxUses && {
           status: "used",
         }),
+      });
       });
 
       if (isNewUser) {

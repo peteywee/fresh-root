@@ -2,7 +2,7 @@
 
 import { createOrgEndpoint } from "@fresh-schedules/api-framework";
 import { ok, serverError } from "../../../../_shared/validation";
-import { UpdateMemberApiSchema } from "@fresh-schedules/types";
+import { UpdateMembershipSchema } from "@fresh-schedules/types";
 
 /**
  * GET /api/organizations/[id]/members/[memberId]
@@ -16,7 +16,7 @@ export const GET = createOrgEndpoint({
         id: memberId,
         orgId: id,
         email: "member@example.com",
-        role: "member",
+        role: "staff",
         joinedAt: Date.now(),
       };
       return ok(member);
