@@ -82,7 +82,7 @@ export const PATCH = createOrgEndpoint({
       const validationResult = PositionSchema.safeParse(sanitized);
       if (!validationResult.success) {
         return NextResponse.json(
-          { error: "Invalid position data", details: validationResult.error.errors },
+          { error: "Invalid position data", details: validationResult.error.issues },
           { status: 400 },
         );
       }

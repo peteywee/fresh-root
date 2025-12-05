@@ -5,7 +5,7 @@
  * Helpers for managing canonical user onboarding state (users/{uid}.onboarding).
  * markOnboardingComplete is called after all successful onboarding flows to mark completion.
  */
-import { doc, type Firestore } from "firebase-admin/firestore";
+import type { Firestore } from "firebase-admin/firestore";
 import { updateDocWithType } from "@/lib/firebase/typed-wrappers";
 
 export type OnboardingIntent = "create_org" | "create_corporate" | "join_existing";
@@ -40,7 +40,7 @@ export async function markOnboardingComplete(params: {
   const now = Date.now();
 
   try {
-    const ref = doc(adminDb, "users", uid);
+    const ref = adminDb.collection("users").doc(uid);
     const updateData: Partial<UserOnboardingDoc> = {
       onboarding: {
         status: "complete",

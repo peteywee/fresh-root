@@ -23,9 +23,11 @@ export class ValidationError extends Error {
 
   toJSON() {
     return {
-      error: "Validation failed",
-      fields: this.fields,
-      statusCode: this.statusCode,
+      error: {
+        code: "VALIDATION_FAILED",
+        message: "Validation failed",
+        details: { fields: this.fields },
+      },
     };
   }
 }

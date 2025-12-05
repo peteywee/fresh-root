@@ -12,7 +12,6 @@
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { Firestore } from "firebase-admin/firestore";
-import { doc } from "firebase-admin/firestore";
 import { getDocWithType, setDocWithType } from "@/lib/firebase/typed-wrappers";
 import { z } from "zod";
 
@@ -63,7 +62,7 @@ export async function ensureUserProfile(args: {
     return;
   }
 
-  const ref = doc(adminDb, "users", uid);
+  const ref = adminDb.collection("users").doc(uid);
   const now = Date.now();
 
   const baseProfile = {

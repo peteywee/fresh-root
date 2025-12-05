@@ -12,6 +12,8 @@
     "baseUrl": ".",
     "paths": {
       "@fresh-schedules/types": ["packages/types/src/index.ts"],
+      "@fresh-schedules/api-framework": ["packages/api-framework/src/index.ts"],
+      "@fresh-schedules/api-framework/testing": ["packages/api-framework/src/testing.ts"],
       "@packages/env": ["packages/env/src/index.ts"]
     },
     "typeRoots": ["./types", "./node_modules/@types"],
