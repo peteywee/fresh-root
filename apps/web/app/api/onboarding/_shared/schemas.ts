@@ -123,7 +123,7 @@ export type JoinTokenResponse = z.infer<typeof JoinTokenResponseSchema>;
 
 export const ErrorResponseSchema = z.object({
   error: z.string(),
-  details: z.record(z.string()).optional(),
+  details: z.record(z.string(), z.string()).optional(),
 });
 
 export type ErrorResponse = z.infer<typeof ErrorResponseSchema>;

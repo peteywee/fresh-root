@@ -49,7 +49,7 @@ export async function parseJson<T>(req: Request, schema: z.ZodType<T>) {
 export const OrganizationCreateSchema = z.object({
   name: z.string().min(1, "Organization name is required").max(100),
   description: z.string().max(500).optional(),
-  settings: z.record(z.unknown()).optional(),
+  settings: z.record(z.string(), z.unknown()).optional(),
 });
 
 // Schedule schemas
