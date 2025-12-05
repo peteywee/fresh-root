@@ -16,7 +16,7 @@ export async function fixFiles(input: string) {
       {
         bullet: "-",
         fences: true,
-        listItemIndent: "1",
+        listItemIndent: "one",
         rule: "-",
         strong: "**",
       }
