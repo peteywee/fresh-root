@@ -18,7 +18,17 @@
     "deploy:hosting": "firebase deploy --only hosting",
     "// --- SDK ---": "",
     "build:sdk": "pnpm --filter \"@fresh-schedules/api-framework\" build",
-    "release:series-a": "node ./scripts/release-series-a.mjs"
+    "release:series-a": "node ./scripts/release-series-a.mjs",
+    "// --- TEST INTELLIGENCE ---": "",
+    "test:intelligence": "cd tests/intelligence && pnpm test:intelligence",
+    "test:intelligence:quick": "cd tests/intelligence && pnpm test:intelligence:quick",
+    "test:ai-demo": "cd tests/intelligence && pnpm demo",
+    "test:auto-generate": "cd tests/intelligence && pnpm test:auto-generate",
+    "test:performance": "cd tests/intelligence && pnpm test:performance",
+    "test:contracts": "cd tests/intelligence && pnpm test:contracts",
+    "test:mutation": "cd tests/intelligence && pnpm test:mutation",
+    "test:chaos": "cd tests/intelligence && pnpm test:chaos",
+    "test:analytics": "cd tests/intelligence && pnpm test:analytics"
   },
   "engines": {
     "node": ">=20.10.0",
