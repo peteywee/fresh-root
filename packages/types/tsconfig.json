@@ -4,7 +4,6 @@
     "outDir": "dist",
     "rootDir": "src",
     "declaration": true,
-    "composite": true,
     "skipLibCheck": true,
     "types": ["node"],
     "typeRoots": ["../../node_modules/@types"]

@@ -91,7 +91,7 @@ export async function createNetworkWithOrgAndVenue(
     id: networkId,
     slug: networkId,
     displayName: basics?.orgName ?? networkId,
-    legalName: (draft.payload as { data?: { legalName?: string } })?.data?.legalName ?? basics?.orgName ?? null,
+    legalName: (draft.form as { data?: { legalName?: string } })?.data?.legalName ?? basics?.orgName ?? null,
     kind: (basics as any).hasCorporateAboveYou ? "franchise_network" : "independent_org",
     segment: (basics as any).segment,
     status: "pending_verification",
@@ -108,7 +108,7 @@ export async function createNetworkWithOrgAndVenue(
   const formDoc: ComplianceDoc = {
     networkId,
     adminUid,
-    ...draft.payload,
+    ...draft.form,
     createdAt: now,
     createdBy: adminUid,
   };
@@ -152,7 +152,7 @@ export async function createNetworkWithOrgAndVenue(
   // Commit batch
   await batch.commit();
 
-  await consumeAdminFormDraft({ formToken, userId: adminUid });
+  await consumeAdminFormDraft({ formToken, expectedUserId: adminUid });
 
   return { networkId, orgId, venueId, status: "pending_verification" };
 }

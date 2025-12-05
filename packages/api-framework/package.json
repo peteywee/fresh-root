@@ -27,6 +27,7 @@
     "clean": "rm -rf dist"
   },
   "dependencies": {
+    "@fresh-schedules/types": "workspace:*",
     "zod": "^3.22.4"
   },
   "peerDependencies": {

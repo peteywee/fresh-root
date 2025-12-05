@@ -10,11 +10,13 @@ export type Role = z.infer<typeof Role>;
 // Type inference from compliance schemas
 export type AdminResponsibilityForm = z.infer<typeof AdminResponsibilityFormSchema>;
 
+// RBAC exports - must be first
 export * from "./rbac";
+
 export * from "./corporates";
 export * from "./orgs";
 export * from "./schedules";
-export * from "./memberships"; // This provides the canonical Membership export
+export * from "./memberships";
 export * from "./positions";
 export * from "./shifts";
 export * from "./venues";

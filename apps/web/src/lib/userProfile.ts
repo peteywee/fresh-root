@@ -111,8 +111,10 @@ export async function ensureUserProfile(args: {
     adminDb,
     ref,
     {
+      id: uid,
       profile,
       updatedAt: now,
+      createdAt: existing.createdAt || now,
       onboarding: existing.onboarding || {
         status: "not_started",
         stage: "profile",

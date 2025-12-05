@@ -33,7 +33,7 @@
  * ```
  */
 
-import type { OrgRole } from "@fresh-schedules/types";
+import type { OrgRole } from "../../types/src/rbac";
 import { NextRequest, NextResponse } from "next/server";
 import { ZodError, ZodSchema } from "zod";
 

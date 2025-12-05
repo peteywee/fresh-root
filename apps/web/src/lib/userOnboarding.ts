@@ -6,7 +6,7 @@
  * markOnboardingComplete is called after all successful onboarding flows to mark completion.
  */
 import type { Firestore } from "firebase-admin/firestore";
-import { updateDocWithType } from "@/lib/firebase/typed-wrappers";
+import { setDocWithType } from "@/lib/firebase/typed-wrappers";
 
 export type OnboardingIntent = "create_org" | "create_corporate" | "join_existing";
 
@@ -22,6 +22,7 @@ export interface OnboardingState {
 }
 
 export interface UserOnboardingDoc {
+  [key: string]: unknown;
   onboarding: OnboardingState;
 }
 
@@ -41,9 +42,9 @@ export async function markOnboardingComplete(params: {
 
   try {
     const ref = adminDb.collection("users").doc(uid);
-    const updateData: Partial<UserOnboardingDoc> = {
+    const updateData = {
       onboarding: {
-        status: "complete",
+        status: "complete" as const,
         stage: "network_created",
         intent,
         primaryNetworkId: networkId,
@@ -54,7 +55,7 @@ export async function markOnboardingComplete(params: {
       },
     };
 
-    await updateDocWithType<UserOnboardingDoc>(adminDb, ref, updateData, { merge: true });
+    await setDocWithType<UserOnboardingDoc>(adminDb, ref, updateData, { merge: true });
   } catch (_e) {
     // Don't surface errors to callers; keep original endpoint semantics.
     // Optionally log via a logger if available in the future.
