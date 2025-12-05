@@ -11,6 +11,21 @@ importers:
       '@fresh-schedules/types':
         specifier: workspace:*
         version: link:packages/types
+      '@opentelemetry/api':
+        specifier: ^1.9.0
+        version: 1.9.0
+      '@opentelemetry/exporter-trace-otlp-http':
+        specifier: ^0.207.0
+        version: 0.207.0(@opentelemetry/api@1.9.0)
+      '@opentelemetry/sdk-node':
+        specifier: ^0.207.0
+        version: 0.207.0(@opentelemetry/api@1.9.0)
+      '@opentelemetry/semantic-conventions':
+        specifier: ^1.37.0
+        version: 1.37.0
+      '@sentry/nextjs':
+        specifier: ^10.25.0
+        version: 10.25.0(@opentelemetry/context-async-hooks@2.2.0(@opentelemetry/api@1.9.0))(@opentelemetry/core@2.2.0(@opentelemetry/api@1.9.0))(@opentelemetry/sdk-trace-base@2.2.0(@opentelemetry/api@1.9.0))(encoding@0.1.13)(next@16.0.5(@babel/core@7.28.5)(@opentelemetry/api@1.9.0)(@playwright/test@1.56.1)(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react@19.2.0)(webpack@5.102.1(esbuild@0.27.0))
       '@tanstack/react-query':
         specifier: ^5.90.11
         version: 5.90.11(react@19.2.0)
@@ -20,6 +35,9 @@ importers:
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
+      firebase:
+        specifier: ^12.0.0
+        version: 12.4.0
       firebase-admin:
         specifier: ^13.6.0
         version: 13.6.0(encoding@0.1.13)
@@ -87,18 +105,30 @@ importers:
       eslint-plugin-unused-imports:
         specifier: ^4.3.0
         version: 4.3.0(@typescript-eslint/eslint-plugin@8.46.2(@typescript-eslint/parser@8.46.2(eslint@9.39.1(jiti@2.6.1))(typescript@5.9.3))(eslint@9.39.1(jiti@2.6.1))(typescript@5.9.3))(eslint@9.39.1(jiti@2.6.1))
+      firebaseui:
+        specifier: ^6.0.0
+        version: 6.1.0(firebase@12.4.0)
       globby:
         specifier: ^16.0.0
         version: 16.0.0
       husky:
         specifier: ^9.1.7
         version: 9.1.7
+      papaparse:
+        specifier: ^5.4.1
+        version: 5.5.3
       prettier:
         specifier: ^3.7.1
         version: 3.7.1
+      qrcode:
+        specifier: ^1.5.4
+        version: 1.5.4
       rimraf:
         specifier: ^6.0.1
         version: 6.1.2
+      speakeasy:
+        specifier: ^2.0.0
+        version: 2.0.0
       tailwindcss:
         specifier: ^4.1.17
         version: 4.1.17
@@ -114,6 +144,12 @@ importers:
       vitest:
         specifier: ^4.0.14
         version: 4.0.14(@opentelemetry/api@1.9.0)(@types/node@24.10.1)(@vitest/ui@4.0.14)(happy-dom@20.0.10)(jiti@2.6.1)(jsdom@27.1.0)(terser@5.44.1)(tsx@4.20.6)(yaml@2.8.1)
+      xlsx:
+        specifier: ^0.18.5
+        version: 0.18.5
+      zustand:
+        specifier: 4.5.2
+        version: 4.5.2(@types/react@19.2.7)(react@19.2.0)
 
   apps/web:
     dependencies:

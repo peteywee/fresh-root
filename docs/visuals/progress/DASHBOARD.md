@@ -20,6 +20,7 @@
 ## 📋 Active Task Checklist
 
 ### Phase 1: Cleanup (Cleanup Lead)
+
 - [ ] Audit branch structure (main, dev, features)
 - [ ] Generate list of duplicate files
 - [ ] Identify all .bak files
@@ -32,6 +33,7 @@
 - **GATE 1 CHECK**: All deletions complete?
 
 ### Phase 2: Dependencies (Dependency Specialist)
+
 - [ ] Extract missing packages from typecheck errors
 - [ ] Create MISSING_PACKAGES.md with versions
 - [ ] Install firebase client SDK
@@ -44,6 +46,7 @@
 - **GATE 2 CHECK**: All packages installed?
 
 ### Phase 3: Type Safety (Type Safety Lead)
+
 - [ ] Document Zod v4 API changes (z.record needs 2 params)
 - [ ] Fix z.record() calls in all files
 - [ ] Fix OrgRole export from packages/types
@@ -58,6 +61,7 @@
 - **GATE 3 CHECK**: TypeCheck passes?
 
 ### Phase 4: Validation & Merge (Orchestrator)
+
 - [ ] Run pnpm -w lint
 - [ ] Run pnpm -w format
 - [ ] Run pnpm -w typecheck (final)
@@ -154,20 +158,23 @@ GATE 4: Ready for Merge
 
 ## 🔄 Next Actions
 
-### For Orchestrator (NOW):
+### For Orchestrator (NOW)
+
 1. ✅ Review TEAM_STRUCTURE.md
 2. ✅ Review this DASHBOARD.md
 3. **→ Assign Phase 1 to Cleanup Lead**
 4. **→ Request initial DUPLICATE_FILES.md list**
 
-### For Cleanup Lead (NEXT):
+### For Cleanup Lead (NEXT)
+
 1. Audit current branches (main, dev)
 2. Generate branch diff (files unique to each)
 3. Identify all .bak files in repo
 4. Check for duplicate implementations
 5. Create `DUPLICATE_FILES.md` with priority ranking
 
-### For Documentation Lead (CONTINUOUS):
+### For Documentation Lead (CONTINUOUS)
+
 1. Monitor this dashboard
 2. Update checklist after each phase completes
 3. Generate visual progress reports
@@ -178,6 +185,7 @@ GATE 4: Ready for Merge
 ## 📝 Log
 
 **Dec 5, 2025 - 14:00 UTC**: Dashboard created. Phase 1 ready to start.
+
 - Team structure defined
 - Artifact directories created
 - Specialist roles assigned
@@ -204,6 +212,7 @@ Files to Delete: 0  |  Branches: 3  |  Ready: ✅
 ## 📞 Questions / Escalations
 
 **For Orchestrator to decide**:
+
 - Should we archive deleted files or permanently remove?
 - Branch strategy: Keep all branches or consolidate?
 - Which lib should be canonical: apps/web/lib or apps/web/src/lib?

@@ -7,6 +7,7 @@
 ## 🎯 Team Roster & Responsibilities
 
 ### 1. **Orchestrator / Primary Agent (YOU)**
+
 - **Focus**: Strategic oversight, decision-making, phase transitions
 - **Tasks**:
   - Define priorities and phase sequencing
@@ -16,6 +17,7 @@
   - Manage branch merges and CI validation
 
 ### 2. **Cleanup Lead (Specialist #1)**
+
 - **Focus**: Identify and delete redundant/legacy files
 - **Responsibilities**:
   - Audit repo for duplicate files (libs, implementations, backups)
@@ -26,6 +28,7 @@
   - `docs/visuals/branch-analysis/DUPLICATE_FILES.md` — files to delete
   - `docs/visuals/branch-analysis/DELETION_LOG.md` — what was deleted & why
 - **Decision Matrix**:
+
   ```
   Priority 1 (Delete immediately):
   - *.bak files (old backups)
@@ -43,6 +46,7 @@
   ```
 
 ### 3. **Dependency Specialist (Specialist #2)**
+
 - **Focus**: Install missing packages, resolve dependency conflicts
 - **Responsibilities**:
   - Extract missing packages from TypeScript errors
@@ -55,6 +59,7 @@
   - `docs/visuals/dependencies/INSTALL_LOG.md` — what was installed & status
   - `docs/visuals/dependencies/AUDIT_REPORT.md` — final audit of all deps
 - **Known Missing**:
+
   ```
   apps/web needs:
   - firebase (client SDK: firebase/auth, firebase/firestore, firebase/storage, firebase/analytics, firebase/app)
@@ -69,6 +74,7 @@
   ```
 
 ### 4. **Type Safety Lead (Specialist #3)**
+
 - **Focus**: Fix TypeScript errors systematically
 - **Responsibilities**:
   - Categorize 97 TypeScript errors by type
@@ -81,6 +87,7 @@
   - `docs/visuals/type-errors/FIXES_APPLIED.md` — what was fixed & how
   - `docs/visuals/type-errors/REMAINING_ERRORS.md` — blockers after fixes
 - **Priority Categories**:
+
   ```
   Tier 1 (High Impact):
   - Missing module declarations (97 errors, blocks all)
@@ -97,6 +104,7 @@
   ```
 
 ### 5. **Documentation Lead (Specialist #4)**
+
 - **Focus**: Generate and maintain visual progress reports
 - **Responsibilities**:
   - Create ASCII/Markdown diagrams showing phase progress
@@ -151,11 +159,13 @@ Documentation Lead (Continuous):
 ## 🔄 Branch Strategy
 
 **Primary Branches**:
+
 - `dev` — main development branch (current)
 - `main` — production-ready (merge after validation)
 - `docs-and-tests` — dedicated docs/test updates (new)
 
 **Workflow**:
+
 1. All changes on `dev` branch
 2. Visual artifacts pushed to `docs/visuals/` on `dev`
 3. When cleanup/fixes complete → merge to `main`
@@ -211,6 +221,7 @@ GATE 4 (Before Merge):
 ## 🚀 How to Delegate
 
 **For Orchestrator (YOU)**:
+
 1. Review this document
 2. Assign each specialist their starting task
 3. Monitor progress via artifacts
@@ -218,6 +229,7 @@ GATE 4 (Before Merge):
 5. Make decisions at gates
 
 **For Specialists**:
+
 1. Read your section above
 2. Check artifacts directory
 3. Execute your phase tasks
@@ -263,6 +275,7 @@ Each specialist creates artifacts following this template:
 Visual artifacts will include:
 
 **ASCII Progress Bar**:
+
 ```
 Phase 1: Cleanup ████░░░░░░ 40%
 Phase 2: Dependencies ░░░░░░░░░░ 0%
@@ -271,6 +284,7 @@ Phase 4: Validation ░░░░░░░░░░ 0%
 ```
 
 **Error Category Breakdown**:
+
 ```
 Missing Modules: ████████░░ 45 errors (46%)
 Type Coercions: ████░░░░░░ 22 errors (23%)
@@ -279,6 +293,7 @@ Other: ██░░░░░░░░ 18 errors (19%)
 ```
 
 **Branch Diff Visualization**:
+
 ```
 File Structure:
 main        → 450 files
