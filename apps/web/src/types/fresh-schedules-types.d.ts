@@ -228,8 +228,21 @@ declare module "@fresh-schedules/types" {
   export const CreateOrgOnboardingSchema: ZAnyObj;
   export type CreateOrgOnboarding = z.infer<typeof CreateOrgOnboardingSchema>;
 
-  export const CreateNetworkOrgPayload: ZAnyObj;
-  export type CreateNetworkOrgPayload = z.infer<typeof CreateNetworkOrgPayload>;
+  export const CreateNetworkOrgPayloadSchema: z.ZodObject<{
+    basics: z.ZodObject<{
+      orgName: z.ZodString;
+      hasCorporateAboveYou: z.ZodBoolean;
+      segment: z.ZodOptional<z.ZodString>;
+    }>;
+    venue: z.ZodOptional<
+      z.ZodObject<{
+        venueName: z.ZodString;
+        timeZone: z.ZodString;
+      }>
+    >;
+    formToken: z.ZodString;
+  }>;
+  export type CreateNetworkOrgPayload = z.infer<typeof CreateNetworkOrgPayloadSchema>;
 
   export const OnboardingIntent: z.ZodEnum<["create_org", "create_corporate", "join_existing"]>;
   export type OnboardingIntent = z.infer<typeof OnboardingIntent>;
