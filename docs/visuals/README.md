@@ -52,29 +52,34 @@ docs/visuals/
 ## 🎯 Quick Links by Role
 
 ### For Orchestrator (YOU)
+
 - **Start Here**: `TEAM_STRUCTURE.md` — Understand specialist roles
 - **Monitor Progress**: `progress/DASHBOARD.md` — Live checklist
 - **Make Decisions**: `branch-analysis/BRANCH_CONSOLIDATION_GUIDE.md` — Strategic choices
 - **Automate**: `AUTOMATION_AND_CI.md` — Setup continuous generation
 
 ### For Cleanup Lead (Specialist #1)
+
 - **Plan Work**: `branch-analysis/PHASE1_CLEANUP_PLAN.md`
 - **Track Progress**: `branch-analysis/DELETION_LOG.md` (update as you go)
 - **Report Status**: Update `progress/DASHBOARD.md` after completing phases
 
 ### For Dependency Specialist (Specialist #2)
+
 - **Identify Needs**: `dependencies/MISSING_PACKAGES.md`
 - **Install & Log**: `dependencies/INSTALL_LOG.md` (update as you go)
 - **Audit**: `dependencies/AUDIT_REPORT.md` (after completion)
 - **Report Status**: Update `progress/DASHBOARD.md` after Phase 2 complete
 
 ### For Type Safety Lead (Specialist #3)
+
 - **Understand Errors**: `type-errors/ERROR_CATEGORIES.md`
 - **Track Fixes**: `type-errors/FIXES_APPLIED.md` (update as you fix)
 - **Dashboard**: `type-errors/ERROR_DASHBOARD.md` (visual error breakdown)
 - **Report Status**: Update `progress/DASHBOARD.md` after Phase 3 complete
 
 ### For Documentation Lead (Continuous)
+
 - **Main Responsibility**: Keep `progress/DASHBOARD.md` updated
 - **Update Automation**: Maintain `AUTOMATION_AND_CI.md`
 - **Generate Reports**: Run scripts from `AUTOMATION_AND_CI.md`
@@ -135,12 +140,14 @@ docs/visuals/
 All visuals should follow these patterns:
 
 ### Progress Bars (ASCII)
+
 ```markdown
 Phase 1: Cleanup        [████░░░░░░] 40%
 Phase 2: Dependencies   [░░░░░░░░░░] 0%
 ```
 
 ### Error Breakdowns (Table)
+
 ```markdown
 | Category | Count | % | Status |
 |----------|-------|---|--------|
@@ -149,6 +156,7 @@ Phase 2: Dependencies   [░░░░░░░░░░] 0%
 ```
 
 ### Checklists (Markdown)
+
 ```markdown
 ### Phase 1: Cleanup
 - [x] Task 1 completed
@@ -157,6 +165,7 @@ Phase 2: Dependencies   [░░░░░░░░░░] 0%
 ```
 
 ### Status Indicators
+
 ```
 ✅ Complete
 🟡 In Progress
@@ -189,23 +198,27 @@ Phase 2: Dependencies   [░░░░░░░░░░] 0%
 ## 🚀 Getting Started
 
 ### Step 1: Understand the Plan
+
 1. Read `TEAM_STRUCTURE.md` (5 min)
 2. Review `progress/DASHBOARD.md` (2 min)
 3. Skim `branch-analysis/BRANCH_CONSOLIDATION_GUIDE.md` (5 min)
 
 ### Step 2: Assign Roles
+
 1. Assign Cleanup Lead → Start Phase 1
 2. Assign Dependency Specialist → Prepare Phase 2
 3. Assign Type Safety Lead → Prepare Phase 3
 4. Assign Documentation Lead → Maintain dashboards
 
 ### Step 3: Execute Phases
+
 1. Phase 1: Cleanup (Cleanup Lead, 1 hour)
 2. Phase 2: Dependencies (Dependency Specialist, 30 min)
 3. Phase 3: Type Safety (Type Safety Lead, 2 hours)
 4. Phase 4: Validation (Orchestrator, 30 min)
 
 ### Step 4: Track Progress
+
 1. Update artifacts continuously (don't wait for phase end)
 2. Use this README to find what to update
 3. Report blockers immediately

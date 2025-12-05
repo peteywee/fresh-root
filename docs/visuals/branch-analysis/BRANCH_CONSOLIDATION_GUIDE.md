@@ -104,6 +104,7 @@ dep-fixes: ~475 files (+25 from main)
 **Question**: apps/web/lib vs apps/web/src/lib?
 
 **Analysis**:
+
 ```
 apps/web/lib/ (OLD):
   ├─ firebase-admin.ts
@@ -129,6 +130,7 @@ Action: DELETE apps/web/lib/
 **Question**: Where should all schemas live?
 
 **Current State**:
+
 ```
 packages/types/src/:
   ├─ shifts.ts ...................... ✅ Source of truth
@@ -152,6 +154,7 @@ Action: DELETE duplicates from validation.ts
 **Question**: What happens to old files?
 
 **Strategy**:
+
 ```
 Priority 1 (DELETE Immediately):
   - *.bak files (backups)
@@ -208,6 +211,7 @@ Timeline:
 ### Recommended Merge Flow
 
 **Phase 1: Consolidate on dev**
+
 ```
 Step 1: Complete cleanup on dev
         - Delete .bak files
@@ -233,6 +237,7 @@ Step 4: Final validation on dev
 ```
 
 **Phase 2: Review feature branches**
+
 ```
 Step 5: Review fix/config-typeerrors
         - Check if fixes conflict with our work
@@ -248,6 +253,7 @@ Status: Feature branches = EVALUATED
 ```
 
 **Phase 3: Merge to main**
+
 ```
 Step 7: Merge dev → main
         - All gates pass
