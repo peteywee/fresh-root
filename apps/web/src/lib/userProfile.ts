@@ -96,7 +96,7 @@ export async function ensureUserProfile(args: {
         lastUpdatedAt: now,
       },
     };
-    
+
     await setDocWithType<UserProfileDoc>(adminDb, ref, newProfile);
     return;
   }
@@ -126,6 +126,6 @@ export async function ensureUserProfile(args: {
         lastUpdatedAt: now,
       },
     },
-    { merge: true }
+    { merge: true },
   );
 }

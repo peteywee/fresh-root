@@ -1,48 +1,41 @@
 # Quick Start: Runtime Documentation
-
-**Current Status:** Production Ready ✅  
-**Main Commit:** f1bfe18 | Score: 130.0 | Tier 0/1: 0 violations  
+**Current Status:** Production Ready ✅\
+**Main Commit:** f1bfe18 | Score: 130.0 | Tier 0/1: 0 violations\
 **Updated:** 2025-11-28
 
 ---
 
 ## For Different Teams
-
 ### 👨‍💼 Operations/Project Managers
-
-1. Read: [PRODUCTION_READINESS_EXECUTIVE_SUMMARY.md](./PRODUCTION_READINESS_EXECUTIVE_SUMMARY.md)
+1. Read: [PRODUCTION\_READINESS\_EXECUTIVE\_SUMMARY.md](./PRODUCTION_READINESS_EXECUTIVE_SUMMARY.md)
 2. Check: Current score and deployment status
 3. Expected: All green ✅
 
 ### 👨‍💻 Developers Starting a Feature
-
 1. `git checkout dev`
 2. Read standard for your change:
-   - Security? → [PHASE_1_TIER_0_FIXES.md](./PHASE_1_TIER_0_FIXES.md)
-   - Types? → [PHASE_2_TIER_1_FIXES.md](./PHASE_2_TIER_1_FIXES.md)
-   - Architecture? → [standards/SYMMETRY_FRAMEWORK.md](./standards/SYMMETRY_FRAMEWORK.md)
-3. Implement following standard
-4. Test: `pnpm lint:patterns` (should show 90+)
-5. Create PR to dev
-6. CI validates automatically
+   - Security? → [PHASE\_1\_TIER\_0\_FIXES.md](./PHASE_1_TIER_0_FIXES.md)
+   - Types? → [PHASE\_2\_TIER\_1\_FIXES.md](./PHASE_2_TIER_1_FIXES.md)
+   - Architecture? → [standards/SYMMETRY\_FRAMEWORK.md](./standards/SYMMETRY_FRAMEWORK.md)
+1. Implement following standard
+2. Test: `pnpm lint:patterns` (should show 90+)
+3. Create PR to dev
+4. CI validates automatically
 
 ### 🚀 Deployment Team
-
-1. Check: [PRODUCTION_DEPLOYMENT_GUIDE.md](./PRODUCTION_DEPLOYMENT_GUIDE.md)
+1. Check: [PRODUCTION\_DEPLOYMENT\_GUIDE.md](./PRODUCTION_DEPLOYMENT_GUIDE.md)
 2. Follow: Step-by-step deployment
 3. Expected: All guard-main checks pass ✅
 
 ### 🔍 Auditors/Security Review
-
 1. Main branch = Runtime code
-2. Check: [RUNTIME_DOCUMENTATION_INDEX.md](./RUNTIME_DOCUMENTATION_INDEX.md)
+2. Check: [RUNTIME\_DOCUMENTATION\_INDEX.md](./RUNTIME_DOCUMENTATION_INDEX.md)
 3. Follow: Links to dev standards
 4. Verify: All checks documented and automated
 
 ---
 
 ## Quick Facts
-
 | Metric                     | Value             |
 | -------------------------- | ----------------- |
 | **Pattern Score**          | 130.0 / 100 ✅    |
@@ -56,23 +49,21 @@
 ---
 
 ## Key Documents
-
 **On Main (Production):**
 
-- [RUNTIME_DOCUMENTATION_INDEX.md](./RUNTIME_DOCUMENTATION_INDEX.md) ← Start here
-- [PRODUCTION_DEPLOYMENT_GUIDE.md](./PRODUCTION_DEPLOYMENT_GUIDE.md)
-- [BRANCH_LINKING_GUIDE.md](./BRANCH_LINKING_GUIDE.md)
+- [RUNTIME\_DOCUMENTATION\_INDEX.md](./RUNTIME_DOCUMENTATION_INDEX.md) ← Start here
+- [PRODUCTION\_DEPLOYMENT\_GUIDE.md](./PRODUCTION_DEPLOYMENT_GUIDE.md)
+- [BRANCH\_LINKING\_GUIDE.md](./BRANCH_LINKING_GUIDE.md)
 
 **On Dev (Development):**
 
-- [standards/00_STANDARDS_INDEX.md](./standards/00_STANDARDS_INDEX.md)
-- [PHASE_1_TIER_0_FIXES.md](./PHASE_1_TIER_0_FIXES.md)
-- [PHASE_2_TIER_1_FIXES.md](./PHASE_2_TIER_1_FIXES.md)
+- [standards/00\_STANDARDS\_INDEX.md](./standards/00_STANDARDS_INDEX.md)
+- [PHASE\_1\_TIER\_0\_FIXES.md](./PHASE_1_TIER_0_FIXES.md)
+- [PHASE\_2\_TIER\_1\_FIXES.md](./PHASE_2_TIER_1_FIXES.md)
 
 ---
 
 ## One-Minute Overview
-
 **What's deployed to production (main)?**
 
 - All runtime code verified to 90+ standard ✅
@@ -101,7 +92,6 @@
 ---
 
 ## Commands to Know
-
 ```bash
 # Check production score
 FRESH_PATTERNS_MIN_SCORE=90 pnpm lint:patterns
@@ -110,7 +100,6 @@ FRESH_PATTERNS_MIN_SCORE=90 pnpm lint:patterns
 # 💎 SCORE: 130.0 points — PERFECT
 # 🔴 Tier 0: 0
 # 🟠 Tier 1: 0
-
 # Verify types
 pnpm typecheck
 
@@ -126,21 +115,19 @@ git checkout -b feature/my-feature
 ---
 
 ## What Each Document Does
-
 | Document                                  | For             | Purpose                    |
 | ----------------------------------------- | --------------- | -------------------------- |
-| RUNTIME_DOCUMENTATION_INDEX.md            | Everyone        | Master index & entry point |
-| PRODUCTION_READINESS_EXECUTIVE_SUMMARY.md | Operations      | Current status overview    |
-| PRODUCTION_DEPLOYMENT_GUIDE.md            | Deployment Team | How to deploy              |
-| BRANCH_LINKING_GUIDE.md                   | Architects      | How linking works          |
-| PHASE_1_TIER_0_FIXES.md                   | Developers      | Security requirements      |
-| PHASE_2_TIER_1_FIXES.md                   | Developers      | Type requirements          |
-| SYMMETRY_FRAMEWORK.md                     | Developers      | Architecture requirements  |
+| RUNTIME\_DOCUMENTATION\_INDEX.md            | Everyone        | Master index & entry point |
+| PRODUCTION\_READINESS\_EXECUTIVE\_SUMMARY.md | Operations      | Current status overview    |
+| PRODUCTION\_DEPLOYMENT\_GUIDE.md            | Deployment Team | How to deploy              |
+| BRANCH\_LINKING\_GUIDE.md                   | Architects      | How linking works          |
+| PHASE\_1\_TIER\_0\_FIXES.md                   | Developers      | Security requirements      |
+| PHASE\_2\_TIER\_1\_FIXES.md                   | Developers      | Type requirements          |
+| SYMMETRY\_FRAMEWORK.md                     | Developers      | Architecture requirements  |
 
 ---
 
 ## If Something Goes Wrong
-
 **CI fails on dev PR:**
 
 1. Read error message (links to standard)
@@ -161,7 +148,7 @@ git checkout -b feature/my-feature
 **Need to understand a requirement:**
 
 1. Find component on main (runtime)
-2. Check BRANCH_LINKING_GUIDE.md
+2. Check BRANCH\_LINKING\_GUIDE.md
 3. Follow link to dev branch standard
 4. Read relevant Phase doc
 5. See examples and implementation
@@ -169,27 +156,21 @@ git checkout -b feature/my-feature
 ---
 
 ## Your Role
-
 ### If you're an Operations Manager
-
-→ Go to [PRODUCTION_READINESS_EXECUTIVE_SUMMARY.md](./PRODUCTION_READINESS_EXECUTIVE_SUMMARY.md)
+→ Go to [PRODUCTION\_READINESS\_EXECUTIVE\_SUMMARY.md](./PRODUCTION_READINESS_EXECUTIVE_SUMMARY.md)
 
 ### If you're a Developer
-
-→ Go to dev branch, read [docs/standards/00_STANDARDS_INDEX.md](../../dev/docs/standards/00_STANDARDS_INDEX.md)
+→ Go to dev branch, read [docs/standards/00\_STANDARDS\_INDEX.md](../../dev/docs/standards/00_STANDARDS_INDEX.md)
 
 ### If you're Deploying
-
-→ Go to [PRODUCTION_DEPLOYMENT_GUIDE.md](./PRODUCTION_DEPLOYMENT_GUIDE.md)
+→ Go to [PRODUCTION\_DEPLOYMENT\_GUIDE.md](./PRODUCTION_DEPLOYMENT_GUIDE.md)
 
 ### If you're Auditing
-
-→ Go to [BRANCH_LINKING_GUIDE.md](./BRANCH_LINKING_GUIDE.md)
+→ Go to [BRANCH\_LINKING\_GUIDE.md](./BRANCH_LINKING_GUIDE.md)
 
 ---
 
 ## Status Dashboard
-
 ```
 ✅ PRODUCTION READY
 ├─ Code Quality:     130.0 / 100
@@ -203,6 +184,6 @@ git checkout -b feature/my-feature
 
 ---
 
-**Last Updated:** 2025-11-28  
-**Start Here:** [RUNTIME_DOCUMENTATION_INDEX.md](./RUNTIME_DOCUMENTATION_INDEX.md)  
+**Last Updated:** 2025-11-28\
+**Start Here:** [RUNTIME\_DOCUMENTATION\_INDEX.md](./RUNTIME_DOCUMENTATION_INDEX.md)\
 **All Good:** Yes ✅

@@ -1,13 +1,11 @@
 # 🤖 Automation & CI: Continuous Visual Generation
-
-**Purpose**: Enable automatic visual documentation updates on push  
-**Owner**: Documentation Lead  
-**Branch**: docs-and-tests (or dev)  
+**Purpose**: Enable automatic visual documentation updates on push\
+**Owner**: Documentation Lead\
+**Branch**: docs-and-tests (or dev)
 
 ---
 
 ## 📋 Overview
-
 This guide establishes how visuals are automatically generated and maintained:
 
 1. **On Every Push**: Generate basic metrics (errors, files, etc.)
@@ -18,14 +16,12 @@ This guide establishes how visuals are automatically generated and maintained:
 ---
 
 ## 🚀 Automation Script: Visual Generator
-
 **File**: `scripts/generate-visuals.sh`
 
 ```bash
-#!/bin/bash
+# !/bin/bash
 # Generate visual progress reports and metrics
 # Run on: Every push to dev or phase completion
-
 set -e
 
 echo "🎨 Generating Visual Reports..."
@@ -51,11 +47,9 @@ DELETED_FILES=$(git log --oneline --all --grep="delete\|remove" --since="1 day a
 # 5. Generate Dashboard Update
 cat > "${VISUALS_DIR}/progress/METRICS_$(date '+%Y%m%d').md" << EOF
 # 📊 Metrics Report - $(date '+%Y-%m-%d')
-
 **Generated**: ${TIMESTAMP}
 
 ## Compiler Metrics
-
 | Metric | Value | Trend |
 |--------|-------|-------|
 | TypeScript Errors | ${TS_ERRORS} | ↓ (goal: 0) |
@@ -63,14 +57,12 @@ cat > "${VISUALS_DIR}/progress/METRICS_$(date '+%Y%m%d').md" << EOF
 | Missing Modules | ${MISSING_MODULES} | ↓ (goal: 0) |
 
 ## Codebase Metrics
-
 | Metric | Value |
 |--------|-------|
 | Total TypeScript Files | ${TOTAL_FILES} |
 | Deleted This Period | ${DELETED_FILES} |
 
 ## Progress
-
 \`\`\`
 TypeScript Errors: $(printf '█%.0s' $(seq 1 $((TS_ERRORS / 10))))░░░░░░░░░░ ${TS_ERRORS}/0
 Missing Modules:   $(printf '█%.0s' $(seq 1 $((MISSING_MODULES / 5))))░░░░░░░░░░ ${MISSING_MODULES}/0
@@ -86,23 +78,19 @@ echo "✅ Visuals generated at ${VISUALS_DIR}/progress/"
 ---
 
 ## 📅 Scheduled Tasks
-
 ### Daily at 09:00 UTC
-
 ```yaml
 name: Daily Metrics Report
 schedule: "0 9 * * *"
 branch: dev
 
-steps:
-  1. pnpm -w typecheck
-  2. scripts/generate-visuals.sh
-  3. Commit metrics to dev
-  4. Update DASHBOARD.md
+steps: 1. pnpm -w typecheck
+  1. scripts/generate-visuals.sh
+  2. Commit metrics to dev
+  3. Update DASHBOARD.md
 ```
 
 ### On Every Push to dev
-
 ```yaml
 name: Update Visuals
 on:
@@ -114,15 +102,13 @@ on:
       - "packages/**"
       - "functions/**"
 
-steps:
-  1. pnpm -w typecheck
-  2. Count errors
-  3. Update progress metrics
-  4. Push updated visuals/
+steps: 1. pnpm -w typecheck
+  1. Count errors
+  2. Update progress metrics
+  3. Push updated visuals/
 ```
 
 ### On Phase Completion (Manual)
-
 ```bash
 # When Phase 1 complete:
 ./scripts/generate-visuals.sh --phase=1 --complete
@@ -134,7 +120,6 @@ steps:
 ```
 
 ### On Merge to main (Archive)
-
 ```yaml
 name: Archive and Summarize
 on:
@@ -142,17 +127,15 @@ on:
     branches:
       - main
 
-steps:
-  1. Create archive snapshot
-  2. Generate completion summary
-  3. Document what was fixed
-  4. Create branch summary
+steps: 1. Create archive snapshot
+  1. Generate completion summary
+  2. Document what was fixed
+  3. Create branch summary
 ```
 
 ---
 
 ## 📁 Artifact Structure
-
 ```
 docs/visuals/
 ├─ progress/
@@ -192,20 +175,17 @@ docs/visuals/
 ---
 
 ## 🎨 Visual Template Examples
-
 ### ASCII Error Distribution
-
 ```markdown
 ## Error Distribution
-
 \`\`\`
 Errors by Category:
 
-Module Import Errors      ██████████ 45 errors (46%)
-Type Coercion Errors      ████░░░░░░ 22 errors (23%)
-Zod Schema Errors         ██░░░░░░░░ 12 errors (12%)
-Duplicate Declaration     ███░░░░░░░ 14 errors (14%)
-Other                     █░░░░░░░░░ 4 errors (5%)
+Module Import Errors ██████████ 45 errors (46%)
+Type Coercion Errors ████░░░░░░ 22 errors (23%)
+Zod Schema Errors ██░░░░░░░░ 12 errors (12%)
+Duplicate Declaration ███░░░░░░░ 14 errors (14%)
+Other █░░░░░░░░░ 4 errors (5%)
 
 Total: 97 errors
 Progress: ████░░░░░░░░░░░░░░ 20% (fixed 20, remaining 77)
@@ -213,25 +193,21 @@ Progress: ████░░░░░░░░░░░░░░ 20% (fixed 20, 
 ```
 
 ### ASCII Progress Bar
-
 ```markdown
 ## Overall Progress
-
 \`\`\`
-Phase 1: Cleanup                ████░░░░░░ 40%
-Phase 2: Dependencies           ░░░░░░░░░░ 0%
-Phase 3: Type Safety            ░░░░░░░░░░ 0%
-Phase 4: Validation & Merge     ░░░░░░░░░░ 0%
+Phase 1: Cleanup ████░░░░░░ 40%
+Phase 2: Dependencies ░░░░░░░░░░ 0%
+Phase 3: Type Safety ░░░░░░░░░░ 0%
+Phase 4: Validation & Merge ░░░░░░░░░░ 0%
 
 Overall: ██░░░░░░░░ 10% (1 phase underway)
 \`\`\`
 ```
 
 ### Branch Diff Tree
-
 ```markdown
 ## Repository Structure
-
 \`\`\`
 main (production)
 ├─ 450 files
@@ -255,7 +231,6 @@ feature-branches
 ---
 
 ## 📊 Live Dashboard Update Logic
-
 **DASHBOARD.md** gets updated with this logic:
 
 ```javascript
@@ -264,40 +239,38 @@ feature-branches
 function updateDashboard() {
   // 1. Count TypeScript errors
   const tsErrors = runCommand("pnpm typecheck");
-  
+
   // 2. Calculate progress percentages
   const phases = {
     cleanup: filesDeleted / totalFilesToDelete,
     dependencies: packagesInstalled / totalPackages,
     typeSafety: errorsFixed / totalErrors,
-    validation: testsPass ? 1.0 : 0.0
+    validation: testsPass ? 1.0 : 0.0,
   };
-  
+
   // 3. Update visual bars
   const dashboard = {
     phase1: generateProgressBar(phases.cleanup),
     phase2: generateProgressBar(phases.dependencies),
     phase3: generateProgressBar(phases.typeSafety),
-    phase4: generateProgressBar(phases.validation)
+    phase4: generateProgressBar(phases.validation),
   };
-  
+
   // 4. Write to DASHBOARD.md
-  writeFile('docs/visuals/progress/DASHBOARD.md', dashboard);
+  writeFile("docs/visuals/progress/DASHBOARD.md", dashboard);
 }
 
 function generateProgressBar(percentage) {
   const filled = Math.round(percentage * 10);
   const empty = 10 - filled;
-  return `[${'█'.repeat(filled)}${'░'.repeat(empty)}] ${Math.round(percentage * 100)}%`;
+  return `[${"█".repeat(filled)}${"░".repeat(empty)}] ${Math.round(percentage * 100)}%`;
 }
 ```
 
 ---
 
 ## 🔄 Continuous Integration Setup
-
 ### GitHub Actions Workflow
-
 **File**: `.github/workflows/generate-visuals.yml`
 
 ```yaml
@@ -309,33 +282,33 @@ on:
       - dev
       - docs-and-tests
     paths:
-      - 'apps/**'
-      - 'packages/**'
-      - 'functions/**'
-      - 'docs/**'
+      - "apps/**"
+      - "packages/**"
+      - "functions/**"
+      - "docs/**"
 
 jobs:
   generate-visuals:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
-      
+          node-version: "20"
+
       - name: Install pnpm
         uses: pnpm/action-setup@v2
         with:
           version: 9.12.1
-      
+
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-      
+
       - name: Generate visuals
         run: bash scripts/generate-visuals.sh
-      
+
       - name: Commit and push
         run: |
           git config user.name "Documentation Bot"
@@ -348,9 +321,7 @@ jobs:
 ---
 
 ## 📝 Manual Triggers
-
 ### Generate Phase Report Manually
-
 ```bash
 # After Phase 1 complete
 ./scripts/generate-phase-report.sh --phase=1
@@ -368,9 +339,7 @@ jobs:
 ---
 
 ## 🎯 Metrics Tracked
-
 ### Real-Time Metrics (Updated on every push)
-
 - TypeScript error count
 - TypeScript warning count
 - Number of files changed
@@ -379,7 +348,6 @@ jobs:
 - Test pass rate
 
 ### Phase Completion Metrics
-
 - Files deleted per phase
 - Time to complete phase
 - Errors fixed per phase
@@ -387,7 +355,6 @@ jobs:
 - Lines of code changed
 
 ### Branch Metrics
-
 - File count per branch
 - Unique files per branch
 - Merge conflicts
@@ -397,7 +364,6 @@ jobs:
 ---
 
 ## 🚀 Quick Start: Run Visuals Manually
-
 ```bash
 # Generate all visuals
 bash scripts/generate-visuals.sh
@@ -418,9 +384,7 @@ bash scripts/generate-all-reports.sh
 ---
 
 ## 📌 Integration with PR/Merge Workflow
-
 ### On PR to main
-
 ```
 1. Generate comparison: main vs dev
 2. Create visual showing what will change
@@ -429,7 +393,6 @@ bash scripts/generate-all-reports.sh
 ```
 
 ### On Merge to main
-
 ```
 1. Archive current visuals/ to docs/archive/
 2. Create merge summary with before/after metrics
@@ -438,7 +401,6 @@ bash scripts/generate-all-reports.sh
 ```
 
 ### On docs-and-tests Updates
-
 ```
 1. Update visual reference library
 2. Add new visual templates
@@ -449,13 +411,11 @@ bash scripts/generate-all-reports.sh
 ---
 
 ## ✅ Checklist for Visual Automation
-
-- [ ] `scripts/generate-visuals.sh` created
-- [ ] GitHub Actions workflow configured
-- [ ] Manual trigger scripts ready
-- [ ] DASHBOARD.md template configured
-- [ ] Metrics tracking logic implemented
-- [ ] Automated daily reports enabled
-- [ ] Artifact structure documented
-- [ ] Team trained on visual updates
-
+- \[ ] `scripts/generate-visuals.sh` created
+- \[ ] GitHub Actions workflow configured
+- \[ ] Manual trigger scripts ready
+- \[ ] DASHBOARD.md template configured
+- \[ ] Metrics tracking logic implemented
+- \[ ] Automated daily reports enabled
+- \[ ] Artifact structure documented
+- \[ ] Team trained on visual updates

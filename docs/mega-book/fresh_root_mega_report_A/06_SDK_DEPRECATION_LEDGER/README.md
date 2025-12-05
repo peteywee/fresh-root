@@ -1,11 +1,9 @@
 # SDK & Deprecation Ledger
-
 This directory tracks **what used to exist**, **why it was removed or refactored**, and **what stable SDK surfaces replace it**.
 
 This is how we protect knowledge when ripping out old code.
 
 ## Entry Format
-
 Each legacy component should be captured like this:
 
 ```text

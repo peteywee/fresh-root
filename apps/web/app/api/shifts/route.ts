@@ -50,7 +50,7 @@ export const POST = createOrgEndpoint({
   handler: async ({ input, context, params }) => {
     try {
       const validated = input;
-      
+
       const shift = {
         id: `shift-${Date.now()}`,
         orgId: context.org?.orgId,

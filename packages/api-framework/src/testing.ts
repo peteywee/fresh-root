@@ -47,7 +47,10 @@ export function createMockRequest(url: string, options: MockRequestOptions = {})
     init.body = JSON.stringify(body);
   }
 
-  const request = new NextRequest(urlObj.toString(), init as RequestInit & { signal?: AbortSignal });
+  const request = new NextRequest(
+    urlObj.toString(),
+    init as RequestInit & { signal?: AbortSignal },
+  );
 
   // Mock cookies
   Object.entries(cookies).forEach(([name, value]) => {

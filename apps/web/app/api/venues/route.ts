@@ -52,7 +52,7 @@ export const POST = createOrgEndpoint({
   handler: async ({ input, context, params }) => {
     try {
       const validated = input;
-      
+
       const venue = {
         id: `venue-${Date.now()}`,
         orgId: context.org?.orgId,

@@ -31,15 +31,15 @@ The **CrewOps Protocol** has been successfully activated and is now ready to dis
 
 ## 📦 FILES CREATED
 
-| File | Size | Purpose | Location |
-|------|------|---------|----------|
-| `01_CREWOPS_MANUAL.md` | 24 KB | Complete protocol manual | `docs/crewops/` |
-| `02_ACTIVATION_FRAMEWORK.md` | 9.6 KB | Auto-engagement framework | `docs/crewops/` |
-| `03_QUICK_REFERENCE.md` | 7.8 KB | User quick reference | `docs/crewops/` |
-| `04_ACTIVATION_STATUS.md` | 8.9 KB | Configuration tracking | `docs/crewops/` |
-| `05_IMPLEMENTATION_COMPLETE.md` | 12 KB | Completion summary | `docs/crewops/` |
-| `06_INDEX.md` | Reference | Navigation guide | `docs/crewops/` |
-| `README.md` | Index | Documentation index | `docs/crewops/` |
+| File                            | Size      | Purpose                   | Location        |
+| ------------------------------- | --------- | ------------------------- | --------------- |
+| `01_CREWOPS_MANUAL.md`          | 24 KB     | Complete protocol manual  | `docs/crewops/` |
+| `02_ACTIVATION_FRAMEWORK.md`    | 9.6 KB    | Auto-engagement framework | `docs/crewops/` |
+| `03_QUICK_REFERENCE.md`         | 7.8 KB    | User quick reference      | `docs/crewops/` |
+| `04_ACTIVATION_STATUS.md`       | 8.9 KB    | Configuration tracking    | `docs/crewops/` |
+| `05_IMPLEMENTATION_COMPLETE.md` | 12 KB     | Completion summary        | `docs/crewops/` |
+| `06_INDEX.md`                   | Reference | Navigation guide          | `docs/crewops/` |
+| `README.md`                     | Index     | Documentation index       | `docs/crewops/` |
 
 **All files**: Located in `docs/crewops/` for primary access
 
@@ -48,10 +48,13 @@ The **CrewOps Protocol** has been successfully activated and is now ready to dis
 ## 🚀 HOW IT WORKS (Simple Version)
 
 ### On Session Start
+
 Protocol automatically loads. You'll see an activation message showing all 6 crew roles are ready.
 
 ### On Your Next Question
+
 If your question is "non-trivial" (code, architecture, research, deployment):
+
 1. **Phase A**: Protocol reads your goal + constraints
 2. **Phase B+C**: Protocol plans + assembles crew
 3. **Phase D**: Protocol executes + gathers evidence
@@ -80,6 +83,7 @@ They self-coordinate per the Constitution (7 binding laws).
 ## 🔐 SECURITY SUPREMACY
 
 The **Security Red Team** can **BLOCK** work if they find:
+
 - Auth bypass risks
 - Data leakage risks
 - Insecure defaults
@@ -93,6 +97,7 @@ If veto triggered: Work stops in Phase E until fixed. No exceptions.
 ## 🛠️ TOOLS (Automatic Deployment)
 
 When protocol engages:
+
 - **Research Analyst** auto-deploys: `read_file`, `grep_search`, `semantic_search`, `mcp_firecrawl_*`
 - **QA Engineer** auto-deploys: `get_errors`, `run_in_terminal`
 - **Scribe** auto-deploys: `list_dir`, `mcp_github_*`
@@ -104,6 +109,7 @@ When protocol engages:
 ## 📋 EVIDENCE HIERARCHY (What Proof Means)
 
 Protocol verifies facts in this order:
+
 1. **Tool observation** (highest confidence)
 2. **Primary documentation**
 3. **Secondary sources**
@@ -116,6 +122,7 @@ If a critical assumption can't be verified → protocol blocks and states why.
 ## ✅ DEFINITION OF DONE (Before Finalizing)
 
 Task is "done" only when:
+
 - ✅ Commands run locally without error
 - ✅ Environment variables defined
 - ✅ Output performs stated business action
@@ -131,29 +138,34 @@ Protocol verifies all items before finalizing.
 Every non-trivial request executes:
 
 **Phase A: CONTEXT SATURATION**
+
 - Read files, constraints, goals
 - Verify assumptions with tools
 - Output: "Context Loaded" + "Risks Identified"
 
 **Phase B+C: PLANNING + TEAM**
+
 - Decompose into batches
 - Spawn workers per batch
 - Assign Constitutional clauses
 - Output: Batch structure + assignments
 
 **Phase D: ACTION MATRIX**
+
 - Execute line-by-line
 - Deploy tools automatically
 - Gather evidence
 - Output: Code + commands + artifacts
 
 **Phase E: SECURITY VETO + REFLEXION**
+
 - Red Team veto check
 - Reconcile constraints
 - State what changed and why
 - Output: Veto pass/block + refinements
 
 **VALIDATION GATES**
+
 - Green gates verified
 - DoD confirmed
 - Audit trail complete
@@ -173,6 +185,7 @@ CREWOPS_EMERGENCY       # Fast-track (minimal planning)
 ```
 
 Example:
+
 ```
 I need a security audit for the payment flow.
 CREWOPS_AUDIT
@@ -183,18 +196,21 @@ CREWOPS_AUDIT
 ## 📚 WHERE TO START
 
 ### If You Want to Use the Protocol (Start Here)
+
 1. Read: `agents/CREWOPS_QUICK_REFERENCE.md` (5 minutes)
 2. Ask your next question
 3. Protocol engages automatically
 4. Done ✅
 
 ### If You Want to Understand It Deeply
+
 1. Read: `agents/CREWOPS_QUICK_REFERENCE.md`
 2. Read: `agents/crewops.md` (complete manual)
 3. Read: `agents/CREWOPS_ACTIVATION.md` (how it engages)
 4. Reference: Other docs as needed
 
 ### If You Want to Navigate Everything
+
 - Start: `agents/CREWOPS_INDEX.md` (reading paths + cross-references)
 
 ---
@@ -207,7 +223,7 @@ Your next non-trivial request will trigger:
 ✅ CREWOPS PROTOCOL ENGAGED
 
 🏷️ CONTEXT INTAKE
-🧠 CREW ASSEMBLY  
+🧠 CREW ASSEMBLY
 ⚡ SWARM PROTOCOL INITIATION
 📋 GATES ENGAGED
 
@@ -238,6 +254,7 @@ Everything is automatic. You just see it unfold.
 ## ✨ YOU'RE READY
 
 The protocol is:
+
 - Loaded ✅
 - Active ✅
 - Auto-engaging ✅
@@ -262,16 +279,16 @@ That's it.
 
 ## 📞 QUICK REFERENCE
 
-| Need | File | Section |
-|------|------|---------|
-| Quick start | CREWOPS_QUICK_REFERENCE.md | Top of file |
-| Constitution | crewops.md | Section 2 |
-| Crew roles | crewops.md | Section 3 |
-| Phases A→E | crewops.md | Section 4 |
-| Tool discipline | crewops.md | Section 6.5 |
-| MCP integration | crewops.md | Section 6.6 |
-| How auto-engagement works | CREWOPS_ACTIVATION.md | All |
-| Configuration | CREWOPS_ACTIVATION_STATUS.md | All |
+| Need                      | File                         | Section     |
+| ------------------------- | ---------------------------- | ----------- |
+| Quick start               | CREWOPS_QUICK_REFERENCE.md   | Top of file |
+| Constitution              | crewops.md                   | Section 2   |
+| Crew roles                | crewops.md                   | Section 3   |
+| Phases A→E                | crewops.md                   | Section 4   |
+| Tool discipline           | crewops.md                   | Section 6.5 |
+| MCP integration           | crewops.md                   | Section 6.6 |
+| How auto-engagement works | CREWOPS_ACTIVATION.md        | All         |
+| Configuration             | CREWOPS_ACTIVATION_STATUS.md | All         |
 
 ---
 
@@ -316,9 +333,8 @@ Next: Ask your question
 The original files are kept in `agents/` for backwards compatibility but should not be edited. **All updates should be made in `docs/crewops/`**.
 
 For any new work:
+
 1. **Read**: `docs/crewops/` (primary location)
 2. **Reference**: `agents/` (legacy, points to `docs/crewops/`)
 
-
 🚀 **Ask away.**
-

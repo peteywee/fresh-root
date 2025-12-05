@@ -12,7 +12,7 @@ export const POST = createAuthenticatedEndpoint({
     try {
       const body = await request.json();
       const { organizationName, type } = body;
-      
+
       const org = {
         id: `org-${Date.now()}`,
         name: organizationName,

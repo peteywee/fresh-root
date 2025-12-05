@@ -73,7 +73,7 @@
 		{
 			"label": "Lint (auto-fix)",
 			"type": "shell",
-			"command": "pnpm -w lint --fix",
+			"command": "pnpm -w run lint -- --fix",
 			"problemMatcher": [
 				"$eslint-stylish"
 			]
@@ -81,13 +81,13 @@
 		{
 			"label": "Format (Prettier)",
 			"type": "shell",
-			"command": "pnpm -w format",
+			"command": "pnpm -w run format",
 			"problemMatcher": []
 		},
 		{
 			"label": "Typecheck",
 			"type": "shell",
-			"command": "pnpm -w typecheck",
+			"command": "pnpm -w run typecheck",
 			"problemMatcher": [
 				"$tsc"
 			]
@@ -132,7 +132,7 @@
 		{
 			"label": "Docs: Markdown Lint (auto-fix)",
 			"type": "shell",
-			"command": "pnpm -w markdownlint '**/*.md' --fix --ignore node_modules --ignore .next --ignore dist --ignore build",
+			"command": "pnpm run docs:md-fix",
 			"problemMatcher": []
 		},
 		{
@@ -211,10 +211,6 @@
 			"detail": "Generate mini-index for API routes (docs/migration/v15/API_ROUTES_MINI_INDEX.md)",
 			"problemMatcher": []
 		},
-		{
-			"label": "Typecheck",
-			"type": "shell",
-			"command": "pnpm -w typecheck"
-		}
+        
 	]
 }

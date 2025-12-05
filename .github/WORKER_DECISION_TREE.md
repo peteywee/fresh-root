@@ -38,20 +38,20 @@ PHASE_1_COMMANDER (YOU)
 
 ### HIGH PRIORITY FILES (10+ errors each)
 
-| File | Path | Errors | Type | Fix |
-|------|------|--------|------|-----|
-| **schedules/page.server.ts** | `app/(app)/protected/schedules/` | 1 require-await + 1 no-unused-vars | CRITICAL | Remove async on fetchSchedules; prefix _limit |
-| **middleware.ts** | `apps/web/` | 8+ mixed errors | HIGH | Prefix context, params with `_` |
+| File                         | Path                             | Errors                             | Type     | Fix                                            |
+| ---------------------------- | -------------------------------- | ---------------------------------- | -------- | ---------------------------------------------- |
+| **schedules/page.server.ts** | `app/(app)/protected/schedules/` | 1 require-await + 1 no-unused-vars | CRITICAL | Remove async on fetchSchedules; prefix \_limit |
+| **middleware.ts**            | `apps/web/`                      | 8+ mixed errors                    | HIGH     | Prefix context, params with `_`                |
 
 ### MEDIUM PRIORITY FILES (3-8 errors)
 
-| File | Path | Errors | Type | Fix |
-|------|------|--------|------|-----|
-| Other API routes | `app/api/*/route.ts` | ~20 | Mixed | Prefix unused params |
+| File             | Path                 | Errors | Type  | Fix                  |
+| ---------------- | -------------------- | ------ | ----- | -------------------- |
+| Other API routes | `app/api/*/route.ts` | ~20    | Mixed | Prefix unused params |
 
 ### LOWER PRIORITY (Already handled via ESLint suppression)
 
-- Firebase unsafe-* rules: SUPPRESSED (not in scope)
+- Firebase unsafe-\* rules: SUPPRESSED (not in scope)
 - no-misused-promises: Separate issue (not in scope)
 
 ---
@@ -60,7 +60,7 @@ PHASE_1_COMMANDER (YOU)
 
 ### Team 1A: schedules/page.server.ts
 
-**Decision**: Fix _limit parameter
+**Decision**: Fix \_limit parameter
 
 ```typescript
 // CURRENT
@@ -70,7 +70,7 @@ async function fetchSchedules(limit: number) {
 async function fetchSchedules(_limit: number) {
 ```
 
-**Rationale**: Parameter comes from route handler but function doesn't use it. Prefix with _ signals intentional.
+**Rationale**: Parameter comes from route handler but function doesn't use it. Prefix with \_ signals intentional.
 
 **Status**: READY FOR EXECUTION
 
@@ -78,7 +78,7 @@ async function fetchSchedules(_limit: number) {
 
 ### Team 1B: middleware.ts
 
-**Decision**: Prefix unused context and params with _
+**Decision**: Prefix unused context and params with \_
 
 ```typescript
 // Pattern in handlers:
@@ -133,6 +133,7 @@ function fetchSchedules(_limit: number) {
 ### Team 2B: Other handlers
 
 **Pattern**: Check each async function for actual await statements
+
 - If no await: Remove async
 - If wraps promises: Keep async
 - If should await something: Add await
@@ -144,18 +145,23 @@ function fetchSchedules(_limit: number) {
 ## 🚀 IMMEDIATE NEXT STEPS
 
 ### Step 1: Execute Team 1A (1 min)
-Fix _limit in schedules/page.server.ts
+
+Fix \_limit in schedules/page.server.ts
 
 ### Step 2: Execute Team 2A (1 min)
+
 Remove async from fetchSchedules
 
 ### Step 3: Execute Team 1B (5-10 min)
+
 Prefix unused context/params in middleware.ts
 
 ### Step 4: Execute Team 1C (10-15 min)
+
 Bulk fix API route parameters
 
 ### Step 5: Validation (5 min)
+
 Run lint, typecheck, build
 
 **TOTAL ESTIMATED TIME**: 25-35 minutes
@@ -165,6 +171,7 @@ Run lint, typecheck, build
 ## ⚡ READY TO DEPLOY
 
 All decisions made. Awaiting command:
+
 - Deploy all sequences in order?
 - Deploy individual teams?
 - Deploy with batch git commits?

@@ -17,35 +17,35 @@ const CreateSessionSchema = z.object({
  */
 export const POST = createPublicEndpoint({
   handler: async ({ request }) => {
-  try {
-    const parsed = await parseJson(request, CreateSessionSchema);
-    if (!parsed.success) {
-      return badRequest("Validation failed", parsed.details);
+    try {
+      const parsed = await parseJson(request, CreateSessionSchema);
+      if (!parsed.success) {
+        return badRequest("Validation failed", parsed.details);
+      }
+
+      const { idToken } = parsed.data;
+
+      const auth = getFirebaseAdminAuth();
+      // Verify the idToken and create a session cookie (5 days default)
+      const expiresIn = 5 * 24 * 60 * 60 * 1000; // 5 days in milliseconds
+      const sessionCookie = await auth.createSessionCookie(idToken, { expiresIn });
+
+      // Set secure HttpOnly session cookie
+      const response = ok({ ok: true });
+      response.cookies.set("session", sessionCookie, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
+        path: "/",
+        maxAge: expiresIn / 1000, // maxAge in seconds
+      });
+
+      return response;
+    } catch (error) {
+      console.error("Session creation error:", error);
+      // Return a generic message to avoid leaking internal error details
+      return serverError("Invalid token or internal error", undefined, "UNAUTHORIZED");
     }
-
-    const { idToken } = parsed.data;
-
-    const auth = getFirebaseAdminAuth();
-    // Verify the idToken and create a session cookie (5 days default)
-    const expiresIn = 5 * 24 * 60 * 60 * 1000; // 5 days in milliseconds
-    const sessionCookie = await auth.createSessionCookie(idToken, { expiresIn });
-
-    // Set secure HttpOnly session cookie
-    const response = ok({ ok: true });
-    response.cookies.set("session", sessionCookie, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-      path: "/",
-      maxAge: expiresIn / 1000, // maxAge in seconds
-    });
-
-    return response;
-  } catch (error) {
-    console.error("Session creation error:", error);
-    // Return a generic message to avoid leaking internal error details
-    return serverError("Invalid token or internal error", undefined, "UNAUTHORIZED");
-  }
   },
 });
 
@@ -55,15 +55,15 @@ export const POST = createPublicEndpoint({
  */
 export const DELETE = createPublicEndpoint({
   handler: async () => {
-  // Clear session cookie
-  const response = ok({ ok: true });
-  response.cookies.set("session", "", {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
-    path: "/",
-    maxAge: 0,
-  });
-  return response;
+    // Clear session cookie
+    const response = ok({ ok: true });
+    response.cookies.set("session", "", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      path: "/",
+      maxAge: 0,
+    });
+    return response;
   },
 });

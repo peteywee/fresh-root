@@ -1,12 +1,12 @@
 // Core authentication middleware
 export async function requireSession(
-  req: AuthenticatedRequest,
-  handler: (req: AuthenticatedRequest) => Promise<NextResponse>,
+req: AuthenticatedRequest,
+handler: (req: AuthenticatedRequest) => Promise<NextResponse>,
 ): Promise<NextResponse> {
 // MFA enforcement for managers/admins
 export async function require2FAForManagers(
-  req: AuthenticatedRequest,
-  handler: (req: AuthenticatedRequest) => Promise<NextResponse>,
+req: AuthenticatedRequest,
+handler: (req: AuthenticatedRequest) => Promise<NextResponse>,
 ): Promise<NextResponse> {
 // Abstract rate limiter interface
 export interface RateLimiter {
@@ -18,26 +18,26 @@ export interface RateLimiter {
 class InMemoryRateLimiter implements RateLimiter {
 // Redis implementation (multi-instance safe)
 class RedisRateLimiter implements RateLimiter {
-  private readonly redis: Redis;
+private readonly redis: Redis;
 
-  public async consume(key: string, cost: number = 1): Promise<RateLimitResult> {
-    const bucketKey = this.buildKey(key, this.options.windowSeconds);
-    const count = await this.redis.incrby(bucketKey, cost);
+public async consume(key: string, cost: number = 1): Promise<RateLimitResult> {
+const bucketKey = this.buildKey(key, this.options.windowSeconds);
+const count = await this.redis.incrby(bucketKey, cost);
 // Factory: auto-select based on environment
 export function getRateLimiter(options: RateLimitOptions): RateLimiter {
 export function withRateLimit(
-  handler: (req: NextRequest) => Promise<NextResponse>,
-  config: RateLimitConfig,
+handler: (req: NextRequest) => Promise<NextResponse>,
+config: RateLimitConfig,
 ): (req: NextRequest) => Promise<NextResponse> {
 // Schema definition (source of truth)
 export const OrganizationSchema = z.object({
-  id: z.string(),
-  name: z.string().min(1, "Organization name required"),
+id: z.string(),
+name: z.string().min(1, "Organization name required"),
 export const ScheduleSchema = z.object({
-  id: z.string(),
+id: z.string(),
 export const ShiftSchema = z.object({
-  id: z.string(),
-  scheduleId: z.string(),
+id: z.string(),
+scheduleId: z.string(),
 // RBAC role hierarchy
 export const RbacRoleSchema = z.enum([
 // Firestore security rules
@@ -45,23 +45,23 @@ rules_version = '2';
 service cloud.firestore {
 // Structured logging with context
 export class Logger {
-  private context: Record<string, unknown>;
+private context: Record<string, unknown>;
 {
-  "name": "fresh-root",
-  "version": "1.1.0",
+"name": "fresh-root",
+"version": "1.1.0",
 {
-  "name": "@apps/web",
-  "version": "0.1.0",
+"name": "@apps/web",
+"version": "0.1.0",
 {
-  "compilerOptions": {
-    "target": "ES2022",
+"compilerOptions": {
+"target": "ES2022",
 // Node environment
 import { z } from "zod";
 const config = {
-  output: "standalone",
+output: "standalone",
 // Session creation flow
 async function createSession(idToken: string): Promise<string> {
-  const auth = getFirebaseAdminAuth();
+const auth = getFirebaseAdminAuth();
 
 ## Architectural Review Panel - Input Document
 
@@ -897,19 +897,6 @@ Client receives real-time updates (Firestore listeners)
 
 Fresh Root implements **hierarchical multi-tenancy** using network isolation:
 
-```
-Network (Tenant Root)
-  ├── Organizations (1 or more per network)
-  │   ├── Schedules
-  │   │   └── Shifts
-  │   ├── Positions
-  │   ├── Venues
-  │   │   └── Zones
-  │   └── Memberships (user-org relationships)
-  ├── Compliance Documents (server-only access)
-  └── Billing Records (server-only access)
-```
-
 **Isolation Mechanisms:**
 
 1. **Firestore Rules Isolation:**
@@ -1654,7 +1641,6 @@ Fresh Root is a **multi-tenant Progressive Web App** designed for small-to-mediu
 - ✅ Monorepo tooling experience (pnpm, Turbo)
 - ✅ Git-based workflows comfortable
 - ✅ Documentation culture established
-
   - **Alternative:** `Rollbar`, `Bugsnag` (not recommended to switch)
 
 - ⚠️ Redis/distributed caching (new for multi-instance)

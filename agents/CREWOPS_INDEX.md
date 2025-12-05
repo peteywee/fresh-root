@@ -207,13 +207,13 @@ Task complete with audit trail
 
 ## 📋 File Responsibilities
 
-| File | Responsibility | Read When |
-|------|-----------------|-----------|
-| CREWOPS_QUICK_REFERENCE.md | User quick start | First time using |
-| crewops.md | Binding authority | Need rule clarification |
-| CREWOPS_ACTIVATION.md | Bootstrap framework | Understanding auto-engagement |
-| CREWOPS_ACTIVATION_STATUS.md | Configuration tracking | Verifying what's active |
-| CREWOPS_IMPLEMENTATION_COMPLETE.md | High-level overview | Need summary view |
+| File                               | Responsibility         | Read When                     |
+| ---------------------------------- | ---------------------- | ----------------------------- |
+| CREWOPS_QUICK_REFERENCE.md         | User quick start       | First time using              |
+| crewops.md                         | Binding authority      | Need rule clarification       |
+| CREWOPS_ACTIVATION.md              | Bootstrap framework    | Understanding auto-engagement |
+| CREWOPS_ACTIVATION_STATUS.md       | Configuration tracking | Verifying what's active       |
+| CREWOPS_IMPLEMENTATION_COMPLETE.md | High-level overview    | Need summary view             |
 
 ---
 
@@ -316,17 +316,17 @@ Protocol engages, but stops after Phase C (no code). ✅
 
 ## 📊 Protocol Statistics
 
-| Metric | Value |
-|--------|-------|
-| **Files** | 5 markdown files |
-| **Total Size** | 62.3 KB |
-| **Sections** | 18 in main manual |
-| **Phases** | 5 (A→E) |
-| **Constitution Laws** | 7 (binding) |
-| **Crew Roles** | 6 (mandatory) |
-| **Tool Categories** | 3 (standard + GitHub + Firecrawl MCP) |
-| **Keyword Modifiers** | 8 (optional) |
-| **Validation Gates** | 5 minimum per task |
+| Metric                | Value                                 |
+| --------------------- | ------------------------------------- |
+| **Files**             | 5 markdown files                      |
+| **Total Size**        | 62.3 KB                               |
+| **Sections**          | 18 in main manual                     |
+| **Phases**            | 5 (A→E)                               |
+| **Constitution Laws** | 7 (binding)                           |
+| **Crew Roles**        | 6 (mandatory)                         |
+| **Tool Categories**   | 3 (standard + GitHub + Firecrawl MCP) |
+| **Keyword Modifiers** | 8 (optional)                          |
+| **Validation Gates**  | 5 minimum per task                    |
 
 ---
 

@@ -12,7 +12,7 @@
 1. Start a new chat.
 2. Paste this file content in your first message (or upload as a file and reference it).
 3. Include the handshake keyword: `CREWOPS_OK`.
-4. For each request, specify what you want: *design only, plan only, code + files, audit, refactor, release*, etc. the agent will ask and give the options
+4. For each request, specify what you want: _design only, plan only, code + files, audit, refactor, release_, etc. the agent will ask and give the options
 
 ### 0.1.5 AUTOMATIC ACTIVATION (Session Bootstrap)
 
@@ -167,7 +167,7 @@ Decompose into dependency batches (minimum structure):
 - Batch 1: Foundation/Config
 - Batch 2: Core Logic/Schema
 - Batch 3: UI/Interaction
-Add Batch 4+: Ops/Deploy/Observability if needed.
+  Add Batch 4+: Ops/Deploy/Observability if needed.
 
 Output:
 
@@ -188,7 +188,7 @@ Spawn one worker per batch:
 Produce a detailed action matrix and execute it line-by-line.
 Format:
 
-- `[ ] Action 1 (Worker X)` -> *(Simulated execution output / tool observation)* -> `[x] Done`
+- `[ ] Action 1 (Worker X)` -> _(Simulated execution output / tool observation)_ -> `[x] Done`
 
 Rules:
 
@@ -245,10 +245,10 @@ If tools are not available:
 
 Evidence ladder:
 
-1) Tool observation
-2) Primary docs
-3) Secondary sources
-4) `[ASSUMPTION]`
+1. Tool observation
+2. Primary docs
+3. Secondary sources
+4. `[ASSUMPTION]`
 
 ---
 
@@ -400,7 +400,7 @@ For each world:
 - expected outcomes
 - key risks
 - triggers that shift worlds
-Choose plans robust across worlds.
+  Choose plans robust across worlds.
 
 ---
 
@@ -684,8 +684,8 @@ Action 1: Declare intent
 
 Action 2: Activate GitHub MCP
 → Tool: mcp_github_push_files
-→ Params: owner="peteywee", repo="fresh-root", branch="dev", 
-          files=[{path: "rate-limit.ts", content: "..."}], 
+→ Params: owner="peteywee", repo="fresh-root", branch="dev",
+          files=[{path: "rate-limit.ts", content: "..."}],
           message="fix: rate-limit per-org scoping"
 → Expected: Files committed to dev branch
 → Observation: [commit hash], [PR URL if applicable]
@@ -740,9 +740,9 @@ This protocol is now **automatically engaged** on:
 ✅ CREWOPS Protocol Active
 
 Binding Framework: CrewOps Manual loaded
-Constitution: Anti-vaporware | Truth & Evidence | Security Supremacy | 
+Constitution: Anti-vaporware | Truth & Evidence | Security Supremacy |
               Deterministic Delivery | Full-File Fidelity
-Crew: Orchestrator | Product Owner | Systems Architect | Security Red Team | 
+Crew: Orchestrator | Product Owner | Systems Architect | Security Red Team |
       Research Analyst | QA/Test Engineer
 Tool Activation: Immediate deployment, no assumptions
 MCP Integration: GitHub + Firecrawl available

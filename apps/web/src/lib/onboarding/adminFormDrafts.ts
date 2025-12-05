@@ -62,7 +62,7 @@ export async function createAdminFormDraft(params: {
 
   const db = getFirebaseAdminDb();
   const ref = db.collection("adminFormDrafts").doc(crypto.randomUUID());
-  
+
   await setDocWithType<AdminFormDraftDoc>(db, ref, draft);
 
   return { formToken: ref.id };
@@ -74,7 +74,7 @@ export async function createAdminFormDraft(params: {
 export async function getAdminFormDraft(formToken: string) {
   const db = getFirebaseAdminDb();
   const ref = db.collection("adminFormDrafts").doc(formToken);
-  
+
   const draft = await getDocWithType<AdminFormDraftDoc>(db, ref);
   if (!draft) return null;
 
@@ -99,9 +99,10 @@ export async function consumeAdminFormDraft(params: {
   const db = getFirebaseAdminDb();
   const ref = db.collection("adminFormDrafts").doc(formToken);
 
-  return await transactionWithType<
-    { form: AdminResponsibilityForm; taxValidation: { isValid: boolean; reason?: string } } | null
-  >(db, async (tx) => {
+  return await transactionWithType<{
+    form: AdminResponsibilityForm;
+    taxValidation: { isValid: boolean; reason?: string };
+  } | null>(db, async (tx) => {
     const draft = await tx.get(ref);
     if (!draft.exists) return null;
 

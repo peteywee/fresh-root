@@ -62,7 +62,7 @@ async function _fetchRecentSchedulesLite(orgId: string, max = 10): Promise<Sched
   const ref = collection(db, "schedules", orgId, "schedules");
   const q = query(ref, orderBy("weekStart", "desc"), limit(max));
   const snap = await getDocs(q);
-  
+
   return snap.docs.map((d) => {
     const data = d.data() as ScheduleDocData;
     return {
@@ -89,19 +89,19 @@ export async function fetchScheduleDoc(orgId: string, scheduleId: string) {
     db,
     "schedules",
     orgId,
-    scheduleId
+    scheduleId,
   ) as DocumentReference<ScheduleDocData>;
-  
+
   const s = await getDoc(ref);
   const data = s.data();
-  
+
   if (!data) {
     throw new Error(`Schedule not found: ${scheduleId}`);
   }
-  
-  return { 
-    id: s.id, 
-    ...data 
+
+  return {
+    id: s.id,
+    ...data,
   };
 }
 

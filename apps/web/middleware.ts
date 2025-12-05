@@ -5,10 +5,10 @@ import type { NextRequest } from "next/server";
 
 /**
  * Simple edge middleware for routing.
- * 
+ *
  * Auth & rate limiting are handled inside route handlers via the SDK's
  * createEndpoint, createAuthenticatedEndpoint, createOrgEndpoint, etc.
- * 
+ *
  * This middleware just passes requests through to allow edge processing
  * of routing logic.
  */

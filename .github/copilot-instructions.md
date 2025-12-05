@@ -1,7 +1,7 @@
 # AI Agent Guide: Fresh Schedules Codebase
 
 **Version**: 2.0
-**Last Updated**: December 2, 2025
+**Last Updated**: December 5, 2025
 **Target**: AI coding agents (GitHub Copilot, Claude Code, Cursor, etc.)
 
 This guide provides essential knowledge for AI agents to be immediately productive in the Fresh Schedules codebase.
@@ -124,19 +124,21 @@ fresh-root/
 import { z } from "zod";
 
 // Base schema (full document)
-export const ShiftSchema = z.object({
-  id: z.string().min(1),
-  orgId: z.string().min(1),
-  scheduleId: z.string().min(1),
-  startTime: z.number().int().positive(),
-  endTime: z.number().int().positive(),
-  status: z.enum(["draft", "published", "cancelled"]).default("draft"),
-  createdAt: z.number().int().positive(),
-  updatedAt: z.number().int().positive()
-}).refine(
-  (data) => data.endTime > data.startTime,
-  { message: "End time must be after start time", path: ["endTime"] }
-);
+export const ShiftSchema = z
+  .object({
+    id: z.string().min(1),
+    orgId: z.string().min(1),
+    scheduleId: z.string().min(1),
+    startTime: z.number().int().positive(),
+    endTime: z.number().int().positive(),
+    status: z.enum(["draft", "published", "cancelled"]).default("draft"),
+    createdAt: z.number().int().positive(),
+    updatedAt: z.number().int().positive(),
+  })
+  .refine((data) => data.endTime > data.startTime, {
+    message: "End time must be after start time",
+    path: ["endTime"],
+  });
 
 export type Shift = z.infer<typeof ShiftSchema>;
 
@@ -144,7 +146,7 @@ export type Shift = z.infer<typeof ShiftSchema>;
 export const CreateShiftSchema = ShiftSchema.omit({
   id: true,
   createdAt: true,
-  updatedAt: true
+  updatedAt: true,
 });
 
 export const UpdateShiftSchema = ShiftSchema.partial().omit({ id: true });
@@ -167,23 +169,23 @@ export const GET = createOrgEndpoint({
     // Fetch shifts for context.org.orgId
     const shifts = await fetchShifts(context.org!.orgId);
     return NextResponse.json({ data: shifts });
-  }
+  },
 });
 
 export const POST = createOrgEndpoint({
-  roles: ['manager'],  // Requires manager or higher
+  roles: ["manager"], // Requires manager or higher
   rateLimit: { maxRequests: 50, windowMs: 60000 },
-  input: CreateShiftSchema,  // Auto-validates
+  input: CreateShiftSchema, // Auto-validates
   handler: async ({ input, context }) => {
     // input is typed and validated
     const shift = await createShift({
       ...input,
       orgId: context.org!.orgId,
       createdAt: Date.now(),
-      updatedAt: Date.now()
+      updatedAt: Date.now(),
     });
     return NextResponse.json(shift, { status: 201 });
-  }
+  },
 });
 ```
 
@@ -214,6 +216,7 @@ match /orgs/{orgId}/schedules/{scheduleId}/shifts/{shiftId} {
 ### Why SDK Factory?
 
 The SDK factory (`@fresh-schedules/api-framework`) provides a declarative, type-safe way to create API endpoints with built-in:
+
 - ✅ Authentication verification
 - ✅ Organization context loading
 - ✅ Role-based authorization
@@ -249,34 +252,38 @@ The SDK factory (`@fresh-schedules/api-framework`) provides a declarative, type-
 ```typescript
 // 1. Public endpoint (no auth required)
 export const GET = createPublicEndpoint({
-  handler: async ({ request }) => { /* ... */ }
+  handler: async ({ request }) => {
+    /* ... */
+  },
 });
 
 // 2. Authenticated endpoint (auth required, no org context)
 export const GET = createAuthenticatedEndpoint({
   handler: async ({ context }) => {
     // context.auth.userId available
-  }
+  },
 });
 
 // 3. Organization endpoint (auth + org membership required)
 export const GET = createOrgEndpoint({
   handler: async ({ context }) => {
     // context.auth.userId, context.org.orgId, context.org.role available
-  }
+  },
 });
 
 // 4. Admin endpoint (auth + admin/org_owner role required)
 export const POST = createAdminEndpoint({
   handler: async ({ context }) => {
     // Only admins and org_owners can access
-  }
+  },
 });
 
 // 5. Rate-limited public endpoint
 export const POST = createRateLimitedEndpoint({
   rateLimit: { maxRequests: 10, windowMs: 60000 },
-  handler: async ({ request }) => { /* ... */ }
+  handler: async ({ request }) => {
+    /* ... */
+  },
 });
 ```
 
@@ -294,24 +301,22 @@ export const GET = createOrgEndpoint({
     const { getFirestore } = await import("firebase-admin/firestore");
     const db = getFirestore();
 
-    const schedulesSnap = await db
-      .collection(`orgs/${context.org!.orgId}/schedules`)
-      .get();
+    const schedulesSnap = await db.collection(`orgs/${context.org!.orgId}/schedules`).get();
 
-    const schedules = schedulesSnap.docs.map(doc => ({
+    const schedules = schedulesSnap.docs.map((doc) => ({
       id: doc.id,
-      ...doc.data()
+      ...doc.data(),
     }));
 
     return NextResponse.json({ data: schedules });
-  }
+  },
 });
 
 // POST /api/schedules
 export const POST = createOrgEndpoint({
-  roles: ['manager'],  // Requires manager or higher
+  roles: ["manager"], // Requires manager or higher
   rateLimit: { maxRequests: 50, windowMs: 60000 },
-  input: CreateScheduleSchema,  // Auto-validates
+  input: CreateScheduleSchema, // Auto-validates
   handler: async ({ input, context }) => {
     try {
       const { getFirestore } = await import("firebase-admin/firestore");
@@ -322,29 +327,27 @@ export const POST = createOrgEndpoint({
         orgId: context.org!.orgId,
         createdBy: context.auth!.userId,
         createdAt: Date.now(),
-        updatedAt: Date.now()
+        updatedAt: Date.now(),
       };
 
-      const docRef = await db
-        .collection(`orgs/${context.org!.orgId}/schedules`)
-        .add(schedule);
+      const docRef = await db.collection(`orgs/${context.org!.orgId}/schedules`).add(schedule);
 
-      return NextResponse.json({
-        id: docRef.id,
-        ...schedule
-      }, { status: 201 });
+      return NextResponse.json(
+        {
+          id: docRef.id,
+          ...schedule,
+        },
+        { status: 201 },
+      );
     } catch (err) {
       const message = err instanceof Error ? err.message : "Unexpected error";
       console.error("Failed to create schedule", {
         error: message,
-        orgId: context.org?.orgId
+        orgId: context.org?.orgId,
       });
-      return NextResponse.json(
-        { error: { code: "INTERNAL_ERROR", message } },
-        { status: 500 }
-      );
+      return NextResponse.json({ error: { code: "INTERNAL_ERROR", message } }, { status: 500 });
     }
-  }
+  },
 });
 ```
 
@@ -359,7 +362,7 @@ export interface EndpointConfig<TInput, TOutput> {
   org?: "required" | "optional" | "none";
 
   // Required roles (if org is required)
-  roles?: OrgRole[];  // ['org_owner', 'admin', 'manager', 'scheduler', 'corporate', 'staff']
+  roles?: OrgRole[]; // ['org_owner', 'admin', 'manager', 'scheduler', 'corporate', 'staff']
 
   // Rate limiting
   rateLimit?: {
@@ -396,6 +399,7 @@ export interface EndpointConfig<TInput, TOutput> {
 **Location**: `packages/types/src/`
 
 **Files**:
+
 - `shifts.ts` - Shift entities
 - `orgs.ts` - Organization entities
 - `schedules.ts` - Schedule entities
@@ -414,7 +418,7 @@ export const EntitySchema = z.object({
   orgId: z.string().min(1),
   status: z.enum(["active", "inactive"]).default("active"),
   createdAt: z.number().int().positive(),
-  updatedAt: z.number().int().positive()
+  updatedAt: z.number().int().positive(),
 });
 
 // 2. Infer TypeScript type
@@ -424,13 +428,13 @@ export type Entity = z.infer<typeof EntitySchema>;
 export const CreateEntitySchema = EntitySchema.omit({
   id: true,
   createdAt: true,
-  updatedAt: true
+  updatedAt: true,
 });
 
 // 4. Derive Update schema (partial, omit immutable fields)
 export const UpdateEntitySchema = EntitySchema.partial().omit({
   id: true,
-  orgId: true  // orgId is immutable
+  orgId: true, // orgId is immutable
 });
 ```
 
@@ -456,16 +460,15 @@ SDK factory automatically converts ZodErrors to user-friendly responses:
 ### Custom Validation Rules
 
 ```typescript
-export const ShiftSchema = z.object({
-  startTime: z.number().int().positive(),
-  endTime: z.number().int().positive()
-}).refine(
-  (data) => data.endTime > data.startTime,
-  {
+export const ShiftSchema = z
+  .object({
+    startTime: z.number().int().positive(),
+    endTime: z.number().int().positive(),
+  })
+  .refine((data) => data.endTime > data.startTime, {
     message: "End time must be after start time",
-    path: ["endTime"]  // Associates error with specific field
-  }
-);
+    path: ["endTime"], // Associates error with specific field
+  });
 ```
 
 ---
@@ -477,6 +480,7 @@ export const ShiftSchema = z.object({
 **Pattern**: Firebase Admin SDK session cookie verification
 
 **Flow**:
+
 1. Client authenticates with Firebase (via JS SDK)
 2. Client sends ID token to `/api/session`
 3. Server creates session cookie via `auth.createSessionCookie(idToken)`
@@ -484,6 +488,7 @@ export const ShiftSchema = z.object({
 5. SDK factory verifies cookie on each request
 
 **Cookie Flags** (required):
+
 ```typescript
 Set-Cookie: session=${value}; HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=${ttl}
 ```
@@ -491,6 +496,7 @@ Set-Cookie: session=${value}; HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=${
 ### Role-Based Access Control (RBAC)
 
 **Role Hierarchy** (lowest to highest):
+
 ```
 staff < corporate < scheduler < manager < admin < org_owner
 ```
@@ -498,14 +504,7 @@ staff < corporate < scheduler < manager < admin < org_owner
 **Role Definition**: `packages/types/src/rbac.ts`
 
 ```typescript
-export const OrgRole = z.enum([
-  "staff",
-  "corporate",
-  "scheduler",
-  "manager",
-  "admin",
-  "org_owner"
-]);
+export const OrgRole = z.enum(["staff", "corporate", "scheduler", "manager", "admin", "org_owner"]);
 
 export type OrgRole = z.infer<typeof OrgRole>;
 ```
@@ -513,21 +512,22 @@ export type OrgRole = z.infer<typeof OrgRole>;
 **Hierarchical Checking**: If you require `manager`, users with `admin` or `org_owner` also pass.
 
 **Usage**:
+
 ```typescript
 // Require manager or higher
 export const POST = createOrgEndpoint({
-  roles: ['manager'],
+  roles: ["manager"],
   handler: async ({ context }) => {
     // context.org.role is guaranteed to be manager, admin, or org_owner
-  }
+  },
 });
 
 // Require admin or org_owner only
 export const DELETE = createOrgEndpoint({
-  roles: ['admin'],
+  roles: ["admin"],
   handler: async ({ context }) => {
     // Only admin and org_owner can access
-  }
+  },
 });
 ```
 
@@ -536,6 +536,7 @@ export const DELETE = createOrgEndpoint({
 **Pattern**: Loaded from Firestore membership collection
 
 **Query**:
+
 ```typescript
 const membershipQuery = await db
   .collectionGroup("memberships")
@@ -547,6 +548,7 @@ const membershipQuery = await db
 ```
 
 **Membership Document** (`/memberships/{userId}_{orgId}`):
+
 ```typescript
 {
   uid: string;
@@ -559,6 +561,7 @@ const membershipQuery = await db
 ```
 
 **Context Available in Handler**:
+
 ```typescript
 {
   auth: {
@@ -588,14 +591,18 @@ const membershipQuery = await db
 **Applied To**: POST, PUT, PATCH, DELETE (mutations only)
 
 **Override** (if needed for webhooks):
+
 ```typescript
 export const POST = createPublicEndpoint({
-  csrf: false,  // Disable CSRF
-  handler: async () => { /* ... */ }
+  csrf: false, // Disable CSRF
+  handler: async () => {
+    /* ... */
+  },
 });
 ```
 
 **Client Must**:
+
 - Include CSRF token in `X-CSRF-Token` header
 - Token must match cookie value
 
@@ -604,28 +611,34 @@ export const POST = createPublicEndpoint({
 **Implementation**: Redis-backed (production) or in-memory (dev)
 
 **Environment Variables**:
+
 - `UPSTASH_REDIS_REST_URL` + `UPSTASH_REDIS_REST_TOKEN` (preferred for Vercel)
 - OR `REDIS_URL` (for ioredis client)
 
 **⚠️ WARNING**: In-memory rate limiting is NOT suitable for multi-instance deployments. Use Redis in production.
 
 **Configuration**:
+
 ```typescript
 export const POST = createOrgEndpoint({
   rateLimit: {
-    maxRequests: 50,   // 50 requests
-    windowMs: 60000    // per 60 seconds
+    maxRequests: 50, // 50 requests
+    windowMs: 60000, // per 60 seconds
   },
-  handler: async () => { /* ... */ }
+  handler: async () => {
+    /* ... */
+  },
 });
 ```
 
 **Recommended Limits**:
+
 - Read operations: 100 req/min
 - Write operations: 50 req/min
 - Sensitive operations (auth, payments): 10 req/min
 
 **Response Headers**:
+
 ```
 X-RateLimit-Limit: 100
 X-RateLimit-Remaining: 42
@@ -640,6 +653,7 @@ Retry-After: 45  (seconds until reset)
 **Automatic**: When you specify `input: Schema`, SDK factory validates before handler
 
 **Manual** (legacy):
+
 ```typescript
 import { parseJson, badRequest } from "../_shared/validation";
 
@@ -654,15 +668,15 @@ if (!parsed.success) {
 **ALWAYS** scope queries to the user's organization:
 
 **❌ WRONG**:
+
 ```typescript
-const schedules = await db.collection("schedules").get();  // No scoping!
+const schedules = await db.collection("schedules").get(); // No scoping!
 ```
 
 **✅ CORRECT**:
+
 ```typescript
-const schedules = await db
-  .collection(`orgs/${context.org!.orgId}/schedules`)
-  .get();
+const schedules = await db.collection(`orgs/${context.org!.orgId}/schedules`).get();
 ```
 
 ### 5. Security Headers
@@ -670,6 +684,7 @@ const schedules = await db
 **Automatic**: Applied to all responses via SDK factory
 
 **Headers Applied**:
+
 - `Content-Security-Policy`: Restricts script/style sources
 - `Strict-Transport-Security`: HSTS
 - `X-Frame-Options`: DENY
@@ -686,6 +701,7 @@ const schedules = await db
 **Location**: `apps/web/lib/firebase-admin.ts`
 
 **Singleton Pattern**:
+
 ```typescript
 import { getFirestore } from "firebase-admin/firestore";
 import { getAuth } from "firebase-admin/auth";
@@ -698,6 +714,7 @@ const auth = getAuth();
 ```
 
 **Environment Variables Required**:
+
 - `FIREBASE_PROJECT_ID` or `NEXT_PUBLIC_FIREBASE_PROJECT_ID`
 - `GOOGLE_APPLICATION_CREDENTIALS_JSON` (service account JSON string)
 
@@ -730,13 +747,13 @@ export const GET = createOrgEndpoint({
       .limit(50)
       .get();
 
-    const schedules = snapshot.docs.map(doc => ({
+    const schedules = snapshot.docs.map((doc) => ({
       id: doc.id,
-      ...doc.data()
+      ...doc.data(),
     }));
 
     return NextResponse.json({ data: schedules });
-  }
+  },
 });
 ```
 
@@ -745,6 +762,7 @@ export const GET = createOrgEndpoint({
 **Location**: `firestore.rules`
 
 **Key Helper Functions**:
+
 ```javascript
 function isSignedIn() {
   return request.auth != null;
@@ -766,6 +784,7 @@ function hasAnyRole(orgId, roles) {
 ```
 
 **Common Patterns**:
+
 ```javascript
 // Self-only access
 match /users/{userId} {
@@ -797,6 +816,7 @@ match /orgs/{orgId}/schedules/{scheduleId} {
 **Config**: `apps/web/vitest.config.ts`
 
 **Run Tests**:
+
 ```bash
 pnpm test              # Run all tests
 pnpm test:coverage     # With coverage
@@ -808,6 +828,7 @@ pnpm test:watch        # Watch mode
 **Location**: `packages/api-framework/src/testing.ts`
 
 **Mock Request Builder**:
+
 ```typescript
 import { createMockRequest } from "@fresh-schedules/api-framework/testing";
 
@@ -816,25 +837,26 @@ const request = createMockRequest("/api/shifts", {
   body: { startTime: 1234567890, endTime: 1234571490 },
   cookies: { session: "valid-session" },
   headers: { "x-org-id": "org-123" },
-  searchParams: { orgId: "org-123" }
+  searchParams: { orgId: "org-123" },
 });
 ```
 
 **Mock Context Builders**:
+
 ```typescript
 import {
   createMockAuthContext,
-  createMockOrgContext
+  createMockOrgContext,
 } from "@fresh-schedules/api-framework/testing";
 
 const authContext = createMockAuthContext({
   userId: "user-123",
-  email: "test@example.com"
+  email: "test@example.com",
 });
 
 const orgContext = createMockOrgContext({
   orgId: "org-123",
-  role: "admin"
+  role: "admin",
 });
 ```
 
@@ -850,6 +872,7 @@ const orgContext = createMockOrgContext({
 ```
 
 **Example Test**:
+
 ```typescript
 // [P1][TEST][TEST] Schedules API tests
 // Tags: P1, TEST, TEST
@@ -869,10 +892,10 @@ describe("POST /api/schedules", () => {
       body: {
         name: "Test Schedule",
         startDate: 1234567890,
-        endDate: 1234571490
+        endDate: 1234571490,
       },
       cookies: { session: "valid-session" },
-      searchParams: { orgId: "org-123" }
+      searchParams: { orgId: "org-123" },
     });
 
     const response = await POST(request, { params: {} });
@@ -886,8 +909,8 @@ describe("POST /api/schedules", () => {
   it("should reject invalid input", async () => {
     const request = createMockRequest("/api/schedules", {
       method: "POST",
-      body: { name: "" },  // Invalid: empty name
-      cookies: { session: "valid-session" }
+      body: { name: "" }, // Invalid: empty name
+      cookies: { session: "valid-session" },
     });
 
     const response = await POST(request, { params: {} });
@@ -914,12 +937,14 @@ describe("POST /api/schedules", () => {
 **⚠️ CRITICAL**: This project enforces pnpm. Using npm or yarn will be blocked by pre-commit hooks.
 
 **Why pnpm?**:
+
 - Workspace support
 - Faster installs
 - Strict dependency resolution
 - Prevents phantom dependencies
 
 **Common Commands**:
+
 ```bash
 # Install (always use --frozen-lockfile in CI)
 pnpm install --frozen-lockfile
@@ -945,6 +970,7 @@ pnpm clean
 **Config**: `turbo.json`
 
 **Tasks**:
+
 - `build` - Build all packages (depends on `^build`)
 - `test` - Run tests (depends on `^build`)
 - `lint` - Lint all packages
@@ -953,6 +979,7 @@ pnpm clean
 - `clean` - Clean build artifacts
 
 **Run via pnpm**:
+
 ```bash
 pnpm dev        # Turbo runs dev tasks
 pnpm build      # Turbo runs build tasks
@@ -962,6 +989,7 @@ pnpm test       # Turbo runs test tasks
 ### Firebase Emulators
 
 **Start Emulators**:
+
 ```bash
 # Terminal 1: Start emulators
 firebase emulators:start
@@ -971,12 +999,14 @@ NEXT_PUBLIC_USE_EMULATORS=true pnpm dev
 ```
 
 **Seed Data**:
+
 ```bash
 pnpm tsx scripts/seed/seed.emulator.ts
 pnpm sim:auth  # Auth simulation
 ```
 
 **Emulator Ports**:
+
 - Firestore: `localhost:8080`
 - Auth: `localhost:9099`
 - Functions: `localhost:5001`
@@ -988,6 +1018,7 @@ pnpm sim:auth  # Auth simulation
 **Location**: `.husky/pre-commit`
 
 **Validation Steps** (runs automatically):
+
 1. **pnpm enforcement** - Blocks npm/yarn usage
 2. **Auto-tag files** - Adds metadata headers
 3. **Typecheck** - Catches TS errors
@@ -996,6 +1027,7 @@ pnpm sim:auth  # Auth simulation
 6. **Pattern detection** - Catches recurring errors (>3x)
 
 **Manual Run**:
+
 ```bash
 pnpm typecheck
 pnpm lint
@@ -1005,6 +1037,7 @@ pnpm format
 ### Local Quality Gates (Before PR)
 
 **Checklist**:
+
 - [ ] `pnpm install --frozen-lockfile` completes without warnings
 - [ ] `pnpm -w typecheck` passes (13 React 19 compat errors acceptable)
 - [ ] `pnpm test` passes
@@ -1029,15 +1062,18 @@ pnpm format
 **RULE**: Never duplicate types. Always use `z.infer<typeof Schema>`.
 
 **❌ WRONG**:
+
 ```typescript
 export const UserSchema = z.object({ name: z.string() });
 
-interface User {  // Duplicate!
+interface User {
+  // Duplicate!
   name: string;
 }
 ```
 
 **✅ CORRECT**:
+
 ```typescript
 export const UserSchema = z.object({ name: z.string() });
 export type User = z.infer<typeof UserSchema>;
@@ -1048,6 +1084,7 @@ export type User = z.infer<typeof UserSchema>;
 **RULE**: All API routes MUST use SDK factory or `withSecurity` wrapper.
 
 **❌ WRONG**:
+
 ```typescript
 export async function GET(request: NextRequest) {
   const data = await fetchData();
@@ -1056,12 +1093,13 @@ export async function GET(request: NextRequest) {
 ```
 
 **✅ CORRECT**:
+
 ```typescript
 export const GET = createOrgEndpoint({
   handler: async ({ context }) => {
     const data = await fetchData(context.org!.orgId);
     return NextResponse.json({ data });
-  }
+  },
 });
 ```
 
@@ -1070,22 +1108,24 @@ export const GET = createOrgEndpoint({
 **RULE**: All POST/PUT/PATCH routes MUST validate input via Zod.
 
 **❌ WRONG**:
+
 ```typescript
 export const POST = createOrgEndpoint({
   handler: async ({ request }) => {
-    const body = await request.json();  // No validation!
+    const body = await request.json(); // No validation!
     await db.collection("items").add(body);
-  }
+  },
 });
 ```
 
 **✅ CORRECT**:
+
 ```typescript
 export const POST = createOrgEndpoint({
-  input: CreateItemSchema,  // Validates automatically
+  input: CreateItemSchema, // Validates automatically
   handler: async ({ input, context }) => {
     await db.collection("items").add(input);
-  }
+  },
 });
 ```
 
@@ -1094,20 +1134,21 @@ export const POST = createOrgEndpoint({
 **RULE**: Always scope Firestore queries to `context.org.orgId`.
 
 **❌ WRONG**:
+
 ```typescript
-const schedules = await db.collection("schedules").get();  // No org scoping!
+const schedules = await db.collection("schedules").get(); // No org scoping!
 ```
 
 **✅ CORRECT**:
+
 ```typescript
-const schedules = await db
-  .collection(`orgs/${context.org!.orgId}/schedules`)
-  .get();
+const schedules = await db.collection(`orgs/${context.org!.orgId}/schedules`).get();
 ```
 
 ### 6. The Triad of Trust
 
 **RULE**: Every domain entity MUST have:
+
 1. Zod schema in `packages/types/src/`
 2. API route in `apps/web/app/api/`
 3. Firestore rules in `firestore.rules`
@@ -1141,6 +1182,7 @@ const schedules = await db
 **RULE**: If `pnpm install` shows deprecated warnings, fix before merging.
 
 **Options**:
+
 1. Upgrade to non-deprecated package
 2. Replace with alternative
 3. Document why it remains (with issue link)
@@ -1150,6 +1192,7 @@ const schedules = await db
 **RULE**: Always log errors with context before returning error response.
 
 **❌ WRONG**:
+
 ```typescript
 catch (err) {
   return NextResponse.json({ error: "Error" }, { status: 500 });
@@ -1157,6 +1200,7 @@ catch (err) {
 ```
 
 **✅ CORRECT**:
+
 ```typescript
 catch (err) {
   const message = err instanceof Error ? err.message : "Unexpected error";
@@ -1176,6 +1220,7 @@ catch (err) {
 ### Creating a New Domain Entity
 
 **Steps**:
+
 ```bash
 # 1. Define schema
 touch packages/types/src/my-entity.ts
@@ -1195,6 +1240,7 @@ node scripts/validate-patterns.mjs
 ```
 
 **1. Schema** (`packages/types/src/my-entity.ts`):
+
 ```typescript
 // [P0][DOMAIN][SCHEMA] MyEntity schema
 // Tags: P0, DOMAIN, SCHEMA
@@ -1207,7 +1253,7 @@ export const MyEntitySchema = z.object({
   name: z.string().min(1).max(100),
   status: z.enum(["active", "inactive"]).default("active"),
   createdAt: z.number().int().positive(),
-  updatedAt: z.number().int().positive()
+  updatedAt: z.number().int().positive(),
 });
 
 export type MyEntity = z.infer<typeof MyEntitySchema>;
@@ -1215,27 +1261,25 @@ export type MyEntity = z.infer<typeof MyEntitySchema>;
 export const CreateMyEntitySchema = MyEntitySchema.omit({
   id: true,
   createdAt: true,
-  updatedAt: true
+  updatedAt: true,
 });
 
 export const UpdateMyEntitySchema = MyEntitySchema.partial().omit({
   id: true,
-  orgId: true
+  orgId: true,
 });
 
 // Export from index.ts
 ```
 
 **2. API Route** (`apps/web/app/api/my-entities/route.ts`):
+
 ```typescript
 // [P0][API][CODE] MyEntities API endpoint
 // Tags: P0, API, CODE
 
 import { createOrgEndpoint } from "@fresh-schedules/api-framework";
-import {
-  CreateMyEntitySchema,
-  UpdateMyEntitySchema
-} from "@fresh-schedules/types";
+import { CreateMyEntitySchema, UpdateMyEntitySchema } from "@fresh-schedules/types";
 import { NextResponse } from "next/server";
 
 // GET /api/my-entities?orgId=xxx
@@ -1244,22 +1288,20 @@ export const GET = createOrgEndpoint({
     const { getFirestore } = await import("firebase-admin/firestore");
     const db = getFirestore();
 
-    const snapshot = await db
-      .collection(`orgs/${context.org!.orgId}/myEntities`)
-      .get();
+    const snapshot = await db.collection(`orgs/${context.org!.orgId}/myEntities`).get();
 
-    const entities = snapshot.docs.map(doc => ({
+    const entities = snapshot.docs.map((doc) => ({
       id: doc.id,
-      ...doc.data()
+      ...doc.data(),
     }));
 
     return NextResponse.json({ data: entities });
-  }
+  },
 });
 
 // POST /api/my-entities
 export const POST = createOrgEndpoint({
-  roles: ['manager'],
+  roles: ["manager"],
   rateLimit: { maxRequests: 50, windowMs: 60000 },
   input: CreateMyEntitySchema,
   handler: async ({ input, context }) => {
@@ -1270,62 +1312,54 @@ export const POST = createOrgEndpoint({
       ...input,
       orgId: context.org!.orgId,
       createdAt: Date.now(),
-      updatedAt: Date.now()
+      updatedAt: Date.now(),
     };
 
-    const docRef = await db
-      .collection(`orgs/${context.org!.orgId}/myEntities`)
-      .add(entity);
+    const docRef = await db.collection(`orgs/${context.org!.orgId}/myEntities`).add(entity);
 
-    return NextResponse.json(
-      { id: docRef.id, ...entity },
-      { status: 201 }
-    );
-  }
+    return NextResponse.json({ id: docRef.id, ...entity }, { status: 201 });
+  },
 });
 
 // PATCH /api/my-entities/[id]
 export const PATCH = createOrgEndpoint({
-  roles: ['manager'],
+  roles: ["manager"],
   input: UpdateMyEntitySchema,
   handler: async ({ input, context, params }) => {
     const { getFirestore } = await import("firebase-admin/firestore");
     const db = getFirestore();
 
-    const docRef = db.doc(
-      `orgs/${context.org!.orgId}/myEntities/${params.id}`
-    );
+    const docRef = db.doc(`orgs/${context.org!.orgId}/myEntities/${params.id}`);
 
     await docRef.update({
       ...input,
-      updatedAt: Date.now()
+      updatedAt: Date.now(),
     });
 
     const updated = await docRef.get();
     return NextResponse.json({
       id: updated.id,
-      ...updated.data()
+      ...updated.data(),
     });
-  }
+  },
 });
 
 // DELETE /api/my-entities/[id]
 export const DELETE = createOrgEndpoint({
-  roles: ['admin'],
+  roles: ["admin"],
   handler: async ({ context, params }) => {
     const { getFirestore } = await import("firebase-admin/firestore");
     const db = getFirestore();
 
-    await db
-      .doc(`orgs/${context.org!.orgId}/myEntities/${params.id}`)
-      .delete();
+    await db.doc(`orgs/${context.org!.orgId}/myEntities/${params.id}`).delete();
 
     return NextResponse.json({ success: true });
-  }
+  },
 });
 ```
 
 **3. Firestore Rules** (`firestore.rules`):
+
 ```javascript
 match /orgs/{orgId}/myEntities/{entityId} {
   // Read: org members
@@ -1344,6 +1378,7 @@ match /orgs/{orgId}/myEntities/{entityId} {
 ```
 
 **4. Tests** (`apps/web/app/api/my-entities/__tests__/my-entities.test.ts`):
+
 ```typescript
 // [P1][TEST][TEST] MyEntities API tests
 // Tags: P1, TEST, TEST
@@ -1356,7 +1391,7 @@ describe("GET /api/my-entities", () => {
   it("should return entities for org", async () => {
     const request = createMockRequest("/api/my-entities", {
       cookies: { session: "valid-session" },
-      searchParams: { orgId: "org-123" }
+      searchParams: { orgId: "org-123" },
     });
 
     const response = await GET(request, { params: {} });
@@ -1373,7 +1408,7 @@ describe("POST /api/my-entities", () => {
       method: "POST",
       body: { name: "Test Entity" },
       cookies: { session: "valid-session" },
-      searchParams: { orgId: "org-123" }
+      searchParams: { orgId: "org-123" },
     });
 
     const response = await POST(request, { params: {} });
@@ -1386,6 +1421,7 @@ describe("POST /api/my-entities", () => {
 ### Migrating Legacy Route to SDK Factory
 
 **Before** (legacy `withSecurity` pattern):
+
 ```typescript
 import { withSecurity } from "../_shared/middleware";
 import { requireOrgMembership, requireRole } from "@/src/lib/api";
@@ -1400,30 +1436,32 @@ export const POST = withSecurity(
       }
       // Business logic
       return ok({ success: true });
-    })
+    }),
   ),
-  { requireAuth: true, maxRequests: 50, windowMs: 60_000 }
+  { requireAuth: true, maxRequests: 50, windowMs: 60_000 },
 );
 ```
 
 **After** (SDK factory):
+
 ```typescript
 import { createOrgEndpoint } from "@fresh-schedules/api-framework";
 import { CreateShiftSchema } from "@fresh-schedules/types";
 import { NextResponse } from "next/server";
 
 export const POST = createOrgEndpoint({
-  roles: ['manager'],
+  roles: ["manager"],
   rateLimit: { maxRequests: 50, windowMs: 60000 },
   input: CreateShiftSchema,
   handler: async ({ input, context }) => {
     // Business logic (input already validated)
     return NextResponse.json({ success: true });
-  }
+  },
 });
 ```
 
 **Benefits**:
+
 - Declarative configuration
 - Automatic validation
 - Type-safe context
@@ -1452,6 +1490,7 @@ export const POST = createOrgEndpoint({
 ```
 
 **Usage**:
+
 ```typescript
 // ❌ WRONG
 import { helper } from "../../../src/lib/helpers";
@@ -1481,6 +1520,7 @@ import { ok, badRequest } from "./validation";
 **Group by feature/domain, not by technical layer**:
 
 **❌ WRONG**:
+
 ```
 /components/Button.tsx
 /components/Modal.tsx
@@ -1489,6 +1529,7 @@ import { ok, badRequest } from "./validation";
 ```
 
 **✅ CORRECT**:
+
 ```
 /schedules/
 ├── components/
@@ -1511,6 +1552,7 @@ import { ok, badRequest } from "./validation";
 **Cause**: ESLint v9 removed some CLI flags. Using `eslint_d` wrapper.
 
 **Fix**: Use `eslint` directly (already fixed in latest):
+
 ```json
 {
   "scripts": {
@@ -1524,6 +1566,7 @@ import { ok, badRequest } from "./validation";
 **Cause**: pnpm enforcement script checking package.json.
 
 **Fix**: Ensure root `package.json` has:
+
 ```json
 {
   "packageManager": "pnpm@9.12.1"
@@ -1547,6 +1590,7 @@ import { ok, badRequest } from "./validation";
 **Cause**: Using in-memory rate limiter with multiple instances.
 
 **Fix**: Set Redis environment variables:
+
 ```bash
 UPSTASH_REDIS_REST_URL=https://....upstash.io
 UPSTASH_REDIS_REST_TOKEN=****
@@ -1559,10 +1603,13 @@ UPSTASH_REDIS_REST_TOKEN=****
 **Fix**: Client must send CSRF token in `X-CSRF-Token` header for mutations.
 
 **Workaround**: Disable CSRF for public endpoints:
+
 ```typescript
 export const POST = createPublicEndpoint({
   csrf: false,
-  handler: async () => { /* ... */ }
+  handler: async () => {
+    /* ... */
+  },
 });
 ```
 
@@ -1571,13 +1618,14 @@ export const POST = createPublicEndpoint({
 **Cause**: Missing `orgId` in query params or `x-org-id` header.
 
 **Fix**: Include org ID in request:
+
 ```typescript
 // Query param
 fetch("/api/schedules?orgId=org-123");
 
 // Header
 fetch("/api/schedules", {
-  headers: { "x-org-id": "org-123" }
+  headers: { "x-org-id": "org-123" },
 });
 ```
 
@@ -1593,15 +1641,15 @@ fetch("/api/schedules", {
 
 ### Key Files
 
-| Purpose | Location |
-|---------|----------|
-| SDK Factory | `packages/api-framework/src/index.ts` |
-| Type Schemas | `packages/types/src/index.ts` |
-| API Template | `apps/web/app/api/_template/route.ts` |
-| Firestore Rules | `firestore.rules` |
-| Coding Standards | `docs/CODING_RULES_AND_PATTERNS.md` |
-| Firebase Admin | `apps/web/lib/firebase-admin.ts` |
-| Test Utilities | `packages/api-framework/src/testing.ts` |
+| Purpose          | Location                                |
+| ---------------- | --------------------------------------- |
+| SDK Factory      | `packages/api-framework/src/index.ts`   |
+| Type Schemas     | `packages/types/src/index.ts`           |
+| API Template     | `apps/web/app/api/_template/route.ts`   |
+| Firestore Rules  | `firestore.rules`                       |
+| Coding Standards | `docs/CODING_RULES_AND_PATTERNS.md`     |
+| Firebase Admin   | `apps/web/lib/firebase-admin.ts`        |
+| Test Utilities   | `packages/api-framework/src/testing.ts` |
 
 ### Environment Variables
 
@@ -1721,4 +1769,4 @@ This codebase follows a **Zod-first, SDK factory pattern** with **hierarchical R
 
 ---
 
-**Last Updated**: December 2, 2025 by AI Agent Analysis
+**Last Updated**: December 5, 2025 by AI Agent Analysis

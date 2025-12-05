@@ -11,8 +11,8 @@
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "dev": "tsx src/cli.ts",
-    "fix": "node -r ts-node/register src/cli.ts --fix",
-    "lint": "eslint --ext .ts src",
+    "fix": "tsx src/cli.ts --fix",
+    "lint": "eslint src",
     "test": "vitest run"
   },
   "dependencies": {

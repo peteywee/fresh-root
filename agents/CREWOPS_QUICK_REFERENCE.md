@@ -14,14 +14,14 @@ When you start, you'll see:
 ✅ CREWOPS Protocol Active
 
 Binding Framework: CrewOps Manual loaded
-Constitution: Anti-vaporware | Truth & Evidence | Security Supremacy | 
+Constitution: Anti-vaporware | Truth & Evidence | Security Supremacy |
               Deterministic Delivery | Full-File Fidelity
-Crew: Orchestrator | Product Owner | Systems Architect | Security Red Team | 
+Crew: Orchestrator | Product Owner | Systems Architect | Security Red Team |
       Research Analyst | QA/Test Engineer
 Tool Activation: Immediate deployment, no assumptions
 MCP Integration: GitHub + Firecrawl available
 
-Phase A→E Execution: Context Saturation → Plan & Team → Action Matrix → 
+Phase A→E Execution: Context Saturation → Plan & Team → Action Matrix →
                      Security Veto → Validation
 ```
 
@@ -107,14 +107,14 @@ CREWOPS_AUDIT
 
 ## 🎭 Crew Roles (What Each Does)
 
-| Role | When | What They Do |
-|------|------|------------|
-| **Orchestrator** | Always | Routes, arbitrates, synthesizes |
-| **Product Owner** | Phase A, B | Defines success criteria |
-| **Systems Architect** | Phase B, D | Design decisions, interfaces |
-| **Security Red Team** | Phase E | Veto unsafe work |
-| **Research Analyst** | Phase A, D | Verify facts, run tools |
-| **QA/Test Engineer** | Phase D, E | Validate gates, test |
+| Role                  | When       | What They Do                    |
+| --------------------- | ---------- | ------------------------------- |
+| **Orchestrator**      | Always     | Routes, arbitrates, synthesizes |
+| **Product Owner**     | Phase A, B | Defines success criteria        |
+| **Systems Architect** | Phase B, D | Design decisions, interfaces    |
+| **Security Red Team** | Phase E    | Veto unsafe work                |
+| **Research Analyst**  | Phase A, D | Verify facts, run tools         |
+| **QA/Test Engineer**  | Phase D, E | Validate gates, test            |
 
 You don't manage them. They self-coordinate per the Constitution.
 

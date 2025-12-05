@@ -12,7 +12,7 @@ export const POST = createAuthenticatedEndpoint({
     try {
       const body = await request.json();
       const { type, includeMedia } = body;
-      
+
       const backup = {
         id: `backup-${Date.now()}`,
         type: type || "full",

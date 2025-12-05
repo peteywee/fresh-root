@@ -1,7 +1,5 @@
 # FRESH Engine Migration Status — November 28, 2025
-
 ## Executive Summary
-
 ✅ **COMPLETE:** FRESH Engine standards framework v2.0 deployed, baseline benchmark captured, and repository cleaned.
 
 **Current Status:** Ready for Phase 1 (Tier 0 Security fixes)
@@ -14,9 +12,7 @@
 ---
 
 ## What Was Done
-
 ### 1. Standards Framework Deployment
-
 **New Documents Created:**
 
 - `.github/agents/OPERATING_AGREEMENT.md`
@@ -47,7 +43,6 @@
   - Symmetry as signal
 
 ### 2. Pattern Validator Implementation
-
 **File:** `scripts/validate-patterns.mjs`
 
 **Features:**
@@ -86,7 +81,6 @@ FRESH_PATTERNS_MIN_SCORE=80 pnpm lint:patterns
 ```
 
 ### 3. CI Integration
-
 **File:** `.github/workflows/ci-patterns.yml`
 
 - Runs on PR and push to main/develop
@@ -97,7 +91,6 @@ FRESH_PATTERNS_MIN_SCORE=80 pnpm lint:patterns
   - Score < 70
 
 ### 4. Package Scripts
-
 **Added to `package.json`:**
 
 ```json
@@ -108,7 +101,6 @@ FRESH_PATTERNS_MIN_SCORE=80 pnpm lint:patterns
 ```
 
 ### 5. Baseline Benchmark
-
 **Captured in:** `reports/patterns-baseline-*.log`
 
 ```
@@ -127,7 +119,6 @@ FRESH_PATTERNS_MIN_SCORE=0 pnpm lint:patterns --verbose
 ```
 
 ### 6. Repository Cleanup
-
 **Deleted 18 stale branches:**
 
 - All branches older than 2025-11-16
@@ -143,12 +134,11 @@ Remote branches: Same 5 only
 ---
 
 ## Migration Roadmap
-
 ### Phase 1: Tier 0 Security Fixes (Next)
-
 **13 issues to resolve:**
 
 1. **Public endpoints missing security wrappers (6 issues):**
+
    - `health/route.ts`
    - `healthz/route.ts`
    - `metrics/route.ts`
@@ -158,7 +148,8 @@ Remote branches: Same 5 only
 
    **Action:** Add `withSecurity` or `requireOrgMembership` wrapper
 
-2. **Write endpoints missing validation (7 issues):**
+1. **Write endpoints missing validation (7 issues):**
+
    - `auth/mfa/setup/route.ts`
    - `onboarding/activate-network/route.ts`
    - `onboarding/create-network-corporate/route.ts`
@@ -172,7 +163,6 @@ Remote branches: Same 5 only
 **Expected outcome:** Tier 0 → 0, Score ≈ +25 points
 
 ### Phase 2: Tier 1 Integrity Fixes
-
 **7 issues to resolve:**
 
 Zod imports and type inference patterns missing in:
@@ -192,7 +182,6 @@ export type Entity = z.infer<typeof EntitySchema>
 **Expected outcome:** Tier 1 → 0, Score ≈ +7 points
 
 ### Phase 3: Tier 3 Style Cleanup (Optional)
-
 **45 missing API headers**
 
 Add to all route.ts files:
@@ -206,7 +195,6 @@ Add to all route.ts files:
 ---
 
 ## Success Criteria
-
 ✅ **Standards Deployed**
 
 - All 6 documents in place
@@ -234,9 +222,7 @@ Add to all route.ts files:
 ---
 
 ## How to Use
-
 ### For Developers
-
 1. **Check your changes against standards:**
 
    ```bash
@@ -245,21 +231,22 @@ Add to all route.ts files:
 
    Fails if Tier 0 or Tier 1 violations exist.
 
-2. **Understand the standards:**
+1. **Understand the standards:**
 
    Start with:
+
    - `.github/agents/fresh-engine.agent.md` (boot sequence)
    - `.github/agents/CONTEXT_MANIFEST.md` (2-minute briefing)
 
-3. **Follow the framework:**
+1. **Follow the framework:**
 
    When writing code:
+
    - Check `SYMMETRY_FRAMEWORK.md` for layer fingerprints
    - Ensure Triad of Trust coverage
    - Use `00_STANDARDS_INDEX.md` as decision guide
 
 ### For CI/CD
-
 The validator automatically runs on:
 
 - All PRs to `main` or `develop`
@@ -278,7 +265,6 @@ FRESH_PATTERNS_MIN_SCORE=50 pnpm lint:patterns
 ---
 
 ## Key Metrics to Track
-
 Over time, monitor these KPIs:
 
 | Metric          | Baseline | Target | Status             |
@@ -291,7 +277,6 @@ Over time, monitor these KPIs:
 ---
 
 ## References
-
 - **Boot sequence:** `.github/agents/fresh-engine.agent.md`
 - **Operating rules:** `.github/agents/OPERATING_AGREEMENT.md`
 - **Thinking model:** `.github/agents/COGNITIVE_ARCHITECTURE.md`
@@ -303,6 +288,6 @@ Over time, monitor these KPIs:
 
 ---
 
-**Last Updated:** November 28, 2025  
-**Status:** ✅ Complete — Phase 1 ready  
+**Last Updated:** November 28, 2025\
+**Status:** ✅ Complete — Phase 1 ready\
 **Next Action:** Fix 13 Tier 0 security issues

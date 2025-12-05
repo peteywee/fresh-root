@@ -1,5 +1,4 @@
 # FRESH Engine Phase 3: Tier 3 Style Cleanup (Optional)
-
 **Objective:** Add missing API headers to remaining routes for style compliance.
 
 **Baseline:** 45 Tier 3 (Style) violations
@@ -10,7 +9,6 @@
 ---
 
 ## Issue Summary
-
 **Tier 3 violations are style/cosmetic only:**
 
 - Missing standard headers on API routes
@@ -18,15 +16,13 @@
 
 **Current violations:**
 
-- ~32 API routes missing header: `// [P#][API][CODE] Description`
-- ~13 schema files missing header: `// [P#][SCHEMA][DOMAIN] Description`
+- \~32 API routes missing header: `// [P#][API][CODE] Description`
+- \~13 schema files missing header: `// [P#][SCHEMA][DOMAIN] Description`
 
 ---
 
 ## Standard Headers
-
 ### API Route Header
-
 All route.ts files should start with:
 
 ```ts
@@ -48,7 +44,6 @@ export async function GET(request: NextRequest) {
 ```
 
 ### Schema Header
-
 All schema files should start with:
 
 ```ts
@@ -72,9 +67,7 @@ export const ComplianceSchema = z.object({
 ---
 
 ## Files to Update
-
 ### API Routes (Priority: Low)
-
 The following routes need headers added:
 
 ```
@@ -114,7 +107,6 @@ apps/web/app/api/zones/route.ts
 ```
 
 ### Schema Files (Priority: Medium)
-
 ```
 packages/types/src/compliance/index.ts
 packages/types/src/compliance.ts
@@ -133,13 +125,11 @@ packages/types/src/widgets.ts
 ---
 
 ## Implementation Strategy
-
 ### Option A: Automated Script
-
 Create a script to add headers to all files:
 
 ```bash
-#!/bin/bash
+# !/bin/bash
 # Add API header to all route.ts
 for file in $(find apps/web/app/api -name 'route.ts'); do
   if ! grep -q "// \[P" "$file"; then
@@ -156,7 +146,6 @@ done
 ```
 
 ### Option B: Manual Per-File
-
 Edit each file individually to add appropriate header based on content.
 
 **Recommendation:** Option A (automated) + manual review for accuracy.
@@ -164,16 +153,15 @@ Edit each file individually to add appropriate header based on content.
 ---
 
 ## Execution Steps
-
 1. **Review current state:**
 
    ```bash
    pnpm lint:patterns:verbose | grep "Header Present"
    ```
 
-2. **Apply headers using script or manual edits**
+1. **Apply headers using script or manual edits**
 
-3. **Verify:**
+1. **Verify:**
 
    ```bash
    FRESH_PATTERNS_MIN_SCORE=0 pnpm lint:patterns --verbose
@@ -181,7 +169,7 @@ Edit each file individually to add appropriate header based on content.
 
    Expected: 🟢 Tier 3 (Style): 0
 
-4. **Commit:**
+1. **Commit:**
 
    ```bash
    git commit -m "style: add standard headers to all API routes and schemas
@@ -197,16 +185,14 @@ Edit each file individually to add appropriate header based on content.
 ---
 
 ## Verification Checklist
-
-- [ ] All API routes have `// [P#][API][CODE]` header
-- [ ] All schema files have `// [P#][SCHEMA][DOMAIN]` header
-- [ ] Validator reports 0 Tier 3 issues
-- [ ] Score ≥ 70
+- \[ ] All API routes have `// [P#][API][CODE]` header
+- \[ ] All schema files have `// [P#][SCHEMA][DOMAIN]` header
+- \[ ] Validator reports 0 Tier 3 issues
+- \[ ] Score ≥ 70
 
 ---
 
 ## Success Criteria
-
 ✅ **Phase 3 Complete** when:
 
 - Tier 0: 0 ✅
@@ -219,7 +205,6 @@ Edit each file individually to add appropriate header based on content.
 ---
 
 ## Priority
-
 🟡 **Optional** — Not required for security/integrity
 
 - Improves developer experience
@@ -231,7 +216,6 @@ Edit each file individually to add appropriate header based on content.
 ---
 
 ## Timeline
-
 **Estimated time to complete:** 30-45 minutes
 
 - Script generation: 10 min

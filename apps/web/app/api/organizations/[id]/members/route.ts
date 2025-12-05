@@ -13,7 +13,7 @@ const AddMemberSchema = z.object({
 
 // TEST COVERAGE NOTE: AddMemberSchema validation tests should verify:
 // - email field validates format and is required
-// - role field restricts to valid enum values  
+// - role field restricts to valid enum values
 // - error messages returned for missing/invalid fields
 // See @fresh-schedules/api-framework/src/testing.ts for test utilities
 

@@ -1,5 +1,4 @@
-# Template: CODE_TS_MODULE
-
+# Template: CODE\_TS\_MODULE
 ```ts
 /**
  * ${Name} module

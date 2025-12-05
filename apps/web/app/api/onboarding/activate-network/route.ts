@@ -46,18 +46,14 @@ export const POST = createAuthenticatedEndpoint({
 
       try {
         const networkRef = adb.collection("networks").doc(String(networkId));
-        
+
         // Use typed wrapper for safe update
-        await updateDocWithType<NetworkDoc>(
-          adb,
-          networkRef,
-          {
-            status: "active",
-            activatedAt: Timestamp.now(),
-            updatedAt: Timestamp.now(),
-          },
-        );
-        
+        await updateDocWithType<NetworkDoc>(adb, networkRef, {
+          status: "active",
+          activatedAt: Timestamp.now(),
+          updatedAt: Timestamp.now(),
+        });
+
         return ok({ ok: true, networkId, status: "active" });
       } catch (err) {
         console.error("activate-network failed", err);

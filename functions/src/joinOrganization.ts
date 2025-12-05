@@ -17,8 +17,15 @@ import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
 import { z } from "zod";
 
-const db = admin.firestore();
-const auth = admin.auth();
+// Avoid initializing Firestore/auth at module-evaluation time so tests can
+// initialize the Admin SDK (emulator) in test setup before use.
+function getDb() {
+  return admin.firestore();
+}
+
+function getAuth() {
+  return admin.auth();
+}
 
 // =============================================================================
 // TYPES & VALIDATION
@@ -71,7 +78,9 @@ class JoinError extends Error {
 
 async function validateToken(
   tokenId: string,
+  dbClient?: any,
 ): Promise<{ ref: admin.firestore.DocumentReference; data: JoinToken }> {
+  const db = dbClient ?? getDb();
   const tokenRef = db.collection("join_tokens").doc(tokenId);
   const tokenDoc = await tokenRef.get();
 
@@ -96,7 +105,8 @@ async function validateToken(
   return { ref: tokenRef, data: tokenData };
 }
 
-async function checkExistingMembership(userId: string, orgId: string): Promise<string | null> {
+async function checkExistingMembership(userId: string, orgId: string, dbClient?: any): Promise<string | null> {
+  const db = dbClient ?? getDb();
   const existing = await db
     .collectionGroup("memberships")
     .where("uid", "==", userId)
@@ -114,14 +124,15 @@ async function getOrCreateAuthUser(
   email: string,
   password: string,
   displayName: string,
+  authClient?: any,
 ): Promise<{ user: admin.auth.UserRecord; isNew: boolean }> {
   try {
-    const existingUser = await auth.getUserByEmail(email);
+    const existingUser = await (authClient ?? getAuth()).getUserByEmail(email);
     return { user: existingUser, isNew: false };
   } catch (error: unknown) {
     const firebaseError = error as { code?: string };
     if (firebaseError.code === "auth/user-not-found") {
-      const newUser = await auth.createUser({
+      const newUser = await (authClient ?? getAuth()).createUser({
         email,
         password,
         displayName,
@@ -133,9 +144,9 @@ async function getOrCreateAuthUser(
   }
 }
 
-async function deleteAuthUser(uid: string): Promise<void> {
+async function deleteAuthUser(uid: string, authClient?: any): Promise<void> {
   try {
-    await auth.deleteUser(uid);
+    await (authClient ?? getAuth()).deleteUser(uid);
     functions.logger.info(`[COMPENSATE] Deleted auth user ${uid}`);
   } catch (error) {
     functions.logger.error(`[COMPENSATE] Failed to delete auth user ${uid}:`, error);
@@ -146,7 +157,13 @@ async function deleteAuthUser(uid: string): Promise<void> {
 // MAIN FUNCTION
 // =============================================================================
 
-export const joinOrganization = functions.https.onCall(async (request): Promise<JoinResult> => {
+// Extract handler for unit/integration testing
+export async function joinOrganizationHandler(
+  request: any,
+  deps?: { db?: any; auth?: any },
+): Promise<JoinResult> {
+  const dbClient = deps?.db ?? getDb();
+  const authClient = deps?.auth ?? getAuth();
   let createdAuthUser: admin.auth.UserRecord | null = null;
   let isNewUser = false;
 
@@ -166,19 +183,19 @@ export const joinOrganization = functions.https.onCall(async (request): Promise<
     functions.logger.info(`[JOIN] Starting join flow for ${email}`);
 
     // Validate token
-    const { ref: tokenRef, data: tokenData } = await validateToken(token);
+    const { ref: tokenRef, data: tokenData } = await validateToken(token, dbClient);
     const { orgId, role } = tokenData;
 
     // Create/Get Auth user
-    const { user, isNew } = await getOrCreateAuthUser(email, password, displayName);
+    const { user, isNew } = await getOrCreateAuthUser(email, password, displayName, authClient);
     createdAuthUser = user;
     isNewUser = isNew;
 
     // Check idempotency
-    const existingMembership = await checkExistingMembership(user.uid, orgId);
+    const existingMembership = await checkExistingMembership(user.uid, orgId, dbClient);
     if (existingMembership) {
       functions.logger.info(`[JOIN] User already member, returning existing`);
-      const customToken = await auth.createCustomToken(user.uid);
+      const customToken = await authClient.createCustomToken(user.uid);
       return {
         success: true,
         userId: user.uid,
@@ -189,7 +206,7 @@ export const joinOrganization = functions.https.onCall(async (request): Promise<
     }
 
     // ATOMIC TRANSACTION
-    const membershipId = await db.runTransaction(async (transaction) => {
+    const membershipId = await dbClient.runTransaction(async (transaction) => {
       const tokenSnapshot = await transaction.get(tokenRef);
       if (!tokenSnapshot.exists) {
         throw new JoinError("Token no longer exists", "TOKEN_NOT_FOUND", 404);
@@ -200,7 +217,7 @@ export const joinOrganization = functions.https.onCall(async (request): Promise<
         throw new JoinError("Token exhausted", "TOKEN_EXHAUSTED", 400);
       }
 
-      const membershipRef = db.collection("memberships").doc();
+      const membershipRef = dbClient.collection("memberships").doc();
       const now = admin.firestore.Timestamp.now();
 
       transaction.set(membershipRef, {
@@ -216,8 +233,9 @@ export const joinOrganization = functions.https.onCall(async (request): Promise<
         updatedAt: now,
       });
 
+      const inc = dbClient.FieldValue && dbClient.FieldValue.increment ? dbClient.FieldValue.increment(1) : admin.firestore.FieldValue.increment(1);
       transaction.update(tokenRef, {
-        currentUses: admin.firestore.FieldValue.increment(1),
+        currentUses: inc,
         lastUsedAt: now,
         ...(currentTokenData.currentUses + 1 >= currentTokenData.maxUses && {
           status: "used",
@@ -225,7 +243,7 @@ export const joinOrganization = functions.https.onCall(async (request): Promise<
       });
 
       if (isNewUser) {
-        const profileRef = db.collection("users").doc(user.uid);
+        const profileRef = dbClient.collection("users").doc(user.uid);
         transaction.set(
           profileRef,
           {
@@ -243,7 +261,7 @@ export const joinOrganization = functions.https.onCall(async (request): Promise<
       return membershipRef.id;
     });
 
-    const customToken = await auth.createCustomToken(user.uid);
+    const customToken = await authClient.createCustomToken(user.uid);
 
     functions.logger.info(`[JOIN] Success: User ${user.uid} joined org ${orgId}`);
 
@@ -258,7 +276,7 @@ export const joinOrganization = functions.https.onCall(async (request): Promise<
     // COMPENSATING TRANSACTION
     if (isNewUser && createdAuthUser) {
       functions.logger.warn(`[JOIN] Transaction failed, executing compensating action`);
-      await deleteAuthUser(createdAuthUser.uid);
+      await deleteAuthUser(createdAuthUser.uid, deps?.auth);
     }
 
     if (error instanceof JoinError) {
@@ -272,4 +290,9 @@ export const joinOrganization = functions.https.onCall(async (request): Promise<
       code: "INTERNAL_ERROR",
     });
   }
+}
+
+// Export the Cloud Function using the handler, this keeps runtime the same
+export const joinOrganization = functions.https.onCall(async (request) => {
+  return await joinOrganizationHandler(request);
 });

@@ -138,16 +138,16 @@ function createErrorResponse(
 
 /**
  * Rate limiting with sliding window (in-memory for now)
- * 
+ *
  * ⚠️ PRODUCTION WARNING: In-memory storage is NOT suitable for multi-instance deployments.
- * 
+ *
  * For production, you MUST:
  * 1. Set REDIS_URL environment variable
  * 2. Use Upstash REST API (recommended for Vercel) or ioredis
  * 3. Replace this Map with Redis client (see packages/api-framework/src/redis.ts)
- * 
+ *
  * Without Redis, clients can bypass rate limits by hitting different instances.
- * 
+ *
  * TODO: Replace with Redis for multi-instance deployments
  */
 const rateLimitStore = new Map<string, { count: number; resetAt: number }>();
@@ -260,18 +260,18 @@ function hasRequiredRole(userRole: OrgRole, requiredRoles: OrgRole[]): boolean {
 
 /**
  * CSRF token verification
- * 
+ *
  * ⚠️ IMPORTANT: Current implementation requires token distribution mechanism:
  * 1. Generate CSRF token on initial page load (e.g., from a GET endpoint)
  * 2. Store in both secure HttpOnly cookie AND response body
  * 3. Client sends token in X-CSRF-Token header for mutations
  * 4. This middleware verifies token matches cookie (timing-safe comparison)
- * 
+ *
  * For stateless APIs or if token distribution is not feasible:
  * - Set csrf: false in endpoint config to disable
  * - Consider using SameSite=Strict cookies instead
  * - Use CORS preflight requirements for additional protection
- * 
+ *
  * References:
  * - https://owasp.org/www-community/attacks/csrf
  * - https://developer.mozilla.org/en-US/docs/Glossary/CSRF
@@ -580,9 +580,9 @@ export type { OrgRole };
 // REDIS & RATE LIMITING
 // =============================================================================
 
-  export * from "./redis";
-  export { checkRateLimit, createRateLimitMiddleware } from "./redis";
-  export type { RateLimitConfig, RateLimitResult, RedisClient } from "./redis";
+export * from "./redis";
+export { checkRateLimit, createRateLimitMiddleware } from "./redis";
+export type { RateLimitConfig, RateLimitResult, RedisClient } from "./redis";
 
 // TODO: Add Route Factory pattern here next
 // - validateInput(schema: ZodSchema, data: unknown)
@@ -597,10 +597,10 @@ export type { OrgRole };
 
 /**
  * createRateLimitedEndpoint
- * 
+ *
  * Factory for public endpoints that require rate limiting without authentication.
  * Useful for APIs like webhooks, public reports, or throttled free-tier endpoints.
- * 
+ *
  * EXAMPLE:
  * ```typescript
  * export const GET = createRateLimitedEndpoint({
@@ -613,7 +613,7 @@ export type { OrgRole };
  * ```
  */
 export function createRateLimitedEndpoint<TOutput = unknown>(
-  config: Omit<EndpointConfig<unknown, TOutput>, 'auth' | 'org'> & {
+  config: Omit<EndpointConfig<unknown, TOutput>, "auth" | "org"> & {
     handler: (params: {
       request: NextRequest;
       context: RequestContext;
@@ -622,8 +622,8 @@ export function createRateLimitedEndpoint<TOutput = unknown>(
   },
 ): (req: NextRequest, ctx: any) => Promise<NextResponse> {
   return createEndpoint({
-    auth: 'none',
-    org: 'none',
+    auth: "none",
+    org: "none",
     ...config,
   });
 }

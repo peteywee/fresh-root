@@ -71,9 +71,7 @@ const listSchedules = async (request: NextRequest, context: RequestContext) => {
   }
 
   try {
-    const schedulesCollection = db.collection(
-      `organizations/${context.org!.orgId}/schedules`,
-    );
+    const schedulesCollection = db.collection(`organizations/${context.org!.orgId}/schedules`);
 
     // Use typed query for better type safety
     const result = await queryWithType<ScheduleDoc>(
@@ -143,7 +141,7 @@ export const GET = createOrgEndpoint({
   rateLimit: { maxRequests: 100, windowMs: 60_000 },
   handler: async ({ request, context }) => {
     return listSchedules(request, context);
-  }
+  },
 });
 
 /**
@@ -151,9 +149,9 @@ export const GET = createOrgEndpoint({
  * Create a new schedule (requires scheduler+ role)
  */
 export const POST = createOrgEndpoint({
-  roles: ['scheduler'],
+  roles: ["scheduler"],
   rateLimit: { maxRequests: 50, windowMs: 60_000 },
   handler: async ({ request, context }) => {
     return createSchedule(request, context);
-  }
+  },
 });

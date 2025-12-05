@@ -3,13 +3,13 @@
  * Real-time test insights, coverage heatmaps, and trend analysis
  */
 
-import * as fs from 'fs';
-import * as path from 'path';
+import * as fs from "fs";
+import * as path from "path";
 
 interface TestExecution {
   testFile: string;
   testName: string;
-  status: 'passed' | 'failed' | 'skipped';
+  status: "passed" | "failed" | "skipped";
   duration: number;
   timestamp: number;
   retries: number;
@@ -59,7 +59,7 @@ export class TestAnalyticsDashboard {
     const flakiness = this.flakinessTracker.get(key) || { runs: 0, failures: 0 };
 
     flakiness.runs++;
-    if (execution.status === 'failed') {
+    if (execution.status === "failed") {
       flakiness.failures++;
     }
 
@@ -104,9 +104,9 @@ export class TestAnalyticsDashboard {
    */
   private generateSummary() {
     const totalTests = this.executions.length;
-    const passed = this.executions.filter(e => e.status === 'passed').length;
-    const failed = this.executions.filter(e => e.status === 'failed').length;
-    const skipped = this.executions.filter(e => e.status === 'skipped').length;
+    const passed = this.executions.filter((e) => e.status === "passed").length;
+    const failed = this.executions.filter((e) => e.status === "failed").length;
+    const skipped = this.executions.filter((e) => e.status === "skipped").length;
 
     const passRate = totalTests > 0 ? (passed / totalTests) * 100 : 0;
 
@@ -136,12 +136,12 @@ export class TestAnalyticsDashboard {
       runs.push(this.executions.slice(i, i + runsSize));
     }
 
-    const passRateTrend = runs.map(run => {
-      const passed = run.filter(e => e.status === 'passed').length;
+    const passRateTrend = runs.map((run) => {
+      const passed = run.filter((e) => e.status === "passed").length;
       return (passed / run.length) * 100;
     });
 
-    const durationTrend = runs.map(run => {
+    const durationTrend = runs.map((run) => {
       const total = run.reduce((sum, e) => sum + e.duration, 0);
       return total / run.length;
     });
@@ -158,7 +158,7 @@ export class TestAnalyticsDashboard {
   private findSlowestTests(): Array<{ name: string; duration: number }> {
     const testDurations = new Map<string, number[]>();
 
-    this.executions.forEach(exec => {
+    this.executions.forEach((exec) => {
       const key = `${exec.testFile}:${exec.testName}`;
       const durations = testDurations.get(key) || [];
       durations.push(exec.duration);
@@ -170,9 +170,7 @@ export class TestAnalyticsDashboard {
       duration: durations.reduce((sum, d) => sum + d, 0) / durations.length,
     }));
 
-    return averages
-      .sort((a, b) => b.duration - a.duration)
-      .slice(0, 10);
+    return averages.sort((a, b) => b.duration - a.duration).slice(0, 10);
   }
 
   /**
@@ -207,41 +205,37 @@ export class TestAnalyticsDashboard {
   /**
    * Generates recommendations
    */
-  private generateRecommendations(
-    summary: any,
-    flakyTests: any[],
-    slowestTests: any[]
-  ): string[] {
+  private generateRecommendations(summary: any, flakyTests: any[], slowestTests: any[]): string[] {
     const recommendations: string[] = [];
 
     // Pass rate recommendations
     if (summary.passRate < 90) {
-      recommendations.push('⚠️  Test pass rate is below 90% - focus on fixing failing tests');
+      recommendations.push("⚠️  Test pass rate is below 90% - focus on fixing failing tests");
     } else if (summary.passRate >= 95) {
-      recommendations.push('✅ Excellent test pass rate! Keep up the good work');
+      recommendations.push("✅ Excellent test pass rate! Keep up the good work");
     }
 
     // Flaky test recommendations
     if (flakyTests.length > 0) {
       recommendations.push(`⚠️  Found ${flakyTests.length} flaky tests - these need investigation`);
-      flakyTests.slice(0, 3).forEach(test => {
+      flakyTests.slice(0, 3).forEach((test) => {
         recommendations.push(`   - ${test.name} (${test.failureRate.toFixed(1)}% failure rate)`);
       });
     }
 
     // Performance recommendations
     if (slowestTests.length > 0 && slowestTests[0].duration > 5000) {
-      recommendations.push('🐌 Slowest tests exceed 5 seconds - consider optimization');
-      slowestTests.slice(0, 3).forEach(test => {
+      recommendations.push("🐌 Slowest tests exceed 5 seconds - consider optimization");
+      slowestTests.slice(0, 3).forEach((test) => {
         recommendations.push(`   - ${test.name} (${test.duration.toFixed(0)}ms)`);
       });
     }
 
     // Test suite size recommendations
     if (summary.totalTests < 100) {
-      recommendations.push('📈 Test coverage could be improved - aim for 100+ tests');
+      recommendations.push("📈 Test coverage could be improved - aim for 100+ tests");
     } else if (summary.totalTests > 500) {
-      recommendations.push('💡 Large test suite - consider parallelization for faster execution');
+      recommendations.push("💡 Large test suite - consider parallelization for faster execution");
     }
 
     return recommendations;
@@ -381,8 +375,8 @@ export class TestAnalyticsDashboard {
       border-radius: 8px;
       padding: 20px;
     }
-    .pass-rate-${analytics.summary.passRate >= 90 ? 'good' : 'bad'} {
-      background: ${analytics.summary.passRate >= 90 ? '#28a745' : '#dc3545'} !important;
+    .pass-rate-${analytics.summary.passRate >= 90 ? "good" : "bad"} {
+      background: ${analytics.summary.passRate >= 90 ? "#28a745" : "#dc3545"} !important;
     }
   </style>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -393,7 +387,7 @@ export class TestAnalyticsDashboard {
     <p class="subtitle">Generated: ${new Date().toLocaleString()}</p>
 
     <div class="metrics">
-      <div class="metric-card pass-rate-${analytics.summary.passRate >= 90 ? 'good' : 'bad'}">
+      <div class="metric-card pass-rate-${analytics.summary.passRate >= 90 ? "good" : "bad"}">
         <div class="metric-label">Pass Rate</div>
         <div class="metric-value">${analytics.summary.passRate.toFixed(1)}%</div>
         <div class="metric-subtext">${analytics.summary.passed}/${analytics.summary.totalTests} passed</div>
@@ -414,11 +408,13 @@ export class TestAnalyticsDashboard {
       <div class="metric-card">
         <div class="metric-label">Flaky Tests</div>
         <div class="metric-value">${analytics.flakyTests.length}</div>
-        <div class="metric-subtext">${analytics.flakyTests.length === 0 ? '✨ Perfect!' : '⚠️ Needs attention'}</div>
+        <div class="metric-subtext">${analytics.flakyTests.length === 0 ? "✨ Perfect!" : "⚠️ Needs attention"}</div>
       </div>
     </div>
 
-    ${analytics.slowestTests.length > 0 ? `
+    ${
+      analytics.slowestTests.length > 0
+        ? `
     <div class="section">
       <h2 class="section-title">🐌 Slowest Tests</h2>
       <table>
@@ -429,18 +425,26 @@ export class TestAnalyticsDashboard {
           </tr>
         </thead>
         <tbody>
-          ${analytics.slowestTests.map(test => `
+          ${analytics.slowestTests
+            .map(
+              (test) => `
           <tr>
             <td>${test.name}</td>
             <td>${test.duration.toFixed(0)}ms</td>
           </tr>
-          `).join('')}
+          `,
+            )
+            .join("")}
         </tbody>
       </table>
     </div>
-    ` : ''}
+    `
+        : ""
+    }
 
-    ${analytics.flakyTests.length > 0 ? `
+    ${
+      analytics.flakyTests.length > 0
+        ? `
     <div class="section">
       <h2 class="section-title">⚠️ Flaky Tests</h2>
       <table>
@@ -451,36 +455,56 @@ export class TestAnalyticsDashboard {
           </tr>
         </thead>
         <tbody>
-          ${analytics.flakyTests.map(test => `
+          ${analytics.flakyTests
+            .map(
+              (test) => `
           <tr>
             <td>${test.name}</td>
             <td>${test.failureRate.toFixed(1)}%</td>
           </tr>
-          `).join('')}
+          `,
+            )
+            .join("")}
         </tbody>
       </table>
     </div>
-    ` : ''}
+    `
+        : ""
+    }
 
-    ${analytics.coverageHeatmap.length > 0 ? `
+    ${
+      analytics.coverageHeatmap.length > 0
+        ? `
     <div class="section">
       <h2 class="section-title">🔥 Coverage Heatmap</h2>
       <div class="heatmap">
-        ${analytics.coverageHeatmap.slice(0, 20).map(coverage => {
-          const linesCoverage = (coverage.lines.covered / coverage.lines.total) * 100;
-          const className = linesCoverage >= 80 ? 'coverage-high' : linesCoverage >= 60 ? 'coverage-medium' : 'coverage-low';
-          return `
+        ${analytics.coverageHeatmap
+          .slice(0, 20)
+          .map((coverage) => {
+            const linesCoverage = (coverage.lines.covered / coverage.lines.total) * 100;
+            const className =
+              linesCoverage >= 80
+                ? "coverage-high"
+                : linesCoverage >= 60
+                  ? "coverage-medium"
+                  : "coverage-low";
+            return `
           <div class="heatmap-cell ${className}">
             <div>${path.basename(coverage.file)}</div>
             <div style="font-size: 18px; margin-top: 8px;">${linesCoverage.toFixed(0)}%</div>
           </div>
           `;
-        }).join('')}
+          })
+          .join("")}
       </div>
     </div>
-    ` : ''}
+    `
+        : ""
+    }
 
-    ${analytics.trends.passRateTrend.length > 0 ? `
+    ${
+      analytics.trends.passRateTrend.length > 0
+        ? `
     <div class="section">
       <h2 class="section-title">📈 Pass Rate Trend</h2>
       <canvas id="passRateChart"></canvas>
@@ -510,14 +534,20 @@ export class TestAnalyticsDashboard {
         }
       });
     </script>
-    ` : ''}
+    `
+        : ""
+    }
 
     <div class="section">
       <h2 class="section-title">💡 Recommendations</h2>
       <div class="recommendations">
-        ${analytics.recommendations.map(rec => `
+        ${analytics.recommendations
+          .map(
+            (rec) => `
         <div class="recommendation">${rec}</div>
-        `).join('')}
+        `,
+          )
+          .join("")}
       </div>
     </div>
   </div>
@@ -528,7 +558,10 @@ export class TestAnalyticsDashboard {
   /**
    * Saves analytics to file
    */
-  saveAnalytics(analytics: TestAnalytics, outputPath: string = 'tests/intelligence/analytics.json'): void {
+  saveAnalytics(
+    analytics: TestAnalytics,
+    outputPath: string = "tests/intelligence/analytics.json",
+  ): void {
     fs.mkdirSync(path.dirname(outputPath), { recursive: true });
     fs.writeFileSync(outputPath, JSON.stringify(analytics, null, 2));
   }
@@ -536,7 +569,10 @@ export class TestAnalyticsDashboard {
   /**
    * Saves HTML dashboard
    */
-  saveDashboard(analytics: TestAnalytics, outputPath: string = 'tests/intelligence/dashboard.html'): void {
+  saveDashboard(
+    analytics: TestAnalytics,
+    outputPath: string = "tests/intelligence/dashboard.html",
+  ): void {
     const html = this.generateHTMLDashboard(analytics);
     fs.mkdirSync(path.dirname(outputPath), { recursive: true });
     fs.writeFileSync(outputPath, html);

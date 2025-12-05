@@ -54,7 +54,7 @@ export const POST = createOrgEndpoint({
     try {
       const body = await request.json();
       const validated = CreatePositionSchema.parse(body);
-      
+
       const position = {
         id: `pos-${Date.now()}`,
         orgId: context.org?.orgId,

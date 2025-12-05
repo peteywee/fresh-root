@@ -2,7 +2,7 @@
 
 **Status**: ✅ ACTIVE  
 **Date**: December 4, 2025  
-**Binding**: Automatic  
+**Binding**: Automatic
 
 ---
 
@@ -51,7 +51,7 @@ The protocol that automatically engages:
 ### On Session Start
 
 ```
-Agent boots → Load CREWOPS.md + CREWOPS_ACTIVATION.md → 
+Agent boots → Load CREWOPS.md + CREWOPS_ACTIVATION.md →
 Display activation message → Ready for prompts
 ```
 
@@ -61,14 +61,14 @@ Display activation message → Ready for prompts
 ✅ CREWOPS Protocol Active
 
 Binding Framework: CrewOps Manual loaded
-Constitution: Anti-vaporware | Truth & Evidence | Security Supremacy | 
+Constitution: Anti-vaporware | Truth & Evidence | Security Supremacy |
               Deterministic Delivery | Full-File Fidelity
-Crew: Orchestrator | Product Owner | Systems Architect | Security Red Team | 
+Crew: Orchestrator | Product Owner | Systems Architect | Security Red Team |
       Research Analyst | QA/Test Engineer
 Tool Activation: Immediate deployment, no assumptions
 MCP Integration: GitHub + Firecrawl available
 
-Phase A→E Execution: Context Saturation → Plan & Team → Action Matrix → 
+Phase A→E Execution: Context Saturation → Plan & Team → Action Matrix →
                      Security Veto → Validation
 ```
 
@@ -139,16 +139,16 @@ Audit trail recorded
 
 Users can modify protocol behavior with keywords in their prompt:
 
-| Keyword | Effect | Use Case |
-|---------|--------|----------|
-| `CREWOPS_OK` | Acknowledge binding | First prompt to activate |
-| `CREWOPS_DESIGN_ONLY` | Phases A-C only | "Plan it out, don't code" |
-| `CREWOPS_AUDIT` | Phases A + E only | "Find problems, don't fix" |
-| `CREWOPS_EXECUTE` | Phase D only | "Run the pre-planned actions" |
-| `CREWOPS_EMERGENCY` | Fast-track to D | "Move fast, minimal planning" |
-| `CREWOPS_PAUSE` | Hold protocol | Temporary suspension |
-| `CREWOPS_RESUME` | Re-engage | Resume after pause |
-| `CREWOPS_RESET` | Clear state | Fresh start |
+| Keyword               | Effect              | Use Case                      |
+| --------------------- | ------------------- | ----------------------------- |
+| `CREWOPS_OK`          | Acknowledge binding | First prompt to activate      |
+| `CREWOPS_DESIGN_ONLY` | Phases A-C only     | "Plan it out, don't code"     |
+| `CREWOPS_AUDIT`       | Phases A + E only   | "Find problems, don't fix"    |
+| `CREWOPS_EXECUTE`     | Phase D only        | "Run the pre-planned actions" |
+| `CREWOPS_EMERGENCY`   | Fast-track to D     | "Move fast, minimal planning" |
+| `CREWOPS_PAUSE`       | Hold protocol       | Temporary suspension          |
+| `CREWOPS_RESUME`      | Re-engage           | Resume after pause            |
+| `CREWOPS_RESET`       | Clear state         | Fresh start                   |
 
 ---
 
@@ -211,10 +211,10 @@ Conflicts resolved in order:
 
 ## Files Created/Modified
 
-| File | Action | Size | Purpose |
-|------|--------|------|---------|
-| `agents/crewops.md` | Enhanced | 747 lines | Main manual + tool/MCP sections |
-| `agents/CREWOPS_ACTIVATION.md` | Created | ~400 lines | Auto-activation framework |
+| File                           | Action   | Size       | Purpose                         |
+| ------------------------------ | -------- | ---------- | ------------------------------- |
+| `agents/crewops.md`            | Enhanced | 747 lines  | Main manual + tool/MCP sections |
+| `agents/CREWOPS_ACTIVATION.md` | Created  | ~400 lines | Auto-activation framework       |
 
 ---
 
@@ -325,16 +325,16 @@ Override: Include CREWOPS_FORCE to re-attempt
 
 ## Status Summary
 
-| Component | Status | Location |
-|-----------|--------|----------|
-| CrewOps Manual | ✅ Active | `agents/crewops.md` |
-| Activation Framework | ✅ Active | `agents/CREWOPS_ACTIVATION.md` |
-| Auto-Engagement | ✅ Enabled | Session bootstrap + non-trivial prompts |
-| Tool Authority Matrix | ✅ Active | Section 16.2 in crewops.md |
-| Constitution | ✅ Binding | Section 2 in crewops.md |
-| Crew Cabinet | ✅ Ready | Section 3 in crewops.md |
-| Phase A→E Workflow | ✅ Enabled | Section 4 in crewops.md + Activation framework |
-| MCP Integration | ✅ Enabled | Section 6.6 in crewops.md |
+| Component             | Status     | Location                                       |
+| --------------------- | ---------- | ---------------------------------------------- |
+| CrewOps Manual        | ✅ Active  | `agents/crewops.md`                            |
+| Activation Framework  | ✅ Active  | `agents/CREWOPS_ACTIVATION.md`                 |
+| Auto-Engagement       | ✅ Enabled | Session bootstrap + non-trivial prompts        |
+| Tool Authority Matrix | ✅ Active  | Section 16.2 in crewops.md                     |
+| Constitution          | ✅ Binding | Section 2 in crewops.md                        |
+| Crew Cabinet          | ✅ Ready   | Section 3 in crewops.md                        |
+| Phase A→E Workflow    | ✅ Enabled | Section 4 in crewops.md + Activation framework |
+| MCP Integration       | ✅ Enabled | Section 6.6 in crewops.md                      |
 
 ---
 

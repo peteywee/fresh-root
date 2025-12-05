@@ -122,16 +122,13 @@ export async function isOrgMember(userId: string, orgId: string): Promise<boolea
   try {
     const db = getFirestore();
     const membershipsRef = db.collection("memberships");
-    
+
     // Use typed query to fetch with proper type safety
     const result = await queryWithType<MembershipDoc>(
       db,
-      membershipsRef
-        .where("userId", "==", userId)
-        .where("orgId", "==", orgId)
-        .limit(1),
+      membershipsRef.where("userId", "==", userId).where("orgId", "==", orgId).limit(1),
     );
-    
+
     return result.success && result.data.length > 0;
   } catch (error) {
     console.error("Error checking org membership:", error);
@@ -147,18 +144,15 @@ export async function getUserRoles(userId: string, orgId: string): Promise<OrgRo
   try {
     const db = getFirestore();
     const membershipsRef = db.collection("memberships");
-    
+
     // Use typed query to fetch with proper type safety
     const result = await queryWithType<MembershipDoc>(
       db,
-      membershipsRef
-        .where("userId", "==", userId)
-        .where("orgId", "==", orgId)
-        .limit(1),
+      membershipsRef.where("userId", "==", userId).where("orgId", "==", orgId).limit(1),
     );
-    
+
     if (!result.success || result.data.length === 0) return null;
-    
+
     const membership = result.data[0];
     return (membership.roles || []) as OrgRole[];
   } catch (error) {
@@ -179,14 +173,14 @@ export async function canAccessResource(
   try {
     const member = await isOrgMember(userId, orgId);
     if (!member) return { allowed: false, reason: "Not a member of organization" };
-    
+
     const roles = (await getUserRoles(userId, orgId)) || [];
     const allowed = hasRequiredRole(roles, requiredRole);
-    
+
     if (!allowed) {
       return { allowed: false, roles, reason: `Requires ${requiredRole} role or higher` };
     }
-    
+
     return { allowed: true, roles };
   } catch (error) {
     console.error("Error checking resource access:", error);

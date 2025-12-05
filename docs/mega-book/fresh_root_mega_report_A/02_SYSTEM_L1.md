@@ -1,9 +1,7 @@
 # L1 — System Architecture Overview
-
 This section describes the **global system**: major capabilities, critical flows, and cross-cutting concerns.
 
 ## 1. High-Level Components
-
 - **Web App (Fresh Schedules PWA)**
   - Next.js App Router, React, Tailwind.
   - Responsible for UI, UX, and client-side orchestration.
@@ -24,24 +22,22 @@ This section describes the **global system**: major capabilities, critical flows
   - Docs and analysis agents (filetag/MCP/etc.) — **supporting**, not core runtime.
 
 ## 2. Critical Flows
-
 1. **Onboarding Flow**
    - Create user profile → org → venue → membership → initial labor settings.
 
-2. **5-Minute Schedule Creation Flow**
+1. **5-Minute Schedule Creation Flow**
    - Select venue + week → ingest labor & forecast inputs → generate shifts → assign staff → review conflicts → publish → notify.
 
-3. **Staff Lifecycle**
+1. **Staff Lifecycle**
    - Add/edit employees → manage availability/preferences → track acknowledgments.
 
-4. **Notification Flow**
+1. **Notification Flow**
    - Publish schedule → fan-out notifications (push/SMS/email) → track delivery status (where possible).
 
-5. **RBAC & Data Access**
+1. **RBAC & Data Access**
    - Authenticated calls → claims-based access → rules-verified reads/writes.
 
 ## 3. Cross-Cutting Concerns
-
 - **Distributed Consistency**
   - Multi-document writes across orgs/venues/schedules/shifts must be transactional where possible, or have compensation mechanisms.
 

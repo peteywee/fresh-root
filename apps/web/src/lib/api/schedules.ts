@@ -26,18 +26,15 @@ export interface ListArgs {
   endISO: string;
 }
 
-import {
-  collection,
-  query,
-  getDocs,
-  setDoc,
-  Query,
-  DocumentData,
-  doc,
-} from "firebase/firestore";
+import { collection, query, getDocs, setDoc, Query, DocumentData, doc } from "firebase/firestore";
 import { db } from "@/app/lib/firebaseClient";
 
-export async function addShift({ userId, role, startTs, endTs }: {
+export async function addShift({
+  userId,
+  role,
+  startTs,
+  endTs,
+}: {
   userId: string;
   role: string;
   startTs: string;

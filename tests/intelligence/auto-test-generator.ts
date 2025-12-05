@@ -3,10 +3,10 @@
  * Analyzes code structure and automatically generates comprehensive tests
  */
 
-import * as ts from 'typescript';
-import * as fs from 'fs';
-import * as path from 'path';
-import { glob } from 'glob';
+import * as ts from "typescript";
+import * as fs from "fs";
+import * as path from "path";
+import { glob } from "glob";
 
 interface RouteAnalysis {
   filePath: string;
@@ -30,13 +30,8 @@ interface GeneratedTest {
  * Analyzes a TypeScript source file and extracts route metadata
  */
 export function analyzeRouteFile(filePath: string): RouteAnalysis | null {
-  const sourceCode = fs.readFileSync(filePath, 'utf-8');
-  const sourceFile = ts.createSourceFile(
-    filePath,
-    sourceCode,
-    ts.ScriptTarget.Latest,
-    true
-  );
+  const sourceCode = fs.readFileSync(filePath, "utf-8");
+  const sourceFile = ts.createSourceFile(filePath, sourceCode, ts.ScriptTarget.Latest, true);
 
   const analysis: Partial<RouteAnalysis> = {
     filePath,
@@ -48,16 +43,16 @@ export function analyzeRouteFile(filePath: string): RouteAnalysis | null {
 
   // Determine HTTP method from route structure
   const fileContent = sourceCode.toLowerCase();
-  if (fileContent.includes('export async function get')) analysis.method = 'GET';
-  else if (fileContent.includes('export async function post')) analysis.method = 'POST';
-  else if (fileContent.includes('export async function put')) analysis.method = 'PUT';
-  else if (fileContent.includes('export async function patch')) analysis.method = 'PATCH';
-  else if (fileContent.includes('export async function delete')) analysis.method = 'DELETE';
+  if (fileContent.includes("export async function get")) analysis.method = "GET";
+  else if (fileContent.includes("export async function post")) analysis.method = "POST";
+  else if (fileContent.includes("export async function put")) analysis.method = "PUT";
+  else if (fileContent.includes("export async function patch")) analysis.method = "PATCH";
+  else if (fileContent.includes("export async function delete")) analysis.method = "DELETE";
 
   // Extract endpoint from file path
   const apiPath = filePath.match(/app\/api\/(.+)\/route\.ts$/)?.[1];
   if (apiPath) {
-    analysis.endpoint = '/' + apiPath.replace(/\[(\w+)\]/g, ':$1');
+    analysis.endpoint = "/" + apiPath.replace(/\[(\w+)\]/g, ":$1");
   }
 
   // Analyze AST for validation and permissions
@@ -65,7 +60,7 @@ export function analyzeRouteFile(filePath: string): RouteAnalysis | null {
     // Find validation schemas
     if (ts.isCallExpression(node)) {
       const text = node.expression.getText(sourceFile);
-      if (text.includes('parse') || text.includes('safeParse')) {
+      if (text.includes("parse") || text.includes("safeParse")) {
         // Extract schema validation
         const arg = node.arguments[0];
         if (arg) {
@@ -81,7 +76,7 @@ export function analyzeRouteFile(filePath: string): RouteAnalysis | null {
       }
 
       // Find permission checks
-      if (text.includes('requireRole') || text.includes('hasPermission')) {
+      if (text.includes("requireRole") || text.includes("hasPermission")) {
         const arg = node.arguments[0];
         if (arg && ts.isStringLiteral(arg)) {
           analysis.requiredPermissions!.push(arg.text);
@@ -92,13 +87,15 @@ export function analyzeRouteFile(filePath: string): RouteAnalysis | null {
     // Find error cases
     if (ts.isCallExpression(node)) {
       const text = node.expression.getText(sourceFile);
-      if (text === 'NextResponse.json') {
+      if (text === "NextResponse.json") {
         const statusArg = node.arguments[1];
         if (statusArg && ts.isObjectLiteralExpression(statusArg)) {
-          statusArg.properties.forEach(prop => {
-            if (ts.isPropertyAssignment(prop) &&
-                prop.name.getText(sourceFile) === 'status' &&
-                ts.isNumericLiteral(prop.initializer)) {
+          statusArg.properties.forEach((prop) => {
+            if (
+              ts.isPropertyAssignment(prop) &&
+              prop.name.getText(sourceFile) === "status" &&
+              ts.isNumericLiteral(prop.initializer)
+            ) {
               const status = parseInt(prop.initializer.text);
               if (status >= 400) {
                 analysis.errorCases!.push(`HTTP ${status}`);
@@ -114,14 +111,14 @@ export function analyzeRouteFile(filePath: string): RouteAnalysis | null {
 
   visit(sourceFile);
 
-  return analysis.endpoint ? analysis as RouteAnalysis : null;
+  return analysis.endpoint ? (analysis as RouteAnalysis) : null;
 }
 
 /**
  * Generates comprehensive test cases for a route
  */
 export function generateTestsForRoute(analysis: RouteAnalysis): GeneratedTest {
-  const testFilePath = analysis.filePath.replace('/route.ts', '/__tests__/auto-generated.test.ts');
+  const testFilePath = analysis.filePath.replace("/route.ts", "/__tests__/auto-generated.test.ts");
   const relativePath = path.relative(process.cwd(), analysis.filePath);
 
   const coverage: string[] = [];
@@ -134,28 +131,32 @@ export function generateTestsForRoute(analysis: RouteAnalysis): GeneratedTest {
     const user = await createTestUser(auth);
     const session = await extractSessionCookie(/* create session */);
 
-    ${analysis.requiredParams.length > 0 ? `
+    ${
+      analysis.requiredParams.length > 0
+        ? `
     const validPayload = {
-      ${analysis.requiredParams.map(p => `${p}: 'test-${p}'`).join(',\n      ')}
+      ${analysis.requiredParams.map((p) => `${p}: 'test-${p}'`).join(",\n      ")}
     };
-    ` : ''}
+    `
+        : ""
+    }
 
     const response = await apiRequest(
       '${analysis.endpoint}',
       {
         method: '${analysis.method}',
-        ${analysis.requiredParams.length > 0 ? 'body: JSON.stringify(validPayload),' : ''}
+        ${analysis.requiredParams.length > 0 ? "body: JSON.stringify(validPayload)," : ""}
       },
       session
     );
 
-    expect(response.status).toBe(${analysis.method === 'POST' ? '201' : '200'});
+    expect(response.status).toBe(${analysis.method === "POST" ? "201" : "200"});
     const data = await response.json();
     expect(data).toMatchObject({
-      ${analysis.requiredParams.map(p => `${p}: expect.any(String)`).join(',\n      ')}
+      ${analysis.requiredParams.map((p) => `${p}: expect.any(String)`).join(",\n      ")}
     });
   });`);
-  coverage.push('Happy path');
+  coverage.push("Happy path");
 
   // Generate authentication test
   testCases.push(`
@@ -170,7 +171,7 @@ export function generateTestsForRoute(analysis: RouteAnalysis): GeneratedTest {
     const data = await response.json();
     expect(data.error).toMatch(/authentication|unauthorized/i);
   });`);
-  coverage.push('Authentication required');
+  coverage.push("Authentication required");
 
   // Generate permission tests
   if (analysis.requiredPermissions.length > 0) {
@@ -193,7 +194,7 @@ export function generateTestsForRoute(analysis: RouteAnalysis): GeneratedTest {
     const data = await response.json();
     expect(data.error).toMatch(/permission|forbidden/i);
   });`);
-    coverage.push(`Permission check: ${analysis.requiredPermissions.join(', ')}`);
+    coverage.push(`Permission check: ${analysis.requiredPermissions.join(", ")}`);
   }
 
   // Generate validation tests
@@ -217,7 +218,7 @@ export function generateTestsForRoute(analysis: RouteAnalysis): GeneratedTest {
     const data = await response.json();
     expect(data.error).toMatch(/validation|required/i);
   });`);
-    coverage.push('Input validation');
+    coverage.push("Input validation");
 
     // Generate invalid data type test
     testCases.push(`
@@ -227,7 +228,7 @@ export function generateTestsForRoute(analysis: RouteAnalysis): GeneratedTest {
     const session = await extractSessionCookie(/* create session */);
 
     const invalidPayload = {
-      ${analysis.requiredParams.map(p => `${p}: 12345 // Invalid type`).join(',\n      ')}
+      ${analysis.requiredParams.map((p) => `${p}: 12345 // Invalid type`).join(",\n      ")}
     };
 
     const response = await apiRequest(
@@ -241,7 +242,7 @@ export function generateTestsForRoute(analysis: RouteAnalysis): GeneratedTest {
 
     expect(response.status).toBe(400);
   });`);
-    coverage.push('Type validation');
+    coverage.push("Type validation");
   }
 
   // Generate edge case tests
@@ -251,11 +252,15 @@ export function generateTestsForRoute(analysis: RouteAnalysis): GeneratedTest {
     const user = await createTestUser(auth);
     const session = await extractSessionCookie(/* create session */);
 
-    ${analysis.requiredParams.length > 0 ? `
+    ${
+      analysis.requiredParams.length > 0
+        ? `
     const payload = {
-      ${analysis.requiredParams.map(p => `${p}: 'concurrent-test-${p}'`).join(',\n      ')}
+      ${analysis.requiredParams.map((p) => `${p}: 'concurrent-test-${p}'`).join(",\n      ")}
     };
-    ` : ''}
+    `
+        : ""
+    }
 
     // Make 5 concurrent requests
     const requests = Array(5).fill(null).map(() =>
@@ -263,7 +268,7 @@ export function generateTestsForRoute(analysis: RouteAnalysis): GeneratedTest {
         '${analysis.endpoint}',
         {
           method: '${analysis.method}',
-          ${analysis.requiredParams.length > 0 ? 'body: JSON.stringify(payload),' : ''}
+          ${analysis.requiredParams.length > 0 ? "body: JSON.stringify(payload)," : ""}
         },
         session
       )
@@ -276,14 +281,14 @@ export function generateTestsForRoute(analysis: RouteAnalysis): GeneratedTest {
       expect([200, 201, 409, 429]).toContain(response.status);
     });
   });`);
-  coverage.push('Concurrent request handling');
+  coverage.push("Concurrent request handling");
 
   const testCode = `/**
  * AUTO-GENERATED TESTS
  * Generated by AI Test Intelligence System
  * Source: ${relativePath}
  *
- * Coverage: ${coverage.join(', ')}
+ * Coverage: ${coverage.join(", ")}
  */
 
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
@@ -306,7 +311,7 @@ describe('${analysis.endpoint} - Auto-Generated Tests', () => {
     await cleanup();
   });
 
-  ${testCases.join('\n\n  ')}
+  ${testCases.join("\n\n  ")}
 });
 `;
 
@@ -320,9 +325,11 @@ describe('${analysis.endpoint} - Auto-Generated Tests', () => {
 /**
  * Scans entire codebase and generates tests for all routes
  */
-export async function autoGenerateAllTests(apiDir: string = 'apps/web/app/api'): Promise<GeneratedTest[]> {
+export async function autoGenerateAllTests(
+  apiDir: string = "apps/web/app/api",
+): Promise<GeneratedTest[]> {
   const routeFiles = await glob(`${apiDir}/**/route.ts`, {
-    ignore: ['**/node_modules/**', '**/__tests__/**'],
+    ignore: ["**/node_modules/**", "**/__tests__/**"],
   });
 
   const generatedTests: GeneratedTest[] = [];
@@ -354,12 +361,14 @@ export async function autoGenerateAllTests(apiDir: string = 'apps/web/app/api'):
  * CLI entry point for auto-generation
  */
 if (require.main === module) {
-  autoGenerateAllTests().then(tests => {
-    console.log(`\n🎉 Successfully generated ${tests.length} test files!`);
-    console.log('\nCoverage Summary:');
-    tests.forEach(test => {
-      console.log(`  ${test.filePath}`);
-      test.coverage.forEach(c => console.log(`    ✓ ${c}`));
-    });
-  }).catch(console.error);
+  autoGenerateAllTests()
+    .then((tests) => {
+      console.log(`\n🎉 Successfully generated ${tests.length} test files!`);
+      console.log("\nCoverage Summary:");
+      tests.forEach((test) => {
+        console.log(`  ${test.filePath}`);
+        test.coverage.forEach((c) => console.log(`    ✓ ${c}`));
+      });
+    })
+    .catch(console.error);
 }

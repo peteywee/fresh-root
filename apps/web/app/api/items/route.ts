@@ -51,7 +51,7 @@ export const POST = createOrgEndpoint({
       const body = await request.json();
       // CreateItemSchema not available - using raw body
       const validated = body;
-      
+
       const item = {
         id: `item-${Date.now()}`,
         orgId: context.org?.orgId,

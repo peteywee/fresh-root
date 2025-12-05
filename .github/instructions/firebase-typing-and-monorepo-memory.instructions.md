@@ -1,6 +1,6 @@
 ---
-description: 'Key learnings from Firebase SDK v12 typing strategy and monorepo dependency resolution'
-applyTo: 'apps/web/app/api/**/*.ts,apps/web/lib/**/*.ts,packages/*/**/*.ts'
+description: "Key learnings from Firebase SDK v12 typing strategy and monorepo dependency resolution"
+applyTo: "apps/web/app/api/**/*.ts,apps/web/lib/**/*.ts,packages/*/**/*.ts"
 ---
 
 # Firebase & Monorepo Dependency Management Memory
@@ -13,7 +13,8 @@ Firebase SDK v12 client and admin SDKs intentionally return `any`-typed values f
 
 **Best pattern**: Use **pragmatic suppression + strategic wrappers**, not fight the SDK design:
 
-1. **Suppress no-unsafe-* ESLint rules** for Firebase-heavy code directories:
+1. **Suppress no-unsafe-\* ESLint rules** for Firebase-heavy code directories:
+
    ```javascript
    // In eslint.config.mjs for Firebase directories (app/api/**, src/lib/**)
    {
@@ -29,16 +30,17 @@ Firebase SDK v12 client and admin SDKs intentionally return `any`-typed values f
    ```
 
 2. **Use type assertions** on Firebase results with confidence:
+
    ```typescript
    const snap = await getDoc(docRef);
-   const data = snap.data() as UserData;  // Safe - Firebase guarantees structure
+   const data = snap.data() as UserData; // Safe - Firebase guarantees structure
    ```
 
 3. **Create type-safe wrapper functions** for complex operations (optional enhancement):
    ```typescript
    export async function getDocWithType<T>(
      db: Firestore,
-     ref: DocumentReference
+     ref: DocumentReference,
    ): Promise<T | null> {
      const snap = await getDoc(ref);
      return snap.exists() ? (snap.data() as T) : null;
@@ -106,12 +108,12 @@ ESLint catches async functions with no actual `await` statements. Two valid patt
 ```typescript
 // Pattern 1: Remove async (function is synchronous)
 export function GET() {
-  return Response.json({ data: 'value' });  // No async needed
+  return Response.json({ data: "value" }); // No async needed
 }
 
 // Pattern 2: Keep async if wrapping async calls (even if not directly awaiting)
 export async function POST(request: Request) {
-  return handleAsync(request);  // Implicitly awaits via return
+  return handleAsync(request); // Implicitly awaits via return
 }
 ```
 
@@ -139,7 +141,7 @@ Root `package.json` should **only list workspace packages in `pnpm-workspace.yam
 // ❌ Root package.json - WRONG
 {
   "dependencies": {
-    "@fresh-schedules/types": "0.1.0"  // Local workspace package - causes npm 404
+    "@fresh-schedules/types": "0.1.0" // Local workspace package - causes npm 404
   }
 }
 

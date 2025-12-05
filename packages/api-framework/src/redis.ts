@@ -95,13 +95,10 @@ async function createUnifiedRedisClient(): Promise<RedisClient> {
   // Try Upstash REST first
   const upstashUrl = process.env.UPSTASH_REDIS_REST_URL;
   const upstashToken = process.env.UPSTASH_REDIS_REST_TOKEN;
-  
+
   if (upstashUrl && upstashToken) {
     try {
-      return new UpstashClient(
-        upstashUrl,
-        upstashToken,
-      );
+      return new UpstashClient(upstashUrl, upstashToken);
     } catch (err) {
       console.warn("Failed to initialize Upstash client:", err);
     }

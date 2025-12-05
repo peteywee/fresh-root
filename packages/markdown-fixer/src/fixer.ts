@@ -11,29 +11,45 @@ export async function fixFiles(input: string) {
     const unified = await import("unified");
     const remarkParse = await import("remark-parse");
     const remarkStringify = await import("remark-stringify");
-    processor = unified.unified().use(remarkParse.default || remarkParse).use(
-      remarkStringify.default || remarkStringify,
-      {
+    processor = unified
+      .unified()
+      .use(remarkParse.default || remarkParse)
+      .use(remarkStringify.default || remarkStringify, {
         bullet: "-",
         fences: true,
         listItemIndent: "one",
         rule: "-",
-        strong: "**",
-      }
-    );
+        // remark-stringify expects '*' or '_' for strong; use '*'
+        strong: "*",
+        // prefer '_' for emphasis to avoid conflicts with '**'
+        emphasis: "_",
+      });
   } catch (err) {
-    console.error("Optional markdown parsing libraries not found (unified/remark). Run 'pnpm -w install' to enable richer fixes.");
+    console.error(
+      "Optional markdown parsing libraries not found (unified/remark). Run 'pnpm -w install' to enable richer fixes.",
+    );
     // fall back to using regex-based changes only
     processor = null;
   }
-  const file = processor ? await processor.process(input) : null;
+  let file: any = null;
+  if (processor) {
+    try {
+      file = await processor.process(input);
+    } catch (e) {
+      console.warn(
+        "Markdown normalize step failed; continuing with regex-based fixes:",
+        e instanceof Error ? e.message : String(e),
+      );
+      file = null;
+    }
+  }
   let content = file ? String(file) : input;
 
   // Additional targeted fixes using regex and heuristics:
   // 1. Normalize headings: Ensure single space after # and no trailing #
   const headingRegex = /^(#+)\s*(.*?)\s*#*\s*$/gm;
   content = content.replace(headingRegex, (_m, p1, title) => {
-    changed = changed || (_m !== `${p1} ${title}`);
+    changed = changed || _m !== `${p1} ${title}`;
     return `${p1} ${title.trim()}`;
   });
 
@@ -54,7 +70,7 @@ export async function fixFiles(input: string) {
 
   // 5. Normalize ordered list numbers (simple heuristic)
   // Convert 1., 2., etc to 1. 2. sequentially when lines start with \d+.
-  const lines = content.split('\n');
+  const lines = content.split("\n");
   const updatedLines = lines.slice();
   let i = 0;
   while (i < lines.length) {
@@ -80,12 +96,12 @@ export async function fixFiles(input: string) {
       i++;
     }
   }
-  content = updatedLines.join('\n');
+  content = updatedLines.join("\n");
 
   // 6. Fix checkboxes: ensure single space after bracket.
   const checkbox = content.replace(/^([\-\*]\s*\[)( |x|X|)\](\s*)/gm, (m) => {
     changed = true;
-    return m.replace(/\[( |x|X|)\]/, (mm) => `[_TEMP_]`).replace('_TEMP_', '[ ]');
+    return m.replace(/\[( |x|X|)\]/, (mm) => `[_TEMP_]`).replace("_TEMP_", "[ ]");
   });
   // The above heuristic is conservative - we already enforced change so let's not rely
   // replace back to original if it was intentional 'x' for checked. We'll instead
@@ -98,13 +114,13 @@ export async function fixFiles(input: string) {
   // Convert to: # Title or ## Title based on underline char
   content = content.replace(/^(.+?)\n(={3,}|-{3,})$/gm, (_m, t, u) => {
     changed = true;
-    const level = u.startsWith('=') ? 1 : 2;
-    return `${'#'.repeat(level)} ${t.trim()}`;
+    const level = u.startsWith("=") ? 1 : 2;
+    return `${"#".repeat(level)} ${t.trim()}`;
   });
 
   // 8. Trim spaces inside backticks / code fences: no trailing spaces
   content = content.replace(/(```\w*\n)([\s\S]*?)(\n```)/g, (_m, open, body, close) => {
-    const trimmedBody = body.replace(/[ \t]+$/gm, '');
+    const trimmedBody = body.replace(/[ \t]+$/gm, "");
     if (trimmedBody !== body) changed = true;
     return `${open}${trimmedBody}${close}`;
   });

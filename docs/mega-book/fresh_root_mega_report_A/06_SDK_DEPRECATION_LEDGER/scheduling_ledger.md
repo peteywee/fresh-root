@@ -1,29 +1,24 @@
 # Scheduling Ledger — SDK Deprecation & Migration Path
-
-> **Purpose:** Track deprecated scheduling patterns, legacy components, and migration roadmap to framework-integrated scheduling.  
-> **Status:** Active  
+> **Purpose:** Track deprecated scheduling patterns, legacy components, and migration roadmap to framework-integrated scheduling.\
+> **Status:** Active\
 > **Last Updated:** November 30, 2025
 
 ---
 
 ## 1. Deprecation Mapping
-
 ### Legacy Components Under Consolidation
-
-| Component | Location | Status | Replacement | Migration Deadline |
-|-----------|----------|--------|-------------|-------------------|
-| **Firestore Task Scheduler** | `src/services/scheduler/firestore-tasks.ts` | Deprecated | Cloud Functions `onSchedule` | Q1 2026 |
-| **Custom Retry Logic** | `src/lib/scheduling/retry-handler.ts` | Deprecated | Framework `retryConfig` | Q1 2026 |
-| **Manual Cron Job Registry** | `functions/scheduled/*.ts` | Partial | Unified registry | Q2 2026 |
-| **Task Queue (Home-grown)** | `src/services/queue/*` | Deprecated | Cloud Tasks via framework | Q2 2026 |
-| **Lock Coordination (Ad-hoc)** | Various (Firestore-based) | Deprecated | Redis/Spanner distributed lock | Q3 2026 |
+| Component                      | Location                                    | Status     | Replacement                    | Migration Deadline |
+| ------------------------------ | ------------------------------------------- | ---------- | ------------------------------ | ------------------ |
+| **Firestore Task Scheduler**   | `src/services/scheduler/firestore-tasks.ts` | Deprecated | Cloud Functions `onSchedule`   | Q1 2026            |
+| **Custom Retry Logic**         | `src/lib/scheduling/retry-handler.ts`       | Deprecated | Framework `retryConfig`        | Q1 2026            |
+| **Manual Cron Job Registry**   | `functions/scheduled/*.ts`                  | Partial    | Unified registry               | Q2 2026            |
+| **Task Queue (Home-grown)**    | `src/services/queue/*`                      | Deprecated | Cloud Tasks via framework      | Q2 2026            |
+| **Lock Coordination (Ad-hoc)** | Various (Firestore-based)                   | Deprecated | Redis/Spanner distributed lock | Q3 2026            |
 
 ---
 
 ## 2. Legacy Component Analysis
-
 ### 2.1 Firestore Task Scheduler
-
 **File:** `src/services/scheduler/firestore-tasks.ts`
 
 **What it is:** Custom task storage and execution coordinator using Firestore collection `_scheduler`.
@@ -31,6 +26,7 @@
 **Why it exists:** Pre-framework solution for delayed task execution and retry management.
 
 **Current usage:**
+
 ```typescript
 // LEGACY PATTERN
 import { scheduleTask } from "@/services/scheduler/firestore-tasks";
@@ -43,31 +39,33 @@ await scheduleTask(db, {
 ```
 
 **Problems:**
+
 - Manual retry logic doesn't integrate with Cloud Tasks
 - No built-in exponential backoff validation
 - Requires explicit cron job to poll `_scheduler` collection
 - Scaling issues under high task volume
 
 **Migration path:**
+
 ```typescript
 // NEW PATTERN: Framework-native scheduling
 import { onSchedule } from "firebase-functions/v2/scheduler";
 
 export const archiveInvoices = onSchedule(
-  { 
+  {
     schedule: "0 3 * * SAT",
     retryConfig: {
       retryCount: 3,
       maxRetryDuration: "3600s", // 1 hour
       minBackoffDuration: "60s",
       maxBackoffDuration: "600s",
-    }
+    },
   },
   async (context) => {
     const logger = structuredLogger(context);
     logger.info("invoice_archive_start");
     await archiveInvoices();
-  }
+  },
 );
 ```
 
@@ -76,12 +74,12 @@ export const archiveInvoices = onSchedule(
 ---
 
 ### 2.2 Custom Retry Handler
-
 **File:** `src/lib/scheduling/retry-handler.ts`
 
 **What it is:** Manual exponential backoff implementation with circuit breaker pattern.
 
 **Legacy code:**
+
 ```typescript
 // DEPRECATED
 export async function retryWithBackoff(
@@ -90,7 +88,7 @@ export async function retryWithBackoff(
     maxRetries: number;
     initialDelayMs: number;
     backoffMultiplier: number;
-  }
+  },
 ) {
   let delay = options.initialDelayMs;
   for (let attempt = 0; attempt < options.maxRetries; attempt++) {
@@ -106,11 +104,13 @@ export async function retryWithBackoff(
 ```
 
 **Issues:**
+
 - No validation of `backoffMultiplier` (can explode or converge to zero)
 - Redundant with framework retry logic
 - Difficult to reason about in tracing
 
 **Replacement:**
+
 ```typescript
 // NEW PATTERN: Declare retry policy at deploy time
 const task = onSchedule(
@@ -120,9 +120,9 @@ const task = onSchedule(
       retryCount: 3,
       minBackoffDuration: "60s",
       maxBackoffDuration: "600s",
-    }
+    },
   },
-  handler
+  handler,
 );
 // Framework handles backoff automatically
 ```
@@ -132,7 +132,6 @@ const task = onSchedule(
 ---
 
 ### 2.3 Manual Cron Job Registry
-
 **Location:** `functions/scheduled/`
 
 **Current files:**
@@ -143,6 +142,7 @@ const task = onSchedule(
 - `reporting.ts` — Report generation
 
 **Current pattern:**
+
 ```typescript
 // functions/scheduled/cleanup.ts
 export const cleanupExpiredSessions = onSchedule(
@@ -159,12 +159,14 @@ export const cleanupExpiredSessions = onSchedule(
 ```
 
 **Architectural issues:**
+
 - Each task implements its own error handling
 - No centralized observability
 - Inconsistent logging across files
 - No validation of cron expressions
 
 **Unified approach:**
+
 ```typescript
 // Proposed: Single registry with shared middleware
 import { createScheduledTask, TaskConfig } from "@/lib/scheduling/registry";
@@ -186,9 +188,7 @@ const tasks: TaskConfig[] = [
   },
 ];
 
-export const scheduledTasks = tasks.map(config => 
-  createScheduledTask(config)
-);
+export const scheduledTasks = tasks.map((config) => createScheduledTask(config));
 ```
 
 **Timeline:** Consolidate registry by Q2 2026
@@ -196,7 +196,6 @@ export const scheduledTasks = tasks.map(config =>
 ---
 
 ### 2.4 Home-Grown Task Queue
-
 **Location:** `src/services/queue/*`
 
 **What it is:** Custom pub/sub-based queue for background work processing.
@@ -204,6 +203,7 @@ export const scheduledTasks = tasks.map(config =>
 **Why deprecated:** Google Cloud Tasks provides native queuing with better semantics.
 
 **Legacy pattern:**
+
 ```typescript
 // DEPRECATED: Custom queue
 import { enqueueTask } from "@/services/queue";
@@ -217,13 +217,10 @@ export async function handleUserSignup(userId: string) {
 }
 
 // Separate worker consumes queue
-export const queueWorker = onMessagePublished(
-  "task-queue-topic",
-  async (message) => {
-    const task = message.json;
-    await processTask(task);
-  }
-);
+export const queueWorker = onMessagePublished("task-queue-topic", async (message) => {
+  const task = message.json;
+  await processTask(task);
+});
 ```
 
 **Problems:**
@@ -234,6 +231,7 @@ export const queueWorker = onMessagePublished(
 - Difficult to reason about ordering
 
 **Modern replacement:**
+
 ```typescript
 // NEW PATTERN: Cloud Tasks
 import { v2 } from "@google-cloud/tasks";
@@ -245,7 +243,7 @@ export async function handleUserSignup(userId: string) {
   const location = "us-central1";
 
   const parent = client.queuePath(project, location, queue);
-  
+
   await client.createTask({
     parent,
     task: {
@@ -253,9 +251,7 @@ export async function handleUserSignup(userId: string) {
         httpMethod: "POST",
         url: "https://my-function-url/send-email",
         headers: { "Content-Type": "application/json" },
-        body: Buffer.from(
-          JSON.stringify({ userId, template: "welcome" })
-        ).toString("base64"),
+        body: Buffer.from(JSON.stringify({ userId, template: "welcome" })).toString("base64"),
       },
     },
   });
@@ -267,20 +263,21 @@ export async function handleUserSignup(userId: string) {
 ---
 
 ### 2.5 Ad-Hoc Lock Coordination
+**Locations:**
 
-**Locations:** 
 - `functions/scheduled/maintenance.ts` (Firestore-based lock)
 - `src/services/scheduler/locks.ts` (homegrown implementation)
 
 **Legacy pattern:**
+
 ```typescript
 // DEPRECATED: Firestore-based distributed lock
 export async function acquireLock(lockId: string, ttlMs: number) {
   const lockRef = db.collection("_locks").doc(lockId);
-  
+
   return db.runTransaction(async (transaction) => {
     const existing = await transaction.get(lockRef);
-    
+
     if (existing.exists && existing.data().expiresAt > Date.now()) {
       return { acquired: false };
     }
@@ -296,40 +293,30 @@ export async function acquireLock(lockId: string, ttlMs: number) {
 ```
 
 **Issues:**
+
 - Transaction overhead on every attempt
 - No automatic cleanup of expired locks
 - Vulnerable to clock skew across zones
 - Firestore contention under high concurrency
 
 **Recommended approach:**
+
 ```typescript
 // NEW PATTERN: Redis-backed distributed lock (Redlock)
 import Redis from "ioredis";
 
 const redis = new Redis(process.env.REDIS_URL);
 
-export async function acquireLock(
-  lockKey: string,
-  ttlMs: number
-): Promise<boolean> {
+export async function acquireLock(lockKey: string, ttlMs: number): Promise<boolean> {
   const lockValue = crypto.randomUUID();
-  
+
   // SET with NX (only if not exists) and PX (milliseconds TTL)
-  const result = await redis.set(
-    `lock:${lockKey}`,
-    lockValue,
-    "NX",
-    "PX",
-    ttlMs
-  );
+  const result = await redis.set(`lock:${lockKey}`, lockValue, "NX", "PX", ttlMs);
 
   return result === "OK";
 }
 
-export async function releaseLock(
-  lockKey: string,
-  lockValue: string
-): Promise<boolean> {
+export async function releaseLock(lockKey: string, lockValue: string): Promise<boolean> {
   // Lua script ensures atomic check-then-delete
   const script = `
     if redis.call("get", KEYS[1]) == ARGV[1] then
@@ -339,12 +326,7 @@ export async function releaseLock(
     end
   `;
 
-  const result = await redis.eval(
-    script,
-    1,
-    `lock:${lockKey}`,
-    lockValue
-  );
+  const result = await redis.eval(script, 1, `lock:${lockKey}`, lockValue);
 
   return result === 1;
 }
@@ -355,11 +337,8 @@ export async function releaseLock(
 ---
 
 ## 3. Before & After Examples
-
 ### Example 1: Scheduled Maintenance Task
-
 #### ❌ BEFORE (Legacy Pattern)
-
 ```typescript
 // functions/scheduled/maintenance.ts
 import { onSchedule } from "firebase-functions/v1/pubsub";
@@ -367,59 +346,57 @@ import { getFirestore } from "firebase-admin/firestore";
 import { scheduleTask } from "@/services/scheduler/firestore-tasks";
 import { retryWithBackoff } from "@/lib/scheduling/retry-handler";
 
-export const performDailyMaintenance = onSchedule(
-  "every 24 hours",
-  async (context) => {
-    // 1. Manual lock acquisition (Firestore-based)
-    const lockId = "maintenance:daily";
-    const lock = await acquireFirestoreLock(lockId, 3600000);
-    
-    if (!lock.acquired) {
-      console.log("Maintenance already running elsewhere");
-      return;
-    }
+export const performDailyMaintenance = onSchedule("every 24 hours", async (context) => {
+  // 1. Manual lock acquisition (Firestore-based)
+  const lockId = "maintenance:daily";
+  const lock = await acquireFirestoreLock(lockId, 3600000);
 
-    try {
-      // 2. Manual retry wrapper
-      await retryWithBackoff(
-        async () => {
-          const db = getFirestore();
-          
-          // 3. Unstructured logging
-          console.log("Starting index rebuild");
-          
-          // 4. Synchronous batch processing (can timeout)
-          const indexes = await db.collection("_indexes").get();
-          const batch = db.batch();
-          
-          indexes.forEach((doc) => {
-            batch.update(doc.ref, { 
-              rebuiltAt: new Date(),
-              status: "ok",
-            });
-          });
-          
-          await batch.commit();
-          
-          console.log("Index rebuild complete");
-        },
-        {
-          maxRetries: 3,
-          initialDelayMs: 1000,
-          backoffMultiplier: 2, // ⚠️ Not validated
-        }
-      );
-    } catch (error) {
-      console.error("Maintenance failed:", error);
-      // No structured error context
-    } finally {
-      await releaseFirestoreLock(lockId);
-    }
+  if (!lock.acquired) {
+    console.log("Maintenance already running elsewhere");
+    return;
   }
-);
+
+  try {
+    // 2. Manual retry wrapper
+    await retryWithBackoff(
+      async () => {
+        const db = getFirestore();
+
+        // 3. Unstructured logging
+        console.log("Starting index rebuild");
+
+        // 4. Synchronous batch processing (can timeout)
+        const indexes = await db.collection("_indexes").get();
+        const batch = db.batch();
+
+        indexes.forEach((doc) => {
+          batch.update(doc.ref, {
+            rebuiltAt: new Date(),
+            status: "ok",
+          });
+        });
+
+        await batch.commit();
+
+        console.log("Index rebuild complete");
+      },
+      {
+        maxRetries: 3,
+        initialDelayMs: 1000,
+        backoffMultiplier: 2, // ⚠️ Not validated
+      },
+    );
+  } catch (error) {
+    console.error("Maintenance failed:", error);
+    // No structured error context
+  } finally {
+    await releaseFirestoreLock(lockId);
+  }
+});
 ```
 
 **Problems:**
+
 - Manual lock management (error-prone)
 - Unvalidated retry config
 - Bare console logging (not queryable)
@@ -427,7 +404,6 @@ export const performDailyMaintenance = onSchedule(
 - No context about execution environment
 
 #### ✅ AFTER (Framework Pattern)
-
 ```typescript
 // functions/scheduled/maintenance.ts
 import { onSchedule } from "firebase-functions/v2/scheduler";
@@ -490,7 +466,7 @@ export const performDailyMaintenance = onSchedule(
             totalDocs: indexes.size,
             durationMs: Date.now() - startTime,
           });
-        }
+        },
       );
 
       if (!success) {
@@ -507,11 +483,12 @@ export const performDailyMaintenance = onSchedule(
       // Framework will retry based on retryConfig
       throw error;
     }
-  }
+  },
 );
 ```
 
 **Improvements:**
+
 - Framework handles retry policy validation
 - Distributed lock via Redis (atomic, efficient)
 - Structured logging (queryable in Cloud Logging)
@@ -521,9 +498,7 @@ export const performDailyMaintenance = onSchedule(
 ---
 
 ### Example 2: Event-Triggered Deferred Task
-
 #### ❌ BEFORE (Custom Queue)
-
 ```typescript
 // DEPRECATED: Custom pub/sub-based queue
 import { enqueueTask } from "@/services/queue";
@@ -545,19 +520,18 @@ export const invoiceQueueWorker = onMessagePublished(
     try {
       const invoice = await fetchInvoice(invoiceId);
       await processInvoice(invoice);
-      
+
       // Manual ack (no automatic retry)
       console.log("Invoice processed");
     } catch (error) {
       console.error("Failed to process invoice");
       // Message lost or indefinite retry
     }
-  }
+  },
 );
 ```
 
 #### ✅ AFTER (Cloud Tasks)
-
 ```typescript
 // NEW PATTERN: Cloud Tasks with HTTP handler
 import { v2 as tasksV2 } from "@google-cloud/tasks";
@@ -586,7 +560,7 @@ export const handleInvoiceCreated = onCallable(async (data, context) => {
           JSON.stringify({
             invoiceId,
             retryAttempt: 0,
-          })
+          }),
         ).toString("base64"),
         oidcToken: {
           serviceAccountEmail: process.env.SERVICE_ACCOUNT_EMAIL,
@@ -629,11 +603,12 @@ export const processInvoiceTask = onRequest(
       // Return 5xx to trigger Cloud Tasks retry
       res.status(500).json({ error: "Processing failed" });
     }
-  }
+  },
 );
 ```
 
 **Improvements:**
+
 - Built-in retry with exponential backoff
 - Automatic deadletter queue
 - Service-to-service auth (OIDC token)
@@ -643,55 +618,48 @@ export const processInvoiceTask = onRequest(
 ---
 
 ## 4. Migration Checklist
-
 ### Phase 1: Prepare (Q4 2025 - December)
-
-- [ ] Audit all scheduled tasks in `functions/scheduled/`
-- [ ] Document retry policies for each task
-- [ ] Identify tasks requiring distributed locking
-- [ ] Set up Redis infrastructure (staging)
-- [ ] Create `SchedulingPolicy` codec with validation
+- \[ ] Audit all scheduled tasks in `functions/scheduled/`
+- \[ ] Document retry policies for each task
+- \[ ] Identify tasks requiring distributed locking
+- \[ ] Set up Redis infrastructure (staging)
+- \[ ] Create `SchedulingPolicy` codec with validation
 
 ### Phase 2: Framework Migration (Q1 2026 - January-March)
-
-- [ ] Migrate `firestore-tasks.ts` to `onSchedule` triggers
-- [ ] Replace `retryWithBackoff` with framework config
-- [ ] Implement Redis-backed distributed locking
-- [ ] Deploy observability middleware
-- [ ] Run parallel execution (old + new) for validation
+- \[ ] Migrate `firestore-tasks.ts` to `onSchedule` triggers
+- \[ ] Replace `retryWithBackoff` with framework config
+- \[ ] Implement Redis-backed distributed locking
+- \[ ] Deploy observability middleware
+- \[ ] Run parallel execution (old + new) for validation
 
 ### Phase 3: Queue Migration (Q2 2026 - April-June)
-
-- [ ] Migrate custom queue to Cloud Tasks
-- [ ] Update event handlers to use Cloud Tasks SDK
-- [ ] Deprecate pub/sub-based queue
-- [ ] Set up deadletter handling
-- [ ] Monitor for duplicate execution
+- \[ ] Migrate custom queue to Cloud Tasks
+- \[ ] Update event handlers to use Cloud Tasks SDK
+- \[ ] Deprecate pub/sub-based queue
+- \[ ] Set up deadletter handling
+- \[ ] Monitor for duplicate execution
 
 ### Phase 4: Cleanup (Q3 2026 - July-September)
-
-- [ ] Remove deprecated components
-- [ ] Consolidate scheduled task registry
-- [ ] Archive legacy code to audit folder
-- [ ] Update documentation
-- [ ] Conduct team training
+- \[ ] Remove deprecated components
+- \[ ] Consolidate scheduled task registry
+- \[ ] Archive legacy code to audit folder
+- \[ ] Update documentation
+- \[ ] Conduct team training
 
 ---
 
 ## 5. Risk Assessment & Mitigation
-
-| Risk | Severity | Mitigation |
-|------|----------|-----------|
-| **Duplicate execution during migration** | High | Run canary deployment with duplicate detection (hash-based) |
-| **Lock contention in Redis** | Medium | Pre-allocate locks; implement exponential backoff in lock acquisition |
-| **Task timeout during large migrations** | Medium | Split large tasks; increase function timeout for duration of migration |
-| **Retry storm from misconfiguration** | High | Validate backoff multiplier at deploy time; add circuit breaker |
-| **Lost tasks during Cloud Tasks transition** | Medium | Implement audit log; run reconciliation job to detect gaps |
+| Risk                                         | Severity | Mitigation                                                             |
+| -------------------------------------------- | -------- | ---------------------------------------------------------------------- |
+| **Duplicate execution during migration**     | High     | Run canary deployment with duplicate detection (hash-based)            |
+| **Lock contention in Redis**                 | Medium   | Pre-allocate locks; implement exponential backoff in lock acquisition  |
+| **Task timeout during large migrations**     | Medium   | Split large tasks; increase function timeout for duration of migration |
+| **Retry storm from misconfiguration**        | High     | Validate backoff multiplier at deploy time; add circuit breaker        |
+| **Lost tasks during Cloud Tasks transition** | Medium   | Implement audit log; run reconciliation job to detect gaps             |
 
 ---
 
 ## 6. Cross-References
-
 - **L2 Architecture:** See `03_SUBSYSTEMS_L2/scheduling.md` for comprehensive subsystem analysis
 - **Task Dependency Graph:** See `04_COMPONENTS_L3/task-coordination.md` for multi-step workflows
 - **Observability Standards:** See `04_COMPONENTS_L3/logging-standards.md` for structured logging codec
@@ -701,7 +669,6 @@ export const processInvoiceTask = onRequest(
 ---
 
 ## 7. Version History
-
-| Date | Author | Changes |
-|------|--------|---------|
+| Date       | Author            | Changes                                           |
+| ---------- | ----------------- | ------------------------------------------------- |
 | 2025-11-30 | Architecture Team | Initial deprecation mapping and migration roadmap |

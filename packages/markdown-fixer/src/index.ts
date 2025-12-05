@@ -1,1 +1,1 @@
-export { fixFiles } from './fixer';
+export { fixFiles } from "./fixer";

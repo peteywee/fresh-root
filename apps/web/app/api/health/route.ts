@@ -6,7 +6,7 @@ import { createPublicEndpoint } from "@fresh-schedules/api-framework";
  * GET /api/health
  * Basic health check endpoint for uptime monitoring
  * Returns 200 with ok: true if service is running
- * 
+ *
  * Public endpoint - no authentication required.
  */
 export const dynamic = "force-dynamic";

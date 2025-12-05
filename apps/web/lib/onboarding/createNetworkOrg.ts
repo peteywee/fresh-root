@@ -126,7 +126,9 @@ export async function createNetworkWithOrgAndVenue(
 
   batch.set(networkRef, networkDoc);
 
-  const complianceRef = networkRef.collection("compliance").doc("adminResponsibilityForm") as DocumentReference<ComplianceDoc>;
+  const complianceRef = networkRef
+    .collection("compliance")
+    .doc("adminResponsibilityForm") as DocumentReference<ComplianceDoc>;
   const formDoc: ComplianceDoc = {
     networkId,
     adminUid,
@@ -168,7 +170,9 @@ export async function createNetworkWithOrgAndVenue(
 
   batch.set(venueRef, venueDoc);
 
-  const membershipRef = networkRef.collection("memberships").doc() as DocumentReference<MembershipDoc>;
+  const membershipRef = networkRef
+    .collection("memberships")
+    .doc() as DocumentReference<MembershipDoc>;
   const membershipId = membershipRef.id;
   const membershipDoc: MembershipDoc = {
     id: membershipId,

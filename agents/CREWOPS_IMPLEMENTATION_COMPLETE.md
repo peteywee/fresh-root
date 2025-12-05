@@ -165,14 +165,14 @@ For every non-trivial request:
 
 **Mandatory Core Crew** (always present):
 
-| Role | Responsibility | Tools |
-|------|-----------------|-------|
-| **Orchestrator** | Route, arbitrate, synthesize | All |
-| **Product Owner** | Success criteria, constraints | Requirements |
-| **Systems Architect** | Structure, interfaces, design | Design tools |
-| **Security Red Team** | Threat model, veto Phase E | Security analysis |
-| **Research Analyst** | Verify facts, run tools | read_file, grep_search, MCP |
-| **QA/Test Engineer** | Validate gates, test | get_errors, runners |
+| Role                  | Responsibility                | Tools                       |
+| --------------------- | ----------------------------- | --------------------------- |
+| **Orchestrator**      | Route, arbitrate, synthesize  | All                         |
+| **Product Owner**     | Success criteria, constraints | Requirements                |
+| **Systems Architect** | Structure, interfaces, design | Design tools                |
+| **Security Red Team** | Threat model, veto Phase E    | Security analysis           |
+| **Research Analyst**  | Verify facts, run tools       | read_file, grep_search, MCP |
+| **QA/Test Engineer**  | Validate gates, test          | get_errors, runners         |
 
 Each worker inherits Constitution instantly. Red Team has veto power (Security Supremacy).
 
@@ -404,12 +404,12 @@ After completing a task, store for next session:
 
 ## 📚 Reference Documents
 
-| Document | Purpose | Location |
-|----------|---------|----------|
-| **crewops.md** | Main manual (Constitution, phases, tools) | `agents/crewops.md` (747 lines) |
-| **CREWOPS_ACTIVATION.md** | Auto-engagement framework | `agents/CREWOPS_ACTIVATION.md` (~400 lines) |
-| **CREWOPS_ACTIVATION_STATUS.md** | Status & configuration tracking | `agents/CREWOPS_ACTIVATION_STATUS.md` |
-| **CREWOPS_QUICK_REFERENCE.md** | User quick reference card | `agents/CREWOPS_QUICK_REFERENCE.md` |
+| Document                         | Purpose                                   | Location                                    |
+| -------------------------------- | ----------------------------------------- | ------------------------------------------- |
+| **crewops.md**                   | Main manual (Constitution, phases, tools) | `agents/crewops.md` (747 lines)             |
+| **CREWOPS_ACTIVATION.md**        | Auto-engagement framework                 | `agents/CREWOPS_ACTIVATION.md` (~400 lines) |
+| **CREWOPS_ACTIVATION_STATUS.md** | Status & configuration tracking           | `agents/CREWOPS_ACTIVATION_STATUS.md`       |
+| **CREWOPS_QUICK_REFERENCE.md**   | User quick reference card                 | `agents/CREWOPS_QUICK_REFERENCE.md`         |
 
 ---
 

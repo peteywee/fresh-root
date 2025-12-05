@@ -1,7 +1,5 @@
 # L2 — Scheduling Core Engine
-
 ## 1. Role in the System (L0/L1 Context)
-
 The Scheduling Core Engine is responsible for turning:
 
 - **Labor constraints** (budget %, average wage, legal rules),
@@ -20,11 +18,10 @@ If this subsystem fails:
 ---
 
 ## 2. Panel Summary
-
-**Distributed Systems (Elena)**  
+**Distributed Systems (Elena)**\
 Typical pattern today: route handlers and functions perform **multiple Firestore writes in sequence** (schedule, shifts, assignments) without guaranteed atomicity or idempotency. That works in demos, but under real failure and retry conditions it will create **orphan docs** and inconsistent schedules.
 
-**Security (Marcus)**  
+**Security (Marcus)**\
 Any schedule operation must be tightly scoped to:
 
 - `orgId` and `venueId`
@@ -33,23 +30,23 @@ Any schedule operation must be tightly scoped to:
 
 Loose checks in handlers plus "hope the rules catch it" is not enough.
 
-**DDD (Ingrid)**  
+**DDD (Ingrid)**\
 Right now, the "Schedule" behaves more like a **bag of documents** than a true **Aggregate**. Code in API routes and functions directly manipulates `schedules`, `shifts`, and `assignments` independently. That scatters invariants (no double booking, correct date ranges, etc.) across the codebase.
 
-**Platform (Kenji)**  
+**Platform (Kenji)**\
 There is no single **scheduling SDK** that other layers depend on. That makes it hard to:
 
 - instrument logs/tracing consistently
 - reason about performance
 - roll out changes safely.
 
-**Staff Engineer (Priya)**  
+**Staff Engineer (Priya)**\
 A dev adding a new rule today is likely to touch multiple routes, helpers, and collections. This leads to "shotgun surgery" and increases the odds of subtle bugs.
 
-**Database (Omar)**  
+**Database (Omar)**\
 The natural Firestore modeling (`schedules/{id}`, `schedules/{id}/shifts`, `assignments`) is fine, but the **query patterns** need discipline. Fully loading a week's worth of schedules, shifts, and assignments can turn into N+1 reads if not centralized.
 
-**API Design (Sarah)**  
+**API Design (Sarah)**\
 The external interface should be **small and predictable**:
 
 - `POST /api/schedules/generate`
@@ -59,11 +56,11 @@ The external interface should be **small and predictable**:
 
 Right now, it's easy for "helper endpoints" or ad-hoc routes to proliferate.
 
-**Devil's Advocate (Rafael)**  
+**Devil's Advocate (Rafael)**\
 If the **5-minute schedule** experience is confusing, fragile, or slow, no amount of clever features elsewhere will matter. Any complexity here that doesn't directly improve that experience is suspect.
 
-**Strategic/Impact (Victoria)**  
-This engine *is* your moat:
+**Strategic/Impact (Victoria)**\
+This engine _is_ your moat:
 
 > "We generate better schedules, faster, with fewer labor surprises."
 
@@ -72,9 +69,7 @@ That's what gets a regional manager or COO to care.
 ---
 
 ## 3. Critical Finding SCHED-1 — Schedule Aggregate Boundary Missing
-
 ### 3.1 What Was Here (Typical Pattern)
-
 In the current style, schedule creation often looks like this in routes or functions:
 
 ```ts
@@ -120,7 +115,6 @@ This "works" in happy-path testing. But:
 - Different parts of the app can write to these collections independently.
 
 ### 3.2 What Should Be Here (Safer, Still Familiar)
-
 First step toward better:
 
 - Use a transaction around the core writes.
@@ -176,7 +170,6 @@ Better, but still has problems:
 - Hard to evolve without touching every caller.
 
 ### 3.3 What Works Best (Target Pattern — SDK Aggregate)
-
 Create a scheduling SDK as the only way to create schedules:
 
 ```ts
@@ -316,9 +309,7 @@ Key properties of the "best" pattern:
 ---
 
 ## 4. Critical Finding SCHED-2 — Publish vs Draft Conflated
-
 ### 4.1 What Was Here
-
 Common pattern in early versions:
 
 - `schedule.status` toggled from "draft" to "published" directly.
@@ -330,7 +321,6 @@ await scheduleRef.update({ status: "published" });
 ```
 
 ### 4.2 What Should Be Here
-
 At minimum, treat publish as a distinct step that:
 
 - Verifies all invariants (no conflicting assignments, labor overspend, etc.).
@@ -355,7 +345,6 @@ await db.runTransaction(async (tx) => {
 ```
 
 ### 4.3 What Works Best
-
 Promote publish into its own SDK method:
 
 ```ts
@@ -405,10 +394,7 @@ Then your route is trivial:
 // apps/web/app/api/schedules/[scheduleId]/publish/route.ts
 import { publishSchedule } from "@fresh-root/scheduling-sdk";
 
-export async function POST(
-  _req: Request,
-  { params }: { params: { scheduleId: string } },
-) {
+export async function POST(_req: Request, { params }: { params: { scheduleId: string } }) {
   const { scheduleId } = params;
   const { orgId, userId } = await getAuthContext(); // your auth helper
 
@@ -421,7 +407,6 @@ export async function POST(
 ---
 
 ## 5. Open Questions for Scheduling Engine
-
 - Do we allow multiple active schedules for the same venue/week, or enforce uniqueness at the SDK level?
 - Do we need a full version history (e.g., schedule v1, v2, v3) or rely on events + snapshots?
 - How tightly should the engine couple to the labor planning subsystem vs treating it as a plugin?
@@ -429,7 +414,6 @@ export async function POST(
 ---
 
 ## 6. Cross-Links
-
 - See `03_SUBSYSTEMS_L2/labor_planning.md` for how labor inputs should be shaped.
 - See `03_SUBSYSTEMS_L2/rbac_security.md` for required checks before calling SDK methods.
 - See `04_COMPONENTS_L3/scheduling_engine_modules.md` for a catalog of scheduling-related modules.

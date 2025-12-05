@@ -27,10 +27,12 @@ export const CreateNetworkOrgPayloadSchema = z.object({
     hasCorporateAboveYou: z.boolean().default(false),
     segment: z.string().optional(),
   }),
-  venue: z.object({
-    venueName: z.string().min(1, "Venue name required"),
-    timeZone: z.string().default("UTC"),
-  }).optional(),
+  venue: z
+    .object({
+      venueName: z.string().min(1, "Venue name required"),
+      timeZone: z.string().default("UTC"),
+    })
+    .optional(),
   formToken: z.string().min(1, "Form token required"),
 });
 

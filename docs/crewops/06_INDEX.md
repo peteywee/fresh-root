@@ -1,17 +1,16 @@
 # CREWOPS Protocol: Complete Implementation Index
-
-**Status**: ✅ FULLY IMPLEMENTED & ACTIVE  
-**Date**: December 4, 2025  
-**Total Size**: 62.3 KB across 5 files  
+**Status**: ✅ FULLY IMPLEMENTED & ACTIVE\
+**Date**: December 4, 2025\
+**Total Size**: 62.3 KB across 5 files\
 **Binding**: Automatic activation on session + non-trivial prompts
 
 ---
 
 ## 📁 Protocol Files (In Order of Reference)
-
-### 1. **agents/CREWOPS_QUICK_REFERENCE.md** (7.8 KB) ⭐ START HERE
-**For**: Users new to the protocol  
+### 1. **agents/CREWOPS\_QUICK\_REFERENCE.md** (7.8 KB) ⭐ START HERE
+**For**: Users new to the protocol\
 **Contains**:
+
 - Session bootstrap message
 - What happens automatically
 - Keyword modifiers quick reference
@@ -24,8 +23,9 @@
 ---
 
 ### 2. **agents/crewops.md** (24 KB) 📖 THE COMPLETE MANUAL
-**For**: Understanding the protocol deeply  
+**For**: Understanding the protocol deeply\
 **Contains**:
+
 - Constitution (7 non-negotiable laws)
 - Crew hierarchy & roles (Section 3)
 - Swarm protocol: Phases A→E (Section 4)
@@ -39,9 +39,10 @@
 
 ---
 
-### 3. **agents/CREWOPS_ACTIVATION.md** (9.6 KB) ⚙️ AUTO-ENGAGEMENT FRAMEWORK
-**For**: How the protocol automatically loads  
+### 3. **agents/CREWOPS\_ACTIVATION.md** (9.6 KB) ⚙️ AUTO-ENGAGEMENT FRAMEWORK
+**For**: How the protocol automatically loads\
 **Contains**:
+
 - Activation sequence (Stage 1, 2, 3)
 - Non-trivial prompt detection rules
 - Phase execution workflow (A→E)
@@ -54,9 +55,10 @@
 
 ---
 
-### 4. **agents/CREWOPS_ACTIVATION_STATUS.md** (8.9 KB) 📊 STATUS TRACKING
-**For**: Verification and configuration  
+### 4. **agents/CREWOPS\_ACTIVATION\_STATUS.md** (8.9 KB) 📊 STATUS TRACKING
+**For**: Verification and configuration\
 **Contains**:
+
 - What's active and where
 - How the protocol works
 - When it engages (bootstrap + non-trivial)
@@ -69,9 +71,10 @@
 
 ---
 
-### 5. **agents/CREWOPS_IMPLEMENTATION_COMPLETE.md** (12 KB) ✅ COMPLETION SUMMARY
-**For**: Overview of what's active  
+### 5. **agents/CREWOPS\_IMPLEMENTATION\_COMPLETE.md** (12 KB) ✅ COMPLETION SUMMARY
+**For**: Overview of what's active\
 **Contains**:
+
 - Summary of all 4 files
 - Activation flow (automatic)
 - Protocol phases A→E
@@ -86,7 +89,6 @@
 ---
 
 ## 🎯 Reading Paths
-
 ### For Immediate Use
 ```
 1. Read: CREWOPS_QUICK_REFERENCE.md (5 min)
@@ -115,7 +117,6 @@
 ---
 
 ## 🔄 Automatic Engagement Timeline
-
 ```
 Session Start
     ↓
@@ -147,7 +148,6 @@ Task complete with audit trail
 ---
 
 ## 🎭 Key Concepts (Quick Reference)
-
 ### Constitution (7 Laws)
 1. **Anti-Vaporware**: No mock code
 2. **Truth & Evidence**: Verify with tools
@@ -179,28 +179,26 @@ Task complete with audit trail
 4. Assumptions (lowest, labeled)
 
 ### Keyword Modifiers (Optional)
-- CREWOPS_OK: Acknowledge binding
-- CREWOPS_DESIGN_ONLY: Plan only
-- CREWOPS_AUDIT: Find problems
-- CREWOPS_EXECUTE: Run pre-planned
-- CREWOPS_EMERGENCY: Fast-track
+- CREWOPS\_OK: Acknowledge binding
+- CREWOPS\_DESIGN\_ONLY: Plan only
+- CREWOPS\_AUDIT: Find problems
+- CREWOPS\_EXECUTE: Run pre-planned
+- CREWOPS\_EMERGENCY: Fast-track
 
 ---
 
 ## 📋 File Responsibilities
-
-| File | Responsibility | Read When |
-|------|-----------------|-----------|
-| CREWOPS_QUICK_REFERENCE.md | User quick start | First time using |
-| crewops.md | Binding authority | Need rule clarification |
-| CREWOPS_ACTIVATION.md | Bootstrap framework | Understanding auto-engagement |
-| CREWOPS_ACTIVATION_STATUS.md | Configuration tracking | Verifying what's active |
-| CREWOPS_IMPLEMENTATION_COMPLETE.md | High-level overview | Need summary view |
+| File                               | Responsibility         | Read When                     |
+| ---------------------------------- | ---------------------- | ----------------------------- |
+| CREWOPS\_QUICK\_REFERENCE.md         | User quick start       | First time using              |
+| crewops.md                         | Binding authority      | Need rule clarification       |
+| CREWOPS\_ACTIVATION.md              | Bootstrap framework    | Understanding auto-engagement |
+| CREWOPS\_ACTIVATION\_STATUS.md       | Configuration tracking | Verifying what's active       |
+| CREWOPS\_IMPLEMENTATION\_COMPLETE.md | High-level overview    | Need summary view             |
 
 ---
 
 ## ✅ What's Guaranteed
-
 When protocol engages on your prompt:
 
 - ✅ Constitution is binding (immutable)
@@ -217,7 +215,6 @@ When protocol engages on your prompt:
 ---
 
 ## 🚀 You're Ready
-
 1. **Session starts** → Protocol loads automatically
 2. **You ask a question** (non-trivial)
 3. **Protocol engages** → You see activation message
@@ -229,23 +226,22 @@ No setup needed. No configuration. Just ask.
 ---
 
 ## 🎯 Quick Checklist for You
-
-- [ ] Read CREWOPS_QUICK_REFERENCE.md (to understand what to expect)
-- [ ] Understand Phases A→E (Context → Plan → Act → Verify)
-- [ ] Know the Constitution (7 binding laws)
-- [ ] Understand Red Team veto (Security Supremacy)
-- [ ] Optional: Use keyword modifiers if needed
+- \[ ] Read CREWOPS\_QUICK\_REFERENCE.md (to understand what to expect)
+- \[ ] Understand Phases A→E (Context → Plan → Act → Verify)
+- \[ ] Know the Constitution (7 binding laws)
+- \[ ] Understand Red Team veto (Security Supremacy)
+- \[ ] Optional: Use keyword modifiers if needed
 
 Then: **Ask your next question.** Protocol does the rest.
 
 ---
 
 ## 📞 How to Engage Protocol
-
 ### Option 1: Just Ask
 ```
 I need to build a new feature for org-scoped rate limiting.
 ```
+
 Protocol auto-engages. ✅
 
 ### Option 2: Acknowledge Binding (Explicit)
@@ -256,6 +252,7 @@ Deliverable: code
 
 CREWOPS_OK
 ```
+
 Protocol engages with explicit acknowledgment. ✅
 
 ### Option 3: Customize Behavior (Optional)
@@ -263,23 +260,26 @@ Protocol engages with explicit acknowledgment. ✅
 I need a security design for the payment flow.
 CREWOPS_DESIGN_ONLY
 ```
+
 Protocol engages, but stops after Phase C (no code). ✅
 
 ---
 
 ## 🔗 Cross-References
-
 **In crewops.md**:
-- Section 0.1.5: Links to CREWOPS_ACTIVATION.md
+
+- Section 0.1.5: Links to CREWOPS\_ACTIVATION.md
 - Section 6.5: Tool Use Discipline
 - Section 6.6: MCP Integration
 - Section 16-18: Tool & MCP Governance
 
-**In CREWOPS_ACTIVATION.md**:
+**In CREWOPS\_ACTIVATION.md**:
+
 - Stage 1: Session bootstrap flow
 - Stage 3: Protocol engagement flow
 
-**In CREWOPS_ACTIVATION_STATUS.md**:
+**In CREWOPS\_ACTIVATION\_STATUS.md**:
+
 - Activation Sequence: Detailed steps
 - Protocol Flow: Visual workflow
 - Worker Matrix: Tool assignments
@@ -288,24 +288,23 @@ Protocol engages, but stops after Phase C (no code). ✅
 ---
 
 ## 📊 Protocol Statistics
-
-| Metric | Value |
-|--------|-------|
-| **Files** | 5 markdown files |
-| **Total Size** | 62.3 KB |
-| **Sections** | 18 in main manual |
-| **Phases** | 5 (A→E) |
-| **Constitution Laws** | 7 (binding) |
-| **Crew Roles** | 6 (mandatory) |
-| **Tool Categories** | 3 (standard + GitHub + Firecrawl MCP) |
-| **Keyword Modifiers** | 8 (optional) |
-| **Validation Gates** | 5 minimum per task |
+| Metric                | Value                                 |
+| --------------------- | ------------------------------------- |
+| **Files**             | 5 markdown files                      |
+| **Total Size**        | 62.3 KB                               |
+| **Sections**          | 18 in main manual                     |
+| **Phases**            | 5 (A→E)                               |
+| **Constitution Laws** | 7 (binding)                           |
+| **Crew Roles**        | 6 (mandatory)                         |
+| **Tool Categories**   | 3 (standard + GitHub + Firecrawl MCP) |
+| **Keyword Modifiers** | 8 (optional)                          |
+| **Validation Gates**  | 5 minimum per task                    |
 
 ---
 
 ## 🎯 Success Criteria
-
 Protocol is successful when:
+
 - ✅ Automatically engages on non-trivial prompts
 - ✅ Phases A→E execute without user intervention
 - ✅ Tools deploy automatically per role
@@ -321,9 +320,9 @@ Protocol is successful when:
 
 ---
 
-**Protocol Status**: ✅ FULLY ACTIVE  
-**Last Updated**: December 4, 2025  
-**Binding**: Automatic  
+**Protocol Status**: ✅ FULLY ACTIVE\
+**Last Updated**: December 4, 2025\
+**Binding**: Automatic\
 **Ready**: YES
 
 **Proceed with your next request. The crew is ready to dispatch.**

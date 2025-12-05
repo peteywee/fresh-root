@@ -3,9 +3,9 @@
  * Real-time performance analysis with regression detection
  */
 
-import { performance } from 'perf_hooks';
-import * as fs from 'fs';
-import * as path from 'path';
+import { performance } from "perf_hooks";
+import * as fs from "fs";
+import * as path from "path";
 
 interface PerformanceMetrics {
   endpoint: string;
@@ -52,7 +52,7 @@ interface PerformanceRegression {
   baseline: number;
   current: number;
   degradation: number; // percentage
-  severity: 'critical' | 'warning' | 'info';
+  severity: "critical" | "warning" | "info";
 }
 
 export class PerformanceProfiler {
@@ -60,7 +60,7 @@ export class PerformanceProfiler {
   private baselines: Map<string, PerformanceBenchmark> = new Map();
   private metricsFile: string;
 
-  constructor(metricsFile: string = 'tests/intelligence/performance-metrics.json') {
+  constructor(metricsFile: string = "tests/intelligence/performance-metrics.json") {
     this.metricsFile = metricsFile;
     this.loadBaselines();
   }
@@ -71,7 +71,7 @@ export class PerformanceProfiler {
   async profile<T>(
     endpoint: string,
     method: string,
-    request: () => Promise<Response>
+    request: () => Promise<Response>,
   ): Promise<{ response: Response; metrics: PerformanceMetrics }> {
     const startTime = performance.now();
     const startMemory = process.memoryUsage().heapUsed;
@@ -87,11 +87,20 @@ export class PerformanceProfiler {
 
       // Clone response to measure size
       const responseText = await response.clone().text();
-      responseSize = Buffer.byteLength(responseText, 'utf8');
+      responseSize = Buffer.byteLength(responseText, "utf8");
 
       return {
         response,
-        metrics: this.recordMetrics(endpoint, method, startTime, startMemory, startCpu, statusCode, 0, responseSize),
+        metrics: this.recordMetrics(
+          endpoint,
+          method,
+          startTime,
+          startMemory,
+          startCpu,
+          statusCode,
+          0,
+          responseSize,
+        ),
       };
     } catch (error) {
       throw error;
@@ -109,7 +118,7 @@ export class PerformanceProfiler {
     startCpu: NodeJS.CpuUsage,
     statusCode: number,
     requestSize: number,
-    responseSize: number
+    responseSize: number,
   ): PerformanceMetrics {
     const endTime = performance.now();
     const endMemory = process.memoryUsage().heapUsed;
@@ -156,7 +165,7 @@ export class PerformanceProfiler {
     const endpointMetrics = new Map<string, PerformanceMetrics[]>();
 
     // Group metrics by endpoint
-    this.metrics.forEach(metric => {
+    this.metrics.forEach((metric) => {
       const key = `${metric.method} ${metric.endpoint}`;
       if (!endpointMetrics.has(key)) {
         endpointMetrics.set(key, []);
@@ -168,8 +177,8 @@ export class PerformanceProfiler {
     const benchmarks: PerformanceBenchmark[] = [];
 
     endpointMetrics.forEach((metrics, key) => {
-      const [method, endpoint] = key.split(' ', 2);
-      const durations = metrics.map(m => m.duration).sort((a, b) => a - b);
+      const [method, endpoint] = key.split(" ", 2);
+      const durations = metrics.map((m) => m.duration).sort((a, b) => a - b);
 
       const mean = durations.reduce((sum, d) => sum + d, 0) / durations.length;
       const stdDeviation = this.stdDev(durations, mean);
@@ -202,35 +211,38 @@ export class PerformanceProfiler {
   detectRegressions(currentBenchmarks: PerformanceBenchmark[]): PerformanceRegression[] {
     const regressions: PerformanceRegression[] = [];
 
-    currentBenchmarks.forEach(current => {
+    currentBenchmarks.forEach((current) => {
       const key = `${current.method} ${current.endpoint}`;
       const baseline = this.baselines.get(key);
 
       if (!baseline) return; // No baseline to compare
 
       // Check P95 regression
-      if (current.p95 > baseline.p95 * 1.2) { // 20% degradation
+      if (current.p95 > baseline.p95 * 1.2) {
+        // 20% degradation
         const degradation = ((current.p95 - baseline.p95) / baseline.p95) * 100;
         regressions.push({
           endpoint: `${current.method} ${current.endpoint}`,
-          metric: 'P95 latency',
+          metric: "P95 latency",
           baseline: baseline.p95,
           current: current.p95,
           degradation,
-          severity: degradation > 50 ? 'critical' : degradation > 30 ? 'warning' : 'info',
+          severity: degradation > 50 ? "critical" : degradation > 30 ? "warning" : "info",
         });
       }
 
       // Check throughput regression
-      if (current.throughput < baseline.throughput * 0.8) { // 20% degradation
-        const degradation = ((baseline.throughput - current.throughput) / baseline.throughput) * 100;
+      if (current.throughput < baseline.throughput * 0.8) {
+        // 20% degradation
+        const degradation =
+          ((baseline.throughput - current.throughput) / baseline.throughput) * 100;
         regressions.push({
           endpoint: `${current.method} ${current.endpoint}`,
-          metric: 'Throughput',
+          metric: "Throughput",
           baseline: baseline.throughput,
           current: current.throughput,
           degradation,
-          severity: degradation > 40 ? 'critical' : degradation > 25 ? 'warning' : 'info',
+          severity: degradation > 40 ? "critical" : degradation > 25 ? "warning" : "info",
         });
       }
     });
@@ -244,7 +256,7 @@ export class PerformanceProfiler {
   generateRecommendations(benchmarks: PerformanceBenchmark[]): string[] {
     const recommendations: string[] = [];
 
-    benchmarks.forEach(benchmark => {
+    benchmarks.forEach((benchmark) => {
       const endpoint = `${benchmark.method} ${benchmark.endpoint}`;
 
       // Slow endpoints (P95 > 1000ms)
@@ -254,7 +266,7 @@ export class PerformanceProfiler {
    - Adding database indexes
    - Implementing caching
    - Optimizing database queries
-   - Using pagination for large datasets`
+   - Using pagination for large datasets`,
         );
       }
 
@@ -264,7 +276,7 @@ export class PerformanceProfiler {
           `📊 ${endpoint} has high latency variance (stdDev: ${benchmark.stdDev.toFixed(2)}ms). Consider:
    - Investigating intermittent performance issues
    - Adding request queuing
-   - Optimizing cold start performance`
+   - Optimizing cold start performance`,
         );
       }
 
@@ -274,14 +286,15 @@ export class PerformanceProfiler {
           `🐌 ${endpoint} has low throughput (${benchmark.throughput.toFixed(2)} req/s). Consider:
    - Connection pooling
    - Async processing for heavy operations
-   - Load balancing`
+   - Load balancing`,
         );
       }
 
       // Large response size (> 100KB)
-      const avgResponseSize = this.metrics
-        .filter(m => m.endpoint === benchmark.endpoint && m.method === benchmark.method)
-        .reduce((sum, m) => sum + m.responseSize, 0) / benchmark.samples;
+      const avgResponseSize =
+        this.metrics
+          .filter((m) => m.endpoint === benchmark.endpoint && m.method === benchmark.method)
+          .reduce((sum, m) => sum + m.responseSize, 0) / benchmark.samples;
 
       if (avgResponseSize > 100000) {
         recommendations.push(
@@ -289,7 +302,7 @@ export class PerformanceProfiler {
    - Implementing pagination
    - Using field filtering
    - Response compression
-   - GraphQL for selective data fetching`
+   - GraphQL for selective data fetching`,
         );
       }
     });
@@ -307,12 +320,15 @@ export class PerformanceProfiler {
 
     // Find slowest and fastest endpoints
     const sortedByP95 = [...benchmarks].sort((a, b) => b.p95 - a.p95);
-    const slowestEndpoint = sortedByP95[0] ? `${sortedByP95[0].method} ${sortedByP95[0].endpoint}` : 'N/A';
+    const slowestEndpoint = sortedByP95[0]
+      ? `${sortedByP95[0].method} ${sortedByP95[0].endpoint}`
+      : "N/A";
     const fastestEndpoint = sortedByP95[sortedByP95.length - 1]
       ? `${sortedByP95[sortedByP95.length - 1].method} ${sortedByP95[sortedByP95.length - 1].endpoint}`
-      : 'N/A';
+      : "N/A";
 
-    const averageResponseTime = benchmarks.reduce((sum, b) => sum + b.mean, 0) / benchmarks.length || 0;
+    const averageResponseTime =
+      benchmarks.reduce((sum, b) => sum + b.mean, 0) / benchmarks.length || 0;
 
     return {
       timestamp: Date.now(),
@@ -335,12 +351,12 @@ export class PerformanceProfiler {
     const benchmarks = this.generateBenchmarks();
     const baselineData: Record<string, PerformanceBenchmark> = {};
 
-    benchmarks.forEach(benchmark => {
+    benchmarks.forEach((benchmark) => {
       const key = `${benchmark.method} ${benchmark.endpoint}`;
       baselineData[key] = benchmark;
     });
 
-    const baselineFile = this.metricsFile.replace('.json', '-baseline.json');
+    const baselineFile = this.metricsFile.replace(".json", "-baseline.json");
     fs.mkdirSync(path.dirname(baselineFile), { recursive: true });
     fs.writeFileSync(baselineFile, JSON.stringify(baselineData, null, 2));
 
@@ -351,10 +367,10 @@ export class PerformanceProfiler {
    * Loads baselines from file
    */
   private loadBaselines(): void {
-    const baselineFile = this.metricsFile.replace('.json', '-baseline.json');
+    const baselineFile = this.metricsFile.replace(".json", "-baseline.json");
 
     if (fs.existsSync(baselineFile)) {
-      const data = JSON.parse(fs.readFileSync(baselineFile, 'utf-8'));
+      const data = JSON.parse(fs.readFileSync(baselineFile, "utf-8"));
       Object.entries(data).forEach(([key, benchmark]) => {
         this.baselines.set(key, benchmark as PerformanceBenchmark);
       });
@@ -419,7 +435,9 @@ export class PerformanceProfiler {
       </div>
     </div>
 
-    ${report.regressions.length > 0 ? `
+    ${
+      report.regressions.length > 0
+        ? `
     <h2>⚠️ Performance Regressions</h2>
     <table>
       <thead>
@@ -433,7 +451,9 @@ export class PerformanceProfiler {
         </tr>
       </thead>
       <tbody>
-        ${report.regressions.map(r => `
+        ${report.regressions
+          .map(
+            (r) => `
         <tr>
           <td>${r.endpoint}</td>
           <td>${r.metric}</td>
@@ -442,10 +462,14 @@ export class PerformanceProfiler {
           <td>${r.degradation.toFixed(1)}%</td>
           <td class="${r.severity}">${r.severity.toUpperCase()}</td>
         </tr>
-        `).join('')}
+        `,
+          )
+          .join("")}
       </tbody>
     </table>
-    ` : ''}
+    `
+        : ""
+    }
 
     <h2>📊 Benchmarks</h2>
     <table>
@@ -461,7 +485,9 @@ export class PerformanceProfiler {
         </tr>
       </thead>
       <tbody>
-        ${report.benchmarks.map(b => `
+        ${report.benchmarks
+          .map(
+            (b) => `
         <tr>
           <td>${b.method} ${b.endpoint}</td>
           <td>${b.p50.toFixed(2)}ms</td>
@@ -471,16 +497,26 @@ export class PerformanceProfiler {
           <td>${b.throughput.toFixed(2)} req/s</td>
           <td>${b.samples}</td>
         </tr>
-        `).join('')}
+        `,
+          )
+          .join("")}
       </tbody>
     </table>
 
-    ${report.recommendations.length > 0 ? `
+    ${
+      report.recommendations.length > 0
+        ? `
     <h2>💡 Recommendations</h2>
-    ${report.recommendations.map(r => `
+    ${report.recommendations
+      .map(
+        (r) => `
     <div class="recommendation">${r}</div>
-    `).join('')}
-    ` : ''}
+    `,
+      )
+      .join("")}
+    `
+        : ""
+    }
   </div>
 </body>
 </html>`;

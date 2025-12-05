@@ -27,9 +27,9 @@ When this agent session initializes:
 ✅ CREWOPS Protocol Active
 
 Binding Framework: CrewOps Manual loaded
-Constitution: Anti-vaporware | Truth & Evidence | Security Supremacy | 
+Constitution: Anti-vaporware | Truth & Evidence | Security Supremacy |
               Deterministic Delivery | Full-File Fidelity
-Crew: Orchestrator | Product Owner | Systems Architect | Security Red Team | 
+Crew: Orchestrator | Product Owner | Systems Architect | Security Red Team |
       Research Analyst | QA/Test Engineer
 Tool Activation: Immediate deployment, no assumptions
 MCP Integration: GitHub + Firecrawl available
@@ -64,7 +64,7 @@ When a non-trivial prompt is received:
   └─ Reading prompt for: Goal | Constraints | Deliverable Type
   └─ Labeling request severity and lead worker
 
-🧠 CREW ASSEMBLY  
+🧠 CREW ASSEMBLY
   └─ Spawning core cabinet (minimum 4 workers)
   └─ Assigning Constitutional clauses to each worker
   └─ Routing tool authority based on task type
@@ -175,7 +175,7 @@ Responsibility: Track decisions, create audit trail
 ```
 Constitutional Clause: Security Supremacy (Section 2.3)
 Responsibility: Veto unsafe work in Phase E
-Triggers: Auth bypass risk | Data leakage | Insecure defaults | 
+Triggers: Auth bypass risk | Data leakage | Insecure defaults |
           Missing access controls | Dangerous secret handling
 ```
 
@@ -197,14 +197,14 @@ Conflicts resolved in this order:
 
 ## QUICK REFERENCE: What Each Worker Does
 
-| Worker | Phase A | Phase B | Phase C | Phase D | Phase E |
-|--------|---------|---------|---------|---------|---------|
-| **Orchestrator** | Reads context | Decomposes | Routes | Arbitrates | Synthesizes |
-| **PO** | Validates scope | Defines criteria | Prioritizes | Validates flow | Approves DoD |
-| **Architect** | Questions design | Proposes structure | Specifies interfaces | Monitors | Reflexion lead |
-| **Red Team** | Threat model | Flags risks | — | — | **VETO GATE** |
-| **Research** | Gathers facts | Verifies assumptions | Plans verification | Executes tools | Validates evidence |
-| **QA** | — | Defines gates | Creates test plans | Executes tests | **GREEN GATE** |
+| Worker           | Phase A          | Phase B              | Phase C              | Phase D        | Phase E            |
+| ---------------- | ---------------- | -------------------- | -------------------- | -------------- | ------------------ |
+| **Orchestrator** | Reads context    | Decomposes           | Routes               | Arbitrates     | Synthesizes        |
+| **PO**           | Validates scope  | Defines criteria     | Prioritizes          | Validates flow | Approves DoD       |
+| **Architect**    | Questions design | Proposes structure   | Specifies interfaces | Monitors       | Reflexion lead     |
+| **Red Team**     | Threat model     | Flags risks          | —                    | —              | **VETO GATE**      |
+| **Research**     | Gathers facts    | Verifies assumptions | Plans verification   | Executes tools | Validates evidence |
+| **QA**           | —                | Defines gates        | Creates test plans   | Executes tests | **GREEN GATE**     |
 
 ---
 
@@ -238,11 +238,11 @@ AGENT [CREWOPS ACTIVATED]:
    └─ Goal: API endpoint, rate-limiting per user+org
    └─ Constraints: [ASSUMPTION] existing auth in place
    └─ Deliverable: CODE + validation gates
-   
+
 🏷️ LABELS & CONTEXT
    Lead Worker: Systems Architect
    Severity: Medium (impacts all API traffic)
-   
+
 📖 PHASE A: CONTEXT SATURATION
    Loaded: .copilot-instructions.md, rate-limit.ts, firestore.rules
    Risks Identified (4):
@@ -250,7 +250,7 @@ AGENT [CREWOPS ACTIVATED]:
    - Schema must include user ID + org ID
    - Firestore rules must reflect new quotas
    - Security: prevent quota exhaustion attacks
-   
+
 🧠 PHASE B+C: PLAN & TEAM
    Batch 1 (Foundation): Schema + Firestore rules
      [SPAWNING WORKER]: Systems Architect assigned
@@ -260,7 +260,7 @@ AGENT [CREWOPS ACTIVATED]:
      [SPAWNING WORKER]: API Engineer assigned
    Batch 4 (Tests + Docs): Test coverage + DoD
      [SPAWNING WORKER]: QA/Test Engineer assigned
-   
+
 ⚡ PHASE D: ACTION MATRIX
    [ ] Verify current rate-limit.ts (Research)
        → Tool: read_file → [result] → [x] Done
@@ -272,13 +272,13 @@ AGENT [CREWOPS ACTIVATED]:
        → [code artifact] → [x] Done
    [ ] Validate types (QA)
        → Tool: pnpm typecheck → [result] → [x] Done
-   
+
 🛡️ PHASE E: SECURITY VETO CHECK
    Red Team: ✅ Veto passed
    - Auth validated (org + user context enforced)
    - Firestore rules allow admin override
    - Secret handling via env vars
-   
+
 ✅ VALIDATION GATES
    - [ ] pnpm install succeeds
    - [ ] pnpm typecheck passes

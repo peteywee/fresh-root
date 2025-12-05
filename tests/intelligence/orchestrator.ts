@@ -3,16 +3,16 @@
  * Master control system for all intelligent testing features
  */
 
-import { autoGenerateAllTests } from './auto-test-generator';
-import { performanceProfiler } from './performance-profiler';
-import { autoGenerateAPIContracts } from './contract-testing';
-import { runMutationTesting } from './mutation-testing';
-import { selfHealingFramework } from './self-healing-tests';
-import { ChaosTestRunner } from './chaos-engineering';
-import { testAnalytics } from './test-analytics';
-import { cicd } from './ci-cd-integration';
-import { execSync } from 'child_process';
-import * as fs from 'fs';
+import { autoGenerateAllTests } from "./auto-test-generator";
+import { performanceProfiler } from "./performance-profiler";
+import { autoGenerateAPIContracts } from "./contract-testing";
+import { runMutationTesting } from "./mutation-testing";
+import { selfHealingFramework } from "./self-healing-tests";
+import { ChaosTestRunner } from "./chaos-engineering";
+import { testAnalytics } from "./test-analytics";
+import { cicd } from "./ci-cd-integration";
+import { execSync } from "child_process";
+import * as fs from "fs";
 
 interface OrchestratorConfig {
   autoGenerate: boolean;
@@ -29,7 +29,7 @@ interface OrchestratorResult {
   duration: number;
   stages: {
     name: string;
-    status: 'success' | 'failed' | 'skipped';
+    status: "success" | "failed" | "skipped";
     duration: number;
     details?: any;
   }[];
@@ -60,8 +60,8 @@ export class TestIntelligenceOrchestrator {
    */
   async runComplete(): Promise<OrchestratorResult> {
     const startTime = Date.now();
-    console.log('\n🚀 LAUNCHING TEST INTELLIGENCE SYSTEM\n');
-    console.log('═'.repeat(70));
+    console.log("\n🚀 LAUNCHING TEST INTELLIGENCE SYSTEM\n");
+    console.log("═".repeat(70));
 
     const result: OrchestratorResult = {
       timestamp: startTime,
@@ -74,23 +74,23 @@ export class TestIntelligenceOrchestrator {
         mutationScore: 0,
         performanceScore: 0,
         contractViolations: 0,
-        chaosResiliency: 'unknown',
+        chaosResiliency: "unknown",
       },
     };
 
     // Stage 1: Auto-Generate Tests
     if (this.config.autoGenerate) {
-      await this.runStage(result, 'Auto-Test Generation', async () => {
-        console.log('\n📝 Stage 1: Auto-Generating Tests...');
-        const generated = await autoGenerateAllTests('apps/web/app/api');
+      await this.runStage(result, "Auto-Test Generation", async () => {
+        console.log("\n📝 Stage 1: Auto-Generating Tests...");
+        const generated = await autoGenerateAllTests("apps/web/app/api");
         return { testsGenerated: generated.length };
       });
     }
 
     // Stage 2: Contract Testing
     if (this.config.contractTesting) {
-      await this.runStage(result, 'Contract Testing', async () => {
-        console.log('\n📋 Stage 2: Generating API Contracts...');
+      await this.runStage(result, "Contract Testing", async () => {
+        console.log("\n📋 Stage 2: Generating API Contracts...");
         const tester = await autoGenerateAPIContracts();
         const violations = tester.getViolations();
         return { violations: violations.length };
@@ -99,20 +99,21 @@ export class TestIntelligenceOrchestrator {
 
     // Stage 3: Run E2E Tests with Performance Profiling
     if (this.config.performanceProfiling) {
-      await this.runStage(result, 'E2E Tests + Performance', async () => {
-        console.log('\n🎯 Stage 3: Running E2E Tests with Performance Profiling...');
+      await this.runStage(result, "E2E Tests + Performance", async () => {
+        console.log("\n🎯 Stage 3: Running E2E Tests with Performance Profiling...");
 
         try {
-          execSync('pnpm vitest run tests/e2e --reporter=json > test-results.json', {
+          execSync("pnpm vitest run tests/e2e --reporter=json > test-results.json", {
             cwd: process.cwd(),
-            stdio: 'inherit',
+            stdio: "inherit",
           });
 
           const report = performanceProfiler.generateReport();
           performanceProfiler.saveBaselines();
 
           // Calculate performance score
-          const avgLatency = report.benchmarks.reduce((sum, b) => sum + b.p95, 0) / report.benchmarks.length;
+          const avgLatency =
+            report.benchmarks.reduce((sum, b) => sum + b.p95, 0) / report.benchmarks.length;
           const performanceScore = Math.max(0, 100 - avgLatency / 10);
 
           return {
@@ -127,12 +128,12 @@ export class TestIntelligenceOrchestrator {
 
     // Stage 4: Mutation Testing
     if (this.config.mutationTesting) {
-      await this.runStage(result, 'Mutation Testing', async () => {
-        console.log('\n🧬 Stage 4: Running Mutation Tests...');
+      await this.runStage(result, "Mutation Testing", async () => {
+        console.log("\n🧬 Stage 4: Running Mutation Tests...");
 
         const targetFiles = [
-          'apps/web/app/api/schedules/route.ts',
-          'apps/web/app/api/organizations/route.ts',
+          "apps/web/app/api/schedules/route.ts",
+          "apps/web/app/api/organizations/route.ts",
         ];
 
         const mutationReport = await runMutationTesting(targetFiles);
@@ -142,26 +143,26 @@ export class TestIntelligenceOrchestrator {
 
     // Stage 5: Chaos Engineering
     if (this.config.chaosTesting) {
-      await this.runStage(result, 'Chaos Engineering', async () => {
-        console.log('\n🌪️  Stage 5: Running Chaos Engineering Tests...');
+      await this.runStage(result, "Chaos Engineering", async () => {
+        console.log("\n🌪️  Stage 5: Running Chaos Engineering Tests...");
 
         const chaosRunner = new ChaosTestRunner();
         const report = await chaosRunner.runAllChaosTests(async () => {
           // Run sample API requests
-          execSync('pnpm vitest run tests/e2e/auth/session-management.test.ts', {
+          execSync("pnpm vitest run tests/e2e/auth/session-management.test.ts", {
             cwd: process.cwd(),
-            stdio: 'pipe',
+            stdio: "pipe",
           });
         });
 
-        return { chaosReport: 'completed' };
+        return { chaosReport: "completed" };
       });
     }
 
     // Stage 6: Generate Analytics
     if (this.config.analytics) {
-      await this.runStage(result, 'Test Analytics', async () => {
-        console.log('\n📊 Stage 6: Generating Test Analytics...');
+      await this.runStage(result, "Test Analytics", async () => {
+        console.log("\n📊 Stage 6: Generating Test Analytics...");
 
         const analytics = testAnalytics.generateAnalytics();
         testAnalytics.saveAnalytics(analytics);
@@ -176,13 +177,13 @@ export class TestIntelligenceOrchestrator {
 
     // Stage 7: CI/CD Validation
     if (this.config.cicdValidation) {
-      await this.runStage(result, 'CI/CD Validation', async () => {
-        console.log('\n🚀 Stage 7: Running CI/CD Deployment Validation...');
+      await this.runStage(result, "CI/CD Validation", async () => {
+        console.log("\n🚀 Stage 7: Running CI/CD Deployment Validation...");
 
         const deploymentResult = await cicd.validateDeployment({
-          environment: 'staging',
-          strategy: 'canary',
-          validationTests: ['tests/e2e/auth'],
+          environment: "staging",
+          strategy: "canary",
+          validationTests: ["tests/e2e/auth"],
           canaryPercentage: 10,
           rollbackOnFailure: true,
         });
@@ -207,7 +208,7 @@ export class TestIntelligenceOrchestrator {
   private async runStage(
     result: OrchestratorResult,
     name: string,
-    fn: () => Promise<any>
+    fn: () => Promise<any>,
   ): Promise<void> {
     const stageStart = Date.now();
 
@@ -217,7 +218,7 @@ export class TestIntelligenceOrchestrator {
 
       result.stages.push({
         name,
-        status: 'success',
+        status: "success",
         duration,
         details,
       });
@@ -228,7 +229,7 @@ export class TestIntelligenceOrchestrator {
 
       result.stages.push({
         name,
-        status: 'failed',
+        status: "failed",
         duration,
         details: { error: error.message },
       });
@@ -241,17 +242,17 @@ export class TestIntelligenceOrchestrator {
    * Generates final summary report
    */
   private generateFinalReport(result: OrchestratorResult): void {
-    console.log('\n\n');
-    console.log('═'.repeat(70));
-    console.log('🎉 TEST INTELLIGENCE SYSTEM - FINAL REPORT');
-    console.log('═'.repeat(70));
-    console.log('\n');
+    console.log("\n\n");
+    console.log("═".repeat(70));
+    console.log("🎉 TEST INTELLIGENCE SYSTEM - FINAL REPORT");
+    console.log("═".repeat(70));
+    console.log("\n");
 
-    console.log('⏱️  Total Duration:', (result.duration / 1000).toFixed(1), 'seconds\n');
+    console.log("⏱️  Total Duration:", (result.duration / 1000).toFixed(1), "seconds\n");
 
-    console.log('📊 Stages Summary:\n');
+    console.log("📊 Stages Summary:\n");
     result.stages.forEach((stage, i) => {
-      const icon = stage.status === 'success' ? '✅' : stage.status === 'failed' ? '❌' : '⏭️';
+      const icon = stage.status === "success" ? "✅" : stage.status === "failed" ? "❌" : "⏭️";
       console.log(`  ${i + 1}. ${icon} ${stage.name} (${(stage.duration / 1000).toFixed(1)}s)`);
 
       if (stage.details) {
@@ -261,36 +262,36 @@ export class TestIntelligenceOrchestrator {
       }
     });
 
-    console.log('\n');
-    console.log('📁 Generated Files:');
-    console.log('  - tests/intelligence/analytics.json');
-    console.log('  - tests/intelligence/dashboard.html');
-    console.log('  - tests/intelligence/performance-metrics.json');
-    console.log('  - tests/intelligence/mutation-report.json');
-    console.log('  - docs/openapi.json');
-    console.log('  - docs/api-docs.html\n');
+    console.log("\n");
+    console.log("📁 Generated Files:");
+    console.log("  - tests/intelligence/analytics.json");
+    console.log("  - tests/intelligence/dashboard.html");
+    console.log("  - tests/intelligence/performance-metrics.json");
+    console.log("  - tests/intelligence/mutation-report.json");
+    console.log("  - docs/openapi.json");
+    console.log("  - docs/api-docs.html\n");
 
-    console.log('🎯 Quick Links:');
-    console.log('  - Test Analytics Dashboard: tests/intelligence/dashboard.html');
-    console.log('  - API Documentation: docs/api-docs.html');
-    console.log('  - Performance Report: tests/intelligence/performance-report.html\n');
+    console.log("🎯 Quick Links:");
+    console.log("  - Test Analytics Dashboard: tests/intelligence/dashboard.html");
+    console.log("  - API Documentation: docs/api-docs.html");
+    console.log("  - Performance Report: tests/intelligence/performance-report.html\n");
 
-    const successCount = result.stages.filter(s => s.status === 'success').length;
-    const failCount = result.stages.filter(s => s.status === 'failed').length;
+    const successCount = result.stages.filter((s) => s.status === "success").length;
+    const failCount = result.stages.filter((s) => s.status === "failed").length;
 
     if (failCount === 0) {
-      console.log('✨ ALL SYSTEMS OPERATIONAL ✨\n');
+      console.log("✨ ALL SYSTEMS OPERATIONAL ✨\n");
     } else {
       console.log(`⚠️  ${failCount} stage(s) failed - review logs above\n`);
     }
 
-    console.log('═'.repeat(70));
-    console.log('\n');
+    console.log("═".repeat(70));
+    console.log("\n");
 
     // Save results
     fs.writeFileSync(
-      'tests/intelligence/orchestrator-results.json',
-      JSON.stringify(result, null, 2)
+      "tests/intelligence/orchestrator-results.json",
+      JSON.stringify(result, null, 2),
     );
   }
 
@@ -308,7 +309,7 @@ export class TestIntelligenceOrchestrator {
       cicdValidation: false,
     };
 
-    console.log('⚡ Running Quick Validation...\n');
+    console.log("⚡ Running Quick Validation...\n");
     await this.runComplete();
   }
 
@@ -326,7 +327,7 @@ export class TestIntelligenceOrchestrator {
       cicdValidation: true,
     };
 
-    console.log('🔥 Running FULL Intelligence Suite...\n');
+    console.log("🔥 Running FULL Intelligence Suite...\n");
     await this.runComplete();
   }
 }
@@ -337,9 +338,9 @@ export class TestIntelligenceOrchestrator {
 if (require.main === module) {
   const orchestrator = new TestIntelligenceOrchestrator();
 
-  const mode = process.argv[2] || 'full';
+  const mode = process.argv[2] || "full";
 
-  if (mode === 'quick') {
+  if (mode === "quick") {
     orchestrator.runQuick();
   } else {
     orchestrator.runFull();

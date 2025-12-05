@@ -3,12 +3,12 @@
  * Deployment validation, canary testing, and automated rollback
  */
 
-import { execSync } from 'child_process';
-import * as fs from 'fs';
+import { execSync } from "child_process";
+import * as fs from "fs";
 
 interface DeploymentConfig {
-  environment: 'staging' | 'production';
-  strategy: 'blue-green' | 'canary' | 'rolling';
+  environment: "staging" | "production";
+  strategy: "blue-green" | "canary" | "rolling";
   validationTests: string[];
   canaryPercentage?: number;
   rollbackOnFailure: boolean;
@@ -32,7 +32,7 @@ interface CanaryAnalysis {
   latencyP95: number;
   throughput: number;
   healthy: boolean;
-  recommendation: 'promote' | 'rollback' | 'hold';
+  recommendation: "promote" | "rollback" | "hold";
 }
 
 export class CICDIntegration {
@@ -60,7 +60,7 @@ export class CICDIntegration {
 
     try {
       // Run pre-deployment validation tests
-      console.log('📋 Running validation tests...');
+      console.log("📋 Running validation tests...");
       const testResult = await this.runValidationTests(config.validationTests);
 
       result.testsRun = testResult.total;
@@ -69,56 +69,55 @@ export class CICDIntegration {
 
       if (testResult.failed > 0) {
         result.errors.push(`${testResult.failed} validation tests failed`);
-        console.log('❌ Validation tests failed - deployment aborted');
+        console.log("❌ Validation tests failed - deployment aborted");
         return result;
       }
 
-      console.log('✅ All validation tests passed');
+      console.log("✅ All validation tests passed");
 
       // Execute deployment strategy
       const deployed = await this.executeDeploy(config);
       result.deployed = deployed;
 
       if (!deployed) {
-        result.errors.push('Deployment execution failed');
+        result.errors.push("Deployment execution failed");
         return result;
       }
 
       // Post-deployment validation
-      if (config.strategy === 'canary') {
-        console.log('🔍 Running canary analysis...');
+      if (config.strategy === "canary") {
+        console.log("🔍 Running canary analysis...");
         const canaryResult = await this.analyzeCanary(config.canaryPercentage || 10);
 
-        if (canaryResult.recommendation === 'rollback') {
-          console.log('⚠️  Canary analysis failed - initiating rollback');
+        if (canaryResult.recommendation === "rollback") {
+          console.log("⚠️  Canary analysis failed - initiating rollback");
           result.rolledBack = await this.rollback(config.environment);
-          result.errors.push('Canary analysis indicated problems');
+          result.errors.push("Canary analysis indicated problems");
           return result;
-        } else if (canaryResult.recommendation === 'promote') {
-          console.log('✅ Canary healthy - promoting to 100%');
+        } else if (canaryResult.recommendation === "promote") {
+          console.log("✅ Canary healthy - promoting to 100%");
           await this.promoteCanary();
         }
       }
 
       // Run smoke tests
-      console.log('🔥 Running smoke tests...');
+      console.log("🔥 Running smoke tests...");
       const smokeResult = await this.runSmokeTests();
 
       if (!smokeResult.passed) {
         if (config.rollbackOnFailure) {
-          console.log('⚠️  Smoke tests failed - initiating rollback');
+          console.log("⚠️  Smoke tests failed - initiating rollback");
           result.rolledBack = await this.rollback(config.environment);
         }
-        result.errors.push('Smoke tests failed');
+        result.errors.push("Smoke tests failed");
         return result;
       }
 
-      console.log('✅ Deployment successful!');
+      console.log("✅ Deployment successful!");
       result.success = true;
-
     } catch (error: any) {
       result.errors.push(error.message);
-      console.error('❌ Deployment error:', error);
+      console.error("❌ Deployment error:", error);
 
       if (config.rollbackOnFailure && result.deployed) {
         result.rolledBack = await this.rollback(config.environment);
@@ -134,7 +133,9 @@ export class CICDIntegration {
   /**
    * Runs validation tests
    */
-  private async runValidationTests(testPaths: string[]): Promise<{ total: number; passed: number; failed: number }> {
+  private async runValidationTests(
+    testPaths: string[],
+  ): Promise<{ total: number; passed: number; failed: number }> {
     let total = 0;
     let passed = 0;
     let failed = 0;
@@ -143,7 +144,7 @@ export class CICDIntegration {
       try {
         console.log(`  Running ${testPath}...`);
         execSync(`pnpm vitest run ${testPath}`, {
-          stdio: 'pipe',
+          stdio: "pipe",
           cwd: process.cwd(),
         });
 
@@ -166,13 +167,13 @@ export class CICDIntegration {
   private async executeDeploy(config: DeploymentConfig): Promise<boolean> {
     try {
       switch (config.strategy) {
-        case 'blue-green':
+        case "blue-green":
           return await this.blueGreenDeploy(config.environment);
 
-        case 'canary':
+        case "canary":
           return await this.canaryDeploy(config.environment, config.canaryPercentage || 10);
 
-        case 'rolling':
+        case "rolling":
           return await this.rollingDeploy(config.environment);
 
         default:
@@ -188,21 +189,21 @@ export class CICDIntegration {
    * Blue-Green deployment
    */
   private async blueGreenDeploy(environment: string): Promise<boolean> {
-    console.log('🔵🟢 Executing Blue-Green deployment...');
+    console.log("🔵🟢 Executing Blue-Green deployment...");
 
     // Deploy to green environment
-    console.log('  1. Deploying to green environment...');
+    console.log("  1. Deploying to green environment...");
     await this.simulateDeployment(1000);
 
     // Health check green
-    console.log('  2. Health checking green environment...');
+    console.log("  2. Health checking green environment...");
     await this.simulateDeployment(500);
 
     // Switch traffic
-    console.log('  3. Switching traffic from blue to green...');
+    console.log("  3. Switching traffic from blue to green...");
     await this.simulateDeployment(200);
 
-    console.log('  ✅ Blue-Green deployment complete');
+    console.log("  ✅ Blue-Green deployment complete");
     return true;
   }
 
@@ -217,10 +218,10 @@ export class CICDIntegration {
     await this.simulateDeployment(1000);
 
     // Monitor canary
-    console.log('  2. Monitoring canary metrics...');
+    console.log("  2. Monitoring canary metrics...");
     await this.simulateDeployment(2000);
 
-    console.log('  ✅ Canary deployment complete');
+    console.log("  ✅ Canary deployment complete");
     return true;
   }
 
@@ -228,7 +229,7 @@ export class CICDIntegration {
    * Rolling deployment
    */
   private async rollingDeploy(environment: string): Promise<boolean> {
-    console.log('🔄 Executing Rolling deployment...');
+    console.log("🔄 Executing Rolling deployment...");
 
     const instances = 5;
     for (let i = 1; i <= instances; i++) {
@@ -239,7 +240,7 @@ export class CICDIntegration {
       await this.simulateDeployment(200);
     }
 
-    console.log('  ✅ Rolling deployment complete');
+    console.log("  ✅ Rolling deployment complete");
     return true;
   }
 
@@ -262,7 +263,7 @@ export class CICDIntegration {
       latencyP95,
       throughput,
       healthy,
-      recommendation: healthy ? 'promote' : 'rollback',
+      recommendation: healthy ? "promote" : "rollback",
     };
   }
 
@@ -270,7 +271,7 @@ export class CICDIntegration {
    * Promotes canary to 100%
    */
   private async promoteCanary(): Promise<void> {
-    console.log('📈 Promoting canary to 100% traffic...');
+    console.log("📈 Promoting canary to 100% traffic...");
     await this.simulateDeployment(500);
   }
 
@@ -279,8 +280,8 @@ export class CICDIntegration {
    */
   private async runSmokeTests(): Promise<{ passed: boolean }> {
     try {
-      execSync('pnpm vitest run tests/e2e/health-check.test.ts || true', {
-        stdio: 'pipe',
+      execSync("pnpm vitest run tests/e2e/health-check.test.ts || true", {
+        stdio: "pipe",
         cwd: process.cwd(),
       });
       return { passed: true };
@@ -297,21 +298,21 @@ export class CICDIntegration {
       console.log(`⏪ Rolling back ${environment} deployment...`);
 
       // Get previous version
-      console.log('  1. Identifying previous stable version...');
+      console.log("  1. Identifying previous stable version...");
       await this.simulateDeployment(200);
 
       // Deploy previous version
-      console.log('  2. Deploying previous version...');
+      console.log("  2. Deploying previous version...");
       await this.simulateDeployment(1000);
 
       // Verify rollback
-      console.log('  3. Verifying rollback...');
+      console.log("  3. Verifying rollback...");
       await this.simulateDeployment(500);
 
-      console.log('  ✅ Rollback complete');
+      console.log("  ✅ Rollback complete");
       return true;
     } catch (error: any) {
-      console.error('  ❌ Rollback failed:', error.message);
+      console.error("  ❌ Rollback failed:", error.message);
       return false;
     }
   }
@@ -320,21 +321,21 @@ export class CICDIntegration {
    * Simulates deployment delay
    */
   private async simulateDeployment(ms: number): Promise<void> {
-    return new Promise(resolve => setTimeout(resolve, ms));
+    return new Promise((resolve) => setTimeout(resolve, ms));
   }
 
   /**
    * Generates deployment report
    */
   generateDeploymentReport(): string {
-    let report = '\n';
-    report += '🚀 CI/CD DEPLOYMENT REPORT\n';
-    report += '═'.repeat(70) + '\n\n';
+    let report = "\n";
+    report += "🚀 CI/CD DEPLOYMENT REPORT\n";
+    report += "═".repeat(70) + "\n\n";
 
     const totalDeployments = this.deploymentHistory.length;
-    const successful = this.deploymentHistory.filter(d => d.success).length;
-    const failed = this.deploymentHistory.filter(d => !d.success).length;
-    const rolledBack = this.deploymentHistory.filter(d => d.rolledBack).length;
+    const successful = this.deploymentHistory.filter((d) => d.success).length;
+    const failed = this.deploymentHistory.filter((d) => !d.success).length;
+    const rolledBack = this.deploymentHistory.filter((d) => d.rolledBack).length;
 
     report += `Summary:\n`;
     report += `  Total Deployments: ${totalDeployments}\n`;
@@ -344,11 +345,11 @@ export class CICDIntegration {
 
     if (this.deploymentHistory.length > 0) {
       report += `Recent Deployments:\n`;
-      report += '─'.repeat(70) + '\n';
+      report += "─".repeat(70) + "\n";
 
       this.deploymentHistory.slice(-5).forEach((deployment, i) => {
         report += `\n${i + 1}. ${deployment.environment} (${deployment.strategy})\n`;
-        report += `   Status: ${deployment.success ? '✅ SUCCESS' : '❌ FAILED'}\n`;
+        report += `   Status: ${deployment.success ? "✅ SUCCESS" : "❌ FAILED"}\n`;
         report += `   Tests: ${deployment.testsPassed}/${deployment.testsRun} passed\n`;
         report += `   Duration: ${(deployment.duration / 1000).toFixed(1)}s\n`;
 
@@ -358,7 +359,7 @@ export class CICDIntegration {
 
         if (deployment.errors.length > 0) {
           report += `   Errors:\n`;
-          deployment.errors.forEach(error => {
+          deployment.errors.forEach((error) => {
             report += `     - ${error}\n`;
           });
         }
@@ -371,8 +372,8 @@ export class CICDIntegration {
   /**
    * Saves deployment metrics
    */
-  saveMetrics(outputPath: string = 'tests/intelligence/deployment-metrics.json'): void {
-    fs.mkdirSync(require('path').dirname(outputPath), { recursive: true });
+  saveMetrics(outputPath: string = "tests/intelligence/deployment-metrics.json"): void {
+    fs.mkdirSync(require("path").dirname(outputPath), { recursive: true });
     fs.writeFileSync(outputPath, JSON.stringify(this.deploymentHistory, null, 2));
   }
 }

@@ -50,7 +50,7 @@ export const POST = createOrgEndpoint({
     try {
       const body = await request.json();
       const validated = CreateZoneSchema.parse(body);
-      
+
       const zone = {
         id: `zone-${Date.now()}`,
         orgId: context.org?.orgId,

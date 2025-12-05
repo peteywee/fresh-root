@@ -1,5 +1,5 @@
 ---
-applyTo: ['*']
+applyTo: ["*"]
 description: "Comprehensive best practices for AI prompt engineering, safety frameworks, bias mitigation, and responsible AI usage for Copilot and LLMs."
 ---
 
@@ -12,17 +12,18 @@ As GitHub Copilot, you are an expert in designing and optimizing CI/CD pipelines
 ## Core Concepts and Structure
 
 ### **1. Workflow Structure (`.github/workflows/*.yml`)**
+
 - **Principle:** Workflows should be clear, modular, and easy to understand, promoting reusability and maintainability.
 - **Deeper Dive:**
-    - **Naming Conventions:** Use consistent, descriptive names for workflow files (e.g., `build-and-test.yml`, `deploy-prod.yml`).
-    - **Triggers (`on`):** Understand the full range of events: `push`, `pull_request`, `workflow_dispatch` (manual), `schedule` (cron jobs), `repository_dispatch` (external events), `workflow_call` (reusable workflows).
-    - **Concurrency:** Use `concurrency` to prevent simultaneous runs for specific branches or groups, avoiding race conditions or wasted resources.
-    - **Permissions:** Define `permissions` at the workflow level for a secure default, overriding at the job level if needed.
+  - **Naming Conventions:** Use consistent, descriptive names for workflow files (e.g., `build-and-test.yml`, `deploy-prod.yml`).
+  - **Triggers (`on`):** Understand the full range of events: `push`, `pull_request`, `workflow_dispatch` (manual), `schedule` (cron jobs), `repository_dispatch` (external events), `workflow_call` (reusable workflows).
+  - **Concurrency:** Use `concurrency` to prevent simultaneous runs for specific branches or groups, avoiding race conditions or wasted resources.
+  - **Permissions:** Define `permissions` at the workflow level for a secure default, overriding at the job level if needed.
 - **Guidance for Copilot:**
-    - Always start with a descriptive `name` and appropriate `on` trigger. Suggest granular triggers for specific use cases (e.g., `on: push: branches: [main]` vs. `on: pull_request`).
-    - Recommend using `workflow_dispatch` for manual triggers, allowing input parameters for flexibility and controlled deployments.
-    - Advise on setting `concurrency` for critical workflows or shared resources to prevent resource contention.
-    - Guide on setting explicit `permissions` for `GITHUB_TOKEN` to adhere to the principle of least privilege.
+  - Always start with a descriptive `name` and appropriate `on` trigger. Suggest granular triggers for specific use cases (e.g., `on: push: branches: [main]` vs. `on: pull_request`).
+  - Recommend using `workflow_dispatch` for manual triggers, allowing input parameters for flexibility and controlled deployments.
+  - Advise on setting `concurrency` for critical workflows or shared resources to prevent resource contention.
+  - Guide on setting explicit `permissions` for `GITHUB_TOKEN` to adhere to the principle of least privilege.
 - **Pro Tip:** For complex repositories, consider using reusable workflows (`workflow_call`) to abstract common CI/CD patterns and reduce duplication across multiple projects.
 
 ... (file truncated for brevity in this list view)

@@ -3,10 +3,10 @@
  * Validates test quality by introducing bugs and ensuring tests catch them
  */
 
-import * as ts from 'typescript';
-import * as fs from 'fs';
-import * as path from 'path';
-import { execSync } from 'child_process';
+import * as ts from "typescript";
+import * as fs from "fs";
+import * as path from "path";
+import { execSync } from "child_process";
 
 interface Mutant {
   id: string;
@@ -15,17 +15,17 @@ interface Mutant {
   original: string;
   mutated: string;
   operator: MutationOperator;
-  status: 'pending' | 'killed' | 'survived' | 'timeout' | 'error';
+  status: "pending" | "killed" | "survived" | "timeout" | "error";
 }
 
 type MutationOperator =
-  | 'ConditionalBoundary' // < to <=, > to >=
-  | 'Negation' // ! addition/removal
-  | 'Arithmetic' // +, -, *, / swaps
-  | 'Logical' // &&, ||, swaps
-  | 'Return' // return value changes
-  | 'Assignment' // = mutations
-  | 'Comparison'; // ==, !=, <, >, <=, >= swaps
+  | "ConditionalBoundary" // < to <=, > to >=
+  | "Negation" // ! addition/removal
+  | "Arithmetic" // +, -, *, / swaps
+  | "Logical" // &&, ||, swaps
+  | "Return" // return value changes
+  | "Assignment" // = mutations
+  | "Comparison"; // ==, !=, <, >, <=, >= swaps
 
 interface MutationReport {
   totalMutants: number;
@@ -45,20 +45,15 @@ interface MutationReport {
 export class MutationTester {
   private mutants: Mutant[] = [];
   private currentMutantId = 0;
-  private testCommand: string = 'pnpm vitest run';
+  private testCommand: string = "pnpm vitest run";
   private timeout: number = 60000; // 60 seconds per test run
 
   /**
    * Generates mutants for a source file
    */
   generateMutants(filePath: string): Mutant[] {
-    const sourceCode = fs.readFileSync(filePath, 'utf-8');
-    const sourceFile = ts.createSourceFile(
-      filePath,
-      sourceCode,
-      ts.ScriptTarget.Latest,
-      true
-    );
+    const sourceCode = fs.readFileSync(filePath, "utf-8");
+    const sourceFile = ts.createSourceFile(filePath, sourceCode, ts.ScriptTarget.Latest, true);
 
     const mutants: Mutant[] = [];
 
@@ -68,86 +63,70 @@ export class MutationTester {
         const operator = node.operatorToken.kind;
 
         if (operator === ts.SyntaxKind.LessThanToken) {
-          mutants.push(this.createMutant(
-            filePath,
-            sourceFile,
-            node.operatorToken,
-            '<',
-            '<=',
-            'ConditionalBoundary'
-          ));
+          mutants.push(
+            this.createMutant(
+              filePath,
+              sourceFile,
+              node.operatorToken,
+              "<",
+              "<=",
+              "ConditionalBoundary",
+            ),
+          );
         } else if (operator === ts.SyntaxKind.GreaterThanToken) {
-          mutants.push(this.createMutant(
-            filePath,
-            sourceFile,
-            node.operatorToken,
-            '>',
-            '>=',
-            'ConditionalBoundary'
-          ));
+          mutants.push(
+            this.createMutant(
+              filePath,
+              sourceFile,
+              node.operatorToken,
+              ">",
+              ">=",
+              "ConditionalBoundary",
+            ),
+          );
         }
 
         // Arithmetic mutations: + to -, * to /
         if (operator === ts.SyntaxKind.PlusToken) {
-          mutants.push(this.createMutant(
-            filePath,
-            sourceFile,
-            node.operatorToken,
-            '+',
-            '-',
-            'Arithmetic'
-          ));
+          mutants.push(
+            this.createMutant(filePath, sourceFile, node.operatorToken, "+", "-", "Arithmetic"),
+          );
         } else if (operator === ts.SyntaxKind.MinusToken) {
-          mutants.push(this.createMutant(
-            filePath,
-            sourceFile,
-            node.operatorToken,
-            '-',
-            '+',
-            'Arithmetic'
-          ));
+          mutants.push(
+            this.createMutant(filePath, sourceFile, node.operatorToken, "-", "+", "Arithmetic"),
+          );
         } else if (operator === ts.SyntaxKind.AsteriskToken) {
-          mutants.push(this.createMutant(
-            filePath,
-            sourceFile,
-            node.operatorToken,
-            '*',
-            '/',
-            'Arithmetic'
-          ));
+          mutants.push(
+            this.createMutant(filePath, sourceFile, node.operatorToken, "*", "/", "Arithmetic"),
+          );
         }
 
         // Logical mutations: && to ||
         if (operator === ts.SyntaxKind.AmpersandAmpersandToken) {
-          mutants.push(this.createMutant(
-            filePath,
-            sourceFile,
-            node.operatorToken,
-            '&&',
-            '||',
-            'Logical'
-          ));
+          mutants.push(
+            this.createMutant(filePath, sourceFile, node.operatorToken, "&&", "||", "Logical"),
+          );
         } else if (operator === ts.SyntaxKind.BarBarToken) {
-          mutants.push(this.createMutant(
-            filePath,
-            sourceFile,
-            node.operatorToken,
-            '||',
-            '&&',
-            'Logical'
-          ));
+          mutants.push(
+            this.createMutant(filePath, sourceFile, node.operatorToken, "||", "&&", "Logical"),
+          );
         }
 
         // Comparison mutations: == to !=
-        if (operator === ts.SyntaxKind.EqualsEqualsToken || operator === ts.SyntaxKind.EqualsEqualsEqualsToken) {
-          mutants.push(this.createMutant(
-            filePath,
-            sourceFile,
-            node.operatorToken,
-            node.operatorToken.getText(sourceFile),
-            '!==',
-            'Comparison'
-          ));
+        if (
+          operator === ts.SyntaxKind.EqualsEqualsToken ||
+          operator === ts.SyntaxKind.EqualsEqualsEqualsToken
+        ) {
+          mutants.push(
+            this.createMutant(
+              filePath,
+              sourceFile,
+              node.operatorToken,
+              node.operatorToken.getText(sourceFile),
+              "!==",
+              "Comparison",
+            ),
+          );
         }
       }
 
@@ -158,11 +137,12 @@ export class MutationTester {
           mutants.push({
             id: `mutant-${this.currentMutantId++}`,
             filePath,
-            lineNumber: sourceFile.getLineAndCharacterOfPosition(node.getStart(sourceFile)).line + 1,
+            lineNumber:
+              sourceFile.getLineAndCharacterOfPosition(node.getStart(sourceFile)).line + 1,
             original: node.getText(sourceFile),
             mutated: node.operand.getText(sourceFile),
-            operator: 'Negation',
-            status: 'pending',
+            operator: "Negation",
+            status: "pending",
           });
         }
       }
@@ -173,36 +153,28 @@ export class MutationTester {
 
         // Return true to false
         if (expression.kind === ts.SyntaxKind.TrueKeyword) {
-          mutants.push(this.createMutant(
-            filePath,
-            sourceFile,
-            expression,
-            'true',
-            'false',
-            'Return'
-          ));
+          mutants.push(
+            this.createMutant(filePath, sourceFile, expression, "true", "false", "Return"),
+          );
         } else if (expression.kind === ts.SyntaxKind.FalseKeyword) {
-          mutants.push(this.createMutant(
-            filePath,
-            sourceFile,
-            expression,
-            'false',
-            'true',
-            'Return'
-          ));
+          mutants.push(
+            this.createMutant(filePath, sourceFile, expression, "false", "true", "Return"),
+          );
         }
 
         // Numeric return values
         if (ts.isNumericLiteral(expression)) {
           const value = parseInt(expression.text);
-          mutants.push(this.createMutant(
-            filePath,
-            sourceFile,
-            expression,
-            expression.text,
-            `${value + 1}`,
-            'Return'
-          ));
+          mutants.push(
+            this.createMutant(
+              filePath,
+              sourceFile,
+              expression,
+              expression.text,
+              `${value + 1}`,
+              "Return",
+            ),
+          );
         }
       }
 
@@ -224,7 +196,7 @@ export class MutationTester {
     node: ts.Node,
     original: string,
     mutated: string,
-    operator: MutationOperator
+    operator: MutationOperator,
   ): Mutant {
     return {
       id: `mutant-${this.currentMutantId++}`,
@@ -233,7 +205,7 @@ export class MutationTester {
       original,
       mutated,
       operator,
-      status: 'pending',
+      status: "pending",
     };
   }
 
@@ -241,8 +213,8 @@ export class MutationTester {
    * Applies a mutant to the source file
    */
   private applyMutant(mutant: Mutant): string {
-    const sourceCode = fs.readFileSync(mutant.filePath, 'utf-8');
-    const lines = sourceCode.split('\n');
+    const sourceCode = fs.readFileSync(mutant.filePath, "utf-8");
+    const lines = sourceCode.split("\n");
 
     // Replace first occurrence on the specific line
     const lineIndex = mutant.lineNumber - 1;
@@ -250,7 +222,7 @@ export class MutationTester {
       lines[lineIndex] = lines[lineIndex].replace(mutant.original, mutant.mutated);
     }
 
-    return lines.join('\n');
+    return lines.join("\n");
   }
 
   /**
@@ -263,8 +235,8 @@ export class MutationTester {
   /**
    * Runs tests against a mutant
    */
-  private async testMutant(mutant: Mutant): Promise<'killed' | 'survived' | 'timeout' | 'error'> {
-    const originalCode = fs.readFileSync(mutant.filePath, 'utf-8');
+  private async testMutant(mutant: Mutant): Promise<"killed" | "survived" | "timeout" | "error"> {
+    const originalCode = fs.readFileSync(mutant.filePath, "utf-8");
     const mutatedCode = this.applyMutant(mutant);
 
     try {
@@ -276,21 +248,21 @@ export class MutationTester {
         execSync(this.testCommand, {
           cwd: process.cwd(),
           timeout: this.timeout,
-          stdio: 'pipe',
+          stdio: "pipe",
         });
 
         // Tests passed - mutant survived (bad!)
-        return 'survived';
+        return "survived";
       } catch (error: any) {
         if (error.killed) {
-          return 'timeout';
+          return "timeout";
         }
         // Tests failed - mutant killed (good!)
-        return 'killed';
+        return "killed";
       }
     } catch (error) {
       console.error(`Error testing mutant ${mutant.id}:`, error);
-      return 'error';
+      return "error";
     } finally {
       // Always revert the mutant
       this.revertMutant(mutant, originalCode);
@@ -316,27 +288,27 @@ export class MutationTester {
       mutant.status = result;
 
       switch (result) {
-        case 'killed':
+        case "killed":
           killed++;
-          console.log('✅ KILLED');
+          console.log("✅ KILLED");
           break;
-        case 'survived':
+        case "survived":
           survived++;
           survivedMutants.push(mutant);
-          console.log('❌ SURVIVED');
+          console.log("❌ SURVIVED");
           break;
-        case 'timeout':
+        case "timeout":
           timeout++;
-          console.log('⏱️  TIMEOUT');
+          console.log("⏱️  TIMEOUT");
           break;
-        case 'error':
+        case "error":
           errors++;
-          console.log('⚠️  ERROR');
+          console.log("⚠️  ERROR");
           break;
       }
     }
 
-    const mutationScore = killed / (this.mutants.length - errors - timeout) * 100;
+    const mutationScore = (killed / (this.mutants.length - errors - timeout)) * 100;
 
     return {
       totalMutants: this.mutants.length,
@@ -358,13 +330,13 @@ export class MutationTester {
    * Generates a detailed mutation testing report
    */
   generateReport(report: MutationReport): string {
-    let output = '\n';
-    output += '═'.repeat(70) + '\n';
-    output += '🧬  MUTATION TESTING REPORT\n';
-    output += '═'.repeat(70) + '\n\n';
+    let output = "\n";
+    output += "═".repeat(70) + "\n";
+    output += "🧬  MUTATION TESTING REPORT\n";
+    output += "═".repeat(70) + "\n\n";
 
     // Summary
-    output += '📊 Summary:\n';
+    output += "📊 Summary:\n";
     output += `   Total Mutants: ${report.totalMutants}\n`;
     output += `   Killed: ${report.killed} ✅\n`;
     output += `   Survived: ${report.survived} ❌\n`;
@@ -374,21 +346,21 @@ export class MutationTester {
 
     // Score interpretation
     if (report.mutationScore >= 80) {
-      output += '🏆 Excellent! Your tests are high quality.\n\n';
+      output += "🏆 Excellent! Your tests are high quality.\n\n";
     } else if (report.mutationScore >= 60) {
-      output += '👍 Good! But there\'s room for improvement.\n\n';
+      output += "👍 Good! But there's room for improvement.\n\n";
     } else if (report.mutationScore >= 40) {
-      output += '⚠️  Fair. Consider adding more test cases.\n\n';
+      output += "⚠️  Fair. Consider adding more test cases.\n\n";
     } else {
-      output += '❌ Poor. Your tests need significant improvement.\n\n';
+      output += "❌ Poor. Your tests need significant improvement.\n\n";
     }
 
     // Survived mutants (weaknesses in tests)
     if (report.survivedMutants.length > 0) {
-      output += '❌ Survived Mutants (Test Weaknesses):\n';
-      output += '─'.repeat(70) + '\n';
+      output += "❌ Survived Mutants (Test Weaknesses):\n";
+      output += "─".repeat(70) + "\n";
 
-      report.survivedMutants.forEach(mutant => {
+      report.survivedMutants.forEach((mutant) => {
         output += `\n${mutant.id} - ${mutant.operator}\n`;
         output += `   File: ${mutant.filePath}:${mutant.lineNumber}\n`;
         output += `   Original: ${mutant.original}\n`;
@@ -396,48 +368,48 @@ export class MutationTester {
         output += `   💡 Add a test case to catch this mutation!\n`;
       });
 
-      output += '\n';
+      output += "\n";
     }
 
     // Recommendations
-    output += '\n💡 Recommendations:\n';
-    output += '─'.repeat(70) + '\n';
+    output += "\n💡 Recommendations:\n";
+    output += "─".repeat(70) + "\n";
 
     const operatorCounts = new Map<MutationOperator, { killed: number; survived: number }>();
 
-    this.mutants.forEach(mutant => {
+    this.mutants.forEach((mutant) => {
       if (!operatorCounts.has(mutant.operator)) {
         operatorCounts.set(mutant.operator, { killed: 0, survived: 0 });
       }
 
       const counts = operatorCounts.get(mutant.operator)!;
-      if (mutant.status === 'killed') {
+      if (mutant.status === "killed") {
         counts.killed++;
-      } else if (mutant.status === 'survived') {
+      } else if (mutant.status === "survived") {
         counts.survived++;
       }
     });
 
     operatorCounts.forEach((counts, operator) => {
       const total = counts.killed + counts.survived;
-      const score = total > 0 ? (counts.killed / total * 100).toFixed(1) : '0';
+      const score = total > 0 ? ((counts.killed / total) * 100).toFixed(1) : "0";
 
       if (counts.survived > 0) {
         output += `\n${operator}:\n`;
         output += `   Score: ${score}% (${counts.killed}/${total} killed)\n`;
 
-        if (operator === 'ConditionalBoundary') {
-          output += '   💡 Add boundary value tests (e.g., test with 0, 1, -1, max values)\n';
-        } else if (operator === 'Arithmetic') {
-          output += '   💡 Verify arithmetic operations with different input values\n';
-        } else if (operator === 'Logical') {
-          output += '   💡 Test all combinations of boolean conditions\n';
-        } else if (operator === 'Return') {
-          output += '   💡 Assert exact return values, not just truthiness\n';
-        } else if (operator === 'Negation') {
-          output += '   💡 Test both positive and negative cases\n';
-        } else if (operator === 'Comparison') {
-          output += '   💡 Test equality and inequality explicitly\n';
+        if (operator === "ConditionalBoundary") {
+          output += "   💡 Add boundary value tests (e.g., test with 0, 1, -1, max values)\n";
+        } else if (operator === "Arithmetic") {
+          output += "   💡 Verify arithmetic operations with different input values\n";
+        } else if (operator === "Logical") {
+          output += "   💡 Test all combinations of boolean conditions\n";
+        } else if (operator === "Return") {
+          output += "   💡 Assert exact return values, not just truthiness\n";
+        } else if (operator === "Negation") {
+          output += "   💡 Test both positive and negative cases\n";
+        } else if (operator === "Comparison") {
+          output += "   💡 Test equality and inequality explicitly\n";
         }
       }
     });
@@ -448,7 +420,10 @@ export class MutationTester {
   /**
    * Saves mutation report to file
    */
-  saveMutationReport(report: MutationReport, outputPath: string = 'tests/intelligence/mutation-report.json'): void {
+  saveMutationReport(
+    report: MutationReport,
+    outputPath: string = "tests/intelligence/mutation-report.json",
+  ): void {
     fs.mkdirSync(path.dirname(outputPath), { recursive: true });
     fs.writeFileSync(outputPath, JSON.stringify(report, null, 2));
     console.log(`\n✅ Mutation report saved to ${outputPath}`);
@@ -462,7 +437,7 @@ export async function runMutationTesting(targetFiles: string[]): Promise<Mutatio
   const tester = new MutationTester();
 
   // Generate mutants for all target files
-  targetFiles.forEach(file => {
+  targetFiles.forEach((file) => {
     console.log(`Generating mutants for ${file}...`);
     const mutants = tester.generateMutants(file);
     console.log(`  Generated ${mutants.length} mutants`);

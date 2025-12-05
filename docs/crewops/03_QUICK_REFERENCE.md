@@ -1,27 +1,25 @@
 # CREWOPS Quick Reference Card
-
-**Status**: ✅ ACTIVE (Auto-Engaging)  
-**Session**: Automatic  
+**Status**: ✅ ACTIVE (Auto-Engaging)\
+**Session**: Automatic\
 **Binding**: Immutable
 
 ---
 
 ## 🚀 Session Bootstrap (Automatic)
-
 When you start, you'll see:
 
 ```
 ✅ CREWOPS Protocol Active
 
 Binding Framework: CrewOps Manual loaded
-Constitution: Anti-vaporware | Truth & Evidence | Security Supremacy | 
+Constitution: Anti-vaporware | Truth & Evidence | Security Supremacy |
               Deterministic Delivery | Full-File Fidelity
-Crew: Orchestrator | Product Owner | Systems Architect | Security Red Team | 
+Crew: Orchestrator | Product Owner | Systems Architect | Security Red Team |
       Research Analyst | QA/Test Engineer
 Tool Activation: Immediate deployment, no assumptions
 MCP Integration: GitHub + Firecrawl available
 
-Phase A→E Execution: Context Saturation → Plan & Team → Action Matrix → 
+Phase A→E Execution: Context Saturation → Plan & Team → Action Matrix →
                      Security Veto → Validation
 ```
 
@@ -30,11 +28,9 @@ Phase A→E Execution: Context Saturation → Plan & Team → Action Matrix →
 ---
 
 ## 📌 For Your First Prompt
-
 Include one of these (optional):
 
 ### Handshake (Explicit Acknowledgment)
-
 ```
 Goal: [what you want]
 Constraints: [what limits you]
@@ -44,7 +40,6 @@ CREWOPS_OK
 ```
 
 ### Or Just Ask (Protocol Auto-Engages)
-
 ```
 [Your request here - any non-trivial task]
 ```
@@ -54,27 +49,22 @@ The protocol detects "non-trivial" automatically and engages Phases A→E.
 ---
 
 ## 🎯 What Happens Automatically
-
 ### Phase A: Context Saturation
-
 - Agent reads your goal, files, constraints
 - Verifies assumptions with tools
 - Displays: `Context Loaded: ...` + `Risks Identified: X`
 
 ### Phase B+C: Planning + Team Assembly
-
 - Breaks task into dependency batches
 - Spawns workers with role assignments
 - Displays: Batch structure + Constitutional assignments
 
 ### Phase D: Action Matrix
-
 - Executes line-by-line
 - Runs tools in parallel
 - Displays: `[ ] Action 1 → [tool] → [result] → [x] Done`
 
 ### Phase E: Security + Validation
-
 - Red Team approves or vetos (Security Supremacy)
 - Competing constraints resolved
 - Displays: Green gates + what changed
@@ -82,7 +72,6 @@ The protocol detects "non-trivial" automatically and engages Phases A→E.
 ---
 
 ## 🔧 Keyword Modifiers (Optional)
-
 Add any of these to your prompt to customize behavior:
 
 ```
@@ -106,22 +95,20 @@ CREWOPS_AUDIT
 ---
 
 ## 🎭 Crew Roles (What Each Does)
-
-| Role | When | What They Do |
-|------|------|------------|
-| **Orchestrator** | Always | Routes, arbitrates, synthesizes |
-| **Product Owner** | Phase A, B | Defines success criteria |
-| **Systems Architect** | Phase B, D | Design decisions, interfaces |
-| **Security Red Team** | Phase E | Veto unsafe work |
-| **Research Analyst** | Phase A, D | Verify facts, run tools |
-| **QA/Test Engineer** | Phase D, E | Validate gates, test |
+| Role                  | When       | What They Do                    |
+| --------------------- | ---------- | ------------------------------- |
+| **Orchestrator**      | Always     | Routes, arbitrates, synthesizes |
+| **Product Owner**     | Phase A, B | Defines success criteria        |
+| **Systems Architect** | Phase B, D | Design decisions, interfaces    |
+| **Security Red Team** | Phase E    | Veto unsafe work                |
+| **Research Analyst**  | Phase A, D | Verify facts, run tools         |
+| **QA/Test Engineer**  | Phase D, E | Validate gates, test            |
 
 You don't manage them. They self-coordinate per the Constitution.
 
 ---
 
 ## 🛠️ Tools (Automatic Deployment)
-
 **Research Analyst uses**:
 
 - `read_file`, `grep_search`, `semantic_search` (code inspection)
@@ -143,7 +130,6 @@ You don't manage them. They self-coordinate per the Constitution.
 ---
 
 ## 📋 Definition of Done (DoD)
-
 Task is "done" only when:
 
 - ✅ Commands run locally without error
@@ -157,7 +143,6 @@ If not verified, protocol states clearly.
 ---
 
 ## 🔴 Red Team Veto (Security Supremacy)
-
 Red Team can block work if they find:
 
 - ❌ Auth bypass risk
@@ -178,7 +163,6 @@ Fix Required: [specific action]
 ---
 
 ## 📊 Evidence Hierarchy (What Proves Things)
-
 Protocol uses facts in this order:
 
 1. **Tool observation** (highest confidence) → `read_file`, `grep_search`
@@ -191,21 +175,19 @@ If critical assumption cannot be verified → protocol blocks and states why.
 ---
 
 ## ✅ Validation Gates (Before Finalizing)
-
 **Required gates for code work**:
 
-- [ ] `pnpm install` succeeds
-- [ ] `pnpm typecheck` passes
-- [ ] `pnpm build` succeeds
-- [ ] Core flows work (business action verified)
-- [ ] Security checks align to RBAC
+- \[ ] `pnpm install` succeeds
+- \[ ] `pnpm typecheck` passes
+- \[ ] `pnpm build` succeeds
+- \[ ] Core flows work (business action verified)
+- \[ ] Security checks align to RBAC
 
 If not verified: Protocol states clearly what remains + how to verify.
 
 ---
 
 ## 🚨 If Something Fails
-
 Protocol is fail-closed:
 
 ```
@@ -225,7 +207,6 @@ Retry: [command to run manually]
 ---
 
 ## 📝 Deliverable Types (Choose One)
-
 ```
 DELIVERABLE: plan-only      # Phases A-C: Design only
 DELIVERABLE: code           # Phases A-E: Full implementation
@@ -244,7 +225,6 @@ DELIVERABLE: plan-only
 ---
 
 ## 🔗 Reference Docs
-
 **Main Manual**: `agents/crewops.md` (747 lines)
 
 - Constitution
@@ -269,15 +249,12 @@ DELIVERABLE: plan-only
 ---
 
 ## 🎯 Typical Workflow
-
 ### You Send
-
 ```
 Build a new API endpoint for org-scoped rate limiting.
 ```
 
 ### Agent Responds (Automatically)
-
 ```
 ✅ CREWOPS Protocol Active
 [activation message]
@@ -314,17 +291,16 @@ Red Team: ✅ Veto passed
 - Secrets via env vars
 
 ✅ VALIDATION GATES
-- [ ] pnpm install → pass
-- [ ] pnpm typecheck → pass
-- [ ] pnpm test → pass (new tests included)
-- [ ] Core flow → verified
-- [ ] Rollback → ready
+- [[ ]] pnpm install → pass
+- [[ ]] pnpm typecheck → pass
+- [[ ]] pnpm test → pass (new tests included)
+- [[ ]] Core flow → verified
+- [[ ]] Rollback → ready
 ```
 
 ---
 
 ## 🚀 That's It
-
 The protocol handles everything automatically. You just:
 
 1. State what you want
@@ -335,8 +311,8 @@ No micromanagement needed. The Constitution and Phase framework do the heavy lif
 
 ---
 
-**Status**: ✅ Protocol Active  
-**Binding**: Automatic  
-**Ready**: Yes  
-**Version**: 1.0  
+**Status**: ✅ Protocol Active\
+**Binding**: Automatic\
+**Ready**: Yes\
+**Version**: 1.0\
 **Last Updated**: December 4, 2025

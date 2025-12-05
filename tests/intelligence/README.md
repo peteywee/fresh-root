@@ -17,6 +17,7 @@ pnpm test:auto-generate
 ```
 
 **Features:**
+
 - ✅ Analyzes TypeScript code structure
 - ✅ Extracts validation schemas, permissions, and error cases
 - ✅ Generates happy path, authentication, authorization, and edge case tests
@@ -24,6 +25,7 @@ pnpm test:auto-generate
 - ✅ Saves hours of manual test writing
 
 **Example Output:**
+
 ```
 Analyzing apps/web/app/api/schedules/route.ts...
 ✅ Generated tests/api/schedules/__tests__/auto-generated.test.ts
@@ -42,6 +44,7 @@ Total: 33 endpoints × 6 tests = 198 auto-generated tests!
 ### 2. **Performance Profiling & Regression Detection** 📊
 
 Every API request is **profiled in real-time** with:
+
 - Response time (P50, P95, P99)
 - Memory usage
 - CPU time
@@ -54,6 +57,7 @@ pnpm test:performance
 ```
 
 **Features:**
+
 - ✅ Automatic baseline creation
 - ✅ Regression detection (>20% degradation = alert)
 - ✅ Beautiful HTML reports with Chart.js visualizations
@@ -61,6 +65,7 @@ pnpm test:performance
 - ✅ Optimization recommendations
 
 **Example Report:**
+
 ```
 ⚠️  POST /api/schedules has slow P95 latency (1,234ms). Consider:
    - Adding database indexes
@@ -73,6 +78,7 @@ pnpm test:performance
 ### 3. **Contract Testing with Auto-Generated OpenAPI Specs** 📋
 
 Tests are converted into **living API documentation**. The system:
+
 - Validates request/response contracts
 - Generates OpenAPI 3.0 specifications
 - Creates interactive Swagger UI documentation
@@ -83,6 +89,7 @@ pnpm test:contracts
 ```
 
 **Features:**
+
 - ✅ Automatic OpenAPI spec generation from Zod schemas
 - ✅ Request/response validation
 - ✅ Swagger UI with interactive API explorer
@@ -90,6 +97,7 @@ pnpm test:contracts
 - ✅ API versioning support
 
 **Generated Files:**
+
 - `docs/openapi.json` - Full OpenAPI 3.0 spec
 - `docs/api-docs.html` - Interactive Swagger UI
 
@@ -104,6 +112,7 @@ pnpm test:mutation
 ```
 
 **Mutation Operators:**
+
 - Conditional Boundary: `<` → `<=`, `>` → `>=`
 - Arithmetic: `+` → `-`, `*` → `/`
 - Logical: `&&` → `||`
@@ -112,6 +121,7 @@ pnpm test:mutation
 - Comparisons: `==` → `!=`
 
 **Example Report:**
+
 ```
 🧬  MUTATION TESTING REPORT
 ══════════════════════════════════════════════════════════════════════
@@ -139,6 +149,7 @@ pnpm test:mutation
 Tests that **automatically fix themselves** when code changes.
 
 **Features:**
+
 - ✅ Analyzes test failures
 - ✅ Suggests healing actions with confidence scores
 - ✅ Automatically applies high-confidence fixes
@@ -147,6 +158,7 @@ Tests that **automatically fix themselves** when code changes.
 - ✅ Adds retry logic for intermittent failures
 
 **Healing Actions:**
+
 1. **Selector Updates** - Element locators changed
 2. **Assertion Updates** - Expected values changed due to code updates
 3. **Timeout Increases** - Slow-loading elements
@@ -154,6 +166,7 @@ Tests that **automatically fix themselves** when code changes.
 5. **Data Updates** - Unique constraint violations
 
 **Example:**
+
 ```
 🔧 Auto-healed test: "should create organization"
   ✓ Updated assertion (confidence: 85%)
@@ -175,6 +188,7 @@ pnpm test:chaos
 ```
 
 **Chaos Experiments:**
+
 1. **High Latency** - 5s delays (30% probability)
 2. **Random 500 Errors** - Internal server errors (10% probability)
 3. **Database Failures** - Connection errors (5% probability)
@@ -183,6 +197,7 @@ pnpm test:chaos
 6. **Intermittent Failures** - Random 503 errors (20% probability)
 
 **Example Report:**
+
 ```
 🌪️  CHAOS ENGINEERING REPORT
 ══════════════════════════════════════════════════════════════════════
@@ -216,6 +231,7 @@ pnpm test:analytics
 ```
 
 **Features:**
+
 - ✅ Pass rate trends (last 10 runs)
 - ✅ Performance trends
 - ✅ Slowest tests identification
@@ -225,6 +241,7 @@ pnpm test:analytics
 - ✅ Beautiful HTML dashboard with Chart.js
 
 **Dashboard Metrics:**
+
 - Total Tests
 - Pass Rate
 - Average Duration
@@ -233,6 +250,7 @@ pnpm test:analytics
 - Trends Over Time
 
 **View Dashboard:**
+
 ```bash
 open tests/intelligence/dashboard.html
 ```
@@ -244,11 +262,13 @@ open tests/intelligence/dashboard.html
 **Production-grade deployment strategies** with automated validation and rollback.
 
 **Deployment Strategies:**
+
 1. **Blue-Green** - Zero-downtime deployment
 2. **Canary** - Gradual rollout with monitoring
 3. **Rolling** - Instance-by-instance updates
 
 **Features:**
+
 - ✅ Pre-deployment validation tests
 - ✅ Canary analysis (error rate, latency, throughput)
 - ✅ Automated rollback on failure
@@ -256,11 +276,12 @@ open tests/intelligence/dashboard.html
 - ✅ GitHub Actions workflow generation
 
 **Example:**
+
 ```typescript
 const result = await cicd.validateDeployment({
-  environment: 'production',
-  strategy: 'canary',
-  validationTests: ['tests/e2e/critical'],
+  environment: "production",
+  strategy: "canary",
+  validationTests: ["tests/e2e/critical"],
   canaryPercentage: 10,
   rollbackOnFailure: true,
 });
@@ -285,6 +306,7 @@ pnpm test:intelligence:quick
 ```
 
 **Complete Workflow:**
+
 1. ✅ Auto-generate tests for all API endpoints
 2. ✅ Generate OpenAPI contracts and Swagger docs
 3. ✅ Run E2E tests with performance profiling
@@ -294,6 +316,7 @@ pnpm test:intelligence:quick
 7. ✅ Validate CI/CD deployment readiness
 
 **Example Output:**
+
 ```
 🚀 LAUNCHING TEST INTELLIGENCE SYSTEM
 ═══════════════════════════════════════════════════════════════════
@@ -344,16 +367,16 @@ pnpm test:intelligence:quick
 
 ### What You Get:
 
-| Feature | Traditional | Test Intelligence | Improvement |
-|---------|-------------|-------------------|-------------|
-| Test Writing Time | 40 hours | 2 hours | **20x faster** |
-| Tests Generated | 0 | 198 | **Infinite ROI** |
-| Performance Monitoring | Manual | Automatic | **100% coverage** |
-| Mutation Score | Unknown | 91% | **High confidence** |
-| Contract Validation | None | 100% | **Complete coverage** |
-| Chaos Resilience | Unknown | Proven | **Production-ready** |
-| Self-Healing | Never | Automatic | **Zero maintenance** |
-| Analytics | None | Real-time | **Data-driven** |
+| Feature                | Traditional | Test Intelligence | Improvement           |
+| ---------------------- | ----------- | ----------------- | --------------------- |
+| Test Writing Time      | 40 hours    | 2 hours           | **20x faster**        |
+| Tests Generated        | 0           | 198               | **Infinite ROI**      |
+| Performance Monitoring | Manual      | Automatic         | **100% coverage**     |
+| Mutation Score         | Unknown     | 91%               | **High confidence**   |
+| Contract Validation    | None        | 100%              | **Complete coverage** |
+| Chaos Resilience       | Unknown     | Proven            | **Production-ready**  |
+| Self-Healing           | Never       | Automatic         | **Zero maintenance**  |
+| Analytics              | None        | Real-time         | **Data-driven**       |
 
 ### Test Coverage:
 
@@ -484,24 +507,31 @@ Generated outputs:
 ## 💡 Use Cases
 
 ### 1. **Continuous Integration**
+
 Run on every PR to ensure code quality and prevent regressions.
 
 ### 2. **Pre-Deployment Validation**
+
 Verify production readiness with comprehensive testing.
 
 ### 3. **Performance Monitoring**
+
 Track performance trends and detect regressions early.
 
 ### 4. **API Documentation**
+
 Auto-generate up-to-date OpenAPI specs from tests.
 
 ### 5. **Test Quality Assurance**
+
 Use mutation testing to verify test effectiveness.
 
 ### 6. **Chaos Engineering**
+
 Validate system resilience under failure conditions.
 
 ### 7. **Developer Onboarding**
+
 New developers get instant API documentation and examples.
 
 ---
@@ -524,18 +554,21 @@ New developers get instant API documentation and examples.
 ## 📈 ROI & Business Value
 
 ### Time Savings:
+
 - **Test Writing**: 40 hours → 2 hours (95% reduction)
 - **Performance Monitoring**: Manual → Automatic (100% coverage)
 - **Documentation**: Manual → Auto-generated (Always up-to-date)
 - **Debugging**: Hours → Minutes (Self-healing tests)
 
 ### Quality Improvements:
+
 - **Test Coverage**: 60% → 85%+ (42% increase)
 - **Bug Detection**: Earlier in dev cycle (80% cost reduction)
 - **Performance Regressions**: Caught automatically
 - **API Contract Violations**: Prevented before deployment
 
 ### Cost Savings (per year):
+
 - Reduced manual testing: **$50,000**
 - Faster bug detection: **$30,000**
 - Prevented outages: **$100,000+**
@@ -545,16 +578,16 @@ New developers get instant API documentation and examples.
 
 ## 🎯 Comparison
 
-| Feature | Jest | Playwright | Vitest | **Test Intelligence** |
-|---------|------|------------|--------|-----------------------|
-| Auto-Generate Tests | ❌ | ❌ | ❌ | ✅ **198 tests** |
-| Performance Profiling | ❌ | ❌ | ❌ | ✅ **Real-time** |
-| Contract Testing | ❌ | ❌ | ❌ | ✅ **OpenAPI** |
-| Mutation Testing | ❌ | ❌ | ❌ | ✅ **91% score** |
-| Self-Healing | ❌ | ❌ | ❌ | ✅ **Automatic** |
-| Chaos Engineering | ❌ | ❌ | ❌ | ✅ **6 scenarios** |
-| Analytics Dashboard | ❌ | ❌ | ❌ | ✅ **Interactive** |
-| CI/CD Integration | ⚠️ Basic | ⚠️ Basic | ⚠️ Basic | ✅ **Advanced** |
+| Feature               | Jest     | Playwright | Vitest   | **Test Intelligence** |
+| --------------------- | -------- | ---------- | -------- | --------------------- |
+| Auto-Generate Tests   | ❌       | ❌         | ❌       | ✅ **198 tests**      |
+| Performance Profiling | ❌       | ❌         | ❌       | ✅ **Real-time**      |
+| Contract Testing      | ❌       | ❌         | ❌       | ✅ **OpenAPI**        |
+| Mutation Testing      | ❌       | ❌         | ❌       | ✅ **91% score**      |
+| Self-Healing          | ❌       | ❌         | ❌       | ✅ **Automatic**      |
+| Chaos Engineering     | ❌       | ❌         | ❌       | ✅ **6 scenarios**    |
+| Analytics Dashboard   | ❌       | ❌         | ❌       | ✅ **Interactive**    |
+| CI/CD Integration     | ⚠️ Basic | ⚠️ Basic   | ⚠️ Basic | ✅ **Advanced**       |
 
 ---
 
@@ -571,6 +604,7 @@ New developers get instant API documentation and examples.
 ## 🤯 Mind = Blown 🤯
 
 This isn't just a test suite. It's a **complete testing ecosystem** that:
+
 - Writes tests for you
 - Monitors performance automatically
 - Validates API contracts
@@ -581,4 +615,3 @@ This isn't just a test suite. It's a **complete testing ecosystem** that:
 - Validates deployments
 
 **Welcome to the future of testing.** 🚀
-

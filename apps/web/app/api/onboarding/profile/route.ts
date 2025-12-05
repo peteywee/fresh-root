@@ -12,7 +12,7 @@ export const POST = createAuthenticatedEndpoint({
     try {
       const body = await request.json();
       const { firstName, lastName, avatar, timezone } = body;
-      
+
       const profile = {
         userId: context.auth?.userId,
         firstName,

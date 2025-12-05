@@ -12,7 +12,7 @@ export const POST = createAuthenticatedEndpoint({
     try {
       const body = await request.json();
       const { token, invitationId } = body;
-      
+
       const result = {
         userId: context.auth?.userId,
         invitationId,

@@ -3,7 +3,7 @@
  * Injects failures to test system resilience and error handling
  */
 
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from "next/server";
 
 interface ChaosExperiment {
   name: string;
@@ -14,20 +14,20 @@ interface ChaosExperiment {
 }
 
 type ChaosType =
-  | 'latency' // Add artificial latency
-  | 'error' // Return errors
-  | 'timeout' // Force timeouts
-  | 'malformed_response' // Return malformed data
-  | 'intermittent_failure' // Random failures
-  | 'rate_limit' // Simulate rate limiting
-  | 'database_failure' // Simulate DB issues
-  | 'network_partition'; // Simulate network issues
+  | "latency" // Add artificial latency
+  | "error" // Return errors
+  | "timeout" // Force timeouts
+  | "malformed_response" // Return malformed data
+  | "intermittent_failure" // Random failures
+  | "rate_limit" // Simulate rate limiting
+  | "database_failure" // Simulate DB issues
+  | "network_partition"; // Simulate network issues
 
 interface ChaosResult {
   experimentName: string;
   totalRequests: number;
   affectedRequests: number;
-  systemBehavior: 'graceful' | 'degraded' | 'failed';
+  systemBehavior: "graceful" | "degraded" | "failed";
   errors: Array<{ type: string; count: number }>;
   recommendations: string[];
 }
@@ -47,7 +47,7 @@ export class ChaosEngineer {
       experimentName: experiment.name,
       totalRequests: 0,
       affectedRequests: 0,
-      systemBehavior: 'graceful',
+      systemBehavior: "graceful",
       errors: [],
       recommendations: [],
     });
@@ -56,10 +56,7 @@ export class ChaosEngineer {
   /**
    * Chaos middleware for API routes
    */
-  async chaosMiddleware(
-    request: Request,
-    next: () => Promise<Response>
-  ): Promise<Response> {
+  async chaosMiddleware(request: Request, next: () => Promise<Response>): Promise<Response> {
     // Check each active experiment
     for (const [name, experiment] of this.experiments) {
       if (!experiment.enabled) continue;
@@ -91,88 +88,86 @@ export class ChaosEngineer {
    */
   private async applyChaos(
     experiment: ChaosExperiment,
-    request: Request
+    request: Request,
   ): Promise<Response | null> {
     const result = this.results.get(experiment.name)!;
 
     switch (experiment.type) {
-      case 'latency':
+      case "latency":
         // Add artificial latency
         const delay = experiment.config.delayMs || 3000;
-        await new Promise(resolve => setTimeout(resolve, delay));
+        await new Promise((resolve) => setTimeout(resolve, delay));
         return null; // Continue to normal handler
 
-      case 'error':
+      case "error":
         // Return error response
         const statusCode = experiment.config.statusCode || 500;
-        const errorMessage = experiment.config.message || 'Internal Server Error (Chaos Experiment)';
+        const errorMessage =
+          experiment.config.message || "Internal Server Error (Chaos Experiment)";
 
         this.logError(result, `HTTP ${statusCode}`);
 
-        return new Response(
-          JSON.stringify({ error: errorMessage, chaos: true }),
-          { status: statusCode, headers: { 'Content-Type': 'application/json' } }
-        );
+        return new Response(JSON.stringify({ error: errorMessage, chaos: true }), {
+          status: statusCode,
+          headers: { "Content-Type": "application/json" },
+        });
 
-      case 'timeout':
+      case "timeout":
         // Force timeout by delaying indefinitely
-        await new Promise(resolve => setTimeout(resolve, 60000));
+        await new Promise((resolve) => setTimeout(resolve, 60000));
         return null;
 
-      case 'malformed_response':
+      case "malformed_response":
         // Return malformed JSON
-        this.logError(result, 'Malformed Response');
+        this.logError(result, "Malformed Response");
 
-        return new Response(
-          '{"incomplete": "json", missing_bracket',
-          { status: 200, headers: { 'Content-Type': 'application/json' } }
-        );
+        return new Response('{"incomplete": "json", missing_bracket', {
+          status: 200,
+          headers: { "Content-Type": "application/json" },
+        });
 
-      case 'intermittent_failure':
+      case "intermittent_failure":
         // Random failures (50% chance)
         if (Math.random() < 0.5) {
-          this.logError(result, 'Intermittent Failure');
+          this.logError(result, "Intermittent Failure");
 
           return new Response(
-            JSON.stringify({ error: 'Service temporarily unavailable', chaos: true }),
-            { status: 503, headers: { 'Content-Type': 'application/json' } }
+            JSON.stringify({ error: "Service temporarily unavailable", chaos: true }),
+            { status: 503, headers: { "Content-Type": "application/json" } },
           );
         }
         return null;
 
-      case 'rate_limit':
+      case "rate_limit":
         // Simulate rate limiting
-        this.logError(result, 'Rate Limit');
+        this.logError(result, "Rate Limit");
 
-        return new Response(
-          JSON.stringify({ error: 'Rate limit exceeded', chaos: true }),
-          {
-            status: 429,
-            headers: {
-              'Content-Type': 'application/json',
-              'Retry-After': '60',
-            },
-          }
-        );
+        return new Response(JSON.stringify({ error: "Rate limit exceeded", chaos: true }), {
+          status: 429,
+          headers: {
+            "Content-Type": "application/json",
+            "Retry-After": "60",
+          },
+        });
 
-      case 'database_failure':
+      case "database_failure":
         // Simulate database connection error
-        this.logError(result, 'Database Failure');
+        this.logError(result, "Database Failure");
 
-        return new Response(
-          JSON.stringify({ error: 'Database connection failed', chaos: true }),
-          { status: 503, headers: { 'Content-Type': 'application/json' } }
-        );
+        return new Response(JSON.stringify({ error: "Database connection failed", chaos: true }), {
+          status: 503,
+          headers: { "Content-Type": "application/json" },
+        });
 
-      case 'network_partition':
+      case "network_partition":
         // Simulate network timeout
-        await new Promise(resolve => setTimeout(resolve, 10000));
-        this.logError(result, 'Network Partition');
+        await new Promise((resolve) => setTimeout(resolve, 10000));
+        this.logError(result, "Network Partition");
 
-        return new Response(
-          JSON.stringify({ error: 'Network timeout', chaos: true }),
-          { status: 504, headers: { 'Content-Type': 'application/json' } }
-        );
+        return new Response(JSON.stringify({ error: "Network timeout", chaos: true }), {
+          status: 504,
+          headers: { "Content-Type": "application/json" },
+        });
 
       default:
         return null;
@@ -183,7 +178,7 @@ export class ChaosEngineer {
    * Logs error for analysis
    */
   private logError(result: ChaosResult, errorType: string): void {
-    const existing = result.errors.find(e => e.type === errorType);
+    const existing = result.errors.find((e) => e.type === errorType);
     if (existing) {
       existing.count++;
     } else {
@@ -204,31 +199,31 @@ export class ChaosEngineer {
     const affectedPercentage = (result.affectedRequests / result.totalRequests) * 100;
 
     if (result.errors.length === 0) {
-      result.systemBehavior = 'graceful';
-      result.recommendations.push('✅ System handled chaos gracefully');
+      result.systemBehavior = "graceful";
+      result.recommendations.push("✅ System handled chaos gracefully");
     } else if (affectedPercentage < 20) {
-      result.systemBehavior = 'graceful';
-      result.recommendations.push('✅ System mostly resilient with minor degradation');
+      result.systemBehavior = "graceful";
+      result.recommendations.push("✅ System mostly resilient with minor degradation");
     } else if (affectedPercentage < 50) {
-      result.systemBehavior = 'degraded';
-      result.recommendations.push('⚠️  System showed degradation under chaos');
-      result.recommendations.push('   Consider adding retry logic and circuit breakers');
+      result.systemBehavior = "degraded";
+      result.recommendations.push("⚠️  System showed degradation under chaos");
+      result.recommendations.push("   Consider adding retry logic and circuit breakers");
     } else {
-      result.systemBehavior = 'failed';
-      result.recommendations.push('❌ System failed under chaos conditions');
-      result.recommendations.push('   CRITICAL: Implement error handling and fallbacks');
+      result.systemBehavior = "failed";
+      result.recommendations.push("❌ System failed under chaos conditions");
+      result.recommendations.push("   CRITICAL: Implement error handling and fallbacks");
     }
 
     // Analyze error patterns
-    result.errors.forEach(error => {
-      if (error.type.includes('500') || error.type.includes('Database')) {
-        result.recommendations.push('💡 Add database connection pooling and retry logic');
+    result.errors.forEach((error) => {
+      if (error.type.includes("500") || error.type.includes("Database")) {
+        result.recommendations.push("💡 Add database connection pooling and retry logic");
       }
-      if (error.type.includes('timeout') || error.type.includes('Network')) {
-        result.recommendations.push('💡 Implement request timeouts and circuit breakers');
+      if (error.type.includes("timeout") || error.type.includes("Network")) {
+        result.recommendations.push("💡 Implement request timeouts and circuit breakers");
       }
-      if (error.type.includes('Rate Limit')) {
-        result.recommendations.push('💡 Add client-side rate limiting and backoff');
+      if (error.type.includes("Rate Limit")) {
+        result.recommendations.push("💡 Add client-side rate limiting and backoff");
       }
     });
 
@@ -239,9 +234,9 @@ export class ChaosEngineer {
    * Generates chaos engineering report
    */
   generateReport(): string {
-    let report = '\n';
-    report += '🌪️  CHAOS ENGINEERING REPORT\n';
-    report += '═'.repeat(70) + '\n\n';
+    let report = "\n";
+    report += "🌪️  CHAOS ENGINEERING REPORT\n";
+    report += "═".repeat(70) + "\n\n";
 
     this.experiments.forEach((experiment, name) => {
       const result = this.analyzeExperiment(name);
@@ -249,7 +244,7 @@ export class ChaosEngineer {
       report += `Experiment: ${name}\n`;
       report += `Type: ${experiment.type}\n`;
       report += `Probability: ${(experiment.probability * 100).toFixed(0)}%\n`;
-      report += `Status: ${experiment.enabled ? '🟢 Active' : '🔴 Inactive'}\n\n`;
+      report += `Status: ${experiment.enabled ? "🟢 Active" : "🔴 Inactive"}\n\n`;
 
       report += `Results:\n`;
       report += `  Total Requests: ${result.totalRequests}\n`;
@@ -258,21 +253,21 @@ export class ChaosEngineer {
 
       if (result.errors.length > 0) {
         report += `Errors Encountered:\n`;
-        result.errors.forEach(error => {
+        result.errors.forEach((error) => {
           report += `  ${error.type}: ${error.count} occurrences\n`;
         });
-        report += '\n';
+        report += "\n";
       }
 
       if (result.recommendations.length > 0) {
         report += `Recommendations:\n`;
-        result.recommendations.forEach(rec => {
+        result.recommendations.forEach((rec) => {
           report += `  ${rec}\n`;
         });
-        report += '\n';
+        report += "\n";
       }
 
-      report += '─'.repeat(70) + '\n\n';
+      report += "─".repeat(70) + "\n\n";
     });
 
     return report;
@@ -284,43 +279,43 @@ export class ChaosEngineer {
   static createStandardExperiments(): ChaosExperiment[] {
     return [
       {
-        name: 'High Latency',
-        type: 'latency',
+        name: "High Latency",
+        type: "latency",
         enabled: false,
         probability: 0.3,
         config: { delayMs: 5000 },
       },
       {
-        name: 'Random 500 Errors',
-        type: 'error',
+        name: "Random 500 Errors",
+        type: "error",
         enabled: false,
         probability: 0.1,
-        config: { statusCode: 500, message: 'Internal Server Error' },
+        config: { statusCode: 500, message: "Internal Server Error" },
       },
       {
-        name: 'Database Connection Failures',
-        type: 'database_failure',
+        name: "Database Connection Failures",
+        type: "database_failure",
         enabled: false,
         probability: 0.05,
         config: {},
       },
       {
-        name: 'Network Timeouts',
-        type: 'timeout',
+        name: "Network Timeouts",
+        type: "timeout",
         enabled: false,
         probability: 0.05,
         config: {},
       },
       {
-        name: 'Rate Limiting',
-        type: 'rate_limit',
+        name: "Rate Limiting",
+        type: "rate_limit",
         enabled: false,
         probability: 0.15,
         config: {},
       },
       {
-        name: 'Intermittent Failures',
-        type: 'intermittent_failure',
+        name: "Intermittent Failures",
+        type: "intermittent_failure",
         enabled: false,
         probability: 0.2,
         config: {},
@@ -354,10 +349,10 @@ export class ChaosEngineer {
    * Disables all experiments
    */
   disableAllExperiments(): void {
-    this.experiments.forEach(exp => {
+    this.experiments.forEach((exp) => {
       exp.enabled = false;
     });
-    console.log('🛡️  All chaos experiments disabled');
+    console.log("🛡️  All chaos experiments disabled");
   }
 }
 
@@ -371,7 +366,7 @@ export class ChaosTestRunner {
     this.engineer = new ChaosEngineer();
 
     // Register standard experiments
-    ChaosEngineer.createStandardExperiments().forEach(exp => {
+    ChaosEngineer.createStandardExperiments().forEach((exp) => {
       this.engineer.registerExperiment(exp);
     });
   }
@@ -381,7 +376,7 @@ export class ChaosTestRunner {
    */
   async runChaosTest(
     scenario: string,
-    testFn: () => Promise<void>
+    testFn: () => Promise<void>,
   ): Promise<{ success: boolean; report: string }> {
     console.log(`\n🌪️  Running chaos test: ${scenario}`);
 
@@ -423,7 +418,7 @@ export class ChaosTestRunner {
       results.push(result.report);
     }
 
-    return results.join('\n\n');
+    return results.join("\n\n");
   }
 }
 
@@ -431,6 +426,6 @@ export class ChaosTestRunner {
 export const chaosEngineer = new ChaosEngineer();
 
 // Initialize with standard experiments
-ChaosEngineer.createStandardExperiments().forEach(exp => {
+ChaosEngineer.createStandardExperiments().forEach((exp) => {
   chaosEngineer.registerExperiment(exp);
 });

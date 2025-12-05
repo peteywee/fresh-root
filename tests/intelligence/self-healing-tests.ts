@@ -3,10 +3,10 @@
  * Automatically adapts tests when the codebase changes
  */
 
-import * as ts from 'typescript';
-import * as fs from 'fs';
-import * as path from 'path';
-import { diffLines } from 'diff';
+import * as ts from "typescript";
+import * as fs from "fs";
+import * as path from "path";
+import { diffLines } from "diff";
 
 interface TestFailure {
   testFile: string;
@@ -17,7 +17,7 @@ interface TestFailure {
 }
 
 interface HealingAction {
-  type: 'selector_update' | 'assertion_update' | 'data_update' | 'timeout_increase' | 'retry_add';
+  type: "selector_update" | "assertion_update" | "data_update" | "timeout_increase" | "retry_add";
   description: string;
   oldValue: string;
   newValue: string;
@@ -45,33 +45,37 @@ export class SelfHealingTestFramework {
     const error = failure.error.toLowerCase();
 
     // Detect selector/locator failures
-    if (error.includes('element not found') || error.includes('timeout') || error.includes('selector')) {
+    if (
+      error.includes("element not found") ||
+      error.includes("timeout") ||
+      error.includes("selector")
+    ) {
       actions.push({
-        type: 'selector_update',
-        description: 'Element selector may have changed',
+        type: "selector_update",
+        description: "Element selector may have changed",
         oldValue: this.extractSelector(failure.error),
         newValue: this.suggestNewSelector(failure.error),
         confidence: 0.7,
       });
 
       actions.push({
-        type: 'timeout_increase',
-        description: 'Element may need more time to load',
-        oldValue: '5000',
-        newValue: '10000',
+        type: "timeout_increase",
+        description: "Element may need more time to load",
+        oldValue: "5000",
+        newValue: "10000",
         confidence: 0.6,
       });
     }
 
     // Detect assertion failures
-    if (error.includes('expect') || error.includes('assertion')) {
+    if (error.includes("expect") || error.includes("assertion")) {
       const expectedValue = this.extractExpectedValue(failure.error);
       const actualValue = this.extractActualValue(failure.error);
 
       if (expectedValue && actualValue) {
         actions.push({
-          type: 'assertion_update',
-          description: 'Expected value may have changed due to code updates',
+          type: "assertion_update",
+          description: "Expected value may have changed due to code updates",
           oldValue: expectedValue,
           newValue: actualValue,
           confidence: 0.8,
@@ -86,21 +90,25 @@ export class SelfHealingTestFramework {
     if (history.length > 0 && history.length < 5) {
       // Flaky test detected
       actions.push({
-        type: 'retry_add',
-        description: 'Test appears to be flaky - add retry logic',
-        oldValue: 'no retry',
-        newValue: 'retry: 3',
+        type: "retry_add",
+        description: "Test appears to be flaky - add retry logic",
+        oldValue: "no retry",
+        newValue: "retry: 3",
         confidence: 0.9,
       });
     }
 
     // Detect data-related failures
-    if (error.includes('unique constraint') || error.includes('already exists') || error.includes('duplicate')) {
+    if (
+      error.includes("unique constraint") ||
+      error.includes("already exists") ||
+      error.includes("duplicate")
+    ) {
       actions.push({
-        type: 'data_update',
-        description: 'Test data conflicts - use unique values',
-        oldValue: 'static test data',
-        newValue: 'dynamic test data with timestamps',
+        type: "data_update",
+        description: "Test data conflicts - use unique values",
+        oldValue: "static test data",
+        newValue: "dynamic test data with timestamps",
         confidence: 0.85,
       });
     }
@@ -133,7 +141,7 @@ export class SelfHealingTestFramework {
 
     // Apply high-confidence healing actions automatically
     const appliedActions: HealingAction[] = [];
-    let testCode = fs.readFileSync(failure.testFile, 'utf-8');
+    let testCode = fs.readFileSync(failure.testFile, "utf-8");
 
     for (const action of actions) {
       if (action.confidence >= 0.8) {
@@ -155,7 +163,7 @@ export class SelfHealingTestFramework {
         testName: failure.testName,
         success: true,
         actions: appliedActions,
-        requiresManualReview: appliedActions.some(a => a.confidence < 0.9),
+        requiresManualReview: appliedActions.some((a) => a.confidence < 0.9),
       };
     }
 
@@ -173,44 +181,44 @@ export class SelfHealingTestFramework {
    */
   private applyHealingAction(testCode: string, action: HealingAction): string {
     switch (action.type) {
-      case 'assertion_update':
+      case "assertion_update":
         // Update expected values in assertions
         return testCode.replace(
-          new RegExp(`expect\\(.*?\\)\\.toBe\\(['"\`]${this.escapeRegex(action.oldValue)}['"\`]\\)`, 'g'),
-          `expect($&).toBe('${action.newValue}')`
+          new RegExp(
+            `expect\\(.*?\\)\\.toBe\\(['"\`]${this.escapeRegex(action.oldValue)}['"\`]\\)`,
+            "g",
+          ),
+          `expect($&).toBe('${action.newValue}')`,
         );
 
-      case 'timeout_increase':
+      case "timeout_increase":
         // Increase timeouts
-        return testCode.replace(
-          /timeout:\s*\d+/g,
-          `timeout: ${action.newValue}`
-        );
+        return testCode.replace(/timeout:\s*\d+/g, `timeout: ${action.newValue}`);
 
-      case 'retry_add':
+      case "retry_add":
         // Add retry configuration
-        if (!testCode.includes('retry:')) {
+        if (!testCode.includes("retry:")) {
           return testCode.replace(
             /it\(['"`]([^'"`]+)['"`],\s*async\s*\(\)/g,
-            `it('$1', async () => {}, { retry: 3 })`
+            `it('$1', async () => {}, { retry: 3 })`,
           );
         }
         return testCode;
 
-      case 'data_update':
+      case "data_update":
         // Make test data dynamic
         return testCode.replace(
           /(name|email|subdomain):\s*['"`]([^'"`]+)['"`]/g,
           (match, field, value) => {
             return `${field}: \`${value}-\${Date.now()}\``;
-          }
+          },
         );
 
-      case 'selector_update':
+      case "selector_update":
         // Update selectors (would need more context)
         return testCode.replace(
-          new RegExp(this.escapeRegex(action.oldValue), 'g'),
-          action.newValue
+          new RegExp(this.escapeRegex(action.oldValue), "g"),
+          action.newValue,
         );
 
       default:
@@ -235,7 +243,7 @@ export class SelfHealingTestFramework {
     const changes: string[] = [];
     const diff = diffLines(oldCode, newCode);
 
-    diff.forEach(part => {
+    diff.forEach((part) => {
       if (part.removed) {
         // Check for API endpoint changes
         const endpointMatch = part.value.match(/\/api\/[\w\-\/]+/g);
@@ -264,13 +272,13 @@ export class SelfHealingTestFramework {
    * Generates a report of healing actions
    */
   generateHealingReport(results: HealingResult[]): string {
-    let report = '\n';
-    report += '🔧 SELF-HEALING TEST REPORT\n';
-    report += '═'.repeat(70) + '\n\n';
+    let report = "\n";
+    report += "🔧 SELF-HEALING TEST REPORT\n";
+    report += "═".repeat(70) + "\n\n";
 
-    const successful = results.filter(r => r.success);
-    const failed = results.filter(r => !r.success);
-    const needsReview = results.filter(r => r.requiresManualReview);
+    const successful = results.filter((r) => r.success);
+    const failed = results.filter((r) => !r.success);
+    const needsReview = results.filter((r) => r.requiresManualReview);
 
     report += `Summary:\n`;
     report += `  Successfully Healed: ${successful.length} ✅\n`;
@@ -279,11 +287,11 @@ export class SelfHealingTestFramework {
 
     if (successful.length > 0) {
       report += `✅ Successfully Healed Tests:\n`;
-      report += '─'.repeat(70) + '\n';
+      report += "─".repeat(70) + "\n";
 
-      successful.forEach(result => {
+      successful.forEach((result) => {
         report += `\n${result.testFile} - ${result.testName}\n`;
-        result.actions.forEach(action => {
+        result.actions.forEach((action) => {
           report += `  ${action.type}: ${action.description}\n`;
           report += `    Old: ${action.oldValue}\n`;
           report += `    New: ${action.newValue}\n`;
@@ -294,13 +302,13 @@ export class SelfHealingTestFramework {
 
     if (needsReview.length > 0) {
       report += `\n\n⚠️  Tests Needing Manual Review:\n`;
-      report += '─'.repeat(70) + '\n';
+      report += "─".repeat(70) + "\n";
 
-      needsReview.forEach(result => {
+      needsReview.forEach((result) => {
         report += `\n${result.testFile} - ${result.testName}\n`;
         if (result.actions.length > 0) {
           report += `  Suggested Actions:\n`;
-          result.actions.forEach(action => {
+          result.actions.forEach((action) => {
             report += `    - ${action.description}\n`;
           });
         }
@@ -315,7 +323,7 @@ export class SelfHealingTestFramework {
    */
   private extractSelector(error: string): string {
     const match = error.match(/selector ['"`]([^'"`]+)['"`]/);
-    return match ? match[1] : '';
+    return match ? match[1] : "";
   }
 
   private suggestNewSelector(error: string): string {
@@ -329,13 +337,13 @@ export class SelfHealingTestFramework {
   }
 
   private extractActualValue(error: string): string | null {
-    const match = error.match(/received ['"`]([^'"`]+)['"`]/i) ||
-                  error.match(/actual ['"`]([^'"`]+)['"`]/i);
+    const match =
+      error.match(/received ['"`]([^'"`]+)['"`]/i) || error.match(/actual ['"`]([^'"`]+)['"`]/i);
     return match ? match[1] : null;
   }
 
   private escapeRegex(str: string): string {
-    return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
   }
 }
 
@@ -347,14 +355,14 @@ export function selfHealingPlugin() {
   const healingResults: HealingResult[] = [];
 
   return {
-    name: 'self-healing-tests',
+    name: "self-healing-tests",
 
     onTestFailed(test: any) {
       const failure: TestFailure = {
-        testFile: test.file?.filepath || '',
+        testFile: test.file?.filepath || "",
         testName: test.name,
-        error: test.error?.message || '',
-        stackTrace: test.error?.stack || '',
+        error: test.error?.message || "",
+        stackTrace: test.error?.stack || "",
         timestamp: Date.now(),
       };
 
@@ -366,7 +374,7 @@ export function selfHealingPlugin() {
 
       if (result.success) {
         console.log(`\n🔧 Auto-healed test: ${test.name}`);
-        result.actions.forEach(action => {
+        result.actions.forEach((action) => {
           console.log(`  ✓ ${action.description}`);
         });
       }

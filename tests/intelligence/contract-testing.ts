@@ -3,9 +3,9 @@
  * Ensures API contracts are maintained and generates documentation
  */
 
-import * as fs from 'fs';
-import * as path from 'path';
-import { z } from 'zod';
+import * as fs from "fs";
+import * as path from "path";
+import { z } from "zod";
 
 interface OpenAPISpec {
   openapi: string;
@@ -24,11 +24,11 @@ interface OpenAPISpec {
 
 interface ContractViolation {
   endpoint: string;
-  type: 'request' | 'response';
+  type: "request" | "response";
   field: string;
   expected: any;
   actual: any;
-  severity: 'error' | 'warning';
+  severity: "error" | "warning";
 }
 
 export class ContractTester {
@@ -37,31 +37,31 @@ export class ContractTester {
 
   constructor() {
     this.spec = {
-      openapi: '3.0.0',
+      openapi: "3.0.0",
       info: {
-        title: 'Fresh Root Scheduling API',
-        version: '1.2.0',
-        description: 'Enterprise scheduling platform API with comprehensive endpoint coverage',
+        title: "Fresh Root Scheduling API",
+        version: "1.2.0",
+        description: "Enterprise scheduling platform API with comprehensive endpoint coverage",
       },
       servers: [
-        { url: 'http://localhost:3000', description: 'Development' },
-        { url: 'https://api.fresh-schedules.com', description: 'Production' },
+        { url: "http://localhost:3000", description: "Development" },
+        { url: "https://api.fresh-schedules.com", description: "Production" },
       ],
       paths: {},
       components: {
         schemas: {},
         securitySchemes: {
           FirebaseAuth: {
-            type: 'http',
-            scheme: 'bearer',
-            bearerFormat: 'JWT',
-            description: 'Firebase Authentication token',
+            type: "http",
+            scheme: "bearer",
+            bearerFormat: "JWT",
+            description: "Firebase Authentication token",
           },
           SessionCookie: {
-            type: 'apiKey',
-            in: 'cookie',
-            name: 'session',
-            description: 'Session cookie for authenticated requests',
+            type: "apiKey",
+            in: "cookie",
+            name: "session",
+            description: "Session cookie for authenticated requests",
           },
         },
       },
@@ -82,13 +82,23 @@ export class ContractTester {
     responses: Record<number, { description: string; schema?: z.ZodObject<any> }>;
     parameters?: Array<{
       name: string;
-      in: 'path' | 'query' | 'header';
+      in: "path" | "query" | "header";
       required?: boolean;
       schema: z.ZodType<any>;
       description?: string;
     }>;
   }): void {
-    const { path: endpoint, method, summary, description, tags, security, requestBody, responses, parameters } = config;
+    const {
+      path: endpoint,
+      method,
+      summary,
+      description,
+      tags,
+      security,
+      requestBody,
+      responses,
+      parameters,
+    } = config;
 
     if (!this.spec.paths[endpoint]) {
       this.spec.paths[endpoint] = {};
@@ -97,18 +107,20 @@ export class ContractTester {
     const operation: any = {
       summary,
       description: description || summary,
-      tags: tags || ['API'],
-      security: security ? security.map(s => ({ [s]: [] })) : [{ FirebaseAuth: [] }, { SessionCookie: [] }],
+      tags: tags || ["API"],
+      security: security
+        ? security.map((s) => ({ [s]: [] }))
+        : [{ FirebaseAuth: [] }, { SessionCookie: [] }],
       responses: {},
     };
 
     // Add parameters
     if (parameters) {
-      operation.parameters = parameters.map(p => ({
+      operation.parameters = parameters.map((p) => ({
         name: p.name,
         in: p.in,
         required: p.required || false,
-        description: p.description || '',
+        description: p.description || "",
         schema: this.zodToOpenAPISchema(p.schema),
       }));
     }
@@ -118,7 +130,7 @@ export class ContractTester {
       operation.requestBody = {
         required: true,
         content: {
-          'application/json': {
+          "application/json": {
             schema: this.zodToOpenAPISchema(requestBody),
           },
         },
@@ -131,7 +143,7 @@ export class ContractTester {
         description: response.description,
         content: response.schema
           ? {
-              'application/json': {
+              "application/json": {
                 schema: this.zodToOpenAPISchema(response.schema),
               },
             }
@@ -161,7 +173,7 @@ export class ContractTester {
       });
 
       return {
-        type: 'object',
+        type: "object",
         properties,
         required: required.length > 0 ? required : undefined,
       };
@@ -169,16 +181,16 @@ export class ContractTester {
 
     if (schema instanceof z.ZodString) {
       const def = schema._def;
-      const openApiSchema: any = { type: 'string' };
+      const openApiSchema: any = { type: "string" };
 
       // Check for email validation
       if (def.checks) {
         for (const check of def.checks) {
-          if (check.kind === 'email') openApiSchema.format = 'email';
-          if (check.kind === 'url') openApiSchema.format = 'uri';
-          if (check.kind === 'uuid') openApiSchema.format = 'uuid';
-          if (check.kind === 'min') openApiSchema.minLength = check.value;
-          if (check.kind === 'max') openApiSchema.maxLength = check.value;
+          if (check.kind === "email") openApiSchema.format = "email";
+          if (check.kind === "url") openApiSchema.format = "uri";
+          if (check.kind === "uuid") openApiSchema.format = "uuid";
+          if (check.kind === "min") openApiSchema.minLength = check.value;
+          if (check.kind === "max") openApiSchema.maxLength = check.value;
         }
       }
 
@@ -186,23 +198,23 @@ export class ContractTester {
     }
 
     if (schema instanceof z.ZodNumber) {
-      return { type: 'number' };
+      return { type: "number" };
     }
 
     if (schema instanceof z.ZodBoolean) {
-      return { type: 'boolean' };
+      return { type: "boolean" };
     }
 
     if (schema instanceof z.ZodArray) {
       return {
-        type: 'array',
+        type: "array",
         items: this.zodToOpenAPISchema(schema._def.type),
       };
     }
 
     if (schema instanceof z.ZodEnum) {
       return {
-        type: 'string',
+        type: "string",
         enum: schema._def.values,
       };
     }
@@ -217,7 +229,7 @@ export class ContractTester {
       };
     }
 
-    return { type: 'string' }; // Fallback
+    return { type: "string" }; // Fallback
   }
 
   /**
@@ -230,28 +242,28 @@ export class ContractTester {
     if (!operation) {
       violations.push({
         endpoint: `${method} ${endpoint}`,
-        type: 'request',
-        field: 'endpoint',
-        expected: 'registered',
-        actual: 'not found',
-        severity: 'error',
+        type: "request",
+        field: "endpoint",
+        expected: "registered",
+        actual: "not found",
+        severity: "error",
       });
       return violations;
     }
 
     // Validate request body against schema
     if (operation.requestBody) {
-      const schema = operation.requestBody.content['application/json'].schema;
+      const schema = operation.requestBody.content["application/json"].schema;
       const validation = this.validateAgainstSchema(data, schema);
 
-      validation.forEach(v => {
+      validation.forEach((v) => {
         violations.push({
           endpoint: `${method} ${endpoint}`,
-          type: 'request',
+          type: "request",
           field: v.field,
           expected: v.expected,
           actual: v.actual,
-          severity: 'error',
+          severity: "error",
         });
       });
     }
@@ -263,7 +275,12 @@ export class ContractTester {
   /**
    * Validates a response against the contract
    */
-  validateResponse(endpoint: string, method: string, statusCode: number, data: any): ContractViolation[] {
+  validateResponse(
+    endpoint: string,
+    method: string,
+    statusCode: number,
+    data: any,
+  ): ContractViolation[] {
     const violations: ContractViolation[] = [];
     const operation = this.spec.paths[endpoint]?.[method.toLowerCase()];
 
@@ -273,28 +290,28 @@ export class ContractTester {
     if (!responseSpec) {
       violations.push({
         endpoint: `${method} ${endpoint}`,
-        type: 'response',
-        field: 'statusCode',
-        expected: Object.keys(operation.responses).join(', '),
+        type: "response",
+        field: "statusCode",
+        expected: Object.keys(operation.responses).join(", "),
         actual: statusCode,
-        severity: 'warning',
+        severity: "warning",
       });
       return violations;
     }
 
     // Validate response body against schema
-    if (responseSpec.content?.['application/json']?.schema) {
-      const schema = responseSpec.content['application/json'].schema;
+    if (responseSpec.content?.["application/json"]?.schema) {
+      const schema = responseSpec.content["application/json"].schema;
       const validation = this.validateAgainstSchema(data, schema);
 
-      validation.forEach(v => {
+      validation.forEach((v) => {
         violations.push({
           endpoint: `${method} ${endpoint}`,
-          type: 'response',
+          type: "response",
           field: v.field,
           expected: v.expected,
           actual: v.actual,
-          severity: 'error',
+          severity: "error",
         });
       });
     }
@@ -306,18 +323,21 @@ export class ContractTester {
   /**
    * Validates data against OpenAPI schema
    */
-  private validateAgainstSchema(data: any, schema: any): Array<{ field: string; expected: any; actual: any }> {
+  private validateAgainstSchema(
+    data: any,
+    schema: any,
+  ): Array<{ field: string; expected: any; actual: any }> {
     const violations: Array<{ field: string; expected: any; actual: any }> = [];
 
-    if (schema.type === 'object' && schema.properties) {
+    if (schema.type === "object" && schema.properties) {
       // Check required fields
       if (schema.required) {
         schema.required.forEach((field: string) => {
           if (!(field in data)) {
             violations.push({
               field,
-              expected: 'required',
-              actual: 'missing',
+              expected: "required",
+              actual: "missing",
             });
           }
         });
@@ -327,7 +347,7 @@ export class ContractTester {
       Object.entries(schema.properties).forEach(([key, propSchema]: [string, any]) => {
         if (key in data) {
           const value = data[key];
-          const valueType = Array.isArray(value) ? 'array' : typeof value;
+          const valueType = Array.isArray(value) ? "array" : typeof value;
 
           if (propSchema.type && valueType !== propSchema.type) {
             violations.push({
@@ -338,9 +358,9 @@ export class ContractTester {
           }
 
           // Validate nested objects
-          if (propSchema.type === 'object' && propSchema.properties) {
+          if (propSchema.type === "object" && propSchema.properties) {
             const nested = this.validateAgainstSchema(value, propSchema);
-            nested.forEach(v => {
+            nested.forEach((v) => {
               violations.push({
                 field: `${key}.${v.field}`,
                 expected: v.expected,
@@ -358,7 +378,7 @@ export class ContractTester {
   /**
    * Generates OpenAPI specification file
    */
-  generateSpec(outputPath: string = 'docs/openapi.json'): void {
+  generateSpec(outputPath: string = "docs/openapi.json"): void {
     fs.mkdirSync(path.dirname(outputPath), { recursive: true });
     fs.writeFileSync(outputPath, JSON.stringify(this.spec, null, 2));
     console.log(`✅ Generated OpenAPI spec at ${outputPath}`);
@@ -367,7 +387,7 @@ export class ContractTester {
   /**
    * Generates Swagger UI HTML
    */
-  generateSwaggerUI(outputPath: string = 'docs/api-docs.html'): void {
+  generateSwaggerUI(outputPath: string = "docs/api-docs.html"): void {
     const html = `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -420,18 +440,18 @@ export class ContractTester {
    */
   generateViolationReport(): string {
     if (this.violations.length === 0) {
-      return '✅ No contract violations found!';
+      return "✅ No contract violations found!";
     }
 
-    const errors = this.violations.filter(v => v.severity === 'error');
-    const warnings = this.violations.filter(v => v.severity === 'warning');
+    const errors = this.violations.filter((v) => v.severity === "error");
+    const warnings = this.violations.filter((v) => v.severity === "warning");
 
     let report = `📋 Contract Violation Report\n`;
-    report += `${'='.repeat(50)}\n\n`;
+    report += `${"=".repeat(50)}\n\n`;
 
     if (errors.length > 0) {
       report += `❌ Errors (${errors.length}):\n`;
-      errors.forEach(v => {
+      errors.forEach((v) => {
         report += `  ${v.endpoint} [${v.type}]\n`;
         report += `    Field: ${v.field}\n`;
         report += `    Expected: ${JSON.stringify(v.expected)}\n`;
@@ -441,7 +461,7 @@ export class ContractTester {
 
     if (warnings.length > 0) {
       report += `⚠️  Warnings (${warnings.length}):\n`;
-      warnings.forEach(v => {
+      warnings.forEach((v) => {
         report += `  ${v.endpoint} [${v.type}]\n`;
         report += `    Field: ${v.field}\n`;
         report += `    Expected: ${JSON.stringify(v.expected)}\n`;
@@ -461,16 +481,16 @@ export async function autoGenerateAPIContracts(): Promise<ContractTester> {
 
   // Register common schemas
   tester.registerEndpoint({
-    path: '/api/session',
-    method: 'POST',
-    summary: 'Create session',
-    tags: ['Authentication'],
+    path: "/api/session",
+    method: "POST",
+    summary: "Create session",
+    tags: ["Authentication"],
     requestBody: z.object({
       idToken: z.string().min(1),
     }),
     responses: {
       200: {
-        description: 'Session created successfully',
+        description: "Session created successfully",
         schema: z.object({
           sessionCookie: z.string(),
           user: z.object({
@@ -479,15 +499,15 @@ export async function autoGenerateAPIContracts(): Promise<ContractTester> {
           }),
         }),
       },
-      401: { description: 'Invalid token' },
+      401: { description: "Invalid token" },
     },
   });
 
   tester.registerEndpoint({
-    path: '/api/organizations',
-    method: 'POST',
-    summary: 'Create organization',
-    tags: ['Organizations'],
+    path: "/api/organizations",
+    method: "POST",
+    summary: "Create organization",
+    tags: ["Organizations"],
     requestBody: z.object({
       name: z.string().min(1).max(100),
       subdomain: z.string().min(3).max(50),
@@ -495,7 +515,7 @@ export async function autoGenerateAPIContracts(): Promise<ContractTester> {
     }),
     responses: {
       201: {
-        description: 'Organization created',
+        description: "Organization created",
         schema: z.object({
           id: z.string(),
           name: z.string(),
@@ -503,28 +523,28 @@ export async function autoGenerateAPIContracts(): Promise<ContractTester> {
           createdAt: z.string(),
         }),
       },
-      400: { description: 'Invalid input' },
-      409: { description: 'Subdomain already exists' },
+      400: { description: "Invalid input" },
+      409: { description: "Subdomain already exists" },
     },
   });
 
   tester.registerEndpoint({
-    path: '/api/organizations/:id',
-    method: 'GET',
-    summary: 'Get organization details',
-    tags: ['Organizations'],
+    path: "/api/organizations/:id",
+    method: "GET",
+    summary: "Get organization details",
+    tags: ["Organizations"],
     parameters: [
       {
-        name: 'id',
-        in: 'path',
+        name: "id",
+        in: "path",
         required: true,
         schema: z.string(),
-        description: 'Organization ID',
+        description: "Organization ID",
       },
     ],
     responses: {
       200: {
-        description: 'Organization details',
+        description: "Organization details",
         schema: z.object({
           id: z.string(),
           name: z.string(),
@@ -532,15 +552,15 @@ export async function autoGenerateAPIContracts(): Promise<ContractTester> {
           createdAt: z.string(),
         }),
       },
-      404: { description: 'Organization not found' },
+      404: { description: "Organization not found" },
     },
   });
 
   tester.registerEndpoint({
-    path: '/api/schedules',
-    method: 'POST',
-    summary: 'Create schedule',
-    tags: ['Scheduling'],
+    path: "/api/schedules",
+    method: "POST",
+    summary: "Create schedule",
+    tags: ["Scheduling"],
     requestBody: z.object({
       organizationId: z.string(),
       name: z.string().min(1).max(100),
@@ -550,7 +570,7 @@ export async function autoGenerateAPIContracts(): Promise<ContractTester> {
     }),
     responses: {
       201: {
-        description: 'Schedule created',
+        description: "Schedule created",
         schema: z.object({
           id: z.string(),
           name: z.string(),
@@ -558,14 +578,14 @@ export async function autoGenerateAPIContracts(): Promise<ContractTester> {
           endDate: z.string(),
         }),
       },
-      400: { description: 'Invalid input' },
-      403: { description: 'Insufficient permissions' },
+      400: { description: "Invalid input" },
+      403: { description: "Insufficient permissions" },
     },
   });
 
   // Generate files
-  tester.generateSpec('docs/openapi.json');
-  tester.generateSwaggerUI('docs/api-docs.html');
+  tester.generateSpec("docs/openapi.json");
+  tester.generateSwaggerUI("docs/api-docs.html");
 
   return tester;
 }

@@ -20,10 +20,7 @@ export const GET = createAuthenticatedEndpoint({
       const staffUid = searchParams.get("staffUid");
 
       if (!orgId) {
-        return NextResponse.json(
-          { error: "orgId query parameter is required" },
-          { status: 400 },
-        );
+        return NextResponse.json({ error: "orgId query parameter is required" }, { status: 400 });
       }
 
       // Mock data - in production, fetch from Firestore
@@ -54,10 +51,7 @@ export const GET = createAuthenticatedEndpoint({
 
       return NextResponse.json({ records: filtered, total: filtered.length }, { status: 200 });
     } catch {
-      return NextResponse.json(
-        { error: "Failed to fetch attendance records" },
-        { status: 500 },
-      );
+      return NextResponse.json({ error: "Failed to fetch attendance records" }, { status: 500 });
     }
   },
 });
@@ -77,16 +71,11 @@ export const POST = createAuthenticatedEndpoint({
 
       // Verify orgId matches context
       if (data.orgId !== context.org!.orgId) {
-        return NextResponse.json(
-          { error: "Organization ID mismatch" },
-          { status: 403 },
-        );
+        return NextResponse.json({ error: "Organization ID mismatch" }, { status: 403 });
       }
 
       // Calculate scheduled duration in minutes
-      const scheduledDuration = Math.floor(
-        (data.scheduledEnd - data.scheduledStart) / (60 * 1000),
-      );
+      const scheduledDuration = Math.floor((data.scheduledEnd - data.scheduledStart) / (60 * 1000));
 
       // In production, create in Firestore
       const newRecord = {
@@ -102,15 +91,9 @@ export const POST = createAuthenticatedEndpoint({
       return NextResponse.json(newRecord, { status: 201 });
     } catch (error) {
       if (error instanceof Error && error.name === "ZodError") {
-        return NextResponse.json(
-          { error: "Invalid attendance record data" },
-          { status: 400 },
-        );
+        return NextResponse.json({ error: "Invalid attendance record data" }, { status: 400 });
       }
-      return NextResponse.json(
-        { error: "Failed to create attendance record" },
-        { status: 500 },
-      );
+      return NextResponse.json({ error: "Failed to create attendance record" }, { status: 500 });
     }
   },
 });

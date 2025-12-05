@@ -1,14 +1,14 @@
 // [P1][TEST][TEST] Fixer Test tests
 // Tags: P1, TEST, TEST
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it } from "vitest";
 
-import fs from 'fs';
-import path from 'path';
-import { fixFiles } from '../src/fixer';
-import { collectMarkdownFiles } from '../src/fsHelpers';
+import fs from "fs";
+import path from "path";
+import { fixFiles } from "../src/fixer";
+import { collectMarkdownFiles } from "../src/fsHelpers";
 
-describe('markdown-fixer', () => {
-  it('normalizes headings, trims trailing, collapses blanks, and handles lists', async () => {
+describe("markdown-fixer", () => {
+  it("normalizes headings, trims trailing, collapses blanks, and handles lists", async () => {
     const raw = `#Heading  
 
 Some text.  
@@ -18,29 +18,31 @@ Some text.
     const { content, changed } = await fixFiles(raw);
     expect(changed).toBe(true);
     // Heading normalization (space after #)
-    expect(content.includes('# Heading') || content.includes('#Heading')).toBeTruthy();
-    expect(content.includes('Some text.')).toBeTruthy();
+    expect(content.includes("# Heading") || content.includes("#Heading")).toBeTruthy();
+    expect(content.includes("Some text.")).toBeTruthy();
     // trailing spaces removed (no trailing whitespace before newline)
     expect(/[^\S\n]$/m.test(content)).toBe(false);
   });
 });
 
-describe('collectMarkdownFiles', () => {
-  it('traverses nested directories and finds markdown files', async () => {
-    const tmp = path.join(process.cwd(), 'test_tmp');
+describe("collectMarkdownFiles", () => {
+  it("traverses nested directories and finds markdown files", async () => {
+    const tmp = path.join(process.cwd(), "test_tmp");
     try {
       if (!fs.existsSync(tmp)) fs.mkdirSync(tmp, { recursive: true });
-      const sub = path.join(tmp, 'subdir');
+      const sub = path.join(tmp, "subdir");
       fs.mkdirSync(sub, { recursive: true });
-      const file1 = path.join(tmp, 'a.md');
-      const file2 = path.join(sub, 'b.markdown');
-      fs.writeFileSync(file1, '# a');
-      fs.writeFileSync(file2, '# b');
+      const file1 = path.join(tmp, "a.md");
+      const file2 = path.join(sub, "b.markdown");
+      fs.writeFileSync(file1, "# a");
+      fs.writeFileSync(file2, "# b");
       const found = collectMarkdownFiles(tmp);
       expect(found).toContain(file1);
       expect(found).toContain(file2);
     } finally {
-      try { fs.rmSync(tmp, { recursive: true }); } catch(_) {}
+      try {
+        fs.rmSync(tmp, { recursive: true });
+      } catch (_) {}
     }
   });
 });
