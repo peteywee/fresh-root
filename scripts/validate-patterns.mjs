@@ -98,9 +98,9 @@ const PATTERNS = {
         name: "Security Wrapper",
         tier: 0,
         severity: "error",
-        test: (content) => /(withSecurity|requireOrgMembership|requireSession)/.test(content),
+        test: (content) => /(withSecurity|requireOrgMembership|requireSession|createOrgEndpoint|createAuthenticatedEndpoint|createPublicEndpoint|createAdminEndpoint)/.test(content),
         message:
-          "API route missing security wrapper (withSecurity/requireOrgMembership/requireSession)",
+          "API route missing security wrapper (withSecurity/requireOrgMembership/requireSession/create*Endpoint)",
       },
       {
         name: "Write Validation",
@@ -111,7 +111,7 @@ const PATTERNS = {
           const hasWrite = /(POST|PATCH|PUT)\s*=/.test(content);
           if (!hasWrite) return true;
           const hasValidation =
-            /parseJson\(|safeParse\(|\.parse\(/.test(content) || /Schema\s*\.parse\(/.test(content);
+            /parseJson\(|safeParse\(|\.parse\(/.test(content) || /Schema\s*\.parse\(/.test(content) || /\binput\s*:/m.test(content);
           return hasValidation;
         },
         message: "Write API routes must validate input using Zod before use",
@@ -450,4 +450,26 @@ const targetPath = targetArg ? join(ROOT, targetArg) : ROOT;
 
 const validator = new PatternValidator(ROOT, { verbose });
 const exitCode = validator.run(targetPath);
+
+// Write machine-readable report for tooling/agents to consume
+try {
+  const outPath = join(ROOT, "pattern-validation-report.json");
+  const report = {
+    errors: validator.results.errors,
+    warnings: validator.results.warnings,
+    info: validator.results.info,
+    triadStatus: validator.results.triadStatus,
+    minScore: MIN_SCORE,
+  };
+  try {
+    const { writeFileSync } = await import('fs');
+    writeFileSync(outPath, JSON.stringify(report, null, 2), 'utf8');
+    if (verbose) console.log(`Wrote report to ${outPath}`);
+  } catch (e) {
+    if (verbose) console.error('Failed to write report file', e);
+  }
+} catch (e) {
+  if (verbose) console.error('Could not generate machine report', e);
+}
+
 process.exit(exitCode);

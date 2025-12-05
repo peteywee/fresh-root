@@ -1,3 +1,5 @@
+// [P1][TEST][TEST] Performance Profiler tests
+// Tags: P1, TEST, TEST
 /**
  * Performance Profiling and Benchmarking System
  * Real-time performance analysis with regression detection

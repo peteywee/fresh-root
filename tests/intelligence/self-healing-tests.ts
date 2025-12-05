@@ -1,3 +1,5 @@
+// [P1][TEST][TEST] Self Healing Tests tests
+// Tags: P1, TEST, TEST
 /**
  * Self-Healing Test Framework
  * Automatically adapts tests when the codebase changes

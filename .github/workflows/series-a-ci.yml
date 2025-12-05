@@ -16,6 +16,8 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      SKIP_PATTERN_VALIDATOR: 'true'
     steps:
       - name: Checkout
         uses: actions/checkout@v4

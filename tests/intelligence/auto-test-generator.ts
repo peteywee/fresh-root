@@ -1,3 +1,5 @@
+// [P0][TEST][TEST] Auto Test Generator tests
+// Tags: P0, TEST, TEST
 /**
  * AI-Powered Test Auto-Generation System
  * Analyzes code structure and automatically generates comprehensive tests

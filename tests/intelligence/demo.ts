@@ -1,3 +1,5 @@
+// [P0][TEST][TEST] Demo tests
+// Tags: P0, TEST, TEST
 /**
  * Test Intelligence System - Live Demo
  * Showcases all features with live examples

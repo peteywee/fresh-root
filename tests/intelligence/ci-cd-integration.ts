@@ -1,3 +1,5 @@
+// [P1][TEST][TEST] Ci Cd Integration tests
+// Tags: P1, TEST, TEST
 /**
  * Advanced CI/CD Integration
  * Deployment validation, canary testing, and automated rollback

@@ -1,3 +1,5 @@
+// [P1][TEST][TEST] Chaos Engineering tests
+// Tags: P1, TEST, TEST
 /**
  * Chaos Engineering for Resilience Testing
  * Injects failures to test system resilience and error handling

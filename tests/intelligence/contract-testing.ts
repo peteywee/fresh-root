@@ -1,3 +1,5 @@
+// [P0][TEST][TEST] Contract Testing tests
+// Tags: P0, TEST, TEST
 /**
  * Contract Testing with Auto-Generated OpenAPI Specifications
  * Ensures API contracts are maintained and generates documentation

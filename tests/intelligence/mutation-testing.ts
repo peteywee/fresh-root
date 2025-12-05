@@ -1,3 +1,5 @@
+// [P1][TEST][TEST] Mutation Testing tests
+// Tags: P1, TEST, TEST
 /**
  * Mutation Testing Framework
  * Validates test quality by introducing bugs and ensuring tests catch them

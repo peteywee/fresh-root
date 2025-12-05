@@ -1,8 +1,8 @@
 // [P0][ATTENDANCE][API] Attendance tracking endpoint
 
+import { createAuthenticatedEndpoint } from "@fresh-schedules/api-framework";
 import { CreateAttendanceRecordSchema } from "@fresh-schedules/types";
 import { NextResponse } from "next/server";
-import { createAuthenticatedEndpoint } from "@fresh-schedules/api-framework";
 
 /**
  * GET /api/attendance
