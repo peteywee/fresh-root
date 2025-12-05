@@ -3,8 +3,8 @@
 import type { Firestore, DocumentReference, WriteBatch } from "firebase-admin/firestore";
 // Use the admin firestore instance from server helper
 import { adminDb } from "@/src/lib/firebase.server";
-import { loadAdminFormDraft, markAdminFormDraftConsumed } from "./adminFormDrafts";
-import type { CreateNetworkOrgPayload } from "@fresh-schedules/types";
+import { getAdminFormDraft, consumeAdminFormDraft } from "./adminFormDrafts";
+import { CreateNetworkOrgPayload } from "@fresh-schedules/types";
 import { Timestamp } from "firebase-admin/firestore";
 
 const dbDefault = adminDb as Firestore | undefined;
@@ -77,7 +77,7 @@ export async function createNetworkWithOrgAndVenue(
 
   const { basics, venue, formToken } = payload;
 
-  const draft = await loadAdminFormDraft(formToken, injectedDb);
+  const draft = await getAdminFormDraft(formToken);
   if (!draft) throw new Error("admin_form_not_found");
   if (draft.userId !== adminUid) throw new Error("admin_form_ownership_mismatch");
 
@@ -92,8 +92,8 @@ export async function createNetworkWithOrgAndVenue(
     slug: networkId,
     displayName: basics?.orgName ?? networkId,
     legalName: (draft.payload as { data?: { legalName?: string } })?.data?.legalName ?? basics?.orgName ?? null,
-    kind: basics.hasCorporateAboveYou ? "franchise_network" : "independent_org",
-    segment: basics.segment,
+    kind: (basics as any).hasCorporateAboveYou ? "franchise_network" : "independent_org",
+    segment: (basics as any).segment,
     status: "pending_verification",
     ownerUserId: adminUid,
     createdAt: now,
@@ -152,7 +152,7 @@ export async function createNetworkWithOrgAndVenue(
   // Commit batch
   await batch.commit();
 
-  await markAdminFormDraftConsumed(formToken, injectedDb);
+  await consumeAdminFormDraft({ formToken, userId: adminUid });
 
   return { networkId, orgId, venueId, status: "pending_verification" };
 }
