@@ -155,7 +155,7 @@ export const joinOrganization = functions.https.onCall(async (request): Promise<
     const validation = JoinRequestSchema.safeParse(request.data);
     if (!validation.success) {
       throw new JoinError(
-        validation.error.errors.map((e) => e.message).join(", "),
+        validation.error.issues.map((e) => e.message).join(", "),
         "VALIDATION_ERROR",
         400,
       );

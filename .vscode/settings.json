@@ -47,10 +47,10 @@
     "editor.defaultFormatter": null
   },
   "[json]": {
-    "editor.defaultFormatter": null
+    "editor.defaultFormatter": "rvest.vs-code-prettier-eslint"
   },
   "[jsonc]": {
-    "editor.defaultFormatter": null
+    "editor.defaultFormatter": "rvest.vs-code-prettier-eslint"
   },
   "[python]": {
     "editor.defaultFormatter": null
@@ -86,5 +86,8 @@
   },
   "[redhat.vscode-yaml]": {
     "enable": false
+  },
+  "[markdown]": {
+    "editor.defaultFormatter": "DavidAnson.vscode-markdownlint"
   }
 }

@@ -107,24 +107,31 @@ export async function getDocWithTypeOrThrow<T extends Record<string, unknown>>(
  * const schedules = await queryWithType<Schedule>(db, q);
  * ```
  */
+export interface QueryResult<T> {
+  success: boolean;
+  data: T[];
+}
+
 export async function queryWithType<T extends Record<string, unknown>>(
   db: Firestore,
   q: Query,
   options?: QueryOptions,
-): Promise<T[]> {
+): Promise<QueryResult<T>> {
   const snap = await q.get();
 
   if (snap.empty && options?.allowEmpty === false) {
     throw new Error("Query returned no results");
   }
 
-  return snap.docs.map((doc) => {
+  const rows = snap.docs.map((doc) => {
     const data = doc.data();
     return {
       ...data,
       id: doc.id, // Include document ID for convenience
     } as unknown as T;
   });
+
+  return { success: true, data: rows };
 }
 
 /**
@@ -148,21 +155,23 @@ export async function queryWithType<T extends Record<string, unknown>>(
  * const membership = await queryWithTypeSingle<Membership>(db, q);
  * ```
  */
+export interface QuerySingleResult<T> {
+  success: boolean;
+  data: T | null;
+}
+
 export async function queryWithTypeSingle<T extends Record<string, unknown>>(
   db: Firestore,
   q: Query,
-): Promise<FirebaseResult<T>> {
+): Promise<QuerySingleResult<T>> {
   const snap = await q.limit(1).get();
 
   if (snap.empty) {
-    return null;
+    return { success: false, data: null };
   }
 
   const doc = snap.docs[0];
-  return {
-    ...doc.data(),
-    id: doc.id,
-  } as unknown as T;
+  return { success: true, data: { ...doc.data(), id: doc.id } as unknown as T };
 }
 
 /**

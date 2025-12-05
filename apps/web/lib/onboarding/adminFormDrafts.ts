@@ -12,7 +12,6 @@ import {
   type AdminResponsibilityForm,
   type CreateAdminResponsibilityFormInput,
 } from "@fresh-schedules/types";
-import { doc } from "firebase-admin/firestore";
 import { z } from "zod";
 
 const AdminFormDraftDocSchema = z.object({
@@ -62,7 +61,7 @@ export async function createAdminFormDraft(params: {
   };
 
   const db = getFirebaseAdminDb();
-  const ref = doc(db, "adminFormDrafts", crypto.randomUUID());
+  const ref = db.collection("adminFormDrafts").doc(crypto.randomUUID());
   
   await setDocWithType<AdminFormDraftDoc>(db, ref, draft);
 
@@ -74,7 +73,7 @@ export async function createAdminFormDraft(params: {
  */
 export async function getAdminFormDraft(formToken: string) {
   const db = getFirebaseAdminDb();
-  const ref = doc(db, "adminFormDrafts", formToken);
+  const ref = db.collection("adminFormDrafts").doc(formToken);
   
   const draft = await getDocWithType<AdminFormDraftDoc>(db, ref);
   if (!draft) return null;
@@ -98,7 +97,7 @@ export async function consumeAdminFormDraft(params: {
 } | null> {
   const { formToken, expectedUserId } = params;
   const db = getFirebaseAdminDb();
-  const ref = doc(db, "adminFormDrafts", formToken);
+  const ref = db.collection("adminFormDrafts").doc(formToken);
 
   return await transactionWithType<
     { form: AdminResponsibilityForm; taxValidation: { isValid: boolean; reason?: string } } | null

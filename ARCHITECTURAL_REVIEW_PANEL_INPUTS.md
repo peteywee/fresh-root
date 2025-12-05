@@ -1,4 +1,69 @@
-# Architectural Review Panel - Input Document
+// Core authentication middleware
+export async function requireSession(
+  req: AuthenticatedRequest,
+  handler: (req: AuthenticatedRequest) => Promise<NextResponse>,
+): Promise<NextResponse> {
+// MFA enforcement for managers/admins
+export async function require2FAForManagers(
+  req: AuthenticatedRequest,
+  handler: (req: AuthenticatedRequest) => Promise<NextResponse>,
+): Promise<NextResponse> {
+// Abstract rate limiter interface
+export interface RateLimiter {
+
+### 1.1 Directory Structure
+
+}
+// In-memory implementation (single-instance only)
+class InMemoryRateLimiter implements RateLimiter {
+// Redis implementation (multi-instance safe)
+class RedisRateLimiter implements RateLimiter {
+  private readonly redis: Redis;
+
+  public async consume(key: string, cost: number = 1): Promise<RateLimitResult> {
+    const bucketKey = this.buildKey(key, this.options.windowSeconds);
+    const count = await this.redis.incrby(bucketKey, cost);
+// Factory: auto-select based on environment
+export function getRateLimiter(options: RateLimitOptions): RateLimiter {
+export function withRateLimit(
+  handler: (req: NextRequest) => Promise<NextResponse>,
+  config: RateLimitConfig,
+): (req: NextRequest) => Promise<NextResponse> {
+// Schema definition (source of truth)
+export const OrganizationSchema = z.object({
+  id: z.string(),
+  name: z.string().min(1, "Organization name required"),
+export const ScheduleSchema = z.object({
+  id: z.string(),
+export const ShiftSchema = z.object({
+  id: z.string(),
+  scheduleId: z.string(),
+// RBAC role hierarchy
+export const RbacRoleSchema = z.enum([
+// Firestore security rules
+rules_version = '2';
+service cloud.firestore {
+// Structured logging with context
+export class Logger {
+  private context: Record<string, unknown>;
+{
+  "name": "fresh-root",
+  "version": "1.1.0",
+{
+  "name": "@apps/web",
+  "version": "0.1.0",
+{
+  "compilerOptions": {
+    "target": "ES2022",
+// Node environment
+import { z } from "zod";
+const config = {
+  output: "standalone",
+// Session creation flow
+async function createSession(idToken: string): Promise<string> {
+  const auth = getFirebaseAdminAuth();
+
+## Architectural Review Panel - Input Document
 
 **Project:** Fresh Root - Multi-Tenant SaaS Scheduling Platform
 **Version:** 1.1.0
@@ -981,26 +1046,28 @@ export const POST = withRateLimit(
 
 ### 2.6 Security Model
 
+#### Layer 1: Firebase Authentication
+
 #### 2.6.1 RBAC (Role-Based Access Control)
 
 **Role Hierarchy:**
 
 ```
 org_owner (highest)
-  └─> Full control over organization
+#### Layer 2: Session Management
       └─> Can create/delete organization
       └─> Can manage all resources
       └─> Can assign/revoke roles
 
 admin
-  └─> Administrative access
+#### Layer 3: MFA (Multi-Factor Authentication)
       └─> Can manage schedules, shifts, users
       └─> Cannot delete organization
 
 manager
   └─> Schedule management
       └─> Can create/edit/delete schedules
-      └─> Can assign shifts
+#### Layer 4: API Authorization
 
 scheduler
   └─> Schedule creation/editing
@@ -1042,20 +1109,22 @@ function hasAnyRole(roles) {
 
 #### 2.6.2 Authentication Layers
 
-**Layer 1: Firebase Authentication**
+##### 1. users
 
 - Email/password authentication
 - Email verification required
 - Password reset flows
 - Account linking
 
-**Layer 2: Session Management**
+##### 2. networks
 
 - Server-side session cookies (5-day expiry)
 - httpOnly, Secure, SameSite=Strict
 - Revocation check on every request
 
 **Layer 3: MFA (Multi-Factor Authentication)**
+
+##### 3. orgs / organizations
 
 - TOTP-based (Speakeasy library)
 - QR code enrollment
@@ -1064,19 +1133,23 @@ function hasAnyRole(roles) {
 
 **Layer 4: API Authorization**
 
+##### 4. schedules
+
 - RBAC role checks
 - Organization membership validation
 - Resource ownership verification
 
 #### 2.6.3 Data Security
 
-**Encryption:**
+##### 5. shifts
 
 - **In Transit:** HTTPS/TLS 1.3 (enforced by Firebase)
 - **At Rest:** Firestore automatic encryption (AES-256)
 - **Client Secrets:** Environment variables, never committed
 
 **Input Validation:**
+
+##### 6. positions
 
 - Zod schemas for all API inputs
 - SQL injection: N/A (Firestore is NoSQL)
@@ -1085,26 +1158,32 @@ function hasAnyRole(roles) {
 
 **Rate Limiting:**
 
+##### 7. venues
+
 - IP-based throttling (30 req/min default)
 - Redis-backed for distributed enforcement
 - Custom limits per endpoint type
 
 **Security Headers:**
 
-```javascript
+##### 8. zones
+
 X-Frame-Options: DENY
 X-Content-Type-Options: nosniff
 Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
 Referrer-Policy: strict-origin-when-cross-origin
 Cross-Origin-Opener-Policy: same-origin
 Content-Security-Policy: default-src 'self'; ...
-```
+
+##### 9. memberships
 
 ### 2.7 Database Schema Overview - Firestore Collections
 
 #### Core Collections
 
 **1. users**
+
+##### 10. join_tokens
 
 - **Path:** `/users/{userId}`
 - **Access:** Self-only (no enumeration)
@@ -1113,12 +1192,16 @@ Content-Security-Policy: default-src 'self'; ...
 
 **2. networks**
 
+##### 11. attendance_records
+
 - **Path:** `/networks/{networkId}`
 - **Access:** Server-only (Admin SDK)
 - **Purpose:** Tenant root container (v14.0.0+)
 - **Fields:** `id`, `name`, `type` (`corporate` | `organization`), `createdBy`, `createdAt`
 
 **3. orgs / organizations**
+
+##### 12. compliance
 
 - **Path:** `/orgs/{orgId}` or `/organizations/{orgId}`
 - **Access:** Members read, owner/admin write
@@ -1128,25 +1211,33 @@ Content-Security-Policy: default-src 'self'; ...
 **4. schedules**
 
 - **Path:** `/orgs/{orgId}/schedules/{scheduleId}`
-- **Access:** Members read, scheduler+ write
+
+##### 13. messages
+
 - **Purpose:** Work schedules
 - **Fields:** `id`, `orgId`, `name`, `startDate`, `endDate`, `status`, `positions[]`, `createdBy`
 
 **5. shifts**
+
+##### 14. receipts
 
 - **Path:** `/orgs/{orgId}/schedules/{scheduleId}/shifts/{shiftId}`
 - **Access:** Members read, scheduler+ write, staff limited update
 - **Purpose:** Individual shift assignments
 - **Fields:** `id`, `scheduleId`, `orgId`, `userId`, `positionId`, `venueId`, `startTime`, `endTime`, `status`, `notes`
 
+##### 15. widgets
+
 **6. positions**
 
 - **Path:** `/orgs/{orgId}/positions/{positionId}`
 - **Access:** Members read, manager+ write
-- **Purpose:** Job positions/roles
+
+##### 16. corporates
+
 - **Fields:** `id`, `orgId`, `name`, `description`, `defaultPayRate`, `requiredSkills[]`
 
-**7. venues**
+- `/`/`corporates`/`{corporateId}`
 
 - **Path:** `/venues/{orgId}/venues/{venueId}`
 - **Access:** Members read, manager+ write
@@ -1564,7 +1655,7 @@ Fresh Root is a **multi-tenant Progressive Web App** designed for small-to-mediu
 - ✅ Git-based workflows comfortable
 - ✅ Documentation culture established
 
-**Growth Areas:**
+  - **Alternative:** `Rollbar`, `Bugsnag` (not recommended to switch)
 
 - ⚠️ Redis/distributed caching (new for multi-instance)
 - ⚠️ OpenTelemetry instrumentation (new)
@@ -2064,7 +2155,7 @@ gcloud run deploy fresh-root --image gcr.io/PROJECT/fresh-root
 
 ---
 
-**End of Architectural Review Panel Input Document**
+## End of Architectural Review Panel Input Document
 
 **Document Version:** 1.0
 **Last Updated:** November 30, 2025

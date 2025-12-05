@@ -20,7 +20,7 @@ const DashboardPage = React.memo(() => {
       // For demo: replace with real orgId/scheduleId selection
       const orgId = "orgA";
       const scheduleId = "demo-schedule";
-      await publishSchedule({ orgId, scheduleId });
+      await publishSchedule(scheduleId);
       setMessage("Published successfully");
     } catch (err: unknown) {
       const errorMessage = err instanceof Error ? err.message : "Publish failed";

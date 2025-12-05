@@ -68,7 +68,25 @@ export function internalError(
 }
 
 export function fromZodError(err: ZodError): NextResponse<ApiResponse> {
-  return badRequest("Validation Error", err.errors);
+  // Convert zod issues into structured field-level errors
+  const fieldErrors: Record<string, string[]> = {};
+
+  for (const issue of err.issues) {
+    const key = issue.path.join(".") || "_root";
+    if (!fieldErrors[key]) fieldErrors[key] = [];
+    fieldErrors[key].push(issue.message);
+  }
+
+  return NextResponse.json(
+    {
+      error: {
+        code: "VALIDATION_FAILED",
+        message: "Validation Error",
+        details: { fields: fieldErrors },
+      },
+    },
+    { status: 422 },
+  );
 }
 
 export const jsonOk = success;

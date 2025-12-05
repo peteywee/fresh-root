@@ -20,6 +20,22 @@ export const JoinWithTokenSchema = z.object({
 export type CreateCorporateOnboarding = z.infer<typeof CreateCorporateOnboardingSchema>;
 export type JoinWithToken = z.infer<typeof JoinWithTokenSchema>;
 
+// Payload for creating network with org and venue during admin onboarding
+export const CreateNetworkOrgPayloadSchema = z.object({
+  basics: z.object({
+    orgName: z.string().min(1, "Organization name required"),
+    hasCorporateAboveYou: z.boolean().default(false),
+    segment: z.string().optional(),
+  }),
+  venue: z.object({
+    venueName: z.string().min(1, "Venue name required"),
+    timeZone: z.string().default("UTC"),
+  }).optional(),
+  formToken: z.string().min(1, "Form token required"),
+});
+
+export type CreateNetworkOrgPayload = z.infer<typeof CreateNetworkOrgPayloadSchema>;
+
 // Schema for creating an organization during onboarding (v14)
 export const CreateOrgOnboardingSchema = z.object({
   orgName: z.string().min(1),

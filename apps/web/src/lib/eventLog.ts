@@ -13,7 +13,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { NewEventSchema, type NewEvent } from "@fresh-schedules/types";
 import type { Firestore } from "firebase-admin/firestore";
-import { collection, doc } from "firebase-admin/firestore";
 import { setDocWithType } from "@/lib/firebase/typed-wrappers";
 
 interface EventDoc extends NewEvent {
@@ -38,7 +37,7 @@ export async function logEvent(adminDb: Firestore | any, input: NewEvent): Promi
   }
 
   const event = parsed.data;
-  const ref = doc(collection(adminDb, "events"));
+  const ref = adminDb.collection("events").doc();
 
   await setDocWithType<EventDoc>(adminDb, ref, {
     id: ref.id,

@@ -1,20 +1,13 @@
-// [P1][FIREBASE][HELPER] Create network/org/venue helper
+// [P0][FIREBASE][HELPER] Create network/org/venue helper
 // Tags: FIREBASE, ONBOARDING, HELPERS
-import type { CreateNetworkOrgPayload } from "@fresh-schedules/types";
-import {
-  type Firestore,
-  type DocumentReference,
-  type WriteBatch,
-  Timestamp,
-  doc,
-  collection,
-} from "firebase-admin/firestore";
-
-import { loadAdminFormDraft, markAdminFormDraftConsumed } from "./adminFormDrafts";
-
+import type { Firestore, DocumentReference, WriteBatch } from "firebase-admin/firestore";
+// Use the admin firestore instance from server helper
 import { adminDb } from "@/src/lib/firebase.server";
+import { getAdminFormDraft, consumeAdminFormDraft } from "./adminFormDrafts";
+import { CreateNetworkOrgPayload } from "@fresh-schedules/types";
+import { Timestamp } from "firebase-admin/firestore";
 
-const db = adminDb as Firestore | undefined;
+const dbDefault = adminDb as Firestore | undefined;
 
 export type CreateNetworkOrgResult = {
   networkId: string;
@@ -29,6 +22,8 @@ interface NetworkDoc {
   slug: string;
   displayName: string;
   legalName: string | null;
+  kind: "franchise_network" | "independent_org";
+  segment?: string;
   status: "pending_verification" | "active";
   ownerUserId: string;
   createdAt: Timestamp;
@@ -41,8 +36,6 @@ interface ComplianceDoc {
   networkId: string;
   adminUid: string;
   [key: string]: unknown;
-  ipAddress?: string;
-  userAgent?: string;
   createdAt: Timestamp;
   createdBy: string;
 }
@@ -79,16 +72,16 @@ export async function createNetworkWithOrgAndVenue(
   payload: CreateNetworkOrgPayload,
   injectedDb?: Firestore,
 ): Promise<CreateNetworkOrgResult> {
-  const root = injectedDb ?? db;
+  const root = injectedDb ?? dbDefault;
   if (!root) throw new Error("admin_db_not_initialized");
 
   const { basics, venue, formToken } = payload;
 
-  const draft = await loadAdminFormDraft(formToken, injectedDb);
+  const draft = await getAdminFormDraft(formToken);
   if (!draft) throw new Error("admin_form_not_found");
   if (draft.userId !== adminUid) throw new Error("admin_form_ownership_mismatch");
 
-  const networkRef = doc(collection(root, "networks")) as DocumentReference<NetworkDoc>;
+  const networkRef = root.collection("networks").doc() as DocumentReference<NetworkDoc>;
   const networkId = networkRef.id;
   const now = Timestamp.now();
 
@@ -98,7 +91,9 @@ export async function createNetworkWithOrgAndVenue(
     id: networkId,
     slug: networkId,
     displayName: basics?.orgName ?? networkId,
-    legalName: (draft.payload as { data?: { legalName?: string } })?.data?.legalName ?? basics?.orgName ?? null,
+    legalName: (draft.form as { data?: { legalName?: string } })?.data?.legalName ?? basics?.orgName ?? null,
+    kind: (basics as any).hasCorporateAboveYou ? "franchise_network" : "independent_org",
+    segment: (basics as any).segment,
     status: "pending_verification",
     ownerUserId: adminUid,
     createdAt: now,
@@ -109,22 +104,17 @@ export async function createNetworkWithOrgAndVenue(
 
   batch.set(networkRef, networkDoc);
 
-  const complianceRef = doc(
-    collection(networkRef, "compliance"),
-    "adminResponsibilityForm"
-  ) as DocumentReference<ComplianceDoc>;
+  const complianceRef = networkRef.collection("compliance").doc("adminResponsibilityForm") as DocumentReference<ComplianceDoc>;
   const formDoc: ComplianceDoc = {
     networkId,
     adminUid,
-    ...draft.payload,
-    ipAddress: draft.ipAddress,
-    userAgent: draft.userAgent,
+    ...draft.form,
     createdAt: now,
     createdBy: adminUid,
   };
   batch.set(complianceRef, formDoc);
 
-  const orgRef = doc(collection(networkRef, "orgs")) as DocumentReference<OrgDoc>;
+  const orgRef = networkRef.collection("orgs").doc() as DocumentReference<OrgDoc>;
   const orgId = orgRef.id;
   const orgDoc: OrgDoc = {
     id: orgId,
@@ -136,7 +126,7 @@ export async function createNetworkWithOrgAndVenue(
   };
   batch.set(orgRef, orgDoc);
 
-  const venueRef = doc(collection(networkRef, "venues")) as DocumentReference<VenueDoc>;
+  const venueRef = networkRef.collection("venues").doc() as DocumentReference<VenueDoc>;
   const venueId = venueRef.id;
   const venueDoc: VenueDoc = {
     id: venueId,
@@ -148,7 +138,7 @@ export async function createNetworkWithOrgAndVenue(
   };
   batch.set(venueRef, venueDoc);
 
-  const membershipRef = doc(collection(networkRef, "memberships")) as DocumentReference<MembershipDoc>;
+  const membershipRef = networkRef.collection("memberships").doc() as DocumentReference<MembershipDoc>;
   const membershipDoc: MembershipDoc = {
     id: membershipRef.id,
     networkId,
@@ -162,7 +152,7 @@ export async function createNetworkWithOrgAndVenue(
   // Commit batch
   await batch.commit();
 
-  await markAdminFormDraftConsumed(formToken, injectedDb);
+  await consumeAdminFormDraft({ formToken, expectedUserId: adminUid });
 
   return { networkId, orgId, venueId, status: "pending_verification" };
 }

@@ -33,9 +33,9 @@
  * ```
  */
 
+import type { OrgRole } from "../../types/src/rbac";
 import { NextRequest, NextResponse } from "next/server";
-import { ZodSchema, ZodError } from "zod";
-import { OrgRole } from "@fresh-schedules/types";
+import { ZodError, ZodSchema } from "zod";
 
 // =============================================================================
 // TYPES
@@ -450,7 +450,7 @@ export function createEndpoint<TInput = unknown, TOutput = unknown>(
         } catch (error) {
           if (error instanceof ZodError) {
             const details: Record<string, string[]> = {};
-            error.errors.forEach((e) => {
+            error.issues.forEach((e: import("zod").ZodIssue) => {
               const path = e.path.join(".");
               if (!details[path]) details[path] = [];
               details[path].push(e.message);
@@ -580,9 +580,9 @@ export type { OrgRole };
 // REDIS & RATE LIMITING
 // =============================================================================
 
-export * from "./redis";
-export type { RedisClient, RateLimitConfig, RateLimitResult } from "./redis";
-export { checkRateLimit, createRateLimitMiddleware } from "./redis";
+  export * from "./redis";
+  export { checkRateLimit, createRateLimitMiddleware } from "./redis";
+  export type { RateLimitConfig, RateLimitResult, RedisClient } from "./redis";
 
 // TODO: Add Route Factory pattern here next
 // - validateInput(schema: ZodSchema, data: unknown)

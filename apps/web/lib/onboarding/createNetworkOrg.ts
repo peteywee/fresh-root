@@ -2,7 +2,7 @@
 // Tags: P0, APP, CODE
 // apps/web/lib/onboarding/createNetworkOrg.ts
 import type { Firestore, DocumentReference, WriteBatch } from "firebase-admin/firestore";
-import { doc, collection } from "firebase-admin/firestore";
+// Use admin firestore instance methods instead of doc/collection helpers
 import { getFirebaseAdminDb } from "../firebase-admin";
 import { consumeAdminFormDraft } from "./adminFormDrafts";
 
@@ -104,7 +104,7 @@ export async function createNetworkWithOrgAndVenue(
 
   const batch: WriteBatch = db.batch();
 
-  const networkRef = doc(collection(db, "networks")) as DocumentReference<NetworkDoc>;
+  const networkRef = db.collection("networks").doc() as DocumentReference<NetworkDoc>;
   const networkId = networkRef.id;
 
   const now = new Date();
@@ -126,10 +126,7 @@ export async function createNetworkWithOrgAndVenue(
 
   batch.set(networkRef, networkDoc);
 
-  const complianceRef = doc(
-    collection(networkRef, "compliance"),
-    "adminResponsibilityForm"
-  ) as DocumentReference<ComplianceDoc>;
+  const complianceRef = networkRef.collection("compliance").doc("adminResponsibilityForm") as DocumentReference<ComplianceDoc>;
   const formDoc: ComplianceDoc = {
     networkId,
     adminUid,
@@ -140,7 +137,7 @@ export async function createNetworkWithOrgAndVenue(
 
   batch.set(complianceRef, formDoc);
 
-  const orgRef = doc(collection(networkRef, "orgs")) as DocumentReference<OrgDoc>;
+  const orgRef = networkRef.collection("orgs").doc() as DocumentReference<OrgDoc>;
   const orgId = orgRef.id;
   const orgDoc: OrgDoc = {
     id: orgId,
@@ -156,7 +153,7 @@ export async function createNetworkWithOrgAndVenue(
 
   batch.set(orgRef, orgDoc);
 
-  const venueRef = doc(collection(networkRef, "venues")) as DocumentReference<VenueDoc>;
+  const venueRef = networkRef.collection("venues").doc() as DocumentReference<VenueDoc>;
   const venueId = venueRef.id;
   const venueDoc: VenueDoc = {
     id: venueId,
@@ -171,7 +168,7 @@ export async function createNetworkWithOrgAndVenue(
 
   batch.set(venueRef, venueDoc);
 
-  const membershipRef = doc(collection(networkRef, "memberships")) as DocumentReference<MembershipDoc>;
+  const membershipRef = networkRef.collection("memberships").doc() as DocumentReference<MembershipDoc>;
   const membershipId = membershipRef.id;
   const membershipDoc: MembershipDoc = {
     id: membershipId,
