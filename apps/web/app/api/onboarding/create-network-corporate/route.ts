@@ -16,9 +16,9 @@ export const POST = createAuthenticatedEndpoint({
       const network = {
         id: `network-${Date.now()}`,
         type: "corporate",
-        companyName,
-        industry,
-        size,
+        corporateName,
+        brandName,
+        formToken,
         ownerId: context.auth?.userId,
         createdAt: Date.now(),
       };

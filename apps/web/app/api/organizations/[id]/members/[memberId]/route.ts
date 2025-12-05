@@ -2,7 +2,7 @@
 
 import { createOrgEndpoint } from "@fresh-schedules/api-framework";
 import { ok, serverError } from "../../../../_shared/validation";
-import { UpdateMembershipSchema } from "@fresh-schedules/types";
+import { UpdateMemberApiSchema } from "@fresh-schedules/types";
 
 /**
  * GET /api/organizations/[id]/members/[memberId]

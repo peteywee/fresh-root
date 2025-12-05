@@ -213,8 +213,17 @@ declare module "@fresh-schedules/types" {
   export const CreateCorporateOnboardingSchema: ZAnyObj;
   export type CreateCorporateOnboarding = z.infer<typeof CreateCorporateOnboardingSchema>;
 
+  export const CreateCorporateNetworkSchema: ZAnyObj;
+  export type CreateCorporateNetworkInput = z.infer<typeof CreateCorporateNetworkSchema>;
+
   export const JoinWithTokenSchema: ZAnyObj;
   export type JoinWithToken = z.infer<typeof JoinWithTokenSchema>;
+
+  export const OnboardingJoinWithTokenSchema: ZAnyObj;
+  export type OnboardingJoinWithTokenInput = z.infer<typeof OnboardingJoinWithTokenSchema>;
+
+  export const OnboardingProfileSchema: ZAnyObj;
+  export type OnboardingProfileInput = z.infer<typeof OnboardingProfileSchema>;
 
   export const CreateOrgOnboardingSchema: ZAnyObj;
   export type CreateOrgOnboarding = z.infer<typeof CreateOrgOnboardingSchema>;
@@ -230,6 +239,21 @@ declare module "@fresh-schedules/types" {
 
   export const OnboardingStateSchema: ZAnyObj;
   export type OnboardingState = z.infer<typeof OnboardingStateSchema>;
+
+  // ============================================================================
+  // ITEMS TYPES
+  // ============================================================================
+  export const CreateItemSchema: ZAnyObj;
+  export type CreateItemInput = z.infer<typeof CreateItemSchema>;
+
+  export const UpdateItemSchema: ZAnyObj;
+  export type UpdateItemInput = z.infer<typeof UpdateItemSchema>;
+
+  // ============================================================================
+  // MEMBERSHIPS TYPES (Extended)
+  // ============================================================================
+  export const UpdateMemberApiSchema: ZAnyObj;
+  export type UpdateMemberApiInput = z.infer<typeof UpdateMemberApiSchema>;
 
   // ============================================================================
   // EVENTS TYPES
