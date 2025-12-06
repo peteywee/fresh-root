@@ -12,7 +12,7 @@
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { Firestore } from "firebase-admin/firestore";
-import { getDocWithType, setDocWithType } from "@/lib/firebase/typed-wrappers";
+import { getDocWithType, setDocWithType } from "./firebase/typed-wrappers";
 import { z } from "zod";
 
 export type AuthUserClaims = {

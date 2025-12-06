@@ -5,7 +5,7 @@ import { getFirestore } from "firebase-admin/firestore";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
-import { queryWithType } from "@/lib/firebase/typed-wrappers";
+import { queryWithType } from "@/src/lib/firebase/typed-wrappers";
 
 export type OrgRole = "org_owner" | "admin" | "manager" | "scheduler" | "corporate" | "staff";
 

@@ -6,7 +6,7 @@
  * markOnboardingComplete is called after all successful onboarding flows to mark completion.
  */
 import type { Firestore } from "firebase-admin/firestore";
-import { setDocWithType } from "@/lib/firebase/typed-wrappers";
+import { setDocWithType } from "@/src/lib/firebase/typed-wrappers";
 
 export type OnboardingIntent = "create_org" | "create_corporate" | "join_existing";
 
