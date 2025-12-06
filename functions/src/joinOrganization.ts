@@ -22,7 +22,6 @@ import { z } from "zod";
 function getDb() {
   return getFirestore();
 }
-}
 
 function getAuth() {
   return admin.auth();
@@ -80,9 +79,27 @@ class JoinError extends Error {
 async function validateToken(
   tokenId: string,
   dbClient?: any,
-): Promise<{ ref: admin.firestore.DocumentReference; data: JoinToken }> {
+): Promise<{ ref: admin.firestore.DocumentReference<JoinToken>; data: JoinToken }> {
   const db = dbClient ?? getDb();
-  const tokenRef = db.collection("join_tokens").doc(tokenId);
+
+  // Typed converter so we can treat tokenRef as DocumentReference<JoinToken>
+  const tokenConverter: admin.firestore.FirestoreDataConverter<JoinToken> = {
+    toFirestore: (data: JoinToken) => ({
+      orgId: data.orgId,
+      role: data.role,
+      status: data.status,
+      createdAt: data.createdAt,
+      expiresAt: data.expiresAt,
+      maxUses: data.maxUses,
+      currentUses: data.currentUses,
+      createdBy: data.createdBy,
+    }),
+    fromFirestore: (snapshot: FirebaseFirestore.QueryDocumentSnapshot) => {
+      return snapshot.data() as JoinToken;
+    },
+  };
+
+  const tokenRef = db.collection("join_tokens").withConverter(tokenConverter).doc(tokenId);
   const tokenDoc = await tokenRef.get();
 
   if (!tokenDoc.exists) {
@@ -206,61 +223,84 @@ export async function joinOrganizationHandler(
       };
     }
 
-    // ATOMIC TRANSACTION
-    const membershipId = await dbClient.runTransaction(async (transaction) => {
-      const tokenSnapshot = await transaction.get(tokenRef);
-      if (!tokenSnapshot.exists) {
-        throw new JoinError("Token no longer exists", "TOKEN_NOT_FOUND", 404);
-      }
+  // ATOMIC TRANSACTION
+  // Define document shapes for type-safety within the transaction
+  interface MembershipDoc {
+    uid: string;
+    orgId: string;
+    role: string;
+    status: "active" | "inactive" | "pending";
+    joinedVia: "token" | string;
+    joinToken?: string;
+    email?: string | null;
+    displayName?: string | null;
+    createdAt: Timestamp;
+    updatedAt: Timestamp;
+  }
 
-      const currentTokenData = tokenSnapshot.data() as JoinToken;
-      if (currentTokenData.currentUses >= currentTokenData.maxUses) {
-        throw new JoinError("Token exhausted", "TOKEN_EXHAUSTED", 400);
-      }
-      const membershipRef = dbClient.collection("memberships").doc();
-      const now = Timestamp.now();
+  interface UserProfileDoc {
+    uid: string;
+    email?: string | null;
+    displayName?: string | null;
+    createdAt: Timestamp;
+    updatedAt: Timestamp;
+    onboardingComplete: boolean;
+  }
 
-      transaction.set(membershipRef, {
-        uid: user.uid,
-        orgId,
-        role,
-        status: "active",
-        joinedVia: "token",
-        joinToken: token,
-        email: user.email,
-        displayName: user.displayName,
-        createdAt: now,
-        updatedAt: now,
-      });
+  const membershipId: string = await dbClient.runTransaction(async (transaction: FirebaseFirestore.Transaction): Promise<string> => {
+    const tokenSnapshot: FirebaseFirestore.DocumentSnapshot<JoinToken> = await transaction.get(tokenRef);
+    if (!tokenSnapshot.exists) {
+      throw new JoinError("Token no longer exists", "TOKEN_NOT_FOUND", 404);
+    }
 
-      const inc = FieldValue.increment(1);
-      transaction.update(tokenRef, {
-        currentUses: inc,
-        lastUsedAt: now,
-        ...(currentTokenData.currentUses + 1 >= currentTokenData.maxUses && {
-          status: "used",
-        }),
-      });
-      });
+    const currentTokenData: JoinToken = tokenSnapshot.data() as JoinToken;
+    if (currentTokenData.currentUses >= currentTokenData.maxUses) {
+      throw new JoinError("Token exhausted", "TOKEN_EXHAUSTED", 400);
+    }
 
-      if (isNewUser) {
-        const profileRef = dbClient.collection("users").doc(user.uid);
-        transaction.set(
-          profileRef,
-          {
-            uid: user.uid,
-            email: user.email,
-            displayName: user.displayName,
-            createdAt: now,
-            updatedAt: now,
-            onboardingComplete: false,
-          },
-          { merge: true },
-        );
-      }
+    const membershipRef: FirebaseFirestore.DocumentReference<MembershipDoc> =
+      dbClient.collection("memberships").doc();
+    const now: Timestamp = Timestamp.now();
 
-      return membershipRef.id;
+    transaction.set(membershipRef, {
+      uid: user.uid,
+      orgId,
+      role,
+      status: "active",
+      joinedVia: "token",
+      joinToken: token,
+      email: user.email,
+      displayName: user.displayName,
+      createdAt: now,
+      updatedAt: now,
+    } as MembershipDoc);
+
+    const inc: FirebaseFirestore.FieldValue = FieldValue.increment(1) as unknown as FirebaseFirestore.FieldValue;
+    transaction.update(tokenRef, {
+      currentUses: inc,
+      lastUsedAt: now,
+      ...(currentTokenData.currentUses + 1 >= currentTokenData.maxUses ? { status: "used" } : {}),
     });
+
+    if (isNewUser) {
+      const profileRef: FirebaseFirestore.DocumentReference<UserProfileDoc> =
+        dbClient.collection("users").doc(user.uid);
+      transaction.set(
+        profileRef,
+        {
+          uid: user.uid,
+          email: user.email,
+          displayName: user.displayName,
+          createdAt: now,
+          updatedAt: now,
+          onboardingComplete: false,
+        } as UserProfileDoc,
+        { merge: true },
+      );
+    }
+
+    return membershipRef.id;
+  });
 
     const customToken = await authClient.createCustomToken(user.uid);
 
