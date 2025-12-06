@@ -13,9 +13,15 @@
     "test:chaos": "tsx -e \"import { ChaosTestRunner } from './chaos-engineering'; new ChaosTestRunner().runAllChaosTests(() => Promise.resolve());\"",
     "test:analytics": "tsx -e \"import { testAnalytics } from './test-analytics'; testAnalytics.saveDashboard(testAnalytics.generateAnalytics());\"",
     "test:cicd": "tsx -e \"import { cicd } from './ci-cd-integration'; cicd.validateDeployment({ environment: 'staging', strategy: 'canary', validationTests: [], rollbackOnFailure: true });\"",
+    "test:prioritize": "tsx -e \"import { aiPrioritizer } from './ai-test-prioritizer'; import { glob } from 'glob'; (async () => { const tests = await glob('tests/**/*.test.ts'); const p = aiPrioritizer.prioritizeTests(tests.slice(0, 20)); console.log(aiPrioritizer.generateReport(p)); })();\"",
+    "test:predict": "tsx -e \"import { predictiveAnalytics } from './predictive-analytics'; import { glob } from 'glob'; (async () => { const tests = await glob('tests/**/*.test.ts'); predictiveAnalytics.predictFailures(tests.slice(0, 20)); console.log(predictiveAnalytics.generateReport()); })();\"",
+    "test:parallel": "tsx -e \"import { parallelizationOptimizer } from './parallelization-optimizer'; import { glob } from 'glob'; (async () => { const tests = await glob('tests/**/*.test.ts'); const opt = parallelizationOptimizer.optimize(tests.slice(0, 20)); console.log(parallelizationOptimizer.generateReport(opt)); })();\"",
+    "test:security": "tsx -e \"import { securityScanner } from './security-scanner'; (async () => { const result = await securityScanner.scan(['apps/web/app/api']); console.log(securityScanner.generateReport(result)); })();\"",
+    "test:visual": "tsx -e \"import { visualRegression } from './visual-regression'; console.log('Visual regression testing - use in test files');\"",
+    "test:data": "tsx -e \"import { testDataFactory } from './test-data-factory'; console.log('Test Data Factory:', testDataFactory.generateUsers(5));\"",
     "demo": "tsx demo.ts",
     "clean": "rm -rf *.json *.html node_modules",
-    "install:all": "pnpm install typescript tsx @types/node vitest @types/diff diff speakeasy"
+    "install:all": "pnpm install typescript tsx @types/node vitest @types/diff diff speakeasy glob"
   },
   "dependencies": {
     "typescript": "^5.3.3",

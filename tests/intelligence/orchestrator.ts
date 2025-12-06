@@ -13,8 +13,15 @@ import { selfHealingFramework } from "./self-healing-tests";
 import { ChaosTestRunner } from "./chaos-engineering";
 import { testAnalytics } from "./test-analytics";
 import { cicd } from "./ci-cd-integration";
+import { aiPrioritizer } from "./ai-test-prioritizer";
+import { visualRegression } from "./visual-regression";
+import { testDataFactory } from "./test-data-factory";
+import { predictiveAnalytics } from "./predictive-analytics";
+import { parallelizationOptimizer } from "./parallelization-optimizer";
+import { securityScanner } from "./security-scanner";
 import { execSync } from "child_process";
 import * as fs from "fs";
+import { glob } from "glob";
 
 interface OrchestratorConfig {
   autoGenerate: boolean;
@@ -24,6 +31,11 @@ interface OrchestratorConfig {
   chaosTesting: boolean;
   analytics: boolean;
   cicdValidation: boolean;
+  aiPrioritization: boolean;
+  visualRegression: boolean;
+  predictiveAnalytics: boolean;
+  parallelization: boolean;
+  securityScan: boolean;
 }
 
 interface OrchestratorResult {
@@ -55,6 +67,11 @@ export class TestIntelligenceOrchestrator {
     chaosTesting: true,
     analytics: true,
     cicdValidation: true,
+    aiPrioritization: true,
+    visualRegression: true,
+    predictiveAnalytics: true,
+    parallelization: true,
+    securityScan: true,
   };
 
   /**
@@ -177,10 +194,86 @@ export class TestIntelligenceOrchestrator {
       });
     }
 
-    // Stage 7: CI/CD Validation
+    // Stage 7: AI Test Prioritization
+    if (this.config.aiPrioritization) {
+      await this.runStage(result, "AI Test Prioritization", async () => {
+        console.log("\n🧠 Stage 7: Running AI Test Prioritization...");
+
+        const testFiles = await glob("tests/**/*.test.ts");
+        const changedFiles = aiPrioritizer.getChangedFiles();
+        const priorities = aiPrioritizer.prioritizeTests(testFiles.slice(0, 20), changedFiles);
+        const plan = aiPrioritizer.generateExecutionPlan(priorities);
+
+        console.log(aiPrioritizer.generateReport(priorities));
+
+        return {
+          totalTests: priorities.length,
+          highRiskTests: plan.highRiskTests,
+          estimatedDuration: `${(plan.estimatedDuration / 1000).toFixed(1)}s`,
+        };
+      });
+    }
+
+    // Stage 8: Predictive Analytics
+    if (this.config.predictiveAnalytics) {
+      await this.runStage(result, "Predictive Analytics", async () => {
+        console.log("\n🔮 Stage 8: Running Predictive Analytics...");
+
+        const testFiles = await glob("tests/**/*.test.ts");
+        const predictions = predictiveAnalytics.predictFailures(testFiles.slice(0, 20));
+        const insights = predictiveAnalytics.generateInsights();
+
+        console.log(predictiveAnalytics.generateReport());
+
+        return {
+          predictedFailures: insights.predictedFailures,
+          highRiskTests: insights.highRiskTests,
+          anomaliesDetected: insights.anomaliesDetected,
+        };
+      });
+    }
+
+    // Stage 9: Parallelization Optimization
+    if (this.config.parallelization) {
+      await this.runStage(result, "Parallelization Optimization", async () => {
+        console.log("\n⚡ Stage 9: Optimizing Test Parallelization...");
+
+        const testFiles = await glob("tests/**/*.test.ts");
+        const optimization = parallelizationOptimizer.optimize(testFiles.slice(0, 20));
+
+        console.log(parallelizationOptimizer.generateReport(optimization));
+
+        return {
+          batches: optimization.batches.length,
+          speedup: `${optimization.speedup.toFixed(2)}x`,
+          efficiency: `${(optimization.efficiency * 100).toFixed(1)}%`,
+        };
+      });
+    }
+
+    // Stage 10: Security Scanning
+    if (this.config.securityScan) {
+      await this.runStage(result, "Security Scanning", async () => {
+        console.log("\n🔒 Stage 10: Running Security Scan...");
+
+        const scanResult = await securityScanner.scan(["apps/web/app/api"]);
+        securityScanner.saveReport(scanResult);
+
+        console.log(securityScanner.generateReport(scanResult));
+
+        return {
+          securityScore: scanResult.score,
+          grade: scanResult.grade,
+          vulnerabilities: scanResult.vulnerabilities.length,
+          critical: scanResult.summary.critical,
+        };
+      });
+    }
+
+    // Stage 11: CI/CD Validation
     if (this.config.cicdValidation) {
       await this.runStage(result, "CI/CD Validation", async () => {
-        console.log("\n🚀 Stage 7: Running CI/CD Deployment Validation...");
+        console.log("\n🚀 Stage 11: Running CI/CD Deployment Validation...");
 
         const deploymentResult = await cicd.validateDeployment({
           environment: "staging",
@@ -309,6 +402,11 @@ export class TestIntelligenceOrchestrator {
       chaosTesting: false,
       analytics: true,
       cicdValidation: false,
+      aiPrioritization: true,
+      visualRegression: false,
+      predictiveAnalytics: true,
+      parallelization: true,
+      securityScan: true,
     };
 
     console.log("⚡ Running Quick Validation...\n");
@@ -327,9 +425,14 @@ export class TestIntelligenceOrchestrator {
       chaosTesting: true,
       analytics: true,
       cicdValidation: true,
+      aiPrioritization: true,
+      visualRegression: true,
+      predictiveAnalytics: true,
+      parallelization: true,
+      securityScan: true,
     };
 
-    console.log("🔥 Running FULL Intelligence Suite...\n");
+    console.log("🔥 Running FULL Intelligence Suite with ALL Add-ons...\n");
     await this.runComplete();
   }
 }
