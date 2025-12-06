@@ -35,17 +35,17 @@
 
 ### ⚠️ Issues to Address
 
-- **Duplicate code** (lib/, src/lib/, schemas in validation.ts)
-- **Outdated docs** (PHASE reports, experimental branches, archived patterns)
-- **File organization** gaps (scattered docs, unclear consolidation)
-- **Branch confusion** (fix/config-typeerrors, dep-fixes, docs-and-tests overlap)
+- **Legacy library duplication**: `apps/web/lib/` still exists with 8 modules (firebase-admin, onboarding/createNetworkOrg + adminFormDrafts, firebase/typed-wrappers, firebase/index, urlState, animations) overlapping with `apps/web/src/lib/`.
+- **Schema drift**: `apps/web/app/api/_shared/validation.ts` still defines schemas (CreateShift, UpdateShift, UpdateSchedule, OrganizationCreate, AdminResponsibility) and is imported across many routes instead of `@fresh-schedules/types`.
+- **Outdated/temporary artifacts**: `repomix-output.xml`, `system-pulse.ts`, `CHROMEBOOK_*`, `MEMORY_MANAGEMENT.md` still present and should be archived or removed.
+- **Branch state unknown**: Current branch `fix/triad-remediation`, default `main`; other branch status needs a fresh inventory.
 
 ### 🎯 Opportunities
 
-- **~40-50 outdated doc files** can be archived/merged
-- **~15-20 duplicate utilities** across lib/ and src/lib/
-- **~10 schema duplicates** to consolidate
-- **Clear deduplication path** without breaking code
+- **Retire legacy lib** by migrating overlapping onboarding modules and removing remaining `apps/web/lib/` files after import rewrites.
+- **Centralize schemas** by removing definitions from `_shared/validation.ts` and importing only from `@fresh-schedules/types`.
+- **Archive stale docs** (CHROMEBOOK notes, MEMORY_MANAGEMENT) and delete generated artifacts (`repomix-output.xml`, `system-pulse.ts`).
+- **Refresh branch matrix** with a current `git branch -r` snapshot and align consolidation plan accordingly.
 
 ---
 
@@ -81,19 +81,21 @@
 │  ├─ index.ts ...................... ✅ SDK factory (all endpoints)     │
 │  └─ testing.ts .................... ✅ Mock request/context builders   │
 │                                                                         │
-│  apps/web/lib/                                                          │
-│  ├─ firebase-admin.ts ............. ✅ Firebase Admin singleton        │
-│  ├─ onboarding/            ........✅ Onboarding helpers              │
-│  └─ [legacy utilities]  ........... ⚠️  DEPRECATED (move to src/lib)  │
+│  apps/web/lib/ (legacy, 8 modules)                                     │
+│  ├─ firebase-admin.ts (legacy)                                         │
+│  ├─ onboarding/createNetworkOrg.ts (duplicate of src/lib)              │
+│  ├─ onboarding/adminFormDrafts.ts (.ts/.mts) (duplicate of src/lib)    │
+│  ├─ firebase/index.ts, firebase/typed-wrappers.ts (legacy wrappers)    │
+│  ├─ urlState.ts, animations.ts (legacy utilities)                      │
 │                                                                         │
-│  apps/web/src/lib/                                                      │
-│  ├─ firebase-admin.ts ............. ✅ Alias for apps/web/lib/        │
-│  ├─ firebase.server.ts ............ ✅ Server-side Firebase helpers   │
-│  ├─ firebase/typed-wrappers.ts .... ✅ Type-safe Firestore ops       │
-│  ├─ env.ts ........................ ✅ Validated environment vars      │
-│  ├─ logger.ts ..................... ✅ Structured logging             │
-│  ├─ onboarding/            ........✅ Onboarding business logic       │
-│  └─ [helpers]  ................... ✅ General utilities               │
+│  apps/web/src/lib/ (canonical, ~28 modules)                            │
+│  ├─ firebase.server.ts ............ ✅ Server-side Firebase helpers     │
+│  ├─ env.ts / env.server.ts ......... ✅ Validated environment vars      │
+│  ├─ logger.ts / otel.ts ............ ✅ Structured logging/telemetry    │
+│  ├─ onboarding/createNetworkOrg.ts . ✅ Canonical onboarding logic      │
+│  ├─ onboarding/adminFormDrafts.ts .. ✅ Canonical onboarding logic      │
+│  ├─ api/*, storage/kv.ts, auth/* ... ✅ Current infrastructure helpers  │
+│  └─ [helpers] ..................... ✅ General utilities               │
 │                                                                         │
 │  Properties:                                                            │
 │  • Pure functions, no side effects                                      │
@@ -210,13 +212,13 @@ LAYER 00 (Domain):                    ~35 files
     ├─ Type exports              ✅ z.infer<>
     └─ Re-exports (index.ts)     ✅ Single entry point
 
-LAYER 01 (Infrastructure):           ~80 files
+LAYER 01 (Infrastructure):           ~90 files
   packages/api-framework/src/         ~40 files  ✅ SDK factory
   packages/config/src/                ~5 files   ✅ Config
   packages/env/src/                   ~5 files   ✅ Env validation
-  apps/web/lib/                       ~20 files  ⚠️  LEGACY
-  apps/web/src/lib/                   ~10 files  ✅ NEW (canonical)
-    └─ Note: apps/web/lib/ should alias to src/lib/
+  apps/web/lib/                       8 legacy modules ⚠️ (remove after import migration)
+  apps/web/src/lib/                   ~28 modules ✅ (canonical)
+    └─ Note: migrate remaining imports, then delete apps/web/lib/
 
 LAYER 02 (Application):              ~120 files
   apps/web/src/lib/[feature]/         ~60 files  ✅ Business logic
@@ -260,55 +262,12 @@ TESTS & CONFIG:                      ~25 files
 
 ## Branch & File Distribution Analysis
 
-### Active Branches
-
-```
-┌─────────────────────────────────────┬──────────┬──────────┬──────────────┐
-│ Branch                              │ Files    │ Status   │ Merge Path   │
-├─────────────────────────────────────┼──────────┼──────────┼──────────────┤
-│ main (Production)                   │ ~450     │ ✅ Ready │ Deploy      │
-│ fix/triad-remediation (CURRENT)     │ ~465     │ ⏳ Active│ → main      │
-│ dev (Remote)                        │ ~465     │ ⚠️  Stale│ Archive     │
-│ fix/config-typeerrors               │ ~480     │ ⚠️  Partial│ Review    │
-│ dep-fixes                           │ ~475     │ ⚠️  Partial│ Review    │
-│ docs-and-tests                      │ ~450+15  │ ⏳ Proposed│ Feature   │
-│ feat/sdk-extraction                 │ ~460     │ 🔴 Old   │ Superseded │
-└─────────────────────────────────────┴──────────┴──────────┴──────────────┘
-
-Legend:
-  ✅ Ready    = All tests passing, documentation complete
-  ⏳ Active   = Work in progress, staged for review
-  ⚠️  Partial = Incomplete, needs evaluation
-  🔴 Old     = Superseded by newer work
-```
-
-### Branch Consolidation Matrix
-
-```
-Branch                  Merge Decision        Rationale
-─────────────────────────────────────────────────────────────────
-main                    KEEP (production)     Stable baseline
-
-fix/triad-remediation   MERGE → main          Current work, ready
-                        Status: ~90% complete
-
-dev (remote)            ARCHIVE               Superseded by fix/triad-remediation
-                        Action: Delete remote tracking branch
-
-fix/config-typeerrors   EVALUATE              Check for conflicts with
-                        Status: ~60% complete triad-remediation
-                        Action: Review before merge
-
-dep-fixes               EVALUATE              Check dependency choices
-                        Status: ~50% complete align with current setup
-                        Action: Review before merge
-
-docs-and-tests          KEEP (separate)       For continuous doc updates
-                        Status: Proposed      Use for visual/doc-only PRs
-
-feat/sdk-extraction     DELETE (archive)      Superseded by SDK factory
-                        Status: Old            Create archive reference
-```
+- Current branch: `fix/triad-remediation`; default branch: `main`.
+- Remote branch inventory needs refresh (run `git branch -r` and `gh pr list --state open` before acting on consolidation).
+- Expected decisions once inventory is refreshed:
+  - Keep `main` as production baseline.
+  - Decide merge/archive for any remaining `dev`, `fix/config-typeerrors`, `dep-fixes`, `docs-and-tests` branches based on freshness and conflicts.
+  - Archive superseded feature spikes (e.g., `feat/sdk-extraction`) if still present.
 
 ---
 
@@ -317,89 +276,45 @@ feat/sdk-extraction     DELETE (archive)      Superseded by SDK factory
 ### 1. Library File Duplication
 
 ```
-ISSUE: Duplicate helpers across apps/web/lib/ and apps/web/src/lib/
+ISSUE: Legacy helpers remain in apps/web/lib/ (8 modules) while src/lib/ is canonical.
 
-❌ DUPLICATES FOUND:
+apps/web/lib/ (legacy — remove after migration)
+- firebase-admin.ts (legacy singleton)
+- onboarding/createNetworkOrg.ts (duplicate of src/lib/onboarding/createNetworkOrg.ts)
+- onboarding/adminFormDrafts.ts + adminFormDrafts.mts (duplicates of src/lib version)
+- firebase/index.ts, firebase/typed-wrappers.ts (legacy wrappers; decide migrate or delete)
+- urlState.ts, animations.ts (legacy utilities)
 
-apps/web/lib/
-├─ firebase-admin.ts .................... DUPLICATE
-├─ onboarding/
-│  └─ createNetworkOrg.ts ............... DUPLICATE
-└─ [other utilities] .................... DUPLICATE (partial)
-
-apps/web/src/lib/
-├─ firebase-admin.ts .................... CANONICAL ✅
-├─ firebase.server.ts ................... NEW
-├─ firebase/
-│  └─ typed-wrappers.ts ................. IMPROVED
-├─ onboarding/
-│  ├─ createNetworkOrg.ts ............... CANONICAL ✅
-│  └─ adminFormDrafts.ts ................ NEW
-└─ [helpers] ............................ CANONICAL ✅
+apps/web/src/lib/ (canonical, ~28 modules)
+- onboarding/createNetworkOrg.ts, onboarding/adminFormDrafts.ts (canonical)
+- env.ts/env.server.ts, logger.ts, otel.ts
+- api/*, storage/kv.ts, auth/*, error/*, onboarding helpers
 
 CONSOLIDATION PLAN:
-
-Priority 1 (IMMEDIATE):
-  1. Verify src/lib/ versions are superior
-  2. Update all imports to use src/lib/
-  3. DELETE apps/web/lib/ directory
-
-   Command:
-   $ rm -rf apps/web/lib
-
-Priority 2 (VALIDATION):
-  1. Run full test suite
-  2. Typecheck all imports
-  3. Verify no import breakage
-
-   Command:
-   $ pnpm -w typecheck
-   $ pnpm test
+1) Replace all imports of `apps/web/lib/*` with `@/src/lib/*` (or `@/lib` if aliased) and verify zero remaining references.
+2) Move or port needed legacy modules (firebase/typed-wrappers, urlState.ts, animations.ts) into `apps/web/src/lib/` or delete if unused.
+3) Delete `apps/web/lib/` once imports are migrated; keep a temporary index re-export only if needed for backward compatibility during the transition.
+4) Validate with `pnpm -w typecheck`, `pnpm lint`, and `pnpm test`.
 ```
 
 ### 2. Schema Duplication
 
 ```
-ISSUE: Zod schemas duplicated in validation.ts
+ISSUE: `_shared/validation.ts` still defines schemas that belong in `@fresh-schedules/types` and is imported across many routes.
 
-❌ DUPLICATES FOUND:
+Current duplicates in apps/web/app/api/_shared/validation.ts:
+- OrganizationCreateSchema
+- UpdateScheduleSchema
+- ShiftStatus, CreateShiftSchema, UpdateShiftSchema
+- CreateAdminResponsibilityFormSchema (+ type)
 
-packages/types/src/                     CANONICAL SOURCE ✅
-├─ shifts.ts ............................ CreateShiftSchema
-├─ schedules.ts ......................... CreateScheduleSchema
-├─ organizations.ts ..................... CreateOrganizationSchema
-├─ positions.ts ......................... CreatePositionSchema
-└─ [others] ............................ All canonical
-
-apps/web/app/api/_shared/validation.ts  DEPRECATED COPIES ❌
-├─ CreateShiftSchema (DUPLICATE) ........ DELETE
-├─ UpdateScheduleSchema (DUPLICATE) .... DELETE
-├─ OrganizationCreateSchema (DUPLICATE). DELETE
-└─ [others] ............................ DELETE all
+Representative routes still importing `_shared/validation`: shifts, positions, venues, zones, onboarding routes, session, publish, healthz, auth/mfa, users/profile, join-with-token (see grep list in repo for full set).
 
 CONSOLIDATION PLAN:
-
-Priority 1 (AUDIT):
-  1. List all schemas in validation.ts
-  2. Verify they exist in packages/types/src/
-  3. Generate migration checklist
-
-Priority 2 (MIGRATION):
-  1. Update all imports in API routes:
-     OLD: import { CreateShiftSchema } from '../_shared/validation'
-     NEW: import { CreateShiftSchema } from '@fresh-schedules/types'
-  
-  2. Delete duplicate schemas from validation.ts
-
-Priority 3 (KEEP ONLY):
-  validation.ts should only contain:
-  - Helper functions (parseJson, badRequest, ok, serverError)
-  - Response formatting utilities
-  - NO schema definitions
-
-ESTIMATED DELETIONS:
-  • ~8-12 duplicate schemas
-  • ~50-100 lines of code
+1) Confirm canonical schemas exist in `packages/types/src` (orgs, schedules, shifts, onboarding forms) or add them there if missing.
+2) Update all API routes to import schemas from `@fresh-schedules/types`; keep `_shared/validation` only for response helpers (ok, badRequest, serverError, parseJson).
+3) Remove schema definitions from `_shared/validation.ts` after imports are migrated.
+4) Re-run `pnpm -w typecheck`, `pnpm lint`, and targeted API tests to ensure no regressions.
 ```
 
 ### 3. Utility Consolidation Opportunities
@@ -581,13 +496,12 @@ RATIONALE:
 ACTION 1: Delete Development Artifacts
 
 Files to Delete:
-  ├─ repomix-output.xml ........... Generated artifact (can regenerate)
-  ├─ system-pulse.ts .............. Debug utility (unused)
-  ├─ pattern-validation-report.json  Build output (regenerates)
-  └─ *.bak files .................. Backups (git has history)
+  ├─ repomix-output.xml ........... Generated artifact (present)
+  ├─ system-pulse.ts .............. Debug utility (present)
+  └─ *.bak files (if any) ......... Backups (git has history)
 
 Command:
-  $ git rm repomix-output.xml system-pulse.ts pattern-validation-report.json
+  $ git rm repomix-output.xml system-pulse.ts
 
 Impact: ZERO (no imports, no runtime effect)
 Verification: pnpm -w typecheck (should pass)
@@ -938,14 +852,13 @@ Week 2 (Dec 19):
 TASKS:
 
 [ ] 1. Delete generated artifacts
-    - repomix-output.xml
-    - pattern-validation-report.json
-    - *.bak files (if any)
-    Command: git rm [files]
+  - repomix-output.xml
+  - *.bak files (if any)
+  Command: git rm repomix-output.xml
 
 [ ] 2. Remove debug utilities
-    - system-pulse.ts
-    Command: git rm system-pulse.ts
+  - system-pulse.ts
+  Command: git rm system-pulse.ts
 
 [ ] 3. Verify no breakage
     Command:
@@ -1096,7 +1009,15 @@ TASKS:
       git mv agents/CREWOPS_*.md docs/archive/crewops/
       git mv .github/PROMPTS_SESSION_SUMMARY.md docs/archive/sessions/
 
-[ ] 5. Create archive index
+[ ] 5. Move device/memory/session notes
+    Commands:
+      git mv CHROMEBOOK_KEEP_COPILOT.md docs/archive/sessions/
+      git mv CHROMEBOOK_MEMORY_STRATEGY.md docs/archive/sessions/
+      git mv MEMORY_MANAGEMENT.md docs/archive/sessions/
+      git mv OOM_PREVENTION.md docs/archive/sessions/  # if present
+      git mv CODE_9_CRASH_ANALYSIS.md docs/archive/sessions/
+
+[ ] 6. Create archive index
     File: docs/archive/README.md
     Content:
       # Archived Documentation
@@ -1108,7 +1029,7 @@ TASKS:
       - [Phase 2 Tier 1 Fixes](./phases/PHASE_2_TIER_1_FIXES.md)
       ...
 
-[ ] 6. Create docs index
+[ ] 7. Create docs index
     File: docs/README.md
     Content:
       # Fresh Root Documentation
@@ -1123,18 +1044,16 @@ TASKS:
       ## 📦 Archived (Historical Reference)
       See [archive/README.md](./archive/README.md)
 
-[ ] 7. Delete obsolete files
+[ ] 8. Delete obsolete files
     Files to delete (after archiving):
-      - CHROMEBOOK_*.md
-      - MEMORY_MANAGEMENT.md
-      - OOM_PREVENTION.md
-      - CODE_9_CRASH_ANALYSIS.md
-      - repomix-output.xml (already done)
-      - system-pulse.ts (already done)
+      - CHROMEBOOK_*.md (if not needed in archive)
+      - MEMORY_MANAGEMENT.md (if not needed in archive)
+      - OOM_PREVENTION.md (if not needed in archive)
+      - CODE_9_CRASH_ANALYSIS.md (if not needed in archive)
     
     Command: git rm [files]
 
-[ ] 8. Commit
+[ ] 9. Commit
     Commit message:
       "docs: archive historical phase reports, create documentation index"
 

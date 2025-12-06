@@ -9,7 +9,7 @@ import { badRequest, ok, parseJson, serverError } from "../_shared/validation";
 
 import { adminDb } from "@/src/lib/firebase.server";
 import type { RequestContext } from "@fresh-schedules/api-framework";
-import { setDocWithType, queryWithType } from "@/lib/firebase/typed-wrappers";
+import { setDocWithType, queryWithType } from "@/src/lib/firebase/typed-wrappers";
 
 const parsePositiveInt = (value: string | null, fallback: number) => {
   const parsed = Number.parseInt(value ?? "", 10);

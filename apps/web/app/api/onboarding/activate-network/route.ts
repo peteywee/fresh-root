@@ -7,7 +7,7 @@ import { Timestamp } from "firebase-admin/firestore";
 import { createAuthenticatedEndpoint } from "@fresh-schedules/api-framework";
 import { ok, serverError, badRequest } from "../../_shared/validation";
 import { adminDb } from "@/src/lib/firebase.server";
-import { updateDocWithType } from "@/lib/firebase/typed-wrappers";
+import { updateDocWithType } from "@/src/lib/firebase/typed-wrappers";
 
 const ActivateNetworkSchema = z.object({
   networkId: z.string().or(z.number()),

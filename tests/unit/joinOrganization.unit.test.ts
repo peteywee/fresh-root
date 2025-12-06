@@ -69,8 +69,8 @@ const fakeFirestore = {
               return false;
             }))
             .map(([path, data]) => ({ id: path.split('/').pop(), data: () => data }));
-            console.info(`[FAKE FIRESTORE] collectionGroup.get ${name} filters=${JSON.stringify(chain.filters)} docs=${docs.map(d=>d.id).join(',')}`);
-            return { empty: docs.length === 0, docs };
+          console.info(`[FAKE FIRESTORE] collectionGroup.get ${name} filters=${JSON.stringify(chain.filters)} docs=${docs.map(d => d.id).join(',')}`);
+          return { empty: docs.length === 0, docs };
         },
       };
       return chain;

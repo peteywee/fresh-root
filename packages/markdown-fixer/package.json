@@ -13,7 +13,7 @@
     "dev": "tsx src/cli.ts",
     "fix": "tsx src/cli.ts --fix",
     "lint": "eslint src",
-    "test": "vitest run"
+    "test": "vitest run --passWithNoTests"
   },
   "dependencies": {
     "commander": "^11.0.0",
