@@ -1,0 +1,111 @@
+{
+  "name": "test-intelligence",
+  "displayName": "Test Intelligence",
+  "description": "AI-Powered Testing with Real-time Analytics, Security Scanning, and GitHub Sync",
+  "version": "1.0.0",
+  "publisher": "fresh-root",
+  "icon": "icon.png",
+  "engines": {
+    "vscode": "^1.80.0"
+  },
+  "categories": [
+    "Testing",
+    "Other"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "testIntelligence.openDashboard",
+        "title": "Test Intelligence: Open Dashboard",
+        "icon": "$(dashboard)"
+      },
+      {
+        "command": "testIntelligence.runFull",
+        "title": "Test Intelligence: Run Full Suite",
+        "icon": "$(play)"
+      },
+      {
+        "command": "testIntelligence.runQuick",
+        "title": "Test Intelligence: Quick Check",
+        "icon": "$(zap)"
+      },
+      {
+        "command": "testIntelligence.prioritize",
+        "title": "Test Intelligence: Prioritize Tests",
+        "icon": "$(sort-precedence)"
+      },
+      {
+        "command": "testIntelligence.securityScan",
+        "title": "Test Intelligence: Security Scan",
+        "icon": "$(shield)"
+      },
+      {
+        "command": "testIntelligence.syncGitHub",
+        "title": "Test Intelligence: Sync GitHub",
+        "icon": "$(github)"
+      }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "testIntelligence",
+          "title": "Test Intelligence",
+          "icon": "resources/test-intelligence.svg"
+        }
+      ]
+    },
+    "views": {
+      "testIntelligence": [
+        {
+          "id": "testIntelligence.dashboard",
+          "name": "Dashboard",
+          "type": "webview"
+        },
+        {
+          "id": "testIntelligence.metrics",
+          "name": "Metrics"
+        },
+        {
+          "id": "testIntelligence.highRiskTests",
+          "name": "High Risk Tests"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Test Intelligence",
+      "properties": {
+        "testIntelligence.autoStart": {
+          "type": "boolean",
+          "default": true,
+          "description": "Automatically start server on VSCode startup"
+        },
+        "testIntelligence.port": {
+          "type": "number",
+          "default": 3456,
+          "description": "Server port"
+        },
+        "testIntelligence.refreshInterval": {
+          "type": "number",
+          "default": 5000,
+          "description": "Auto-refresh interval (ms)"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "package": "vsce package"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.80.0",
+    "@types/node": "^20.x",
+    "typescript": "^5.3.3",
+    "vsce": "^2.15.0"
+  }
+}
