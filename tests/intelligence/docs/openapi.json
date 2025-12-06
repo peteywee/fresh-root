@@ -1,0 +1,342 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Fresh Root Scheduling API",
+    "version": "1.2.0",
+    "description": "Enterprise scheduling platform API with comprehensive endpoint coverage"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000",
+      "description": "Development"
+    },
+    {
+      "url": "https://api.fresh-schedules.com",
+      "description": "Production"
+    }
+  ],
+  "paths": {
+    "/api/session": {
+      "post": {
+        "summary": "Create session",
+        "description": "Create session",
+        "tags": [
+          "Authentication"
+        ],
+        "security": [
+          {
+            "FirebaseAuth": []
+          },
+          {
+            "SessionCookie": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Session created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "sessionCookie": {
+                      "type": "string"
+                    },
+                    "user": {
+                      "type": "object",
+                      "properties": {
+                        "uid": {
+                          "type": "string"
+                        },
+                        "email": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "uid",
+                        "email"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "sessionCookie",
+                    "user"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid token"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "idToken": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "idToken"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/organizations": {
+      "post": {
+        "summary": "Create organization",
+        "description": "Create organization",
+        "tags": [
+          "Organizations"
+        ],
+        "security": [
+          {
+            "FirebaseAuth": []
+          },
+          {
+            "SessionCookie": []
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Organization created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "subdomain": {
+                      "type": "string"
+                    },
+                    "createdAt": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "name",
+                    "subdomain",
+                    "createdAt"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "409": {
+            "description": "Subdomain already exists"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "subdomain": {
+                    "type": "string"
+                  },
+                  "timezone": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "name",
+                  "subdomain"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/organizations/:id": {
+      "get": {
+        "summary": "Get organization details",
+        "description": "Get organization details",
+        "tags": [
+          "Organizations"
+        ],
+        "security": [
+          {
+            "FirebaseAuth": []
+          },
+          {
+            "SessionCookie": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Organization details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "subdomain": {
+                      "type": "string"
+                    },
+                    "createdAt": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "name",
+                    "subdomain",
+                    "createdAt"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Organization not found"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Organization ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/api/schedules": {
+      "post": {
+        "summary": "Create schedule",
+        "description": "Create schedule",
+        "tags": [
+          "Scheduling"
+        ],
+        "security": [
+          {
+            "FirebaseAuth": []
+          },
+          {
+            "SessionCookie": []
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Schedule created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "startDate": {
+                      "type": "string"
+                    },
+                    "endDate": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "name",
+                    "startDate",
+                    "endDate"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "403": {
+            "description": "Insufficient permissions"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "organizationId": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "startDate": {
+                    "type": "string"
+                  },
+                  "endDate": {
+                    "type": "string"
+                  },
+                  "venueId": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "organizationId",
+                  "name",
+                  "startDate",
+                  "endDate"
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {},
+    "securitySchemes": {
+      "FirebaseAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "description": "Firebase Authentication token"
+      },
+      "SessionCookie": {
+        "type": "apiKey",
+        "in": "cookie",
+        "name": "session",
+        "description": "Session cookie for authenticated requests"
+      }
+    }
+  }
+}

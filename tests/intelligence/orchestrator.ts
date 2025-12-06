@@ -21,7 +21,11 @@ import { parallelizationOptimizer } from "./parallelization-optimizer";
 import { securityScanner } from "./security-scanner";
 import { execSync } from "child_process";
 import * as fs from "fs";
+import * as path from "path";
 import { glob } from "glob";
+
+// Project root - go up from tests/intelligence to project root
+const PROJECT_ROOT = path.resolve(__dirname, "../..");
 
 interface OrchestratorConfig {
   autoGenerate: boolean;
@@ -199,7 +203,7 @@ export class TestIntelligenceOrchestrator {
       await this.runStage(result, "AI Test Prioritization", async () => {
         console.log("\n🧠 Stage 7: Running AI Test Prioritization...");
 
-        const testFiles = await glob("tests/**/*.test.ts");
+        const testFiles = await glob("**/*.test.ts", { cwd: PROJECT_ROOT, ignore: ["**/node_modules/**"] });
         const changedFiles = await aiPrioritizer.getChangedFiles();
         const priorities = aiPrioritizer.prioritizeTests(testFiles.slice(0, 20), changedFiles);
         const plan = aiPrioritizer.generateExecutionPlan(priorities);
@@ -219,7 +223,7 @@ export class TestIntelligenceOrchestrator {
       await this.runStage(result, "Predictive Analytics", async () => {
         console.log("\n🔮 Stage 8: Running Predictive Analytics...");
 
-        const testFiles = await glob("tests/**/*.test.ts");
+        const testFiles = await glob("**/*.test.ts", { cwd: PROJECT_ROOT, ignore: ["**/node_modules/**"] });
         const predictions = predictiveAnalytics.predictFailures(testFiles.slice(0, 20));
         const insights = predictiveAnalytics.generateInsights();
 
@@ -238,7 +242,7 @@ export class TestIntelligenceOrchestrator {
       await this.runStage(result, "Parallelization Optimization", async () => {
         console.log("\n⚡ Stage 9: Optimizing Test Parallelization...");
 
-        const testFiles = await glob("tests/**/*.test.ts");
+        const testFiles = await glob("**/*.test.ts", { cwd: PROJECT_ROOT, ignore: ["**/node_modules/**"] });
         const optimization = parallelizationOptimizer.optimize(testFiles.slice(0, 20));
 
         console.log(parallelizationOptimizer.generateReport(optimization));
@@ -393,7 +397,7 @@ export class TestIntelligenceOrchestrator {
   /**
    * Runs quick validation (subset of features)
    */
-  async runQuick(): Promise<void> {
+  async runQuick(): Promise<OrchestratorResult> {
     this.config = {
       autoGenerate: false,
       performanceProfiling: true,
@@ -410,13 +414,13 @@ export class TestIntelligenceOrchestrator {
     };
 
     console.log("⚡ Running Quick Validation...\n");
-    await this.runComplete();
+    return await this.runComplete();
   }
 
   /**
    * Runs full comprehensive suite
    */
-  async runFull(): Promise<void> {
+  async runFull(): Promise<OrchestratorResult> {
     this.config = {
       autoGenerate: true,
       performanceProfiling: true,
@@ -433,7 +437,7 @@ export class TestIntelligenceOrchestrator {
     };
 
     console.log("🔥 Running FULL Intelligence Suite with ALL Add-ons...\n");
-    await this.runComplete();
+    return await this.runComplete();
   }
 }
 

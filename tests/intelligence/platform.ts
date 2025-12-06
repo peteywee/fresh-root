@@ -37,7 +37,7 @@ export async function safeExec(
 ): Promise<ExecResult> {
   const { timeout = 120000, retries = 0, ignoreErrors = false, cwd = process.cwd() } = options;
 
-  let lastError: Error | null = null;
+  let lastError: (Error & { code?: number }) | null = null;
 
   for (let attempt = 0; attempt <= retries; attempt++) {
     try {

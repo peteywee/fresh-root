@@ -222,7 +222,7 @@ export class SecurityScanner {
             confidence: 0.85,
           });
         }
-      });
+      }
     });
   }
 

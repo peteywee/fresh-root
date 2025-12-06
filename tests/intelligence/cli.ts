@@ -14,6 +14,9 @@ import { glob } from "glob";
 import * as fs from "fs";
 import * as path from "path";
 
+// Project root - go up from tests/intelligence to project root
+const PROJECT_ROOT = path.resolve(__dirname, "../..");
+
 // ANSI color codes (no dependencies needed)
 const colors = {
   reset: "\x1b[0m",
@@ -59,7 +62,7 @@ const commands = {
 
   async prioritize(limit = 20) {
     try {
-      const testFiles = await glob("tests/**/*.test.ts");
+      const testFiles = await glob("**/*.test.ts", { cwd: PROJECT_ROOT, ignore: ["**/node_modules/**"] });
       const changedFiles = await aiPrioritizer.getChangedFiles();
       const priorities = aiPrioritizer.prioritizeTests(testFiles.slice(0, limit), changedFiles);
       console.log(aiPrioritizer.generateReport(priorities));
@@ -72,7 +75,7 @@ const commands = {
 
   async predict(limit = 20) {
     try {
-      const testFiles = await glob("tests/**/*.test.ts");
+      const testFiles = await glob("**/*.test.ts", { cwd: PROJECT_ROOT, ignore: ["**/node_modules/**"] });
       const predictions = predictiveAnalytics.predictFailures(testFiles.slice(0, limit));
       console.log(predictiveAnalytics.generateReport());
       process.exit(predictions.filter((p) => p.failureProbability > 0.7).length > 0 ? 1 : 0);
@@ -84,7 +87,7 @@ const commands = {
 
   async parallel(limit = 20) {
     try {
-      const testFiles = await glob("tests/**/*.test.ts");
+      const testFiles = await glob("**/*.test.ts", { cwd: PROJECT_ROOT, ignore: ["**/node_modules/**"] });
       const optimization = parallelizationOptimizer.optimize(testFiles.slice(0, limit));
       console.log(parallelizationOptimizer.generateReport(optimization));
       process.exit(0);

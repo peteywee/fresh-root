@@ -1,0 +1,22 @@
+{
+  "summary": {
+    "totalTests": 0,
+    "passed": 0,
+    "failed": 0,
+    "skipped": 0,
+    "passRate": 0,
+    "averageDuration": 0,
+    "totalDuration": 0
+  },
+  "trends": {
+    "passRateTrend": [],
+    "durationTrend": []
+  },
+  "slowestTests": [],
+  "flakyTests": [],
+  "coverageHeatmap": [],
+  "recommendations": [
+    "⚠️  Test pass rate is below 90% - focus on fixing failing tests",
+    "📈 Test coverage could be improved - aim for 100+ tests"
+  ]
+}

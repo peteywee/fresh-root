@@ -16,6 +16,9 @@ import { testDataFactory } from "./test-data-factory";
 import { glob } from "glob";
 import { githubSync } from "./github-sync";
 
+// Project root - go up from tests/intelligence to project root
+const PROJECT_ROOT = path.resolve(__dirname, "../..");
+
 const PORT = process.env.PORT || 3456;
 const clients = new Set<http.ServerResponse>();
 
@@ -95,7 +98,7 @@ const server = http.createServer(async (req, res) => {
           break;
 
         case "prioritize":
-          const testFiles = await glob("tests/**/*.test.ts");
+          const testFiles = await glob("**/*.test.ts", { cwd: PROJECT_ROOT, ignore: ["**/node_modules/**"] });
           const changedFiles = await aiPrioritizer.getChangedFiles();
           const priorities = aiPrioritizer.prioritizeTests(testFiles.slice(0, 50), changedFiles);
           data = {
@@ -106,14 +109,14 @@ const server = http.createServer(async (req, res) => {
           break;
 
         case "predict":
-          const tests = await glob("tests/**/*.test.ts");
+          const tests = await glob("**/*.test.ts", { cwd: PROJECT_ROOT, ignore: ["**/node_modules/**"] });
           const predictions = predictiveAnalytics.predictFailures(tests.slice(0, 50));
           const insights = predictiveAnalytics.generateInsights();
           data = { predictions: predictions.slice(0, 20), insights };
           break;
 
         case "parallel":
-          const allTests = await glob("tests/**/*.test.ts");
+          const allTests = await glob("**/*.test.ts", { cwd: PROJECT_ROOT, ignore: ["**/node_modules/**"] });
           const optimization = parallelizationOptimizer.optimize(allTests.slice(0, 50));
           data = optimization;
           break;
