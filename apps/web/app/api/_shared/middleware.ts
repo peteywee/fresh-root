@@ -12,7 +12,7 @@ import {
   rateLimit as inMemoryRateLimit,
   securityHeaders,
 } from "./security";
-import { getFirebaseAdminAuth } from "@/src/lib/firebase-admin";
+import { getFirebaseAdminAuth } from "@/lib/firebase-admin";
 // Removed unused imports (csrfProtection, createRedisRateLimit) to satisfy lint no-unused-vars
 import { Logger } from "@/src/lib/logger";
 

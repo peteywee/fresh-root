@@ -2,7 +2,7 @@
 import { NextRequest } from "next/server";
 import { z } from "zod";
 
-import { getFirebaseAdminAuth } from "@/src/lib/firebase-admin";
+import { getFirebaseAdminAuth } from "@/lib/firebase-admin";
 import { createPublicEndpoint } from "@fresh-schedules/api-framework";
 import { parseJson, badRequest, serverError, ok } from "../_shared/validation";
 

@@ -125,6 +125,7 @@ import { z } from "zod";
 
 // Base schema (full document)
 <<<<<<< HEAD
+<<<<<<< HEAD
 export const ShiftSchema = z
   .object({
     id: z.string().min(1),
@@ -141,6 +142,8 @@ export const ShiftSchema = z
     path: ["endTime"],
   });
 =======
+=======
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
 export const ShiftSchema = z.object({
   id: z.string().min(1),
   orgId: z.string().min(1),
@@ -154,7 +157,10 @@ export const ShiftSchema = z.object({
   (data) => data.endTime > data.startTime,
   { message: "End time must be after start time", path: ["endTime"] }
 );
+<<<<<<< HEAD
 >>>>>>> origin/claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
+=======
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
 
 export type Shift = z.infer<typeof ShiftSchema>;
 
@@ -163,10 +169,14 @@ export const CreateShiftSchema = ShiftSchema.omit({
   id: true,
   createdAt: true,
 <<<<<<< HEAD
+<<<<<<< HEAD
   updatedAt: true,
 =======
   updatedAt: true
 >>>>>>> origin/claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
+=======
+  updatedAt: true
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
 });
 
 export const UpdateShiftSchema = ShiftSchema.partial().omit({ id: true });
@@ -190,6 +200,7 @@ export const GET = createOrgEndpoint({
     const shifts = await fetchShifts(context.org!.orgId);
     return NextResponse.json({ data: shifts });
 <<<<<<< HEAD
+<<<<<<< HEAD
   },
 });
 
@@ -198,6 +209,8 @@ export const POST = createOrgEndpoint({
   rateLimit: { maxRequests: 50, windowMs: 60000 },
   input: CreateShiftSchema, // Auto-validates
 =======
+=======
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
   }
 });
 
@@ -205,7 +218,10 @@ export const POST = createOrgEndpoint({
   roles: ['manager'],  // Requires manager or higher
   rateLimit: { maxRequests: 50, windowMs: 60000 },
   input: CreateShiftSchema,  // Auto-validates
+<<<<<<< HEAD
 >>>>>>> origin/claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
+=======
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
   handler: async ({ input, context }) => {
     // input is typed and validated
     const shift = await createShift({
@@ -213,16 +229,22 @@ export const POST = createOrgEndpoint({
       orgId: context.org!.orgId,
       createdAt: Date.now(),
 <<<<<<< HEAD
+<<<<<<< HEAD
       updatedAt: Date.now(),
     });
     return NextResponse.json(shift, { status: 201 });
   },
 =======
+=======
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
       updatedAt: Date.now()
     });
     return NextResponse.json(shift, { status: 201 });
   }
+<<<<<<< HEAD
 >>>>>>> origin/claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
+=======
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
 });
 ```
 
@@ -254,9 +276,12 @@ match /orgs/{orgId}/schedules/{scheduleId}/shifts/{shiftId} {
 
 The SDK factory (`@fresh-schedules/api-framework`) provides a declarative, type-safe way to create API endpoints with built-in:
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> origin/claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
+=======
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
 - ✅ Authentication verification
 - ✅ Organization context loading
 - ✅ Role-based authorization
@@ -293,12 +318,16 @@ The SDK factory (`@fresh-schedules/api-framework`) provides a declarative, type-
 // 1. Public endpoint (no auth required)
 export const GET = createPublicEndpoint({
 <<<<<<< HEAD
+<<<<<<< HEAD
   handler: async ({ request }) => {
     /* ... */
   },
 =======
   handler: async ({ request }) => { /* ... */ }
 >>>>>>> origin/claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
+=======
+  handler: async ({ request }) => { /* ... */ }
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
 });
 
 // 2. Authenticated endpoint (auth required, no org context)
@@ -306,10 +335,14 @@ export const GET = createAuthenticatedEndpoint({
   handler: async ({ context }) => {
     // context.auth.userId available
 <<<<<<< HEAD
+<<<<<<< HEAD
   },
 =======
   }
 >>>>>>> origin/claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
+=======
+  }
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
 });
 
 // 3. Organization endpoint (auth + org membership required)
@@ -317,10 +350,14 @@ export const GET = createOrgEndpoint({
   handler: async ({ context }) => {
     // context.auth.userId, context.org.orgId, context.org.role available
 <<<<<<< HEAD
+<<<<<<< HEAD
   },
 =======
   }
 >>>>>>> origin/claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
+=======
+  }
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
 });
 
 // 4. Admin endpoint (auth + admin/org_owner role required)
@@ -328,15 +365,20 @@ export const POST = createAdminEndpoint({
   handler: async ({ context }) => {
     // Only admins and org_owners can access
 <<<<<<< HEAD
+<<<<<<< HEAD
   },
 =======
   }
 >>>>>>> origin/claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
+=======
+  }
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
 });
 
 // 5. Rate-limited public endpoint
 export const POST = createRateLimitedEndpoint({
   rateLimit: { maxRequests: 10, windowMs: 60000 },
+<<<<<<< HEAD
 <<<<<<< HEAD
   handler: async ({ request }) => {
     /* ... */
@@ -344,6 +386,9 @@ export const POST = createRateLimitedEndpoint({
 =======
   handler: async ({ request }) => { /* ... */ }
 >>>>>>> origin/claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
+=======
+  handler: async ({ request }) => { /* ... */ }
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
 });
 ```
 
@@ -362,6 +407,7 @@ export const GET = createOrgEndpoint({
     const db = getFirestore();
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     const schedulesSnap = await db.collection(`orgs/${context.org!.orgId}/schedules`).get();
 
     const schedules = schedulesSnap.docs.map((doc) => ({
@@ -372,6 +418,8 @@ export const GET = createOrgEndpoint({
     return NextResponse.json({ data: schedules });
   },
 =======
+=======
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
     const schedulesSnap = await db
       .collection(`orgs/${context.org!.orgId}/schedules`)
       .get();
@@ -383,11 +431,15 @@ export const GET = createOrgEndpoint({
 
     return NextResponse.json({ data: schedules });
   }
+<<<<<<< HEAD
 >>>>>>> origin/claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
+=======
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
 });
 
 // POST /api/schedules
 export const POST = createOrgEndpoint({
+<<<<<<< HEAD
 <<<<<<< HEAD
   roles: ["manager"], // Requires manager or higher
   rateLimit: { maxRequests: 50, windowMs: 60000 },
@@ -397,6 +449,11 @@ export const POST = createOrgEndpoint({
   rateLimit: { maxRequests: 50, windowMs: 60000 },
   input: CreateScheduleSchema,  // Auto-validates
 >>>>>>> origin/claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
+=======
+  roles: ['manager'],  // Requires manager or higher
+  rateLimit: { maxRequests: 50, windowMs: 60000 },
+  input: CreateScheduleSchema,  // Auto-validates
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
   handler: async ({ input, context }) => {
     try {
       const { getFirestore } = await import("firebase-admin/firestore");
@@ -407,6 +464,7 @@ export const POST = createOrgEndpoint({
         orgId: context.org!.orgId,
         createdBy: context.auth!.userId,
         createdAt: Date.now(),
+<<<<<<< HEAD
 <<<<<<< HEAD
         updatedAt: Date.now(),
       };
@@ -421,6 +479,8 @@ export const POST = createOrgEndpoint({
         { status: 201 },
       );
 =======
+=======
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
         updatedAt: Date.now()
       };
 
@@ -432,11 +492,15 @@ export const POST = createOrgEndpoint({
         id: docRef.id,
         ...schedule
       }, { status: 201 });
+<<<<<<< HEAD
 >>>>>>> origin/claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
+=======
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
     } catch (err) {
       const message = err instanceof Error ? err.message : "Unexpected error";
       console.error("Failed to create schedule", {
         error: message,
+<<<<<<< HEAD
 <<<<<<< HEAD
         orgId: context.org?.orgId,
       });
@@ -444,6 +508,8 @@ export const POST = createOrgEndpoint({
     }
   },
 =======
+=======
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
         orgId: context.org?.orgId
       });
       return NextResponse.json(
@@ -452,7 +518,10 @@ export const POST = createOrgEndpoint({
       );
     }
   }
+<<<<<<< HEAD
 >>>>>>> origin/claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
+=======
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
 });
 ```
 
@@ -468,10 +537,14 @@ export interface EndpointConfig<TInput, TOutput> {
 
   // Required roles (if org is required)
 <<<<<<< HEAD
+<<<<<<< HEAD
   roles?: OrgRole[]; // ['org_owner', 'admin', 'manager', 'scheduler', 'corporate', 'staff']
 =======
   roles?: OrgRole[];  // ['org_owner', 'admin', 'manager', 'scheduler', 'corporate', 'staff']
 >>>>>>> origin/claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
+=======
+  roles?: OrgRole[];  // ['org_owner', 'admin', 'manager', 'scheduler', 'corporate', 'staff']
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
 
   // Rate limiting
   rateLimit?: {
@@ -509,9 +582,12 @@ export interface EndpointConfig<TInput, TOutput> {
 
 **Files**:
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> origin/claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
+=======
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
 - `shifts.ts` - Shift entities
 - `orgs.ts` - Organization entities
 - `schedules.ts` - Schedule entities
@@ -531,10 +607,14 @@ export const EntitySchema = z.object({
   status: z.enum(["active", "inactive"]).default("active"),
   createdAt: z.number().int().positive(),
 <<<<<<< HEAD
+<<<<<<< HEAD
   updatedAt: z.number().int().positive(),
 =======
   updatedAt: z.number().int().positive()
 >>>>>>> origin/claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
+=======
+  updatedAt: z.number().int().positive()
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
 });
 
 // 2. Infer TypeScript type
@@ -545,20 +625,28 @@ export const CreateEntitySchema = EntitySchema.omit({
   id: true,
   createdAt: true,
 <<<<<<< HEAD
+<<<<<<< HEAD
   updatedAt: true,
 =======
   updatedAt: true
 >>>>>>> origin/claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
+=======
+  updatedAt: true
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
 });
 
 // 4. Derive Update schema (partial, omit immutable fields)
 export const UpdateEntitySchema = EntitySchema.partial().omit({
   id: true,
 <<<<<<< HEAD
+<<<<<<< HEAD
   orgId: true, // orgId is immutable
 =======
   orgId: true  // orgId is immutable
 >>>>>>> origin/claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
+=======
+  orgId: true  // orgId is immutable
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
 });
 ```
 
@@ -585,6 +673,7 @@ SDK factory automatically converts ZodErrors to user-friendly responses:
 
 ```typescript
 <<<<<<< HEAD
+<<<<<<< HEAD
 export const ShiftSchema = z
   .object({
     startTime: z.number().int().positive(),
@@ -595,6 +684,8 @@ export const ShiftSchema = z
     path: ["endTime"], // Associates error with specific field
   });
 =======
+=======
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
 export const ShiftSchema = z.object({
   startTime: z.number().int().positive(),
   endTime: z.number().int().positive()
@@ -605,7 +696,10 @@ export const ShiftSchema = z.object({
     path: ["endTime"]  // Associates error with specific field
   }
 );
+<<<<<<< HEAD
 >>>>>>> origin/claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
+=======
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
 ```
 
 ---
@@ -618,9 +712,12 @@ export const ShiftSchema = z.object({
 
 **Flow**:
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> origin/claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
+=======
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
 1. Client authenticates with Firebase (via JS SDK)
 2. Client sends ID token to `/api/session`
 3. Server creates session cookie via `auth.createSessionCookie(idToken)`
@@ -629,9 +726,12 @@ export const ShiftSchema = z.object({
 
 **Cookie Flags** (required):
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> origin/claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
+=======
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
 ```typescript
 Set-Cookie: session=${value}; HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=${ttl}
 ```
@@ -640,9 +740,12 @@ Set-Cookie: session=${value}; HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=${
 
 **Role Hierarchy** (lowest to highest):
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> origin/claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
+=======
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
 ```
 staff < corporate < scheduler < manager < admin < org_owner
 ```
@@ -651,8 +754,11 @@ staff < corporate < scheduler < manager < admin < org_owner
 
 ```typescript
 <<<<<<< HEAD
+<<<<<<< HEAD
 export const OrgRole = z.enum(["staff", "corporate", "scheduler", "manager", "admin", "org_owner"]);
 =======
+=======
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
 export const OrgRole = z.enum([
   "staff",
   "corporate",
@@ -661,7 +767,10 @@ export const OrgRole = z.enum([
   "admin",
   "org_owner"
 ]);
+<<<<<<< HEAD
 >>>>>>> origin/claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
+=======
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
 
 export type OrgRole = z.infer<typeof OrgRole>;
 ```
@@ -669,6 +778,7 @@ export type OrgRole = z.infer<typeof OrgRole>;
 **Hierarchical Checking**: If you require `manager`, users with `admin` or `org_owner` also pass.
 
 **Usage**:
+<<<<<<< HEAD
 <<<<<<< HEAD
 
 ```typescript
@@ -679,6 +789,8 @@ export const POST = createOrgEndpoint({
     // context.org.role is guaranteed to be manager, admin, or org_owner
   },
 =======
+=======
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
 ```typescript
 // Require manager or higher
 export const POST = createOrgEndpoint({
@@ -686,22 +798,31 @@ export const POST = createOrgEndpoint({
   handler: async ({ context }) => {
     // context.org.role is guaranteed to be manager, admin, or org_owner
   }
+<<<<<<< HEAD
 >>>>>>> origin/claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
+=======
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
 });
 
 // Require admin or org_owner only
 export const DELETE = createOrgEndpoint({
+<<<<<<< HEAD
 <<<<<<< HEAD
   roles: ["admin"],
   handler: async ({ context }) => {
     // Only admin and org_owner can access
   },
 =======
+=======
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
   roles: ['admin'],
   handler: async ({ context }) => {
     // Only admin and org_owner can access
   }
+<<<<<<< HEAD
 >>>>>>> origin/claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
+=======
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
 });
 ```
 
@@ -711,9 +832,12 @@ export const DELETE = createOrgEndpoint({
 
 **Query**:
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> origin/claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
+=======
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
 ```typescript
 const membershipQuery = await db
   .collectionGroup("memberships")
@@ -726,9 +850,12 @@ const membershipQuery = await db
 
 **Membership Document** (`/memberships/{userId}_{orgId}`):
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> origin/claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
+=======
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
 ```typescript
 {
   uid: string;
@@ -742,9 +869,12 @@ const membershipQuery = await db
 
 **Context Available in Handler**:
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> origin/claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
+=======
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
 ```typescript
 {
   auth: {
@@ -775,6 +905,7 @@ const membershipQuery = await db
 
 **Override** (if needed for webhooks):
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 ```typescript
 export const POST = createPublicEndpoint({
@@ -783,19 +914,27 @@ export const POST = createPublicEndpoint({
     /* ... */
   },
 =======
+=======
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
 ```typescript
 export const POST = createPublicEndpoint({
   csrf: false,  // Disable CSRF
   handler: async () => { /* ... */ }
+<<<<<<< HEAD
 >>>>>>> origin/claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
+=======
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
 });
 ```
 
 **Client Must**:
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> origin/claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
+=======
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
 - Include CSRF token in `X-CSRF-Token` header
 - Token must match cookie value
 
@@ -805,15 +944,19 @@ export const POST = createPublicEndpoint({
 
 **Environment Variables**:
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> origin/claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
+=======
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
 - `UPSTASH_REDIS_REST_URL` + `UPSTASH_REDIS_REST_TOKEN` (preferred for Vercel)
 - OR `REDIS_URL` (for ioredis client)
 
 **⚠️ WARNING**: In-memory rate limiting is NOT suitable for multi-instance deployments. Use Redis in production.
 
 **Configuration**:
+<<<<<<< HEAD
 <<<<<<< HEAD
 
 ```typescript
@@ -826,6 +969,8 @@ export const POST = createOrgEndpoint({
     /* ... */
   },
 =======
+=======
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
 ```typescript
 export const POST = createOrgEndpoint({
   rateLimit: {
@@ -833,24 +978,33 @@ export const POST = createOrgEndpoint({
     windowMs: 60000    // per 60 seconds
   },
   handler: async () => { /* ... */ }
+<<<<<<< HEAD
 >>>>>>> origin/claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
+=======
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
 });
 ```
 
 **Recommended Limits**:
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> origin/claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
+=======
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
 - Read operations: 100 req/min
 - Write operations: 50 req/min
 - Sensitive operations (auth, payments): 10 req/min
 
 **Response Headers**:
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> origin/claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
+=======
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
 ```
 X-RateLimit-Limit: 100
 X-RateLimit-Remaining: 42
@@ -866,9 +1020,12 @@ Retry-After: 45  (seconds until reset)
 
 **Manual** (legacy):
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> origin/claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
+=======
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
 ```typescript
 import { parseJson, badRequest } from "../_shared/validation";
 
@@ -884,6 +1041,7 @@ if (!parsed.success) {
 
 **❌ WRONG**:
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 ```typescript
 const schedules = await db.collection("schedules").get(); // No scoping!
@@ -894,6 +1052,8 @@ const schedules = await db.collection("schedules").get(); // No scoping!
 ```typescript
 const schedules = await db.collection(`orgs/${context.org!.orgId}/schedules`).get();
 =======
+=======
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
 ```typescript
 const schedules = await db.collection("schedules").get();  // No scoping!
 ```
@@ -903,7 +1063,10 @@ const schedules = await db.collection("schedules").get();  // No scoping!
 const schedules = await db
   .collection(`orgs/${context.org!.orgId}/schedules`)
   .get();
+<<<<<<< HEAD
 >>>>>>> origin/claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
+=======
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
 ```
 
 ### 5. Security Headers
@@ -912,9 +1075,12 @@ const schedules = await db
 
 **Headers Applied**:
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> origin/claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
+=======
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
 - `Content-Security-Policy`: Restricts script/style sources
 - `Strict-Transport-Security`: HSTS
 - `X-Frame-Options`: DENY
@@ -932,9 +1098,12 @@ const schedules = await db
 
 **Singleton Pattern**:
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> origin/claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
+=======
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
 ```typescript
 import { getFirestore } from "firebase-admin/firestore";
 import { getAuth } from "firebase-admin/auth";
@@ -948,9 +1117,12 @@ const auth = getAuth();
 
 **Environment Variables Required**:
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> origin/claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
+=======
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
 - `FIREBASE_PROJECT_ID` or `NEXT_PUBLIC_FIREBASE_PROJECT_ID`
 - `GOOGLE_APPLICATION_CREDENTIALS_JSON` (service account JSON string)
 
@@ -984,6 +1156,7 @@ export const GET = createOrgEndpoint({
       .get();
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     const schedules = snapshot.docs.map((doc) => ({
       id: doc.id,
       ...doc.data(),
@@ -992,6 +1165,8 @@ export const GET = createOrgEndpoint({
     return NextResponse.json({ data: schedules });
   },
 =======
+=======
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
     const schedules = snapshot.docs.map(doc => ({
       id: doc.id,
       ...doc.data()
@@ -999,7 +1174,10 @@ export const GET = createOrgEndpoint({
 
     return NextResponse.json({ data: schedules });
   }
+<<<<<<< HEAD
 >>>>>>> origin/claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
+=======
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
 });
 ```
 
@@ -1009,9 +1187,12 @@ export const GET = createOrgEndpoint({
 
 **Key Helper Functions**:
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> origin/claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
+=======
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
 ```javascript
 function isSignedIn() {
   return request.auth != null;
@@ -1034,9 +1215,12 @@ function hasAnyRole(orgId, roles) {
 
 **Common Patterns**:
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> origin/claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
+=======
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
 ```javascript
 // Self-only access
 match /users/{userId} {
@@ -1069,9 +1253,12 @@ match /orgs/{orgId}/schedules/{scheduleId} {
 
 **Run Tests**:
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> origin/claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
+=======
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
 ```bash
 pnpm test              # Run all tests
 pnpm test:coverage     # With coverage
@@ -1084,9 +1271,12 @@ pnpm test:watch        # Watch mode
 
 **Mock Request Builder**:
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> origin/claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
+=======
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
 ```typescript
 import { createMockRequest } from "@fresh-schedules/api-framework/testing";
 
@@ -1096,14 +1286,19 @@ const request = createMockRequest("/api/shifts", {
   cookies: { session: "valid-session" },
   headers: { "x-org-id": "org-123" },
 <<<<<<< HEAD
+<<<<<<< HEAD
   searchParams: { orgId: "org-123" },
 =======
   searchParams: { orgId: "org-123" }
 >>>>>>> origin/claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
+=======
+  searchParams: { orgId: "org-123" }
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
 });
 ```
 
 **Mock Context Builders**:
+<<<<<<< HEAD
 <<<<<<< HEAD
 
 ```typescript
@@ -1111,29 +1306,42 @@ import {
   createMockAuthContext,
   createMockOrgContext,
 =======
+=======
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
 ```typescript
 import {
   createMockAuthContext,
   createMockOrgContext
+<<<<<<< HEAD
 >>>>>>> origin/claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
+=======
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
 } from "@fresh-schedules/api-framework/testing";
 
 const authContext = createMockAuthContext({
   userId: "user-123",
 <<<<<<< HEAD
+<<<<<<< HEAD
   email: "test@example.com",
 =======
   email: "test@example.com"
 >>>>>>> origin/claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
+=======
+  email: "test@example.com"
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
 });
 
 const orgContext = createMockOrgContext({
   orgId: "org-123",
 <<<<<<< HEAD
+<<<<<<< HEAD
   role: "admin",
 =======
   role: "admin"
 >>>>>>> origin/claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
+=======
+  role: "admin"
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
 });
 ```
 
@@ -1150,9 +1358,12 @@ const orgContext = createMockOrgContext({
 
 **Example Test**:
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> origin/claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
+=======
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
 ```typescript
 // [P1][TEST][TEST] Schedules API tests
 // Tags: P1, TEST, TEST
@@ -1173,16 +1384,22 @@ describe("POST /api/schedules", () => {
         name: "Test Schedule",
         startDate: 1234567890,
 <<<<<<< HEAD
+<<<<<<< HEAD
         endDate: 1234571490,
       },
       cookies: { session: "valid-session" },
       searchParams: { orgId: "org-123" },
 =======
+=======
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
         endDate: 1234571490
       },
       cookies: { session: "valid-session" },
       searchParams: { orgId: "org-123" }
+<<<<<<< HEAD
 >>>>>>> origin/claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
+=======
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
     });
 
     const response = await POST(request, { params: {} });
@@ -1197,12 +1414,17 @@ describe("POST /api/schedules", () => {
     const request = createMockRequest("/api/schedules", {
       method: "POST",
 <<<<<<< HEAD
+<<<<<<< HEAD
       body: { name: "" }, // Invalid: empty name
       cookies: { session: "valid-session" },
 =======
       body: { name: "" },  // Invalid: empty name
       cookies: { session: "valid-session" }
 >>>>>>> origin/claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
+=======
+      body: { name: "" },  // Invalid: empty name
+      cookies: { session: "valid-session" }
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
     });
 
     const response = await POST(request, { params: {} });
@@ -1230,9 +1452,12 @@ describe("POST /api/schedules", () => {
 
 **Why pnpm?**:
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> origin/claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
+=======
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
 - Workspace support
 - Faster installs
 - Strict dependency resolution
@@ -1240,9 +1465,12 @@ describe("POST /api/schedules", () => {
 
 **Common Commands**:
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> origin/claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
+=======
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
 ```bash
 # Install (always use --frozen-lockfile in CI)
 pnpm install --frozen-lockfile
@@ -1269,9 +1497,12 @@ pnpm clean
 
 **Tasks**:
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> origin/claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
+=======
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
 - `build` - Build all packages (depends on `^build`)
 - `test` - Run tests (depends on `^build`)
 - `lint` - Lint all packages
@@ -1281,9 +1512,12 @@ pnpm clean
 
 **Run via pnpm**:
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> origin/claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
+=======
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
 ```bash
 pnpm dev        # Turbo runs dev tasks
 pnpm build      # Turbo runs build tasks
@@ -1294,9 +1528,12 @@ pnpm test       # Turbo runs test tasks
 
 **Start Emulators**:
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> origin/claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
+=======
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
 ```bash
 # Terminal 1: Start emulators
 firebase emulators:start
@@ -1307,9 +1544,12 @@ NEXT_PUBLIC_USE_EMULATORS=true pnpm dev
 
 **Seed Data**:
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> origin/claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
+=======
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
 ```bash
 pnpm tsx scripts/seed/seed.emulator.ts
 pnpm sim:auth  # Auth simulation
@@ -1317,9 +1557,12 @@ pnpm sim:auth  # Auth simulation
 
 **Emulator Ports**:
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> origin/claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
+=======
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
 - Firestore: `localhost:8080`
 - Auth: `localhost:9099`
 - Functions: `localhost:5001`
@@ -1332,9 +1575,12 @@ pnpm sim:auth  # Auth simulation
 
 **Validation Steps** (runs automatically):
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> origin/claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
+=======
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
 1. **pnpm enforcement** - Blocks npm/yarn usage
 2. **Auto-tag files** - Adds metadata headers
 3. **Typecheck** - Catches TS errors
@@ -1344,9 +1590,12 @@ pnpm sim:auth  # Auth simulation
 
 **Manual Run**:
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> origin/claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
+=======
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
 ```bash
 pnpm typecheck
 pnpm lint
@@ -1357,9 +1606,12 @@ pnpm format
 
 **Checklist**:
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> origin/claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
+=======
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
 - [ ] `pnpm install --frozen-lockfile` completes without warnings
 - [ ] `pnpm -w typecheck` passes (13 React 19 compat errors acceptable)
 - [ ] `pnpm test` passes
@@ -1385,6 +1637,7 @@ pnpm format
 
 **❌ WRONG**:
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 ```typescript
 export const UserSchema = z.object({ name: z.string() });
@@ -1392,20 +1645,28 @@ export const UserSchema = z.object({ name: z.string() });
 interface User {
   // Duplicate!
 =======
+=======
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
 ```typescript
 export const UserSchema = z.object({ name: z.string() });
 
 interface User {  // Duplicate!
+<<<<<<< HEAD
 >>>>>>> origin/claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
+=======
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
   name: string;
 }
 ```
 
 **✅ CORRECT**:
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> origin/claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
+=======
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
 ```typescript
 export const UserSchema = z.object({ name: z.string() });
 export type User = z.infer<typeof UserSchema>;
@@ -1417,9 +1678,12 @@ export type User = z.infer<typeof UserSchema>;
 
 **❌ WRONG**:
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> origin/claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
+=======
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
 ```typescript
 export async function GET(request: NextRequest) {
   const data = await fetchData();
@@ -1429,19 +1693,26 @@ export async function GET(request: NextRequest) {
 
 **✅ CORRECT**:
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> origin/claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
+=======
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
 ```typescript
 export const GET = createOrgEndpoint({
   handler: async ({ context }) => {
     const data = await fetchData(context.org!.orgId);
     return NextResponse.json({ data });
 <<<<<<< HEAD
+<<<<<<< HEAD
   },
 =======
   }
 >>>>>>> origin/claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
+=======
+  }
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
 });
 ```
 
@@ -1451,6 +1722,7 @@ export const GET = createOrgEndpoint({
 
 **❌ WRONG**:
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 ```typescript
 export const POST = createOrgEndpoint({
@@ -1459,17 +1731,23 @@ export const POST = createOrgEndpoint({
     await db.collection("items").add(body);
   },
 =======
+=======
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
 ```typescript
 export const POST = createOrgEndpoint({
   handler: async ({ request }) => {
     const body = await request.json();  // No validation!
     await db.collection("items").add(body);
   }
+<<<<<<< HEAD
 >>>>>>> origin/claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
+=======
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
 });
 ```
 
 **✅ CORRECT**:
+<<<<<<< HEAD
 <<<<<<< HEAD
 
 ```typescript
@@ -1479,13 +1757,18 @@ export const POST = createOrgEndpoint({
     await db.collection("items").add(input);
   },
 =======
+=======
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
 ```typescript
 export const POST = createOrgEndpoint({
   input: CreateItemSchema,  // Validates automatically
   handler: async ({ input, context }) => {
     await db.collection("items").add(input);
   }
+<<<<<<< HEAD
 >>>>>>> origin/claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
+=======
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
 });
 ```
 
@@ -1494,6 +1777,7 @@ export const POST = createOrgEndpoint({
 **RULE**: Always scope Firestore queries to `context.org.orgId`.
 
 **❌ WRONG**:
+<<<<<<< HEAD
 <<<<<<< HEAD
 
 ```typescript
@@ -1505,6 +1789,8 @@ const schedules = await db.collection("schedules").get(); // No org scoping!
 ```typescript
 const schedules = await db.collection(`orgs/${context.org!.orgId}/schedules`).get();
 =======
+=======
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
 ```typescript
 const schedules = await db.collection("schedules").get();  // No org scoping!
 ```
@@ -1514,16 +1800,22 @@ const schedules = await db.collection("schedules").get();  // No org scoping!
 const schedules = await db
   .collection(`orgs/${context.org!.orgId}/schedules`)
   .get();
+<<<<<<< HEAD
 >>>>>>> origin/claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
+=======
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
 ```
 
 ### 6. The Triad of Trust
 
 **RULE**: Every domain entity MUST have:
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> origin/claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
+=======
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
 1. Zod schema in `packages/types/src/`
 2. API route in `apps/web/app/api/`
 3. Firestore rules in `firestore.rules`
@@ -1558,9 +1850,12 @@ const schedules = await db
 
 **Options**:
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> origin/claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
+=======
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
 1. Upgrade to non-deprecated package
 2. Replace with alternative
 3. Document why it remains (with issue link)
@@ -1571,9 +1866,12 @@ const schedules = await db
 
 **❌ WRONG**:
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> origin/claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
+=======
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
 ```typescript
 catch (err) {
   return NextResponse.json({ error: "Error" }, { status: 500 });
@@ -1582,9 +1880,12 @@ catch (err) {
 
 **✅ CORRECT**:
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> origin/claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
+=======
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
 ```typescript
 catch (err) {
   const message = err instanceof Error ? err.message : "Unexpected error";
@@ -1605,9 +1906,12 @@ catch (err) {
 
 **Steps**:
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> origin/claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
+=======
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
 ```bash
 # 1. Define schema
 touch packages/types/src/my-entity.ts
@@ -1628,9 +1932,12 @@ node scripts/validate-patterns.mjs
 
 **1. Schema** (`packages/types/src/my-entity.ts`):
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> origin/claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
+=======
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
 ```typescript
 // [P0][DOMAIN][SCHEMA] MyEntity schema
 // Tags: P0, DOMAIN, SCHEMA
@@ -1644,10 +1951,14 @@ export const MyEntitySchema = z.object({
   status: z.enum(["active", "inactive"]).default("active"),
   createdAt: z.number().int().positive(),
 <<<<<<< HEAD
+<<<<<<< HEAD
   updatedAt: z.number().int().positive(),
 =======
   updatedAt: z.number().int().positive()
 >>>>>>> origin/claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
+=======
+  updatedAt: z.number().int().positive()
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
 });
 
 export type MyEntity = z.infer<typeof MyEntitySchema>;
@@ -1656,19 +1967,27 @@ export const CreateMyEntitySchema = MyEntitySchema.omit({
   id: true,
   createdAt: true,
 <<<<<<< HEAD
+<<<<<<< HEAD
   updatedAt: true,
 =======
   updatedAt: true
 >>>>>>> origin/claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
+=======
+  updatedAt: true
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
 });
 
 export const UpdateMyEntitySchema = MyEntitySchema.partial().omit({
   id: true,
 <<<<<<< HEAD
+<<<<<<< HEAD
   orgId: true,
 =======
   orgId: true
 >>>>>>> origin/claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
+=======
+  orgId: true
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
 });
 
 // Export from index.ts
@@ -1676,22 +1995,31 @@ export const UpdateMyEntitySchema = MyEntitySchema.partial().omit({
 
 **2. API Route** (`apps/web/app/api/my-entities/route.ts`):
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> origin/claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
+=======
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
 ```typescript
 // [P0][API][CODE] MyEntities API endpoint
 // Tags: P0, API, CODE
 
 import { createOrgEndpoint } from "@fresh-schedules/api-framework";
 <<<<<<< HEAD
+<<<<<<< HEAD
 import { CreateMyEntitySchema, UpdateMyEntitySchema } from "@fresh-schedules/types";
 =======
+=======
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
 import {
   CreateMyEntitySchema,
   UpdateMyEntitySchema
 } from "@fresh-schedules/types";
+<<<<<<< HEAD
 >>>>>>> origin/claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
+=======
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
 import { NextResponse } from "next/server";
 
 // GET /api/my-entities?orgId=xxx
@@ -1700,6 +2028,7 @@ export const GET = createOrgEndpoint({
     const { getFirestore } = await import("firebase-admin/firestore");
     const db = getFirestore();
 
+<<<<<<< HEAD
 <<<<<<< HEAD
     const snapshot = await db.collection(`orgs/${context.org!.orgId}/myEntities`).get();
 
@@ -1711,6 +2040,8 @@ export const GET = createOrgEndpoint({
     return NextResponse.json({ data: entities });
   },
 =======
+=======
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
     const snapshot = await db
       .collection(`orgs/${context.org!.orgId}/myEntities`)
       .get();
@@ -1722,16 +2053,23 @@ export const GET = createOrgEndpoint({
 
     return NextResponse.json({ data: entities });
   }
+<<<<<<< HEAD
 >>>>>>> origin/claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
+=======
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
 });
 
 // POST /api/my-entities
 export const POST = createOrgEndpoint({
 <<<<<<< HEAD
+<<<<<<< HEAD
   roles: ["manager"],
 =======
   roles: ['manager'],
 >>>>>>> origin/claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
+=======
+  roles: ['manager'],
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
   rateLimit: { maxRequests: 50, windowMs: 60000 },
   input: CreateMyEntitySchema,
   handler: async ({ input, context }) => {
@@ -1743,6 +2081,7 @@ export const POST = createOrgEndpoint({
       orgId: context.org!.orgId,
       createdAt: Date.now(),
 <<<<<<< HEAD
+<<<<<<< HEAD
       updatedAt: Date.now(),
     };
 
@@ -1751,6 +2090,8 @@ export const POST = createOrgEndpoint({
     return NextResponse.json({ id: docRef.id, ...entity }, { status: 201 });
   },
 =======
+=======
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
       updatedAt: Date.now()
     };
 
@@ -1763,21 +2104,29 @@ export const POST = createOrgEndpoint({
       { status: 201 }
     );
   }
+<<<<<<< HEAD
 >>>>>>> origin/claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
+=======
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
 });
 
 // PATCH /api/my-entities/[id]
 export const PATCH = createOrgEndpoint({
 <<<<<<< HEAD
+<<<<<<< HEAD
   roles: ["manager"],
 =======
   roles: ['manager'],
 >>>>>>> origin/claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
+=======
+  roles: ['manager'],
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
   input: UpdateMyEntitySchema,
   handler: async ({ input, context, params }) => {
     const { getFirestore } = await import("firebase-admin/firestore");
     const db = getFirestore();
 
+<<<<<<< HEAD
 <<<<<<< HEAD
     const docRef = db.doc(`orgs/${context.org!.orgId}/myEntities/${params.id}`);
 
@@ -1785,6 +2134,8 @@ export const PATCH = createOrgEndpoint({
       ...input,
       updatedAt: Date.now(),
 =======
+=======
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
     const docRef = db.doc(
       `orgs/${context.org!.orgId}/myEntities/${params.id}`
     );
@@ -1792,12 +2143,16 @@ export const PATCH = createOrgEndpoint({
     await docRef.update({
       ...input,
       updatedAt: Date.now()
+<<<<<<< HEAD
 >>>>>>> origin/claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
+=======
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
     });
 
     const updated = await docRef.get();
     return NextResponse.json({
       id: updated.id,
+<<<<<<< HEAD
 <<<<<<< HEAD
       ...updated.data(),
     });
@@ -1807,40 +2162,58 @@ export const PATCH = createOrgEndpoint({
     });
   }
 >>>>>>> origin/claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
+=======
+      ...updated.data()
+    });
+  }
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
 });
 
 // DELETE /api/my-entities/[id]
 export const DELETE = createOrgEndpoint({
 <<<<<<< HEAD
+<<<<<<< HEAD
   roles: ["admin"],
 =======
   roles: ['admin'],
 >>>>>>> origin/claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
+=======
+  roles: ['admin'],
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
   handler: async ({ context, params }) => {
     const { getFirestore } = await import("firebase-admin/firestore");
     const db = getFirestore();
 
+<<<<<<< HEAD
 <<<<<<< HEAD
     await db.doc(`orgs/${context.org!.orgId}/myEntities/${params.id}`).delete();
 
     return NextResponse.json({ success: true });
   },
 =======
+=======
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
     await db
       .doc(`orgs/${context.org!.orgId}/myEntities/${params.id}`)
       .delete();
 
     return NextResponse.json({ success: true });
   }
+<<<<<<< HEAD
 >>>>>>> origin/claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
+=======
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
 });
 ```
 
 **3. Firestore Rules** (`firestore.rules`):
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> origin/claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
+=======
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
 ```javascript
 match /orgs/{orgId}/myEntities/{entityId} {
   // Read: org members
@@ -1860,9 +2233,12 @@ match /orgs/{orgId}/myEntities/{entityId} {
 
 **4. Tests** (`apps/web/app/api/my-entities/__tests__/my-entities.test.ts`):
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> origin/claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
+=======
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
 ```typescript
 // [P1][TEST][TEST] MyEntities API tests
 // Tags: P1, TEST, TEST
@@ -1876,10 +2252,14 @@ describe("GET /api/my-entities", () => {
     const request = createMockRequest("/api/my-entities", {
       cookies: { session: "valid-session" },
 <<<<<<< HEAD
+<<<<<<< HEAD
       searchParams: { orgId: "org-123" },
 =======
       searchParams: { orgId: "org-123" }
 >>>>>>> origin/claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
+=======
+      searchParams: { orgId: "org-123" }
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
     });
 
     const response = await GET(request, { params: {} });
@@ -1897,10 +2277,14 @@ describe("POST /api/my-entities", () => {
       body: { name: "Test Entity" },
       cookies: { session: "valid-session" },
 <<<<<<< HEAD
+<<<<<<< HEAD
       searchParams: { orgId: "org-123" },
 =======
       searchParams: { orgId: "org-123" }
 >>>>>>> origin/claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
+=======
+      searchParams: { orgId: "org-123" }
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
     });
 
     const response = await POST(request, { params: {} });
@@ -1914,9 +2298,12 @@ describe("POST /api/my-entities", () => {
 
 **Before** (legacy `withSecurity` pattern):
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> origin/claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
+=======
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
 ```typescript
 import { withSecurity } from "../_shared/middleware";
 import { requireOrgMembership, requireRole } from "@/src/lib/api";
@@ -1932,6 +2319,7 @@ export const POST = withSecurity(
       // Business logic
       return ok({ success: true });
 <<<<<<< HEAD
+<<<<<<< HEAD
     }),
   ),
   { requireAuth: true, maxRequests: 50, windowMs: 60_000 },
@@ -1940,14 +2328,22 @@ export const POST = withSecurity(
   ),
   { requireAuth: true, maxRequests: 50, windowMs: 60_000 }
 >>>>>>> origin/claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
+=======
+    })
+  ),
+  { requireAuth: true, maxRequests: 50, windowMs: 60_000 }
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
 );
 ```
 
 **After** (SDK factory):
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> origin/claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
+=======
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
 ```typescript
 import { createOrgEndpoint } from "@fresh-schedules/api-framework";
 import { CreateShiftSchema } from "@fresh-schedules/types";
@@ -1955,28 +2351,39 @@ import { NextResponse } from "next/server";
 
 export const POST = createOrgEndpoint({
 <<<<<<< HEAD
+<<<<<<< HEAD
   roles: ["manager"],
 =======
   roles: ['manager'],
 >>>>>>> origin/claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
+=======
+  roles: ['manager'],
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
   rateLimit: { maxRequests: 50, windowMs: 60000 },
   input: CreateShiftSchema,
   handler: async ({ input, context }) => {
     // Business logic (input already validated)
     return NextResponse.json({ success: true });
 <<<<<<< HEAD
+<<<<<<< HEAD
   },
 =======
   }
 >>>>>>> origin/claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
+=======
+  }
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
 });
 ```
 
 **Benefits**:
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> origin/claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
+=======
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
 - Declarative configuration
 - Automatic validation
 - Type-safe context
@@ -2006,9 +2413,12 @@ export const POST = createOrgEndpoint({
 
 **Usage**:
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> origin/claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
+=======
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
 ```typescript
 // ❌ WRONG
 import { helper } from "../../../src/lib/helpers";
@@ -2039,9 +2449,12 @@ import { ok, badRequest } from "./validation";
 
 **❌ WRONG**:
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> origin/claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
+=======
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
 ```
 /components/Button.tsx
 /components/Modal.tsx
@@ -2051,9 +2464,12 @@ import { ok, badRequest } from "./validation";
 
 **✅ CORRECT**:
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> origin/claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
+=======
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
 ```
 /schedules/
 ├── components/
@@ -2077,9 +2493,12 @@ import { ok, badRequest } from "./validation";
 
 **Fix**: Use `eslint` directly (already fixed in latest):
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> origin/claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
+=======
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
 ```json
 {
   "scripts": {
@@ -2094,9 +2513,12 @@ import { ok, badRequest } from "./validation";
 
 **Fix**: Ensure root `package.json` has:
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> origin/claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
+=======
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
 ```json
 {
   "packageManager": "pnpm@9.12.1"
@@ -2121,9 +2543,12 @@ import { ok, badRequest } from "./validation";
 
 **Fix**: Set Redis environment variables:
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> origin/claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
+=======
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
 ```bash
 UPSTASH_REDIS_REST_URL=https://....upstash.io
 UPSTASH_REDIS_REST_TOKEN=****
@@ -2137,6 +2562,7 @@ UPSTASH_REDIS_REST_TOKEN=****
 
 **Workaround**: Disable CSRF for public endpoints:
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 ```typescript
 export const POST = createPublicEndpoint({
@@ -2145,11 +2571,16 @@ export const POST = createPublicEndpoint({
     /* ... */
   },
 =======
+=======
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
 ```typescript
 export const POST = createPublicEndpoint({
   csrf: false,
   handler: async () => { /* ... */ }
+<<<<<<< HEAD
 >>>>>>> origin/claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
+=======
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
 });
 ```
 
@@ -2159,9 +2590,12 @@ export const POST = createPublicEndpoint({
 
 **Fix**: Include org ID in request:
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> origin/claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
+=======
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
 ```typescript
 // Query param
 fetch("/api/schedules?orgId=org-123");
@@ -2169,10 +2603,14 @@ fetch("/api/schedules?orgId=org-123");
 // Header
 fetch("/api/schedules", {
 <<<<<<< HEAD
+<<<<<<< HEAD
   headers: { "x-org-id": "org-123" },
 =======
   headers: { "x-org-id": "org-123" }
 >>>>>>> origin/claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
+=======
+  headers: { "x-org-id": "org-123" }
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
 });
 ```
 
@@ -2189,6 +2627,7 @@ fetch("/api/schedules", {
 ### Key Files
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 | Purpose          | Location                                |
 | ---------------- | --------------------------------------- |
 | SDK Factory      | `packages/api-framework/src/index.ts`   |
@@ -2199,6 +2638,8 @@ fetch("/api/schedules", {
 | Firebase Admin   | `apps/web/lib/firebase-admin.ts`        |
 | Test Utilities   | `packages/api-framework/src/testing.ts` |
 =======
+=======
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
 | Purpose | Location |
 |---------|----------|
 | SDK Factory | `packages/api-framework/src/index.ts` |
@@ -2208,7 +2649,10 @@ fetch("/api/schedules", {
 | Coding Standards | `docs/CODING_RULES_AND_PATTERNS.md` |
 | Firebase Admin | `apps/web/lib/firebase-admin.ts` |
 | Test Utilities | `packages/api-framework/src/testing.ts` |
+<<<<<<< HEAD
 >>>>>>> origin/claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
+=======
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
 
 ### Environment Variables
 
@@ -2329,7 +2773,11 @@ This codebase follows a **Zod-first, SDK factory pattern** with **hierarchical R
 ---
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 **Last Updated**: December 5, 2025 by AI Agent Analysis
 =======
 **Last Updated**: December 2, 2025 by AI Agent Analysis
 >>>>>>> origin/claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
+=======
+**Last Updated**: December 2, 2025 by AI Agent Analysis
+>>>>>>> claude/copilot-instructions-01YJM2ASW6ZA6FotLgfPBr7b
