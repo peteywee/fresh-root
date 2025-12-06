@@ -134,6 +134,7 @@
       <div class="tab" onclick="switchTab('prioritize')">AI Prioritization</div>
       <div class="tab" onclick="switchTab('predict')">Predictions</div>
       <div class="tab" onclick="switchTab('security')">Security</div>
+      <div class="tab" onclick="switchTab('github')">GitHub</div>
       <div class="tab" onclick="switchTab('console')">Live Console</div>
     </div>
 
@@ -181,6 +182,23 @@
       <div class="card">
         <div class="card-title">Security Vulnerabilities</div>
         <ul class="list" id="security-list"></ul>
+      </div>
+    </div>
+
+    <div id="github" class="tab-content">
+      <div class="grid">
+        <div class="card">
+          <div class="card-title">Repository Info</div>
+          <div id="repo-info">Loading...</div>
+          <div style="margin-top: 16px; display: flex; gap: 8px;">
+            <button class="btn btn-primary" onclick="syncGitHub()">🔄 Sync</button>
+            <button class="btn btn-secondary" onclick="pullLatest()">⬇️ Pull</button>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">Recent Commits</div>
+          <ul class="list" id="commits-list"></ul>
+        </div>
       </div>
     </div>
 
@@ -329,11 +347,75 @@
       ]);
     }
 
+    async function syncGitHub() {
+      const data = await api('github/sync');
+      loadGitHub();
+      setStatus('GitHub synced', 'success');
+    }
+
+    async function pullLatest() {
+      const data = await api('github/pull');
+      setStatus(data.message, data.success ? 'success' : 'danger');
+    }
+
+    async function loadGitHub() {
+      const data = await api('github/repos');
+      const info = document.getElementById('repo-info');
+      if (data.repos && data.repos.length > 0) {
+        const repo = data.repos[0];
+        info.innerHTML = `
+          <div class="metric">
+            <span>Repository</span>
+            <a href="${repo.url}" target="_blank" style="color: var(--primary);">
+              ${repo.owner}/${repo.name}
+            </a>
+          </div>
+          <div class="metric">
+            <span>Branch</span>
+            <span>${repo.branch}</span>
+          </div>
+          <div class="metric">
+            <span>Tests</span>
+            <span>${repo.testCount}</span>
+          </div>
+          <div class="metric">
+            <span>Last Commit</span>
+            <span>${repo.lastCommit}</span>
+          </div>
+        `;
+      } else {
+        info.innerHTML = '<div style="color: var(--muted);">No repository synced</div>';
+      }
+
+      const commits = await api('github/commits');
+      const list = document.getElementById('commits-list');
+      if (commits.commits && commits.commits.length > 0) {
+        list.innerHTML = commits.commits.slice(0, 10).map(c => `
+          <li class="list-item">
+            <div>
+              <div><strong>${c.message}</strong></div>
+              <div style="font-size: 12px; color: var(--muted);">
+                ${c.author} • ${c.date}
+              </div>
+            </div>
+            <span style="font-family: monospace; font-size: 12px; color: var(--muted);">
+              ${c.hash}
+            </span>
+          </li>
+        `).join('');
+      } else {
+        list.innerHTML = '<li class="list-item">No commits</li>';
+      }
+    }
+
     function switchTab(tab) {
       document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
       document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-      document.querySelector(`.tab:nth-child(${['overview', 'prioritize', 'predict', 'security', 'console'].indexOf(tab) + 1})`).classList.add('active');
+      const tabs = ['overview', 'prioritize', 'predict', 'security', 'github', 'console'];
+      document.querySelector(`.tab:nth-child(${tabs.indexOf(tab) + 1})`).classList.add('active');
       document.getElementById(tab).classList.add('active');
+
+      if (tab === 'github') loadGitHub();
     }
 
     // Initialize

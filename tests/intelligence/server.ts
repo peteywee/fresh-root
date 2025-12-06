@@ -130,9 +130,26 @@ const server = http.createServer(async (req, res) => {
           data = { users: testDataFactory.generateUsers(count) };
           break;
 
+        case "github/sync":
+          sendEvent("status", "Syncing GitHub repository...");
+          const repo = await githubSync.syncCurrentRepo();
+          data = repo || { message: "Not a git repository" };
+          break;
+
         case "github/repos":
-          // GitHub repo sync - placeholder for now
-          data = { repos: [], message: "GitHub sync not yet configured" };
+          data = { repos: githubSync.getRepos(), stats: githubSync.getStats() };
+          break;
+
+        case "github/commits":
+          const commits = await githubSync.getRecentCommits(20);
+          data = { commits };
+          break;
+
+        case "github/pull":
+          sendEvent("status", "Pulling latest changes...");
+          const pullResult = await githubSync.pullLatest();
+          sendEvent("status", pullResult.message);
+          data = pullResult;
           break;
 
         default:
