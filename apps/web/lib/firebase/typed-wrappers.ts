@@ -1,7 +1,17 @@
+/**
+ * @deprecated Use @/src/lib/firebase/typed-wrappers.ts instead
+ * This file is kept temporarily for backward compatibility.
+ * All new imports should use @/src/lib/firebase/typed-wrappers.ts
+ */
+
 // [P1][FIREBASE][HELPERS] Type-safe Firebase wrapper functions
 // Tags: P1, FIREBASE, HELPERS, TYPING
+
+// Re-export from canonical location
+export * from '../../src/lib/firebase/typed-wrappers';
+
 /**
- * Type-safe wrapper functions for Firebase Admin SDK Firestore operations.
+ * Original Type-safe wrapper functions for Firebase Admin SDK Firestore operations.
  *
  * These wrappers provide:
  * - Generic type parameters for type-safe document reads

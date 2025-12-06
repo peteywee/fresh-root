@@ -1,8 +1,53 @@
-# Fresh Root
+---
+**UPDATED**: Restructured for better navigation
+**Update Date**: December 6, 2025
+**Changes**: Added active/archived separation, improved navigation
+---
 
-**Status:** ✅ Production Ready | **Version:** 1.1.0 | **Last Updated:** November 10, 2025
+# Fresh Root Documentation
+
+**Status:** ✅ Production Ready | **Version:** 1.1.0 | **Architecture Cleanup:** December 6, 2025
 
 A production-ready Progressive Web App (PWA) for staff scheduling with enterprise-grade security and reliability.
+
+---
+
+## 🚀 Active Documentation (Use These)
+
+### Getting Started
+- [**Quick Start Guide**](./QUICK_START.md) - Setup and development workflow
+- [**Coding Rules & Patterns**](./CODING_RULES_AND_PATTERNS.md) - Development standards
+- [**Architecture Overview**](./visuals/ARCHITECTURE.md) - System design & topology
+
+### Production
+- [**Production Deployment Guide**](./PRODUCTION_DEPLOYMENT_GUIDE.md) - Deployment checklist
+- [**Production Readiness KPI**](./PRODUCTION_READINESS_KPI.md) - Quality metrics
+- [**Production Environment Validation**](./PRODUCTION_ENV_VALIDATION.md) - Environment setup
+
+### Architecture & Design
+- **[Mega Architecture Report (Consolidated)](./mega-book/fresh_root_mega_report_A/)** - L0-L4 hierarchical architecture
+  - [L0 — Mission & Non-Negotiables](./mega-book/fresh_root_mega_report_A/01_SYSTEM_L0.md)
+  - [L1 — System Architecture](./mega-book/fresh_root_mega_report_A/02_SYSTEM_L1.md) ✨ *Recently enhanced with 9-panel review*
+  - [L2 — Subsystems](./mega-book/fresh_root_mega_report_A/03_SUBSYSTEMS_L2/)
+  - [L3 — Components](./mega-book/fresh_root_mega_report_A/04_COMPONENTS_L3/)
+  - [L4 — Tasks & Deployment](./mega-book/fresh_root_mega_report_A/05_TASKS_L4/)
+
+### Reference & Analysis
+- [**Codebase Architectural Index**](./CODEBASE_ARCHITECTURAL_INDEX.md) - Complete infrastructure map
+- [**Architectural Review Panel Inputs**](./ARCHITECTURAL_REVIEW_PANEL_INPUTS.md) - 9-panel expert model findings
+- [**Error Prevention Patterns**](./ERROR_PREVENTION_PATTERNS.md) - Common pitfalls & safeguards
+- [**Firebase Typing Strategy**](./FIREBASE_TYPING_STRATEGY.md) - Type modernization roadmap
+- [**Firebase Prompt Workflow**](./FIREBASE_PROMPT_WORKFLOW.md) - AI-assisted development templates
+
+---
+
+## 📦 Archived Documentation (Historical Reference)
+
+**Historical phase reports, migration documents, and development session notes have been archived.**
+
+See [**archive/README.md**](./archive/README.md) for historical reference.
+
+**Archive Date**: December 6, 2025
 Built with Next.js, Firebase, and a modern monorepo architecture.
 
 ---

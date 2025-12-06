@@ -1,3 +1,10 @@
+---
+**ARCHIVED**: Temporary development notes
+**Archive Date**: December 6, 2025
+**Scheduled Deletion**: January 6, 2026 (30 days)
+**Reason**: Development session artifact, superseded by current architecture
+---
+
 # Chromebook Memory Strategy - No Swap Edition
 
 **Situation**: Chromebook Crostini containers cannot use swap files. With 6.3GB RAM and no swap, memory pressure is critical. This guide focuses on reducing memory consumption and graceful build degradation.

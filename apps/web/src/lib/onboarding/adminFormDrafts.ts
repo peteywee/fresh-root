@@ -1,6 +1,6 @@
 // [P0][FIREBASE][CODE] AdminFormDrafts
 // Tags: P0, FIREBASE, CODE
-import { getFirebaseAdminDb } from "@/lib/firebase-admin";
+import { getFirebaseAdminDb } from "@/src/lib/firebase-admin";
 import {
   getDocWithType,
   setDocWithType,

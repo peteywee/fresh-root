@@ -1,3 +1,9 @@
+/**
+ * @deprecated Consider moving to @/src/lib/animations.ts or removing if unused
+ * This file is kept temporarily for backward compatibility.
+ * Consider integrating with modern component library patterns.
+ */
+
 //[P2][UI][CODE] Framer Motion animation variants and utilities
 // Tags: P2, UI, CODE, animations, framer-motion
 

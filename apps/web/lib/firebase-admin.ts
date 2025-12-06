@@ -1,8 +1,19 @@
+/**
+ * @deprecated Use @/src/lib/firebase-admin.ts instead
+ * This file is kept temporarily for backward compatibility.
+ * All new imports should use @/src/lib/firebase-admin.ts
+ */
+
 // [P0][SECURITY][FIREBASE] Firebase Admin SDK singleton for Next.js server-side operations
 // Tags: P0, SECURITY, FIREBASE, ADMIN_SDK, NEXTJS
-import { cert, initializeApp, type App } from "firebase-admin/app";
-import { getAuth, type Auth } from "firebase-admin/auth";
-import { getFirestore, type Firestore } from "firebase-admin/firestore";
+
+// Re-export from canonical location
+export * from '../src/lib/firebase-admin';
+
+// Original implementation (deprecated):
+// import { cert, initializeApp, type App } from "firebase-admin/app";
+// import { getAuth, type Auth } from "firebase-admin/auth";
+// import { getFirestore, type Firestore } from "firebase-admin/firestore";
 
 // Singleton Firebase Admin SDK initialization
 let app: App | null = null;

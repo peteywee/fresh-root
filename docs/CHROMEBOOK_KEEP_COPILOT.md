@@ -1,3 +1,10 @@
+---
+**ARCHIVED**: Temporary development notes
+**Archive Date**: December 6, 2025
+**Scheduled Deletion**: January 6, 2026 (30 days)
+**Reason**: Development session artifact, no longer needed
+---
+
 # Keep Copilot + Minimal Speed Loss (Chromebook Edition)
 
 **Updated strategy**: Instead of disabling Copilot, use targeted optimizations to keep it running while minimizing speed impact.

@@ -11,8 +11,8 @@ import {
   sendEmailLinkRobust,
   startGooglePopup,
   establishServerSession,
-} from "../../../src/lib/auth-helpers";
-import { auth } from "../../lib/firebaseClient";
+} from "@/src/lib/auth-helpers";
+import { auth } from "@/src/lib/firebaseClient";
 
 const LoginForm = React.memo(() => {
   const router = useRouter();

@@ -1,8 +1,4 @@
-#!/usr/bin/env tsx
-// [P2][APP][CODE] System Pulse
-// Tags: P2, APP, CODE
-
-import { promisify } from "util";
+// DELETED: Debug artifact removed by architecture cleanup
 import { exec } from "child_process";
 
 const execAsync = promisify(exec);

@@ -1,3 +1,9 @@
+---
+**ARCHIVED**: Historical migration status
+**Archive Date**: December 6, 2025
+**Reason**: SDK migration completed, superseded by current architecture
+---
+
 # SDK Migration: Current Status & Path Forward
 
 **Date:** November 30, 2025  

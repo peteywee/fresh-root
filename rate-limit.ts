@@ -18,6 +18,7 @@
 /* -------------------------------------------------------------------------- */
 
 import { NextResponse, type NextRequest } from "next/server";
+import type { Redis } from "ioredis";
 
 /* -------------------------------------------------------------------------- */
 /* Public types                                                                */
@@ -161,10 +162,103 @@ class InMemoryRateLimiter {
 }
 
 /* -------------------------------------------------------------------------- */
+/* Redis backend                                                               */
+/* -------------------------------------------------------------------------- */
+
+class RedisRateLimiter {
+  constructor(private readonly redis: Redis) {}
+
+  async checkLimit(
+    request: NextRequest | Request | undefined,
+    options: RateLimitOptions,
+  ): Promise<RateLimitResult> {
+    const keyGen = options.keyGenerator ?? defaultKeyGenerator;
+    const key = `rate_limit:${keyGen(request)}`;
+    const now = Date.now();
+    const windowMs = options.windowSeconds * 1000;
+    const resetAt = Math.ceil((now + windowMs) / 1000) * 1000; // Round to next second
+
+    try {
+      // Use Redis pipeline for atomicity
+      const pipeline = this.redis.pipeline();
+      pipeline.incr(key);
+      pipeline.expire(key, options.windowSeconds);
+      const results = await pipeline.exec();
+
+      if (!results || results.some(([err]) => err)) {
+        throw new Error("Redis pipeline failed");
+      }
+
+      const count = results[0][1] as number;
+
+      if (count > options.max) {
+        return {
+          allowed: false,
+          remaining: 0,
+          resetAt,
+          key,
+        };
+      }
+
+      return {
+        allowed: true,
+        remaining: Math.max(options.max - count, 0),
+        resetAt,
+        key,
+      };
+    } catch (error) {
+      // Log error but don't fail the request
+      console.error("Redis rate limiting failed:", error);
+      // Fallback to allowing the request (fail open for availability)
+      return {
+        allowed: true,
+        remaining: options.max - 1,
+        resetAt,
+        key,
+      };
+    }
+  }
+}
+
+/* -------------------------------------------------------------------------- */
 /* Singleton backend                                                           */
 /* -------------------------------------------------------------------------- */
 
-const globalLimiter = new InMemoryRateLimiter();
+let globalLimiter: InMemoryRateLimiter | RedisRateLimiter | null = null;
+
+/**
+ * Initialize the rate limiter backend.
+ * Uses Redis if REDIS_URL is provided, falls back to in-memory otherwise.
+ */
+function initializeRateLimiter(): InMemoryRateLimiter | RedisRateLimiter {
+  if (globalLimiter) {
+    return globalLimiter;
+  }
+
+  const redisUrl = process.env.REDIS_URL || process.env.UPSTASH_REDIS_REST_URL;
+  
+  if (redisUrl && process.env.NODE_ENV === "production") {
+    try {
+      // Dynamic import to avoid bundling Redis in environments that don't need it
+      const Redis = require("ioredis").default;
+      const redis = new Redis(redisUrl, {
+        retryDelayOnFailover: 100,
+        enableReadyCheck: false,
+        maxRetriesPerRequest: 1,
+      });
+      
+      globalLimiter = new RedisRateLimiter(redis);
+      console.log("[rate-limit] Initialized Redis rate limiter");
+      return globalLimiter;
+    } catch (error) {
+      console.warn("[rate-limit] Failed to initialize Redis, falling back to in-memory:", error);
+    }
+  }
+
+  globalLimiter = new InMemoryRateLimiter();
+  console.log("[rate-limit] Initialized in-memory rate limiter");
+  return globalLimiter;
+}
 
 /**
  * Exposed only for advanced tests / diagnostics. Most tests should go through
@@ -174,7 +268,20 @@ export async function checkRateLimit(
   request: NextRequest | Request | undefined,
   options: RateLimitOptions,
 ): Promise<RateLimitResult> {
-  return globalLimiter.checkLimit(request, options);
+  const limiter = initializeRateLimiter();
+  return limiter.checkLimit(request, options);
+}
+
+/**
+ * For testing: reset the global limiter to force reinitialization.
+ * Only use this in test environments.
+ */
+export function resetRateLimiter(): void {
+  if (process.env.NODE_ENV !== "test") {
+    console.warn("resetRateLimiter() should only be used in tests");
+    return;
+  }
+  globalLimiter = null;
 }
 
 /* -------------------------------------------------------------------------- */

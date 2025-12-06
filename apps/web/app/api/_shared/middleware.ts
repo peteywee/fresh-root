@@ -12,9 +12,9 @@ import {
   rateLimit as inMemoryRateLimit,
   securityHeaders,
 } from "./security";
-import { getFirebaseAdminAuth } from "../../../lib/firebase-admin";
+import { getFirebaseAdminAuth } from "@/src/lib/firebase-admin";
 // Removed unused imports (csrfProtection, createRedisRateLimit) to satisfy lint no-unused-vars
-import { Logger } from "../../../src/lib/logger";
+import { Logger } from "@/src/lib/logger";
 
 export interface AuthenticatedRequest extends NextRequest {
   user?: {

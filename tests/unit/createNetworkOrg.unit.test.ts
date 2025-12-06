@@ -1,7 +1,151 @@
-// [P1][TEST][UNIT] createNetworkWithOrgAndVenue helper
+// [P1][TEST][UNIT] Redis Rate Limiter
 // Tags: P1, TEST, UNIT
 
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import { getRateLimiter } from "../../apps/web/src/lib/api/rate-limit";
+import type { Redis } from "ioredis";
+
+// Mock ioredis
+vi.mock("ioredis", () => ({
+  default: vi.fn().mockImplementation(() => ({
+    incr: vi.fn(),
+    expire: vi.fn(),
+    ttl: vi.fn(),
+    disconnect: vi.fn(),
+    on: vi.fn(),
+  })),
+}));
+
+// Mock environment
+const originalEnv = process.env;
+
+describe("Rate Limiter", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    process.env = { ...originalEnv };
+  });
+
+  afterEach(() => {
+    process.env = originalEnv;
+  });
+
+  describe("Factory Function", () => {
+    it("should return Redis limiter when REDIS_URL is set", () => {
+      process.env.REDIS_URL = "redis://localhost:6379";
+      const limiter = getRateLimiter();
+      expect(limiter.constructor.name).toBe("RedisRateLimiter");
+    });
+
+    it("should return InMemory limiter when REDIS_URL is not set", () => {
+      delete process.env.REDIS_URL;
+      const limiter = getRateLimiter();
+      expect(limiter.constructor.name).toBe("InMemoryRateLimiter");
+    });
+  });
+
+  describe("Redis Rate Limiter", () => {
+    let mockRedis: any;
+    let limiter: any;
+
+    beforeEach(() => {
+      process.env.REDIS_URL = "redis://localhost:6379";
+      limiter = getRateLimiter();
+      // Get the Redis instance from the limiter
+      mockRedis = (limiter as any).redis;
+    });
+
+    it("should allow requests under limit", async () => {
+      mockRedis.incr.mockResolvedValue(1);
+      mockRedis.expire.mockResolvedValue(1);
+
+      const result = await limiter.checkLimit("test-key", 100, 60);
+
+      expect(result).toEqual({
+        allowed: true,
+        remaining: 99,
+        resetTime: expect.any(Number),
+      });
+      expect(mockRedis.incr).toHaveBeenCalledWith("test-key");
+      expect(mockRedis.expire).toHaveBeenCalledWith("test-key", 60);
+    });
+
+    it("should reject requests over limit", async () => {
+      mockRedis.incr.mockResolvedValue(101);
+      mockRedis.ttl.mockResolvedValue(30);
+
+      const result = await limiter.checkLimit("test-key", 100, 60);
+
+      expect(result).toEqual({
+        allowed: false,
+        remaining: 0,
+        resetTime: expect.any(Number),
+      });
+      expect(mockRedis.incr).toHaveBeenCalledWith("test-key");
+      expect(mockRedis.ttl).toHaveBeenCalledWith("test-key");
+    });
+
+    it("should handle Redis errors gracefully", async () => {
+      mockRedis.incr.mockRejectedValue(new Error("Redis connection failed"));
+
+      const result = await limiter.checkLimit("test-key", 100, 60);
+
+      expect(result).toEqual({
+        allowed: true,
+        remaining: 99,
+        resetTime: expect.any(Number),
+      });
+    });
+  });
+
+  describe("InMemory Rate Limiter", () => {
+    let limiter: any;
+
+    beforeEach(() => {
+      delete process.env.REDIS_URL;
+      limiter = getRateLimiter();
+    });
+
+    it("should track requests in memory", async () => {
+      const result1 = await limiter.checkLimit("test-key", 2, 60);
+      expect(result1.allowed).toBe(true);
+      expect(result1.remaining).toBe(1);
+
+      const result2 = await limiter.checkLimit("test-key", 2, 60);
+      expect(result2.allowed).toBe(true);
+      expect(result2.remaining).toBe(0);
+
+      const result3 = await limiter.checkLimit("test-key", 2, 60);
+      expect(result3.allowed).toBe(false);
+      expect(result3.remaining).toBe(0);
+    });
+
+    it("should reset after window expires", async () => {
+      // Mock Date.now to control time
+      const now = Date.now();
+      vi.spyOn(Date, "now")
+        .mockReturnValueOnce(now)
+        .mockReturnValueOnce(now)
+        .mockReturnValueOnce(now + 61000); // 61 seconds later
+
+      await limiter.checkLimit("test-key", 1, 60);
+      await limiter.checkLimit("test-key", 1, 60); // Should be blocked
+      
+      const result = await limiter.checkLimit("test-key", 1, 60); // Should be allowed again
+      expect(result.allowed).toBe(true);
+    });
+  });
+
+  describe("Legacy Compatibility", () => {
+    it("should maintain legacy key format", async () => {
+      delete process.env.REDIS_URL;
+      const limiter = getRateLimiter();
+      
+      // Test that the key format is maintained for backward compatibility
+      const result = await limiter.checkLimit("api:/test:user-123", 100, 60);
+      expect(result.allowed).toBe(true);
+    });
+  });
+});
 
 type Stored = Record<string, any>;
 const store = new Map<string, Stored>();

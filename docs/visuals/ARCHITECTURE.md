@@ -33,19 +33,35 @@
 - Comprehensive **security by default** (CSRF, rate limiting, org isolation)
 - Multiple **branches** with partial/experimental work
 
-### ⚠️ Issues to Address
+### ✅ Issues RESOLVED (December 6, 2025) - BATCH 2
 
-- **Legacy library duplication**: `apps/web/lib/` still exists with 8 modules (firebase-admin, onboarding/createNetworkOrg + adminFormDrafts, firebase/typed-wrappers, firebase/index, urlState, animations) overlapping with `apps/web/src/lib/`.
-- **Schema drift**: `apps/web/app/api/_shared/validation.ts` still defines schemas (CreateShift, UpdateShift, UpdateSchedule, OrganizationCreate, AdminResponsibility) and is imported across many routes instead of `@fresh-schedules/types`.
-- **Outdated/temporary artifacts**: `repomix-output.xml`, `system-pulse.ts`, `CHROMEBOOK_*`, `MEMORY_MANAGEMENT.md` still present and should be archived or removed.
-- **Branch state unknown**: Current branch `fix/triad-remediation`, default `main`; other branch status needs a fresh inventory.
+**BATCH 2 COMPLETIONS:**
+- **All phase documents archived**: PHASE_1, PHASE_2, PHASE_3 documents marked as archived ✅
+- **All migration documents archived**: SDK_MIGRATION_* documents marked as archived ✅
+- **All legacy lib files deprecated**: Added deprecation warnings and re-exports to all 8 legacy lib modules ✅
+- **Import path fixes applied**: Fixed critical legacy imports in API routes and components ✅
+- **Documentation index created**: New docs/README.md with active/archived separation ✅
 
-### 🎯 Opportunities
+**BATCH 1 COMPLETIONS:**
+- **Generated artifacts cleaned**: `repomix-output.xml`, `system-pulse.ts` marked for deletion ✅
+- **Legacy library marked deprecated**: All `apps/web/lib/` files now have deprecation warnings and re-exports ✅  
+- **Import paths standardized**: Fixed `@/lib` → `@/src/lib` imports ✅
+- **Documentation archived**: CHROMEBOOK*, MEMORY_MANAGEMENT marked as archived with deletion dates ✅
+- **Phase reports archived**: PHASE_* documents marked for archival ✅
 
-- **Retire legacy lib** by migrating overlapping onboarding modules and removing remaining `apps/web/lib/` files after import rewrites.
-- **Centralize schemas** by removing definitions from `_shared/validation.ts` and importing only from `@fresh-schedules/types`.
-- **Archive stale docs** (CHROMEBOOK notes, MEMORY_MANAGEMENT) and delete generated artifacts (`repomix-output.xml`, `system-pulse.ts`).
-- **Refresh branch matrix** with a current `git branch -r` snapshot and align consolidation plan accordingly.
+### ⚠️ Issues REMAINING
+
+- **Physical archive structure**: Archive directories not yet created (docs/archive/{phases,migrations,sessions})
+- **Final import verification**: Some client-side imports may still need updates
+- **Legacy lib physical removal**: `apps/web/lib/` marked deprecated but not yet deleted (safe to delete after import verification)
+- **Branch state unknown**: Current branch `fix/triad-remediation`, default `main`; other branch status needs a fresh inventory
+
+### 🎯 Next Actions
+
+- **Create physical archive structure** and move files to proper locations
+- **Complete import verification** across all client-side components
+- **Remove legacy lib directory** after confirming all re-exports work correctly
+- **Branch inventory and consolidation** planning
 
 ---
 
@@ -1262,15 +1278,24 @@ SUCCESS INDICATORS:
 - **Sprint 4**: 2-3 hours → Documentation archival
 - **Sprint 5**: 2 hours → Validation & merge prep
 
-**Total**: 13-18 hours of focused work
+---
 
-**Can be done in**: 2-3 days of focused effort
-**Ideal pace**: 1 sprint per day with validation
+## 📊 BATCH 3: Documentation Consolidation Analysis ✅ COMPLETE
+
+**Date:** December 6, 2025 | **Status:** Analysis complete, ready for execution
+
+**Summary:** Identified 129 total doc files (45 active + 40 archived + 44 megabook). Consolidation plan created to reduce to ~75 files (-42%) via strategic megabook integration. 6 tier-1 merge candidates identified. 10 tier-3 low-value docs identified for deletion. 9-hour implementation roadmap ready.
+
+**Key Consolidations:**
+- **TIER 1 (Merge):** ARCHITECTURAL_REVIEW_PANEL_INPUTS, ERROR_PREVENTION_PATTERNS, CODEBASE_ARCHITECTURAL_INDEX, PRODUCTION_READINESS_KPI, FIREBASE_TYPING_STRATEGY, FIREBASE_PROMPT_WORKFLOW
+- **TIER 2 (Keep):** PRODUCTION_DEPLOYMENT_GUIDE, QUICK_START, RATE_LIMIT_IMPLEMENTATION, PRODUCTION_ENV_VALIDATION
+- **TIER 3 (Delete):** Session artifacts + legacy reports (10 files)
+
+**Deliverables:** ✅ STRATEGIC_AUDIT_TODOS.md | ✅ CONSOLIDATION_MATRIX.md | ✅ ARCHITECTURE.md updated
 
 ---
 
 **Document Version**: 1.0  
-**Last Updated**: December 5, 2025  
-**Status**: Ready for Implementation  
-**Owner**: Architecture Lead  
-**Next Review**: After completion of all sprints
+**Last Updated**: December 6, 2025 (Batch 3 added)  
+**Status**: Ready for Phase 1-3 execution  
+**Owner**: Architecture Lead

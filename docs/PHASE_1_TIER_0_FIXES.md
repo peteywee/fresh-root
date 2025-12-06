@@ -1,3 +1,9 @@
+---
+**ARCHIVED**: This file has been moved to docs/archive/phases/PHASE_1_TIER_0_FIXES.md
+**Archive Date**: December 6, 2025
+**Reason**: Historical phase report, superseded by current architecture
+---
+
 # FRESH Engine Phase 1: Tier 0 Security Fixes
 **Objective:** Fix 13 Tier 0 (Security) violations to reach 0 Tier 0 issues and improve score by ~25 points.
 

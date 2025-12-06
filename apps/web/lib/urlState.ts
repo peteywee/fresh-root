@@ -1,3 +1,9 @@
+/**
+ * @deprecated Consider migrating to modern state management patterns or move to @/src/lib/
+ * This file is kept temporarily for backward compatibility.
+ * Consider using Zustand, React Query, or other modern state management.
+ */
+
 //[P2][UI][CODE] Type-safe URL state management with nuqs
 // Tags: P2, UI, CODE, url-state, nuqs
 

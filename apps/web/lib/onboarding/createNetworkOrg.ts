@@ -1,7 +1,18 @@
+/**
+ * @deprecated Use @/src/lib/onboarding/createNetworkOrg.ts instead
+ * This file is kept temporarily for backward compatibility.
+ * All new imports should use @/src/lib/onboarding/createNetworkOrg.ts
+ */
+
 // [P0][APP][CODE] CreateNetworkOrg
 // Tags: P0, APP, CODE
 // apps/web/lib/onboarding/createNetworkOrg.ts
-import type { Firestore, DocumentReference, WriteBatch } from "firebase-admin/firestore";
+
+// Re-export from canonical location
+export * from '../../src/lib/onboarding/createNetworkOrg';
+
+// Original implementation (deprecated):
+// import type { Firestore, DocumentReference, WriteBatch } from "firebase-admin/firestore";
 // Use admin firestore instance methods instead of doc/collection helpers
 import { getFirebaseAdminDb } from "../firebase-admin";
 import { consumeAdminFormDraft } from "./adminFormDrafts";
