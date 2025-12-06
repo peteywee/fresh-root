@@ -6,7 +6,7 @@ import {
   setDocWithType,
   updateDocWithType,
   transactionWithType,
-} from "@/lib/firebase/typed-wrappers";
+} from "@/src/lib/firebase/typed-wrappers";
 import {
   CreateAdminResponsibilityFormSchema,
   type AdminResponsibilityForm,

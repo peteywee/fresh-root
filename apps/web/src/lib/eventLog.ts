@@ -13,7 +13,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { NewEventSchema, type NewEvent } from "@fresh-schedules/types";
 import type { Firestore } from "firebase-admin/firestore";
-import { setDocWithType } from "@/lib/firebase/typed-wrappers";
+import { setDocWithType } from "./firebase/typed-wrappers";
 
 interface EventDoc extends NewEvent {
   id: string;

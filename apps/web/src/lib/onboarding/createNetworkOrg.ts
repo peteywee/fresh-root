@@ -75,9 +75,16 @@ export async function createNetworkWithOrgAndVenue(
   const root = injectedDb ?? dbDefault;
   if (!root) throw new Error("admin_db_not_initialized");
 
-  const { basics, venue, formToken } = payload;
+  // Extract and validate payload fields
+  const basicsData = payload.basics;
+  const venueData = payload.venue;
+  const tokenString = payload.formToken;
 
-  const draft = await getAdminFormDraft(formToken);
+  // Type guard: ensure basics exists (required by schema)
+  if (!basicsData) throw new Error("basics_required");
+  if (!tokenString) throw new Error("form_token_required");
+
+  const draft = await getAdminFormDraft(tokenString);
   if (!draft) throw new Error("admin_form_not_found");
   if (draft.userId !== adminUid) throw new Error("admin_form_ownership_mismatch");
 
@@ -90,11 +97,11 @@ export async function createNetworkWithOrgAndVenue(
   const networkDoc: NetworkDoc = {
     id: networkId,
     slug: networkId,
-    displayName: basics?.orgName ?? networkId,
+    displayName: basicsData.orgName ?? networkId,
     legalName:
-      (draft.form as { data?: { legalName?: string } })?.data?.legalName ?? basics?.orgName ?? null,
-    kind: (basics as any).hasCorporateAboveYou ? "franchise_network" : "independent_org",
-    segment: (basics as any).segment,
+      (draft.form as { data?: { legalName?: string } })?.data?.legalName ?? basicsData.orgName ?? null,
+    kind: basicsData.hasCorporateAboveYou ? "franchise_network" : "independent_org",
+    segment: basicsData.segment,
     status: "pending_verification",
     ownerUserId: adminUid,
     createdAt: now,
@@ -122,7 +129,7 @@ export async function createNetworkWithOrgAndVenue(
   const orgDoc: OrgDoc = {
     id: orgId,
     networkId,
-    displayName: basics?.orgName ?? "Org",
+    displayName: basicsData.orgName ?? "Org",
     primaryContactUid: adminUid,
     createdAt: now,
     createdBy: adminUid,
@@ -134,8 +141,8 @@ export async function createNetworkWithOrgAndVenue(
   const venueDoc: VenueDoc = {
     id: venueId,
     networkId,
-    name: venue?.venueName ?? "Main Venue",
-    timeZone: venue?.timeZone ?? "UTC",
+    name: venueData?.venueName ?? "Main Venue",
+    timeZone: venueData?.timeZone ?? "UTC",
     createdAt: now,
     createdBy: adminUid,
   };
@@ -157,7 +164,7 @@ export async function createNetworkWithOrgAndVenue(
   // Commit batch
   await batch.commit();
 
-  await consumeAdminFormDraft({ formToken, expectedUserId: adminUid });
+  await consumeAdminFormDraft({ formToken: tokenString, expectedUserId: adminUid });
 
   return { networkId, orgId, venueId, status: "pending_verification" };
 }
