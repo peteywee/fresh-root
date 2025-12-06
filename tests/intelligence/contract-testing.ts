@@ -182,12 +182,12 @@ export class ContractTester {
     }
 
     if (schema instanceof z.ZodString) {
-      const def = schema._def;
+      const def = schema._def as any;
       const openApiSchema: any = { type: "string" };
 
       // Check for email validation
       if (def.checks) {
-        for (const check of def.checks) {
+        for (const check of def.checks as any[]) {
           if (check.kind === "email") openApiSchema.format = "email";
           if (check.kind === "url") openApiSchema.format = "uri";
           if (check.kind === "uuid") openApiSchema.format = "uuid";
@@ -210,24 +210,24 @@ export class ContractTester {
     if (schema instanceof z.ZodArray) {
       return {
         type: "array",
-        items: this.zodToOpenAPISchema(schema._def.type),
+        items: this.zodToOpenAPISchema((schema._def as any).type),
       };
     }
 
     if (schema instanceof z.ZodEnum) {
       return {
         type: "string",
-        enum: schema._def.values,
+        enum: (schema._def as any).values,
       };
     }
 
     if (schema instanceof z.ZodOptional || schema instanceof z.ZodNullable) {
-      return this.zodToOpenAPISchema(schema._def.innerType);
+      return this.zodToOpenAPISchema((schema._def as any).innerType);
     }
 
     if (schema instanceof z.ZodUnion) {
       return {
-        oneOf: schema._def.options.map((opt: z.ZodType<any>) => this.zodToOpenAPISchema(opt)),
+        oneOf: (schema._def as any).options.map((opt: any) => this.zodToOpenAPISchema(opt)),
       };
     }
 

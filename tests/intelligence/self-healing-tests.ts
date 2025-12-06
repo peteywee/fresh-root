@@ -245,7 +245,7 @@ export class SelfHealingTestFramework {
     const changes: string[] = [];
     const diff = diffLines(oldCode, newCode);
 
-    diff.forEach((part) => {
+    diff.forEach((part: { added?: boolean; removed?: boolean; value: string }) => {
       if (part.removed) {
         // Check for API endpoint changes
         const endpointMatch = part.value.match(/\/api\/[\w\-\/]+/g);

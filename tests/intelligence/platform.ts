@@ -6,11 +6,21 @@
 import { exec, ExecException } from "child_process";
 import { promisify } from "util";
 import * as os from "os";
+import * as fs from "fs";
 
 const execAsync = promisify(exec);
 
+// Lazy evaluation to avoid initialization order issues
+function detectChromebook(): boolean {
+  try {
+    return os.platform() === "linux" && fs.existsSync("/etc/lsb-release");
+  } catch {
+    return false;
+  }
+}
+
 export const platform = {
-  isChromebook: os.platform() === "linux" && fs.existsSync("/etc/lsb-release"),
+  get isChromebook() { return detectChromebook(); },
   isWindows: os.platform() === "win32",
   isMac: os.platform() === "darwin",
   isLinux: os.platform() === "linux",
@@ -169,6 +179,3 @@ export function checkResources(): { ok: boolean; warnings: string[] } {
     warnings,
   };
 }
-
-// For CommonJS compatibility
-import * as fs from "fs";

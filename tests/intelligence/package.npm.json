@@ -1,11 +1,11 @@
 {
   "name": "testintel",
-  "version": "1.0.8",
+  "version": "1.0.0",
   "description": "AI-Powered Test Intelligence System - Production-grade CLI for intelligent test orchestration, security scanning, E2E generation, and predictive analytics",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "bin": {
-    "testintel": "dist/cli.js"
+    "testintel": "./dist/cli.js"
   },
   "files": [
     "dist",
@@ -90,15 +90,12 @@
     "node": ">=18.0.0"
   },
   "dependencies": {
-    "diff": "^5.1.0",
-    "glob": "^10.3.10",
-    "typescript": "^5.3.3",
-    "zod": "^3.22.4"
+    "glob": "^10.3.10"
   },
   "devDependencies": {
-    "@types/diff": "^7.0.2",
     "@types/node": "^20.10.5",
     "tsx": "^4.7.0",
+    "typescript": "^5.3.3",
     "vitest": "^1.1.0"
   },
   "peerDependencies": {

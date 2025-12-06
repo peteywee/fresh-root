@@ -88,6 +88,9 @@ tests/intelligence/realtime-dashboard.html
 tests/intelligence/manifest.json
 tests/intelligence/*.generated.test.ts
 
+# Generated E2E tests
+tests/e2e/*.e2e.test.ts
+
 services/api/test/rbac.test.ts
 services/api/test/otel.test.ts
 packages/rules-tests/src/rules.test.ts
