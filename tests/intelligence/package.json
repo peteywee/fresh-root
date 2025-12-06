@@ -8,6 +8,7 @@
   },
   "scripts": {
     "testintel": "tsx cli.ts",
+    "dashboard": "tsx server.ts",
     "test:intelligence": "tsx cli.ts run full",
     "test:intelligence:quick": "tsx cli.ts run quick",
     "test:prioritize": "tsx cli.ts prioritize",
