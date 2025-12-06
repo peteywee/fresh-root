@@ -1,0 +1,16 @@
+{
+  "stages": ["security", "prioritize", "predict", "parallel"],
+  "parallel": true,
+  "verbose": false,
+  "output": "junit",
+  "timeout": 300000,
+  "retries": 2,
+  "limits": {
+    "tests": 50,
+    "workers": 4
+  },
+  "paths": {
+    "scan": ["apps/web/app/api"],
+    "tests": ["tests/**/*.test.ts"]
+  }
+}

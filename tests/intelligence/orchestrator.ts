@@ -200,7 +200,7 @@ export class TestIntelligenceOrchestrator {
         console.log("\n🧠 Stage 7: Running AI Test Prioritization...");
 
         const testFiles = await glob("tests/**/*.test.ts");
-        const changedFiles = aiPrioritizer.getChangedFiles();
+        const changedFiles = await aiPrioritizer.getChangedFiles();
         const priorities = aiPrioritizer.prioritizeTests(testFiles.slice(0, 20), changedFiles);
         const plan = aiPrioritizer.generateExecutionPlan(priorities);
 

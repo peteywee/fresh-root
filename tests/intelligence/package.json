@@ -1,32 +1,29 @@
 {
   "name": "@fresh-root/test-intelligence",
   "version": "1.0.0",
-  "description": "AI-Powered Test Intelligence System - The most advanced testing framework ever built",
+  "description": "AI-Powered Test Intelligence System - Production-grade CLI with cross-platform support",
   "private": true,
+  "bin": {
+    "testintel": "./cli.ts"
+  },
   "scripts": {
-    "test:intelligence": "tsx orchestrator.ts full",
-    "test:intelligence:quick": "tsx orchestrator.ts quick",
-    "test:auto-generate": "tsx auto-test-generator.ts",
-    "test:performance": "tsx -e \"import { performanceProfiler } from './performance-profiler'; performanceProfiler.generateReport();\"",
-    "test:contracts": "tsx -e \"import { autoGenerateAPIContracts } from './contract-testing'; autoGenerateAPIContracts();\"",
-    "test:mutation": "tsx mutation-testing.ts",
-    "test:chaos": "tsx -e \"import { ChaosTestRunner } from './chaos-engineering'; new ChaosTestRunner().runAllChaosTests(() => Promise.resolve());\"",
-    "test:analytics": "tsx -e \"import { testAnalytics } from './test-analytics'; testAnalytics.saveDashboard(testAnalytics.generateAnalytics());\"",
-    "test:cicd": "tsx -e \"import { cicd } from './ci-cd-integration'; cicd.validateDeployment({ environment: 'staging', strategy: 'canary', validationTests: [], rollbackOnFailure: true });\"",
-    "test:prioritize": "tsx -e \"import { aiPrioritizer } from './ai-test-prioritizer'; import { glob } from 'glob'; (async () => { const tests = await glob('tests/**/*.test.ts'); const p = aiPrioritizer.prioritizeTests(tests.slice(0, 20)); console.log(aiPrioritizer.generateReport(p)); })();\"",
-    "test:predict": "tsx -e \"import { predictiveAnalytics } from './predictive-analytics'; import { glob } from 'glob'; (async () => { const tests = await glob('tests/**/*.test.ts'); predictiveAnalytics.predictFailures(tests.slice(0, 20)); console.log(predictiveAnalytics.generateReport()); })();\"",
-    "test:parallel": "tsx -e \"import { parallelizationOptimizer } from './parallelization-optimizer'; import { glob } from 'glob'; (async () => { const tests = await glob('tests/**/*.test.ts'); const opt = parallelizationOptimizer.optimize(tests.slice(0, 20)); console.log(parallelizationOptimizer.generateReport(opt)); })();\"",
-    "test:security": "tsx -e \"import { securityScanner } from './security-scanner'; (async () => { const result = await securityScanner.scan(['apps/web/app/api']); console.log(securityScanner.generateReport(result)); })();\"",
-    "test:visual": "tsx -e \"import { visualRegression } from './visual-regression'; console.log('Visual regression testing - use in test files');\"",
-    "test:data": "tsx -e \"import { testDataFactory } from './test-data-factory'; console.log('Test Data Factory:', testDataFactory.generateUsers(5));\"",
+    "testintel": "tsx cli.ts",
+    "test:intelligence": "tsx cli.ts run full",
+    "test:intelligence:quick": "tsx cli.ts run quick",
+    "test:prioritize": "tsx cli.ts prioritize",
+    "test:predict": "tsx cli.ts predict",
+    "test:parallel": "tsx cli.ts parallel",
+    "test:security": "tsx cli.ts security",
+    "test:data": "tsx cli.ts data",
     "demo": "tsx demo.ts",
     "clean": "rm -rf *.json *.html node_modules",
-    "install:all": "pnpm install typescript tsx @types/node vitest @types/diff diff speakeasy glob"
+    "install:all": "pnpm install"
   },
   "dependencies": {
     "typescript": "^5.3.3",
     "diff": "^5.1.0",
-    "speakeasy": "^2.0.0"
+    "speakeasy": "^2.0.0",
+    "glob": "^10.3.10"
   },
   "devDependencies": {
     "@types/node": "^20.10.5",
@@ -38,14 +35,13 @@
     "testing",
     "ai",
     "automation",
-    "e2e",
-    "performance",
-    "chaos-engineering",
-    "mutation-testing",
-    "contract-testing",
-    "self-healing",
-    "analytics",
-    "cicd"
+    "cli",
+    "cross-platform",
+    "chromebook",
+    "cicd",
+    "junit",
+    "security",
+    "owasp"
   ],
   "author": "Fresh Root Team",
   "license": "MIT"

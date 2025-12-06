@@ -5,7 +5,7 @@
 
 import * as fs from "fs";
 import * as path from "path";
-import { execSync } from "child_process";
+import { getGitDiff } from "./platform";
 
 interface TestExecution {
   name: string;
@@ -138,18 +138,19 @@ export class AITestPrioritizer {
   }
 
   /**
-   * Gets changed files from git
+   * Gets changed files from git (async, cross-platform)
    */
-  getChangedFiles(): string[] {
-    try {
-      const output = execSync("git diff --name-only HEAD~1 HEAD", {
-        encoding: "utf-8",
-        stdio: "pipe",
-      });
-      return output.split("\n").filter((f) => f.trim().length > 0);
-    } catch {
-      return [];
-    }
+  async getChangedFiles(): Promise<string[]> {
+    return await getGitDiff();
+  }
+
+  /**
+   * Gets changed files from git (sync version for backwards compat)
+   */
+  getChangedFilesSync(): string[] {
+    // Fallback for sync callers - returns empty array
+    // Users should migrate to async getChangedFiles()
+    return [];
   }
 
   /**
