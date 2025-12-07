@@ -1,0 +1,109 @@
+{
+  "name": "testintel",
+  "version": "1.0.0",
+  "description": "AI-Powered Test Intelligence System - Production-grade CLI for intelligent test orchestration, security scanning, E2E generation, and predictive analytics",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "bin": {
+    "testintel": "./dist/cli.js"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "prepublishOnly": "npm run build",
+    "testintel": "tsx cli.ts",
+    "dashboard": "tsx server.ts",
+    "test:intelligence": "tsx cli.ts run full",
+    "test:intelligence:quick": "tsx cli.ts run quick",
+    "test:prioritize": "tsx cli.ts prioritize",
+    "test:predict": "tsx cli.ts predict",
+    "test:parallel": "tsx cli.ts parallel",
+    "test:security": "tsx cli.ts security",
+    "test:data": "tsx cli.ts data",
+    "e2e": "tsx cli.ts e2e",
+    "e2e:generate": "tsx cli.ts e2e generate",
+    "e2e:run": "tsx cli.ts e2e run",
+    "e2e:list": "tsx cli.ts e2e list",
+    "demo": "tsx demo.ts",
+    "clean": "rm -rf dist *.json *.html",
+    "lint": "eslint src --ext .ts",
+    "test": "vitest run"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/peteywee/testintel.git"
+  },
+  "bugs": {
+    "url": "https://github.com/peteywee/testintel/issues"
+  },
+  "homepage": "https://github.com/peteywee/testintel#readme",
+  "keywords": [
+    "testing",
+    "test",
+    "ai",
+    "automation",
+    "cli",
+    "e2e",
+    "end-to-end",
+    "security",
+    "owasp",
+    "vulnerability",
+    "scanner",
+    "prioritization",
+    "analytics",
+    "predictive",
+    "parallel",
+    "parallelization",
+    "optimization",
+    "cicd",
+    "ci",
+    "cd",
+    "github-actions",
+    "gitlab-ci",
+    "jenkins",
+    "junit",
+    "cross-platform",
+    "chromebook",
+    "windows",
+    "macos",
+    "linux",
+    "vitest",
+    "jest",
+    "playwright",
+    "test-runner",
+    "test-framework",
+    "devops",
+    "quality",
+    "qa"
+  ],
+  "author": {
+    "name": "Fresh Schedules Team",
+    "email": "dev@freshschedules.com",
+    "url": "https://freshschedules.com"
+  },
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "glob": "^10.3.10"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.5",
+    "tsx": "^4.7.0",
+    "typescript": "^5.3.3",
+    "vitest": "^1.1.0"
+  },
+  "peerDependencies": {
+    "vitest": ">=1.0.0"
+  },
+  "peerDependenciesMeta": {
+    "vitest": {
+      "optional": true
+    }
+  }
+}
