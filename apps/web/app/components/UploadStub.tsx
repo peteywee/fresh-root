@@ -14,7 +14,7 @@ export default function UploadStub() {
         onChange={(e) => {
           const file = e.target.files?.[0];
           if (file) {
-            console.log("Selected file:", { name: file.name, size: file.size, type: file.type });
+            console.warn("Selected file:", { name: file.name, size: file.size, type: file.type });
           }
         }}
       />
