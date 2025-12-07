@@ -12,7 +12,7 @@ import { CreateItemSchema } from "@fresh-schedules/types";
  * List items for an organization
  */
 export const GET = createOrgEndpoint({
-  handler: async ({ request, context, params }) => {
+  handler: async ({ request, context, _params }) => {
     try {
       const { searchParams } = new URL(request.url);
       const orgId = searchParams.get("orgId") || context.org?.orgId;

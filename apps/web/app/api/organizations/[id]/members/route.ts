@@ -22,7 +22,7 @@ const AddMemberSchema = z.object({
  * List members of an organization
  */
 export const GET = createOrgEndpoint({
-  handler: async ({ context, params }) => {
+  handler: async ({ _context, params }) => {
     try {
       const { id } = params;
       const members = [
@@ -71,7 +71,7 @@ export const POST = createOrgEndpoint({
  */
 export const PATCH = createOrgEndpoint({
   roles: ["admin"],
-  handler: async ({ request, context, params }) => {
+  handler: async ({ request, context, _params }) => {
     try {
       const body = await request.json();
       const { memberId, role } = body;
@@ -89,7 +89,7 @@ export const PATCH = createOrgEndpoint({
  */
 export const DELETE = createOrgEndpoint({
   roles: ["admin"],
-  handler: async ({ request, context, params }) => {
+  handler: async ({ request, _context, _params }) => {
     try {
       const body = await request.json();
       const { memberId } = body;

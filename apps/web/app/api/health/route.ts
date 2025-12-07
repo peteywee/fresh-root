@@ -12,7 +12,7 @@ import { createPublicEndpoint } from "@fresh-schedules/api-framework";
 export const dynamic = "force-dynamic";
 
 export const GET = createPublicEndpoint({
-  handler: async ({ request, input, context, params }) => {
+  handler: async ({ request, input, _context, _params }) => {
     const healthStatus = {
       ok: true,
       status: "healthy",

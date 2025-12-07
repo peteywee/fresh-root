@@ -111,7 +111,7 @@ export const PATCH = createOrgEndpoint({
  */
 export const DELETE = createOrgEndpoint({
   roles: ["admin"],
-  handler: async ({ request, context, params }) => {
+  handler: async ({ request, _context, params }) => {
     // Apply rate limiting
     const rateLimitResult = await checkRateLimit(request, RateLimits.api);
     if (!rateLimitResult.allowed) {

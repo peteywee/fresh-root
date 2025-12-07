@@ -10,7 +10,7 @@ import { badRequest, ok, serverError } from "../_shared/validation";
  */
 export const POST = createOrgEndpoint({
   roles: ["manager"],
-  handler: async ({ request, context, params }) => {
+  handler: async ({ request, context, _params }) => {
     try {
       const body = await request.json();
       const { scheduleId } = body;
