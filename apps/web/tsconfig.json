@@ -24,6 +24,17 @@
       }
     ]
   },
-  "include": ["app", "src", "next-env.d.ts", ".next/types/**/*.ts", "vitest.d.ts"],
+  "include": [
+    "app",
+    "src",
+    "lib",
+    "components",
+    "middleware.ts",
+    "proxy.ts",
+    "instrumentation.ts",
+    "next-env.d.ts",
+    ".next/types/**/*.ts",
+    "vitest.d.ts"
+  ],
   "exclude": ["node_modules", "**/__tests__/**", "**/*.test.ts", "**/*.test.tsx"]
 }
