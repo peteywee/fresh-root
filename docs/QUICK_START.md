@@ -2,7 +2,42 @@
 
 **Current Status:** Production Ready ✅  
 **Main Commit:** f1bfe18 | Score: 130.0 | Tier 0/1: 0 violations  
-**Updated:** 2025-11-28
+**Updated:** 2025-12-06 (Consolidated with PNPM_ENFORCEMENT.md)
+
+---
+
+## Package Manager Requirements: pnpm-only Policy
+
+**⚠️ CRITICAL:** This monorepo uses **pnpm exclusively**. Using npm or yarn will break dependency resolution and cause deployment failures.
+
+### Why pnpm
+
+1. **Monorepo Support**: Native workspace management across 8+ packages
+2. **Strict Dependency Resolution**: Prevents transitive dependency issues
+3. **Disk Efficiency**: Hard-linking prevents duplication
+4. **Lock File Integrity**: pnpm-lock.yaml provides deterministic installs
+5. **Series-A Standard**: Production-grade tooling for enterprise deployments
+
+### Environment Requirements
+
+```bash
+# Minimum versions (enforced by package.json engines field)
+node >= 20.10.0
+pnpm >= 9.0.0
+```
+
+### Installation & Setup
+
+```bash
+# 1. Verify pnpm is installed
+pnpm --version
+
+# 2. Install monorepo dependencies
+pnpm install
+
+# 3. Verify setup (runs pnpm enforcement checks)
+pnpm prepare
+```
 
 ---
 

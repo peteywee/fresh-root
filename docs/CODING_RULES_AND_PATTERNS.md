@@ -1,10 +1,10 @@
 # Coding Rules and Patterns Guide
 
-> **Purpose**: Prevent errors at code creation time through clear, enforceable rules based on existing codebase patterns.
+> **Purpose**: Prevent errors at code creation time through clear, enforceable rules based on existing codebase patterns. Consolidates canonical rules with error prevention patterns and series-A safeguards.
 >
-> **Last Updated**: 2025-11-28
-> **Version**: 2.0
-> **Based on**: Fresh Schedules v1.1.0 codebase analysis
+> **Last Updated**: 2025-12-06
+> **Version**: 2.1 (Consolidated with Error Prevention Patterns & Series-A Standards)
+> **Based on**: Fresh Schedules v1.1.0 codebase analysis + Phase 2 consolidation
 
 ---
 
@@ -16,11 +16,12 @@
 4. [API Development Rules](#api-development-rules)
 5. [Security Rules](#security-rules)
 6. [Error Handling Rules](#error-handling-rules)
-7. [Testing Rules](#testing-rules)
-8. [File Organization Rules](#file-organization-rules)
-9. [Common Anti-Patterns to Avoid](#common-anti-patterns-to-avoid)
-10. [Pattern Checklists](#pattern-checklists)
-11. [Automated Validation](#automated-validation)
+7. [Error Prevention & Pattern Recognition](#error-prevention--pattern-recognition) (NEW: Consolidated from ERROR_PREVENTION_PATTERNS.md)
+8. [Testing Rules](#testing-rules)
+9. [File Organization Rules](#file-organization-rules)
+10. [Common Anti-Patterns to Avoid](#common-anti-patterns-to-avoid)
+11. [Pattern Checklists](#pattern-checklists)
+12. [Automated Validation](#automated-validation)
 
 ---
 
