@@ -10,17 +10,21 @@
 ### What Was Done (All Batches Executed)
 
 #### **Batch 1: Remove Jest Build System** ✅
+
 - ❌ `jest.config.ts` – DELETED
 - ❌ `jest-playwright.config.js` – DELETED
 - ❌ `jest.rules.config.js` – DELETED
 - **Result**: Vitest confirmed as single test runner
 
 #### **Batch 2: Consolidate Governance** ✅
+
 - ❌ `docs/copilot-instruction.md` – DELETED (superseded by `.github/copilot-instructions.md` v2.0)
 - **Result**: Single source of truth for Copilot governance
 
 #### **Batch 3: Archive Phase/Migration Work** ✅
+
 Moved to `archive/docs/phase-work/`:
+
 - PHASE_1_TIER_0_FIXES.md
 - PHASE_2_TIER_1_FIXES.md
 - PHASE_2_STATUS_REPORT.md
@@ -36,23 +40,29 @@ Moved to `archive/docs/phase-work/`:
 - CODE_9_CRASH_ANALYSIS.md
 
 #### **Batch 4: Archive Device-Specific & Legacy** ✅
+
 Moved to `archive/docs/device-specific/`:
+
 - CHROMEBOOK_KEEP_COPILOT.md
 - CHROMEBOOK_MEMORY_STRATEGY.md
 - MEMORY_MANAGEMENT.md
 - OOM_PREVENTION.md
 
 #### **Batch 5: Archive Test/QA Reports** ✅
+
 Moved to `archive/docs/test-reports/`:
+
 - TEST_INTELLIGENCE_INTEGRATION_REPORT.md
 - TEST_INTELLIGENCE_SUMMARY.md
 - qa-report.md
 - qa-postfix-report.md
 
 #### **Batch 6: Update .gitignore** ✅
+
 - Added: `repomix-output.xml` (2.2M generated artifact)
 
 #### **Batch 7: Create Atomic Commit** ✅
+
 - Commit: `2d1a5e0` – All Phase 1 changes consolidated
 
 ---
@@ -74,13 +84,16 @@ Moved to `archive/docs/test-reports/`:
 ### 🟢 Active Reference (25 Files)
 
 **Entry Points & Navigation**:
+
 - QUICK_START.md
 - README.md
 
 **Canonical Reference**:
+
 - CODING_RULES_AND_PATTERNS.md ⭐
 
 **Production & Deployment**:
+
 - PRODUCTION_DEPLOYMENT_GUIDE.md
 - PRODUCTION_ENV_VALIDATION.md
 - PRODUCTION_READINESS.md
@@ -88,11 +101,13 @@ Moved to `archive/docs/test-reports/`:
 - PRODUCTION_READINESS_SIGN_OFF.md
 
 **Technical Patterns**:
+
 - FIREBASE_TYPING_STRATEGY.md
 - RATE_LIMIT_IMPLEMENTATION.md
 - VSCODE_TASKS.md
 
 **Strategy & Planning** (Needs Phase 2 review):
+
 - CODEBASE_ARCHITECTURAL_INDEX.md (40K – may need archival)
 - ARCHITECTURAL_REVIEW_PANEL_INPUTS.md (68K – may need archival)
 - BRANCH_LINKING_GUIDE.md (12K – verify usage)
@@ -107,6 +122,7 @@ Moved to `archive/docs/test-reports/`:
 - SESSION_SUMMARY_DEC_1_2025.md (12K – date-stamped, archive)
 
 **Subdirectories** (Keep):
+
 - crewops/ (88 KB) – Agent operations
 - mega-book/ (232 KB) – Comprehensive reference
 - templates/ (48 KB) – Code scaffolding
@@ -119,6 +135,7 @@ Moved to `archive/docs/test-reports/`:
 ### 📦 Archived (21 Files in archive/docs/)
 
 Structure:
+
 ```
 archive/docs/
 ├── phase-work/          (13 files: PHASE_*.md, MIGRATION_*.md, SDK_MIGRATION_*.md, etc.)
