@@ -29,6 +29,7 @@
 **All 5 agents agree these should merge:**
 
 #### 1.1: PRODUCTION_READINESS Cluster
+
 - **Files**: PRODUCTION_READINESS_KPI.md + PRODUCTION_READINESS_SIGN_OFF.md
 - **Target**: PRODUCTION_READINESS.md (12 KB base)
 - **Rationale**: Overlapping content, subsets of main (Agent: Consolidation 9+12=21 refs collapsed)
@@ -37,6 +38,7 @@
 - **Status**: ✅ PROCEED (all agents agree)
 
 #### 1.2: CODING_RULES Consolidation
+
 - **Files**: ERROR_PREVENTION_PATTERNS.md (merge in)
 - **Target**: CODING_RULES_AND_PATTERNS.md (23 KB hub)
 - **Rationale**: Error patterns ARE coding rules, scattered incorrectly (Consolidation: 12 refs collected)
@@ -45,6 +47,7 @@
 - **Status**: ✅ PROCEED (all agents agree)
 
 #### 1.3: QUICK_START Entry Point
+
 - **Files**: PNPM_ENFORCEMENT.md (merge in)
 - **Target**: QUICK_START.md (5.8 KB onboarding)
 - **Rationale**: Package manager setup is first-step, not independent domain (Navigation: improves new dev journey)
@@ -53,6 +56,7 @@
 - **Status**: ✅ PROCEED (all agents agree)
 
 #### 1.4: PRODUCTION Deployment Scope
+
 - **Files**: PRODUCTION_ENV_VALIDATION.md (optional merge)
 - **Target**: PRODUCTION_DEPLOYMENT_GUIDE.md
 - **Rationale**: Environment validation precedes deployment (Dependency: logical chain)
@@ -67,7 +71,9 @@
 **Architecture + Navigation agents agree:**
 
 #### 2.1: README Decision Tree (NEW)
+
 - **Action**: Enhance README.md with decision tree
+
   ```
   Are you new to the project?
     → Go to QUICK_START
@@ -76,15 +82,18 @@
   Do you need coding patterns?
     → Go to CODING_RULES_AND_PATTERNS
   ```
+
 - **Impact**: Consolidates entry point clarity (Navigation: single README hub instead of 4)
 - **Status**: ✅ PROCEED
 
 #### 2.2: Retire PHASE_2_START_HERE.md (DELETE)
+
 - **Rationale**: Confuses current-state vs future-state planning (Navigation Strategist: "retire planning docs")
 - **Impact**: Reduces entry point noise (Navigation: 4 entry points → 1 primary + 2 secondary)
 - **Status**: ✅ DELETE after Phase 2 execution
 
 #### 2.3: Retire STRUCTURE.md (OPTIONAL)
+
 - **Rationale**: Navigation captured in README decision tree (Architecture: redundant navigation)
 - **Alternative**: Keep if used as reference, merge into README appendix
 - **Status**: ⚠️ OPTIONAL (Navigation: not critical path)
@@ -96,6 +105,7 @@
 **Archive Manager + Consolidation Expert agree:**
 
 #### 3.1: Archive Phase 2 Planning Docs
+
 - **Files**: PHASE_2_DETAILED_PLAN.md, PHASE_2_EXECUTION_SUMMARY.md, PHASE_2_QUICK_REFERENCE.md, CLEANUP_INDEX.md, CONSOLIDATION_CANDIDATES.md
 - **Destination**: archive/docs/operations/ (new consolidated subdir)
 - **Rationale**: 0 cross-refs, execution artifacts, archive after Phase 2 completes (Archive Manager verified 0 refs)
@@ -103,6 +113,7 @@
 - **Status**: ✅ PROCEED after Phase 2 execution
 
 #### 3.2: Archive Subdirectory Consolidation
+
 - **Current**: 6 subdirs (phase-work, device-specific, test-reports, strategic, reports, legacy-optimization)
 - **Optimize to**: 4 subdirs by merging empty ones
   - phase-work/ (keep, 13 files)
@@ -118,7 +129,7 @@
 
 **Architecture Analyst recommends: 9 domains → 5 clean domains**
 
-#### Current 9 Domains → Proposed 5:
+#### Current 9 Domains → Proposed 5
 
 | Current | Proposed | Files |
 |---------|----------|-------|
@@ -178,17 +189,20 @@ VERIFY: Success Criteria (10-15 min)
 ## KEY OPTIMIZATIONS (Agent-Driven Improvements)
 
 ### From Consolidation Expert
+
 - **High-Impact Merges**: 5 identified (all Tier 1+1 Tier 2 optional)
 - **Orphan Elimination**: 2-3 files with 0 refs
 - **Duplication Cleanup**: 7 index files compressed to 1 (README decision tree)
 
 ### From Architecture Analyst
+
 - **Domain Consolidation**: 9→5 domains (Phase 3 option)
 - **Navigation Clarity**: 5.5→8.5/10 with decision tree + breadcrumbs
 - **Information Hierarchy**: Clear (Entry → Reference → Guides → Ops → Archive)
 
 ### From Navigation Strategist
-- **User Journey Efficiency**: 
+
+- **User Journey Efficiency**:
   - New dev: 3+ hours → 45 min
   - DevOps: 30+ min → 15 min
   - Code reviewer: 15+ min → 5-10 min
@@ -196,11 +210,13 @@ VERIFY: Success Criteria (10-15 min)
 - **Wayfinding**: Decision tree + breadcrumbs + "You Are Here" badges
 
 ### From Archive Manager
+
 - **Archive Health**: 98% (22 files organized, 0 broken refs, low false refs)
 - **Subdirectory Optimization**: 6→4 structure (merge empty dirs)
 - **Active Archival**: 5 PHASE files + CLEANUP_INDEX ready to archive
 
 ### From Dependency Mapper
+
 - **Critical Path Validation**: 3 essential paths identified and healthy (8.2/10)
 - **Safety**: 1 minor circular loop OK, no structural risks
 - **Optimization**: Strengthen back-references (FIREBASE_TYPING→RULES, etc.)
@@ -225,24 +241,28 @@ VERIFY: Success Criteria (10-15 min)
 ## RECOMMENDED EXECUTION SEQUENCE
 
 ### PHASE 2A: Consolidation (Highest Priority, Week 1)
+
 **Tasks**: 1.1, 1.2, 1.3, 2.1  
 **Time**: 50-65 min  
 **Output**: 3-4 files merged, README decision tree created  
 **Risk**: Low (atomic commits per merge)
 
 ### PHASE 2B: Entry Points & Navigation (Secondary, Week 1)
+
 **Tasks**: 2.2, 2.3, 4.1, 4.2, 4.3  
 **Time**: 30-45 min  
 **Output**: Clean entry points, breadcrumbs, improved discovery  
 **Risk**: Low (cosmetic + navigation improvements)
 
 ### PHASE 2C: Archive Optimization (Housekeeping, Week 1-2)
+
 **Tasks**: 3.1, 3.2, 3.3, 3.4  
 **Time**: 30-45 min  
 **Output**: Archive reorganized, phase docs moved, new archive README  
 **Risk**: Very Low (no active code affected)
 
 ### PHASE 3: Domain Reorganization (Optional Future, Q1 2026)
+
 **Tasks**: Rename/reorganize docs/ to match 5-domain structure  
 **Time**: 2-4 hours  
 **Output**: Perfect information architecture alignment  
@@ -253,6 +273,7 @@ VERIFY: Success Criteria (10-15 min)
 ## AGENT CONSENSUS SUMMARY
 
 ✅ **All 5 agents agree on**:
+
 - 5 Tier-1 consolidations (4 core + 1 optional)
 - Archive cleanup (22 files optimized, 5 phase files moved)
 - Entry point simplification (README hub with decision tree)
@@ -260,6 +281,7 @@ VERIFY: Success Criteria (10-15 min)
 - Dependency health is strong (8.2/10, safe to consolidate)
 
 ⚠️ **Split opinions on** (majority consensus):
+
 - PHASE_2_START_HERE deletion: 4/5 agree (retire); Navigation says keep until end of Phase 2
 - STRUCTURE.md retirement: 3/5 agree (redundant); Navigation says optional
 - ENV_VALIDATION merge: 2/5 agree (0 refs); Archive says "low usage, suggest merge"
