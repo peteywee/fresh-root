@@ -72,6 +72,24 @@ export default [
       ],
     },
   },
+  // Firebase-heavy directories: suppress no-unsafe-* rules per firebase-typing-and-monorepo-memory.instructions.md
+  {
+    files: [
+      'apps/web/app/api/**/*.ts',
+      'apps/web/src/lib/**/*.ts',
+      'apps/web/lib/**/*.ts',
+      'app/api/**/*.ts',       // When ESLint runs from apps/web directory
+      'src/lib/**/*.ts',       // When ESLint runs from apps/web directory
+      'lib/**/*.ts',           // When ESLint runs from apps/web directory
+    ],
+    rules: {
+      '@typescript-eslint/no-unsafe-assignment': 'off',
+      '@typescript-eslint/no-unsafe-member-access': 'off',
+      '@typescript-eslint/no-unsafe-call': 'off',
+      '@typescript-eslint/no-unsafe-argument': 'off',
+      '@typescript-eslint/no-unsafe-return': 'off',
+    },
+  },
   // Onboarding API tests: silence explicit any warnings (scaffolding/mocks)
   {
     files: [

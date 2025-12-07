@@ -39,12 +39,12 @@ export async function loginWithGoogleSmart() {
       await signInWithPopup(auth!, provider);
     }
   } catch (e) {
-    reportError(e as unknown, { phase: "google_sign_in" });
+    reportError(e, { phase: "google_sign_in" });
     // Fallback: try redirect if popup failed (e.g., blocked)
     try {
       await signInWithRedirect(auth!, provider);
     } catch (e2) {
-      reportError(e2 as unknown, { phase: "google_sign_in_fallback" });
+      reportError(e2, { phase: "google_sign_in_fallback" });
       throw e2;
     }
   }
@@ -63,7 +63,7 @@ export async function completeGoogleRedirectOnce(): Promise<boolean> {
     const res = await getRedirectResult(auth!);
     return !!res?.user;
   } catch (e) {
-    reportError(e as unknown, { phase: "google_redirect_complete" });
+    reportError(e, { phase: "google_redirect_complete" });
     return false;
   }
 }
@@ -77,7 +77,7 @@ export async function sendEmailLinkRobust(email: string) {
     await sendSignInLinkToEmail(auth, email, actionCodeSettings);
     await setPendingEmail(email);
   } catch (e) {
-    reportError(e as unknown, { phase: "send_email_link" });
+    reportError(e, { phase: "send_email_link" });
     throw e;
   }
 }
@@ -96,7 +96,7 @@ export async function completeEmailLinkIfPresent(): Promise<boolean> {
   try {
     await signInWithEmailLink(auth!, email, window.location.href);
   } catch (e) {
-    reportError(e as unknown, { phase: "complete_email_link" });
+    reportError(e, { phase: "complete_email_link" });
     throw e;
   } finally {
     await clearPendingEmail();
@@ -123,12 +123,12 @@ export async function logoutEverywhere() {
   try {
     await fetch("/api/session", { method: "DELETE" });
   } catch (e) {
-    reportError(e as unknown, { phase: "session_delete" });
+    reportError(e, { phase: "session_delete" });
   }
   try {
     const { signOut } = await import("firebase/auth");
     await signOut(auth!);
   } catch (e) {
-    reportError(e as unknown, { phase: "client_signout" });
+    reportError(e, { phase: "client_signout" });
   }
 }

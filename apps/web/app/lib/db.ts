@@ -12,7 +12,6 @@ import {
   query,
   orderBy,
   limit,
-  type Query,
   type DocumentReference,
 } from "firebase/firestore";
 

@@ -1,11 +1,10 @@
 // [P0][ONBOARDING][API] Activate network endpoint (with typed wrapper)
 
-import { NextResponse } from "next/server";
 import { z } from "zod";
 import { Timestamp } from "firebase-admin/firestore";
 
 import { createAuthenticatedEndpoint } from "@fresh-schedules/api-framework";
-import { ok, serverError, badRequest } from "../../_shared/validation";
+import { ok, serverError } from "../../_shared/validation";
 import { adminDb } from "@/src/lib/firebase.server";
 import { updateDocWithType } from "@/src/lib/firebase/typed-wrappers";
 

@@ -1,7 +1,7 @@
 // [P0][ZONES][API] Zones list endpoint
 export const dynamic = "force-dynamic";
 
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { CreateZoneSchema } from "@fresh-schedules/types";
 
 import { createOrgEndpoint } from "@fresh-schedules/api-framework";

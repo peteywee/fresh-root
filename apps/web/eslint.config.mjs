@@ -84,6 +84,18 @@ export default [
     },
   },
 
+  // Firebase-heavy directories: suppress no-unsafe-* rules per firebase-typing-and-monorepo-memory.instructions.md
+  {
+    files: ['app/api/**/*.ts', 'src/lib/**/*.ts', 'lib/**/*.ts'],
+    rules: {
+      '@typescript-eslint/no-unsafe-assignment': 'off',
+      '@typescript-eslint/no-unsafe-member-access': 'off',
+      '@typescript-eslint/no-unsafe-call': 'off',
+      '@typescript-eslint/no-unsafe-argument': 'off',
+      '@typescript-eslint/no-unsafe-return': 'off',
+    },
+  },
+
   {
     files: [
       "**/*.spec.{ts,tsx,js,jsx}",

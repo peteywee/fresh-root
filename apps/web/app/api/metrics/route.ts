@@ -1,6 +1,5 @@
 // [P0][METRICS][API] Metrics endpoint
 
-import { NextRequest, NextResponse } from "next/server";
 
 import { createPublicEndpoint } from "@fresh-schedules/api-framework";
 import { ok, serverError } from "../_shared/validation";
