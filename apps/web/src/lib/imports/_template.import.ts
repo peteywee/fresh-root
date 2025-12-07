@@ -1,7 +1,7 @@
 // [P2][APP][CODE]  Template Import
 // Tags: P2, APP, CODE
+import ExcelJS from "exceljs";
 import { parse } from "papaparse";
-import * as XLSX from "xlsx";
 import { z } from "zod";
 
 export const RowSchema = z.record(z.any()); // replace with concrete schema per import type
@@ -21,9 +21,32 @@ export async function importFile(file: File): Promise<ImportResult<z.infer<typeo
     const parsed = parse(text, { header: true, skipEmptyLines: true });
     rows = parsed.data as unknown[];
   } else if (name.endsWith(".xlsx")) {
-    const wb = XLSX.read(await file.arrayBuffer());
-    const ws = wb.Sheets[wb.SheetNames[0]];
-    rows = XLSX.utils.sheet_to_json(ws) as unknown[];
+    const workbook = new ExcelJS.Workbook();
+    await workbook.xlsx.load(await file.arrayBuffer());
+    const worksheet = workbook.worksheets[0];
+    if (worksheet) {
+      const headers: string[] = [];
+      worksheet.eachRow((row, rowNumber) => {
+        if (rowNumber === 1) {
+          // First row is headers
+          row.eachCell((cell) => {
+            headers.push(String(cell.value ?? ""));
+          });
+        } else {
+          // Data rows
+          const rowData: Record<string, unknown> = {};
+          row.eachCell((cell, colNumber) => {
+            const header = headers[colNumber - 1];
+            if (header) {
+              rowData[header] = cell.value;
+            }
+          });
+          if (Object.keys(rowData).length > 0) {
+            rows.push(rowData);
+          }
+        }
+      });
+    }
   } else {
     throw new Error("Unsupported file type");
   }
