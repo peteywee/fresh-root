@@ -7,9 +7,8 @@ import { invalidate } from "../lib/cache";
 
 const TAG_SCHEDULES = (orgId: string) => `schedules:${orgId}`;
 
-export async function publishSchedule({
+export function publishSchedule({
   orgId,
-  scheduleId: _scheduleId,
 }: {
   orgId: string;
   scheduleId: string;

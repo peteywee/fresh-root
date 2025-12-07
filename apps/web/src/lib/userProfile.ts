@@ -25,7 +25,7 @@ export type AuthUserClaims = {
   [key: string]: unknown;
 };
 
-const UserProfileSchema = z.object({
+const _UserProfileSchema = z.object({
   id: z.string(),
   createdAt: z.number(),
   updatedAt: z.number(),
@@ -47,7 +47,7 @@ const UserProfileSchema = z.object({
   }),
 });
 
-export type UserProfileDoc = z.infer<typeof UserProfileSchema>;
+export type UserProfileDoc = z.infer<typeof _UserProfileSchema>;
 
 export async function ensureUserProfile(args: {
   adminDb: Firestore | any;

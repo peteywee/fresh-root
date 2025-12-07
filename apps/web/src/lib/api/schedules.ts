@@ -65,6 +65,6 @@ export async function listShiftsForRange({ orgId, scheduleId, startISO, endISO }
   return rows.filter((s) => s.startTs >= startISO && s.startTs <= endISO);
 }
 
-export async function publishSchedule(_scheduleId: string) {
+export function publishSchedule(_scheduleId: string) {
   return { success: true };
 }
