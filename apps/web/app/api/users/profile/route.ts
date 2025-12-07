@@ -1,18 +1,4 @@
-// [P0][USERS][PROFILE][API] User profile endpoint
-
-import { createAuthenticatedEndpoint } from "@fresh-schedules/api-framework";
-import { ok, serverError } from "../../_shared/validation";
-
-/**
- * GET /api/users/profile
- * Get authenticated user profile
- */
-export const GET = createAuthenticatedEndpoint({
-  rateLimit: {
-    maxRequests: 100,
-    windowMs: 60000,
-  },
-  handler: async ({ context }) => {
+handler:handler: ({ context }) => {
     try {
       const profile = {
         userId: context.auth?.userId,

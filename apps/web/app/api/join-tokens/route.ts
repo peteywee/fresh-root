@@ -10,7 +10,7 @@ import { CreateJoinTokenSchema } from "@fresh-schedules/types";
  */
 export const GET = createOrgEndpoint({
   roles: ["admin"],
-  handler: async ({ context, _params }) => {
+  handler: ({ context, _params }) => {
     try {
       const tokens = [
         {
@@ -36,7 +36,7 @@ export const GET = createOrgEndpoint({
 export const POST = createOrgEndpoint({
   roles: ["admin"],
   input: CreateJoinTokenSchema,
-  handler: async ({ input, context }) => {
+  handler: ({ input, context }) => {
     try {
       const token = {
         id: `token-${Date.now()}`,

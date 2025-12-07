@@ -10,7 +10,7 @@ import { OnboardingProfileSchema } from "@fresh-schedules/types";
  */
 export const POST = createAuthenticatedEndpoint({
   input: OnboardingProfileSchema,
-  handler: async ({ input, context }) => {
+  handler: ({ input, context }) => {
     try {
       const { firstName, lastName, avatar, timezone } = input;
 

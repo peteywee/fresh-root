@@ -11,7 +11,7 @@ import { NextResponse } from "next/server";
 export const GET = createAuthenticatedEndpoint({
   org: "required",
   rateLimit: { maxRequests: 100, windowMs: 60_000 },
-  handler: async ({ request, context }) => {
+  handler: ({ request, context }) => {
     try {
       const { searchParams } = new URL(request.url);
       const orgId = searchParams.get("orgId") || context.org!.orgId;
@@ -65,7 +65,7 @@ export const POST = createAuthenticatedEndpoint({
   roles: ["scheduler"],
   input: CreateAttendanceRecordSchema,
   rateLimit: { maxRequests: 100, windowMs: 60_000 },
-  handler: async ({ input, context }) => {
+  handler: ({ input, context }) => {
     try {
       const data = input;
 

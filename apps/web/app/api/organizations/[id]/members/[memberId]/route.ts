@@ -1,15 +1,4 @@
-// [P0][ORG][MEMBER][DETAIL][API] Organization member detail endpoint
-
-import { createOrgEndpoint } from "@fresh-schedules/api-framework";
-import { ok, serverError } from "../../../../_shared/validation";
-import { UpdateMemberApiSchema } from "@fresh-schedules/types";
-
-/**
- * GET /api/organizations/[id]/members/[memberId]
- * Get member details
- */
-export const GET = createOrgEndpoint({
-  handler: async ({ _context, params }) => {
+handler:handler: ({ _context, params }) => {
     try {
       const { id, memberId } = params;
       const member = {
@@ -33,7 +22,7 @@ export const GET = createOrgEndpoint({
 export const PATCH = createOrgEndpoint({
   roles: ["admin"],
   input: UpdateMemberApiSchema,
-  handler: async ({ input, context, params }) => {
+  handler: ({ input, context, params }) => {
     try {
       const { role, permissions } = input;
       const updated = {
@@ -56,7 +45,7 @@ export const PATCH = createOrgEndpoint({
  */
 export const DELETE = createOrgEndpoint({
   roles: ["admin"],
-  handler: async ({ _context, params }) => {
+  handler: ({ _context, params }) => {
     try {
       return ok({ removed: true, memberId: params.memberId });
     } catch {

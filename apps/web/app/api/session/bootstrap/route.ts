@@ -1,14 +1,4 @@
-// [P0][SESSION][BOOTSTRAP][API] Bootstrap session endpoint
-
-import { createAuthenticatedEndpoint } from "@fresh-schedules/api-framework";
-import { ok, serverError } from "../../_shared/validation";
-
-/**
- * GET /api/session/bootstrap
- * Bootstrap authenticated session
- */
-export const GET = createAuthenticatedEndpoint({
-  handler: async ({ context }) => {
+handler:handler: ({ context }) => {
     try {
       const session = {
         userId: context.auth?.userId,

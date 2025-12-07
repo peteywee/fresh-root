@@ -1,18 +1,4 @@
-// [P0][VENUES][API] Venues list endpoint
-export const dynamic = "force-dynamic";
-
-import { NextResponse } from "next/server";
-import { CreateVenueSchema } from "@fresh-schedules/types";
-
-import { createOrgEndpoint } from "@fresh-schedules/api-framework";
-import { badRequest, ok, serverError } from "../_shared/validation";
-
-/**
- * GET /api/venues
- * List venues for an organization
- */
-export const GET = createOrgEndpoint({
-  handler: async ({ request, context, _params }) => {
+handler:handler: ({ request, context, _params }) => {
     try {
       const { searchParams } = new URL(request.url);
       const orgId = searchParams.get("orgId") || context.org?.orgId;
@@ -49,7 +35,7 @@ export const GET = createOrgEndpoint({
 export const POST = createOrgEndpoint({
   roles: ["manager"],
   input: CreateVenueSchema,
-  handler: async ({ input, context, _params }) => {
+  handler: ({ input, context, _params }) => {
     try {
       const validated = input;
 

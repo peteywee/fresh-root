@@ -1,14 +1,4 @@
-// [P0][ORG][DETAIL][API] Organization detail endpoint
-
-import { createOrgEndpoint } from "@fresh-schedules/api-framework";
-import { ok, serverError } from "../../_shared/validation";
-
-/**
- * GET /api/organizations/[id]
- * Get organization details
- */
-export const GET = createOrgEndpoint({
-  handler: async ({ context, params }) => {
+handler:handler: ({ context, params }) => {
     try {
       const { id } = params;
       const org = {
@@ -54,7 +44,7 @@ export const PATCH = createOrgEndpoint({
  */
 export const DELETE = createOrgEndpoint({
   roles: ["admin"],
-  handler: async ({ _context, params }) => {
+  handler: ({ _context, params }) => {
     try {
       return ok({ deleted: true, id: params.id });
     } catch {

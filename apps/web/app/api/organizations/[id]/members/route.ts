@@ -1,28 +1,4 @@
-// [P0][ORG][MEMBERS][API] Organization members endpoint
-
-import { NextResponse } from "next/server";
-import { z } from "zod";
-
-import { createOrgEndpoint } from "@fresh-schedules/api-framework";
-import { ok, serverError } from "../../../_shared/validation";
-
-const AddMemberSchema = z.object({
-  email: z.string().email("Invalid email address"),
-  role: z.enum(["member", "manager", "admin"]).describe("Member role in organization"),
-});
-
-// TEST COVERAGE NOTE: AddMemberSchema validation tests should verify:
-// - email field validates format and is required
-// - role field restricts to valid enum values
-// - error messages returned for missing/invalid fields
-// See @fresh-schedules/api-framework/src/testing.ts for test utilities
-
-/**
- * GET /api/organizations/[id]/members
- * List members of an organization
- */
-export const GET = createOrgEndpoint({
-  handler: async ({ _context, params }) => {
+handler:handler: ({ _context, params }) => {
     try {
       const { id } = params;
       const members = [
