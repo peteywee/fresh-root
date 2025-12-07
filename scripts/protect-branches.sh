@@ -12,7 +12,11 @@ OWNER=${1:-"peteywee"}
 REPO=${2:-"fresh-root"}
 # ---------------------
 
-# Function to apply branch protection rules.
+apply_protection() {
+    if [ $# -ne 2 ]; then
+        echo "❌ Error: apply_protection requires exactly 2 arguments (branch_name and description)" >&2
+        return 1
+    fi
 apply_protection() {
     local branch_name=$1
     local description=$2
@@ -112,8 +116,8 @@ echo "✅ main           - Strict: 2 required checks, code review required, no f
 echo "✅ dev            - Moderate: 1 required check, code review required, no force push"
 echo "✅ docs-tests-logs - Light: No checks, archive-only, no force push"
 echo ""
-
-echo "🔑 To execute:"
-echo "Run: bash scripts/protect-branches.sh [owner] [repo]"
+echo "🔑 Script completed!"
+echo "To run again with different parameters:"
+echo "bash scripts/protect-branches.sh [owner] [repo]"
 echo "Example: bash scripts/protect-branches.sh peteywee fresh-root"
 echo ""
