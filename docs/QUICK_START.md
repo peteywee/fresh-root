@@ -7,7 +7,7 @@
 ---
 
 **Breadcrumb Navigation:**  
-[Home](./README.md) > **Quick Start** · [Production Readiness](./PRODUCTION_READINESS.md) · [Coding Rules](./CODING_RULES_AND_PATTERNS.md) · [Deployment Guide](./PRODUCTION_DEPLOYMENT_GUIDE.md)
+[Home](./README.md) > **📍 You Are Here: Quick Start** · [Production Readiness](./PRODUCTION_READINESS.md) · [Coding Rules](./CODING_RULES_AND_PATTERNS.md) · [Deployment Guide](./PRODUCTION_DEPLOYMENT_GUIDE.md)
 
 ---
 
