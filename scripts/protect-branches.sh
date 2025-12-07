@@ -13,10 +13,13 @@ apply_protection() {
     echo "🛡️  Applying protection for '$branch_name' branch ($description)..."
     
     # The GitHub API for branch protection requires a PUT request.
-    gh api "repos/$OWNER/$REPO/branches/$branch_name/protection" \
+    if ! gh api "repos/$OWNER/$REPO/branches/$branch_name/protection" \
       --method PUT \
       --silent \
-      --input -
+      --input -; then
+        echo "❌ Failed to apply protection for '$branch_name' branch." >&2
+        exit 1
+    fi
     echo "✅ Protection applied for '$branch_name' branch."
 }
 
