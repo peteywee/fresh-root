@@ -21,6 +21,7 @@
 **Navigation Clarity Score: 5.5/10** ✗
 
 **Problems Identified:**
+
 1. **Competing entry points** — README vs QUICK_START vs PHASE_2_START_HERE (users don't know which)
 2. **Unclear user segmentation** — Each doc says "for developers" but targets different stages
 3. **Missing wayfinding** — No breadcrumbs, no "you are here" markers
@@ -35,6 +36,7 @@
 ### 1. Entry Point Hierarchy (Consolidation)
 
 **PRIMARY ENTRY POINT:**
+
 ```
 README.md (The Hub)
 ├─ "I'm a new developer" → QUICK_START.md
@@ -45,12 +47,14 @@ README.md (The Hub)
 ```
 
 **Why:**
+
 - Eliminates decision paralysis (one clear landing page)
 - Decision tree routes users to correct resource in <1 minute
 - README becomes "hub" not "overview"
 - PHASE_2_START_HERE retired (confuses current-state vs future-state)
 
 **Implementation:**
+
 - Replace README's current quick-links with user decision tree
 - Add visual badges ("⭐ Start here", "⚡ For implementation")
 - Create .github/NAVIGATION.md as metadata index
@@ -60,6 +64,7 @@ README.md (The Hub)
 ### 2. User Journey Maps (For Each Persona)
 
 #### **Journey 1: New Developer (Goal: First feature PR)**
+
 ```
 1. Land on README
    ↓
@@ -86,6 +91,7 @@ README.md (The Hub)
 ---
 
 #### **Journey 2: Experienced Developer (Goal: Implement new domain entity)**
+
 ```
 1. Land on README
    ↓
@@ -112,6 +118,7 @@ README.md (The Hub)
 ---
 
 #### **Journey 3: DevOps/Release Engineer (Goal: Deploy to production)**
+
 ```
 1. Land on README
    ↓
@@ -138,6 +145,7 @@ README.md (The Hub)
 ---
 
 #### **Journey 4: Code Reviewer (Goal: Understand change compliance)**
+
 ```
 1. Land on README
    ↓
@@ -161,11 +169,13 @@ README.md (The Hub)
 ### 3. Wayfinding Improvements (Implementation Guide)
 
 #### **A. Breadcrumb Navigation (Add to all docs)**
+
 ```markdown
 ← [Home](./README.md) / [Development](./README.md#development) / Coding Rules
 ```
 
 #### **B. "You Are Here" Badges (Top of each doc)**
+
 ```markdown
 **📍 You are here:** Implementing Code → [Zod-First Patterns](./CODING_RULES_AND_PATTERNS.md)
 **Next:** [Test Your Patterns](./CODING_RULES_AND_PATTERNS.md#testing-rules)
@@ -173,6 +183,7 @@ README.md (The Hub)
 ```
 
 #### **C. Table of Contents (Link Between Related Sections)**
+
 ```markdown
 ## Related Sections
 - 🔗 Type Safety Rules → see [CODING_RULES_AND_PATTERNS.md § Type Safety & Validation](./CODING_RULES_AND_PATTERNS.md)
@@ -181,6 +192,7 @@ README.md (The Hub)
 ```
 
 #### **D. Context Indicators (Help users understand why they're reading this)**
+
 ```markdown
 ### Why You're Reading This
 
@@ -193,6 +205,7 @@ README.md (The Hub)
 ```
 
 #### **E. Quick Navigation Sidebar (Future: Digital format)**
+
 ```
 Fresh Schedules Docs
 ├─ 🏠 [Home](./README.md)
@@ -223,6 +236,7 @@ Fresh Schedules Docs
 ### 🟢 QUICK WINS (1-2 hours, high impact)
 
 **Week 1:**
+
 1. **README Decision Tree** (30 min)
    - Add "What should I read?" section
    - Simple yes/no flow to destination doc
@@ -244,9 +258,10 @@ Fresh Schedules Docs
 
 **Week 1-2:**
 4. **Add "You Are Here" Badges** (40 min)
-   - Top of each major doc
-   - Includes: current section, next section, related links
-   - Template format for consistency
+
+- Top of each major doc
+- Includes: current section, next section, related links
+- Template format for consistency
 
 5. **Cross-Link Related Sections** (1 hour)
    - CODING_RULES_AND_PATTERNS.md ↔ Copilot Instructions
@@ -263,9 +278,10 @@ Fresh Schedules Docs
 
 **Month 2+:**
 7. **Digital Navigation System** (design task)
-   - Searchable doc index
-   - Visual decision tree UI
-   - Doc dependency graph
+
+- Searchable doc index
+- Visual decision tree UI
+- Doc dependency graph
 
 8. **Auto-Generated TOC Index** (automation)
    - Parse all .md files
@@ -288,16 +304,19 @@ Fresh Schedules Docs
 ## Success Criteria
 
 ✅ **By end of Week 1:**
+
 - [ ] README has decision tree
 - [ ] Top 5 docs have breadcrumbs
 - [ ] Navigation metadata created
 
 ✅ **By end of Week 2:**
+
 - [ ] New devs can answer "what should I read?" in <1 minute
 - [ ] All persona journeys take recommended time
 - [ ] PHASE_2_START_HERE retired and documented
 
 ✅ **By end of Month 1:**
+
 - [ ] Navigation clarity score = 8.5/10
 - [ ] Zero "I can't find X" questions in onboarding
 - [ ] Doc discovery time < 2 minutes for any topic

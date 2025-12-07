@@ -26,6 +26,7 @@ docs/ Directory (45 files, ~380K)
 ```
 
 **Issues:**
+
 - ❌ docs/ directory cluttered with historical/planning docs
 - ❌ Unclear which docs are active vs. historical
 - ❌ New team members confused by duplicate docs (KPI + READINESS)
@@ -120,6 +121,7 @@ RESULT: 250K freed from docs/, 14 files properly archived
 ## 🔄 Three Waves of Archival
 
 ### Wave 1: Cleanup Artifacts (Dec 6)
+
 **When:** Immediately (design approval)  
 **What:** 5 archived + 1 deleted = 66K freed  
 **Risk:** 🟢 LOW — Clear artifacts, no dependencies  
@@ -136,6 +138,7 @@ PRODUCTION_DOCS_INDEX.md (8K) ────────────────> 
 ---
 
 ### Wave 2: Phase 2 Work (Dec 20)
+
 **When:** After Phase 2 officially complete  
 **What:** 3 archived + 3 consolidated = 72K freed  
 **Risk:** 🟡 MEDIUM — Merges required, higher coordination  
@@ -158,6 +161,7 @@ ERROR_PREVENTION_PATTERNS.md (8K) ────────> MERGE ──> CODING
 ---
 
 ### Wave 3: Strategic Input (Jan 15)
+
 **When:** After strategic review period ends  
 **What:** 2 archived = 108K freed  
 **Risk:** 🟢 LOW — Straightforward archival  
@@ -228,6 +232,7 @@ Step 2: Commit
 ## 💡 Key Design Principles
 
 ### 1. **Semantic Organization**
+
 ```
 archive/
 ├── cleanup/    ← GROUP BY PURPOSE (not date, not size)
@@ -236,42 +241,50 @@ archive/
 ├── strategic/
 └── version-history/
 ```
+
 ✅ **Why:** Clear intent. "cleanup" means something; "2025-12-06" doesn't.
 
 ---
 
 ### 2. **Merged Files = Deleted Files**
+
 ```
 PRODUCTION_READINESS_KPI.md ──┐
                               ├──> MERGE ──> PRODUCTION_READINESS.md
 PRODUCTION_READINESS_SIGN_OFF ┘    (NO separate file)
 ```
+
 ✅ **Why:** Single source of truth. No duplicate content. Metadata comment shows source.
 
 ---
 
 ### 3. **Git Is The Safety Net**
+
 ```
 Deleted file?
 └─ git show <commit>:docs/FILENAME.md
    └─ Full content + history recoverable
 ```
+
 ✅ **Why:** No need for stubs or separate backups. Git has 100% coverage.
 
 ---
 
 ### 4. **Discoverability = 30 Seconds**
+
 ```
 archive/README.md
 ├─ Lists all files with categories
 ├─ Shows recovery instructions
 └─ Links to detailed docs
 ```
+
 ✅ **Why:** New team member can find any file in 30 seconds.
 
 ---
 
 ### 5. **Validation = Prevention**
+
 ```
 Before archiving:
 1. grep -r "FILENAME" docs/ apps/ packages/  ← No refs?
@@ -281,6 +294,7 @@ Before archiving:
 
 └─ If ALL pass → SAFE TO ARCHIVE
 ```
+
 ✅ **Why:** Prevents mistakes; fully automatable.
 
 ---
@@ -288,6 +302,7 @@ Before archiving:
 ## 🚀 Get Started in 3 Steps
 
 ### Step 1: Understand the Design (5 min)
+
 ```
 Read: docs/ARCHIVE_SUMMARY.md
      ↓
@@ -296,6 +311,7 @@ A: Archive Manager says YES
 ```
 
 ### Step 2: Prepare to Execute (30 min)
+
 ```
 Read: docs/ARCHIVE_EXECUTION_TIMELINE.md
      ↓
@@ -304,6 +320,7 @@ A: Team Lead says YES
 ```
 
 ### Step 3: Execute Wave 1 (2 hours)
+
 ```
 Follow: Exact commands in ARCHIVE_EXECUTION_TIMELINE.md Wave 1 section
         ├─ Create folders
@@ -318,15 +335,18 @@ Follow: Exact commands in ARCHIVE_EXECUTION_TIMELINE.md Wave 1 section
 ## 📋 Approval Checklist
 
 **Before Wave 1 (Dec 6):**
+
 - [ ] Archive Manager: Approve structure & naming?
 - [ ] Team Lead: Ready to archive cleanup artifacts?
 - [ ] All: No questions about design?
 
 **Before Wave 2 (Dec 20):**
+
 - [ ] Phase 2 Lead: Phase 2 officially complete?
 - [ ] Tech Lead: Ready to consolidate docs?
 
 **Before Wave 3 (Jan 15):**
+
 - [ ] Architecture Lead: Strategic review done?
 - [ ] Architecture Lead: mega-book is canonical?
 
@@ -348,6 +368,7 @@ Follow: Exact commands in ARCHIVE_EXECUTION_TIMELINE.md Wave 1 section
 ## 🎓 What You Get
 
 ### Documentation Created
+
 - ✅ `docs/ARCHIVE_SUMMARY.md` — 5-min overview
 - ✅ `docs/ARCHIVE_STRUCTURE_DESIGN.md` — 30-min deep dive
 - ✅ `docs/ARCHIVE_EXECUTION_TIMELINE.md` — Step-by-step guide
@@ -355,10 +376,12 @@ Follow: Exact commands in ARCHIVE_EXECUTION_TIMELINE.md Wave 1 section
 - ✅ `docs/ARCHIVE_DELIVERY_SUMMARY.md` — What was delivered
 
 ### Tools Created
+
 - ✅ `scripts/archive/validate-archive-candidate.sh` — Validation script
 - ✅ `scripts/archive/README.md` — Tool documentation
 
 ### Design Artifacts
+
 - ✅ Pre-archival checklist (executable)
 - ✅ Wave-by-wave execution plan
 - ✅ Risk assessments
@@ -396,11 +419,13 @@ Follow: Exact commands in ARCHIVE_EXECUTION_TIMELINE.md Wave 1 section
 ## 🎯 Next Action
 
 **THIS WEEK:**
+
 1. Review `docs/ARCHIVE_SUMMARY.md` (5 min)
 2. Decide: Approve design?
 3. If YES → Proceed to Wave 1 execution (Dec 6)
 
 **QUESTIONS?**
+
 - Design details → `docs/ARCHIVE_STRUCTURE_DESIGN.md`
 - How to execute → `docs/ARCHIVE_EXECUTION_TIMELINE.md`
 - Quick reference → `docs/ARCHIVE_INDEX.md`

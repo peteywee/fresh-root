@@ -23,6 +23,7 @@ The Fresh Root documentation spans **39 markdown files** across **1 root level +
 ## 1. Current Information Domains (Inventory)
 
 ### **Domain 1: Canonical Reference (High Authority, Frequently Referenced)**
+
 - `CODING_RULES_AND_PATTERNS.md` (1039 lines) — Definitive pattern guidance
 - `QUICK_START.md` (370 lines) — First-time setup and entry
 - `README.md` (236 lines) — Project overview
@@ -33,6 +34,7 @@ The Fresh Root documentation spans **39 markdown files** across **1 root level +
 ---
 
 ### **Domain 2: Production & Deployment (Fragmented Across 3 Files)**
+
 - `PRODUCTION_READINESS.md` (301 lines) — Status and KPI checklist
 - `PRODUCTION_DEPLOYMENT_GUIDE.md` (296 lines) — Deploy procedures
 - `PRODUCTION_ENV_VALIDATION.md` (186 lines) — Environment configuration
@@ -43,6 +45,7 @@ The Fresh Root documentation spans **39 markdown files** across **1 root level +
 ---
 
 ### **Domain 3: Technical Implementation (Infrastructure & Patterns)**
+
 - `FIREBASE_TYPING_STRATEGY.md` (248 lines) — Firebase + Zod integration
 - `FIREBASE_PROMPT_WORKFLOW.md` (142 lines) — Prompting guidelines for Firebase features
 - `RATE_LIMIT_IMPLEMENTATION.md` (156 lines) — Redis rate limiting setup
@@ -55,6 +58,7 @@ The Fresh Root documentation spans **39 markdown files** across **1 root level +
 ---
 
 ### **Domain 4: Planning & Execution (Phase-Based, Archival Candidates)**
+
 - `PHASE_1_CLEANUP_COMPLETE.md` (187 lines) ← Archive Wave 1
 - `PHASE_2_DETAILED_PLAN.md` (839 lines) ← Archive Wave 2
 - `PHASE_2_EXECUTION_SUMMARY.md` (294 lines) ← Archive Wave 2
@@ -67,6 +71,7 @@ The Fresh Root documentation spans **39 markdown files** across **1 root level +
 ---
 
 ### **Domain 5: Navigation & Meta (Index/Hub Files)**
+
 - `README.md` — Project entry
 - `STATE_INDEX.md` (417 lines) — Current doc state and inventory
 - `CLEANUP_INDEX.md` (618 lines) — Archival strategy (scheduled delete)
@@ -79,6 +84,7 @@ The Fresh Root documentation spans **39 markdown files** across **1 root level +
 ---
 
 ### **Domain 6: Archive & Discoverability**
+
 - `ARCHIVE_STRUCTURE_DESIGN.md` (809 lines) — Archive system design
 - `ARCHIVE_DELIVERY_SUMMARY.md` (492 lines) — Archive implementation summary
 - `ARCHIVE_EXECUTION_TIMELINE.md` (649 lines) — Phased archival plan
@@ -93,6 +99,7 @@ The Fresh Root documentation spans **39 markdown files** across **1 root level +
 ---
 
 ### **Domain 7: Governance & AI Instructions**
+
 - `AGENTS.md` (52 lines) — Agent role definitions
 - Related files in `agents/`, `crewops/` subdirectories
 - **Purpose:** AI agent workflows and governance
@@ -102,6 +109,7 @@ The Fresh Root documentation spans **39 markdown files** across **1 root level +
 ---
 
 ### **Domain 8: Strategic Analysis (Archival Candidates)**
+
 - `CODEBASE_ARCHITECTURAL_INDEX.md` (1290 lines)
 - `ARCHITECTURAL_REVIEW_PANEL_INPUTS.md` (124 lines)
 - `CONSOLIDATION_ANALYSIS.md` (root-level)
@@ -161,11 +169,13 @@ Configuration:
 ### Alignment Score: 6/10
 
 **Strengths:**
+
 - ✅ Core patterns (SDK factory, Zod validation) well-documented
 - ✅ Security rules clearly stated
 - ✅ Firebase integration patterns covered
 
 **Gaps:**
+
 - ❌ **No UI/Components documentation** (packages/ui exists but undocumented)
 - ❌ **No shared packages reference** (packages/config, packages/rules-tests)
 - ❌ **No Cloud Functions guide** (functions/ directory)
@@ -262,6 +272,7 @@ Configuration:
 ### Problem 1: Multiple Entry Points (Confusing for New Users)
 
 **Current Entry Points:**
+
 - `README.md` — General overview
 - `QUICK_START.md` — Setup guide
 - `PHASE_2_START_HERE.md` — Phase 2 planning (should not be entry point!)
@@ -355,6 +366,7 @@ ARCHIVE/ (Out of main navigation)
 ```
 
 **Impact:**
+
 - ✅ Reduces active docs from 39 to ~15 canonical + 8 guides + 5 ops
 - ✅ Eliminates 7 redundant index files
 - ✅ Groups related docs by domain (production, guides, reference)
@@ -365,16 +377,19 @@ ARCHIVE/ (Out of main navigation)
 ## 7. Recommended Actions (Phased)
 
 ### Phase 0: Navigation Clarity (Immediate, 1-2 hours)
+
 1. **Create `docs/NAVIGATION.md`** — Single entry point explaining all 5 domains
 2. **Update `README.md`** — Remove competing entry points, link to NAVIGATION.md
 3. **Archive `PHASE_2_*.md` files** — Move to archive/phase-work/ (already planned)
 
 ### Phase 1: Production Consolidation (1-2 hours)
+
 1. **Merge `PRODUCTION_READINESS`, `PRODUCTION_DEPLOYMENT_GUIDE`, `PRODUCTION_ENV_VALIDATION`** into single `docs/OPERATIONS/DEPLOYMENT_GUIDE.md`
 2. **Create `docs/OPERATIONS/README.md`** — Navigation hub for ops docs
 3. **Delete redundant index files** — Keep only `STATE_INDEX.md` (archive reference)
 
 ### Phase 2: Technical Guides Separation (2-3 hours)
+
 1. **Create `docs/GUIDES/` subdirectory** (migration from root-level)
 2. **Move/rename technical docs:**
    - `RATE_LIMIT_IMPLEMENTATION.md` → `docs/GUIDES/RATE_LIMITING.md`
@@ -386,6 +401,7 @@ ARCHIVE/ (Out of main navigation)
    - `docs/GUIDES/WORKSPACE_STRUCTURE.md` (explain pnpm workspaces)
 
 ### Phase 3: Archive Consolidation (Already planned, 2-4 hours)
+
 1. **Consolidate archive docs** → Single `archive/README.md` + `MANIFEST.json`
 2. **Archive phase docs** → `archive/phase-work/`
 3. **Archive strategic docs** → `archive/strategic/`
@@ -397,30 +413,35 @@ ARCHIVE/ (Out of main navigation)
 ### Clear Cutoffs (Domain Boundaries)
 
 **CANONICAL REFERENCE** (Authority)
+
 - What: Rules, patterns, definitive guidance
 - Files: CODING_RULES_AND_PATTERNS, Firebase guides, Type safety docs
 - Keep: All files in this domain
 - Consolidate: Yes, merge Firebase_*.md into single FIREBASE_INTEGRATION.md
 
 **GUIDES** (How-To, Technical Implementation)
+
 - What: Step-by-step procedures, infrastructure setup
 - Files: Rate limiting, PNPM, VSCode, UI components
 - Keep: All technical how-tos
 - Consolidate: Yes, move to docs/GUIDES/ subdirectory
 
 **OPERATIONS** (Deployment & Maintenance)
+
 - What: Production readiness, deployment procedures, environment validation
 - Files: Currently 3 scattered files
 - Keep: Single consolidated ops guide
 - Consolidate: YES - this is low-hanging fruit
 
 **GOVERNANCE** (Process & Automation)
+
 - What: AI agents, crew operations, templates
 - Files: AGENTS.md, crewops/, templates/
 - Keep: All governance files
 - Consolidate: Merge agents/ into crewops/
 
 **PLANNING & ARCHIVE** (Historical, Moved out of main navigation)
+
 - What: Phase-based planning, execution logs, archive metadata
 - Files: PHASE_2_*.md, ARCHIVE_*.md, CLEANUP_INDEX.md
 - Keep: Archive governance only
