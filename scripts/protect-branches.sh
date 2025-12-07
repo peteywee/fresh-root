@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
-
+if ! command -v gh &> /dev/null; then
+    echo "Error: GitHub CLI 'gh' is not installed. Please install it to run this script." >&2
+    echo "Installation instructions: https://cli.github.com/" >&2
+    exit 1
+fi
 # --- Configuration ---
 # You can replace the defaults or pass the owner and repo as arguments to the script.
 OWNER=${1:-"peteywee"}
