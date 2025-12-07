@@ -7,6 +7,11 @@
 
 ---
 
+**Breadcrumb Navigation:**  
+[Home](./README.md) · [Quick Start](./QUICK_START.md) > **Production Readiness** · [Coding Rules](./CODING_RULES_AND_PATTERNS.md) · [Deployment Guide](./PRODUCTION_DEPLOYMENT_GUIDE.md)
+
+---
+
 ## Executive Summary: Consolidated Pre-Flight Check
 
 This document consolidates production readiness verification (KPIs) and sign-off approval. All quality gates are green. The system is secure, stable, and follows top-shelf service engineering standards.

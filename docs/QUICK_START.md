@@ -6,6 +6,11 @@
 
 ---
 
+**Breadcrumb Navigation:**  
+[Home](./README.md) > **Quick Start** · [Production Readiness](./PRODUCTION_READINESS.md) · [Coding Rules](./CODING_RULES_AND_PATTERNS.md) · [Deployment Guide](./PRODUCTION_DEPLOYMENT_GUIDE.md)
+
+---
+
 ## Package Manager Requirements: pnpm-only Policy
 
 **⚠️ CRITICAL:** This monorepo uses **pnpm exclusively**. Using npm or yarn will break dependency resolution and cause deployment failures.

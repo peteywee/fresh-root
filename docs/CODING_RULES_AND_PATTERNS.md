@@ -8,6 +8,11 @@
 
 ---
 
+**Breadcrumb Navigation:**  
+[Home](./README.md) · [Quick Start](./QUICK_START.md) · [Production Readiness](./PRODUCTION_READINESS.md) > **Coding Rules** · [Deployment Guide](./PRODUCTION_DEPLOYMENT_GUIDE.md)
+
+---
+
 ## Table of Contents
 
 1. [Core Principles](#core-principles)
