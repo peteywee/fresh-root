@@ -627,3 +627,11 @@ export function createRateLimitedEndpoint<TOutput = unknown>(
     ...config,
   });
 }
+
+
+// =============================================================================
+// SDK ENHANCEMENTS
+// =============================================================================
+// Export all enhancement modules for advanced use cases
+export * from "./enhancements";
+

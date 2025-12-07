@@ -48,6 +48,8 @@
     "firebaseui": "^6.0.0",
     "globby": "^16.0.0",
     "husky": "^9.1.7",
+    "markdownlint": "^0.40.0",
+    "markdownlint-cli2": "^0.20.0",
     "papaparse": "^5.4.1",
     "prettier": "^3.7.1",
     "qrcode": "^1.5.4",
