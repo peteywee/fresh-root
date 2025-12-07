@@ -9,6 +9,7 @@ This directory contains specialized instruction files that guide AI coding agent
 **[copilot-instructions.md](./copilot-instructions.md)** ⭐ **START HERE**
 
 Comprehensive guide for AI agents working on the codebase. Covers:
+
 - Quick start & essential context
 - Architecture overview
 - SDK Factory pattern (current standard)
@@ -28,12 +29,14 @@ Comprehensive guide for AI agents working on the codebase. Covers:
 ## Specialized Instructions by Domain
 
 ### AI Safety & Prompt Engineering
+
 - **[ai-prompt-engineering-safety-best-practices.instructions.md](./ai-prompt-engineering-safety-best-practices.instructions.md)**
   - Comprehensive AI safety frameworks
   - Bias mitigation strategies
   - Responsible AI usage patterns
 
 ### Code Review
+
 - **[code-review-generic.instructions.md](./code-review-generic.instructions.md)**
   - Generic code review guidelines
   - Quality standards across all domains
@@ -42,12 +45,14 @@ Comprehensive guide for AI agents working on the codebase. Covers:
 ### Framework-Specific
 
 #### TypeScript & ES2022
+
 - **[typescript-5-es2022.instructions.md](./typescript-5-es2022.instructions.md)**
   - TypeScript 5.x standards
   - ES2022 output targets
   - Type safety best practices
 
 #### Next.js & Tailwind
+
 - **[nextjs-tailwind.instructions.md](./nextjs-tailwind.instructions.md)**
   - Next.js + Tailwind development
   - Component patterns
@@ -59,6 +64,7 @@ Comprehensive guide for AI agents working on the codebase. Covers:
   - API route best practices
 
 #### Firebase & Data Layer
+
 - **[firebase-typing-and-monorepo-memory.instructions.md](./firebase-typing-and-monorepo-memory.instructions.md)**
   - Firebase SDK v12 typing strategy
   - Monorepo dependency resolution
@@ -67,18 +73,21 @@ Comprehensive guide for AI agents working on the codebase. Covers:
 ### Quality & Testing
 
 #### Testing Frameworks
+
 - **[playwright-typescript.instructions.md](./playwright-typescript.instructions.md)**
   - Playwright test generation
   - TypeScript testing best practices
   - Test structure & assertions
 
 #### Security & OWASP
+
 - **[security-and-owasp.instructions.md](./security-and-owasp.instructions.md)**
   - OWASP Top 10 compliance
   - Secure coding practices
   - All languages/frameworks
 
 #### Performance
+
 - **[performance-optimization.instructions.md](./performance-optimization.instructions.md)**
   - Frontend, backend, database optimization
   - Performance budgets
@@ -86,6 +95,7 @@ Comprehensive guide for AI agents working on the codebase. Covers:
   - Pro tips & troubleshooting
 
 #### Object-Oriented Design
+
 - **[object-calisthenics.instructions.md](./object-calisthenics.instructions.md)**
   - Object Calisthenics principles
   - Business domain code standards
@@ -94,12 +104,14 @@ Comprehensive guide for AI agents working on the codebase. Covers:
 ### Operations & Deployment
 
 #### CI/CD
+
 - **[github-actions-ci-cd-best-practices.instructions.md](./github-actions-ci-cd-best-practices.instructions.md)**
   - GitHub Actions workflows
   - CI/CD pipeline standards
   - Deployment automation
 
 #### pnpm & Package Management
+
 - **[pnpm-enforcement.instructions.md](./pnpm-enforcement.instructions.md)** (if exists)
   - pnpm-only policy
   - Monorepo structure
@@ -108,12 +120,14 @@ Comprehensive guide for AI agents working on the codebase. Covers:
 ### Development Philosophy
 
 #### Self-Explanatory Code
+
 - **[self-explanatory-code-commenting.instructions.md](./self-explanatory-code-commenting.instructions.md)**
   - Commenting guidelines
   - Self-documenting code principles
   - When to comment (and when not to)
 
 #### Production-Grade Standards
+
 - **[production-development-directive.instructions.md](./production-development-directive.instructions.md)**
   - Hierarchical thinking
   - Tool usage (proactive, not reactive)
@@ -125,6 +139,7 @@ Comprehensive guide for AI agents working on the codebase. Covers:
   - Decision framework
 
 #### Copilot Taming
+
 - **[taming-copilot.instructions.md](./taming-copilot.instructions.md)**
   - Core directives & hierarchy
   - Code on request only
@@ -137,6 +152,7 @@ Comprehensive guide for AI agents working on the codebase. Covers:
 ## Cross-References to Documentation
 
 For runtime documentation, see:
+
 - **[/docs/README.md](../../docs/README.md)** - Documentation entry point with decision tree
 - **[/docs/QUICK_START.md](../../docs/QUICK_START.md)** - Getting started guide
 - **[/docs/CODING_RULES_AND_PATTERNS.md](../../docs/CODING_RULES_AND_PATTERNS.md)** - Canonical rules & patterns
@@ -148,18 +164,23 @@ For runtime documentation, see:
 ## How to Use These Instructions
 
 ### For GitHub Copilot
+
 These files are automatically picked up by GitHub Copilot when working in this repository. Place custom instructions at the repository root or `.github/copilot-instructions.md` for highest priority.
 
 ### For Other AI Agents
+
 Reference the appropriate instruction file based on your task:
+
 1. Start with **copilot-instructions.md** for general guidance
 2. Add domain-specific files for your particular work
 3. Cross-reference with `/docs/` for runtime documentation
 
 ### For Code Review
+
 Use **code-review-generic.instructions.md** as the standard checklist for all PRs.
 
 ### For New Developers
+
 1. Read **copilot-instructions.md** (5-10 min overview)
 2. Follow **QUICK_START.md** in /docs/ (environment setup)
 3. Review **CODING_RULES_AND_PATTERNS.md** before first commit
@@ -174,6 +195,7 @@ Use **code-review-generic.instructions.md** as the standard checklist for all PR
 **Coverage:** All major domains (AI, security, testing, performance, operations, development philosophy)
 
 **Principles:**
+
 - Each file is purpose-focused and domain-specific
 - No duplication across files (each instruction file is a single source of truth)
 - Clear cross-references between related files
@@ -181,9 +203,10 @@ Use **code-review-generic.instructions.md** as the standard checklist for all PR
 
 ---
 
-## Questions or Feedback?
+## Questions or Feedback
 
 For updates to these instructions, see:
+
 - **Code changes:** Reference the codebase and instruction files during PR review
 - **Pattern updates:** Update `copilot-instructions.md` first, then domain files
 - **New domains:** Create new instruction file following the naming convention
