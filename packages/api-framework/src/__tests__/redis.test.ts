@@ -3,6 +3,7 @@
 // 🤖 AUTO-GENERATED: Complete this test to meet coverage threshold (≥90%)
 
 import { describe, it, expect, beforeEach } from "vitest";
+
 import { GET } from "../route";
 
 describe("redis.ts API Route", () => {

@@ -7,6 +7,7 @@
  */
 
 import { NextRequest } from "next/server";
+
 import type { AuthContext, OrgContext, OrgRole } from "./index";
 
 // =============================================================================

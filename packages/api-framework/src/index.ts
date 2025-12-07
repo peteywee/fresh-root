@@ -33,9 +33,10 @@
  * ```
  */
 
-import type { OrgRole } from "../../types/src/rbac";
 import { NextRequest, NextResponse } from "next/server";
 import { ZodError, ZodSchema } from "zod";
+
+import type { OrgRole } from "../../types/src/rbac";
 
 // =============================================================================
 // TYPES
@@ -580,9 +581,15 @@ export type { OrgRole };
 // REDIS & RATE LIMITING
 // =============================================================================
 
-  export * from "./redis";
-  export { checkRateLimit, createRateLimitMiddleware } from "./redis";
-  export type { RateLimitConfig, RateLimitResult, RedisClient } from "./redis";
+export * from "./redis";
+export { checkRateLimit, createRateLimitMiddleware } from "./redis";
+export type { RateLimitConfig, RateLimitResult, RedisClient } from "./redis";
+
+// =============================================================================
+// SDK ENHANCEMENTS (v2.0.0)
+// =============================================================================
+
+export * from "./enhancements";
 
 // TODO: Add Route Factory pattern here next
 // - validateInput(schema: ZodSchema, data: unknown)
