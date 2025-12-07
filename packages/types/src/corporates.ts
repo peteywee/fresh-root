@@ -13,6 +13,7 @@
 import { z } from "zod";
 
 // Type-only import for Firestore Timestamp (avoid runtime dependency)
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 type Timestamp = any;
 
 // ===== MAIN CORPORATE SCHEMA =====
