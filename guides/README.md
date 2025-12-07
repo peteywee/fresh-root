@@ -12,16 +12,19 @@ This directory contains comprehensive guides and documentation for major feature
 ## Featured Domains
 
 ### Workforce Management
+
 - SCHEDULING.md - Shift and schedule management
 - LABOR_PLANNING.md - Workforce planning and forecasting
 - STAFF_MANAGEMENT.md - Staff profiles, roles, and management
 
 ### Operations
+
 - NOTIFICATIONS.md - Alert and notification systems
 - BILLING_AND_PRICING.md - Billing models and pricing strategy
 - SHIFT_COMPLIANCE.md - Compliance and regulatory requirements
 
 ### User Experience
+
 - ONBOARDING.md - New user onboarding workflows
 - UI_UX.md - User interface and experience guidelines
 
@@ -51,6 +54,7 @@ guides/
 ## Guide Organization
 
 Each guide includes:
+
 - ✅ Business context and purpose
 - ✅ Key workflows and processes
 - ✅ Data models and relationships
@@ -61,6 +65,7 @@ Each guide includes:
 ## CI/CD Maintenance
 
 This directory is maintained by `.github/workflows/maintain-docs.yml`:
+
 - **Validates**: All README.md files exist and are current
 - **Generates**: Guide completeness reports
 - **Enforces**: 10/10 quality gates

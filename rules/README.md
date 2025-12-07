@@ -12,14 +12,17 @@ This directory contains canonical rules, governance frameworks, compliance stand
 ## Core Areas
 
 ### Development Rules & Patterns
+
 - [CODING_RULES_AND_PATTERNS.md](./CODING_RULES_AND_PATTERNS.md) - Canonical development standards
 - [ERROR_PREVENTION_PATTERNS.md](./ERROR_PREVENTION_PATTERNS.md) - Safeguard patterns and error detection
 
 ### Security & Authorization
+
 - RBAC_AND_SECURITY.md - Role-based access control and security policies
 - COMPLIANCE.md - Regulatory and compliance requirements
 
 ### Organization & Structure
+
 - ORG_HIERARCHY.md - Organizational structure and team definitions
 
 ## Structure
@@ -44,6 +47,7 @@ rules/
 ## Hard Rules (Must Follow)
 
 These rules are enforced by CI/CD and development workflows:
+
 1. ✅ All code must pass type checking (TypeScript strict mode)
 2. ✅ All inputs must be validated (Zod schemas)
 3. ✅ All API routes must use SDK factory pattern
@@ -56,6 +60,7 @@ These rules are enforced by CI/CD and development workflows:
 ## CI/CD Maintenance
 
 This directory is maintained by `.github/workflows/maintain-docs.yml`:
+
 - **Validates**: All README.md files exist and are current
 - **Generates**: Quality metrics and compliance reports
 - **Enforces**: 10/10 quality gates

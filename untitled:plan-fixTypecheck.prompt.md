@@ -2,16 +2,19 @@ Plan: Unblock TypeScript typecheck and validate repository patterns
 
 Goal
 ----
+
 Fix the failing `pnpm -w typecheck` by resolving the lockfile mismatch, installing dependencies, re-running the typecheck, and verifying Triad-of-Trust pattern validator is green. Then run the Combot verification and produce a final QA report.
 
 Assumptions
 -----------
+
 - You approved updating the lockfile locally with `--no-frozen-lockfile`.
 - Changes to `pnpm-lock.yaml` will be committed in a dedicated PR if necessary.
 - Urgent secret-remediation (handled previously) is done or in-progress by SR Agent.
 
 Steps
 -----
+
 1) Install dependencies (allow lockfile update)
    - Command: `pnpm -w install --no-frozen-lockfile`
    - Outcome: node_modules present, `pnpm-lock.yaml` may be updated.
@@ -39,13 +42,14 @@ Steps
 
 Rollback and Safety
 -------------------
+
 - If lockfile update is not desired, revert by resetting `pnpm-lock.yaml` and `node_modules` and open an issue to coordinate lockfile update centrally.
 - Do not commit secrets or secret values during any step. If a secret is accidentally printed, sanitize outputs before saving to repo.
 
 Deliverables
 ------------
+
 - `docs/qa-postfix-report.md` with full logs and diffs
 - Representative PR(s) fixing SDK factory & Zod validation for sample routes
 - `agents/combot-invocations/*` record requesting verification
-
 

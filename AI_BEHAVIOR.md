@@ -13,24 +13,28 @@ This document describes how AI agents (GitHub Copilot, Claude Code, custom agent
 ## Core Principles
 
 ### 1. Hierarchical Decision Making
+
 - Senior Dev makes strategic decisions
 - Workers execute in parallel batches
 - Atomic commits track all changes
 - Council decides on unclear issues
 
 ### 2. Proactive Tool Usage
+
 - Search before assuming
 - Verify patterns in actual code
 - Test changes before committing
 - Validate no regressions
 
 ### 3. Production-Grade Standards
+
 - All code must pass 10/10 quality gates
 - No shortcuts, no guesses, no hallucinations
 - Type-safe, validated, secured always
 - Comprehensive error handling
 
 ### 4. Continuous Safeguard Creation
+
 - Same error >3 times = create safeguard
 - Automate pattern detection
 - Block problematic code at compile time
@@ -39,21 +43,25 @@ This document describes how AI agents (GitHub Copilot, Claude Code, custom agent
 ## Quick Navigation
 
 ### AI Automation Framework
+
 - [/ai/README.md](/ai/README.md) - AI agent overview
 - [/ai/GLOBAL_COGNITION_AGENT.md](/ai/GLOBAL_COGNITION_AGENT.md) - Agent directives
 - [/ai/crewops/framework.md](/ai/crewops/framework.md) - Team automation
 
 ### Instruction Files
+
 - [/.github/instructions/copilot-instructions.md](/.github/instructions/copilot-instructions.md) ⭐ **START HERE**
 - [/.github/instructions/production-development-directive.instructions.md](/.github/instructions/production-development-directive.instructions.md) - Production standards
 - [/.github/instructions/taming-copilot.instructions.md](/.github/instructions/taming-copilot.instructions.md) - Copilot control
 
 ### Root-level Mirror
+
 - [/instructions/](/instructions/) - Mirrored copies of all instruction files
 
 ## Key Behaviors
 
 ### For Every Task
+
 1. ✅ Parse request deeply
 2. ✅ Create TODO list with dependencies
 3. ✅ Spawn parallel workers where possible
@@ -64,6 +72,7 @@ This document describes how AI agents (GitHub Copilot, Claude Code, custom agent
 8. ✅ Commit with confidence
 
 ### For Every Decision
+
 - ✅ WHO is affected?
 - ✅ WHAT are we solving?
 - ✅ WHEN will this run?
@@ -74,6 +83,7 @@ This document describes how AI agents (GitHub Copilot, Claude Code, custom agent
 ## Quality Standards
 
 All AI-generated code must:
+
 - ✅ Pass TypeScript strict mode
 - ✅ Validate input with Zod
 - ✅ Handle errors with context

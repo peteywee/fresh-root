@@ -1,0 +1,89 @@
+{
+  "config": {
+    "MD001": true,
+    "MD003": {
+      "style": "consistent"
+    },
+    "MD018": true,
+    "MD019": true,
+    "MD022": {
+      "blanks": 1
+    },
+    "MD023": true,
+    "MD025": true,
+    "MD026": {
+      "punctuation": ".,;:!?"
+    },
+    "MD041": true,
+    "MD024": {
+      "siblings_only": true
+    },
+    "MD004": {
+      "style": "consistent"
+    },
+    "MD005": true,
+    "MD007": {
+      "indent": 2
+    },
+    "MD029": {
+      "style": "ordered"
+    },
+    "MD030": {
+      "ul_single": 1,
+      "ol_single": 1,
+      "ul_multi": 1,
+      "ol_multi": 1
+    },
+    "MD050": {
+      "style": "consistent"
+    },
+    "MD009": {
+      "br_spaces": 2,
+      "strict": true
+    },
+    "MD010": {
+      "code_blocks": true
+    },
+    "MD012": {
+      "maximum": 1
+    },
+    "MD027": true,
+    "MD037": true,
+    "MD038": true,
+    "MD039": true,
+    "MD049": {
+      "style": "consistent"
+    },
+    "MD031": {
+      "list_items": true
+    },
+    "MD032": true,
+    "MD040": true,
+    "MD046": {
+      "style": "backtick"
+    },
+    "MD047": true,
+    "MD034": true,
+    "MD035": {
+      "style": "consistent"
+    },
+    "MD042": true,
+    "MD014": true,
+    "MD033": {
+      "allowed_elements": []
+    },
+    "MD013": false
+  },
+  "fix": false,
+  "globs": [
+    "**/*.md"
+  ],
+  "ignores": [
+    "node_modules",
+    ".git",
+    "dist",
+    "build",
+    ".next",
+    "packages/*/node_modules"
+  ]
+}

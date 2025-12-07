@@ -211,9 +211,10 @@ match /orgs/{orgId}/schedules/{scheduleId}/shifts/{shiftId} {
 
 **Status**: 90%+ of routes migrated. This is the **preferred pattern** for all new API routes.
 
-### Why SDK Factory?
+### Why SDK Factory
 
 The SDK factory (`@fresh-schedules/api-framework`) provides a declarative, type-safe way to create API endpoints with built-in:
+
 - ✅ Authentication verification
 - ✅ Organization context loading
 - ✅ Role-based authorization
@@ -396,6 +397,7 @@ export interface EndpointConfig<TInput, TOutput> {
 **Location**: `packages/types/src/`
 
 **Files**:
+
 - `shifts.ts` - Shift entities
 - `orgs.ts` - Organization entities
 - `schedules.ts` - Schedule entities
@@ -477,6 +479,7 @@ export const ShiftSchema = z.object({
 **Pattern**: Firebase Admin SDK session cookie verification
 
 **Flow**:
+
 1. Client authenticates with Firebase (via JS SDK)
 2. Client sends ID token to `/api/session`
 3. Server creates session cookie via `auth.createSessionCookie(idToken)`
@@ -484,6 +487,7 @@ export const ShiftSchema = z.object({
 5. SDK factory verifies cookie on each request
 
 **Cookie Flags** (required):
+
 ```typescript
 Set-Cookie: session=${value}; HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=${ttl}
 ```
@@ -491,6 +495,7 @@ Set-Cookie: session=${value}; HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=${
 ### Role-Based Access Control (RBAC)
 
 **Role Hierarchy** (lowest to highest):
+
 ```
 staff < corporate < scheduler < manager < admin < org_owner
 ```
@@ -513,6 +518,7 @@ export type OrgRole = z.infer<typeof OrgRole>;
 **Hierarchical Checking**: If you require `manager`, users with `admin` or `org_owner` also pass.
 
 **Usage**:
+
 ```typescript
 // Require manager or higher
 export const POST = createOrgEndpoint({
@@ -536,6 +542,7 @@ export const DELETE = createOrgEndpoint({
 **Pattern**: Loaded from Firestore membership collection
 
 **Query**:
+
 ```typescript
 const membershipQuery = await db
   .collectionGroup("memberships")
@@ -547,6 +554,7 @@ const membershipQuery = await db
 ```
 
 **Membership Document** (`/memberships/{userId}_{orgId}`):
+
 ```typescript
 {
   uid: string;
@@ -559,6 +567,7 @@ const membershipQuery = await db
 ```
 
 **Context Available in Handler**:
+
 ```typescript
 {
   auth: {
@@ -588,6 +597,7 @@ const membershipQuery = await db
 **Applied To**: POST, PUT, PATCH, DELETE (mutations only)
 
 **Override** (if needed for webhooks):
+
 ```typescript
 export const POST = createPublicEndpoint({
   csrf: false,  // Disable CSRF
@@ -596,6 +606,7 @@ export const POST = createPublicEndpoint({
 ```
 
 **Client Must**:
+
 - Include CSRF token in `X-CSRF-Token` header
 - Token must match cookie value
 
@@ -604,12 +615,14 @@ export const POST = createPublicEndpoint({
 **Implementation**: Redis-backed (production) or in-memory (dev)
 
 **Environment Variables**:
+
 - `UPSTASH_REDIS_REST_URL` + `UPSTASH_REDIS_REST_TOKEN` (preferred for Vercel)
 - OR `REDIS_URL` (for ioredis client)
 
 **⚠️ WARNING**: In-memory rate limiting is NOT suitable for multi-instance deployments. Use Redis in production.
 
 **Configuration**:
+
 ```typescript
 export const POST = createOrgEndpoint({
   rateLimit: {
@@ -621,11 +634,13 @@ export const POST = createOrgEndpoint({
 ```
 
 **Recommended Limits**:
+
 - Read operations: 100 req/min
 - Write operations: 50 req/min
 - Sensitive operations (auth, payments): 10 req/min
 
 **Response Headers**:
+
 ```
 X-RateLimit-Limit: 100
 X-RateLimit-Remaining: 42
@@ -640,6 +655,7 @@ Retry-After: 45  (seconds until reset)
 **Automatic**: When you specify `input: Schema`, SDK factory validates before handler
 
 **Manual** (legacy):
+
 ```typescript
 import { parseJson, badRequest } from "../_shared/validation";
 
@@ -654,11 +670,13 @@ if (!parsed.success) {
 **ALWAYS** scope queries to the user's organization:
 
 **❌ WRONG**:
+
 ```typescript
 const schedules = await db.collection("schedules").get();  // No scoping!
 ```
 
 **✅ CORRECT**:
+
 ```typescript
 const schedules = await db
   .collection(`orgs/${context.org!.orgId}/schedules`)
@@ -670,6 +688,7 @@ const schedules = await db
 **Automatic**: Applied to all responses via SDK factory
 
 **Headers Applied**:
+
 - `Content-Security-Policy`: Restricts script/style sources
 - `Strict-Transport-Security`: HSTS
 - `X-Frame-Options`: DENY
@@ -686,6 +705,7 @@ const schedules = await db
 **Location**: `apps/web/lib/firebase-admin.ts`
 
 **Singleton Pattern**:
+
 ```typescript
 import { getFirestore } from "firebase-admin/firestore";
 import { getAuth } from "firebase-admin/auth";
@@ -698,6 +718,7 @@ const auth = getAuth();
 ```
 
 **Environment Variables Required**:
+
 - `FIREBASE_PROJECT_ID` or `NEXT_PUBLIC_FIREBASE_PROJECT_ID`
 - `GOOGLE_APPLICATION_CREDENTIALS_JSON` (service account JSON string)
 
@@ -745,6 +766,7 @@ export const GET = createOrgEndpoint({
 **Location**: `firestore.rules`
 
 **Key Helper Functions**:
+
 ```javascript
 function isSignedIn() {
   return request.auth != null;
@@ -766,6 +788,7 @@ function hasAnyRole(orgId, roles) {
 ```
 
 **Common Patterns**:
+
 ```javascript
 // Self-only access
 match /users/{userId} {
@@ -797,6 +820,7 @@ match /orgs/{orgId}/schedules/{scheduleId} {
 **Config**: `apps/web/vitest.config.ts`
 
 **Run Tests**:
+
 ```bash
 pnpm test              # Run all tests
 pnpm test:coverage     # With coverage
@@ -808,6 +832,7 @@ pnpm test:watch        # Watch mode
 **Location**: `packages/api-framework/src/testing.ts`
 
 **Mock Request Builder**:
+
 ```typescript
 import { createMockRequest } from "@fresh-schedules/api-framework/testing";
 
@@ -821,6 +846,7 @@ const request = createMockRequest("/api/shifts", {
 ```
 
 **Mock Context Builders**:
+
 ```typescript
 import {
   createMockAuthContext,
@@ -850,6 +876,7 @@ const orgContext = createMockOrgContext({
 ```
 
 **Example Test**:
+
 ```typescript
 // [P1][TEST][TEST] Schedules API tests
 // Tags: P1, TEST, TEST
@@ -914,12 +941,14 @@ describe("POST /api/schedules", () => {
 **⚠️ CRITICAL**: This project enforces pnpm. Using npm or yarn will be blocked by pre-commit hooks.
 
 **Why pnpm?**:
+
 - Workspace support
 - Faster installs
 - Strict dependency resolution
 - Prevents phantom dependencies
 
 **Common Commands**:
+
 ```bash
 # Install (always use --frozen-lockfile in CI)
 pnpm install --frozen-lockfile
@@ -945,6 +974,7 @@ pnpm clean
 **Config**: `turbo.json`
 
 **Tasks**:
+
 - `build` - Build all packages (depends on `^build`)
 - `test` - Run tests (depends on `^build`)
 - `lint` - Lint all packages
@@ -953,6 +983,7 @@ pnpm clean
 - `clean` - Clean build artifacts
 
 **Run via pnpm**:
+
 ```bash
 pnpm dev        # Turbo runs dev tasks
 pnpm build      # Turbo runs build tasks
@@ -962,6 +993,7 @@ pnpm test       # Turbo runs test tasks
 ### Firebase Emulators
 
 **Start Emulators**:
+
 ```bash
 # Terminal 1: Start emulators
 firebase emulators:start
@@ -971,12 +1003,14 @@ NEXT_PUBLIC_USE_EMULATORS=true pnpm dev
 ```
 
 **Seed Data**:
+
 ```bash
 pnpm tsx scripts/seed/seed.emulator.ts
 pnpm sim:auth  # Auth simulation
 ```
 
 **Emulator Ports**:
+
 - Firestore: `localhost:8080`
 - Auth: `localhost:9099`
 - Functions: `localhost:5001`
@@ -988,6 +1022,7 @@ pnpm sim:auth  # Auth simulation
 **Location**: `.husky/pre-commit`
 
 **Validation Steps** (runs automatically):
+
 1. **pnpm enforcement** - Blocks npm/yarn usage
 2. **Auto-tag files** - Adds metadata headers
 3. **Typecheck** - Catches TS errors
@@ -996,6 +1031,7 @@ pnpm sim:auth  # Auth simulation
 6. **Pattern detection** - Catches recurring errors (>3x)
 
 **Manual Run**:
+
 ```bash
 pnpm typecheck
 pnpm lint
@@ -1005,6 +1041,7 @@ pnpm format
 ### Local Quality Gates (Before PR)
 
 **Checklist**:
+
 - [ ] `pnpm install --frozen-lockfile` completes without warnings
 - [ ] `pnpm -w typecheck` passes (13 React 19 compat errors acceptable)
 - [ ] `pnpm test` passes
@@ -1029,6 +1066,7 @@ pnpm format
 **RULE**: Never duplicate types. Always use `z.infer<typeof Schema>`.
 
 **❌ WRONG**:
+
 ```typescript
 export const UserSchema = z.object({ name: z.string() });
 
@@ -1038,6 +1076,7 @@ interface User {  // Duplicate!
 ```
 
 **✅ CORRECT**:
+
 ```typescript
 export const UserSchema = z.object({ name: z.string() });
 export type User = z.infer<typeof UserSchema>;
@@ -1048,6 +1087,7 @@ export type User = z.infer<typeof UserSchema>;
 **RULE**: All API routes MUST use SDK factory or `withSecurity` wrapper.
 
 **❌ WRONG**:
+
 ```typescript
 export async function GET(request: NextRequest) {
   const data = await fetchData();
@@ -1056,6 +1096,7 @@ export async function GET(request: NextRequest) {
 ```
 
 **✅ CORRECT**:
+
 ```typescript
 export const GET = createOrgEndpoint({
   handler: async ({ context }) => {
@@ -1070,6 +1111,7 @@ export const GET = createOrgEndpoint({
 **RULE**: All POST/PUT/PATCH routes MUST validate input via Zod.
 
 **❌ WRONG**:
+
 ```typescript
 export const POST = createOrgEndpoint({
   handler: async ({ request }) => {
@@ -1080,6 +1122,7 @@ export const POST = createOrgEndpoint({
 ```
 
 **✅ CORRECT**:
+
 ```typescript
 export const POST = createOrgEndpoint({
   input: CreateItemSchema,  // Validates automatically
@@ -1094,11 +1137,13 @@ export const POST = createOrgEndpoint({
 **RULE**: Always scope Firestore queries to `context.org.orgId`.
 
 **❌ WRONG**:
+
 ```typescript
 const schedules = await db.collection("schedules").get();  // No org scoping!
 ```
 
 **✅ CORRECT**:
+
 ```typescript
 const schedules = await db
   .collection(`orgs/${context.org!.orgId}/schedules`)
@@ -1108,6 +1153,7 @@ const schedules = await db
 ### 6. The Triad of Trust
 
 **RULE**: Every domain entity MUST have:
+
 1. Zod schema in `packages/types/src/`
 2. API route in `apps/web/app/api/`
 3. Firestore rules in `firestore.rules`
@@ -1141,6 +1187,7 @@ const schedules = await db
 **RULE**: If `pnpm install` shows deprecated warnings, fix before merging.
 
 **Options**:
+
 1. Upgrade to non-deprecated package
 2. Replace with alternative
 3. Document why it remains (with issue link)
@@ -1150,6 +1197,7 @@ const schedules = await db
 **RULE**: Always log errors with context before returning error response.
 
 **❌ WRONG**:
+
 ```typescript
 catch (err) {
   return NextResponse.json({ error: "Error" }, { status: 500 });
@@ -1157,6 +1205,7 @@ catch (err) {
 ```
 
 **✅ CORRECT**:
+
 ```typescript
 catch (err) {
   const message = err instanceof Error ? err.message : "Unexpected error";
@@ -1176,6 +1225,7 @@ catch (err) {
 ### Creating a New Domain Entity
 
 **Steps**:
+
 ```bash
 # 1. Define schema
 touch packages/types/src/my-entity.ts
@@ -1195,6 +1245,7 @@ node scripts/validate-patterns.mjs
 ```
 
 **1. Schema** (`packages/types/src/my-entity.ts`):
+
 ```typescript
 // [P0][DOMAIN][SCHEMA] MyEntity schema
 // Tags: P0, DOMAIN, SCHEMA
@@ -1227,6 +1278,7 @@ export const UpdateMyEntitySchema = MyEntitySchema.partial().omit({
 ```
 
 **2. API Route** (`apps/web/app/api/my-entities/route.ts`):
+
 ```typescript
 // [P0][API][CODE] MyEntities API endpoint
 // Tags: P0, API, CODE
@@ -1326,6 +1378,7 @@ export const DELETE = createOrgEndpoint({
 ```
 
 **3. Firestore Rules** (`firestore.rules`):
+
 ```javascript
 match /orgs/{orgId}/myEntities/{entityId} {
   // Read: org members
@@ -1344,6 +1397,7 @@ match /orgs/{orgId}/myEntities/{entityId} {
 ```
 
 **4. Tests** (`apps/web/app/api/my-entities/__tests__/my-entities.test.ts`):
+
 ```typescript
 // [P1][TEST][TEST] MyEntities API tests
 // Tags: P1, TEST, TEST
@@ -1386,6 +1440,7 @@ describe("POST /api/my-entities", () => {
 ### Migrating Legacy Route to SDK Factory
 
 **Before** (legacy `withSecurity` pattern):
+
 ```typescript
 import { withSecurity } from "../_shared/middleware";
 import { requireOrgMembership, requireRole } from "@/src/lib/api";
@@ -1407,6 +1462,7 @@ export const POST = withSecurity(
 ```
 
 **After** (SDK factory):
+
 ```typescript
 import { createOrgEndpoint } from "@fresh-schedules/api-framework";
 import { CreateShiftSchema } from "@fresh-schedules/types";
@@ -1424,6 +1480,7 @@ export const POST = createOrgEndpoint({
 ```
 
 **Benefits**:
+
 - Declarative configuration
 - Automatic validation
 - Type-safe context
@@ -1452,6 +1509,7 @@ export const POST = createOrgEndpoint({
 ```
 
 **Usage**:
+
 ```typescript
 // ❌ WRONG
 import { helper } from "../../../src/lib/helpers";
@@ -1481,6 +1539,7 @@ import { ok, badRequest } from "./validation";
 **Group by feature/domain, not by technical layer**:
 
 **❌ WRONG**:
+
 ```
 /components/Button.tsx
 /components/Modal.tsx
@@ -1489,6 +1548,7 @@ import { ok, badRequest } from "./validation";
 ```
 
 **✅ CORRECT**:
+
 ```
 /schedules/
 ├── components/
@@ -1511,6 +1571,7 @@ import { ok, badRequest } from "./validation";
 **Cause**: ESLint v9 removed some CLI flags. Using `eslint_d` wrapper.
 
 **Fix**: Use `eslint` directly (already fixed in latest):
+
 ```json
 {
   "scripts": {
@@ -1524,6 +1585,7 @@ import { ok, badRequest } from "./validation";
 **Cause**: pnpm enforcement script checking package.json.
 
 **Fix**: Ensure root `package.json` has:
+
 ```json
 {
   "packageManager": "pnpm@9.12.1"
@@ -1547,6 +1609,7 @@ import { ok, badRequest } from "./validation";
 **Cause**: Using in-memory rate limiter with multiple instances.
 
 **Fix**: Set Redis environment variables:
+
 ```bash
 UPSTASH_REDIS_REST_URL=https://....upstash.io
 UPSTASH_REDIS_REST_TOKEN=****
@@ -1559,6 +1622,7 @@ UPSTASH_REDIS_REST_TOKEN=****
 **Fix**: Client must send CSRF token in `X-CSRF-Token` header for mutations.
 
 **Workaround**: Disable CSRF for public endpoints:
+
 ```typescript
 export const POST = createPublicEndpoint({
   csrf: false,
@@ -1571,6 +1635,7 @@ export const POST = createPublicEndpoint({
 **Cause**: Missing `orgId` in query params or `x-org-id` header.
 
 **Fix**: Include org ID in request:
+
 ```typescript
 // Query param
 fetch("/api/schedules?orgId=org-123");

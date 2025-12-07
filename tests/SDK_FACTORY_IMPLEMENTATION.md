@@ -568,6 +568,7 @@ describe('SDK Factory: createOrgEndpoint', () => {
 ```
 
 ## Generated Test Count
+
 - **Authentication**: 10 tests
 - **Authorization**: 20 tests  
 - **Input Validation**: 15 tests
@@ -579,6 +580,7 @@ describe('SDK Factory: createOrgEndpoint', () => {
 ## Implementation Roadmap
 
 ### Week 1 (SDK Factory - 150 cases)
+
 ```bash
 tests/api-framework/
 ├── createOrgEndpoint.test.ts (75 cases)
@@ -587,6 +589,7 @@ tests/api-framework/
 ```
 
 ### Week 2 (Type Safety - 200 cases)
+
 ```bash
 tests/types/
 ├── shifts.test.ts

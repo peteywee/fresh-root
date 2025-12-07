@@ -37,6 +37,7 @@ describe('createOrgEndpoint', () => {
 ### Test Categories
 
 #### 1. Authentication Tests (10 cases)
+
 - [ ] Valid session cookie
 - [ ] Invalid session cookie
 - [ ] Expired session
@@ -49,6 +50,7 @@ describe('createOrgEndpoint', () => {
 - [ ] Cross-site session attacks
 
 #### 2. Authorization Tests (20 cases)
+
 - [ ] All 6 role types tested
 - [ ] Role hierarchy validation
 - [ ] Cross-org isolation
@@ -61,6 +63,7 @@ describe('createOrgEndpoint', () => {
 - [ ] Audit logging
 
 #### 3. Input Validation Tests (15 cases)
+
 - [ ] Valid input
 - [ ] Missing required fields
 - [ ] Invalid data types
@@ -73,6 +76,7 @@ describe('createOrgEndpoint', () => {
 - [ ] Nested object validation
 
 #### 4. Rate Limiting Tests (12 cases)
+
 - [ ] Single user limits
 - [ ] Burst handling
 - [ ] Token bucket algorithm
@@ -85,6 +89,7 @@ describe('createOrgEndpoint', () => {
 - [ ] Concurrent requests
 
 #### 5. Error Handling Tests (10 cases)
+
 - [ ] HTTP status codes
 - [ ] Error message format
 - [ ] Stack trace handling
@@ -97,6 +102,7 @@ describe('createOrgEndpoint', () => {
 - [ ] Database errors
 
 #### 6. Performance Tests (8 cases)
+
 - [ ] Response time baseline
 - [ ] Memory usage
 - [ ] Concurrent request handling
@@ -131,6 +137,7 @@ describe('CreateShiftSchema', () => {
 ### Test Categories
 
 #### 1. Valid Input Tests (5 cases per schema)
+
 - [ ] Minimum valid object
 - [ ] Maximum valid object
 - [ ] Optional fields omitted
@@ -138,6 +145,7 @@ describe('CreateShiftSchema', () => {
 - [ ] Edge case values
 
 #### 2. Invalid Input Tests (8 cases per schema)
+
 - [ ] Missing required fields
 - [ ] Wrong data types
 - [ ] Out of range values
@@ -148,11 +156,13 @@ describe('CreateShiftSchema', () => {
 - [ ] String format violations
 
 #### 3. Error Messages Tests (3 cases per schema)
+
 - [ ] Clear field identification
 - [ ] Helpful error description
 - [ ] Multiple error aggregation
 
 #### 4. Type Inference Tests (2 cases per schema)
+
 - [ ] Correct TypeScript type
 - [ ] Optional vs required accurate
 
@@ -182,6 +192,7 @@ describe('GET /api/schedules', () => {
 ### Test Categories per Route
 
 #### GET Endpoint Tests
+
 - [ ] Happy path - returns data
 - [ ] Authorization - org member
 - [ ] Forbidden - not member
@@ -194,6 +205,7 @@ describe('GET /api/schedules', () => {
 - [ ] Response format - correct structure
 
 #### POST Endpoint Tests
+
 - [ ] Create with valid input
 - [ ] Validation - required fields
 - [ ] Validation - data types
@@ -206,6 +218,7 @@ describe('GET /api/schedules', () => {
 - [ ] State transition - valid flow
 
 #### PATCH Endpoint Tests
+
 - [ ] Update existing resource
 - [ ] Partial update - subset of fields
 - [ ] Validation - constraints
@@ -218,6 +231,7 @@ describe('GET /api/schedules', () => {
 - [ ] Version tracking - etag handling
 
 #### DELETE Endpoint Tests
+
 - [ ] Delete existing resource
 - [ ] Soft vs hard delete
 - [ ] Permission - admin only
@@ -234,22 +248,26 @@ describe('GET /api/schedules', () => {
 ## Priority Test Generation Order
 
 ### Phase 1: Critical Path (Week 1)
+
 1. ✅ SDK Factory tests (8 configs × 75 = 600 cases)
 2. ✅ Zod schema tests (20 schemas × 18 = 360 cases)
 3. **Total Phase 1**: 960 test cases
 
 ### Phase 2: Integration (Week 2)
+
 1. ✅ API routes tests (12 routes × 40 = 480 cases)
 2. ✅ Firebase integration (8 patterns × 50 = 400 cases)
 3. **Total Phase 2**: 880 test cases
 
 ### Phase 3: Coverage (Week 3)
+
 1. ✅ Firestore schema (10 collections × 20 = 200 cases)
 2. ✅ Auth/RBAC scenarios (6 roles × 30 = 180 cases)
 3. ✅ Error paths (common errors × 20 = 200 cases)
 4. **Total Phase 3**: 580 test cases
 
 ### Phase 4: Polish (Week 4)
+
 1. ✅ Edge cases (300 cases)
 2. ✅ Performance tests (100 cases)
 3. ✅ E2E scenarios (200 cases)
@@ -258,6 +276,7 @@ describe('GET /api/schedules', () => {
 ## Test Execution Strategy
 
 ### Local Development
+
 ```bash
 # Watch mode - single file
 pnpm test -- --watch src/my-file.test.ts
@@ -270,6 +289,7 @@ pnpm test
 ```
 
 ### CI/CD Pipeline
+
 ```bash
 # Unit tests
 pnpm test -- --run --reporter=verbose
@@ -286,6 +306,7 @@ pnpm test -- --coverage --reporter=verbose \
 ```
 
 ### Codespace Validation
+
 ```bash
 # Full suite (local validation before PR)
 pnpm test && pnpm test:integration && pnpm test:e2e
@@ -301,6 +322,7 @@ pnpm test:integration --coverage
 ## Quality Checkpoints
 
 ### Before Merge to Main
+
 - ✅ All tests passing (100%)
 - ✅ Coverage ≥85% (overall)
 - ✅ Unit coverage ≥90%
@@ -310,6 +332,7 @@ pnpm test:integration --coverage
 - ✅ No regressions
 
 ### 10/10 Quality Score Definition
+
 - ✅ **0 test failures** (all green)
 - ✅ **≥90% unit coverage**
 - ✅ **≥80% integration coverage**

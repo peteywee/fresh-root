@@ -1,12 +1,13 @@
 // [P0][SCHEDULE][API] Schedules list endpoint (with improved type definitions)
 
 import { CreateScheduleSchema } from "@fresh-schedules/types";
-import type { CreateScheduleInput } from "@fresh-schedules/types";
+import { z } from "zod";
+type CreateScheduleInput = z.infer<typeof CreateScheduleSchema>;
 import { Timestamp } from "firebase-admin/firestore";
 import { createOrgEndpoint } from "@fresh-schedules/api-framework";
 import type { NextRequest } from "next/server";
 
-import { badRequest, ok, parseJson, serverError } from "../_shared/validation";
+import { ok, serverError } from "../_shared/validation";
 
 import { adminDb } from "@/src/lib/firebase.server";
 import type { RequestContext } from "@fresh-schedules/api-framework";
@@ -95,26 +96,18 @@ const listSchedules = async (request: NextRequest, context: RequestContext) => {
     return serverError(message);
   }
 };
-
 /**
  * Create a new schedule with full type safety
  */
-const createSchedule = async (request: NextRequest, context: RequestContext) => {
-  const parsed = await parseJson(request, CreateScheduleSchema);
-  if (!parsed.success) {
-    return badRequest("Invalid payload", parsed.details);
-  }
-
+const createSchedule = async (input: CreateScheduleInput, context: RequestContext) => {
   const { db, error } = getAdminDbOrError();
   if (error) {
     return error;
   }
 
   try {
-    // parsed may not be fully narrowed by TypeScript across module boundaries; assert shape
-    const successParsed = parsed as { success: true; data: CreateScheduleInput };
-    const { name, startDate, endDate } = successParsed.data;
-    const scheduleRef = db.collection(`organizations/${context.org!.orgId}/schedules`).doc();
+    const { name, startDate, endDate } = input;
+    const scheduleRef = db.collection(`orgs/${context.org!.orgId}/schedules`).doc();
     const now = Timestamp.now();
 
     const schedule: ScheduleDoc = {
@@ -134,6 +127,11 @@ const createSchedule = async (request: NextRequest, context: RequestContext) => 
     return ok({ success: true, schedule });
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : "Unexpected error";
+    console.error("Failed to create schedule", {
+      error: message,
+      orgId: context.org?.orgId,
+      userId: context.auth?.userId
+    });
     return serverError(message);
   }
 };
@@ -156,7 +154,8 @@ export const GET = createOrgEndpoint({
 export const POST = createOrgEndpoint({
   roles: ['scheduler'],
   rateLimit: { maxRequests: 50, windowMs: 60_000 },
-  handler: async ({ request, context }) => {
-    return createSchedule(request, context);
+  input: CreateScheduleSchema,
+  handler: async ({ input, context }) => {
+    return createSchedule(input, context);
   }
 });

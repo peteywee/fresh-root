@@ -5,6 +5,7 @@ Scope: secret-pattern scan, TypeScript typecheck attempt, repository pattern val
 
 Summary
 -------
+
 - Secret-pattern scan: FOUND potential secrets in tracked files. Notable files with sensitive values or commented examples:
   - `./.env.local` — contains `NEXT_PUBLIC_FIREBASE_API_KEY` and `SESSION_SECRET` values (committed). **Immediate action required**.
   - Multiple `.env.example` and `apps/web/.env.example` files contain placeholder keys (expected) and commented guidance. These are fine as long as they do not contain real secrets.
@@ -19,11 +20,13 @@ Summary
 
 Findings (secrets)
 ------------------
+
 - The scan reported actual secrets in `./.env.local` (non-empty `NEXT_PUBLIC_FIREBASE_API_KEY` and `SESSION_SECRET` among others).
 - The repository should NOT contain environment files with production secrets. If those values are real, rotate immediately and remove them from the repository history.
 
 Immediate Remediation (secrets)
 -------------------------------
+
 1. Rotate exposed secrets now (Firebase API key, any session or service account credentials). Treat them as compromised.
 2. Remove the files containing secrets from the repository and add them to `.gitignore`:
 
@@ -53,11 +56,13 @@ Immediate Remediation (secrets)
 
 Remediation (developer workflow & CI)
 ------------------------------------
+
 - Ensure `.env.local` and similar local secret files are in the repository-level `.gitignore` and not committed.
 - Use a secrets manager for production secrets and set safe dev default values in `.env.example` (placeholders only).
 
 TypeScript Typecheck Fix
 ------------------------
+
 The typecheck failed because `turbo` was not found and local dependencies are missing. To run typecheck locally:
 
 ```bash
@@ -72,6 +77,7 @@ If you prefer not to install full dependencies on CI, consider running a lightwe
 
 Pattern Validator (Triad) Fix Plan
 ---------------------------------
+
 The `scripts/validate-patterns.mjs` run reported many Tier-0 violations (security + write validation). High-level steps to remediate:
 
 1. Prioritize Tier-0 issues: fix routes missing security wrappers. For each route reported, wrap the handler with the appropriate security layer (SDK factory pattern or `withSecurity`) per the project guidelines.
@@ -94,6 +100,7 @@ node scripts/validate-patterns.mjs
 
 SR-Agent / Combot Invocation
 ----------------------------
+
 Per the reconciled rulebook: if remediation is blocked, or if SR-level security incidents (committed secrets, evidence of compromise) are detected, invoke the SR Agent (human-in-the-loop) and the Combot for high-confidence audit.
 
 - To escalate: create an issue with `[SR-AGENT]` in the title and ping on the team's channel. Attach `docs/qa-report.md`.
@@ -101,6 +108,7 @@ Per the reconciled rulebook: if remediation is blocked, or if SR-level security 
 
 Next Steps (recommended, ordered)
 --------------------------------
+
 1. Rotate and revoke any exposed credentials (Firebase, session secrets). MARK AS URGENT.
 2. Remove `.env.local` from the repo and rewrite history if those secrets are in older commits.
 3. Add `.env.local` to `.gitignore` and ensure `.env.example` contains placeholders only.
@@ -111,11 +119,13 @@ Next Steps (recommended, ordered)
 
 Artifacts & Outputs
 -------------------
+
 - This file: `docs/qa-report.md` — summary and remediation steps.
 - Raw secret-scan output was produced in terminal; DO NOT copy secret values into issues or chat. Use file paths/line references only.
 - Pattern validator output captured during the run; reproduce locally with `node scripts/validate-patterns.mjs`.
 
 If you want, I can:
+
 - Create a minimal PR that removes `.env.local` and adds it to `.gitignore` (I will NOT include secret values),
 - Or run `pnpm -w install --frozen-lockfile` and re-run `pnpm -w typecheck` and the validator here, if you'd like me to proceed.
 

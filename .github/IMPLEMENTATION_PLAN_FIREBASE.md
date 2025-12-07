@@ -26,6 +26,7 @@ This plan addresses the Firebase SDK v12 typing situation in the `fresh-root` mo
 | P1-T6 | Remove conflicting middleware.ts (use proxy.ts) | ✅ DONE | 10 minutes |
 
 **Files affected by Phase 1**:
+
 - `apps/web/app/api/items/route.ts` (4 no-unused-vars)
 - `apps/web/app/api/activate-network/route.ts` (3 no-unused-vars)
 - `apps/web/app/api/join-with-token/route.ts` (2 no-unused-vars)
@@ -38,6 +39,7 @@ This plan addresses the Firebase SDK v12 typing situation in the `fresh-root` mo
 **Expected outcome**: 196 → 195 errors (0.5% reduction)
 
 **Why so small?** The no-unused-vars and require-await fixes were attempted but reverted due to breaking TypeScript signatures in API route handlers. The handlers need `async` returns for the framework. Remaining errors are:
+
 - 195 errors: Mix of Firebase unsafe-* (suppressed), no-empty-object-type, no-redundant-type-constituents, and other pre-existing issues
 - Focus shifted from quick lint fixes to ensuring code stability (typecheck, pre-existing bugs)
 
@@ -55,6 +57,7 @@ This plan addresses the Firebase SDK v12 typing situation in the `fresh-root` mo
 | P2-T4 | Update `packages/types` with Firebase-specific type definitions | Pending | 1-2 hours |
 
 **Wrapper function examples**:
+
 ```typescript
 // lib/firebase/typed-wrappers.ts
 export async function getDocWithType<T>(
@@ -74,7 +77,8 @@ export async function queryWithType<T>(
 }
 ```
 
-**Expected outcome**: 
+**Expected outcome**:
+
 - Improved type safety for Firebase operations
 - Reduced `@typescript-eslint/no-unsafe-member-access` errors in new code
 - Better IDE autocomplete and type checking
@@ -92,6 +96,7 @@ export async function queryWithType<T>(
 | P3-T3 | Update `ARCHITECTURE_DIAGRAMS.md` with Firebase SDK typing notes | Pending | 1 hour |
 
 **Documentation content**:
+
 - Why Firebase SDK v12 APIs return `any` types
 - Which ESLint rules are suppressed and why
 - Recommended patterns for new Firebase code
@@ -141,6 +146,7 @@ export async function queryWithType<T>(
 ## 6. Testing Strategy
 
 ### Pre-Implementation Baseline
+
 ```bash
 # Current state
 pnpm lint 2>&1 | grep "✖" | wc -l  # Should show 196
@@ -149,6 +155,7 @@ pnpm build                           # Should succeed
 ```
 
 ### After Phase 1 (Lint Cleanup)
+
 ```bash
 # Expected: 196 → ~100 errors
 pnpm lint 2>&1 | grep "✖" | wc -l
@@ -157,6 +164,7 @@ pnpm build                           # Should still succeed
 ```
 
 ### After Phase 2 (Type Wrappers) - Optional
+
 ```bash
 # Create test file for wrappers
 pnpm test -- lib/firebase/typed-wrappers.test.ts
@@ -176,6 +184,7 @@ pnpm vitest run
 | Future Firebase SDK versions break wrappers | Low | Type wrappers are backwards compatible with SDK v12+ |
 
 **Assumptions**:
+
 - Firebase SDK v12 will remain primary data layer for foreseeable future
 - Team accepts pragmatic suppression of no-unsafe-* rules for Firebase code
 - Type assertions on Firebase results are acceptable pattern (consistent with SDK design)

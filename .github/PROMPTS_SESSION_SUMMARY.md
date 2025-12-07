@@ -11,9 +11,11 @@
 This session leveraged 5 GitHub Copilot prompts from [awesome-copilot](https://github.com/copilotusers/awesome-copilot) to guide strategic planning:
 
 ### 1. GitHub Copilot Starter (372 lines)
+
 **Purpose**: Foundation for workspace Copilot configuration
 
 **Key Guidance**:
+
 - Create `.github/copilot-instructions.md` for workspace-level guidance
 - Create `.github/instructions/` directory with language-specific memory files
 - Use `.github/prompts/` for reusable prompt files
@@ -25,9 +27,11 @@ This session leveraged 5 GitHub Copilot prompts from [awesome-copilot](https://g
 ---
 
 ### 2. Create Implementation Plan (157 lines)
+
 **Purpose**: Structure for implementation planning
 
 **Template Structure**:
+
 - Overview & context
 - Phased implementation steps (GOAL-P1, P2, P3...)
 - Task breakdown with effort estimates
@@ -43,9 +47,11 @@ This session leveraged 5 GitHub Copilot prompts from [awesome-copilot](https://g
 ---
 
 ### 3. Documentation Writer (46 lines)
+
 **Purpose**: Diátaxis documentation framework
 
 **Four Documentation Types**:
+
 - **Tutorials**: Learning-focused, hands-on
 - **How-Guides**: Problem-focused, goal-driven
 - **Reference**: Information-focused, lookup
@@ -56,11 +62,13 @@ This session leveraged 5 GitHub Copilot prompts from [awesome-copilot](https://g
 ---
 
 ### 4. Remember/Memory Keeper (125 lines)
+
 **Purpose**: Transform lessons into reusable domain-specific knowledge
 
 **Syntax**: `/remember [>domain [scope]] lesson content`
 
 **Scope Options**:
+
 - `global` (default) - VS Code user-level memory
 - `workspace` (ws) - Project-level memory
 
@@ -69,9 +77,11 @@ This session leveraged 5 GitHub Copilot prompts from [awesome-copilot](https://g
 ---
 
 ### 5. Review & Refactor (759 bytes)
+
 **Purpose**: Code quality and standards enforcement
 
 **Strategy**:
+
 1. Review coding guidelines in `.github/instructions/*.md`
 2. Review code against standards
 3. Refactor while keeping files intact
@@ -84,6 +94,7 @@ This session leveraged 5 GitHub Copilot prompts from [awesome-copilot](https://g
 ## 🎯 Strategic Plan Summary
 
 ### Current State (Baseline)
+
 ```
 ESLint Errors:        196 (down from 379 via Firebase suppression)
 TypeScript:           ✅ ALL 4 PACKAGES PASS
@@ -93,6 +104,7 @@ Lint Warnings:        43 no-unused-vars + 34 require-await
 ```
 
 ### Phase 1: Lint Error Cleanup (Immediate - 3-4 hours)
+
 **Goal**: Reduce 196 → <100 errors
 
 | Error Type | Count | Fix Pattern | Effort |
@@ -106,14 +118,17 @@ Lint Warnings:        43 no-unused-vars + 34 require-await
 ---
 
 ### Phase 2: Type-Safe Firebase Wrappers (Optional Enhancement - 6-8 hours)
+
 **Goal**: Improve type safety for new Firebase code
 
 **Deliverables**:
+
 - `lib/firebase/typed-wrappers.ts` with helper functions
 - Refactored 8 API routes using wrappers
 - Updated `packages/types` with Firebase type definitions
 
 **Example Pattern**:
+
 ```typescript
 export async function getDocWithType<T>(
   db: Firestore,
@@ -127,9 +142,11 @@ export async function getDocWithType<T>(
 ---
 
 ### Phase 3: Documentation (2-3 hours)
+
 **Goal**: Capture strategy for team reference
 
 **Deliverables**:
+
 - ✅ `.github/IMPLEMENTATION_PLAN_FIREBASE.md` (created)
 - ✅ `.github/instructions/firebase-typing-and-monorepo-memory.instructions.md` (created)
 - `.github/instructions/firebase-best-practices.md` (pending)
@@ -139,11 +156,13 @@ export async function getDocWithType<T>(
 ## 🔑 Key Decisions Made
 
 ### Decision 1: Pragmatic Firebase Suppression ✅
+
 **Context**: Firebase SDK v12 returns `any` types; fighting the SDK design creates busywork
 
 **Choice**: Suppress no-unsafe-* rules for Firebase code, document rationale
 
-**Rationale**: 
+**Rationale**:
+
 - Firebase limitation is intentional (documented in SDK issues)
 - Type assertions are safe for Firebase Firestore data
 - Centralized suppression is cleaner than scattered `@ts-ignore`
@@ -154,11 +173,13 @@ export async function getDocWithType<T>(
 ---
 
 ### Decision 2: Phased Approach ✅
+
 **Context**: Complete Firebase typing overhaul would be 50+ hour project
 
 **Choice**: Phase 1 (lint cleanup) + optional Phase 2 (wrappers) + Phase 3 (docs)
 
 **Rationale**:
+
 - Phase 1 unblocks immediate value (clean lint, passes typecheck)
 - Phase 2 is optional enhancement for new code
 - Phase 3 prevents team from repeating same reasoning
@@ -169,11 +190,13 @@ export async function getDocWithType<T>(
 ---
 
 ### Decision 3: Memory-Driven Knowledge Base ✅
+
 **Context**: Multiple monorepo and Firebase patterns learned
 
 **Choice**: Document in `.github/instructions/` for team reuse
 
 **Deliverables**:
+
 - Firebase SDK v12 pattern (suppression + assertions + wrappers)
 - React peerDependency resolution in monorepos
 - no-unused-vars & require-await patterns
@@ -230,6 +253,7 @@ pnpm build
 ### Team Communication
 
 Share `.github/instructions/firebase-typing-and-monorepo-memory.instructions.md` with team to establish shared understanding of:
+
 - Why Firebase suppressions are in place (not "broken code")
 - How to handle Firebase type safety in new code
 - Monorepo dependency patterns to follow
@@ -239,10 +263,12 @@ Share `.github/instructions/firebase-typing-and-monorepo-memory.instructions.md`
 ## 📚 Documentation Index
 
 **Created This Session**:
+
 - ✅ `.github/IMPLEMENTATION_PLAN_FIREBASE.md` - Detailed 3-phase implementation plan
 - ✅ `.github/instructions/firebase-typing-and-monorepo-memory.instructions.md` - Team memory on patterns
 
 **Referenced**:
+
 - `.github/prompts/github-copilot-starter.prompt.md` - Workspace config guidance
 - `.github/prompts/create-implementation-plan.prompt.md` - Plan template used
 - `.github/prompts/documentation-writer.prompt.md` - Documentation framework
@@ -254,21 +280,27 @@ Share `.github/instructions/firebase-typing-and-monorepo-memory.instructions.md`
 ## 🎓 Lessons for Future Sessions
 
 ### Lesson 1: Leverage Existing Guidance
+
 Using awesome-copilot prompts **before** implementing ensured:
+
 - Structured approach (phased vs. all-at-once)
 - Documented rationale (not just "because it works")
 - Team-shareable patterns (memory instructions)
 - Clear success criteria (what does "done" look like?)
 
 ### Lesson 2: Firebase as Architectural Choice
+
 Firebase SDK v12's `any` types are:
+
 - **Not a bug** - documented in Firebase issues
 - **Not a blocker** - suppression is acceptable pattern
 - **Not unique** - many SDKs have similar constraints
 - **Not permanent** - wrappers provide future flexibility
 
 ### Lesson 3: Monorepo Dependency Management
+
 pnpm requires:
+
 - Explicit React peerDependencies in all packages
 - No workspace packages in root `dependencies`
 - Configuration in `pnpm-workspace.yaml`

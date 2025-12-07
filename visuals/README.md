@@ -12,10 +12,12 @@ This directory contains visual representations, architecture diagrams, navigatio
 ## Core Areas
 
 ### Architecture Visuals
+
 - INFORMATION_ARCHITECTURE.md - System architecture and domain relationships
 - ARCHIVE_OVERVIEW.md - Archive organization and file structure
 
 ### Navigation & Strategy
+
 - NAVIGATION_STRATEGY.md - Documentation navigation and entry points
 - ARCHIVE_MANAGER.md - Archive management and validation
 
@@ -40,6 +42,7 @@ visuals/
 ## Visual Assets
 
 This directory includes:
+
 - ✅ Architecture diagrams (text-based and referenced)
 - ✅ Dependency graphs and data flow charts
 - ✅ Information architecture maps
@@ -49,6 +52,7 @@ This directory includes:
 ## CI/CD Maintenance
 
 This directory is maintained by `.github/workflows/maintain-docs.yml`:
+
 - **Validates**: All README.md files exist and are current
 - **Generates**: Visual consistency reports
 - **Enforces**: 10/10 quality gates

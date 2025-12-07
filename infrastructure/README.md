@@ -12,18 +12,22 @@ This directory contains technical architecture documentation, infrastructure des
 ## Core Areas
 
 ### Data & Storage
+
 - FIRESTORE_SCHEMA.md - Firestore collections, documents, and schema design
 - DATA_ARCHITECTURE.md - Data models and relationships (also in /patterns/)
 
 ### Compute & Functions
+
 - CLOUD_FUNCTIONS.md - Cloud Functions design and deployment
 - FUNCTIONS.md - Cloud Functions architecture and patterns
 
 ### Integration & APIs
+
 - API_ENDPOINTS.md - REST API design and endpoint documentation
 - REALTIME_COLLABORATION.md - Real-time features and WebSocket patterns
 
 ### Operations & Observability
+
 - OBSERVABILITY.md - Monitoring, logging, metrics, and alerting
 - DEVOPS_REPOSITORY.md - DevOps workflows and infrastructure-as-code
 
@@ -52,6 +56,7 @@ infrastructure/
 ## Architecture Decisions
 
 Key decisions documented:
+
 - ✅ Firebase/Firestore as primary data store
 - ✅ Cloud Functions for serverless compute
 - ✅ Pub/Sub for event-driven workflows
@@ -62,6 +67,7 @@ Key decisions documented:
 ## CI/CD Maintenance
 
 This directory is maintained by `.github/workflows/maintain-docs.yml`:
+
 - **Validates**: All README.md files exist and are current
 - **Generates**: Infrastructure compliance reports
 - **Enforces**: 10/10 quality gates

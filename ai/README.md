@@ -12,12 +12,14 @@ This directory contains documentation for AI agent behavior, automation framewor
 ## Core Areas
 
 ### Cognition & Agent Behavior
+
 - Agent directives and decision frameworks
 - Hierarchical thinking patterns
 - Prompt engineering best practices
 - Safety and bias mitigation
 
 ### Automation & CrewOps
+
 - Workflow orchestration
 - Agent team coordination
 - Parallel execution patterns
@@ -47,6 +49,7 @@ ai/
 ## CI/CD Maintenance
 
 This directory is maintained by `.github/workflows/maintain-docs.yml`:
+
 - **Validates**: All README.md files exist and are current
 - **Generates**: Metrics and reports
 - **Enforces**: 10/10 quality gates

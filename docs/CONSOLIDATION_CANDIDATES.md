@@ -365,6 +365,7 @@ INVESTIGATE: Purpose Unclear or Status Unknown
 | Consolidate agents/ → crewops/ | 2 dirs → 1 | 4.0K | 0K | −4.0K | **HIGH** |
 
 ### SUBTOTAL (Immediate Safe Actions)
+
 - **Files**: 30 → 21 (−30%)
 - **Size**: ~233K → ~108K (−53%)
 - **Inbound Refs**: All consolidated, no broken links
@@ -377,6 +378,7 @@ INVESTIGATE: Purpose Unclear or Status Unknown
 | Archive Orphaned (PROD_ENV_VAL, etc.) | −18K | Immediate or with Phase 2 |
 
 ### TOTAL POTENTIAL
+
 - **Files**: 30 → 14-16 (−50%)
 - **Size**: ~233K → ~75K (−68%)
 - **Archive**: 26 files organized in archive/docs/

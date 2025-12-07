@@ -11,12 +11,14 @@ This is a maintained copy of the canonical rules that govern all development in 
 ## Quick Links
 
 ### Core Rules
+
 - [Full Rules Documentation](/rules/CODING_RULES_AND_PATTERNS.md)
 - [Error Prevention Patterns](/rules/ERROR_PREVENTION_PATTERNS.md)
 - [Security & RBAC](/rules/RBAC_AND_SECURITY.md)
 - [Compliance Requirements](/rules/COMPLIANCE.md)
 
 ### Related Guidance
+
 - [Development Patterns](/patterns/README.md)
 - [Testing Standards](/tests/README.md)
 - [Repository State](/STATE.md)

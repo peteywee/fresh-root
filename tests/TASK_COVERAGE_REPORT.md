@@ -15,6 +15,7 @@ This report identifies untested code paths across the codebase and maps requirem
 ### P0 - Critical (Security, Auth, Data Integrity)
 
 #### SDK Factory Pattern (`packages/api-framework/`)
+
 - **Status**: Partially tested
 - **Coverage Gaps**:
   - [ ] `createOrgEndpoint()` with various role hierarchies
@@ -27,6 +28,7 @@ This report identifies untested code paths across the codebase and maps requirem
 - **Estimated Tests**: 150+ test cases
 
 #### Type Safety & Validation (`packages/types/`)
+
 - **Status**: Schema definitions exist, tests incomplete
 - **Coverage Gaps**:
   - [ ] Zod schema validation (all schemas)
@@ -38,6 +40,7 @@ This report identifies untested code paths across the codebase and maps requirem
 - **Estimated Tests**: 200+ test cases
 
 #### Firebase Integration
+
 - **Status**: Admin SDK usage untested
 - **Coverage Gaps**:
   - [ ] Organization-scoped queries
@@ -49,6 +52,7 @@ This report identifies untested code paths across the codebase and maps requirem
 - **Estimated Tests**: 120+ test cases
 
 #### Authentication & Authorization
+
 - **Status**: Middleware exists, coverage gaps
 - **Coverage Gaps**:
   - [ ] Session cookie verification
@@ -60,6 +64,7 @@ This report identifies untested code paths across the codebase and maps requirem
 - **Estimated Tests**: 180+ test cases
 
 #### Rate Limiting & Security
+
 - **Status**: Implementation exists, tests missing
 - **Coverage Gaps**:
   - [ ] Rate limit calculation logic
@@ -73,6 +78,7 @@ This report identifies untested code paths across the codebase and maps requirem
 ### P1 - Important (Core Business Logic)
 
 #### API Routes (Schedule Management)
+
 - **Routes**: GET/POST/PATCH/DELETE on `/api/schedules*`
 - **Coverage Gaps**:
   - [ ] Happy path (all verbs)
@@ -85,6 +91,7 @@ This report identifies untested code paths across the codebase and maps requirem
 - **Estimated Tests**: 250+ test cases
 
 #### Firestore Schema & Relationships
+
 - **Collections**: orgs, schedules, shifts, positions, memberships, etc.
 - **Coverage Gaps**:
   - [ ] Document creation validation
@@ -98,6 +105,7 @@ This report identifies untested code paths across the codebase and maps requirem
 ### P2 - Standard (Utility Functions, Helpers)
 
 #### Type Inference & Conversion
+
 - **Coverage Gaps**:
   - [ ] Type inference from Zod schemas
   - [ ] Runtime type checking
@@ -109,12 +117,14 @@ This report identifies untested code paths across the codebase and maps requirem
 ## Coverage Summary
 
 ### Existing Coverage
+
 - ✅ Jest migration archived (Phase 1)
 - ✅ Vitest configured
 - ✅ Basic unit tests in place
 - ✅ Integration test infrastructure ready
 
 ### Gaps to Fill
+
 - ❌ SDK Factory comprehensive tests (150+ cases)
 - ❌ Zod schema validation tests (200+ cases)
 - ❌ Firebase integration tests (120+ cases)
@@ -125,6 +135,7 @@ This report identifies untested code paths across the codebase and maps requirem
 - ❌ Utility function tests (100+ cases)
 
 ### Total Test Cases Required
+
 **~1,380 test cases** to achieve 10/10 coverage
 
 ## Priority Implementation Order
@@ -137,16 +148,19 @@ This report identifies untested code paths across the codebase and maps requirem
 ## Testing Framework Strategy
 
 ### Unit Tests (Vitest)
+
 - Fast feedback (target: <5s for full suite)
 - >90% code coverage required
 - Run on every commit
 
 ### Integration Tests
+
 - Database interactions (with emulator)
 - >80% coverage required
 - Run on PR creation
 
 ### E2E Tests (Playwright)
+
 - User workflows
 - >70% coverage required
 - Run on deploy

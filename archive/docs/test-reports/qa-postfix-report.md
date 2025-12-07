@@ -2,10 +2,12 @@
 
 Summary
 -------
+
 This report summarizes actions taken to unblock the failing `pnpm -w typecheck`, the Combot verification results, and recommended next remediation steps for Tier-0 validator failures.
 
 Actions performed
 -----------------
+
 1. Installed dependencies (allowed lockfile update):
 
 ```bash
@@ -15,6 +17,7 @@ pnpm -w install --no-frozen-lockfile
 - `pnpm-lock.yaml` was updated locally. Review required before committing.
 
 2. Ran `pnpm -w typecheck` and fixed minimal TypeScript errors in three files:
+
 - `apps/web/app/api/attendance/route.ts` — coerced scheduled times to `Number()` before arithmetic to fix `unknown` type errors.
 - `apps/web/src/lib/imports/_template.import.ts` — fixed `z.record` usage to `z.record(z.string(), z.any())` to match Zod API.
 - `apps/web/src/lib/onboarding/createNetworkOrg.ts` — added safe casts for loosely-typed payload fields and coerced `formToken` to string when calling `consumeAdminFormDraft`.
@@ -30,6 +33,7 @@ node scripts/validate-patterns.mjs
 - Validator result: FAIL — 49 Tier-0 security violations remain (missing security wrappers and write validation in many API routes).
 
 4. Called Combot verification (automated summary written to `combot/verification-2025-12-05.json` and `.log`). Key results:
+
 - Secrets: FAIL — tracked `.env.local` present in repo (contains `NEXT_PUBLIC_FIREBASE_API_KEY`, `SESSION_SECRET`, etc.).
 - Typecheck: PASS — typecheck completed with no errors after fixes.
 - Pattern validator: FAIL — Tier-0 violations remain.
@@ -37,6 +41,7 @@ node scripts/validate-patterns.mjs
 
 Artifacts produced
 ------------------
+
 - `docs/qa-report.md` (initial report)
 - `docs/qa-postfix-report.md` (this file)
 - `combot/verification-2025-12-05.json` and `.log`
@@ -46,6 +51,7 @@ Artifacts produced
 
 Next steps (recommended, prioritized)
 ------------------------------------
+
 1. Immediate secret remediation (critical):
    - Remove `.env.local` from the repository, rotate any exposed secrets, and add `.env.local` to `.gitignore`. If secrets are in history, perform an authorized history rewrite.
 
@@ -63,6 +69,7 @@ Next steps (recommended, prioritized)
 
 Commands & quick runbook
 ------------------------
+
 Remove `.env.local` (example):
 
 ```bash
@@ -83,6 +90,7 @@ node scripts/validate-patterns.mjs
 
 Contact / Escalation
 --------------------
+
 - Repo owner: `@peteywee`
 - SR Agent (oncall): See `.github/agents/SR_AGENT_INVOCATION.md`
 

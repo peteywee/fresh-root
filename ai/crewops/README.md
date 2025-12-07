@@ -12,6 +12,7 @@ CrewOps is the team automation framework that enables coordinated multi-agent wo
 ## Framework Components
 
 ### Core Framework
+
 - **manual.md** - CrewOps manual and operational procedures
 - **framework.md** - Framework architecture and design
 - **reference.md** - Quick reference and API reference
@@ -43,6 +44,7 @@ ai/crewops/
 ## Agent Team Structure
 
 CrewOps enables:
+
 - ✅ Hierarchical agent organization
 - ✅ Task-based delegation
 - ✅ Parallel execution batches
@@ -60,6 +62,7 @@ CrewOps enables:
 ## CI/CD Integration
 
 CrewOps workflow is maintained by:
+
 - `.github/workflows/maintain-docs.yml` - Validates framework documentation
 - `.github/workflows/test-coverage.yml` - Tests CrewOps implementation
 - CI/CD automation scripts - Execute batch protocols

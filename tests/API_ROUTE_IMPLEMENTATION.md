@@ -608,12 +608,14 @@ describe('DELETE /api/schedules/:id', () => {
 ## Test Case Count Summary
 
 ### Per Route Type
+
 - **GET**: ~10-12 test cases
 - **POST**: ~15-18 test cases  
 - **PATCH**: ~12-15 test cases
 - **DELETE**: ~12-15 test cases
 
 ### Total for Major Routes (12 routes)
+
 - **Accounts**: 40 test cases
 - **Organizations**: 40 test cases
 - **Schedules**: 50 test cases (complex)

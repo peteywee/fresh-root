@@ -42,6 +42,7 @@ Phase 1 Commander (YOU)
 **Task**: Generate precise error location manifest
 
 **Command**:
+
 ```bash
 cd /home/patrick/fresh-root
 pnpm lint 2>&1 | grep -E "(no-unused-vars|require-await)" | head -80 > /tmp/phase1_errors.txt
@@ -58,17 +59,21 @@ pnpm lint 2>&1 | grep -E "(no-unused-vars|require-await)" | head -80 > /tmp/phas
 ### **[SEQUENCE 2] Team 1: no-unused-vars Fixers (Parallel)**
 
 #### **Worker 1A: API Routes Group 1**
-**Files**: 
+
+**Files**:
+
 - `apps/web/app/api/items/route.ts` (4 errors)
 - `apps/web/app/api/activate-network/route.ts` (3 errors)
 
 **Pattern**:
+
 ```typescript
 // BEFORE: export async function POST(request: Request)
 // AFTER:  export async function POST(_request: Request)
 ```
 
 **Tasks**:
+
 1. Read file
 2. Identify unused parameters (request, _request, context, etc.)
 3. Add `_` prefix to parameter name
@@ -79,7 +84,9 @@ pnpm lint 2>&1 | grep -E "(no-unused-vars|require-await)" | head -80 > /tmp/phas
 ---
 
 #### **Worker 1B: API Routes Group 2**
+
 **Files**:
+
 - `apps/web/app/api/join-with-token/route.ts` (2 errors)
 - `apps/web/app/api/positions/[id]/route.ts` (2 errors)
 
@@ -90,7 +97,9 @@ pnpm lint 2>&1 | grep -E "(no-unused-vars|require-await)" | head -80 > /tmp/phas
 ---
 
 #### **Worker 1C: API Routes Group 3**
+
 **Files**:
+
 - `apps/web/app/api/publish/route.ts` (3 errors)
 - `apps/web/app/api/schedules/route.ts` (4 errors)
 
@@ -101,11 +110,14 @@ pnpm lint 2>&1 | grep -E "(no-unused-vars|require-await)" | head -80 > /tmp/phas
 ---
 
 #### **Worker 1D: Middleware & Types**
+
 **Files**:
+
 - `apps/web/middleware.ts` (8 no-unused-vars errors)
 - `types/firebase-admin.d.ts` (17 no-unused-vars errors)
 
-**Pattern**: 
+**Pattern**:
+
 - middleware.ts: Prefix unused params with `_`
 - firebase-admin.d.ts: Type definitions; verify parameter names are intentional
 
@@ -116,9 +128,11 @@ pnpm lint 2>&1 | grep -E "(no-unused-vars|require-await)" | head -80 > /tmp/phas
 ### **[SEQUENCE 2] Team 2: require-await Fixers (Parallel)**
 
 #### **Worker 2A: middleware.ts (Primary)**
+
 **File**: `apps/web/middleware.ts` (12 require-await errors)
 
 **Pattern**: Choose per-instance
+
 ```typescript
 // Option 1: Remove async (sync function)
 export function handler() { }
@@ -131,6 +145,7 @@ export async function handler() { await asyncCall(); }
 ```
 
 **Tasks**:
+
 1. Read middleware.ts
 2. For each function marked require-await:
    - Check if it has any async operations
@@ -143,6 +158,7 @@ export async function handler() { await asyncCall(); }
 ---
 
 #### **Worker 2B: Other Files**
+
 **Files**: Any remaining require-await errors (estimated 2-3 instances)
 
 **Pattern**: Same as Worker 2A
@@ -154,6 +170,7 @@ export async function handler() { await asyncCall(); }
 ### **[SEQUENCE 3] Team 3: Validation & Cleanup**
 
 #### **Worker 3A: Lint Verification**
+
 ```bash
 cd /home/patrick/fresh-root
 pnpm lint 2>&1 | tee /tmp/phase1_lint_results.txt
@@ -168,6 +185,7 @@ pnpm lint 2>&1 | tee /tmp/phase1_lint_results.txt
 ---
 
 #### **Worker 3B: TypeScript Check**
+
 ```bash
 cd /home/patrick/fresh-root
 pnpm typecheck 2>&1 | tee /tmp/phase1_typecheck_results.txt
@@ -180,6 +198,7 @@ pnpm typecheck 2>&1 | tee /tmp/phase1_typecheck_results.txt
 ---
 
 #### **Worker 3C: Build Verification**
+
 ```bash
 cd /home/patrick/fresh-root
 pnpm build 2>&1 | tee /tmp/phase1_build_results.txt
@@ -274,6 +293,7 @@ Validation (Seq 3) can start as soon as first fixes are verified, doesn't need A
 **Command to start**: Execute Code Analysis (Worker Lead - Sequence 1)
 
 Would you like me to:
+
 1. Deploy all workers now (run all tasks in sequence)?
 2. Deploy individual workers (start with Code Analysis)?
 3. Create automated worker scripts for each team?

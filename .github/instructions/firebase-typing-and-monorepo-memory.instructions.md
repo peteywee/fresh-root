@@ -14,6 +14,7 @@ Firebase SDK v12 client and admin SDKs intentionally return `any`-typed values f
 **Best pattern**: Use **pragmatic suppression + strategic wrappers**, not fight the SDK design:
 
 1. **Suppress no-unsafe-* ESLint rules** for Firebase-heavy code directories:
+
    ```javascript
    // In eslint.config.mjs for Firebase directories (app/api/**, src/lib/**)
    {
@@ -29,12 +30,14 @@ Firebase SDK v12 client and admin SDKs intentionally return `any`-typed values f
    ```
 
 2. **Use type assertions** on Firebase results with confidence:
+
    ```typescript
    const snap = await getDoc(docRef);
    const data = snap.data() as UserData;  // Safe - Firebase guarantees structure
    ```
 
 3. **Create type-safe wrapper functions** for complex operations (optional enhancement):
+
    ```typescript
    export async function getDocWithType<T>(
      db: Firestore,

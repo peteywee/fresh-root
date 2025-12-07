@@ -8,9 +8,11 @@ description: Enforces Object Calisthenics principles for business domain code to
 > Examples may be added later if needed.
 
 ## Objective
+
 This rule enforces the principles of Object Calisthenics to ensure clean, maintainable, and robust code in the backend, **primarily for business domain code**.
 
 ## Scope and Application
+
 - **Primary focus**: Business domain classes (aggregates, entities, value objects, domain services)
 - **Secondary focus**: Application layer services and use case handlers
 - **Exemptions**:
@@ -56,6 +58,7 @@ This rule enforces the principles of Object Calisthenics to ensure clean, mainta
        }
    }
    ```
+
 2. **Don't Use the ELSE Keyword**:
 
    - Avoid using the `else` keyword to reduce complexity and improve readability.
@@ -272,6 +275,7 @@ First Class Collections: a class that contains an array as an attribute should n
    ```
 
 ## Implementation Guidelines
+
 - **Domain Classes**:
   - Use private constructors and static factory methods for creating instances.
   - Avoid exposing setters for properties.
@@ -294,6 +298,7 @@ First Class Collections: a class that contains an array as an attribute should n
   - Be pragmatic about infrastructure and DTO code.
 
 ## References
+
 - [Object Calisthenics - Original 9 Rules by Jeff Bay](https://www.cs.helsinki.fi/u/luontola/tdd-2009/ext/ObjectCalisthenics.pdf)
 - [ThoughtWorks - Object Calisthenics](https://www.thoughtworks.com/insights/blog/object-calisthenics)
 - [Clean Code: A Handbook of Agile Software Craftsmanship - Robert C. Martin](https://www.oreilly.com/library/view/clean-code-a/9780136083238/)

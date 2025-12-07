@@ -133,6 +133,7 @@ function fetchSchedules(_limit: number) {
 ### Team 2B: Other handlers
 
 **Pattern**: Check each async function for actual await statements
+
 - If no await: Remove async
 - If wraps promises: Keep async
 - If should await something: Add await
@@ -144,18 +145,23 @@ function fetchSchedules(_limit: number) {
 ## 🚀 IMMEDIATE NEXT STEPS
 
 ### Step 1: Execute Team 1A (1 min)
+
 Fix _limit in schedules/page.server.ts
 
 ### Step 2: Execute Team 2A (1 min)
+
 Remove async from fetchSchedules
 
 ### Step 3: Execute Team 1B (5-10 min)
+
 Prefix unused context/params in middleware.ts
 
 ### Step 4: Execute Team 1C (10-15 min)
+
 Bulk fix API route parameters
 
 ### Step 5: Validation (5 min)
+
 Run lint, typecheck, build
 
 **TOTAL ESTIMATED TIME**: 25-35 minutes
@@ -165,6 +171,7 @@ Run lint, typecheck, build
 ## ⚡ READY TO DEPLOY
 
 All decisions made. Awaiting command:
+
 - Deploy all sequences in order?
 - Deploy individual teams?
 - Deploy with batch git commits?
