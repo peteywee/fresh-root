@@ -1,23 +1,33 @@
-#!/bin/bash
-# [P0][GOVERNANCE] Protect main, dev, and docs-tests-logs branches
-# Tags: P0, GOVERNANCE, BRANCH-PROTECTION
-# Run on GitHub with: gh api ... (see commands below)
+set -euo pipefail
 
-set -e
+# --- Configuration ---
+# You can replace the defaults or pass the owner and repo as arguments to the script.
+OWNER=${1:-"peteywee"}
+REPO=${2:-"fresh-root"}
+# ---------------------
 
-echo "🔒 Branch Protection Configuration"
-echo "===================================="
-echo ""
-echo "This script documents the required branch protection rules."
-echo "Run the gh commands below to protect each branch."
+# Function to apply branch protection rules.
+apply_protection() {
+    local branch_name=$1
+    local description=$2
+    echo "🛡️  Applying protection for '$branch_name' branch ($description)..."
+    
+    # The GitHub API for branch protection requires a PUT request.
+    gh api "repos/$OWNER/$REPO/branches/$branch_name/protection" \
+      --method PUT \
+      --silent \
+      --input -
+    echo "✅ Protection applied for '$branch_name' branch."
+}
+
+echo "🔒 Branch Protection Configuration for $OWNER/$REPO"
+echo "=================================================="
 echo ""
 
 # Main branch - Most restrictive
 echo "1️⃣  MAIN BRANCH (Production)"
 echo "---"
-echo "gh api repos/{owner}/{repo}/branches/main/protection \\"
-echo "  --input - << 'EOF'"
-cat << 'EOF'
+apply_protection "main" "Most restrictive" << 'EOF'
 {
   "required_status_checks": {
     "strict": true,
@@ -44,9 +54,7 @@ echo ""
 # Dev branch - Moderate
 echo "2️⃣  DEV BRANCH (Development)"
 echo "---"
-echo "gh api repos/{owner}/{repo}/branches/dev/protection \\"
-echo "  --input - << 'EOF'"
-cat << 'EOF'
+apply_protection "dev" "Moderate" << 'EOF'
 {
   "required_status_checks": {
     "strict": true,
@@ -69,9 +77,7 @@ echo ""
 # Docs-tests-logs - Archive
 echo "3️⃣  DOCS-TESTS-LOGS BRANCH (Archive/Documentation)"
 echo "---"
-echo "gh api repos/{owner}/{repo}/branches/docs-tests-logs/protection \\"
-echo "  --input - << 'EOF'"
-cat << 'EOF'
+apply_protection "docs-tests-logs" "Archive/Documentation" << 'EOF'
 {
   "required_status_checks": {
     "strict": false,
@@ -91,14 +97,14 @@ cat << 'EOF'
 EOF
 echo ""
 
-echo "📋 Summary:"
-echo "==========="
+echo "📋 Summary of rules applied:"
+echo "============================"
 echo "✅ main           - Strict: 2 required checks, code review required, no force push"
 echo "✅ dev            - Moderate: 1 required check, code review required, no force push"
 echo "✅ docs-tests-logs - Light: No checks, archive-only, no force push"
 echo ""
+
 echo "🔑 To execute:"
-echo "1. Replace {owner}/{repo} with: peteywee/fresh-root"
-echo "2. Run each gh api command"
-echo "3. Or use: bash scripts/protect-branches.sh (if implemented)"
+echo "Run: bash scripts/protect-branches.sh [owner] [repo]"
+echo "Example: bash scripts/protect-branches.sh peteywee fresh-root"
 echo ""
