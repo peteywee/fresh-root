@@ -1,0 +1,68 @@
+# [P0][CI][WORKFLOW] Docs-tests-logs archive guard
+# Tags: P0, CI, WORKFLOW, GOVERNANCE
+
+name: Docs-Tests-Logs Archive Guard
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches:
+      - docs-tests-logs
+
+permissions:
+  pull-requests: write
+  contents: read
+
+jobs:
+  guard-archive:
+    runs-on: ubuntu-latest
+    name: Ensure only archive content
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Verify archive-only files
+        id: verify
+        run: |
+          # Files that belong on docs-tests-logs
+          VALID=$(git diff --name-only origin/docs-tests-logs...HEAD | \
+            grep -E '(^docs/|^\.github/|^e2e/|^coverage|^performance|\.log$|\.report$|\.metrics$)' || true)
+          
+          # Files that don't belong
+          INVALID=$(git diff --name-only origin/docs-tests-logs...HEAD | \
+            grep -v -E '(^docs/|^\.github/|^e2e/|^coverage|^performance|\.log$|\.report$|\.metrics$|^\.git)' || true)
+          
+          if [ -n "$INVALID" ]; then
+            echo "ERROR: docs-tests-logs can only contain documentation and artifacts"
+            echo "Invalid files:"
+            echo "$INVALID"
+            exit 1
+          fi
+          echo "✅ All files are archive content"
+
+      - name: Add approval comment
+        if: success()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `✅ **Archive Guard: PASSED**\n\nAll files are valid archive content for docs-tests-logs:\n- Documentation (docs/)\n- Test artifacts (e2e/, tests/)\n- CI/CD reports and logs\n- Coverage and performance metrics\n\nThis branch serves as the single source of truth for project artifacts.`
+            })
+
+      - name: Block invalid content
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `❌ **Archive Guard: FAILED**\n\n**docs-tests-logs can only contain:**\n- Documentation files (docs/*.md)\n- Test suites (e2e/*.ts, tests/*.ts)\n- CI/CD reports and logs\n- Coverage reports\n- Performance metrics\n\n**Feature code and regular code belongs on:**\n- **dev**: For active development\n- **main**: For production releases\n\n**Please move invalid files to the correct branch.**`
+            })
