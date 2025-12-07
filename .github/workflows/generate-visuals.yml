@@ -99,9 +99,12 @@ jobs:
         continue-on-error: true
         run: git push
 
-      # If direct push fails (protected branch), create a PR instead
+      # If direct push fails (protected branch), try creating a PR
+      # Note: Requires "Allow GitHub Actions to create pull requests" in repo settings
       - name: Create PR if push blocked
         if: steps.check.outputs.changed == 'true' && steps.push.outcome == 'failure'
+        id: create-pr
+        continue-on-error: true  # Don't fail workflow if PR creation is disabled
         uses: peter-evans/create-pull-request@v6
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -125,6 +128,21 @@ jobs:
           labels: |
             automation
             documentation
+
+      # Report outcome in step summary
+      - name: Report push/PR outcome
+        if: steps.check.outputs.changed == 'true'
+        run: |
+          if [[ "${{ steps.push.outcome }}" == "success" ]]; then
+            echo "### ✅ Visuals pushed directly to ${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY
+          elif [[ "${{ steps.create-pr.outcome }}" == "success" ]]; then
+            echo "### ✅ PR created for visuals update" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "### ⚠️ Visuals generated but could not be committed" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "To enable automatic commits, go to:" >> $GITHUB_STEP_SUMMARY
+            echo "Settings → Actions → General → Workflow permissions → Allow GitHub Actions to create pull requests" >> $GITHUB_STEP_SUMMARY
+          fi
 
       - name: Comment on PR if triggered by PR
         if: github.event_name == 'pull_request' && steps.check.outputs.changed == 'true'
