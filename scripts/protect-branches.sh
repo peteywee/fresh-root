@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+
 set -euo pipefail
 if ! command -v gh &> /dev/null; then
     echo "Error: GitHub CLI 'gh' is not installed. Please install it to run this script." >&2
