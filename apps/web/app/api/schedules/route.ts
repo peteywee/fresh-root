@@ -65,8 +65,14 @@ export interface ShiftDoc {
 /**
  * List schedules for an organization with pagination and type safety
  */
-const listSchedules = async (request: NextRequest, context: RequestContext) => {
-  const pagination = getPagination(request);
+const listSchedules = async (request: Request, context: RequestContext) => {
+  const pagination = (() => {
+    const { searchParams } = new URL(request.url);
+    return {
+      limit: parsePositiveInt(searchParams.get("limit"), 20),
+      offset: parsePositiveInt(searchParams.get("offset"), 0),
+    };
+  })();
   const { db, error } = getAdminDbOrError();
   if (error) {
     return error;
@@ -143,7 +149,7 @@ const createSchedule = async (input: CreateScheduleInput, context: RequestContex
 export const GET = createOrgEndpoint({
   rateLimit: { maxRequests: 100, windowMs: 60_000 },
   handler: async ({ request, context }) => {
-    return listSchedules(request, context);
+    return listSchedules(request as unknown as Request, context);
   }
 });
 

@@ -22,14 +22,21 @@ export default defineConfig({
     // Clamp workers down to keep memory/CPU predictable in Crostini.
     maxWorkers: 1,
 
-    // Global setup – we’ll use this to guard process.listeners and import other setup.
-    setupFiles: ["./vitest.setup.ts"],
+    // Global setup – we'll use this to guard process.listeners and import other setup.
+    // Use absolute path so it works when vitest runs from package directories
+    setupFiles: [path.resolve(__dirname, "./vitest.setup.ts")],
 
     // Test globs across your workspaces.
+    // Patterns are interpreted relative to each package directory when vitest runs in monorepo
     include: [
       "apps/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}",
+      "apps/**/__tests__/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}",
       "services/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}",
+      "services/**/__tests__/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}",
       "packages/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}",
+      "packages/**/__tests__/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}",
+      "src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}",  // for packages with src/ structure
+      "src/__tests__/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}",  // for packages with src/__tests__/ structure
     ],
   },
   resolve: {

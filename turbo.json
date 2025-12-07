@@ -11,7 +11,16 @@
       ]
     },
     "test": {
-      "dependsOn": ["^build"]
+      "dependsOn": ["^build"],
+      "inputs": ["app/**", "src/**", "lib/**", "vitest.config.ts", "vitest.setup.ts"]
+    },
+    "@fresh-root/markdown-fixer#test": {
+      "cache": false,
+      "outputs": []
+    },
+    "@fresh-schedules/types#test": {
+      "cache": false,
+      "outputs": []
     },
     "lint": {},
     "typecheck": {},
