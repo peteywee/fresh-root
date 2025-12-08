@@ -21,7 +21,7 @@ export async function importFile(file: File): Promise<ImportResult<z.infer<typeo
   if (name.endsWith(".csv")) {
     const text = await file.text();
     const parsed = parse(text, { header: true, skipEmptyLines: true });
-    rows = parsed.data as unknown[];
+    rows = parsed.data;
   } else if (name.endsWith(".xlsx")) {
     const workbook = new ExcelJS.Workbook();
     await workbook.xlsx.load(await file.arrayBuffer());

@@ -1,8 +1,17 @@
 // [P0][PUBLISH][API] Publish endpoint
 
+import { z } from "zod";
+import { NextRequest, NextResponse } from "next/server";
+
 import { createOrgEndpoint } from "@fresh-schedules/api-framework";
-import { ok, badRequest, serverError } from "../_shared/validation";
-import { PublishScheduleSchema } from "@fresh-schedules/types";
+import { badRequest, ok, serverError } from "../_shared/validation";
+
+const PublishEndpointSchema = z.object({
+  scheduleId: z.string().min(1, "Schedule ID required"),
+  comment: z.string().max(500).optional(),
+  effectiveDate: z.number().optional(),
+  notifyTeam: z.boolean().default(true),
+});
 
 /**
  * POST /api/publish
@@ -10,12 +19,10 @@ import { PublishScheduleSchema } from "@fresh-schedules/types";
  */
 export const POST = createOrgEndpoint({
   roles: ["manager"],
-  input: PublishScheduleSchema,
+  input: PublishEndpointSchema,
   handler: async ({ input, context, params }) => {
     try {
-      const { notifyStaff, message } = input;
-      const scheduleId = (params?.id as string) || null;
-      if (!scheduleId) return badRequest("scheduleId is required");
+      const { scheduleId } = input;
 
       const result = {
         success: true,

@@ -4,7 +4,6 @@ import { getFirebaseAdminDb } from "@/lib/firebase-admin";
 import {
   getDocWithType,
   setDocWithType,
-  updateDocWithType,
   transactionWithType,
 } from "@/src/lib/firebase/typed-wrappers";
 import {
@@ -129,7 +128,7 @@ export async function consumeAdminFormDraft(params: {
     });
 
     return {
-      form: data.form as AdminResponsibilityForm,
+      form: data.form,
       taxValidation: {
         isValid: data.taxValidation.isValid,
         reason: data.taxValidation.reason,

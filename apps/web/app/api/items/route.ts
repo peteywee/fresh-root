@@ -1,9 +1,8 @@
 // [P0][ITEMS][API] Items list endpoint
 export const dynamic = "force-dynamic";
 
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 
-import { z } from "zod";
 import { createOrgEndpoint } from "@fresh-schedules/api-framework";
 import { badRequest, ok, serverError } from "../_shared/validation";
 import { CreateItemSchema } from "@fresh-schedules/types";

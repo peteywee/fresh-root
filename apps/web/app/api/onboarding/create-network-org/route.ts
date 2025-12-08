@@ -1,6 +1,7 @@
 // [P0][ONBOARDING][ORG][API] Create organization network endpoint
 
 import { createAuthenticatedEndpoint } from "@fresh-schedules/api-framework";
+import { CreateNetworkOrgPayloadSchema } from "@fresh-schedules/types";
 import { ok, serverError } from "../../_shared/validation";
 import { CreateNetworkOrgPayloadSchema } from "@fresh-schedules/types";
 
@@ -11,20 +12,15 @@ import { CreateNetworkOrgPayloadSchema } from "@fresh-schedules/types";
 export const POST = createAuthenticatedEndpoint({
   input: CreateNetworkOrgPayloadSchema,
   handler: async ({ input, context }) => {
+  input: CreateNetworkOrgPayloadSchema,
+  handler: async ({ input, context }) => {
     try {
-      const { basics, venue } = input;
+      const { basics } = input;
 
       const org = {
         id: `org-${Date.now()}`,
         name: basics.orgName,
-        hasCorporateAboveYou: basics.hasCorporateAboveYou,
-        segment: basics.segment,
-        venue: venue
-          ? {
-              name: venue.venueName,
-              timeZone: venue.timeZone,
-            }
-          : undefined,
+        type: "standard",
         ownerId: context.auth?.userId,
         createdAt: Date.now(),
       };

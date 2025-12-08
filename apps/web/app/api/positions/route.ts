@@ -1,7 +1,7 @@
 // [P0][CORE][API] Positions list endpoint
 export const dynamic = "force-dynamic";
 
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { CreatePositionSchema } from "@fresh-schedules/types";
 
 import { createOrgEndpoint } from "@fresh-schedules/api-framework";

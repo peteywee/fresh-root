@@ -1,11 +1,10 @@
 // [P0][AUTH][API] MFA setup endpoint
-import { NextRequest } from "next/server";
 import * as QRCode from "qrcode";
 import * as speakeasy from "speakeasy";
 import { z } from "zod";
 
 import { createAuthenticatedEndpoint } from "@fresh-schedules/api-framework";
-import { ok, serverError, badRequest } from "../../../_shared/validation";
+import { ok, serverError } from "../../../_shared/validation";
 
 // Schema for MFA setup request (empty for now, but validates request is valid JSON)
 const MFASetupSchema = z.object({}).passthrough().optional();

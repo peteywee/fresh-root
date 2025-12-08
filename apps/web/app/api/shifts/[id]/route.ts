@@ -3,7 +3,7 @@
 import { UpdateShiftSchema } from "@fresh-schedules/types";
 
 import { createOrgEndpoint } from "@fresh-schedules/api-framework";
-import { badRequest, ok, serverError } from "../../_shared/validation";
+import { ok, serverError } from "../../_shared/validation";
 
 /**
  * GET /api/shifts/[id]
