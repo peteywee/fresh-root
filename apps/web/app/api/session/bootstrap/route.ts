@@ -2,7 +2,10 @@
 
 import { createAuthenticatedEndpoint } from "@fresh-schedules/api-framework";
 import { ok, serverError } from "../../_shared/validation";
-import { CreateSessionSchema } from "@fresh-schedules/types";
+import { z } from "zod";
+
+// Minimal permissive session payload schema for bootstrap route
+const CreateSessionSchema = z.object({}).passthrough().optional();
 
 /**
  * GET /api/session/bootstrap

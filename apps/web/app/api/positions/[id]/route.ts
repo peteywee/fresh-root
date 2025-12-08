@@ -1,9 +1,21 @@
 // [P0][CORE][API] Position management endpoint
 export const dynamic = "force-dynamic";
 import { createOrgEndpoint } from "@fresh-schedules/api-framework";
-
-import { PositionSchema, UpdatePositionSchema } from "@fresh-schedules/types";
+import { PositionSchema } from "@fresh-schedules/types";
 import { NextResponse } from "next/server";
+import { z } from "zod";
+
+// Inline update schema (mirrors packages/types UpdatePositionSchema)
+const UpdatePositionSchema = z.object({
+  name: z.string().min(1).max(100).optional(),
+  description: z.string().max(500).optional(),
+  type: z.string().optional(),
+  skillLevel: z.string().optional(),
+  hourlyRate: z.number().nonnegative().optional(),
+  color: z.string().regex(/^#[0-9A-Fa-f]{6}$/).optional(),
+  isActive: z.boolean().optional(),
+  requiredCertifications: z.array(z.string()).optional(),
+});
 
 import { checkRateLimit, RateLimits } from "../../../../src/lib/api/rate-limit";
 import { sanitizeObject } from "../../../../src/lib/api/sanitize";
@@ -59,7 +71,7 @@ export const GET = createOrgEndpoint({
 export const PATCH = createOrgEndpoint({
   roles: ["manager"],
   input: UpdatePositionSchema,
-  handler: async ({ input, context, params }) => {
+  handler: async ({ request, input, context, params }) => {
     // Apply rate limiting
     const rateLimitResult = await checkRateLimit(request, RateLimits.api);
     if (!rateLimitResult.allowed) {

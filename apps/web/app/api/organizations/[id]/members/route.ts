@@ -5,7 +5,6 @@ import { z } from "zod";
 
 import { createOrgEndpoint } from "@fresh-schedules/api-framework";
 import { badRequest, ok, serverError } from "../../../_shared/validation";
-import { z } from "zod";
 
 const AddMemberSchema = z.object({
   email: z.string().email("Invalid email address"),

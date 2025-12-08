@@ -2,7 +2,23 @@
 
 import { createAuthenticatedEndpoint } from "@fresh-schedules/api-framework";
 import { ok, serverError } from "../../_shared/validation";
-import { CreateNetworkOrgPayloadSchema } from "@fresh-schedules/types";
+import { z } from "zod";
+
+// Inline schema (copied from packages/types) to avoid mismatched export names
+const CreateNetworkOrgPayloadSchema = z.object({
+  basics: z.object({
+    orgName: z.string().min(1, "Organization name required"),
+    hasCorporateAboveYou: z.boolean().default(false),
+    segment: z.string().optional(),
+  }),
+  venue: z
+    .object({
+      venueName: z.string().min(1, "Venue name required"),
+      timeZone: z.string().default("UTC"),
+    })
+    .optional(),
+  formToken: z.string().min(1, "Form token required"),
+});
 
 /**
  * POST /api/onboarding/create-network-org

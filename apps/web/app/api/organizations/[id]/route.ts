@@ -2,7 +2,24 @@
 
 import { createOrgEndpoint } from "@fresh-schedules/api-framework";
 import { ok, serverError } from "../../_shared/validation";
-import { UpdateOrgPayloadSchema } from "@fresh-schedules/types";
+import { z } from "zod";
+
+// Inline update schema to avoid mismatched exported name
+const UpdateOrgPayloadSchema = z
+  .object({
+    networkId: z.string().min(1).optional(),
+    name: z.string().min(1).max(100).optional(),
+    description: z.string().max(500).optional(),
+    industry: z.string().max(100).optional(),
+    size: z.string().optional(),
+    status: z.string().optional(),
+    logoUrl: z.string().url().optional(),
+    websiteUrl: z.string().url().optional(),
+    contactEmail: z.string().email().optional(),
+    contactPhone: z.string().max(20).optional(),
+    settings: z.record(z.unknown()).optional(),
+  })
+  .passthrough();
 
 /**
  * GET /api/organizations/[id]
