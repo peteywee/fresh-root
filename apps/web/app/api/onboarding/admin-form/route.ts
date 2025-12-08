@@ -8,7 +8,7 @@ import { ok, serverError } from "../../_shared/validation";
  * Get admin onboarding form
  */
 export const GET = createAuthenticatedEndpoint({
-  handler: ({ context }) => {
+  handler: async ({ context }) => {
     try {
       const form = {
         id: "admin-form",

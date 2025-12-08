@@ -1,4 +1,18 @@
-handler:handler: ({ request, context, _params }) => {
+// [P0][ZONES][API] Zones list endpoint
+export const dynamic = "force-dynamic";
+
+import { NextResponse } from "next/server";
+import { CreateZoneSchema } from "@fresh-schedules/types";
+
+import { createOrgEndpoint } from "@fresh-schedules/api-framework";
+import { badRequest, ok, serverError } from "../_shared/validation";
+
+/**
+ * GET /api/zones
+ * List zones for a venue
+ */
+export const GET = createOrgEndpoint({
+  handler: async ({ request, context, params }) => {
     try {
       const { searchParams } = new URL(request.url);
       const venueId = searchParams.get("venueId");
@@ -32,7 +46,7 @@ handler:handler: ({ request, context, _params }) => {
  */
 export const POST = createOrgEndpoint({
   roles: ["manager"],
-  handler: async ({ request, context, _params }) => {
+  handler: async ({ request, context, params }) => {
     try {
       const body = await request.json();
       const validated = CreateZoneSchema.parse(body);

@@ -1,4 +1,16 @@
-handler:handler: ({ request, context, params }) => {
+// [P0][SCHEDULE][API] Schedule detail endpoint
+
+import { UpdateScheduleSchema } from "@fresh-schedules/types";
+
+import { createOrgEndpoint } from "@fresh-schedules/api-framework";
+import { badRequest, ok, parseJson, serverError } from "../../_shared/validation";
+
+/**
+ * GET /api/schedules/[id]
+ * Fetch a schedule by ID
+ */
+export const GET = createOrgEndpoint({
+  handler: async ({ request, context, params }) => {
     try {
       const { id } = params;
       if (!id) {
@@ -61,7 +73,7 @@ export const PATCH = createOrgEndpoint({
  */
 export const DELETE = createOrgEndpoint({
   roles: ["manager"],
-  handler: ({ _context, params }) => {
+  handler: async ({ context, params }) => {
     try {
       const { id } = params;
       if (!id) {

@@ -32,7 +32,7 @@ export interface NetworkDoc {
  */
 export const POST = createAuthenticatedEndpoint({
   input: ActivateNetworkSchema,
-  handler: async ({ input, _context }) => {
+  handler: async ({ input, context }) => {
     try {
       const { networkId } = input;
 

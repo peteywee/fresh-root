@@ -1,4 +1,20 @@
-handler:handler: ({ request, context }) => {
+// [P0][ORGS][API] Organizations list endpoint
+
+import { CreateOrganizationSchema } from "@fresh-schedules/types";
+import { NextResponse } from "next/server";
+
+import { createAuthenticatedEndpoint } from "@fresh-schedules/api-framework";
+import { badRequest, ok, parseJson, serverError } from "../_shared/validation";
+
+// Rate limiting via factory options
+
+/**
+ * GET /api/organizations
+ * List organizations the current user belongs to
+ */
+export const GET = createAuthenticatedEndpoint({
+  rateLimit: { maxRequests: 100, windowMs: 60000 },
+  handler: async ({ request, context }) => {
     try {
       const { searchParams } = new URL(request.url);
       const userId = context.auth?.userId;

@@ -8,7 +8,7 @@ import { ok, serverError } from "../../_shared/validation";
  * Join an organization using an invite token
  */
 export const POST = createAuthenticatedEndpoint({
-  handler: ({ input, context }) => {
+  handler: async ({ input, context }) => {
     try {
       // Note: input validation can be added with Zod schema if needed
       const { token, invitationId } = input as any;

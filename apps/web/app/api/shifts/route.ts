@@ -1,4 +1,18 @@
-handler:handler: ({ request, context, _params }) => {
+// [P0][SHIFTS][API] Shifts list endpoint
+export const dynamic = "force-dynamic";
+
+import { NextResponse } from "next/server";
+import { CreateShiftSchema } from "@fresh-schedules/types";
+
+import { createOrgEndpoint } from "@fresh-schedules/api-framework";
+import { badRequest, ok, serverError } from "../_shared/validation";
+
+/**
+ * GET /api/shifts
+ * List shifts for an organization
+ */
+export const GET = createOrgEndpoint({
+  handler: async ({ request, context, params }) => {
     try {
       const { searchParams } = new URL(request.url);
       const orgId = searchParams.get("orgId") || context.org?.orgId;
@@ -33,7 +47,7 @@ handler:handler: ({ request, context, _params }) => {
 export const POST = createOrgEndpoint({
   roles: ["manager"],
   input: CreateShiftSchema,
-  handler: ({ input, context, _params }) => {
+  handler: async ({ input, context, params }) => {
     try {
       const validated = input;
 

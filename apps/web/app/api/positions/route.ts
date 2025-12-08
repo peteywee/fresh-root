@@ -1,4 +1,18 @@
-handler:handler: ({ request, context, _params }) => {
+// [P0][CORE][API] Positions list endpoint
+export const dynamic = "force-dynamic";
+
+import { NextResponse } from "next/server";
+import { CreatePositionSchema } from "@fresh-schedules/types";
+
+import { createOrgEndpoint } from "@fresh-schedules/api-framework";
+import { badRequest, ok, serverError } from "../_shared/validation";
+
+/**
+ * GET /api/positions
+ * List positions for an organization
+ */
+export const GET = createOrgEndpoint({
+  handler: async ({ request, context, params }) => {
     try {
       const { searchParams } = new URL(request.url);
       const orgId = searchParams.get("orgId") || context.org?.orgId;
@@ -36,7 +50,7 @@ handler:handler: ({ request, context, _params }) => {
  */
 export const POST = createOrgEndpoint({
   roles: ["manager"],
-  handler: async ({ request, context, _params }) => {
+  handler: async ({ request, context, params }) => {
     try {
       const body = await request.json();
       const validated = CreatePositionSchema.parse(body);

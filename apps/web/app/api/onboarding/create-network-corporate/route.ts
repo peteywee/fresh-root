@@ -10,7 +10,7 @@ import { CreateCorporateOnboardingSchema } from "@fresh-schedules/types";
  */
 export const POST = createAuthenticatedEndpoint({
   input: CreateCorporateOnboardingSchema,
-  handler: ({ input, context }) => {
+  handler: async ({ input, context }) => {
     try {
       const { corporateName, brandName, formToken } = input;
       const network = {

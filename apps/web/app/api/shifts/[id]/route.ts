@@ -1,4 +1,16 @@
-handler:handler: ({ context, params }) => {
+// [P0][SHIFTS][DETAIL][API] Shift detail endpoint
+
+import { UpdateShiftSchema } from "@fresh-schedules/types";
+
+import { createOrgEndpoint } from "@fresh-schedules/api-framework";
+import { ok, serverError } from "../../_shared/validation";
+
+/**
+ * GET /api/shifts/[id]
+ * Get shift details
+ */
+export const GET = createOrgEndpoint({
+  handler: async ({ context, params }) => {
     try {
       const { id } = params;
       const shift = {
@@ -22,7 +34,7 @@ handler:handler: ({ context, params }) => {
 export const PATCH = createOrgEndpoint({
   roles: ["manager"],
   input: UpdateShiftSchema,
-  handler: ({ input, context, params }) => {
+  handler: async ({ input, context, params }) => {
     try {
       const { name, startTime, endTime } = input;
       const updated = {
@@ -45,7 +57,7 @@ export const PATCH = createOrgEndpoint({
  */
 export const DELETE = createOrgEndpoint({
   roles: ["manager"],
-  handler: ({ _context, params }) => {
+  handler: async ({ context, params }) => {
     try {
       return ok({ deleted: true, id: params.id });
     } catch {
