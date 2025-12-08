@@ -2,11 +2,6 @@
 // Tags: P0, INTERNAL, SCHEMA, ZOD, ADMIN
 
 import { z } from "zod";
-
-/**
- * Backup request schema
- * Admin-only operation for system backup
- */
 export const CreateBackupSchema = z.object({
   type: z.enum(["full", "incremental", "audit"]).default("full"),
   includeMedia: z.boolean().default(false),

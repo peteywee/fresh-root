@@ -18,10 +18,8 @@ const CreateBackupSchema = z.object({
 export const POST = createAuthenticatedEndpoint({
   input: CreateBackupSchema,
   handler: async ({ input, context }) => {
-  input: CreateBackupSchema,
-  handler: async ({ input, context }) => {
     try {
-      const { type, includeMedia } = input;
+      const { type, includeMedia, description, retentionDays } = input;
 
       const backup = {
         id: `backup-${Date.now()}`,
@@ -35,6 +33,8 @@ export const POST = createAuthenticatedEndpoint({
       };
       return ok(backup);
     } catch (err) {
+      const message = err instanceof Error ? err.message : "Failed to create backup";
+      console.error("Failed to create backup", { error: message, userId: context.auth?.userId });
       return serverError("Failed to create backup");
     }
   },

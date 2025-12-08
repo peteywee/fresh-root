@@ -22,15 +22,16 @@ export const POST = createOrgEndpoint({
   input: PublishEndpointSchema,
   handler: async ({ input, context, params }) => {
     try {
-      const { scheduleId } = input;
+      const { scheduleId, comment, effectiveDate, notifyTeam } = input;
 
       const result = {
         success: true,
         scheduleId,
-        message,
-        notifyStaff: notifyStaff ?? true,
+        message: comment ?? "Published",
+        notifyTeam,
         publishedBy: context.auth?.userId,
         publishedAt: Date.now(),
+        effectiveDate: effectiveDate ?? Date.now(),
       };
 
       return ok(result);

@@ -1,5 +1,6 @@
 // [P0][SESSION][BOOTSTRAP][API] Bootstrap session endpoint
 
+import { z } from "zod";
 import { createAuthenticatedEndpoint } from "@fresh-schedules/api-framework";
 import { ok, serverError } from "../../_shared/validation";
 import { CreateSessionSchema } from "@fresh-schedules/types";

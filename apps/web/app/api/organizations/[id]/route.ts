@@ -44,13 +44,13 @@ export const PATCH = createOrgEndpoint({
       const updated = {
         id: params.id,
         ...input,
-        ...input,
         updatedBy: context.auth?.userId,
-        updatedAt: Date.now(),
         updatedAt: Date.now(),
       };
       return ok(updated);
-    } catch {
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "Failed to update organization";
+      console.error("Failed to update organization", { error: message, orgId: params.id, userId: context.auth?.userId });
       return serverError("Failed to update organization");
     }
   },

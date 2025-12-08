@@ -86,7 +86,7 @@ async function cleanupOldVersions(groups, options = {}) {
   const { dryRun = false, verbose = false } = options;
   const deleted = [];
 
-  for (const [, files] of groups) {
+  for (const [key, files] of groups) {
     if (files.length <= 1) continue;
 
     // Keep the first (newest), delete the rest
@@ -107,7 +107,59 @@ async function cleanupOldVersions(groups, options = {}) {
   return deleted;
 }
 
+<<<<<<< HEAD
 
+=======
+/**
+ * Update a file to current date (creates new dated version)
+ */
+function updateToCurrentDate(filePath, options = {}) {
+  const { dryRun = false, verbose = false } = options;
+  const currentDate = getCurrentDate();
+  const dir = path.dirname(filePath);
+  const filename = path.basename(filePath);
+  const parsed = parseDatedFilename(filename);
+
+  if (!parsed) {
+    // Not a dated file, add date
+    const ext = path.extname(filename);
+    const base = path.basename(filename, ext);
+    const newFilename = `${base}_${currentDate}${ext}`;
+    const newPath = path.join(dir, newFilename);
+
+    if (verbose) {
+      console.log(`📝 Creating dated version: ${newPath}`);
+    }
+
+    if (!dryRun) {
+      fs.renameSync(filePath, newPath);
+    }
+
+    return newPath;
+  }
+
+  // Already dated, update date if different
+  if (parsed.date === currentDate) {
+    if (verbose) {
+      console.log(`✓ Already current: ${filePath}`);
+    }
+    return filePath;
+  }
+
+  const newFilename = `${parsed.baseName}_${currentDate}${parsed.extension}`;
+  const newPath = path.join(dir, newFilename);
+
+  if (verbose) {
+    console.log(`📝 Updating date: ${filePath} → ${newFilename}`);
+  }
+
+  if (!dryRun) {
+    fs.renameSync(filePath, newPath);
+  }
+
+  return newPath;
+}
+>>>>>>> 1eb7759 (feat(redteam): add security assessment planning and schema updates)
 
 /**
  * Main execution

@@ -3,15 +3,12 @@
 import { createAuthenticatedEndpoint } from "@fresh-schedules/api-framework";
 import { CreateNetworkOrgPayloadSchema } from "@fresh-schedules/types";
 import { ok, serverError } from "../../_shared/validation";
-import { CreateNetworkOrgPayloadSchema } from "@fresh-schedules/types";
 
 /**
  * POST /api/onboarding/create-network-org
  * Create organization network
  */
 export const POST = createAuthenticatedEndpoint({
-  input: CreateNetworkOrgPayloadSchema,
-  handler: async ({ input, context }) => {
   input: CreateNetworkOrgPayloadSchema,
   handler: async ({ input, context }) => {
     try {
@@ -25,7 +22,9 @@ export const POST = createAuthenticatedEndpoint({
         createdAt: Date.now(),
       };
       return ok(org);
-    } catch {
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "Failed to create organization network";
+      console.error("Failed to create organization network", { error: message, userId: context.auth?.userId });
       return serverError("Failed to create organization network");
     }
   },

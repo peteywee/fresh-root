@@ -12,5 +12,4 @@ export const CreateSessionSchema = z.object({
   email: z.string().email("Invalid email").optional(),
   metadata: z.record(z.string(), z.any()).optional(),
 });
-
 export type CreateSession = z.infer<typeof CreateSessionSchema>;
