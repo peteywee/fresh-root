@@ -96,6 +96,14 @@ export default [
     },
   },
 
+  // API route handlers: SDK framework requires async handlers even without await
+  {
+    files: ['app/api/**/route.ts'],
+    rules: {
+      '@typescript-eslint/require-await': 'off',
+    },
+  },
+
   {
     files: [
       "**/*.spec.{ts,tsx,js,jsx}",
