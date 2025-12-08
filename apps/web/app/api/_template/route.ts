@@ -1,6 +1,5 @@
 // [P0][CORE][API] Template endpoint for new routes
 import { NextResponse } from "next/server";
-import { z } from "zod";
 import { createPublicEndpoint } from "@fresh-schedules/api-framework";
 
 // Minimal template payload schema for POST examples

@@ -1,10 +1,9 @@
 // [P0][PUBLISH][API] Publish endpoint
 
 import { z } from "zod";
-import { NextRequest, NextResponse } from "next/server";
 
 import { createOrgEndpoint } from "@fresh-schedules/api-framework";
-import { badRequest, ok, serverError } from "../_shared/validation";
+import { ok, serverError } from "../_shared/validation";
 
 const PublishEndpointSchema = z.object({
   scheduleId: z.string().min(1, "Schedule ID required"),
