@@ -106,7 +106,7 @@ export default function IntentPage() {
       <button
         type="button"
         disabled={!intent || submitting}
-        onClick={continueFlow}
+        onClick={() => void continueFlow()}
         className="inline-flex items-center rounded-md bg-slate-900 px-4 py-2 text-sm text-white disabled:opacity-60"
       >
         {submitting ? "Checking..." : "Continue"}

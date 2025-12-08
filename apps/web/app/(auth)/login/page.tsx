@@ -120,7 +120,7 @@ const LoginForm = React.memo(() => {
 
         <button
           type="button"
-          onClick={onGoogle}
+          onClick={() => void onGoogle()}
           aria-label="Continue with Google"
           className="btn-primary mb-4 flex w-full items-center justify-center gap-2"
         >
@@ -151,7 +151,7 @@ const LoginForm = React.memo(() => {
           <div className="h-px flex-1 bg-surface-accent" />
         </div>
 
-        <form onSubmit={onSendMagicLink} className="space-y-4">
+        <form onSubmit={(e) => void onSendMagicLink(e)} className="space-y-4">
           <input
             type="email"
             value={email}
