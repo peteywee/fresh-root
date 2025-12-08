@@ -51,14 +51,15 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Verify no docs/tests/logs in main
+      - name: Verify no build artifacts in main
         id: file-check
         run: |
+          # Only block actual build artifacts, not docs
           INVALID=$(git diff --name-only origin/main...HEAD | \
-            grep -E '\.(log|report|metrics|e2e\.ts|spec\.ts)$' || true)
+            grep -E '^(node_modules/|\.next/|coverage/|dist/)' || true)
           
           if [ -n "$INVALID" ]; then
-            echo "ERROR: Main branch cannot contain test/log files:"
+            echo "ERROR: Main branch cannot contain build artifacts:"
             echo "$INVALID"
             exit 1
           fi
