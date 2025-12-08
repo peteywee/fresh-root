@@ -17,7 +17,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     // Placeholder: replace with real initialization (fetch session, etc.)
-    const init = async () => {
+    const init = () => {
       // simulate async auth check
       setTimeout(() => {
         setUser(null);

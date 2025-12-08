@@ -58,7 +58,7 @@ export async function ensureUserProfile(args: {
 
   if (!adminDb) {
     // Stub mode, nothing to persist
-    console.log("[userProfile] stub ensureUserProfile", { uid, claims });
+    console.warn("[userProfile] stub ensureUserProfile", { uid, claims });
     return;
   }
 

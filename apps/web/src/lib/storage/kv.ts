@@ -12,7 +12,7 @@ const STORE = "kv";
 const VERSION = 1;
 
 async function db() {
-  return openDB(DB_NAME, VERSION, {
+  return await openDB(DB_NAME, VERSION, {
     upgrade(d: IDBDatabase) {
       if (!d.objectStoreNames.contains(STORE)) {
         const s = d.createObjectStore(STORE, { keyPath: "key" });

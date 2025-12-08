@@ -70,7 +70,7 @@ class InMemoryRateLimiter implements RateLimiter {
     this.options = options;
   }
 
-  public async consume(key: string, cost: number = 1): Promise<RateLimitResult> {
+  public consume(key: string, cost: number = 1): RateLimitResult {
     const now = Date.now();
     const windowMs = this.options.windowSeconds * 1000;
     const bucketKey = this.buildKey(key);
