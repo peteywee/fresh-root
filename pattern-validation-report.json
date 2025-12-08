@@ -1,54 +1,5 @@
 {
-  "errors": [
-    {
-      "file": "apps/web/app/api/internal/backup/route.ts",
-      "pattern": "API_ROUTE",
-      "name": "Write Validation",
-      "message": "Write API routes must validate input using Zod before use",
-      "tier": 0,
-      "severity": "error"
-    },
-    {
-      "file": "apps/web/app/api/onboarding/create-network-org/route.ts",
-      "pattern": "API_ROUTE",
-      "name": "Write Validation",
-      "message": "Write API routes must validate input using Zod before use",
-      "tier": 0,
-      "severity": "error"
-    },
-    {
-      "file": "apps/web/app/api/onboarding/join-with-token/route.ts",
-      "pattern": "API_ROUTE",
-      "name": "Write Validation",
-      "message": "Write API routes must validate input using Zod before use",
-      "tier": 0,
-      "severity": "error"
-    },
-    {
-      "file": "apps/web/app/api/organizations/[id]/route.ts",
-      "pattern": "API_ROUTE",
-      "name": "Write Validation",
-      "message": "Write API routes must validate input using Zod before use",
-      "tier": 0,
-      "severity": "error"
-    },
-    {
-      "file": "apps/web/app/api/publish/route.ts",
-      "pattern": "API_ROUTE",
-      "name": "Write Validation",
-      "message": "Write API routes must validate input using Zod before use",
-      "tier": 0,
-      "severity": "error"
-    },
-    {
-      "file": "apps/web/app/api/session/bootstrap/route.ts",
-      "pattern": "API_ROUTE",
-      "name": "Write Validation",
-      "message": "Write API routes must validate input using Zod before use",
-      "tier": 0,
-      "severity": "error"
-    }
-  ],
+  "errors": [],
   "warnings": [],
   "info": [],
   "triadStatus": [
