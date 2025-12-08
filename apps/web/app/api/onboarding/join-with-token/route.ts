@@ -3,6 +3,12 @@
 import { createAuthenticatedEndpoint } from "@fresh-schedules/api-framework";
 import { JoinWithTokenSchema } from "@fresh-schedules/types";
 import { ok, serverError } from "../../_shared/validation";
+import { z } from "zod";
+
+const JoinWithTokenSchema = z.object({
+  token: z.string().min(1).optional(),
+  invitationId: z.string().optional(),
+});
 
 /**
  * POST /api/onboarding/join-with-token
@@ -10,13 +16,14 @@ import { ok, serverError } from "../../_shared/validation";
  */
 export const POST = createAuthenticatedEndpoint({
   input: JoinWithTokenSchema,
+  input: JoinWithTokenSchema,
   handler: async ({ input, context }) => {
     try {
-      const { joinToken } = input;
+      const { token, invitationId } = input ?? {};
 
       const result = {
         userId: context.auth?.userId,
-        joinToken,
+        invitationId: invitationId ?? token,
         joinedAt: Date.now(),
         role: "member",
       };
