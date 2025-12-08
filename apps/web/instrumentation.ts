@@ -30,7 +30,7 @@ export function register() {
   // Import and validate server environment at startup. Keep as a runtime
   // require so bundlers won't pull this into client bundles.
   try {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
+     
     const { loadServerEnv } = require("./src/lib/env.server");
     loadServerEnv();
   } catch (error) {
@@ -41,7 +41,7 @@ export function register() {
   // === Environment validation (production only) ===
   try {
     if (process.env.NODE_ENV === "production") {
-      // eslint-disable-next-line @typescript-eslint/no-var-requires
+       
       const { env, preFlightChecks, getMultiInstanceInfo } = require("@packages/env");
 
       console.log("\n📋 Validating production environment...");
@@ -82,7 +82,7 @@ function initializeOpenTelemetryWithTimeout(): void {
   // For now, we skip OTEL initialization to keep startup fast and unblocking.
 
   if (process.env.OTEL_EXPORTER_OTLP_ENDPOINT) {
-    // eslint-disable-next-line no-console
+     
     console.warn(
       "[instrumentation] OTEL_EXPORTER_OTLP_ENDPOINT is set but OTEL SDK not initialized during module load to prevent hangs. Consider initializing in a separate worker.",
     );

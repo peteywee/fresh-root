@@ -17,7 +17,7 @@ type OrgFormState = {
 
 export default function CreateNetworkOrgPage() {
   const router = useRouter();
-  const nav: NavRouter = { push: router.push };
+  const nav: NavRouter = { push: (url: string) => router.push(url) };
   const [form, setForm] = useState<OrgFormState>({
     orgName: "",
     venueName: "",

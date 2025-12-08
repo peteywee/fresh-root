@@ -25,6 +25,7 @@ export type AuthUserClaims = {
   [key: string]: unknown;
 };
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const _UserProfileSchema = z.object({
   id: z.string(),
   createdAt: z.number(),

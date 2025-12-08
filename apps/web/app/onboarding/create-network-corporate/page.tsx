@@ -18,7 +18,7 @@ type CorporateFormState = {
 
 export default function CreateNetworkCorporatePage() {
   const router = useRouter();
-  const nav: NavRouter = { push: router.push };
+  const nav: NavRouter = { push: (url: string) => router.push(url) };
   const [form, setForm] = useState<CorporateFormState>({
     corporateName: "",
     brandName: "",

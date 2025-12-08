@@ -12,7 +12,7 @@ import type { NextRequest } from "next/server";
  * This middleware just passes requests through to allow edge processing
  * of routing logic.
  */
-export function middleware(request: NextRequest) {
+export function middleware(_request: NextRequest) {
   return NextResponse.next();
 }
 

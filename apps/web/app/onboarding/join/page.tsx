@@ -15,7 +15,7 @@ type JoinFormState = {
 
 export default function JoinPage() {
   const router = useRouter();
-  const nav: NavRouter = { push: router.push };
+  const nav: NavRouter = { push: (url: string) => router.push(url) };
   const [form, setForm] = useState<JoinFormState>({
     token: "",
     email: "",

@@ -10,7 +10,7 @@ type NavRouter = Pick<ReturnType<typeof useRouter>, "push">;
 
 export default function StaffInviteBlockedPage() {
   const router = useRouter();
-  const nav: NavRouter = { push: router.push };
+  const nav: NavRouter = { push: (url: string) => router.push(url) };
 
   return (
     <main className="mx-auto flex max-w-xl flex-col gap-6 px-4 py-10">
