@@ -1,5 +1,6 @@
 // [P0][CORE][API] Template endpoint for new routes
 import { NextRequest, NextResponse } from "next/server";
+import { z } from "zod";
 import { createPublicEndpoint } from "@fresh-schedules/api-framework";
 
 // [P1][API][CODE] Route API route handler
@@ -30,9 +31,12 @@ export const GET = createPublicEndpoint({
   },
 });
 
+const TemplatePostSchema = z.object({}).passthrough().optional();
+
 export const POST = createPublicEndpoint({
-  handler: async ({ request }) => {
-    const payload = await request.json().catch(() => ({}));
+  input: TemplatePostSchema,
+  handler: async ({ input }) => {
+    const payload = input ?? {};
     return NextResponse.json({ ok: true, payload }, { status: 201 });
   },
 });

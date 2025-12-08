@@ -2,6 +2,7 @@
 
 import { createAuthenticatedEndpoint } from "@fresh-schedules/api-framework";
 import { ok, serverError } from "../../_shared/validation";
+import { CreateSessionSchema } from "@fresh-schedules/types";
 
 /**
  * GET /api/session/bootstrap
@@ -28,15 +29,17 @@ export const GET = createAuthenticatedEndpoint({
  * Create new session
  */
 export const POST = createAuthenticatedEndpoint({
-  handler: async ({ request, context }) => {
+  input: CreateSessionSchema,
+  handler: async ({ input, context }) => {
     try {
-      const body = await request.json();
       const session = {
         userId: context.auth?.userId,
         email: context.auth?.email,
         createdAt: Date.now(),
-        ...body,
+        // input will be injected by the SDK factory into handler as `input`
       };
+      // Note: CreateSessionSchema validates incoming payload via `input` param
+      // If you need to access optional fields from the request body, use `input`.
       return ok(session);
     } catch {
       return serverError("Failed to create session");

@@ -3,6 +3,7 @@ export const dynamic = "force-dynamic";
 
 import { NextRequest, NextResponse } from "next/server";
 
+import { z } from "zod";
 import { createOrgEndpoint } from "@fresh-schedules/api-framework";
 import { badRequest, ok, serverError } from "../_shared/validation";
 
@@ -44,18 +45,23 @@ export const GET = createOrgEndpoint({
  * POST /api/items
  * Create new item
  */
+const CreateItemSchema = z.object({
+  name: z.string().min(1),
+  description: z.string().max(500).optional(),
+  quantity: z.number().int().nonnegative().optional(),
+  unit: z.string().optional(),
+  isActive: z.boolean().optional(),
+});
+
 export const POST = createOrgEndpoint({
   roles: ["manager"],
-  handler: async ({ request, context, params }) => {
+  input: CreateItemSchema,
+  handler: async ({ input, context }) => {
     try {
-      const body = await request.json();
-      // CreateItemSchema not available - using raw body
-      const validated = body;
-      
       const item = {
         id: `item-${Date.now()}`,
         orgId: context.org?.orgId,
-        ...validated,
+        ...input,
         createdBy: context.auth?.userId,
         createdAt: Date.now(),
       };

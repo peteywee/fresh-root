@@ -2,7 +2,7 @@
 export const dynamic = "force-dynamic";
 import { createOrgEndpoint } from "@fresh-schedules/api-framework";
 
-import { PositionSchema } from "@fresh-schedules/types";
+import { PositionSchema, UpdatePositionSchema } from "@fresh-schedules/types";
 import { NextResponse } from "next/server";
 
 import { checkRateLimit, RateLimits } from "../../../../src/lib/api/rate-limit";
@@ -58,7 +58,8 @@ export const GET = createOrgEndpoint({
  */
 export const PATCH = createOrgEndpoint({
   roles: ["manager"],
-  handler: async ({ request, context, params }) => {
+  input: UpdatePositionSchema,
+  handler: async ({ input, context, params }) => {
     // Apply rate limiting
     const rateLimitResult = await checkRateLimit(request, RateLimits.api);
     if (!rateLimitResult.allowed) {
@@ -75,8 +76,7 @@ export const PATCH = createOrgEndpoint({
 
     try {
       const { id } = params;
-      const body = await request.json();
-      const sanitized = sanitizeObject(body);
+      const sanitized = sanitizeObject(input);
 
       // Validate with Zod
       const validationResult = PositionSchema.safeParse(sanitized);

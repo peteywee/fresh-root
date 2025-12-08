@@ -2,21 +2,22 @@
 
 import { createAuthenticatedEndpoint } from "@fresh-schedules/api-framework";
 import { ok, serverError } from "../../_shared/validation";
+import { CreateNetworkOrgPayloadSchema } from "@fresh-schedules/types";
 
 /**
  * POST /api/onboarding/create-network-org
  * Create organization network
  */
 export const POST = createAuthenticatedEndpoint({
-  handler: async ({ request, context }) => {
+  input: CreateNetworkOrgPayloadSchema,
+  handler: async ({ input, context }) => {
     try {
-      const body = await request.json();
-      const { organizationName, type } = body;
-      
+      const { basics } = input;
+
       const org = {
         id: `org-${Date.now()}`,
-        name: organizationName,
-        type: type || "standard",
+        name: basics.orgName,
+        type: "standard",
         ownerId: context.auth?.userId,
         createdAt: Date.now(),
       };

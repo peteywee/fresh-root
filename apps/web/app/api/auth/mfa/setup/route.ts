@@ -17,20 +17,10 @@ const MFASetupSchema = z.object({}).passthrough().optional();
  */
 export const POST = createAuthenticatedEndpoint({
   rateLimit: { maxRequests: 50, windowMs: 60000 },
-  handler: async ({ request, context }) => {
+  input: MFASetupSchema,
+  handler: async ({ input, context }) => {
     try {
-      // Validate request body (even if empty)
-      let body: unknown;
-      try {
-        body = await request.json();
-      } catch {
-        body = {};
-      }
-
-      const result = MFASetupSchema.safeParse(body);
-      if (!result.success) {
-        return badRequest("Invalid request", result.error.issues);
-      }
+      // input is already validated (may be undefined)
 
       // Derive a stable label from user id for display if email is unknown client-side
       const userLabel = context.auth?.userId || "user";

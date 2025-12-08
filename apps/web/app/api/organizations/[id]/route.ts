@@ -2,6 +2,7 @@
 
 import { createOrgEndpoint } from "@fresh-schedules/api-framework";
 import { ok, serverError } from "../../_shared/validation";
+import { UpdateOrgPayloadSchema } from "@fresh-schedules/types";
 
 /**
  * GET /api/organizations/[id]
@@ -31,15 +32,14 @@ export const GET = createOrgEndpoint({
  */
 export const PATCH = createOrgEndpoint({
   roles: ["admin"],
-  handler: async ({ request, context, params }) => {
+  input: UpdateOrgPayloadSchema,
+  handler: async ({ input, context, params }) => {
     try {
-      const body = await request.json();
-      const { name, settings } = body;
       const updated = {
         id: params.id,
-        name,
-        settings,
+        ...input,
         updatedBy: context.auth?.userId,
+        updatedAt: Date.now(),
       };
       return ok(updated);
     } catch {
