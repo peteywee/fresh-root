@@ -17,17 +17,10 @@
   },
   "dependencies": {
     "commander": "^11.0.0",
-<<<<<<< HEAD
     "remark": "^15.0.0",
     "unified": "^11.0.0",
     "remark-parse": "^11.0.0",
     "remark-stringify": "^11.0.0"
-=======
-    "remark": "^14.0.2",
-    "unified": "^11.0.5",
-    "remark-parse": "^10.0.2",
-    "remark-stringify": "^10.0.2"
->>>>>>> pr-128
   },
   "devDependencies": {
     "ts-node": "^10.9.1",

@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Documentation Index
 
 Welcome to the Fresh Root documentation. This directory is organized into the following categories.
@@ -121,21 +120,7 @@ Status reports, audits, and historical analysis.
 
 ## 🏛 [Archive](./archive/)
 
-Historical documents, past migration logs, and deprecated guides.
-=======
-# Fresh Root
-
-**Status:** ✅ Production Ready | **Version:** 1.1.0 | **Last Updated:** November 10, 2025
-
-A production-ready Progressive Web App (PWA) for staff scheduling with enterprise-grade security and reliability.
-Built with Next.js, Firebase, and a modern monorepo architecture.
-
----
-
-## 🎯 Overview
-
-Fresh Root is an enterprise scheduling platform designed for teams that need reliable, secure, and
-observable staff management. Built with security-first principles and comprehensive monitoring,
+Historical documents, past migration logs, and deprecated guides
 logging, and operational support.
 
 **Key Capabilities:**
@@ -358,4 +343,3 @@ This project is licensed under the terms specified in [LICENSE](./LICENSE).
 ---
 
 **Last Updated:** November 10, 2025
->>>>>>> pr-128
