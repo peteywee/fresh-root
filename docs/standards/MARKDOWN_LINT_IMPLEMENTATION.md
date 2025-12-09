@@ -147,6 +147,7 @@ pnpm run docs:lint || {
 ```
 
 **Enforces**:
+
 - Consistent header hierarchy
 - Proper list formatting
 - No trailing whitespace
@@ -160,6 +161,7 @@ pnpm run docs:lint || {
 **Use Case**: General documentation, API docs, team guides
 
 Includes all critical rules from Strict profile except:
+
 - MD013 (line length) - disabled for flexibility
 - MD014 (bare URLs) - warning only
 - MD033 (HTML) - relaxed
@@ -171,6 +173,7 @@ Includes all critical rules from Strict profile except:
 **Use Case**: Legacy documentation, blog posts, informal content
 
 Only enforces:
+
 - Critical spacing issues
 - Header hierarchy
 - Code block fencing
@@ -236,6 +239,7 @@ code without fence
 ```javascript
 code with fence
 ```
+
 ```
 
 **Auto-fix**: 6/7
@@ -414,6 +418,7 @@ husky add .husky/pre-commit "pnpm run docs:lint"
 ### Issue: markdownlint-cli2 not found
 
 **Solution**:
+
 ```bash
 pnpm install -D markdownlint-cli2@^0.20.0
 pnpm add -D markdownlint@^0.40.0
@@ -422,6 +427,7 @@ pnpm add -D markdownlint@^0.40.0
 ### Issue: Too many line length violations
 
 **Solution**:
+
 ```json
 {
   "md013": {
@@ -435,6 +441,7 @@ pnpm add -D markdownlint@^0.40.0
 ### Issue: Auto-fix not working
 
 **Solution**:
+
 ```bash
 # Use --fix flag
 node scripts/markdown-lint-lib/task.mjs --fix
@@ -470,4 +477,4 @@ node scripts/markdown-lint-lib/task.mjs --verbose --fix
 
 **Status**: ✅ Ready for production use  
 **Maintenance**: Active  
-**Support**: See docs/CODING_RULES_AND_PATTERNS.md
+**Support**: See ./CODING_RULES_AND_PATTERNS.md

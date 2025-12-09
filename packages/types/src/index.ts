@@ -28,6 +28,8 @@ export * from "./compliance/adminResponsibilityForm";
 export * from "./networks";
 export * from "./onboarding";
 export * from "./events";
+export * from "./session";
+export * from "./internal";
 export * from "./errors";
 
 // Additional collections and convenience exports added by v14.5

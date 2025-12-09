@@ -1,3 +1,21 @@
+# AI Agents Documentation
+
+This directory contains documentation for AI agent systems, instruction hierarchies, and operational protocols.
+
+## Contents
+
+- [Agent Instruction Overhaul](./AGENT_INSTRUCTION_OVERHAUL.md) - Master project plan for instruction system restructuring
+- [Global Cognition Agent](./GLOBAL_COGNITION_AGENT.md) - Repository-aware analysis agent
+
+## Related Documentation
+
+- [CrewOps Manual](/docs/guides/crewops/01_CREWOPS_MANUAL.md) - Agent operating protocol
+- [Activation Framework](/docs/guides/crewops/02_ACTIVATION_FRAMEWORK.md) - Auto-activation system
+- [Red Team Workflow](/docs/guides/crewops/07_RED_TEAM_WORKFLOW.md) - Handoff protocol
+- [Agent System Architecture](/docs/visuals/AGENT_SYSTEM_ARCHITECTURE.md) - Visual diagrams
+
+---
+
 # Repository Guidelines
 
 Guide for Fresh Root (pnpm + Turbo). Start with `docs/INDEX.md` to ground yourself (`docs/RUNTIME_DOCUMENTATION_INDEX.md` for production); keep changes standards-aligned.
@@ -28,7 +46,7 @@ pnpm build                               # production build
 
 - Prettier: 2 spaces, 100-char lines, semicolons, double quotes (`pnpm format:check`).
 - ESLint: ordered imports (builtin/external → internal → relative), `prefer-const`, warn on `any`/unused vars; keep React hooks compliant.
-- Schema-first: define/extend Zod models in `packages/types` and derive API/UI types (see `docs/CODING_RULES_AND_PATTERNS.md`).
+- Schema-first: define/extend Zod models in `packages/types` and derive API/UI types (see `../standards/CODING_RULES_AND_PATTERNS.md`).
 - New or edited source files include the header block (file, purpose, layer, contracts, owner, tags) per `docs/standards/FILE_HEADER_STANDARD.md`.
 
 ## Testing Guidelines
