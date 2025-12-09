@@ -75,26 +75,13 @@ export async function createNetworkWithOrgAndVenue(
   const root = injectedDb ?? dbDefault;
   if (!root) throw new Error("admin_db_not_initialized");
 
-  // Extract and validate payload fields
-  const basics = payload.basics;
-  const venue = payload.venue;
-  const formToken = payload.formToken;
-
-<<<<<<< HEAD
-  // Type guard: ensure basics exists (required by schema)
+  // Extract payload
+  const { basics, venue, formToken } = payload || ({} as any);
   if (!basics) throw new Error("basics_required");
   if (!formToken) throw new Error("form_token_required");
 
-  const draft = await getAdminFormDraft(String(formToken));
-=======
-  // payload types can be loosely typed in some flows; coerce to known shapes for TS safety
-  // locals for TS safety
-  const basicsAny = basics as any;
-  const venueAny = venue as any;
   const formTokenStr = String(formToken);
-
   const draft = await getAdminFormDraft(formTokenStr);
->>>>>>> pr-128
   if (!draft) throw new Error("admin_form_not_found");
   if (draft.userId !== adminUid) throw new Error("admin_form_ownership_mismatch");
 
@@ -107,17 +94,11 @@ export async function createNetworkWithOrgAndVenue(
   const networkDoc: NetworkDoc = {
     id: networkId,
     slug: networkId,
-<<<<<<< HEAD
-    displayName: basicsAny?.orgName ?? networkId,
-    legalName: (draft.form as { data?: { legalName?: string } })?.data?.legalName ?? basicsAny?.orgName ?? null,
-    kind: basicsAny?.hasCorporateAboveYou ? "franchise_network" : "independent_org",
-    segment: basicsAny?.segment,
-=======
-    displayName: basicsAny?.orgName ?? networkId,
-    legalName: (draft.form as { data?: { legalName?: string } })?.data?.legalName ?? basicsAny?.orgName ?? null,
-    kind: basicsAny?.hasCorporateAboveYou ? "franchise_network" : "independent_org",
-    segment: basicsAny?.segment,
->>>>>>> pr-128
+    displayName: (basics as any)?.orgName ?? networkId,
+    legalName:
+      (draft.form as { data?: { legalName?: string } })?.data?.legalName ?? (basics as any)?.orgName ?? null,
+    kind: (basics as any)?.hasCorporateAboveYou ? "franchise_network" : "independent_org",
+    segment: (basics as any)?.segment,
     status: "pending_verification",
     ownerUserId: adminUid,
     createdAt: now,
@@ -125,7 +106,6 @@ export async function createNetworkWithOrgAndVenue(
     updatedAt: now,
     updatedBy: adminUid,
   };
-
   batch.set(networkRef, networkDoc);
 
   const complianceRef = networkRef
@@ -145,11 +125,7 @@ export async function createNetworkWithOrgAndVenue(
   const orgDoc: OrgDoc = {
     id: orgId,
     networkId,
-<<<<<<< HEAD
-    displayName: basicsAny?.orgName ?? "Org",
-=======
-    displayName: basicsAny?.orgName ?? "Org",
->>>>>>> pr-128
+    displayName: (basics as any)?.orgName ?? "Org",
     primaryContactUid: adminUid,
     createdAt: now,
     createdBy: adminUid,
@@ -161,21 +137,14 @@ export async function createNetworkWithOrgAndVenue(
   const venueDoc: VenueDoc = {
     id: venueId,
     networkId,
-<<<<<<< HEAD
-    name: venueAny?.venueName ?? "Main Venue",
-    timeZone: venueAny?.timeZone ?? "UTC",
-=======
-    name: venueAny?.venueName ?? "Main Venue",
-    timeZone: venueAny?.timeZone ?? "UTC",
->>>>>>> pr-128
+    name: (venue as any)?.venueName ?? "Main Venue",
+    timeZone: (venue as any)?.timeZone ?? "UTC",
     createdAt: now,
     createdBy: adminUid,
   };
   batch.set(venueRef, venueDoc);
 
-  const membershipRef = networkRef
-    .collection("memberships")
-    .doc() as DocumentReference<MembershipDoc>;
+  const membershipRef = networkRef.collection("memberships").doc() as DocumentReference<MembershipDoc>;
   const membershipDoc: MembershipDoc = {
     id: membershipRef.id,
     networkId,
@@ -189,11 +158,7 @@ export async function createNetworkWithOrgAndVenue(
   // Commit batch
   await batch.commit();
 
-<<<<<<< HEAD
   await consumeAdminFormDraft({ formToken: formTokenStr, expectedUserId: adminUid });
-=======
-  await consumeAdminFormDraft({ formToken: formTokenStr, expectedUserId: adminUid });
->>>>>>> pr-128
 
   return { networkId, orgId, venueId, status: "pending_verification" };
 }
