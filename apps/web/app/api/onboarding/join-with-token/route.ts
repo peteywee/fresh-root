@@ -1,6 +1,7 @@
 // [P0][ONBOARDING][JOIN][API] Join organization with token endpoint
 
 import { createAuthenticatedEndpoint } from "@fresh-schedules/api-framework";
+import { JoinWithTokenSchema } from "@fresh-schedules/types";
 import { ok, serverError } from "../../_shared/validation";
 
 /**
@@ -8,14 +9,14 @@ import { ok, serverError } from "../../_shared/validation";
  * Join an organization using an invite token
  */
 export const POST = createAuthenticatedEndpoint({
+  input: JoinWithTokenSchema,
   handler: async ({ input, context }) => {
     try {
-      // Note: input validation can be added with Zod schema if needed
-      const { token, invitationId } = input as any;
+      const { joinToken } = input;
 
       const result = {
         userId: context.auth?.userId,
-        invitationId,
+        joinToken,
         joinedAt: Date.now(),
         role: "member",
       };

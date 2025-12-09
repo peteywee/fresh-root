@@ -16,7 +16,7 @@ const parsePositiveInt = (value: string | null, fallback: number) => {
   return Number.isFinite(parsed) && parsed >= 0 ? parsed : fallback;
 };
 
-const getPagination = (request: NextRequest) => {
+const getPagination = (request: Request) => {
   const { searchParams } = new URL(request.url);
   return {
     limit: parsePositiveInt(searchParams.get("limit"), 20),
@@ -63,7 +63,7 @@ export interface ShiftDoc {
 /**
  * List schedules for an organization with pagination and type safety
  */
-const listSchedules = async (request: NextRequest, context: RequestContext) => {
+const listSchedules = async (request: Request, context: RequestContext) => {
   const pagination = getPagination(request);
   const { db, error } = getAdminDbOrError();
   if (error) {
@@ -96,7 +96,7 @@ const listSchedules = async (request: NextRequest, context: RequestContext) => {
 /**
  * Create a new schedule with full type safety
  */
-const createSchedule = async (request: NextRequest, context: RequestContext) => {
+const createSchedule = async (request: Request, context: RequestContext) => {
   const parsed = await parseJson(request, CreateScheduleSchema);
   if (!parsed.success) {
     return badRequest("Invalid payload", parsed.details);

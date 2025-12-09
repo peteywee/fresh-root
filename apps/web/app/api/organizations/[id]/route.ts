@@ -1,7 +1,13 @@
 // [P0][ORG][DETAIL][API] Organization detail endpoint
 
 import { createOrgEndpoint } from "@fresh-schedules/api-framework";
+import { z } from "zod";
 import { ok, serverError } from "../../_shared/validation";
+
+const UpdateOrgSchema = z.object({
+  name: z.string().optional(),
+  settings: z.record(z.string(), z.any()).optional(),
+});
 
 /**
  * GET /api/organizations/[id]
@@ -31,10 +37,10 @@ export const GET = createOrgEndpoint({
  */
 export const PATCH = createOrgEndpoint({
   roles: ["admin"],
-  handler: async ({ request, context, params }) => {
+  input: UpdateOrgSchema,
+  handler: async ({ input, context, params }) => {
     try {
-      const body = await request.json();
-      const { name, settings } = body;
+      const { name, settings } = input;
       const updated = {
         id: params.id,
         name,

@@ -1,14 +1,17 @@
 {
   "name": "fresh-root",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "private": true,
   "scripts": {
     "dev": "turbo run dev",
     "build": "turbo run build",
     "test": "turbo run test",
     "lint": "turbo run lint",
+    "lint:fix": "turbo run lint -- --fix",
     "typecheck": "turbo run typecheck",
     "format": "prettier --write \"**/*.{ts,tsx,md,json}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,md,json}\"",
+    "fix:all": "pnpm lint:fix && pnpm format && pnpm --filter @fresh-root/markdown-fixer fix",
     "clean": "turbo run clean && rm -rf node_modules",
     "prepare": "pnpm run enforce-pnpm",
     "enforce-pnpm": "node scripts/enforce-pnpm.js",
@@ -22,7 +25,12 @@
     "deps:analyze": "node scripts/analyze-tree-diff.mjs",
     "deps:analyze:verbose": "node scripts/analyze-tree-diff.mjs --verbose",
     "deps:check": "pnpm audit && pnpm ls --depth=0",
-    "deps:dedupe": "pnpm dedupe"
+    "deps:dedupe": "pnpm dedupe",
+    "validate:patterns": "node scripts/validate-patterns.mjs",
+    "validate:patterns:verbose": "node scripts/validate-patterns.mjs --verbose",
+    "docs:update": "node scripts/docs-auto-update.mjs",
+    "docs:update:verbose": "node scripts/docs-auto-update.mjs --verbose",
+    "docs:update:dry-run": "node scripts/docs-auto-update.mjs --dry-run --verbose"
   },
   "engines": {
     "node": ">=20.10.0",

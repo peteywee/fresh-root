@@ -150,3 +150,13 @@ Root `package.json` should **only list workspace packages in `pnpm-workspace.yam
 ```
 
 **Why**: npm registry doesn't have local workspace packages. pnpm reads `pnpm-workspace.yaml` to resolve them correctly.
+
+## TypeScript Schema Module Resolution in Monorepos
+
+When creating new schema files in `packages/types/src/` and immediately importing them in routes:
+
+**Common issue**: TypeScript can't resolve newly created exports even after adding to `index.ts`.
+
+**Solution**: Use **inline Zod schemas** in route files until module resolution stabilizes, then refactor to package imports once fully tested.
+
+**See**: `typescript-schema-pattern-memory.instructions.md` for detailed pattern and workaround steps.

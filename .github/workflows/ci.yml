@@ -57,6 +57,24 @@ jobs:
             exit 1
           fi
 
+      - name: Pattern Validation
+        continue-on-error: true
+        run: |
+          echo "## 📊 Pattern Validator Results" >> $GITHUB_STEP_SUMMARY
+          if node scripts/validate-patterns.mjs; then
+            echo "✅ Pattern validation passed" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "⚠️ Pattern violations detected (see report)" >> $GITHUB_STEP_SUMMARY
+            if [ -f pattern-validation-report.json ]; then
+              ERRORS=$(jq '.errors | length' pattern-validation-report.json 2>/dev/null || echo "0")
+              echo "" >> $GITHUB_STEP_SUMMARY
+              echo "| Category | Count |" >> $GITHUB_STEP_SUMMARY
+              echo "|----------|-------|" >> $GITHUB_STEP_SUMMARY
+              echo "| Tier 0 Errors | $(jq '[.errors[] | select(.tier==0)] | length' pattern-validation-report.json 2>/dev/null || echo "0") |" >> $GITHUB_STEP_SUMMARY
+              echo "| Total Violations | $ERRORS |" >> $GITHUB_STEP_SUMMARY
+            fi
+          fi
+
       - name: Lint (non-blocking)
         continue-on-error: true
         run: |

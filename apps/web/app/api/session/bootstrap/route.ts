@@ -1,7 +1,14 @@
 // [P0][SESSION][BOOTSTRAP][API] Bootstrap session endpoint
 
 import { createAuthenticatedEndpoint } from "@fresh-schedules/api-framework";
+import { z } from "zod";
 import { ok, serverError } from "../../_shared/validation";
+
+const CreateSessionSchema = z.object({
+  userId: z.string().optional(),
+  email: z.string().email().optional(),
+  metadata: z.record(z.string(), z.any()).optional(),
+});
 
 /**
  * GET /api/session/bootstrap
@@ -28,14 +35,14 @@ export const GET = createAuthenticatedEndpoint({
  * Create new session
  */
 export const POST = createAuthenticatedEndpoint({
-  handler: async ({ request, context }) => {
+  input: CreateSessionSchema,
+  handler: async ({ input, context }) => {
     try {
-      const body = await request.json();
       const session = {
-        userId: context.auth?.userId,
-        email: context.auth?.email,
+        userId: input?.userId || context.auth?.userId,
+        email: input?.email || context.auth?.email,
         createdAt: Date.now(),
-        ...body,
+        ...(input?.metadata || {}),
       };
       return ok(session);
     } catch {

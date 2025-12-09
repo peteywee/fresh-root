@@ -5,8 +5,12 @@
  * Tags: P0, CI, VALIDATION, GOVERNANCE
  *
  * Validates that files in a commit match the allowed patterns for their target branch.
- * Prevents docs/tests/logs from being committed to main/dev
- * Prevents code from being committed to docs-tests-logs
+ *
+ * Updated Dec 8, 2025:
+ * - docs/ now allowed on ALL branches
+ * - docs/production/ must sync to main
+ * - docs/dev/ auto-managed with dated versions (latest only)
+ * - Removed docs-tests-logs branch restrictions
  */
 
 const fs = require("fs");
@@ -17,88 +21,87 @@ const BRANCH_RULES = {
   main: {
     name: "Main (Production)",
     allowed: [
-      /^apps\/.*\.(ts|tsx|js|jsx|json|css)$/,
-      /^packages\/.*\.(ts|tsx|js|jsx|json|css)$/,
-      /^functions\/.*\.(ts|tsx|js|jsx|json|css)$/,
-      /^public\/.*\.(ts|tsx|js|jsx|json|css|svg|png|jpg|gif|webp)$/,
+      // Source code
+      /^apps\/.*\.(ts|tsx|js|jsx|json|css|md)$/,
+      /^packages\/.*\.(ts|tsx|js|jsx|json|css|md)$/,
+      /^functions\/.*\.(ts|tsx|js|jsx|json)$/,
+      /^public\/.*\.(ts|tsx|js|jsx|json|css|svg|png|jpg|gif|webp|ico)$/,
       /^src\/.*\.(ts|tsx|js|jsx|json|css)$/,
-      /^\.github\/workflows\/(?!.*-(test|coverage|performance|report)).*\.yml$/,
+      // Documentation - ALL docs allowed on main
+      /^docs\/.*\.(md|mermaid|svg|png)$/,
+      /^\.github\/instructions\/.*\.md$/,
+      /^\.github\/prompts\/.*\.md$/,
+      /^agents\/.*\.md$/,
+      // Config
+      /^\.github\/workflows\/.*\.yml$/,
       /^\.husky\/.*$/,
-      /^scripts\/(?!.*-test).*\.(ts|js|mjs)$/,
-      /^(tsconfig|jest|vitest|turbo|prettier|eslint)[^/]*\.(json|js|mjs|cjs)$/,
+      /^scripts\/.*\.(ts|js|mjs|sh)$/,
+      /^(tsconfig|jest|vitest|turbo|prettier|eslint|tailwind|postcss)[^/]*\.(json|js|mjs|cjs)$/,
       /^package\.json$/,
       /^pnpm-lock\.yaml$/,
+      /^pnpm-workspace\.yaml$/,
       /^(firestore|storage)\.rules$/,
+      /^firebase\.json$/,
       /^README\.md$/,
       /^LICENSE$/,
+      /^\.env\.example$/,
     ],
     forbidden: [
-      { regex: /^docs\//, reason: "Documentation belongs on docs-tests-logs" },
-      { regex: /\.e2e\.ts$/, reason: "E2E tests belong on docs-tests-logs" },
-      {
-        regex: /\.spec\.ts$/,
-        reason: "Test files belong on docs-tests-logs",
-      },
-      {
-        regex: /IMPLEMENTATION_COMPLETE/,
-        reason: "Reports belong on docs-tests-logs",
-      },
-      {
-        regex: /PHASE_\d+_|SUMMARY|REPORT/,
-        reason: "Project reports belong on docs-tests-logs",
-      },
-      { regex: /\.(log|report|metrics)$/, reason: "CI logs belong on docs-tests-logs" },
-      { regex: /coverage/, reason: "Coverage reports belong on docs-tests-logs" },
-      {
-        regex: /performance-metrics/,
-        reason: "Performance data belongs on docs-tests-logs",
-      },
+      // Only block CI artifacts, not docs
+      { regex: /\.(log)$/, reason: "Log files should not be committed" },
+      { regex: /^coverage\//, reason: "Coverage reports are generated, not committed" },
+      { regex: /^\.next\//, reason: "Build artifacts should not be committed" },
+      { regex: /^node_modules\//, reason: "Dependencies should not be committed" },
     ],
   },
   dev: {
-    name: "Dev (Working Branch)",
+    name: "Dev (Development)",
     allowed: [
-      /^apps\/.*\.(ts|tsx|js|jsx)$/,
-      /^packages\/.*\.(ts|tsx|js|jsx)$/,
-      /^functions\/.*\.(ts|tsx|js|jsx)$/,
-      /^src\/.*\.(ts|tsx|js|jsx)$/,
-      /^tests\/.*\.(test|spec)\.(ts|tsx|js)$/,
+      // Source code
+      /^apps\/.*\.(ts|tsx|js|jsx|json|css|md)$/,
+      /^packages\/.*\.(ts|tsx|js|jsx|json|css|md)$/,
+      /^functions\/.*\.(ts|tsx|js|jsx|json)$/,
+      /^public\/.*\.(ts|tsx|js|jsx|json|css|svg|png|jpg|gif|webp|ico)$/,
+      /^src\/.*\.(ts|tsx|js|jsx|json|css)$/,
+      // Tests - all tests allowed on dev
+      /^tests\/.*\.(test|spec|e2e)\.(ts|tsx|js)$/,
       /^__tests__\/.*\.(test|spec)\.(ts|tsx|js)$/,
       /^(apps|packages)\/.*\/__tests__\/.*\.(test|spec)\.(ts|tsx|js)$/,
+      /^e2e\/.*\.(spec|e2e)\.(ts|tsx|js)$/,
+      // Documentation - ALL docs allowed on dev
+      /^docs\/.*\.(md|mermaid|svg|png)$/,
+      /^\.github\/instructions\/.*\.md$/,
+      /^\.github\/prompts\/.*\.md$/,
+      /^agents\/.*\.md$/,
+      /^plan\/.*\.md$/,
+      // Config
       /^\.github\/workflows\/.*\.yml$/,
-      /^scripts\/.*\.(ts|js|mjs)$/,
-      /^(tsconfig|jest|vitest|turbo|prettier|eslint)[^/]*\.(json|js|mjs|cjs)$/,
+      /^\.husky\/.*$/,
+      /^scripts\/.*\.(ts|js|mjs|sh)$/,
+      /^(tsconfig|jest|vitest|turbo|prettier|eslint|tailwind|postcss)[^/]*\.(json|js|mjs|cjs)$/,
       /^package\.json$/,
       /^pnpm-lock\.yaml$/,
+      /^pnpm-workspace\.yaml$/,
       /^(firestore|storage)\.rules$/,
+      /^firebase\.json$/,
+      /^README\.md$/,
+      /^\.env\.example$/,
     ],
     forbidden: [
-      {
-        regex: /^docs\/(?!feature-\d+)/,
-        reason: "Only feature-specific docs allowed; general docs go to docs-tests-logs",
-      },
-      {
-        regex: /IMPLEMENTATION_COMPLETE/,
-        reason: "Project reports belong on docs-tests-logs",
-      },
-      {
-        regex: /PHASE_\d+_|SUMMARY|REPORT/,
-        reason: "Project reports belong on docs-tests-logs",
-      },
-      { regex: /\.(log|report|metrics)$/, reason: "CI logs belong on docs-tests-logs" },
-      { regex: /coverage/, reason: "Coverage reports belong on docs-tests-logs" },
-      {
-        regex: /performance-metrics/,
-        reason: "Performance data belongs on docs-tests-logs",
-      },
+      // Only block CI artifacts
+      { regex: /\.(log)$/, reason: "Log files should not be committed" },
+      { regex: /^coverage\//, reason: "Coverage reports are generated, not committed" },
+      { regex: /^\.next\//, reason: "Build artifacts should not be committed" },
+      { regex: /^node_modules\//, reason: "Dependencies should not be committed" },
     ],
   },
   "docs-tests-logs": {
     name: "Docs-Tests-Logs (Archive)",
     allowed: [
-      /^docs\/.*\.md$/,
-      /^\.github\/(IMPLEMENTATION_COMPLETE|REPORTS|SUMMARIES|BRANCH_STRATEGY)/,
-      /^\.github\/workflows\/(coverage|performance|test-results).*\.yml$/,
+      // Archive branch - accepts everything except production code
+      /^docs\/.*\.(md|mermaid|svg|png)$/,
+      /^\.github\/.*\.(md|yml)$/,
+      /^agents\/.*\.md$/,
       /^e2e\/.*\.(spec|e2e)\.(ts|tsx|js)$/,
       /^tests\/.*\.(test|spec)\.(ts|tsx|js)$/,
       /\.(log|report|metrics)$/,
@@ -106,33 +109,38 @@ const BRANCH_RULES = {
       /^performance-metrics/,
       /^TEST_RESULTS/,
       /^CI_REPORTS/,
-      /^\.github\/.*\.md$/,
     ],
     forbidden: [
+      // Production code should not go here
       {
-        regex: /^apps\/.*\.ts$/,
-        reason: "Feature code belongs on dev/main",
+        regex: /^apps\/.*\.(ts|tsx)$/,
+        reason: "Production code belongs on dev/main",
       },
-      { regex: /^packages\/.*\.ts$/, reason: "Feature code belongs on dev/main" },
-      { regex: /^functions\/.*\.ts$/, reason: "Feature code belongs on dev/main" },
-      { regex: /^scripts\/.*\.(ts|js)$/, reason: "Scripts belong on dev/main" },
-      {
-        regex: /^src\/.*\.ts$/,
-        reason: "Source code belongs on dev/main",
-      },
+      { regex: /^packages\/(?!.*\.md$).*\.(ts|tsx)$/, reason: "Production code belongs on dev/main" },
+      { regex: /^functions\/.*\.(ts)$/, reason: "Production code belongs on dev/main" },
     ],
   },
   feature: {
     name: "Feature Branch",
     allowed: [
-      /^apps\/.*\.(ts|tsx|js|jsx)$/,
-      /^packages\/.*\.(ts|tsx|js|jsx)$/,
-      /^functions\/.*\.(ts|tsx|js|jsx)$/,
-      /^src\/.*\.(ts|tsx|js|jsx)$/,
+      // Source code
+      /^apps\/.*\.(ts|tsx|js|jsx|json|css|md)$/,
+      /^packages\/.*\.(ts|tsx|js|jsx|json|css|md)$/,
+      /^functions\/.*\.(ts|tsx|js|jsx|json)$/,
+      /^src\/.*\.(ts|tsx|js|jsx|json|css)$/,
+      // Tests
       /^(apps|packages|functions)\/.*\/__tests__\/.*\.(test|spec)\.(ts|tsx|js)$/,
       /^tests\/.*\.(test|spec)\.(ts|tsx|js)$/,
-      /^docs\/feature-[0-9]+-.*\.md$/,
-      /^\.github\/workflows\/feature-.*\.yml$/,
+      // Documentation - feature docs allowed
+      /^docs\/.*\.(md|mermaid|svg|png)$/,
+      /^\.github\/instructions\/.*\.md$/,
+      /^\.github\/prompts\/.*\.md$/,
+      /^plan\/.*\.md$/,
+      // Config
+      /^\.github\/workflows\/.*\.yml$/,
+      /^scripts\/.*\.(ts|js|mjs|sh)$/,
+      /^package\.json$/,
+      /^pnpm-lock\.yaml$/,
     ],
     forbidden: [],
   },
@@ -152,6 +160,9 @@ function validateFiles(branchType, files) {
   }
 
   files.forEach((file) => {
+    // Skip empty lines and common ignored patterns
+    if (!file || file.startsWith('.git/')) return;
+
     // Check if file matches forbidden patterns
     const forbiddenRule = rules.forbidden.find((rule) =>
       rule.regex.test(file)
@@ -168,29 +179,18 @@ function validateFiles(branchType, files) {
     // Check if file matches allowed patterns
     const isAllowed = rules.allowed.some((regex) => regex.test(file));
     if (!isAllowed) {
-      // Check for common unintended patterns
-      if (/\.(log|report|metrics)$/.test(file)) {
+      // Only warn for truly unexpected files, not docs
+      if (/^node_modules\//.test(file) || /^\.next\//.test(file)) {
         errors.push({
           file,
-          reason: "CI logs/reports belong on docs-tests-logs",
-          severity: "ERROR",
-        });
-      } else if (/^docs\//.test(file)) {
-        errors.push({
-          file,
-          reason: "Documentation belongs on docs-tests-logs",
-          severity: "ERROR",
-        });
-      } else if (/IMPLEMENTATION_COMPLETE|REPORTS|SUMMARY/.test(file)) {
-        errors.push({
-          file,
-          reason: "Project reports belong on docs-tests-logs",
+          reason: "Build artifacts should not be committed",
           severity: "ERROR",
         });
       } else {
+        // Downgrade to warning for unrecognized patterns
         warnings.push({
           file,
-          reason: `File does not match allowed patterns for ${branchType}`,
+          reason: `File does not match standard patterns for ${branchType} (review recommended)`,
           severity: "WARNING",
         });
       }
