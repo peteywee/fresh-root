@@ -1,4 +1,4 @@
-// [P1][API][CODE] Batch API endpoint
+// [P0][API][CODE] Batch API endpoint
 // Tags: P1, API, CODE, BATCH
 
 import { createOrgEndpoint } from "@fresh-schedules/api-framework";
