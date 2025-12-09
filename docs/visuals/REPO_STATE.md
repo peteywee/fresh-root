@@ -44,11 +44,11 @@ stateDiagram-v2
 
 ## Recent Commits
 ```
-0058f05 Merge pull request #130 from peteywee/chore/docs-consolidation
-1b20227 Delete main branch merge gate workflow
-8186a7e docs(memory): add TypeScript schema pattern memory and cross-reference to monorepo guide
-eb07841 fix(tier-0): add Zod input validation to 6 API routes and integrate pattern validator into CI
-9946470 feat(v1.3.0): agent system consolidation with master contract and unified documentation
-3964e62 chore(docs): consolidate documentation into organized subdirectories
-48cbbe7 fi
+409c214 fix(code-review): remove unused variables from API route and script
+4553305 chore: resolve merge conflicts in docs and routes, normalize headings and schemas
+5c0c2d7 chore(docs): improve formatting and clarity in PNPM enforcement guide
+b5181bc feat(api): add backup endpoint for system backups
+bd864c9 chore: remove duplicate backup route pre-merge cleanup
+739086e fix(ci): resolve merge conflicts in package.json, markdown-fixer, docs README
+10edb1f chore(consolidate): merge content from PR
 ```
