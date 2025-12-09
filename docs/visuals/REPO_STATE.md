@@ -38,18 +38,17 @@ stateDiagram-v2
 ```
 
 ## Current State
-- **Branch**: `main`
+- **Branch**: `dev`
 - **Total Branches**: 2
 - **Uncommitted Changes**: 0
 
 ## Recent Commits
 ```
-45995bb docs(ci): add remediation report and new CI workflow
-dc983b1 chore(ci): remove broken Series A CI workflow
-4587a3d fix(web): remove redundant middleware.ts (Next.js 16 uses proxy.ts)
-534ba2d fix(ci): make visuals workflow gracefully handle permission limits
-505315f fix(ci): resolve workflow failures
-e45d4d4 fix(lint): suppress explicit-any warning for Timestamp type
-a764b49 fix(security): resolve all 9 vulnerabilities (CVE fixes)
-6e16dee feat(api-framework): SDK enhancements for main bra
+0058f05 Merge pull request #130 from peteywee/chore/docs-consolidation
+1b20227 Delete main branch merge gate workflow
+8186a7e docs(memory): add TypeScript schema pattern memory and cross-reference to monorepo guide
+eb07841 fix(tier-0): add Zod input validation to 6 API routes and integrate pattern validator into CI
+9946470 feat(v1.3.0): agent system consolidation with master contract and unified documentation
+3964e62 chore(docs): consolidate documentation into organized subdirectories
+48cbbe7 fi
 ```
