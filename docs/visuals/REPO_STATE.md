@@ -44,11 +44,11 @@ stateDiagram-v2
 
 ## Recent Commits
 ```
-0fdac1a Merge pull request #135 from peteywee/fix/triad-remediation
-4c47d8c fix(api): standardize header for batch route (P0)
-91f39fa Merge pull request #133 from peteywee/copilot/sub-pr-130
-6aa633e fix(tests): enhance batch route tests with additional scenarios and validation
-820dd77 fix(api): secure batch API with createOrgEndpoint + local schema
-c8c3455 fix(api): use createOrgEndpoint for batch route with manager role
-0915b29 fix(api): add local batch input schema and use createAuthenticatedE
+da21c49 Merge pull request #129 from peteywee:fix/triad-remediation-quickpush
+bef059a test(batch): update tests for timeout behavior
+c37c8a4 chore(remediation): apply pending route and schema updates, header fixes
+47d0abc chore(types): add standard header tags to schema files
+dc32496 fix(onboarding): add Zod input validation for join-with-token POST
+30b2722 feat(redteam): add security assessment planning and schema updates
+754b78b fix(api): apply SDK factory Zod input validation to backup, publi
 ```
