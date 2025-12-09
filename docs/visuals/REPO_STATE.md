@@ -39,17 +39,16 @@ stateDiagram-v2
 
 ## Current State
 - **Branch**: `main`
-- **Total Branches**: 10
-- **Uncommitted Changes**: 9
+- **Total Branches**: 2
+- **Uncommitted Changes**: 0
 
 ## Recent Commits
 ```
-9bc7ca6 feat(governance): distribute branch strategy rules to main branch
-a72924a feat(testintel): add E2E test generation, documentation, and npm publishing
-856da34 Merge pull request #112 from peteywee/test/intelligence
-cc02dd9 Add files via upload
-abf82cd Merge pull request #111 from peteywee/dev
-7e200fd Merge pull request #110 from peteywee/fix/triad-remediation
-0eff79c refactor: address legacy code duplication and improve documentation
-4c2fcec docs: add architecture overview and consolidati
+f1b4e0d chore(report): update pattern validation report for API route header check
+e7e285c chore(docs): merge production docs from docs/production-sync-from-dev
+14cec52 chore(docs): promote production docs from dev into branch for main PR
+45995bb docs(ci): add remediation report and new CI workflow
+dc983b1 chore(ci): remove broken Series A CI workflow
+4587a3d fix(web): remove redundant middleware.ts (Next.js 16 uses proxy.ts)
+534ba2d fix(ci): make visuals workflow gracefully handle permission li
 ```
