@@ -1,10 +1,5 @@
-<<<<<<< HEAD
 // [P0][INTERNAL][SCHEMA] Internal operations schema (backup, publish)
 // Tags: P0, INTERNAL, SCHEMA, ZOD, ADMIN
-=======
-// [P0][TYPES][INTERNAL] Internal operations schemas
-// Tags: P0, TYPES, SCHEMA
->>>>>>> 2166f9b (chore(types): add standard header tags to schema files)
 
 import { z } from "zod";
 export const CreateBackupSchema = z.object({

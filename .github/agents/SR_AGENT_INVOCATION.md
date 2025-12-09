@@ -39,11 +39,13 @@ Immediate Actions Required (SR Agent)
 
 4. After rotations, validate and re-run local CI tasks:
    - Run dependency install (note: prior attempt failed with frozen-lockfile). Use:
+
      ```bash
      pnpm -w install --no-frozen-lockfile
      pnpm -w typecheck
      node scripts/validate-patterns.mjs
      ```
+
    - If choosing to preserve lockfile, update `packages/markdown-fixer/package.json` to match the lockfile or coordinate a lockfile update via CI with a dedicated PR.
 
 5. Remediate Tier-0 validator issues (security wrappers & Zod input validation):
