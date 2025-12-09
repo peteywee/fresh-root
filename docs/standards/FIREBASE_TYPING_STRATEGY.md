@@ -18,9 +18,17 @@ date: 2025-12-02
 
 **Files Affected:**
 
+<<<<<<< HEAD:docs/standards/FIREBASE_TYPING_STRATEGY.md
 - app/api/\*_/_.ts (40+ route handlers)
 - src/lib/\*_/_.ts (utility functions)
 - lib/\*_/_.ts (helpers)
+=======
+**Files Affected:**
+
+- app/api/**/*.ts (40+ route handlers)
+- src/lib/**/*.ts (utility functions)
+- lib/**/*.ts (helpers)
+>>>>>>> pr-128:docs/FIREBASE_TYPING_STRATEGY.md
 - app/lib/firebaseClient.ts
 - app/actions/\*_/_.ts
 - instrumentation.ts
@@ -79,8 +87,13 @@ date: 2025-12-02
 
 **Files with Issue:**
 
+<<<<<<< HEAD:docs/standards/FIREBASE_TYPING_STRATEGY.md
 - app/api/\*/route.ts (multiple endpoint handlers)
 - app/actions/\*.ts (server actions)
+=======
+- app/api/*/route.ts (multiple endpoint handlers)
+- app/actions/*.ts (server actions)
+>>>>>>> pr-128:docs/FIREBASE_TYPING_STRATEGY.md
 
 **Fix Strategy:**
 
@@ -174,7 +187,12 @@ const userData = snapData<UserProfile>(snap);
 ---
 
 ## References
+<<<<<<< HEAD:docs/standards/FIREBASE_TYPING_STRATEGY.md
 - **Firebase Typing Issue:** https://github.com/firebase/firebase-js-sdk/issues/7598
+=======
+
+- **Firebase Typing Issue:** <https://github.com/firebase/firebase-js-sdk/issues/7598>
+>>>>>>> pr-128:docs/FIREBASE_TYPING_STRATEGY.md
 - **ESLint Config:** apps/web/eslint.config.mjs
 - **Firebase Files:** apps/web/src/lib/, apps/web/app/api/
 - **Type Definitions:** types/firebase-admin.d.ts

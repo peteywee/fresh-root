@@ -265,6 +265,11 @@ export async function handleUserSignup(userId: string) {
 ### 2.5 Ad-Hoc Lock Coordination
 **Locations:**
 
+<<<<<<< HEAD:docs/archive/mega-report-A/mega-book/fresh_root_mega_report_A/06_SDK_DEPRECATION_LEDGER/scheduling_ledger.md
+=======
+**Locations:**
+
+>>>>>>> pr-128:docs/mega-book/fresh_root_mega_report_A/06_SDK_DEPRECATION_LEDGER/scheduling_ledger.md
 - `functions/scheduled/maintenance.ts` (Firestore-based lock)
 - `src/services/scheduler/locks.ts` (homegrown implementation)
 
@@ -663,12 +668,18 @@ export const processInvoiceTask = onRequest(
 - **L2 Architecture:** See `03_SUBSYSTEMS_L2/scheduling.md` for comprehensive subsystem analysis
 - **Task Dependency Graph:** See `04_COMPONENTS_L3/task-coordination.md` for multi-step workflows
 - **Observability Standards:** See `04_COMPONENTS_L3/logging-standards.md` for structured logging codec
-- **Cloud Tasks Documentation:** https://cloud.google.com/tasks/docs
-- **Redlock Algorithm:** https://redis.io/docs/manual/patterns/distributed-locks/
+- **Cloud Tasks Documentation:** <https://cloud.google.com/tasks/docs>
+- **Redlock Algorithm:** <https://redis.io/docs/manual/patterns/distributed-locks/>
 
 ---
 
 ## 7. Version History
+<<<<<<< HEAD:docs/archive/mega-report-A/mega-book/fresh_root_mega_report_A/06_SDK_DEPRECATION_LEDGER/scheduling_ledger.md
 | Date       | Author            | Changes                                           |
 | ---------- | ----------------- | ------------------------------------------------- |
+=======
+
+| Date | Author | Changes |
+|------|--------|---------|
+>>>>>>> pr-128:docs/mega-book/fresh_root_mega_report_A/06_SDK_DEPRECATION_LEDGER/scheduling_ledger.md
 | 2025-11-30 | Architecture Team | Initial deprecation mapping and migration roadmap |

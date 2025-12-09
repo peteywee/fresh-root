@@ -2,7 +2,12 @@
 ## Package Management: pnpm-only Policy
 **CRITICAL:** This monorepo uses **pnpm exclusively**. Using npm or yarn will break dependency resolution and cause deployment failures.
 
+<<<<<<< HEAD:docs/standards/PNPM_ENFORCEMENT.md
 ### Why pnpm?
+=======
+### Why pnpm
+
+>>>>>>> pr-128:docs/PNPM_ENFORCEMENT.md
 1. **Monorepo Support**: Native workspace management across 8+ packages
 2. **Strict Dependency Resolution**: Prevents transitive dependency issues
 3. **Disk Efficiency**: Hard-linking prevents duplication

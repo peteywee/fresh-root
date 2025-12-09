@@ -74,6 +74,7 @@ export const POST = createAuthenticatedEndpoint({
 ```
 
 **Error Breakdown**:
+
 | Error Code | Count | Pattern |
 |-----------|-------|---------|
 | TS1128 | 233 | "Declaration or statement expected" - syntax |
@@ -91,8 +92,13 @@ export const POST = createAuthenticatedEndpoint({
 
 **Commits**:
 
+<<<<<<< HEAD:docs/archive/SESSION_SUMMARY_DEC_1_2025.md
 - `401908d`: Fixed ESLint script
 - `1e52512`: Reverted route files + added pnpm enforcement
+=======
+- `401908d`: Fixed ESLint script  
+- `1e52512`: Reverted route files + added pnpm enforcement  
+>>>>>>> pr-128:docs/SESSION_SUMMARY_DEC_1_2025.md
 - `717a40a`: Added pattern detection safeguards
 
 ---
@@ -273,9 +279,15 @@ TS2345: NextRequest type mismatch
 
 **Next Steps**:
 
+<<<<<<< HEAD:docs/archive/SESSION_SUMMARY_DEC_1_2025.md
 - \[ ] Either upgrade Next.js to 16.1+ (supports React 19) or downgrade @types/react to 18.x
 - \[ ] This is a separate task from Series-A enforcement
 - \[ ] Currently acceptable (tracked as known issue)
+=======
+- [ ] Either upgrade Next.js to 16.1+ (supports React 19) or downgrade @types/react to 18.x
+- [ ] This is a separate task from Series-A enforcement
+- [ ] Currently acceptable (tracked as known issue)
+>>>>>>> pr-128:docs/SESSION_SUMMARY_DEC_1_2025.md
 
 ### Code Smell Patterns
 **Detected**: 26 potential issues with incomplete try-catch blocks
@@ -288,6 +300,7 @@ TS2345: NextRequest type mismatch
 
 ## Files Changed Summary
 ### New Files
+
 - `.npmrc` - pnpm package manager config
 - `docs/PNPM_ENFORCEMENT.md` - CI/CD enforcement guide
 - `docs/ERROR_PREVENTION_PATTERNS.md` - Error analysis & prevention
@@ -295,11 +308,13 @@ TS2345: NextRequest type mismatch
 - `scripts/detect-error-patterns.js` - Error pattern detection
 
 ### Updated Files
+
 - `package.json` - Changed prepare script from `husky install` to `pnpm run enforce-pnpm`
 - `apps/web/package.json` - Updated lint scripts (removed eslint\_d daemon)
 - `.husky/pre-commit` - Enhanced with 6 validation steps
 
 ### Reverted Files (Fixed)
+
 - `apps/web/app/api/*` (22 route files) - Reverted to working HEAD to fix 427 errors
 
 ---

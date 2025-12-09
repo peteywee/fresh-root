@@ -11,6 +11,15 @@ const AddMemberSchema = z.object({
   role: z.enum(["member", "manager", "admin"]).describe("Member role in organization"),
 });
 
+const UpdateMemberSchema = z.object({
+  memberId: z.string().min(1),
+  role: z.enum(["member", "manager", "admin"]).optional(),
+});
+
+const RemoveMemberSchema = z.object({
+  memberId: z.string().min(1),
+});
+
 // TEST COVERAGE NOTE: AddMemberSchema validation tests should verify:
 // - email field validates format and is required
 // - role field restricts to valid enum values
@@ -47,10 +56,10 @@ export const GET = createOrgEndpoint({
  */
 export const POST = createOrgEndpoint({
   roles: ["admin"],
-  handler: async ({ request, context, params }) => {
+  input: AddMemberSchema,
+  handler: async ({ input, context, params }) => {
     try {
-      const body = await request.json();
-      const validated = AddMemberSchema.parse(body);
+      const validated = input;
       const member = {
         id: `member-${Date.now()}`,
         orgId: params.id,
@@ -71,10 +80,10 @@ export const POST = createOrgEndpoint({
  */
 export const PATCH = createOrgEndpoint({
   roles: ["admin"],
-  handler: async ({ request, context, params }) => {
+  input: UpdateMemberSchema,
+  handler: async ({ input, context, params }) => {
     try {
-      const body = await request.json();
-      const { memberId, role } = body;
+      const { memberId, role } = input;
       const updated = { memberId, role, updatedBy: context.auth?.userId };
       return ok(updated);
     } catch {
@@ -89,10 +98,10 @@ export const PATCH = createOrgEndpoint({
  */
 export const DELETE = createOrgEndpoint({
   roles: ["admin"],
-  handler: async ({ request, context, params }) => {
+  input: RemoveMemberSchema,
+  handler: async ({ input, context, params }) => {
     try {
-      const body = await request.json();
-      const { memberId } = body;
+      const { memberId } = input;
       return ok({ removed: true, memberId });
     } catch {
       return serverError("Failed to remove member");

@@ -2,7 +2,11 @@
 ## LEGACY\_COMPONENT: inlineScheduleCreationV1
 **TYPE:** Route/Function with inline Firestore writes
 
+<<<<<<< HEAD:docs/reports/mega-report/06_SDK_DEPRECATION_LEDGER/scheduling_ledger.md
 **LOCATION\_OLD** (representative):
+=======
+**LOCATION_OLD** (representative):
+>>>>>>> pr-128:docs/mega-report/06_SDK_DEPRECATION_LEDGER/scheduling_ledger.md
 
 - `apps/web/app/api/schedules/create/route.ts`
 - `functions/src/schedules/createScheduleInline.ts`

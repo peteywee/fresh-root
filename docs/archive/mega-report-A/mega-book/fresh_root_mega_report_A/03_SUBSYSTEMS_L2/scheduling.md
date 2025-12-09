@@ -5,6 +5,10 @@
 ---
 
 ## 1. Role in the System
+<<<<<<< HEAD:docs/archive/mega-report-A/mega-book/fresh_root_mega_report_A/03_SUBSYSTEMS_L2/scheduling.md
+=======
+
+>>>>>>> pr-128:docs/mega-book/fresh_root_mega_report_A/03_SUBSYSTEMS_L2/scheduling.md
 The scheduling subsystem is the temporal orchestration engine that coordinates asynchronous task execution across the platform. It bridges the event-driven architecture (pubsub, real-time triggers) with deterministic, time-based operations (cron jobs, deferred tasks, maintenance cycles).
 
 **Core responsibilities:**
@@ -269,10 +273,17 @@ export const resetUserTiers = onSchedule("0 0 * * MON", async () => {
 
 **Deployment Checklist:**
 
+<<<<<<< HEAD:docs/archive/mega-report-A/mega-book/fresh_root_mega_report_A/03_SUBSYSTEMS_L2/scheduling.md
 - \[ ] Deploy Redis cluster to staging
 - \[ ] Implement `AcquireLockFailure` handling
 - \[ ] Define lock acquisition timeout (recommend 30s)
 - \[ ] Add monitoring for lock contention
+=======
+- [ ] Deploy Redis cluster to staging
+- [ ] Implement `AcquireLockFailure` handling
+- [ ] Define lock acquisition timeout (recommend 30s)
+- [ ] Add monitoring for lock contention
+>>>>>>> pr-128:docs/mega-book/fresh_root_mega_report_A/03_SUBSYSTEMS_L2/scheduling.md
 
 ---
 

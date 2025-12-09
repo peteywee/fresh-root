@@ -50,11 +50,16 @@ export const GET = createOrgEndpoint({
  */
 export const POST = createOrgEndpoint({
   roles: ["manager"],
-  handler: async ({ request, context, params }) => {
+  input: CreatePositionSchema,
+  handler: async ({ input, context, params }) => {
     try {
+<<<<<<< HEAD
       const body = await request.json();
       const validated = CreatePositionSchema.parse(body);
 
+=======
+      const validated = input;
+>>>>>>> pr-128
       const position = {
         id: `pos-${Date.now()}`,
         orgId: context.org?.orgId,

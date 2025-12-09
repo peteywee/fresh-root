@@ -9,9 +9,15 @@
 
 ## 📁 Protocol Files (In Order of Reference)
 
+<<<<<<< HEAD:docs/guides/crewops/06_INDEX.md
 ### 1. **agents/CREWOPS\_QUICK\_REFERENCE.md** (7.8 KB) ⭐ START HERE
 
 **For**: Users new to the protocol\
+=======
+### 1. **agents/CREWOPS_QUICK_REFERENCE.md** (7.8 KB) ⭐ START HERE
+
+**For**: Users new to the protocol  
+>>>>>>> pr-128:docs/crewops/06_INDEX.md
 **Contains**:
 
 - Session bootstrap message
@@ -27,7 +33,11 @@
 
 ### 2. **agents/crewops.md** (24 KB) 📖 THE COMPLETE MANUAL
 
+<<<<<<< HEAD:docs/guides/crewops/06_INDEX.md
 **For**: Understanding the protocol deeply\
+=======
+**For**: Understanding the protocol deeply  
+>>>>>>> pr-128:docs/crewops/06_INDEX.md
 **Contains**:
 
 - Constitution (7 non-negotiable laws)
@@ -43,9 +53,15 @@
 
 ---
 
+<<<<<<< HEAD:docs/guides/crewops/06_INDEX.md
 ### 3. **agents/CREWOPS\_ACTIVATION.md** (9.6 KB) ⚙️ AUTO-ENGAGEMENT FRAMEWORK
 
 **For**: How the protocol automatically loads\
+=======
+### 3. **agents/CREWOPS_ACTIVATION.md** (9.6 KB) ⚙️ AUTO-ENGAGEMENT FRAMEWORK
+
+**For**: How the protocol automatically loads  
+>>>>>>> pr-128:docs/crewops/06_INDEX.md
 **Contains**:
 
 - Activation sequence (Stage 1, 2, 3)
@@ -60,9 +76,15 @@
 
 ---
 
+<<<<<<< HEAD:docs/guides/crewops/06_INDEX.md
 ### 4. **agents/CREWOPS\_ACTIVATION\_STATUS.md** (8.9 KB) 📊 STATUS TRACKING
 
 **For**: Verification and configuration\
+=======
+### 4. **agents/CREWOPS_ACTIVATION_STATUS.md** (8.9 KB) 📊 STATUS TRACKING
+
+**For**: Verification and configuration  
+>>>>>>> pr-128:docs/crewops/06_INDEX.md
 **Contains**:
 
 - What's active and where
@@ -77,9 +99,15 @@
 
 ---
 
+<<<<<<< HEAD:docs/guides/crewops/06_INDEX.md
 ### 5. **agents/CREWOPS\_IMPLEMENTATION\_COMPLETE.md** (12 KB) ✅ COMPLETION SUMMARY
 
 **For**: Overview of what's active\
+=======
+### 5. **agents/CREWOPS_IMPLEMENTATION_COMPLETE.md** (12 KB) ✅ COMPLETION SUMMARY
+
+**For**: Overview of what's active  
+>>>>>>> pr-128:docs/crewops/06_INDEX.md
 **Contains**:
 
 - Summary of all 4 files
@@ -213,11 +241,19 @@ Task complete with audit trail
 
 ### Keyword Modifiers (Optional)
 
+<<<<<<< HEAD:docs/guides/crewops/06_INDEX.md
 - CREWOPS\_OK: Acknowledge binding
 - CREWOPS\_DESIGN\_ONLY: Plan only
 - CREWOPS\_AUDIT: Find problems
 - CREWOPS\_EXECUTE: Run pre-planned
 - CREWOPS\_EMERGENCY: Fast-track
+=======
+- CREWOPS_OK: Acknowledge binding
+- CREWOPS_DESIGN_ONLY: Plan only
+- CREWOPS_AUDIT: Find problems
+- CREWOPS_EXECUTE: Run pre-planned
+- CREWOPS_EMERGENCY: Fast-track
+>>>>>>> pr-128:docs/crewops/06_INDEX.md
 
 ---
 
@@ -311,17 +347,29 @@ Protocol engages, but stops after Phase C (no code). ✅
 
 **In crewops.md**:
 
+<<<<<<< HEAD:docs/guides/crewops/06_INDEX.md
 - Section 0.1.5: Links to CREWOPS\_ACTIVATION.md
+=======
+- Section 0.1.5: Links to CREWOPS_ACTIVATION.md
+>>>>>>> pr-128:docs/crewops/06_INDEX.md
 - Section 6.5: Tool Use Discipline
 - Section 6.6: MCP Integration
 - Section 16-18: Tool & MCP Governance
 
+<<<<<<< HEAD:docs/guides/crewops/06_INDEX.md
 **In CREWOPS\_ACTIVATION.md**:
+=======
+**In CREWOPS_ACTIVATION.md**:
+>>>>>>> pr-128:docs/crewops/06_INDEX.md
 
 - Stage 1: Session bootstrap flow
 - Stage 3: Protocol engagement flow
 
+<<<<<<< HEAD:docs/guides/crewops/06_INDEX.md
 **In CREWOPS\_ACTIVATION\_STATUS.md**:
+=======
+**In CREWOPS_ACTIVATION_STATUS.md**:
+>>>>>>> pr-128:docs/crewops/06_INDEX.md
 
 - Activation Sequence: Detailed steps
 - Protocol Flow: Visual workflow

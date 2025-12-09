@@ -3,6 +3,7 @@ export const dynamic = "force-dynamic";
 
 import { NextRequest, NextResponse } from "next/server";
 
+import { z } from "zod";
 import { createOrgEndpoint } from "@fresh-schedules/api-framework";
 import { badRequest, ok, serverError } from "../_shared/validation";
 import { CreateItemSchema } from "@fresh-schedules/types";
@@ -45,6 +46,14 @@ export const GET = createOrgEndpoint({
  * POST /api/items
  * Create new item
  */
+const CreateItemSchema = z.object({
+  name: z.string().min(1),
+  description: z.string().max(500).optional(),
+  quantity: z.number().int().nonnegative().optional(),
+  unit: z.string().optional(),
+  isActive: z.boolean().optional(),
+});
+
 export const POST = createOrgEndpoint({
   roles: ["manager"],
   input: CreateItemSchema,
