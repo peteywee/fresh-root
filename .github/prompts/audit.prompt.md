@@ -2,16 +2,7 @@
 agent: "agent"
 description: "Security audit based on OWASP Top 10 and codebase patterns"
 tools:
-<<<<<<< HEAD
-  [
-    "search/codebase",
-    "search",
-    "problems",
-    "usages",
-  ]
-=======
   ['search', 'usages', 'problems', 'testFailure', 'fetch']
->>>>>>> 1eb7759 (feat(redteam): add security assessment planning and schema updates)
 ---
 
 # Security Audit
