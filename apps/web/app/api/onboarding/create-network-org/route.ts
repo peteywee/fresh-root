@@ -12,7 +12,7 @@ export const POST = createAuthenticatedEndpoint({
   input: CreateNetworkOrgPayloadSchema,
   handler: async ({ input, context }) => {
     try {
-      const { basics, venue, formToken } = input;
+      const { basics, venue } = input;
 
       const org = {
         id: `org-${Date.now()}`,
