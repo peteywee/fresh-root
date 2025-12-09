@@ -96,12 +96,29 @@ describe("POST /api/batch", () => {
       { id: "1", payload: { a: 1 } },
       { id: "2", payload: { delay: 200 } },
     ];
+<<<<<<< HEAD
     // To force timeout, set lower per-item timeout, patch processBatchItems config call? For now just check slow processing returns a success or failure depending on set timeouts
     const requestForProcess = createMockRequest("/api/batch", { method: "POST", body: { items } });
     const requestForPost = createMockRequest("/api/batch", { method: "POST", body: { items } });
     await expect(processBatchItems(items, ctx as any, requestForProcess as any)).rejects.toThrow(/
       /exceeds maximum/,
     );
+=======
+    // To force timeout, set lower per-item timeout in the handler (createBatchHandler default is 5000ms here).
+    const ctx = createMockOrgContext();
+    const requestForProcess = createMockRequest("/api/batch", { method: "POST", body: { items } });
+    const requestForPost = createMockRequest("/api/batch", { method: "POST", body: { items } });
+
+    // Call the helper directly — we expect the slow item to time out and the handler to mark it as failed
+    const result = await processBatchItems(items, ctx as any, requestForProcess as any);
+    expect(result.totalItems).toBe(2);
+    // the second item (index 1) should be marked as failure due to timeout
+    expect(result.results[1].success).toBe(false);
+    expect(result.results[1].error?.message).toContain("timed out");
+
+    // Also assert the endpoint wrapper returns the same shape
+    const response = await POST(requestForPost as any, { params: Promise.resolve({}) as Promise<Record<string, string>> });
+>>>>>>> 3b100d5 (test(batch): update tests for timeout behavior)
     const wrapped = await response.json();
     const batch4 = unwrapData(wrapped);
     expect(batch4.totalItems).toBe(2);
