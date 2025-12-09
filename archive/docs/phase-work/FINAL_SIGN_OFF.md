@@ -73,7 +73,7 @@ The `fresh-root` repository has been comprehensively audited, hardened, and veri
 
 ## 📚 Production Documentation (8 Files)
 
-### 1. **PRODUCTION_DOCS_INDEX.md** (Navigation Hub)
+### 1. **docs/production/PRODUCTION_DOCS_INDEX.md** (Navigation Hub)
 
 - Central index linking all production documentation
 - Quick reference for deployment teams and developers
@@ -85,13 +85,13 @@ The `fresh-root` repository has been comprehensively audited, hardened, and veri
 - Quality gates, security posture, metrics
 - **Use**: Quick status overview with ASCII tables
 
-### 3. **PRODUCTION_READINESS_SIGN_OFF.md** (Official Sign-Off)
+### 3. **docs/production/PRODUCTION_READINESS_SIGN_OFF.md** (Official Sign-Off)
 
 - Comprehensive production readiness assessment
 - All quality metrics and compliance verification
 - **Use**: Official documentation for deployment approval
 
-### 4. **DEPLOYMENT_REPORT.md** (Step-by-Step Guide)
+### 4. **docs/production/DEPLOYMENT_REPORT.md** (Step-by-Step Guide)
 
 - Pre-deployment, deployment, and post-deployment procedures
 - Verification commands and success criteria
@@ -109,7 +109,7 @@ The `fresh-root` repository has been comprehensively audited, hardened, and veri
 - Memory configuration and optimization guide
 - **Use**: For operational teams managing production memory
 
-### 7. **PRODUCTION_READINESS_KPI.md** (Key Performance Indicators)
+### 7. **docs/production/PRODUCTION_READINESS_KPI.md** (Key Performance Indicators)
 
 - Quantified metrics and performance baselines
 - SLA targets and monitoring thresholds

@@ -252,7 +252,7 @@ pnpm dev
 | ------------------------------------------------------ | ----------------------------------------------------------- |
 | `docs/standards/OBSERVABILITY_AND_TRACING_STANDARD.md` | Observability policy (when to span, what to measure)        |
 | `docs/RATE_LIMIT_IMPLEMENTATION.md`                    | Rate limiting strategy (dual-mode, fallback, observability) |
-| `docs/PRODUCTION_ENV_VALIDATION.md`                    | Environment validation approach (Zod schema, gating)        |
+| `docs/production/PRODUCTION_ENV_VALIDATION.md`         | Environment validation approach (Zod schema, gating)        |
 | `docs/ARCHITECTURE_DIAGRAMS.md`                        | Visual architecture reference (NEW - 4 diagrams)            |
 
 ---

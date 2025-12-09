@@ -98,9 +98,9 @@ Every production component on `main` links to its standards on `dev`:
 ```
 docs/
 ├── RUNTIME_DOCUMENTATION_INDEX.md (this links to everything)
-├── PRODUCTION_READINESS_EXECUTIVE_SUMMARY.md (current status)
-├── PRODUCTION_READINESS.md (detailed analysis)
-└── PRODUCTION_DEPLOYMENT_GUIDE.md (how to deploy)
+├── production/PRODUCTION_READINESS_EXECUTIVE_SUMMARY.md (current status)
+├── production/PRODUCTION_READINESS.md (detailed analysis)
+└── production/PRODUCTION_DEPLOYMENT_GUIDE.md (how to deploy)
 
 .github/workflows/
 └── guard-main.yml (production gate that enforces standards)
@@ -269,9 +269,9 @@ fresh-root/
 ├── main (production branch)
 │   ├── docs/
 │   │   ├── RUNTIME_DOCUMENTATION_INDEX.md ← START HERE
-│   │   ├── PRODUCTION_READINESS_EXECUTIVE_SUMMARY.md
-│   │   ├── PRODUCTION_READINESS.md
-│   │   └── PRODUCTION_DEPLOYMENT_GUIDE.md
+│   │   ├── production/PRODUCTION_READINESS_EXECUTIVE_SUMMARY.md
+│   │   ├── production/PRODUCTION_READINESS.md
+│   │   └── production/PRODUCTION_DEPLOYMENT_GUIDE.md
 │   └── .github/workflows/
 │       ├── guard-main.yml (references dev standards in error messages)
 │       ├── ci-patterns.yml
