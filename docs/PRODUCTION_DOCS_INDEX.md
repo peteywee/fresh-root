@@ -1,8 +1,8 @@
-# Production Deployment Documentation Index
+# NOTE: This file was moved to docs/production/PRODUCTION_DOCS_INDEX.md
 
-**Status**: ✅ PRODUCTION READY  
-**Date**: November 29, 2025  
-**Release Candidate**: fresh-root@1.1.0
+This file has been moved to `docs/production/PRODUCTION_DOCS_INDEX.md` and is maintained there as the canonical source of truth.
+
+Please update bookmarks and references to the new location.
 
 ---
 

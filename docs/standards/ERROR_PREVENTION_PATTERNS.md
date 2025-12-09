@@ -261,12 +261,7 @@ cat error-report.txt | wc -l  # Should stay at 13 (React version only)
 - **TypeScript Error Codes**: <https://www.typescriptlang.org/docs/handbook/error-index.html>
 - **ESLint Rules**: <https://eslint.org/docs/rules/>
 - **Husky Docs**: <https://typicode.github.io/husky/>
-<<<<<<< HEAD:docs/standards/ERROR_PREVENTION_PATTERNS.md
-- **Series-A Standards**: See `../production/PRODUCTION_READINESS.md`
-=======
-- **Series-A Standards**: See `docs/PRODUCTION_READINESS.md`
-
->>>>>>> pr-128:docs/ERROR_PREVENTION_PATTERNS.md
+- **Series-A Standards**: See `docs/production/PRODUCTION_READINESS.md`
 
 ---
 
