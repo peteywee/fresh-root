@@ -181,11 +181,7 @@ Total: 4,500+ lines of production-ready code
 
 ## 🚀 How To Use
 
-<<<<<<<< HEAD:docs/reports/TEST_INTELLIGENCE_SUMMARY.md
-### Run The Demo (See It In Action):
-========
 ### Run The Demo (See It In Action)
->>>>>>>> pr-128:archive/docs/test-reports/TEST_INTELLIGENCE_SUMMARY.md
 
 ```bash
 cd tests/intelligence
@@ -193,11 +189,7 @@ pnpm install
 pnpm demo
 ```
 
-<<<<<<<< HEAD:docs/reports/TEST_INTELLIGENCE_SUMMARY.md
-### Run Individual Features:
-========
 ### Run Individual Features
->>>>>>>> pr-128:archive/docs/test-reports/TEST_INTELLIGENCE_SUMMARY.md
 
 ```bash
 pnpm test:auto-generate      # Auto-generate tests
@@ -210,9 +202,13 @@ pnpm test:cicd               # CI/CD validation
 ```
 
 <<<<<<<< HEAD:docs/reports/TEST_INTELLIGENCE_SUMMARY.md
-### Run Complete Suite:
-========
+
 ### Run Complete Suite
+
+========
+
+### Run Complete Suite
+>>>>>>>>
 >>>>>>>> pr-128:archive/docs/test-reports/TEST_INTELLIGENCE_SUMMARY.md
 
 ```bash
@@ -221,9 +217,13 @@ pnpm test:intelligence:quick # Quick validation (5 min)
 ```
 
 <<<<<<<< HEAD:docs/reports/TEST_INTELLIGENCE_SUMMARY.md
-### View Outputs:
-========
+
 ### View Outputs
+
+========
+
+### View Outputs
+>>>>>>>>
 >>>>>>>> pr-128:archive/docs/test-reports/TEST_INTELLIGENCE_SUMMARY.md
 
 ```bash
@@ -237,9 +237,13 @@ open tests/intelligence/performance-report.html
 ## 🎓 Technical Deep Dive
 
 <<<<<<<< HEAD:docs/reports/TEST_INTELLIGENCE_SUMMARY.md
-### Technologies Used:
-========
+
 ### Technologies Used
+
+========
+
+### Technologies Used
+>>>>>>>>
 >>>>>>>> pr-128:archive/docs/test-reports/TEST_INTELLIGENCE_SUMMARY.md
 
 - **TypeScript** - Type-safe implementation
@@ -251,9 +255,13 @@ open tests/intelligence/performance-report.html
 - **diff** - Self-healing code comparison
 
 <<<<<<<< HEAD:docs/reports/TEST_INTELLIGENCE_SUMMARY.md
-### Architectural Patterns:
-========
+
 ### Architectural Patterns
+
+========
+
+### Architectural Patterns
+>>>>>>>>
 >>>>>>>> pr-128:archive/docs/test-reports/TEST_INTELLIGENCE_SUMMARY.md
 
 - **Singleton Pattern** - Global instances (profiler, analytics)
@@ -264,9 +272,13 @@ open tests/intelligence/performance-report.html
 - **Middleware Pattern** - Chaos injection
 
 <<<<<<<< HEAD:docs/reports/TEST_INTELLIGENCE_SUMMARY.md
-### Design Principles:
-========
+
 ### Design Principles
+
+========
+
+### Design Principles
+>>>>>>>>
 >>>>>>>> pr-128:archive/docs/test-reports/TEST_INTELLIGENCE_SUMMARY.md
 
 - **DRY** - Reusable utilities and factories
@@ -347,19 +359,25 @@ Zero-maintenance testing:
 ### vs. Stryker (Mutation Testing)
 
 <<<<<<<< HEAD:docs/reports/TEST_INTELLIGENCE_SUMMARY.md
+
 - ⚠️ Stryker: Mutation testing only
 ========
 - ⚠️  Stryker: Mutation testing only
+
 >>>>>>>> pr-128:archive/docs/test-reports/TEST_INTELLIGENCE_SUMMARY.md
+
 - ✅ Test Intelligence: Mutation + 7 other systems integrated
 
 ### vs. Chaos Toolkit
 
 <<<<<<<< HEAD:docs/reports/TEST_INTELLIGENCE_SUMMARY.md
+
 - ⚠️ Chaos Toolkit: Chaos engineering only
 ========
 - ⚠️  Chaos Toolkit: Chaos engineering only
+
 >>>>>>>> pr-128:archive/docs/test-reports/TEST_INTELLIGENCE_SUMMARY.md
+
 - ✅ Test Intelligence: Chaos + comprehensive testing
 
 ---
@@ -446,9 +464,13 @@ This is not just a test suite. It's a **complete testing ecosystem** that:
 ## 📞 Quick Reference
 
 <<<<<<<< HEAD:docs/reports/TEST_INTELLIGENCE_SUMMARY.md
-### Key Files:
-========
+
 ### Key Files
+
+========
+
+### Key Files
+>>>>>>>>
 >>>>>>>> pr-128:archive/docs/test-reports/TEST_INTELLIGENCE_SUMMARY.md
 
 - `tests/intelligence/README.md` - Full documentation
@@ -456,9 +478,13 @@ This is not just a test suite. It's a **complete testing ecosystem** that:
 - `tests/intelligence/demo.ts` - Live demo
 
 <<<<<<<< HEAD:docs/reports/TEST_INTELLIGENCE_SUMMARY.md
-### Key Commands:
-========
+
 ### Key Commands
+
+========
+
+### Key Commands
+>>>>>>>>
 >>>>>>>> pr-128:archive/docs/test-reports/TEST_INTELLIGENCE_SUMMARY.md
 
 ```bash
@@ -468,9 +494,13 @@ open tests/intelligence/dashboard.html  # View results
 ```
 
 <<<<<<<< HEAD:docs/reports/TEST_INTELLIGENCE_SUMMARY.md
-### Key Metrics:
-========
+
 ### Key Metrics
+
+========
+
+### Key Metrics
+>>>>>>>>
 >>>>>>>> pr-128:archive/docs/test-reports/TEST_INTELLIGENCE_SUMMARY.md
 
 - **Test Coverage**: 85%+

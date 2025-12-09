@@ -9,133 +9,57 @@
 
 ## 📁 Protocol Files (In Order of Reference)
 
-<<<<<<< HEAD:docs/guides/crewops/06_INDEX.md
 ### 1. **agents/CREWOPS\_QUICK\_REFERENCE.md** (7.8 KB) ⭐ START HERE
 
 **For**: Users new to the protocol\
-=======
-### 1. **agents/CREWOPS_QUICK_REFERENCE.md** (7.8 KB) ⭐ START HERE
-
-**For**: Users new to the protocol  
->>>>>>> pr-128:docs/crewops/06_INDEX.md
 **Contains**:
 
 - Session bootstrap message
 - What happens automatically
 - Keyword modifiers quick reference
-- Crew roles at a glance
-- Validation gates summary
-- Typical workflow example
-
-**Read this first** to understand what to expect.
-
 ---
 
 ### 2. **agents/crewops.md** (24 KB) 📖 THE COMPLETE MANUAL
-
-<<<<<<< HEAD:docs/guides/crewops/06_INDEX.md
 **For**: Understanding the protocol deeply\
-=======
-**For**: Understanding the protocol deeply  
->>>>>>> pr-128:docs/crewops/06_INDEX.md
 **Contains**:
 
 - Constitution (7 non-negotiable laws)
 - Crew hierarchy & roles (Section 3)
-- Swarm protocol: Phases A→E (Section 4)
-- Tool use discipline (Section 6.5)
-- MCP integration framework (Section 6.6)
-- Tool governance & enforcement (Section 16)
-- Decision audit & verification (Section 17)
-- Integration examples (Section 18)
-
-**Authority**: This is the binding document. All workers inherit it.
 
 ---
 
-<<<<<<< HEAD:docs/guides/crewops/06_INDEX.md
-### 3. **agents/CREWOPS\_ACTIVATION.md** (9.6 KB) ⚙️ AUTO-ENGAGEMENT FRAMEWORK
 
 **For**: How the protocol automatically loads\
-=======
-### 3. **agents/CREWOPS_ACTIVATION.md** (9.6 KB) ⚙️ AUTO-ENGAGEMENT FRAMEWORK
-
-**For**: How the protocol automatically loads  
->>>>>>> pr-128:docs/crewops/06_INDEX.md
 **Contains**:
 
 - Activation sequence (Stage 1, 2, 3)
-- Non-trivial prompt detection rules
-- Phase execution workflow (A→E)
-- Keyword modifiers (8 types)
-- Tool activation per role
-- Worker responsibilities matrix
-- Orchestrator enforcement checklist
-
 **Purpose**: Explains how the protocol self-initializes without user action.
 
 ---
-
-<<<<<<< HEAD:docs/guides/crewops/06_INDEX.md
 ### 4. **agents/CREWOPS\_ACTIVATION\_STATUS.md** (8.9 KB) 📊 STATUS TRACKING
 
 **For**: Verification and configuration\
-=======
-### 4. **agents/CREWOPS_ACTIVATION_STATUS.md** (8.9 KB) 📊 STATUS TRACKING
-
-**For**: Verification and configuration  
->>>>>>> pr-128:docs/crewops/06_INDEX.md
 **Contains**:
 
-- What's active and where
-- How the protocol works
-- When it engages (bootstrap + non-trivial)
-- Binding priority order
-- Tool authority matrix
-- Green gates checklist
-- Session memory hooks
 
 **Use**: Verify protocol is active; understand enforcement.
 
----
 
-<<<<<<< HEAD:docs/guides/crewops/06_INDEX.md
 ### 5. **agents/CREWOPS\_IMPLEMENTATION\_COMPLETE.md** (12 KB) ✅ COMPLETION SUMMARY
 
 **For**: Overview of what's active\
-=======
-### 5. **agents/CREWOPS_IMPLEMENTATION_COMPLETE.md** (12 KB) ✅ COMPLETION SUMMARY
-
-**For**: Overview of what's active  
->>>>>>> pr-128:docs/crewops/06_INDEX.md
 **Contains**:
-
-- Summary of all 4 files
-- Activation flow (automatic)
-- Protocol phases A→E
-- Crew roles with tools
-- Security supremacy rules
-- Definition of Done
-- Keyword modifiers
 - Typical workflow example
 
 **Purpose**: High-level view of entire implementation.
-
 ---
 
 ### 6. **guides/crewops/07\_RED\_TEAM\_WORKFLOW.md** (NEW) 🔴 SECURITY HANDOFF
 
 **For**: Security-critical changes and adversarial testing\
-**Contains**:
-
-- 14 attack vectors across 4 categories (SEC, LOG, PAT, EDGE)
-- Agent → Red Team → Sr Dev → User handoff protocol
-- Veto triggers and escalation criteria
-- Simulated red team workflow template
 - Confidence scoring and risk assessment
 - Breaking change detection
 
-**Purpose**: Formalize security review workflow for high-risk changes.
 
 ---
 
@@ -167,7 +91,6 @@
 3. Read: CREWOPS_ACTIVATION.md (engagement framework)
 4. Reference: CREWOPS_ACTIVATION_STATUS.md (configuration)
 5. Reference: CREWOPS_IMPLEMENTATION_COMPLETE.md (summary)
-```
 
 ---
 
@@ -199,7 +122,6 @@ All workers deployed with Constitutional clauses
 Crew executes, tools deployed, gates verified
     ↓
 Task complete with audit trail
-```
 
 ---
 
@@ -224,11 +146,6 @@ Task complete with audit trail
 5. **Research Analyst**: Verify + tool deployment
 6. **QA/Test Engineer**: Validation + testing
 
-### Phases (A→E)
-
-- **A**: Context Saturation (READ)
-- **B+C**: Planning + Team Assembly (DESIGN)
-- **D**: Action Matrix (ACT)
 - **E**: Security Veto + Reflexion (VERIFY)
 - **Validation**: Green gates + DoD
 
@@ -239,21 +156,7 @@ Task complete with audit trail
 3. Secondary sources
 4. Assumptions (lowest, labeled)
 
-### Keyword Modifiers (Optional)
-
-<<<<<<< HEAD:docs/guides/crewops/06_INDEX.md
-- CREWOPS\_OK: Acknowledge binding
-- CREWOPS\_DESIGN\_ONLY: Plan only
-- CREWOPS\_AUDIT: Find problems
 - CREWOPS\_EXECUTE: Run pre-planned
-- CREWOPS\_EMERGENCY: Fast-track
-=======
-- CREWOPS_OK: Acknowledge binding
-- CREWOPS_DESIGN_ONLY: Plan only
-- CREWOPS_AUDIT: Find problems
-- CREWOPS_EXECUTE: Run pre-planned
-- CREWOPS_EMERGENCY: Fast-track
->>>>>>> pr-128:docs/crewops/06_INDEX.md
 
 ---
 
@@ -265,24 +168,12 @@ Task complete with audit trail
 | crewops.md                         | Binding authority      | Need rule clarification       |
 | CREWOPS\_ACTIVATION.md              | Bootstrap framework    | Understanding auto-engagement |
 | CREWOPS\_ACTIVATION\_STATUS.md       | Configuration tracking | Verifying what's active       |
-| CREWOPS\_IMPLEMENTATION\_COMPLETE.md | High-level overview    | Need summary view             |
 
 ---
 
 ## ✅ What's Guaranteed
 
-When protocol engages on your prompt:
-
-- ✅ Constitution is binding (immutable)
-- ✅ Crew is assembled (6 mandatory roles)
-- ✅ Tools auto-deploy (Research Analyst + QA)
-- ✅ Phases A→E execute in order
-- ✅ Evidence is verified (tool + docs)
-- ✅ Security veto is enforced (Red Team)
-- ✅ Validation gates are checked
-- ✅ Audit trail is recorded
 - ✅ Rollback path exists
-- ✅ DoD is verified before completion
 
 ---
 
@@ -294,19 +185,12 @@ When protocol engages on your prompt:
 4. **Phases A→E execute** → Crew works automatically
 5. **Task complete** → With audit trail + validation
 
-No setup needed. No configuration. Just ask.
 
 ---
 
-## 🎯 Quick Checklist for You
-
-- \[ ] Read CREWOPS\_QUICK\_REFERENCE.md (to understand what to expect)
-- \[ ] Understand Phases A→E (Context → Plan → Act → Verify)
-- \[ ] Know the Constitution (7 binding laws)
 - \[ ] Understand Red Team veto (Security Supremacy)
 - \[ ] Optional: Use keyword modifiers if needed
 
-Then: **Ask your next question.** Protocol does the rest.
 
 ---
 
@@ -339,42 +223,18 @@ I need a security design for the payment flow.
 CREWOPS_DESIGN_ONLY
 ```
 
-Protocol engages, but stops after Phase C (no code). ✅
 
 ---
 
 ## 🔗 Cross-References
 
-**In crewops.md**:
-
-<<<<<<< HEAD:docs/guides/crewops/06_INDEX.md
-- Section 0.1.5: Links to CREWOPS\_ACTIVATION.md
-=======
-- Section 0.1.5: Links to CREWOPS_ACTIVATION.md
->>>>>>> pr-128:docs/crewops/06_INDEX.md
-- Section 6.5: Tool Use Discipline
 - Section 6.6: MCP Integration
 - Section 16-18: Tool & MCP Governance
-
-<<<<<<< HEAD:docs/guides/crewops/06_INDEX.md
-**In CREWOPS\_ACTIVATION.md**:
-=======
-**In CREWOPS_ACTIVATION.md**:
->>>>>>> pr-128:docs/crewops/06_INDEX.md
 
 - Stage 1: Session bootstrap flow
 - Stage 3: Protocol engagement flow
 
-<<<<<<< HEAD:docs/guides/crewops/06_INDEX.md
-**In CREWOPS\_ACTIVATION\_STATUS.md**:
-=======
-**In CREWOPS_ACTIVATION_STATUS.md**:
->>>>>>> pr-128:docs/crewops/06_INDEX.md
-
-- Activation Sequence: Detailed steps
-- Protocol Flow: Visual workflow
 - Worker Matrix: Tool assignments
-- Enforcement Checklist: Orchestrator verification
 
 ---
 
@@ -390,26 +250,14 @@ Protocol engages, but stops after Phase C (no code). ✅
 | **Crew Roles**        | 6 (mandatory)                         |
 | **Tool Categories**   | 3 (standard + GitHub + Firecrawl MCP) |
 | **Keyword Modifiers** | 8 (optional)                          |
-| **Validation Gates**  | 5 minimum per task                    |
 
 ---
 
 ## 🎯 Success Criteria
 
-Protocol is successful when:
-
-- ✅ Automatically engages on non-trivial prompts
-- ✅ Phases A→E execute without user intervention
-- ✅ Tools deploy automatically per role
-- ✅ Evidence is verified (not assumed)
-- ✅ Security veto blocks unsafe work
-- ✅ Validation gates prevent incomplete work
-- ✅ Audit trails are recorded
-- ✅ Runnable commands are provided
 - ✅ Definition of Done is met
 - ✅ Crew is coordinated without conflict
 
-**All are implemented. ✅**
 
 ---
 

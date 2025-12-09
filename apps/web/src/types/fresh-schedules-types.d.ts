@@ -76,6 +76,7 @@ declare module "@fresh-schedules/types" {
 
   export const UpdateOrganizationSchema: ZAnyObj;
   export type UpdateOrganizationInput = z.infer<typeof UpdateOrganizationSchema>;
+  export const UpdateOrganizationInput: ZAnyObj;
 
   // ============================================================================
   // MEMBERSHIPS TYPES
@@ -273,6 +274,24 @@ declare module "@fresh-schedules/types" {
   // ============================================================================
   export const NewEventSchema: ZAnyObj;
   export type NewEvent = z.infer<typeof NewEventSchema>;
+
+  // ==========================================================================
+  // INTERNAL TYPES (shim)
+  // ==========================================================================
+  export const CreateBackupSchema: ZAnyObj;
+  export type CreateBackup = z.infer<typeof CreateBackupSchema>;
+
+  // ==========================================================================
+  // SCHEDULES (additional) - publish
+  // ==========================================================================
+  export const PublishScheduleSchema: ZAnyObj;
+  export type PublishScheduleInput = z.infer<typeof PublishScheduleSchema>;
+
+  // ==========================================================================
+  // SESSION (shim)
+  // ==========================================================================
+  export const CreateSessionSchema: ZAnyObj;
+  export type CreateSession = z.infer<typeof CreateSessionSchema>;
 
   // ============================================================================
   // RBAC TYPES

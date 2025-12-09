@@ -76,21 +76,12 @@
 
 ### Remaining 30 Routes
 
-<<<<<<<< HEAD:docs/archive/SDK_MIGRATION_STATUS.md
 | Category     | Routes                       | Pattern                                  |
 | ------------ | ---------------------------- | ---------------------------------------- |
 | Public       | metrics                      | `createPublicEndpoint`                   |
-| Auth Only    | auth/_, session/_            | `createAuthenticatedEndpoint`            |
-| Auth + Org   | organizations/_, schedules/_ | `createOrgEndpoint` with roles           |
+| Auth Only    | auth/*, session/*            | `createAuthenticatedEndpoint`            |
+| Auth + Org   | organizations/*, schedules/* | `createOrgEndpoint` with roles           |
 | Auth + Roles | publish, positions           | `createAuthenticatedEndpoint` with roles |
-========
-| Category | Routes | Pattern |
-|----------|--------|---------|
-| Public | metrics | `createPublicEndpoint` |
-| Auth Only | auth/*, session/* | `createAuthenticatedEndpoint` |
-| Auth + Org | organizations/*, schedules/* | `createOrgEndpoint` with roles |
-| Auth + Roles | publish, positions | `createAuthenticatedEndpoint` with roles |
->>>>>>>> pr-128:archive/docs/phase-work/SDK_MIGRATION_STATUS.md
 
 ### Blocking Issue
 
@@ -197,11 +188,7 @@ pnpm test               # Must pass
 
 ---
 
-<<<<<<<< HEAD:docs/archive/SDK_MIGRATION_STATUS.md
-## 6. Architecture Decision: Keep \_shared or Delete?
-========
 ## 6. Architecture Decision: Keep _shared or Delete
->>>>>>>> pr-128:archive/docs/phase-work/SDK_MIGRATION_STATUS.md
 
 ### Current State
 

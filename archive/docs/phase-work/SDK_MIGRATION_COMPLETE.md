@@ -23,29 +23,17 @@ The SDK migration has been successfully completed. All API routes have been migr
 
 All routes now use SDK endpoint factories:
 
-<<<<<<<< HEAD:docs/archive/SDK_MIGRATION_COMPLETE.md
-#### Using `createOrgEndpoint`:
-========
 #### Using `createOrgEndpoint`
->>>>>>>> pr-128:archive/docs/phase-work/SDK_MIGRATION_COMPLETE.md
 
 - `/api/attendance` (GET, POST with scheduler role)
 - `/api/positions/[id]` (GET, PATCH with manager role, DELETE with admin role)
 - `/api/schedules` (GET, POST with scheduler role)
 
-<<<<<<<< HEAD:docs/archive/SDK_MIGRATION_COMPLETE.md
-#### Using `createAuthenticatedEndpoint`:
-
-- `/api/items` (GET, POST)
-
-#### Context Structure Updates:
-========
 #### Using `createAuthenticatedEndpoint`
 
 - `/api/items` (GET, POST)
 
 #### Context Structure Updates
->>>>>>>> pr-128:archive/docs/phase-work/SDK_MIGRATION_COMPLETE.md
 
 All routes now use the proper SDK context structure:
 

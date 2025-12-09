@@ -46,14 +46,6 @@ export const GET = createOrgEndpoint({
  * POST /api/items
  * Create new item
  */
-const CreateItemSchema = z.object({
-  name: z.string().min(1),
-  description: z.string().max(500).optional(),
-  quantity: z.number().int().nonnegative().optional(),
-  unit: z.string().optional(),
-  isActive: z.boolean().optional(),
-});
-
 export const POST = createOrgEndpoint({
   roles: ["manager"],
   input: CreateItemSchema,

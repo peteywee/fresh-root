@@ -304,22 +304,11 @@ if (!response.ok) {
 
 1. **Middleware Pipeline**: Single factory wrap vs. nested decorators
    - Reduced function call stack from 5-7 levels to 3 levels
-<<<<<<<< HEAD:docs/archive/MIGRATION_COMPLETE.md
 2. **Rate Limiting**: In-memory store for small workloads
    - No external dependency overhead for local development
    - Can be swapped for Redis in production
 3. **Error Handling**: Early return pattern
    - Auth failures fail fast before Firestore queries
-========
-
-2. **Rate Limiting**: In-memory store for small workloads
-   - No external dependency overhead for local development
-   - Can be swapped for Redis in production
-
-3. **Error Handling**: Early return pattern
-   - Auth failures fail fast before Firestore queries
-
->>>>>>>> pr-128:archive/docs/phase-work/MIGRATION_COMPLETE.md
 4. **Bundle Size**: Consolidated SDK exports
    - Reduced route imports from 4-6 per file to 2-3
 
