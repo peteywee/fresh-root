@@ -1,8 +1,17 @@
 // [P1][API][CODE] Batch API endpoint
 // Tags: P1, API, CODE, BATCH
 
-import { createEndpoint } from "@fresh-schedules/api-framework";
-import { CreateBatchSchema } from "@fresh-schedules/types";
+import { createOrgEndpoint } from "@fresh-schedules/api-framework";
+import { z } from "zod";
+// Local schema for batch input (keeps types inline and avoids needing to export schema)
+export const CreateBatchSchema = z.object({
+  items: z.array(
+    z.object({
+      id: z.string().min(1),
+      payload: z.any(),
+    }),
+  ),
+});
 import { createBatchHandler } from "@fresh-schedules/api-framework";
 import { badRequest, serverError } from "../_shared/validation";
 
@@ -36,9 +45,8 @@ export async function processBatchItems(
   return handler(items, context, request as any);
 }
 
-export const POST = createEndpoint({
-  auth: "optional",
-  org: "none",
+export const POST = createOrgEndpoint({
+  roles: ["manager"],
   rateLimit: { maxRequests: 40, windowMs: 60_000 },
   csrf: false,
   input: CreateBatchSchema,
