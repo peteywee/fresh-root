@@ -2,16 +2,7 @@
 // Tags: P1, API, CODE, BATCH
 
 import { createEndpoint } from "@fresh-schedules/api-framework";
-import { z } from "zod";
-// Local schema for batch input (keeps types inline and avoids needing to export schema)
-export const CreateBatchSchema = z.object({
-  items: z.array(
-    z.object({
-      id: z.string().min(1),
-      payload: z.any(),
-    }),
-  ),
-});
+import { CreateBatchSchema } from "@fresh-schedules/types";
 import { createBatchHandler } from "@fresh-schedules/api-framework";
 import { badRequest, serverError } from "../_shared/validation";
 
@@ -46,24 +37,14 @@ export async function processBatchItems(
 }
 
 export const POST = createEndpoint({
-  rateLimit: { maxRequests: 40, windowMs: 60_000 },
   auth: "optional",
   org: "none",
+  rateLimit: { maxRequests: 40, windowMs: 60_000 },
   csrf: false,
   input: CreateBatchSchema,
   handler: async ({ input, context, request }) => {
     try {
-      // Debug: log input shape
-      // eslint-disable-next-line no-console
-      console.log('BATCH HANDLER INPUT', JSON.stringify(input));
-      // Debug raw request body text (show body that createEndpoint parsed)
-      try {
-        // eslint-disable-next-line no-console
-        console.log('BATCH HANDLER RAW BODY TEXT', JSON.stringify(await (request as any).text()));
-      } catch (err) {
-        // eslint-disable-next-line no-console
-        console.warn('Failed to read request text in handler', err);
-      }
+      // input already validated by createEndpoint
       // Ensure items is present and an array
       if (!input || !Array.isArray((input as any).items)) {
         return badRequest("Invalid payload: items must be an array");
