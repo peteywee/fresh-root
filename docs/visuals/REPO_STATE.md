@@ -44,12 +44,12 @@ stateDiagram-v2
 
 ## Recent Commits
 ```
+f567860 chore(tests): resolve merge conflict in batch route tests during merge from fix/triad-remediation-quickpush
+5156900 chore(visuals): update index and metadata
+89e455b chore(visuals): auto-update architecture and repo state diagrams
 1cbfe5d chore: save work before rebase
 17615f8 chore(types): resolve leftover merge markers in internal and session schemas
 87fdee6 chore(visuals): update index and metadata
 23c7406 chore(visuals): auto-update architecture and repo state diagrams
-0676386 test(batch): sync local test updates for batch route
-6370fa7 chore(visuals): update index and metadata
-79b50ff chore(visuals): auto-update architecture and repo state diagrams
-da21c49 Merge pull request #129 from peteywee:fix/triad-remediation-q
+0676386 test(b
 ```
