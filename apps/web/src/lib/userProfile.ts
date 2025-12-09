@@ -66,13 +66,13 @@ export async function ensureUserProfile(args: {
   const now = Date.now();
 
   const baseProfile = {
-    email: (claims.email as string | undefined) || null,
+    email: (claims.email) || null,
     displayName:
-      (claims.displayName as string | undefined) || (claims.name as string | undefined) || null,
-    avatarUrl: (claims.picture as string | undefined) || null,
+      (claims.displayName) || (claims.name) || null,
+    avatarUrl: (claims.picture) || null,
     selfDeclaredRole:
-      (claims.selfDeclaredRole as string | undefined) ||
-      (claims.role as string | undefined) ||
+      (claims.selfDeclaredRole) ||
+      (claims.role) ||
       null,
   };
 

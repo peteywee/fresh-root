@@ -247,7 +247,7 @@ export async function checkRateLimit(
   const limiter = getRateLimiter(preset);
   const ip =
     (req.headers?.get("x-forwarded-for") ?? "").split(",")[0].trim() ||
-    (req as any).ip ||
+    (req).ip ||
     "unknown";
 
   const key = buildRateLimitKey({

@@ -4,7 +4,6 @@ import { CreateScheduleSchema } from "@fresh-schedules/types";
 import type { CreateScheduleInput } from "@fresh-schedules/types";
 import { Timestamp } from "firebase-admin/firestore";
 import { createOrgEndpoint } from "@fresh-schedules/api-framework";
-import type { NextRequest } from "next/server";
 
 import { badRequest, ok, parseJson, serverError } from "../_shared/validation";
 

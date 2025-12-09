@@ -12,11 +12,11 @@ export const POST = createAuthenticatedEndpoint({
   input: JoinWithTokenSchema,
   handler: async ({ input, context }) => {
     try {
-      const { joinToken } = input;
+      const { token, invitationId } = input ?? {};
 
       const result = {
         userId: context.auth?.userId,
-        joinToken,
+        invitationId: invitationId ?? token,
         joinedAt: Date.now(),
         role: "member",
       };

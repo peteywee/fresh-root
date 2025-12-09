@@ -1,5 +1,4 @@
 // [P0][SESSION][API] Session management endpoint
-import { NextRequest } from "next/server";
 import { z } from "zod";
 
 import { getFirebaseAdminAuth } from "../../../lib/firebase-admin";

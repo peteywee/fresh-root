@@ -3,10 +3,18 @@
   "warnings": [],
   "info": [
     {
-      "file": "apps/web/app/api/batch/route.ts",
-      "pattern": "API_ROUTE",
+      "file": "packages/types/src/internal.ts",
+      "pattern": "SCHEMA_FILE",
       "name": "Header Present",
-      "message": "Missing standard header: // [P#][API][CODE] description",
+      "message": "Missing standard header: // [P#][CATEGORY][SCHEMA] description",
+      "tier": 3,
+      "severity": "info"
+    },
+    {
+      "file": "packages/types/src/session.ts",
+      "pattern": "SCHEMA_FILE",
+      "name": "Header Present",
+      "message": "Missing standard header: // [P#][CATEGORY][SCHEMA] description",
       "tier": 3,
       "severity": "info"
     }

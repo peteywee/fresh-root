@@ -1,8 +1,14 @@
 // [P0][ORG][DETAIL][API] Organization detail endpoint
 
+import { z } from "zod";
 import { createOrgEndpoint } from "@fresh-schedules/api-framework";
 import { ok, serverError } from "../../_shared/validation";
-import { UpdateOrganizationInput } from "@fresh-schedules/types";
+
+const UpdateOrgSchema = z.object({
+  name: z.string().min(1).max(100).optional(),
+  settings: z.record(z.any()).optional(),
+  status: z.enum(["active", "inactive"]).optional(),
+});
 
 /**
  * GET /api/organizations/[id]
@@ -32,7 +38,7 @@ export const GET = createOrgEndpoint({
  */
 export const PATCH = createOrgEndpoint({
   roles: ["admin"],
-  input: UpdateOrganizationInput,
+  input: UpdateOrgSchema,
   handler: async ({ input, context, params }) => {
     try {
       const updated = {
@@ -42,7 +48,9 @@ export const PATCH = createOrgEndpoint({
         updatedAt: Date.now(),
       };
       return ok(updated);
-    } catch {
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "Failed to update organization";
+      console.error("Failed to update organization", { error: message, orgId: params.id, userId: context.auth?.userId });
       return serverError("Failed to update organization");
     }
   },

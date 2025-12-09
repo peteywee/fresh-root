@@ -7,7 +7,7 @@ import { CreateNetworkOrgPayload } from "@fresh-schedules/types";
 import { Timestamp } from "firebase-admin/firestore";
 import { consumeAdminFormDraft, getAdminFormDraft } from "./adminFormDrafts";
 
-const dbDefault = adminDb as Firestore | undefined;
+const dbDefault = adminDb;
 
 export type CreateNetworkOrgResult = {
   networkId: string;

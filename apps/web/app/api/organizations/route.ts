@@ -1,7 +1,7 @@
 // [P0][ORGS][API] Organizations list endpoint
 
 import { CreateOrganizationSchema } from "@fresh-schedules/types";
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 
 import { createAuthenticatedEndpoint } from "@fresh-schedules/api-framework";
 import { badRequest, ok, parseJson, serverError } from "../_shared/validation";

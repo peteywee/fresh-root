@@ -1,7 +1,7 @@
 // [P0][VENUES][API] Venues list endpoint
 export const dynamic = "force-dynamic";
 
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { CreateVenueSchema } from "@fresh-schedules/types";
 
 import { createOrgEndpoint } from "@fresh-schedules/api-framework";

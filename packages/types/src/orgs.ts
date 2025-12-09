@@ -123,6 +123,11 @@ export const Organization = OrganizationSchema.extend({
 });
 
 /**
+ * Alias for UpdateOrganizationSchema used in API route handlers
+ */
+export const UpdateOrgPayloadSchema = UpdateOrganizationSchema;
+
+/**
  * Query parameters for listing organizations
  */
 export const ListOrganizationsQuerySchema = z.object({
