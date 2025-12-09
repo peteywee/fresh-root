@@ -44,12 +44,11 @@ stateDiagram-v2
 
 ## Recent Commits
 ```
-ba125c4 Remove branch file pattern validation workflow
-79249b9 chore(visuals): update index and metadata
-18b44db chore(visuals): auto-update architecture and repo state diagrams
-d676506 Remove feature branch auto-cleanup workflow
-5a338dd chore(visuals): auto-update architecture and repo state diagrams
-409c214 fix(code-review): remove unused variables from API route and script
-4553305 chore: resolve merge conflicts in docs and routes, normalize headings and schemas
-5c0c2d7 chore(docs): improve fo
+0fdac1a Merge pull request #135 from peteywee/fix/triad-remediation
+4c47d8c fix(api): standardize header for batch route (P0)
+91f39fa Merge pull request #133 from peteywee/copilot/sub-pr-130
+6aa633e fix(tests): enhance batch route tests with additional scenarios and validation
+820dd77 fix(api): secure batch API with createOrgEndpoint + local schema
+c8c3455 fix(api): use createOrgEndpoint for batch route with manager role
+0915b29 fix(api): add local batch input schema and use createAuthenticatedE
 ```
