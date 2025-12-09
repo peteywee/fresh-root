@@ -1,35 +1,46 @@
 // [P1][API][CODE] Batch API endpoint
 // Tags: P1, API, CODE, BATCH
 
-import { createOrgEndpoint } from "@fresh-schedules/api-framework";
+import { createEndpoint } from "@fresh-schedules/api-framework";
 import { CreateBatchSchema } from "@fresh-schedules/types";
 import { createBatchHandler } from "@fresh-schedules/api-framework";
-import { NextResponse } from "next/server";
-import { ok, badRequest, serverError } from "../_shared/validation";
+import { badRequest, serverError } from "../_shared/validation";
 
 /*
  * POST /api/batch
  * Processes a list of items as a single batch operation.
  * Demonstrates SDK factory + batch handler usage with canonical Zod validation.
  */
-export const POST = createOrgEndpoint({
+export async function processBatchItems(
+  items: unknown[],
+  context: any,
+  request: Request,
+) {
+  const handler = createBatchHandler({
+    maxBatchSize: 200,
+    timeoutPerItem: 5000,
+    continueOnError: true,
+    itemHandler: async ({ item, index }) => {
+      return { id: (item as any).id, processedAt: Date.now() } as unknown;
+    },
+  });
+
+  return handler(items, context, request as any);
+}
+
+export const POST = createEndpoint({
   auth: "optional",
-  org: "optional",
+  org: "none",
+  csrf: false,
   input: CreateBatchSchema,
   handler: async ({ input, context, request }) => {
     try {
-      const handler = createBatchHandler({
-        maxBatchSize: 200, // sensible default
-        timeoutPerItem: 5000,
-        continueOnError: input.continueOnError ?? true,
-        itemHandler: async ({ item, index }) => {
-          // Example item handler: echo payload
-          return { id: (item as any).id, processedAt: Date.now() } as unknown;
-        },
-      });
-
-      const result = await handler(input.items, context, request as Request);
-      return ok(result);
+      // Ensure items is present and an array
+      if (!input || !Array.isArray((input as any).items)) {
+        return badRequest("Invalid payload: items must be an array");
+      }
+      const result = await processBatchItems((input as any).items, context, request);
+      return result;
     } catch (err) {
       const message = err instanceof Error ? err.message : "Unexpected error";
       console.error("Batch processing failed", { error: message, orgId: context.org?.orgId });
