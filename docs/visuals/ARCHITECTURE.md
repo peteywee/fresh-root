@@ -5,7 +5,7 @@ graph TB
     subgraph apps["📱 Applications"]
         web["web (Next.js PWA)"]
     end
-
+    
     subgraph packages["📦 Packages"]
         api["api-framework<br/>(SDK Factory)"]
         types["types<br/>(Zod Schemas)"]
@@ -13,18 +13,18 @@ graph TB
         config["config<br/>(Shared)"]
         rules["rules-tests<br/>(Firebase Rules)"]
     end
-
+    
     subgraph services["🔥 Services"]
         firebase["Firebase<br/>(Admin SDK)"]
         emulator["Emulator<br/>(Local Dev)"]
     end
-
+    
     subgraph infra["⚙️ Infrastructure"]
         workflows["GitHub Actions<br/>(CI/CD)"]
         hooks["Git Hooks<br/>(Pre-commit)"]
         rules-db["Firestore Rules<br/>(Security)"]
     end
-
+    
     web -->|uses| api
     web -->|uses| types
     web -->|uses| ui
@@ -37,7 +37,7 @@ graph TB
     workflows -->|runs| web
     hooks -->|validates| types
     emulator -->|simulates| firebase
-
+    
     style web fill:#4f46e5,stroke:#312e81,color:#fff
     style api fill:#059669,stroke:#065f46,color:#fff
     style types fill:#7c3aed,stroke:#4c1d95,color:#fff
