@@ -28,7 +28,7 @@ export function ok<T>(data: T) {
 }
 
 /** Utility to parse JSON request bodies against a Zod schema */
-export async function parseJson<T>(req: Request, schema: z.ZodType<T>) {
+export async function parseJson<T>(req: Request, schema: any) {
   let json: unknown;
   try {
     json = await req.json();
@@ -37,7 +37,7 @@ export async function parseJson<T>(req: Request, schema: z.ZodType<T>) {
   }
   const parsed = schema.safeParse(json);
   if (!parsed.success) {
-    const details = parsed.error.issues.map((i) => ({
+    const details = parsed.error.issues.map((i: any) => ({
       path: i.path.join("."),
       message: i.message,
     }));

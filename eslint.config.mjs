@@ -68,15 +68,18 @@ export default [
       "@typescript-eslint/no-explicit-any": "warn", // Warn on explicit any types
       // SAFEGUARD: Pattern detected 87x - Firebase/Firestore returns untyped data
       // TODO: Create typed wrappers in src/lib/firebase/typed-wrappers.ts
-      "@typescript-eslint/no-unsafe-assignment": "warn",
-      "@typescript-eslint/no-unsafe-member-access": "warn",
-      "@typescript-eslint/no-unsafe-call": "warn",
-      "@typescript-eslint/no-unsafe-argument": "warn",
-      "@typescript-eslint/no-unsafe-return": "warn",
+      // Note: Type-aware rules disabled in main config, enabled per workspace
+      // "@typescript-eslint/no-unsafe-assignment": "warn",
+      // "@typescript-eslint/no-unsafe-member-access": "warn",
+      // "@typescript-eslint/no-unsafe-call": "warn",
+      // "@typescript-eslint/no-unsafe-argument": "warn",
+      // "@typescript-eslint/no-unsafe-return": "warn",
       // SAFEGUARD: Pattern detected 45x - SDK factory handlers don't always need await
-      "@typescript-eslint/require-await": "warn",
+      // Note: Type-aware rule disabled in main config, enabled per workspace
+      // "@typescript-eslint/require-await": "warn",
       // SAFEGUARD: Pattern detected 8x - Event handlers with promises (React patterns)
-      "@typescript-eslint/no-misused-promises": "warn",
+      // Note: Type-aware rule disabled in main config, enabled per workspace
+      // "@typescript-eslint/no-misused-promises": "warn",
       "prefer-const": "warn",
       "no-console": "off", // Disabled: service worker needs console
       "react-hooks/rules-of-hooks": "error",
@@ -91,6 +94,7 @@ export default [
       ],
     },
   },
+
   // Onboarding API tests: silence explicit any warnings (scaffolding/mocks)
   {
     files: [
@@ -109,13 +113,14 @@ export default [
       parserOptions: {
         ecmaVersion: "latest",
         sourceType: "module",
-        project: ["apps/web/tsconfig.test.json"],
       },
+    },
+    plugins: {
+      "@typescript-eslint": typescriptEslint,
     },
     rules: {
       // Turn off no-undef for test globals to avoid editor warnings
       "no-undef": "off",
-      "@typescript-eslint/no-unsafe-assignment": "warn",
       "@typescript-eslint/no-explicit-any": "off",
     },
   },

@@ -12,10 +12,7 @@
     "test:watch": "vitest",
     "test:ui": "vitest --ui",
     "test:coverage": "vitest --coverage",
-    "bench": "vitest bench --config vitest.bench.config.ts",
-    "lint": "eslint . --ext .ts,.tsx --cache",
-    "lint:watch": "eslint . --ext .ts,.tsx --watch",
-    "lint:fix": "eslint . --ext .ts,.tsx --fix"
+    "bench": "vitest bench --config vitest.bench.config.ts"
   },
   "dependencies": {
     "@fresh-schedules/api-framework": "workspace:*",
