@@ -38,7 +38,7 @@ export const POST = createOrgEndpoint({
   input: CreateJoinTokenSchema,
   handler: async ({ input, context }) => {
     try {
-      const token = {
+      const _token = {
         id: `token-${Date.now()}`,
         orgId: context.org?.orgId,
         token: Math.random().toString(36).substring(2, 15),

@@ -14,7 +14,7 @@ export async function createSchedule(payload: CreatePayload) {
   if (!/^[a-zA-Z0-9_-]+$/.test(payload.orgId)) {
     throw new Error("Invalid orgId format");
   }
-  const token = {
+  const _token = {
     uid: "u1-dev",
     orgId: payload.orgId,
     roles: ["manager"],

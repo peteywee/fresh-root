@@ -18,7 +18,7 @@ const DashboardPage = React.memo(() => {
     setMessage(null);
     try {
       // For demo: replace with real orgId/scheduleId selection
-      const orgId = "orgA";
+      const _orgId = "orgA";
       const scheduleId = "demo-schedule";
       await publishSchedule(scheduleId);
       setMessage("Published successfully");

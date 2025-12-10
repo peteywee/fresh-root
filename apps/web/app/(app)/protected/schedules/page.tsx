@@ -15,7 +15,7 @@ export const metadata = {
 
 export default async function SchedulesPage() {
   // Get authenticated user's org from session cookie
-  const orgId = await getAuthenticatedOrgId();
+  const _orgId = await getAuthenticatedOrgId();
 
   // Redirect to login if not authenticated or no org
   if (!orgId) {

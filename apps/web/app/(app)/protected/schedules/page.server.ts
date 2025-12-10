@@ -22,7 +22,7 @@ export async function getAuthenticatedOrgId(): Promise<string | null> {
     const decodedClaims = await auth.verifySessionCookie(sessionCookie, true);
 
     // Extract orgId from custom claims
-    const orgId = decodedClaims.orgId as string | undefined;
+    const _orgId = decodedClaims.orgId as string | undefined;
 
     if (!orgId) {
       console.warn("No orgId in custom claims for user:", decodedClaims.uid);

@@ -14,7 +14,7 @@ export const GET = createAuthenticatedEndpoint({
   handler: async ({ request, context }) => {
     try {
       const { searchParams } = new URL(request.url);
-      const orgId = searchParams.get("orgId") || context.org!.orgId;
+      const _orgId = searchParams.get("orgId") || context.org!.orgId;
       const shiftId = searchParams.get("shiftId");
       const scheduleId = searchParams.get("scheduleId");
       const staffUid = searchParams.get("staffUid");
