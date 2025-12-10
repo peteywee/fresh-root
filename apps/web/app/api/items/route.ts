@@ -15,7 +15,7 @@ export const GET = createOrgEndpoint({
   handler: async ({ request, context, params }) => {
     try {
       const { searchParams } = new URL(request.url);
-      const _orgId = searchParams.get("orgId") || context.org?.orgId;
+      const orgId = searchParams.get("orgId") || context.org?.orgId;
 
       if (!orgId) {
         return badRequest("orgId query parameter is required");

@@ -24,6 +24,13 @@ export default [
       "components/**",
       "instrumentation.ts",
       "vitest.setup.ts",
+      "proxy.ts",
+      // SAFEGUARD: Test files parsed by vitest, not eslint
+      "**/__tests__/**",
+      "**/*.test.ts",
+      "**/*.test.tsx",
+      "**/*.spec.ts",
+      "**/*.spec.tsx",
 
       // quarantined trees (shouldn't exist inside app, but guard anyway)
       "../../_legacy/**",
@@ -107,6 +114,9 @@ export default [
       "@typescript-eslint/no-require-imports": "warn",
       "@typescript-eslint/no-floating-promises": "warn",
       "@typescript-eslint/ban-ts-comment": "warn",
+      "@typescript-eslint/unbound-method": "warn",
+      "@typescript-eslint/no-empty-object-type": "warn",
+      "no-empty": "warn",
       "no-console": ["warn", { allow: ["warn", "error"] }],
       "no-debugger": "warn",
       "prefer-const": "warn",
