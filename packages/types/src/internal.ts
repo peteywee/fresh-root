@@ -1,15 +1,11 @@
-<<<<<<< HEAD
-// [P0][DOMAIN][SCHEMA] Internal operation schemas
-// Tags: P0, DOMAIN, SCHEMA, INTERNAL
+// [P0][INTERNAL][SCHEMA] Internal API schemas
+// Tags: P0, INTERNAL, SCHEMA
 
 import { z } from "zod";
 
-/**
- * Internal backup operation schema
- * Used for system backup and data export operations
- */
+// Backup request schema
 export const BackupRequestSchema = z.object({
-  type: z.enum(["full", "incremental", "selective"]).default("incremental"),
+  type: z.enum(["full", "partial", "incremental"]).default("full"),
   entities: z.array(z.string()).optional(),
   compression: z.boolean().default(true),
   encryption: z.boolean().default(true),
@@ -17,30 +13,12 @@ export const BackupRequestSchema = z.object({
 
 export type BackupRequest = z.infer<typeof BackupRequestSchema>;
 
-/**
- * Publish operation schema
- * Used for schedule and content publishing
- */
+// Publish request schema  
 export const PublishRequestSchema = z.object({
-  entityType: z.enum(["schedule", "shift", "announcement"]),
-  entityId: z.string().min(1),
+  scheduleId: z.string().min(1, "Schedule ID is required"),
   publishAt: z.number().int().positive().optional(),
   notifyUsers: z.boolean().default(true),
-  channels: z.array(z.enum(["email", "sms", "push"])).default(["push"]),
+  channels: z.array(z.enum(["email", "push", "sms"])).default(["email"]),
 });
 
 export type PublishRequest = z.infer<typeof PublishRequestSchema>;
-=======
-// [P0][INTERNAL][SCHEMA] Internal operations schema (backup, publish)
-// Tags: P0, INTERNAL, SCHEMA, ZOD, ADMIN
-
-import { z } from "zod";
-export const CreateBackupSchema = z.object({
-  type: z.enum(["full", "incremental", "audit"]).default("full"),
-  includeMedia: z.boolean().default(false),
-  description: z.string().max(500).optional(),
-  retentionDays: z.number().int().min(1).max(365).optional(),
-});
-
-export type CreateBackup = z.infer<typeof CreateBackupSchema>;
->>>>>>> origin/dev

@@ -1,15 +1,9 @@
 // [P0][SESSION][BOOTSTRAP][API] Bootstrap session endpoint
 // Tags: P0, SESSION, BOOTSTRAP, API, SDK_FACTORY
 
-import { z } from "zod";
 import { createAuthenticatedEndpoint } from "@fresh-schedules/api-framework";
-<<<<<<< HEAD
 import { SessionBootstrapSchema } from "@fresh-schedules/types";
 import { NextResponse } from "next/server";
-=======
-import { ok, serverError } from "../../_shared/validation";
-import { CreateSessionSchema } from "@fresh-schedules/types";
->>>>>>> origin/dev
 
 /**
  * GET /api/session/bootstrap
@@ -42,30 +36,18 @@ export const GET = createAuthenticatedEndpoint({
 
 /**
  * POST /api/session/bootstrap
- * Create new session
+ * Create new session with preferences
  */
 export const POST = createAuthenticatedEndpoint({
-<<<<<<< HEAD
   input: SessionBootstrapSchema,
   handler: async ({ input, context }) => {
     try {
       const session = {
         userId: context.auth?.userId,
         email: context.auth?.email,
-        idToken: input.idToken,
-        redirectUrl: input.redirectUrl,
-        orgId: input.orgId,
         createdAt: Date.now(),
-=======
-  input: CreateSessionSchema,
-  handler: async ({ input, context }) => {
-    try {
-      const session = {
-        userId: input?.userId || context.auth?.userId,
-        email: input?.email || context.auth?.email,
-        createdAt: Date.now(),
-        ...(input?.metadata ? { metadata: input.metadata } : {}),
->>>>>>> origin/dev
+        preferences: input.preferences,
+        deviceInfo: input.deviceInfo,
       };
       return NextResponse.json(session);
     } catch (err) {
