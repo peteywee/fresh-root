@@ -84,7 +84,7 @@ export default [
   },
   // Test files: allow globals like describe/it/beforeAll provided by Vitest/Jest
   {
-    files: ["**/*.test.*", "**/*.spec.*"],
+    files: ["**/*.test.*", "**/*.spec.*", "**/vitest.setup.ts"],
     languageOptions: {
       parser: typescriptParser,
       parserOptions: {
