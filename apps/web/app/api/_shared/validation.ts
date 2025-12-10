@@ -28,7 +28,7 @@ export function ok<T>(data: T) {
 }
 
 /** Utility to parse JSON request bodies against a Zod schema */
-export async function parseJson<T>(req: Request, schema: any) {
+export async function parseJson<T>(req: Request, schema: import("zod").ZodTypeAny) {
   let json: unknown;
   try {
     json = await req.json();

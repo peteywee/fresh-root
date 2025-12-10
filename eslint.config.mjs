@@ -39,6 +39,14 @@ export default [
       "**/__tests__/**",
       "**/*.test.ts",
       "**/*.test.tsx",
+      // Migrated from apps/web/.eslintignore
+      "apps/web/app/api/__tests__/**",
+      "apps/web/app/api/batch/__tests__/**",
+      "apps/web/app/api/onboarding/__tests__/**",
+      "apps/web/src/lib/*.test.ts",
+      "apps/web/src/lib/*.test.tsx",
+      "apps/web/src/lib/userProfile.test.ts",
+      "apps/web/components/ui/**",
     ],
   },
   {

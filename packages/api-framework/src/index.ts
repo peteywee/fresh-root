@@ -81,7 +81,7 @@ export interface EndpointConfig<TInput = unknown, TOutput = unknown> {
   csrf?: boolean;
 
   /** Zod schema for request body/query validation */
-  input?: any;
+  input?: import("zod").ZodTypeAny;
 
   /** The actual handler function */
   handler: (params: {
@@ -446,7 +446,7 @@ export function createEndpoint<TInput = unknown, TOutput = unknown>(
             rawInput = await request.json().catch(() => ({}));
           }
 
-          validatedInput = inputSchema.parse(rawInput);
+          validatedInput = inputSchema.parse(rawInput) as TInput;
         } catch (error) {
           if (error instanceof ZodError) {
             const details: Record<string, string[]> = {};
