@@ -42,6 +42,7 @@
   },
   "files": [
     "dist",
-    "README.md"
+    "README.md",
+    "eslint.config.js"
   ]
 }
