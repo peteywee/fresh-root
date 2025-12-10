@@ -1,23 +1,39 @@
-# Fresh Schedules API Framework - Complete Usage Guide
+# Fresh Schedules API Framework - Indexable Reference Guide
+
+<!-- INDEXABLE_METADATA: api-framework, sdk, usage-guide, context-reference -->
+<!-- ADOPTION_STATUS: 100% (Complete Migration) -->
+<!-- LAST_UPDATED: December 10, 2025 -->
+<!-- QUERY_TAGS: createOrgEndpoint, createPublicEndpoint, createAuthenticatedEndpoint, middleware, validation, auth, RBAC -->
 
 **Version**: 1.0.0  
 **Package**: `@fresh-schedules/api-framework`  
-**Current Adoption**: 95 endpoints across 53 route files (~90% migrated)
+**Current Adoption**: ✅ 100% - All routes migrated to SDK factory pattern  
+**Context Callable**: Use keywords `api-framework`, `sdk-factory`, `endpoint-creation`, `middleware` for AI retrieval
+
+## 🔍 Quick Context Lookup
+
+**For AI Agents**: This document provides complete SDK factory patterns. Use these keywords for specific sections:
+
+- `endpoint-types` → 5 factory functions with examples
+- `validation-patterns` → Zod input validation with error handling  
+- `auth-patterns` → RBAC, session management, org context
+- `testing-patterns` → Mock utilities and test structure
+- `migration-patterns` → Legacy withSecurity → SDK factory conversion
 
 ## 📋 Table of Contents
 
 1. [Installation & Setup](#installation--setup)
-2. [Core Concepts](#core-concepts)
-3. [Endpoint Types](#endpoint-types)
-4. [Configuration Options](#configuration-options)
-5. [Input Validation](#input-validation)
-6. [Authentication & Authorization](#authentication--authorization)
-7. [Error Handling](#error-handling)
-8. [Testing](#testing)
-9. [ESLint Integration](#eslint-integration)
-10. [Migration Guide](#migration-guide)
-11. [Examples](#examples)
-12. [Troubleshooting](#troubleshooting)
+2. [Core Concepts](#core-concepts) 🔍 `core-concepts`
+3. [Endpoint Types](#endpoint-types) 🔍 `endpoint-types`
+4. [Configuration Options](#configuration-options) 🔍 `config-options`
+5. [Input Validation](#input-validation) 🔍 `validation-patterns`
+6. [Authentication & Authorization](#authentication--authorization) 🔍 `auth-patterns`
+7. [Error Handling](#error-handling) 🔍 `error-patterns`
+8. [Testing](#testing) 🔍 `testing-patterns`
+9. [ESLint Integration](#eslint-integration) 🔍 `eslint-patterns`
+10. [Migration Guide](#migration-guide) 🔍 `migration-patterns`
+11. [Examples](#examples) 🔍 `examples`
+12. [Troubleshooting](#troubleshooting) 🔍 `troubleshooting`
 
 ---
 

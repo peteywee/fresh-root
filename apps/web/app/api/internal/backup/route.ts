@@ -1,29 +1,39 @@
 // [P0][INTERNAL][BACKUP][API] Backup endpoint
+// Tags: P0, INTERNAL, BACKUP, API, SDK_FACTORY
 
 import { createAuthenticatedEndpoint } from "@fresh-schedules/api-framework";
-import { ok, serverError } from "../../_shared/validation";
+import { BackupRequestSchema } from "@fresh-schedules/types";
+import { NextResponse } from "next/server";
 
 /**
  * POST /api/internal/backup
  * Create system backup
  */
 export const POST = createAuthenticatedEndpoint({
-  handler: async ({ request, context }) => {
+  input: BackupRequestSchema,
+  handler: async ({ input, context }) => {
     try {
-      const body = await request.json();
-      const { type, includeMedia } = body;
-
       const backup = {
         id: `backup-${Date.now()}`,
-        type: type || "full",
-        includeMedia: includeMedia || false,
+        type: input.type,
+        entities: input.entities,
+        compression: input.compression,
+        encryption: input.encryption,
         initiatedBy: context.auth?.userId,
         createdAt: Date.now(),
         status: "pending",
       };
-      return ok(backup);
-    } catch {
-      return serverError("Failed to create backup");
+      return NextResponse.json(backup);
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "Failed to create backup";
+      console.error("Backup creation failed", {
+        error: message,
+        userId: context.auth?.userId,
+      });
+      return NextResponse.json(
+        { error: { code: "INTERNAL_ERROR", message } },
+        { status: 500 }
+      );
     }
   },
 });

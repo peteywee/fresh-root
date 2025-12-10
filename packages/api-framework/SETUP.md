@@ -4,7 +4,7 @@
 
 **SDK Installation**: ✅ Installed (`workspace:*` dependency)  
 **Build Status**: ✅ Working (303ms ESM, 5045ms DTS)  
-**Current Adoption**: ✅ 95 endpoints across 53 route files (~90% migrated)  
+**Current Adoption**: ✅ 100% - All API routes using SDK factory pattern  
 
 ## 🚀 Quick Start (5 minutes)
 
@@ -88,6 +88,7 @@ export const POST = createRateLimitedEndpoint({...});
 ## ⚡ Common Patterns
 
 ### Input Validation
+
 ```typescript
 import { CreateScheduleSchema } from "@fresh-schedules/types";
 
@@ -100,6 +101,7 @@ export const POST = createOrgEndpoint({
 ```
 
 ### Role-Based Access
+
 ```typescript
 export const POST = createOrgEndpoint({
   roles: ["manager"], // manager, admin, org_owner can access
@@ -110,6 +112,7 @@ export const POST = createOrgEndpoint({
 ```
 
 ### Rate Limiting
+
 ```typescript
 export const POST = createOrgEndpoint({
   rateLimit: { maxRequests: 50, windowMs: 60000 },
@@ -117,7 +120,7 @@ export const POST = createOrgEndpoint({
 });
 ```
 
-## 🛟 Need Help?
+## 🛟 Need Help
 
 1. **Check Examples**: Look at existing routes in `apps/web/app/api/`
 2. **Read Full Guide**: Complete documentation in the README
@@ -136,6 +139,7 @@ export const POST = createOrgEndpoint({
 ## 🎯 What You Get
 
 Every endpoint automatically includes:
+
 1. **Rate Limiting** (Redis-backed)
 2. **Authentication** (Firebase session cookies)
 3. **CSRF Protection** (POST/PUT/PATCH/DELETE)
