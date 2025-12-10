@@ -1,11 +1,13 @@
 // [P0][FIREBASE][HELPER] Create network/org/venue helper
 // Tags: FIREBASE, ONBOARDING, HELPERS
-import type { DocumentReference, Firestore, WriteBatch } from "firebase-admin/firestore";
 // Use the admin firestore instance from server helper
-import { adminDb } from "@/src/lib/firebase.server";
 import { CreateNetworkOrgPayload } from "@fresh-schedules/types";
+import type { DocumentReference, Firestore, WriteBatch } from "firebase-admin/firestore";
 import { Timestamp } from "firebase-admin/firestore";
+
 import { consumeAdminFormDraft, getAdminFormDraft } from "./adminFormDrafts";
+
+import { adminDb } from "@/src/lib/firebase.server";
 
 const dbDefault = adminDb;
 
@@ -75,16 +77,13 @@ export async function createNetworkWithOrgAndVenue(
   const root = injectedDb ?? dbDefault;
   if (!root) throw new Error("admin_db_not_initialized");
 
-  // Extract and validate payload fields
-  const basicsData = payload.basics;
-  const venueData = payload.venue;
-  const tokenString = payload.formToken;
+  // Extract payload
+  const { basics, venue, formToken } = payload || ({} as any);
+  if (!basics) throw new Error("basics_required");
+  if (!formToken) throw new Error("form_token_required");
 
-  // Type guard: ensure basics exists (required by schema)
-  if (!basicsData) throw new Error("basics_required");
-  if (!tokenString) throw new Error("form_token_required");
-
-  const draft = await getAdminFormDraft(tokenString);
+  const formTokenStr = String(formToken);
+  const draft = await getAdminFormDraft(formTokenStr);
   if (!draft) throw new Error("admin_form_not_found");
   if (draft.userId !== adminUid) throw new Error("admin_form_ownership_mismatch");
 
@@ -97,11 +96,9 @@ export async function createNetworkWithOrgAndVenue(
   const networkDoc: NetworkDoc = {
     id: networkId,
     slug: networkId,
-    displayName: basicsData.orgName ?? networkId,
+    displayName: (basics as any)?.orgName ?? networkId,
     legalName:
-      (draft.form as { data?: { legalName?: string } })?.data?.legalName ??
-      basicsData.orgName ??
-      null,
+      (draft.form as { data?: { legalName?: string } })?.data?.legalName ?? basicsData.orgName ?? null,
     kind: basicsData.hasCorporateAboveYou ? "franchise_network" : "independent_org",
     segment: basicsData.segment,
     status: "pending_verification",
@@ -111,7 +108,6 @@ export async function createNetworkWithOrgAndVenue(
     updatedAt: now,
     updatedBy: adminUid,
   };
-
   batch.set(networkRef, networkDoc);
 
   const complianceRef = networkRef
@@ -131,7 +127,7 @@ export async function createNetworkWithOrgAndVenue(
   const orgDoc: OrgDoc = {
     id: orgId,
     networkId,
-    displayName: basicsData.orgName ?? "Org",
+    displayName: (basics as any)?.orgName ?? "Org",
     primaryContactUid: adminUid,
     createdAt: now,
     createdBy: adminUid,
@@ -143,16 +139,14 @@ export async function createNetworkWithOrgAndVenue(
   const venueDoc: VenueDoc = {
     id: venueId,
     networkId,
-    name: venueData?.venueName ?? "Main Venue",
-    timeZone: venueData?.timeZone ?? "UTC",
+    name: (venue as any)?.venueName ?? "Main Venue",
+    timeZone: (venue as any)?.timeZone ?? "UTC",
     createdAt: now,
     createdBy: adminUid,
   };
   batch.set(venueRef, venueDoc);
 
-  const membershipRef = networkRef
-    .collection("memberships")
-    .doc() as DocumentReference<MembershipDoc>;
+  const membershipRef = networkRef.collection("memberships").doc() as DocumentReference<MembershipDoc>;
   const membershipDoc: MembershipDoc = {
     id: membershipRef.id,
     networkId,
@@ -166,7 +160,7 @@ export async function createNetworkWithOrgAndVenue(
   // Commit batch
   await batch.commit();
 
-  await consumeAdminFormDraft({ formToken: tokenString, expectedUserId: adminUid });
+  await consumeAdminFormDraft({ formToken: formTokenStr, expectedUserId: adminUid });
 
   return { networkId, orgId, venueId, status: "pending_verification" };
 }

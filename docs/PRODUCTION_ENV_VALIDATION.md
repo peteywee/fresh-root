@@ -1,3 +1,12 @@
+NOTE: This file has been moved to `docs/production/PRODUCTION_ENV_VALIDATION.md`
+
+This file was consolidated into the `docs/production/` directory and is maintained there as the canonical source of truth.
+
+Please update bookmarks and references to the new location:
+
+`docs/production/PRODUCTION_ENV_VALIDATION.md`
+
+The full content and history remain available in that location.
 # Production Environment Validation Guide
 
 **Status**: ✅ **FULLY IMPLEMENTED**

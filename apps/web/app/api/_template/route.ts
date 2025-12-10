@@ -36,10 +36,13 @@ export const GET = createPublicEndpoint({
   },
 });
 
+// Use the TemplatePostSchema defined above
+
 export const POST = createPublicEndpoint({
   input: TemplatePostSchema,
   handler: async ({ input }) => {
-    return NextResponse.json({ ok: true, payload: input }, { status: 201 });
+    const payload = input ?? {};
+    return NextResponse.json({ ok: true, payload }, { status: 201 });
   },
 });
 

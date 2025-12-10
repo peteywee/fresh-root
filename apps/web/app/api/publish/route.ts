@@ -1,9 +1,9 @@
 // [P0][PUBLISH][API] Publish endpoint
-// Tags: P0, PUBLISH, API, SDK_FACTORY
 
 import { createOrgEndpoint } from "@fresh-schedules/api-framework";
 import { PublishRequestSchema } from "@fresh-schedules/types";
-import { NextResponse } from "next/server";
+
+import { ok, serverError } from "../_shared/validation";
 
 /**
  * POST /api/publish
@@ -14,30 +14,18 @@ export const POST = createOrgEndpoint({
   input: PublishRequestSchema,
   handler: async ({ input, context }) => {
     try {
-      const published = {
-        id: `publish-${Date.now()}`,
-        entityType: input.entityType,
-        entityId: input.entityId,
-        publishAt: input.publishAt || Date.now(),
+      const result = {
+        success: true,
+        scheduleId: input.scheduleId,
+        publishedBy: context.auth?.userId,
+        publishedAt: input.publishAt || Date.now(),
         notifyUsers: input.notifyUsers,
         channels: input.channels,
-        orgId: context.org!.orgId,
-        publishedBy: context.auth!.userId,
-        status: "published",
-        createdAt: Date.now(),
       };
-      return NextResponse.json(published);
-    } catch (err) {
-      const message = err instanceof Error ? err.message : "Failed to publish";
-      console.error("Publish failed", {
-        error: message,
-        orgId: context.org?.orgId,
-        userId: context.auth?.userId,
-      });
-      return NextResponse.json(
-        { error: { code: "INTERNAL_ERROR", message } },
-        { status: 500 }
-      );
+
+      return ok(result);
+    } catch {
+      return serverError("Failed to publish schedule");
     }
   },
 });

@@ -74,8 +74,10 @@ export const POST = createAuthenticatedEndpoint({
         return NextResponse.json({ error: "Organization ID mismatch" }, { status: 403 });
       }
 
-      // Calculate scheduled duration in minutes
-      const scheduledDuration = Math.floor((data.scheduledEnd - data.scheduledStart) / (60 * 1000));
+  // Calculate scheduled duration in minutes (coerce to number to satisfy TS)
+  const scheduledEnd = Number(data.scheduledEnd);
+  const scheduledStart = Number(data.scheduledStart);
+  const scheduledDuration = Math.floor((scheduledEnd - scheduledStart) / (60 * 1000));
 
       // In production, create in Firestore
       const newRecord = {

@@ -140,8 +140,8 @@ const ref: DocumentReference<ShiftDoc> = doc(...) as DocumentReference<ShiftDoc>
 
 The following files were analyzed but contained NO Firebase operations:
 
-- apps/web/app/api/onboarding/\_shared/rateLimit.ts (in-memory store)
-- apps/web/app/api/\_shared/security.ts (HTTP middleware)
+- apps/web/app/api/onboarding/_shared/rateLimit.ts (in-memory store)
+- apps/web/app/api/_shared/security.ts (HTTP middleware)
 - apps/web/src/lib/api/rate-limit.ts (Redis/in-memory)
 - apps/web/src/lib/api/csrf.ts (CSRF token generation)
 - apps/web/app/api/session/route.ts (cookie management)

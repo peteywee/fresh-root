@@ -36,7 +36,7 @@ export const GET = createAuthenticatedEndpoint({
 
 /**
  * POST /api/session/bootstrap
- * Create new session
+ * Create new session with preferences
  */
 export const POST = createAuthenticatedEndpoint({
   input: SessionBootstrapSchema,
@@ -45,10 +45,9 @@ export const POST = createAuthenticatedEndpoint({
       const session = {
         userId: context.auth?.userId,
         email: context.auth?.email,
-        idToken: input.idToken,
-        redirectUrl: input.redirectUrl,
-        orgId: input.orgId,
         createdAt: Date.now(),
+        preferences: input.preferences,
+        deviceInfo: input.deviceInfo,
       };
       return NextResponse.json(session);
     } catch (err) {
