@@ -1,4 +1,8 @@
-# Production Readiness KPI Checklist
+# NOTE: This file was moved to docs/production/PRODUCTION_READINESS_KPI.md
+
+This file has been moved to `docs/production/PRODUCTION_READINESS_KPI.md` and is maintained there as the canonical source of truth.
+
+Please update bookmarks and references to the new location.
 
 **Last Updated:** November 28, 2025\
 **Status:** ✅ **PRODUCTION READY** (All KPIs met)

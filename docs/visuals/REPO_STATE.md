@@ -39,19 +39,18 @@ stateDiagram-v2
 
 ## Current State
 - **Branch**: `main`
-- **Total Branches**: 2
-- **Uncommitted Changes**: 0
+- **Total Branches**: 10
+- **Uncommitted Changes**: 9
 
 ## Recent Commits
 ```
+34cd13e chore: update TypeScript and Vitest versions, migrate ESLint ignore rules to config, and remove obsolete .eslintignore file
+637d11c fix(lint): implement ESLint flat config monorepo solution
+946f6f7 chore(visuals): update index and metadata
+b8afb4e chore(visuals): update index and metadata
 79511cd Delete .github/workflows/ci.yml
 a1c81c9 chore(visuals): update index and metadata
 ce54ece Delete .github/workflows/main-merge-gate.yml
 8011781 chore(visuals): update index and metadata
-f263a0b Delete .github/workflows/feature-branch-cleanup.yml
-a35bb0c Delete .github/workflows/docs-archive-guard.yml
-43b72f6 Delete .github/workflows/branch-file-validator.yml
-866b931 chore(visuals): update index and metadata
-c337492 chore(visuals): auto-update architecture and repo state diagrams
-fe60df2 f
+f263a0b D
 ```

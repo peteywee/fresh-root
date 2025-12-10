@@ -8,7 +8,6 @@
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "typecheck": "echo \"types package typecheck skipped (checked transitively via @apps/web)\"",
-    "lint": "eslint . --max-warnings=0",
     "test": "vitest run --passWithNoTests",
     "test:watch": "vitest"
   },
@@ -17,6 +16,6 @@
     "typescript": "^5.6.3"
   },
   "dependencies": {
-    "zod": "^4.1.12"
+    "zod": "^4.1.13"
   }
 }

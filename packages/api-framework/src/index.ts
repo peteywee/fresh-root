@@ -33,9 +33,10 @@
  * ```
  */
 
-import type { OrgRole } from "../../types/src/rbac";
 import { NextRequest, NextResponse } from "next/server";
 import { ZodError } from "zod";
+
+import type { OrgRole } from "../../types/src/rbac";
 
 // =============================================================================
 // TYPES
@@ -81,7 +82,7 @@ export interface EndpointConfig<TInput = unknown, TOutput = unknown> {
   csrf?: boolean;
 
   /** Zod schema for request body/query validation */
-  input?: any;
+  input?: import("zod").ZodTypeAny;
 
   /** The actual handler function */
   handler: (params: {
@@ -332,7 +333,7 @@ async function logAudit(
  */
 export function createEndpoint<TInput = unknown, TOutput = unknown>(
   config: EndpointConfig<TInput, TOutput>,
-): (request: NextRequest, context?: { params: Record<string, string> }) => Promise<NextResponse> {
+): (request: NextRequest, context: { params: Promise<Record<string, string>> }) => Promise<NextResponse> {
   const {
     auth = "required",
     org = "none",
@@ -343,10 +344,10 @@ export function createEndpoint<TInput = unknown, TOutput = unknown>(
     handler,
   } = config;
 
-  return async (request: NextRequest, routeContext?: { params: Record<string, string> }) => {
+  return async (request: NextRequest, routeContext: { params: Promise<Record<string, string>> }) => {
     const requestId = crypto.randomUUID();
     const startTime = Date.now();
-    const params = routeContext?.params || {};
+    const params = await routeContext.params;
 
     // Initialize context
     const context: RequestContext = {
@@ -446,7 +447,7 @@ export function createEndpoint<TInput = unknown, TOutput = unknown>(
             rawInput = await request.json().catch(() => ({}));
           }
 
-          validatedInput = inputSchema.parse(rawInput);
+          validatedInput = inputSchema.parse(rawInput) as TInput;
         } catch (error) {
           if (error instanceof ZodError) {
             const details: Record<string, string[]> = {};
@@ -620,7 +621,7 @@ export function createRateLimitedEndpoint<TOutput = unknown>(
       params: Record<string, string>;
     }) => Promise<NextResponse>;
   },
-): (req: NextRequest, ctx: any) => Promise<NextResponse> {
+): (req: NextRequest, ctx: { params: Promise<Record<string, string>> }) => Promise<NextResponse> {
   return createEndpoint({
     auth: "none",
     org: "none",

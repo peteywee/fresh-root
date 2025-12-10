@@ -2,7 +2,7 @@
 // Tags: P0, ORG, DETAIL, API, SDK_FACTORY
 
 import { createOrgEndpoint } from "@fresh-schedules/api-framework";
-import { UpdateOrganizationSchema } from "@fresh-schedules/types";
+import { UpdateOrgSchema } from "@fresh-schedules/types";
 import { NextResponse } from "next/server";
 
 /**
@@ -32,12 +32,12 @@ export const GET = createOrgEndpoint({
 });
 
 /**
- * PATCH /api/organizations/[id]
+ * PUT /api/organizations/[id]
  * Update organization
  */
 export const PUT = createOrgEndpoint({
   roles: ["admin"],
-  input: UpdateOrganizationSchema,
+  input: UpdateOrgSchema,
   handler: async ({ input, context, params }) => {
     try {
       const updated = {
@@ -48,15 +48,9 @@ export const PUT = createOrgEndpoint({
         updatedAt: Date.now(),
       };
       return NextResponse.json(updated);
-    } catch (err) {
-      const message = err instanceof Error ? err.message : "Failed to update organization";
-      console.error("Org update failed", {
-        error: message,
-        orgId: params.id,
-        userId: context.auth?.userId,
-      });
+    } catch {
       return NextResponse.json(
-        { error: { code: "INTERNAL_ERROR", message } },
+        { error: { code: "INTERNAL_ERROR", message: "Failed to update organization" } },
         { status: 500 }
       );
     }
@@ -65,7 +59,6 @@ export const PUT = createOrgEndpoint({
 
 /**
  * DELETE /api/organizations/[id]
- * Delete organization
  */
 export const DELETE = createOrgEndpoint({
   roles: ["admin"],

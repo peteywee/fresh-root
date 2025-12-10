@@ -18,21 +18,10 @@ const MFAVerifySchema = z.object({
  */
 export const POST = createAuthenticatedEndpoint({
   rateLimit: { maxRequests: 50, windowMs: 60000 },
-  handler: async ({ request, context }) => {
+  input: MFAVerifySchema,
+  handler: async ({ input, context }) => {
     try {
-      let body: unknown;
-      try {
-        body = await request.json();
-      } catch {
-        body = {};
-      }
-
-      const result = MFAVerifySchema.safeParse(body);
-      if (!result.success) {
-        return badRequest("Invalid request", result.error.issues);
-      }
-
-      const { secret, token } = result.data;
+      const { secret, token } = input;
 
       // Verify TOTP token
       const verified = speakeasy.totp.verify({

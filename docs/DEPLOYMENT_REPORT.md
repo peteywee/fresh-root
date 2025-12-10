@@ -1,6 +1,8 @@
-# Production Readiness Completion Report
+# NOTE: This file was moved to docs/production/DEPLOYMENT_REPORT.md
 
-**Date**: November 29, 2025\
+This file has been moved to `docs/production/DEPLOYMENT_REPORT.md` and is maintained there as the canonical source of truth.
+
+**Date**: November 29, 2025  
 **Status**: ✅ COMPLETE AND VERIFIED
 
 ---

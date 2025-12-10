@@ -3,7 +3,8 @@
 
 import { createAuthenticatedEndpoint } from "@fresh-schedules/api-framework";
 import { BackupRequestSchema } from "@fresh-schedules/types";
-import { NextResponse } from "next/server";
+
+import { ok, serverError } from "../../_shared/validation";
 
 /**
  * POST /api/internal/backup
@@ -21,19 +22,11 @@ export const POST = createAuthenticatedEndpoint({
         encryption: input.encryption,
         initiatedBy: context.auth?.userId,
         createdAt: Date.now(),
-        status: "pending",
+        status: "pending" as const,
       };
-      return NextResponse.json(backup);
-    } catch (err) {
-      const message = err instanceof Error ? err.message : "Failed to create backup";
-      console.error("Backup creation failed", {
-        error: message,
-        userId: context.auth?.userId,
-      });
-      return NextResponse.json(
-        { error: { code: "INTERNAL_ERROR", message } },
-        { status: 500 }
-      );
+      return ok(backup);
+    } catch {
+      return serverError("Failed to create backup");
     }
   },
 });

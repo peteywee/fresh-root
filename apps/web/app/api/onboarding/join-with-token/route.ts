@@ -3,7 +3,8 @@
 
 import { createAuthenticatedEndpoint } from "@fresh-schedules/api-framework";
 import { JoinWithTokenSchema } from "@fresh-schedules/types";
-import { NextResponse } from "next/server";
+
+import { ok, serverError } from "../../_shared/validation";
 
 /**
  * POST /api/onboarding/join-with-token
@@ -15,12 +16,12 @@ export const POST = createAuthenticatedEndpoint({
     try {
       const result = {
         userId: context.auth?.userId,
-        joinToken: input.joinToken,
+        token: input.joinToken,
         joinedAt: Date.now(),
         role: "member",
         status: "pending_approval",
       };
-      return NextResponse.json(result);
+      return ok(result);
     } catch (err) {
       const message = err instanceof Error ? err.message : "Failed to join with token";
       console.error("Join with token failed", {
@@ -28,10 +29,7 @@ export const POST = createAuthenticatedEndpoint({
         userId: context.auth?.userId,
         token: input.joinToken,
       });
-      return NextResponse.json(
-        { error: { code: "INTERNAL_ERROR", message } },
-        { status: 500 }
-      );
+      return serverError("Failed to join with token");
     }
   },
 });

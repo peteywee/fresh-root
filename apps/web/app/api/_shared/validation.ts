@@ -1,7 +1,6 @@
 // [P1][INTEGRITY][VALIDATION] Validation
 // Tags: P1, INTEGRITY, VALIDATION
 import { NextResponse } from "next/server";
-import { z } from "zod";
 
 /** Standard API error payload shape */
 export type ApiError = {
@@ -28,7 +27,7 @@ export function ok<T>(data: T) {
 }
 
 /** Utility to parse JSON request bodies against a Zod schema */
-export async function parseJson<T>(req: Request, schema: z.ZodType<T>) {
+export async function parseJson(req: Request, schema: import("zod").ZodTypeAny) {
   let json: unknown;
   try {
     json = await req.json();
@@ -37,7 +36,7 @@ export async function parseJson<T>(req: Request, schema: z.ZodType<T>) {
   }
   const parsed = schema.safeParse(json);
   if (!parsed.success) {
-    const details = parsed.error.issues.map((i) => ({
+    const details = parsed.error.issues.map((i: any) => ({
       path: i.path.join("."),
       message: i.message,
     }));

@@ -1,27 +1,19 @@
-// [P0][DOMAIN][SCHEMA] Session and authentication schemas
-// Tags: P0, DOMAIN, SCHEMA, SESSION
+// [P0][SESSION][SCHEMA] Session API schemas
+// Tags: P0, SESSION, SCHEMA
 
 import { z } from "zod";
 
-/**
- * Session bootstrap schema
- * Used for initial session setup and user context loading
- */
+// Session bootstrap schema (for POST requests with optional preferences)
 export const SessionBootstrapSchema = z.object({
-  idToken: z.string().min(1),
-  redirectUrl: z.string().url().optional(),
-  orgId: z.string().min(1).optional(),
+  preferences: z.object({
+    theme: z.enum(["light", "dark", "auto"]).default("auto"),
+    timezone: z.string().optional(),
+    language: z.string().default("en"),
+  }).optional(),
+  deviceInfo: z.object({
+    userAgent: z.string().optional(),
+    platform: z.string().optional(),
+  }).optional(),
 });
 
 export type SessionBootstrap = z.infer<typeof SessionBootstrapSchema>;
-
-/**
- * Session refresh schema
- * Used for extending or refreshing existing sessions
- */
-export const SessionRefreshSchema = z.object({
-  sessionId: z.string().min(1),
-  extendTTL: z.boolean().default(false),
-});
-
-export type SessionRefresh = z.infer<typeof SessionRefreshSchema>;

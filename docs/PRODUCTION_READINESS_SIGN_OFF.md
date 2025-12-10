@@ -1,12 +1,8 @@
-# Production Readiness Sign-Off - November 29, 2025
+# NOTE: This file was moved to docs/production/PRODUCTION_READINESS_SIGN_OFF.md
 
-**Status**: ✅ **PRODUCTION GRADE - ALL SYSTEMS GO**
+This file has been moved to `docs/production/PRODUCTION_READINESS_SIGN_OFF.md` and is maintained there as the canonical source of truth.
 
----
-
-## Executive Summary
-
-This repository has been systematically hardened and verified for production deployment. All quality gates are green. The system is secure, stable, and follows top-shelf service engineering standards.
+Please update bookmarks and references to the new location.
 
 ### Quality Metrics
 
