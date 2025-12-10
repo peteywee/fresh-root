@@ -1,7 +1,7 @@
 # Firebase Modernization & Type Safety Implementation Plan
 
-**Created**: 2025-01-30  
-**Status**: Planning Phase  
+**Created**: 2025-01-30\
+**Status**: Planning Phase\
 **Priority**: Medium-High
 
 ## 1. Overview
@@ -104,8 +104,10 @@ export async function queryWithType<T>(db: Firestore, q: Query): Promise<T[]> {
 
 - **ALT-001: Full Type Guards Everywhere**: Adding explicit type guards to every Firebase call
   - **Rationale rejected**: Verbose, creates boilerplate; suppression + wrappers is more maintainable
+
 - **ALT-002: Migrate to TypeORM/Prisma**: Replace Firebase with traditional ORM
   - **Rationale rejected**: Major architectural change; Firebase is core to project infrastructure
+
 - **ALT-003: Use `@ts-ignore` on Every Firebase Call**: Suppress at call-site
   - **Rationale rejected**: Creates scattered technical debt; centralized ESLint suppression is cleaner
 
@@ -201,7 +203,7 @@ pnpm vitest run
 - **Phase 2 (Type Wrappers)**: 6-8 hours (optional)
 - **Phase 3 (Documentation)**: 2-3 hours
 
-**Total (All Phases)**: 11-15 hours  
+**Total (All Phases)**: 11-15 hours\
 **Minimum (Phase 1 Only)**: 3-4 hours
 
 ---
@@ -215,6 +217,6 @@ pnpm vitest run
 
 ---
 
-**Author**: GitHub Copilot  
-**Last Updated**: 2025-01-30  
+**Author**: GitHub Copilot\
+**Last Updated**: 2025-01-30\
 **Status**: Ready for Review & Approval

@@ -74,20 +74,20 @@ For a complete architecture overview, see [Architecture Diagrams](./docs/ARCHITE
    pnpm install --frozen-lockfile
    ```
 
-2. **Configure environment:**
+1. **Configure environment:**
 
    ```bash
    cp .env.example .env.local
    # Update with your Firebase configuration
    ```
 
-3. **Start development server:**
+1. **Start development server:**
 
    ```bash
    pnpm dev
    ```
 
-4. **Run tests:**
+1. **Run tests:**
 
    ```bash
    pnpm test              # Unit tests

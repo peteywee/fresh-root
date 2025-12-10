@@ -1,9 +1,7 @@
 ---
-applyTo: "**"
----
 
+## applyTo: "\*\*"
 # Next.js Best Practices for LLMs (2025)
-
 _Last updated: July 2025_
 
 This document summarizes the latest, authoritative best practices for building, structuring, and maintaining Next.js applications. It is intended for use by LLMs and developers to ensure code quality, maintainability, and scalability.
@@ -13,6 +11,7 @@ This document summarizes the latest, authoritative best practices for building, 
 ## 1. Project Structure & Organization
 
 - **Use the `app/` directory** (App Router) for all new projects. Prefer it over the legacy `pages/` directory.
+
 - **Top-level folders:**
   - `app/` — Routing, layouts, pages, and route handlers
   - `public/` — Static assets (images, fonts, etc.)
@@ -22,11 +21,15 @@ This document summarizes the latest, authoritative best practices for building, 
   - `styles/` — Global and modular stylesheets
   - `hooks/` — Custom React hooks
   - `types/` — TypeScript type definitions
+
 - **Colocation:** Place files (components, styles, tests) near where they are used, but avoid deeply nested structures.
+
 - **Route Groups:** Use parentheses (e.g., `(admin)`) to group routes without affecting the URL path.
+
 - **Private Folders:** Prefix with `_` (e.g., `_internal`) to opt out of routing and signal implementation details.
 
 - **Feature Folders:** For large apps, group by feature (e.g., `app/dashboard/`, `app/auth/`).
+
 - **Use `src/`** (optional): Place all source code in `src/` to separate from config files.
 
 ## 2.1. Server and Client Component Integration (App Router)

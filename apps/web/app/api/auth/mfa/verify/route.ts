@@ -1,5 +1,4 @@
 // [P0][AUTH][API] MFA verify endpoint
-import { NextRequest } from "next/server";
 import * as speakeasy from "speakeasy";
 import { z } from "zod";
 

@@ -1,6 +1,6 @@
 # CREWOPS.md — TopShelf CrewOps Operating Manual (Commercial SaaS/PWA)
 
-**Owner:** TopShelfService LLC  
+**Owner:** TopShelfService LLC\
 **Purpose:** Provide an enforceable operating agreement for an agentic “crew” that delivers production-grade SaaS/PWA work with evidence, conflict, and deterministic outputs.
 
 ---
@@ -508,12 +508,12 @@ If missing, proceed with reasonable defaults and label them `[ASSUMPTION]`.
 
 Before any request proceeds:
 
-- [ ] Are external facts needed? → Activate research tools
-- [ ] Is code inspection needed? → Activate `read_file`, `grep_search`, `semantic_search`
-- [ ] Do we need to validate impact? → Use `list_code_usages`
-- [ ] Must we verify build state? → Use `get_errors`, test runners
-- [ ] Must changes go to GitHub? → Activate MCP GitHub tools
-- [ ] Is documentation external? → Activate Firecrawl MCP
+- \[ ] Are external facts needed? → Activate research tools
+- \[ ] Is code inspection needed? → Activate `read_file`, `grep_search`, `semantic_search`
+- \[ ] Do we need to validate impact? → Use `list_code_usages`
+- \[ ] Must we verify build state? → Use `get_errors`, test runners
+- \[ ] Must changes go to GitHub? → Activate MCP GitHub tools
+- \[ ] Is documentation external? → Activate Firecrawl MCP
 
 ### 16.2 Worker Tool Authority Matrix
 

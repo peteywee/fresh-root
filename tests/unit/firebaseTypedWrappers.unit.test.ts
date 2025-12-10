@@ -32,7 +32,7 @@ function makeRef(id: string) {
         store.set(id, { ...(store.get(id) || {}), ...data });
       } else {
         store.set(id, { ...data });
-  } from "../../apps/web/src/lib/firebase/typed-wrappers";
+      }
     },
     async update(data: any) {
       store.set(id, { ...(store.get(id) || {}), ...data });

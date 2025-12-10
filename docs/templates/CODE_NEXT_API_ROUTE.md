@@ -1,4 +1,5 @@
-# Template: CODE\_NEXT\_API\_ROUTE
+# Template: CODE_NEXT_API_ROUTE
+
 ```ts
 /**
  * Next.js API Route: ${Name}

@@ -1,7 +1,9 @@
 # Zod Schemas Mini-Index
+
 Consolidated index of Zod schema definitions in `packages/types/src/`.
 
 ## Core Schemas
+
 - **attendance** → `packages/types/src/attendance.ts`
 - **corporates** → `packages/types/src/corporates.ts`
 - **errors** → `packages/types/src/errors.ts`
@@ -25,9 +27,11 @@ Consolidated index of Zod schema definitions in `packages/types/src/`.
 - **orgVenueAssignments** → `packages/types/src/links/orgVenueAssignments.ts`
 
 ## Legacy (v14) Schemas
+
 - **corpOrgLinks.v14** → `packages/types/src/links/corpOrgLinks.v14.ts`
 
 ## Statistics
+
 - Total schemas: 22
 - Core schemas: 21
 - Legacy (v14): 1

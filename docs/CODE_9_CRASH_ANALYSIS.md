@@ -175,7 +175,7 @@ tail -f ~/.oom-safeguard.log
    swapon --show
    ```
 
-2. **Increase swap to 4GB** (if 2GB not enough)
+1. **Increase swap to 4GB** (if 2GB not enough)
 
    ```bash
    sudo fallocate -l 2G /swapfile2
@@ -183,14 +183,14 @@ tail -f ~/.oom-safeguard.log
    sudo swapon /swapfile2
    ```
 
-3. **Reduce build parallelism** (more conservative)
+1. **Reduce build parallelism** (more conservative)
 
    ```bash
    SWC_NUM_THREADS=1
    NODE_OPTIONS="--max-old-space-size=1024"
    ```
 
-4. **Close heavy applications** (temporary relief)
+1. **Close heavy applications** (temporary relief)
    - VSCode extensions: Disable Cloud Code
    - Browser: Close extra tabs
    - Other services: Stop unused daemons
@@ -230,17 +230,17 @@ tail -100 ~/.oom-safeguard.log
 
 ✅ **Manual actions required**
 
-- [ ] Add 2GB swap space
-- [ ] Restart VSCode
-- [ ] Run `bash scripts/check-memory-preflight.sh`
-- [ ] Start `bash scripts/safeguard-oom.sh` in background
+- \[ ] Add 2GB swap space
+- \[ ] Restart VSCode
+- \[ ] Run `bash scripts/check-memory-preflight.sh`
+- \[ ] Start `bash scripts/safeguard-oom.sh` in background
 
 ✅ **Verification**
 
-- [ ] `free -h` shows swap space
-- [ ] Preflight check passes
-- [ ] `pnpm dev` starts without crashes
-- [ ] `~/.oom-safeguard.log` shows monitoring active
+- \[ ] `free -h` shows swap space
+- \[ ] Preflight check passes
+- \[ ] `pnpm dev` starts without crashes
+- \[ ] `~/.oom-safeguard.log` shows monitoring active
 
 ---
 

@@ -22,8 +22,12 @@ vi.mock("firebase-admin/auth", () => ({
 vi.mock("firebase-admin/firestore", () => ({
   getFirestore: () => ({
     collectionGroup: (_name: string) => ({
-      where: function () { return this as any; },
-      limit: function () { return this as any; },
+      where: function () {
+        return this as any;
+      },
+      limit: function () {
+        return this as any;
+      },
       get: async function () {
         return {
           empty: false,
@@ -56,8 +60,12 @@ vi.mock("firebase-admin", () => ({
   }),
   getFirestore: () => ({
     collectionGroup: (_name: string) => ({
-      where: function () { return this as any; },
-      limit: function () { return this as any; },
+      where: function () {
+        return this as any;
+      },
+      limit: function () {
+        return this as any;
+      },
       get: async function () {
         return {
           empty: false,
@@ -79,12 +87,16 @@ describe("POST /api/batch", () => {
   function unwrapData(wrapped: any) {
     if (!wrapped) return undefined;
     if (wrapped.data && typeof wrapped.data.totalItems === "number") return wrapped.data;
-    if (wrapped.data && wrapped.data.body && typeof wrapped.data.body.totalItems === "number") return wrapped.data.body;
+    if (wrapped.data && wrapped.data.body && typeof wrapped.data.body.totalItems === "number")
+      return wrapped.data.body;
     return undefined;
   }
 
   it("should process items and return results", async () => {
-    const items = [{ id: "1", payload: { a: 1 } }, { id: "2", payload: { a: 2 } }];
+    const items = [
+      { id: "1", payload: { a: 1 } },
+      { id: "2", payload: { a: 2 } },
+    ];
     const ctx = createMockOrgContext();
     // Provide session cookie and orgId to satisfy auth & org checks for createOrgEndpoint
     const requestForProcess = createMockRequest("/api/batch", {
@@ -107,7 +119,9 @@ describe("POST /api/batch", () => {
     expect(result.successCount).toBe(2);
     expect(result.failureCount).toBe(0);
 
-    const response = await POST(requestForPost as any, { params: Promise.resolve({}) as Promise<Record<string, string>> });
+    const response = await POST(requestForPost as any, {
+      params: Promise.resolve({}) as Promise<Record<string, string>>,
+    });
     const wrapped = await response.json();
     const batch = unwrapData(wrapped);
     expect(batch).toBeDefined();
@@ -118,9 +132,13 @@ describe("POST /api/batch", () => {
   it("should reject batch exceeding max size", async () => {
     const items = Array.from({ length: 201 }).map((_, i) => ({ id: String(i), payload: {} }));
     const ctx = createMockOrgContext();
-    await expect(processBatchItems(items, ctx as any, createMockRequest("/api/batch", { method: "POST", body: { items } }) as any)).rejects.toThrow(
-      /exceeds maximum/,
-    );
+    await expect(
+      processBatchItems(
+        items,
+        ctx as any,
+        createMockRequest("/api/batch", { method: "POST", body: { items } }) as any,
+      ),
+    ).rejects.toThrow(/exceeds maximum/);
   });
 
   it("continueOnError: true should partially succeed when item fails", async () => {
@@ -129,8 +147,16 @@ describe("POST /api/batch", () => {
       { id: "2", payload: { fail: true } },
       { id: "3", payload: { a: 3 } },
     ];
-    const request = createMockRequest("/api/batch", { method: "POST", body: { items, continueOnError: true }, cookies: { session: "mock-session" }, headers: { cookie: "session=mock-session", authorization: "Bearer mock-token" }, searchParams: { orgId: "org-test" } });
-    const response = await POST(request as any, { params: Promise.resolve({}) as Promise<Record<string, string>> });
+    const request = createMockRequest("/api/batch", {
+      method: "POST",
+      body: { items, continueOnError: true },
+      cookies: { session: "mock-session" },
+      headers: { cookie: "session=mock-session", authorization: "Bearer mock-token" },
+      searchParams: { orgId: "org-test" },
+    });
+    const response = await POST(request as any, {
+      params: Promise.resolve({}) as Promise<Record<string, string>>,
+    });
     const wrapped = await response.json();
     const batch2 = unwrapData(wrapped);
     expect(batch2.successCount).toBe(2);
@@ -143,8 +169,16 @@ describe("POST /api/batch", () => {
       { id: "2", payload: { fail: true } },
       { id: "3", payload: { a: 3 } },
     ];
-    const request = createMockRequest("/api/batch", { method: "POST", body: { items, continueOnError: false }, cookies: { session: "mock-session" }, headers: { cookie: "session=mock-session", authorization: "Bearer mock-token" }, searchParams: { orgId: "org-test" } });
-    const response = await POST(request as any, { params: Promise.resolve({}) as Promise<Record<string, string>> });
+    const request = createMockRequest("/api/batch", {
+      method: "POST",
+      body: { items, continueOnError: false },
+      cookies: { session: "mock-session" },
+      headers: { cookie: "session=mock-session", authorization: "Bearer mock-token" },
+      searchParams: { orgId: "org-test" },
+    });
+    const response = await POST(request as any, {
+      params: Promise.resolve({}) as Promise<Record<string, string>>,
+    });
     const wrapped = await response.json();
     const batch3 = unwrapData(wrapped);
     expect(batch3.successCount).toBeLessThan(3);
@@ -158,15 +192,25 @@ describe("POST /api/batch", () => {
     ];
     const ctx = createMockOrgContext();
     const requestForProcess = createMockRequest("/api/batch", { method: "POST", body: { items } });
-    const requestForPost = createMockRequest("/api/batch", { method: "POST", body: { items }, cookies: { session: "mock-session" }, headers: { cookie: "session=mock-session", authorization: "Bearer mock-token" }, searchParams: { orgId: "org-test" } });
+    const requestForPost = createMockRequest("/api/batch", {
+      method: "POST",
+      body: { items },
+      cookies: { session: "mock-session" },
+      headers: { cookie: "session=mock-session", authorization: "Bearer mock-token" },
+      searchParams: { orgId: "org-test" },
+    });
 
     // Use a low per-item timeout to force timeout behavior during the test
-    const result = await processBatchItems(items, ctx as any, requestForProcess as any, { timeoutPerItem: 50 });
+    const result = await processBatchItems(items, ctx as any, requestForProcess as any, {
+      timeoutPerItem: 50,
+    });
     expect(result.totalItems).toBe(2);
     expect(result.results[1].success).toBe(false);
     expect(result.results[1].error?.message).toContain("timed out");
 
-    const response = await POST(requestForPost as any, { params: Promise.resolve({}) as Promise<Record<string, string>> });
+    const response = await POST(requestForPost as any, {
+      params: Promise.resolve({}) as Promise<Record<string, string>>,
+    });
     const wrapped = await response.json();
     const batch4 = unwrapData(wrapped);
     if (!batch4) console.log("wrapped timeout test:", wrapped);

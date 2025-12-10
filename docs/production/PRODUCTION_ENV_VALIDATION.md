@@ -388,15 +388,15 @@ pnpm tsx scripts/validate-env.ts
 
 Before deploying to production:
 
-- [ ] `REDIS_URL` is set in production environment
-- [ ] `NODE_ENV=production` is set
-- [ ] Firebase credentials are set
-- [ ] Run startup validation: `preFlightChecks(env)`
-- [ ] No `assertNotProduction()` guards in production code
-- [ ] All `assertProduction()` guards in production-only code
-- [ ] Rate limiting tests pass with Redis
-- [ ] Multi-instance info shows "safe" risk level
-- [ ] Pre-flight checks pass
+- \[ ] `REDIS_URL` is set in production environment
+- \[ ] `NODE_ENV=production` is set
+- \[ ] Firebase credentials are set
+- \[ ] Run startup validation: `preFlightChecks(env)`
+- \[ ] No `assertNotProduction()` guards in production code
+- \[ ] All `assertProduction()` guards in production-only code
+- \[ ] Rate limiting tests pass with Redis
+- \[ ] Multi-instance info shows "safe" risk level
+- \[ ] Pre-flight checks pass
 
 ---
 

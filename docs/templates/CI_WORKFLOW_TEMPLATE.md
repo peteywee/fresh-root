@@ -1,4 +1,5 @@
-# Template: CI\_WORKFLOW\_TEMPLATE
+# Template: CI_WORKFLOW_TEMPLATE
+
 ```yaml
 name: ci-minimal-secure
 

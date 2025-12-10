@@ -1,5 +1,7 @@
 # File Header & Tag Standard
+
 ## Required Header (top of every new/changed file)
+
 Include this exact block at the top of every new or modified source file so tooling and humans can quickly discover ownership, layer, and contracts.
 
 ```text
@@ -12,6 +14,7 @@ Include this exact block at the top of every new or modified source file so tool
 ```
 
 ### Rules
+
 - Layer reflects the five-layer model described in the repository docs. Use `L00`..`L04` accordingly.
 - `Contracts` should reference Zod schemas, TypeScript interfaces, or adapter interfaces (e.g. `DataProviderAdapter`) that this file relies on or exposes.
 - `Owner` should be a team or person responsible for reviewing changes to this file.

@@ -81,7 +81,7 @@ echo 'ulimit -v 6291456' >> ~/.bashrc
    free -h
    ```
 
-2. **Increase swap** (if 2GB not enough):
+1. **Increase swap** (if 2GB not enough):
 
    ```bash
    # Add another 2GB
@@ -91,7 +91,7 @@ echo 'ulimit -v 6291456' >> ~/.bashrc
    sudo swapon /swapfile2
    ```
 
-3. **Reduce parallel build tasks**:
+1. **Reduce parallel build tasks**:
 
    ```bash
    # In .env.local
@@ -99,7 +99,7 @@ echo 'ulimit -v 6291456' >> ~/.bashrc
    NODE_OPTIONS="--max-old-space-size=1024"
    ```
 
-4. **Close unnecessary applications**:
+1. **Close unnecessary applications**:
    - VSCode Extensions: Disable Cloud Code, Remote extensions if not using
    - Browser: Close extra tabs
    - Terminal: Kill unused shells

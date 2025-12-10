@@ -1,26 +1,28 @@
 ---
+
 agent: "agent"
 description: "Create a new implementation plan file for new features, refactoring existing code or upgrading packages, design, architecture or infrastructure."
 tools:
-  [
-    "changes",
-    "search/codebase",
-    "edit/editFiles",
-    "extensions",
-    "fetch",
-    "githubRepo",
-    "openSimpleBrowser",
-    "problems",
-    "runTasks",
-    "search",
-    "search/searchResults",
-    "runCommands/terminalLastCommand",
-    "runCommands/terminalSelection",
-    "testFailure",
-    "usages",
-    "vscodeAPI",
-  ]
----
+\[
+"changes",
+"search/codebase",
+"edit/editFiles",
+"extensions",
+"fetch",
+"githubRepo",
+"openSimpleBrowser",
+"problems",
+"runTasks",
+"search",
+"search/searchResults",
+"runCommands/terminalLastCommand",
+"runCommands/terminalSelection",
+"testFailure",
+"usages",
+"vscodeAPI",
+]
+
+-
 
 # Create Implementation Plan
 
@@ -84,16 +86,16 @@ All implementation plans must strictly adhere to the following template. Each se
 
 The status of the implementation plan must be clearly defined in the front matter and must reflect the current state of the plan. The status can be one of the following (status_color in brackets): `Completed` (bright green badge), `In progress` (yellow badge), `Planned` (blue badge), `Deprecated` (red badge), or `On Hold` (orange badge). It should also be displayed as a badge in the introduction section.
 
-```md
----
+## ```md
+
 goal: [Concise Title Describing the Package Implementation Plan's Goal]
 version: [Optional: e.g., 1.0, Date]
 date_created: [YYYY-MM-DD]
 last_updated: [Optional: YYYY-MM-DD]
 owner: [Optional: Team/Individual responsible for this spec]
 status: 'Completed'|'In progress'|'Planned'|'Deprecated'|'On Hold'
-tags: [Optional: List of relevant tags or categories, e.g., `feature`, `upgrade`, `chore`, `architecture`, `migration`, `bug` etc]
----
+
+## tags: [Optional: List of relevant tags or categories, e.g., `feature`, `upgrade`, `chore`, `architecture`, `migration`, `bug` etc]
 
 # Introduction
 
@@ -173,4 +175,7 @@ tags: [Optional: List of relevant tags or categories, e.g., `feature`, `upgrade`
 
 [Link to related spec 1]
 [Link to relevant external documentation]
+
+```
+
 ```

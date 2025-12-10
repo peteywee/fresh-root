@@ -1,6 +1,5 @@
 // [P0][PUBLISH][API] Publish endpoint
 
-import { NextRequest, NextResponse } from "next/server";
 
 import { createOrgEndpoint } from "@fresh-schedules/api-framework";
 import { badRequest, ok, serverError } from "../_shared/validation";

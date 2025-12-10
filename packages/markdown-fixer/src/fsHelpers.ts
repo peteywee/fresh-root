@@ -1,7 +1,7 @@
 // [P2][APP][CODE] FsHelpers
 // Tags: P2, APP, CODE
-import fs from 'fs';
-import path from 'path';
+import fs from "fs";
+import path from "path";
 
 export function collectMarkdownFiles(
   dir: string,

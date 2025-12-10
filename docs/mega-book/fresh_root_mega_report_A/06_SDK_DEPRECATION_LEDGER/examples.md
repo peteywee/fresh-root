@@ -1,19 +1,21 @@
 # SDK Ledger — Example Entries (Templates)
+
 This file contains concrete templates you can copy when documenting real deprecations.
 
 ## Example 1 — Legacy Firestore Write Pattern → Transactional SDK
-LEGACY\_COMPONENT: createScheduleAndShiftsInline\
-TYPE: Cloud Function (HTTP)\
-LOCATION\_OLD: `functions/src/schedules/createScheduleAndShiftsInline.ts`\
-REASON\_REMOVED: Mixed concerns (HTTP + validation + Firestore writes), no transaction, duplicated logic.\
-RISK\_IF\_LOST: We forget the exact order of writes and edge cases that were previously handled ad-hoc.
 
-NEW\_SDK\_INTERFACE:
+LEGACY_COMPONENT: createScheduleAndShiftsInline\
+TYPE: Cloud Function (HTTP)\
+LOCATION_OLD: `functions/src/schedules/createScheduleAndShiftsInline.ts`\
+REASON_REMOVED: Mixed concerns (HTTP + validation + Firestore writes), no transaction, duplicated logic.\
+RISK_IF_LOST: We forget the exact order of writes and edge cases that were previously handled ad-hoc.
+
+NEW_SDK_INTERFACE:
 NAME: `@fresh-root/scheduling-sdk`\
-LOCATION\_NEW: `packages/scheduling-sdk/src/transactions/createSchedule.ts`\
+LOCATION_NEW: `packages/scheduling-sdk/src/transactions/createSchedule.ts`\
 SURFACE: - `createScheduleWithShifts(input: CreateScheduleInput): Promise<CreateScheduleResult>`
 
-BEFORE\_CODE (Representative):
+BEFORE_CODE (Representative):
 
 ```ts
 // Pseudo-legacy example (for pattern only)
@@ -24,7 +26,7 @@ for (const shift of shifts) {
 }
 ```
 
-AFTER\_CODE (Representative):
+AFTER_CODE (Representative):
 
 ```ts
 // New SDK usage
@@ -37,7 +39,7 @@ const result = await schedulingSdk.createScheduleWithShifts({
 });
 ```
 
-MIGRATION\_NOTES:
+MIGRATION_NOTES:
 
 - All direct writes to `schedules` and `shifts` collections must go through `createScheduleWithShifts`.
 - Firestore transaction is enforced inside the SDK.

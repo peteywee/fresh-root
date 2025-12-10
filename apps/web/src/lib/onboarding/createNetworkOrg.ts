@@ -7,7 +7,7 @@ import { CreateNetworkOrgPayload } from "@fresh-schedules/types";
 import { Timestamp } from "firebase-admin/firestore";
 import { consumeAdminFormDraft, getAdminFormDraft } from "./adminFormDrafts";
 
-const dbDefault = adminDb as Firestore | undefined;
+const dbDefault = adminDb;
 
 export type CreateNetworkOrgResult = {
   networkId: string;
@@ -99,7 +99,9 @@ export async function createNetworkWithOrgAndVenue(
     slug: networkId,
     displayName: basicsData.orgName ?? networkId,
     legalName:
-      (draft.form as { data?: { legalName?: string } })?.data?.legalName ?? basicsData.orgName ?? null,
+      (draft.form as { data?: { legalName?: string } })?.data?.legalName ??
+      basicsData.orgName ??
+      null,
     kind: basicsData.hasCorporateAboveYou ? "franchise_network" : "independent_org",
     segment: basicsData.segment,
     status: "pending_verification",

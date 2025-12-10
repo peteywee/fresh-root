@@ -1,4 +1,5 @@
 # Branch-to-Documentation Linking Guide
+
 **Purpose:** Ensure every runtime component on `main` is linked to its respective development documentation on `dev`\
 **Status:** Production Ready\
 **Date:** 2025-11-28
@@ -6,7 +7,9 @@
 ---
 
 ## Branch Architecture
+
 ### Main Branch (Production)
+
 - **Purpose:** Runtime-ready code deployed to production
 - **Access:** Read-only (via guard-main.yml gate)
 - **Contains:**
@@ -17,6 +20,7 @@
   - Deployment guides
 
 ### Dev Branch (Development)
+
 - **Purpose:** Development, standards, implementation guidance
 - **Access:** Writable (feature branches created here)
 - **Contains:**
@@ -29,9 +33,11 @@
 ---
 
 ## Runtime Component Linking Map
+
 Every production component on `main` links to its standards on `dev`:
 
 ### Security (Tier 0) - Enforcement on Main, Standards on Dev
+
 | Runtime Component | Location                      | Links To                               | Standard                             |
 | ----------------- | ----------------------------- | -------------------------------------- | ------------------------------------ |
 | Security Wrappers | `apps/web/app/api/*/route.ts` | dev: `PHASE_1_TIER_0_FIXES.md`         | 6 endpoints must have `withSecurity` |
@@ -41,12 +47,13 @@ Every production component on `main` links to its standards on `dev`:
 **How Linking Works:**
 
 1. guard-main.yml (on main) enforces: "Zero Tier 0 violations"
-2. If violation detected: Error message references PHASE\_1\_TIER\_0\_FIXES.md (on dev)
+2. If violation detected: Error message references PHASE_1_TIER_0_FIXES.md (on dev)
 3. Developer checks out dev, reads documentation
 4. Implements fix per standard, creates PR to dev
 5. PR merges to main after guard-main verification
 
 ### Integrity (Tier 1) - Enforcement on Main, Standards on Dev
+
 | Runtime Component | Location                        | Links To                               | Standard                  |
 | ----------------- | ------------------------------- | -------------------------------------- | ------------------------- |
 | Zod Schemas       | `packages/types/src/*/index.ts` | dev: `PHASE_2_TIER_1_FIXES.md`         | Export Zod + z.infer      |
@@ -56,12 +63,13 @@ Every production component on `main` links to its standards on `dev`:
 **How Linking Works:**
 
 1. guard-main.yml (on main) enforces: "Zero Tier 1 violations"
-2. If violation detected: Error message references PHASE\_2\_TIER\_1\_FIXES.md (on dev)
+2. If violation detected: Error message references PHASE_2_TIER_1_FIXES.md (on dev)
 3. Developer implements fix following standard
 4. Creates PR to dev, passes ci-patterns validation
 5. PR merges to main via guard-main gate
 
 ### Architecture (Tier 2) - Enforcement on Main, Standards on Dev
+
 | Runtime Component   | Location             | Links To                               | Standard          |
 | ------------------- | -------------------- | -------------------------------------- | ----------------- |
 | Triad: Schedule     | Schema + API + Rules | dev: `standards/SYMMETRY_FRAMEWORK.md` | Complete coverage |
@@ -71,12 +79,13 @@ Every production component on `main` links to its standards on `dev`:
 **How Linking Works:**
 
 1. Pattern validator (on main) enforces: "3/3 Complete Triads"
-2. If gap detected: Error message references SYMMETRY\_FRAMEWORK.md (on dev)
+2. If gap detected: Error message references SYMMETRY_FRAMEWORK.md (on dev)
 3. Developer adds missing layer, ensures symmetry
 4. Pattern validator confirms completion
 5. Code merged to main when all checks pass
 
 ### Code Quality (TypeScript & ESLint) - Enforcement on Main, Standards on Dev
+
 | Runtime Component | Location        | Links To                               | Standard                 |
 | ----------------- | --------------- | -------------------------------------- | ------------------------ |
 | Type Safety       | All `.ts` files | dev: `standards/00_STANDARDS_INDEX.md` | Zero compilation errors  |
@@ -94,7 +103,9 @@ Every production component on `main` links to its standards on `dev`:
 ---
 
 ## Documentation Cross-Reference Table
+
 ### On Main Branch (Production)
+
 ```
 docs/
 ├── RUNTIME_DOCUMENTATION_INDEX.md (this links to everything)
@@ -107,6 +118,7 @@ docs/
 ```
 
 ### On Dev Branch (Development)
+
 ```
 docs/
 ├── standards/
@@ -130,7 +142,9 @@ scripts/
 ---
 
 ## How to Use This Linking
+
 ### For Developers
+
 **Starting a new feature:**
 
 1. Create feature branch from `dev`
@@ -138,16 +152,17 @@ scripts/
    - Security → `PHASE_1_TIER_0_FIXES.md`
    - Types → `PHASE_2_TIER_1_FIXES.md`
    - Architecture → `standards/SYMMETRY_FRAMEWORK.md`
-1. Implement following standard
-2. Open PR to dev
-3. CI validates (ci-patterns.yml + pr.yml)
-4. If issue, error message links back to standard
-5. Fix and retry
-6. After merge to dev, PR auto-creates to main
-7. guard-main.yml verifies production readiness
-8. If green, deployed to production (main)
+3. Implement following standard
+4. Open PR to dev
+5. CI validates (ci-patterns.yml + pr.yml)
+6. If issue, error message links back to standard
+7. Fix and retry
+8. After merge to dev, PR auto-creates to main
+9. guard-main.yml verifies production readiness
+10. If green, deployed to production (main)
 
 ### For Operations
+
 **Checking production status:**
 
 1. Go to main branch
@@ -165,6 +180,7 @@ scripts/
 6. Deploy via main branch when ready
 
 ### For Auditors
+
 **Verifying production compliance:**
 
 1. main branch: See production-ready code
@@ -175,7 +191,7 @@ scripts/
 **Tracing any component:**
 
 1. Find runtime code on main
-2. Check RUNTIME\_DOCUMENTATION\_INDEX.md for links
+2. Check RUNTIME_DOCUMENTATION_INDEX.md for links
 3. Follow link to standard on dev
 4. See exact requirement and implementation example
 5. Verify guard-main enforces it
@@ -183,7 +199,9 @@ scripts/
 ---
 
 ## Cross-Branch Links Reference
+
 ### Link Syntax
+
 When main references dev standards:
 
 ```markdown
@@ -194,6 +212,7 @@ When main references dev standards:
 ```
 
 ### Link Resolution
+
 **On GitHub:**
 
 - main: `docs/RUNTIME_DOCUMENTATION_INDEX.md`
@@ -210,7 +229,9 @@ When you see link in CI failure:
 ---
 
 ## CI Workflow Link Integration
+
 ### guard-main.yml (Production Gate)
+
 ```yaml
 # When Tier 0 violation detected:
 - name: Pattern Validator
@@ -230,6 +251,7 @@ When you see link in CI failure:
 ```
 
 ### ci-patterns.yml (Dev Validation)
+
 ```yaml
 # Runs on dev branch PRs
 # If pattern violation:
@@ -239,6 +261,7 @@ When you see link in CI failure:
 ```
 
 ### pr.yml (PR Fast-Track)
+
 ```yaml
 # Runs on dev branch PRs
 # If check fails:
@@ -250,6 +273,7 @@ When you see link in CI failure:
 ---
 
 ## Documentation Update Workflow
+
 When standards change on dev:
 
 1. Update doc on dev branch
@@ -264,6 +288,7 @@ When standards change on dev:
 ---
 
 ## Repository Structure for Linking
+
 ```
 fresh-root/
 ├── main (production branch)
@@ -297,7 +322,9 @@ fresh-root/
 ---
 
 ## Verification
+
 ### Verify Links Work
+
 On main branch:
 
 ```bash
@@ -315,6 +342,7 @@ cat docs/standards/00_STANDARDS_INDEX.md | head -20
 ```
 
 ### Verify Linking in CI
+
 ```bash
 # Create a violation on dev
 # Open PR to dev
@@ -329,11 +357,12 @@ cat docs/standards/00_STANDARDS_INDEX.md | head -20
 ---
 
 ## Quick Links (for this document)
-- **Production Documentation:** See [RUNTIME\_DOCUMENTATION\_INDEX.md](./RUNTIME_DOCUMENTATION_INDEX.md)
-- **Deployment Guide:** See [PRODUCTION\_DEPLOYMENT\_GUIDE.md](./PRODUCTION_DEPLOYMENT_GUIDE.md)
-- **All Standards (on dev):** Reference docs/standards/00\_STANDARDS\_INDEX.md
-- **Security (on dev):** Reference docs/PHASE\_1\_TIER\_0\_FIXES.md
-- **Types (on dev):** Reference docs/PHASE\_2\_TIER\_1\_FIXES.md
+
+- **Production Documentation:** See [RUNTIME_DOCUMENTATION_INDEX.md](./RUNTIME_DOCUMENTATION_INDEX.md)
+- **Deployment Guide:** See [PRODUCTION_DEPLOYMENT_GUIDE.md](./PRODUCTION_DEPLOYMENT_GUIDE.md)
+- **All Standards (on dev):** Reference docs/standards/00_STANDARDS_INDEX.md
+- **Security (on dev):** Reference docs/PHASE_1_TIER_0_FIXES.md
+- **Types (on dev):** Reference docs/PHASE_2_TIER_1_FIXES.md
 
 ---
 

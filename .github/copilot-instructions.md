@@ -1,29 +1,42 @@
 # AI Agent Guide: Fresh Schedules Codebase
 
-**Version**: 2.0
-**Last Updated**: December 5, 2025
+**Version**: 2.1
+**Last Updated**: December 10, 2025
 **Target**: AI coding agents (GitHub Copilot, Claude Code, Cursor, etc.)
 
 This guide provides essential knowledge for AI agents to be immediately productive in the Fresh Schedules codebase.
+
+## 🎯 Before You Start
+
+**Important**: This codebase is governed by production development directives. Read these files for binding operational rules:
+
+- **Production Development Philosophy** (`.github/instructions/production-development-directive.instructions.md`): Hierarchical thinking, tool usage, concurrent workers, safeguards, quality enforcement
+- **CrewOps Protocol** (`docs/crewops/`): Multi-role agent coordination for non-trivial tasks (auto-engages on complex requests)
+- **Security & OWASP** (`.github/instructions/security-and-owasp.instructions.md`): Mandatory security patterns and vulnerability prevention
+- **Code Review** (`.github/instructions/code-review-generic.instructions.md`): Comprehensive review standards
+- **Performance** (`.github/instructions/performance-optimization.instructions.md`): Optimization patterns for all layers
+
+These directives are **binding**—not suggestions. They define how you must operate in this codebase.
 
 ---
 
 ## Table of Contents
 
 1. [Quick Start](#quick-start)
-2. [Architecture Overview](#architecture-overview)
-3. [The Triad of Trust](#the-triad-of-trust)
-4. [SDK Factory Pattern (Current Standard)](#sdk-factory-pattern-current-standard)
-5. [Type Safety & Validation](#type-safety--validation)
-6. [Authentication & Authorization](#authentication--authorization)
-7. [Security Patterns](#security-patterns)
-8. [Data Layer & Firebase](#data-layer--firebase)
-9. [Testing Patterns](#testing-patterns)
-10. [Development Workflows](#development-workflows)
-11. [Hard Rules (Must Follow)](#hard-rules-must-follow)
-12. [Common Patterns & Examples](#common-patterns--examples)
-13. [File Organization](#file-organization)
-14. [Troubleshooting](#troubleshooting)
+2. [Operational Directives](#operational-directives)
+3. [Architecture Overview](#architecture-overview)
+4. [The Triad of Trust](#the-triad-of-trust)
+5. [SDK Factory Pattern (Current Standard)](#sdk-factory-pattern-current-standard)
+6. [Type Safety & Validation](#type-safety--validation)
+7. [Authentication & Authorization](#authentication--authorization)
+8. [Security Patterns](#security-patterns)
+9. [Data Layer & Firebase](#data-layer--firebase)
+10. [Testing Patterns](#testing-patterns)
+11. [Development Workflows](#development-workflows)
+12. [Hard Rules (Must Follow)](#hard-rules-must-follow)
+13. [Common Patterns & Examples](#common-patterns--examples)
+14. [File Organization](#file-organization)
+15. [Troubleshooting](#troubleshooting)
 
 ---
 
@@ -66,6 +79,41 @@ NEXT_PUBLIC_USE_EMULATORS=true firebase emulators:start
 3. `docs/CODING_RULES_AND_PATTERNS.md` - Comprehensive coding standards
 4. `firestore.rules` - Security rules (must sync with API routes)
 5. `apps/web/app/api/_template/route.ts` - API route template
+
+---
+
+## Operational Directives
+
+### Production Development Philosophy
+
+This codebase enforces **strict hierarchical thinking and sequential execution**. When making changes:
+
+1. **Understand the hierarchy** - What must be done first? What blocks what?
+2. **Use tools proactively** - Don't assume; verify with the codebase
+3. **Validate before proceeding** - Each step must be validated before moving to the next
+4. **Document safeguards** - If you find an error pattern 3x, create a safeguard rule
+5. **No junk code** - Every line must be production-grade; no placeholders, dead code, or workarounds
+
+**Key Files**:
+
+- `.github/instructions/production-development-directive.instructions.md` - Full operational rules
+- `.github/instructions/security-and-owasp.instructions.md` - Security-first patterns
+- `.github/instructions/code-review-generic.instructions.md` - Code review standards
+
+### CrewOps Protocol
+
+For **non-trivial tasks** (multi-step feature work, architectural changes, complex bug fixes), the CrewOps protocol automatically engages a multi-role team:
+
+- **Orchestrator** - Routes work, arbitrates conflicts
+- **Product Owner** - Defines success criteria
+- **Systems Architect** - Makes design decisions
+- **Security Red Team** - Has VETO power (can block unsafe work)
+- **Research Analyst** - Deploys tools, verifies facts
+- **QA/Test Engineer** - Validates gates, confirms definition of done
+
+**Location**: `docs/crewops/` - Read the manual for detailed coordination rules.
+
+**Key Principle**: Security Red Team can **BLOCK** work if they find auth bypass risks, data leakage, insecure defaults, or missing access controls.
 
 ---
 
@@ -232,19 +280,19 @@ The SDK factory (`@fresh-schedules/api-framework`) provides a declarative, type-
 ```
 1. Rate Limiting (Redis/in-memory)
    ↓
-2. Authentication (Firebase session cookie)
+1. Authentication (Firebase session cookie)
    ↓
-3. CSRF Protection (POST/PUT/PATCH/DELETE)
+1. CSRF Protection (POST/PUT/PATCH/DELETE)
    ↓
-4. Organization Context Loading (Firestore)
+1. Organization Context Loading (Firestore)
    ↓
-5. Role-Based Authorization (hierarchical)
+1. Role-Based Authorization (hierarchical)
    ↓
-6. Input Validation (Zod)
+1. Input Validation (Zod)
    ↓
-7. Handler Execution (your business logic)
+1. Handler Execution (your business logic)
    ↓
-8. Audit Logging (success/failure)
+1. Audit Logging (success/failure)
 ```
 
 ### Factory Types
@@ -1038,14 +1086,14 @@ pnpm format
 
 **Checklist**:
 
-- [ ] `pnpm install --frozen-lockfile` completes without warnings
-- [ ] `pnpm -w typecheck` passes (13 React 19 compat errors acceptable)
-- [ ] `pnpm test` passes
-- [ ] `pnpm test:rules` passes (if you changed Firestore rules)
-- [ ] `pnpm lint` passes
-- [ ] If you touched markdown: Run "Docs: Markdown Fix" task
-- [ ] No deprecated packages in install output
-- [ ] No unmet peer dependencies
+- \[ ] `pnpm install --frozen-lockfile` completes without warnings
+- \[ ] `pnpm -w typecheck` passes (13 React 19 compat errors acceptable)
+- \[ ] `pnpm test` passes
+- \[ ] `pnpm test:rules` passes (if you changed Firestore rules)
+- \[ ] `pnpm lint` passes
+- \[ ] If you touched markdown: Run "Docs: Markdown Fix" task
+- \[ ] No deprecated packages in install output
+- \[ ] No unmet peer dependencies
 
 ---
 
@@ -1230,7 +1278,6 @@ touch apps/web/app/api/my-entities/route.ts
 
 # 3. Update Firestore rules
 # Edit: firestore.rules
-
 # 4. Create tests
 mkdir apps/web/app/api/my-entities/__tests__
 touch apps/web/app/api/my-entities/__tests__/my-entities.test.ts
@@ -1765,8 +1812,19 @@ This codebase follows a **Zod-first, SDK factory pattern** with **hierarchical R
 7. **Test before PR** - typecheck, lint, test, rules tests
 8. **Read the docs** - `docs/CODING_RULES_AND_PATTERNS.md` has comprehensive patterns
 
+### Operating Under the Directives
+
+**Remember**: The production development directive is binding. This means:
+
+- ✅ **Hierarchical thinking**: Understand dependencies before acting
+- ✅ **Tool usage**: Use tools immediately to verify assumptions
+- ✅ **Safeguards**: Create rules when you see patterns repeating 3x
+- ✅ **Production code**: Every line must be production-ready
+- ✅ **Validation gates**: All changes must pass full test/lint/build cycles
+- ✅ **Security-first**: Security Red Team can veto unsafe work
+
 **For questions or improvements**, open an issue or PR at [github.com/peteywee/fresh-root](https://github.com/peteywee/fresh-root).
 
 ---
 
-**Last Updated**: December 5, 2025 by AI Agent Analysis
+**Last Updated**: December 10, 2025 by AI Agent Analysis

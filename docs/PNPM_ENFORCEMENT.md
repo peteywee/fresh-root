@@ -1,8 +1,11 @@
 # CI/CD Deployment Guide: FRESH-ROOT Series-A
+
 ## Package Management: pnpm-only Policy
+
 **CRITICAL:** This monorepo uses **pnpm exclusively**. Using npm or yarn will break dependency resolution and cause deployment failures.
 
 ### Why pnpm?
+
 1. **Monorepo Support**: Native workspace management across 8+ packages
 2. **Strict Dependency Resolution**: Prevents transitive dependency issues
 3. **Disk Efficiency**: Hard-linking prevents duplication
@@ -10,6 +13,7 @@
 5. **Series-A Standard**: Production-grade tooling for enterprise deployments
 
 ### Environment Requirements
+
 ```bash
 # Minimum versions (enforced by package.json engines field)
 node >= 20.10.0
@@ -17,6 +21,7 @@ pnpm >= 9.0.0
 ```
 
 ### Installation & Setup
+
 ```bash
 # 1. Verify pnpm is installed
 pnpm --version
@@ -29,7 +34,9 @@ pnpm prepare
 ```
 
 ### CI/CD Pipeline: pnpm-only Commands
+
 #### GitHub Actions Workflow (.github/workflows/\*)
+
 ```yaml
 name: Build & Deploy
 
@@ -64,6 +71,7 @@ jobs:
 ```
 
 ### Common Commands
+
 | Task                        | Command                                    |
 | --------------------------- | ------------------------------------------ |
 | Install all dependencies    | `pnpm install`                             |
@@ -78,7 +86,9 @@ jobs:
 | Build                       | `pnpm build`                               |
 
 ### Troubleshooting
+
 #### Error: "npm ERR! code ERESOLVE"
+
 ```bash
 # You ran 'npm install' - DO NOT DO THIS
 # Fix:
@@ -87,6 +97,7 @@ pnpm install
 ```
 
 #### Error: "Cannot find module"
+
 ```bash
 # Lock file mismatch (npm or yarn used)
 # Fix:
@@ -95,6 +106,7 @@ pnpm install
 ```
 
 #### Error: "engine" violations
+
 ```bash
 # pnpm version too old
 # Fix:
@@ -103,6 +115,7 @@ pnpm install
 ```
 
 ### Enforcement Mechanisms
+
 1. **`.npmrc`**: Enables `engine-strict=true` to reject npm/yarn
 2. **`scripts/enforce-pnpm.js`**: Pre-commit hook validates lock file
 3. **`package.json::packageManager`**: Specifies pnpm as official manager
@@ -110,6 +123,7 @@ pnpm install
 5. **GitHub Branch Protection**: CI fails if lock file not pnpm-lock.yaml
 
 ### Emergency: Recovering from npm Usage
+
 If npm or yarn was accidentally used:
 
 ```bash

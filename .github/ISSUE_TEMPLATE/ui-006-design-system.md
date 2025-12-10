@@ -1,12 +1,10 @@
-# Objective
-
----
+## # Objective
 
 name: UI-006 Design System Baseline (Tailwind + shadcn)
 about: Establish consistent tokens and primitives; remove ad-hoc UI
-title: "[UI-006] Design System Baseline"
-labels: ["ui", "frontend", "P1"]
-assignees: ["peteywee"]
+title: "\[UI-006] Design System Baseline"
+labels: \["ui", "frontend", "P1"]
+assignees: \["peteywee"]
 
 ---
 
@@ -26,9 +24,9 @@ Create a **cohesive UI** foundation that’s accessible, fast, and consistent.
 
 ## Tasks
 
-- [ ] Configure theme tokens and typography scale.
-- [ ] Generate primitives via shadcn.
-- [ ] Replace ad-hoc buttons/inputs on Dashboard & Schedules.
+- \[ ] Configure theme tokens and typography scale.
+- \[ ] Generate primitives via shadcn.
+- \[ ] Replace ad-hoc buttons/inputs on Dashboard & Schedules.
 
 ## Acceptance Criteria
 

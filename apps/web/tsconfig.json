@@ -24,6 +24,6 @@
       }
     ]
   },
-  "include": ["app", "src", "next-env.d.ts", ".next/types/**/*.ts", "vitest.d.ts"],
-  "exclude": ["node_modules", "**/__tests__/**", "**/*.test.ts", "**/*.test.tsx"]
+  "include": ["app", "src", "next-env.d.ts", ".next/types/**/*.ts", "vitest.d.ts", "vitest.setup.ts", "**/*.test.ts", "**/*.test.tsx"],
+  "exclude": ["node_modules"]
 }

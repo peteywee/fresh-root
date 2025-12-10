@@ -19,7 +19,7 @@ let OTEL_ENABLED: boolean | null = null;
 function isOtelEnabled(): boolean {
   if (OTEL_ENABLED === null) {
     // Import env only when actually checking if OTEL is enabled
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
+     
     const { env } = require("@/src/env");
     OTEL_ENABLED = Boolean(env.OTEL_EXPORTER_OTLP_ENDPOINT);
   }
@@ -45,7 +45,7 @@ export function ensureOtelStarted(): void {
   }
 
   // Import env here, inside the function, to avoid module-level side effects
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
+   
   const { env } = require("@/src/env");
 
   const exporter = new OTLPTraceExporter({
@@ -66,7 +66,7 @@ export function ensureOtelStarted(): void {
     // eslint-disable-next-line no-console
     console.log("[otel] OpenTelemetry SDK started");
   } catch (err) {
-    // eslint-disable-next-line no-console
+     
     console.error("[otel] Failed to start OpenTelemetry SDK", err);
   }
 
@@ -85,7 +85,7 @@ export async function shutdownOtel(): Promise<void> {
     // eslint-disable-next-line no-console
     console.log("[otel] OpenTelemetry SDK shutdown complete");
   } catch (err) {
-    // eslint-disable-next-line no-console
+     
     console.error("[otel] Error during OpenTelemetry shutdown", err);
   }
 }

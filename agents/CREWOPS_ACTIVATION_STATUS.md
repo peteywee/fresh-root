@@ -1,7 +1,7 @@
 # CREWOPS Protocol: Activation Status
 
-**Status**: ✅ ACTIVE  
-**Date**: December 4, 2025  
+**Status**: ✅ ACTIVE\
+**Date**: December 4, 2025\
 **Binding**: Automatic
 
 ---
@@ -20,7 +20,7 @@ The complete operating manual for the TopShelf CrewOps Engine:
 - Decision audit trail
 - Integration examples
 
-**Size**: 718 lines  
+**Size**: 718 lines\
 **Reference**: Link at Section 0.1.5 in crewops.md
 
 ### 2. **Automatic Activation Framework (agents/CREWOPS_ACTIVATION.md)**
@@ -41,7 +41,7 @@ The protocol that automatically engages:
 - Orchestrator checklist
 - Protocol failure fallback
 
-**Size**: ~400 lines  
+**Size**: ~400 lines\
 **Reference**: Linked from crewops.md Section 0.1.5
 
 ---
@@ -286,16 +286,16 @@ What Changed: [list of revisions]
 
 **Orchestrator Checklist (Before Responding)**:
 
-- [ ] Constitution loaded (Section 2)
-- [ ] Crew Cabinet assembled (Section 3)
-- [ ] Tool Authority Matrix active (Section 16.2)
-- [ ] Binding Priority Order engaged (Section 0.2)
-- [ ] Phase A context saturation initiated
-- [ ] Workers spawned with Constitutional assignments
-- [ ] Action Matrix planned (Phase D)
-- [ ] Security Red Team assigned veto (Phase E)
-- [ ] Validation gates defined
-- [ ] Audit trail recording started
+- \[ ] Constitution loaded (Section 2)
+- \[ ] Crew Cabinet assembled (Section 3)
+- \[ ] Tool Authority Matrix active (Section 16.2)
+- \[ ] Binding Priority Order engaged (Section 0.2)
+- \[ ] Phase A context saturation initiated
+- \[ ] Workers spawned with Constitutional assignments
+- \[ ] Action Matrix planned (Phase D)
+- \[ ] Security Red Team assigned veto (Phase E)
+- \[ ] Validation gates defined
+- \[ ] Audit trail recording started
 
 If ANY box unchecked: Fail-closed, state missing item(s), do not proceed.
 
@@ -347,7 +347,7 @@ Override: Include CREWOPS_FORCE to re-attempt
 
 ---
 
-**Protocol Binding**: Automatic activation on session bootstrap + all non-trivial prompts.  
-**Last Updated**: December 4, 2025  
-**Owner**: TopShelfService LLC  
+**Protocol Binding**: Automatic activation on session bootstrap + all non-trivial prompts.\
+**Last Updated**: December 4, 2025\
+**Owner**: TopShelfService LLC\
 **Reference**: agents/crewops.md + agents/CREWOPS_ACTIVATION.md

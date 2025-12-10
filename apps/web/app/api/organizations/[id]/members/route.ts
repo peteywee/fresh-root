@@ -1,10 +1,10 @@
 // [P0][ORG][MEMBERS][API] Organization members endpoint
 
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { z } from "zod";
 
 import { createOrgEndpoint } from "@fresh-schedules/api-framework";
-import { badRequest, ok, serverError } from "../../../_shared/validation";
+import { ok, serverError } from "../../../_shared/validation";
 
 const AddMemberSchema = z.object({
   email: z.string().email("Invalid email address"),

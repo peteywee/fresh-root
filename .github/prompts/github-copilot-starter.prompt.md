@@ -1,14 +1,13 @@
 ---
+
 agent: "agent"
 model: Claude Sonnet 4
-tools: ["edit", "githubRepo", "changes", "problems", "search", "runCommands", "fetch"]
-description: "Set up complete GitHub Copilot configuration for a new project based on technology stack"
----
+tools: \["edit", "githubRepo", "changes", "problems", "search", "runCommands", "fetch"]
+## description: "Set up complete GitHub Copilot configuration for a new project based on technology stack"
 
 You are a GitHub Copilot setup specialist. Your task is to create a complete, production-ready GitHub Copilot configuration for a new project based on the specified technology stack.
 
 ## Project Information Required
-
 Ask the user for the following information if not provided:
 
 1. **Primary Language/Framework**: (e.g., JavaScript/React, Python/Django, Java/Spring Boot, etc.)
@@ -18,15 +17,12 @@ Ask the user for the following information if not provided:
 5. **Development Style**: (strict standards, flexible, specific patterns)
 
 ## Configuration Files to Create
-
 Based on the provided stack, create the following files in the appropriate directories:
 
 ### 1. `.github/copilot-instructions.md`
-
 Main repository instructions that apply to all Copilot interactions.
 
 ### 2. `.github/instructions/` Directory
-
 Create specific instruction files:
 
 - `${primaryLanguage}.instructions.md` - Language-specific guidelines
@@ -37,7 +33,6 @@ Create specific instruction files:
 - `code-review.instructions.md` - Code review standards and GitHub review guidelines
 
 ### 3. `.github/prompts/` Directory
-
 Create reusable prompt files:
 
 - `setup-component.prompt.md` - Component/module creation
@@ -48,7 +43,6 @@ Create reusable prompt files:
 - `debug-issue.prompt.md` - Debugging assistance
 
 ### 4. `.github/agents/` Directory
-
 Create specialized chat modes:
 
 - `architect.agent.md` - Architecture planning mode
@@ -62,7 +56,6 @@ Create specialized chat modes:
 ```
 
 ### 5. `.github/workflows/` Directory
-
 Create Coding Agent workflow file:
 
 - `copilot-setup-steps.yml` - GitHub Actions workflow for Coding Agent environment setup
@@ -70,18 +63,17 @@ Create Coding Agent workflow file:
 **CRITICAL**: The workflow MUST follow this exact structure:
 
 - Job name MUST be `copilot-setup-steps`
-- Include proper triggers (workflow_dispatch, push, pull_request on the workflow file)
+- Include proper triggers (workflow\_dispatch, push, pull\_request on the workflow file)
 - Set appropriate permissions (minimum required)
 - Customize steps based on the technology stack provided
 
 ## Content Guidelines
-
 For each file, follow these principles:
 
 **MANDATORY FIRST STEP**: Always use the fetch tool to research existing patterns before creating any content:
 
 1. **Fetch from awesome-copilot collections**: https://github.com/github/awesome-copilot/blob/main/docs/README.collections.md
-2. **Fetch specific instruction files**: https://raw.githubusercontent.com/github/awesome-copilot/main/instructions/[relevant-file].instructions.md
+2. **Fetch specific instruction files**: https://raw.githubusercontent.com/github/awesome-copilot/main/instructions/\[relevant-file].instructions.md
 3. **Check for existing patterns** that match the technology stack
 
 **Primary Approach**: Reference and adapt existing instructions from awesome-copilot repository:
@@ -101,7 +93,6 @@ For each file, follow these principles:
 
 ```markdown
 ## <!-- Based on: https://github.com/github/awesome-copilot/blob/main/instructions/react.instructions.md -->
-
 applyTo: "**/\*.jsx,**/\*.tsx"
 description: "React development best practices"
 
@@ -110,22 +101,21 @@ description: "React development best practices"
 # React Development Guidelines
 
 ...
-```
+
+````
 
 ```markdown
 <!-- Inspired by: https://github.com/github/awesome-copilot/blob/main/instructions/java.instructions.md -->
 
 ## <!-- and: https://github.com/github/awesome-copilot/blob/main/instructions/spring-boot.instructions.md -->
-
 applyTo: "\*_/_.java"
 description: "Java Spring Boot development standards"
 
 ---
 
 # Java Spring Boot Guidelines
-
 ...
-```
+````
 
 **Secondary Approach**: If no awesome-copilot instructions exist, create **SIMPLE GUIDELINES ONLY**:
 
@@ -213,15 +203,16 @@ Use this frontmatter structure for all files:
 
 **Instructions (.instructions.md):**
 
-```yaml
----
-applyTo: "**/*.ts,**/*.tsx"
----
+## ```yaml
+
+## applyTo: "**/\*.ts,**/\*.tsx"
+
 # Project coding standards for TypeScript and React
 
 Apply the [general coding guidelines](./general-coding.instructions.md) to all code.
 
 ## TypeScript Guidelines
+
 - Use TypeScript for all new code
 - Follow functional programming principles where possible
 - Use interfaces for data structures and type definitions
@@ -229,23 +220,22 @@ Apply the [general coding guidelines](./general-coding.instructions.md) to all c
 - Use optional chaining (?.) and nullish coalescing (??) operators
 
 ## React Guidelines
+
 - Use functional components with hooks
 - Follow the React hooks rules (no conditional hooks)
 - Use React.FC type for components with children
 - Keep components small and focused
 - Use CSS modules for component styling
 
-```
+````
 
 **Prompts (.prompt.md):**
 
-```yaml
----
+## ```yaml
 agent: 'agent'
 model: Claude Sonnet 4
 tools: ['githubRepo', 'codebase']
-description: 'Generate a new React form component'
----
+## description: 'Generate a new React form component'
 Your goal is to generate a new React form component based on the templates in #githubRepo contoso/react-templates.
 
 Ask for the form name and fields if not provided.
@@ -261,31 +251,32 @@ Requirements for the form:
 * Use TypeScript types to ensure type safety
 * Customize UX-friendly validation rules
 
-```
+````
 
 **Chat Modes (.agent.md):**
 
-```yaml
----
+## ```yaml
+
 description: Generate an implementation plan for new features or refactoring existing code.
 tools: ['codebase', 'fetch', 'findTestFiles', 'githubRepo', 'search', 'usages']
-model: Claude Sonnet 4
----
+
+## model: Claude Sonnet 4
+
 # Planning mode instructions
+
 You are in planning mode. Your task is to generate an implementation plan for a new feature or for refactoring existing code.
 Don't make any code edits, just generate a plan.
 
 The plan consists of a Markdown document that describes the implementation plan, including the following sections:
 
-* Overview: A brief description of the feature or refactoring task.
-* Requirements: A list of requirements for the feature or refactoring task.
-* Implementation Steps: A detailed list of steps to implement the feature or refactoring task.
-* Testing: A list of tests that need to be implemented to verify the feature or refactoring task.
+- Overview: A brief description of the feature or refactoring task.
+- Requirements: A list of requirements for the feature or refactoring task.
+- Implementation Steps: A detailed list of steps to implement the feature or refactoring task.
+- Testing: A list of tests that need to be implemented to verify the feature or refactoring task.
 
-```
+````
 
 ## Execution Steps
-
 1. **Analyze the provided technology stack**
 2. **Create the directory structure**
 3. **Generate main copilot-instructions.md with project-wide standards**
@@ -296,7 +287,6 @@ The plan consists of a Markdown document that describes the implementation plan,
 8. **Validate all files follow proper formatting and include necessary frontmatter**
 
 ## Post-Setup Instructions
-
 After creating all files, provide the user with:
 
 1. **VS Code setup instructions** - How to enable and configure the files
@@ -305,21 +295,19 @@ After creating all files, provide the user with:
 4. **Testing recommendations** - How to verify the setup works correctly
 
 ## Quality Checklist
-
 Before completing, verify:
 
-- [ ] All files have proper YAML frontmatter
-- [ ] Language-specific best practices are included
-- [ ] Files reference each other appropriately using Markdown links
-- [ ] Prompts include relevant tools and variables
-- [ ] Instructions are comprehensive but not overwhelming
-- [ ] Security and performance considerations are addressed
-- [ ] Testing guidelines are included
-- [ ] Documentation standards are clear
-- [ ] Code review standards are defined
+- \[ ] All files have proper YAML frontmatter
+- \[ ] Language-specific best practices are included
+- \[ ] Files reference each other appropriately using Markdown links
+- \[ ] Prompts include relevant tools and variables
+- \[ ] Instructions are comprehensive but not overwhelming
+- \[ ] Security and performance considerations are addressed
+- \[ ] Testing guidelines are included
+- \[ ] Documentation standards are clear
+- \[ ] Code review standards are defined
 
 ## Workflow Template Structure
-
 The `copilot-setup-steps.yml` workflow MUST follow this exact format and KEEP IT SIMPLE:
 
 ```yaml
@@ -342,7 +330,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v5
       # Add ONLY basic technology-specific setup steps here
-```
+````
 
 **KEEP WORKFLOWS SIMPLE** - Only include essential steps:
 

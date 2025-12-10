@@ -1,6 +1,5 @@
 // [P0][ONBOARDING][API] Verify eligibility endpoint
 
-import { NextResponse } from "next/server";
 import { z } from "zod";
 
 import { createAuthenticatedEndpoint } from "@fresh-schedules/api-framework";

@@ -1,7 +1,7 @@
 # GitHub Copilot Prompts - Session Summary & Strategic Guidance
 
-**Session Date**: 2025-01-30  
-**Workspace**: `fresh-root` - TypeScript/Next.js Monorepo with Firebase  
+**Session Date**: 2025-01-30\
+**Workspace**: `fresh-root` - TypeScript/Next.js Monorepo with Firebase\
 **Status**: Planning Phase Complete - Ready for Phase 1 Execution
 
 ---
@@ -227,18 +227,16 @@ export async function getDocWithType<T>(db: Firestore, ref: DocumentReference): 
 ```bash
 # 1. Fix no-unused-vars (prefix with _)
 # Affected files:
-#   - apps/web/app/api/items/route.ts
-#   - apps/web/app/api/activate-network/route.ts
-#   - apps/web/app/api/join-with-token/route.ts
-#   - apps/web/app/api/positions/[id]/route.ts
-#   - apps/web/app/api/publish/route.ts
-#   - apps/web/app/api/schedules/route.ts
-#   - apps/web/middleware.ts
-#   - types/firebase-admin.d.ts
-
+# - apps/web/app/api/items/route.ts
+# - apps/web/app/api/activate-network/route.ts
+# - apps/web/app/api/join-with-token/route.ts
+# - apps/web/app/api/positions/[id]/route.ts
+# - apps/web/app/api/publish/route.ts
+# - apps/web/app/api/schedules/route.ts
+# - apps/web/middleware.ts
+# - types/firebase-admin.d.ts
 # 2. Fix require-await (remove async or add await)
 # Mostly in: apps/web/middleware.ts (12 instances)
-
 # 3. Run lint validation
 pnpm lint 2>&1 | grep "✖" | wc -l  # Should show ~100 or less
 

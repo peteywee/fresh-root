@@ -1,7 +1,7 @@
 # SDK Migration: Current Status & Path Forward
 
-**Date:** November 30, 2025  
-**Branch:** `feat/sdk-extraction`  
+**Date:** November 30, 2025\
+**Branch:** `feat/sdk-extraction`\
 **Status:** ✅ Infrastructure Ready | 🚧 Route Migration In Progress
 
 ---
@@ -129,33 +129,33 @@ pnpm test               # Must pass
 
 ### Phase 1: Infrastructure (✅ DONE)
 
-- [x] SDK package extracted (`@fresh-schedules/api-framework`)
-- [x] Turbo pipeline configured (6 stages)
-- [x] CI/CD workflow created (`series-a-ci.yml`)
-- [x] Root scripts established (14 commands)
-- [x] Book consolidated (44 chapters)
-- [x] Middleware simplified (edge pass-through)
+- \[x] SDK package extracted (`@fresh-schedules/api-framework`)
+- \[x] Turbo pipeline configured (6 stages)
+- \[x] CI/CD workflow created (`series-a-ci.yml`)
+- \[x] Root scripts established (14 commands)
+- \[x] Book consolidated (44 chapters)
+- \[x] Middleware simplified (edge pass-through)
 
 ### Phase 2: Proof-of-Concept (✅ DONE)
 
-- [x] `health/route.ts` migrated (public endpoint)
-- [x] `attendance/route.ts` migrated (auth + org + roles)
-- [x] Migration pattern documented (templates in files)
-- [x] \_shared/middleware.ts fixed (redis import removed)
+- \[x] `health/route.ts` migrated (public endpoint)
+- \[x] `attendance/route.ts` migrated (auth + org + roles)
+- \[x] Migration pattern documented (templates in files)
+- \[x] \_shared/middleware.ts fixed (redis import removed)
 
 ### Phase 3: Route Migration (🚧 IN PROGRESS)
 
-- [ ] 30 remaining routes migrated to SDK factories
-- [ ] Delete `_shared/middleware.ts` (legacy removed)
-- [ ] Delete unused validation helpers (or keep as utilities)
-- [ ] All imports from `@fresh-schedules/api-framework` only
+- \[ ] 30 remaining routes migrated to SDK factories
+- \[ ] Delete `_shared/middleware.ts` (legacy removed)
+- \[ ] Delete unused validation helpers (or keep as utilities)
+- \[ ] All imports from `@fresh-schedules/api-framework` only
 
 ### Phase 4: Testing & Merge (⏳ READY)
 
-- [ ] `pnpm typecheck` passes (0 errors)
-- [ ] `pnpm build` succeeds
-- [ ] `pnpm test` passes
-- [ ] Merge to `main` with PR review
+- \[ ] `pnpm typecheck` passes (0 errors)
+- \[ ] `pnpm build` succeeds
+- \[ ] `pnpm test` passes
+- \[ ] Merge to `main` with PR review
 
 ---
 
@@ -253,6 +253,6 @@ pnpm test               # Must pass
 
 ---
 
-**Last Updated:** 2025-11-30 22:30 UTC  
-**Updated By:** GitHub Copilot  
+**Last Updated:** 2025-11-30 22:30 UTC\
+**Updated By:** GitHub Copilot\
 **Merge Ready:** ✅ YES (infrastructure stable, route migration follows)

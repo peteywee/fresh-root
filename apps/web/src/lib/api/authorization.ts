@@ -154,7 +154,7 @@ export async function getUserRoles(userId: string, orgId: string): Promise<OrgRo
     if (!result.success || result.data.length === 0) return null;
 
     const membership = result.data[0];
-    return (membership.roles || []) as OrgRole[];
+    return (membership.roles || []);
   } catch (error) {
     console.error("Error retrieving user roles:", error);
     return null;

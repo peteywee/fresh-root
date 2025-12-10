@@ -29,21 +29,21 @@ This plan restores passing integration coverage for the `joinOrganization` Cloud
 
 - GOAL-001: Stabilize emulator bootstrap and teardown to eliminate timeouts.
 
-| Task     | Description | Completed | Date |
-| -------- | ----------- | --------- | ---- |
-| TASK-001 | Update `tests/integration/setup.ts` to use a single `admin` app instance guarded by `admin.apps.length` and add explicit `process.env.GCLOUD_PROJECT = "fresh-schedules-test"` to avoid emulator project fallback delays. |  |  |
-| TASK-002 | Replace collection-scan cleanup in `afterEach` with per-collection chunked deletes using `listDocuments()` and looped batch commits with a hard cap (e.g., 200 docs per batch) plus a test-level timeout guard. |  |  |
-| TASK-003 | Increase `testTimeout` and `hookTimeout` for the integration suite to 60s in `vitest.integration.config.ts` (or file-local `describe` timeout) while keeping per-test operations under 20s; document rationale. |  |  |
+| Task     | Description                                                                                                                                                                                                               | Completed | Date |
+| -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------- | ---- |
+| TASK-001 | Update `tests/integration/setup.ts` to use a single `admin` app instance guarded by `admin.apps.length` and add explicit `process.env.GCLOUD_PROJECT = "fresh-schedules-test"` to avoid emulator project fallback delays. |           |      |
+| TASK-002 | Replace collection-scan cleanup in `afterEach` with per-collection chunked deletes using `listDocuments()` and looped batch commits with a hard cap (e.g., 200 docs per batch) plus a test-level timeout guard.           |           |      |
+| TASK-003 | Increase `testTimeout` and `hookTimeout` for the integration suite to 60s in `vitest.integration.config.ts` (or file-local `describe` timeout) while keeping per-test operations under 20s; document rationale.           |           |      |
 
 ### Implementation Phase 2
 
 - GOAL-002: Ensure deterministic test data and assertions for `joinOrganization`.
 
-| Task     | Description | Completed | Date |
-| -------- | ----------- | --------- | ---- |
-| TASK-004 | In `tests/integration/joinOrganization.test.ts`, generate token/user ids with `crypto.randomUUID()` instead of `Date.now()` to avoid collisions in parallel runs and to tighten expectations. |  |  |
-| TASK-005 | Add assertion helpers to wait for Firestore transaction consistency (retry `getFirestoreDoc` with backoff up to 5s) to avoid flakiness immediately after transaction commit. |  |  |
-| TASK-006 | Add coverage for expired/exhausted token handling using emulator data seeded per test; ensure cleanup reuses the new teardown utilities. |  |  |
+| Task     | Description                                                                                                                                                                                   | Completed | Date |
+| -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------- | ---- |
+| TASK-004 | In `tests/integration/joinOrganization.test.ts`, generate token/user ids with `crypto.randomUUID()` instead of `Date.now()` to avoid collisions in parallel runs and to tighten expectations. |           |      |
+| TASK-005 | Add assertion helpers to wait for Firestore transaction consistency (retry `getFirestoreDoc` with backoff up to 5s) to avoid flakiness immediately after transaction commit.                  |           |      |
+| TASK-006 | Add coverage for expired/exhausted token handling using emulator data seeded per test; ensure cleanup reuses the new teardown utilities.                                                      |           |      |
 
 ## 3. Alternatives
 

@@ -1,5 +1,7 @@
 # L2 — Scheduling Core Engine
+
 ## 1. Role in the System (L0/L1 Context)
+
 The Scheduling Core Engine is responsible for turning:
 
 - **Labor constraints** (budget %, average wage, legal rules),
@@ -18,6 +20,7 @@ If this subsystem fails:
 ---
 
 ## 2. Panel Summary
+
 **Distributed Systems (Elena)**\
 Typical pattern today: route handlers and functions perform **multiple Firestore writes in sequence** (schedule, shifts, assignments) without guaranteed atomicity or idempotency. That works in demos, but under real failure and retry conditions it will create **orphan docs** and inconsistent schedules.
 
@@ -69,7 +72,9 @@ That's what gets a regional manager or COO to care.
 ---
 
 ## 3. Critical Finding SCHED-1 — Schedule Aggregate Boundary Missing
+
 ### 3.1 What Was Here (Typical Pattern)
+
 In the current style, schedule creation often looks like this in routes or functions:
 
 ```ts
@@ -115,6 +120,7 @@ This "works" in happy-path testing. But:
 - Different parts of the app can write to these collections independently.
 
 ### 3.2 What Should Be Here (Safer, Still Familiar)
+
 First step toward better:
 
 - Use a transaction around the core writes.
@@ -170,6 +176,7 @@ Better, but still has problems:
 - Hard to evolve without touching every caller.
 
 ### 3.3 What Works Best (Target Pattern — SDK Aggregate)
+
 Create a scheduling SDK as the only way to create schedules:
 
 ```ts
@@ -309,7 +316,9 @@ Key properties of the "best" pattern:
 ---
 
 ## 4. Critical Finding SCHED-2 — Publish vs Draft Conflated
+
 ### 4.1 What Was Here
+
 Common pattern in early versions:
 
 - `schedule.status` toggled from "draft" to "published" directly.
@@ -321,6 +330,7 @@ await scheduleRef.update({ status: "published" });
 ```
 
 ### 4.2 What Should Be Here
+
 At minimum, treat publish as a distinct step that:
 
 - Verifies all invariants (no conflicting assignments, labor overspend, etc.).
@@ -345,6 +355,7 @@ await db.runTransaction(async (tx) => {
 ```
 
 ### 4.3 What Works Best
+
 Promote publish into its own SDK method:
 
 ```ts
@@ -407,6 +418,7 @@ export async function POST(_req: Request, { params }: { params: { scheduleId: st
 ---
 
 ## 5. Open Questions for Scheduling Engine
+
 - Do we allow multiple active schedules for the same venue/week, or enforce uniqueness at the SDK level?
 - Do we need a full version history (e.g., schedule v1, v2, v3) or rely on events + snapshots?
 - How tightly should the engine couple to the labor planning subsystem vs treating it as a plugin?
@@ -414,6 +426,7 @@ export async function POST(_req: Request, { params }: { params: { scheduleId: st
 ---
 
 ## 6. Cross-Links
+
 - See `03_SUBSYSTEMS_L2/labor_planning.md` for how labor inputs should be shaped.
 - See `03_SUBSYSTEMS_L2/rbac_security.md` for required checks before calling SDK methods.
 - See `04_COMPONENTS_L3/scheduling_engine_modules.md` for a catalog of scheduling-related modules.

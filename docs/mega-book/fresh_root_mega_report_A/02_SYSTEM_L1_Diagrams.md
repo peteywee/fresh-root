@@ -1,9 +1,11 @@
 # Architecture Diagrams
+
 Strategic visual representations of Fresh Schedules infrastructure, execution roadmap, and critical flows.
 
 ---
 
 ## 1. Strategic Execution Roadmap (Gantt)
+
 **Timeline:** Phase -1 (Reality) → Phase 0 (Safety) → Phase 1 (Foundation) → Launch
 
 ```mermaid
@@ -35,6 +37,7 @@ gantt
 ---
 
 ## 2. Rate Limiting & Rate Limit Observability Architecture (Flowchart)
+
 **System:** Dual-mode rate limiter with Redis (production) and in-memory fallback (dev)
 
 ```mermaid
@@ -72,6 +75,7 @@ flowchart TD
 ---
 
 ## 3. OpenTelemetry Tracing Hierarchy (Layered Spans)
+
 **Observability:** Request span → Critical inner spans with attributes
 
 ```mermaid
@@ -105,6 +109,7 @@ graph TB
 ---
 
 ## 4. Production Validation & Environment Configuration (Sequence)
+
 **Flow:** Build → Runtime → Validation → Operational Guarantee
 
 ```mermaid
@@ -151,6 +156,7 @@ sequenceDiagram
 ---
 
 ## Key Takeaways
+
 | Diagram                    | Purpose                                                | Usage                                               |
 | -------------------------- | ------------------------------------------------------ | --------------------------------------------------- |
 | **1. Gantt**               | Strategic timeline for phases and milestones           | Project planning, stakeholder alignment             |
@@ -161,6 +167,7 @@ sequenceDiagram
 ---
 
 ## References
+
 - **Rate Limiting:** `apps/web/src/lib/api/rate-limit.ts`
 - **OTEL Initialization:** `apps/web/app/api/_shared/otel-init.ts`
 - **Environment Validation:** `packages/env/src/index.ts`

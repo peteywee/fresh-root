@@ -1,12 +1,10 @@
-# Objective
-
----
+## # Objective
 
 name: RULE-005 Zod Contracts & Rules Matrix
 about: Finalize Zod schemas and expand Firestore rules tests (success + denial matrices)
-title: "[RULE-005] Zod & Rules Matrix"
-labels: ["rules", "backend", "P1"]
-assignees: ["peteywee"]
+title: "\[RULE-005] Zod & Rules Matrix"
+labels: \["rules", "backend", "P1"]
+assignees: \["peteywee"]
 
 ---
 
@@ -26,10 +24,10 @@ Guarantee **data correctness** and **tenant isolation** with Zod validation and 
 
 ## Tasks
 
-- [ ] Finalize schemas (required fields, time ranges, overlap constraints).
-- [ ] API validates all writes (422 with details on failure).
-- [ ] Add ≥3 denial tests per collection (wrong role, cross-org, missing fields).
-- [ ] Keep CI rules suite green.
+- \[ ] Finalize schemas (required fields, time ranges, overlap constraints).
+- \[ ] API validates all writes (422 with details on failure).
+- \[ ] Add ≥3 denial tests per collection (wrong role, cross-org, missing fields).
+- \[ ] Keep CI rules suite green.
 
 ## Acceptance Criteria
 

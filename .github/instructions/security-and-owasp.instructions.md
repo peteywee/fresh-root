@@ -1,7 +1,8 @@
 ---
-applyTo: "*"
-description: "Comprehensive secure coding instructions for all languages and frameworks, based on OWASP Top 10 and industry best practices."
----
+
+applyTo: "\*"
+
+## description: "Comprehensive secure coding instructions for all languages and frameworks, based on OWASP Top 10 and industry best practices."
 
 # Secure Coding and OWASP Guidelines
 

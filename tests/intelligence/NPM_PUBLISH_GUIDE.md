@@ -29,6 +29,7 @@ npm login
 ```
 
 Verify login:
+
 ```bash
 npm whoami
 # Should print your username
@@ -116,6 +117,7 @@ npm view testintel
 ```
 
 **Alternative names if `testintel` is taken:**
+
 - `@peteywee/testintel` (scoped - always available)
 - `testintel-cli`
 - `test-intelligence-cli`
@@ -189,6 +191,7 @@ npm publish
 If `testintel` is taken, use a scoped package:
 
 1. **Update package.json name:**
+
 ```json
 {
   "name": "@peteywee/testintel"
@@ -196,11 +199,13 @@ If `testintel` is taken, use a scoped package:
 ```
 
 2. **Publish:**
+
 ```bash
 npm publish --access public
 ```
 
 3. **Users install with:**
+
 ```bash
 npm install -g @peteywee/testintel
 ```
@@ -223,19 +228,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
-          registry-url: 'https://registry.npmjs.org'
-          
+          node-version: "20"
+          registry-url: "https://registry.npmjs.org"
+
       - name: Install dependencies
         run: npm ci
-        
+
       - name: Build
         run: npm run build
-        
+
       - name: Publish
         run: npm publish --access public
         env:
@@ -243,6 +248,7 @@ jobs:
 ```
 
 ### Set up NPM Token:
+
 1. Go to https://www.npmjs.com/settings/YOUR_USERNAME/tokens
 2. Generate new token (Automation type)
 3. Add to GitHub Secrets as `NPM_TOKEN`
@@ -266,17 +272,21 @@ jobs:
 ## Troubleshooting
 
 ### "You must be logged in to publish packages"
+
 ```bash
 npm login
 ```
 
 ### "Package name already exists"
+
 Use a scoped name: `@peteywee/testintel`
 
 ### "You do not have permission to publish"
+
 You don't own the package. Use a different name.
 
 ### "Cannot publish over existing version"
+
 ```bash
 npm version patch
 npm publish
@@ -317,12 +327,14 @@ npm unpublish testintel@1.0.0
 ## Next Steps After Publishing
 
 1. **Add badges to README:**
+
 ```markdown
 [![npm version](https://badge.fury.io/js/testintel.svg)](https://www.npmjs.com/package/testintel)
 [![npm downloads](https://img.shields.io/npm/dm/testintel.svg)](https://www.npmjs.com/package/testintel)
 ```
 
 2. **Create GitHub Release:**
+
 ```bash
 git tag v1.0.0
 git push origin v1.0.0
@@ -337,5 +349,6 @@ git push origin v1.0.0
 ## Contact
 
 For help with publishing, contact:
+
 - GitHub: @peteywee
 - Email: dev@freshschedules.com

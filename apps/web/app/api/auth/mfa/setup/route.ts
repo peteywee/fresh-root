@@ -1,5 +1,4 @@
 // [P0][AUTH][API] MFA setup endpoint
-import { NextRequest } from "next/server";
 import * as QRCode from "qrcode";
 import * as speakeasy from "speakeasy";
 import { z } from "zod";
