@@ -44,12 +44,13 @@ stateDiagram-v2
 
 ## Recent Commits
 ```
-9bc7ca6 feat(governance): distribute branch strategy rules to main branch
-a72924a feat(testintel): add E2E test generation, documentation, and npm publishing
-856da34 Merge pull request #112 from peteywee/test/intelligence
-cc02dd9 Add files via upload
-abf82cd Merge pull request #111 from peteywee/dev
-7e200fd Merge pull request #110 from peteywee/fix/triad-remediation
-0eff79c refactor: address legacy code duplication and improve documentation
-4c2fcec docs: add architecture overview and consolidati
+34cd13e chore: update TypeScript and Vitest versions, migrate ESLint ignore rules to config, and remove obsolete .eslintignore file
+637d11c fix(lint): implement ESLint flat config monorepo solution
+946f6f7 chore(visuals): update index and metadata
+b8afb4e chore(visuals): update index and metadata
+79511cd Delete .github/workflows/ci.yml
+a1c81c9 chore(visuals): update index and metadata
+ce54ece Delete .github/workflows/main-merge-gate.yml
+8011781 chore(visuals): update index and metadata
+f263a0b D
 ```

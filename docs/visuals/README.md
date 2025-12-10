@@ -1,6 +1,6 @@
 # Repository Visuals & Analytics
 
-**Generated**: 2025-12-07T08:13:18.491Z  
+**Generated**: 2025-12-10T13:50:53.077Z  
 **Auto-updated**: On every commit (CI workflow)
 
 ## Contents
@@ -16,27 +16,19 @@
 
 **Update locally**:
 ```bash
-# Generate all visuals
-node scripts/generate-visuals.mjs
-
-# With verbose output
 node scripts/generate-visuals.mjs --verbose
-
-# Custom output directory
-node scripts/generate-visuals.mjs --output ./custom-output
 ```
 
-## ⚙️ Maintenance
+**In CI (automated)**:
+Runs on every push to `dev` and `main` branches via GitHub Actions.
 
-The visual generation script automatically:
-1. Deletes previous versions (only latest in repo)
-2. Detects dependencies from `pnpm list`
-3. Analyzes repository state from git
-4. Runs security audits
-5. Generates Mermaid diagrams
-6. Updates this index file
+## Viewing Mermaid Diagrams
+
+- **GitHub**: Renders automatically in `.md` files
+- **VS Code**: Install "Markdown Preview Mermaid Support" extension
+- **Web**: Use https://mermaid.live to paste diagrams
 
 ---
 
-**Last Updated**: 12/7/2025, 8:13:18 AM  
+**Last Updated**: 12/10/2025, 1:50:53 PM  
 **Status**: ✅ Auto-maintained
