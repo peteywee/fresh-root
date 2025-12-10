@@ -30,11 +30,11 @@ export * from "./onboarding";
 export * from "./events";
 export * from "./internal";
 export * from "./session";
+export * from "./widgets";
 export * from "./errors";
 
 // Additional collections and convenience exports added by v14.5
 export * as corporates from "./corporates";
-export * as widgets from "./widgets";
 export * as messages from "./messages";
 export * as receipts from "./receipts";
 export * as compliance from "./compliance";

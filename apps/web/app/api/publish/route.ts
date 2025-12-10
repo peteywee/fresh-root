@@ -41,17 +41,3 @@ export const POST = createOrgEndpoint({
     }
   },
 });
-
-      const result = {
-        success: true,
-        scheduleId,
-        publishedBy: context.auth?.userId,
-        publishedAt: Date.now(),
-      };
-
-      return ok(result);
-    } catch {
-      return serverError("Failed to publish schedule");
-    }
-  },
-});

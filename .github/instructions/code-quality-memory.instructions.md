@@ -21,7 +21,12 @@ When you find the same error pattern **3 or more times**, create a **safeguard r
 
 2. **Apply the 3x Rule**: If count ≥ 3, create safeguard rule in ESLint config
 
-3. **Convert errors to warnings** for legitimate patterns:
+3. **Create architectural fixes** over per-file patches:
+   - Document pattern in `.github/safeguards/{pattern}.rule.md`
+   - Apply systematic solution (interface changes, type adjustments)
+   - Update safeguard documentation with status tracking
+
+4. **Convert errors to warnings** for legitimate patterns:
    ```javascript
    // In eslint.config.mjs
    rules: {
@@ -33,9 +38,7 @@ When you find the same error pattern **3 or more times**, create a **safeguard r
    }
    ```
 
-4. **Document reasoning** with comments explaining why the pattern is acceptable
-
-## Batch Error Remediation Strategy
+5. **Document reasoning** with comments explaining why the pattern is acceptable
 
 For large error counts (100+ errors), use systematic batch processing:
 

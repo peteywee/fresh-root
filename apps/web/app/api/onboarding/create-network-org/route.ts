@@ -37,9 +37,3 @@ export const POST = createAuthenticatedEndpoint({
     }
   },
 });
-      return ok(org);
-    } catch {
-      return serverError("Failed to create organization network");
-    }
-  },
-});

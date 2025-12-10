@@ -33,10 +33,6 @@ export const GET = createAuthenticatedEndpoint({
     }
   },
 });
-      return serverError("Failed to bootstrap session");
-    }
-  },
-});
 
 /**
  * POST /api/session/bootstrap

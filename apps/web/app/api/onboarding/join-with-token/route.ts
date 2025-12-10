@@ -35,10 +35,3 @@ export const POST = createAuthenticatedEndpoint({
     }
   },
 });
-      };
-      return ok(result);
-    } catch {
-      return serverError("Failed to join organization");
-    }
-  },
-});

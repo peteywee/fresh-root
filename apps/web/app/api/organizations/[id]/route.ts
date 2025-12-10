@@ -2,7 +2,7 @@
 // Tags: P0, ORG, DETAIL, API, SDK_FACTORY
 
 import { createOrgEndpoint } from "@fresh-schedules/api-framework";
-import { UpdateOrgSchema } from "@fresh-schedules/types";
+import { UpdateOrganizationSchema } from "@fresh-schedules/types";
 import { NextResponse } from "next/server";
 
 /**
@@ -20,9 +20,13 @@ export const GET = createOrgEndpoint({
         memberCount: 1,
         createdAt: Date.now(),
       };
-      return ok(org);
-    } catch {
-      return serverError("Failed to fetch organization");
+      return NextResponse.json(org);
+    } catch (error) {
+      console.error("Failed to fetch organization", { error, orgId: params.id });
+      return NextResponse.json(
+        { error: { code: "INTERNAL_ERROR", message: "Failed to fetch organization" } },
+        { status: 500 }
+      );
     }
   },
 });
@@ -33,7 +37,7 @@ export const GET = createOrgEndpoint({
  */
 export const PUT = createOrgEndpoint({
   roles: ["admin"],
-  input: UpdateOrgSchema,
+  input: UpdateOrganizationSchema,
   handler: async ({ input, context, params }) => {
     try {
       const updated = {
@@ -67,9 +71,13 @@ export const DELETE = createOrgEndpoint({
   roles: ["admin"],
   handler: async ({ context, params }) => {
     try {
-      return ok({ deleted: true, id: params.id });
-    } catch {
-      return serverError("Failed to delete organization");
+      return NextResponse.json({ deleted: true, id: params.id });
+    } catch (error) {
+      console.error("Failed to delete organization", { error, orgId: params.id });
+      return NextResponse.json(
+        { error: { code: "INTERNAL_ERROR", message: "Failed to delete organization" } },
+        { status: 500 }
+      );
     }
   },
 });

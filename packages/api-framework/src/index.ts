@@ -35,7 +35,7 @@
 
 import type { OrgRole } from "../../types/src/rbac";
 import { NextRequest, NextResponse } from "next/server";
-import { ZodError, ZodSchema } from "zod";
+import { ZodError } from "zod";
 
 // =============================================================================
 // TYPES
@@ -81,7 +81,7 @@ export interface EndpointConfig<TInput = unknown, TOutput = unknown> {
   csrf?: boolean;
 
   /** Zod schema for request body/query validation */
-  input?: ZodSchema<TInput>;
+  input?: any;
 
   /** The actual handler function */
   handler: (params: {

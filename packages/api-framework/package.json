@@ -4,17 +4,17 @@
   "description": "Internal SDK for building secure, consistent API routes",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
-  "types": "./dist/index.d.ts",
+  "types": "./dist/index.d.mts",
   "exports": {
     ".": {
       "import": "./dist/index.mjs",
       "require": "./dist/index.js",
-      "types": "./dist/index.d.ts"
+      "types": "./dist/index.d.mts"
     },
     "./testing": {
       "import": "./dist/testing.mjs",
       "require": "./dist/testing.js",
-      "types": "./dist/testing.d.ts"
+      "types": "./dist/testing.d.mts"
     }
   },
   "scripts": {
