@@ -100,12 +100,7 @@ The following type errors exist but are **unrelated to the SDK migration**:
    pnpm update next@latest
    ```
 
-<<<<<<< HEAD:docs/SDK_MIGRATION_COMPLETE.md
-1. **Resolve Next.js version conflict** (2 errors):
-=======
 2. **Resolve Next.js version conflict** (2 errors):
-
->>>>>>> origin/dev:archive/docs/phase-work/SDK_MIGRATION_COMPLETE.md
    ```bash
    # Clean and reinstall to resolve duplicate Next.js versions
    pnpm store prune

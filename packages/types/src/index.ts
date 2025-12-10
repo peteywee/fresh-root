@@ -29,14 +29,6 @@ export * from "./compliance/adminResponsibilityForm";
 export * from "./networks";
 export * from "./onboarding";
 export * from "./events";
-<<<<<<< HEAD
-export * from "./internal";
-export * from "./session";
-export * from "./widgets";
-=======
-export * from "./session";
-export * from "./internal";
->>>>>>> origin/dev
 export * from "./errors";
 export * from "./session";
 export * from "./internal";

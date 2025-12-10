@@ -243,16 +243,8 @@ code without fence
 ✅ FIXED:
 ```javascript
 code with fence
-<<<<<<< HEAD:docs/MARKDOWN_LINT_IMPLEMENTATION.md
-````
-````
-
-````
-=======
 ```
-
 ```
->>>>>>> origin/dev:docs/standards/MARKDOWN_LINT_IMPLEMENTATION.md
 
 **Auto-fix**: 6/7
 
@@ -481,12 +473,6 @@ node scripts/markdown-lint-lib/task.mjs --verbose --fix
 
 ---
 
-<<<<<<< HEAD:docs/MARKDOWN_LINT_IMPLEMENTATION.md
-**Status**: ✅ Ready for production use\
-**Maintenance**: Active\
-**Support**: See docs/CODING_RULES_AND_PATTERNS.md
-=======
 **Status**: ✅ Ready for production use  
 **Maintenance**: Active  
-**Support**: See ./CODING_RULES_AND_PATTERNS.md
->>>>>>> origin/dev:docs/standards/MARKDOWN_LINT_IMPLEMENTATION.md
+**Support**: See docs/CODING_RULES_AND_PATTERNS.md

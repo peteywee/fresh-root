@@ -357,20 +357,11 @@ cat docs/standards/00_STANDARDS_INDEX.md | head -20
 ---
 
 ## Quick Links (for this document)
-
-<<<<<<< HEAD:docs/BRANCH_LINKING_GUIDE.md
-- **Production Documentation:** See [RUNTIME_DOCUMENTATION_INDEX.md](./RUNTIME_DOCUMENTATION_INDEX.md)
-- **Deployment Guide:** See [PRODUCTION_DEPLOYMENT_GUIDE.md](./PRODUCTION_DEPLOYMENT_GUIDE.md)
-- **All Standards (on dev):** Reference docs/standards/00_STANDARDS_INDEX.md
-- **Security (on dev):** Reference docs/PHASE_1_TIER_0_FIXES.md
-- **Types (on dev):** Reference docs/PHASE_2_TIER_1_FIXES.md
-=======
 - **Production Documentation:** See [RUNTIME\_DOCUMENTATION\_INDEX.md](./RUNTIME_DOCUMENTATION_INDEX.md)
 - **Deployment Guide:** See [PRODUCTION\_DEPLOYMENT\_GUIDE.md](./PRODUCTION_DEPLOYMENT_GUIDE.md)
 - **All Standards (on dev):** Reference docs/standards/00\_STANDARDS\_INDEX.md
 - **Security (on dev):** Reference docs/PHASE\_1\_TIER\_0\_FIXES.md
 - **Types (on dev):** Reference docs/PHASE\_2\_TIER\_1\_FIXES.md
->>>>>>> origin/dev:docs/standards/BRANCH_LINKING_GUIDE.md
 
 ---
 

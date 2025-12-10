@@ -252,12 +252,7 @@ export type ComplianceResponsibility   = z.infer<typeof ComplianceResponsibility
 ---
 
 ## Documentation References
-
-<<<<<<< HEAD:docs/mega-book/fresh_root_mega_report_A/05_TASKS_L4/Production_Readiness_Report.md
 1. **Full Analysis:** `docs/PRODUCTION_READINESS.md`
-=======
-1. **Full Analysis:** `docs/production/PRODUCTION_READINESS.md`
->>>>>>> origin/dev:docs/archive/mega-report-A/mega-book/fresh_root_mega_report_A/05_TASKS_L4/Production_Readiness_Report.md
 2. **Phase Execution:** `docs/MIGRATION_ROADMAP.md`
 3. **Standards:** `docs/standards/00_STANDARDS_INDEX.md`
 4. **Implementation Guide:** `docs/standards/SYMMETRY_FRAMEWORK.md`

@@ -697,11 +697,6 @@ export const processInvoiceTask = onRequest(
 ---
 
 ## 7. Version History
-<<<<<<< HEAD:docs/mega-book/fresh_root_mega_report_A/06_SDK_DEPRECATION_LEDGER/scheduling_ledger.md
-
-=======
-<<<<<<< HEAD:docs/archive/mega-report-A/mega-book/fresh_root_mega_report_A/06_SDK_DEPRECATION_LEDGER/scheduling_ledger.md
->>>>>>> origin/dev:docs/archive/mega-report-A/mega-book/fresh_root_mega_report_A/06_SDK_DEPRECATION_LEDGER/scheduling_ledger.md
 | Date       | Author            | Changes                                           |
 | ---------- | ----------------- | ------------------------------------------------- |
 =======

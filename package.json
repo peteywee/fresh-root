@@ -6,12 +6,7 @@
     "dev": "turbo run dev",
     "build": "turbo run build",
     "test": "turbo run test",
-<<<<<<< HEAD
-    "lint": "eslint . --max-warnings=0",
-=======
     "lint": "turbo run lint",
-    "lint:fix": "turbo run lint -- --fix",
->>>>>>> origin/dev
     "typecheck": "turbo run typecheck",
     "format": "prettier --write \"**/*.{ts,tsx,md,json}\"",
     "format:check": "prettier --check \"**/*.{ts,tsx,md,json}\"",
