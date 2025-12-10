@@ -2,14 +2,14 @@
 
 ```mermaid
 pie title File Types in Repository
-    "TypeScript/TSX (292)" : 292
+    "TypeScript/TSX (293)" : 293
     "Tests (53)" : 53
     "Documentation (178)" : 178
     "Config & Other" : 50
 ```
 
 ## Codebase Metrics
-- **TypeScript Files**: 292
+- **TypeScript Files**: 293
 - **Test Files**: 53
 - **Documentation**: 178 files
 - **Test Coverage**: Target 80%+
