@@ -67,6 +67,71 @@ pnpm -C apps/web test -- app/api/batch/__tests__/route.test.ts
 - Keep the triad in sync: if you add a schema, add tests, and consider security rules that may need updates.
 - If you need to enable `auth`/`org` in a test, create mock auth/context helpers instead of weakening the route.
 
+## Testing: Firebase auth + Firestore Mocks
+
+Tagline: How to mock Firebase Admin auth and Firestore for `createOrgEndpoint` protected routes in Vitest.
+
+When validating route-level integration tests for endpoints that use `createOrgEndpoint`, the test environment must provide both an authenticated session and a valid org membership record in Firestore. These are common causes of 401/403 and test flakiness in integration tests.
+
+Patterns:
+- Mock both `firebase-admin` and the `firebase-admin/auth` and `firebase-admin/firestore` entry points if the codebase uses either granular imports or the default import. Provide mocks for `getAuth().verifySessionCookie` or `getAuth().verifyIdToken` (whichever your route uses). Also mock `getFirestore().collectionGroup(...).get()` to return a membership document with proper role.
+- Always send a cookie header AND an Authorization header (bearer token) and `searchParams: { orgId }` to the test request when calling `createOrgEndpoint`, to be robust against code that expects either the cookie or the token.
+- Keep tokens & cookie values stable and small; use a shared test value like `mock-session` and `mock-token` that your mocks accept.
+
+Example mocks (recommended centralization in `vitest.setup.ts`):
+
+```ts
+vi.mock('firebase-admin/auth', () => ({
+	getAuth: () => ({
+		verifySessionCookie: async () => ({ uid: 'test-user-1' }),
+		verifyIdToken: async () => ({ uid: 'test-user-1' }),
+	}),
+}));
+
+vi.mock('firebase-admin/firestore', () => ({
+	getFirestore: () => ({
+		collectionGroup: () => ({
+			where: () => ({ limit: () => ({
+				get: async () => ({ empty: false, docs: [{ id: 'mem-1', data: () => ({ uid: 'test-user-1', orgId: 'org-test', role: 'manager' }) }] })
+			}) }),
+		}),
+	}),
+}));
+
+// Also mock default import when code uses `import admin from 'firebase-admin'`
+vi.mock('firebase-admin', () => ({
+	getAuth: () => ({ verifySessionCookie: async () => ({ uid: 'test-user-1' }) }),
+	getFirestore: () => ({ collectionGroup: () => ({ where: () => ({ limit: () => ({ get: async () => ({ empty: false, docs: [{ id: 'mem-1', data: () => ({ uid: 'test-user-1', orgId: 'org-test', role: 'manager' }) }] }) }) }) }) }),
+}));
+```
+
+Test request setup:
+- Use `createMockRequest` but also pass cookie (+ header) and `searchParams: { orgId }`.
+- Example call:
+
+```ts
+const req = createMockRequest('/api/batch', {
+	method: 'POST',
+	body: { items },
+	cookies: { session: 'mock-session' },
+	headers: { cookie: 'session=mock-session', authorization: 'Bearer mock-token' },
+	searchParams: { orgId: 'org-test' },
+});
+```
+
+Testing best practices:
+- Centralize the Firebase mocks in `vitest.setup.ts` (or a shared helper) so they don't need to be redefined in every test file.
+- Avoid duplicating NextRequest bodies across test calls; create per-request instances to prevent body stream reuse errors.
+- Prefer testing the handler directly via exported helpers (like `processBatchItems`) for logic tests, and run a small number of route-level integration tests that assert wrapper behavior and authentication.
+- Remove console.log debug lines once tests are stable and the correct shapes are asserted.
+
+Suggested followups:
+- Move these mocks into `apps/web/vitest.setup.ts` (or `packages/api-framework/testing` shared helpers) to reduce duplication.
+- Add an `authTestHelpers.ts` utility that returns pre-configured `createMockRequest` with session cookie, header, and orgId.
+- Add a lint rule or test check to prevent reusing request bodies across test calls.
+- Ensure `CreateBatchSchema` is exported from `packages/types` and re-exported from the root types index so `apps/web` can import it reliably.
+
+
 ## Process Suggestions
 - When multiple PRs touch the same domain (API routes), create a triage branch that consolidates changes, run `pnpm -w typecheck` and `node scripts/validate-patterns.mjs` early, and create small follow-up PRs for docs-only or test-only cleanups.
 
