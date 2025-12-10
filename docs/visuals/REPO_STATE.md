@@ -44,11 +44,13 @@ stateDiagram-v2
 
 ## Recent Commits
 ```
-fe60df2 feat: complete SDK factory migration and add memory preservation system
-8f5b829 feat(sdk): achieve 100% adoption and create indexable context documentation
-b5e1c84 docs(memory): add Pattern Protocol institutional knowledge
-2f16f81 feat(sdk): add comprehensive usage guide and code quality integration
-8ff5d2f chore(visuals): update index and metadata
-ea158f0 chore(visuals): auto-update architecture and repo state diagrams
-214df7a refactor: rename variables for consistency across schedule a
+34cd13e chore: update TypeScript and Vitest versions, migrate ESLint ignore rules to config, and remove obsolete .eslintignore file
+637d11c fix(lint): implement ESLint flat config monorepo solution
+946f6f7 chore(visuals): update index and metadata
+b8afb4e chore(visuals): update index and metadata
+79511cd Delete .github/workflows/ci.yml
+a1c81c9 chore(visuals): update index and metadata
+ce54ece Delete .github/workflows/main-merge-gate.yml
+8011781 chore(visuals): update index and metadata
+f263a0b D
 ```
