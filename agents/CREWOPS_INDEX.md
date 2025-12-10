@@ -1,8 +1,8 @@
 # CREWOPS Protocol: Complete Implementation Index
 
-**Status**: ✅ FULLY IMPLEMENTED & ACTIVE  
-**Date**: December 4, 2025  
-**Total Size**: 62.3 KB across 5 files  
+**Status**: ✅ FULLY IMPLEMENTED & ACTIVE\
+**Date**: December 4, 2025\
+**Total Size**: 62.3 KB across 5 files\
 **Binding**: Automatic activation on session + non-trivial prompts
 
 ---
@@ -11,7 +11,7 @@
 
 ### 1. **agents/CREWOPS_QUICK_REFERENCE.md** (7.8 KB) ⭐ START HERE
 
-**For**: Users new to the protocol  
+**For**: Users new to the protocol\
 **Contains**:
 
 - Session bootstrap message
@@ -27,7 +27,7 @@
 
 ### 2. **agents/crewops.md** (24 KB) 📖 THE COMPLETE MANUAL
 
-**For**: Understanding the protocol deeply  
+**For**: Understanding the protocol deeply\
 **Contains**:
 
 - Constitution (7 non-negotiable laws)
@@ -45,7 +45,7 @@
 
 ### 3. **agents/CREWOPS_ACTIVATION.md** (9.6 KB) ⚙️ AUTO-ENGAGEMENT FRAMEWORK
 
-**For**: How the protocol automatically loads  
+**For**: How the protocol automatically loads\
 **Contains**:
 
 - Activation sequence (Stage 1, 2, 3)
@@ -62,7 +62,7 @@
 
 ### 4. **agents/CREWOPS_ACTIVATION_STATUS.md** (8.9 KB) 📊 STATUS TRACKING
 
-**For**: Verification and configuration  
+**For**: Verification and configuration\
 **Contains**:
 
 - What's active and where
@@ -79,7 +79,7 @@
 
 ### 5. **agents/CREWOPS_IMPLEMENTATION_COMPLETE.md** (12 KB) ✅ COMPLETION SUMMARY
 
-**For**: Overview of what's active  
+**For**: Overview of what's active\
 **Contains**:
 
 - Summary of all 4 files
@@ -248,11 +248,11 @@ No setup needed. No configuration. Just ask.
 
 ## 🎯 Quick Checklist for You
 
-- [ ] Read CREWOPS_QUICK_REFERENCE.md (to understand what to expect)
-- [ ] Understand Phases A→E (Context → Plan → Act → Verify)
-- [ ] Know the Constitution (7 binding laws)
-- [ ] Understand Red Team veto (Security Supremacy)
-- [ ] Optional: Use keyword modifiers if needed
+- \[ ] Read CREWOPS_QUICK_REFERENCE.md (to understand what to expect)
+- \[ ] Understand Phases A→E (Context → Plan → Act → Verify)
+- \[ ] Know the Constitution (7 binding laws)
+- \[ ] Understand Red Team veto (Security Supremacy)
+- \[ ] Optional: Use keyword modifiers if needed
 
 Then: **Ask your next question.** Protocol does the rest.
 
@@ -349,9 +349,9 @@ Protocol is successful when:
 
 ---
 
-**Protocol Status**: ✅ FULLY ACTIVE  
-**Last Updated**: December 4, 2025  
-**Binding**: Automatic  
+**Protocol Status**: ✅ FULLY ACTIVE\
+**Last Updated**: December 4, 2025\
+**Binding**: Automatic\
 **Ready**: YES
 
 **Proceed with your next request. The crew is ready to dispatch.**

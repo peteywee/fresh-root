@@ -1,12 +1,10 @@
-# Labels
-
----
+## # Labels
 
 name: "🔧 Production Work Item"
 about: Standardized work ticket for production readiness
-title: "[WORK-ID] Title"
-labels: []
-assignees: [peteywee]
+title: "\[WORK-ID] Title"
+labels: \[]
+assignees: \[peteywee]
 
 ---
 
@@ -31,23 +29,23 @@ Explain why this matters for production readiness.
 ## Commands
 
 ```bash
-##  deterministic steps
+## deterministic steps
 ```
 
 ## Acceptance Criteria
 
-- [ ]
+- \[ ]
 
 ## Success KPIs
 
 ## Definition of Done
 
-- [ ] CI green
-- [ ] Docs updated
-- [ ] Tests ≥ 85 %
-- [ ] Security audit clear
-- [ ] Linked in roadmap
-- [ ] All lint/format errors auto-fixed before commit/PR (any language)
+- \[ ] CI green
+- \[ ] Docs updated
+- \[ ] Tests ≥ 85 %
+- \[ ] Security audit clear
+- \[ ] Linked in roadmap
+- \[ ] All lint/format errors auto-fixed before commit/PR (any language)
 
 ## Explanation / Rationale
 
@@ -69,9 +67,9 @@ Why this task exists, dependencies, and production impact.
 
 ### 7️⃣ Meta Acceptance Criteria (for this framework itself)
 
-- [x] Every future response must include **Labels, Objective, Scope, Files/Paths, Commands, Acceptance Criteria, Success KPIs, Definition of Done**.
-- [x] Template stored in `.github/ISSUE_TEMPLATE/_production-template.md`.
-- [x] GitHub Actions validate presence of these sections (optional extension).
+- \[x] Every future response must include **Labels, Objective, Scope, Files/Paths, Commands, Acceptance Criteria, Success KPIs, Definition of Done**.
+- \[x] Template stored in `.github/ISSUE_TEMPLATE/_production-template.md`.
+- \[x] GitHub Actions validate presence of these sections (optional extension).
 
 ---
 

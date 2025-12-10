@@ -8,9 +8,7 @@
 ---
 
 ## 📁 Protocol Files (In Order of Reference)
-
 ### 1. **agents/CREWOPS\_QUICK\_REFERENCE.md** (7.8 KB) ⭐ START HERE
-
 **For**: Users new to the protocol\
 **Contains**:
 
@@ -20,15 +18,24 @@
 ---
 
 ### 2. **agents/crewops.md** (24 KB) 📖 THE COMPLETE MANUAL
+
 **For**: Understanding the protocol deeply\
 **Contains**:
 
 - Constitution (7 non-negotiable laws)
 - Crew hierarchy & roles (Section 3)
+- Swarm protocol: Phases A→E (Section 4)
+- Tool use discipline (Section 6.5)
+- MCP integration framework (Section 6.6)
+- Tool governance & enforcement (Section 16)
+- Decision audit & verification (Section 17)
+- Integration examples (Section 18)
+
+**Authority**: This is the binding document. All workers inherit it.
 
 ---
 
-
+### 3. **agents/CREWOPS\_ACTIVATION.md** (9.6 KB) ⚙️ AUTO-ENGAGEMENT FRAMEWORK
 **For**: How the protocol automatically loads\
 **Contains**:
 
@@ -36,8 +43,8 @@
 **Purpose**: Explains how the protocol self-initializes without user action.
 
 ---
-### 4. **agents/CREWOPS\_ACTIVATION\_STATUS.md** (8.9 KB) 📊 STATUS TRACKING
 
+### 4. **agents/CREWOPS\_ACTIVATION\_STATUS.md** (8.9 KB) 📊 STATUS TRACKING
 **For**: Verification and configuration\
 **Contains**:
 
@@ -46,7 +53,6 @@
 
 
 ### 5. **agents/CREWOPS\_IMPLEMENTATION\_COMPLETE.md** (12 KB) ✅ COMPLETION SUMMARY
-
 **For**: Overview of what's active\
 **Contains**:
 - Typical workflow example
@@ -146,6 +152,10 @@ Task complete with audit trail
 5. **Research Analyst**: Verify + tool deployment
 6. **QA/Test Engineer**: Validation + testing
 
+### Phases (A→E)
+- **A**: Context Saturation (READ)
+- **B+C**: Planning + Team Assembly (DESIGN)
+- **D**: Action Matrix (ACT)
 - **E**: Security Veto + Reflexion (VERIFY)
 - **Validation**: Green gates + DoD
 
@@ -156,7 +166,12 @@ Task complete with audit trail
 3. Secondary sources
 4. Assumptions (lowest, labeled)
 
+### Keyword Modifiers (Optional)
+- CREWOPS\_OK: Acknowledge binding
+- CREWOPS\_DESIGN\_ONLY: Plan only
+- CREWOPS\_AUDIT: Find problems
 - CREWOPS\_EXECUTE: Run pre-planned
+- CREWOPS\_EMERGENCY: Fast-track
 
 ---
 
@@ -164,15 +179,25 @@ Task complete with audit trail
 
 | File                               | Responsibility         | Read When                     |
 | ---------------------------------- | ---------------------- | ----------------------------- |
-| CREWOPS\_QUICK\_REFERENCE.md         | User quick start       | First time using              |
+| CREWOPS_QUICK_REFERENCE.md         | User quick start       | First time using              |
 | crewops.md                         | Binding authority      | Need rule clarification       |
 | CREWOPS\_ACTIVATION.md              | Bootstrap framework    | Understanding auto-engagement |
 | CREWOPS\_ACTIVATION\_STATUS.md       | Configuration tracking | Verifying what's active       |
+| CREWOPS\_IMPLEMENTATION\_COMPLETE.md | High-level overview    | Need summary view             |
 
 ---
 
 ## ✅ What's Guaranteed
+When protocol engages on your prompt:
 
+- ✅ Constitution is binding (immutable)
+- ✅ Crew is assembled (6 mandatory roles)
+- ✅ Tools auto-deploy (Research Analyst + QA)
+- ✅ Phases A→E execute in order
+- ✅ Evidence is verified (tool + docs)
+- ✅ Security veto is enforced (Red Team)
+- ✅ Validation gates are checked
+- ✅ Audit trail is recorded
 - ✅ Rollback path exists
 
 ---
@@ -188,6 +213,10 @@ Task complete with audit trail
 
 ---
 
+## 🎯 Quick Checklist for You
+- \[ ] Read CREWOPS\_QUICK\_REFERENCE.md (to understand what to expect)
+- \[ ] Understand Phases A→E (Context → Plan → Act → Verify)
+- \[ ] Know the Constitution (7 binding laws)
 - \[ ] Understand Red Team veto (Security Supremacy)
 - \[ ] Optional: Use keyword modifiers if needed
 
@@ -227,13 +256,22 @@ CREWOPS_DESIGN_ONLY
 ---
 
 ## 🔗 Cross-References
+**In crewops.md**:
 
+- Section 0.1.5: Links to CREWOPS\_ACTIVATION.md
+- Section 6.5: Tool Use Discipline
 - Section 6.6: MCP Integration
 - Section 16-18: Tool & MCP Governance
+
+**In CREWOPS\_ACTIVATION.md**:
 
 - Stage 1: Session bootstrap flow
 - Stage 3: Protocol engagement flow
 
+**In CREWOPS\_ACTIVATION\_STATUS.md**:
+
+- Activation Sequence: Detailed steps
+- Protocol Flow: Visual workflow
 - Worker Matrix: Tool assignments
 
 ---
@@ -254,7 +292,16 @@ CREWOPS_DESIGN_ONLY
 ---
 
 ## 🎯 Success Criteria
+Protocol is successful when:
 
+- ✅ Automatically engages on non-trivial prompts
+- ✅ Phases A→E execute without user intervention
+- ✅ Tools deploy automatically per role
+- ✅ Evidence is verified (not assumed)
+- ✅ Security veto blocks unsafe work
+- ✅ Validation gates prevent incomplete work
+- ✅ Audit trails are recorded
+- ✅ Runnable commands are provided
 - ✅ Definition of Done is met
 - ✅ Crew is coordinated without conflict
 

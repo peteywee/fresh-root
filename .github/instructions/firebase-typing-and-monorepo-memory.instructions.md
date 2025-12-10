@@ -1,7 +1,8 @@
 ---
+
 description: "Key learnings from Firebase SDK v12 typing strategy and monorepo dependency resolution"
-applyTo: "apps/web/app/api/**/*.ts,apps/web/lib/**/*.ts,packages/*/**/*.ts"
----
+
+## applyTo: "apps/web/app/api/**/\*.ts,apps/web/lib/**/_.ts,packages/_/\*\*/\*.ts"
 
 # Firebase & Monorepo Dependency Management Memory
 
@@ -29,14 +30,14 @@ Firebase SDK v12 client and admin SDKs intentionally return `any`-typed values f
    }
    ```
 
-2. **Use type assertions** on Firebase results with confidence:
+1. **Use type assertions** on Firebase results with confidence:
 
    ```typescript
    const snap = await getDoc(docRef);
    const data = snap.data() as UserData; // Safe - Firebase guarantees structure
    ```
 
-3. **Create type-safe wrapper functions** for complex operations (optional enhancement):
+1. **Create type-safe wrapper functions** for complex operations (optional enhancement):
    ```typescript
    export async function getDocWithType<T>(
      db: Firestore,

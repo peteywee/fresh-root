@@ -11,12 +11,12 @@ import { glob } from "glob";
 // Determine project root - works for both global and local installs
 function getProjectRoot(): string {
   const cwd = process.cwd();
-  
+
   // Check if we're in a project with apps/web/app/api
   if (fs.existsSync(path.join(cwd, "apps/web/app/api"))) {
     return cwd;
   }
-  
+
   // Fallback to up from tests/intelligence (when run as local package)
   return path.resolve(__dirname, "../..");
 }
@@ -58,8 +58,8 @@ class E2ETestGenerator {
     const generatedFiles: string[] = [];
 
     // Find API routes
-    const routePattern = routes?.length 
-      ? routes.map(r => `${PROJECT_ROOT}/${r}/**/route.ts`)
+    const routePattern = routes?.length
+      ? routes.map((r) => `${PROJECT_ROOT}/${r}/**/route.ts`)
       : [`${PROJECT_ROOT}/apps/web/app/api/**/route.ts`];
 
     for (const pattern of routePattern) {
@@ -82,9 +82,11 @@ class E2ETestGenerator {
    */
   private generateTestForRoute(routeFile: string): string | null {
     const routeContent = fs.readFileSync(routeFile, "utf-8");
-    
+
     // Extract route path from file path
-    const relativePath = routeFile.replace(`${PROJECT_ROOT}/apps/web/app/api/`, "").replace("/route.ts", "");
+    const relativePath = routeFile
+      .replace(`${PROJECT_ROOT}/apps/web/app/api/`, "")
+      .replace("/route.ts", "");
     const routeName = relativePath.replace(/\//g, "-") || "root";
     const testFile = path.join(E2E_DIR, `${routeName}.e2e.test.ts`);
 
@@ -108,20 +110,27 @@ class E2ETestGenerator {
     }
 
     // Detect if it requires authentication
-    const requiresAuth = routeContent.includes("createOrgEndpoint") || 
-                         routeContent.includes("createAuthenticatedEndpoint") ||
-                         routeContent.includes("withSecurity");
+    const requiresAuth =
+      routeContent.includes("createOrgEndpoint") ||
+      routeContent.includes("createAuthenticatedEndpoint") ||
+      routeContent.includes("withSecurity");
 
     // Detect input schema
     const inputSchemaMatch = routeContent.match(/input:\s*(\w+Schema)/);
     const inputSchema = inputSchemaMatch ? inputSchemaMatch[1] : null;
 
     // Generate test content
-    const testContent = this.generateTestContent(routeName, relativePath, methods, requiresAuth, inputSchema);
-    
+    const testContent = this.generateTestContent(
+      routeName,
+      relativePath,
+      methods,
+      requiresAuth,
+      inputSchema,
+    );
+
     fs.writeFileSync(testFile, testContent);
     console.log(`   ✅ Generated: tests/e2e/${routeName}.e2e.test.ts`);
-    
+
     return testFile;
   }
 
@@ -129,20 +138,21 @@ class E2ETestGenerator {
    * Generate test file content
    */
   private generateTestContent(
-    routeName: string, 
-    routePath: string, 
-    methods: string[], 
+    routeName: string,
+    routePath: string,
+    methods: string[],
     requiresAuth: boolean,
-    inputSchema: string | null
+    inputSchema: string | null,
   ): string {
     const apiPath = `/api/${routePath}`;
-    
-    const methodTests = methods.map(method => {
-      const authNote = requiresAuth ? "// Requires authentication" : "";
-      const inputNote = inputSchema ? `// Input: ${inputSchema}` : "";
 
-      if (method === "GET") {
-        return `
+    const methodTests = methods
+      .map((method) => {
+        const authNote = requiresAuth ? "// Requires authentication" : "";
+        const inputNote = inputSchema ? `// Input: ${inputSchema}` : "";
+
+        if (method === "GET") {
+          return `
   describe("${method} ${apiPath}", () => {
     ${authNote}
     
@@ -151,17 +161,21 @@ class E2ETestGenerator {
       expect(response.status).toBe(${requiresAuth ? "401" : "200"});
     });
 
-    ${requiresAuth ? `
+    ${
+      requiresAuth
+        ? `
     it("should return 401 without authentication", async () => {
       const response = await fetch(\`\${BASE_URL}${apiPath}\`);
       expect(response.status).toBe(401);
     });
-    ` : ""}
+    `
+        : ""
+    }
   });`;
-      }
+        }
 
-      if (method === "POST" || method === "PUT" || method === "PATCH") {
-        return `
+        if (method === "POST" || method === "PUT" || method === "PATCH") {
+          return `
   describe("${method} ${apiPath}", () => {
     ${authNote}
     ${inputNote}
@@ -190,10 +204,10 @@ class E2ETestGenerator {
       expect([200, 201, 401, 403]).toContain(response.status);
     });
   });`;
-      }
+        }
 
-      if (method === "DELETE") {
-        return `
+        if (method === "DELETE") {
+          return `
   describe("${method} ${apiPath}", () => {
     ${authNote}
     
@@ -204,10 +218,11 @@ class E2ETestGenerator {
       expect([401, 403, 404]).toContain(response.status);
     });
   });`;
-      }
+        }
 
-      return "";
-    }).join("\n");
+        return "";
+      })
+      .join("\n");
 
     return `/**
  * E2E Tests for ${routeName} API
@@ -267,10 +282,10 @@ ${methodTests}
 
     // Find E2E test files
     const testPattern = pattern || "**/*.e2e.test.ts";
-    const testFiles = await glob(testPattern, { 
-      cwd: E2E_DIR, 
+    const testFiles = await glob(testPattern, {
+      cwd: E2E_DIR,
       ignore: ["**/node_modules/**"],
-      absolute: true 
+      absolute: true,
     });
 
     if (testFiles.length === 0) {
@@ -313,7 +328,7 @@ ${methodTests}
     try {
       const output = execSync(
         `cd ${PROJECT_ROOT} && npx vitest run "${testFile}" --reporter=json 2>&1`,
-        { encoding: "utf-8", timeout: 60000 }
+        { encoding: "utf-8", timeout: 60000 },
       );
 
       result.duration = Date.now() - startTime;
@@ -339,9 +354,7 @@ ${methodTests}
    */
   private printReport(report: E2EReport): void {
     const { summary } = report;
-    const passRate = summary.total > 0 
-      ? Math.round((summary.passed / summary.total) * 100) 
-      : 0;
+    const passRate = summary.total > 0 ? Math.round((summary.passed / summary.total) * 100) : 0;
 
     console.log(`
 ════════════════════════════════════════════════════════════════════════
@@ -356,10 +369,14 @@ Summary:
   Pass Rate:    ${passRate}%
   Duration:     ${(summary.duration / 1000).toFixed(2)}s
 
-${report.executed.length > 0 ? `
+${
+  report.executed.length > 0
+    ? `
 Test Results:
-${report.executed.map(t => `  ${t.status === "passed" ? "✅" : "❌"} ${t.file} (${t.duration}ms)`).join("\n")}
-` : ""}
+${report.executed.map((t) => `  ${t.status === "passed" ? "✅" : "❌"} ${t.file} (${t.duration}ms)`).join("\n")}
+`
+    : ""
+}
 ════════════════════════════════════════════════════════════════════════
 `);
   }
@@ -368,13 +385,13 @@ ${report.executed.map(t => `  ${t.status === "passed" ? "✅" : "❌"} ${t.file}
    * List existing E2E tests
    */
   async list(): Promise<string[]> {
-    const testFiles = await glob("**/*.e2e.test.ts", { 
-      cwd: E2E_DIR, 
-      ignore: ["**/node_modules/**"] 
+    const testFiles = await glob("**/*.e2e.test.ts", {
+      cwd: E2E_DIR,
+      ignore: ["**/node_modules/**"],
     });
 
     console.log(`\n📋 E2E Tests (${testFiles.length} files):\n`);
-    
+
     if (testFiles.length === 0) {
       console.log("   No E2E tests found. Run 'testintel e2e generate' to create them.\n");
     } else {

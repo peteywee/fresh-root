@@ -552,13 +552,13 @@ describe("withRateLimit", () => {
 
 Before deploying with rate limiting:
 
-- [ ] Choose `max` and `windowSeconds` for each route
-- [ ] Set `REDIS_URL` in production environment
-- [ ] Test Redis connection in production
-- [ ] Monitor 429 responses in production
-- [ ] Document rate limits in API docs
-- [ ] Add `Retry-After` handling to client code
-- [ ] Set up alerts for unusual 429 spike patterns
+- \[ ] Choose `max` and `windowSeconds` for each route
+- \[ ] Set `REDIS_URL` in production environment
+- \[ ] Test Redis connection in production
+- \[ ] Monitor 429 responses in production
+- \[ ] Document rate limits in API docs
+- \[ ] Add `Retry-After` handling to client code
+- \[ ] Set up alerts for unusual 429 spike patterns
 
 ---
 

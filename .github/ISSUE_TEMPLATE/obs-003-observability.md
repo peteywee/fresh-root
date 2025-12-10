@@ -1,12 +1,10 @@
-# Objective
-
----
+## # Objective
 
 name: OBS-003 Observability (Sentry + OTel + JSON logs)
 about: Wire Sentry, structured logs with reqId, and OpenTelemetry traces + dashboards
-title: "[OBS-003] Observability"
-labels: ["observability", "platform", "backend", "P1"]
-assignees: ["peteywee"]
+title: "\[OBS-003] Observability"
+labels: \["observability", "platform", "backend", "P1"]
+assignees: \["peteywee"]
 
 ---
 
@@ -26,11 +24,11 @@ Full-stack **observability**: structured logs, error tracking, and distributed t
 
 ## Tasks
 
-- [ ] Add reqId creation/propagation.
-- [ ] Structure all logs as JSON; no PII.
-- [ ] Sentry init and release tagging.
-- [ ] OTel tracer provider, spans around API and Firestore calls.
-- [ ] Grafana/Cloud dashboards + alert on error budget burn.
+- \[ ] Add reqId creation/propagation.
+- \[ ] Structure all logs as JSON; no PII.
+- \[ ] Sentry init and release tagging.
+- \[ ] OTel tracer provider, spans around API and Firestore calls.
+- \[ ] Grafana/Cloud dashboards + alert on error budget burn.
 
 ## Acceptance Criteria
 

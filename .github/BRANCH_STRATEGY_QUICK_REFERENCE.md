@@ -1,7 +1,7 @@
 # 🏗️ Branch Strategy Quick Reference
 
-**Effective**: December 7, 2025  
-**Owner**: Sr Dev (Architecture)  
+**Effective**: December 7, 2025\
+**Owner**: Sr Dev (Architecture)\
 **Status**: ACTIVE - All branches governed
 
 ---
@@ -30,14 +30,13 @@
 
 ### 🟢 **main** (Production)
 
-**What goes here**: Production-ready code only  
-**Who can merge**: DevOps/Release team  
+**What goes here**: Production-ready code only\
+**Who can merge**: DevOps/Release team\
 **PR Requirements**: 2+ approvals, all tests pass, E2E verified
 
 ```bash
 # You CANNOT commit directly to main
 # Only way to get code here: dev → main (PR, 2 reviews)
-
 # If you have production-ready code on dev:
 git checkout dev
 git pull origin dev
@@ -46,8 +45,8 @@ git pull origin dev
 
 ### 🟡 **dev** (Working Branch)
 
-**What goes here**: Feature code + tests you're actively developing  
-**Who can merge**: Any engineer (1+ approval)  
+**What goes here**: Feature code + tests you're actively developing\
+**Who can merge**: Any engineer (1+ approval)\
 **PR Requirements**: 1+ approval, tests pass, no docs/logs/metrics
 
 ```bash
@@ -67,8 +66,8 @@ git push origin feature/123-my-feature
 
 ### 📘 **docs-tests-logs** (Archive)
 
-**What goes here**: ALL documentation, test results, reports  
-**Who can merge**: Anyone (no review required)  
+**What goes here**: ALL documentation, test results, reports\
+**Who can merge**: Anyone (no review required)\
 **Never merged back**: This is archive-only
 
 ```bash
@@ -90,6 +89,7 @@ git push origin docs/add-new-doc
 ## What Goes Where?
 
 ### ✅ Commit to **dev** (or feature from dev)
+
 - TypeScript/JavaScript code (.ts, .tsx, .js)
 - Package.json, tsconfig.json, eslint config
 - Firestore rules (.rules)
@@ -98,6 +98,7 @@ git push origin docs/add-new-doc
 - Tests that are part of features (but see below)
 
 ### ✅ Commit to **docs-tests-logs**
+
 - Project documentation (docs/)
 - Implementation reports
 - E2E test suites
@@ -107,10 +108,12 @@ git push origin docs/add-new-doc
 - Project summaries
 
 ### ❌ NEVER commit to **main** directly
+
 - Create a PR from dev instead
 - Main only accepts merges from dev
 
 ### ❌ NEVER commit docs/tests/logs to **dev**
+
 - Move these to docs-tests-logs instead
 - Automated checks will block these commits
 
@@ -119,6 +122,7 @@ git push origin docs/add-new-doc
 ## Commit Messages
 
 ### Feature Commits (dev branch)
+
 ```bash
 git commit -m "feat: add new authentication flow"
 git commit -m "fix: resolve login validation bug"
@@ -127,6 +131,7 @@ git commit -m "refactor: simplify user service"
 ```
 
 ### Documentation Commits (docs-tests-logs)
+
 ```bash
 git commit -m "docs: add architecture overview"
 git commit -m "docs: document SDK factory pattern"
@@ -139,28 +144,31 @@ git commit -m "report: add performance metrics"
 ## PR Checklist by Branch
 
 ### Feature → Dev PR
-- [ ] Source branch: feature/123-*
-- [ ] Target branch: dev
-- [ ] Tests passing locally: `pnpm test`
-- [ ] TypeScript passing: `pnpm typecheck`
-- [ ] Linting passing: `pnpm lint`
-- [ ] 1+ approval required
-- [ ] Description: What was added/fixed
+
+- \[ ] Source branch: feature/123-\*
+- \[ ] Target branch: dev
+- \[ ] Tests passing locally: `pnpm test`
+- \[ ] TypeScript passing: `pnpm typecheck`
+- \[ ] Linting passing: `pnpm lint`
+- \[ ] 1+ approval required
+- \[ ] Description: What was added/fixed
 
 ### Dev → Main PR
-- [ ] Source branch: dev
-- [ ] Target branch: main
-- [ ] All tests passing (E2E verified)
-- [ ] No docs/tests/logs files
-- [ ] Release notes included
-- [ ] 2+ approvals required
-- [ ] Commit history clean
+
+- \[ ] Source branch: dev
+- \[ ] Target branch: main
+- \[ ] All tests passing (E2E verified)
+- \[ ] No docs/tests/logs files
+- \[ ] Release notes included
+- \[ ] 2+ approvals required
+- \[ ] Commit history clean
 
 ### Docs → Docs-Tests-Logs PR
-- [ ] Documentation files only
-- [ ] No code changes
-- [ ] No review required
-- [ ] Clear description of what's documented
+
+- \[ ] Documentation files only
+- \[ ] No code changes
+- \[ ] No review required
+- \[ ] Clear description of what's documented
 
 ---
 
@@ -176,16 +184,13 @@ git status  # Should be clean
 git push origin feature/123-my-feature
 
 # 3. Go to GitHub and create PR
-#    Source: feature/123-my-feature
-#    Target: dev
-#    Title: "feat: description of your feature"
-#    Description: What was changed
-
+# Source: feature/123-my-feature
+# Target: dev
+# Title: "feat: description of your feature"
+# Description: What was changed
 # 4. Get 1+ approval from team
-
 # 5. Merge the PR
-#    ✅ Feature branch auto-deletes
-
+# ✅ Feature branch auto-deletes
 # 6. Your code is now in dev!
 ```
 
@@ -193,16 +198,13 @@ git push origin feature/123-my-feature
 
 ```bash
 # 1. Your code must be on dev branch first
-#    (via feature PR already merged)
-
+# (via feature PR already merged)
 # 2. Create PR: dev → main
-#    Title: "release: v1.2.3"
-#    Description: Release notes
-
+# Title: "release: v1.2.3"
+# Description: Release notes
 # 3. Get 2+ approvals
-
 # 4. Merge to main
-#    ✅ Your code is now in production!
+# ✅ Your code is now in production!
 ```
 
 ### "Where do I put my documentation?"
@@ -217,15 +219,13 @@ git checkout -b docs/add-new-guide
 
 # 3. Create your documentation
 # docs/my-new-guide.md
-
 # 4. Commit it
 git add docs/
 git commit -m "docs: add new guide"
 git push origin docs/add-new-guide
 
 # 5. Create PR to docs-tests-logs
-#    (or commit directly if no review needed)
-
+# (or commit directly if no review needed)
 # 6. Your documentation is now in the archive!
 ```
 
@@ -234,22 +234,26 @@ git push origin docs/add-new-guide
 ## Automated Checks (Won't Let You Merge If...)
 
 ### All Branches
+
 - ✅ No skipped tests (`test.skip`, `test.only`)
 - ✅ No debug code (`console.log`, `debugger`)
 - ✅ No unresolved TODOs/FIXMEs
 - ✅ No secrets in commits
 
 ### Main Branch (Only)
+
 - ❌ Source is not dev branch
 - ❌ Contains docs/test files
 - ❌ No release notes in PR
 - ❌ Less than 2 approvals
 
 ### Dev Branch
+
 - ❌ Contains docs/test/log files (move to docs-tests-logs)
 - ❌ Less than 1 approval
 
 ### Docs-Tests-Logs Branch
+
 - ❌ Contains feature code
 - ❌ Contains regular source files
 
@@ -282,7 +286,6 @@ git push origin docs-tests-logs:docs-tests-logs
 # Escalate to Sr Dev immediately
 # We'll need to create a revert commit on main
 # And establish new procedures to prevent this
-
 # For future: Main only accepts from dev
 ```
 
@@ -306,5 +309,5 @@ Ask in Slack #engineering or contact Sr Dev
 
 ---
 
-**Last Updated**: December 7, 2025  
+**Last Updated**: December 7, 2025\
 **Next Review**: January 7, 2026

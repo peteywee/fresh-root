@@ -1,7 +1,8 @@
 ---
+
 description: "Guidelines for GitHub Copilot to write comments to achieve self-explanatory code with less comments. Examples are in JavaScript but it should work on any language that has comments."
-applyTo: "**"
----
+
+## applyTo: "\*\*"
 
 # Self-explanatory Code Commenting Instructions
 
@@ -104,12 +105,12 @@ function calculateCompoundInterest(principal, rate, time, compoundFrequency = 1)
 
 Before committing, ensure your comments:
 
-- [ ] Explain WHY, not WHAT
-- [ ] Are grammatically correct and clear
-- [ ] Will remain accurate as code evolves
-- [ ] Add genuine value to code understanding
-- [ ] Are placed appropriately (above the code they describe)
-- [ ] Use proper spelling and professional language
+- \[ ] Explain WHY, not WHAT
+- \[ ] Are grammatically correct and clear
+- \[ ] Will remain accurate as code evolves
+- \[ ] Add genuine value to code understanding
+- \[ ] Are placed appropriately (above the code they describe)
+- \[ ] Use proper spelling and professional language
 
 ## Summary
 

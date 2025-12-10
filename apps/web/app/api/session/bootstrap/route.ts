@@ -1,13 +1,13 @@
 // [P0][SESSION][BOOTSTRAP][API] Bootstrap session endpoint
+// Tags: P0, SESSION, BOOTSTRAP, API, SDK_FACTORY
 
-import { z } from "zod";
 import { createAuthenticatedEndpoint } from "@fresh-schedules/api-framework";
-import { ok, serverError } from "../../_shared/validation";
-import { CreateSessionSchema } from "@fresh-schedules/types";
+import { SessionBootstrapSchema } from "@fresh-schedules/types";
+import { NextResponse } from "next/server";
 
 /**
  * GET /api/session/bootstrap
- * Bootstrap authenticated session
+ * Bootstrap authenticated session (no input validation needed for GET)
  */
 export const GET = createAuthenticatedEndpoint({
   handler: async ({ context }) => {
@@ -17,31 +17,49 @@ export const GET = createAuthenticatedEndpoint({
         email: context.auth?.email,
         emailVerified: context.auth?.emailVerified,
         authenticated: true,
+        bootstrapAt: Date.now(),
       };
-      return ok(session);
-    } catch {
-      return serverError("Failed to bootstrap session");
+      return NextResponse.json(session);
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "Failed to bootstrap session";
+      console.error("Session bootstrap failed", {
+        error: message,
+        userId: context.auth?.userId,
+      });
+      return NextResponse.json(
+        { error: { code: "INTERNAL_ERROR", message } },
+        { status: 500 }
+      );
     }
   },
 });
 
 /**
  * POST /api/session/bootstrap
- * Create new session
+ * Create new session with preferences
  */
 export const POST = createAuthenticatedEndpoint({
-  input: CreateSessionSchema,
+  input: SessionBootstrapSchema,
   handler: async ({ input, context }) => {
     try {
       const session = {
-        userId: input?.userId || context.auth?.userId,
-        email: input?.email || context.auth?.email,
+        userId: context.auth?.userId,
+        email: context.auth?.email,
         createdAt: Date.now(),
-        ...(input?.metadata ? { metadata: input.metadata } : {}),
+        preferences: input.preferences,
+        deviceInfo: input.deviceInfo,
       };
-      return ok(session);
-    } catch {
-      return serverError("Failed to create session");
+      return NextResponse.json(session);
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "Failed to create session";
+      console.error("Session creation failed", {
+        error: message,
+        userId: context.auth?.userId,
+      });
+      return NextResponse.json(
+        { error: { code: "INTERNAL_ERROR", message } },
+        { status: 500 }
+      );
     }
   },
 });

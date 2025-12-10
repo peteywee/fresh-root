@@ -1,7 +1,8 @@
 ---
-applyTo: "**/*.{cs,ts,java}"
-description: Enforces Object Calisthenics principles for business domain code to ensure clean, maintainable, and robust code
----
+
+applyTo: "\*\*/\*.{cs,ts,java}"
+
+## description: Enforces Object Calisthenics principles for business domain code to ensure clean, maintainable, and robust code
 
 # Object Calisthenics Rules
 
@@ -60,7 +61,7 @@ This rule enforces the principles of Object Calisthenics to ensure clean, mainta
    }
    ```
 
-2. **Don't Use the ELSE Keyword**:
+1. **Don't Use the ELSE Keyword**:
    - Avoid using the `else` keyword to reduce complexity and improve readability.
    - Use early returns to handle conditions instead.
    - Use Fail Fast principle
@@ -90,7 +91,7 @@ This rule enforces the principles of Object Calisthenics to ensure clean, mainta
    }
    ````
 
-3. **Wrapping All Primitives and Strings**:
+1. **Wrapping All Primitives and Strings**:
    - Avoid using primitive types directly in your code.
    - Wrap them in classes to provide meaningful context and behavior.
 
@@ -118,7 +119,7 @@ This rule enforces the principles of Object Calisthenics to ensure clean, mainta
    }
    ```
 
-4. **First Class Collections**:
+1. **First Class Collections**:
    - Use collections to encapsulate data and behavior, rather than exposing raw data structures.
      First Class Collections: a class that contains an array as an attribute should not contain any other attributes
 
@@ -151,7 +152,7 @@ This rule enforces the principles of Object Calisthenics to ensure clean, mainta
    }
 ```
 
-5. **One Dot per Line**:
+1. **One Dot per Line**:
    - Limit the number of method calls in a single line to improve readability and maintainability.
 
    ```csharp
@@ -169,7 +170,7 @@ This rule enforces the principles of Object Calisthenics to ensure clean, mainta
    }
    ```
 
-6. **Don't abbreviate**:
+1. **Don't abbreviate**:
    - Use meaningful names for classes, methods, and variables.
    - Avoid abbreviations that can lead to confusion.
 
@@ -184,7 +185,7 @@ This rule enforces the principles of Object Calisthenics to ensure clean, mainta
    }
    ```
 
-7. **Keep entities small (Class, method, namespace or package)**:
+1. **Keep entities small (Class, method, namespace or package)**:
    - Limit the size of classes and methods to improve code readability and maintainability.
    - Each class should have a single responsibility and be as small as possible.
 
@@ -214,7 +215,7 @@ This rule enforces the principles of Object Calisthenics to ensure clean, mainta
    }
    ```
 
-8. **No Classes with More Than Two Instance Variables**:
+1. **No Classes with More Than Two Instance Variables**:
    - Encourage classes to have a single responsibility by limiting the number of instance variables.
    - Limit the number of instance variables to two to maintain simplicity.
    - Do not count ILogger or any other logger as instance variable.
@@ -250,7 +251,7 @@ This rule enforces the principles of Object Calisthenics to ensure clean, mainta
    }
    ```
 
-9. **No Getters/Setters in Domain Classes**:
+1. **No Getters/Setters in Domain Classes**:
    - Avoid exposing setters for properties in domain classes.
    - Use private constructors and static factory methods for object creation.
    - **Note**: This rule applies primarily to domain classes, not DTOs or data transfer objects.

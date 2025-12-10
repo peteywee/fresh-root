@@ -1,8 +1,8 @@
 # PR Staging: Infrastructure Hardening & Architecture
 
-**Branch**: `stage/architecture-and-functions-pr`  
-**Target**: `dev` → `main`  
-**Date**: November 30, 2025  
+**Branch**: `stage/architecture-and-functions-pr`\
+**Target**: `dev` → `main`\
+**Date**: November 30, 2025\
 **Status**: 🟢 Ready for Review
 
 ---
@@ -204,14 +204,14 @@ assertProduction(); // FAIL if REDIS_URL or OTEL endpoint missing
 
 ## Testing Performed
 
-- [x] **Dev server stability**: 5.4s startup, no OOM crashes (Chromebook tested)
-- [x] **Rate limiting operational**: Redis connection + in-memory fallback working
-- [x] **OTEL tracing**: Lazy-loaded, no module-load hangs
-- [x] **Env validation**: Zod parsing correct, typed config working
-- [x] **Firestore indexes**: 6 new collection indexes for performance
-- [x] **Cloud functions**: All 6 functions exportable, no syntax errors
-- [x] **TypeScript**: Full codebase typecheck PASS
-- [x] **Lint**: No new warnings introduced
+- \[x] **Dev server stability**: 5.4s startup, no OOM crashes (Chromebook tested)
+- \[x] **Rate limiting operational**: Redis connection + in-memory fallback working
+- \[x] **OTEL tracing**: Lazy-loaded, no module-load hangs
+- \[x] **Env validation**: Zod parsing correct, typed config working
+- \[x] **Firestore indexes**: 6 new collection indexes for performance
+- \[x] **Cloud functions**: All 6 functions exportable, no syntax errors
+- \[x] **TypeScript**: Full codebase typecheck PASS
+- \[x] **Lint**: No new warnings introduced
 
 ---
 
@@ -299,12 +299,12 @@ pnpm dev
 
 Please verify:
 
-- [ ] Architecture diagrams are clear and technically accurate
-- [ ] Cloud function exports match your intended API surface
-- [ ] Rate limiting fallback strategy (in-memory if no Redis) is acceptable
-- [ ] Environment validation captures all your production requirements
-- [ ] Firestore indexes align with your anticipated query patterns
-- [ ] No unintended side effects from lazy-loaded OTEL init
+- \[ ] Architecture diagrams are clear and technically accurate
+- \[ ] Cloud function exports match your intended API surface
+- \[ ] Rate limiting fallback strategy (in-memory if no Redis) is acceptable
+- \[ ] Environment validation captures all your production requirements
+- \[ ] Firestore indexes align with your anticipated query patterns
+- \[ ] No unintended side effects from lazy-loaded OTEL init
 
 ### Questions
 
@@ -321,9 +321,9 @@ Refer to:
 
 ### Stage 1: Code Review ✅ (This PR)
 
-- [ ] All reviewer checks pass
-- [ ] No conflicts with main
-- [ ] No additional changes requested
+- \[ ] All reviewer checks pass
+- \[ ] No conflicts with main
+- \[ ] No additional changes requested
 
 ### Stage 2: Merge to Dev
 

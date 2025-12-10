@@ -15,7 +15,9 @@ function createDoc(refPath: string, data: any) {
 }
 
 function getDoc(refPath: string) {
-  return firestoreData[refPath] ? { exists: true, data: () => ({ ...firestoreData[refPath] }) } : { exists: false };
+  return firestoreData[refPath]
+    ? { exists: true, data: () => ({ ...firestoreData[refPath] }) }
+    : { exists: false };
 }
 
 // Minimal mock of Firestore's collection/doc reference
@@ -61,15 +63,19 @@ const fakeFirestore = {
         get: async () => {
           // Find docs in firestoreData that are in 'memberships' collection and match filters
           const docs = Object.entries(firestoreData)
-            .filter(([path, data]) => path.includes('memberships/'))
-            .filter(([, data]) => filters.every((f) => {
-              if (!data) return false;
-              const val = (data as any)[f.field];
-              if (f.op === '==') return val === f.value;
-              return false;
-            }))
-            .map(([path, data]) => ({ id: path.split('/').pop(), data: () => data }));
-          console.info(`[FAKE FIRESTORE] collectionGroup.get ${name} filters=${JSON.stringify(chain.filters)} docs=${docs.map(d => d.id).join(',')}`);
+            .filter(([path, data]) => path.includes("memberships/"))
+            .filter(([, data]) =>
+              filters.every((f) => {
+                if (!data) return false;
+                const val = (data as any)[f.field];
+                if (f.op === "==") return val === f.value;
+                return false;
+              }),
+            )
+            .map(([path, data]) => ({ id: path.split("/").pop(), data: () => data }));
+          console.info(
+            `[FAKE FIRESTORE] collectionGroup.get ${name} filters=${JSON.stringify(chain.filters)} docs=${docs.map((d) => d.id).join(",")}`,
+          );
           return { empty: docs.length === 0, docs };
         },
       };
@@ -88,9 +94,9 @@ const fakeFirestore = {
         const existing = firestoreData[ref._path] || {};
         const newData: any = { ...existing };
         for (const [k, v] of Object.entries(data)) {
-          if (v && typeof v === 'object' && (v as any).__increment !== undefined) {
+          if (v && typeof v === "object" && (v as any).__increment !== undefined) {
             const inc = (v as any).__increment as number;
-            const base = typeof newData[k] === 'number' ? newData[k] : 0;
+            const base = typeof newData[k] === "number" ? newData[k] : 0;
             newData[k] = base + inc;
           } else {
             newData[k] = v;
@@ -166,10 +172,13 @@ describe("joinOrganizationHandler (unit, mocked admin)", () => {
 
     const email = `mock-join-${Date.now()}@example.com`;
 
-    const res = await joinOrganizationHandler({
-      data: { token: tokenId, email, password: "test-12345", displayName: "Mock User" },
-      auth: undefined,
-    }, { db: fakeFirestore, auth: fakeAuth });
+    const res = await joinOrganizationHandler(
+      {
+        data: { token: tokenId, email, password: "test-12345", displayName: "Mock User" },
+        auth: undefined,
+      },
+      { db: fakeFirestore, auth: fakeAuth },
+    );
 
     expect(res.success).toBe(true);
     expect(res.userId).toBeDefined();
@@ -180,7 +189,9 @@ describe("joinOrganizationHandler (unit, mocked admin)", () => {
     expect(token.currentUses).toBe(1);
 
     // membership exists
-    const membership = Object.values(firestoreData).find((d: any) => d && d.uid === res.userId && d.orgId === orgId);
+    const membership = Object.values(firestoreData).find(
+      (d: any) => d && d.uid === res.userId && d.orgId === orgId,
+    );
     expect(membership).toBeTruthy();
   });
 
@@ -201,15 +212,21 @@ describe("joinOrganizationHandler (unit, mocked admin)", () => {
 
     const email = `mock-join-${Date.now()}@example.com`;
 
-    const res1 = await joinOrganizationHandler({
-      data: { token: tokenId, email, password: "test-12345", displayName: "Mock User" },
-      auth: undefined,
-    }, { db: fakeFirestore, auth: fakeAuth });
+    const res1 = await joinOrganizationHandler(
+      {
+        data: { token: tokenId, email, password: "test-12345", displayName: "Mock User" },
+        auth: undefined,
+      },
+      { db: fakeFirestore, auth: fakeAuth },
+    );
 
-    const res2 = await joinOrganizationHandler({
-      data: { token: tokenId, email, password: "test-12345", displayName: "Mock User" },
-      auth: undefined,
-    }, { db: fakeFirestore, auth: fakeAuth });
+    const res2 = await joinOrganizationHandler(
+      {
+        data: { token: tokenId, email, password: "test-12345", displayName: "Mock User" },
+        auth: undefined,
+      },
+      { db: fakeFirestore, auth: fakeAuth },
+    );
 
     expect(res1.membershipId).toBe(res2.membershipId);
 

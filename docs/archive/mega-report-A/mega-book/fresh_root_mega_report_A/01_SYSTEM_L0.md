@@ -1,9 +1,12 @@
 # L0 — Mission & Non-Negotiables
+
 ## 1. Core Mission Statement
+
 **Mission:**\
 Enable managers to produce and publish a compliant, labor-aware staff schedule in **under 5 minutes** after onboarding, without needing spreadsheets, paper, or tribal knowledge.
 
 ## 2. Non-Negotiable Outcomes
+
 1. **Speed:** First real schedule from a new org in <= 5 minutes once onboarding data is present.
 2. **Correctness:** No internally inconsistent schedules (e.g., orphan shifts, double-booked staff).
 3. **Compliance Guardrails:** System actively prevents or clearly flags illegal/unsafe scheduling patterns.
@@ -12,6 +15,7 @@ Enable managers to produce and publish a compliant, labor-aware staff schedule i
 6. **Operational Resilience:** Critical flows (onboarding, schedule publish) must be recoverable from failure without manual DB surgery.
 
 ## 3. Mission-Level Threats
+
 - Building an over-complex architecture that cannot ship.
 - Silent data corruption in schedules or assignments.
 - RBAC or multi-tenant bugs causing cross-org data leaks.

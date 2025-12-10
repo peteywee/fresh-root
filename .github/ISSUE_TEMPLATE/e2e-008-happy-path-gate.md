@@ -1,12 +1,10 @@
-# Objective
-
----
+## # Objective
 
 name: E2E-008 Happy Path Gate (Playwright)
 about: Automate onboarding → create org → plan → publish; gate PRs on E2E
-title: "[E2E-008] Happy Path Gate"
-labels: ["e2e", "platform", "P1"]
-assignees: ["peteywee"]
+title: "\[E2E-008] Happy Path Gate"
+labels: \["e2e", "platform", "P1"]
+assignees: \["peteywee"]
 
 ---
 
@@ -25,9 +23,9 @@ Automate the **end-to-end** flow and make it a required PR check.
 
 ## Tasks
 
-- [ ] Seed data fixtures.
-- [ ] Implement E2E with screenshots/video artifacts.
-- [ ] Make E2E a required check on `develop` and `main`.
+- \[ ] Seed data fixtures.
+- \[ ] Implement E2E with screenshots/video artifacts.
+- \[ ] Make E2E a required check on `develop` and `main`.
 
 ## Acceptance Criteria
 

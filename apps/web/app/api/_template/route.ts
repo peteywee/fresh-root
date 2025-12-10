@@ -24,9 +24,9 @@ const TemplatePostSchema = z.object({
  */
 
 export const GET = createPublicEndpoint({
-  handler: async ({ request, context }) => {
+  handler: async ({ request: _request }) => {
     try {
-      const url = new URL(request.url);
+      const url = new URL(_request.url);
       const message = url.searchParams.get("message") ?? "Hello from SDK endpoint";
       return NextResponse.json({ ok: true, message });
     } catch (err: unknown) {
@@ -51,5 +51,5 @@ export const HEAD = createPublicEndpoint({
 });
 
 // Optional examples; keep thin in real handlers.
-export const DELETE = async () => NextResponse.json({ ok: true });
-export const PATCH = async () => NextResponse.json({ ok: true });
+export const DELETE = () => NextResponse.json({ ok: true });
+export const PATCH = () => NextResponse.json({ ok: true });

@@ -2,8 +2,8 @@
 
 title: Firebase SDK v12 Typing Modernization Strategy
 date: 2025-12-02
-## status: Active
 
+## status: Active
 # Firebase SDK v12 Typing Modernization Strategy
 ## Executive Summary
 **Current State:** 379 lint errors in apps/web (327 errors + 52 warnings)
@@ -185,8 +185,7 @@ const userData = snapData<UserProfile>(snap);
 ---
 
 ## References
-
-- **Firebase Typing Issue:** <https://github.com/firebase/firebase-js-sdk/issues/7598>
+- **Firebase Typing Issue:** https://github.com/firebase/firebase-js-sdk/issues/7598
 - **ESLint Config:** apps/web/eslint.config.mjs
 - **Firebase Files:** apps/web/src/lib/, apps/web/app/api/
 - **Type Definitions:** types/firebase-admin.d.ts

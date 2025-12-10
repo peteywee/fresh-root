@@ -1,7 +1,7 @@
 # 🎯 CREWOPS PROTOCOL: ACTIVATION COMPLETE
 
-**Status**: ✅ FULLY ACTIVE  
-**Date**: December 4, 2025  
+**Status**: ✅ FULLY ACTIVE\
+**Date**: December 4, 2025\
 **Binding**: Automatic (No user action required)
 
 ---
@@ -293,16 +293,16 @@ Conflicts resolved in this strict order:
 
 Before responding to any non-trivial prompt:
 
-- [ ] Constitution loaded (Section 2)
-- [ ] Crew Cabinet assembled (Section 3)
-- [ ] Tool Authority Matrix active (Section 16.2)
-- [ ] Binding Priority Order engaged
-- [ ] Phase A context saturation initiated
-- [ ] Workers spawned with Constitutional assignments
-- [ ] Action Matrix planned (Phase D)
-- [ ] Security Red Team assigned veto (Phase E)
-- [ ] Validation gates defined
-- [ ] Audit trail recording started
+- \[ ] Constitution loaded (Section 2)
+- \[ ] Crew Cabinet assembled (Section 3)
+- \[ ] Tool Authority Matrix active (Section 16.2)
+- \[ ] Binding Priority Order engaged
+- \[ ] Phase A context saturation initiated
+- \[ ] Workers spawned with Constitutional assignments
+- \[ ] Action Matrix planned (Phase D)
+- \[ ] Security Red Team assigned veto (Phase E)
+- \[ ] Validation gates defined
+- \[ ] Audit trail recording started
 
 **If ANY box unchecked**: Fail-closed, state what's missing, do not proceed.
 
@@ -366,11 +366,11 @@ What Changed:
 - Added circuit-breaker pattern to prevent exhaustion
 
 ✅ VALIDATION GATES
-- [ ] pnpm install → ✅ pass
-- [ ] pnpm typecheck → ✅ pass
-- [ ] pnpm test → ✅ pass (3 new tests added)
-- [ ] Core flow → ✅ verified (rate-limit enforced per user+org)
-- [ ] Rollback → ✅ ready (revert commit)
+- [[ ]] pnpm install → ✅ pass
+- [[ ]] pnpm typecheck → ✅ pass
+- [[ ]] pnpm test → ✅ pass (3 new tests added)
+- [[ ]] Core flow → ✅ verified (rate-limit enforced per user+org)
+- [[ ]] Rollback → ✅ ready (revert commit)
 
 📋 DEFINITION OF DONE
 All DoD items verified. Task complete. Ready for merge.
@@ -441,10 +441,10 @@ That's it.
 
 ---
 
-**Protocol Status**: ✅ ACTIVE  
-**Binding**: Automatic on session + non-trivial prompts  
-**Implementation**: COMPLETE  
-**Last Updated**: December 4, 2025  
+**Protocol Status**: ✅ ACTIVE\
+**Binding**: Automatic on session + non-trivial prompts\
+**Implementation**: COMPLETE\
+**Last Updated**: December 4, 2025\
 **Owner**: TopShelfService LLC
 
 **The crew is ready. Dispatch them with your next request.**

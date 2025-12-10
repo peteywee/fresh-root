@@ -1,7 +1,8 @@
 ---
+
 description: "Playwright test generation instructions"
-applyTo: "**"
----
+
+## applyTo: "\*\*"
 
 ## Test Writing Guidelines
 
@@ -81,8 +82,8 @@ test.describe("Movie Search Feature", () => {
 
 Before finalizing tests, ensure:
 
-- [ ] All locators are accessible and specific and avoid strict mode violations
-- [ ] Tests are grouped logically and follow a clear structure
-- [ ] Assertions are meaningful and reflect user expectations
-- [ ] Tests follow consistent naming conventions
-- [ ] Code is properly formatted and commented
+- \[ ] All locators are accessible and specific and avoid strict mode violations
+- \[ ] Tests are grouped logically and follow a clear structure
+- \[ ] Assertions are meaningful and reflect user expectations
+- \[ ] Tests follow consistent naming conventions
+- \[ ] Code is properly formatted and commented

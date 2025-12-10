@@ -1,12 +1,10 @@
-# Objective
-
----
+## # Objective
 
 name: SEC-002 Edge Controls (rate limits, WAF, caps)
 about: Add rate-limit, Helmet, body-size caps, CORS; throttle abuse and reduce attack surface
-title: "[SEC-002] Edge Controls"
-labels: ["security", "platform", "backend", "P0"]
-assignees: ["peteywee"]
+title: "\[SEC-002] Edge Controls"
+labels: \["security", "platform", "backend", "P0"]
+assignees: \["peteywee"]
 
 ---
 
@@ -26,10 +24,10 @@ Protect the API with **rate-limits**, **WAF-style headers**, and **payload caps*
 
 ## Tasks
 
-- [ ] Sliding-window limit for write routes; separate bucket for reads.
-- [ ] Body size caps; return 413 on oversize.
-- [ ] Harden headers via Helmet; strict CORS domains.
-- [ ] Tests that flood requests are throttled; oversize fails 413.
+- \[ ] Sliding-window limit for write routes; separate bucket for reads.
+- \[ ] Body size caps; return 413 on oversize.
+- \[ ] Harden headers via Helmet; strict CORS domains.
+- \[ ] Tests that flood requests are throttled; oversize fails 413.
 
 ## Acceptance Criteria
 

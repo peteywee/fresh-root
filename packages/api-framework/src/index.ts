@@ -34,7 +34,7 @@
  */
 
 import { NextRequest, NextResponse } from "next/server";
-import { ZodError, ZodSchema } from "zod";
+import { ZodError } from "zod";
 
 import type { OrgRole } from "../../types/src/rbac";
 
@@ -82,7 +82,7 @@ export interface EndpointConfig<TInput = unknown, TOutput = unknown> {
   csrf?: boolean;
 
   /** Zod schema for request body/query validation */
-  input?: ZodSchema<TInput>;
+  input?: import("zod").ZodTypeAny;
 
   /** The actual handler function */
   handler: (params: {
@@ -447,7 +447,7 @@ export function createEndpoint<TInput = unknown, TOutput = unknown>(
             rawInput = await request.json().catch(() => ({}));
           }
 
-          validatedInput = inputSchema.parse(rawInput);
+          validatedInput = inputSchema.parse(rawInput) as TInput;
         } catch (error) {
           if (error instanceof ZodError) {
             const details: Record<string, string[]> = {};
@@ -629,10 +629,8 @@ export function createRateLimitedEndpoint<TOutput = unknown>(
   });
 }
 
-
 // =============================================================================
 // SDK ENHANCEMENTS
 // =============================================================================
 // Export all enhancement modules for advanced use cases
 export * from "./enhancements";
-

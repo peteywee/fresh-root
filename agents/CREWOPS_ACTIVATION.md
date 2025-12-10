@@ -1,8 +1,8 @@
 # CREWOPS Protocol Activation Framework
 
-**Version**: 1.0  
-**Status**: Active  
-**Binding**: Automatic on session start + all non-trivial prompts  
+**Version**: 1.0\
+**Status**: Active\
+**Binding**: Automatic on session start + all non-trivial prompts\
 **Owner**: TopShelfService LLC
 
 ---
@@ -97,22 +97,22 @@ Ready for Phases A→E execution.
    - What's uncertain?
    - What needs verification?
 
-2. **Phase B+C**: Hierarchical Decomposition + Worker Spawning
+1. **Phase B+C**: Hierarchical Decomposition + Worker Spawning
    - Break into dependency batches
    - Spawn 1 worker per batch
    - Assign Constitution clauses
 
-3. **Phase D**: The Action Matrix
+1. **Phase D**: The Action Matrix
    - Execute line-by-line
    - Tool calls documented
    - Observations recorded
 
-4. **Phase E**: Security Veto + Reflexion
+1. **Phase E**: Security Veto + Reflexion
    - Red Team approval
    - Competing constraints reconciled
    - What changed and why
 
-5. **Validation Gates**
+1. **Validation Gates**
    - Green gates must pass
    - DoD verified
    - Audit trail complete
@@ -212,16 +212,16 @@ Conflicts resolved in this order:
 
 Before responding to any non-trivial prompt:
 
-- [ ] Constitution loaded (Section 2)
-- [ ] Crew Cabinet assembled (Section 3)
-- [ ] Tool Authority Matrix active (Section 16.2)
-- [ ] Binding Priority Order engaged (Section 0.2)
-- [ ] Phase A context saturation initiated
-- [ ] Workers spawned with Constitutional assignments
-- [ ] Action Matrix planned (Phase D)
-- [ ] Security Red Team assigned veto (Phase E)
-- [ ] Validation gates defined (Section 10)
-- [ ] Audit trail recording started
+- \[ ] Constitution loaded (Section 2)
+- \[ ] Crew Cabinet assembled (Section 3)
+- \[ ] Tool Authority Matrix active (Section 16.2)
+- \[ ] Binding Priority Order engaged (Section 0.2)
+- \[ ] Phase A context saturation initiated
+- \[ ] Workers spawned with Constitutional assignments
+- \[ ] Action Matrix planned (Phase D)
+- \[ ] Security Red Team assigned veto (Phase E)
+- \[ ] Validation gates defined (Section 10)
+- \[ ] Audit trail recording started
 
 **If ANY box unchecked**: Fail-closed, state what's missing, do not proceed.
 
@@ -318,7 +318,7 @@ Example:
 Fallback: Activating standard tooling mode
 Override: Include CREWOPS_FORCE to re-attempt initialization
 ```
-
+>
 ---
 
 ## DEACTIVATION & RESET
@@ -333,6 +333,6 @@ Default: Always ON unless paused.
 
 ---
 
-**Last Updated**: December 4, 2025  
-**Status**: Ready for Deployment  
+**Last Updated**: December 4, 2025\
+**Status**: Ready for Deployment\
 **Binding**: Automatic activation on session bootstrap + all non-trivial prompts

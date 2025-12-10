@@ -1,7 +1,8 @@
 ---
+
 description: "Next.js + Tailwind development standards and instructions"
-applyTo: "**/*.tsx, **/*.ts, **/*.jsx, **/*.js, **/*.css"
----
+
+## applyTo: "\*\*/_.tsx, \*\*/_.ts, \*\*/_.jsx, \*\*/_.js, \*\*/\*.css"
 
 # Next.js + Tailwind Development Instructions
 

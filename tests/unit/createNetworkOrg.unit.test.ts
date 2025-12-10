@@ -11,7 +11,8 @@ function makeDocRef(path: string) {
     id: path.split("/").pop() as string,
     path,
     collection: (name: string) => ({
-      doc: (id?: string) => makeDocRef(`${path}/${name}/${id || Math.random().toString(36).slice(2)}`),
+      doc: (id?: string) =>
+        makeDocRef(`${path}/${name}/${id || Math.random().toString(36).slice(2)}`),
     }),
   };
 }
@@ -104,9 +105,9 @@ describe("createNetworkWithOrgAndVenue", () => {
 
     const db = makeDb();
 
-    await expect(
-      createNetworkWithOrgAndVenue("admin-1", payload, db as any),
-    ).rejects.toThrow("admin_form_ownership_mismatch");
+    await expect(createNetworkWithOrgAndVenue("admin-1", payload, db as any)).rejects.toThrow(
+      "admin_form_ownership_mismatch",
+    );
 
     expect(mockConsume).not.toHaveBeenCalled();
     expect(store.size).toBe(0);

@@ -1,14 +1,9 @@
 // [P0][ORG][DETAIL][API] Organization detail endpoint
+// Tags: P0, ORG, DETAIL, API, SDK_FACTORY
 
-import { z } from "zod";
 import { createOrgEndpoint } from "@fresh-schedules/api-framework";
-import { ok, serverError } from "../../_shared/validation";
-
-const UpdateOrgSchema = z.object({
-  name: z.string().min(1).max(100).optional(),
-  settings: z.record(z.any()).optional(),
-  status: z.enum(["active", "inactive"]).optional(),
-});
+import { UpdateOrgSchema } from "@fresh-schedules/types";
+import { NextResponse } from "next/server";
 
 /**
  * GET /api/organizations/[id]
@@ -25,33 +20,39 @@ export const GET = createOrgEndpoint({
         memberCount: 1,
         createdAt: Date.now(),
       };
-      return ok(org);
-    } catch {
-      return serverError("Failed to fetch organization");
+      return NextResponse.json(org);
+    } catch (error) {
+      console.error("Failed to fetch organization", { error, orgId: params.id });
+      return NextResponse.json(
+        { error: { code: "INTERNAL_ERROR", message: "Failed to fetch organization" } },
+        { status: 500 }
+      );
     }
   },
 });
 
 /**
- * PATCH /api/organizations/[id]
+ * PUT /api/organizations/[id]
  * Update organization
  */
-export const PATCH = createOrgEndpoint({
+export const PUT = createOrgEndpoint({
   roles: ["admin"],
   input: UpdateOrgSchema,
   handler: async ({ input, context, params }) => {
     try {
       const updated = {
         id: params.id,
-        ...input,
+        name: input.name,
+        settings: input.settings,
         updatedBy: context.auth?.userId,
         updatedAt: Date.now(),
       };
-      return ok(updated);
-    } catch (err) {
-      const message = err instanceof Error ? err.message : "Failed to update organization";
-      console.error("Failed to update organization", { error: message, orgId: params.id, userId: context.auth?.userId });
-      return serverError("Failed to update organization");
+      return NextResponse.json(updated);
+    } catch {
+      return NextResponse.json(
+        { error: { code: "INTERNAL_ERROR", message: "Failed to update organization" } },
+        { status: 500 }
+      );
     }
   },
 });
@@ -63,9 +64,13 @@ export const DELETE = createOrgEndpoint({
   roles: ["admin"],
   handler: async ({ context, params }) => {
     try {
-      return ok({ deleted: true, id: params.id });
-    } catch {
-      return serverError("Failed to delete organization");
+      return NextResponse.json({ deleted: true, id: params.id });
+    } catch (error) {
+      console.error("Failed to delete organization", { error, orgId: params.id });
+      return NextResponse.json(
+        { error: { code: "INTERNAL_ERROR", message: "Failed to delete organization" } },
+        { status: 500 }
+      );
     }
   },
 });

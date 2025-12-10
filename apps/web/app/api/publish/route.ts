@@ -1,16 +1,9 @@
 // [P0][PUBLISH][API] Publish endpoint
 
-import { z } from "zod";
-
 import { createOrgEndpoint } from "@fresh-schedules/api-framework";
-import { ok, serverError } from "../_shared/validation";
+import { PublishRequestSchema } from "@fresh-schedules/types";
 
-const PublishEndpointSchema = z.object({
-  scheduleId: z.string().min(1, "Schedule ID required"),
-  comment: z.string().max(500).optional(),
-  effectiveDate: z.number().optional(),
-  notifyTeam: z.boolean().default(true),
-});
+import { ok, serverError } from "../_shared/validation";
 
 /**
  * POST /api/publish
@@ -18,25 +11,20 @@ const PublishEndpointSchema = z.object({
  */
 export const POST = createOrgEndpoint({
   roles: ["manager"],
-  input: PublishEndpointSchema,
-  handler: async ({ input, context, params }) => {
+  input: PublishRequestSchema,
+  handler: async ({ input, context }) => {
     try {
-      const { scheduleId, comment, effectiveDate, notifyTeam } = input;
-
       const result = {
         success: true,
-        scheduleId,
-        message: comment ?? "Published",
-        notifyTeam,
+        scheduleId: input.scheduleId,
         publishedBy: context.auth?.userId,
-        publishedAt: Date.now(),
-        effectiveDate: effectiveDate ?? Date.now(),
+        publishedAt: input.publishAt || Date.now(),
+        notifyUsers: input.notifyUsers,
+        channels: input.channels,
       };
 
       return ok(result);
-    } catch (err) {
-      const message = err instanceof Error ? err.message : "Unexpected error";
-      console.error("Failed to publish schedule", { error: message, orgId: context.org?.orgId });
+    } catch {
       return serverError("Failed to publish schedule");
     }
   },

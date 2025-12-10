@@ -47,7 +47,7 @@ Every production component on `main` links to its standards on `dev`:
 **How Linking Works:**
 
 1. guard-main.yml (on main) enforces: "Zero Tier 0 violations"
-2. If violation detected: Error message references PHASE\_1\_TIER\_0\_FIXES.md (on dev)
+2. If violation detected: Error message references PHASE_1_TIER_0_FIXES.md (on dev)
 3. Developer checks out dev, reads documentation
 4. Implements fix per standard, creates PR to dev
 5. PR merges to main after guard-main verification
@@ -63,7 +63,7 @@ Every production component on `main` links to its standards on `dev`:
 **How Linking Works:**
 
 1. guard-main.yml (on main) enforces: "Zero Tier 1 violations"
-2. If violation detected: Error message references PHASE\_2\_TIER\_1\_FIXES.md (on dev)
+2. If violation detected: Error message references PHASE_2_TIER_1_FIXES.md (on dev)
 3. Developer implements fix following standard
 4. Creates PR to dev, passes ci-patterns validation
 5. PR merges to main via guard-main gate
@@ -79,7 +79,7 @@ Every production component on `main` links to its standards on `dev`:
 **How Linking Works:**
 
 1. Pattern validator (on main) enforces: "3/3 Complete Triads"
-2. If gap detected: Error message references SYMMETRY\_FRAMEWORK.md (on dev)
+2. If gap detected: Error message references SYMMETRY_FRAMEWORK.md (on dev)
 3. Developer adds missing layer, ensures symmetry
 4. Pattern validator confirms completion
 5. Code merged to main when all checks pass
@@ -152,14 +152,14 @@ scripts/
    - Security → `PHASE_1_TIER_0_FIXES.md`
    - Types → `PHASE_2_TIER_1_FIXES.md`
    - Architecture → `standards/SYMMETRY_FRAMEWORK.md`
-1. Implement following standard
-2. Open PR to dev
-3. CI validates (ci-patterns.yml + pr.yml)
-4. If issue, error message links back to standard
-5. Fix and retry
-6. After merge to dev, PR auto-creates to main
-7. guard-main.yml verifies production readiness
-8. If green, deployed to production (main)
+3. Implement following standard
+4. Open PR to dev
+5. CI validates (ci-patterns.yml + pr.yml)
+6. If issue, error message links back to standard
+7. Fix and retry
+8. After merge to dev, PR auto-creates to main
+9. guard-main.yml verifies production readiness
+10. If green, deployed to production (main)
 
 ### For Operations
 
@@ -191,7 +191,7 @@ scripts/
 **Tracing any component:**
 
 1. Find runtime code on main
-2. Check RUNTIME\_DOCUMENTATION\_INDEX.md for links
+2. Check RUNTIME_DOCUMENTATION_INDEX.md for links
 3. Follow link to standard on dev
 4. See exact requirement and implementation example
 5. Verify guard-main enforces it
@@ -357,7 +357,6 @@ cat docs/standards/00_STANDARDS_INDEX.md | head -20
 ---
 
 ## Quick Links (for this document)
-
 - **Production Documentation:** See [RUNTIME\_DOCUMENTATION\_INDEX.md](./RUNTIME_DOCUMENTATION_INDEX.md)
 - **Deployment Guide:** See [PRODUCTION\_DEPLOYMENT\_GUIDE.md](./PRODUCTION_DEPLOYMENT_GUIDE.md)
 - **All Standards (on dev):** Reference docs/standards/00\_STANDARDS\_INDEX.md

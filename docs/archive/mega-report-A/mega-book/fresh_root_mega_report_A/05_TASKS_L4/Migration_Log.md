@@ -1,4 +1,5 @@
 # FRESH Engine Complete Migration Roadmap
+
 **Status:** 🟢 Phase 1 & 2 COMPLETE, Score 108.0 (EXCELLENT), Ready for Phase 3 (optional)
 **Achievement:** 0 Tier 0 violations ✅ | 0 Tier 1 violations ✅ | Score exceeds 70+ target by 38 points
 **Timeline:** 3-4 hours total (Phase 1 & 2 complete, Phase 3 optional)
@@ -6,6 +7,7 @@
 ---
 
 ## Quick Start
+
 ```bash
 # 1. See Phase 1 tasks
 cat docs/PHASE_1_TIER_0_FIXES.md
@@ -26,7 +28,9 @@ git commit -m "fix: resolve Tier 0 violations"
 ---
 
 ## Three-Phase Plan
+
 ### Phase 1: Tier 0 Security ✅ COMPLETE
+
 **Duration:** 1-2 hours (COMPLETED)
 **Issues:** 13 Tier 0 violations → **0 ✅**
 
@@ -43,6 +47,7 @@ git commit -m "fix: resolve Tier 0 violations"
 ---
 
 ### Phase 2: Tier 1 Integrity ✅ COMPLETE
+
 **Duration:** 30-45 minutes (COMPLETED)
 **Issues:** 7 Tier 1 violations → **0 ✅**
 
@@ -58,6 +63,7 @@ git commit -m "fix: resolve Tier 0 violations"
 ---
 
 ### Phase 3: Tier 3 Style (Optional) ⏳ READY TO START
+
 **Duration:** 30-45 minutes
 **Issues:** 44 Tier 3 violations (optional cosmetic headers)
 
@@ -74,6 +80,7 @@ git commit -m "fix: resolve Tier 0 violations"
 ---
 
 ## Parallel Paths
+
 **Conservative (sequential):**
 
 1. Phase 1 (2 hrs) → Commit
@@ -89,6 +96,7 @@ git commit -m "fix: resolve Tier 0 violations"
 ---
 
 ## Metrics Dashboard
+
 Current State (FINAL AFTER PHASE 1 & 2):
 
 ```
@@ -111,13 +119,16 @@ Performance Metrics:
 ---
 
 ## Execution Checklist
+
 ### Pre-Phase 1 ✅ COMPLETE
+
 - \[x] Read `docs/PHASE_1_TIER_0_FIXES.md`
 - \[x] Understand security wrapper pattern
 - \[x] Understand Zod validation pattern
 - \[x] Have validator command ready: `pnpm lint:patterns`
 
 ### During Phase 1 ✅ COMPLETE
+
 - \[x] Fix 6 public endpoints with `withSecurity`
 - \[x] Fix 7 write endpoints with Zod validation
 - \[x] Run validator after each batch
@@ -125,26 +136,31 @@ Performance Metrics:
 - \[x] Commit with message: "fix: resolve Tier 0 violations" (17747ed)
 
 ### Pre-Phase 2 ✅ COMPLETE
+
 - \[x] Read `docs/PHASE_2_TIER_1_FIXES.md`
 - \[x] Review 4 schema files
 - \[x] Understand z.infer pattern
 
 ### During Phase 2 ✅ COMPLETE
+
 - \[x] Add Zod imports + type exports to 4 files
 - \[x] Verify Tier 1 → 0
 - \[x] Commit with message: "fix: resolve Tier 1 violations" (91e19db)
 
 ### Pre-Phase 3 (Optional) ⏳ READY
+
 - \[ ] Read `docs/PHASE_3_TIER3_CLEANUP.md`
 - \[ ] Decide: automated script or manual
 - \[ ] Current score: 108.0 (optional to continue for full 100%)
 
 ### During Phase 3 (Optional)
+
 - \[ ] Add headers to ~45 files
 - \[ ] Verify Tier 3 → 0 and Score ≥ 70
 - \[ ] Commit with message: "style: add standard headers"
 
 ### Final Verification ✅ COMPLETE
+
 - \[x] Run: `pnpm lint:patterns`
   - Result: Score 108.0 ✨, Tier 0/1 = 0 ✅
 - \[x] Run: `pnpm typecheck` (PASSED)
@@ -154,7 +170,9 @@ Performance Metrics:
 ---
 
 ## Command Reference
+
 ### Validator Commands
+
 ```bash
 # Check current status (enforces MIN_SCORE=70)
 pnpm lint:patterns
@@ -167,6 +185,7 @@ FRESH_PATTERNS_MIN_SCORE=50 pnpm lint:patterns
 ```
 
 ### Git Commands
+
 ```bash
 # See changed files
 git status
@@ -185,6 +204,7 @@ git log --oneline -10
 ```
 
 ### Build Verification
+
 ```bash
 # Type check
 pnpm typecheck
@@ -202,6 +222,7 @@ pnpm ci
 ---
 
 ## Key Files Reference
+
 **Standards Documentation:**
 
 - `.github/agents/OPERATING_AGREEMENT.md` — Role and obligations
@@ -228,6 +249,7 @@ pnpm ci
 ---
 
 ## Progress Tracking
+
 Use the todo list to track progress:
 
 ```bash
@@ -246,6 +268,7 @@ Expected progression:
 ---
 
 ## Support & Troubleshooting
+
 **Q: Validator returns errors after my changes?**
 
 - Run: `FRESH_PATTERNS_MIN_SCORE=0 pnpm lint:patterns --verbose`
@@ -273,6 +296,7 @@ Expected progression:
 ---
 
 ## Timeline Summary
+
 | Phase            | Duration     | Issues | Score Gain | Status                          |
 | ---------------- | ------------ | ------ | ---------- | ------------------------------- |
 | Setup            | Complete     | —      | —          | ✅ Done                         |
@@ -291,6 +315,7 @@ Expected progression:
 ---
 
 ## Next Steps
+
 **✅ COMPLETED PHASES 1 & 2 - Ready for:**
 
 1. Code review (all violations resolved)
