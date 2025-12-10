@@ -44,12 +44,11 @@ stateDiagram-v2
 
 ## Recent Commits
 ```
-214df7a refactor: rename variables for consistency across schedule and API routes
-ad2692a chore(visuals): update index and metadata
-9db1839 chore(visuals): auto-update architecture and repo state diagrams
-6a07b31 refactor: rename variables for consistency and clarity across the codebase
-5442249 chore(visuals): update index and metadata
-604e275 chore(visuals): auto-update architecture and repo state diagrams
-2b62c2e fix(config): update eslint and tsconfig to properly handle test files
-0dec425 fix
+fe60df2 feat: complete SDK factory migration and add memory preservation system
+8f5b829 feat(sdk): achieve 100% adoption and create indexable context documentation
+b5e1c84 docs(memory): add Pattern Protocol institutional knowledge
+2f16f81 feat(sdk): add comprehensive usage guide and code quality integration
+8ff5d2f chore(visuals): update index and metadata
+ea158f0 chore(visuals): auto-update architecture and repo state diagrams
+214df7a refactor: rename variables for consistency across schedule a
 ```
