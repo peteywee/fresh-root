@@ -1,6 +1,7 @@
 // [P1][TEST][INTEGRATION] /api/batch route tests
 // Tags: P1, TEST, INTEGRATION, BATCH
 
+<<<<<<< HEAD
 import { describe, it, expect, vi } from "vitest";
 // Mock firebase-admin auth and firestore to allow createOrgEndpoint checks in tests
 vi.mock("firebase-admin/auth", () => ({
@@ -81,12 +82,18 @@ vi.mock("firebase-admin", () => ({
   }),
 }));
 import { createMockRequest, createMockOrgContext } from "@fresh-schedules/api-framework/testing";
+=======
+import { describe, it, expect } from "vitest";
+import { createMockOrgContext } from "@fresh-schedules/api-framework/testing";
+import { createAuthenticatedMockRequest } from "@/test-utils/authHelpers";
+>>>>>>> origin/dev
 import { POST, processBatchItems } from "../route";
 
 describe("POST /api/batch", () => {
   function unwrapData(wrapped: any) {
     if (!wrapped) return undefined;
     if (wrapped.data && typeof wrapped.data.totalItems === "number") return wrapped.data;
+<<<<<<< HEAD
     if (wrapped.data && wrapped.data.body && typeof wrapped.data.body.totalItems === "number")
       return wrapped.data.body;
     return undefined;
@@ -123,6 +130,38 @@ describe("POST /api/batch", () => {
       params: Promise.resolve({}) as Promise<Record<string, string>>,
     });
     const wrapped = await response.json();
+=======
+    if (wrapped.data && wrapped.data.body && typeof wrapped.data.body.totalItems === "number") return wrapped.data.body;
+    return undefined;
+  }
+  it("should process items and return results", async () => {
+    const requestForProcess = createAuthenticatedMockRequest("/api/batch", {
+      method: "POST",
+      body: { items: [{ id: "1", payload: { a: 1 } }, { id: "2", payload: { a: 2 } }] },
+    });
+    const requestForPost = createAuthenticatedMockRequest("/api/batch", {
+      method: "POST",
+      body: { items: [{ id: "1", payload: { a: 1 } }, { id: "2", payload: { a: 2 } }] },
+    });
+
+    const ctx = createMockOrgContext();
+    const result = await processBatchItems([{ id: "1", payload: { a: 1 } }, { id: "2", payload: { a: 2 } }], ctx as any, requestForProcess as any);
+    const body = result;
+    // debug log for test failure investigation
+    // NOTE: Not logging to avoid unnecessary noise in test output.
+
+    expect(body).toBeDefined();
+    expect(body.totalItems).toBe(2);
+    expect(body.successCount).toBe(2);
+    expect(body.failureCount).toBe(0);
+    expect(body.results.length).toBe(2);
+    // Ensure endpoint wrapper returns the same via createEndpoint
+    const response = await POST(requestForPost as any, { params: Promise.resolve({}) as Promise<Record<string, string>> });
+    // inspect raw response
+    const wrapped = await response.json();
+    expect(wrapped).toBeDefined();
+    expect(wrapped.data).toBeDefined();
+>>>>>>> origin/dev
     const batch = unwrapData(wrapped);
     expect(batch).toBeDefined();
     expect(batch.totalItems).toBe(2);
@@ -132,6 +171,7 @@ describe("POST /api/batch", () => {
   it("should reject batch exceeding max size", async () => {
     const items = Array.from({ length: 201 }).map((_, i) => ({ id: String(i), payload: {} }));
     const ctx = createMockOrgContext();
+<<<<<<< HEAD
     await expect(
       processBatchItems(
         items,
@@ -139,6 +179,12 @@ describe("POST /api/batch", () => {
         createMockRequest("/api/batch", { method: "POST", body: { items } }) as any,
       ),
     ).rejects.toThrow(/exceeds maximum/);
+=======
+    // Use helper directly to assert the low-level error thrown
+    await expect(processBatchItems(items, ctx as any, createAuthenticatedMockRequest("/api/batch", { method: "POST", body: { items } }) as any)).rejects.toThrow(
+      /exceeds maximum/,
+    );
+>>>>>>> origin/dev
   });
 
   it("continueOnError: true should partially succeed when item fails", async () => {
@@ -147,6 +193,7 @@ describe("POST /api/batch", () => {
       { id: "2", payload: { fail: true } },
       { id: "3", payload: { a: 3 } },
     ];
+<<<<<<< HEAD
     const request = createMockRequest("/api/batch", {
       method: "POST",
       body: { items, continueOnError: true },
@@ -157,6 +204,10 @@ describe("POST /api/batch", () => {
     const response = await POST(request as any, {
       params: Promise.resolve({}) as Promise<Record<string, string>>,
     });
+=======
+    const request = createAuthenticatedMockRequest("/api/batch", { method: "POST", body: { items, continueOnError: true } });
+    const response = await POST(request as any, { params: Promise.resolve({}) as Promise<Record<string, string>> });
+>>>>>>> origin/dev
     const wrapped = await response.json();
     const batch2 = unwrapData(wrapped);
     expect(batch2.successCount).toBe(2);
@@ -169,6 +220,7 @@ describe("POST /api/batch", () => {
       { id: "2", payload: { fail: true } },
       { id: "3", payload: { a: 3 } },
     ];
+<<<<<<< HEAD
     const request = createMockRequest("/api/batch", {
       method: "POST",
       body: { items, continueOnError: false },
@@ -179,6 +231,10 @@ describe("POST /api/batch", () => {
     const response = await POST(request as any, {
       params: Promise.resolve({}) as Promise<Record<string, string>>,
     });
+=======
+    const request = createAuthenticatedMockRequest("/api/batch", { method: "POST", body: { items, continueOnError: false } });
+    const response = await POST(request as any, { params: Promise.resolve({}) as Promise<Record<string, string>> });
+>>>>>>> origin/dev
     const wrapped = await response.json();
     const batch3 = unwrapData(wrapped);
     expect(batch3.successCount).toBeLessThan(3);
@@ -189,6 +245,7 @@ describe("POST /api/batch", () => {
     const items = [
       { id: "1", payload: { a: 1 } },
       { id: "2", payload: { delay: 200 } },
+<<<<<<< HEAD
     ];
     const ctx = createMockOrgContext();
     const requestForProcess = createMockRequest("/api/batch", { method: "POST", body: { items } });
@@ -214,6 +271,23 @@ describe("POST /api/batch", () => {
     const wrapped = await response.json();
     const batch4 = unwrapData(wrapped);
     if (!batch4) console.log("wrapped timeout test:", wrapped);
+=======
+      const ctx = createMockOrgContext();
+      const requestForProcess = createAuthenticatedMockRequest("/api/batch", { method: "POST", body: { items } });
+      const requestForPost = createAuthenticatedMockRequest("/api/batch", { method: "POST", body: { items } });
+
+      // Call the helper directly — expect the slow item to time out and be marked as failed
+      const result = await processBatchItems(items, ctx as any, requestForProcess as any, { timeoutPerItem: 50 });
+      expect(result.totalItems).toBe(2);
+      expect(result.results[1].success).toBe(false);
+      expect(result.results[1].error?.message).toContain("timed out");
+
+      // Also check the endpoint wrapper returns the same shape
+      const response = await POST(requestForPost as any, { params: Promise.resolve({}) as Promise<Record<string, string>> });
+    const wrapped = await response.json();
+    const batch4 = unwrapData(wrapped);
+    expect(batch4).toBeDefined();
+>>>>>>> origin/dev
     expect(batch4.totalItems).toBe(2);
   });
 });

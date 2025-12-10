@@ -1,8 +1,16 @@
+<<<<<<< HEAD
 # PRODUCTION READINESS REPORT
 
 **Date:** November 28, 2025 | **Status:** EXCELLENT
 **Current Score:** 111.5 points (159% of 70+ requirement)
 **Phase 1 & 2:** ✅ COMPLETE | **Phase 3:** ⏳ Optional
+=======
+# NOTE: This file was moved to docs/production/PRODUCTION_READINESS.md
+
+This file has been moved to `docs/production/PRODUCTION_READINESS.md` and is maintained there as the canonical source of truth.
+
+Please update bookmarks and references to the new location.
+>>>>>>> origin/dev
 
 ---
 

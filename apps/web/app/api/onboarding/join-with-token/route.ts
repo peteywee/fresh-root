@@ -3,7 +3,11 @@
 
 import { createAuthenticatedEndpoint } from "@fresh-schedules/api-framework";
 import { JoinWithTokenSchema } from "@fresh-schedules/types";
+<<<<<<< HEAD
 import { NextResponse } from "next/server";
+=======
+import { ok, serverError } from "../../_shared/validation";
+>>>>>>> origin/dev
 
 /**
  * POST /api/onboarding/join-with-token
@@ -13,9 +17,17 @@ export const POST = createAuthenticatedEndpoint({
   input: JoinWithTokenSchema,
   handler: async ({ input, context }) => {
     try {
+<<<<<<< HEAD
       const result = {
         userId: context.auth?.userId,
         joinToken: input.joinToken,
+=======
+      const { token, invitationId } = input ?? {};
+
+      const result = {
+        userId: context.auth?.userId,
+        invitationId: invitationId ?? token,
+>>>>>>> origin/dev
         joinedAt: Date.now(),
         role: "member",
         status: "pending_approval",

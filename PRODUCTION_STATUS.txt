@@ -125,5 +125,5 @@
 ║ Release Candidate: fresh-root@1.1.0                                          ║
 ║ Status: PRODUCTION GRADE                                                     ║
 ║                                                                               ║
-║ See PRODUCTION_READINESS_SIGN_OFF.md for detailed information                ║
+║ See docs/production/PRODUCTION_READINESS_SIGN_OFF.md for detailed information                ║
 ╚═══════════════════════════════════════════════════════════════════════════════╝

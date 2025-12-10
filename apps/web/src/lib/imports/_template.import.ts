@@ -1,10 +1,12 @@
 // [P2][APP][CODE]  Template Import
 // Tags: P2, APP, CODE
 import ExcelJS from "exceljs";
+import type { Row, Cell } from "exceljs";
 import { parse } from "papaparse";
 import { z } from "zod";
 
-export const RowSchema = z.record(z.any()); // replace with concrete schema per import type
+// Use string keys and allow any values for template imports; callers should replace with concrete schema
+export const RowSchema = z.record(z.string(), z.any()); // replace with concrete schema per import type
 
 export type ImportResult<T> = {
   records: T[];
@@ -26,16 +28,16 @@ export async function importFile(file: File): Promise<ImportResult<z.infer<typeo
     const worksheet = workbook.worksheets[0];
     if (worksheet) {
       const headers: string[] = [];
-      worksheet.eachRow((row, rowNumber) => {
+      worksheet.eachRow((row: Row, rowNumber: number) => {
         if (rowNumber === 1) {
           // First row is headers
-          row.eachCell((cell) => {
+          row.eachCell((cell: Cell) => {
             headers.push(String(cell.value ?? ""));
           });
         } else {
           // Data rows
           const rowData: Record<string, unknown> = {};
-          row.eachCell((cell, colNumber) => {
+          row.eachCell((cell: Cell, colNumber: number) => {
             const header = headers[colNumber - 1];
             if (header) {
               rowData[header] = cell.value;

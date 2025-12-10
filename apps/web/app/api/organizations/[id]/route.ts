@@ -1,9 +1,16 @@
 // [P0][ORG][DETAIL][API] Organization detail endpoint
 // Tags: P0, ORG, DETAIL, API, SDK_FACTORY
 
+import { z } from "zod";
 import { createOrgEndpoint } from "@fresh-schedules/api-framework";
 import { UpdateOrganizationSchema } from "@fresh-schedules/types";
 import { NextResponse } from "next/server";
+
+const UpdateOrgSchema = z.object({
+  name: z.string().min(1).max(100).optional(),
+  settings: z.record(z.any()).optional(),
+  status: z.enum(["active", "inactive"]).optional(),
+});
 
 /**
  * GET /api/organizations/[id]
@@ -37,11 +44,16 @@ export const GET = createOrgEndpoint({
  */
 export const PUT = createOrgEndpoint({
   roles: ["admin"],
+<<<<<<< HEAD
   input: UpdateOrganizationSchema,
+=======
+  input: UpdateOrgSchema,
+>>>>>>> origin/dev
   handler: async ({ input, context, params }) => {
     try {
       const updated = {
         id: params.id,
+<<<<<<< HEAD
         name: input.name,
         settings: input.settings,
         updatedBy: context.auth?.userId,
@@ -59,13 +71,23 @@ export const PUT = createOrgEndpoint({
         { error: { code: "INTERNAL_ERROR", message } },
         { status: 500 }
       );
+=======
+        ...input,
+        updatedBy: context.auth?.userId,
+        updatedAt: Date.now(),
+      };
+      return ok(updated);
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "Failed to update organization";
+      console.error("Failed to update organization", { error: message, orgId: params.id, userId: context.auth?.userId });
+      return serverError("Failed to update organization");
+>>>>>>> origin/dev
     }
   },
 });
 
 /**
  * DELETE /api/organizations/[id]
- * Delete organization
  */
 export const DELETE = createOrgEndpoint({
   roles: ["admin"],

@@ -2,14 +2,20 @@
 // Tags: P0, ONBOARDING, ORG, API, SDK_FACTORY
 
 import { createAuthenticatedEndpoint } from "@fresh-schedules/api-framework";
+<<<<<<< HEAD
 import { CreateOrgOnboardingSchema } from "@fresh-schedules/types";
 import { NextResponse } from "next/server";
+=======
+import { CreateNetworkOrgPayloadSchema } from "@fresh-schedules/types";
+import { ok, serverError } from "../../_shared/validation";
+>>>>>>> origin/dev
 
 /**
  * POST /api/onboarding/create-network-org
  * Create organization network
  */
 export const POST = createAuthenticatedEndpoint({
+<<<<<<< HEAD
   input: CreateOrgOnboardingSchema,
   handler: async ({ input, context }) => {
     try {
@@ -19,10 +25,22 @@ export const POST = createAuthenticatedEndpoint({
         venueName: input.venueName,
         location: input.location,
         formToken: input.formToken,
+=======
+  input: CreateNetworkOrgPayloadSchema,
+  handler: async ({ input, context }) => {
+    try {
+      const { basics } = input;
+
+      const org = {
+        id: `org-${Date.now()}`,
+        name: basics.orgName,
+        type: "standard",
+>>>>>>> origin/dev
         ownerId: context.auth?.userId,
         createdAt: Date.now(),
         status: "active",
       };
+<<<<<<< HEAD
       return NextResponse.json(org);
     } catch (err) {
       const message = err instanceof Error ? err.message : "Failed to create organization";
@@ -34,6 +52,13 @@ export const POST = createAuthenticatedEndpoint({
         { error: { code: "INTERNAL_ERROR", message } },
         { status: 500 }
       );
+=======
+      return ok(org);
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "Failed to create organization network";
+      console.error("Failed to create organization network", { error: message, userId: context.auth?.userId });
+      return serverError("Failed to create organization network");
+>>>>>>> origin/dev
     }
   },
 });
