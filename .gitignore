@@ -49,6 +49,11 @@ scripts-local/
 TODO.md
 *.log
 
+# Temp directories
+docs/temp/*/extracted/
+docs/temp/*/*.zip
+!docs/temp/*/.gitkeep
+
 # TypeScript incremental and tsbuildinfo files
 **/tsconfig.tsbuildinfo
 
