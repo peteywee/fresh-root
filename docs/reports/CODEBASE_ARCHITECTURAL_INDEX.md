@@ -1,18 +1,17 @@
 # Codebase Architectural Index - Fresh Root
 
-**Generated:** November 30, 2025
-**Version:** 1.1.0
-**Status:** Production Ready
-**Repository:** fresh-root
+**Generated:** November 30, 2025 **Version:** 1.1.0 **Status:** Production Ready **Repository:**
+fresh-root
 
 ---
 
 ## Executive Summary
 
-Fresh Root is a production-grade Progressive Web App (PWA) for enterprise staff scheduling, built with Next.js 16, Firebase, and a modern monorepo architecture. The system demonstrates enterprise-level security, comprehensive observability, and scalable multi-tenant design.
+Fresh Root is a production-grade Progressive Web App (PWA) for enterprise staff scheduling, built
+with Next.js 16, Firebase, and a modern monorepo architecture. The system demonstrates
+enterprise-level security, comprehensive observability, and scalable multi-tenant design.
 
-**Production Readiness:** ✅ APPROVED
-**Quality Score:** 111.5/100 (59% above threshold)
+**Production Readiness:** ✅ APPROVED **Quality Score:** 111.5/100 (59% above threshold)
 **Deployment Status:** Ready for multi-instance production deployment
 
 ---
@@ -298,9 +297,8 @@ This ensures runtime validation and compile-time type safety are synchronized.
 
 ### API Routes Summary
 
-**Total API Routes:** 22+ endpoints
-**Route Categories:** 12 functional areas
-**HTTP Methods:** GET, POST, PUT, PATCH, DELETE
+**Total API Routes:** 22+ endpoints **Route Categories:** 12 functional areas **HTTP Methods:** GET,
+POST, PUT, PATCH, DELETE
 
 ### Route Categories
 
@@ -443,10 +441,8 @@ span.end();
 
 ### Test Coverage
 
-**Test Files:** 6
-**Test Framework:** Vitest 4.0.14
-**Pass Rate:** 100% (6/6 passing)
-**Test Duration:** 2.16s
+**Test Files:** 6 **Test Framework:** Vitest 4.0.14 **Pass Rate:** 100% (6/6 passing) **Test
+Duration:** 2.16s
 
 #### Test Suites
 
@@ -476,9 +472,8 @@ export default defineConfig({
 
 ### Linting Configuration
 
-**Linter:** ESLint 9.39.1 (flat config)
-**Parser:** @typescript-eslint/parser
-**Plugins:** TypeScript, React, React Hooks, Import
+**Linter:** ESLint 9.39.1 (flat config) **Parser:** @typescript-eslint/parser **Plugins:**
+TypeScript, React, React Hooks, Import
 
 #### Lint Rules
 
@@ -497,8 +492,7 @@ Status: ✅ PASSING (0 blocking errors)
 
 ### CI/CD Pipeline
 
-**Platform:** GitHub Actions
-**Workflows:** 8 automated pipelines
+**Platform:** GitHub Actions **Workflows:** 8 automated pipelines
 
 #### Workflows
 
@@ -563,9 +557,8 @@ Status: ✅ PASSING (0 blocking errors)
 
 ### Strategic Audit TODOs
 
-**Source:** `STRATEGIC_AUDIT_TODOS.md`
-**Generated:** November 29, 2025
-**Overall Grade:** A- (93/100)
+**Source:** `STRATEGIC_AUDIT_TODOS.md` **Generated:** November 29, 2025 **Overall Grade:** A-
+(93/100)
 
 #### Critical TODOs (Week 1 - Blocking Multi-Instance Production)
 
@@ -653,8 +646,8 @@ Status: ✅ PASSING (0 blocking errors)
 
 ### Rate Limiting Implementation
 
-**Source:** `RATE_LIMIT_IMPLEMENTATION.md`
-**Status:** ✅ FULLY IMPLEMENTED (in-memory), ⚠️ Redis pending
+**Source:** `RATE_LIMIT_IMPLEMENTATION.md` **Status:** ✅ FULLY IMPLEMENTED (in-memory), ⚠️ Redis
+pending
 
 #### Current State
 
@@ -710,9 +703,8 @@ Status: ✅ PASSING (0 blocking errors)
 
 ### Firestore Security Rules
 
-**File:** `/home/patrick/fresh-root/firestore.rules`
-**Version:** v2 (rules_version = '2')
-**Tags:** P1, INTEGRITY, FIRESTORE, RULES, SECURITY, RBAC, TENANT_ISOLATION
+**File:** `/home/patrick/fresh-root/firestore.rules` **Version:** v2 (rules_version = '2') **Tags:**
+P1, INTEGRITY, FIRESTORE, RULES, SECURITY, RBAC, TENANT_ISOLATION
 
 #### Security Model
 
@@ -807,9 +799,8 @@ const securityHeaders = [
 
 ### Build Configuration
 
-**Output:** Standalone (Docker-ready)
-**Build Tool:** Next.js (Webpack mode)
-**Target:** Node.js 20.19.5 LTS
+**Output:** Standalone (Docker-ready) **Build Tool:** Next.js (Webpack mode) **Target:** Node.js
+20.19.5 LTS
 
 #### Next.js Configuration
 
@@ -910,9 +901,7 @@ export const env = EnvSchema.parse(process.env);
 
 ### Package Management
 
-**Manager:** pnpm 9.12.1
-**Workspace:** pnpm workspaces
-**Build Orchestration:** Turbo 2.6.0
+**Manager:** pnpm 9.12.1 **Workspace:** pnpm workspaces **Build Orchestration:** Turbo 2.6.0
 
 #### Workspace Packages
 
@@ -957,8 +946,7 @@ export const env = EnvSchema.parse(process.env);
 
 #### @packages/types
 
-**Exports:** 225+ types across 26 files
-**Pattern:** Zod-first schema → type inference
+**Exports:** 225+ types across 26 files **Pattern:** Zod-first schema → type inference
 
 **Key Exports:**
 
@@ -969,15 +957,12 @@ export const env = EnvSchema.parse(process.env);
 
 #### @packages/ui
 
-**Purpose:** Shared React components
-**Styling:** TailwindCSS
-**Icons:** Lucide React
+**Purpose:** Shared React components **Styling:** TailwindCSS **Icons:** Lucide React
 
 #### @packages/env
 
-**Purpose:** Environment validation
-**Schema:** Zod-based
-**Exports:** `env` object, production validators
+**Purpose:** Environment validation **Schema:** Zod-based **Exports:** `env` object, production
+validators
 
 ---
 
@@ -985,8 +970,7 @@ export const env = EnvSchema.parse(process.env);
 
 ### Documentation Structure
 
-**Total Files:** 185+ markdown files
-**Location:** `/home/patrick/fresh-root/docs/`
+**Total Files:** 185+ markdown files **Location:** `/home/patrick/fresh-root/docs/`
 
 #### Key Documentation Areas
 
@@ -1079,10 +1063,8 @@ pnpm pulse                  # System health check
 
 ### Git Workflow
 
-**Main Branch:** `main` (protected)
-**Dev Branch:** `dev` (protected)
-**Feature Branches:** `feature/*`, `fix/*`
-**Current Branch:** `feature/rate-limit-production-validation`
+**Main Branch:** `main` (protected) **Dev Branch:** `dev` (protected) **Feature Branches:**
+`feature/*`, `fix/*` **Current Branch:** `feature/rate-limit-production-validation`
 
 #### Branch Protection
 
@@ -1103,9 +1085,7 @@ pnpm pulse                  # System health check
 
 ### Error Tracking
 
-**Provider:** Sentry 10.25.0
-**Integration:** Next.js automatic instrumentation
-**Features:**
+**Provider:** Sentry 10.25.0 **Integration:** Next.js automatic instrumentation **Features:**
 
 - Error aggregation
 - Stack trace capture
@@ -1114,10 +1094,8 @@ pnpm pulse                  # System health check
 
 ### Distributed Tracing
 
-**Provider:** OpenTelemetry 0.207.0
-**Status:** 🟡 Partial (implementation in progress)
-**Exporters:** OTLP HTTP
-**Instrumentation:**
+**Provider:** OpenTelemetry 0.207.0 **Status:** 🟡 Partial (implementation in progress)
+**Exporters:** OTLP HTTP **Instrumentation:**
 
 - HTTP requests
 - Database queries
@@ -1126,16 +1104,12 @@ pnpm pulse                  # System health check
 
 ### Logging
 
-**Format:** Structured JSON
-**Levels:** error, warn, info, debug
-**Destination:** stdout (container logs)
-**Future:** Centralized log aggregation (TODO-006)
+**Format:** Structured JSON **Levels:** error, warn, info, debug **Destination:** stdout (container
+logs) **Future:** Centralized log aggregation (TODO-006)
 
 ### Metrics
 
-**Endpoint:** `GET /api/metrics`
-**Format:** Prometheus-compatible
-**Metrics:**
+**Endpoint:** `GET /api/metrics` **Format:** Prometheus-compatible **Metrics:**
 
 - Request count
 - Response time
@@ -1255,9 +1229,7 @@ pnpm pulse                  # System health check
 
 ## 17. Contact & Support
 
-**Repository:** fresh-root v1.1.0
-**Maintainer:** Patrick Craven
-**License:** See LICENSE file
+**Repository:** fresh-root v1.1.0 **Maintainer:** Patrick Craven **License:** See LICENSE file
 **Last Updated:** November 30, 2025
 
 ---

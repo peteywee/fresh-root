@@ -1,7 +1,8 @@
 # Phase 2 – Schema Crosswalk (13.5 → 14 → 15)
 
 **Purpose**\
-Map Firestore schemas and domain types from **legacy** designs to the **v15 canonical schema** so data migration can be automated and safe.
+Map Firestore schemas and domain types from **legacy** designs to the **v15 canonical schema** so
+data migration can be automated and safe.
 
 ---
 

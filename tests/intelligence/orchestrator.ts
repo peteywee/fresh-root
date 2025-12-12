@@ -5,16 +5,17 @@
  * Master control system for all intelligent testing features
  */
 
-import { autoGenerateAllTests } from "./auto-test-generator";
-import { performanceProfiler } from "./performance-profiler";
-import { autoGenerateAPIContracts } from "./contract-testing";
-import { runMutationTesting } from "./mutation-testing";
-import { selfHealingFramework } from "./self-healing-tests";
-import { ChaosTestRunner } from "./chaos-engineering";
-import { testAnalytics } from "./test-analytics";
-import { cicd } from "./ci-cd-integration";
 import { execSync } from "child_process";
 import * as fs from "fs";
+
+import { autoGenerateAllTests } from "./auto-test-generator";
+import { ChaosTestRunner } from "./chaos-engineering";
+import { cicd } from "./ci-cd-integration";
+import { autoGenerateAPIContracts } from "./contract-testing";
+import { runMutationTesting } from "./mutation-testing";
+import { performanceProfiler } from "./performance-profiler";
+import { selfHealingFramework } from "./self-healing-tests";
+import { testAnalytics } from "./test-analytics";
 
 interface OrchestratorConfig {
   autoGenerate: boolean;

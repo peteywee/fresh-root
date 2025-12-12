@@ -8,14 +8,16 @@
 **Version**: 1.0.0  
 **Package**: `@fresh-schedules/api-framework`  
 **Current Adoption**: ✅ 100% - All routes migrated to SDK factory pattern  
-**Context Callable**: Use keywords `api-framework`, `sdk-factory`, `endpoint-creation`, `middleware` for AI retrieval
+**Context Callable**: Use keywords `api-framework`, `sdk-factory`, `endpoint-creation`, `middleware`
+for AI retrieval
 
 ## 🔍 Quick Context Lookup
 
-**For AI Agents**: This document provides complete SDK factory patterns. Use these keywords for specific sections:
+**For AI Agents**: This document provides complete SDK factory patterns. Use these keywords for
+specific sections:
 
 - `endpoint-types` → 5 factory functions with examples
-- `validation-patterns` → Zod input validation with error handling  
+- `validation-patterns` → Zod input validation with error handling
 - `auth-patterns` → RBAC, session management, org context
 - `testing-patterns` → Mock utilities and test structure
 - `migration-patterns` → Legacy withSecurity → SDK factory conversion
@@ -99,7 +101,7 @@ export const GET = createOrgEndpoint({
 
 Every endpoint gets this pipeline automatically:
 
-```
+```text
 1. Rate Limiting (Redis/in-memory)
    ↓
 2. Authentication (Firebase session cookie)
@@ -234,7 +236,7 @@ export interface EndpointConfig<TInput, TOutput> {
 // Conservative (sensitive operations)
 rateLimit: { maxRequests: 10, windowMs: 60000 }
 
-// Standard (write operations)  
+// Standard (write operations)
 rateLimit: { maxRequests: 50, windowMs: 60000 }
 
 // Generous (read operations)
@@ -245,7 +247,7 @@ rateLimit: { maxRequests: 100, windowMs: 60000 }
 
 ```typescript
 // From lowest to highest permissions
-staff < corporate < scheduler < manager < admin < org_owner
+staff < corporate < scheduler < manager < admin < org_owner;
 ```
 
 If you require `manager`, users with `admin` or `org_owner` also pass.
@@ -378,10 +380,7 @@ export const POST = createOrgEndpoint({
         userId: context.auth?.userId,
         orgId: context.org?.orgId,
       });
-      return NextResponse.json(
-        { error: { code: "INTERNAL_ERROR", message } },
-        { status: 500 }
-      );
+      return NextResponse.json({ error: { code: "INTERNAL_ERROR", message } }, { status: 500 });
     }
   },
 });
@@ -464,15 +463,15 @@ Add to `apps/web/eslint.config.mjs`:
 rules: {
   // SAFEGUARD: SDK factory patterns don't always need await
   "@typescript-eslint/require-await": "warn",
-  
+
   // SAFEGUARD: React event handlers with promises
   "@typescript-eslint/no-misused-promises": "warn",
-  
+
   // SAFEGUARD: Firebase SDK returns untyped data
   "@typescript-eslint/no-unsafe-assignment": "warn",
   "@typescript-eslint/no-unsafe-member-access": "warn",
   "@typescript-eslint/no-unsafe-call": "warn",
-  
+
   // SAFEGUARD: Unused parameters in handlers
   "@typescript-eslint/no-unused-vars": [
     "warn",
@@ -518,9 +517,9 @@ export const POST = withSecurity(
       }
       // Business logic
       return NextResponse.json({ success: true });
-    })
+    }),
   ),
-  { requireAuth: true, maxRequests: 50, windowMs: 60_000 }
+  { requireAuth: true, maxRequests: 50, windowMs: 60_000 },
 );
 ```
 
@@ -544,7 +543,7 @@ export const POST = createOrgEndpoint({
 ### Migration Benefits
 
 - **90% less boilerplate** code
-- **Automatic validation** with better error messages  
+- **Automatic validation** with better error messages
 - **Type-safe context** with IntelliSense
 - **Consistent error handling** across all routes
 - **Built-in audit logging** and request tracing
@@ -563,9 +562,9 @@ import { NextResponse } from "next/server";
 
 export const GET = createPublicEndpoint({
   handler: async () => {
-    return NextResponse.json({ 
-      status: "healthy", 
-      timestamp: Date.now() 
+    return NextResponse.json({
+      status: "healthy",
+      timestamp: Date.now(),
     });
   },
 });
@@ -583,9 +582,7 @@ export const GET = createOrgEndpoint({
     const { getFirestore } = await import("firebase-admin/firestore");
     const db = getFirestore();
 
-    const snapshot = await db
-      .collection(`orgs/${context.org!.orgId}/schedules`)
-      .get();
+    const snapshot = await db.collection(`orgs/${context.org!.orgId}/schedules`).get();
 
     const schedules = snapshot.docs.map((doc) => ({
       id: doc.id,
@@ -621,14 +618,15 @@ export const POST = createOrgEndpoint({
       updatedAt: Date.now(),
     };
 
-    const docRef = await db
-      .collection(`orgs/${context.org!.orgId}/schedules`)
-      .add(schedule);
+    const docRef = await db.collection(`orgs/${context.org!.orgId}/schedules`).add(schedule);
 
-    return NextResponse.json({
-      id: docRef.id,
-      ...schedule,
-    }, { status: 201 });
+    return NextResponse.json(
+      {
+        id: docRef.id,
+        ...schedule,
+      },
+      { status: 201 },
+    );
   },
 });
 ```
@@ -649,7 +647,7 @@ export const PATCH = createOrgEndpoint({
     const db = getFirestore();
 
     const docRef = db.doc(`orgs/${context.org!.orgId}/schedules/${params.id}`);
-    
+
     await docRef.update({
       ...input,
       updatedAt: Date.now(),
@@ -759,9 +757,9 @@ handler: async ({ context }) => {
     // Business logic
     return NextResponse.json({ success: true });
   } catch (err) {
-    console.error("Handler failed", { 
+    console.error("Handler failed", {
       error: err instanceof Error ? err.message : "Unknown error",
-      orgId: context.org?.orgId 
+      orgId: context.org?.orgId
     });
     return NextResponse.json(
       { error: { code: "INTERNAL_ERROR", message: "Operation failed" } },
@@ -796,10 +794,11 @@ handler: async ({ request: _request, input, context: _context }) => {
 
 ## Summary
 
-The Fresh Schedules API Framework provides a **declarative, type-safe way** to build API endpoints with:
+The Fresh Schedules API Framework provides a **declarative, type-safe way** to build API endpoints
+with:
 
 - ✅ **Zero boilerplate** - All middleware handled automatically
-- ✅ **Type safety** - Full TypeScript support with IntelliSense  
+- ✅ **Type safety** - Full TypeScript support with IntelliSense
 - ✅ **Security by default** - Auth, RBAC, CSRF, rate limiting
 - ✅ **Consistent errors** - Standardized error handling and logging
 - ✅ **Easy testing** - Comprehensive mocking utilities
@@ -807,4 +806,5 @@ The Fresh Schedules API Framework provides a **declarative, type-safe way** to b
 
 **Migration complete**: Legacy `withSecurity` pattern → SDK Factory pattern.
 
-For questions or improvements, check the source code at `packages/api-framework/src/index.ts` or create an issue.
+For questions or improvements, check the source code at `packages/api-framework/src/index.ts` or
+create an issue.

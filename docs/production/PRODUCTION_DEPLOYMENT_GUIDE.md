@@ -99,8 +99,7 @@ On GitHub:
 - ESLint: 0 blocking errors ✅
 - Build: SUCCESS ✅
 
-This PR contains all production-ready code.
-guard-main.yml will run final verification before merge.
+This PR contains all production-ready code. guard-main.yml will run final verification before merge.
 ```
 
 ### Step 4: guard-main.yml Executes
@@ -170,7 +169,8 @@ FRESH_PATTERNS_MIN_SCORE=90 pnpm lint:patterns
 
 On main branch after successful deployment:
 
-1. Verify [PRODUCTION_READINESS_EXECUTIVE_SUMMARY.md](./PRODUCTION_READINESS_EXECUTIVE_SUMMARY.md) is current
+1. Verify [PRODUCTION_READINESS_EXECUTIVE_SUMMARY.md](./PRODUCTION_READINESS_EXECUTIVE_SUMMARY.md)
+   is current
 2. Check [RUNTIME_DOCUMENTATION_INDEX.md](./RUNTIME_DOCUMENTATION_INDEX.md) links are valid
 3. Confirm CI workflows visible in `.github/workflows/`
 
@@ -229,15 +229,19 @@ git push origin main --force-with-lease
 
 ### For Operations Team
 
-- **Deployment Status:** [PRODUCTION_READINESS_EXECUTIVE_SUMMARY.md](./PRODUCTION_READINESS_EXECUTIVE_SUMMARY.md)
+- **Deployment Status:**
+  [PRODUCTION_READINESS_EXECUTIVE_SUMMARY.md](./PRODUCTION_READINESS_EXECUTIVE_SUMMARY.md)
 - **Full Analysis:** [PRODUCTION_READINESS.md](./PRODUCTION_READINESS.md)
 - **CI/CD Logs:** `.github/workflows/guard-main.yml` (GitHub Actions)
 
 ### For Development Team
 
-- **Standards Reference:** See dev branch [docs/standards/00_STANDARDS_INDEX.md](../../dev/docs/standards/00_STANDARDS_INDEX.md)
-- **Implementation Guides:** See dev branch [docs/PHASE\_\*.md](../../dev/docs/PHASE_1_TIER_0_FIXES.md)
-- **Architecture:** See dev branch [docs/standards/SYMMETRY_FRAMEWORK.md](../../dev/docs/standards/SYMMETRY_FRAMEWORK.md)
+- **Standards Reference:** See dev branch
+  [docs/standards/00_STANDARDS_INDEX.md](../../dev/docs/standards/00_STANDARDS_INDEX.md)
+- **Implementation Guides:** See dev branch
+  [docs/PHASE\_\*.md](../../dev/docs/PHASE_1_TIER_0_FIXES.md)
+- **Architecture:** See dev branch
+  [docs/standards/SYMMETRY_FRAMEWORK.md](../../dev/docs/standards/SYMMETRY_FRAMEWORK.md)
 
 ### For Operators
 
@@ -294,7 +298,8 @@ pnpm lint:patterns     # Verify 90+ score
 **If unsure about deployment status:**
 
 - Check [RUNTIME_DOCUMENTATION_INDEX.md](./RUNTIME_DOCUMENTATION_INDEX.md)
-- See metrics in [PRODUCTION_READINESS_EXECUTIVE_SUMMARY.md](./PRODUCTION_READINESS_EXECUTIVE_SUMMARY.md)
+- See metrics in
+  [PRODUCTION_READINESS_EXECUTIVE_SUMMARY.md](./PRODUCTION_READINESS_EXECUTIVE_SUMMARY.md)
 - Verify guard-main logs on GitHub
 
 ---

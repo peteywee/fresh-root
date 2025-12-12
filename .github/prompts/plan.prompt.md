@@ -1,6 +1,7 @@
 ---
 agent: "agent"
-description: "Create a structured implementation plan with TODO list, dependencies, and validation criteria"
+description:
+  "Create a structured implementation plan with TODO list, dependencies, and validation criteria"
 tools:
   [
     "changes",
@@ -25,6 +26,7 @@ Create a comprehensive implementation plan for: `${input:Goal}`
 ### 1. Context Analysis
 
 First, understand the request:
+
 - What is the goal?
 - What are the constraints?
 - What files/patterns are involved?
@@ -40,6 +42,7 @@ ID | Title (3-7 words) | Description | Status | Dependencies
 ```
 
 Rules:
+
 - Atomic, actionable tasks
 - Clear acceptance criteria per task
 - Dependencies explicitly mapped
@@ -48,6 +51,7 @@ Rules:
 ### 3. Dependency Graph
 
 Map the critical path:
+
 ```
 Task 1 → Task 2 → Task 3
                 ↘ Task 4
@@ -56,6 +60,7 @@ Task 1 → Task 2 → Task 3
 ### 4. Risk Assessment
 
 Identify risks:
+
 - What could fail?
 - What assumptions are being made?
 - What needs verification?
@@ -63,6 +68,7 @@ Identify risks:
 ### 5. Validation Plan
 
 Define success criteria:
+
 - TypeScript passes
 - Tests pass
 - Pattern validator ≥90
@@ -74,27 +80,33 @@ Define success criteria:
 # Implementation Plan: [Goal]
 
 ## Context
+
 [Summary of current state and goal]
 
 ## TODO List
-| ID | Task | Dependencies | Status |
-|----|------|--------------|--------|
-| 1 | ... | None | not-started |
-| 2 | ... | 1 | not-started |
+
+| ID  | Task | Dependencies | Status      |
+| --- | ---- | ------------ | ----------- |
+| 1   | ...  | None         | not-started |
+| 2   | ...  | 1            | not-started |
 
 ## Dependency Graph
+
 [Visual representation]
 
 ## Risks & Mitigations
+
 - Risk 1: [Description] → Mitigation: [Plan]
 
 ## Validation Criteria
+
 - [ ] TypeScript: 0 errors
 - [ ] Tests: All pass
 - [ ] Pattern score: ≥90
 - [ ] [Specific criteria]
 
 ## Estimated Time
+
 [X] hours/minutes
 ```
 

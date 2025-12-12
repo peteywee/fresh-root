@@ -237,9 +237,8 @@ Each worker should track:
 ```markdown
 ## Worker [ID]: [Task Name]
 
-**Files**: [List of files to fix]
-**Error Count**: [Number of errors to fix]
-**Status**: 🔄 IN PROGRESS
+**Files**: [List of files to fix] **Error Count**: [Number of errors to fix] **Status**: 🔄 IN
+PROGRESS
 
 ### Tasks
 
@@ -251,8 +250,7 @@ Each worker should track:
 
 **Notes**: [Any blockers or changes needed]
 
-**Time Spent**: [Actual execution time]
-**Completed At**: [Timestamp]
+**Time Spent**: [Actual execution time] **Completed At**: [Timestamp]
 ```
 
 ---

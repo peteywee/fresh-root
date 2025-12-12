@@ -1,74 +1,34 @@
-// Core authentication middleware
-export async function requireSession(
-req: AuthenticatedRequest,
-handler: (req: AuthenticatedRequest) => Promise<NextResponse>,
-): Promise<NextResponse> {
-// MFA enforcement for managers/admins
-export async function require2FAForManagers(
-req: AuthenticatedRequest,
-handler: (req: AuthenticatedRequest) => Promise<NextResponse>,
-): Promise<NextResponse> {
-// Abstract rate limiter interface
-export interface RateLimiter {
+// Core authentication middleware export async function requireSession( req: AuthenticatedRequest,
+handler: (req: AuthenticatedRequest) => Promise<NextResponse>, ): Promise<NextResponse> { // MFA
+enforcement for managers/admins export async function require2FAForManagers( req:
+AuthenticatedRequest, handler: (req: AuthenticatedRequest) => Promise<NextResponse>, ):
+Promise<NextResponse> { // Abstract rate limiter interface export interface RateLimiter {
 
 ### 1.1 Directory Structure
 
-}
-// In-memory implementation (single-instance only)
-class InMemoryRateLimiter implements RateLimiter {
-// Redis implementation (multi-instance safe)
-class RedisRateLimiter implements RateLimiter {
-private readonly redis: Redis;
+} // In-memory implementation (single-instance only) class InMemoryRateLimiter implements
+RateLimiter { // Redis implementation (multi-instance safe) class RedisRateLimiter implements
+RateLimiter { private readonly redis: Redis;
 
-public async consume(key: string, cost: number = 1): Promise<RateLimitResult> {
-const bucketKey = this.buildKey(key, this.options.windowSeconds);
-const count = await this.redis.incrby(bucketKey, cost);
-// Factory: auto-select based on environment
-export function getRateLimiter(options: RateLimitOptions): RateLimiter {
-export function withRateLimit(
-handler: (req: NextRequest) => Promise<NextResponse>,
-config: RateLimitConfig,
-): (req: NextRequest) => Promise<NextResponse> {
-// Schema definition (source of truth)
-export const OrganizationSchema = z.object({
-id: z.string(),
-name: z.string().min(1, "Organization name required"),
-export const ScheduleSchema = z.object({
-id: z.string(),
-export const ShiftSchema = z.object({
-id: z.string(),
-scheduleId: z.string(),
-// RBAC role hierarchy
-export const RbacRoleSchema = z.enum(\[
-// Firestore security rules
-rules_version = '2';
-service cloud.firestore {
-// Structured logging with context
-export class Logger {
-private context: Record\<string, unknown>;
-{
-"name": "fresh-root",
-"version": "1.1.0",
-{
-"name": "@apps/web",
-"version": "0.1.0",
-{
-"compilerOptions": {
-"target": "ES2022",
-// Node environment
-import { z } from "zod";
-const config = {
-output: "standalone",
-// Session creation flow
-async function createSession(idToken: string): Promise<string> {
-const auth = getFirebaseAdminAuth();
+public async consume(key: string, cost: number = 1): Promise<RateLimitResult> { const bucketKey =
+this.buildKey(key, this.options.windowSeconds); const count = await this.redis.incrby(bucketKey,
+cost); // Factory: auto-select based on environment export function getRateLimiter(options:
+RateLimitOptions): RateLimiter { export function withRateLimit( handler: (req: NextRequest) =>
+Promise<NextResponse>, config: RateLimitConfig, ): (req: NextRequest) => Promise<NextResponse> { //
+Schema definition (source of truth) export const OrganizationSchema = z.object({ id: z.string(),
+name: z.string().min(1, "Organization name required"), export const ScheduleSchema = z.object({ id:
+z.string(), export const ShiftSchema = z.object({ id: z.string(), scheduleId: z.string(), // RBAC
+role hierarchy export const RbacRoleSchema = z.enum(\[ // Firestore security rules rules_version =
+'2'; service cloud.firestore { // Structured logging with context export class Logger { private
+context: Record\<string, unknown>; { "name": "fresh-root", "version": "1.1.0", { "name":
+"@apps/web", "version": "0.1.0", { "compilerOptions": { "target": "ES2022", // Node environment
+import { z } from "zod"; const config = { output: "standalone", // Session creation flow async
+function createSession(idToken: string): Promise<string> { const auth = getFirebaseAdminAuth();
 
 ## Architectural Review Panel - Input Document
 
-**Project:** Fresh Root - Multi-Tenant SaaS Scheduling Platform
-**Version:** 1.1.0
-**Generated:** November 30, 2025
-**Status:** Production Ready (Single Instance) / Multi-Instance Preparation
+**Project:** Fresh Root - Multi-Tenant SaaS Scheduling Platform **Version:** 1.1.0 **Generated:**
+November 30, 2025 **Status:** Production Ready (Single Instance) / Multi-Instance Preparation
 **Codebase Size:** ~500 source files, 248 TypeScript files, 55 React components
 
 ---
@@ -798,12 +758,14 @@ const config = {
 
 ### 2.1 System Architecture Overview
 
-Fresh Root is a **multi-tenant SaaS scheduling platform** built using a modern monorepo architecture with Next.js 16, Firebase, and a comprehensive security model.
+Fresh Root is a **multi-tenant SaaS scheduling platform** built using a modern monorepo architecture
+with Next.js 16, Firebase, and a comprehensive security model.
 
 **Core Architecture Patterns:**
 
 - **Next.js App Router:** Server-side rendering with API routes
-- **Firebase Ecosystem:** Firestore (database), Firebase Auth (authentication), Cloud Functions (serverless)
+- **Firebase Ecosystem:** Firestore (database), Firebase Auth (authentication), Cloud Functions
+  (serverless)
 - **Multi-Tenant Isolation:** Network-scoped data isolation with RBAC
 - **Monorepo Structure:** pnpm workspaces with Turbo build orchestration
 - **Session-Based Auth:** Custom session cookies with MFA support
@@ -933,7 +895,8 @@ Fresh Root implements **hierarchical multi-tenancy** using network isolation:
 
 **Session Cookie Approach (Custom Implementation):**
 
-Fresh Root uses **server-side session cookies** instead of client-side JWT tokens for enhanced security:
+Fresh Root uses **server-side session cookies** instead of client-side JWT tokens for enhanced
+security:
 
 ```typescript
 // Session creation flow
@@ -1154,12 +1117,9 @@ function hasAnyRole(roles) {
 
 ##### 8. zones
 
-X-Frame-Options: DENY
-X-Content-Type-Options: nosniff
-Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
-Referrer-Policy: strict-origin-when-cross-origin
-Cross-Origin-Opener-Policy: same-origin
-Content-Security-Policy: default-src 'self'; ...
+X-Frame-Options: DENY X-Content-Type-Options: nosniff Strict-Transport-Security: max-age=63072000;
+includeSubDomains; preload Referrer-Policy: strict-origin-when-cross-origin
+Cross-Origin-Opener-Policy: same-origin Content-Security-Policy: default-src 'self'; ...
 
 ##### 9. memberships
 
@@ -1210,7 +1170,8 @@ Content-Security-Policy: default-src 'self'; ...
 - **Path:** `/orgs/{orgId}/schedules/{scheduleId}/shifts/{shiftId}`
 - **Access:** Members read, scheduler+ write, staff limited update
 - **Purpose:** Individual shift assignments
-- **Fields:** `id`, `scheduleId`, `orgId`, `userId`, `positionId`, `venueId`, `startTime`, `endTime`, `status`, `notes`
+- **Fields:** `id`, `scheduleId`, `orgId`, `userId`, `positionId`, `venueId`, `startTime`,
+  `endTime`, `status`, `notes`
 
 ##### 15. widgets
 
@@ -1307,8 +1268,9 @@ Content-Security-Policy: default-src 'self'; ...
 
 **Industry:** SaaS - Workforce Management & Scheduling
 
-**Product Description:**
-Fresh Root is a **multi-tenant Progressive Web App** designed for small-to-medium enterprises that need reliable, secure staff scheduling. The platform enables organizations to:
+**Product Description:** Fresh Root is a **multi-tenant Progressive Web App** designed for
+small-to-medium enterprises that need reliable, secure staff scheduling. The platform enables
+organizations to:
 
 - Create and publish work schedules
 - Assign shifts to employees with specific positions
@@ -2123,7 +2085,8 @@ gcloud run deploy fresh-root --image gcr.io/PROJECT/fresh-root
    - Are we missing critical security considerations for SOC 2 readiness?
 
 1. **Scaling Strategy:**
-   - Is the Redis-backed rate limiting + OpenTelemetry tracing approach sufficient for multi-instance?
+   - Is the Redis-backed rate limiting + OpenTelemetry tracing approach sufficient for
+     multi-instance?
    - What pitfalls should we watch for when scaling from 1 → 10 → 100 instances?
 
 1. **Technical Debt Prioritization:**
@@ -2136,7 +2099,8 @@ gcloud run deploy fresh-root --image gcr.io/PROJECT/fresh-root
 
 **Specific Concerns:**
 
-- **Memory constraints:** Are we building technical debt with our low-memory development environment?
+- **Memory constraints:** Are we building technical debt with our low-memory development
+  environment?
 - **Test coverage:** Is 27% endpoint coverage acceptable for early production?
 - **Firebase lock-in:** Are we too dependent on Firebase for future flexibility?
 - **Compliance:** What are we missing for SOC 2 and GDPR compliance?
@@ -2153,7 +2117,5 @@ gcloud run deploy fresh-root --image gcr.io/PROJECT/fresh-root
 
 ## End of Architectural Review Panel Input Document
 
-**Document Version:** 1.0
-**Last Updated:** November 30, 2025
-**Total Pages:** 26
-**Total Sections:** 5 (all complete)
+**Document Version:** 1.0 **Last Updated:** November 30, 2025 **Total Pages:** 26 **Total
+Sections:** 5 (all complete)

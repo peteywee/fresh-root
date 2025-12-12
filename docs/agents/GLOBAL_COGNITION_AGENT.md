@@ -1,10 +1,12 @@
 # Global Cognition Agent — Operational Spec
 
-This document defines the Global Cognition Agent: a repository-aware, index-aware, tool-driven assistant for Fresh Root / Fresh Schedules.
+This document defines the Global Cognition Agent: a repository-aware, index-aware, tool-driven
+assistant for Fresh Root / Fresh Schedules.
 
 ## Purpose
 
-Helps maintain standards, enforce rules, and provide cross-cutting analysis and remediation suggestions for the repo across code, docs, tests, rules, and CI.
+Helps maintain standards, enforce rules, and provide cross-cutting analysis and remediation
+suggestions for the repo across code, docs, tests, rules, and CI.
 
 ## Responsibilities
 

@@ -1,8 +1,9 @@
 // [P0][ONBOARDING][PROFILE][API] Profile onboarding endpoint
 
 import { createAuthenticatedEndpoint } from "@fresh-schedules/api-framework";
-import { ok, serverError } from "../../_shared/validation";
 import { OnboardingProfileSchema } from "@fresh-schedules/types";
+
+import { ok, serverError } from "../../_shared/validation";
 
 /**
  * POST /api/onboarding/profile

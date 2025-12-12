@@ -22,7 +22,8 @@
 
 ### What is the SDK Factory?
 
-The **SDK Factory** (`@fresh-schedules/api-framework`) is a declarative, type-safe framework for building Next.js API routes with:
+The **SDK Factory** (`@fresh-schedules/api-framework`) is a declarative, type-safe framework for
+building Next.js API routes with:
 
 - ✅ **Built-in Authentication & Authorization**
 - ✅ **Organization Context Management** (multi-tenant support)
@@ -259,7 +260,8 @@ All errors return consistent format:
 }
 ```
 
-**Codes**: VALIDATION_FAILED, UNAUTHORIZED, FORBIDDEN, NOT_FOUND, CONFLICT, RATE_LIMITED, INTERNAL_ERROR
+**Codes**: VALIDATION_FAILED, UNAUTHORIZED, FORBIDDEN, NOT_FOUND, CONFLICT, RATE_LIMITED,
+INTERNAL_ERROR
 
 ---
 

@@ -1,8 +1,9 @@
 // [P0][JOIN-TOKENS][API] Join tokens endpoint
 
 import { createOrgEndpoint } from "@fresh-schedules/api-framework";
-import { ok, serverError } from "../_shared/validation";
 import { CreateJoinTokenSchema } from "@fresh-schedules/types";
+
+import { ok, serverError } from "../_shared/validation";
 
 /**
  * GET /api/join-tokens

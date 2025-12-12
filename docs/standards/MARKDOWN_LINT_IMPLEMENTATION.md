@@ -20,7 +20,8 @@
 
 ## Overview
 
-The markdown-lint-lib is a **production-grade markdown validation and auto-fix system** that integrates with Next.js API routes and CI/CD pipelines. It provides:
+The markdown-lint-lib is a **production-grade markdown validation and auto-fix system** that
+integrates with Next.js API routes and CI/CD pipelines. It provides:
 
 - ✅ **Comprehensive Rule Coverage**: 51 markdown rules across 6 categories
 - ✅ **Profile-Based Configuration**: Strict, Standard, Lenient profiles for different use cases
@@ -221,22 +222,17 @@ Only enforces:
 #### 3. Whitespace & Spacing (10 Rules) - 9 Auto-Fixable
 
 ```markdown
-❌ WRONG:
-line with trailing spaces
-double spaces
+❌ WRONG: line with trailing spaces double spaces
 
-✅ FIXED:
-line with no trailing spaces
-double spaces (single)
+✅ FIXED: line with no trailing spaces double spaces (single)
 ```
 
 **Auto-fix**: 9/10
 
 #### 4. Code (7 Rules) - 6 Auto-Fixable
 
-````markdown
-❌ WRONG:
-code without fence
+`````markdown
+❌ WRONG: code without fence
 
 ````+ (wrong marker)
 
@@ -260,6 +256,7 @@ code with fence
 
 http://bare.url (plain)
 ````
+`````
 
 **Auto-fix**: 4/5
 

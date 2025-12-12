@@ -1,5 +1,7 @@
 ---
-description: "TypeScript schema pattern lessons learned from Zod validation implementation in monorepo. Covers module resolution, inline vs. exported schemas, and pragmatic workarounds."
+description:
+  "TypeScript schema pattern lessons learned from Zod validation implementation in monorepo. Covers
+  module resolution, inline vs. exported schemas, and pragmatic workarounds."
 applyTo: "packages/types/**/*.ts,apps/web/app/api/**/*.ts"
 priority: 2
 ---
@@ -10,41 +12,52 @@ Lessons from implementing Zod input validation across the fresh-root monorepo.
 
 ## The Module Resolution Trap: Newly Created Schema Files
 
-**Problem**: Created new schema files (`session.ts`, `internal.ts`) in `packages/types/src/`, exported them in `index.ts`, but TypeScript compiler couldn't resolve them when importing in API routes.
+**Problem**: Created new schema files (`session.ts`, `internal.ts`) in `packages/types/src/`,
+exported them in `index.ts`, but TypeScript compiler couldn't resolve them when importing in API
+routes.
 
 **Error Pattern**:
+
 ```
 TS2305: Module '"@fresh-schedules/types"' has no exported member 'CreateBackupSchema'
 ```
 
-**Root Cause**: TypeScript compiler caching or import path resolution in monorepo context. When you create a new `.ts` file and immediately export it from `index.ts`, the module graph hasn't fully updated in the type checker's internal state.
+**Root Cause**: TypeScript compiler caching or import path resolution in monorepo context. When you
+create a new `.ts` file and immediately export it from `index.ts`, the module graph hasn't fully
+updated in the type checker's internal state.
 
 ### What Didn't Work ❌
 
 **Attempt 1: Import from newly created package file**
+
 ```typescript
 // ❌ DON'T DO THIS on fresh schema files
 import { CreateSessionSchema } from "@fresh-schedules/types";
 
 export const POST = createAuthenticatedEndpoint({
   input: CreateSessionSchema, // TypeScript: "no exported member"
-  handler: async ({ input }) => { /* ... */ }
+  handler: async ({ input }) => {
+    /* ... */
+  },
 });
 ```
 
 **Why it failed**:
+
 - New files in monorepo don't immediately resolve in import paths
 - TypeScript cache hasn't recomputed module graph
 - `pnpm` workspace resolution may not have indexed new exports yet
 - Even after `pnpm install --frozen-lockfile`, type information not refreshed
 
 **Attempt 2: Force TypeScript recompilation**
+
 ```bash
 # ❌ DON'T RELY SOLELY ON THIS
 pnpm -w typecheck --force
 ```
 
 **Why it's insufficient**:
+
 - `--force` flag clears cache but doesn't guarantee reindex of new package exports
 - Issue persists across multiple type-check runs
 - Suggests deeper module resolution issue in monorepo setup
@@ -76,6 +89,7 @@ export const POST = createAuthenticatedEndpoint({
 ```
 
 **Why this works**:
+
 - Schema defined in same file scope
 - No import path resolution needed
 - TypeScript compiler has full visibility
@@ -99,7 +113,8 @@ export const POST = createAuthenticatedEndpoint({
 //    - Verify module resolution stabilizes
 ```
 
-**Timeline advantage**: 
+**Timeline advantage**:
+
 - Inline schemas: Immediate validation, production-ready
 - Package schemas: Can be refactored once module resolution is proven stable
 - Created files: Already exist for future refactoring/documentation
@@ -114,9 +129,11 @@ export const POST = createAuthenticatedEndpoint({
 4. **Monitor for resolution** on next `pnpm install --frozen-lockfile`
 5. **Refactor to imports** once module graph stabilizes
 
-**Don't**: Fight TypeScript module resolution immediately. Work around it pragmatically while documenting the path to proper imports.
+**Don't**: Fight TypeScript module resolution immediately. Work around it pragmatically while
+documenting the path to proper imports.
 
 **Pattern code**:
+
 ```typescript
 // apps/web/app/api/session/bootstrap/route.ts
 // [P0][API][CODE] Session bootstrap endpoint
@@ -136,7 +153,9 @@ export type CreateSession = z.infer<typeof CreateSessionSchema>;
 
 export const POST = createAuthenticatedEndpoint({
   input: CreateSessionSchema,
-  handler: async ({ input }) => { /* ... */ }
+  handler: async ({ input }) => {
+    /* ... */
+  },
 });
 ```
 
@@ -159,6 +178,7 @@ pnpm -w typecheck
 ```
 
 **Success indicator**:
+
 - TypeCheck completes with 0 errors across all packages
 - All imports resolve correctly in IDE
 - `@fresh-schedules/types` exports are visible in autocomplete
@@ -172,4 +192,5 @@ pnpm -w typecheck
 - ✅ Plan gradual migration to package exports (once stable)
 - ❌ Don't force complex import paths before resolution is proven
 
-**Pragmatism over purity**: Getting validation working beats waiting for perfect module organization.
+**Pragmatism over purity**: Getting validation working beats waiting for perfect module
+organization.

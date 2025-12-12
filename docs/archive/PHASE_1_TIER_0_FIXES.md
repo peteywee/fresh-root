@@ -1,10 +1,10 @@
 # FRESH Engine Phase 1: Tier 0 Security Fixes
 
-**Objective:** Fix 13 Tier 0 (Security) violations to reach 0 Tier 0 issues and improve score by ~25 points.
+**Objective:** Fix 13 Tier 0 (Security) violations to reach 0 Tier 0 issues and improve score by ~25
+points.
 
-**Baseline:** 13 Tier 0 issues, Score: 0.0
-**Target:** 0 Tier 0 issues, Score: ~25+
-**Deadline:** Ready for Phase 2 (Tier 1 integrity)
+**Baseline:** 13 Tier 0 issues, Score: 0.0 **Target:** 0 Tier 0 issues, Score: ~25+ **Deadline:**
+Ready for Phase 2 (Tier 1 integrity)
 
 ---
 
@@ -14,7 +14,8 @@
 
 **Issue Type:** Tier 0 — API route missing security wrapper
 
-These endpoints are currently exposed without authentication/authorization. Each needs a security wrapper added at the top level.
+These endpoints are currently exposed without authentication/authorization. Each needs a security
+wrapper added at the top level.
 
 #### Task 1.1: `apps/web/app/api/health/route.ts`
 
@@ -82,7 +83,8 @@ export const GET = withSecurity(async (context: NextRequest) => {
 
 **Issue Type:** Tier 0 — Write API routes must validate input using Zod before use
 
-These POST/PATCH endpoints need input validation added. Look for Zod schema imports and validation calls.
+These POST/PATCH endpoints need input validation added. Look for Zod schema imports and validation
+calls.
 
 #### Task 2.1: `apps/web/app/api/auth/mfa/setup/route.ts`
 

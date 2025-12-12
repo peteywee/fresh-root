@@ -2,7 +2,8 @@
 
 ## Purpose
 
-Create predictable, comprehensive tests that reflect business risk and enforce security/role logic across Fresh Schedules.
+Create predictable, comprehensive tests that reflect business risk and enforce security/role logic
+across Fresh Schedules.
 
 ## Test Layers
 

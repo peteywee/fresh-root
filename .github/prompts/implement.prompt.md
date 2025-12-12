@@ -23,8 +23,7 @@ Execute the implementation plan for: `${input:TaskDescription}`
 
 ### 1. Load or Create Plan
 
-If no plan exists, create TODO list first.
-If plan exists, load and verify current state.
+If no plan exists, create TODO list first. If plan exists, load and verify current state.
 
 ### 2. Execute Tasks Sequentially
 
@@ -44,6 +43,7 @@ For each task:
 ### 3. Validation Gates
 
 After each significant change:
+
 - Check for TypeScript errors
 - Verify no lint issues
 - Run relevant tests if applicable
@@ -51,6 +51,7 @@ After each significant change:
 ### 4. Final Validation
 
 After all tasks:
+
 ```bash
 pnpm typecheck
 pnpm lint
@@ -73,21 +74,24 @@ node scripts/validate-patterns.mjs
 ## Implementation Progress
 
 ### Task 1: [Title]
-Status: ✅ Completed
-Changes:
+
+Status: ✅ Completed Changes:
+
 - [File]: [Description of change]
 
 ### Task 2: [Title]
-Status: 🔄 In Progress
-...
+
+Status: 🔄 In Progress ...
 
 ## Validation Results
+
 - TypeScript: ✅/❌
 - Lint: ✅/❌
 - Tests: ✅/❌
 - Patterns: [score]
 
 ## Next Steps
+
 [What remains or what user should verify]
 ```
 

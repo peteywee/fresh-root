@@ -1,10 +1,10 @@
 # Coding Rules and Patterns Guide
 
-> **Purpose**: Prevent errors at code creation time through clear, enforceable rules based on existing codebase patterns.
+> **Purpose**: Prevent errors at code creation time through clear, enforceable rules based on
+> existing codebase patterns.
 >
-> **Last Updated**: 2025-11-28
-> **Version**: 2.0
-> **Based on**: Fresh Schedules v1.1.0 codebase analysis
+> **Last Updated**: 2025-11-28 **Version**: 2.0 **Based on**: Fresh Schedules v1.1.0 codebase
+> analysis
 
 ---
 
@@ -155,7 +155,8 @@ match /entities/{entityId} {
 }
 ```
 
-**Triad Coverage Check**: Run `node scripts/validate-patterns.mjs` to verify all entities have complete triad coverage.
+**Triad Coverage Check**: Run `node scripts/validate-patterns.mjs` to verify all entities have
+complete triad coverage.
 
 ---
 
@@ -950,8 +951,7 @@ Score calculation:
 - Tier 2 violation: -2 points each
 - Tier 3 violation: -0.5 points each
 
-**Below 90**: CI/CD fails
-**Any Tier 0/1**: CI/CD blocks immediately
+**Below 90**: CI/CD fails **Any Tier 0/1**: CI/CD blocks immediately
 
 ---
 
@@ -1013,14 +1013,13 @@ export const POST = withSecurity(
 
 Following these rules ensures:
 
-✅ **Type Safety**: Zod-first approach prevents type mismatches
-✅ **Security**: Authentication and authorization built-in
-✅ **Consistency**: Standard patterns across codebase
-✅ **Maintainability**: Clear structure and documentation
-✅ **Quality**: Automated validation catches issues early
-✅ **Observability**: Logging and tracing from the start
+✅ **Type Safety**: Zod-first approach prevents type mismatches ✅ **Security**: Authentication and
+authorization built-in ✅ **Consistency**: Standard patterns across codebase ✅ **Maintainability**:
+Clear structure and documentation ✅ **Quality**: Automated validation catches issues early ✅
+**Observability**: Logging and tracing from the start
 
-**Remember**: The goal is to catch errors at **code creation time**, not at runtime or in production.
+**Remember**: The goal is to catch errors at **code creation time**, not at runtime or in
+production.
 
 ---
 
@@ -1033,5 +1032,4 @@ Following these rules ensures:
 
 ---
 
-**Questions or Improvements?**
-Open an issue or PR in the repository.
+**Questions or Improvements?** Open an issue or PR in the repository.

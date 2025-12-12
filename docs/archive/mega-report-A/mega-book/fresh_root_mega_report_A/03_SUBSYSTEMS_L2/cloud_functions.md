@@ -27,7 +27,8 @@ _TBD — to be filled with a concise description of how this subsystem contribut
 
 ## 3. Critical Findings (Placeholder)
 
-Once analysis is run, document Critical/High items here, each with L0–L4 structure and cross-links into L3/L4 sections.
+Once analysis is run, document Critical/High items here, each with L0–L4 structure and cross-links
+into L3/L4 sections.
 
 ## 4. Architectural Notes & Invariants
 

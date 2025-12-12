@@ -25,12 +25,14 @@ apps/web/
 ### Server vs Client Components
 
 **Server Components (Default)**
+
 - Data fetching
 - Heavy computation
 - Non-interactive UI
 - Direct database access
 
 **Client Components**
+
 - Add `'use client'` at top
 - Interactivity (onClick, useState)
 - Browser APIs
@@ -55,11 +57,11 @@ export default function Button() {
 
 ```typescript
 // ❌ Bad - Will error
-import dynamic from 'next/dynamic';
-const ClientComponent = dynamic(() => import('./Client'), { ssr: false });
+import dynamic from "next/dynamic";
+const ClientComponent = dynamic(() => import("./Client"), { ssr: false });
 
 // ✅ Good - Import directly, mark Client component with 'use client'
-import ClientComponent from './ClientComponent';
+import ClientComponent from "./ClientComponent";
 ```
 
 ### API Routes (Route Handlers)
@@ -72,7 +74,7 @@ import { InputSchema } from "@fresh-schedules/types";
 export const GET = createOrgEndpoint({
   handler: async ({ context }) => {
     return NextResponse.json({ orgId: context.org!.orgId });
-  }
+  },
 });
 
 export const POST = createOrgEndpoint({
@@ -81,7 +83,7 @@ export const POST = createOrgEndpoint({
   rateLimit: { maxRequests: 50, windowMs: 60000 },
   handler: async ({ input, context }) => {
     return NextResponse.json({ success: true }, { status: 201 });
-  }
+  },
 });
 ```
 
@@ -204,26 +206,23 @@ type QuerySnapshot = FirebaseFirestore.QuerySnapshot;
 // Use cva for variant styling
 import { cva } from "class-variance-authority";
 
-const buttonVariants = cva(
-  "inline-flex items-center justify-center rounded-md font-medium",
-  {
-    variants: {
-      variant: {
-        primary: "bg-blue-600 text-white hover:bg-blue-700",
-        secondary: "bg-gray-100 text-gray-900 hover:bg-gray-200",
-      },
-      size: {
-        sm: "h-8 px-3 text-sm",
-        md: "h-10 px-4",
-        lg: "h-12 px-6 text-lg",
-      },
+const buttonVariants = cva("inline-flex items-center justify-center rounded-md font-medium", {
+  variants: {
+    variant: {
+      primary: "bg-blue-600 text-white hover:bg-blue-700",
+      secondary: "bg-gray-100 text-gray-900 hover:bg-gray-200",
     },
-    defaultVariants: {
-      variant: "primary",
-      size: "md",
+    size: {
+      sm: "h-8 px-3 text-sm",
+      md: "h-10 px-4",
+      lg: "h-12 px-6 text-lg",
     },
-  }
-);
+  },
+  defaultVariants: {
+    variant: "primary",
+    size: "md",
+  },
+});
 ```
 
 ---
@@ -321,12 +320,10 @@ export const POST = createOrgEndpoint({
       updatedAt: Date.now(),
     };
 
-    const docRef = await db
-      .collection(`orgs/${context.org!.orgId}/schedules`)
-      .add(schedule);
+    const docRef = await db.collection(`orgs/${context.org!.orgId}/schedules`).add(schedule);
 
     return NextResponse.json({ id: docRef.id, ...schedule }, { status: 201 });
-  }
+  },
 });
 ```
 

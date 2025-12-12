@@ -185,7 +185,8 @@ The three-branch governance architecture has been successfully deployed to all p
 ### For Developers
 
 1. Read `.github/BRANCH_STRATEGY_QUICK_REFERENCE.md` for your role
-2. Use correct branch type for your work (feature/\* for dev, not creating new branches on main/docs)
+2. Use correct branch type for your work (feature/\* for dev, not creating new branches on
+   main/docs)
 3. Follow commit message conventions from quick reference
 4. Run `node scripts/validate-branch-files.js` before pushing feature branches
 
@@ -285,9 +286,11 @@ This three-branch governance architecture is implemented under the authority of:
 - **Sr Dev Directive** (`.github/SR_DEV_DIRECTIVE.md`)
 - **Branch Strategy Governance** (`.github/BRANCH_STRATEGY_GOVERNANCE.md`)
 
-Final authority on all governance decisions rests with Sr Dev authority as documented in SR_DEV_DIRECTIVE.md.
+Final authority on all governance decisions rests with Sr Dev authority as documented in
+SR_DEV_DIRECTIVE.md.
 
-For questions, disputes, or pattern adjustments: See SR_DEV_DIRECTIVE.md → Escalation Procedures section.
+For questions, disputes, or pattern adjustments: See SR_DEV_DIRECTIVE.md → Escalation Procedures
+section.
 
 ---
 

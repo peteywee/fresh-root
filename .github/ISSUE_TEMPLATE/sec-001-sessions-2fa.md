@@ -1,16 +1,15 @@
 ## # Objective
 
-name: SEC-001 Sessions & 2FA (Prod-grade auth)
-about: Enforce session-only auth + 2FA for privileged roles; ban dev headers in prod
-title: "\[SEC-001] Sessions & 2FA"
-labels: \["security", "backend", "P0"]
-assignees: \["peteywee"]
+name: SEC-001 Sessions & 2FA (Prod-grade auth) about: Enforce session-only auth + 2FA for privileged
+roles; ban dev headers in prod title: "\[SEC-001] Sessions & 2FA" labels: \["security", "backend",
+"P0"] assignees: \["peteywee"]
 
 ---
 
 ## Objective
 
-Enforce **session-only authentication** in production and **2FA** for `org_owner|admin|manager`. Remove dev header pathways from prod.
+Enforce **session-only authentication** in production and **2FA** for `org_owner|admin|manager`.
+Remove dev header pathways from prod.
 
 ## Scope
 

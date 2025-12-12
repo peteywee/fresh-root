@@ -1,7 +1,6 @@
 # Safeguard Rule: ZodType Compatibility
 
-**Created**: December 10, 2025
-**Trigger**: 3+ occurrences of ZodType compatibility errors
+**Created**: December 10, 2025 **Trigger**: 3+ occurrences of ZodType compatibility errors
 **Pattern**: `ZodObject<...> is missing properties from ZodType<TInput, any, any>`
 
 ## Error Pattern Detection
@@ -40,24 +39,27 @@ module.exports = {
   create(context) {
     return {
       Property(node) {
-        if (node.key.name === "input" && 
-            node.parent.parent.callee?.name?.includes("createOrgEndpoint")) {
+        if (
+          node.key.name === "input" &&
+          node.parent.parent.callee?.name?.includes("createOrgEndpoint")
+        ) {
           // Check if value is a direct Zod schema import
           const sourceCode = context.getSourceCode();
           const valueText = sourceCode.getText(node.value);
           if (valueText.endsWith("Schema") && !valueText.includes("as ZodType")) {
             context.report({
               node,
-              message: "Use 'as ZodType<InputType>' type assertion for Zod schemas in API framework",
+              message:
+                "Use 'as ZodType<InputType>' type assertion for Zod schemas in API framework",
               fix(fixer) {
                 return fixer.replaceText(node.value, `${valueText} as ZodType<any>`);
-              }
+              },
             });
           }
         }
-      }
+      },
     };
-  }
+  },
 };
 ```
 
@@ -79,8 +81,8 @@ export const POST = createOrgEndpoint({
 
 ## Architectural Solution
 
-**File**: `packages/api-framework/src/index.ts`
-**Change**: Update EndpointConfig interface to accept broader Zod types
+**File**: `packages/api-framework/src/index.ts` **Change**: Update EndpointConfig interface to
+accept broader Zod types
 
 ```typescript
 // Current (too restrictive):
@@ -108,7 +110,8 @@ input?: z.ZodTypeAny;
 
 ## Current Status: RESOLVED ✅
 
-**ZodType compatibility error eliminated**. Remaining issue is input type inference (`input: unknown` instead of inferred types).
+**ZodType compatibility error eliminated**. Remaining issue is input type inference
+(`input: unknown` instead of inferred types).
 
 ### Workaround for Input Typing
 
@@ -118,6 +121,6 @@ export const POST = createOrgEndpoint({
   handler: async ({ input, context }) => {
     const typedInput = input as CreateWidget; // Type assertion workaround
     return NextResponse.json({ name: typedInput.name });
-  }
+  },
 });
 ```

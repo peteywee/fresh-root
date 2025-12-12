@@ -7,7 +7,8 @@
 
 ## Overview
 
-Automated CI/CD system that generates and maintains **architecture diagrams, dependency visualizations, and repository state analysis** on every commit to `dev` and `main` branches.
+Automated CI/CD system that generates and maintains **architecture diagrams, dependency
+visualizations, and repository state analysis** on every commit to `dev` and `main` branches.
 
 **Key Feature**: Only the latest versions of visuals are kept in the repository at all times.
 
@@ -428,7 +429,8 @@ This visual system is governed by:
 
 - **Sr Dev Directive** (`.github/SR_DEV_DIRECTIVE.md`)
 - **Branch Strategy Governance** (`.github/BRANCH_STRATEGY_GOVERNANCE.md`)
-- **Production Development Directive** (`.github/instructions/production-development-directive.instructions.md`)
+- **Production Development Directive**
+  (`.github/instructions/production-development-directive.instructions.md`)
 
 ---
 

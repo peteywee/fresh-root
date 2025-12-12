@@ -1,6 +1,7 @@
 ---
 
-description: "Guidelines for GitHub Copilot to write comments to achieve self-explanatory code with less comments. Examples are in JavaScript but it should work on any language that has comments."
+description: "Guidelines for GitHub Copilot to write comments to achieve self-explanatory code with
+less comments. Examples are in JavaScript but it should work on any language that has comments."
 
 ## applyTo: "\*\*"
 
@@ -8,8 +9,8 @@ description: "Guidelines for GitHub Copilot to write comments to achieve self-ex
 
 ## Core Principle
 
-**Write code that speaks for itself. Comment only when necessary to explain WHY, not WHAT.**
-We do not need comments most of the time.
+**Write code that speaks for itself. Comment only when necessary to explain WHY, not WHAT.** We do
+not need comments most of the time.
 
 ## Commenting Guidelines
 
@@ -114,4 +115,5 @@ Before committing, ensure your comments:
 
 ## Summary
 
-Remember: **The best comment is the one you don't need to write because the code is self-documenting.**
+Remember: **The best comment is the one you don't need to write because the code is
+self-documenting.**

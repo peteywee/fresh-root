@@ -8,13 +8,16 @@
 ---
 
 ## 📁 Protocol Files (In Order of Reference)
-### 1. **agents/CREWOPS\_QUICK\_REFERENCE.md** (7.8 KB) ⭐ START HERE
+
+### 1. **agents/CREWOPS_QUICK_REFERENCE.md** (7.8 KB) ⭐ START HERE
+
 **For**: Users new to the protocol\
 **Contains**:
 
 - Session bootstrap message
 - What happens automatically
 - Keyword modifiers quick reference
+
 ---
 
 ### 2. **agents/crewops.md** (24 KB) 📖 THE COMPLETE MANUAL
@@ -35,37 +38,38 @@
 
 ---
 
-### 3. **agents/CREWOPS\_ACTIVATION.md** (9.6 KB) ⚙️ AUTO-ENGAGEMENT FRAMEWORK
+### 3. **agents/CREWOPS_ACTIVATION.md** (9.6 KB) ⚙️ AUTO-ENGAGEMENT FRAMEWORK
+
 **For**: How the protocol automatically loads\
 **Contains**:
 
-- Activation sequence (Stage 1, 2, 3)
-**Purpose**: Explains how the protocol self-initializes without user action.
+- Activation sequence (Stage 1, 2, 3) **Purpose**: Explains how the protocol self-initializes
+  without user action.
 
 ---
 
-### 4. **agents/CREWOPS\_ACTIVATION\_STATUS.md** (8.9 KB) 📊 STATUS TRACKING
+### 4. **agents/CREWOPS_ACTIVATION_STATUS.md** (8.9 KB) 📊 STATUS TRACKING
+
 **For**: Verification and configuration\
 **Contains**:
 
-
 **Use**: Verify protocol is active; understand enforcement.
 
+### 5. **agents/CREWOPS_IMPLEMENTATION_COMPLETE.md** (12 KB) ✅ COMPLETION SUMMARY
 
-### 5. **agents/CREWOPS\_IMPLEMENTATION\_COMPLETE.md** (12 KB) ✅ COMPLETION SUMMARY
 **For**: Overview of what's active\
 **Contains**:
+
 - Typical workflow example
 
-**Purpose**: High-level view of entire implementation.
----
+## **Purpose**: High-level view of entire implementation.
 
-### 6. **guides/crewops/07\_RED\_TEAM\_WORKFLOW.md** (NEW) 🔴 SECURITY HANDOFF
+### 6. **guides/crewops/07_RED_TEAM_WORKFLOW.md** (NEW) 🔴 SECURITY HANDOFF
 
 **For**: Security-critical changes and adversarial testing\
+
 - Confidence scoring and risk assessment
 - Breaking change detection
-
 
 ---
 
@@ -103,31 +107,13 @@
 ## 🔄 Automatic Engagement Timeline
 
 ```
-Session Start
-    ↓
-Load crewops.md + CREWOPS_ACTIVATION.md
-    ↓
-Activate Constitution (Section 2)
-    ↓
-Initialize Crew Cabinet (Section 3)
-    ↓
-Register Tool Authority Matrix (Section 16.2)
-    ↓
-Display Activation Message (from CREWOPS_QUICK_REFERENCE template)
-    ↓
-Ready for User Input
-    ↓
-User sends NON-TRIVIAL request
-    ↓
-Orchestrator detects "non-trivial"
-    ↓
-Protocol engages Phases A→E (from CREWOPS_ACTIVATION.md)
-    ↓
-All workers deployed with Constitutional clauses
-    ↓
-Crew executes, tools deployed, gates verified
-    ↓
-Task complete with audit trail
+
+Session Start ↓ Load crewops.md + CREWOPS_ACTIVATION.md ↓ Activate Constitution (Section 2) ↓
+Initialize Crew Cabinet (Section 3) ↓ Register Tool Authority Matrix (Section 16.2) ↓ Display
+Activation Message (from CREWOPS_QUICK_REFERENCE template) ↓ Ready for User Input ↓ User sends
+NON-TRIVIAL request ↓ Orchestrator detects "non-trivial" ↓ Protocol engages Phases A→E (from
+CREWOPS_ACTIVATION.md) ↓ All workers deployed with Constitutional clauses ↓ Crew executes, tools
+deployed, gates verified ↓ Task complete with audit trail
 
 ---
 
@@ -153,6 +139,7 @@ Task complete with audit trail
 6. **QA/Test Engineer**: Validation + testing
 
 ### Phases (A→E)
+
 - **A**: Context Saturation (READ)
 - **B+C**: Planning + Team Assembly (DESIGN)
 - **D**: Action Matrix (ACT)
@@ -167,11 +154,12 @@ Task complete with audit trail
 4. Assumptions (lowest, labeled)
 
 ### Keyword Modifiers (Optional)
-- CREWOPS\_OK: Acknowledge binding
-- CREWOPS\_DESIGN\_ONLY: Plan only
-- CREWOPS\_AUDIT: Find problems
-- CREWOPS\_EXECUTE: Run pre-planned
-- CREWOPS\_EMERGENCY: Fast-track
+
+- CREWOPS_OK: Acknowledge binding
+- CREWOPS_DESIGN_ONLY: Plan only
+- CREWOPS_AUDIT: Find problems
+- CREWOPS_EXECUTE: Run pre-planned
+- CREWOPS_EMERGENCY: Fast-track
 
 ---
 
@@ -181,13 +169,14 @@ Task complete with audit trail
 | ---------------------------------- | ---------------------- | ----------------------------- |
 | CREWOPS_QUICK_REFERENCE.md         | User quick start       | First time using              |
 | crewops.md                         | Binding authority      | Need rule clarification       |
-| CREWOPS\_ACTIVATION.md              | Bootstrap framework    | Understanding auto-engagement |
-| CREWOPS\_ACTIVATION\_STATUS.md       | Configuration tracking | Verifying what's active       |
-| CREWOPS\_IMPLEMENTATION\_COMPLETE.md | High-level overview    | Need summary view             |
+| CREWOPS_ACTIVATION.md              | Bootstrap framework    | Understanding auto-engagement |
+| CREWOPS_ACTIVATION_STATUS.md       | Configuration tracking | Verifying what's active       |
+| CREWOPS_IMPLEMENTATION_COMPLETE.md | High-level overview    | Need summary view             |
 
 ---
 
 ## ✅ What's Guaranteed
+
 When protocol engages on your prompt:
 
 - ✅ Constitution is binding (immutable)
@@ -210,16 +199,15 @@ When protocol engages on your prompt:
 4. **Phases A→E execute** → Crew works automatically
 5. **Task complete** → With audit trail + validation
 
-
 ---
 
 ## 🎯 Quick Checklist for You
-- \[ ] Read CREWOPS\_QUICK\_REFERENCE.md (to understand what to expect)
+
+- \[ ] Read CREWOPS_QUICK_REFERENCE.md (to understand what to expect)
 - \[ ] Understand Phases A→E (Context → Plan → Act → Verify)
 - \[ ] Know the Constitution (7 binding laws)
 - \[ ] Understand Red Team veto (Security Supremacy)
 - \[ ] Optional: Use keyword modifiers if needed
-
 
 ---
 
@@ -252,23 +240,23 @@ I need a security design for the payment flow.
 CREWOPS_DESIGN_ONLY
 ```
 
-
 ---
 
 ## 🔗 Cross-References
+
 **In crewops.md**:
 
-- Section 0.1.5: Links to CREWOPS\_ACTIVATION.md
+- Section 0.1.5: Links to CREWOPS_ACTIVATION.md
 - Section 6.5: Tool Use Discipline
 - Section 6.6: MCP Integration
 - Section 16-18: Tool & MCP Governance
 
-**In CREWOPS\_ACTIVATION.md**:
+**In CREWOPS_ACTIVATION.md**:
 
 - Stage 1: Session bootstrap flow
 - Stage 3: Protocol engagement flow
 
-**In CREWOPS\_ACTIVATION\_STATUS.md**:
+**In CREWOPS_ACTIVATION_STATUS.md**:
 
 - Activation Sequence: Detailed steps
 - Protocol Flow: Visual workflow
@@ -292,6 +280,7 @@ CREWOPS_DESIGN_ONLY
 ---
 
 ## 🎯 Success Criteria
+
 Protocol is successful when:
 
 - ✅ Automatically engages on non-trivial prompts
@@ -304,7 +293,6 @@ Protocol is successful when:
 - ✅ Runnable commands are provided
 - ✅ Definition of Done is met
 - ✅ Crew is coordinated without conflict
-
 
 ---
 

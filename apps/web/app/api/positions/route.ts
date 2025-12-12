@@ -1,10 +1,10 @@
 // [P0][CORE][API] Positions list endpoint
 export const dynamic = "force-dynamic";
 
-import { NextResponse } from "next/server";
-import { CreatePositionSchema } from "@fresh-schedules/types";
-
 import { createOrgEndpoint } from "@fresh-schedules/api-framework";
+import { CreatePositionSchema } from "@fresh-schedules/types";
+import { NextResponse } from "next/server";
+
 import { badRequest, ok, serverError } from "../_shared/validation";
 
 /**
@@ -52,7 +52,7 @@ export const POST = createOrgEndpoint({
   roles: ["manager"],
   input: CreatePositionSchema,
   handler: async ({ input, context, params }) => {
-        try {
+    try {
       const validated = input;
       const position = {
         id: `pos-${Date.now()}`,

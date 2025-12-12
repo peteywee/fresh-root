@@ -1,13 +1,16 @@
 # L2 — Scheduling Core Engine
 
 > **Status:** Fully documented\
-> Comprehensive analysis of the scheduling subsystem, critical findings, architectural assessment, and implementation patterns.
+> Comprehensive analysis of the scheduling subsystem, critical findings, architectural assessment,
+> and implementation patterns.
 
 ---
 
 ## 1. Role in the System
 
-The scheduling subsystem is the temporal orchestration engine that coordinates asynchronous task execution across the platform. It bridges the event-driven architecture (pubsub, real-time triggers) with deterministic, time-based operations (cron jobs, deferred tasks, maintenance cycles).
+The scheduling subsystem is the temporal orchestration engine that coordinates asynchronous task
+execution across the platform. It bridges the event-driven architecture (pubsub, real-time triggers)
+with deterministic, time-based operations (cron jobs, deferred tasks, maintenance cycles).
 
 **Core responsibilities:**
 
@@ -38,7 +41,10 @@ This subsystem is **critical to operational resilience** because it handles:
 
 ### 🔴 CRITICAL: Retry Storms Without Backoff Validation
 
-**Problem:** The task scheduling system lacks centralized exponential backoff validation. While individual function deployments specify `retryConfig`, there's no runtime enforcement preventing misconfigured backoff multipliers (e.g., `backoffMultiplier: 0.5`) that could cause rapid retry storms.
+**Problem:** The task scheduling system lacks centralized exponential backoff validation. While
+individual function deployments specify `retryConfig`, there's no runtime enforcement preventing
+misconfigured backoff multipliers (e.g., `backoffMultiplier: 0.5`) that could cause rapid retry
+storms.
 
 **Impact:**
 
@@ -73,7 +79,9 @@ export async function scheduleMaintenanceTask(
 
 ### 🟠 HIGH: Task Context Isolation Not Enforced at Invocation
 
-**Problem:** Scheduled tasks inherit the full Cloud Functions context (service account permissions, environment variables). While isolation is architecturally intended, there's no mechanism to restrict task execution to a limited permission set.
+**Problem:** Scheduled tasks inherit the full Cloud Functions context (service account permissions,
+environment variables). While isolation is architecturally intended, there's no mechanism to
+restrict task execution to a limited permission set.
 
 **Impact:**
 
@@ -111,7 +119,9 @@ export const cleanupExpiredSessions = onSchedule(
 
 ### 🟠 HIGH: No Distributed Lock for One-Time Tasks
 
-**Problem:** There's no distributed locking mechanism for tasks that must execute exactly-once across multiple deployment zones. If a task is scheduled simultaneously in two regions, both will execute.
+**Problem:** There's no distributed locking mechanism for tasks that must execute exactly-once
+across multiple deployment zones. If a task is scheduled simultaneously in two regions, both will
+execute.
 
 **Impact:**
 
@@ -171,7 +181,9 @@ export function getLogger(context: FunctionContext) {
 
 ### 🟡 MEDIUM: Task Schedule Drift During High Load
 
-**Problem:** Under peak load, scheduled tasks experience significant drift from their intended execution time. A task scheduled for `2 AM` might execute at `2:15 AM`, causing cascading delays for dependent operations.
+**Problem:** Under peak load, scheduled tasks experience significant drift from their intended
+execution time. A task scheduled for `2 AM` might execute at `2:15 AM`, causing cascading delays for
+dependent operations.
 
 **Contributing Factors:**
 
@@ -199,7 +211,8 @@ export function getLogger(context: FunctionContext) {
 **Status:** Approved by Platform Architecture\
 **Complexity:** High (3–4 weeks)
 
-**Objective:** Provide a unified abstraction for scheduling operations with configurable backoff, retry, and isolation semantics.
+**Objective:** Provide a unified abstraction for scheduling operations with configurable backoff,
+retry, and isolation semantics.
 
 **Design:**
 
@@ -599,7 +612,8 @@ export async function scheduleTask(
 
 ## 3. Critical Findings (Placeholder)
 
-Once analysis is run, document Critical/High items here, each with L0–L4 structure and cross-links into L3/L4 sections.
+Once analysis is run, document Critical/High items here, each with L0–L4 structure and cross-links
+into L3/L4 sections.
 
 ## 4. Architectural Notes & Invariants
 
@@ -621,7 +635,8 @@ Track unresolved decisions and design questions.
 
 **Deprecation & Migration:**
 
-- See `06_SDK_DEPRECATION_LEDGER/scheduling_ledger.md` for comprehensive deprecation mapping, legacy component analysis, and phased migration roadmap through Q3 2026
+- See `06_SDK_DEPRECATION_LEDGER/scheduling_ledger.md` for comprehensive deprecation mapping, legacy
+  component analysis, and phased migration roadmap through Q3 2026
 
 **Complementary Subsystems:**
 

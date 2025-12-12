@@ -1,9 +1,9 @@
 // [P0][AUTH][API] MFA setup endpoint
+import { createAuthenticatedEndpoint } from "@fresh-schedules/api-framework";
 import * as QRCode from "qrcode";
 import * as speakeasy from "speakeasy";
 import { z } from "zod";
 
-import { createAuthenticatedEndpoint } from "@fresh-schedules/api-framework";
 import { ok, serverError } from "../../../_shared/validation";
 
 // Schema for MFA setup request (empty for now, but validates request is valid JSON)

@@ -9,7 +9,9 @@
 
 ## Executive Summary
 
-All 33 API route handlers have been successfully migrated from the legacy `withSecurity` middleware pattern to the modern factory-based SDK framework (`@fresh-schedules/api-framework`). This represents a complete architectural overhaul of the API routing layer in preparation for Series A.
+All 33 API route handlers have been successfully migrated from the legacy `withSecurity` middleware
+pattern to the modern factory-based SDK framework (`@fresh-schedules/api-framework`). This
+represents a complete architectural overhaul of the API routing layer in preparation for Series A.
 
 ### Key Metrics
 
@@ -227,7 +229,8 @@ function serverError(message: string): NextResponse;
 - ✅ **Unified SDK Framework**: All routes use consistent factory pattern
 - ✅ **Security**: Role-based access control standardized with manager/admin/org_owner roles
 - ✅ **Authentication**: Automatic auth context loading with verified email checks
-- ✅ **Rate Limiting**: Built-in per-endpoint configuration (e.g., 1000 req/min for health check, 100 req/24h for eligibility)
+- ✅ **Rate Limiting**: Built-in per-endpoint configuration (e.g., 1000 req/min for health check,
+  100 req/24h for eligibility)
 - ✅ **Error Handling**: Consistent error responses with standardized codes
 - ✅ **Logging**: Structured audit logs with request ID propagation
 - ✅ **Type Safety**: Full TypeScript support with RequestContext typing
@@ -271,7 +274,8 @@ For downstream consumers:
 1. **Auth Context Shape**: Changed from `req.user` to structured `context.auth`
 2. **Org Context**: Now separate from auth; accessed via `context.org`
 3. **Error Responses**: Standardized to `{ error: string, code?: string, details?: object }`
-4. **Request Validation**: Must use handler's `input` parameter (Zod schemas) instead of manual body parsing
+4. **Request Validation**: Must use handler's `input` parameter (Zod schemas) instead of manual body
+   parsing
 5. **Rate Limiting**: Now per-endpoint instead of global; returned in response headers
 
 ### Migration Guide for Consumers
@@ -303,25 +307,25 @@ if (!response.ok) {
 ## Performance Improvements
 
 1. **Middleware Pipeline**: Single factory wrap vs. nested decorators
-   - Reduced function call stack from 5-7 levels to 3 levels
-<<<<<<<< HEAD:docs/archive/MIGRATION_COMPLETE.md
+   - Reduced function call stack from 5-7 levels to 3 levels <<<<<<<<
+     HEAD:docs/archive/MIGRATION_COMPLETE.md
 2. **Rate Limiting**: In-memory store for small workloads
    - No external dependency overhead for local development
    - Can be swapped for Redis in production
 3. **Error Handling**: Early return pattern
-   - Auth failures fail fast before Firestore queries
-========
+   - # Auth failures fail fast before Firestore queries
 
-2. **Rate Limiting**: In-memory store for small workloads
+4. **Rate Limiting**: In-memory store for small workloads
    - No external dependency overhead for local development
    - Can be swapped for Redis in production
 
-3. **Error Handling**: Early return pattern
+5. **Error Handling**: Early return pattern
    - Auth failures fail fast before Firestore queries
 
->>>>>>>> pr-128:archive/docs/phase-work/MIGRATION_COMPLETE.md
-4. **Bundle Size**: Consolidated SDK exports
-   - Reduced route imports from 4-6 per file to 2-3
+> > > > > > > > pr-128:archive/docs/phase-work/MIGRATION_COMPLETE.md 4. **Bundle Size**:
+> > > > > > > > Consolidated SDK exports
+
+- Reduced route imports from 4-6 per file to 2-3
 
 ---
 

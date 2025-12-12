@@ -9,7 +9,9 @@
 
 ## Executive Summary
 
-All 33 API route handlers have been successfully migrated from the legacy `withSecurity` middleware pattern to the modern factory-based SDK framework (`@fresh-schedules/api-framework`). This represents a complete architectural overhaul of the API routing layer in preparation for Series A.
+All 33 API route handlers have been successfully migrated from the legacy `withSecurity` middleware
+pattern to the modern factory-based SDK framework (`@fresh-schedules/api-framework`). This
+represents a complete architectural overhaul of the API routing layer in preparation for Series A.
 
 ### Key Metrics
 
@@ -227,7 +229,8 @@ function serverError(message: string): NextResponse;
 - ✅ **Unified SDK Framework**: All routes use consistent factory pattern
 - ✅ **Security**: Role-based access control standardized with manager/admin/org_owner roles
 - ✅ **Authentication**: Automatic auth context loading with verified email checks
-- ✅ **Rate Limiting**: Built-in per-endpoint configuration (e.g., 1000 req/min for health check, 100 req/24h for eligibility)
+- ✅ **Rate Limiting**: Built-in per-endpoint configuration (e.g., 1000 req/min for health check,
+  100 req/24h for eligibility)
 - ✅ **Error Handling**: Consistent error responses with standardized codes
 - ✅ **Logging**: Structured audit logs with request ID propagation
 - ✅ **Type Safety**: Full TypeScript support with RequestContext typing
@@ -271,7 +274,8 @@ For downstream consumers:
 1. **Auth Context Shape**: Changed from `req.user` to structured `context.auth`
 2. **Org Context**: Now separate from auth; accessed via `context.org`
 3. **Error Responses**: Standardized to `{ error: string, code?: string, details?: object }`
-4. **Request Validation**: Must use handler's `input` parameter (Zod schemas) instead of manual body parsing
+4. **Request Validation**: Must use handler's `input` parameter (Zod schemas) instead of manual body
+   parsing
 5. **Rate Limiting**: Now per-endpoint instead of global; returned in response headers
 
 ### Migration Guide for Consumers

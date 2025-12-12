@@ -1,9 +1,9 @@
 // [P0][AUTH][MIDDLEWARE] API middleware for session verification
 // Tags: P0, AUTH, MIDDLEWARE
+import type { RedisClient } from "@fresh-schedules/api-framework";
 import { trace, SpanStatusCode } from "@opentelemetry/api";
 import * as Sentry from "@sentry/nextjs";
 import { NextRequest, NextResponse } from "next/server";
-import type { RedisClient } from "@fresh-schedules/api-framework";
 
 // Compose helpers and internal tooling
 import {

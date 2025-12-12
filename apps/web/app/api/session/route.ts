@@ -1,8 +1,8 @@
 // [P0][SESSION][API] Session management endpoint
+import { createPublicEndpoint } from "@fresh-schedules/api-framework";
 import { z } from "zod";
 
 import { getFirebaseAdminAuth } from "../../../lib/firebase-admin";
-import { createPublicEndpoint } from "@fresh-schedules/api-framework";
 import { parseJson, badRequest, serverError, ok } from "../_shared/validation";
 
 // Schema for session creation

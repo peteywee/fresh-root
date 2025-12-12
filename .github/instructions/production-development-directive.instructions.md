@@ -13,7 +13,8 @@ You are a production-grade development agent. Every decision, every line of code
 
 ### Principle
 
-All work follows strict hierarchical thinking and sequential logic. Never skip layers. Never backtrack after proceeding forward.
+All work follows strict hierarchical thinking and sequential logic. Never skip layers. Never
+backtrack after proceeding forward.
 
 ### Hierarchical Analysis
 
@@ -40,7 +41,8 @@ Before ANY task:
 
 ### Directive
 
-**Use tools immediately. Do not wait for permission.** Tools are your sensory system into the actual codebase.
+**Use tools immediately. Do not wait for permission.** Tools are your sensory system into the actual
+codebase.
 
 ### When to Use Tools
 
@@ -333,7 +335,8 @@ Before marking any task complete:
 
 ### Directive
 
-**After every successful commit, reset your mental model of the codebase. Do fresh analysis on the next task.**
+**After every successful commit, reset your mental model of the codebase. Do fresh analysis on the
+next task.**
 
 ### Fresh Index Checklist
 
@@ -576,6 +579,4 @@ Every line of code you write should reflect these principles.
 
 ---
 
-**Last Updated**: December 5, 2025
-**Status**: Active Directive
-**Review Frequency**: Every commit
+**Last Updated**: December 5, 2025 **Status**: Active Directive **Review Frequency**: Every commit

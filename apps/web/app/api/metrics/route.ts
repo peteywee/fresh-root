@@ -1,7 +1,7 @@
 // [P0][METRICS][API] Metrics endpoint
 
-
 import { createPublicEndpoint } from "@fresh-schedules/api-framework";
+
 import { ok, serverError } from "../_shared/validation";
 
 /**

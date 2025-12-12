@@ -1,6 +1,7 @@
 # Architecture Diagrams
 
-Strategic visual representations of Fresh Schedules infrastructure, execution roadmap, and critical flows.
+Strategic visual representations of Fresh Schedules infrastructure, execution roadmap, and critical
+flows.
 
 ---
 

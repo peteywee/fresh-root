@@ -401,15 +401,15 @@ graph TB
 
 ## Diagram Legend
 
-| Symbol | Meaning |
-|--------|---------|
-| 🔴 Red Fill | Security/Critical (Blocking) |
-| 🟠 Orange Fill | Integrity (Blocking) |
-| 🟡 Yellow Fill | Warning (Non-Blocking) |
-| 🟢 Green Fill | Success/Validation |
-| 🔵 Blue Fill | Core/Always Loaded |
-| Dashed Line | Dependency/Reference |
-| Solid Line | Direct Flow |
+| Symbol         | Meaning                      |
+| -------------- | ---------------------------- |
+| 🔴 Red Fill    | Security/Critical (Blocking) |
+| 🟠 Orange Fill | Integrity (Blocking)         |
+| 🟡 Yellow Fill | Warning (Non-Blocking)       |
+| 🟢 Green Fill  | Success/Validation           |
+| 🔵 Blue Fill   | Core/Always Loaded           |
+| Dashed Line    | Dependency/Reference         |
+| Solid Line     | Direct Flow                  |
 
 ---
 

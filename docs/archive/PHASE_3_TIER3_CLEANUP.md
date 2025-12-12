@@ -2,10 +2,9 @@
 
 **Objective:** Add missing API headers to remaining routes for style compliance.
 
-**Baseline:** 45 Tier 3 (Style) violations
-**Target:** 0 Tier 3 violations (optional)
-**Score Improvement:** ~22 points (if completed)
-**Scope:** Optional but recommended to reach 70+ score threshold
+**Baseline:** 45 Tier 3 (Style) violations **Target:** 0 Tier 3 violations (optional) **Score
+Improvement:** ~22 points (if completed) **Scope:** Optional but recommended to reach 70+ score
+threshold
 
 ---
 

@@ -1,8 +1,8 @@
 // [P0][SHIFTS][DETAIL][API] Shift detail endpoint
 
+import { createOrgEndpoint } from "@fresh-schedules/api-framework";
 import { UpdateShiftSchema } from "@fresh-schedules/types";
 
-import { createOrgEndpoint } from "@fresh-schedules/api-framework";
 import { ok, serverError } from "../../_shared/validation";
 
 /**

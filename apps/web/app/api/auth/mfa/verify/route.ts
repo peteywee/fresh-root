@@ -1,8 +1,8 @@
 // [P0][AUTH][API] MFA verify endpoint
+import { createAuthenticatedEndpoint } from "@fresh-schedules/api-framework";
 import * as speakeasy from "speakeasy";
 import { z } from "zod";
 
-import { createAuthenticatedEndpoint } from "@fresh-schedules/api-framework";
 import { ok, serverError, badRequest } from "../../../_shared/validation";
 
 // Schema for MFA verification request

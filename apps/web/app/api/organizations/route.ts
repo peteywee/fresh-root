@@ -1,9 +1,9 @@
 // [P0][ORGS][API] Organizations list endpoint
 
+import { createAuthenticatedEndpoint } from "@fresh-schedules/api-framework";
 import { CreateOrganizationSchema } from "@fresh-schedules/types";
 import { NextResponse } from "next/server";
 
-import { createAuthenticatedEndpoint } from "@fresh-schedules/api-framework";
 import { badRequest, ok, parseJson, serverError } from "../_shared/validation";
 
 // Rate limiting via factory options

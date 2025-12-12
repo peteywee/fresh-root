@@ -2,9 +2,7 @@
 
 ## ${Service} Runbook
 
-**Owner:** ${Owner}
-**SLOs:** ${SLOs}
-**Pager:** ${Pager}
+**Owner:** ${Owner} **SLOs:** ${SLOs} **Pager:** ${Pager}
 
 ## Overview
 

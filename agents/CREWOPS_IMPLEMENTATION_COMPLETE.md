@@ -13,7 +13,8 @@ The **CrewOps Protocol** is now fully implemented and **automatically engaged** 
 1. **Session Bootstrap** — When agent starts
 2. **Every Non-Trivial Prompt** — Code, architecture, research, deployment work
 
-The protocol is **self-initializing** and **fail-closed**. You don't need to do anything special; just start asking questions.
+The protocol is **self-initializing** and **fail-closed**. You don't need to do anything special;
+just start asking questions.
 
 ---
 
@@ -425,7 +426,8 @@ The protocol is:
 - ✅ **Audit-tracked** with complete trails
 - ✅ **Deterministic** with runnable commands
 
-**You don't need to do anything.** Just ask your next question. The crew will dispatch automatically.
+**You don't need to do anything.** Just ask your next question. The crew will dispatch
+automatically.
 
 ---
 

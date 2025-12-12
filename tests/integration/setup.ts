@@ -10,8 +10,8 @@
  *   firebase emulators:start --only auth,firestore,functions
  */
 
-import { beforeAll, afterAll, afterEach } from "vitest";
 import * as admin from "firebase-admin";
+import { beforeAll, afterAll, afterEach } from "vitest";
 
 // =============================================================================
 // EMULATOR CONFIGURATION

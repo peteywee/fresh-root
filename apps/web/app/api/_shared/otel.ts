@@ -11,6 +11,7 @@
  */
 
 import { context, trace, SpanStatusCode, type Attributes } from "@opentelemetry/api";
+
 import { ensureOtelStarted } from "./otel-init";
 
 const tracer = trace.getTracer("fresh-root-web-api");

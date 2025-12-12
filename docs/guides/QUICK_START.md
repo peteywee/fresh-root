@@ -175,7 +175,8 @@ git checkout -b feature/my-feature
 
 ### If you're a Developer
 
-→ Go to dev branch, read [docs/standards/00_STANDARDS_INDEX.md](../../dev/docs/standards/00_STANDARDS_INDEX.md)
+→ Go to dev branch, read
+[docs/standards/00_STANDARDS_INDEX.md](../../dev/docs/standards/00_STANDARDS_INDEX.md)
 
 ### If you're Deploying
 

@@ -318,7 +318,9 @@ Example:
 Fallback: Activating standard tooling mode
 Override: Include CREWOPS_FORCE to re-attempt initialization
 ```
+
 >
+
 ---
 
 ## DEACTIVATION & RESET

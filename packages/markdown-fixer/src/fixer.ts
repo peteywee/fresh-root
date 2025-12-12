@@ -74,18 +74,25 @@ export async function fixFiles(input: string) {
   const updatedLines = lines.slice();
   let i = 0;
   while (i < lines.length) {
-    const match = lines[i].match(/^(\s*)(\d+)\.\s+/);
+    const line = lines[i];
+    if (!line) {
+      i++;
+      continue;
+    }
+    const match = line.match(/^(\s*)(\d+)\.\s+/);
     if (match) {
       // Find contiguous block
       const start = i;
       let counter = 1;
       while (i < lines.length) {
-        const m = lines[i].match(/^(\s*)(\d+)\.\s+(.*)$/);
+        const curLine = lines[i];
+        if (!curLine) break;
+        const m = curLine.match(/^(\s*)(\d+)\.\s+(.*)$/);
         if (!m) break;
-        const indent = m[1];
-        const rest = m[3];
+        const indent = m[1]!;
+        const rest = m[3]!;
         const expected = `${indent}${counter}. ${rest}`;
-        if (expected !== lines[i]) {
+        if (expected !== curLine) {
           updatedLines[i] = expected;
           changed = true;
         }

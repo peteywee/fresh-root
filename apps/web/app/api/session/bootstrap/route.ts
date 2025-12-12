@@ -26,10 +26,7 @@ export const GET = createAuthenticatedEndpoint({
         error: message,
         userId: context.auth?.userId,
       });
-      return NextResponse.json(
-        { error: { code: "INTERNAL_ERROR", message } },
-        { status: 500 }
-      );
+      return NextResponse.json({ error: { code: "INTERNAL_ERROR", message } }, { status: 500 });
     }
   },
 });
@@ -56,10 +53,7 @@ export const POST = createAuthenticatedEndpoint({
         error: message,
         userId: context.auth?.userId,
       });
-      return NextResponse.json(
-        { error: { code: "INTERNAL_ERROR", message } },
-        { status: 500 }
-      );
+      return NextResponse.json({ error: { code: "INTERNAL_ERROR", message } }, { status: 500 });
     }
   },
 });

@@ -1,14 +1,15 @@
 # FRESH Engine Phase 3: Tier 3 Style Cleanup (Optional)
+
 **Objective:** Add missing API headers to remaining routes for style compliance.
 
-**Baseline:** 45 Tier 3 (Style) violations
-**Target:** 0 Tier 3 violations (optional)
-**Score Improvement:** ~22 points (if completed)
-**Scope:** Optional but recommended to reach 70+ score threshold
+**Baseline:** 45 Tier 3 (Style) violations **Target:** 0 Tier 3 violations (optional) **Score
+Improvement:** ~22 points (if completed) **Scope:** Optional but recommended to reach 70+ score
+threshold
 
 ---
 
 ## Issue Summary
+
 **Tier 3 violations are style/cosmetic only:**
 
 - Missing standard headers on API routes
@@ -22,7 +23,9 @@
 ---
 
 ## Standard Headers
+
 ### API Route Header
+
 All route.ts files should start with:
 
 ```ts
@@ -44,6 +47,7 @@ export async function GET(request: NextRequest) {
 ```
 
 ### Schema Header
+
 All schema files should start with:
 
 ```ts
@@ -67,7 +71,9 @@ export const ComplianceSchema = z.object({
 ---
 
 ## Files to Update
+
 ### API Routes (Priority: Low)
+
 The following routes need headers added:
 
 ```
@@ -107,6 +113,7 @@ apps/web/app/api/zones/route.ts
 ```
 
 ### Schema Files (Priority: Medium)
+
 ```
 packages/types/src/compliance/index.ts
 packages/types/src/compliance.ts
@@ -125,7 +132,9 @@ packages/types/src/widgets.ts
 ---
 
 ## Implementation Strategy
+
 ### Option A: Automated Script
+
 Create a script to add headers to all files:
 
 ```bash
@@ -146,6 +155,7 @@ done
 ```
 
 ### Option B: Manual Per-File
+
 Edit each file individually to add appropriate header based on content.
 
 **Recommendation:** Option A (automated) + manual review for accuracy.
@@ -153,6 +163,7 @@ Edit each file individually to add appropriate header based on content.
 ---
 
 ## Execution Steps
+
 1. **Review current state:**
 
    ```bash
@@ -185,6 +196,7 @@ Edit each file individually to add appropriate header based on content.
 ---
 
 ## Verification Checklist
+
 - \[ ] All API routes have `// [P#][API][CODE]` header
 - \[ ] All schema files have `// [P#][SCHEMA][DOMAIN]` header
 - \[ ] Validator reports 0 Tier 3 issues
@@ -193,6 +205,7 @@ Edit each file individually to add appropriate header based on content.
 ---
 
 ## Success Criteria
+
 ✅ **Phase 3 Complete** when:
 
 - Tier 0: 0 ✅
@@ -205,6 +218,7 @@ Edit each file individually to add appropriate header based on content.
 ---
 
 ## Priority
+
 🟡 **Optional** — Not required for security/integrity
 
 - Improves developer experience
@@ -216,6 +230,7 @@ Edit each file individually to add appropriate header based on content.
 ---
 
 ## Timeline
+
 **Estimated time to complete:** 30-45 minutes
 
 - Script generation: 10 min

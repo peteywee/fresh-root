@@ -1,6 +1,7 @@
 # Keep Copilot + Minimal Speed Loss (Chromebook Edition)
 
-**Updated strategy**: Instead of disabling Copilot, use targeted optimizations to keep it running while minimizing speed impact.
+**Updated strategy**: Instead of disabling Copilot, use targeted optimizations to keep it running
+while minimizing speed impact.
 
 ---
 
@@ -349,10 +350,8 @@ ps aux | grep copilot
 
 ## TL;DR
 
-✅ **Copilot stays enabled**
-✅ **Builds ~10% slower** (acceptable trade)
-✅ **Memory safe** (peaks at 1.8GB, leaves 4.5GB buffer)
-✅ **No crashes** (daemon monitors, safeguards active)
-✅ **Full productivity** (AI assistance + stability)
+✅ **Copilot stays enabled** ✅ **Builds ~10% slower** (acceptable trade) ✅ **Memory safe** (peaks
+at 1.8GB, leaves 4.5GB buffer) ✅ **No crashes** (daemon monitors, safeguards active) ✅ **Full
+productivity** (AI assistance + stability)
 
 Run `pnpm dev`, use Copilot, and don't worry about code 9.

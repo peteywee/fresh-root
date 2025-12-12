@@ -2,8 +2,7 @@
 
 ## Spec: ${Feature}
 
-**Owner:** ${Owner}
-**Goal:** ${Goal}
+**Owner:** ${Owner} **Goal:** ${Goal}
 
 ## Problem
 
@@ -11,8 +10,7 @@ ${Problem}
 
 ## Scope
 
-In: ${InScope}
-Out: ${OutScope}
+In: ${InScope} Out: ${OutScope}
 
 ## UX Flow
 

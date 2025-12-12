@@ -4,7 +4,8 @@ This document describes the available VS Code tasks for the Fresh-Root project.
 
 ## Using Tasks in VS Code
 
-Press `Ctrl+Shift+P` (or `Cmd+Shift+P` on macOS) and search for "Tasks: Run Task" to see all available tasks.
+Press `Ctrl+Shift+P` (or `Cmd+Shift+P` on macOS) and search for "Tasks: Run Task" to see all
+available tasks.
 
 ## Available Tasks
 
@@ -67,13 +68,15 @@ Press `Ctrl+Shift+P` (or `Cmd+Shift+P` on macOS) and search for "Tasks: Run Task
 
 ## Setup: Adding Tasks to VS Code
 
-The tasks are configured in `.vscode/tasks.json` (which is `.gitignore`d). All new tasks are automatically included:
+The tasks are configured in `.vscode/tasks.json` (which is `.gitignore`d). All new tasks are
+automatically included:
 
 - ✅ Quality Gate Tasks (Doc Parity, Test Coverage)
 - ✅ Migration Tools (v15 Readiness, Mini-Indexes)
 - ✅ Cleanup Tasks (Legacy Artifacts)
 
-To manually add a task, press `Ctrl+Shift+D` (or `Cmd+Shift+D`), click "Configure Task", and add to the `tasks` array in `.vscode/tasks.json`.
+To manually add a task, press `Ctrl+Shift+D` (or `Cmd+Shift+D`), click "Configure Task", and add to
+the `tasks` array in `.vscode/tasks.json`.
 
 ## Running Tasks from Command Line
 

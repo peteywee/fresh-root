@@ -1,6 +1,7 @@
 # Action Plan: Complete Feature Branch Merges
 
 ## Quick Summary
+
 ✅ **Done**: Analyzed all PRs and prepared consolidated changes  
 ⏳ **Todo**: Push to dev, close PRs, resolve conflicts
 
@@ -9,6 +10,7 @@
 ## Immediate Actions (5 minutes)
 
 ### Step 1: Push Consolidated Changes to Dev
+
 ```bash
 cd /path/to/fresh-root
 git checkout dev
@@ -20,15 +22,18 @@ git push origin dev
 **Expected Result**: The dev branch will have PR #131 and #132 changes merged.
 
 ### Step 2: Close PRs #131 and #132
+
 Visit these URLs and close with comment:
 
 **PR #131**: https://github.com/peteywee/fresh-root/pull/131
+
 ```
 Merged into dev branch via consolidated commit 956166f.
 Changes: Removed feature-branch-cleanup.yml workflow file.
 ```
 
 **PR #132**: https://github.com/peteywee/fresh-root/pull/132
+
 ```
 Merged into dev branch via consolidated commit 956166f.
 Changes: Removed branch-file-validator.yml workflow file.
@@ -45,6 +50,7 @@ Changes: Removed branch-file-validator.yml workflow file.
 This PR has merge conflicts because it's based on an older dev commit.
 
 **Option A - Rebase (Recommended)**:
+
 ```bash
 git checkout fix/triad-remediation-quickpush
 git fetch origin
@@ -60,6 +66,7 @@ git push --force-with-lease origin fix/triad-remediation-quickpush
 ```
 
 **Option B - Manual Merge**:
+
 ```bash
 git checkout dev
 git merge --no-ff fix/triad-remediation-quickpush
@@ -87,6 +94,7 @@ git push origin dev
 After completing all steps:
 
 ### Check Dev Branch
+
 ```bash
 git checkout dev
 git log --oneline -10
@@ -97,6 +105,7 @@ git log --oneline -10
 ```
 
 ### Check Workflow Files
+
 ```bash
 ls -la .github/workflows/
 
@@ -106,7 +115,9 @@ ls -la .github/workflows/
 ```
 
 ### Check PR Status
+
 All these should be closed:
+
 - [ ] PR #131 ✓
 - [ ] PR #132 ✓
 - [ ] PR #129 (after conflict resolution) ✓
@@ -116,6 +127,7 @@ All these should be closed:
 ## What NOT to Close
 
 These PRs target `main`, not `dev`:
+
 - **PR #127**: dev → main (v1.3.1 security fixes) - Keep open
 - **PR #136**: docs → main (Production documentation) - Keep open
 - **PR #137**: copilot branch → dev (This PR) - Up to you
@@ -125,15 +137,18 @@ These PRs target `main`, not `dev`:
 ## Troubleshooting
 
 ### "Authentication failed" when pushing
+
 - Make sure you have push access to the repository
 - Check your git credentials: `git config --list | grep credential`
 - Consider using SSH instead of HTTPS
 
 ### "Cannot rebase" errors
+
 - Try Option B (manual merge) instead
 - Or create a fresh PR from current dev with cherry-picked commits
 
 ### "Still showing conflicts" after resolution
+
 - Make sure you've added all resolved files: `git add <file>`
 - Check status: `git status`
 - Complete the rebase: `git rebase --continue`
@@ -148,9 +163,9 @@ These PRs target `main`, not `dev`:
 
 ---
 
-**Priority**: Medium (improves workflow, removes unused automation)
-**Complexity**: Low (simple file deletions) + Medium (PR #129 conflicts)
-**Time Estimate**: 
+**Priority**: Medium (improves workflow, removes unused automation) **Complexity**: Low (simple file
+deletions) + Medium (PR #129 conflicts) **Time Estimate**:
+
 - Steps 1-2: 5 minutes
 - Step 3: 15-30 minutes depending on conflicts
 

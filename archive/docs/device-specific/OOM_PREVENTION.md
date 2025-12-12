@@ -1,8 +1,8 @@
 # OOM Crash Prevention Guide (Code 9 - SIGKILL)
 
-**Problem**: VSCode process killed by system OOM killer (exit code 9, SIGKILL)
-**Root Cause**: 6.3GB system RAM with 0 swap space + 4.1GB used = insufficient memory pressure buffer
-**Solution**: Swap + process monitoring + memory caps
+**Problem**: VSCode process killed by system OOM killer (exit code 9, SIGKILL) **Root Cause**: 6.3GB
+system RAM with 0 swap space + 4.1GB used = insufficient memory pressure buffer **Solution**: Swap +
+process monitoring + memory caps
 
 ## Quick Fix (1 minute)
 
@@ -155,5 +155,4 @@ watch -n 1 'free -h && echo "" && ps aux --sort=-%mem | head -8'
 
 ---
 
-**Last Updated**: November 29, 2025
-**Status**: All safeguards in place, monitoring active
+**Last Updated**: November 29, 2025 **Status**: All safeguards in place, monitoring active

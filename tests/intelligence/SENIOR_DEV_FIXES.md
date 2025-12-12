@@ -2,7 +2,8 @@
 
 ## Problem Statement
 
-Junior devs created `testintel` - an AI-Powered Test Intelligence CLI package for npm. However, there were several issues:
+Junior devs created `testintel` - an AI-Powered Test Intelligence CLI package for npm. However,
+there were several issues:
 
 1. **Runtime crash** - `fs` module not imported in platform.ts
 2. **Type errors** - Zod internal types incompatible, missing type declarations
@@ -134,7 +135,8 @@ const PROJECT_ROOT = getProjectRoot();
 
 ### 5. Created Honest Documentation (v1.0.8)
 
-**Problem:** TECHNICAL_MANUAL.md oversold features - claimed AI prioritization, predictive analytics, etc. work when they're all stub data
+**Problem:** TECHNICAL_MANUAL.md oversold features - claimed AI prioritization, predictive
+analytics, etc. work when they're all stub data
 
 **Solution:** Created `USAGE_GUIDE.md` with:
 

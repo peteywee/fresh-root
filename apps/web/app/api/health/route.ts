@@ -1,6 +1,6 @@
 // [P0][HEALTH][API] Health check endpoint
-import { NextResponse } from "next/server";
 import { createPublicEndpoint } from "@fresh-schedules/api-framework";
+import { NextResponse } from "next/server";
 
 /**
  * GET /api/health

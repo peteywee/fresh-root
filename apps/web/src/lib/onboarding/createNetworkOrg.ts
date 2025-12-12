@@ -98,7 +98,9 @@ export async function createNetworkWithOrgAndVenue(
     slug: networkId,
     displayName: (basics as any)?.orgName ?? networkId,
     legalName:
-      (draft.form as { data?: { legalName?: string } })?.data?.legalName ?? basicsData.orgName ?? null,
+      (draft.form as { data?: { legalName?: string } })?.data?.legalName ??
+      basicsData.orgName ??
+      null,
     kind: basicsData.hasCorporateAboveYou ? "franchise_network" : "independent_org",
     segment: basicsData.segment,
     status: "pending_verification",
@@ -146,7 +148,9 @@ export async function createNetworkWithOrgAndVenue(
   };
   batch.set(venueRef, venueDoc);
 
-  const membershipRef = networkRef.collection("memberships").doc() as DocumentReference<MembershipDoc>;
+  const membershipRef = networkRef
+    .collection("memberships")
+    .doc() as DocumentReference<MembershipDoc>;
   const membershipDoc: MembershipDoc = {
     id: membershipRef.id,
     networkId,

@@ -4,7 +4,7 @@
 
 **SDK Installation**: ✅ Installed (`workspace:*` dependency)  
 **Build Status**: ✅ Working (303ms ESM, 5045ms DTS)  
-**Current Adoption**: ✅ 100% - All API routes using SDK factory pattern  
+**Current Adoption**: ✅ 100% - All API routes using SDK factory pattern
 
 ## 🚀 Quick Start (5 minutes)
 
@@ -40,9 +40,9 @@ import { NextResponse } from "next/server";
 
 export const GET = createOrgEndpoint({
   handler: async ({ context }) => {
-    return NextResponse.json({ 
+    return NextResponse.json({
       orgId: context.org!.orgId,
-      message: "Hello from SDK!" 
+      message: "Hello from SDK!",
     });
   },
 });
@@ -116,7 +116,9 @@ export const POST = createOrgEndpoint({
 ```typescript
 export const POST = createOrgEndpoint({
   rateLimit: { maxRequests: 50, windowMs: 60000 },
-  handler: async () => { /* ... */ },
+  handler: async () => {
+    /* ... */
+  },
 });
 ```
 

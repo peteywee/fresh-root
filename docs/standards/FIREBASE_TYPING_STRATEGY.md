@@ -20,9 +20,9 @@ date: 2025-12-02
 
 **Files Affected:**
 
-- app/api/**/*.ts (40+ route handlers)
-- src/lib/**/*.ts (utility functions)
-- lib/**/*.ts (helpers)
+- app/api/\*_/_.ts (40+ route handlers)
+- src/lib/\*_/_.ts (utility functions)
+- lib/\*_/_.ts (helpers)
 - app/lib/firebaseClient.ts
 - app/actions/\*_/_.ts
 - instrumentation.ts
@@ -52,8 +52,8 @@ date: 2025-12-02
 }
 ```
 
-**Expected Impact:** 195 errors → suppressed (195 error reduction)
-**Timeline:** Immediate (config change only)
+**Expected Impact:** 195 errors → suppressed (195 error reduction) **Timeline:** Immediate (config
+change only)
 
 ---
 
@@ -85,8 +85,8 @@ date: 2025-12-02
 
 **Files with Issue:**
 
-- app/api/*/route.ts (multiple endpoint handlers)
-- app/actions/*.ts (server actions)
+- app/api/\*/route.ts (multiple endpoint handlers)
+- app/actions/\*.ts (server actions)
 
 **Fix Strategy:**
 
@@ -108,8 +108,7 @@ export const POST = (req: Request) => {
 };
 ```
 
-**Expected Impact:** ~39 error reduction
-**Automation:** 70% auto-fixable, 30% requires review
+**Expected Impact:** ~39 error reduction **Automation:** 70% auto-fixable, 30% requires review
 
 ---
 
@@ -177,14 +176,14 @@ const userData = snapData<UserProfile>(snap);
 
 ## Implementation Timeline
 
-**Phase 1 (Active):** Dec 2 - Now (config, ~15 min)
-**Phase 2 (Queued):** Dec 2 - Within 1 hour (auto-fix)
-**Phase 3 (Queued):** Dec 2 - Within 4 hours (require-await fixes)
-**Phase 4 (Future):** Q1 2026 (Firebase wrapper library)
+**Phase 1 (Active):** Dec 2 - Now (config, ~15 min) **Phase 2 (Queued):** Dec 2 - Within 1 hour
+(auto-fix) **Phase 3 (Queued):** Dec 2 - Within 4 hours (require-await fixes) **Phase 4 (Future):**
+Q1 2026 (Firebase wrapper library)
 
 ---
 
 ## References
+
 - **Firebase Typing Issue:** https://github.com/firebase/firebase-js-sdk/issues/7598
 - **ESLint Config:** apps/web/eslint.config.mjs
 - **Firebase Files:** apps/web/src/lib/, apps/web/app/api/

@@ -1,10 +1,10 @@
 // [P0][SHIFTS][API] Shifts list endpoint
 export const dynamic = "force-dynamic";
 
-import { NextResponse } from "next/server";
-import { CreateShiftSchema } from "@fresh-schedules/types";
-
 import { createOrgEndpoint } from "@fresh-schedules/api-framework";
+import { CreateShiftSchema } from "@fresh-schedules/types";
+import { NextResponse } from "next/server";
+
 import { badRequest, ok, serverError } from "../_shared/validation";
 
 /**

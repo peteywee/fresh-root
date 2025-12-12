@@ -3,9 +3,12 @@
 ## What "Comprehensive" Means Here
 
 - **Schemas**: 100% property coverage via Zod safeParse tests (valid + invalid matrices).
-- **Rules**: Each resource path gets allow/deny matrices for roles `['admin','manager','staff','anon']` and membership states.
-- **API**: Request validation (happy + edge), authN, authZ, rate limit, shape of response, and error codes.
-- **Flows**: At least one integration test per core flow (onboarding, join, create schedule, publish).
+- **Rules**: Each resource path gets allow/deny matrices for roles
+  `['admin','manager','staff','anon']` and membership states.
+- **API**: Request validation (happy + edge), authN, authZ, rate limit, shape of response, and error
+  codes.
+- **Flows**: At least one integration test per core flow (onboarding, join, create schedule,
+  publish).
 
 ## Metrics We Track
 

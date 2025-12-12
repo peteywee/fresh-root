@@ -1,8 +1,8 @@
 // [P0][SCHEDULE][API] Schedule detail endpoint
 
+import { createOrgEndpoint } from "@fresh-schedules/api-framework";
 import { UpdateScheduleSchema } from "@fresh-schedules/types";
 
-import { createOrgEndpoint } from "@fresh-schedules/api-framework";
 import { badRequest, ok, parseJson, serverError } from "../../_shared/validation";
 
 /**

@@ -6,12 +6,14 @@ applyTo: "\*\*/\*.{cs,ts,java}"
 
 # Object Calisthenics Rules
 
-> ⚠️ **Warning:** This file contains the 9 original Object Calisthenics rules. No additional rules must be added, and none of these rules should be replaced or removed.
-> Examples may be added later if needed.
+> ⚠️ **Warning:** This file contains the 9 original Object Calisthenics rules. No additional rules
+> must be added, and none of these rules should be replaced or removed. Examples may be added later
+> if needed.
 
 ## Objective
 
-This rule enforces the principles of Object Calisthenics to ensure clean, maintainable, and robust code in the backend, **primarily for business domain code**.
+This rule enforces the principles of Object Calisthenics to ensure clean, maintainable, and robust
+code in the backend, **primarily for business domain code**.
 
 ## Scope and Application
 
@@ -121,7 +123,8 @@ This rule enforces the principles of Object Calisthenics to ensure clean, mainta
 
 1. **First Class Collections**:
    - Use collections to encapsulate data and behavior, rather than exposing raw data structures.
-     First Class Collections: a class that contains an array as an attribute should not contain any other attributes
+     First Class Collections: a class that contains an array as an attribute should not contain any
+     other attributes
 
 ```csharp
    // Bad Example - Exposing raw collection
@@ -287,7 +290,8 @@ This rule enforces the principles of Object Calisthenics to ensure clean, mainta
   - Focus on maintaining single responsibility and clean abstractions.
 
 - **DTOs and Data Objects**:
-  - Rules 3 (wrapping primitives), 8 (two instance variables), and 9 (no getters/setters) may be relaxed for DTOs.
+  - Rules 3 (wrapping primitives), 8 (two instance variables), and 9 (no getters/setters) may be
+    relaxed for DTOs.
   - Public properties with getters/setters are acceptable for data transfer objects.
 
 - **Testing**:

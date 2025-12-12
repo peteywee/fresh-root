@@ -70,7 +70,8 @@ async function fetchSchedules(limit: number) {
 async function fetchSchedules(_limit: number) {
 ```
 
-**Rationale**: Parameter comes from route handler but function doesn't use it. Prefix with \_ signals intentional.
+**Rationale**: Parameter comes from route handler but function doesn't use it. Prefix with \_
+signals intentional.
 
 **Status**: READY FOR EXECUTION
 

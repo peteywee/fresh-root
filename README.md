@@ -2,7 +2,7 @@
 
 **Status:** ✅ Production Ready | **Version:** 1.2.0 | **Last Updated:** December 7, 2025
 
-A production-ready Progressive Web App (PWA) for staff scheduling with enterprise-grade security, 
+A production-ready Progressive Web App (PWA) for staff scheduling with enterprise-grade security,
 comprehensive testing automation, and intelligent coverage management.
 
 Built with Next.js 16, Firebase, TypeScript, and a modern monorepo architecture (pnpm workspaces).
@@ -13,21 +13,26 @@ Built with Next.js 16, Firebase, TypeScript, and a modern monorepo architecture 
 
 ### ✨ Major Features
 
-- **🧪 Auto-Generated Test Templates** — 39 test templates (33 unit, 6 integration) auto-generated to identify coverage gaps
-- **📊 Coverage Threshold Automation** — Automatic test generation when coverage falls below thresholds (Unit ≥90%, Integration ≥80%, Overall ≥85%)
-- **📝 Markdown Linting Library** — 51 rules, 28 auto-fixable with 3 configurable profiles (strict/standard/lenient)
-- **✅ SDK Factory Verification** — 40 passing integration tests validating SDK factory pattern across 20+ API routes
-- **🔄 Intelligent Test Workflow** — Detect gaps → Generate templates → Implement TODOs → Auto-commit
+- **🧪 Auto-Generated Test Templates** — 39 test templates (33 unit, 6 integration) auto-generated
+  to identify coverage gaps
+- **📊 Coverage Threshold Automation** — Automatic test generation when coverage falls below
+  thresholds (Unit ≥90%, Integration ≥80%, Overall ≥85%)
+- **📝 Markdown Linting Library** — 51 rules, 28 auto-fixable with 3 configurable profiles
+  (strict/standard/lenient)
+- **✅ SDK Factory Verification** — 40 passing integration tests validating SDK factory pattern
+  across 20+ API routes
+- **🔄 Intelligent Test Workflow** — Detect gaps → Generate templates → Implement TODOs →
+  Auto-commit
 
 ### 📦 What Ships
 
-| Component | Details |
-|-----------|---------|
-| **Test Templates** | 39 pre-generated templates ready for implementation |
-| **Coverage Automation** | Workflow detects thresholds, auto-generates missing tests |
-| **Markdown Linting** | Full library with CLI integration, npm scripts, CI workflow |
-| **SDK Verification** | TypeScript strict mode (0 errors), 40 passing tests |
-| **Documentation** | Quick-start guides, implementation hints, architecture docs |
+| Component               | Details                                                     |
+| ----------------------- | ----------------------------------------------------------- |
+| **Test Templates**      | 39 pre-generated templates ready for implementation         |
+| **Coverage Automation** | Workflow detects thresholds, auto-generates missing tests   |
+| **Markdown Linting**    | Full library with CLI integration, npm scripts, CI workflow |
+| **SDK Verification**    | TypeScript strict mode (0 errors), 40 passing tests         |
+| **Documentation**       | Quick-start guides, implementation hints, architecture docs |
 
 ---
 
@@ -129,12 +134,12 @@ Coverage below threshold?
 
 ### Thresholds (Hard Requirements)
 
-| Metric | Minimum | Status |
-|--------|---------|--------|
-| **Unit Tests** | ≥90% | 🔴 Enforced |
-| **Integration Tests** | ≥80% | 🔴 Enforced |
-| **E2E Tests** | ≥70% | 🟡 Monitored |
-| **Overall** | ≥85% | 🔴 Enforced |
+| Metric                | Minimum | Status       |
+| --------------------- | ------- | ------------ |
+| **Unit Tests**        | ≥90%    | 🔴 Enforced  |
+| **Integration Tests** | ≥80%    | 🔴 Enforced  |
+| **E2E Tests**         | ≥70%    | 🟡 Monitored |
+| **Overall**           | ≥85%    | 🔴 Enforced  |
 
 ### Quick Commands
 
@@ -342,9 +347,9 @@ import { createOrgEndpoint } from "@fresh-schedules/api-framework";
 import { CreateScheduleSchema } from "@fresh-schedules/types";
 
 export const POST = createOrgEndpoint({
-  roles: ["manager"],                    // Required role
-  rateLimit: { maxRequests: 50, windowMs: 60000 },  // Rate limit
-  input: CreateScheduleSchema,           // Auto-validates
+  roles: ["manager"], // Required role
+  rateLimit: { maxRequests: 50, windowMs: 60000 }, // Rate limit
+  input: CreateScheduleSchema, // Auto-validates
   handler: async ({ input, context }) => {
     // Business logic here
     // context has: auth (userId, email), org (orgId, role), request
@@ -372,13 +377,13 @@ export const POST = createOrgEndpoint({
 
 ### Quick Links
 
-| Resource | Purpose |
-|----------|---------|
-| [QUICK_START.md](./docs/QUICK_START.md) | First 5 minutes |
-| [CODING_RULES_AND_PATTERNS.md](./docs/CODING_RULES_AND_PATTERNS.md) | Code standards |
-| [PRODUCTION_READINESS.md](./docs/PRODUCTION_READINESS.md) | Production checklist |
-| [TEST_AUTO_GENERATION.md](./docs/TEST_AUTO_GENERATION.md) | Test generation details |
-| [ARCHITECTURE.md](./docs/ARCHITECTURE.md) | System architecture |
+| Resource                                                                                                       | Purpose                  |
+| -------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| [QUICK_START.md](./docs/QUICK_START.md)                                                                        | First 5 minutes          |
+| [CODING_RULES_AND_PATTERNS.md](./docs/CODING_RULES_AND_PATTERNS.md)                                            | Code standards           |
+| [PRODUCTION_READINESS.md](./docs/PRODUCTION_READINESS.md)                                                      | Production checklist     |
+| [TEST_AUTO_GENERATION.md](./docs/TEST_AUTO_GENERATION.md)                                                      | Test generation details  |
+| [ARCHITECTURE.md](./docs/ARCHITECTURE.md)                                                                      | System architecture      |
 | [AI_PROMPT_ENGINEERING.md](./.github/instructions/ai-prompt-engineering-safety-best-practices.instructions.md) | Prompt engineering guide |
 
 ### Comprehensive Guides

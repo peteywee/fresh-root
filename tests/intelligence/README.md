@@ -2,7 +2,9 @@
 
 **The most advanced, AI-powered testing framework you've ever seen.**
 
-This is not your typical test suite. This is a **next-generation, self-aware testing ecosystem** that combines cutting-edge AI, chaos engineering, mutation testing, performance profiling, and self-healing capabilities into a single, unified platform.
+This is not your typical test suite. This is a **next-generation, self-aware testing ecosystem**
+that combines cutting-edge AI, chaos engineering, mutation testing, performance profiling, and
+self-healing capabilities into a single, unified platform.
 
 ---
 
@@ -10,7 +12,8 @@ This is not your typical test suite. This is a **next-generation, self-aware tes
 
 ### 1. **AI-Powered Auto-Test Generation** 🤖
 
-The system **analyzes your codebase** using AST (Abstract Syntax Tree) parsing and **automatically generates comprehensive tests** for every API endpoint.
+The system **analyzes your codebase** using AST (Abstract Syntax Tree) parsing and **automatically
+generates comprehensive tests** for every API endpoint.
 
 ```bash
 pnpm test:auto-generate
@@ -50,7 +53,8 @@ Every API request is **profiled in real-time** with:
 - CPU time
 - Throughput
 
-The system **detects performance regressions** by comparing against baselines and **generates actionable recommendations**.
+The system **detects performance regressions** by comparing against baselines and **generates
+actionable recommendations**.
 
 ```bash
 pnpm test:performance
@@ -105,7 +109,8 @@ pnpm test:contracts
 
 ### 4. **Mutation Testing** 🧬
 
-**Validates the quality of your tests** by introducing bugs into your code and ensuring tests catch them.
+**Validates the quality of your tests** by introducing bugs into your code and ensuring tests catch
+them.
 
 ```bash
 pnpm test:mutation
@@ -554,10 +559,14 @@ New developers get instant API documentation and examples.
 ## 📈 ROI & Business Value
 
 <<<<<<< HEAD
+
 ### Time Savings:
+
 =======
+
 ### Time Savings
->>>>>>> pr-128
+
+> > > > > > > pr-128
 
 - **Test Writing**: 40 hours → 2 hours (95% reduction)
 - **Performance Monitoring**: Manual → Automatic (100% coverage)
@@ -565,10 +574,14 @@ New developers get instant API documentation and examples.
 - **Debugging**: Hours → Minutes (Self-healing tests)
 
 <<<<<<< HEAD
+
 ### Quality Improvements:
+
 =======
+
 ### Quality Improvements
->>>>>>> pr-128
+
+> > > > > > > pr-128
 
 - **Test Coverage**: 60% → 85%+ (42% increase)
 - **Bug Detection**: Earlier in dev cycle (80% cost reduction)
@@ -576,10 +589,14 @@ New developers get instant API documentation and examples.
 - **API Contract Violations**: Prevented before deployment
 
 <<<<<<< HEAD
+
 ### Cost Savings (per year):
+
 =======
+
 ### Cost Savings (per year)
->>>>>>> pr-128
+
+> > > > > > > pr-128
 
 - Reduced manual testing: **$50,000**
 - Faster bug detection: **$30,000**

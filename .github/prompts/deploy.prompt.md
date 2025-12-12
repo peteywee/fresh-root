@@ -2,7 +2,15 @@
 agent: "agent"
 description: "Build, validate, and deploy to production"
 tools:
-  ['runCommands/terminalLastCommand', 'runTasks', 'github/github-mcp-server/*', 'usages', 'problems', 'testFailure', 'todos']
+  [
+    "runCommands/terminalLastCommand",
+    "runTasks",
+    "github/github-mcp-server/*",
+    "usages",
+    "problems",
+    "testFailure",
+    "todos",
+  ]
 ---
 
 # Deploy Workflow
@@ -112,9 +120,11 @@ git push origin main
 # Deployment Report
 
 ## Environment
+
 [dev/staging/production]
 
 ## Pre-Deployment Checks
+
 - [ ] TypeScript: ✅/❌
 - [ ] Lint: ✅/❌
 - [ ] Tests: ✅/❌
@@ -123,17 +133,20 @@ git push origin main
 - [ ] Security: ✅/❌
 
 ## Deployment Status
+
 - [ ] Code pushed
 - [ ] CI passed
 - [ ] Deploy succeeded
 - [ ] Smoke test passed
 
 ## Verification
+
 - URL: [deployed URL]
 - Version: [version/commit]
 - Time: [timestamp]
 
 ## Rollback Ready
+
 - Previous version: [version]
 - Rollback command: `[command]`
 ```
