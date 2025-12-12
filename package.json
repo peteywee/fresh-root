@@ -30,9 +30,12 @@
     "deps:dedupe": "pnpm dedupe",
     "validate:patterns": "node scripts/validate-patterns.mjs",
     "validate:patterns:verbose": "node scripts/validate-patterns.mjs --verbose",
-    "docs:update": "node scripts/docs-auto-update.mjs",
-    "docs:update:verbose": "node scripts/docs-auto-update.mjs --verbose",
-    "docs:update:dry-run": "node scripts/docs-auto-update.mjs --dry-run --verbose"
+    "docs:update": "node scripts/docs-sync.mjs",
+    "docs:sync": "node scripts/docs-sync.mjs",
+    "docs:analyze": "node scripts/telemetry/repomix-metrics.mjs",
+    "repomix": "node packages/repomix/dist/cli.js",
+    "repomix:ci": "pnpm repomix . --style json --output docs/architecture/repomix-ci.json --compress && pnpm repomix . --style markdown --output docs/architecture/repomix-ci.md",
+    "repomix:dashboard": "pnpm repomix:ci && pnpm docs:sync && pnpm docs:analyze"
   },
   "engines": {
     "node": ">=20.10.0",
