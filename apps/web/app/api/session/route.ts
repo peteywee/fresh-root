@@ -27,7 +27,7 @@ export const POST = createPublicEndpoint({
       const auth = getFirebaseAdminAuth();
       // Verify the idToken and create a session cookie (5 days default)
       const expiresIn = 5 * 24 * 60 * 60 * 1000; // 5 days in milliseconds
-      const sessionCookie = await auth.createSessionCookie(idToken, { expiresIn });
+      const sessionCookie = await auth.createSessionCookie(parsed.data.idToken, { expiresIn });
 
       // Set secure HttpOnly session cookie
       const response = ok({ ok: true });

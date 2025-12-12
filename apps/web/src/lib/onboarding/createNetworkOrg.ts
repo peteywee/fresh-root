@@ -93,16 +93,17 @@ export async function createNetworkWithOrgAndVenue(
 
   const batch: WriteBatch = root.batch();
 
+  const basicsData = basics as any;
   const networkDoc: NetworkDoc = {
     id: networkId,
     slug: networkId,
-    displayName: (basics as any)?.orgName ?? networkId,
+    displayName: basicsData?.orgName ?? networkId,
     legalName:
       (draft.form as { data?: { legalName?: string } })?.data?.legalName ??
-      basicsData.orgName ??
+      basicsData?.orgName ??
       null,
-    kind: basicsData.hasCorporateAboveYou ? "franchise_network" : "independent_org",
-    segment: basicsData.segment,
+    kind: basicsData?.hasCorporateAboveYou ? "franchise_network" : "independent_org",
+    segment: basicsData?.segment,
     status: "pending_verification",
     ownerUserId: adminUid,
     createdAt: now,

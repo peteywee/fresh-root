@@ -51,9 +51,9 @@ export const GET = createOrgEndpoint({
 export const POST = createOrgEndpoint({
   roles: ["manager"],
   input: CreatePositionSchema,
-  handler: async ({ input, context, params }) => {
+  handler: async ({ input, context, params }: { input: Record<string, unknown>; context: any; params: any }) => {
     try {
-      const validated = input;
+      const validated = input as Record<string, unknown>;
       const position = {
         id: `pos-${Date.now()}`,
         orgId: context.org?.orgId,

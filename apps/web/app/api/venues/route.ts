@@ -51,12 +51,12 @@ export const POST = createOrgEndpoint({
   input: CreateVenueSchema,
   handler: async ({ input, context, params }) => {
     try {
-      const validated = input;
+      const validated = input as Record<string, unknown>;
 
       const venue = {
         id: `venue-${Date.now()}`,
         orgId: context.org?.orgId,
-        ...validated,
+        ...(validated || {}),
         createdBy: context.auth?.userId,
         createdAt: Date.now(),
       };

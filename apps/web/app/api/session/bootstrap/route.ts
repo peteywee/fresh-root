@@ -2,8 +2,19 @@
 // Tags: P0, SESSION, BOOTSTRAP, API, SDK_FACTORY
 
 import { createAuthenticatedEndpoint } from "@fresh-schedules/api-framework";
-import { SessionBootstrapSchema } from "@fresh-schedules/types";
+import { z } from "zod";
 import { NextResponse } from "next/server";
+
+// Session bootstrap schema
+const SessionBootstrapSchema = z.object({
+  preferences: z.record(z.string(), z.unknown()).optional(),
+  deviceInfo: z.object({
+    userAgent: z.string().optional(),
+    platform: z.string().optional(),
+  }).optional(),
+});
+
+type SessionBootstrap = z.infer<typeof SessionBootstrapSchema>;
 
 /**
  * GET /api/session/bootstrap
@@ -37,7 +48,7 @@ export const GET = createAuthenticatedEndpoint({
  */
 export const POST = createAuthenticatedEndpoint({
   input: SessionBootstrapSchema,
-  handler: async ({ input, context }) => {
+  handler: async ({ input, context }: { input: SessionBootstrap; context: any }) => {
     try {
       const session = {
         userId: context.auth?.userId,

@@ -49,12 +49,12 @@ export const POST = createOrgEndpoint({
   input: CreateShiftSchema,
   handler: async ({ input, context, params }) => {
     try {
-      const validated = input;
+      const validated = input as Record<string, unknown>;
 
       const shift = {
         id: `shift-${Date.now()}`,
         orgId: context.org?.orgId,
-        ...validated,
+        ...(validated || {}),
         createdBy: context.auth?.userId,
         createdAt: Date.now(),
       };

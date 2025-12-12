@@ -36,12 +36,12 @@ export const PATCH = createOrgEndpoint({
   input: UpdateShiftSchema,
   handler: async ({ input, context, params }) => {
     try {
-      const { name, startTime, endTime } = input;
+      const shiftData = input as Record<string, unknown>;
       const updated = {
         id: params.id,
-        name,
-        startTime,
-        endTime,
+        name: shiftData.name,
+        startTime: shiftData.startTime,
+        endTime: shiftData.endTime,
         updatedBy: context.auth?.userId,
       };
       return ok(updated);

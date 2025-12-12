@@ -49,9 +49,10 @@ export const PATCH = createOrgEndpoint({
         return badRequest("Validation failed", parsed.details);
       }
 
+      const validated = parsed.data as Record<string, unknown>;
       const updated = {
         id,
-        ...parsed.data,
+        ...(validated || {}),
         updatedBy: context.auth?.userId,
         updatedAt: Date.now(),
       };
