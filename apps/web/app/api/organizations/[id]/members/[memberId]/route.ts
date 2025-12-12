@@ -1,8 +1,9 @@
 // [P0][ORG][MEMBER][DETAIL][API] Organization member detail endpoint
 
 import { createOrgEndpoint } from "@fresh-schedules/api-framework";
-import { ok, serverError } from "../../../../_shared/validation";
 import { UpdateMemberApiSchema } from "@fresh-schedules/types";
+
+import { ok, serverError } from "../../../../_shared/validation";
 
 /**
  * GET /api/organizations/[id]/members/[memberId]

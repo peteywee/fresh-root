@@ -4,7 +4,7 @@
 
 **TYPE:** Route/Function with inline Firestore writes
 
-**LOCATION\_OLD** (representative):
+**LOCATION_OLD** (representative):
 
 - `apps/web/app/api/schedules/create/route.ts`
 - `functions/src/schedules/createScheduleInline.ts`
@@ -17,7 +17,8 @@
 
 **RISK_IF_LOST:**
 
-- We forget the business assumptions (how shifts were derived, how assignments were initially attached).
+- We forget the business assumptions (how shifts were derived, how assignments were initially
+  attached).
 - Future devs reintroduce ad-hoc writes to `schedules` and `shifts` by copy-pasting old patterns.
 
 ---

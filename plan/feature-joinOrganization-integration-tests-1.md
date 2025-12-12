@@ -12,15 +12,21 @@ tags: [feature, testing, firebase, functions]
 
 ![Status: In progress](https://img.shields.io/badge/status-In%20progress-yellow)
 
-This plan restores passing integration coverage for the `joinOrganization` Cloud Function by stabilizing emulator setup, shortening data teardown, and ensuring deterministic token/membership assertions.
+This plan restores passing integration coverage for the `joinOrganization` Cloud Function by
+stabilizing emulator setup, shortening data teardown, and ensuring deterministic token/membership
+assertions.
 
 ## 1. Requirements & Constraints
 
-- **REQ-001**: Integration tests must pass reliably on local emulators and CI runners within 90 seconds total wall time.
-- **REQ-002**: Tests must exercise the real `joinOrganizationHandler` with Firestore/Auth emulator state (no mocks).
+- **REQ-001**: Integration tests must pass reliably on local emulators and CI runners within 90
+  seconds total wall time.
+- **REQ-002**: Tests must exercise the real `joinOrganizationHandler` with Firestore/Auth emulator
+  state (no mocks).
 - **SEC-001**: No real Firebase project credentials may be used; all traffic must target emulators.
-- **CON-001**: Preserve current production logic in `functions/src/joinOrganization.ts`; only test harness changes allowed unless a blocking defect is found.
-- **GUD-001**: Keep tests idempotent and isolated; each test must fully clean its data without affecting others.
+- **CON-001**: Preserve current production logic in `functions/src/joinOrganization.ts`; only test
+  harness changes allowed unless a blocking defect is found.
+- **GUD-001**: Keep tests idempotent and isolated; each test must fully clean its data without
+  affecting others.
 - **PAT-001**: Prefer deterministic, time-bounded cleanup over unbounded collection scans.
 
 ## 2. Implementation Steps
@@ -47,30 +53,41 @@ This plan restores passing integration coverage for the `joinOrganization` Cloud
 
 ## 3. Alternatives
 
-- **ALT-001**: Stub Firestore/Auth calls in integration tests; rejected because requirement mandates exercising emulator-backed logic.
-- **ALT-002**: Move tests to unit-only coverage; rejected because transactional and auth side effects must be validated end-to-end.
+- **ALT-001**: Stub Firestore/Auth calls in integration tests; rejected because requirement mandates
+  exercising emulator-backed logic.
+- **ALT-002**: Move tests to unit-only coverage; rejected because transactional and auth side
+  effects must be validated end-to-end.
 
 ## 4. Dependencies
 
-- **DEP-001**: Firebase emulators (auth, firestore, functions) must be running locally or via CI service before tests start.
-- **DEP-002**: `vitest.integration.config.ts` must allow custom timeouts and import of `tests/integration/setup.ts`.
+- **DEP-001**: Firebase emulators (auth, firestore, functions) must be running locally or via CI
+  service before tests start.
+- **DEP-002**: `vitest.integration.config.ts` must allow custom timeouts and import of
+  `tests/integration/setup.ts`.
 
 ## 5. Files
 
 - **FILE-001**: `tests/integration/setup.ts` — emulator bootstrap and cleanup adjustments.
-- **FILE-002**: `tests/integration/joinOrganization.test.ts` — deterministic data creation and stability helpers.
+- **FILE-002**: `tests/integration/joinOrganization.test.ts` — deterministic data creation and
+  stability helpers.
 - **FILE-003**: `vitest.integration.config.ts` — integration-specific timeouts/config.
 
 ## 6. Testing
 
-- **TEST-001**: `pnpm vitest run --config vitest.integration.config.ts tests/integration/joinOrganization.test.ts` passes locally with emulators running.
-- **TEST-002**: CI integration workflow executes the same command and completes within the 90s wall-clock budget.
+- **TEST-001**:
+  `pnpm vitest run --config vitest.integration.config.ts tests/integration/joinOrganization.test.ts`
+  passes locally with emulators running.
+- **TEST-002**: CI integration workflow executes the same command and completes within the 90s
+  wall-clock budget.
 
 ## 7. Risks & Assumptions
 
-- **RISK-001**: Emulator cleanup might still be slow if other suites populate large collections; mitigation is chunked deletes with hard caps and logging.
-- **RISK-002**: Increasing timeouts could mask underlying performance regressions; mitigation is to log per-test durations and revisit after stability is confirmed.
-- **ASSUMPTION-001**: No production code changes are needed; failures are due solely to test harness instability.
+- **RISK-001**: Emulator cleanup might still be slow if other suites populate large collections;
+  mitigation is chunked deletes with hard caps and logging.
+- **RISK-002**: Increasing timeouts could mask underlying performance regressions; mitigation is to
+  log per-test durations and revisit after stability is confirmed.
+- **ASSUMPTION-001**: No production code changes are needed; failures are due solely to test harness
+  instability.
 
 ## 8. Related Specifications / Further Reading
 

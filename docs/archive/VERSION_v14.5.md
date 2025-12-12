@@ -4,11 +4,14 @@
 
 ## Objective
 
-Deliver immediate, no-Node fixes: add missing schemas, ensure exports exist, fix public logo, codify route standards, provide bash-only guard refactor helper, and stage a minimal PR guard.
+Deliver immediate, no-Node fixes: add missing schemas, ensure exports exist, fix public logo, codify
+route standards, provide bash-only guard refactor helper, and stage a minimal PR guard.
 
 ## Why
 
-We had parity errors (missing schemas/exports), a noisy `/logo.svg` 404, inconsistent route imports (guards/telemetry), and no single written standard. v14.5 resolves all items that don’t require Node execution and sets a stable base ahead of v15.
+We had parity errors (missing schemas/exports), a noisy `/logo.svg` 404, inconsistent route imports
+(guards/telemetry), and no single written standard. v14.5 resolves all items that don’t require Node
+execution and sets a stable base ahead of v15.
 
 ## Scope
 

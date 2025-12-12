@@ -1,6 +1,7 @@
 # NOTE: This file was moved to docs/production/PRODUCTION_DOCS_INDEX.md
 
-This file has been moved to `docs/production/PRODUCTION_DOCS_INDEX.md` and is maintained there as the canonical source of truth.
+This file has been moved to `docs/production/PRODUCTION_DOCS_INDEX.md` and is maintained there as
+the canonical source of truth.
 
 **Status**: ✅ PRODUCTION READY  
 **Date**: November 29, 2025  
@@ -12,22 +13,28 @@ This file has been moved to `docs/production/PRODUCTION_DOCS_INDEX.md` and is ma
 
 ### For Deployment Teams
 
-1. **[PRODUCTION_STATUS.txt](./PRODUCTION_STATUS.txt)** - Visual summary with all metrics and checklists
+1. **[PRODUCTION_STATUS.txt](./PRODUCTION_STATUS.txt)** - Visual summary with all metrics and
+   checklists
 2. **[DEPLOYMENT_REPORT.md](./DEPLOYMENT_REPORT.md)** - Step-by-step deployment instructions
-3. **[PRODUCTION_READINESS_SIGN_OFF.md](./PRODUCTION_READINESS_SIGN_OFF.md)** - Comprehensive technical details
+3. **[PRODUCTION_READINESS_SIGN_OFF.md](./PRODUCTION_READINESS_SIGN_OFF.md)** - Comprehensive
+   technical details
 
 ### For Operations
 
-1. **[MEMORY_MANAGEMENT.md](./MEMORY_MANAGEMENT.md)** - Memory optimization guide and OOM crisis resolution
+1. **[MEMORY_MANAGEMENT.md](./MEMORY_MANAGEMENT.md)** - Memory optimization guide and OOM crisis
+   resolution
 2. **[run-dev.sh](./run-dev.sh)** - Standardized dev launcher script
 3. **Monitoring Setup**: Follow post-deployment verification in DEPLOYMENT_REPORT.md
 
 ### For Developers
 
-1. **[copilot-instructions.md](./.github/copilot-instructions.md)** - Repository patterns and conventions
+1. **[copilot-instructions.md](./.github/copilot-instructions.md)** - Repository patterns and
+   conventions
 2. **[apps/web/README.md](./apps/web/README.md)** - Application architecture
-3. **[docs/standards/00_STANDARDS_INDEX.md](./docs/standards/00_STANDARDS_INDEX.md)** - Coding standards and tier system
-4. **[docs/standards/OBSERVABILITY_AND_TRACING_STANDARD.md](./docs/standards/OBSERVABILITY_AND_TRACING_STANDARD.md)** - Tracing and rate limiting guide
+3. **[docs/standards/00_STANDARDS_INDEX.md](./docs/standards/00_STANDARDS_INDEX.md)** - Coding
+   standards and tier system
+4. **[docs/standards/OBSERVABILITY_AND_TRACING_STANDARD.md](./docs/standards/OBSERVABILITY_AND_TRACING_STANDARD.md)** -
+   Tracing and rate limiting guide
 
 ---
 
@@ -223,7 +230,8 @@ See repository roadmap for details.
 
 **This system has been comprehensively audited, hardened, and verified for production deployment.**
 
-All quality gates are passing. All security vulnerabilities have been patched. Zero blocking issues remain.
+All quality gates are passing. All security vulnerabilities have been patched. Zero blocking issues
+remain.
 
 **✅ APPROVED FOR PRODUCTION DEPLOYMENT**
 

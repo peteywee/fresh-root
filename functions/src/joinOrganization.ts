@@ -13,9 +13,9 @@
  * 4. SECURITY: Token validation happens server-side
  */
 
-import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
 import { getFirestore, FieldValue, Timestamp } from "firebase-admin/firestore";
+import * as functions from "firebase-functions";
 import { z } from "zod";
 
 // Avoid initializing Firestore/auth at module-evaluation time so tests can

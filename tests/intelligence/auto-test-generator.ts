@@ -5,10 +5,10 @@
  * Analyzes code structure and automatically generates comprehensive tests
  */
 
-import * as ts from "typescript";
 import * as fs from "fs";
-import * as path from "path";
 import { glob } from "glob";
+import * as path from "path";
+import * as ts from "typescript";
 
 interface RouteAnalysis {
   filePath: string;

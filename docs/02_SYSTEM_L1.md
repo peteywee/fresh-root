@@ -1,6 +1,7 @@
 # L1 — System Architecture Overview
 
-This section describes the **global system**: major capabilities, critical flows, and cross-cutting concerns.
+This section describes the **global system**: major capabilities, critical flows, and cross-cutting
+concerns.
 
 ## 1. High-Level Components
 
@@ -29,13 +30,15 @@ This section describes the **global system**: major capabilities, critical flows
    - Create user profile → org → venue → membership → initial labor settings.
 
 1. **5-Minute Schedule Creation Flow**
-   - Select venue + week → ingest labor & forecast inputs → generate shifts → assign staff → review conflicts → publish → notify.
+   - Select venue + week → ingest labor & forecast inputs → generate shifts → assign staff → review
+     conflicts → publish → notify.
 
 1. **Staff Lifecycle**
    - Add/edit employees → manage availability/preferences → track acknowledgments.
 
 1. **Notification Flow**
-   - Publish schedule → fan-out notifications (push/SMS/email) → track delivery status (where possible).
+   - Publish schedule → fan-out notifications (push/SMS/email) → track delivery status (where
+     possible).
 
 1. **RBAC & Data Access**
    - Authenticated calls → claims-based access → rules-verified reads/writes.
@@ -43,7 +46,8 @@ This section describes the **global system**: major capabilities, critical flows
 ## 3. Cross-Cutting Concerns
 
 - **Distributed Consistency**
-  - Multi-document writes across orgs/venues/schedules/shifts must be transactional where possible, or have compensation mechanisms.
+  - Multi-document writes across orgs/venues/schedules/shifts must be transactional where possible,
+    or have compensation mechanisms.
 
 - **Security**
   - Deny-by-default RBAC.

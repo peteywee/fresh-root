@@ -20,6 +20,8 @@
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
+    "lint": "eslint . --cache --ext .ts,.tsx,.js,.jsx",
+    "lint:fix": "eslint . --cache --ext .ts,.tsx,.js,.jsx --fix",
     "typecheck": "tsc --noEmit",
     "test": "vitest run --passWithNoTests",
     "test:watch": "vitest",
@@ -34,7 +36,7 @@
     "next": "^16.0.5"
   },
   "devDependencies": {
-    "@types/node": "^20.10.0",
+    "@types/node": "^24.0.0",
     "tsup": "^8.5.1",
     "typescript": "^5.6.3",
     "vitest": "^4.0.14"

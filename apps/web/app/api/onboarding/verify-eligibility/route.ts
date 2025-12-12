@@ -1,8 +1,8 @@
 // [P0][ONBOARDING][API] Verify eligibility endpoint
 
+import { createAuthenticatedEndpoint } from "@fresh-schedules/api-framework";
 import { z } from "zod";
 
-import { createAuthenticatedEndpoint } from "@fresh-schedules/api-framework";
 import { ok, serverError, badRequest } from "../../_shared/validation";
 
 const VerifyEligibilitySchema = z.object({}).passthrough().optional();

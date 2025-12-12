@@ -1,7 +1,7 @@
 # FRESH Schedules Standards Index v2.0
 
-> This document defines the **tiered standard system** for the Fresh Schedules
-> codebase and how it is enforced in CI via `scripts/validate-patterns.mjs`.
+> This document defines the **tiered standard system** for the Fresh Schedules codebase and how it
+> is enforced in CI via `scripts/validate-patterns.mjs`.
 
 ---
 
@@ -77,7 +77,8 @@ The Pattern Validator uses:
 >
 > - Require: **0 Tier 0**, **0 Tier 1**, and score ≥ **70**.
 
-These thresholds are enforced by `scripts/validate-patterns.mjs` and used in `.github/workflows/ci-patterns.yml`.
+These thresholds are enforced by `scripts/validate-patterns.mjs` and used in
+`.github/workflows/ci-patterns.yml`.
 
 ---
 

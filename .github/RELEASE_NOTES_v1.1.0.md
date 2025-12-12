@@ -4,13 +4,16 @@
 
 ## 🎉 Milestone: Integrity Core (Block 3) Complete
 
-This release marks the completion of **Block 3: Integrity Core**, bringing the Fresh Root project to a fully validated, production-ready state with comprehensive data integrity guarantees across the entire stack.
+This release marks the completion of **Block 3: Integrity Core**, bringing the Fresh Root project to
+a fully validated, production-ready state with comprehensive data integrity guarantees across the
+entire stack.
 
 ## 🧩 Block 3: Integrity Core Highlights
 
 ### Zod-First API Validation
 
-- All API routes now validate inputs using shared Zod schemas from the `@fresh-schedules/types` package
+- All API routes now validate inputs using shared Zod schemas from the `@fresh-schedules/types`
+  package
 - Eliminates runtime type mismatches and ensures data contracts across client, server, and database
 - Schemas exported for reuse in tests, documentation, and future tooling
 
@@ -23,8 +26,10 @@ This release marks the completion of **Block 3: Integrity Core**, bringing the F
 
 ### Rules Test Matrix
 
-- Comprehensive Firestore/Storage security rules tests with **≥1 allow + 3 deny** scenarios per collection
-- Covers organizations, memberships, schedules, shifts, venues, zones, positions, attendance, join-tokens, and MFA documents
+- Comprehensive Firestore/Storage security rules tests with **≥1 allow + 3 deny** scenarios per
+  collection
+- Covers organizations, memberships, schedules, shifts, venues, zones, positions, attendance,
+  join-tokens, and MFA documents
 - Automated test execution via `pnpm test:rules` with Firebase Emulator Suite
 
 ### Schema Parity Validation
@@ -37,7 +42,8 @@ This release marks the completion of **Block 3: Integrity Core**, bringing the F
 ### CI Workflow Standards
 
 - Formal 10-step canonical workflow template documented in `docs/CI_WORKFLOW_STANDARDS.md`
-- Standard pattern: checkout → tooling → install → auto-fix → strict lint → non-blocking typecheck → test → build → optional → cleanup
+- Standard pattern: checkout → tooling → install → auto-fix → strict lint → non-blocking typecheck →
+  test → build → optional → cleanup
 - Applied to `repo-agent.yml` and `eslint-ts-agent.yml` workflows
 - Non-blocking typecheck option (`|| true`) for progressive strictness adoption
 
@@ -52,12 +58,14 @@ This release marks the completion of **Block 3: Integrity Core**, bringing the F
 ### Next.js Params Handling (Next.js 15 Compatibility)
 
 - **Before**: `async (req, context, { params }: { params: Promise<{ id: string }> })`
-- **After**: `async (req, context: { params: Record<string, string>; userId: string; orgId: string })`
+- **After**:
+  `async (req, context: { params: Record<string, string>; userId: string; orgId: string })`
 - **Migration**: Access params via `context.params.id` instead of `await params`
 
 ## 📚 New Documentation
 
-- `docs/BLOCK3_IMPLEMENTATION.md`: Comprehensive summary of Integrity Core deliverables and rules matrix
+- `docs/BLOCK3_IMPLEMENTATION.md`: Comprehensive summary of Integrity Core deliverables and rules
+  matrix
 - `docs/CI_WORKFLOW_STANDARDS.md`: Canonical CI job template with rationale, patterns, anti-patterns
 - `docs/CLEANUP_SUMMARY_2025-11-07.md`: Record of Nov 7 cleanup activities
 - `CHANGELOG.md`: Historical change tracking (v1.1.0, v1.0.0, and future releases)
@@ -67,10 +75,12 @@ This release marks the completion of **Block 3: Integrity Core**, bringing the F
 
 ### Changed
 
-- **Typecheck in CI**: Made non-blocking with `(pnpm -w typecheck || true)` to allow progressive strictness
+- **Typecheck in CI**: Made non-blocking with `(pnpm -w typecheck || true)` to allow progressive
+  strictness
 - **Package.json ci script**: Added `pnpm -w fix` (format+lint auto-fix) before strict lint step
 - **Lint warning threshold**: Reduced from 200 to 100 (goal: 0 over time)
-- **Path alias consistency**: Unified `@` alias to map to `apps/web` root, enabling both `@/app/*` and `@/src/*` imports
+- **Path alias consistency**: Unified `@` alias to map to `apps/web` root, enabling both `@/app/*`
+  and `@/src/*` imports
 
 ### Fixed
 
@@ -141,4 +151,5 @@ See [CHANGELOG.md](./CHANGELOG.md) for complete version history.
 
 ---
 
-**Previous Release:** [v1.0.0](https://github.com/peteywee/fresh-root/releases/tag/v1.0.0) (Blocks 1 & 2: Security Core + Reliability Core)
+**Previous Release:** [v1.0.0](https://github.com/peteywee/fresh-root/releases/tag/v1.0.0) (Blocks 1
+& 2: Security Core + Reliability Core)

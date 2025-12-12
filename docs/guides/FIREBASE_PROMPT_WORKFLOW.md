@@ -200,42 +200,49 @@ Learnings to Store:
 ## Execution Checklist
 
 ### Pre-Execution
+
 - \[x] Background process running (pnpm lint --fix)
 - \[x] Firebase typing strategy documented
 - \[x] Prompts downloaded to `.github/prompts/`
 - \[x] Repository context analyzed
 
 ### Step 1: GitHub Copilot Starter
+
 - \[ ] Open prompt: `/github-copilot-starter`
 - \[ ] Provide tech stack information
 - \[ ] Review suggested copilot-instructions.md
 - \[ ] Apply recommendations to repository
 
 ### Step 2: Create Implementation Plan
+
 - \[ ] Open prompt: `/create-implementation-plan`
 - \[ ] Provide Firebase modernization context
 - \[ ] Review generated implementation plan
 - \[ ] Extract actionable milestones
 
 ### Step 3: Review and Refactor
+
 - \[ ] Open prompt: `/review-and-refactor`
 - \[ ] Select Firebase files from app/api/ and src/lib/
 - \[ ] Review proposed refactorings
 - \[ ] Apply type-safe improvements
 
 ### Step 4: Documentation Writer
+
 - \[ ] Open prompt: `/documentation-writer`
 - \[ ] Specify Firebase patterns topic
 - \[ ] Generate team-ready documentation
 - \[ ] Add to docs/ folder
 
 ### Step 5: Memory Keeper
+
 - \[ ] Open prompt: `/remember`
 - \[ ] Provide learnings from modernization
 - \[ ] Store in memory instructions
 - \[ ] Reference in team communications
 
 ### Post-Execution
+
 - \[ ] Monitor background lint process completion
 - \[ ] Verify error count reduction (379 → <200)
 - \[ ] Confirm 5/6 packages passing

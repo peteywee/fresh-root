@@ -2,8 +2,7 @@
 
 ## ADR: ${Title}
 
-**Date:** ${Created}
-**Status:** Proposed | Accepted | Superseded
+**Date:** ${Created} **Status:** Proposed | Accepted | Superseded
 
 ## Context
 

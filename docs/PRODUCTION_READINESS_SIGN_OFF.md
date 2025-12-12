@@ -1,6 +1,7 @@
 # NOTE: This file was moved to docs/production/PRODUCTION_READINESS_SIGN_OFF.md
 
-This file has been moved to `docs/production/PRODUCTION_READINESS_SIGN_OFF.md` and is maintained there as the canonical source of truth.
+This file has been moved to `docs/production/PRODUCTION_READINESS_SIGN_OFF.md` and is maintained
+there as the canonical source of truth.
 
 Please update bookmarks and references to the new location.
 
@@ -91,7 +92,9 @@ Total: 7 warnings (0 errors)
 - 7x @typescript-eslint/no-explicit-any (framework integration - Next.js dynamic params)
 ```
 
-**Justification**: Next.js route handlers require `any` for dynamic context params (req/ctx with Promise-or-sync params). These are documented with eslint-disable comments and justified per repository standards.
+**Justification**: Next.js route handlers require `any` for dynamic context params (req/ctx with
+Promise-or-sync params). These are documented with eslint-disable comments and justified per
+repository standards.
 
 **CLI Command**:
 
@@ -301,7 +304,8 @@ pnpm -w test:rules  # With Firebase credentials
 
 ## 10. Sign-Off Statement
 
-**This repository has been systematically audited, hardened, and verified for production deployment.**
+**This repository has been systematically audited, hardened, and verified for production
+deployment.**
 
 All quality gates are passing. The codebase demonstrates:
 

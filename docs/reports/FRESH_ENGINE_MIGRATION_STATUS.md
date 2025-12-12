@@ -2,7 +2,8 @@
 
 ## Executive Summary
 
-✅ **COMPLETE:** FRESH Engine standards framework v2.0 deployed, baseline benchmark captured, and repository cleaned.
+✅ **COMPLETE:** FRESH Engine standards framework v2.0 deployed, baseline benchmark captured, and
+repository cleaned.
 
 **Current Status:** Ready for Phase 1 (Tier 0 Security fixes)
 
@@ -137,8 +138,8 @@ FRESH_PATTERNS_MIN_SCORE=0 pnpm lint:patterns --verbose
 
 **Final clean state:**
 
-Local branches: `main`, `dev`, `migration/firebase-admin-v15`, `agent/fix-index-and-allowlist`, `docs-and-tests`
-Remote branches: Same 5 only
+Local branches: `main`, `dev`, `migration/firebase-admin-v15`, `agent/fix-index-and-allowlist`,
+`docs-and-tests` Remote branches: Same 5 only
 
 ---
 

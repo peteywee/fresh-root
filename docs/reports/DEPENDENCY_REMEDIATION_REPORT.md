@@ -1,8 +1,7 @@
 # Dependency Remediation Report
 
 **Generated**: 2025-12-07T08:13:50.618Z\
-**Repository**: https://github.com/peteywee/fresh-root\
-**Branch**: main
+**Repository**: https://github.com/peteywee/fresh-root\ **Branch**: main
 
 ---
 

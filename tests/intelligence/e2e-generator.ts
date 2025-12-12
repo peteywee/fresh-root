@@ -3,10 +3,10 @@
  * Creates and runs end-to-end tests for API routes
  */
 
-import * as fs from "fs";
-import * as path from "path";
 import { execSync, spawnSync } from "child_process";
+import * as fs from "fs";
 import { glob } from "glob";
+import * as path from "path";
 
 // Determine project root - works for both global and local installs
 function getProjectRoot(): string {

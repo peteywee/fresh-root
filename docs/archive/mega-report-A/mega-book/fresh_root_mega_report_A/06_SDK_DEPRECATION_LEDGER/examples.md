@@ -7,11 +7,12 @@ This file contains concrete templates you can copy when documenting real depreca
 LEGACY_COMPONENT: createScheduleAndShiftsInline\
 TYPE: Cloud Function (HTTP)\
 LOCATION_OLD: `functions/src/schedules/createScheduleAndShiftsInline.ts`\
-REASON_REMOVED: Mixed concerns (HTTP + validation + Firestore writes), no transaction, duplicated logic.\
-RISK_IF_LOST: We forget the exact order of writes and edge cases that were previously handled ad-hoc.
+REASON_REMOVED: Mixed concerns (HTTP + validation + Firestore writes), no transaction, duplicated
+logic.\
+RISK_IF_LOST: We forget the exact order of writes and edge cases that were previously handled
+ad-hoc.
 
-NEW_SDK_INTERFACE:
-NAME: `@fresh-root/scheduling-sdk`\
+NEW_SDK_INTERFACE: NAME: `@fresh-root/scheduling-sdk`\
 LOCATION_NEW: `packages/scheduling-sdk/src/transactions/createSchedule.ts`\
 SURFACE: - `createScheduleWithShifts(input: CreateScheduleInput): Promise<CreateScheduleResult>`
 
@@ -41,6 +42,7 @@ const result = await schedulingSdk.createScheduleWithShifts({
 
 MIGRATION_NOTES:
 
-- All direct writes to `schedules` and `shifts` collections must go through `createScheduleWithShifts`.
+- All direct writes to `schedules` and `shifts` collections must go through
+  `createScheduleWithShifts`.
 - Firestore transaction is enforced inside the SDK.
 - Idempotency key is required in `CreateScheduleInput`.

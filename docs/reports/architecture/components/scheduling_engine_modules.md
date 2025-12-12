@@ -1,8 +1,10 @@
 # L3 — Scheduling Engine Modules
+
 This file catalogs the **concrete components** that make up the system.\
 Each entry should be linkable from L2 subsystem files and from L4 task plans.
 
 ## 1. Structure
+
 Each component should be documented as:
 
 ```text
@@ -17,4 +19,5 @@ RELATED TASKS: [Links into 05_TASKS_L4/*]
 ```
 
 ## 2. Catalog
+
 _TBD — to be filled as the codebase is systematically walked._

@@ -1,6 +1,8 @@
 # Chromebook Memory Strategy - No Swap Edition
 
-**Situation**: Chromebook Crostini containers cannot use swap files. With 6.3GB RAM and no swap, memory pressure is critical. This guide focuses on reducing memory consumption and graceful build degradation.
+**Situation**: Chromebook Crostini containers cannot use swap files. With 6.3GB RAM and no swap,
+memory pressure is critical. This guide focuses on reducing memory consumption and graceful build
+degradation.
 
 ## The Reality
 
@@ -11,7 +13,8 @@ Your system composition:
 - **Current Usage**: 4.1GB (VSCode, Claude, system)
 - **Available for builds**: ~2.2GB (tight but workable)
 
-**Key constraint**: Once RAM is full, there's NO swap buffer. Build must stay under 2.2GB or it dies with code 9.
+**Key constraint**: Once RAM is full, there's NO swap buffer. Build must stay under 2.2GB or it dies
+with code 9.
 
 ---
 
@@ -19,7 +22,8 @@ Your system composition:
 
 ### Option A: Disable Copilot Extension (Saves ~300MB)
 
-**Why this matters**: Copilot's language model runs in VSCode background, consuming 300MB+ even when idle.
+**Why this matters**: Copilot's language model runs in VSCode background, consuming 300MB+ even when
+idle.
 
 **Steps**:
 
@@ -99,7 +103,8 @@ SWC_NUM_THREADS=1
 TURBO_TASKS_CONCURRENCY=2
 ```
 
-This is **deliberate slowdown** — trades speed for stability. Builds will take ~50% longer but won't crash.
+This is **deliberate slowdown** — trades speed for stability. Builds will take ~50% longer but won't
+crash.
 
 **Edit: `apps/web/.env.local`**
 

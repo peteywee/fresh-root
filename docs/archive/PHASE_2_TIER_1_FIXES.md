@@ -1,11 +1,10 @@
 # FRESH Engine Phase 2: Tier 1 Integrity Fixes
 
-**Objective:** Fix 7 Tier 1 (Integrity) violations to reach 0 Tier 1 issues and improve score by ~7 points.
+**Objective:** Fix 7 Tier 1 (Integrity) violations to reach 0 Tier 1 issues and improve score by ~7
+points.
 
-**Baseline:** 7 Tier 1 issues
-**Target:** 0 Tier 1 issues
-**Score Improvement:** ~7 points (would reach ~32+ after Phase 1)
-**Start After:** Phase 1 complete (Tier 0 = 0)
+**Baseline:** 7 Tier 1 issues **Target:** 0 Tier 1 issues **Score Improvement:** ~7 points (would
+reach ~32+ after Phase 1) **Start After:** Phase 1 complete (Tier 0 = 0)
 
 ---
 

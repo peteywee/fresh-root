@@ -22,7 +22,10 @@ If this subsystem fails:
 ## 2. Panel Summary
 
 **Distributed Systems (Elena)**\
-Typical pattern today: route handlers and functions perform **multiple Firestore writes in sequence** (schedule, shifts, assignments) without guaranteed atomicity or idempotency. That works in demos, but under real failure and retry conditions it will create **orphan docs** and inconsistent schedules.
+Typical pattern today: route handlers and functions perform **multiple Firestore writes in
+sequence** (schedule, shifts, assignments) without guaranteed atomicity or idempotency. That works
+in demos, but under real failure and retry conditions it will create **orphan docs** and
+inconsistent schedules.
 
 **Security (Marcus)**\
 Any schedule operation must be tightly scoped to:
@@ -34,7 +37,10 @@ Any schedule operation must be tightly scoped to:
 Loose checks in handlers plus "hope the rules catch it" is not enough.
 
 **DDD (Ingrid)**\
-Right now, the "Schedule" behaves more like a **bag of documents** than a true **Aggregate**. Code in API routes and functions directly manipulates `schedules`, `shifts`, and `assignments` independently. That scatters invariants (no double booking, correct date ranges, etc.) across the codebase.
+Right now, the "Schedule" behaves more like a **bag of documents** than a true **Aggregate**. Code
+in API routes and functions directly manipulates `schedules`, `shifts`, and `assignments`
+independently. That scatters invariants (no double booking, correct date ranges, etc.) across the
+codebase.
 
 **Platform (Kenji)**\
 There is no single **scheduling SDK** that other layers depend on. That makes it hard to:
@@ -44,10 +50,13 @@ There is no single **scheduling SDK** that other layers depend on. That makes it
 - roll out changes safely.
 
 **Staff Engineer (Priya)**\
-A dev adding a new rule today is likely to touch multiple routes, helpers, and collections. This leads to "shotgun surgery" and increases the odds of subtle bugs.
+A dev adding a new rule today is likely to touch multiple routes, helpers, and collections. This
+leads to "shotgun surgery" and increases the odds of subtle bugs.
 
 **Database (Omar)**\
-The natural Firestore modeling (`schedules/{id}`, `schedules/{id}/shifts`, `assignments`) is fine, but the **query patterns** need discipline. Fully loading a week's worth of schedules, shifts, and assignments can turn into N+1 reads if not centralized.
+The natural Firestore modeling (`schedules/{id}`, `schedules/{id}/shifts`, `assignments`) is fine,
+but the **query patterns** need discipline. Fully loading a week's worth of schedules, shifts, and
+assignments can turn into N+1 reads if not centralized.
 
 **API Design (Sarah)**\
 The external interface should be **small and predictable**:
@@ -60,7 +69,8 @@ The external interface should be **small and predictable**:
 Right now, it's easy for "helper endpoints" or ad-hoc routes to proliferate.
 
 **Devil's Advocate (Rafael)**\
-If the **5-minute schedule** experience is confusing, fragile, or slow, no amount of clever features elsewhere will matter. Any complexity here that doesn't directly improve that experience is suspect.
+If the **5-minute schedule** experience is confusing, fragile, or slow, no amount of clever features
+elsewhere will matter. Any complexity here that doesn't directly improve that experience is suspect.
 
 **Strategic/Impact (Victoria)**\
 This engine _is_ your moat:
@@ -419,7 +429,8 @@ export async function POST(_req: Request, { params }: { params: { scheduleId: st
 
 ## 5. Open Questions for Scheduling Engine
 
-- Do we allow multiple active schedules for the same venue/week, or enforce uniqueness at the SDK level?
+- Do we allow multiple active schedules for the same venue/week, or enforce uniqueness at the SDK
+  level?
 - Do we need a full version history (e.g., schedule v1, v2, v3) or rely on events + snapshots?
 - How tightly should the engine couple to the labor planning subsystem vs treating it as a plugin?
 

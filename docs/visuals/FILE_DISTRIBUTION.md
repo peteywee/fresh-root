@@ -9,12 +9,14 @@ pie title File Types in Repository
 ```
 
 ## Codebase Metrics
+
 - **TypeScript Files**: 76664
 - **Test Files**: 1152
 - **Documentation**: 124 files
 - **Test Coverage**: Target 80%+
 
 ## File Organization
+
 ```
 apps/
   web/

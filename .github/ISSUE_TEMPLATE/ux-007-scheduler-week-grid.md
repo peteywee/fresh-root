@@ -1,10 +1,8 @@
 ## # Objective
 
-name: UX-007 Scheduler Week Grid (virtualized + publish pipeline)
-about: Deliver the sub-5-minute scheduling flow with performant grid and keyboard ops
-title: "\[UX-007] Scheduler Week Grid"
-labels: \["ux", "frontend", "P1"]
-assignees: \["peteywee"]
+name: UX-007 Scheduler Week Grid (virtualized + publish pipeline) about: Deliver the sub-5-minute
+scheduling flow with performant grid and keyboard ops title: "\[UX-007] Scheduler Week Grid" labels:
+\["ux", "frontend", "P1"] assignees: \["peteywee"]
 
 ---
 

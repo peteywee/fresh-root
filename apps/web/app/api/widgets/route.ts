@@ -2,13 +2,22 @@
 // Tags: P0, CORE, API, SDK_FACTORY
 
 import { createPublicEndpoint } from "@fresh-schedules/api-framework";
-import { CreateWidgetSchema } from "@fresh-schedules/types";
+import { z } from "zod";
 import { NextResponse } from "next/server";
+
+// Widget item schema
+const CreateItemSchema = z.object({
+  name: z.string().min(1),
+  type: z.string().min(1),
+  config: z.record(z.unknown()).optional(),
+});
+
+type CreateItem = z.infer<typeof CreateItemSchema>;
 
 // Widget endpoint for testing/demo purposes
 export const POST = createPublicEndpoint({
-  input: CreateWidgetSchema,
-  handler: async ({ input }) => {
+  input: CreateItemSchema,
+  handler: async ({ input }: { input: CreateItem }) => {
     const widget = {
       id: `widget-${Date.now()}`,
       name: input.name,

@@ -1,8 +1,6 @@
 # Fresh Root Strategic Audit - Action Items
 
-**Generated:** November 29, 2025
-**Status:** In Progress
-**Overall Grade:** A- (93/100)
+**Generated:** November 29, 2025 **Status:** In Progress **Overall Grade:** A- (93/100)
 
 ---
 
@@ -23,13 +21,10 @@ Fresh Root is production-ready with **3 critical infrastructure gaps** blocking 
 
 ### ⚠️ TODO-001: Redis Rate Limiting Implementation
 
-**Priority:** CRITICAL
-**Effort:** 4-8 hours
-**Owner:** DevOps/Backend
-**Status:** 🔴 NOT STARTED
+**Priority:** CRITICAL **Effort:** 4-8 hours **Owner:** DevOps/Backend **Status:** 🔴 NOT STARTED
 
-**Why Critical:**
-Current in-memory rate limiting won't scale horizontally. Load-balanced deployments can bypass rate limits (each instance tracks separately).
+**Why Critical:** Current in-memory rate limiting won't scale horizontally. Load-balanced
+deployments can bypass rate limits (each instance tracks separately).
 
 **Tasks:**
 
@@ -89,13 +84,11 @@ for i in {1..200}; do curl -X POST https://api.example.com/api/test; done | grep
 
 ### ⚠️ TODO-002: OpenTelemetry Tracing Implementation
 
-**Priority:** HIGH
-**Effort:** 4-6 hours
-**Owner:** DevOps/Backend
-**Status:** 🟡 IN PROGRESS (otel.ts updated, init needed)
+**Priority:** HIGH **Effort:** 4-6 hours **Owner:** DevOps/Backend **Status:** 🟡 IN PROGRESS
+(otel.ts updated, init needed)
 
-**Why Critical:**
-No distributed tracing means debugging production issues is impossible. Need end-to-end request tracing for SLA monitoring.
+**Why Critical:** No distributed tracing means debugging production issues is impossible. Need
+end-to-end request tracing for SLA monitoring.
 
 **Tasks:**
 
@@ -184,13 +177,10 @@ open http://localhost:16686
 
 ### ⚠️ TODO-003: Environment Variable Validation
 
-**Priority:** MEDIUM
-**Effort:** 2 hours
-**Owner:** Backend
-**Status:** 🔴 NOT STARTED
+**Priority:** MEDIUM **Effort:** 2 hours **Owner:** Backend **Status:** 🔴 NOT STARTED
 
-**Why Important:**
-Production incidents often caused by missing/invalid environment variables. Fail fast at startup with clear error messages.
+**Why Important:** Production incidents often caused by missing/invalid environment variables. Fail
+fast at startup with clear error messages.
 
 **Tasks:**
 
@@ -280,14 +270,11 @@ pnpm dev
 
 ### TODO-004: Firestore Rules Test Coverage
 
-**Priority:** HIGH
-**Effort:** 8 hours
-**Owner:** QA/Backend
-**Status:** 🔴 NOT STARTED
-**Target:** 80%+ rule coverage
+**Priority:** HIGH **Effort:** 8 hours **Owner:** QA/Backend **Status:** 🔴 NOT STARTED **Target:**
+80%+ rule coverage
 
-**Why Important:**
-Firestore rule changes can silently break authorization. Comprehensive tests prevent security vulnerabilities.
+**Why Important:** Firestore rule changes can silently break authorization. Comprehensive tests
+prevent security vulnerabilities.
 
 **Tasks:**
 
@@ -358,14 +345,11 @@ firebase emulators:exec --only firestore \
 
 ### TODO-005: API Endpoint Test Coverage
 
-**Priority:** MEDIUM
-**Effort:** 12 hours
-**Owner:** QA/Backend
-**Status:** 🔴 NOT STARTED
+**Priority:** MEDIUM **Effort:** 12 hours **Owner:** QA/Backend **Status:** 🔴 NOT STARTED
 **Target:** 60%+ API route coverage
 
-**Why Important:**
-Current coverage: 6 tests for 34 routes (18%). Need tests to prevent regression bugs.
+**Why Important:** Current coverage: 6 tests for 34 routes (18%). Need tests to prevent regression
+bugs.
 
 **Tasks:**
 
@@ -445,13 +429,10 @@ pnpm test --run
 
 ### TODO-006: Log Aggregation Configuration
 
-**Priority:** MEDIUM
-**Effort:** 4 hours
-**Owner:** DevOps
-**Status:** 🔴 NOT STARTED
+**Priority:** MEDIUM **Effort:** 4 hours **Owner:** DevOps **Status:** 🔴 NOT STARTED
 
-**Why Important:**
-Currently logs only go to stdout. Need centralized logging for debugging production issues.
+**Why Important:** Currently logs only go to stdout. Need centralized logging for debugging
+production issues.
 
 **Tasks:**
 
@@ -517,10 +498,7 @@ curl http://localhost:3000/api/schedules
 
 ### TODO-007: Monitoring Dashboards
 
-**Priority:** MEDIUM
-**Effort:** 4 hours
-**Owner:** DevOps
-**Status:** 🔴 NOT STARTED
+**Priority:** MEDIUM **Effort:** 4 hours **Owner:** DevOps **Status:** 🔴 NOT STARTED
 
 **Tasks:**
 
@@ -553,10 +531,7 @@ curl http://localhost:3000/api/schedules
 
 ### TODO-008: E2E Test Suite (Playwright)
 
-**Priority:** MEDIUM
-**Effort:** 20 hours
-**Owner:** QA
-**Status:** 🔴 NOT STARTED
+**Priority:** MEDIUM **Effort:** 20 hours **Owner:** QA **Status:** 🔴 NOT STARTED
 
 **Tasks:**
 
@@ -595,10 +570,7 @@ curl http://localhost:3000/api/schedules
 
 ### TODO-009: API Documentation (OpenAPI)
 
-**Priority:** MEDIUM
-**Effort:** 8 hours
-**Owner:** Backend
-**Status:** 🔴 NOT STARTED
+**Priority:** MEDIUM **Effort:** 8 hours **Owner:** Backend **Status:** 🔴 NOT STARTED
 
 **Tasks:**
 
@@ -635,10 +607,7 @@ curl http://localhost:3000/api/schedules
 
 ### TODO-010: Performance Profiling
 
-**Priority:** LOW
-**Effort:** 8 hours
-**Owner:** Backend
-**Status:** 🔴 NOT STARTED
+**Priority:** LOW **Effort:** 8 hours **Owner:** Backend **Status:** 🔴 NOT STARTED
 
 **Tasks:**
 
@@ -671,9 +640,7 @@ curl http://localhost:3000/api/schedules
 
 ### TODO-011: Security Penetration Testing
 
-**Priority:** LOW
-**Effort:** External engagement (16-40 hours)
-**Owner:** Security/External firm
+**Priority:** LOW **Effort:** External engagement (16-40 hours) **Owner:** Security/External firm
 **Status:** 🔴 NOT STARTED
 
 **Tasks:**
@@ -712,10 +679,7 @@ curl http://localhost:3000/api/schedules
 
 ### TODO-012: Disaster Recovery Procedures
 
-**Priority:** LOW
-**Effort:** 6 hours
-**Owner:** DevOps
-**Status:** 🔴 NOT STARTED
+**Priority:** LOW **Effort:** 6 hours **Owner:** DevOps **Status:** 🔴 NOT STARTED
 
 **Tasks:**
 
@@ -758,9 +722,7 @@ curl http://localhost:3000/api/schedules
 
 ### TODO-013: Horizontal Scaling Infrastructure (30 days)
 
-**Priority:** STRATEGIC
-**Effort:** 40 hours
-**Owner:** DevOps/Architecture
+**Priority:** STRATEGIC **Effort:** 40 hours **Owner:** DevOps/Architecture
 
 **Tasks:**
 
@@ -794,9 +756,7 @@ curl http://localhost:3000/api/schedules
 
 ### TODO-014: Service Separation (60 days)
 
-**Priority:** STRATEGIC
-**Effort:** 80 hours
-**Owner:** Architecture/Backend
+**Priority:** STRATEGIC **Effort:** 80 hours **Owner:** Architecture/Backend
 
 **Tasks:**
 
@@ -830,9 +790,7 @@ curl http://localhost:3000/api/schedules
 
 ### TODO-015: Advanced Observability (90 days)
 
-**Priority:** STRATEGIC
-**Effort:** 40 hours
-**Owner:** DevOps/SRE
+**Priority:** STRATEGIC **Effort:** 40 hours **Owner:** DevOps/SRE
 
 **Tasks:**
 
@@ -919,7 +877,8 @@ Before starting implementation, need answers to:
 1. **Timeline:** Are you planning single-instance or multi-instance deployment initially?
 2. **Observability:** Do you have a preferred tracing backend (Jaeger/Honeycomb/Datadog)?
 3. **Redis:** Do you have Redis infrastructure already, or need to provision?
-4. **Help:** Want me to implement any of these TODOs? I can start with Redis rate limiting (4 hours).
+4. **Help:** Want me to implement any of these TODOs? I can start with Redis rate limiting (4
+   hours).
 5. **Budget:** Any budget constraints for SaaS tools (Datadog, Honeycomb, etc.)?
 6. **Timeline Constraints:** Any hard deadlines for production launch?
 
@@ -933,13 +892,11 @@ Before starting implementation, need answers to:
 2. TODO-002: OpenTelemetry tracing (HIGH)
 3. TODO-003: Environment validation (MEDIUM)
 
-**If launching in 1 month:**
-Add: 4. TODO-004: Firestore rules tests (HIGH) 5. TODO-006: Log aggregation (MEDIUM) 6. TODO-007: Monitoring dashboards (MEDIUM)
+**If launching in 1 month:** Add: 4. TODO-004: Firestore rules tests (HIGH) 5. TODO-006: Log
+aggregation (MEDIUM) 6. TODO-007: Monitoring dashboards (MEDIUM)
 
-**If launching in 3 months:**
-Add all remaining items for production-grade enterprise deployment.
+**If launching in 3 months:** Add all remaining items for production-grade enterprise deployment.
 
 ---
 
-**Last Updated:** November 29, 2025
-**Next Review:** After critical TODOs complete
+**Last Updated:** November 29, 2025 **Next Review:** After critical TODOs complete

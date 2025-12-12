@@ -1,12 +1,13 @@
 // [P0][ONBOARDING][API] Activate network endpoint (with typed wrapper)
 
-import { z } from "zod";
-import { Timestamp } from "firebase-admin/firestore";
-
 import { createAuthenticatedEndpoint } from "@fresh-schedules/api-framework";
+import { Timestamp } from "firebase-admin/firestore";
+import { z } from "zod";
+
 import { ok, serverError } from "../../_shared/validation";
-import { adminDb } from "@/src/lib/firebase.server";
+
 import { updateDocWithType } from "@/src/lib/firebase/typed-wrappers";
+import { adminDb } from "@/src/lib/firebase.server";
 
 const ActivateNetworkSchema = z.object({
   networkId: z.string().or(z.number()),

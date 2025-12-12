@@ -1,10 +1,7 @@
 ## # Labels
 
-name: "🔧 Production Work Item"
-about: Standardized work ticket for production readiness
-title: "\[WORK-ID] Title"
-labels: \[]
-assignees: \[peteywee]
+name: "🔧 Production Work Item" about: Standardized work ticket for production readiness title:
+"\[WORK-ID] Title" labels: \[] assignees: \[peteywee]
 
 ---
 
@@ -19,8 +16,7 @@ Explain why this matters for production readiness.
 
 ## Scope
 
-**In:**
-**Out:**
+**In:** **Out:**
 
 ## Files / Paths
 
@@ -67,7 +63,8 @@ Why this task exists, dependencies, and production impact.
 
 ### 7️⃣ Meta Acceptance Criteria (for this framework itself)
 
-- \[x] Every future response must include **Labels, Objective, Scope, Files/Paths, Commands, Acceptance Criteria, Success KPIs, Definition of Done**.
+- \[x] Every future response must include **Labels, Objective, Scope, Files/Paths, Commands,
+  Acceptance Criteria, Success KPIs, Definition of Done**.
 - \[x] Template stored in `.github/ISSUE_TEMPLATE/_production-template.md`.
 - \[x] GitHub Actions validate presence of these sections (optional extension).
 
@@ -82,7 +79,9 @@ Why this task exists, dependencies, and production impact.
 
 ---
 
-Would you like me to now generate the **`.github/workflows/validate-template.yml`** that automatically fails CI if any PR description or issue lacks these required headings? That turns this philosophy into enforceable policy.
+Would you like me to now generate the **`.github/workflows/validate-template.yml`** that
+automatically fails CI if any PR description or issue lacks these required headings? That turns this
+philosophy into enforceable policy.
 
 | Section                 | Why it must exist                                                                                      |
 | ----------------------- | ------------------------------------------------------------------------------------------------------ |

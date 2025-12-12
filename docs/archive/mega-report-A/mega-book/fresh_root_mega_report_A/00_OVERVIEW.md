@@ -27,4 +27,5 @@ It is structured using the **L0–L4 hierarchical protocol** and the **9-panel e
 - `06_SDK_DEPRECATION_LEDGER/` — Mapping from removed code → stable SDKs
 - `99_APPENDICES/` — Glossary, data models, risk register, references
 
-Each file is designed to be **machine-readable** (for AI tools) and **human-usable** (for you and future collaborators).
+Each file is designed to be **machine-readable** (for AI tools) and **human-usable** (for you and
+future collaborators).

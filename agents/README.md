@@ -10,7 +10,8 @@
 
 ## 📌 Important: Documentation Moved
 
-All CrewOps protocol documentation has been moved to **`docs/crewops/`** for better organization and accessibility.
+All CrewOps protocol documentation has been moved to **`docs/crewops/`** for better organization and
+accessibility.
 
 **Start here**: [`docs/crewops/README.md`](../docs/crewops/README.md)
 
@@ -18,7 +19,8 @@ All CrewOps protocol documentation has been moved to **`docs/crewops/`** for bet
 
 ## 🎉 WHAT'S BEEN ACCOMPLISHED
 
-The **CrewOps Protocol** has been successfully activated and is now ready to dispatch on your next non-trivial request. The protocol is:
+The **CrewOps Protocol** has been successfully activated and is now ready to dispatch on your next
+non-trivial request. The protocol is:
 
 - ✅ **Loaded** into the agent context
 - ✅ **Self-engaging** on session start + non-trivial prompts
@@ -98,7 +100,8 @@ If veto triggered: Work stops in Phase E until fixed. No exceptions.
 
 When protocol engages:
 
-- **Research Analyst** auto-deploys: `read_file`, `grep_search`, `semantic_search`, `mcp_firecrawl_*`
+- **Research Analyst** auto-deploys: `read_file`, `grep_search`, `semantic_search`,
+  `mcp_firecrawl_*`
 - **QA Engineer** auto-deploys: `get_errors`, `run_in_terminal`
 - **Scribe** auto-deploys: `list_dir`, `mcp_github_*`
 
@@ -330,7 +333,8 @@ Next: Ask your question
 
 ## 🔗 Legacy Files (For Reference Only)
 
-The original files are kept in `agents/` for backwards compatibility but should not be edited. **All updates should be made in `docs/crewops/`**.
+The original files are kept in `agents/` for backwards compatibility but should not be edited. **All
+updates should be made in `docs/crewops/`**.
 
 For any new work:
 

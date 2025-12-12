@@ -6,7 +6,10 @@ export function createAuthenticatedMockRequest(path: string, options: any = {}) 
     body: options.body ?? {},
     cookies: { ...(options.cookies ?? { session: "mock-session" }) },
     headers: {
-      ...(options.headers ?? { cookie: "session=mock-session", authorization: "Bearer mock-token" }),
+      ...(options.headers ?? {
+        cookie: "session=mock-session",
+        authorization: "Bearer mock-token",
+      }),
     },
     searchParams: { ...(options.searchParams ?? { orgId: "org-test" }) },
   });

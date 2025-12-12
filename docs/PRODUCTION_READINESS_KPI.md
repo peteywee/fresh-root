@@ -1,6 +1,7 @@
 # NOTE: This file was moved to docs/production/PRODUCTION_READINESS_KPI.md
 
-This file has been moved to `docs/production/PRODUCTION_READINESS_KPI.md` and is maintained there as the canonical source of truth.
+This file has been moved to `docs/production/PRODUCTION_READINESS_KPI.md` and is maintained there as
+the canonical source of truth.
 
 Please update bookmarks and references to the new location.
 
@@ -9,7 +10,8 @@ Please update bookmarks and references to the new location.
 
 ## Executive Summary
 
-This document serves as a standard quality gate for all Copilot agent work. All deliverables must meet these KPIs before being considered production-ready.
+This document serves as a standard quality gate for all Copilot agent work. All deliverables must
+meet these KPIs before being considered production-ready.
 
 ---
 

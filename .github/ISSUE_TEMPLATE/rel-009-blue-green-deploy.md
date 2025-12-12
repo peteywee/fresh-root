@@ -1,10 +1,8 @@
 ## # Objective
 
-name: REL-009 Blue/Green Deployment (zero downtime)
-about: Deploy with smoke tests and automatic promotion; verified rollback
-title: "\[REL-009] Blue/Green Deploy"
-labels: \["release", "platform", "P1"]
-assignees: \["peteywee"]
+name: REL-009 Blue/Green Deployment (zero downtime) about: Deploy with smoke tests and automatic
+promotion; verified rollback title: "\[REL-009] Blue/Green Deploy" labels: \["release", "platform",
+"P1"] assignees: \["peteywee"]
 
 ---
 

@@ -79,8 +79,8 @@
 | Category     | Routes                       | Pattern                                  |
 | ------------ | ---------------------------- | ---------------------------------------- |
 | Public       | metrics                      | `createPublicEndpoint`                   |
-| Auth Only    | auth/*, session/*            | `createAuthenticatedEndpoint`            |
-| Auth + Org   | organizations/*, schedules/* | `createOrgEndpoint` with roles           |
+| Auth Only    | auth/_, session/_            | `createAuthenticatedEndpoint`            |
+| Auth + Org   | organizations/_, schedules/_ | `createOrgEndpoint` with roles           |
 | Auth + Roles | publish, positions           | `createAuthenticatedEndpoint` with roles |
 
 ### Blocking Issue
@@ -188,7 +188,7 @@ pnpm test               # Must pass
 
 ---
 
-## 6. Architecture Decision: Keep _shared or Delete
+## 6. Architecture Decision: Keep \_shared or Delete
 
 ### Current State
 
@@ -248,8 +248,10 @@ pnpm test               # Must pass
 
 ## 10. Key Contacts / Decisions
 
-- **Decision Point:** Should we ship `feat/sdk-extraction` now (infra stable) or wait for all 30 routes?
-  - **Recommendation:** Ship now. Infrastructure is production-ready; route migration can continue on separate PR.
+- **Decision Point:** Should we ship `feat/sdk-extraction` now (infra stable) or wait for all 30
+  routes?
+  - **Recommendation:** Ship now. Infrastructure is production-ready; route migration can continue
+    on separate PR.
 - **Next PR:** `copilot/migrate-remaining-31-routes` (after 30 routes done)
 
 ---

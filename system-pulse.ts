@@ -2,8 +2,8 @@
 // [P2][APP][CODE] System Pulse
 // Tags: P2, APP, CODE
 
-import { promisify } from "util";
 import { exec } from "child_process";
+import { promisify } from "util";
 
 const execAsync = promisify(exec);
 

@@ -341,7 +341,8 @@ NODE_ENV=production
 # Falls back to InMemoryRateLimiter
 ```
 
-**⚠️ Risk**: Each instance tracks separately. Requests split across processes = limits not enforced globally.
+**⚠️ Risk**: Each instance tracks separately. Requests split across processes = limits not enforced
+globally.
 
 ---
 
@@ -428,7 +429,8 @@ export const POST = withRateLimit(
 );
 ```
 
-**Future enhancement**: Modify `withRateLimit` to extract `userId` from context and use it in the key instead of IP.
+**Future enhancement**: Modify `withRateLimit` to extract `userId` from context and use it in the
+key instead of IP.
 
 ---
 

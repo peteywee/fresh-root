@@ -1,8 +1,9 @@
 // [P0][ONBOARDING][CORPORATE][API] Create corporate network endpoint
 
 import { createAuthenticatedEndpoint } from "@fresh-schedules/api-framework";
-import { ok, serverError } from "../../_shared/validation";
 import { CreateCorporateOnboardingSchema } from "@fresh-schedules/types";
+
+import { ok, serverError } from "../../_shared/validation";
 
 /**
  * POST /api/onboarding/create-network-corporate

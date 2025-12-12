@@ -1,26 +1,10 @@
 ---
 
-agent: "agent"
-description: "Create a new implementation plan file for new features, refactoring existing code or upgrading packages, design, architecture or infrastructure."
-tools:
-\[
-"changes",
-"search/codebase",
-"edit/editFiles",
-"extensions",
-"fetch",
-"githubRepo",
-"openSimpleBrowser",
-"problems",
-"runTasks",
-"search",
-"search/searchResults",
-"runCommands/terminalLastCommand",
-"runCommands/terminalSelection",
-"testFailure",
-"usages",
-"vscodeAPI",
-]
+agent: "agent" description: "Create a new implementation plan file for new features, refactoring
+existing code or upgrading packages, design, architecture or infrastructure." tools: \[ "changes",
+"search/codebase", "edit/editFiles", "extensions", "fetch", "githubRepo", "openSimpleBrowser",
+"problems", "runTasks", "search", "search/searchResults", "runCommands/terminalLastCommand",
+"runCommands/terminalSelection", "testFailure", "usages", "vscodeAPI", ]
 
 -
 
@@ -28,11 +12,14 @@ tools:
 
 ## Primary Directive
 
-Your goal is to create a new implementation plan file for `${input:PlanPurpose}`. Your output must be machine-readable, deterministic, and structured for autonomous execution by other AI systems or humans.
+Your goal is to create a new implementation plan file for `${input:PlanPurpose}`. Your output must
+be machine-readable, deterministic, and structured for autonomous execution by other AI systems or
+humans.
 
 ## Execution Context
 
-This prompt is designed for AI-to-AI communication and automated processing. All instructions must be interpreted literally and executed systematically without human interpretation or clarification.
+This prompt is designed for AI-to-AI communication and automated processing. All instructions must
+be interpreted literally and executed systematically without human interpretation or clarification.
 
 ## Core Requirements
 
@@ -43,13 +30,16 @@ This prompt is designed for AI-to-AI communication and automated processing. All
 
 ## Plan Structure Requirements
 
-Plans must consist of discrete, atomic phases containing executable tasks. Each phase must be independently processable by AI agents or humans without cross-phase dependencies unless explicitly declared.
+Plans must consist of discrete, atomic phases containing executable tasks. Each phase must be
+independently processable by AI agents or humans without cross-phase dependencies unless explicitly
+declared.
 
 ## Phase Architecture
 
 - Each phase must have measurable completion criteria
 - Tasks within phases must be executable in parallel unless dependencies are specified
-- All task descriptions must include specific file paths, function names, and exact implementation details
+- All task descriptions must include specific file paths, function names, and exact implementation
+  details
 - No task should require human interpretation or decision-making
 
 ## AI-Optimized Implementation Standards
@@ -72,7 +62,9 @@ Plans must consist of discrete, atomic phases containing executable tasks. Each 
 
 ## Mandatory Template Structure
 
-All implementation plans must strictly adhere to the following template. Each section is required and must be populated with specific, actionable content. AI agents must validate template compliance before execution.
+All implementation plans must strictly adhere to the following template. Each section is required
+and must be populated with specific, actionable content. AI agents must validate template compliance
+before execution.
 
 ## Template Validation Rules
 
@@ -84,16 +76,18 @@ All implementation plans must strictly adhere to the following template. Each se
 
 ## Status
 
-The status of the implementation plan must be clearly defined in the front matter and must reflect the current state of the plan. The status can be one of the following (status_color in brackets): `Completed` (bright green badge), `In progress` (yellow badge), `Planned` (blue badge), `Deprecated` (red badge), or `On Hold` (orange badge). It should also be displayed as a badge in the introduction section.
+The status of the implementation plan must be clearly defined in the front matter and must reflect
+the current state of the plan. The status can be one of the following (status_color in brackets):
+`Completed` (bright green badge), `In progress` (yellow badge), `Planned` (blue badge), `Deprecated`
+(red badge), or `On Hold` (orange badge). It should also be displayed as a badge in the introduction
+section.
 
 ## ```md
 
-goal: [Concise Title Describing the Package Implementation Plan's Goal]
-version: [Optional: e.g., 1.0, Date]
-date_created: [YYYY-MM-DD]
-last_updated: [Optional: YYYY-MM-DD]
-owner: [Optional: Team/Individual responsible for this spec]
-status: 'Completed'|'In progress'|'Planned'|'Deprecated'|'On Hold'
+goal: [Concise Title Describing the Package Implementation Plan's Goal] version: [Optional: e.g.,
+1.0, Date] date_created: [YYYY-MM-DD] last_updated: [Optional: YYYY-MM-DD] owner: [Optional:
+Team/Individual responsible for this spec] status: 'Completed'|'In
+progress'|'Planned'|'Deprecated'|'On Hold'
 
 ## tags: [Optional: List of relevant tags or categories, e.g., `feature`, `upgrade`, `chore`, `architecture`, `migration`, `bug` etc]
 
@@ -105,7 +99,8 @@ status: 'Completed'|'In progress'|'Planned'|'Deprecated'|'On Hold'
 
 ## 1. Requirements & Constraints
 
-[Explicitly list all requirements & constraints that affect the plan and constrain how it is implemented. Use bullet points or tables for clarity.]
+[Explicitly list all requirements & constraints that affect the plan and constrain how it is
+implemented. Use bullet points or tables for clarity.]
 
 - **REQ-001**: Requirement 1
 - **SEC-001**: Security Requirement 1
@@ -118,7 +113,8 @@ status: 'Completed'|'In progress'|'Planned'|'Deprecated'|'On Hold'
 
 ### Implementation Phase 1
 
-- GOAL-001: [Describe the goal of this phase, e.g., "Implement feature X", "Refactor module Y", etc.]
+- GOAL-001: [Describe the goal of this phase, e.g., "Implement feature X", "Refactor module Y",
+  etc.]
 
 | Task     | Description           | Completed | Date       |
 | -------- | --------------------- | --------- | ---------- |
@@ -128,7 +124,8 @@ status: 'Completed'|'In progress'|'Planned'|'Deprecated'|'On Hold'
 
 ### Implementation Phase 2
 
-- GOAL-002: [Describe the goal of this phase, e.g., "Implement feature X", "Refactor module Y", etc.]
+- GOAL-002: [Describe the goal of this phase, e.g., "Implement feature X", "Refactor module Y",
+  etc.]
 
 | Task     | Description           | Completed | Date |
 | -------- | --------------------- | --------- | ---- |
@@ -138,14 +135,16 @@ status: 'Completed'|'In progress'|'Planned'|'Deprecated'|'On Hold'
 
 ## 3. Alternatives
 
-[A bullet point list of any alternative approaches that were considered and why they were not chosen. This helps to provide context and rationale for the chosen approach.]
+[A bullet point list of any alternative approaches that were considered and why they were not
+chosen. This helps to provide context and rationale for the chosen approach.]
 
 - **ALT-001**: Alternative approach 1
 - **ALT-002**: Alternative approach 2
 
 ## 4. Dependencies
 
-[List any dependencies that need to be addressed, such as libraries, frameworks, or other components that the plan relies on.]
+[List any dependencies that need to be addressed, such as libraries, frameworks, or other components
+that the plan relies on.]
 
 - **DEP-001**: Dependency 1
 - **DEP-002**: Dependency 2
@@ -173,8 +172,7 @@ status: 'Completed'|'In progress'|'Planned'|'Deprecated'|'On Hold'
 
 ## 8. Related Specifications / Further Reading
 
-[Link to related spec 1]
-[Link to relevant external documentation]
+[Link to related spec 1] [Link to relevant external documentation]
 
 ```
 

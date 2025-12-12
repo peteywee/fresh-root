@@ -12,7 +12,10 @@ const UpdatePositionSchema = z.object({
   type: z.string().optional(),
   skillLevel: z.string().optional(),
   hourlyRate: z.number().nonnegative().optional(),
-  color: z.string().regex(/^#[0-9A-Fa-f]{6}$/).optional(),
+  color: z
+    .string()
+    .regex(/^#[0-9A-Fa-f]{6}$/)
+    .optional(),
   isActive: z.boolean().optional(),
   requiredCertifications: z.array(z.string()).optional(),
 });

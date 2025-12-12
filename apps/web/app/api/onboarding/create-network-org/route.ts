@@ -2,7 +2,7 @@
 // Tags: P0, ONBOARDING, ORG, API, SDK_FACTORY
 
 import { createAuthenticatedEndpoint } from "@fresh-schedules/api-framework";
-import { CreateNetworkOrgSchema } from "@fresh-schedules/types";
+import { CreateNetworkSchema } from "@fresh-schedules/types";
 
 import { ok, serverError } from "../../_shared/validation";
 
@@ -11,7 +11,7 @@ import { ok, serverError } from "../../_shared/validation";
  * Create organization network
  */
 export const POST = createAuthenticatedEndpoint({
-  input: CreateNetworkOrgSchema,
+  input: CreateNetworkSchema,
   handler: async ({ input, context }) => {
     try {
       const org = {

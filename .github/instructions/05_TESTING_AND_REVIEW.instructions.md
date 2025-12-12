@@ -1,6 +1,7 @@
 ---
 applyTo: "**/*.{test,spec}.{ts,tsx},tests/**,**/__tests__/**"
-description: "Testing standards and code review guidelines for Vitest, Playwright, and review processes."
+description:
+  "Testing standards and code review guidelines for Vitest, Playwright, and review processes."
 priority: 5
 ---
 
@@ -184,15 +185,15 @@ test.describe("Feature Name", () => {
 
 ```typescript
 // ✅ Good - User-facing, accessible
-page.getByRole("button", { name: "Submit" })
-page.getByLabel("Email")
-page.getByText("Welcome")
-page.getByTestId("schedule-card")
+page.getByRole("button", { name: "Submit" });
+page.getByLabel("Email");
+page.getByText("Welcome");
+page.getByTestId("schedule-card");
 
 // ❌ Avoid - Brittle
-page.locator(".btn-primary")
-page.locator("#submit-btn")
-page.locator("div > button:first-child")
+page.locator(".btn-primary");
+page.locator("#submit-btn");
+page.locator("div > button:first-child");
 ```
 
 ### Assertions
@@ -225,13 +226,13 @@ await expect(page.getByRole("main")).toMatchAriaSnapshot(`
 
 ### What Must Be Tested
 
-| Component | Coverage Target |
-|-----------|----------------|
-| API Routes | 80%+ (all methods) |
-| Business Logic | 90%+ |
-| Utility Functions | 95%+ |
-| UI Components | 70%+ (critical paths) |
-| Edge Cases | Explicit tests |
+| Component         | Coverage Target       |
+| ----------------- | --------------------- |
+| API Routes        | 80%+ (all methods)    |
+| Business Logic    | 90%+                  |
+| Utility Functions | 95%+                  |
+| UI Components     | 70%+ (critical paths) |
+| Edge Cases        | Explicit tests        |
 
 ### What to Test
 

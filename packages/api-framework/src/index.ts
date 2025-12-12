@@ -333,7 +333,10 @@ async function logAudit(
  */
 export function createEndpoint<TInput = unknown, TOutput = unknown>(
   config: EndpointConfig<TInput, TOutput>,
-): (request: NextRequest, context: { params: Promise<Record<string, string>> }) => Promise<NextResponse> {
+): (
+  request: NextRequest,
+  context: { params: Promise<Record<string, string>> },
+) => Promise<NextResponse> {
   const {
     auth = "required",
     org = "none",
@@ -344,7 +347,10 @@ export function createEndpoint<TInput = unknown, TOutput = unknown>(
     handler,
   } = config;
 
-  return async (request: NextRequest, routeContext: { params: Promise<Record<string, string>> }) => {
+  return async (
+    request: NextRequest,
+    routeContext: { params: Promise<Record<string, string>> },
+  ) => {
     const requestId = crypto.randomUUID();
     const startTime = Date.now();
     const params = await routeContext.params;

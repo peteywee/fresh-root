@@ -107,9 +107,6 @@ async function cleanupOldVersions(groups, options = {}) {
   return deleted;
 }
 
-<<<<<<< HEAD
-
-=======
 /**
  * Update a file to current date (creates new dated version)
  */
@@ -159,7 +156,6 @@ function updateToCurrentDate(filePath, options = {}) {
 
   return newPath;
 }
->>>>>>> 1eb7759 (feat(redteam): add security assessment planning and schema updates)
 
 /**
  * Main execution

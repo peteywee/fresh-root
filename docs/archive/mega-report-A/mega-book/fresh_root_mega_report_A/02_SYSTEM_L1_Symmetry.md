@@ -1,8 +1,7 @@
 # Fresh Schedules Symmetry Framework v2.0
 
-> This framework defines the **expected fingerprints** of files in the Fresh
-> Schedules codebase. If a file doesn't match its fingerprint, treat it as a
-> potential defect.
+> This framework defines the **expected fingerprints** of files in the Fresh Schedules codebase. If
+> a file doesn't match its fingerprint, treat it as a potential defect.
 
 ---
 
@@ -115,7 +114,8 @@ This header is validated as a **Tier 3 (style)** check.
 Use these signals:
 
 - **Strong symmetry:** All files for a feature share the same structural patterns.
-- **Broken symmetry:** A file deviates from its layer fingerprint (missing header, bypassing guards, etc.).
+- **Broken symmetry:** A file deviates from its layer fingerprint (missing header, bypassing guards,
+  etc.).
 
 Broken symmetry is not always a bug, but it is always a **cue to investigate**.
 

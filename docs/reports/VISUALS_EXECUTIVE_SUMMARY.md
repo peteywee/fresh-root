@@ -8,7 +8,11 @@
 
 ## What You Asked For
 
-> "create architecture and current repostate visuals on commits and major file visuals on pushes needs to be ci mandated as well and updated constantly a mandatory tree diff should kill alot of the deprecated dep and unmet peers problem and i wanted the other visuals latest version to be the only one there at all time so workflow that and add whatever dep you need to package json mermaid is automatically installed in my github repos"
+> "create architecture and current repostate visuals on commits and major file visuals on pushes
+> needs to be ci mandated as well and updated constantly a mandatory tree diff should kill alot of
+> the deprecated dep and unmet peers problem and i wanted the other visuals latest version to be the
+> only one there at all time so workflow that and add whatever dep you need to package json mermaid
+> is automatically installed in my github repos"
 
 ---
 
@@ -333,7 +337,8 @@ Complete guides available:
 This system operates under:
 
 - **Sr Dev Directive** (`.github/SR_DEV_DIRECTIVE.md`)
-- **Production Development Directive** (`.github/instructions/production-development-directive.instructions.md`)
+- **Production Development Directive**
+  (`.github/instructions/production-development-directive.instructions.md`)
 - **Branch Strategy Governance** (`.github/BRANCH_STRATEGY_GOVERNANCE.md`)
 
 ---
@@ -363,7 +368,8 @@ pnpm visuals:generate
 
 ## 🎉 Summary
 
-**What was requested**: Architecture visuals, repo state diagrams, tree diff analysis, CI automation, minimal deps, only latest versions
+**What was requested**: Architecture visuals, repo state diagrams, tree diff analysis, CI
+automation, minimal deps, only latest versions
 
 **What was delivered**:
 

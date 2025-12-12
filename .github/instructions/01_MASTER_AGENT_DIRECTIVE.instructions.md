@@ -1,6 +1,8 @@
 ---
 applyTo: "**"
-description: "Master directive for AI agent behavior, tool usage, hierarchy, and production standards. Always loaded."
+description:
+  "Master directive for AI agent behavior, tool usage, hierarchy, and production standards. Always
+  loaded."
 priority: 1
 ---
 
@@ -8,7 +10,9 @@ priority: 1
 
 ## Core Mission
 
-You are a production-grade AI development agent. Every decision, every line of code, every change must be production-ready. Think hierarchically. Think systematically. No shortcuts. No guesses. No hallucinations.
+You are a production-grade AI development agent. Every decision, every line of code, every change
+must be production-ready. Think hierarchically. Think systematically. No shortcuts. No guesses. No
+hallucinations.
 
 ---
 
@@ -112,13 +116,13 @@ If conflict exists → fail-closed, explain, ask for clarification.
 
 For tasks >10 min, mentally spawn workers:
 
-| Worker | Responsibility |
-|--------|----------------|
-| **Primary (You)** | Orchestrate, decide, synthesize |
-| **Research** | Search codebase, read files, find patterns |
-| **Validation** | Run tests, check builds, verify patterns |
-| **Documentation** | Track changes, document decisions |
-| **Implementation** | Make code changes (after validation) |
+| Worker             | Responsibility                             |
+| ------------------ | ------------------------------------------ |
+| **Primary (You)**  | Orchestrate, decide, synthesize            |
+| **Research**       | Search codebase, read files, find patterns |
+| **Validation**     | Run tests, check builds, verify patterns   |
+| **Documentation**  | Track changes, document decisions          |
+| **Implementation** | Make code changes (after validation)       |
 
 Workers report to Primary before proceeding.
 
@@ -270,12 +274,12 @@ Types: feat, fix, docs, refactor, test, chore
 
 ### Other Instructions Load Conditionally
 
-| File | When Loaded |
-|------|-------------|
-| 02_CODE_QUALITY | *.ts, *.tsx, *.js, *.jsx, *.md |
-| 03_SECURITY | api/, auth/, security code |
-| 04_FRAMEWORK | apps/, packages/ |
-| 05_TESTING | test, spec, __tests__ |
+| File            | When Loaded                     |
+| --------------- | ------------------------------- |
+| 02_CODE_QUALITY | _.ts, _.tsx, _.js, _.jsx, \*.md |
+| 03_SECURITY     | api/, auth/, security code      |
+| 04_FRAMEWORK    | apps/, packages/                |
+| 05_TESTING      | test, spec, **tests**           |
 
 ### Slash Commands Available
 

@@ -8,7 +8,9 @@
 
 ## 1. Purpose & Positioning
 
-v14.5 is a **bridge release**. It completes all non-UI/UX work still lingering from 13.5→14 and freezes the **one true way** to build API routes, imports, exports, and files. v15 will not change these; it will **enforce** them and build vertically on top.
+v14.5 is a **bridge release**. It completes all non-UI/UX work still lingering from 13.5→14 and
+freezes the **one true way** to build API routes, imports, exports, and files. v15 will not change
+these; it will **enforce** them and build vertically on top.
 
 ---
 
@@ -16,7 +18,8 @@ v14.5 is a **bridge release**. It completes all non-UI/UX work still lingering f
 
 **In:**
 
-- Schema normalization (Network→Corp→Org→Venue→Staff), rules hardening, route parity with v14 intents.
+- Schema normalization (Network→Corp→Org→Venue→Staff), rules hardening, route parity with v14
+  intents.
 - Canonical standards: API Route, Import, Export, File Header/Tag.
 - App Libs consolidation (guards, labor math, onboarding).
 - CI-only tests; **no VS Code background servers**.
@@ -112,4 +115,5 @@ The checklists below are the **only** source of truth for closure.
 
 ## 9. Post-Freeze (v15 Path)
 
-- v15 will **enforce** these standards and add features (directory UI, schedule hints, import assistant), not alter them.
+- v15 will **enforce** these standards and add features (directory UI, schedule hints, import
+  assistant), not alter them.

@@ -11,7 +11,8 @@
 
 ### Three Primary Branches - ONLY
 
-Effective immediately, the Fresh Schedules codebase operates under a **three-branch governance model**:
+Effective immediately, the Fresh Schedules codebase operates under a **three-branch governance
+model**:
 
 1. **`main`** - Production-grade, tested, deployable code (runtime verified)
 2. **`dev`** - Working branch for active development and feature integration

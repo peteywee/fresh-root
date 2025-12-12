@@ -15,12 +15,12 @@
 ## Usage
 
 **Update locally**:
+
 ```bash
 node scripts/generate-visuals.mjs --verbose
 ```
 
-**In CI (automated)**:
-Runs on every push to `dev` and `main` branches via GitHub Actions.
+**In CI (automated)**: Runs on every push to `dev` and `main` branches via GitHub Actions.
 
 ## Viewing Mermaid Diagrams
 

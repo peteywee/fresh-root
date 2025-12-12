@@ -89,10 +89,9 @@ name: Daily Metrics Report
 schedule: "0 9 * * *"
 branch: dev
 
-steps: 1. pnpm -w typecheck
-  1. scripts/generate-visuals.sh
-  2. Commit metrics to dev
-  3. Update DASHBOARD.md
+steps:
+  1. pnpm -w typecheck 1. scripts/generate-visuals.sh 2. Commit metrics to dev 3. Update
+  DASHBOARD.md
 ```
 
 ### On Every Push to dev
@@ -108,10 +107,7 @@ on:
       - "packages/**"
       - "functions/**"
 
-steps: 1. pnpm -w typecheck
-  1. Count errors
-  2. Update progress metrics
-  3. Push updated visuals/
+steps: 1. pnpm -w typecheck 1. Count errors 2. Update progress metrics 3. Push updated visuals/
 ```
 
 ### On Phase Completion (Manual)
@@ -135,10 +131,9 @@ on:
     branches:
       - main
 
-steps: 1. Create archive snapshot
-  1. Generate completion summary
-  2. Document what was fixed
-  3. Create branch summary
+steps:
+  1. Create archive snapshot 1. Generate completion summary 2. Document what was fixed 3. Create
+  branch summary
 ```
 
 ---
@@ -190,18 +185,13 @@ docs/visuals/
 ```markdown
 ## Error Distribution
 
-\`\`\`
-Errors by Category:
+\`\`\` Errors by Category:
 
-Module Import Errors ██████████ 45 errors (46%)
-Type Coercion Errors ████░░░░░░ 22 errors (23%)
-Zod Schema Errors ██░░░░░░░░ 12 errors (12%)
-Duplicate Declaration ███░░░░░░░ 14 errors (14%)
-Other █░░░░░░░░░ 4 errors (5%)
+Module Import Errors ██████████ 45 errors (46%) Type Coercion Errors ████░░░░░░ 22 errors (23%) Zod
+Schema Errors ██░░░░░░░░ 12 errors (12%) Duplicate Declaration ███░░░░░░░ 14 errors (14%) Other
+█░░░░░░░░░ 4 errors (5%)
 
-Total: 97 errors
-Progress: ████░░░░░░░░░░░░░░ 20% (fixed 20, remaining 77)
-\`\`\`
+Total: 97 errors Progress: ████░░░░░░░░░░░░░░ 20% (fixed 20, remaining 77) \`\`\`
 ```
 
 ### ASCII Progress Bar
@@ -209,14 +199,10 @@ Progress: ████░░░░░░░░░░░░░░ 20% (fixed 20, 
 ```markdown
 ## Overall Progress
 
-\`\`\`
-Phase 1: Cleanup ████░░░░░░ 40%
-Phase 2: Dependencies ░░░░░░░░░░ 0%
-Phase 3: Type Safety ░░░░░░░░░░ 0%
-Phase 4: Validation & Merge ░░░░░░░░░░ 0%
+\`\`\` Phase 1: Cleanup ████░░░░░░ 40% Phase 2: Dependencies ░░░░░░░░░░ 0% Phase 3: Type Safety
+░░░░░░░░░░ 0% Phase 4: Validation & Merge ░░░░░░░░░░ 0%
 
-Overall: ██░░░░░░░░ 10% (1 phase underway)
-\`\`\`
+Overall: ██░░░░░░░░ 10% (1 phase underway) \`\`\`
 ```
 
 ### Branch Diff Tree
@@ -224,24 +210,13 @@ Overall: ██░░░░░░░░ 10% (1 phase underway)
 ```markdown
 ## Repository Structure
 
-\`\`\`
-main (production)
-├─ 450 files
-├─ Status: ✅ Stable
-└─ Last updated: 3 days ago
+\`\`\` main (production) ├─ 450 files ├─ Status: ✅ Stable └─ Last updated: 3 days ago
 
-dev (current)
-├─ 465 files (+15 new)
-├─ Status: 🔧 In progress
-├─ TypeScript errors: 97
-├─ Packages to install: 9
-└─ Files to delete: 5
+dev (current) ├─ 465 files (+15 new) ├─ Status: 🔧 In progress ├─ TypeScript errors: 97 ├─ Packages
+to install: 9 └─ Files to delete: 5
 
-feature-branches
-├─ fix/config-typeerrors: 480 files
-├─ dep-fixes: 475 files
-└─ Status: ⏳ Review needed
-\`\`\`
+feature-branches ├─ fix/config-typeerrors: 480 files ├─ dep-fixes: 475 files └─ Status: ⏳ Review
+needed \`\`\`
 ```
 
 ---

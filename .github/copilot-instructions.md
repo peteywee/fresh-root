@@ -1,20 +1,27 @@
 # AI Agent Guide: Fresh Schedules Codebase
 
-**Version**: 2.1
-**Last Updated**: December 10, 2025
-**Target**: AI coding agents (GitHub Copilot, Claude Code, Cursor, etc.)
+**Version**: 2.1 **Last Updated**: December 10, 2025 **Target**: AI coding agents (GitHub Copilot,
+Claude Code, Cursor, etc.)
 
-This guide provides essential knowledge for AI agents to be immediately productive in the Fresh Schedules codebase.
+This guide provides essential knowledge for AI agents to be immediately productive in the Fresh
+Schedules codebase.
 
 ## 🎯 Before You Start
 
-**Important**: This codebase is governed by production development directives. Read these files for binding operational rules:
+**Important**: This codebase is governed by production development directives. Read these files for
+binding operational rules:
 
-- **Production Development Philosophy** (`.github/instructions/production-development-directive.instructions.md`): Hierarchical thinking, tool usage, concurrent workers, safeguards, quality enforcement
-- **CrewOps Protocol** (`docs/crewops/`): Multi-role agent coordination for non-trivial tasks (auto-engages on complex requests)
-- **Security & OWASP** (`.github/instructions/security-and-owasp.instructions.md`): Mandatory security patterns and vulnerability prevention
-- **Code Review** (`.github/instructions/code-review-generic.instructions.md`): Comprehensive review standards
-- **Performance** (`.github/instructions/performance-optimization.instructions.md`): Optimization patterns for all layers
+- **Production Development Philosophy**
+  (`.github/instructions/production-development-directive.instructions.md`): Hierarchical thinking,
+  tool usage, concurrent workers, safeguards, quality enforcement
+- **CrewOps Protocol** (`docs/crewops/`): Multi-role agent coordination for non-trivial tasks
+  (auto-engages on complex requests)
+- **Security & OWASP** (`.github/instructions/security-and-owasp.instructions.md`): Mandatory
+  security patterns and vulnerability prevention
+- **Code Review** (`.github/instructions/code-review-generic.instructions.md`): Comprehensive review
+  standards
+- **Performance** (`.github/instructions/performance-optimization.instructions.md`): Optimization
+  patterns for all layers
 
 These directives are **binding**—not suggestions. They define how you must operate in this codebase.
 
@@ -22,21 +29,21 @@ These directives are **binding**—not suggestions. They define how you must ope
 
 ## Table of Contents
 
-1. [Quick Start](#quick-start)
-2. [Operational Directives](#operational-directives)
-3. [Architecture Overview](#architecture-overview)
-4. [The Triad of Trust](#the-triad-of-trust)
-5. [SDK Factory Pattern (Current Standard)](#sdk-factory-pattern-current-standard)
-6. [Type Safety & Validation](#type-safety--validation)
-7. [Authentication & Authorization](#authentication--authorization)
-8. [Security Patterns](#security-patterns)
-9. [Data Layer & Firebase](#data-layer--firebase)
-10. [Testing Patterns](#testing-patterns)
-11. [Development Workflows](#development-workflows)
-12. [Hard Rules (Must Follow)](#hard-rules-must-follow)
-13. [Common Patterns & Examples](#common-patterns--examples)
-14. [File Organization](#file-organization)
-15. [Troubleshooting](#troubleshooting)
+1. [Quick Start](#quick-start-1)
+2. [Operational Directives](#operational-directives-1)
+3. [Architecture Overview](#architecture-overview-1)
+4. [The Triad of Trust](#the-triad-of-trust-1)
+5. [SDK Factory Pattern (Current Standard)](#sdk-factory-pattern-current-standard-1)
+6. [Type Safety & Validation](#type-safety--validation-1)
+7. [Authentication & Authorization](#authentication--authorization-1)
+8. [Security Patterns](#security-patterns-1)
+9. [Data Layer & Firebase](#data-layer--firebase-1)
+10. [Testing Patterns](#testing-patterns-1)
+11. [Development Workflows](#development-workflows-1)
+12. [Hard Rules (Must Follow)](#hard-rules-must-follow-1)
+13. [Common Patterns & Examples](#common-patterns--examples-1)
+14. [File Organization](#file-organization-1)
+15. [Troubleshooting](#troubleshooting-1)
 
 ---
 
@@ -70,7 +77,7 @@ pnpm test:e2e          # E2E tests (Playwright)
 
 # Firebase emulators (local development)
 NEXT_PUBLIC_USE_EMULATORS=true firebase emulators:start
-```
+```typescript
 
 ### Critical Files to Read First
 
@@ -86,13 +93,15 @@ NEXT_PUBLIC_USE_EMULATORS=true firebase emulators:start
 
 ### Production Development Philosophy
 
-This codebase enforces **strict hierarchical thinking and sequential execution**. When making changes:
+This codebase enforces **strict hierarchical thinking and sequential execution**. When making
+changes:
 
 1. **Understand the hierarchy** - What must be done first? What blocks what?
 2. **Use tools proactively** - Don't assume; verify with the codebase
 3. **Validate before proceeding** - Each step must be validated before moving to the next
 4. **Document safeguards** - If you find an error pattern 3x, create a safeguard rule
-5. **No junk code** - Every line must be production-grade; no placeholders, dead code, or workarounds
+5. **No junk code** - Every line must be production-grade; no placeholders, dead code, or
+   workarounds
 
 **Key Files**:
 
@@ -102,7 +111,8 @@ This codebase enforces **strict hierarchical thinking and sequential execution**
 
 ### CrewOps Protocol
 
-For **non-trivial tasks** (multi-step feature work, architectural changes, complex bug fixes), the CrewOps protocol automatically engages a multi-role team:
+For **non-trivial tasks** (multi-step feature work, architectural changes, complex bug fixes), the
+CrewOps protocol automatically engages a multi-role team:
 
 - **Orchestrator** - Routes work, arbitrates conflicts
 - **Product Owner** - Defines success criteria
@@ -113,7 +123,8 @@ For **non-trivial tasks** (multi-step feature work, architectural changes, compl
 
 **Location**: `docs/crewops/` - Read the manual for detailed coordination rules.
 
-**Key Principle**: Security Red Team can **BLOCK** work if they find auth bypass risks, data leakage, insecure defaults, or missing access controls.
+**Key Principle**: Security Red Team can **BLOCK** work if they find auth bypass risks, data
+leakage, insecure defaults, or missing access controls.
 
 ---
 
@@ -121,7 +132,7 @@ For **non-trivial tasks** (multi-step feature work, architectural changes, compl
 
 ### Monorepo Structure
 
-```
+```typescript
 fresh-root/
 ├── apps/
 │   └── web/                 # Next.js PWA (App Router)
@@ -140,7 +151,7 @@ fresh-root/
 ├── docs/                   # Documentation
 ├── firestore.rules         # Firestore security rules ⭐
 └── storage.rules           # Cloud Storage security rules
-```
+```typescript
 
 ### Service Boundaries
 
@@ -151,7 +162,8 @@ fresh-root/
 
 ### Major Architectural Changes (Recent)
 
-- **SDK Factory Migration**: 90%+ of routes migrated from `withSecurity` wrapper pattern to declarative SDK factory pattern
+- **SDK Factory Migration**: 90%+ of routes migrated from `withSecurity` wrapper pattern to
+  declarative SDK factory pattern
 - **Zod-First Validation**: All API inputs validated via Zod schemas in `packages/types`
 - **Series-A Standards**: pnpm enforcement, error pattern detection, enhanced pre-commit hooks
 
@@ -198,7 +210,7 @@ export const CreateShiftSchema = ShiftSchema.omit({
 });
 
 export const UpdateShiftSchema = ShiftSchema.partial().omit({ id: true });
-```
+```typescript
 
 ### 2. API Route (with SDK Factory)
 
@@ -235,7 +247,7 @@ export const POST = createOrgEndpoint({
     return NextResponse.json(shift, { status: 201 });
   },
 });
-```
+```typescript
 
 ### 3. Firestore Security Rules
 
@@ -251,9 +263,10 @@ match /orgs/{orgId}/schedules/{scheduleId}/shifts/{shiftId} {
                 && isOrgMember(orgId)
                 && hasAnyRole(['org_owner', 'admin', 'manager']);
 }
-```
+```typescript
 
-**⚠️ CRITICAL**: If you add/modify any of the triad, you MUST update all three. Run `node scripts/validate-patterns.mjs` to verify coverage.
+**⚠️ CRITICAL**: If you add/modify any of the triad, you MUST update all three. Run
+`node scripts/validate-patterns.mjs` to verify coverage.
 
 ---
 
@@ -263,7 +276,8 @@ match /orgs/{orgId}/schedules/{scheduleId}/shifts/{shiftId} {
 
 ### Why SDK Factory?
 
-The SDK factory (`@fresh-schedules/api-framework`) provides a declarative, type-safe way to create API endpoints with built-in:
+The SDK factory (`@fresh-schedules/api-framework`) provides a declarative, type-safe way to create
+API endpoints with built-in:
 
 - ✅ Authentication verification
 - ✅ Organization context loading
@@ -277,7 +291,7 @@ The SDK factory (`@fresh-schedules/api-framework`) provides a declarative, type-
 
 ### Middleware Pipeline (Automatic)
 
-```
+```typescript
 1. Rate Limiting (Redis/in-memory)
    ↓
 1. Authentication (Firebase session cookie)
@@ -293,7 +307,7 @@ The SDK factory (`@fresh-schedules/api-framework`) provides a declarative, type-
 1. Handler Execution (your business logic)
    ↓
 1. Audit Logging (success/failure)
-```
+```typescript
 
 ### Factory Types
 
@@ -333,7 +347,7 @@ export const POST = createRateLimitedEndpoint({
     /* ... */
   },
 });
-```
+```typescript
 
 ### Complete Example
 
@@ -397,7 +411,7 @@ export const POST = createOrgEndpoint({
     }
   },
 });
-```
+```typescript
 
 ### Configuration Options
 
@@ -432,7 +446,7 @@ export interface EndpointConfig<TInput, TOutput> {
     params: Record<string, string>;
   }) => Promise<TOutput>;
 }
-```
+```typescript
 
 ---
 
@@ -484,7 +498,7 @@ export const UpdateEntitySchema = EntitySchema.partial().omit({
   id: true,
   orgId: true, // orgId is immutable
 });
-```
+```typescript
 
 ### Validation Error Handling
 
@@ -503,7 +517,7 @@ SDK factory automatically converts ZodErrors to user-friendly responses:
     }
   }
 }
-```
+```typescript
 
 ### Custom Validation Rules
 
@@ -517,7 +531,7 @@ export const ShiftSchema = z
     message: "End time must be after start time",
     path: ["endTime"], // Associates error with specific field
   });
-```
+```typescript
 
 ---
 
@@ -539,15 +553,15 @@ export const ShiftSchema = z
 
 ```typescript
 Set-Cookie: session=${value}; HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=${ttl}
-```
+```typescript
 
 ### Role-Based Access Control (RBAC)
 
 **Role Hierarchy** (lowest to highest):
 
-```
+```typescript
 staff < corporate < scheduler < manager < admin < org_owner
-```
+```typescript
 
 **Role Definition**: `packages/types/src/rbac.ts`
 
@@ -555,7 +569,7 @@ staff < corporate < scheduler < manager < admin < org_owner
 export const OrgRole = z.enum(["staff", "corporate", "scheduler", "manager", "admin", "org_owner"]);
 
 export type OrgRole = z.infer<typeof OrgRole>;
-```
+```typescript
 
 **Hierarchical Checking**: If you require `manager`, users with `admin` or `org_owner` also pass.
 
@@ -577,7 +591,7 @@ export const DELETE = createOrgEndpoint({
     // Only admin and org_owner can access
   },
 });
-```
+```typescript
 
 ### Organization Context
 
@@ -593,7 +607,7 @@ const membershipQuery = await db
   .where("status", "==", "active")
   .limit(1)
   .get();
-```
+```typescript
 
 **Membership Document** (`/memberships/{userId}_{orgId}`):
 
@@ -606,7 +620,7 @@ const membershipQuery = await db
   createdAt: number;
   updatedAt: number;
 }
-```
+```typescript
 
 **Context Available in Handler**:
 
@@ -626,7 +640,7 @@ const membershipQuery = await db
   requestId: string;
   timestamp: number;
 }
-```
+```typescript
 
 ---
 
@@ -647,7 +661,7 @@ export const POST = createPublicEndpoint({
     /* ... */
   },
 });
-```
+```typescript
 
 **Client Must**:
 
@@ -663,7 +677,8 @@ export const POST = createPublicEndpoint({
 - `UPSTASH_REDIS_REST_URL` + `UPSTASH_REDIS_REST_TOKEN` (preferred for Vercel)
 - OR `REDIS_URL` (for ioredis client)
 
-**⚠️ WARNING**: In-memory rate limiting is NOT suitable for multi-instance deployments. Use Redis in production.
+**⚠️ WARNING**: In-memory rate limiting is NOT suitable for multi-instance deployments. Use Redis in
+production.
 
 **Configuration**:
 
@@ -677,7 +692,7 @@ export const POST = createOrgEndpoint({
     /* ... */
   },
 });
-```
+```typescript
 
 **Recommended Limits**:
 
@@ -687,12 +702,12 @@ export const POST = createOrgEndpoint({
 
 **Response Headers**:
 
-```
+```typescript
 X-RateLimit-Limit: 100
 X-RateLimit-Remaining: 42
 X-RateLimit-Reset: 1672531200000
 Retry-After: 45  (seconds until reset)
-```
+```typescript
 
 ### 3. Input Validation
 
@@ -709,7 +724,7 @@ const parsed = await parseJson(request, CreateEntitySchema);
 if (!parsed.success) {
   return badRequest("Invalid payload", parsed.details);
 }
-```
+```typescript
 
 ### 4. Organization Isolation
 
@@ -719,13 +734,13 @@ if (!parsed.success) {
 
 ```typescript
 const schedules = await db.collection("schedules").get(); // No scoping!
-```
+```typescript
 
 **✅ CORRECT**:
 
 ```typescript
 const schedules = await db.collection(`orgs/${context.org!.orgId}/schedules`).get();
-```
+```typescript
 
 ### 5. Security Headers
 
@@ -759,7 +774,7 @@ const db = getFirestore();
 
 // Get Auth instance
 const auth = getAuth();
-```
+```typescript
 
 **Environment Variables Required**:
 
@@ -768,7 +783,7 @@ const auth = getAuth();
 
 ### Firestore Collection Paths
 
-```
+```typescript
 /users/{userId}                                    - User profiles
 /orgs/{orgId}                                      - Organizations
 /orgs/{orgId}/schedules/{scheduleId}              - Schedules
@@ -777,7 +792,7 @@ const auth = getAuth();
 /memberships/{userId}_{orgId}                      - Memberships
 /venues/{orgId}/venues/{venueId}                   - Venues
 /zones/{orgId}/zones/{zoneId}                      - Zones
-```
+```typescript
 
 ### Firestore Access Pattern
 
@@ -803,7 +818,7 @@ export const GET = createOrgEndpoint({
     return NextResponse.json({ data: schedules });
   },
 });
-```
+```typescript
 
 ### Firestore Security Rules
 
@@ -829,7 +844,7 @@ function hasAnyRole(orgId, roles) {
     && get(/databases/$(database)/documents/memberships/$(uid() + "_" + orgId))
        .data.role in roles;
 }
-```
+```typescript
 
 **Common Patterns**:
 
@@ -853,7 +868,7 @@ match /orgs/{orgId}/schedules/{scheduleId} {
   allow read: if isSignedIn() && isOrgMember(orgId);
   allow write: if isSignedIn() && hasAnyRole(orgId, ['org_owner', 'admin', 'manager']);
 }
-```
+```typescript
 
 ---
 
@@ -869,7 +884,7 @@ match /orgs/{orgId}/schedules/{scheduleId} {
 pnpm test              # Run all tests
 pnpm test:coverage     # With coverage
 pnpm test:watch        # Watch mode
-```
+```typescript
 
 ### Test Utilities
 
@@ -887,7 +902,7 @@ const request = createMockRequest("/api/shifts", {
   headers: { "x-org-id": "org-123" },
   searchParams: { orgId: "org-123" },
 });
-```
+```typescript
 
 **Mock Context Builders**:
 
@@ -906,18 +921,18 @@ const orgContext = createMockOrgContext({
   orgId: "org-123",
   role: "admin",
 });
-```
+```typescript
 
 ### Test Structure
 
 **Location**: Co-located with code in `__tests__/` directories
 
-```
+```typescript
 /api/schedules/
 ├── route.ts
 └── __tests__/
     └── schedules.test.ts
-```
+```typescript
 
 **Example Test**:
 
@@ -966,7 +981,7 @@ describe("POST /api/schedules", () => {
     expect(response.status).toBe(400);
   });
 });
-```
+```typescript
 
 ### Firestore Rules Tests
 
@@ -1011,7 +1026,7 @@ pnpm -r build
 
 # Clean all node_modules
 pnpm clean
-```
+```typescript
 
 ### Turbo Tasks
 
@@ -1032,7 +1047,7 @@ pnpm clean
 pnpm dev        # Turbo runs dev tasks
 pnpm build      # Turbo runs build tasks
 pnpm test       # Turbo runs test tasks
-```
+```typescript
 
 ### Firebase Emulators
 
@@ -1044,14 +1059,14 @@ firebase emulators:start
 
 # Terminal 2: Set env var and start dev server
 NEXT_PUBLIC_USE_EMULATORS=true pnpm dev
-```
+```typescript
 
 **Seed Data**:
 
 ```bash
 pnpm tsx scripts/seed/seed.emulator.ts
 pnpm sim:auth  # Auth simulation
-```
+```typescript
 
 **Emulator Ports**:
 
@@ -1080,7 +1095,7 @@ pnpm sim:auth  # Auth simulation
 pnpm typecheck
 pnpm lint
 pnpm format
-```
+```typescript
 
 ### Local Quality Gates (Before PR)
 
@@ -1103,7 +1118,8 @@ pnpm format
 
 **RULE**: Use pnpm ONLY. Never use npm or yarn.
 
-**Why**: Enforced via pre-commit hooks and `.npmrc`. Using other package managers will cause CI failures.
+**Why**: Enforced via pre-commit hooks and `.npmrc`. Using other package managers will cause CI
+failures.
 
 ### 2. Type Safety
 
@@ -1118,14 +1134,14 @@ interface User {
   // Duplicate!
   name: string;
 }
-```
+```typescript
 
 **✅ CORRECT**:
 
 ```typescript
 export const UserSchema = z.object({ name: z.string() });
 export type User = z.infer<typeof UserSchema>;
-```
+```typescript
 
 ### 3. Security Middleware
 
@@ -1138,7 +1154,7 @@ export async function GET(request: NextRequest) {
   const data = await fetchData();
   return NextResponse.json(data);
 }
-```
+```typescript
 
 **✅ CORRECT**:
 
@@ -1149,7 +1165,7 @@ export const GET = createOrgEndpoint({
     return NextResponse.json({ data });
   },
 });
-```
+```typescript
 
 ### 4. Input Validation
 
@@ -1164,7 +1180,7 @@ export const POST = createOrgEndpoint({
     await db.collection("items").add(body);
   },
 });
-```
+```typescript
 
 **✅ CORRECT**:
 
@@ -1175,7 +1191,7 @@ export const POST = createOrgEndpoint({
     await db.collection("items").add(input);
   },
 });
-```
+```typescript
 
 ### 5. Organization Isolation
 
@@ -1185,13 +1201,13 @@ export const POST = createOrgEndpoint({
 
 ```typescript
 const schedules = await db.collection("schedules").get(); // No org scoping!
-```
+```typescript
 
 **✅ CORRECT**:
 
 ```typescript
 const schedules = await db.collection(`orgs/${context.org!.orgId}/schedules`).get();
-```
+```typescript
 
 ### 6. The Triad of Trust
 
@@ -1215,7 +1231,7 @@ const schedules = await db.collection(`orgs/${context.org!.orgId}/schedules`).ge
 // P# = Priority (P0=critical, P1=important, P2=standard)
 // DOMAIN = AUTH, API, UI, DB, TEST, etc.
 // CATEGORY = CODE, SCHEMA, TEST, MIDDLEWARE, etc.
-```
+```typescript
 
 **Auto-applied**: Pre-commit hook runs `node scripts/tag-files.mjs`
 
@@ -1245,7 +1261,7 @@ const schedules = await db.collection(`orgs/${context.org!.orgId}/schedules`).ge
 catch (err) {
   return NextResponse.json({ error: "Error" }, { status: 500 });
 }
-```
+```typescript
 
 **✅ CORRECT**:
 
@@ -1259,7 +1275,7 @@ catch (err) {
   });
   return NextResponse.json({ error: "Error" }, { status: 500 });
 }
-```
+```typescript
 
 ---
 
@@ -1284,7 +1300,7 @@ touch apps/web/app/api/my-entities/__tests__/my-entities.test.ts
 
 # 5. Validate
 node scripts/validate-patterns.mjs
-```
+```typescript
 
 **1. Schema** (`packages/types/src/my-entity.ts`):
 
@@ -1317,7 +1333,7 @@ export const UpdateMyEntitySchema = MyEntitySchema.partial().omit({
 });
 
 // Export from index.ts
-```
+```typescript
 
 **2. API Route** (`apps/web/app/api/my-entities/route.ts`):
 
@@ -1403,7 +1419,7 @@ export const DELETE = createOrgEndpoint({
     return NextResponse.json({ success: true });
   },
 });
-```
+```typescript
 
 **3. Firestore Rules** (`firestore.rules`):
 
@@ -1422,7 +1438,7 @@ match /orgs/{orgId}/myEntities/{entityId} {
                 && isOrgMember(orgId)
                 && hasAnyRole(orgId, ['org_owner', 'admin']);
 }
-```
+```typescript
 
 **4. Tests** (`apps/web/app/api/my-entities/__tests__/my-entities.test.ts`):
 
@@ -1463,7 +1479,7 @@ describe("POST /api/my-entities", () => {
     expect(response.status).toBe(201);
   });
 });
-```
+```typescript
 
 ### Migrating Legacy Route to SDK Factory
 
@@ -1487,7 +1503,7 @@ export const POST = withSecurity(
   ),
   { requireAuth: true, maxRequests: 50, windowMs: 60_000 },
 );
-```
+```typescript
 
 **After** (SDK factory):
 
@@ -1505,7 +1521,7 @@ export const POST = createOrgEndpoint({
     return NextResponse.json({ success: true });
   },
 });
-```
+```typescript
 
 **Benefits**:
 
@@ -1534,7 +1550,7 @@ export const POST = createOrgEndpoint({
     }
   }
 }
-```
+```typescript
 
 **Usage**:
 
@@ -1544,7 +1560,7 @@ import { helper } from "../../../src/lib/helpers";
 
 // ✅ CORRECT
 import { helper } from "@/src/lib/helpers";
-```
+```typescript
 
 ### Import Order (Enforced by ESLint)
 
@@ -1560,7 +1576,7 @@ import { createOrgEndpoint } from "@fresh-schedules/api-framework";
 // 3. Relative imports
 import { withSecurity } from "../_shared/middleware";
 import { ok, badRequest } from "./validation";
-```
+```typescript
 
 ### Domain-Driven Structure
 
@@ -1568,16 +1584,16 @@ import { ok, badRequest } from "./validation";
 
 **❌ WRONG**:
 
-```
+```typescript
 /components/Button.tsx
 /components/Modal.tsx
 /hooks/useSchedule.ts
 /utils/scheduleHelpers.ts
-```
+```typescript
 
 **✅ CORRECT**:
 
-```
+```typescript
 /schedules/
 ├── components/
 │   ├── ScheduleCard.tsx
@@ -1586,7 +1602,7 @@ import { ok, badRequest } from "./validation";
 │   └── useSchedules.ts
 └── utils/
     └── scheduleHelpers.ts
-```
+```typescript
 
 ---
 
@@ -1606,7 +1622,7 @@ import { ok, badRequest } from "./validation";
     "lint": "eslint . --ext .ts,.tsx --cache"
   }
 }
-```
+```typescript
 
 #### 2. "packageManager field is required"
 
@@ -1618,13 +1634,14 @@ import { ok, badRequest } from "./validation";
 {
   "packageManager": "pnpm@9.12.1"
 }
-```
+```typescript
 
 #### 3. 427 TypeScript Errors
 
 **Cause**: Broken SDK factory migration (syntax errors).
 
-**Fix**: Already reverted in latest commits. If you see TS1128, TS1005, TS1472 errors, revert to working commit.
+**Fix**: Already reverted in latest commits. If you see TS1128, TS1005, TS1472 errors, revert to
+working commit.
 
 #### 4. "Link cannot be used as JSX component" (TS2786)
 
@@ -1641,7 +1658,7 @@ import { ok, badRequest } from "./validation";
 ```bash
 UPSTASH_REDIS_REST_URL=https://....upstash.io
 UPSTASH_REDIS_REST_TOKEN=****
-```
+```typescript
 
 #### 6. CSRF Token Invalid
 
@@ -1658,7 +1675,7 @@ export const POST = createPublicEndpoint({
     /* ... */
   },
 });
-```
+```typescript
 
 #### 7. "Organization context not found"
 
@@ -1674,13 +1691,14 @@ fetch("/api/schedules?orgId=org-123");
 fetch("/api/schedules", {
   headers: { "x-org-id": "org-123" },
 });
-```
+```typescript
 
 #### 8. Firestore Permission Denied
 
 **Cause**: Mismatch between API route permissions and Firestore rules.
 
-**Fix**: Verify Firestore rules allow the operation for the user's role. Check membership document exists.
+**Fix**: Verify Firestore rules allow the operation for the user's role. Check membership document
+exists.
 
 ---
 
@@ -1719,7 +1737,7 @@ NEXT_PUBLIC_USE_EMULATORS=true
 
 # General
 NODE_ENV=production|development
-```
+```typescript
 
 ### Useful Scripts
 
@@ -1746,11 +1764,11 @@ pnpm deploy:hosting         # Deploy hosting
 node scripts/validate-patterns.mjs    # Validate triad coverage
 node scripts/detect-error-patterns.js # Check for error patterns
 node scripts/tag-files.mjs            # Add file headers
-```
+```typescript
 
 ### Role Hierarchy
 
-```
+```typescript
 org_owner   (100) - Full control
   ↓
 admin       (80)  - User management, settings
@@ -1762,11 +1780,11 @@ scheduler   (50)  - Create/edit schedules
 corporate   (45)  - View across locations
   ↓
 staff       (40)  - View own schedule
-```
+```typescript
 
 ### HTTP Status Codes
 
-```
+```typescript
 200 OK                    - Success (GET)
 201 Created              - Success (POST)
 204 No Content           - Success (DELETE)
@@ -1777,7 +1795,7 @@ staff       (40)  - View own schedule
 409 Conflict             - Duplicate resource
 429 Too Many Requests    - Rate limited
 500 Internal Server Error - Unexpected error
-```
+```typescript
 
 ### Error Response Format
 
@@ -1795,13 +1813,14 @@ staff       (40)  - View own schedule
     }
   }
 }
-```
+```typescript
 
 ---
 
 ## Summary
 
-This codebase follows a **Zod-first, SDK factory pattern** with **hierarchical RBAC** and **comprehensive security**. Key takeaways:
+This codebase follows a **Zod-first, SDK factory pattern** with **hierarchical RBAC** and
+**comprehensive security**. Key takeaways:
 
 1. **Use SDK factory** for all new API routes (declarative, type-safe)
 2. **Follow the Triad of Trust** (Schema + API + Rules) for all entities
@@ -1823,7 +1842,8 @@ This codebase follows a **Zod-first, SDK factory pattern** with **hierarchical R
 - ✅ **Validation gates**: All changes must pass full test/lint/build cycles
 - ✅ **Security-first**: Security Red Team can veto unsafe work
 
-**For questions or improvements**, open an issue or PR at [github.com/peteywee/fresh-root](https://github.com/peteywee/fresh-root).
+**For questions or improvements**, open an issue or PR at
+[github.com/peteywee/fresh-root](https://github.com/peteywee/fresh-root).
 
 ---
 

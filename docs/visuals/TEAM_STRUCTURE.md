@@ -1,6 +1,7 @@
 # Specialist Team Structure
 
-**Mission**: Break down and delegate major cleanup, dependency resolution, and type safety fixes across specialist roles.
+**Mission**: Break down and delegate major cleanup, dependency resolution, and type safety fixes
+across specialist roles.
 
 ---
 
@@ -245,9 +246,8 @@ Each specialist creates artifacts following this template:
 ```markdown
 # [Specialist Role] - [Phase Name]
 
-**Status**: [Starting / In Progress / Complete]
-**Last Updated**: [Date/Time]
-**Blockers**: None / [List]
+**Status**: [Starting / In Progress / Complete] **Last Updated**: [Date/Time] **Blockers**: None /
+[List]
 
 ## Summary
 

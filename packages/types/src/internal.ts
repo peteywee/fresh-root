@@ -13,7 +13,7 @@ export const BackupRequestSchema = z.object({
 
 export type BackupRequest = z.infer<typeof BackupRequestSchema>;
 
-// Publish request schema  
+// Publish request schema
 export const PublishRequestSchema = z.object({
   scheduleId: z.string().min(1, "Schedule ID is required"),
   publishAt: z.number().int().positive().optional(),

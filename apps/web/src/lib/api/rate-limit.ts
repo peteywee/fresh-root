@@ -11,9 +11,10 @@
  *   safe across multiple instances.
  */
 
+import Redis from "ioredis";
+
 import type { Env } from "@/src/env";
 import { env } from "@/src/env";
-import Redis from "ioredis";
 
 /* -------------------------------------------------------------------------- */
 /* Types                                                                      */
@@ -246,9 +247,7 @@ export async function checkRateLimit(
 ): Promise<RateLimitResult> {
   const limiter = getRateLimiter(preset);
   const ip =
-    (req.headers?.get("x-forwarded-for") ?? "").split(",")[0].trim() ||
-    (req).ip ||
-    "unknown";
+    (req.headers?.get("x-forwarded-for") ?? "").split(",")[0].trim() || req.ip || "unknown";
 
   const key = buildRateLimitKey({
     feature: "api",

@@ -104,7 +104,8 @@ testintel e2e run                   # Run all E2E tests
 
 **Generates:** Test files in `tests/e2e/` matching Playwright format
 
-**Limitation:** When installed globally, can't find project API routes. Use local installation or run from project directory.
+**Limitation:** When installed globally, can't find project API routes. Use local installation or
+run from project directory.
 
 ---
 
