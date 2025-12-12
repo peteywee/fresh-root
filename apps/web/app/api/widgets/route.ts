@@ -2,8 +2,8 @@
 // Tags: P0, CORE, API, SDK_FACTORY
 
 import { createPublicEndpoint } from "@fresh-schedules/api-framework";
-import { z } from "zod";
 import { NextResponse } from "next/server";
+import { z } from "zod";
 
 // Widget item schema
 const CreateItemSchema = z.object({

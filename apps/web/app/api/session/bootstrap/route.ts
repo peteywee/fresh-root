@@ -2,8 +2,8 @@
 // Tags: P0, SESSION, BOOTSTRAP, API, SDK_FACTORY
 
 import { createAuthenticatedEndpoint } from "@fresh-schedules/api-framework";
-import { z } from "zod";
 import { NextResponse } from "next/server";
+import { z } from "zod";
 
 // Session bootstrap schema
 const SessionBootstrapSchema = z.object({
