@@ -1,4 +1,5 @@
-# Template: CODE\_ZOD\_SCHEMA
+# Template: CODE_ZOD_SCHEMA
+
 ```ts
 /**
  * ${Name} domain schema

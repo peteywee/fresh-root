@@ -348,13 +348,7 @@ describe("Pagination", () => {
     const totalItems = 42;
     const paginationParams = { page: 2, pageSize: 5 };
 
-    const response = createPaginatedResponse(
-      data,
-      totalItems,
-      paginationParams,
-      "req-123",
-      50,
-    );
+    const response = createPaginatedResponse(data, totalItems, paginationParams, "req-123", 50);
 
     expect(response.data).toEqual(data);
     expect(response.pagination.page).toBe(2);
@@ -372,13 +366,7 @@ describe("Pagination", () => {
     const totalItems = 42;
     const paginationParams = { page: 9, pageSize: 5 };
 
-    const response = createPaginatedResponse(
-      data,
-      totalItems,
-      paginationParams,
-      "req-123",
-      50,
-    );
+    const response = createPaginatedResponse(data, totalItems, paginationParams, "req-123", 50);
 
     expect(response.pagination.hasNextPage).toBe(false);
     expect(response.pagination.hasPrevPage).toBe(true);
@@ -389,13 +377,7 @@ describe("Pagination", () => {
     const totalItems = 42;
     const paginationParams = { page: 1, pageSize: 5 };
 
-    const response = createPaginatedResponse(
-      data,
-      totalItems,
-      paginationParams,
-      "req-123",
-      50,
-    );
+    const response = createPaginatedResponse(data, totalItems, paginationParams, "req-123", 50);
 
     expect(response.pagination.hasNextPage).toBe(true);
     expect(response.pagination.hasPrevPage).toBe(false);
@@ -649,9 +631,8 @@ describe("Idempotency", () => {
     const request = createMockRequest("/create", { method: "POST" });
     const context = createMockContext();
 
-    const handler = withIdempotency<{ success: boolean }>(
-      { required: true },
-      async () => NextResponse.json({ success: true }),
+    const handler = withIdempotency<{ success: boolean }>({ required: true }, async () =>
+      NextResponse.json({ success: true }),
     );
 
     const response = await handler(request, context);
@@ -671,13 +652,10 @@ describe("Idempotency", () => {
 
     let handlerCalled = false;
 
-    const handler = withIdempotency<{ success: boolean }>(
-      {},
-      async () => {
-        handlerCalled = true;
-        return NextResponse.json({ success: true });
-      },
-    );
+    const handler = withIdempotency<{ success: boolean }>({}, async () => {
+      handlerCalled = true;
+      return NextResponse.json({ success: true });
+    });
 
     await handler(request, context);
 

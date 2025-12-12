@@ -1,12 +1,14 @@
 NOTE: This file has been moved to `docs/production/PRODUCTION_ENV_VALIDATION.md`
 
-This file was consolidated into the `docs/production/` directory and is maintained there as the canonical source of truth.
+This file was consolidated into the `docs/production/` directory and is maintained there as the
+canonical source of truth.
 
 Please update bookmarks and references to the new location:
 
 `docs/production/PRODUCTION_ENV_VALIDATION.md`
 
 The full content and history remain available in that location.
+
 # Production Environment Validation Guide
 
 **Status**: ✅ **FULLY IMPLEMENTED**
@@ -397,15 +399,15 @@ pnpm tsx scripts/validate-env.ts
 
 Before deploying to production:
 
-- [ ] `REDIS_URL` is set in production environment
-- [ ] `NODE_ENV=production` is set
-- [ ] Firebase credentials are set
-- [ ] Run startup validation: `preFlightChecks(env)`
-- [ ] No `assertNotProduction()` guards in production code
-- [ ] All `assertProduction()` guards in production-only code
-- [ ] Rate limiting tests pass with Redis
-- [ ] Multi-instance info shows "safe" risk level
-- [ ] Pre-flight checks pass
+- \[ ] `REDIS_URL` is set in production environment
+- \[ ] `NODE_ENV=production` is set
+- \[ ] Firebase credentials are set
+- \[ ] Run startup validation: `preFlightChecks(env)`
+- \[ ] No `assertNotProduction()` guards in production code
+- \[ ] All `assertProduction()` guards in production-only code
+- \[ ] Rate limiting tests pass with Redis
+- \[ ] Multi-instance info shows "safe" risk level
+- \[ ] Pre-flight checks pass
 
 ---
 
@@ -466,4 +468,5 @@ const redis = new Redis(env.REDIS_URL); // ← Could be undefined!
 | Simple bool check     | `isProduction(env)`           | Conditionals           |
 | Redis enabled         | `isMultiInstanceEnabled(env)` | Feature detection      |
 
-**Key principle**: Fail fast and loudly. Better to crash at startup than silently break in production.
+**Key principle**: Fail fast and loudly. Better to crash at startup than silently break in
+production.

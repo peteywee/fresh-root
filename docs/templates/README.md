@@ -1,4 +1,5 @@
 # Source Templates (Canonical)
+
 Use these as the **single source of truth** for new files. Generate with:
 
 ```bash
@@ -22,18 +23,20 @@ node scripts/gen/scaffold-from-template.mjs DOC_SPEC docs/specs/feature-x.md "Fe
 ```
 
 ## Available Templates
-- **CODE\_TS\_MODULE.md** – Generic TS module (headers, error shape, logging hooks)
-- **CODE\_NEXT\_API\_ROUTE.md** – Next.js App Router route with security/lint guards
-- **CODE\_FIRESTORE\_RULES.md** – Firestore RLS baseline (org membership + claims)
-- **CODE\_ZOD\_SCHEMA.md** – Domain schema + index export pattern
-- **DOC\_RUNBOOK.md** – Operations runbook (SLOs, paging, rollback)
-- **DOC\_ADR.md** – Architecture Decision Record
-- **DOC\_SPEC.md** – Feature spec with Acceptance Criteria
-- **CI\_WORKFLOW\_TEMPLATE.yml** – Hardened minimal CI job
+
+- **CODE_TS_MODULE.md** – Generic TS module (headers, error shape, logging hooks)
+- **CODE_NEXT_API_ROUTE.md** – Next.js App Router route with security/lint guards
+- **CODE_FIRESTORE_RULES.md** – Firestore RLS baseline (org membership + claims)
+- **CODE_ZOD_SCHEMA.md** – Domain schema + index export pattern
+- **DOC_RUNBOOK.md** – Operations runbook (SLOs, paging, rollback)
+- **DOC_ADR.md** – Architecture Decision Record
+- **DOC_SPEC.md** – Feature spec with Acceptance Criteria
+- **CI_WORKFLOW_TEMPLATE.yml** – Hardened minimal CI job
 
 ---
 
 ## Usage
+
 All templates use `${VarName}` syntax for substitution. Pass key-value pairs as arguments:
 
 ```bash

@@ -1,7 +1,7 @@
 # SDK Factory Pattern - Comprehensive Overview & Implementation Guide
 
-**Status**: ✅ Production Ready (90%+ Migrated)  
-**Version**: 2.0.0  
+**Status**: ✅ Production Ready (90%+ Migrated)\
+**Version**: 2.0.0\
 **Last Updated**: December 7, 2025
 
 ---
@@ -22,7 +22,8 @@
 
 ### What is the SDK Factory?
 
-The **SDK Factory** (`@fresh-schedules/api-framework`) is a declarative, type-safe framework for building Next.js API routes with:
+The **SDK Factory** (`@fresh-schedules/api-framework`) is a declarative, type-safe framework for
+building Next.js API routes with:
 
 - ✅ **Built-in Authentication & Authorization**
 - ✅ **Organization Context Management** (multi-tenant support)
@@ -38,59 +39,61 @@ The **SDK Factory** (`@fresh-schedules/api-framework`) is a declarative, type-sa
 ### Problem It Solves
 
 **Before SDK Factory** (repetitive boilerplate):
+
 ```typescript
 export async function GET(request: NextRequest) {
   try {
     // 1. Verify auth
     const session = await verifySession(request);
     if (!session) return unauthorized();
-    
+
     // 2. Check rate limit
     const limited = await checkRateLimit(session.userId);
     if (limited) return tooManyRequests();
-    
+
     // 3. Load organization
     const org = await loadOrg(request.query.orgId);
     if (!org) return notFound();
-    
+
     // 4. Verify membership
     const member = await verifyMembership(session.userId, org.id);
     if (!member) return forbidden();
-    
+
     // 5. Check role
-    if (!canAccess(member.role, 'read')) return forbidden();
-    
+    if (!canAccess(member.role, "read")) return forbidden();
+
     // 6. Validate input
     const parsed = inputSchema.safeParse(request.query);
     if (!parsed.success) return badRequest(parsed.error);
-    
+
     // 7. Business logic (finally!)
     const data = await fetchData(org.id);
-    
+
     // 8. Log
-    await logAudit('GET', session.userId, org.id, 'success');
-    
+    await logAudit("GET", session.userId, org.id, "success");
+
     // 9. Response
     return NextResponse.json({ data });
   } catch (err) {
     // 10. Error handling
-    await logAudit('GET', session.userId, org.id, 'error', err);
+    await logAudit("GET", session.userId, org.id, "error", err);
     return internalError();
   }
 }
 ```
 
 **After SDK Factory** (clean, focused):
+
 ```typescript
 export const GET = createOrgEndpoint({
-  roles: ['manager'],
+  roles: ["manager"],
   rateLimit: { maxRequests: 100, windowMs: 60000 },
   input: QuerySchema,
   handler: async ({ input, context }) => {
     // Only business logic!
     const data = await fetchData(context.org!.orgId);
     return NextResponse.json({ data });
-  }
+  },
 });
 ```
 
@@ -101,6 +104,7 @@ export const GET = createOrgEndpoint({
 ### 1. Endpoint Factories (4 Types)
 
 #### Public Endpoint
+
 **No authentication required**
 
 ```typescript
@@ -109,13 +113,14 @@ export const POST = createPublicEndpoint({
   handler: async ({ input }) => {
     await addToNewsletter(input.email);
     return NextResponse.json({ success: true });
-  }
+  },
 });
 ```
 
 **Use Cases**: Sign-ups, public data, webhooks
 
 #### Authenticated Endpoint
+
 **Auth required, no org context**
 
 ```typescript
@@ -124,29 +129,31 @@ export const GET = createAuthenticatedEndpoint({
     // context.auth.userId available
     const profile = await getUserProfile(context.auth!.userId);
     return NextResponse.json({ profile });
-  }
+  },
 });
 ```
 
 **Use Cases**: Personal data, user preferences, account info
 
 #### Organization Endpoint
+
 **Auth + org membership required**
 
 ```typescript
 export const GET = createOrgEndpoint({
-  roles: ['manager'],  // Optional - defaults to any member
+  roles: ["manager"], // Optional - defaults to any member
   handler: async ({ context }) => {
     // context.org.orgId and context.org.role available
     const schedules = await fetchSchedules(context.org!.orgId);
     return NextResponse.json({ schedules });
-  }
+  },
 });
 ```
 
 **Use Cases**: Business operations, team data, org-scoped resources
 
 #### Admin Endpoint
+
 **Auth + admin/org_owner role required**
 
 ```typescript
@@ -156,7 +163,7 @@ export const POST = createAdminEndpoint({
     // Only admins can access
     await inviteUser(input.email, context.org!.orgId);
     return NextResponse.json({ success: true });
-  }
+  },
 });
 ```
 
@@ -253,7 +260,8 @@ All errors return consistent format:
 }
 ```
 
-**Codes**: VALIDATION_FAILED, UNAUTHORIZED, FORBIDDEN, NOT_FOUND, CONFLICT, RATE_LIMITED, INTERNAL_ERROR
+**Codes**: VALIDATION_FAILED, UNAUTHORIZED, FORBIDDEN, NOT_FOUND, CONFLICT, RATE_LIMITED,
+INTERNAL_ERROR
 
 ---
 
@@ -273,13 +281,13 @@ export const GET = createPublicEndpoint({
   handler: async () => {
     const db = getFirestore();
     const status = await db.collection("_health").doc("check").get();
-    
+
     return NextResponse.json({
       status: "ok",
       timestamp: Date.now(),
-      database: status.exists ? "connected" : "disconnected"
+      database: status.exists ? "connected" : "disconnected",
     });
-  }
+  },
 });
 ```
 
@@ -296,17 +304,14 @@ export const GET = createAuthenticatedEndpoint({
   handler: async ({ context }) => {
     const { getFirestore } = await import("firebase-admin/firestore");
     const db = getFirestore();
-    
-    const user = await db
-      .collection("users")
-      .doc(context.auth!.userId)
-      .get();
-    
+
+    const user = await db.collection("users").doc(context.auth!.userId).get();
+
     return NextResponse.json({
       id: user.id,
-      ...user.data()
+      ...user.data(),
     });
-  }
+  },
 });
 ```
 
@@ -321,30 +326,25 @@ import { CreateScheduleSchema } from "@fresh-schedules/types";
 import { NextResponse } from "next/server";
 
 export const POST = createOrgEndpoint({
-  roles: ['manager'],  // Only managers+
+  roles: ["manager"], // Only managers+
   rateLimit: { maxRequests: 50, windowMs: 60000 },
-  input: CreateScheduleSchema,  // Auto-validates
+  input: CreateScheduleSchema, // Auto-validates
   handler: async ({ input, context }) => {
     const { getFirestore } = await import("firebase-admin/firestore");
     const db = getFirestore();
-    
+
     const schedule = {
       ...input,
       orgId: context.org!.orgId,
       createdBy: context.auth!.userId,
       createdAt: Date.now(),
-      updatedAt: Date.now()
+      updatedAt: Date.now(),
     };
-    
-    const docRef = await db
-      .collection(`orgs/${context.org!.orgId}/schedules`)
-      .add(schedule);
-    
-    return NextResponse.json(
-      { id: docRef.id, ...schedule },
-      { status: 201 }
-    );
-  }
+
+    const docRef = await db.collection(`orgs/${context.org!.orgId}/schedules`).add(schedule);
+
+    return NextResponse.json({ id: docRef.id, ...schedule }, { status: 201 });
+  },
 });
 ```
 
@@ -362,20 +362,18 @@ export const DELETE = createAdminEndpoint({
   handler: async ({ context, params }) => {
     const { getFirestore } = await import("firebase-admin/firestore");
     const db = getFirestore();
-    
-    await db
-      .doc(`memberships/${params.userId}_${context.org!.orgId}`)
-      .delete();
-    
+
+    await db.doc(`memberships/${params.userId}_${context.org!.orgId}`).delete();
+
     await logAudit({
-      action: 'MEMBER_REMOVED',
+      action: "MEMBER_REMOVED",
       admin: context.auth!.userId,
       org: context.org!.orgId,
-      target: params.userId
+      target: params.userId,
     });
-    
+
     return NextResponse.json({ success: true });
-  }
+  },
 });
 ```
 
@@ -390,52 +388,49 @@ import { BulkAssignSchema } from "@fresh-schedules/types";
 import { NextResponse } from "next/server";
 
 export const POST = createOrgEndpoint({
-  roles: ['manager'],
-  rateLimit: { maxRequests: 20, windowMs: 60000 },  // Stricter for bulk ops
+  roles: ["manager"],
+  rateLimit: { maxRequests: 20, windowMs: 60000 }, // Stricter for bulk ops
   input: BulkAssignSchema,
   handler: async ({ input, context }) => {
     const { getFirestore } = await import("firebase-admin/firestore");
     const db = getFirestore();
-    
+
     try {
       const batch = db.batch();
       const results = [];
-      
+
       for (const assignment of input.assignments) {
         const shiftRef = db.doc(
-          `orgs/${context.org!.orgId}/schedules/${input.scheduleId}/shifts/${assignment.shiftId}`
+          `orgs/${context.org!.orgId}/schedules/${input.scheduleId}/shifts/${assignment.shiftId}`,
         );
-        
+
         // Validate before batch
         const shift = await shiftRef.get();
         if (!shift.exists) {
           throw new Error(`Shift not found: ${assignment.shiftId}`);
         }
-        
+
         batch.update(shiftRef, {
           assignedTo: assignment.staffId,
-          updatedAt: Date.now()
+          updatedAt: Date.now(),
         });
-        
-        results.push({ shiftId: assignment.shiftId, status: 'queued' });
+
+        results.push({ shiftId: assignment.shiftId, status: "queued" });
       }
-      
+
       await batch.commit();
-      
+
       return NextResponse.json({
         assigned: results.length,
-        results
+        results,
       });
     } catch (err) {
       const message = err instanceof Error ? err.message : "Bulk assignment failed";
       console.error("Bulk assign error", { error: message, orgId: context.org?.orgId });
-      
-      return NextResponse.json(
-        { error: { code: "BULK_ASSIGN_FAILED", message } },
-        { status: 400 }
-      );
+
+      return NextResponse.json({ error: { code: "BULK_ASSIGN_FAILED", message } }, { status: 400 });
     }
-  }
+  },
 });
 ```
 
@@ -448,50 +443,50 @@ export const POST = createOrgEndpoint({
 ```
 1. HTTP Request arrives
    ↓
-2. SDK Factory intercepts
+1. SDK Factory intercepts
    ├─ Extract request context
    ├─ Parse route params
    └─ Get request body/query
    ↓
-3. Rate Limit Check
+1. Rate Limit Check
    ├─ Generate rate limit key
    ├─ Query Redis/memory
    └─ Return 429 if exceeded
    ↓
-4. Authentication
+1. Authentication
    ├─ Extract session cookie
    ├─ Verify with Firebase Admin
    └─ Populate context.auth
    ↓
-5. CSRF Validation (if mutation)
+1. CSRF Validation (if mutation)
    ├─ Compare token with header
    └─ Return 403 if invalid
    ↓
-6. Organization Loading (if org required)
+1. Organization Loading (if org required)
    ├─ Query membership from Firestore
    ├─ Verify active status
    └─ Populate context.org
    ↓
-7. Role Authorization (if roles specified)
+1. Role Authorization (if roles specified)
    ├─ Get user role from context.org
    ├─ Check hierarchy
    └─ Return 403 if insufficient
    ↓
-8. Input Validation (if schema provided)
+1. Input Validation (if schema provided)
    ├─ Run Zod schema parse
    ├─ Return 400 with details if invalid
    └─ Populate input parameter
    ↓
-9. Handler Execution
+1. Handler Execution
    ├─ Call user-defined handler
    ├─ Catch any errors
    └─ Format response
    ↓
-10. Audit Logging
+1. Audit Logging
     ├─ Log method, user, org, status
     └─ Log errors if occurred
     ↓
-11. Response Sent
+1. Response Sent
 ```
 
 ### Context Object Structure
@@ -523,23 +518,23 @@ export const POST = createOrgEndpoint({
 **Problem**: Some operations need custom pre-processing
 
 **Proposal**:
+
 ```typescript
 export const POST = createOrgEndpoint({
-  middleware: [
-    validateDuplicates,
-    checkQuotas,
-    validateDependencies
-  ],
-  handler: async ({ input, context }) => { /* ... */ }
+  middleware: [validateDuplicates, checkQuotas, validateDependencies],
+  handler: async ({ input, context }) => {
+    /* ... */
+  },
 });
 ```
 
-**Benefits**: 
+**Benefits**:
+
 - Reusable validation logic
 - Clear separation of concerns
 - Easier to test
 
-**Implementation Effort**: Medium  
+**Implementation Effort**: Medium\
 **Priority**: P1 (High value)
 
 ### Proposal 2: Batch Operation Handler
@@ -547,24 +542,26 @@ export const POST = createOrgEndpoint({
 **Problem**: Bulk operations have different rate limits and error handling
 
 **Proposal**:
+
 ```typescript
 export const POST = createBatchEndpoint({
-  roles: ['manager'],
-  batchSize: 100,           // Max items per request
-  timeoutPerItem: 100,      // ms per item
+  roles: ["manager"],
+  batchSize: 100, // Max items per request
+  timeoutPerItem: 100, // ms per item
   handler: async (item, { context }) => {
     // Processes one item at a time
     // Returns { success: true, data } or { error }
-  }
+  },
 });
 ```
 
 **Benefits**:
+
 - Automatic partial success handling
 - Better error reporting
 - Timeout protection
 
-**Implementation Effort**: Medium  
+**Implementation Effort**: Medium\
 **Priority**: P1 (Many use cases)
 
 ### Proposal 3: Response Transformation
@@ -572,26 +569,28 @@ export const POST = createBatchEndpoint({
 **Problem**: No built-in response formatting/pagination
 
 **Proposal**:
+
 ```typescript
 export const GET = createOrgEndpoint({
   output: {
-    format: 'paginated',
+    format: "paginated",
     pageSize: 50,
-    schema: ShiftSchema
+    schema: ShiftSchema,
   },
   handler: async ({ context }) => {
     // Returns array, SDK handles pagination
     return await fetchShifts(context.org!.orgId);
-  }
+  },
 });
 ```
 
 **Benefits**:
+
 - Automatic pagination
 - Consistent response format
 - Type-safe serialization
 
-**Implementation Effort**: Medium  
+**Implementation Effort**: Medium\
 **Priority**: P2 (Nice to have)
 
 ### Proposal 4: Webhook Security Layer
@@ -599,23 +598,25 @@ export const GET = createOrgEndpoint({
 **Problem**: Webhooks need signature verification and replay protection
 
 **Proposal**:
+
 ```typescript
 export const POST = createWebhookEndpoint({
   secret: process.env.WEBHOOK_SECRET,
-  events: ['shift.created', 'shift.assigned'],
-  replayProtection: { maxAge: 5 * 60 * 1000 },  // 5 min
+  events: ["shift.created", "shift.assigned"],
+  replayProtection: { maxAge: 5 * 60 * 1000 }, // 5 min
   handler: async ({ event, payload }) => {
     // payload already validated
-  }
+  },
 });
 ```
 
 **Benefits**:
+
 - Automatic signature verification
 - Replay attack prevention
 - Event type validation
 
-**Implementation Effort**: Medium  
+**Implementation Effort**: Medium\
 **Priority**: P2 (Webhook support)
 
 ### Proposal 5: Idempotency Key Support
@@ -623,23 +624,25 @@ export const POST = createWebhookEndpoint({
 **Problem**: Retries can cause duplicate operations
 
 **Proposal**:
+
 ```typescript
 export const POST = createOrgEndpoint({
-  idempotencyKey: true,  // Extract from request header
+  idempotencyKey: true, // Extract from request header
   handler: async ({ input, context, idempotencyKey }) => {
     // SDK deduplicates based on key + operation
     const result = await createShift(input);
     return NextResponse.json(result);
-  }
+  },
 });
 ```
 
 **Benefits**:
+
 - Safe retries
 - No duplicate data
 - Better resilience
 
-**Implementation Effort**: Medium  
+**Implementation Effort**: Medium\
 **Priority**: P2 (API reliability)
 
 ---
@@ -664,7 +667,7 @@ import { z } from "zod";
 export const CreateItemSchema = z.object({
   name: z.string().min(1).max(100),
   description: z.string().optional(),
-  status: z.enum(['active', 'inactive']).default('active')
+  status: z.enum(["active", "inactive"]).default("active"),
 });
 
 export type CreateItem = z.infer<typeof CreateItemSchema>;
@@ -673,6 +676,7 @@ export type CreateItem = z.infer<typeof CreateItemSchema>;
 ### Step 3: Update Route Handler
 
 Before:
+
 ```typescript
 export async function POST(request: NextRequest) {
   // boilerplate...
@@ -682,16 +686,17 @@ export async function POST(request: NextRequest) {
 ```
 
 After:
+
 ```typescript
 import { createOrgEndpoint } from "@fresh-schedules/api-framework";
 import { CreateItemSchema } from "@fresh-schedules/types";
 
 export const POST = createOrgEndpoint({
-  roles: ['manager'],
+  roles: ["manager"],
   input: CreateItemSchema,
   handler: async ({ input, context }) => {
     // business logic only!
-  }
+  },
 });
 ```
 
@@ -707,7 +712,7 @@ it("should create item", async () => {
   const request = createMockRequest("/api/items", {
     method: "POST",
     body: { name: "Test" },
-    cookies: { session: "valid-session" }
+    cookies: { session: "valid-session" },
   });
 
   const response = await POST(request, { params: {} });
@@ -739,14 +744,15 @@ curl -X POST http://localhost:3000/api/items \
 **Cause**: Missing `orgId` in request
 
 **Solution**:
+
 ```typescript
 // Must include orgId in query params or header
-fetch("/api/items?orgId=org-123")
+fetch("/api/items?orgId=org-123");
 
 // Or explicitly in header
 fetch("/api/items", {
-  headers: { "x-org-id": "org-123" }
-})
+  headers: { "x-org-id": "org-123" },
+});
 ```
 
 ### "Permission denied (403)"
@@ -754,6 +760,7 @@ fetch("/api/items", {
 **Cause**: User doesn't have required role
 
 **Solution**:
+
 ```typescript
 // Check membership
 const member = await getMembership(userId, orgId);
@@ -761,7 +768,7 @@ console.log(member.role);
 
 // Adjust required roles in endpoint
 export const POST = createOrgEndpoint({
-  roles: ['manager']  // Change if needed
+  roles: ["manager"], // Change if needed
 });
 ```
 
@@ -770,6 +777,7 @@ export const POST = createOrgEndpoint({
 **Cause**: Too many requests too fast
 
 **Solution**:
+
 ```typescript
 // Add exponential backoff retry
 async function retryWithBackoff(fn, maxRetries = 3) {
@@ -777,7 +785,7 @@ async function retryWithBackoff(fn, maxRetries = 3) {
     try {
       return await fn();
     } catch (err) {
-      if (err.code === 'RATE_LIMITED' && i < maxRetries - 1) {
+      if (err.code === "RATE_LIMITED" && i < maxRetries - 1) {
         await sleep(Math.pow(2, i) * 1000);
       } else {
         throw err;
@@ -792,10 +800,11 @@ async function retryWithBackoff(fn, maxRetries = 3) {
 **Cause**: Incorrect input schema
 
 **Solution**:
+
 ```typescript
 // Verify schema matches expected input
 const result = await CreateItemSchema.parseAsync(body);
-console.log(result);  // Check types match
+console.log(result); // Check types match
 ```
 
 ---
@@ -803,6 +812,7 @@ console.log(result);  // Check types match
 ## Summary
 
 The SDK Factory provides:
+
 - ✅ 90%+ migration of API routes
 - ✅ Boilerplate reduction of 60-70%
 - ✅ Type safety from request to response
@@ -811,6 +821,7 @@ The SDK Factory provides:
 - ✅ Built-in monitoring & logging
 
 **Next Steps**:
+
 1. Implement Proposal 1 (middleware chain)
 2. Implement Proposal 2 (batch operations)
 3. Implement Proposal 4 (webhook security)
@@ -818,6 +829,6 @@ The SDK Factory provides:
 
 ---
 
-**Status**: Production Ready  
-**Maintenance**: Active  
+**Status**: Production Ready\
+**Maintenance**: Active\
 **Support**: See .github/copilot-instructions.md

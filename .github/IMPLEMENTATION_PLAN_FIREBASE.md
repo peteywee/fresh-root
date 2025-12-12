@@ -1,12 +1,15 @@
 # Firebase Modernization & Type Safety Implementation Plan
 
-**Created**: 2025-01-30  
-**Status**: Planning Phase  
+**Created**: 2025-01-30\
+**Status**: Planning Phase\
 **Priority**: Medium-High
 
 ## 1. Overview
 
-This plan addresses the Firebase SDK v12 typing situation in the `fresh-root` monorepo. The Firebase admin and client SDKs return `any`-typed values (e.g., `snap.data()`, `getFirestore()`) which causes 104+ ESLint no-unsafe-\* errors. The solution is a phased approach combining pragmatic suppression with strategic type-safe wrapper functions.
+This plan addresses the Firebase SDK v12 typing situation in the `fresh-root` monorepo. The Firebase
+admin and client SDKs return `any`-typed values (e.g., `snap.data()`, `getFirestore()`) which causes
+104+ ESLint no-unsafe-\* errors. The solution is a phased approach combining pragmatic suppression
+with strategic type-safe wrapper functions.
 
 ---
 
@@ -38,9 +41,12 @@ This plan addresses the Firebase SDK v12 typing situation in the `fresh-root` mo
 
 **Expected outcome**: 196 → 195 errors (0.5% reduction)
 
-**Why so small?** The no-unused-vars and require-await fixes were attempted but reverted due to breaking TypeScript signatures in API route handlers. The handlers need `async` returns for the framework. Remaining errors are:
+**Why so small?** The no-unused-vars and require-await fixes were attempted but reverted due to
+breaking TypeScript signatures in API route handlers. The handlers need `async` returns for the
+framework. Remaining errors are:
 
-- 195 errors: Mix of Firebase unsafe-\* (suppressed), no-empty-object-type, no-redundant-type-constituents, and other pre-existing issues
+- 195 errors: Mix of Firebase unsafe-\* (suppressed), no-empty-object-type,
+  no-redundant-type-constituents, and other pre-existing issues
 - Focus shifted from quick lint fixes to ensuring code stability (typecheck, pre-existing bugs)
 
 ---
@@ -103,16 +109,21 @@ export async function queryWithType<T>(db: Firestore, q: Query): Promise<T[]> {
 ## 3. Alternatives Considered
 
 - **ALT-001: Full Type Guards Everywhere**: Adding explicit type guards to every Firebase call
-  - **Rationale rejected**: Verbose, creates boilerplate; suppression + wrappers is more maintainable
+  - **Rationale rejected**: Verbose, creates boilerplate; suppression + wrappers is more
+    maintainable
+
 - **ALT-002: Migrate to TypeORM/Prisma**: Replace Firebase with traditional ORM
   - **Rationale rejected**: Major architectural change; Firebase is core to project infrastructure
+
 - **ALT-003: Use `@ts-ignore` on Every Firebase Call**: Suppress at call-site
-  - **Rationale rejected**: Creates scattered technical debt; centralized ESLint suppression is cleaner
+  - **Rationale rejected**: Creates scattered technical debt; centralized ESLint suppression is
+    cleaner
 
 - **ALT-004: Wait for Firebase SDK v13+ Types**: Hope for future improvements
   - **Rationale rejected**: No timeline commitment from Firebase team; unblocks work now
 
-**Chosen approach**: Pragmatic suppression (Phase 1) + optional wrappers (Phase 2) + documentation (Phase 3)
+**Chosen approach**: Pragmatic suppression (Phase 1) + optional wrappers (Phase 2) + documentation
+(Phase 3)
 
 ---
 
@@ -201,7 +212,7 @@ pnpm vitest run
 - **Phase 2 (Type Wrappers)**: 6-8 hours (optional)
 - **Phase 3 (Documentation)**: 2-3 hours
 
-**Total (All Phases)**: 11-15 hours  
+**Total (All Phases)**: 11-15 hours\
 **Minimum (Phase 1 Only)**: 3-4 hours
 
 ---
@@ -215,6 +226,6 @@ pnpm vitest run
 
 ---
 
-**Author**: GitHub Copilot  
-**Last Updated**: 2025-01-30  
+**Author**: GitHub Copilot\
+**Last Updated**: 2025-01-30\
 **Status**: Ready for Review & Approval

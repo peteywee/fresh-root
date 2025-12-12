@@ -2,7 +2,8 @@
 
 ## Series-A Standards: Error Safeguards
 
-This document tracks recurring error patterns across FRESH-ROOT and establishes safeguards to prevent them from reoccurring.
+This document tracks recurring error patterns across FRESH-ROOT and establishes safeguards to
+prevent them from reoccurring.
 
 ---
 
@@ -10,9 +11,9 @@ This document tracks recurring error patterns across FRESH-ROOT and establishes 
 
 ### Summary
 
-**Date**: December 1, 2025
-**Total Errors Found**: 427 TypeScript errors (all in `@apps/web`)
-**Root Cause**: SDK factory migration (commit 6639062) introduced broken code refactoring
+**Date**: December 1, 2025\
+**Total Errors Found**: 427 TypeScript errors (all in `@apps/web`)\
+**Root Cause**: SDK factory migration (commit 6639062) introduced broken code refactoring\
 **Resolution**: Reverted route files to previous working commit HEAD
 
 ### Error Breakdown
@@ -42,7 +43,8 @@ export const POST = createAuthenticatedEndpoint({
 });  // Misplaced closing braces
 ```
 
-**Why It Happened**: Refactor merged two different handler patterns (old `withSecurity` and new `createAuthenticatedEndpoint`)
+**Why It Happened**: Refactor merged two different handler patterns (old `withSecurity` and new
+`createAuthenticatedEndpoint`)
 
 **Prevention Rule**:
 
@@ -258,10 +260,10 @@ cat error-report.txt | wc -l  # Should stay at 13 (React version only)
 
 ## References
 
-- **TypeScript Error Codes**: <https://www.typescriptlang.org/docs/handbook/error-index.html>
-- **ESLint Rules**: <https://eslint.org/docs/rules/>
-- **Husky Docs**: <https://typicode.github.io/husky/>
-- **Series-A Standards**: See `docs/production/PRODUCTION_READINESS.md`
+- **TypeScript Error Codes**: https://www.typescriptlang.org/docs/handbook/error-index.html
+- **ESLint Rules**: https://eslint.org/docs/rules/
+- **Husky Docs**: https://typicode.github.io/husky/
+- **Series-A Standards**: See `docs/PRODUCTION_READINESS.md`
 
 ---
 

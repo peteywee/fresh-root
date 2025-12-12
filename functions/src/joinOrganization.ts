@@ -13,9 +13,9 @@
  * 4. SECURITY: Token validation happens server-side
  */
 
-import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
 import { getFirestore, FieldValue, Timestamp } from "firebase-admin/firestore";
+import * as functions from "firebase-functions";
 import { z } from "zod";
 
 // Avoid initializing Firestore/auth at module-evaluation time so tests can
@@ -123,7 +123,11 @@ async function validateToken(
   return { ref: tokenRef, data: tokenData };
 }
 
-async function checkExistingMembership(userId: string, orgId: string, dbClient?: any): Promise<string | null> {
+async function checkExistingMembership(
+  userId: string,
+  orgId: string,
+  dbClient?: any,
+): Promise<string | null> {
   const db = dbClient ?? getDb();
   const existing = await db
     .collectionGroup("memberships")
@@ -223,84 +227,93 @@ export async function joinOrganizationHandler(
       };
     }
 
-  // ATOMIC TRANSACTION
-  // Define document shapes for type-safety within the transaction
-  interface MembershipDoc {
-    uid: string;
-    orgId: string;
-    role: string;
-    status: "active" | "inactive" | "pending";
-    joinedVia: "token" | string;
-    joinToken?: string;
-    email?: string | null;
-    displayName?: string | null;
-    createdAt: Timestamp;
-    updatedAt: Timestamp;
-  }
-
-  interface UserProfileDoc {
-    uid: string;
-    email?: string | null;
-    displayName?: string | null;
-    createdAt: Timestamp;
-    updatedAt: Timestamp;
-    onboardingComplete: boolean;
-  }
-
-  const membershipId: string = await dbClient.runTransaction(async (transaction: FirebaseFirestore.Transaction): Promise<string> => {
-    const tokenSnapshot: FirebaseFirestore.DocumentSnapshot<JoinToken> = await transaction.get(tokenRef);
-    if (!tokenSnapshot.exists) {
-      throw new JoinError("Token no longer exists", "TOKEN_NOT_FOUND", 404);
+    // ATOMIC TRANSACTION
+    // Define document shapes for type-safety within the transaction
+    interface MembershipDoc {
+      uid: string;
+      orgId: string;
+      role: string;
+      status: "active" | "inactive" | "pending";
+      joinedVia: "token" | string;
+      joinToken?: string;
+      email?: string | null;
+      displayName?: string | null;
+      createdAt: Timestamp;
+      updatedAt: Timestamp;
     }
 
-    const currentTokenData: JoinToken = tokenSnapshot.data() as JoinToken;
-    if (currentTokenData.currentUses >= currentTokenData.maxUses) {
-      throw new JoinError("Token exhausted", "TOKEN_EXHAUSTED", 400);
+    interface UserProfileDoc {
+      uid: string;
+      email?: string | null;
+      displayName?: string | null;
+      createdAt: Timestamp;
+      updatedAt: Timestamp;
+      onboardingComplete: boolean;
     }
 
-    const membershipRef: FirebaseFirestore.DocumentReference<MembershipDoc> =
-      dbClient.collection("memberships").doc();
-    const now: Timestamp = Timestamp.now();
+    const membershipId: string = await dbClient.runTransaction(
+      async (transaction: FirebaseFirestore.Transaction): Promise<string> => {
+        const tokenSnapshot: FirebaseFirestore.DocumentSnapshot<JoinToken> =
+          await transaction.get(tokenRef);
+        if (!tokenSnapshot.exists) {
+          throw new JoinError("Token no longer exists", "TOKEN_NOT_FOUND", 404);
+        }
 
-    transaction.set(membershipRef, {
-      uid: user.uid,
-      orgId,
-      role,
-      status: "active",
-      joinedVia: "token",
-      joinToken: token,
-      email: user.email,
-      displayName: user.displayName,
-      createdAt: now,
-      updatedAt: now,
-    } as MembershipDoc);
+        const currentTokenData: JoinToken = tokenSnapshot.data() as JoinToken;
+        if (currentTokenData.currentUses >= currentTokenData.maxUses) {
+          throw new JoinError("Token exhausted", "TOKEN_EXHAUSTED", 400);
+        }
 
-    const inc: FirebaseFirestore.FieldValue = FieldValue.increment(1) as unknown as FirebaseFirestore.FieldValue;
-    transaction.update(tokenRef, {
-      currentUses: inc,
-      lastUsedAt: now,
-      ...(currentTokenData.currentUses + 1 >= currentTokenData.maxUses ? { status: "used" } : {}),
-    });
+        const membershipRef: FirebaseFirestore.DocumentReference<MembershipDoc> = dbClient
+          .collection("memberships")
+          .doc();
+        const now: Timestamp = Timestamp.now();
 
-    if (isNewUser) {
-      const profileRef: FirebaseFirestore.DocumentReference<UserProfileDoc> =
-        dbClient.collection("users").doc(user.uid);
-      transaction.set(
-        profileRef,
-        {
+        transaction.set(membershipRef, {
           uid: user.uid,
+          orgId,
+          role,
+          status: "active",
+          joinedVia: "token",
+          joinToken: token,
           email: user.email,
           displayName: user.displayName,
           createdAt: now,
           updatedAt: now,
-          onboardingComplete: false,
-        } as UserProfileDoc,
-        { merge: true },
-      );
-    }
+        } as MembershipDoc);
 
-    return membershipRef.id;
-  });
+        const inc: FirebaseFirestore.FieldValue = FieldValue.increment(
+          1,
+        ) as unknown as FirebaseFirestore.FieldValue;
+        transaction.update(tokenRef, {
+          currentUses: inc,
+          lastUsedAt: now,
+          ...(currentTokenData.currentUses + 1 >= currentTokenData.maxUses
+            ? { status: "used" }
+            : {}),
+        });
+
+        if (isNewUser) {
+          const profileRef: FirebaseFirestore.DocumentReference<UserProfileDoc> = dbClient
+            .collection("users")
+            .doc(user.uid);
+          transaction.set(
+            profileRef,
+            {
+              uid: user.uid,
+              email: user.email,
+              displayName: user.displayName,
+              createdAt: now,
+              updatedAt: now,
+              onboardingComplete: false,
+            } as UserProfileDoc,
+            { merge: true },
+          );
+        }
+
+        return membershipRef.id;
+      },
+    );
 
     const customToken = await authClient.createCustomToken(user.uid);
 

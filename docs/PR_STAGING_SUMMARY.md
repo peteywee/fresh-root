@@ -1,17 +1,20 @@
 # PR Staging: Infrastructure Hardening & Architecture
 
-**Branch**: `stage/architecture-and-functions-pr`  
-**Target**: `dev` → `main`  
-**Date**: November 30, 2025  
+**Branch**: `stage/architecture-and-functions-pr`\
+**Target**: `dev` → `main`\
+**Date**: November 30, 2025\
 **Status**: 🟢 Ready for Review
 
 ---
 
 ## Executive Summary
 
-Complete infrastructure hardening with production-ready observability, rate limiting, and cloud function exports. All changes tested locally with passing typecheck, lint, and dev server stability verification.
+Complete infrastructure hardening with production-ready observability, rate limiting, and cloud
+function exports. All changes tested locally with passing typecheck, lint, and dev server stability
+verification.
 
-**Key Achievement**: Eliminated Code 9 OOM crashes on Chromebook; deployed rate limiting + OTEL tracing; functions ready for Firebase deployment.
+**Key Achievement**: Eliminated Code 9 OOM crashes on Chromebook; deployed rate limiting + OTEL
+tracing; functions ready for Firebase deployment.
 
 ---
 
@@ -98,7 +101,8 @@ export {
 | `onScheduleUpdate`    | Keeps denormalized schedule summary fields in sync                                                             | ✅ Implemented |
 | `reconcileOrgStats`   | Scheduled function (daily) recalculates org stats as safety net                                                | ✅ Implemented |
 
-**Impact**: Functions ready for Firebase deployment; atomic join prevents duplicate users; denormalization fixes N+1 performance issues at scale.
+**Impact**: Functions ready for Firebase deployment; atomic join prevents duplicate users;
+denormalization fixes N+1 performance issues at scale.
 
 ---
 
@@ -204,14 +208,14 @@ assertProduction(); // FAIL if REDIS_URL or OTEL endpoint missing
 
 ## Testing Performed
 
-- [x] **Dev server stability**: 5.4s startup, no OOM crashes (Chromebook tested)
-- [x] **Rate limiting operational**: Redis connection + in-memory fallback working
-- [x] **OTEL tracing**: Lazy-loaded, no module-load hangs
-- [x] **Env validation**: Zod parsing correct, typed config working
-- [x] **Firestore indexes**: 6 new collection indexes for performance
-- [x] **Cloud functions**: All 6 functions exportable, no syntax errors
-- [x] **TypeScript**: Full codebase typecheck PASS
-- [x] **Lint**: No new warnings introduced
+- \[x] **Dev server stability**: 5.4s startup, no OOM crashes (Chromebook tested)
+- \[x] **Rate limiting operational**: Redis connection + in-memory fallback working
+- \[x] **OTEL tracing**: Lazy-loaded, no module-load hangs
+- \[x] **Env validation**: Zod parsing correct, typed config working
+- \[x] **Firestore indexes**: 6 new collection indexes for performance
+- \[x] **Cloud functions**: All 6 functions exportable, no syntax errors
+- \[x] **TypeScript**: Full codebase typecheck PASS
+- \[x] **Lint**: No new warnings introduced
 
 ---
 
@@ -282,11 +286,10 @@ pnpm dev
 
 ### What This PR Achieves
 
-✅ **Infrastructure Hardening**: Rate limiting + observability system fully operational
-✅ **Cloud Functions Ready**: joinOrganization and denormalization triggers exportable
-✅ **Chromebook Stabilization**: Code 9 OOM crashes eliminated
-✅ **Visual Reference**: 4 architecture diagrams for onboarding and debugging
-✅ **Production Ready**: All env validation + gating in place
+✅ **Infrastructure Hardening**: Rate limiting + observability system fully operational ✅ **Cloud
+Functions Ready**: joinOrganization and denormalization triggers exportable ✅ **Chromebook
+Stabilization**: Code 9 OOM crashes eliminated ✅ **Visual Reference**: 4 architecture diagrams for
+onboarding and debugging ✅ **Production Ready**: All env validation + gating in place
 
 ### What This PR Does NOT Change
 
@@ -299,12 +302,12 @@ pnpm dev
 
 Please verify:
 
-- [ ] Architecture diagrams are clear and technically accurate
-- [ ] Cloud function exports match your intended API surface
-- [ ] Rate limiting fallback strategy (in-memory if no Redis) is acceptable
-- [ ] Environment validation captures all your production requirements
-- [ ] Firestore indexes align with your anticipated query patterns
-- [ ] No unintended side effects from lazy-loaded OTEL init
+- \[ ] Architecture diagrams are clear and technically accurate
+- \[ ] Cloud function exports match your intended API surface
+- \[ ] Rate limiting fallback strategy (in-memory if no Redis) is acceptable
+- \[ ] Environment validation captures all your production requirements
+- \[ ] Firestore indexes align with your anticipated query patterns
+- \[ ] No unintended side effects from lazy-loaded OTEL init
 
 ### Questions
 
@@ -321,9 +324,9 @@ Refer to:
 
 ### Stage 1: Code Review ✅ (This PR)
 
-- [ ] All reviewer checks pass
-- [ ] No conflicts with main
-- [ ] No additional changes requested
+- \[ ] All reviewer checks pass
+- \[ ] No conflicts with main
+- \[ ] No additional changes requested
 
 ### Stage 2: Merge to Dev
 

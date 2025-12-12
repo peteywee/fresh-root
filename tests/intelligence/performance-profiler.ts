@@ -5,9 +5,9 @@
  * Real-time performance analysis with regression detection
  */
 
-import { performance } from "perf_hooks";
 import * as fs from "fs";
 import * as path from "path";
+import { performance } from "perf_hooks";
 
 interface PerformanceMetrics {
   endpoint: string;

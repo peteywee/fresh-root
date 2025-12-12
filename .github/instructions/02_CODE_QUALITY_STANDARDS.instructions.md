@@ -1,6 +1,7 @@
 ---
 applyTo: "**/*.{ts,tsx,js,jsx}"
-description: "Code quality standards for TypeScript/JavaScript: style, patterns, performance, commenting."
+description:
+  "Code quality standards for TypeScript/JavaScript: style, patterns, performance, commenting."
 priority: 2
 ---
 
@@ -53,7 +54,7 @@ function process(users: User[]) {
 
 // ✅ Good
 function process(users: User[]) {
-  const activeUsers = users.filter(u => u.isActive);
+  const activeUsers = users.filter((u) => u.isActive);
   activeUsers.forEach(processUser);
 }
 ```
@@ -100,7 +101,7 @@ class Age {
 class Group {
   users: User[];
   getActiveCount() {
-    return this.users.filter(u => u.isActive).length;
+    return this.users.filter((u) => u.isActive).length;
   }
 }
 
@@ -151,12 +152,14 @@ const configuration = loadConfig();
 ### Comment ONLY When Necessary
 
 **✅ Comment for:**
+
 - WHY (reasoning, not WHAT)
 - Complex business logic
 - Non-obvious algorithms
 - Regex patterns
 
 **❌ Don't comment:**
+
 - Obvious code
 - What the code does (it should be clear)
 - Redundant information
@@ -188,12 +191,12 @@ const tax = calculateProgressiveTax(income, [0.1, 0.2], [10000]);
 ```typescript
 // ❌ Bad
 for (const user of users) {
-  const orders = await db.collection('orders').where('userId', '==', user.id).get();
+  const orders = await db.collection("orders").where("userId", "==", user.id).get();
 }
 
 // ✅ Good
-const userIds = users.map(u => u.id);
-const orders = await db.collection('orders').where('userId', 'in', userIds).get();
+const userIds = users.map((u) => u.id);
+const orders = await db.collection("orders").where("userId", "in", userIds).get();
 ```
 
 ### Efficient Data Structures
@@ -276,7 +279,7 @@ class AppError extends Error {
     message: string,
     public readonly code: string,
     public readonly statusCode: number = 500,
-    public readonly context?: Record<string, unknown>
+    public readonly context?: Record<string, unknown>,
   ) {
     super(message);
     this.name = this.constructor.name;

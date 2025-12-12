@@ -3,7 +3,8 @@
 [![npm version](https://badge.fury.io/js/testintel.svg)](https://www.npmjs.com/package/testintel)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-**AI-Powered Test Intelligence System** - A production-grade CLI for intelligent test orchestration, security scanning, E2E test generation, and predictive analytics.
+**AI-Powered Test Intelligence System** - A production-grade CLI for intelligent test orchestration,
+security scanning, E2E test generation, and predictive analytics.
 
 ---
 
@@ -24,17 +25,17 @@
 
 ## Features
 
-| Feature | Description |
-|---------|-------------|
+| Feature                       | Description                                                        |
+| ----------------------------- | ------------------------------------------------------------------ |
 | 🧠 **AI Test Prioritization** | ML-powered test ordering based on failure history and code changes |
-| 🔒 **Security Scanning** | OWASP-based vulnerability detection for API routes |
-| ⚡ **Parallel Optimization** | Intelligent test batching for maximum parallelization |
-| 🔮 **Predictive Analytics** | Forecast test failures before they happen |
-| 🧪 **E2E Test Generation** | Auto-generate E2E tests from API routes |
-| 📊 **Live Dashboard** | Real-time test metrics and visualization |
-| 🔧 **Self-Healing Tests** | Automatic test repair for common failures |
-| 📋 **JUnit Reports** | CI/CD compatible test output |
-| 🌐 **Cross-Platform** | Works on Windows, macOS, Linux, and Chromebooks |
+| 🔒 **Security Scanning**      | OWASP-based vulnerability detection for API routes                 |
+| ⚡ **Parallel Optimization**  | Intelligent test batching for maximum parallelization              |
+| 🔮 **Predictive Analytics**   | Forecast test failures before they happen                          |
+| 🧪 **E2E Test Generation**    | Auto-generate E2E tests from API routes                            |
+| 📊 **Live Dashboard**         | Real-time test metrics and visualization                           |
+| 🔧 **Self-Healing Tests**     | Automatic test repair for common failures                          |
+| 📋 **JUnit Reports**          | CI/CD compatible test output                                       |
+| 🌐 **Cross-Platform**         | Works on Windows, macOS, Linux, and Chromebooks                    |
 
 ---
 
@@ -128,9 +129,11 @@ testintel security apps/web/app/api lib/utils
 Run the complete test intelligence pipeline.
 
 **Arguments:**
+
 - `mode` - Test mode: `full` (default) or `quick`
 
 **Examples:**
+
 ```bash
 testintel run           # Full test suite
 testintel run full      # Explicit full mode
@@ -138,6 +141,7 @@ testintel run quick     # Quick validation
 ```
 
 **Stages (Full Mode):**
+
 1. Contract Testing
 2. E2E Tests + Performance
 3. Mutation Testing
@@ -156,12 +160,14 @@ testintel run quick     # Quick validation
 Generate and run E2E tests.
 
 **Actions:**
+
 - `generate` - Generate E2E tests from API routes
 - `run` - Run all E2E tests
 - `list` - List existing E2E tests
 - `help` - Show E2E help
 
 **Examples:**
+
 ```bash
 testintel e2e generate              # Generate for all API routes
 testintel e2e generate apps/web     # Generate for specific path
@@ -170,6 +176,7 @@ testintel e2e list                  # Show existing tests
 ```
 
 **Generated Test Structure:**
+
 ```typescript
 // tests/e2e/health.e2e.test.ts
 describe("health API E2E Tests", () => {
@@ -189,9 +196,11 @@ describe("health API E2E Tests", () => {
 Scan for security vulnerabilities.
 
 **Arguments:**
+
 - `paths` - Paths to scan (default: `apps/web/app/api`)
 
 **Examples:**
+
 ```bash
 testintel security                      # Default API scan
 testintel security apps/web lib         # Multiple paths
@@ -199,6 +208,7 @@ testintel security src/routes           # Custom path
 ```
 
 **Security Checks:**
+
 - SQL Injection detection
 - XSS vulnerability scanning
 - Hardcoded secrets detection
@@ -208,6 +218,7 @@ testintel security src/routes           # Custom path
 - OWASP Top 10 compliance
 
 **Output:**
+
 ```
 🔒 SECURITY SCAN REPORT
 ════════════════════════════════════════════════════════════════════════
@@ -228,15 +239,18 @@ Vulnerabilities Found:
 AI-powered test prioritization.
 
 **Arguments:**
+
 - `limit` - Maximum tests to analyze (default: 20)
 
 **Examples:**
+
 ```bash
 testintel prioritize          # Top 20 tests
 testintel prioritize 50       # Top 50 tests
 ```
 
 **Output:**
+
 ```
 🧠 AI TEST PRIORITIZATION REPORT
 ══════════════════════════════════════════════════════════════════════
@@ -254,9 +268,11 @@ testintel prioritize 50       # Top 50 tests
 Predict test failures before running.
 
 **Arguments:**
+
 - `limit` - Maximum tests to analyze (default: 20)
 
 **Examples:**
+
 ```bash
 testintel predict             # Analyze 20 tests
 testintel predict 100         # Analyze 100 tests
@@ -269,15 +285,18 @@ testintel predict 100         # Analyze 100 tests
 Optimize test parallelization.
 
 **Arguments:**
+
 - `limit` - Maximum tests to optimize (default: 20)
 
 **Examples:**
+
 ```bash
 testintel parallel            # Optimize 20 tests
 testintel parallel 50         # Optimize 50 tests
 ```
 
 **Output:**
+
 ```
 ⚡ PARALLELIZATION OPTIMIZATION REPORT
 ════════════════════════════════════════════════════════════════════════
@@ -299,15 +318,18 @@ Max Workers: 4
 Generate realistic test data.
 
 **Arguments:**
+
 - `count` - Number of records to generate (default: 5)
 
 **Examples:**
+
 ```bash
 testintel data                # Generate 5 users
 testintel data 100            # Generate 100 users
 ```
 
 **Output:**
+
 ```json
 [
   {
@@ -365,13 +387,13 @@ Create a `.testintelrc.json` file in your project root:
 
 ### Environment Variables
 
-| Variable | Description | Default |
-|----------|-------------|---------|
-| `TEST_BASE_URL` | Base URL for E2E tests | `http://localhost:3000` |
-| `TESTINTEL_VERBOSE` | Enable verbose output | `false` |
-| `TESTINTEL_OUTPUT` | Output format (json, junit, html) | `json` |
-| `TESTINTEL_PARALLEL` | Enable parallel execution | `true` |
-| `CI` | CI environment detection | auto-detected |
+| Variable             | Description                       | Default                 |
+| -------------------- | --------------------------------- | ----------------------- |
+| `TEST_BASE_URL`      | Base URL for E2E tests            | `http://localhost:3000` |
+| `TESTINTEL_VERBOSE`  | Enable verbose output             | `false`                 |
+| `TESTINTEL_OUTPUT`   | Output format (json, junit, html) | `json`                  |
+| `TESTINTEL_PARALLEL` | Enable parallel execution         | `true`                  |
+| `CI`                 | CI environment detection          | auto-detected           |
 
 ---
 
@@ -382,16 +404,16 @@ Create a `.testintelrc.json` file in your project root:
 You can also use Test Intelligence programmatically:
 
 ```typescript
-import { orchestrator } from 'testintel';
-import { securityScanner } from 'testintel/security';
-import { e2eGenerator } from 'testintel/e2e';
+import { orchestrator } from "testintel";
+import { securityScanner } from "testintel/security";
+import { e2eGenerator } from "testintel/e2e";
 
 // Run full test suite
 const result = await orchestrator.runFull();
 console.log(result.stages);
 
 // Run security scan
-const securityResult = await securityScanner.scan(['apps/web']);
+const securityResult = await securityScanner.scan(["apps/web"]);
 console.log(securityResult.summary);
 
 // Generate E2E tests
@@ -401,15 +423,15 @@ console.log(`Generated ${generated.length} tests`);
 
 ### Module Exports
 
-| Module | Export | Description |
-|--------|--------|-------------|
-| `testintel` | `orchestrator` | Main test orchestrator |
-| `testintel/security` | `securityScanner` | Security vulnerability scanner |
-| `testintel/e2e` | `e2eGenerator` | E2E test generator |
-| `testintel/prioritizer` | `aiPrioritizer` | AI test prioritization |
-| `testintel/analytics` | `predictiveAnalytics` | Predictive analytics |
-| `testintel/parallel` | `parallelizationOptimizer` | Parallel optimization |
-| `testintel/data` | `testDataFactory` | Test data generation |
+| Module                  | Export                     | Description                    |
+| ----------------------- | -------------------------- | ------------------------------ |
+| `testintel`             | `orchestrator`             | Main test orchestrator         |
+| `testintel/security`    | `securityScanner`          | Security vulnerability scanner |
+| `testintel/e2e`         | `e2eGenerator`             | E2E test generator             |
+| `testintel/prioritizer` | `aiPrioritizer`            | AI test prioritization         |
+| `testintel/analytics`   | `predictiveAnalytics`      | Predictive analytics           |
+| `testintel/parallel`    | `parallelizationOptimizer` | Parallel optimization          |
+| `testintel/data`        | `testDataFactory`          | Test data generation           |
 
 ---
 
@@ -427,24 +449,24 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
-          
+          node-version: "20"
+
       - name: Install dependencies
         run: npm ci
-        
+
       - name: Install testintel
         run: npm install -g testintel
-        
+
       - name: Run Security Scan
         run: testintel security
-        
+
       - name: Run Test Suite
         run: testintel run quick
-        
+
       - name: Upload Report
         uses: actions/upload-artifact@v4
         with:
@@ -518,6 +540,7 @@ pipeline {
 **Cause:** Global installation not in PATH.
 
 **Fix:**
+
 ```bash
 # Find npm global bin
 npm bin -g
@@ -534,6 +557,7 @@ npm install -g testintel
 **Cause:** Dev server not running.
 
 **Fix:**
+
 ```bash
 # Start your dev server first
 npm run dev
@@ -547,6 +571,7 @@ testintel e2e run
 **Cause:** Wrong path specified.
 
 **Fix:**
+
 ```bash
 # List your project structure
 ls -la
@@ -560,6 +585,7 @@ testintel security src/api  # or wherever your API is
 **Cause:** Dependencies not installed.
 
 **Fix:**
+
 ```bash
 npm install glob tsx typescript
 ```

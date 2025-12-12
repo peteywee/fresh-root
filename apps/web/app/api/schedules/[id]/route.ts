@@ -1,8 +1,8 @@
 // [P0][SCHEDULE][API] Schedule detail endpoint
 
+import { createOrgEndpoint } from "@fresh-schedules/api-framework";
 import { UpdateScheduleSchema } from "@fresh-schedules/types";
 
-import { createOrgEndpoint } from "@fresh-schedules/api-framework";
 import { badRequest, ok, parseJson, serverError } from "../../_shared/validation";
 
 /**
@@ -49,9 +49,10 @@ export const PATCH = createOrgEndpoint({
         return badRequest("Validation failed", parsed.details);
       }
 
+      const validated = parsed.data as Record<string, unknown>;
       const updated = {
         id,
-        ...parsed.data,
+        ...(validated || {}),
         updatedBy: context.auth?.userId,
         updatedAt: Date.now(),
       };

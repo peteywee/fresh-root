@@ -1,14 +1,15 @@
 # GitHub Copilot Prompts - Session Summary & Strategic Guidance
 
-**Session Date**: 2025-01-30  
-**Workspace**: `fresh-root` - TypeScript/Next.js Monorepo with Firebase  
+**Session Date**: 2025-01-30\
+**Workspace**: `fresh-root` - TypeScript/Next.js Monorepo with Firebase\
 **Status**: Planning Phase Complete - Ready for Phase 1 Execution
 
 ---
 
 ## 📋 Prompt Guidance Applied
 
-This session leveraged 5 GitHub Copilot prompts from [awesome-copilot](https://github.com/copilotusers/awesome-copilot) to guide strategic planning:
+This session leveraged 5 GitHub Copilot prompts from
+[awesome-copilot](https://github.com/copilotusers/awesome-copilot) to guide strategic planning:
 
 ### 1. GitHub Copilot Starter (372 lines)
 
@@ -113,7 +114,8 @@ Lint Warnings:        43 no-unused-vars + 34 require-await
 | require-await  | 34    | Remove async or add await | 1-2 hrs |
 | Other minor    | ~5    | Case-by-case              | 30 mins |
 
-**Expected Result**: ~100 remaining errors (mostly pre-existing type/logic issues, not Firebase-related)
+**Expected Result**: ~100 remaining errors (mostly pre-existing type/logic issues, not
+Firebase-related)
 
 ---
 
@@ -227,18 +229,16 @@ export async function getDocWithType<T>(db: Firestore, ref: DocumentReference): 
 ```bash
 # 1. Fix no-unused-vars (prefix with _)
 # Affected files:
-#   - apps/web/app/api/items/route.ts
-#   - apps/web/app/api/activate-network/route.ts
-#   - apps/web/app/api/join-with-token/route.ts
-#   - apps/web/app/api/positions/[id]/route.ts
-#   - apps/web/app/api/publish/route.ts
-#   - apps/web/app/api/schedules/route.ts
-#   - apps/web/middleware.ts
-#   - types/firebase-admin.d.ts
-
+# - apps/web/app/api/items/route.ts
+# - apps/web/app/api/activate-network/route.ts
+# - apps/web/app/api/join-with-token/route.ts
+# - apps/web/app/api/positions/[id]/route.ts
+# - apps/web/app/api/publish/route.ts
+# - apps/web/app/api/schedules/route.ts
+# - apps/web/middleware.ts
+# - types/firebase-admin.d.ts
 # 2. Fix require-await (remove async or add await)
 # Mostly in: apps/web/middleware.ts (12 instances)
-
 # 3. Run lint validation
 pnpm lint 2>&1 | grep "✖" | wc -l  # Should show ~100 or less
 
@@ -249,7 +249,8 @@ pnpm build
 
 ### Team Communication
 
-Share `.github/instructions/firebase-typing-and-monorepo-memory.instructions.md` with team to establish shared understanding of:
+Share `.github/instructions/firebase-typing-and-monorepo-memory.instructions.md` with team to
+establish shared understanding of:
 
 - Why Firebase suppressions are in place (not "broken code")
 - How to handle Firebase type safety in new code
@@ -262,7 +263,8 @@ Share `.github/instructions/firebase-typing-and-monorepo-memory.instructions.md`
 **Created This Session**:
 
 - ✅ `.github/IMPLEMENTATION_PLAN_FIREBASE.md` - Detailed 3-phase implementation plan
-- ✅ `.github/instructions/firebase-typing-and-monorepo-memory.instructions.md` - Team memory on patterns
+- ✅ `.github/instructions/firebase-typing-and-monorepo-memory.instructions.md` - Team memory on
+  patterns
 
 **Referenced**:
 
@@ -307,4 +309,5 @@ pnpm requires:
 
 **Plan Status**: ✅ **READY FOR PHASE 1 EXECUTION**
 
-Proceed with Phase 1 lint cleanup when ready. All groundwork (planning, documentation, decision rationale) is in place.
+Proceed with Phase 1 lint cleanup when ready. All groundwork (planning, documentation, decision
+rationale) is in place.

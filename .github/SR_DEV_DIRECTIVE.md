@@ -1,9 +1,9 @@
 # 🎯 SR DEV DIRECTIVE: Three-Branch Governance Architecture
 
-**Effective Date**: December 7, 2025  
-**Authority**: Sr Dev (Architecture)  
-**Status**: ACTIVE GOVERNANCE  
-**Review Cycle**: Monthly  
+**Effective Date**: December 7, 2025\
+**Authority**: Sr Dev (Architecture)\
+**Status**: ACTIVE GOVERNANCE\
+**Review Cycle**: Monthly
 
 ---
 
@@ -11,13 +11,15 @@
 
 ### Three Primary Branches - ONLY
 
-Effective immediately, the Fresh Schedules codebase operates under a **three-branch governance model**:
+Effective immediately, the Fresh Schedules codebase operates under a **three-branch governance
+model**:
 
 1. **`main`** - Production-grade, tested, deployable code (runtime verified)
 2. **`dev`** - Working branch for active development and feature integration
 3. **`docs-tests-logs`** - Archive of all project artifacts (never merged back)
 
 **All other branches** are **ephemeral feature branches** that:
+
 - Are created FROM `dev`
 - Require PR to merge TO `dev`
 - Are **automatically deleted** upon merge completion
@@ -26,6 +28,7 @@ Effective immediately, the Fresh Schedules codebase operates under a **three-bra
 ### Authority & Enforcement
 
 **This governance is enforced by**:
+
 - ✅ GitHub API branch protection rules
 - ✅ GitHub Actions validation workflows
 - ✅ Node.js validator scripts (regex-based)
@@ -33,6 +36,7 @@ Effective immediately, the Fresh Schedules codebase operates under a **three-bra
 - ✅ File pattern validation on every commit
 
 **Non-compliance results in**:
+
 - PR rejection with detailed error messages
 - Blocked merges until violations resolved
 - Automatic cleanup of stale/malformed branches
@@ -44,11 +48,12 @@ Effective immediately, the Fresh Schedules codebase operates under a **three-bra
 
 ### 🟢 **main** Branch - Production Code
 
-**Purpose**: Single source of truth for production deployments  
-**Owner**: DevOps/Release team  
-**Code Quality**: HIGHEST  
+**Purpose**: Single source of truth for production deployments\
+**Owner**: DevOps/Release team\
+**Code Quality**: HIGHEST
 
 **What Belongs Here**:
+
 - ✅ Feature code (tested, verified, E2E passing)
 - ✅ Configuration files (tsconfig, jest, vitest)
 - ✅ Infrastructure code (firestore rules, storage rules)
@@ -57,7 +62,8 @@ Effective immediately, the Fresh Schedules codebase operates under a **three-bra
 - ✅ README.md, LICENSE
 
 **What NEVER Belongs Here**:
-- ❌ Documentation files (docs/*.md)
+
+- ❌ Documentation files (docs/\*.md)
 - ❌ Test results, reports, metrics
 - ❌ CI/CD logs (.log, .report, .metrics)
 - ❌ Coverage reports
@@ -67,6 +73,7 @@ Effective immediately, the Fresh Schedules codebase operates under a **three-bra
 - ❌ Debug code or TODOs
 
 **Merge Requirements**:
+
 - Source: `dev` branch ONLY
 - Reviews: 2+ approvals required
 - Tests: All passing (unit + E2E)
@@ -75,6 +82,7 @@ Effective immediately, the Fresh Schedules codebase operates under a **three-bra
 - Description: Release notes required
 
 **Merge Process**:
+
 ```bash
 # 1. Create PR: dev → main
 # 2. Get 2 approvals
@@ -86,20 +94,22 @@ Effective immediately, the Fresh Schedules codebase operates under a **three-bra
 
 ### 🟡 **dev** Branch - Working Branch
 
-**Purpose**: Integration point for features, testing ground  
-**Owner**: Engineering team  
-**Code Quality**: HIGH  
+**Purpose**: Integration point for features, testing ground\
+**Owner**: Engineering team\
+**Code Quality**: HIGH
 
 **What Belongs Here**:
+
 - ✅ Feature code under development
 - ✅ Feature tests (unit + integration)
 - ✅ Configuration files
 - ✅ Infrastructure code
 - ✅ GitHub Actions workflows
-- ✅ Feature-specific documentation (docs/feature-*)
+- ✅ Feature-specific documentation (docs/feature-\*)
 
 **What NEVER Belongs Here**:
-- ❌ General documentation (docs/*.md excluding feature-*)
+
+- ❌ General documentation (docs/_.md excluding feature-_)
 - ❌ Project reports and summaries
 - ❌ Test artifacts and results
 - ❌ CI/CD logs
@@ -107,6 +117,7 @@ Effective immediately, the Fresh Schedules codebase operates under a **three-bra
 - ❌ Performance metrics
 
 **Merge Requirements**:
+
 - Source: `feature/*` branches ONLY
 - Reviews: 1+ approval required
 - Tests: All passing
@@ -114,6 +125,7 @@ Effective immediately, the Fresh Schedules codebase operates under a **three-bra
 - CI: All checks green
 
 **Merge Process**:
+
 ```bash
 # 1. Create feature branch from dev
 git checkout dev
@@ -133,13 +145,14 @@ git push origin feature/123-description
 
 ### 📘 **docs-tests-logs** Branch - Archive
 
-**Purpose**: Single source of truth for all project artifacts  
-**Owner**: Sr Dev / Documentation team  
-**Code Quality**: N/A (archive-only)  
+**Purpose**: Single source of truth for all project artifacts\
+**Owner**: Sr Dev / Documentation team\
+**Code Quality**: N/A (archive-only)\
 **Special Rule**: NEVER MERGED BACK TO DEV/MAIN
 
 **What Belongs Here**:
-- ✅ All documentation (docs/*.md)
+
+- ✅ All documentation (docs/\*.md)
 - ✅ Implementation reports
 - ✅ Project summaries
 - ✅ E2E test suites
@@ -151,12 +164,14 @@ git push origin feature/123-description
 - ✅ Architecture decisions
 
 **What NEVER Belongs Here**:
+
 - ❌ Feature code
 - ❌ Regular source code
 - ❌ Configuration files (keep on dev)
 - ❌ Package files
 
 **Merge Requirements**:
+
 - Source: Anything (artifacts, docs)
 - Reviews: 0 (no review needed)
 - Tests: N/A
@@ -164,6 +179,7 @@ git push origin feature/123-description
 - Auto-merge: Yes
 
 **Merge Process**:
+
 ```bash
 # 1. Create branch from docs-tests-logs
 git checkout docs-tests-logs
@@ -279,18 +295,21 @@ performance-metrics/            # Performance data
 ## GitHub Actions Enforcement Workflows
 
 ### Workflow 1: Branch File Pattern Validator
+
 - **Trigger**: Every PR (opened, updated)
 - **Action**: Validates file patterns match target branch
 - **Output**: PR comment with validation result
 - **Failure**: Blocks merge with detailed error
 
 ### Workflow 2: Feature Branch Auto-Cleanup
+
 - **Trigger**: PR merge to dev
 - **Action**: Auto-deletes feature branch
 - **Output**: PR comment confirming cleanup
 - **Success**: Branch removed from repo
 
 ### Workflow 3: Main Branch Merge Gate
+
 - **Trigger**: PR to main
 - **Action**: Enforces main branch rules
 - **Validation**:
@@ -301,6 +320,7 @@ performance-metrics/            # Performance data
 - **Output**: PR comment with gate status
 
 ### Workflow 4: Docs-Tests-Logs Archive Guard
+
 - **Trigger**: PR to docs-tests-logs
 - **Action**: Ensures archive-only content
 - **Validation**: Blocks feature code
@@ -310,7 +330,8 @@ performance-metrics/            # Performance data
 
 ## Commit Standards by Branch
 
-### Feature Branches (feature/*)
+### Feature Branches (feature/\*)
+
 ```bash
 # Daily minimum: 1 commit per day
 git commit -m "feat: implement login validation"
@@ -325,6 +346,7 @@ git commit -m "fix: resolve edge case in session"
 ```
 
 ### Dev Branch Merges
+
 ```bash
 # Via PR from feature branches
 # Automatically commits feature to dev
@@ -333,6 +355,7 @@ git commit -m "fix: resolve edge case in session"
 ```
 
 ### Main Branch Merges
+
 ```bash
 # Via PR from dev
 # Includes release notes
@@ -341,6 +364,7 @@ git commit -m "fix: resolve edge case in session"
 ```
 
 ### Docs-Tests-Logs Branch
+
 ```bash
 # As artifacts are generated
 git commit -m "docs: add architecture overview"
@@ -370,13 +394,13 @@ git commit -m "report: add performance metrics"
 ```bash
 # 1. Contact Sr Dev IMMEDIATELY
 # 2. If approved:
-#    - Create hotfix/issue-# from main
-#    - Fix the issue
-#    - Create PR to main
-#    - Fast-track review (1 approval)
+# - Create hotfix/issue-# from main
+# - Fix the issue
+# - Create PR to main
+# - Fast-track review (1 approval)
 # 3. After merge:
-#    - Cherry-pick fix to dev
-#    - Document the hotfix
+# - Cherry-pick fix to dev
+# - Document the hotfix
 ```
 
 ---
@@ -384,6 +408,7 @@ git commit -m "report: add performance metrics"
 ## Monitoring & Metrics
 
 ### Track Monthly
+
 - Commits per feature (target: ≥1 per day)
 - Feature branch lifetime (target: <1 week)
 - PRs merged per sprint
@@ -391,6 +416,7 @@ git commit -m "report: add performance metrics"
 - Branch violation rate
 
 ### Audit Quarterly
+
 - Review branch sizes
 - Check for stale branches
 - Verify compliance rate
@@ -406,29 +432,29 @@ git commit -m "report: add performance metrics"
    git pull origin dev
    git checkout -b feature/123-description
 
-2. COMMIT DAILY MINIMUM
+1. COMMIT DAILY MINIMUM
    git commit -m "feat: implement X"
    git push origin feature/123-description
 
-3. PASS LOCAL VALIDATION
+1. PASS LOCAL VALIDATION
    pnpm typecheck  ✅
    pnpm lint       ✅
    pnpm test       ✅
 
-4. CREATE PR TO DEV (when done)
+1. CREATE PR TO DEV (when done)
    - Get 1+ approval
    - All CI green
    - Merge
 
-5. FEATURE BRANCH AUTO-DELETES ✅
+1. FEATURE BRANCH AUTO-DELETES ✅
 
-6. FOR PRODUCTION RELEASE
+1. FOR PRODUCTION RELEASE
    - Create PR: dev → main
    - Get 2+ approvals
    - Merge
    - Your code is in production!
 
-7. FOR DOCUMENTATION
+1. FOR DOCUMENTATION
    - Create branch from docs-tests-logs
    - Add your documentation
    - Create PR to docs-tests-logs
@@ -450,6 +476,7 @@ git commit -m "report: add performance metrics"
 6. ✅ All governance is API-enforced
 
 **This governance applies to**:
+
 - All engineers
 - All feature work
 - All PRs
@@ -459,7 +486,7 @@ git commit -m "report: add performance metrics"
 
 ---
 
-**Signed**: Sr Dev (Architecture)  
-**Date**: December 7, 2025  
-**Status**: ACTIVE GOVERNANCE  
+**Signed**: Sr Dev (Architecture)\
+**Date**: December 7, 2025\
+**Status**: ACTIVE GOVERNANCE\
 **Review Date**: January 7, 2026

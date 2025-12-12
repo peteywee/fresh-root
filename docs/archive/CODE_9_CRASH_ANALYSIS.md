@@ -1,9 +1,7 @@
 # Code 9 Crash Analysis & Safeguard Report
 
-**Incident**: VSCode killed with exit code 9 (SIGKILL)
-**Date**: November 29, 2025
-**Diagnosis**: Out of Memory (OOM) Killer triggered
-**Status**: ✅ SAFEGUARDS DEPLOYED
+**Incident**: VSCode killed with exit code 9 (SIGKILL) **Date**: November 29, 2025 **Diagnosis**:
+Out of Memory (OOM) Killer triggered **Status**: ✅ SAFEGUARDS DEPLOYED
 
 ---
 
@@ -100,8 +98,8 @@ free -h
 # Should show: Swap: 2.0Gi available
 ```
 
-**Why**: Swap provides buffer when RAM pressure peaks during builds
-**Expected**: Prevents OOM killer trigger, may slow down but won't crash
+**Why**: Swap provides buffer when RAM pressure peaks during builds **Expected**: Prevents OOM
+killer trigger, may slow down but won't crash
 
 ### Start Safeguard Daemon
 
@@ -113,8 +111,8 @@ bash scripts/safeguard-oom.sh &
 pnpm dev
 ```
 
-**Why**: Real-time process monitoring catches memory hogs before cascade
-**Effect**: Graceful process termination vs sudden SIGKILL
+**Why**: Real-time process monitoring catches memory hogs before cascade **Effect**: Graceful
+process termination vs sudden SIGKILL
 
 ### Use Launcher Script
 
@@ -175,7 +173,7 @@ tail -f ~/.oom-safeguard.log
    swapon --show
    ```
 
-2. **Increase swap to 4GB** (if 2GB not enough)
+1. **Increase swap to 4GB** (if 2GB not enough)
 
    ```bash
    sudo fallocate -l 2G /swapfile2
@@ -183,14 +181,14 @@ tail -f ~/.oom-safeguard.log
    sudo swapon /swapfile2
    ```
 
-3. **Reduce build parallelism** (more conservative)
+1. **Reduce build parallelism** (more conservative)
 
    ```bash
    SWC_NUM_THREADS=1
    NODE_OPTIONS="--max-old-space-size=1024"
    ```
 
-4. **Close heavy applications** (temporary relief)
+1. **Close heavy applications** (temporary relief)
    - VSCode extensions: Disable Cloud Code
    - Browser: Close extra tabs
    - Other services: Stop unused daemons
@@ -230,17 +228,17 @@ tail -100 ~/.oom-safeguard.log
 
 ✅ **Manual actions required**
 
-- [ ] Add 2GB swap space
-- [ ] Restart VSCode
-- [ ] Run `bash scripts/check-memory-preflight.sh`
-- [ ] Start `bash scripts/safeguard-oom.sh` in background
+- \[ ] Add 2GB swap space
+- \[ ] Restart VSCode
+- \[ ] Run `bash scripts/check-memory-preflight.sh`
+- \[ ] Start `bash scripts/safeguard-oom.sh` in background
 
 ✅ **Verification**
 
-- [ ] `free -h` shows swap space
-- [ ] Preflight check passes
-- [ ] `pnpm dev` starts without crashes
-- [ ] `~/.oom-safeguard.log` shows monitoring active
+- \[ ] `free -h` shows swap space
+- \[ ] Preflight check passes
+- \[ ] `pnpm dev` starts without crashes
+- \[ ] `~/.oom-safeguard.log` shows monitoring active
 
 ---
 
@@ -253,6 +251,5 @@ tail -100 ~/.oom-safeguard.log
 
 ---
 
-**Report Generated**: November 29, 2025
-**Safeguards Status**: ✅ COMPLETE
-**Next Step**: Add swap space and run preflight check
+**Report Generated**: November 29, 2025 **Safeguards Status**: ✅ COMPLETE **Next Step**: Add swap
+space and run preflight check

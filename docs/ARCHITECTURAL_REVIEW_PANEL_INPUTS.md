@@ -1,74 +1,34 @@
-// Core authentication middleware
-export async function requireSession(
-req: AuthenticatedRequest,
-handler: (req: AuthenticatedRequest) => Promise<NextResponse>,
-): Promise<NextResponse> {
-// MFA enforcement for managers/admins
-export async function require2FAForManagers(
-req: AuthenticatedRequest,
-handler: (req: AuthenticatedRequest) => Promise<NextResponse>,
-): Promise<NextResponse> {
-// Abstract rate limiter interface
-export interface RateLimiter {
+// Core authentication middleware export async function requireSession( req: AuthenticatedRequest,
+handler: (req: AuthenticatedRequest) => Promise<NextResponse>, ): Promise<NextResponse> { // MFA
+enforcement for managers/admins export async function require2FAForManagers( req:
+AuthenticatedRequest, handler: (req: AuthenticatedRequest) => Promise<NextResponse>, ):
+Promise<NextResponse> { // Abstract rate limiter interface export interface RateLimiter {
 
 ### 1.1 Directory Structure
 
-}
-// In-memory implementation (single-instance only)
-class InMemoryRateLimiter implements RateLimiter {
-// Redis implementation (multi-instance safe)
-class RedisRateLimiter implements RateLimiter {
-private readonly redis: Redis;
+} // In-memory implementation (single-instance only) class InMemoryRateLimiter implements
+RateLimiter { // Redis implementation (multi-instance safe) class RedisRateLimiter implements
+RateLimiter { private readonly redis: Redis;
 
-public async consume(key: string, cost: number = 1): Promise<RateLimitResult> {
-const bucketKey = this.buildKey(key, this.options.windowSeconds);
-const count = await this.redis.incrby(bucketKey, cost);
-// Factory: auto-select based on environment
-export function getRateLimiter(options: RateLimitOptions): RateLimiter {
-export function withRateLimit(
-handler: (req: NextRequest) => Promise<NextResponse>,
-config: RateLimitConfig,
-): (req: NextRequest) => Promise<NextResponse> {
-// Schema definition (source of truth)
-export const OrganizationSchema = z.object({
-id: z.string(),
-name: z.string().min(1, "Organization name required"),
-export const ScheduleSchema = z.object({
-id: z.string(),
-export const ShiftSchema = z.object({
-id: z.string(),
-scheduleId: z.string(),
-// RBAC role hierarchy
-export const RbacRoleSchema = z.enum([
-// Firestore security rules
-rules_version = '2';
-service cloud.firestore {
-// Structured logging with context
-export class Logger {
-private context: Record<string, unknown>;
-{
-"name": "fresh-root",
-"version": "1.1.0",
-{
-"name": "@apps/web",
-"version": "0.1.0",
-{
-"compilerOptions": {
-"target": "ES2022",
-// Node environment
-import { z } from "zod";
-const config = {
-output: "standalone",
-// Session creation flow
-async function createSession(idToken: string): Promise<string> {
-const auth = getFirebaseAdminAuth();
+public async consume(key: string, cost: number = 1): Promise<RateLimitResult> { const bucketKey =
+this.buildKey(key, this.options.windowSeconds); const count = await this.redis.incrby(bucketKey,
+cost); // Factory: auto-select based on environment export function getRateLimiter(options:
+RateLimitOptions): RateLimiter { export function withRateLimit( handler: (req: NextRequest) =>
+Promise<NextResponse>, config: RateLimitConfig, ): (req: NextRequest) => Promise<NextResponse> { //
+Schema definition (source of truth) export const OrganizationSchema = z.object({ id: z.string(),
+name: z.string().min(1, "Organization name required"), export const ScheduleSchema = z.object({ id:
+z.string(), export const ShiftSchema = z.object({ id: z.string(), scheduleId: z.string(), // RBAC
+role hierarchy export const RbacRoleSchema = z.enum(\[ // Firestore security rules rules_version =
+'2'; service cloud.firestore { // Structured logging with context export class Logger { private
+context: Record\<string, unknown>; { "name": "fresh-root", "version": "1.1.0", { "name":
+"@apps/web", "version": "0.1.0", { "compilerOptions": { "target": "ES2022", // Node environment
+import { z } from "zod"; const config = { output: "standalone", // Session creation flow async
+function createSession(idToken: string): Promise<string> { const auth = getFirebaseAdminAuth();
 
 ## Architectural Review Panel - Input Document
 
-**Project:** Fresh Root - Multi-Tenant SaaS Scheduling Platform
-**Version:** 1.1.0
-**Generated:** November 30, 2025
-**Status:** Production Ready (Single Instance) / Multi-Instance Preparation
+**Project:** Fresh Root - Multi-Tenant SaaS Scheduling Platform **Version:** 1.1.0 **Generated:**
+November 30, 2025 **Status:** Production Ready (Single Instance) / Multi-Instance Preparation
 **Codebase Size:** ~500 source files, 248 TypeScript files, 55 React components
 
 ---
@@ -798,12 +758,14 @@ const config = {
 
 ### 2.1 System Architecture Overview
 
-Fresh Root is a **multi-tenant SaaS scheduling platform** built using a modern monorepo architecture with Next.js 16, Firebase, and a comprehensive security model.
+Fresh Root is a **multi-tenant SaaS scheduling platform** built using a modern monorepo architecture
+with Next.js 16, Firebase, and a comprehensive security model.
 
 **Core Architecture Patterns:**
 
 - **Next.js App Router:** Server-side rendering with API routes
-- **Firebase Ecosystem:** Firestore (database), Firebase Auth (authentication), Cloud Functions (serverless)
+- **Firebase Ecosystem:** Firestore (database), Firebase Auth (authentication), Cloud Functions
+  (serverless)
 - **Multi-Tenant Isolation:** Network-scoped data isolation with RBAC
 - **Monorepo Structure:** pnpm workspaces with Turbo build orchestration
 - **Session-Based Auth:** Custom session cookies with MFA support
@@ -905,19 +867,19 @@ Fresh Root implements **hierarchical multi-tenancy** using network isolation:
    - No list operations allowed (prevents enumeration)
    - Cross-tenant queries automatically filtered
 
-2. **Data Path Isolation:**
+1. **Data Path Isolation:**
    - Organization data: `/orgs/{orgId}/...`
    - Network data: `/networks/{networkId}/...`
    - User data: `/users/{userId}` (self-only)
    - Memberships: `/memberships/{uid}_{orgId}` (composite key)
 
-3. **API-Level Isolation:**
+1. **API-Level Isolation:**
    - Session middleware extracts `orgId` from custom claims
    - All Firestore queries filter by `orgId`
    - No cross-organization data leakage
    - Network-level admin operations server-only
 
-4. **Client-Side Isolation:**
+1. **Client-Side Isolation:**
    - User can only access orgs where they have membership
    - UI filters data by current organization context
    - Organization switcher requires re-authentication
@@ -933,7 +895,8 @@ Fresh Root implements **hierarchical multi-tenancy** using network isolation:
 
 **Session Cookie Approach (Custom Implementation):**
 
-Fresh Root uses **server-side session cookies** instead of client-side JWT tokens for enhanced security:
+Fresh Root uses **server-side session cookies** instead of client-side JWT tokens for enhanced
+security:
 
 ```typescript
 // Session creation flow
@@ -1055,7 +1018,6 @@ manager
   └─> Schedule management
       └─> Can create/edit/delete schedules
 #### Layer 4: API Authorization
-
 scheduler
   └─> Schedule creation/editing
       └─> Can create/edit schedules
@@ -1075,7 +1037,7 @@ staff (lowest)
    - Verified server-side in session middleware
    - Firestore rules check `request.auth.token.roles`
 
-2. **Membership Document (Legacy):**
+1. **Membership Document (Legacy):**
    - `/memberships/{uid}_{orgId}` document
    - Contains: `roles: []`, `createdAt`, `invitedBy`
    - Firestore rules fallback to membership doc
@@ -1155,12 +1117,9 @@ function hasAnyRole(roles) {
 
 ##### 8. zones
 
-X-Frame-Options: DENY
-X-Content-Type-Options: nosniff
-Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
-Referrer-Policy: strict-origin-when-cross-origin
-Cross-Origin-Opener-Policy: same-origin
-Content-Security-Policy: default-src 'self'; ...
+X-Frame-Options: DENY X-Content-Type-Options: nosniff Strict-Transport-Security: max-age=63072000;
+includeSubDomains; preload Referrer-Policy: strict-origin-when-cross-origin
+Cross-Origin-Opener-Policy: same-origin Content-Security-Policy: default-src 'self'; ...
 
 ##### 9. memberships
 
@@ -1211,7 +1170,8 @@ Content-Security-Policy: default-src 'self'; ...
 - **Path:** `/orgs/{orgId}/schedules/{scheduleId}/shifts/{shiftId}`
 - **Access:** Members read, scheduler+ write, staff limited update
 - **Purpose:** Individual shift assignments
-- **Fields:** `id`, `scheduleId`, `orgId`, `userId`, `positionId`, `venueId`, `startTime`, `endTime`, `status`, `notes`
+- **Fields:** `id`, `scheduleId`, `orgId`, `userId`, `positionId`, `venueId`, `startTime`,
+  `endTime`, `status`, `notes`
 
 ##### 15. widgets
 
@@ -1227,8 +1187,11 @@ Content-Security-Policy: default-src 'self'; ...
 - `/`/`corporates`/`{corporateId}`
 
 - **Path:** `/venues/{orgId}/venues/{venueId}`
+
 - **Access:** Members read, manager+ write
+
 - **Purpose:** Physical locations
+
 - **Fields:** `id`, `orgId`, `name`, `address`, `capacity`, `zones[]`
 
 **8. zones**
@@ -1305,8 +1268,9 @@ Content-Security-Policy: default-src 'self'; ...
 
 **Industry:** SaaS - Workforce Management & Scheduling
 
-**Product Description:**
-Fresh Root is a **multi-tenant Progressive Web App** designed for small-to-medium enterprises that need reliable, secure staff scheduling. The platform enables organizations to:
+**Product Description:** Fresh Root is a **multi-tenant Progressive Web App** designed for
+small-to-medium enterprises that need reliable, secure staff scheduling. The platform enables
+organizations to:
 
 - Create and publish work schedules
 - Assign shifts to employees with specific positions
@@ -1637,16 +1601,24 @@ Fresh Root is a **multi-tenant Progressive Web App** designed for small-to-mediu
 **Strengths:**
 
 - ✅ Strong TypeScript/React expertise
+
 - ✅ Firebase ecosystem proficiency
+
 - ✅ Monorepo tooling experience (pnpm, Turbo)
+
 - ✅ Git-based workflows comfortable
+
 - ✅ Documentation culture established
   - **Alternative:** `Rollbar`, `Bugsnag` (not recommended to switch)
 
 - ⚠️ Redis/distributed caching (new for multi-instance)
+
 - ⚠️ OpenTelemetry instrumentation (new)
+
 - ⚠️ Load balancer configuration (limited experience)
+
 - ⚠️ Penetration testing (requires external firm)
+
 - ⚠️ E2E testing with Playwright (not yet integrated)
 
 **Learning Curve Considerations:**
@@ -1673,18 +1645,18 @@ Fresh Root is a **multi-tenant Progressive Web App** designed for small-to-mediu
    - **Cloud Functions:** Must use for serverless operations
    - **Rationale:** Entire codebase built around Firebase SDK
 
-2. **Next.js 16**
+1. **Next.js 16**
    - **App Router:** Required (no Pages Router)
    - **API Routes:** Required for backend
    - **React 19:** Required by Next.js 16
    - **Rationale:** Framework choice, migration cost prohibitive
 
-3. **pnpm Workspaces**
+1. **pnpm Workspaces**
    - **Monorepo:** pnpm workspace structure
    - **Package Manager:** pnpm 9.12.1+ required
    - **Rationale:** Existing setup, faster than npm/yarn
 
-4. **TypeScript 5.6+**
+1. **TypeScript 5.6+**
    - **Strict mode:** Enabled
    - **Zod-first:** Runtime validation required
    - **Rationale:** Type safety critical for multi-tenant architecture
@@ -1696,12 +1668,12 @@ Fresh Root is a **multi-tenant Progressive Web App** designed for small-to-mediu
    - **Alternative:** Memcached (not recommended)
    - **Rationale:** Standard choice, well-integrated with Node.js
 
-2. **OpenTelemetry for Tracing**
+1. **OpenTelemetry for Tracing**
    - **Preferred:** OTLP HTTP exporter
    - **Backend:** Jaeger (self-hosted) or Honeycomb (SaaS)
    - **Rationale:** Vendor-neutral, industry standard
 
-3. **Sentry for Error Tracking**
+1. **Sentry for Error Tracking**
    - **Current:** Already integrated
    - **Alternative:** Rollbar, Bugsnag (not recommended to switch)
    - **Rationale:** Already configured, migration cost high
@@ -1713,11 +1685,11 @@ Fresh Root is a **multi-tenant Progressive Web App** designed for small-to-mediu
    - No PostgreSQL, MySQL, etc.
    - **Rationale:** Entire security model built on Firestore rules
 
-2. **No Alternative Frontend Frameworks**
+1. **No Alternative Frontend Frameworks**
    - React 19 only (no Vue, Svelte, Angular)
    - **Rationale:** Too much migration effort
 
-3. **No Alternative Cloud Providers (for now)**
+1. **No Alternative Cloud Providers (for now)**
    - Firebase/GCP only
    - No AWS, Azure migration
    - **Rationale:** Firebase lock-in, migration prohibitively expensive
@@ -1945,14 +1917,14 @@ Fresh Root is a **multi-tenant Progressive Web App** designed for small-to-mediu
    - **Impact:** Multi-instance deployments can bypass rate limits
    - **Blocker:** Cannot deploy to load-balanced environment without this
 
-2. **TODO-002: OpenTelemetry Tracing**
+1. **TODO-002: OpenTelemetry Tracing**
    - **Priority:** HIGH
    - **Effort:** 4-6 hours
    - **Status:** 🟡 IN PROGRESS (helpers done, init needed)
    - **Impact:** Cannot debug production issues without distributed tracing
    - **Blocker:** Limited observability in multi-instance setup
 
-3. **TODO-003: Environment Variable Validation**
+1. **TODO-003: Environment Variable Validation**
    - **Priority:** MEDIUM
    - **Effort:** 2-4 hours
    - **Status:** 🟡 PARTIAL (schema exists, validation incomplete)
@@ -1963,19 +1935,19 @@ Fresh Root is a **multi-tenant Progressive Web App** designed for small-to-mediu
 
 #### 5.3.2 High Priority TODOs
 
-4. **TODO-004: Firestore Rules Test Coverage**
+1. **TODO-004: Firestore Rules Test Coverage**
    - **Effort:** 8 hours
    - **Current:** Minimal test coverage
    - **Target:** 80%+ rule coverage
    - **Impact:** Security rules not validated, risk of authorization bypass
 
-5. **TODO-005: API Endpoint Test Coverage**
+1. **TODO-005: API Endpoint Test Coverage**
    - **Effort:** 12 hours
    - **Current:** 6/22+ endpoints tested (27%)
    - **Target:** 60%+ endpoint coverage
    - **Impact:** Regression bugs, hard to refactor safely
 
-6. **TODO-006: Log Aggregation Configuration**
+1. **TODO-006: Log Aggregation Configuration**
    - **Effort:** 4 hours
    - **Current:** Logs only to stdout
    - **Impact:** Cannot query production logs centrally
@@ -2108,25 +2080,27 @@ gcloud run deploy fresh-root --image gcr.io/PROJECT/fresh-root
    - Is the multi-tenant isolation strategy (network-scoped + Firestore rules) secure and scalable?
    - Are there architectural blind spots we're missing?
 
-2. **Security Posture:**
+1. **Security Posture:**
    - Is our session-based auth approach sound for multi-tenant SaaS?
    - Are we missing critical security considerations for SOC 2 readiness?
 
-3. **Scaling Strategy:**
-   - Is the Redis-backed rate limiting + OpenTelemetry tracing approach sufficient for multi-instance?
+1. **Scaling Strategy:**
+   - Is the Redis-backed rate limiting + OpenTelemetry tracing approach sufficient for
+     multi-instance?
    - What pitfalls should we watch for when scaling from 1 → 10 → 100 instances?
 
-4. **Technical Debt Prioritization:**
+1. **Technical Debt Prioritization:**
    - Are our Critical TODOs correctly prioritized?
    - What are we underestimating in terms of effort or risk?
 
-5. **Observability Gaps:**
+1. **Observability Gaps:**
    - What observability blind spots exist in our current architecture?
    - Is our logging/tracing/monitoring strategy enterprise-ready?
 
 **Specific Concerns:**
 
-- **Memory constraints:** Are we building technical debt with our low-memory development environment?
+- **Memory constraints:** Are we building technical debt with our low-memory development
+  environment?
 - **Test coverage:** Is 27% endpoint coverage acceptable for early production?
 - **Firebase lock-in:** Are we too dependent on Firebase for future flexibility?
 - **Compliance:** What are we missing for SOC 2 and GDPR compliance?
@@ -2143,7 +2117,5 @@ gcloud run deploy fresh-root --image gcr.io/PROJECT/fresh-root
 
 ## End of Architectural Review Panel Input Document
 
-**Document Version:** 1.0
-**Last Updated:** November 30, 2025
-**Total Pages:** 26
-**Total Sections:** 5 (all complete)
+**Document Version:** 1.0 **Last Updated:** November 30, 2025 **Total Pages:** 26 **Total
+Sections:** 5 (all complete)

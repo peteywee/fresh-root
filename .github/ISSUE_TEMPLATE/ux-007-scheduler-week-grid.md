@@ -1,12 +1,8 @@
-# Objective
+## # Objective
 
----
-
-name: UX-007 Scheduler Week Grid (virtualized + publish pipeline)
-about: Deliver the sub-5-minute scheduling flow with performant grid and keyboard ops
-title: "[UX-007] Scheduler Week Grid"
-labels: ["ux", "frontend", "P1"]
-assignees: ["peteywee"]
+name: UX-007 Scheduler Week Grid (virtualized + publish pipeline) about: Deliver the sub-5-minute
+scheduling flow with performant grid and keyboard ops title: "\[UX-007] Scheduler Week Grid" labels:
+\["ux", "frontend", "P1"] assignees: \["peteywee"]
 
 ---
 
@@ -26,9 +22,9 @@ Hit the **publish ≤ 5 minutes** benchmark with a fast Week grid and keyboard-f
 
 ## Tasks
 
-- [ ] Implement virtualization and drag/resize interactions.
-- [ ] Keyboard shortcuts and conflict highlights.
-- [ ] Budget header: allowed$ and allowedHours from inputs.
+- \[ ] Implement virtualization and drag/resize interactions.
+- \[ ] Keyboard shortcuts and conflict highlights.
+- \[ ] Budget header: allowed$ and allowedHours from inputs.
 
 ## Acceptance Criteria
 

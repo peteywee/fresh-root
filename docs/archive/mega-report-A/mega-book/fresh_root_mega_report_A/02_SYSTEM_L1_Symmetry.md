@@ -1,11 +1,12 @@
 # Fresh Schedules Symmetry Framework v2.0
-> This framework defines the **expected fingerprints** of files in the Fresh
-> Schedules codebase. If a file doesn't match its fingerprint, treat it as a
-> potential defect.
+
+> This framework defines the **expected fingerprints** of files in the Fresh Schedules codebase. If
+> a file doesn't match its fingerprint, treat it as a potential defect.
 
 ---
 
 ## 1. Universal File Header
+
 All first-class files (schemas, APIs, rules, critical UI) SHOULD begin with:
 
 ```ts
@@ -24,7 +25,9 @@ This header is validated as a **Tier 3 (style)** check.
 ---
 
 ## 2. Layer Fingerprints
+
 ### 2.1 Layer 00 — Domain (Schemas & Types)
+
 **Location:**
 
 - `packages/types/src/**/*.ts`
@@ -45,6 +48,7 @@ This header is validated as a **Tier 3 (style)** check.
 ---
 
 ### 2.2 Layer 02 — API (Routes)
+
 **Location:**
 
 - `apps/web/app/api/**/route.ts`
@@ -65,6 +69,7 @@ This header is validated as a **Tier 3 (style)** check.
 ---
 
 ### 2.3 Layer 01 — Rules (Firestore)
+
 **Location:**
 
 - `firestore.rules`
@@ -87,6 +92,7 @@ This header is validated as a **Tier 3 (style)** check.
 ---
 
 ### 2.4 Layer 03 — UI (Pages & Components)
+
 **Location:**
 
 - `apps/web/app/**/page.tsx`
@@ -104,16 +110,19 @@ This header is validated as a **Tier 3 (style)** check.
 ---
 
 ## 3. Symmetry as a Signal
+
 Use these signals:
 
 - **Strong symmetry:** All files for a feature share the same structural patterns.
-- **Broken symmetry:** A file deviates from its layer fingerprint (missing header, bypassing guards, etc.).
+- **Broken symmetry:** A file deviates from its layer fingerprint (missing header, bypassing guards,
+  etc.).
 
 Broken symmetry is not always a bug, but it is always a **cue to investigate**.
 
 ---
 
 ## 4. Quantitative Enforcement
+
 `scripts/validate-patterns.mjs` enforces parts of this framework by:
 
 1. Checking:

@@ -12,8 +12,9 @@
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { Firestore } from "firebase-admin/firestore";
-import { getDocWithType, setDocWithType } from "./firebase/typed-wrappers";
 import { z } from "zod";
+
+import { getDocWithType, setDocWithType } from "./firebase/typed-wrappers";
 
 export type AuthUserClaims = {
   email?: string;
@@ -66,14 +67,10 @@ export async function ensureUserProfile(args: {
   const now = Date.now();
 
   const baseProfile = {
-    email: (claims.email) || null,
-    displayName:
-      (claims.displayName) || (claims.name) || null,
-    avatarUrl: (claims.picture) || null,
-    selfDeclaredRole:
-      (claims.selfDeclaredRole) ||
-      (claims.role) ||
-      null,
+    email: claims.email || null,
+    displayName: claims.displayName || claims.name || null,
+    avatarUrl: claims.picture || null,
+    selfDeclaredRole: claims.selfDeclaredRole || claims.role || null,
   };
 
   const existing = await getDocWithType<UserProfileDoc>(adminDb, ref);

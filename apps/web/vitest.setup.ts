@@ -44,21 +44,38 @@ vi.mock("@/src/lib/firebase.server", () => {
 // integrations that use createOrgEndpoint and Firestore membership checks.
 vi.mock("firebase-admin/auth", () => ({
   getAuth: () => ({
-    verifySessionCookie: async (_cookie: string) => ({ uid: "test-user-1", email: "test@example.com", email_verified: true, customClaims: {} }),
-    verifyIdToken: async (_token: string) => ({ uid: "test-user-1", email: "test@example.com", email_verified: true, customClaims: {} }),
+    verifySessionCookie: async (_cookie: string) => ({
+      uid: "test-user-1",
+      email: "test@example.com",
+      email_verified: true,
+      customClaims: {},
+    }),
+    verifyIdToken: async (_token: string) => ({
+      uid: "test-user-1",
+      email: "test@example.com",
+      email_verified: true,
+      customClaims: {},
+    }),
   }),
 }));
 
 vi.mock("firebase-admin/firestore", () => ({
   getFirestore: () => ({
     collectionGroup: (_name: string) => ({
-      where: function () { return this as any; },
-      limit: function () { return this as any; },
+      where: function () {
+        return this as any;
+      },
+      limit: function () {
+        return this as any;
+      },
       get: async function () {
         return {
           empty: false,
           docs: [
-            { id: "membership-test", data: () => ({ uid: "test-user-1", orgId: "org-test", role: "manager" }) },
+            {
+              id: "membership-test",
+              data: () => ({ uid: "test-user-1", orgId: "org-test", role: "manager" }),
+            },
           ],
         };
       },
@@ -68,18 +85,35 @@ vi.mock("firebase-admin/firestore", () => ({
 
 vi.mock("firebase-admin", () => ({
   getAuth: () => ({
-    verifySessionCookie: async (_cookie: string) => ({ uid: "test-user-1", email: "test@example.com", email_verified: true, customClaims: {} }),
-    verifyIdToken: async (_token: string) => ({ uid: "test-user-1", email: "test@example.com", email_verified: true, customClaims: {} }),
+    verifySessionCookie: async (_cookie: string) => ({
+      uid: "test-user-1",
+      email: "test@example.com",
+      email_verified: true,
+      customClaims: {},
+    }),
+    verifyIdToken: async (_token: string) => ({
+      uid: "test-user-1",
+      email: "test@example.com",
+      email_verified: true,
+      customClaims: {},
+    }),
   }),
   getFirestore: () => ({
     collectionGroup: (_name: string) => ({
-      where: function () { return this as any; },
-      limit: function () { return this as any; },
+      where: function () {
+        return this as any;
+      },
+      limit: function () {
+        return this as any;
+      },
       get: async function () {
         return {
           empty: false,
           docs: [
-            { id: "membership-test", data: () => ({ uid: "test-user-1", orgId: "org-test", role: "manager" }) },
+            {
+              id: "membership-test",
+              data: () => ({ uid: "test-user-1", orgId: "org-test", role: "manager" }),
+            },
           ],
         };
       },

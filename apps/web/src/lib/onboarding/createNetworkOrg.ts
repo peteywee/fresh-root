@@ -1,11 +1,13 @@
 // [P0][FIREBASE][HELPER] Create network/org/venue helper
 // Tags: FIREBASE, ONBOARDING, HELPERS
-import type { DocumentReference, Firestore, WriteBatch } from "firebase-admin/firestore";
 // Use the admin firestore instance from server helper
-import { adminDb } from "@/src/lib/firebase.server";
 import { CreateNetworkOrgPayload } from "@fresh-schedules/types";
+import type { DocumentReference, Firestore, WriteBatch } from "firebase-admin/firestore";
 import { Timestamp } from "firebase-admin/firestore";
+
 import { consumeAdminFormDraft, getAdminFormDraft } from "./adminFormDrafts";
+
+import { adminDb } from "@/src/lib/firebase.server";
 
 const dbDefault = adminDb;
 
@@ -91,14 +93,17 @@ export async function createNetworkWithOrgAndVenue(
 
   const batch: WriteBatch = root.batch();
 
+  const basicsData = basics as any;
   const networkDoc: NetworkDoc = {
     id: networkId,
     slug: networkId,
-    displayName: (basics as any)?.orgName ?? networkId,
+    displayName: basicsData?.orgName ?? networkId,
     legalName:
-      (draft.form as { data?: { legalName?: string } })?.data?.legalName ?? (basics as any)?.orgName ?? null,
-    kind: (basics as any)?.hasCorporateAboveYou ? "franchise_network" : "independent_org",
-    segment: (basics as any)?.segment,
+      (draft.form as { data?: { legalName?: string } })?.data?.legalName ??
+      basicsData?.orgName ??
+      null,
+    kind: basicsData?.hasCorporateAboveYou ? "franchise_network" : "independent_org",
+    segment: basicsData?.segment,
     status: "pending_verification",
     ownerUserId: adminUid,
     createdAt: now,
@@ -144,7 +149,9 @@ export async function createNetworkWithOrgAndVenue(
   };
   batch.set(venueRef, venueDoc);
 
-  const membershipRef = networkRef.collection("memberships").doc() as DocumentReference<MembershipDoc>;
+  const membershipRef = networkRef
+    .collection("memberships")
+    .doc() as DocumentReference<MembershipDoc>;
   const membershipDoc: MembershipDoc = {
     id: membershipRef.id,
     networkId,

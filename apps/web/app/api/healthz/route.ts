@@ -1,6 +1,7 @@
 // [P0][HEALTH][API] Health check endpoint
 
 import { createPublicEndpoint } from "@fresh-schedules/api-framework";
+
 import { ok } from "../_shared/validation";
 
 /**

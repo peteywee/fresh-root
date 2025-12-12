@@ -1,18 +1,17 @@
 # Codebase Architectural Index - Fresh Root
 
-**Generated:** November 30, 2025
-**Version:** 1.1.0
-**Status:** Production Ready
-**Repository:** fresh-root
+**Generated:** November 30, 2025 **Version:** 1.1.0 **Status:** Production Ready **Repository:**
+fresh-root
 
 ---
 
 ## Executive Summary
 
-Fresh Root is a production-grade Progressive Web App (PWA) for enterprise staff scheduling, built with Next.js 16, Firebase, and a modern monorepo architecture. The system demonstrates enterprise-level security, comprehensive observability, and scalable multi-tenant design.
+Fresh Root is a production-grade Progressive Web App (PWA) for enterprise staff scheduling, built
+with Next.js 16, Firebase, and a modern monorepo architecture. The system demonstrates
+enterprise-level security, comprehensive observability, and scalable multi-tenant design.
 
-**Production Readiness:** ✅ APPROVED
-**Quality Score:** 111.5/100 (59% above threshold)
+**Production Readiness:** ✅ APPROVED **Quality Score:** 111.5/100 (59% above threshold)
 **Deployment Status:** Ready for multi-instance production deployment
 
 ---
@@ -152,62 +151,62 @@ The system uses a multi-tenant architecture with network-scoped isolation:
    - Path: `/users/{userId}`
    - Access: Self-only (no enumeration)
 
-2. **networks** - Tenant root (v14.0.0+)
+1. **networks** - Tenant root (v14.0.0+)
    - Path: `/networks/{networkId}`
    - Access: Server-only (Admin SDK)
    - Subcollections: orgs, venues, memberships, compliance
 
-3. **orgs** / **organizations** - Organization entities
+1. **orgs** / **organizations** - Organization entities
    - Path: `/orgs/{orgId}` or `/organizations/{orgId}`
    - Access: Members (read), Owners (write)
    - Subcollections: schedules, positions, messages, receipts
 
-4. **schedules** - Work schedules
+1. **schedules** - Work schedules
    - Path: `/orgs/{orgId}/schedules/{scheduleId}`
    - Path: `/schedules/{orgId}/schedules/{scheduleId}`
    - Access: Members (read), Schedulers+ (write)
 
-5. **shifts** - Individual shift assignments
+1. **shifts** - Individual shift assignments
    - Path: `/orgs/{orgId}/schedules/{scheduleId}/shifts/{shiftId}`
    - Path: `/shifts/{orgId}/shifts/{shiftId}`
    - Access: Members (read), Schedulers+ (write), Staff (limited update)
 
-6. **positions** - Job positions/roles
+1. **positions** - Job positions/roles
    - Path: `/orgs/{orgId}/positions/{positionId}`
    - Path: `/positions/{orgId}/positions/{positionId}`
    - Access: Members (read), Managers+ (write)
 
-7. **venues** - Physical locations
+1. **venues** - Physical locations
    - Path: `/venues/{orgId}/venues/{venueId}`
    - Access: Members (read), Managers+ (write)
 
-8. **zones** - Venue subdivisions
+1. **zones** - Venue subdivisions
    - Path: `/zones/{orgId}/zones/{zoneId}`
    - Access: Members (read), Managers+ (write)
 
-9. **memberships** - User-org relationships
+1. **memberships** - User-org relationships
    - Path: `/memberships/{uid}_{orgId}`
    - Access: Self (read), Managers+ (write)
 
-10. **join_tokens** - Invitation tokens
-    - Path: `/join_tokens/{orgId}/join_tokens/{tokenId}`
-    - Access: Managers+ (read/write)
+1. **join_tokens** - Invitation tokens
+   - Path: `/join_tokens/{orgId}/join_tokens/{tokenId}`
+   - Access: Managers+ (read/write)
 
-11. **attendance_records** - Clock-in/out records
-    - Path: `/attendance_records/{orgId}/records/{recordId}`
-    - Access: Members (read), Schedulers+ (write)
+1. **attendance_records** - Clock-in/out records
+   - Path: `/attendance_records/{orgId}/records/{recordId}`
+   - Access: Members (read), Schedulers+ (write)
 
-12. **compliance** - Regulatory documents
-    - Path: `/networks/{networkId}/compliance/{complianceId}`
-    - Access: Server-only (no client access)
+1. **compliance** - Regulatory documents
+   - Path: `/networks/{networkId}/compliance/{complianceId}`
+   - Access: Server-only (no client access)
 
 #### Supporting Collections
 
-13. **messages** - Organization announcements
-14. **receipts** - User-generated receipts
-15. **widgets** - Dashboard widgets
-16. **items** - General items/inventory
-17. **corporates** - Corporate entities (multi-org)
+1. **messages** - Organization announcements
+2. **receipts** - User-generated receipts
+3. **widgets** - Dashboard widgets
+4. **items** - General items/inventory
+5. **corporates** - Corporate entities (multi-org)
 
 ### TypeScript Type System
 
@@ -298,9 +297,8 @@ This ensures runtime validation and compile-time type safety are synchronized.
 
 ### API Routes Summary
 
-**Total API Routes:** 22+ endpoints
-**Route Categories:** 12 functional areas
-**HTTP Methods:** GET, POST, PUT, PATCH, DELETE
+**Total API Routes:** 22+ endpoints **Route Categories:** 12 functional areas **HTTP Methods:** GET,
+POST, PUT, PATCH, DELETE
 
 ### Route Categories
 
@@ -396,17 +394,17 @@ export const POST = withRateLimit(
    - In-memory (dev): Single-instance bucket
    - Redis (prod): Multi-instance distributed
 
-2. **withSecurity** - Security wrapper
+1. **withSecurity** - Security wrapper
    - Authentication verification
    - Authorization checks
    - Input sanitization
 
-3. **requireSession** - Session validation
+1. **requireSession** - Session validation
    - Verifies active session
    - Extracts user context
    - Enforces session timeout
 
-4. **validateJson** - Request validation
+1. **validateJson** - Request validation
    - Zod schema validation
    - Type-safe request bodies
    - Error formatting
@@ -443,10 +441,8 @@ span.end();
 
 ### Test Coverage
 
-**Test Files:** 6
-**Test Framework:** Vitest 4.0.14
-**Pass Rate:** 100% (6/6 passing)
-**Test Duration:** 2.16s
+**Test Files:** 6 **Test Framework:** Vitest 4.0.14 **Pass Rate:** 100% (6/6 passing) **Test
+Duration:** 2.16s
 
 #### Test Suites
 
@@ -476,9 +472,8 @@ export default defineConfig({
 
 ### Linting Configuration
 
-**Linter:** ESLint 9.39.1 (flat config)
-**Parser:** @typescript-eslint/parser
-**Plugins:** TypeScript, React, React Hooks, Import
+**Linter:** ESLint 9.39.1 (flat config) **Parser:** @typescript-eslint/parser **Plugins:**
+TypeScript, React, React Hooks, Import
 
 #### Lint Rules
 
@@ -497,8 +492,7 @@ Status: ✅ PASSING (0 blocking errors)
 
 ### CI/CD Pipeline
 
-**Platform:** GitHub Actions
-**Workflows:** 8 automated pipelines
+**Platform:** GitHub Actions **Workflows:** 8 automated pipelines
 
 #### Workflows
 
@@ -508,33 +502,33 @@ Status: ✅ PASSING (0 blocking errors)
    - TypeScript type checking
    - ESLint code quality
 
-2. **agent.yml** - AI agent automation
+1. **agent.yml** - AI agent automation
    - Auto-regenerate documentation
    - Update schema catalog
    - Pattern compliance
 
-3. **guard-main.yml** - Main branch protection
+1. **guard-main.yml** - Main branch protection
    - Block direct commits
    - Enforce PR workflow
 
-4. **doc-parity.yml** - Documentation validation
+1. **doc-parity.yml** - Documentation validation
    - Ensure API docs match routes
    - Schema docs match types
    - Test spec presence
 
-5. **schema-catalog-guard.yml** - Schema catalog validation
+1. **schema-catalog-guard.yml** - Schema catalog validation
    - Auto-update schema catalog
    - Verify type completeness
 
-6. **file-index-guard.yml** - File index validation
+1. **file-index-guard.yml** - File index validation
    - Keep file index up to date
    - Track codebase structure
 
-7. **ci-patterns.yml** - Pattern enforcement
+1. **ci-patterns.yml** - Pattern enforcement
    - Validate coding patterns
    - Enforce standards
 
-8. **auto-regenerate-index.yml** - Nightly index update
+1. **auto-regenerate-index.yml** - Nightly index update
    - Regenerate documentation index
    - Update schema catalog
 
@@ -563,9 +557,8 @@ Status: ✅ PASSING (0 blocking errors)
 
 ### Strategic Audit TODOs
 
-**Source:** `STRATEGIC_AUDIT_TODOS.md`
-**Generated:** November 29, 2025
-**Overall Grade:** A- (93/100)
+**Source:** `STRATEGIC_AUDIT_TODOS.md` **Generated:** November 29, 2025 **Overall Grade:** A-
+(93/100)
 
 #### Critical TODOs (Week 1 - Blocking Multi-Instance Production)
 
@@ -577,7 +570,7 @@ Status: ✅ PASSING (0 blocking errors)
    - **Impact:** Load-balanced deployments can bypass rate limits
    - **Solution:** Implement RedisRateLimiter with ioredis
 
-2. **TODO-002: OpenTelemetry Tracing Implementation**
+1. **TODO-002: OpenTelemetry Tracing Implementation**
    - **Priority:** HIGH
    - **Effort:** 4-6 hours
    - **Status:** 🟡 IN PROGRESS (otel.ts updated, init needed)
@@ -585,7 +578,7 @@ Status: ✅ PASSING (0 blocking errors)
    - **Impact:** Cannot debug multi-instance issues
    - **Solution:** Complete OTEL initialization and exporter config
 
-3. **TODO-003: Environment Variable Validation**
+1. **TODO-003: Environment Variable Validation**
    - **Priority:** CRITICAL
    - **Effort:** 2-4 hours
    - **Status:** 🟡 PARTIAL (schema exists, validation incomplete)
@@ -595,29 +588,29 @@ Status: ✅ PASSING (0 blocking errors)
 
 #### High Priority TODOs (Week 2-3)
 
-4. **TODO-004: Firestore Rules Test Coverage**
+1. **TODO-004: Firestore Rules Test Coverage**
    - **Effort:** 8-12 hours
    - **Impact:** Security rules not fully tested
 
-5. **TODO-005: API Endpoint Test Coverage**
+1. **TODO-005: API Endpoint Test Coverage**
    - **Effort:** 12-16 hours
    - **Impact:** Only 6 test files for 22+ endpoints
 
-6. **TODO-006: Log Aggregation Configuration**
+1. **TODO-006: Log Aggregation Configuration**
    - **Effort:** 4-6 hours
    - **Impact:** No centralized logging
 
 #### Medium Priority TODOs (30-Day Roadmap)
 
-7. **TODO-007:** Monitoring Dashboards
-8. **TODO-008:** E2E Test Suite (Playwright)
-9. **TODO-009:** API Documentation (OpenAPI)
-10. **TODO-010:** Performance Profiling
-11. **TODO-011:** Security Penetration Testing
-12. **TODO-012:** Disaster Recovery Procedures
-13. **TODO-013:** Horizontal Scaling Infrastructure
-14. **TODO-014:** Service Separation
-15. **TODO-015:** Advanced Observability
+1. **TODO-007:** Monitoring Dashboards
+2. **TODO-008:** E2E Test Suite (Playwright)
+3. **TODO-009:** API Documentation (OpenAPI)
+4. **TODO-010:** Performance Profiling
+5. **TODO-011:** Security Penetration Testing
+6. **TODO-012:** Disaster Recovery Procedures
+7. **TODO-013:** Horizontal Scaling Infrastructure
+8. **TODO-014:** Service Separation
+9. **TODO-015:** Advanced Observability
 
 ### OOM Prevention (Memory Constraints)
 
@@ -641,20 +634,20 @@ Status: ✅ PASSING (0 blocking errors)
    sudo swapon /swapfile
    ```
 
-2. **Memory Monitoring**
+1. **Memory Monitoring**
    - Preflight checks: `bash scripts/check-memory-preflight.sh`
    - OOM safeguard: `bash scripts/safeguard-oom.sh`
    - Dev launcher: `bash run-dev.sh` (includes memory setup)
 
-3. **Build Optimization**
+1. **Build Optimization**
    - Reduced parallelism (SWC_NUM_THREADS=2)
    - Node heap limits (NODE_OPTIONS="--max-old-space-size=1536")
    - Single-threaded test execution
 
 ### Rate Limiting Implementation
 
-**Source:** `RATE_LIMIT_IMPLEMENTATION.md`
-**Status:** ✅ FULLY IMPLEMENTED (in-memory), ⚠️ Redis pending
+**Source:** `RATE_LIMIT_IMPLEMENTATION.md` **Status:** ✅ FULLY IMPLEMENTED (in-memory), ⚠️ Redis
+pending
 
 #### Current State
 
@@ -710,9 +703,8 @@ Status: ✅ PASSING (0 blocking errors)
 
 ### Firestore Security Rules
 
-**File:** `/home/patrick/fresh-root/firestore.rules`
-**Version:** v2 (rules_version = '2')
-**Tags:** P1, INTEGRITY, FIRESTORE, RULES, SECURITY, RBAC, TENANT_ISOLATION
+**File:** `/home/patrick/fresh-root/firestore.rules` **Version:** v2 (rules_version = '2') **Tags:**
+P1, INTEGRITY, FIRESTORE, RULES, SECURITY, RBAC, TENANT_ISOLATION
 
 #### Security Model
 
@@ -721,17 +713,17 @@ Status: ✅ PASSING (0 blocking errors)
    - Cross-network access prevention
    - Org-level memberships
 
-2. **Role-Based Access Control (RBAC)**
+1. **Role-Based Access Control (RBAC)**
    - Roles: `org_owner`, `admin`, `manager`, `scheduler`, `staff`
    - Token-based (preferred) + legacy membership docs
    - Hierarchical permissions
 
-3. **Access Patterns**
+1. **Access Patterns**
    - No enumeration (list operations blocked)
    - Get-only for specific documents
    - Self-service limited to own data
 
-4. **Compliance Documents**
+1. **Compliance Documents**
    - Server-only access (no client reads/writes)
    - Admin SDK required for modifications
    - Network-scoped isolation
@@ -807,9 +799,8 @@ const securityHeaders = [
 
 ### Build Configuration
 
-**Output:** Standalone (Docker-ready)
-**Build Tool:** Next.js (Webpack mode)
-**Target:** Node.js 20.19.5 LTS
+**Output:** Standalone (Docker-ready) **Build Tool:** Next.js (Webpack mode) **Target:** Node.js
+20.19.5 LTS
 
 #### Next.js Configuration
 
@@ -867,12 +858,12 @@ export const env = EnvSchema.parse(process.env);
    - Automatic edge caching
    - Zero-config deployments
 
-2. **Firebase Hosting + Cloud Run**
+1. **Firebase Hosting + Cloud Run**
    - Standalone Docker container
    - Cloud Functions for serverless
    - Firebase integration
 
-3. **Self-Hosted**
+1. **Self-Hosted**
    - Docker container
    - Node.js 20+ runtime
    - 2GB+ RAM recommended
@@ -910,9 +901,7 @@ export const env = EnvSchema.parse(process.env);
 
 ### Package Management
 
-**Manager:** pnpm 9.12.1
-**Workspace:** pnpm workspaces
-**Build Orchestration:** Turbo 2.6.0
+**Manager:** pnpm 9.12.1 **Workspace:** pnpm workspaces **Build Orchestration:** Turbo 2.6.0
 
 #### Workspace Packages
 
@@ -957,8 +946,7 @@ export const env = EnvSchema.parse(process.env);
 
 #### @packages/types
 
-**Exports:** 225+ types across 26 files
-**Pattern:** Zod-first schema → type inference
+**Exports:** 225+ types across 26 files **Pattern:** Zod-first schema → type inference
 
 **Key Exports:**
 
@@ -969,15 +957,12 @@ export const env = EnvSchema.parse(process.env);
 
 #### @packages/ui
 
-**Purpose:** Shared React components
-**Styling:** TailwindCSS
-**Icons:** Lucide React
+**Purpose:** Shared React components **Styling:** TailwindCSS **Icons:** Lucide React
 
 #### @packages/env
 
-**Purpose:** Environment validation
-**Schema:** Zod-based
-**Exports:** `env` object, production validators
+**Purpose:** Environment validation **Schema:** Zod-based **Exports:** `env` object, production
+validators
 
 ---
 
@@ -985,8 +970,7 @@ export const env = EnvSchema.parse(process.env);
 
 ### Documentation Structure
 
-**Total Files:** 185+ markdown files
-**Location:** `/home/patrick/fresh-root/docs/`
+**Total Files:** 185+ markdown files **Location:** `/home/patrick/fresh-root/docs/`
 
 #### Key Documentation Areas
 
@@ -996,24 +980,24 @@ export const env = EnvSchema.parse(process.env);
    - Authentication requirements
    - Rate limiting policies
 
-2. **Schema Documentation** (`docs/schemas/`) - 66 files
+1. **Schema Documentation** (`docs/schemas/`) - 66 files
    - Firestore collection schemas
    - TypeScript type definitions
    - Validation rules
    - Migration guides
 
-3. **Standards** (`docs/standards/`)
+1. **Standards** (`docs/standards/`)
    - Coding conventions
    - Pattern enforcement
    - Security guidelines
    - Quality gates
 
-4. **Feature Blocks** (`docs/blocks/`)
+1. **Feature Blocks** (`docs/blocks/`)
    - Feature specifications
    - Implementation guides
    - Test plans
 
-5. **Runbooks** (`docs/runbooks/`)
+1. **Runbooks** (`docs/runbooks/`)
    - Operational procedures
    - Incident response
    - Deployment guides
@@ -1079,10 +1063,8 @@ pnpm pulse                  # System health check
 
 ### Git Workflow
 
-**Main Branch:** `main` (protected)
-**Dev Branch:** `dev` (protected)
-**Feature Branches:** `feature/*`, `fix/*`
-**Current Branch:** `feature/rate-limit-production-validation`
+**Main Branch:** `main` (protected) **Dev Branch:** `dev` (protected) **Feature Branches:**
+`feature/*`, `fix/*` **Current Branch:** `feature/rate-limit-production-validation`
 
 #### Branch Protection
 
@@ -1103,9 +1085,7 @@ pnpm pulse                  # System health check
 
 ### Error Tracking
 
-**Provider:** Sentry 10.25.0
-**Integration:** Next.js automatic instrumentation
-**Features:**
+**Provider:** Sentry 10.25.0 **Integration:** Next.js automatic instrumentation **Features:**
 
 - Error aggregation
 - Stack trace capture
@@ -1114,10 +1094,8 @@ pnpm pulse                  # System health check
 
 ### Distributed Tracing
 
-**Provider:** OpenTelemetry 0.207.0
-**Status:** 🟡 Partial (implementation in progress)
-**Exporters:** OTLP HTTP
-**Instrumentation:**
+**Provider:** OpenTelemetry 0.207.0 **Status:** 🟡 Partial (implementation in progress)
+**Exporters:** OTLP HTTP **Instrumentation:**
 
 - HTTP requests
 - Database queries
@@ -1126,16 +1104,12 @@ pnpm pulse                  # System health check
 
 ### Logging
 
-**Format:** Structured JSON
-**Levels:** error, warn, info, debug
-**Destination:** stdout (container logs)
-**Future:** Centralized log aggregation (TODO-006)
+**Format:** Structured JSON **Levels:** error, warn, info, debug **Destination:** stdout (container
+logs) **Future:** Centralized log aggregation (TODO-006)
 
 ### Metrics
 
-**Endpoint:** `GET /api/metrics`
-**Format:** Prometheus-compatible
-**Metrics:**
+**Endpoint:** `GET /api/metrics` **Format:** Prometheus-compatible **Metrics:**
 
 - Request count
 - Response time
@@ -1232,32 +1206,30 @@ pnpm pulse                  # System health check
 
 ### Short-Term (Weeks 2-3)
 
-4. **TODO-004:** Firestore rules test coverage (8-12 hours)
-5. **TODO-005:** API endpoint tests (12-16 hours)
-6. **TODO-006:** Log aggregation setup (4-6 hours)
+1. **TODO-004:** Firestore rules test coverage (8-12 hours)
+2. **TODO-005:** API endpoint tests (12-16 hours)
+3. **TODO-006:** Log aggregation setup (4-6 hours)
 
 ### Medium-Term (30 Days)
 
-7. Monitoring dashboards (Grafana/CloudWatch)
-8. E2E test suite (Playwright)
-9. OpenAPI documentation
-10. Performance profiling
-11. Security penetration testing
-12. Disaster recovery procedures
+1. Monitoring dashboards (Grafana/CloudWatch)
+2. E2E test suite (Playwright)
+3. OpenAPI documentation
+4. Performance profiling
+5. Security penetration testing
+6. Disaster recovery procedures
 
 ### Long-Term (60-90 Days)
 
-13. Horizontal scaling infrastructure
-14. Service separation (microservices)
-15. Advanced observability (tracing, APM)
+1. Horizontal scaling infrastructure
+2. Service separation (microservices)
+3. Advanced observability (tracing, APM)
 
 ---
 
 ## 17. Contact & Support
 
-**Repository:** fresh-root v1.1.0
-**Maintainer:** Patrick Craven
-**License:** See LICENSE file
+**Repository:** fresh-root v1.1.0 **Maintainer:** Patrick Craven **License:** See LICENSE file
 **Last Updated:** November 30, 2025
 
 ---

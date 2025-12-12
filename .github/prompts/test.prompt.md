@@ -1,14 +1,7 @@
 ---
 agent: "agent"
 description: "Generate and run tests for a feature or file"
-tools:
-  [
-    "search/codebase",
-    "edit/editFiles",
-    "problems",
-    "runTasks",
-    "testFailure",
-  ]
+tools: ["search/codebase", "edit/editFiles", "problems", "runTasks", "testFailure"]
 ---
 
 # Generate & Run Tests
@@ -22,16 +15,19 @@ Target can be: file path, feature name, or "coverage" for coverage report.
 ## Test Types
 
 ### Unit Tests (Vitest)
+
 - Test individual functions/methods
 - Mock external dependencies
 - Fast execution
 
 ### API Route Tests
+
 - Test HTTP handlers
 - Mock request/response
 - Verify status codes and responses
 
 ### E2E Tests (Playwright)
+
 - Test user flows
 - Real browser interaction
 - Accessibility checks
@@ -41,6 +37,7 @@ Target can be: file path, feature name, or "coverage" for coverage report.
 ### 1. Analyze Target
 
 Determine what needs testing:
+
 - What functions/methods exist?
 - What are the inputs/outputs?
 - What edge cases exist?
@@ -48,6 +45,7 @@ Determine what needs testing:
 ### 2. Generate Tests
 
 Create test file with:
+
 - Happy path tests
 - Error case tests
 - Edge case tests
@@ -134,14 +132,15 @@ describe("POST /api/feature", () => {
 # Test Results
 
 ## Tests Generated
+
 - [file]: [count] tests
 
 ## Test Summary
 ```
-✓ Test suite passed
-  ✓ should handle valid input
-  ✓ should throw on invalid input
-  ✓ should handle edge case
+
+✓ Test suite passed ✓ should handle valid input ✓ should throw on invalid input ✓ should handle edge
+case
+
 ```
 
 ## Coverage (if requested)

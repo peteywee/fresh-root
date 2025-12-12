@@ -1,13 +1,24 @@
 // [P0][SESSION][BOOTSTRAP][API] Bootstrap session endpoint
+// Tags: P0, SESSION, BOOTSTRAP, API, SDK_FACTORY
 
-import { z } from "zod";
 import { createAuthenticatedEndpoint } from "@fresh-schedules/api-framework";
-import { ok, serverError } from "../../_shared/validation";
-import { CreateSessionSchema } from "@fresh-schedules/types";
+import { NextResponse } from "next/server";
+import { z } from "zod";
+
+// Session bootstrap schema
+const SessionBootstrapSchema = z.object({
+  preferences: z.record(z.string(), z.unknown()).optional(),
+  deviceInfo: z.object({
+    userAgent: z.string().optional(),
+    platform: z.string().optional(),
+  }).optional(),
+});
+
+type SessionBootstrap = z.infer<typeof SessionBootstrapSchema>;
 
 /**
  * GET /api/session/bootstrap
- * Bootstrap authenticated session
+ * Bootstrap authenticated session (no input validation needed for GET)
  */
 export const GET = createAuthenticatedEndpoint({
   handler: async ({ context }) => {
@@ -17,31 +28,43 @@ export const GET = createAuthenticatedEndpoint({
         email: context.auth?.email,
         emailVerified: context.auth?.emailVerified,
         authenticated: true,
+        bootstrapAt: Date.now(),
       };
-      return ok(session);
-    } catch {
-      return serverError("Failed to bootstrap session");
+      return NextResponse.json(session);
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "Failed to bootstrap session";
+      console.error("Session bootstrap failed", {
+        error: message,
+        userId: context.auth?.userId,
+      });
+      return NextResponse.json({ error: { code: "INTERNAL_ERROR", message } }, { status: 500 });
     }
   },
 });
 
 /**
  * POST /api/session/bootstrap
- * Create new session
+ * Create new session with preferences
  */
 export const POST = createAuthenticatedEndpoint({
-  input: CreateSessionSchema,
-  handler: async ({ input, context }) => {
+  input: SessionBootstrapSchema,
+  handler: async ({ input, context }: { input: SessionBootstrap; context: any }) => {
     try {
       const session = {
-        userId: input?.userId || context.auth?.userId,
-        email: input?.email || context.auth?.email,
+        userId: context.auth?.userId,
+        email: context.auth?.email,
         createdAt: Date.now(),
-        ...(input?.metadata ? { metadata: input.metadata } : {}),
+        preferences: input.preferences,
+        deviceInfo: input.deviceInfo,
       };
-      return ok(session);
-    } catch {
-      return serverError("Failed to create session");
+      return NextResponse.json(session);
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "Failed to create session";
+      console.error("Session creation failed", {
+        error: message,
+        userId: context.auth?.userId,
+      });
+      return NextResponse.json({ error: { code: "INTERNAL_ERROR", message } }, { status: 500 });
     }
   },
 });

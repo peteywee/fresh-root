@@ -1,6 +1,8 @@
 # Chromebook Memory Strategy - No Swap Edition
 
-**Situation**: Chromebook Crostini containers cannot use swap files. With 6.3GB RAM and no swap, memory pressure is critical. This guide focuses on reducing memory consumption and graceful build degradation.
+**Situation**: Chromebook Crostini containers cannot use swap files. With 6.3GB RAM and no swap,
+memory pressure is critical. This guide focuses on reducing memory consumption and graceful build
+degradation.
 
 ## The Reality
 
@@ -11,7 +13,8 @@ Your system composition:
 - **Current Usage**: 4.1GB (VSCode, Claude, system)
 - **Available for builds**: ~2.2GB (tight but workable)
 
-**Key constraint**: Once RAM is full, there's NO swap buffer. Build must stay under 2.2GB or it dies with code 9.
+**Key constraint**: Once RAM is full, there's NO swap buffer. Build must stay under 2.2GB or it dies
+with code 9.
 
 ---
 
@@ -19,7 +22,8 @@ Your system composition:
 
 ### Option A: Disable Copilot Extension (Saves ~300MB)
 
-**Why this matters**: Copilot's language model runs in VSCode background, consuming 300MB+ even when idle.
+**Why this matters**: Copilot's language model runs in VSCode background, consuming 300MB+ even when
+idle.
 
 **Steps**:
 
@@ -42,14 +46,16 @@ Your system shows multiple VSCode processes (806MB + 770MB + 87MB = ~1.6GB total
 **Steps**:
 
 1. Run: `ps aux | grep code`
-2. If you see multiple entries like `/usr/share/code/code`, kill extras:
+
+1. If you see multiple entries like `/usr/share/code/code`, kill extras:
 
    ```bash
    killall -except $$ code  # Keep only current instance
    ```
 
-3. Or manually close VSCode windows except main one
-4. Keep only ONE VSCode window open while developing
+1. Or manually close VSCode windows except main one
+
+1. Keep only ONE VSCode window open while developing
 
 **Expected result**: Frees ~400-600MB
 
@@ -97,7 +103,8 @@ SWC_NUM_THREADS=1
 TURBO_TASKS_CONCURRENCY=2
 ```
 
-This is **deliberate slowdown** — trades speed for stability. Builds will take ~50% longer but won't crash.
+This is **deliberate slowdown** — trades speed for stability. Builds will take ~50% longer but won't
+crash.
 
 **Edit: `apps/web/.env.local`**
 
@@ -346,10 +353,10 @@ watch -n 2 'free -h'
 
 ## SUCCESS CRITERIA
 
-✅ `pnpm dev` completes without code 9 crashes  
-✅ Memory stays below 5.5GB during builds  
-✅ Free RAM never hits 0MB  
-✅ Safeguard daemon logs show no emergency kills  
+✅ `pnpm dev` completes without code 9 crashes\
+✅ Memory stays below 5.5GB during builds\
+✅ Free RAM never hits 0MB\
+✅ Safeguard daemon logs show no emergency kills\
 ✅ Preflight check passes before each session
 
 ---

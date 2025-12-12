@@ -1,46 +1,39 @@
 ---
+
 description: "Generic code review instructions that can be customized for any project using GitHub Copilot"
-applyTo: "**"
-excludeAgent: ["coding-agent"]
----
+applyTo: "\*\*"
+## excludeAgent: \["coding-agent"]
 
 # Generic Code Review Instructions
-
 Comprehensive code review guidelines for GitHub Copilot that can be adapted to any project. These instructions follow best practices from prompt engineering and provide a structured approach to code quality, security, testing, and architecture review.
 
 ## Review Language
-
 When performing a code review, respond in **English** (or specify your preferred language).
 
 > **Customization Tip**: Change to your preferred language by replacing "English" with "Portuguese (Brazilian)", "Spanish", "French", etc.
 
 ## Review Priorities
-
 When performing a code review, prioritize issues in the following order:
 
 ### 🔴 CRITICAL (Block merge)
-
 - **Security**: Vulnerabilities, exposed secrets, authentication/authorization issues
 - **Correctness**: Logic errors, data corruption risks, race conditions
 - **Breaking Changes**: API contract changes without versioning
 - **Data Loss**: Risk of data loss or corruption
 
 ### 🟡 IMPORTANT (Requires discussion)
-
 - **Code Quality**: Severe violations of SOLID principles, excessive duplication
 - **Test Coverage**: Missing tests for critical paths or new functionality
 - **Performance**: Obvious performance bottlenecks (N+1 queries, memory leaks)
 - **Architecture**: Significant deviations from established patterns
 
 ### 🟢 SUGGESTION (Non-blocking improvements)
-
 - **Readability**: Poor naming, complex logic that could be simplified
 - **Optimization**: Performance improvements without functional impact
 - **Best Practices**: Minor deviations from conventions
 - **Documentation**: Missing or incomplete comments/documentation
 
 ## General Review Principles
-
 When performing a code review, follow these principles:
 
 1. **Be specific**: Reference exact lines, files, and provide concrete examples
@@ -52,11 +45,9 @@ When performing a code review, follow these principles:
 7. **Group related comments**: Avoid multiple comments about the same topic
 
 ## Code Quality Standards
-
 When performing a code review, check for:
 
 ### Clean Code
-
 - Descriptive and meaningful names for variables, functions, and classes
 - Single Responsibility Principle: each function/class does one thing well
 - DRY (Don't Repeat Yourself): no code duplication
@@ -66,7 +57,6 @@ When performing a code review, check for:
 - Code should be self-documenting; comments only when necessary
 
 ### Examples
-
 ```javascript
 // ❌ BAD: Poor naming and magic numbers
 function calc(x, y) {
@@ -86,4 +76,6 @@ function calculateDiscount(orderTotal, itemPrice) {
 }
 ```
 
-... (file truncated for brevity)
+...
+
+(file truncated for brevity)

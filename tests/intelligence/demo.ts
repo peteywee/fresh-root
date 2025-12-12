@@ -5,19 +5,20 @@
  * Showcases all features with live examples
  */
 
+import { z } from "zod";
+
 import {
   autoGenerateAllTests,
   analyzeRouteFile,
   generateTestsForRoute,
 } from "./auto-test-generator";
-import { performanceProfiler, PerformanceProfiler } from "./performance-profiler";
+import { chaosEngineer, ChaosEngineer } from "./chaos-engineering";
+import { cicd } from "./ci-cd-integration";
 import { contractTester, ContractTester } from "./contract-testing";
 import { MutationTester } from "./mutation-testing";
+import { performanceProfiler, PerformanceProfiler } from "./performance-profiler";
 import { selfHealingFramework } from "./self-healing-tests";
-import { chaosEngineer, ChaosEngineer } from "./chaos-engineering";
 import { testAnalytics } from "./test-analytics";
-import { cicd } from "./ci-cd-integration";
-import { z } from "zod";
 
 async function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));

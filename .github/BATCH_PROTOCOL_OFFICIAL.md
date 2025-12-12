@@ -1,15 +1,17 @@
 # OFFICIAL BATCH PROTOCOL - Complete Instruction Set
 
-**Version**: 2.0.0  
-**Status**: ✅ Active & Enforced  
-**Last Updated**: December 7, 2025  
+**Version**: 2.0.0\
+**Status**: ✅ Active & Enforced\
+**Last Updated**: December 7, 2025\
 **Classification**: Production Directive
 
 ---
 
 ## Core Mission
 
-You are an enterprise-grade AI agent tasked with complex, multi-step tasks in production codebases. The Batch Protocol ensures every task is planned, executed, validated, and documented with systematic precision. No shortcuts. No guesses. No hallucinations.
+You are an enterprise-grade AI agent tasked with complex, multi-step tasks in production codebases.
+The Batch Protocol ensures every task is planned, executed, validated, and documented with
+systematic precision. No shortcuts. No guesses. No hallucinations.
 
 **Every task follows this protocol. No exceptions.**
 
@@ -45,12 +47,14 @@ PARSED:
 ### 1.3 Scope Classification
 
 **Simple Tasks** (< 5 min, single action):
+
 - Single file edit
 - Simple lookup
 - Direct answer to question
 - Skip detailed planning, execute immediately
 
 **Complex Tasks** (≥ 5 min, multiple steps):
+
 - Multi-file changes
 - Architecture decisions
 - Testing/validation required
@@ -78,6 +82,7 @@ Use `manage_todo_list` with this structure:
 ```
 
 **Example**:
+
 ```
 1. Understand current architecture
    - Read 3 key files
@@ -86,7 +91,7 @@ Use `manage_todo_list` with this structure:
    - Dependencies: none
    - Parallelizable: no (blocks everything)
 
-2. Design solution
+1. Design solution
    - Compare 2 approaches
    - Document pros/cons
    - Status: not-started
@@ -142,6 +147,7 @@ VALIDATION WORKER:
 Use tools to ground yourself in ACTUAL codebase state:
 
 **Priority Order**:
+
 1. `semantic_search` - Find patterns & examples
 2. `grep_search` - Precise pattern matching
 3. `file_search` - Locate related files
@@ -149,6 +155,7 @@ Use tools to ground yourself in ACTUAL codebase state:
 5. `run_in_terminal` - Execute verification commands
 
 **Batch Your Searches**:
+
 - Don't search multiple times for same pattern
 - Run related searches in parallel when possible
 - Consolidate results before proceeding
@@ -165,6 +172,7 @@ Before proposing changes:
 ### 3.3 Dependency Mapping
 
 Create explicit map:
+
 ```
 Your Change:  File A
     ↓
@@ -232,12 +240,11 @@ Success Criteria:
 ### 5.1 Mark Tasks In-Progress
 
 Before starting work:
+
 ```typescript
 manage_todo_list({
   operation: "write",
-  todoList: [
-    { id: 1, status: "in-progress", /* ... */ }
-  ]
+  todoList: [{ id: 1, status: "in-progress" /* ... */ }],
 });
 ```
 
@@ -253,6 +260,7 @@ For EVERY tool call:
 4. **Next step** - What do you do now?
 
 **Example**:
+
 ```
 INTENT: "Search for all rate-limit middleware patterns"
 
@@ -298,10 +306,10 @@ As soon as each todo finishes:
 manage_todo_list({
   operation: "write",
   todoList: [
-    { id: 1, status: "completed" },  // Just finished
+    { id: 1, status: "completed" }, // Just finished
     { id: 2, status: "in-progress" }, // Now working on this
-    { id: 3, status: "not-started" }
-  ]
+    { id: 3, status: "not-started" },
+  ],
 });
 ```
 
@@ -377,6 +385,7 @@ If ANY red → Fix → Recheck.
 ### 7.1 Code Comments
 
 Add comments for:
+
 - ✓ WHY (reasoning, not WHAT)
 - ✓ Complex business logic
 - ✓ Non-obvious decisions
@@ -423,13 +432,16 @@ Update relevant changelog:
 ## [Version] - YYYY-MM-DD
 
 ### Added
+
 - New batch endpoint handler for bulk operations
 - Request middleware chain support
 
 ### Fixed
+
 - Rate limit calculation for org-scoped endpoints
 
 ### Changed
+
 - SDK factory now validates org membership before auth
 ```
 
@@ -449,12 +461,13 @@ Closes: #issue-number
 Related-To: #other-issue
 ```
 
-**Types**: feat, fix, docs, refactor, test, chore  
+**Types**: feat, fix, docs, refactor, test, chore\
 **Scope**: feature area (api, sdk, ui, types, etc.)
 
 ### 8.2 Commit Atomicity
 
 Each commit should:
+
 - ✓ Represent ONE logical change
 - ✓ Pass all validation (tests, lint, typecheck)
 - ✓ Have clear message
@@ -495,6 +508,7 @@ git show --stat                # Show what was changed
 ### 9.2 GitHub Actions
 
 Check that:
+
 - ✅ All workflows passed
 - ✅ CodeQL scan completed
 - ✅ Build succeeded
@@ -547,7 +561,6 @@ git stash
 # Make code with violation
 # Try to commit
 # Safeguard should block
-
 # Undo
 git stash pop
 ```
@@ -583,6 +596,7 @@ git push --dry-run              # Simulate push
 ### 11.3 Production Gates
 
 In CI/CD, these auto-verify:
+
 - Code scanning (CodeQL)
 - Dependency audit (npm audit)
 - Build verification
@@ -618,7 +632,7 @@ Changes:
 
 Testing:
 - Local: ✅ All tests pass
-- Coverage: [X]%
+- Coverage: [x]%
 - Manual: [what was manually tested]
 
 Validation:
@@ -723,6 +737,7 @@ VERIFICATION:
 ### 14.2 Protocol Violations
 
 Never:
+
 - ❌ Skip validation gates
 - ❌ Commit without testing
 - ❌ Push to multiple branches without verifying each
@@ -741,13 +756,14 @@ Never:
 **Request**: "Fix typo in README.md"
 
 **Process**:
+
 1. Find file ✓
 2. Locate typo ✓
 3. Make edit ✓
 4. Commit ✓
 5. Push ✓
 
-**Time**: 2 min  
+**Time**: 2 min\
 **Batch Protocol**: Not required (simple task)
 
 ### Scenario 2: Add New API Endpoint
@@ -755,6 +771,7 @@ Never:
 **Request**: "Create GET /api/schedules with auth, validation, rate limit"
 
 **Process**:
+
 1. TODO list (5 tasks)
 2. Discovery: Read SDK, find patterns
 3. Create schema in types/
@@ -764,7 +781,7 @@ Never:
 7. Commit & push
 8. Verify
 
-**Time**: 30 min  
+**Time**: 30 min\
 **Batch Protocol**: FULL enforcement required
 
 ### Scenario 3: Refactor Large Module
@@ -772,6 +789,7 @@ Never:
 **Request**: "Refactor auth middleware for clarity + add new hook"
 
 **Process**:
+
 1. TODO list (8 tasks)
 2. Research current pattern
 3. Design new architecture
@@ -783,7 +801,7 @@ Never:
 9. Commit with clear messages
 10. Verify
 
-**Time**: 2 hours  
+**Time**: 2 hours\
 **Batch Protocol**: FULL + workers for parallel tasks
 
 ---
@@ -827,14 +845,14 @@ pnpm clean                          # Clean build artifacts
 
 The Batch Protocol ensures:
 
-✅ **Systematic Approach**: Every task planned, documented, validated  
-✅ **Zero Guessing**: All assumptions verified with tools  
-✅ **Quality Assurance**: All validation gates pass  
-✅ **Clear Communication**: Status, blockers, results  
-✅ **Production Ready**: Safe, tested, documented code  
-✅ **Maintainability**: Future devs understand decisions  
-✅ **Error Prevention**: Patterns caught, safeguards created  
-✅ **Team Alignment**: Everyone follows same process  
+✅ **Systematic Approach**: Every task planned, documented, validated\
+✅ **Zero Guessing**: All assumptions verified with tools\
+✅ **Quality Assurance**: All validation gates pass\
+✅ **Clear Communication**: Status, blockers, results\
+✅ **Production Ready**: Safe, tested, documented code\
+✅ **Maintainability**: Future devs understand decisions\
+✅ **Error Prevention**: Patterns caught, safeguards created\
+✅ **Team Alignment**: Everyone follows same process
 
 **This is not a style guide. This is how we work.**
 
@@ -842,11 +860,11 @@ The Batch Protocol ensures:
 
 ## 18. GOVERNANCE
 
-**Authority**: Sr Dev Directive + Production Development Directive  
-**Enforcement**: Pre-commit hooks + CI/CD pipelines  
-**Violations**: Will block commits and merges  
-**Reviews**: Updated based on observed patterns (error > 3x = safeguard)  
-**Status**: ACTIVE as of December 7, 2025  
+**Authority**: Sr Dev Directive + Production Development Directive\
+**Enforcement**: Pre-commit hooks + CI/CD pipelines\
+**Violations**: Will block commits and merges\
+**Reviews**: Updated based on observed patterns (error > 3x = safeguard)\
+**Status**: ACTIVE as of December 7, 2025
 
 ---
 
@@ -856,6 +874,6 @@ The Batch Protocol ensures:
 
 ---
 
-**Last Updated**: December 7, 2025  
-**Maintainer**: AI Agent Infrastructure  
+**Last Updated**: December 7, 2025\
+**Maintainer**: AI Agent Infrastructure\
 **Version**: 2.0.0 - Official Production Release

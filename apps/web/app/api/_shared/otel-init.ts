@@ -19,7 +19,7 @@ let OTEL_ENABLED: boolean | null = null;
 function isOtelEnabled(): boolean {
   if (OTEL_ENABLED === null) {
     // Import env only when actually checking if OTEL is enabled
-     
+
     const { env } = require("@/src/env");
     OTEL_ENABLED = Boolean(env.OTEL_EXPORTER_OTLP_ENDPOINT);
   }
@@ -45,7 +45,7 @@ export function ensureOtelStarted(): void {
   }
 
   // Import env here, inside the function, to avoid module-level side effects
-   
+
   const { env } = require("@/src/env");
 
   const exporter = new OTLPTraceExporter({
@@ -63,10 +63,9 @@ export function ensureOtelStarted(): void {
   // Start the SDK synchronously
   try {
     sdk.start();
-    // eslint-disable-next-line no-console
+
     console.log("[otel] OpenTelemetry SDK started");
   } catch (err) {
-     
     console.error("[otel] Failed to start OpenTelemetry SDK", err);
   }
 
@@ -82,10 +81,9 @@ export async function shutdownOtel(): Promise<void> {
   }
   try {
     await sdk.shutdown();
-    // eslint-disable-next-line no-console
+
     console.log("[otel] OpenTelemetry SDK shutdown complete");
   } catch (err) {
-     
     console.error("[otel] Error during OpenTelemetry shutdown", err);
   }
 }

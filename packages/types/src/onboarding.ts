@@ -98,3 +98,10 @@ export const OnboardingProfileSchema = z.object({
   timezone: z.string().optional(),
 });
 export type OnboardingProfileInput = z.infer<typeof OnboardingProfileSchema>;
+
+// Schema for creating organization network (simple version)
+export const CreateNetworkOrgSchema = z.object({
+  organizationName: z.string().min(1, "Organization name is required"),
+  type: z.enum(["standard", "enterprise", "franchise"]).default("standard"),
+});
+export type CreateNetworkOrg = z.infer<typeof CreateNetworkOrgSchema>;

@@ -5,10 +5,10 @@
  * Automatically adapts tests when the codebase changes
  */
 
-import * as ts from "typescript";
+import { diffLines } from "diff";
 import * as fs from "fs";
 import * as path from "path";
-import { diffLines } from "diff";
+import * as ts from "typescript";
 
 interface TestFailure {
   testFile: string;

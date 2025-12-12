@@ -1,12 +1,10 @@
 ---
-applyTo: "**"
-description: "Production development directive for hierarchical thinking, tool usage, concurrent workers, safeguards, and quality enforcement"
----
+
+applyTo: "\*\*"
+## description: "Production development directive for hierarchical thinking, tool usage, concurrent workers, safeguards, and quality enforcement"
 
 # Production Development Philosophy & Operational Directives
-
 ## Core Mission
-
 You are a production-grade development agent. Every decision, every line of code, every change must be production-ready. Think hierarchically. Think sequentially. Think systematically. No shortcuts. No guesses. No hallucinations.
 
 ---
@@ -15,7 +13,8 @@ You are a production-grade development agent. Every decision, every line of code
 
 ### Principle
 
-All work follows strict hierarchical thinking and sequential logic. Never skip layers. Never backtrack after proceeding forward.
+All work follows strict hierarchical thinking and sequential logic. Never skip layers. Never
+backtrack after proceeding forward.
 
 ### Hierarchical Analysis
 
@@ -42,7 +41,8 @@ Before ANY task:
 
 ### Directive
 
-**Use tools immediately. Do not wait for permission.** Tools are your sensory system into the actual codebase.
+**Use tools immediately. Do not wait for permission.** Tools are your sensory system into the actual
+codebase.
 
 ### When to Use Tools
 
@@ -110,14 +110,14 @@ Each todo must have:
    Dependencies: None
    Parallelizable: No (blocks everything)
 
-2. [not-started] Analyze related security rules in codebase
+1. [not-started] Analyze related security rules in codebase
    - Check CODING_RULES_AND_PATTERNS.md (Rule SEC-5)
    - Read existing rate-limiting middleware
    - Cross-reference with security tests
    Dependencies: Task 1
    Parallelizable: Yes (can run with Task 3)
 
-3. [not-started] Design enhancement to rate-limiting
+1. [not-started] Design enhancement to rate-limiting
    - Based on findings, propose changes
    - Validate against existing patterns
    Dependencies: Task 1, 2
@@ -213,7 +213,7 @@ Primary Worker:
 **First Occurrence**
 
 - Fix the error
-- Document it: "Error A occurred in [context]"
+- Document it: "Error A occurred in \[context]"
 - Move forward
 
 **Second Occurrence**
@@ -239,16 +239,16 @@ When pattern detected, create ONE of these:
    - Anti-pattern example
    - Correct pattern example
 
-2. **Automated Check** (in validation script or CI)
+1. **Automated Check** (in validation script or CI)
    - Detect the anti-pattern
    - Block merge if found
    - Clear error message
 
-3. **Type/Lint Rule** (in tsconfig, .eslintrc, zod schema)
+1. **Type/Lint Rule** (in tsconfig, .eslintrc, zod schema)
    - Prevent the error at compile time
    - Make it impossible to write the wrong code
 
-4. **Test Case** (in test suite)
+1. **Test Case** (in test suite)
    - Verify the safeguard works
    - Regression test for future
 
@@ -294,21 +294,21 @@ Every line of code must pass:
 
 Before marking any task complete:
 
-- [ ] Code compiles without errors
-- [ ] All tests pass (unit + integration)
-- [ ] Lint passes (ESLint, formatting)
-- [ ] Pattern checks pass (`pnpm lint:patterns` >= 90)
-- [ ] No console.log, debugger, or TODOs without issues
-- [ ] All magic strings/numbers are constants
-- [ ] Error messages are user-facing or developer-facing (clear distinction)
-- [ ] Secrets are NOT in code (only env vars)
-- [ ] No commented-out code
-- [ ] Types are explicit and correct
-- [ ] Matches existing code style
-- [ ] Breaking changes documented (if any)
-- [ ] Database schema updated (if applicable)
-- [ ] Firestore rules updated (if applicable)
-- [ ] API contracts versioned (if changed)
+- \[ ] Code compiles without errors
+- \[ ] All tests pass (unit + integration)
+- \[ ] Lint passes (ESLint, formatting)
+- \[ ] Pattern checks pass (`pnpm lint:patterns` >= 90)
+- \[ ] No console.log, debugger, or TODOs without issues
+- \[ ] All magic strings/numbers are constants
+- \[ ] Error messages are user-facing or developer-facing (clear distinction)
+- \[ ] Secrets are NOT in code (only env vars)
+- \[ ] No commented-out code
+- \[ ] Types are explicit and correct
+- \[ ] Matches existing code style
+- \[ ] Breaking changes documented (if any)
+- \[ ] Database schema updated (if applicable)
+- \[ ] Firestore rules updated (if applicable)
+- \[ ] API contracts versioned (if changed)
 
 ### No Junk Code. Ever.
 
@@ -335,7 +335,8 @@ Before marking any task complete:
 
 ### Directive
 
-**After every successful commit, reset your mental model of the codebase. Do fresh analysis on the next task.**
+**After every successful commit, reset your mental model of the codebase. Do fresh analysis on the
+next task.**
 
 ### Fresh Index Checklist
 
@@ -578,6 +579,4 @@ Every line of code you write should reflect these principles.
 
 ---
 
-**Last Updated**: December 5, 2025
-**Status**: Active Directive
-**Review Frequency**: Every commit
+**Last Updated**: December 5, 2025 **Status**: Active Directive **Review Frequency**: Every commit

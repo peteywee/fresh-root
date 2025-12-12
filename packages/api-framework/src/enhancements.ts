@@ -200,12 +200,7 @@ export function createBatchHandler<TItem, TOutput>(
   context: RequestContext,
   request: NextRequest,
 ) => Promise<BatchResult<TOutput>> {
-  const {
-    maxBatchSize,
-    timeoutPerItem = 5000,
-    continueOnError = true,
-    itemHandler,
-  } = config;
+  const { maxBatchSize, timeoutPerItem = 5000, continueOnError = true, itemHandler } = config;
 
   return async (items, context, request): Promise<BatchResult<TOutput>> => {
     // Validate batch size

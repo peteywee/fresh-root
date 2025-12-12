@@ -1,15 +1,23 @@
-// [P0][SESSION][SCHEMA] Session bootstrap schema
-// Tags: P0, SESSION, SCHEMA, ZOD
+// [P0][SESSION][SCHEMA] Session API schemas
+// Tags: P0, SESSION, SCHEMA
 
 import { z } from "zod";
 
-/**
- * Session bootstrap payload
- * Used when creating a new session with optional metadata
- */
-export const CreateSessionSchema = z.object({
-  userId: z.string().min(1, "User ID required").optional(),
-  email: z.string().email("Invalid email").optional(),
-  metadata: z.record(z.string(), z.any()).optional(),
+// Session bootstrap schema (for POST requests with optional preferences)
+export const SessionBootstrapSchema = z.object({
+  preferences: z
+    .object({
+      theme: z.enum(["light", "dark", "auto"]).default("auto"),
+      timezone: z.string().optional(),
+      language: z.string().default("en"),
+    })
+    .optional(),
+  deviceInfo: z
+    .object({
+      userAgent: z.string().optional(),
+      platform: z.string().optional(),
+    })
+    .optional(),
 });
-export type CreateSession = z.infer<typeof CreateSessionSchema>;
+
+export type SessionBootstrap = z.infer<typeof SessionBootstrapSchema>;

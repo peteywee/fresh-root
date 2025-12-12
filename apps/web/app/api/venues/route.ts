@@ -1,10 +1,10 @@
 // [P0][VENUES][API] Venues list endpoint
 export const dynamic = "force-dynamic";
 
-import { NextResponse } from "next/server";
-import { CreateVenueSchema } from "@fresh-schedules/types";
-
 import { createOrgEndpoint } from "@fresh-schedules/api-framework";
+import { CreateVenueSchema } from "@fresh-schedules/types";
+import { NextResponse } from "next/server";
+
 import { badRequest, ok, serverError } from "../_shared/validation";
 
 /**
@@ -51,12 +51,12 @@ export const POST = createOrgEndpoint({
   input: CreateVenueSchema,
   handler: async ({ input, context, params }) => {
     try {
-      const validated = input;
+      const validated = input as Record<string, unknown>;
 
       const venue = {
         id: `venue-${Date.now()}`,
         orgId: context.org?.orgId,
-        ...validated,
+        ...(validated || {}),
         createdBy: context.auth?.userId,
         createdAt: Date.now(),
       };

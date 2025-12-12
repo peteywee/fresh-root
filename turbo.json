@@ -13,8 +13,13 @@
     "test": {
       "dependsOn": ["^build"]
     },
-    "lint": {},
-    "typecheck": {},
+    "lint": {
+      "outputs": ["eslint-report.json"],
+      "cache": false
+    },
+    "typecheck": {
+      "dependsOn": ["^build"]
+    },
     "dev": {
       "cache": false,
       "persistent": true

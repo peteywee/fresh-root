@@ -1,9 +1,9 @@
 // [P0][ORGS][API] Organizations list endpoint
 
+import { createAuthenticatedEndpoint } from "@fresh-schedules/api-framework";
 import { CreateOrganizationSchema } from "@fresh-schedules/types";
 import { NextResponse } from "next/server";
 
-import { createAuthenticatedEndpoint } from "@fresh-schedules/api-framework";
 import { badRequest, ok, parseJson, serverError } from "../_shared/validation";
 
 // Rate limiting via factory options
@@ -50,23 +50,10 @@ export const GET = createAuthenticatedEndpoint({
  */
 export const POST = createAuthenticatedEndpoint({
   rateLimit: { maxRequests: 50, windowMs: 60000 },
-  handler: async ({ request, context }) => {
+  input: CreateOrganizationSchema,
+  handler: async ({ input, context }) => {
     try {
-      const parsed = await parseJson(request, CreateOrganizationSchema);
-      if (!parsed.success) {
-        return NextResponse.json(
-          {
-            error: {
-              code: "VALIDATION_ERROR",
-              message: "Invalid organization data",
-              details: parsed.details,
-            },
-          },
-          { status: 422 },
-        );
-      }
-
-      const data = parsed.data;
+      const data = input as Record<string, unknown>;
       const created = {
         id: `org-${Date.now()}`,
         name: data.name,

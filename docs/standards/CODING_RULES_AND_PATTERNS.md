@@ -1,13 +1,15 @@
 # Coding Rules and Patterns Guide
-> **Purpose**: Prevent errors at code creation time through clear, enforceable rules based on existing codebase patterns.
+
+> **Purpose**: Prevent errors at code creation time through clear, enforceable rules based on
+> existing codebase patterns.
 >
-> **Last Updated**: 2025-11-28
-> **Version**: 2.0
-> **Based on**: Fresh Schedules v1.1.0 codebase analysis
+> **Last Updated**: 2025-11-28 **Version**: 2.0 **Based on**: Fresh Schedules v1.1.0 codebase
+> analysis
 
 ---
 
 ## Table of Contents
+
 1. [Core Principles](#core-principles)
 2. [The Triad of Trust](#the-triad-of-trust)
 3. [Type Safety Rules](#type-safety-rules)
@@ -23,27 +25,33 @@
 ---
 
 ## Core Principles
+
 ### 1. **Zod-First Type Safety**
+
 All types that cross boundaries (API, database, UI) MUST originate from Zod schemas.
 
 **Why**: Prevents runtime type mismatches and provides automatic validation.
 
 ### 2. **Security by Default**
+
 All API routes MUST have authentication and authorization middleware applied.
 
 **Why**: Prevents unauthorized access and data breaches.
 
 ### 3. **Single Source of Truth**
+
 Types, validation schemas, and business logic should have exactly one canonical location.
 
 **Why**: Eliminates duplication and prevents synchronization bugs.
 
 ### 4. **Fail Fast with Clear Messages**
+
 Validation should occur at boundaries with detailed, actionable error messages.
 
 **Why**: Makes debugging easier and improves developer experience.
 
 ### 5. **Observability from Start**
+
 Logging, tracing, and error tracking should be built-in, not added later.
 
 **Why**: Enables rapid debugging and performance optimization in production.
@@ -51,9 +59,11 @@ Logging, tracing, and error tracking should be built-in, not added later.
 ---
 
 ## The Triad of Trust
+
 Every domain entity that crosses system boundaries MUST be covered by all three components:
 
 ### 1. Schema (Type Definition)
+
 **Location**: `packages/types/src/[entity].ts`
 
 ```typescript
@@ -89,6 +99,7 @@ export type UpdateEntityInput = z.infer<typeof UpdateEntitySchema>;
 ```
 
 ### 2. API Route
+
 **Location**: `apps/web/app/api/[entities]/route.ts`
 
 ```typescript
@@ -126,6 +137,7 @@ export const POST = withSecurity(
 ```
 
 ### 3. Firestore Security Rules
+
 **Location**: `firestore.rules`
 
 ```javascript
@@ -143,12 +155,15 @@ match /entities/{entityId} {
 }
 ```
 
-**Triad Coverage Check**: Run `node scripts/validate-patterns.mjs` to verify all entities have complete triad coverage.
+**Triad Coverage Check**: Run `node scripts/validate-patterns.mjs` to verify all entities have
+complete triad coverage.
 
 ---
 
 ## Type Safety Rules
+
 ### Rule TS-1: Never Duplicate Types
+
 **❌ WRONG**:
 
 ```typescript
@@ -173,6 +188,7 @@ import { User } from "@fresh-schedules/types";
 ```
 
 ### Rule TS-2: Always Use Zod for Validation
+
 **❌ WRONG**:
 
 ```typescript
@@ -198,6 +214,7 @@ export const POST = withSecurity(async (req: NextRequest) => {
 ```
 
 ### Rule TS-3: Derive Schemas, Don't Duplicate
+
 **❌ WRONG**:
 
 ```typescript
@@ -221,6 +238,7 @@ export const CreateUserSchema = UserSchema.omit({
 ```
 
 ### Rule TS-4: Use Strict TypeScript Config
+
 **Required** in all `tsconfig.json` files:
 
 ```json
@@ -238,7 +256,9 @@ export const CreateUserSchema = UserSchema.omit({
 ---
 
 ## API Development Rules
+
 ### Rule API-1: Always Apply Security Middleware
+
 **❌ WRONG**:
 
 ```typescript
@@ -261,6 +281,7 @@ export const GET = withSecurity(
 ```
 
 ### Rule API-2: Middleware Composition Order
+
 **CRITICAL**: Middleware must be applied in this exact order:
 
 ```typescript
@@ -278,6 +299,7 @@ withSecurity(
 ```
 
 ### Rule API-3: Validate ALL Inputs
+
 **❌ WRONG**:
 
 ```typescript
@@ -301,6 +323,7 @@ export const POST = withSecurity(async (req) => {
 ```
 
 ### Rule API-4: Consistent Response Helpers
+
 Use provided response helpers for consistency:
 
 ```typescript
@@ -317,6 +340,7 @@ return serverError("Database connection failed");
 ```
 
 ### Rule API-5: Handle Errors at Boundaries
+
 ```typescript
 export const GET = withSecurity(async (req, context) => {
   try {
@@ -332,6 +356,7 @@ export const GET = withSecurity(async (req, context) => {
 ```
 
 ### Rule API-6: Standard File Header
+
 **REQUIRED** at the top of every file:
 
 ```typescript
@@ -347,7 +372,9 @@ export const GET = withSecurity(async (req, context) => {
 ---
 
 ## Security Rules
+
 ### Rule SEC-1: Session-Based Authentication
+
 All API routes MUST verify session cookies:
 
 ```typescript
@@ -358,6 +385,7 @@ export const GET = withSecurity(
 ```
 
 ### Rule SEC-2: Organization Isolation
+
 Always scope queries to the user's organization:
 
 **❌ WRONG**:
@@ -373,6 +401,7 @@ const schedules = await db.collection(`organizations/${context.orgId}/schedules`
 ```
 
 ### Rule SEC-3: Role-Based Access Control
+
 Use hierarchical role checking:
 
 ```typescript
@@ -387,6 +416,7 @@ export const POST = withSecurity(
 ```
 
 ### Rule SEC-4: Input Sanitization
+
 Let Zod handle sanitization through schema definition:
 
 ```typescript
@@ -398,6 +428,7 @@ export const CreatePostSchema = z.object({
 ```
 
 ### Rule SEC-5: Rate Limiting
+
 Apply appropriate rate limits based on endpoint sensitivity:
 
 ```typescript
@@ -412,6 +443,7 @@ Apply appropriate rate limits based on endpoint sensitivity:
 ```
 
 ### Rule SEC-6: Secure Cookie Flags
+
 Session cookies MUST have these flags:
 
 ```typescript
@@ -424,7 +456,9 @@ res.setHeader(
 ---
 
 ## Error Handling Rules
+
 ### Rule ERR-1: Use Type-Safe Error Classes
+
 **❌ WRONG**:
 
 ```typescript
@@ -453,6 +487,7 @@ throw new ValidationError({ email: ["Invalid email format"] });
 ```
 
 ### Rule ERR-2: Always Log Context
+
 ```typescript
 try {
   await operation();
@@ -469,6 +504,7 @@ try {
 ```
 
 ### Rule ERR-3: Return Structured Errors
+
 **❌ WRONG**:
 
 ```typescript
@@ -491,6 +527,7 @@ return NextResponse.json(
 ```
 
 ### Rule ERR-4: Don't Expose Internal Details
+
 **❌ WRONG**:
 
 ```typescript
@@ -511,7 +548,9 @@ catch (err) {
 ---
 
 ## Testing Rules
+
 ### Rule TEST-1: Co-locate Tests
+
 Place tests next to the code they test:
 
 ```
@@ -522,11 +561,13 @@ Place tests next to the code they test:
 ```
 
 ### Rule TEST-2: Test File Naming
+
 - Unit tests: `[feature].test.ts`
 - Integration tests: `[feature].integration.test.ts`
 - E2E tests: `[feature].e2e.test.ts`
 
 ### Rule TEST-3: Required Test Structure
+
 ```typescript
 // [P1][TEST][TEST] Feature Name tests
 // Tags: P1, TEST, TEST
@@ -558,6 +599,7 @@ describe("Feature Name", () => {
 ```
 
 ### Rule TEST-4: Mock External Dependencies
+
 ```typescript
 import { vi } from "vitest";
 
@@ -575,6 +617,7 @@ vi.mock("@/src/lib/firebase.server", () => ({
 ```
 
 ### Rule TEST-5: Test Coverage Targets
+
 - **Critical paths (P0)**: 90%+ coverage
 - **Important features (P1)**: 80%+ coverage
 - **Standard features (P2)**: 70%+ coverage
@@ -582,7 +625,9 @@ vi.mock("@/src/lib/firebase.server", () => ({
 ---
 
 ## File Organization Rules
+
 ### Rule ORG-1: Monorepo Structure
+
 ```
 fresh-root/
 ├── apps/              # Applications
@@ -598,6 +643,7 @@ fresh-root/
 ```
 
 ### Rule ORG-2: Domain-Driven File Structure
+
 Group by feature/domain, not by technical layer:
 
 **❌ WRONG**:
@@ -623,6 +669,7 @@ Group by feature/domain, not by technical layer:
 ```
 
 ### Rule ORG-3: Import Organization
+
 ESLint enforces this order:
 
 1. External/builtin imports
@@ -644,6 +691,7 @@ import { ok } from "./validation";
 ```
 
 ### Rule ORG-4: Path Aliases
+
 Use configured path aliases for cleaner imports:
 
 ```typescript
@@ -657,7 +705,9 @@ import { helper } from "@/src/lib/helpers";
 ---
 
 ## Common Anti-Patterns to Avoid
+
 ### Anti-Pattern 1: Implicit any Types
+
 **Problem**:
 
 ```typescript
@@ -676,6 +726,7 @@ function process(data: { value: string }): string {
 ```
 
 ### Anti-Pattern 2: Unchecked Array Access
+
 **Problem**:
 
 ```typescript
@@ -695,6 +746,7 @@ const name = array[0]?.name;
 ```
 
 ### Anti-Pattern 3: Manual Type Guards
+
 **Problem**:
 
 ```typescript
@@ -713,6 +765,7 @@ if (parsed.success) {
 ```
 
 ### Anti-Pattern 4: String-Based Status
+
 **Problem**:
 
 ```typescript
@@ -731,6 +784,7 @@ if (status === "pendin") {  // ← Type error caught!
 ```
 
 ### Anti-Pattern 5: Catch Without Logging
+
 **Problem**:
 
 ```typescript
@@ -753,6 +807,7 @@ try {
 ```
 
 ### Anti-Pattern 6: Premature Optimization
+
 **Problem**:
 
 ```typescript
@@ -768,6 +823,7 @@ const data = await db.collection("items").where("id", "==", id).get();
 ```
 
 ### Anti-Pattern 7: God Objects/Functions
+
 **Problem**:
 
 ```typescript
@@ -798,7 +854,9 @@ function deleteSchedule(id: string) {
 ---
 
 ## Pattern Checklists
+
 ### New API Endpoint Checklist
+
 - \[ ] File header with priority and tags
 - \[ ] Schema defined in `packages/types/src/`
 - \[ ] Schema uses Zod with proper validation rules
@@ -815,6 +873,7 @@ function deleteSchedule(id: string) {
 - \[ ] Rate limiting configured appropriately
 
 ### New Domain Entity Checklist
+
 - \[ ] Schema file in `packages/types/src/[entity].ts`
 - \[ ] Base schema with all fields
 - \[ ] Create schema (omit auto-generated fields)
@@ -829,6 +888,7 @@ function deleteSchedule(id: string) {
 - \[ ] Triad coverage verified with validation script
 
 ### Code Review Checklist
+
 - \[ ] No manual type definitions (use Zod inference)
 - \[ ] All API routes have security middleware
 - \[ ] Input validation present on all writes
@@ -844,7 +904,9 @@ function deleteSchedule(id: string) {
 ---
 
 ## Automated Validation
+
 ### Pattern Validation Script
+
 Run automated pattern checks:
 
 ```bash
@@ -854,26 +916,31 @@ node scripts/validate-patterns.mjs
 **Enforced Patterns**:
 
 #### Tier 0 (SECURITY) - Blocks CI/CD
+
 - API routes must have security wrappers
 - Write operations must validate input
 - Firestore rules must deny by default
 
 #### Tier 1 (INTEGRITY) - Blocks CI/CD
+
 - Schema files must import Zod
 - Types must use `z.infer<>` pattern
 - Proper error handling required
 
 #### Tier 2 (ARCHITECTURE) - Warning
+
 - File headers should be present
 - Consistent naming conventions
 - Proper code organization
 
 #### Tier 3 (STYLE) - Informational
+
 - Code formatting
 - Comment quality
 - Documentation completeness
 
 ### Minimum Score Requirement
+
 **Default**: 90 points
 
 Score calculation:
@@ -884,13 +951,14 @@ Score calculation:
 - Tier 2 violation: -2 points each
 - Tier 3 violation: -0.5 points each
 
-**Below 90**: CI/CD fails
-**Any Tier 0/1**: CI/CD blocks immediately
+**Below 90**: CI/CD fails **Any Tier 0/1**: CI/CD blocks immediately
 
 ---
 
 ## Quick Reference: Common Patterns
+
 ### Creating a New Entity
+
 ```bash
 # 1. Define schema
 touch packages/types/src/my-entity.ts
@@ -909,6 +977,7 @@ node scripts/validate-patterns.mjs
 ```
 
 ### Adding Authentication to Route
+
 ```typescript
 // Before
 export async function GET(request: NextRequest) {
@@ -925,6 +994,7 @@ export const GET = withSecurity(
 ```
 
 ### Adding Role-Based Authorization
+
 ```typescript
 export const POST = withSecurity(
   requireOrgMembership(
@@ -940,20 +1010,21 @@ export const POST = withSecurity(
 ---
 
 ## Summary
+
 Following these rules ensures:
 
-✅ **Type Safety**: Zod-first approach prevents type mismatches
-✅ **Security**: Authentication and authorization built-in
-✅ **Consistency**: Standard patterns across codebase
-✅ **Maintainability**: Clear structure and documentation
-✅ **Quality**: Automated validation catches issues early
-✅ **Observability**: Logging and tracing from the start
+✅ **Type Safety**: Zod-first approach prevents type mismatches ✅ **Security**: Authentication and
+authorization built-in ✅ **Consistency**: Standard patterns across codebase ✅ **Maintainability**:
+Clear structure and documentation ✅ **Quality**: Automated validation catches issues early ✅
+**Observability**: Logging and tracing from the start
 
-**Remember**: The goal is to catch errors at **code creation time**, not at runtime or in production.
+**Remember**: The goal is to catch errors at **code creation time**, not at runtime or in
+production.
 
 ---
 
 ## Related Documentation
+
 - [Context Manifest](/.github/agents/CONTEXT_MANIFEST.md) - Quick reference for codebase invariants
 - [Architecture Documentation](/docs/COMPLETE_TECHNICAL_DOCUMENTATION.md) - Full technical details
 - [Contributing Guide](/docs/CONTRIBUTING.md) - How to contribute
@@ -961,5 +1032,4 @@ Following these rules ensures:
 
 ---
 
-**Questions or Improvements?**
-Open an issue or PR in the repository.
+**Questions or Improvements?** Open an issue or PR in the repository.

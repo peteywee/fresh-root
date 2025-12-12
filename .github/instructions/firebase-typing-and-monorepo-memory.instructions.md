@@ -1,7 +1,9 @@
 ---
-description: "Key learnings from Firebase SDK v12 typing strategy and monorepo dependency resolution"
-applyTo: "apps/web/app/api/**/*.ts,apps/web/lib/**/*.ts,packages/*/**/*.ts"
----
+
+description: "Key learnings from Firebase SDK v12 typing strategy and monorepo dependency
+resolution"
+
+## applyTo: "apps/web/app/api/**/\*.ts,apps/web/lib/**/_.ts,packages/_/\*\*/\*.ts"
 
 # Firebase & Monorepo Dependency Management Memory
 
@@ -9,7 +11,9 @@ Core patterns for maintaining a TypeScript monorepo with Firebase as a primary d
 
 ## Firebase SDK v12 Type Safety Pattern
 
-Firebase SDK v12 client and admin SDKs intentionally return `any`-typed values from core APIs (`snap.data()`, `getFirestore()`, `query.getDocs()`, etc.). This is a **documented limitation of the SDK**, not a bug.
+Firebase SDK v12 client and admin SDKs intentionally return `any`-typed values from core APIs
+(`snap.data()`, `getFirestore()`, `query.getDocs()`, etc.). This is a **documented limitation of the
+SDK**, not a bug.
 
 **Best pattern**: Use **pragmatic suppression + strategic wrappers**, not fight the SDK design:
 
@@ -29,14 +33,14 @@ Firebase SDK v12 client and admin SDKs intentionally return `any`-typed values f
    }
    ```
 
-2. **Use type assertions** on Firebase results with confidence:
+1. **Use type assertions** on Firebase results with confidence:
 
    ```typescript
    const snap = await getDoc(docRef);
    const data = snap.data() as UserData; // Safe - Firebase guarantees structure
    ```
 
-3. **Create type-safe wrapper functions** for complex operations (optional enhancement):
+1. **Create type-safe wrapper functions** for complex operations (optional enhancement):
    ```typescript
    export async function getDocWithType<T>(
      db: Firestore,
@@ -47,11 +51,13 @@ Firebase SDK v12 client and admin SDKs intentionally return `any`-typed values f
    }
    ```
 
-**Avoid**: Sprinkling `@ts-ignore`, using `//@ts-nocheck`, or adding type guards everywhere. Centralizing the suppression is cleaner.
+**Avoid**: Sprinkling `@ts-ignore`, using `//@ts-nocheck`, or adding type guards everywhere.
+Centralizing the suppression is cleaner.
 
 ## Monorepo React Peer Dependency Resolution
 
-When using React in multiple packages, **pnpm may resolve multiple React versions** if peerDependencies are not explicitly set.
+When using React in multiple packages, **pnpm may resolve multiple React versions** if
+peerDependencies are not explicitly set.
 
 **Critical pattern**: Add explicit React peerDependencies to every package that uses React:
 
@@ -83,13 +89,15 @@ Then pin React in the root package.json:
 }
 ```
 
-**Why**: pnpm creates **multiple dependency trees** unless explicitly constrained. This causes two copies of React in `node_modules`, leading to React Hook failures and type mismatches.
+**Why**: pnpm creates **multiple dependency trees** unless explicitly constrained. This causes two
+copies of React in `node_modules`, leading to React Hook failures and type mismatches.
 
 ## TypeScript no-unused-vars & require-await Patterns
 
 ### no-unused-vars (Prefix with Underscore)
 
-ESLint detects legitimate unused parameters in callbacks and route handlers. **Prefix with underscore** instead of removing:
+ESLint detects legitimate unused parameters in callbacks and route handlers. **Prefix with
+underscore** instead of removing:
 
 ```typescript
 // ❌ Avoid: Removing parameter may break Next.js route semantics
@@ -99,7 +107,8 @@ export async function POST(request: Request) { ... }
 export async function POST(_request: Request) { ... }
 ```
 
-**Why**: Next.js API routes require specific parameter names (`request`, `response`, `{ params }`, etc.). Renaming breaks the framework.
+**Why**: Next.js API routes require specific parameter names (`request`, `response`, `{ params }`,
+etc.). Renaming breaks the framework.
 
 ### require-await (Remove async or Add Await)
 
@@ -135,7 +144,8 @@ Use **file pattern rules** in flat config for package-specific suppressions:
 
 ## Dependency Removal Gotchas
 
-Root `package.json` should **only list workspace packages in `pnpm-workspace.yaml`**, not in `dependencies`:
+Root `package.json` should **only list workspace packages in `pnpm-workspace.yaml`**, not in
+`dependencies`:
 
 ```json
 // ❌ Root package.json - WRONG
@@ -149,7 +159,8 @@ Root `package.json` should **only list workspace packages in `pnpm-workspace.yam
 // pnpm-workspace.yaml lists: packages/types, packages/config, etc.
 ```
 
-**Why**: npm registry doesn't have local workspace packages. pnpm reads `pnpm-workspace.yaml` to resolve them correctly.
+**Why**: npm registry doesn't have local workspace packages. pnpm reads `pnpm-workspace.yaml` to
+resolve them correctly.
 
 ## TypeScript Schema Module Resolution in Monorepos
 
@@ -157,6 +168,8 @@ When creating new schema files in `packages/types/src/` and immediately importin
 
 **Common issue**: TypeScript can't resolve newly created exports even after adding to `index.ts`.
 
-**Solution**: Use **inline Zod schemas** in route files until module resolution stabilizes, then refactor to package imports once fully tested.
+**Solution**: Use **inline Zod schemas** in route files until module resolution stabilizes, then
+refactor to package imports once fully tested.
 
-**See**: `typescript-schema-pattern-memory.instructions.md` for detailed pattern and workaround steps.
+**See**: `typescript-schema-pattern-memory.instructions.md` for detailed pattern and workaround
+steps.

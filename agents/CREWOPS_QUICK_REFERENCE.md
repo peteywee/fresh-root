@@ -1,7 +1,7 @@
 # CREWOPS Quick Reference Card
 
-**Status**: ✅ ACTIVE (Auto-Engaging)  
-**Session**: Automatic  
+**Status**: ✅ ACTIVE (Auto-Engaging)\
+**Session**: Automatic\
 **Binding**: Immutable
 
 ---
@@ -194,11 +194,11 @@ If critical assumption cannot be verified → protocol blocks and states why.
 
 **Required gates for code work**:
 
-- [ ] `pnpm install` succeeds
-- [ ] `pnpm typecheck` passes
-- [ ] `pnpm build` succeeds
-- [ ] Core flows work (business action verified)
-- [ ] Security checks align to RBAC
+- \[ ] `pnpm install` succeeds
+- \[ ] `pnpm typecheck` passes
+- \[ ] `pnpm build` succeeds
+- \[ ] Core flows work (business action verified)
+- \[ ] Security checks align to RBAC
 
 If not verified: Protocol states clearly what remains + how to verify.
 
@@ -314,11 +314,11 @@ Red Team: ✅ Veto passed
 - Secrets via env vars
 
 ✅ VALIDATION GATES
-- [ ] pnpm install → pass
-- [ ] pnpm typecheck → pass
-- [ ] pnpm test → pass (new tests included)
-- [ ] Core flow → verified
-- [ ] Rollback → ready
+- [[ ]] pnpm install → pass
+- [[ ]] pnpm typecheck → pass
+- [[ ]] pnpm test → pass (new tests included)
+- [[ ]] Core flow → verified
+- [[ ]] Rollback → ready
 ```
 
 ---
@@ -335,8 +335,8 @@ No micromanagement needed. The Constitution and Phase framework do the heavy lif
 
 ---
 
-**Status**: ✅ Protocol Active  
-**Binding**: Automatic  
-**Ready**: Yes  
-**Version**: 1.0  
+**Status**: ✅ Protocol Active\
+**Binding**: Automatic\
+**Ready**: Yes\
+**Version**: 1.0\
 **Last Updated**: December 4, 2025

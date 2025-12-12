@@ -1,6 +1,7 @@
 // [P0][ONBOARDING][ADMIN][API] Admin form endpoint
 
 import { createAuthenticatedEndpoint } from "@fresh-schedules/api-framework";
+
 import { ok, serverError } from "../../_shared/validation";
 
 /**

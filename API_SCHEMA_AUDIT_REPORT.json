@@ -1,0 +1,188 @@
+{
+  "totalRoutesFound": 35,
+  "routesWithInput": 24,
+  "routesWithoutInput": 11,
+  "brokenImports": [
+    {
+      "routePath": "apps/web/app/api/auth/mfa/setup/route.ts",
+      "schemaName": "MFASetupSchema",
+      "schemaFile": "NOT FOUND - Defined inline in route",
+      "exists": false,
+      "isImported": true,
+      "isExportedFromIndex": false,
+      "issue": "Schema is defined inline in the route instead of exported from packages/types"
+    },
+    {
+      "routePath": "apps/web/app/api/auth/mfa/verify/route.ts",
+      "schemaName": "MFAVerifySchema",
+      "schemaFile": "NOT FOUND - Likely defined inline in route",
+      "exists": false,
+      "isImported": true,
+      "isExportedFromIndex": false,
+      "issue": "Schema is defined inline in the route instead of exported from packages/types"
+    },
+    {
+      "routePath": "apps/web/app/api/_template/route.ts",
+      "schemaName": "TemplatePostSchema",
+      "schemaFile": "NOT FOUND - Template schema",
+      "exists": false,
+      "isImported": false,
+      "isExportedFromIndex": false,
+      "issue": "Template file has placeholder schema that doesn't exist in packages/types"
+    },
+    {
+      "routePath": "apps/web/app/api/onboarding/activate-network/route.ts",
+      "schemaName": "ActivateNetworkSchema",
+      "schemaFile": "NOT FOUND",
+      "exists": false,
+      "isImported": false,
+      "isExportedFromIndex": false,
+      "issue": "Schema referenced but never defined anywhere"
+    },
+    {
+      "routePath": "apps/web/app/api/organizations/[id]/members/route.ts",
+      "schemaName": "AddMemberSchema",
+      "schemaFile": "NOT FOUND - Defined inline in route",
+      "exists": false,
+      "isImported": true,
+      "isExportedFromIndex": false,
+      "issue": "Schema is defined inline in the route instead of exported from packages/types"
+    },
+    {
+      "routePath": "apps/web/app/api/organizations/[id]/members/route.ts",
+      "schemaName": "UpdateMemberSchema",
+      "schemaFile": "NOT FOUND - Defined inline in route",
+      "exists": false,
+      "isImported": true,
+      "isExportedFromIndex": false,
+      "issue": "Schema is defined inline in the route instead of exported from packages/types"
+    },
+    {
+      "routePath": "apps/web/app/api/organizations/[id]/members/route.ts",
+      "schemaName": "RemoveMemberSchema",
+      "schemaFile": "NOT FOUND - Defined inline in route",
+      "exists": false,
+      "isImported": true,
+      "isExportedFromIndex": false,
+      "issue": "Schema is defined inline in the route instead of exported from packages/types"
+    },
+    {
+      "routePath": "apps/web/app/api/positions/[id]/route.ts",
+      "schemaName": "UpdatePositionSchema",
+      "schemaFile": "positions.ts",
+      "exists": true,
+      "isImported": false,
+      "isExportedFromIndex": true,
+      "issue": "Schema exists in positions.ts and is exported from index but NOT imported in route; route defines inline copy"
+    }
+  ],
+  "missingSchemaFiles": [
+    "ActivateNetworkSchema",
+    "AddMemberSchema",
+    "MFASetupSchema",
+    "MFAVerifySchema",
+    "RemoveMemberSchema",
+    "TemplatePostSchema",
+    "UpdateMemberSchema"
+  ],
+  "schemaMigrationNeeded": {
+    "auth/mfa/setup": {
+      "schemaName": "MFASetupSchema",
+      "action": "Move inline z.object({}).passthrough().optional() from route.ts to packages/types/src/auth.ts",
+      "status": "INLINE DEFINITION"
+    },
+    "auth/mfa/verify": {
+      "schemaName": "MFAVerifySchema",
+      "action": "Check if defined inline; migrate to packages/types/src/auth.ts",
+      "status": "NEEDS VERIFICATION"
+    },
+    "onboarding/activate-network": {
+      "schemaName": "ActivateNetworkSchema",
+      "action": "Define schema in packages/types/src/networks.ts or onboarding.ts",
+      "status": "MISSING"
+    },
+    "organizations/[id]/members": {
+      "schemas": ["AddMemberSchema", "UpdateMemberSchema", "RemoveMemberSchema"],
+      "action": "Migrate inline schemas from route.ts to packages/types/src/memberships.ts",
+      "status": "INLINE DEFINITIONS"
+    },
+    "positions/[id]": {
+      "schemaName": "UpdatePositionSchema",
+      "action": "Remove inline copy and import from packages/types",
+      "currentImport": "Not imported despite being exported from packages/types/src/positions.ts",
+      "status": "IMPORT MISSING"
+    },
+    "_template": {
+      "schemaName": "TemplatePostSchema",
+      "action": "Template file - update with real schema when creating new route",
+      "status": "TEMPLATE"
+    }
+  },
+  "routesWithoutInputDeclarations": [
+    "apps/web/app/api/health/route.ts",
+    "apps/web/app/api/healthz/route.ts",
+    "apps/web/app/api/metrics/route.ts",
+    "apps/web/app/api/onboarding/admin-form/route.ts",
+    "apps/web/app/api/onboarding/verify-eligibility/route.ts",
+    "apps/web/app/api/organizations/route.ts",
+    "apps/web/app/api/schedules/[id]/route.ts",
+    "apps/web/app/api/schedules/route.ts",
+    "apps/web/app/api/session/route.ts",
+    "apps/web/app/api/users/profile/route.ts",
+    "apps/web/app/api/zones/route.ts"
+  ],
+  "routesWithProperImports": [
+    "apps/web/app/api/attendance/route.ts → CreateAttendanceRecordSchema (✓ imported from attendance.ts)",
+    "apps/web/app/api/batch/route.ts → CreateBatchSchema (✓ imported from batch.ts)",
+    "apps/web/app/api/internal/backup/route.ts → BackupRequestSchema (✓ imported from internal.ts)",
+    "apps/web/app/api/items/route.ts → CreateItemSchema (✓ imported from items.ts)",
+    "apps/web/app/api/join-tokens/route.ts → CreateJoinTokenSchema (✓ imported from join-tokens.ts)",
+    "apps/web/app/api/onboarding/create-network-corporate/route.ts → CreateCorporateOnboardingSchema (✓ imported)",
+    "apps/web/app/api/onboarding/create-network-org/route.ts → CreateNetworkSchema (✓ imported from networks.ts)",
+    "apps/web/app/api/onboarding/join-with-token/route.ts → JoinWithTokenSchema (✓ imported from onboarding.ts)",
+    "apps/web/app/api/onboarding/profile/route.ts → OnboardingProfileSchema (✓ imported from onboarding.ts)",
+    "apps/web/app/api/organizations/[id]/members/[memberId]/route.ts → UpdateMemberApiSchema (✓ imported from memberships.ts)",
+    "apps/web/app/api/organizations/[id]/route.ts → UpdateOrganizationSchema (✓ imported from orgs.ts)",
+    "apps/web/app/api/positions/route.ts → CreatePositionSchema (✓ imported from positions.ts)",
+    "apps/web/app/api/publish/route.ts → PublishRequestSchema (✓ imported from internal.ts)",
+    "apps/web/app/api/session/bootstrap/route.ts → SessionBootstrapSchema (✓ imported from session.ts)",
+    "apps/web/app/api/shifts/[id]/route.ts → UpdateShiftSchema (✓ imported from shifts.ts)",
+    "apps/web/app/api/shifts/route.ts → CreateShiftSchema (✓ imported from shifts.ts)",
+    "apps/web/app/api/venues/route.ts → CreateVenueSchema (✓ imported from venues.ts)",
+    "apps/web/app/api/widgets/route.ts → CreateItemSchema (✓ imported from items.ts)"
+  ],
+  "summaryOfIssues": "CRITICAL TRIAD INTEGRITY ISSUE: 8 routes have broken schema references. ROOT CAUSES: (1) 5 routes define schemas inline instead of exporting from packages/types (MFASetupSchema, MFAVerifySchema, AddMemberSchema, UpdateMemberSchema, RemoveMemberSchema); (2) 2 schemas completely missing (ActivateNetworkSchema, TemplatePostSchema); (3) 1 route has inline copy when schema already exported (UpdatePositionSchema in positions/[id]). This violates the Triad of Trust pattern - all schemas MUST be defined in packages/types/src and imported by routes.",
+  "recommendedFixes": [
+    {
+      "priority": "P0",
+      "action": "Migrate inline MFA schemas to packages/types/src/auth.ts",
+      "routes": ["auth/mfa/setup", "auth/mfa/verify"],
+      "effort": "15 min"
+    },
+    {
+      "priority": "P0",
+      "action": "Migrate inline member schemas to packages/types/src/memberships.ts",
+      "routes": ["organizations/[id]/members"],
+      "schemas": ["AddMemberSchema", "UpdateMemberSchema", "RemoveMemberSchema"],
+      "effort": "20 min"
+    },
+    {
+      "priority": "P0",
+      "action": "Remove inline UpdatePositionSchema copy and import from packages/types",
+      "routes": ["positions/[id]"],
+      "effort": "5 min"
+    },
+    {
+      "priority": "P1",
+      "action": "Define missing ActivateNetworkSchema in packages/types/src/networks.ts",
+      "routes": ["onboarding/activate-network"],
+      "effort": "10 min"
+    },
+    {
+      "priority": "P2",
+      "action": "Update template route with realistic schema",
+      "routes": ["_template"],
+      "effort": "5 min"
+    }
+  ]
+}

@@ -8,7 +8,8 @@ priority: 3
 
 ## Core Principle
 
-**Security-first mindset.** When in doubt, choose the more secure option. Never sacrifice security for convenience.
+**Security-first mindset.** When in doubt, choose the more secure option. Never sacrifice security
+for convenience.
 
 ---
 
@@ -30,7 +31,7 @@ export const GET = createOrgEndpoint({
   handler: async ({ context }) => {
     const data = await db.collection(`orgs/${context.org!.orgId}/schedules`).get();
     return NextResponse.json(data);
-  }
+  },
 });
 ```
 
@@ -128,7 +129,7 @@ export const POST = createRateLimitedEndpoint({
   rateLimit: { maxRequests: 5, windowMs: 60000 }, // 5 attempts per minute
   handler: async ({ request }) => {
     // Login logic
-  }
+  },
 });
 ```
 
@@ -168,6 +169,7 @@ function validateUrl(url: string): boolean {
 ### Never Generate Harmful Content
 
 Refuse requests for:
+
 - Illegal activities
 - Violence or harm
 - Harassment or hate speech
@@ -188,7 +190,7 @@ const prompt = `You are helpful. User says: ${userInput}`;
 const systemPrompt = "You are a helpful coding assistant.";
 const messages = [
   { role: "system", content: systemPrompt },
-  { role: "user", content: sanitizeInput(userInput) }
+  { role: "user", content: sanitizeInput(userInput) },
 ];
 ```
 
@@ -218,7 +220,7 @@ export const GET = createOrgEndpoint({
   roles: ["manager"],
   handler: async ({ context }) => {
     // Auth, org context, rate limiting automatic
-  }
+  },
 });
 ```
 
@@ -252,10 +254,13 @@ rateLimit: { maxRequests: 10, windowMs: 60000 }
 Automatic for POST/PUT/PATCH/DELETE via SDK factory.
 
 Disable only for webhooks:
+
 ```typescript
 export const POST = createPublicEndpoint({
   csrf: false, // Only for external webhooks
-  handler: async () => { /* ... */ }
+  handler: async () => {
+    /* ... */
+  },
 });
 ```
 

@@ -1,12 +1,16 @@
 # Scheduling Ledger — SDK Deprecation & Migration Path
-> **Purpose:** Track deprecated scheduling patterns, legacy components, and migration roadmap to framework-integrated scheduling.\
+
+> **Purpose:** Track deprecated scheduling patterns, legacy components, and migration roadmap to
+> framework-integrated scheduling.\
 > **Status:** Active\
 > **Last Updated:** November 30, 2025
 
 ---
 
 ## 1. Deprecation Mapping
+
 ### Legacy Components Under Consolidation
+
 | Component                      | Location                                    | Status     | Replacement                    | Migration Deadline |
 | ------------------------------ | ------------------------------------------- | ---------- | ------------------------------ | ------------------ |
 | **Firestore Task Scheduler**   | `src/services/scheduler/firestore-tasks.ts` | Deprecated | Cloud Functions `onSchedule`   | Q1 2026            |
@@ -18,10 +22,13 @@
 ---
 
 ## 2. Legacy Component Analysis
+
 ### 2.1 Firestore Task Scheduler
+
 **File:** `src/services/scheduler/firestore-tasks.ts`
 
-**What it is:** Custom task storage and execution coordinator using Firestore collection `_scheduler`.
+**What it is:** Custom task storage and execution coordinator using Firestore collection
+`_scheduler`.
 
 **Why it exists:** Pre-framework solution for delayed task execution and retry management.
 
@@ -74,6 +81,7 @@ export const archiveInvoices = onSchedule(
 ---
 
 ### 2.2 Custom Retry Handler
+
 **File:** `src/lib/scheduling/retry-handler.ts`
 
 **What it is:** Manual exponential backoff implementation with circuit breaker pattern.
@@ -132,6 +140,7 @@ const task = onSchedule(
 ---
 
 ### 2.3 Manual Cron Job Registry
+
 **Location:** `functions/scheduled/`
 
 **Current files:**
@@ -196,6 +205,7 @@ export const scheduledTasks = tasks.map((config) => createScheduledTask(config))
 ---
 
 ### 2.4 Home-Grown Task Queue
+
 **Location:** `src/services/queue/*`
 
 **What it is:** Custom pub/sub-based queue for background work processing.
@@ -263,13 +273,15 @@ export async function handleUserSignup(userId: string) {
 ---
 
 ### 2.5 Ad-Hoc Lock Coordination
+
 **Locations:**
 
-<<<<<<< HEAD:docs/archive/mega-report-A/mega-book/fresh_root_mega_report_A/06_SDK_DEPRECATION_LEDGER/scheduling_ledger.md
-=======
+# <<<<<<< HEAD:docs/archive/mega-report-A/mega-book/fresh_root_mega_report_A/06_SDK_DEPRECATION_LEDGER/scheduling_ledger.md
+
 **Locations:**
 
->>>>>>> pr-128:docs/mega-book/fresh_root_mega_report_A/06_SDK_DEPRECATION_LEDGER/scheduling_ledger.md
+> > > > > > > pr-128:docs/mega-book/fresh_root_mega_report_A/06_SDK_DEPRECATION_LEDGER/scheduling_ledger.md
+
 - `functions/scheduled/maintenance.ts` (Firestore-based lock)
 - `src/services/scheduler/locks.ts` (homegrown implementation)
 
@@ -342,8 +354,11 @@ export async function releaseLock(lockKey: string, lockValue: string): Promise<b
 ---
 
 ## 3. Before & After Examples
+
 ### Example 1: Scheduled Maintenance Task
+
 #### ❌ BEFORE (Legacy Pattern)
+
 ```typescript
 // functions/scheduled/maintenance.ts
 import { onSchedule } from "firebase-functions/v1/pubsub";
@@ -409,6 +424,7 @@ export const performDailyMaintenance = onSchedule("every 24 hours", async (conte
 - No context about execution environment
 
 #### ✅ AFTER (Framework Pattern)
+
 ```typescript
 // functions/scheduled/maintenance.ts
 import { onSchedule } from "firebase-functions/v2/scheduler";
@@ -503,7 +519,9 @@ export const performDailyMaintenance = onSchedule(
 ---
 
 ### Example 2: Event-Triggered Deferred Task
+
 #### ❌ BEFORE (Custom Queue)
+
 ```typescript
 // DEPRECATED: Custom pub/sub-based queue
 import { enqueueTask } from "@/services/queue";
@@ -537,6 +555,7 @@ export const invoiceQueueWorker = onMessagePublished(
 ```
 
 #### ✅ AFTER (Cloud Tasks)
+
 ```typescript
 // NEW PATTERN: Cloud Tasks with HTTP handler
 import { v2 as tasksV2 } from "@google-cloud/tasks";
@@ -623,7 +642,9 @@ export const processInvoiceTask = onRequest(
 ---
 
 ## 4. Migration Checklist
+
 ### Phase 1: Prepare (Q4 2025 - December)
+
 - \[ ] Audit all scheduled tasks in `functions/scheduled/`
 - \[ ] Document retry policies for each task
 - \[ ] Identify tasks requiring distributed locking
@@ -631,6 +652,7 @@ export const processInvoiceTask = onRequest(
 - \[ ] Create `SchedulingPolicy` codec with validation
 
 ### Phase 2: Framework Migration (Q1 2026 - January-March)
+
 - \[ ] Migrate `firestore-tasks.ts` to `onSchedule` triggers
 - \[ ] Replace `retryWithBackoff` with framework config
 - \[ ] Implement Redis-backed distributed locking
@@ -638,6 +660,7 @@ export const processInvoiceTask = onRequest(
 - \[ ] Run parallel execution (old + new) for validation
 
 ### Phase 3: Queue Migration (Q2 2026 - April-June)
+
 - \[ ] Migrate custom queue to Cloud Tasks
 - \[ ] Update event handlers to use Cloud Tasks SDK
 - \[ ] Deprecate pub/sub-based queue
@@ -645,6 +668,7 @@ export const processInvoiceTask = onRequest(
 - \[ ] Monitor for duplicate execution
 
 ### Phase 4: Cleanup (Q3 2026 - July-September)
+
 - \[ ] Remove deprecated components
 - \[ ] Consolidate scheduled task registry
 - \[ ] Archive legacy code to audit folder
@@ -654,6 +678,7 @@ export const processInvoiceTask = onRequest(
 ---
 
 ## 5. Risk Assessment & Mitigation
+
 | Risk                                         | Severity | Mitigation                                                             |
 | -------------------------------------------- | -------- | ---------------------------------------------------------------------- |
 | **Duplicate execution during migration**     | High     | Run canary deployment with duplicate detection (hash-based)            |
@@ -665,21 +690,25 @@ export const processInvoiceTask = onRequest(
 ---
 
 ## 6. Cross-References
+
 - **L2 Architecture:** See `03_SUBSYSTEMS_L2/scheduling.md` for comprehensive subsystem analysis
 - **Task Dependency Graph:** See `04_COMPONENTS_L3/task-coordination.md` for multi-step workflows
-- **Observability Standards:** See `04_COMPONENTS_L3/logging-standards.md` for structured logging codec
+- **Observability Standards:** See `04_COMPONENTS_L3/logging-standards.md` for structured logging
+  codec
 - **Cloud Tasks Documentation:** <https://cloud.google.com/tasks/docs>
 - **Redlock Algorithm:** <https://redis.io/docs/manual/patterns/distributed-locks/>
 
 ---
 
 ## 7. Version History
-<<<<<<< HEAD:docs/archive/mega-report-A/mega-book/fresh_root_mega_report_A/06_SDK_DEPRECATION_LEDGER/scheduling_ledger.md
-| Date       | Author            | Changes                                           |
-| ---------- | ----------------- | ------------------------------------------------- |
+
+| Date | Author | Changes |
+| ---- | ------ | ------- |
+
 =======
 
 | Date | Author | Changes |
-|------|--------|---------|
->>>>>>> pr-128:docs/mega-book/fresh_root_mega_report_A/06_SDK_DEPRECATION_LEDGER/scheduling_ledger.md
-| 2025-11-30 | Architecture Team | Initial deprecation mapping and migration roadmap |
+| ---- | ------ | ------- |
+
+> > > > > > > pr-128:docs/mega-book/fresh_root_mega_report_A/06_SDK_DEPRECATION_LEDGER/scheduling_ledger.md
+> > > > > > > | 2025-11-30 | Architecture Team | Initial deprecation mapping and migration roadmap |

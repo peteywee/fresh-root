@@ -19,16 +19,19 @@ npm install --save-dev testintel
 ## Quick Start
 
 ### 1. Run Help
+
 ```bash
 testintel --help
 ```
 
 ### 2. Generate Test Data
+
 ```bash
 testintel data 10  # Generate 10 mock test users
 ```
 
 ### 3. Scan for Security Issues
+
 ```bash
 testintel security apps/web/app/api
 ```
@@ -38,6 +41,7 @@ testintel security apps/web/app/api
 ## CLI Commands
 
 ### `testintel run [mode]`
+
 **Status:** ✅ Fully Implemented  
 **What it does:** Runs your entire test suite with full or quick mode
 
@@ -47,12 +51,14 @@ testintel run quick        # Quick smoke tests
 ```
 
 **Exit codes:**
+
 - `0` = All tests passed
 - `1` = Tests failed
 
 ---
 
 ### `testintel security [paths]`
+
 **Status:** ✅ Working (Basic)  
 **What it does:** Scans API routes for common security vulnerabilities
 
@@ -63,6 +69,7 @@ testintel security apps/web lib functions   # Multiple paths
 ```
 
 **Checks for:**
+
 - Hardcoded secrets/credentials
 - SQL injection vulnerabilities
 - Missing authentication
@@ -72,12 +79,14 @@ testintel security apps/web lib functions   # Multiple paths
 **Output:** Saves JSON report to `security-report.json`
 
 **Exit codes:**
+
 - `0` = No critical issues
 - `1` = Critical vulnerabilities found
 
 ---
 
 ### `testintel e2e <action> [paths]`
+
 **Status:** ⚠️ Limited (Needs project context)  
 **What it does:** Generate, list, and run E2E tests from API routes
 
@@ -89,16 +98,19 @@ testintel e2e run                   # Run all E2E tests
 ```
 
 **Requirements:**
+
 - Must run from project root (not global install)
 - Requires Playwright installed: `npm install -D @playwright/test`
 
 **Generates:** Test files in `tests/e2e/` matching Playwright format
 
-**Limitation:** When installed globally, can't find project API routes. Use local installation or run from project directory.
+**Limitation:** When installed globally, can't find project API routes. Use local installation or
+run from project directory.
 
 ---
 
 ### `testintel prioritize [limit]`
+
 **Status:** ⚠️ Demo Mode  
 **What it does:** AI-powered test ordering based on failure history and code changes
 
@@ -108,6 +120,7 @@ testintel prioritize 50        # Top 50 tests
 ```
 
 **Currently:** Shows mock data. Real implementation requires:
+
 - Test execution history file
 - Git integration
 - ML model training
@@ -115,6 +128,7 @@ testintel prioritize 50        # Top 50 tests
 ---
 
 ### `testintel predict [limit]`
+
 **Status:** ⚠️ Demo Mode  
 **What it does:** Predict which tests are likely to fail
 
@@ -128,6 +142,7 @@ testintel predict 100         # Next 100 tests
 ---
 
 ### `testintel parallel [limit]`
+
 **Status:** ⚠️ Demo Mode  
 **What it does:** Optimize test parallelization strategy
 
@@ -141,6 +156,7 @@ testintel parallel 50         # Optimize 50 tests
 ---
 
 ### `testintel data [count]`
+
 **Status:** ✅ Fully Implemented  
 **What it does:** Generate mock test data (users, organizations, etc.)
 
@@ -151,7 +167,8 @@ testintel data 20            # Generate 20 users
 
 **Output:** JSON array of test users with realistic data
 
-**Use for:** 
+**Use for:**
+
 - Seeding databases
 - E2E test fixtures
 - Load testing
@@ -159,12 +176,14 @@ testintel data 20            # Generate 20 users
 ---
 
 ### `testintel --help` / `testintel help`
+
 **Status:** ✅ Working  
 Shows all available commands and examples
 
 ---
 
 ### `testintel --version` / `testintel -v`
+
 **Status:** ✅ Working  
 Displays the current version
 
@@ -186,6 +205,7 @@ Create in your project root to customize CLI behavior:
 ```
 
 **Options:**
+
 - `stages`: Which commands to run in sequence
 - `parallel`: Run tests in parallel
 - `verbose`: Show detailed output
@@ -196,6 +216,7 @@ Create in your project root to customize CLI behavior:
 ## Output and Reports
 
 ### Security Reports
+
 Saved to: `security-report.json`
 
 ```json
@@ -212,6 +233,7 @@ Saved to: `security-report.json`
 ```
 
 ### Test Data Output
+
 Printed to stdout as JSON:
 
 ```json
@@ -234,7 +256,7 @@ Printed to stdout as JSON:
 ```yaml
 - name: Run Security Scan
   run: npm install -g testintel && testintel security apps/web/app/api
-  
+
 - name: Run Tests
   run: testintel run
 ```
@@ -269,7 +291,8 @@ stage('Test Intelligence') {
 
 **Problem:** E2E generation finds 0 routes
 
-**Solution:** 
+**Solution:**
+
 1. Run from project root: `cd /path/to/project && testintel e2e generate`
 2. Ensure API routes exist at: `apps/web/app/api/**/route.ts`
 3. Check routes are exported: `export const GET = ...` or `export const POST = ...`
@@ -279,6 +302,7 @@ stage('Test Intelligence') {
 **Problem:** Global install can't find dependencies
 
 **Solution:**
+
 1. Use local install: `npm install --save-dev testintel`
 2. Run via npx: `npx testintel --help`
 3. Or reinstall globally: `npm install -g testintel@latest`
@@ -286,6 +310,7 @@ stage('Test Intelligence') {
 ### Exit code 1 but no visible errors
 
 **Solution:** Check the JSON report files:
+
 - `security-report.json` (for security scans)
 - `test-execution-history.json` (for test history)
 
@@ -309,6 +334,7 @@ testintel run quick
 ### Parallel Execution
 
 Enable in config:
+
 ```json
 {
   "parallel": true
@@ -316,6 +342,7 @@ Enable in config:
 ```
 
 Or via environment:
+
 ```bash
 TEST_PARALLEL=true testintel run
 ```
@@ -324,16 +351,16 @@ TEST_PARALLEL=true testintel run
 
 ## Feature Status Summary
 
-| Feature | Status | Notes |
-|---------|--------|-------|
-| `run` | ✅ Full | Executes test suite |
-| `security` | ✅ Working | Scans API routes |
+| Feature        | Status     | Notes                 |
+| -------------- | ---------- | --------------------- |
+| `run`          | ✅ Full    | Executes test suite   |
+| `security`     | ✅ Working | Scans API routes      |
 | `e2e generate` | ⚠️ Limited | Needs project context |
-| `e2e run` | ✅ Working | Runs Playwright tests |
-| `data` | ✅ Full | Generates test data |
-| `prioritize` | ⚠️ Demo | Shows mock output |
-| `predict` | ⚠️ Demo | Shows mock output |
-| `parallel` | ⚠️ Demo | Shows mock output |
+| `e2e run`      | ✅ Working | Runs Playwright tests |
+| `data`         | ✅ Full    | Generates test data   |
+| `prioritize`   | ⚠️ Demo    | Shows mock output     |
+| `predict`      | ⚠️ Demo    | Shows mock output     |
+| `parallel`     | ⚠️ Demo    | Shows mock output     |
 
 ---
 

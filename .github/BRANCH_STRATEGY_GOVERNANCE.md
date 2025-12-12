@@ -1,10 +1,10 @@
 # 🏗️ Branch Strategy & Governance Framework
 
-**Version**: 1.0  
-**Status**: ACTIVE GOVERNANCE  
-**Owner**: Sr Dev (Architecture)  
-**Last Updated**: December 7, 2025  
-**Enforcement**: GitHub API + GitHub Actions  
+**Version**: 1.0\
+**Status**: ACTIVE GOVERNANCE\
+**Owner**: Sr Dev (Architecture)\
+**Last Updated**: December 7, 2025\
+**Enforcement**: GitHub API + GitHub Actions
 
 ---
 
@@ -65,6 +65,7 @@ refactor/[issue-#]-[description]    (from dev, PR → dev)
 ### A. Main Branch Patterns
 
 **ALLOWED** (Code only):
+
 ```regex
 ^(apps|packages|functions)/.*\.(ts|tsx|js|jsx|json|css)$
 ^(public|src)/.*\.(ts|tsx|js|jsx|json|css|svg|png)$
@@ -78,6 +79,7 @@ refactor/[issue-#]-[description]    (from dev, PR → dev)
 ```
 
 **NOT ALLOWED** (Move to docs-tests-logs):
+
 ```regex
 ^(docs)/.*\.md$                              # Documentation
 ^(tests|__tests__|\.e2e\.ts|\.spec\.ts).*   # Test files/suites
@@ -89,6 +91,7 @@ refactor/[issue-#]-[description]    (from dev, PR → dev)
 ```
 
 **AUTO-REJECT** (CI Gate):
+
 ```regex
 (TODO|FIXME|HACK|XXX):.*                     # Unresolved markers
 console\.(log|debug|trace)\(                 # Debug logs
@@ -101,6 +104,7 @@ node_modules/|\.next/|dist/|build/           # Build artifacts
 ### B. Dev Branch Patterns
 
 **ALLOWED** (Code + in-flight tests):
+
 ```regex
 ^(apps|packages|functions)/.*\.(ts|tsx|js|jsx)$
 ^(tests|__tests__)/.*\.(test|spec)\.(ts|tsx|js)$  # Feature tests
@@ -109,6 +113,7 @@ node_modules/|\.next/|dist/|build/           # Build artifacts
 ```
 
 **NOT ALLOWED** (Archive-only content):
+
 ```regex
 ^(docs)/.*\.md$                              # Move to docs-tests-logs
 ^(\.github)/(IMPLEMENTATION_COMPLETE|REPORTS|SUMMARIES).*\.md$
@@ -119,6 +124,7 @@ node_modules/|\.next/|dist/|build/           # Build artifacts
 ### C. Docs-Tests-Logs Branch Patterns
 
 **ALLOWED ONLY** (Archive content):
+
 ```regex
 ^(docs)/.*\.md$                              # All documentation
 ^(\.github)/(IMPLEMENTATION_COMPLETE|REPORTS|SUMMARIES).*\.md$
@@ -131,6 +137,7 @@ node_modules/|\.next/|dist/|build/           # Build artifacts
 ```
 
 **NOT ALLOWED** (Code belongs on dev/main):
+
 ```regex
 ^(apps|packages|functions)/.*\.ts$           # Feature code
 ^src/.*\.ts$                                 # Source code
@@ -147,24 +154,24 @@ node_modules/|\.next/|dist/|build/           # Build artifacts
 1. CREATE FEATURE BRANCH
    git checkout -b feature/123-add-auth-flow
 
-2. COMMIT FREQUENTLY (minimum daily)
+1. COMMIT FREQUENTLY (minimum daily)
    git commit -m "feat: implement login form validation"
    git commit -m "feat: add session persistence"
    git commit -m "test: add E2E login tests"
 
-3. ENSURE PASSING TESTS
+1. ENSURE PASSING TESTS
    pnpm -w typecheck    ✅
    pnpm -w test         ✅
    pnpm -w lint         ✅
 
-4. CREATE PR TO DEV
+1. CREATE PR TO DEV
    Title: feat(auth): implement login flow
    - Tests: ✅ All passing
    - Coverage: ✅ >80% for new code
    - Docs: ✅ API docs + comments
    - Type Safety: ✅ No TS errors
 
-5. MERGE & AUTO-DELETE
+1. MERGE & AUTO-DELETE
    [✓] Merge PR to dev
    [✓] Auto-delete source branch (GitHub setting)
    [✓] Feature branch gone
@@ -172,25 +179,25 @@ node_modules/|\.next/|dist/|build/           # Build artifacts
 
 ### Commit Frequency Requirements
 
-| Branch | Frequency | Rule |
-|--------|-----------|------|
-| **Feature** | Daily minimum | 1+ commits per day while active |
-| **Dev** | Per PR merge | 1 merge per feature completion |
-| **Main** | Per release | 1 merge per release cycle |
-| **Docs-Tests-Logs** | Per update | As documentation/reports added |
+| Branch              | Frequency     | Rule                            |
+| ------------------- | ------------- | ------------------------------- |
+| **Feature**         | Daily minimum | 1+ commits per day while active |
+| **Dev**             | Per PR merge  | 1 merge per feature completion  |
+| **Main**            | Per release   | 1 merge per release cycle       |
+| **Docs-Tests-Logs** | Per update    | As documentation/reports added  |
 
 ### PR Requirements by Branch
 
-| Criteria | Feature→Dev | Dev→Main |
-|----------|------------|----------|
-| **Reviewers** | 1+ | 2+ |
-| **Tests** | ✅ All pass | ✅ All pass + E2E verified |
-| **Type Check** | ✅ 0 errors | ✅ 0 errors |
-| **Lint** | ✅ Clean | ✅ Clean |
-| **Coverage** | >80% new | >85% overall |
-| **CI Status** | ✅ Green | ✅ Green |
-| **Docs** | Feature docs | Complete |
-| **Performance** | No regression | <5% regression allowed |
+| Criteria        | Feature→Dev   | Dev→Main                   |
+| --------------- | ------------- | -------------------------- |
+| **Reviewers**   | 1+            | 2+                         |
+| **Tests**       | ✅ All pass   | ✅ All pass + E2E verified |
+| **Type Check**  | ✅ 0 errors   | ✅ 0 errors                |
+| **Lint**        | ✅ Clean      | ✅ Clean                   |
+| **Coverage**    | >80% new      | >85% overall               |
+| **CI Status**   | ✅ Green      | ✅ Green                   |
+| **Docs**        | Feature docs  | Complete                   |
+| **Performance** | No regression | <5% regression allowed     |
 
 ---
 
@@ -279,8 +286,8 @@ EOF
 
 ### Workflow 1: Branch File Pattern Validator
 
-**Location**: `.github/workflows/branch-file-validator.yml`  
-**Trigger**: On every commit push  
+**Location**: `.github/workflows/branch-file-validator.yml`\
+**Trigger**: On every commit push\
 **Action**: Reject commits with wrong file patterns
 
 ```yaml
@@ -301,10 +308,10 @@ jobs:
       - name: Validate file patterns for target branch
         run: |
           TARGET_BRANCH=${{ github.base_ref }}
-          
+
           # Get changed files
           CHANGED_FILES=$(git diff --name-only origin/$TARGET_BRANCH...HEAD)
-          
+
           case "$TARGET_BRANCH" in
             main)
               echo "Validating files for MAIN branch..."
@@ -327,8 +334,8 @@ jobs:
 
 ### Workflow 2: Feature Branch Auto-Delete
 
-**Location**: `.github/workflows/feature-branch-cleanup.yml`  
-**Trigger**: On PR merge to dev  
+**Location**: `.github/workflows/feature-branch-cleanup.yml`\
+**Trigger**: On PR merge to dev\
 **Action**: Auto-delete source branch, verify commit frequency
 
 ```yaml
@@ -366,8 +373,8 @@ jobs:
 
 ### Workflow 3: Main Branch Merge Gate
 
-**Location**: `.github/workflows/main-merge-gate.yml`  
-**Trigger**: On PR to main  
+**Location**: `.github/workflows/main-merge-gate.yml`\
+**Trigger**: On PR to main\
 **Action**: Block merge unless criteria met
 
 ```yaml
@@ -418,8 +425,8 @@ jobs:
 
 ### Workflow 4: Docs-Tests-Logs Archive Guard
 
-**Location**: `.github/workflows/docs-archive-guard.yml`  
-**Trigger**: On PR to docs-tests-logs  
+**Location**: `.github/workflows/docs-archive-guard.yml`\
+**Trigger**: On PR to docs-tests-logs\
 **Action**: Ensure only docs/tests/logs files
 
 ```yaml
@@ -443,7 +450,7 @@ jobs:
           INVALID_FILES=$(git diff --name-only origin/docs-tests-logs...HEAD | \
             grep -v -E '\.(md|log|report|metrics|coverage|e2e\.ts|spec\.ts|yml)$' | \
             grep -v -E '^(docs|coverage|performance-metrics|\.github)' || true)
-          
+
           if [ -n "$INVALID_FILES" ]; then
             echo "ERROR: docs-tests-logs can only contain documentation and test artifacts"
             echo "$INVALID_FILES"
@@ -460,8 +467,7 @@ jobs:
 **Location**: `scripts/validate-branch-files.js`
 
 ```javascript
-#!/usr/bin/env node
-
+# !/usr/bin/env node
 const fs = require("fs");
 const path = require("path");
 
@@ -553,23 +559,26 @@ console.log("✅ All files valid for " + branchType);
 ## VII. Branch Consolidation Checklist
 
 ### From Main → Docs-Tests-Logs
-- [ ] Move all docs/*.md files
-- [ ] Move all .github/*REPORTS*.md files
-- [ ] Move all CI/CD result summaries
-- [ ] Move all test result artifacts
-- [ ] Keep only code/configuration in main
-- [ ] Create PR to docs-tests-logs
-- [ ] Verify main has 0 docs files
-- [ ] Delete source files from main
+
+- \[ ] Move all docs/\*.md files
+- \[ ] Move all .github/_REPORTS_.md files
+- \[ ] Move all CI/CD result summaries
+- \[ ] Move all test result artifacts
+- \[ ] Keep only code/configuration in main
+- \[ ] Create PR to docs-tests-logs
+- \[ ] Verify main has 0 docs files
+- \[ ] Delete source files from main
 
 ### From Dev → Appropriate Branch
-- [ ] Test artifacts → docs-tests-logs
-- [ ] Documentation files → docs-tests-logs
-- [ ] Code/tests → keep on dev
-- [ ] Performance reports → docs-tests-logs
-- [ ] Coverage reports → docs-tests-logs
+
+- \[ ] Test artifacts → docs-tests-logs
+- \[ ] Documentation files → docs-tests-logs
+- \[ ] Code/tests → keep on dev
+- \[ ] Performance reports → docs-tests-logs
+- \[ ] Coverage reports → docs-tests-logs
 
 ### Symlink Strategy (Dev Only)
+
 ```bash
 # On dev: symlink to docs-tests-logs content when needed
 ln -s ../docs-tests-logs/docs ./docs-reference
@@ -583,43 +592,47 @@ ln -s ../docs-tests-logs/e2e ./test-artifacts-reference
 
 ## VIII. Enforcement Matrix
 
-| Action | Main | Dev | Docs-Tests-Logs | Feature |
-|--------|------|-----|-----------------|---------|
-| **Direct Commit** | ❌ | ⚠️ PR | ✅ | ❌ |
-| **PR Merge** | 2+ reviews | 1+ review | Auto | Auto-delete |
-| **File Validation** | Strict | Moderate | Archive only | Loose |
-| **Commit Frequency** | N/A | Per PR | Per artifact | Daily min |
-| **Auto-Delete** | ❌ | ❌ | ❌ | ✅ |
-| **E2E Required** | ✅ | ⚠️ | N/A | ✅ |
-| **Tests Required** | ✅ | ✅ | N/A | ✅ |
+| Action               | Main       | Dev       | Docs-Tests-Logs | Feature     |
+| -------------------- | ---------- | --------- | --------------- | ----------- |
+| **Direct Commit**    | ❌         | ⚠️ PR     | ✅              | ❌          |
+| **PR Merge**         | 2+ reviews | 1+ review | Auto            | Auto-delete |
+| **File Validation**  | Strict     | Moderate  | Archive only    | Loose       |
+| **Commit Frequency** | N/A        | Per PR    | Per artifact    | Daily min   |
+| **Auto-Delete**      | ❌         | ❌        | ❌              | ✅          |
+| **E2E Required**     | ✅         | ⚠️        | N/A             | ✅          |
+| **Tests Required**   | ✅         | ✅        | N/A             | ✅          |
 
 ---
 
 ## IX. Implementation Timeline
 
 ### Phase 1: Foundation (Today)
-- [x] Create branch strategy document
-- [x] Define file patterns with regex
-- [ ] Create validation scripts
-- [ ] Set up GitHub API branch protection
+
+- \[x] Create branch strategy document
+- \[x] Define file patterns with regex
+- \[ ] Create validation scripts
+- \[ ] Set up GitHub API branch protection
 
 ### Phase 2: Enforcement (This Week)
-- [ ] Deploy GitHub Actions workflows
-- [ ] Enable file pattern validation
-- [ ] Enable branch protection rules
-- [ ] Test on feature branches
+
+- \[ ] Deploy GitHub Actions workflows
+- \[ ] Enable file pattern validation
+- \[ ] Enable branch protection rules
+- \[ ] Test on feature branches
 
 ### Phase 3: Migration (Next Week)
-- [ ] Consolidate main → docs-tests-logs
-- [ ] Consolidate dev → appropriate branches
-- [ ] Verify no file violations
-- [ ] Document for team
+
+- \[ ] Consolidate main → docs-tests-logs
+- \[ ] Consolidate dev → appropriate branches
+- \[ ] Verify no file violations
+- \[ ] Document for team
 
 ### Phase 4: Continuous (Ongoing)
-- [ ] Monitor branch violations
-- [ ] Auto-delete completed features
-- [ ] Enforce commit frequency
-- [ ] Audit branch health monthly
+
+- \[ ] Monitor branch violations
+- \[ ] Auto-delete completed features
+- \[ ] Enforce commit frequency
+- \[ ] Audit branch health monthly
 
 ---
 
@@ -627,28 +640,28 @@ ln -s ../docs-tests-logs/e2e ./test-artifacts-reference
 
 ### Branch Responsibilities
 
-| Branch | Owner | Purpose |
-|--------|-------|---------|
-| **main** | DevOps/Release | Production deployments |
-| **dev** | Engineering | Active development |
-| **docs-tests-logs** | Sr Dev/Docs | Project artifacts |
-| **feature/*** | Feature Team | Feature development |
+| Branch              | Owner          | Purpose                |
+| ------------------- | -------------- | ---------------------- |
+| **main**            | DevOps/Release | Production deployments |
+| **dev**             | Engineering    | Active development     |
+| **docs-tests-logs** | Sr Dev/Docs    | Project artifacts      |
+| **feature/**\*      | Feature Team   | Feature development    |
 
 ### Quick Reference: Where Do I Commit?
 
 ```
 Rule 1: Code changes?
   → Branch from dev, PR to dev
-  
+
 Rule 2: Documentation?
   → Branch from docs-tests-logs, PR to docs-tests-logs
-  
+
 Rule 3: Test results/Reports?
   → Branch from docs-tests-logs, PR to docs-tests-logs
-  
+
 Rule 4: Production ready?
   → Merge from dev to main (2 reviews)
-  
+
 Rule 5: Done with feature?
   → Merge to dev, branch auto-deletes
 ```
@@ -658,21 +671,27 @@ Rule 5: Done with feature?
 ## XI. FAQ & Troubleshooting
 
 ### Q: Where do I commit my documentation?
+
 **A**: Always to `docs-tests-logs`. If on dev/main, move to docs-tests-logs PR first.
 
 ### Q: Can I merge feature to main directly?
+
 **A**: No. Always: feature → dev → main. Main only accepts from dev.
 
 ### Q: My feature branch has 1 commit, can I merge?
+
 **A**: Yes, if tests pass. 1+ commits is minimum requirement.
 
 ### Q: Can I revert a main merge?
+
 **A**: Escalate to Sr Dev. Main is immutable. Create fix PR to dev.
 
 ### Q: Why auto-delete feature branches?
+
 **A**: Keeps repo clean, prevents stale branches, enforces cleanup discipline.
 
 ### Q: Can I symlink test artifacts to main?
+
 **A**: No. Reference docs-tests-logs via CI/documentation only. Never symlink to main.
 
 ---
@@ -680,6 +699,7 @@ Rule 5: Done with feature?
 ## XII. Metrics & Monitoring
 
 **Track These Metrics**:
+
 - Commits per feature (should be ≥1 per day)
 - PRs merged per sprint
 - Main branch deployment frequency
@@ -688,6 +708,7 @@ Rule 5: Done with feature?
 - Feature branch lifetime (target: <1 week)
 
 **Monthly Audit**:
+
 - Review branch sizes
 - Check for stale branches
 - Verify file pattern compliance
@@ -699,6 +720,7 @@ Rule 5: Done with feature?
 ## Summary
 
 This three-branch architecture enforces:
+
 - ✅ **Main**: Production code only (runtime-verified, testable, deployable)
 - ✅ **Dev**: Working codebase (features, tests, active development)
 - ✅ **Docs-Tests-Logs**: Archive of all project artifacts (never merged back)
@@ -711,6 +733,6 @@ This three-branch architecture enforces:
 
 ---
 
-*Created: December 7, 2025*  
-*Owner: Sr Dev (Architecture)*  
-*Review Status: Draft → Ready for Implementation*
+_Created: December 7, 2025_\
+_Owner: Sr Dev (Architecture)_\
+_Review Status: Draft → Ready for Implementation_

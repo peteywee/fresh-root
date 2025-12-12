@@ -1,7 +1,9 @@
 # Senior Dev Fixes: testintel CLI Package
 
 ## Problem Statement
-Junior devs created `testintel` - an AI-Powered Test Intelligence CLI package for npm. However, there were several issues:
+
+Junior devs created `testintel` - an AI-Powered Test Intelligence CLI package for npm. However,
+there were several issues:
 
 1. **Runtime crash** - `fs` module not imported in platform.ts
 2. **Type errors** - Zod internal types incompatible, missing type declarations
@@ -19,12 +21,14 @@ Junior devs created `testintel` - an AI-Powered Test Intelligence CLI package fo
 
 **Problem:** `ReferenceError: Cannot access 'fs' before initialization` in platform.ts line 12
 
-**Root Cause:** 
+**Root Cause:**
+
 - `fs` module was used before import
 - Attempted to call `fs.existsSync()` in object literal initialization
 - Duplicate import at bottom of file
 
 **Solution:**
+
 ```typescript
 // Added missing fs import
 import * as fs from "fs";
@@ -39,7 +43,9 @@ function detectChromebook(): boolean {
 }
 
 export const platform = {
-  get isChromebook() { return detectChromebook(); },  // Lazy evaluation
+  get isChromebook() {
+    return detectChromebook();
+  }, // Lazy evaluation
   isWindows: os.platform() === "win32",
   isMac: os.platform() === "darwin",
   isLinux: os.platform() === "linux",
@@ -49,11 +55,13 @@ export const platform = {
 ### 2. Fixed Type Errors (v1.0.4)
 
 **Problems:**
+
 - Zod internal `_def` type properties weren't recognized
 - `diff` module missing type declarations
 - Various TS2339 errors on internal properties
 
 **Solutions:**
+
 ```typescript
 // Added @types/diff
 npm install --save-dev @types/diff
@@ -73,10 +81,11 @@ diff.forEach((part: { added?: boolean; removed?: boolean; value: string }) => {
 **Problem:** Version was hardcoded as "v1.0.0" in help text and --version command
 
 **Solution:**
+
 ```typescript
 // Read version from package.json at runtime
 const packageJson = JSON.parse(
-  fs.readFileSync(path.join(__dirname, "..", "package.json"), "utf-8")
+  fs.readFileSync(path.join(__dirname, "..", "package.json"), "utf-8"),
 );
 const VERSION = packageJson.version || "1.0.0";
 
@@ -86,10 +95,10 @@ export const commands = {
     console.log(`${c("cyan", "Test Intelligence CLI")} ${c("gray", "v" + VERSION)}`);
     // ...
   },
-  
+
   version() {
     console.log(VERSION);
-  }
+  },
 };
 ```
 
@@ -97,22 +106,24 @@ export const commands = {
 
 **Problem:** E2E test generation found 0 routes when running from global npm install
 
-**Root Cause:** 
+**Root Cause:**
+
 - `__dirname` pointed to `/usr/local/share/.../node_modules/testintel/dist/`
 - Could not find `apps/web/app/api/**/*.ts` from that location
 - Only worked when lucky enough to run from exact project directory
 
 **Solution:**
+
 ```typescript
 // Detect project root at runtime (works for both global and local installs)
 function getProjectRoot(): string {
   const cwd = process.cwd();
-  
+
   // Check if we're in a project with apps/web/app/api
   if (fs.existsSync(path.join(cwd, "apps/web/app/api"))) {
     return cwd;
   }
-  
+
   // Fallback to up from tests/intelligence (local package)
   return path.resolve(__dirname, "../..");
 }
@@ -124,22 +135,24 @@ const PROJECT_ROOT = getProjectRoot();
 
 ### 5. Created Honest Documentation (v1.0.8)
 
-**Problem:** TECHNICAL_MANUAL.md oversold features - claimed AI prioritization, predictive analytics, etc. work when they're all stub data
+**Problem:** TECHNICAL_MANUAL.md oversold features - claimed AI prioritization, predictive
+analytics, etc. work when they're all stub data
 
 **Solution:** Created `USAGE_GUIDE.md` with:
 
-| Feature | Status | Notes |
-|---------|--------|-------|
-| `run` | ✅ Full | Executes test suite |
-| `security` | ✅ Working | Scans API routes |
-| `e2e generate` | ✅ Fixed | Now works from global install |
-| `e2e run` | ✅ Working | Runs Playwright tests |
-| `data` | ✅ Full | Generates test data |
-| `prioritize` | ⚠️ Demo | Shows mock output |
-| `predict` | ⚠️ Demo | Shows mock output |
-| `parallel` | ⚠️ Demo | Shows mock output |
+| Feature        | Status     | Notes                         |
+| -------------- | ---------- | ----------------------------- |
+| `run`          | ✅ Full    | Executes test suite           |
+| `security`     | ✅ Working | Scans API routes              |
+| `e2e generate` | ✅ Fixed   | Now works from global install |
+| `e2e run`      | ✅ Working | Runs Playwright tests         |
+| `data`         | ✅ Full    | Generates test data           |
+| `prioritize`   | ⚠️ Demo    | Shows mock output             |
+| `predict`      | ⚠️ Demo    | Shows mock output             |
+| `parallel`     | ⚠️ Demo    | Shows mock output             |
 
 Plus sections for:
+
 - Installation instructions
 - CI/CD integration examples
 - Troubleshooting
@@ -150,17 +163,17 @@ Plus sections for:
 
 ## Version History
 
-| Version | Change | Status |
-|---------|--------|--------|
-| 1.0.0 | Initial release | ❌ Missing typescript dependency |
-| 1.0.1 | Added typescript | ❌ Missing zod dependency |
-| 1.0.2 | Added zod, diff | ❌ fs initialization error |
-| 1.0.3 | Fixed fs import | ❌ Still had old compiled dist |
-| 1.0.4 | Clean rebuild | ✅ Runtime works, CLI runs |
-| 1.0.5 | Dynamic version | ⚠️ Broken npm publish |
-| 1.0.6 | Registry sync | ✅ Stable |
-| 1.0.7 | Added PROJECT_ROOT fix | ❌ Broken prepublishOnly hook |
-| 1.0.8 | Fixed build, E2E works | ✅ **CURRENT - RECOMMENDED** |
+| Version | Change                 | Status                           |
+| ------- | ---------------------- | -------------------------------- |
+| 1.0.0   | Initial release        | ❌ Missing typescript dependency |
+| 1.0.1   | Added typescript       | ❌ Missing zod dependency        |
+| 1.0.2   | Added zod, diff        | ❌ fs initialization error       |
+| 1.0.3   | Fixed fs import        | ❌ Still had old compiled dist   |
+| 1.0.4   | Clean rebuild          | ✅ Runtime works, CLI runs       |
+| 1.0.5   | Dynamic version        | ⚠️ Broken npm publish            |
+| 1.0.6   | Registry sync          | ✅ Stable                        |
+| 1.0.7   | Added PROJECT_ROOT fix | ❌ Broken prepublishOnly hook    |
+| 1.0.8   | Fixed build, E2E works | ✅ **CURRENT - RECOMMENDED**     |
 
 ---
 
@@ -204,7 +217,7 @@ testintel parallel 10         # ⚠️ Shows mock output
 ## Key Learnings (What Jr Dev Did Wrong)
 
 1. ❌ Used modules before importing them
-2. ❌ Hardcoded environment-specific paths (__dirname)
+2. ❌ Hardcoded environment-specific paths (\_\_dirname)
 3. ❌ Didn't test with global npm install
 4. ❌ Overclaimed features in documentation
 5. ❌ No version management (hardcoded strings)
@@ -228,6 +241,7 @@ testintel parallel 10         # ⚠️ Shows mock output
 ## Documentation Files
 
 Created:
+
 - ✅ `USAGE_GUIDE.md` - User manual with honest feature status
 - ✅ `TECHNICAL_MANUAL.md` - Already exists (overstates features)
 - ✅ `NPM_PUBLISH_GUIDE.md` - Publication instructions
@@ -241,6 +255,7 @@ Created:
 **Current Version:** 1.0.8 (npm install -g testintel@1.0.8)
 
 **What Works:**
+
 - ✅ CLI with proper help and version commands
 - ✅ E2E test generation from API routes (34 tests generated)
 - ✅ Security scanning of API routes
@@ -249,9 +264,11 @@ Created:
 - ✅ Cross-platform support (Windows, macOS, Linux, Chromebook)
 
 **What's Demo:**
+
 - Prioritization, prediction, parallelization (mock data for now)
 
 **Known Limitations:**
+
 - No server mode
 - No web dashboard
 - Demo features need real ML implementation

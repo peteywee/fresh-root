@@ -1,6 +1,7 @@
 // [P0][USERS][PROFILE][API] User profile endpoint
 
 import { createAuthenticatedEndpoint } from "@fresh-schedules/api-framework";
+
 import { ok, serverError } from "../../_shared/validation";
 
 /**

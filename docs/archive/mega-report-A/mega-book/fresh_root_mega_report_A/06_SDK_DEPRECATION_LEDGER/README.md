@@ -1,9 +1,12 @@
 # SDK & Deprecation Ledger
-This directory tracks **what used to exist**, **why it was removed or refactored**, and **what stable SDK surfaces replace it**.
+
+This directory tracks **what used to exist**, **why it was removed or refactored**, and **what
+stable SDK surfaces replace it**.
 
 This is how we protect knowledge when ripping out old code.
 
 ## Entry Format
+
 Each legacy component should be captured like this:
 
 ```text
@@ -31,4 +34,5 @@ MIGRATION_NOTES:
   - [Gotchas]
 ```
 
-Documenting removed code in this way lets you safely refactor while **building reusable SDKs** instead of losing hard-won structure.
+Documenting removed code in this way lets you safely refactor while **building reusable SDKs**
+instead of losing hard-won structure.

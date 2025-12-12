@@ -5,10 +5,10 @@
  * Validates test quality by introducing bugs and ensuring tests catch them
  */
 
-import * as ts from "typescript";
+import { execSync } from "child_process";
 import * as fs from "fs";
 import * as path from "path";
-import { execSync } from "child_process";
+import * as ts from "typescript";
 
 interface Mutant {
   id: string;

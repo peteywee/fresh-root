@@ -1,18 +1,15 @@
-# Objective
+## # Objective
 
----
-
-name: SEC-001 Sessions & 2FA (Prod-grade auth)
-about: Enforce session-only auth + 2FA for privileged roles; ban dev headers in prod
-title: "[SEC-001] Sessions & 2FA"
-labels: ["security", "backend", "P0"]
-assignees: ["peteywee"]
+name: SEC-001 Sessions & 2FA (Prod-grade auth) about: Enforce session-only auth + 2FA for privileged
+roles; ban dev headers in prod title: "\[SEC-001] Sessions & 2FA" labels: \["security", "backend",
+"P0"] assignees: \["peteywee"]
 
 ---
 
 ## Objective
 
-Enforce **session-only authentication** in production and **2FA** for `org_owner|admin|manager`. Remove dev header pathways from prod.
+Enforce **session-only authentication** in production and **2FA** for `org_owner|admin|manager`.
+Remove dev header pathways from prod.
 
 ## Scope
 
@@ -33,12 +30,12 @@ Enforce **session-only authentication** in production and **2FA** for `org_owner
 
 ## Tasks
 
-- [ ] Implement cookie-based session creation & invalidation.
-- [ ] API middleware verifying Firebase session and populating claims.
-- [ ] Gate writes: **require verified session** + role checks.
-- [ ] Reject dev headers in `NODE_ENV=production`.
-- [ ] Tests for 401 (no session), 403 (missing 2FA for privileged), 200 (happy path).
-- [ ] Docs updated and envs added to `.env.example`.
+- \[ ] Implement cookie-based session creation & invalidation.
+- \[ ] API middleware verifying Firebase session and populating claims.
+- \[ ] Gate writes: **require verified session** + role checks.
+- \[ ] Reject dev headers in `NODE_ENV=production`.
+- \[ ] Tests for 401 (no session), 403 (missing 2FA for privileged), 200 (happy path).
+- \[ ] Docs updated and envs added to `.env.example`.
 
 ## Acceptance Criteria
 

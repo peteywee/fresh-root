@@ -1,11 +1,16 @@
 # L2 — Scheduling Core Engine
+
 > **Status:** Fully documented\
-> Comprehensive analysis of the scheduling subsystem, critical findings, architectural assessment, and implementation patterns.
+> Comprehensive analysis of the scheduling subsystem, critical findings, architectural assessment,
+> and implementation patterns.
 
 ---
 
 ## 1. Role in the System
-The scheduling subsystem is the temporal orchestration engine that coordinates asynchronous task execution across the platform. It bridges the event-driven architecture (pubsub, real-time triggers) with deterministic, time-based operations (cron jobs, deferred tasks, maintenance cycles).
+
+The scheduling subsystem is the temporal orchestration engine that coordinates asynchronous task
+execution across the platform. It bridges the event-driven architecture (pubsub, real-time triggers)
+with deterministic, time-based operations (cron jobs, deferred tasks, maintenance cycles).
 
 **Core responsibilities:**
 
@@ -23,6 +28,7 @@ This subsystem is **critical to operational resilience** because it handles:
 ---
 
 ## 2. Panel Summary
+
 | Panel                   | Lead   | Status      | Key Finding                                                                            |
 | ----------------------- | ------ | ----------- | -------------------------------------------------------------------------------------- |
 | **Distributed Systems** | Elena  | ✓ Completed | Multi-zone coordination patterns established; retry semantics differ by context        |
@@ -32,8 +38,13 @@ This subsystem is **critical to operational resilience** because it handles:
 ---
 
 ## 3. Critical Findings
+
 ### 🔴 CRITICAL: Retry Storms Without Backoff Validation
-**Problem:** The task scheduling system lacks centralized exponential backoff validation. While individual function deployments specify `retryConfig`, there's no runtime enforcement preventing misconfigured backoff multipliers (e.g., `backoffMultiplier: 0.5`) that could cause rapid retry storms.
+
+**Problem:** The task scheduling system lacks centralized exponential backoff validation. While
+individual function deployments specify `retryConfig`, there's no runtime enforcement preventing
+misconfigured backoff multipliers (e.g., `backoffMultiplier: 0.5`) that could cause rapid retry
+storms.
 
 **Impact:**
 
@@ -67,7 +78,10 @@ export async function scheduleMaintenanceTask(
 ---
 
 ### 🟠 HIGH: Task Context Isolation Not Enforced at Invocation
-**Problem:** Scheduled tasks inherit the full Cloud Functions context (service account permissions, environment variables). While isolation is architecturally intended, there's no mechanism to restrict task execution to a limited permission set.
+
+**Problem:** Scheduled tasks inherit the full Cloud Functions context (service account permissions,
+environment variables). While isolation is architecturally intended, there's no mechanism to
+restrict task execution to a limited permission set.
 
 **Impact:**
 
@@ -104,7 +118,10 @@ export const cleanupExpiredSessions = onSchedule(
 ---
 
 ### 🟠 HIGH: No Distributed Lock for One-Time Tasks
-**Problem:** There's no distributed locking mechanism for tasks that must execute exactly-once across multiple deployment zones. If a task is scheduled simultaneously in two regions, both will execute.
+
+**Problem:** There's no distributed locking mechanism for tasks that must execute exactly-once
+across multiple deployment zones. If a task is scheduled simultaneously in two regions, both will
+execute.
 
 **Impact:**
 
@@ -130,6 +147,7 @@ Time T3: Both regions execute billing-reset task
 ---
 
 ### 🟡 MEDIUM: Inconsistent Observability Across Execution Contexts
+
 **Problem:** Scheduled task execution traces vary significantly depending on deployment context:
 
 - **Emulator:** Console logs only, no structured tracing
@@ -162,7 +180,10 @@ export function getLogger(context: FunctionContext) {
 ---
 
 ### 🟡 MEDIUM: Task Schedule Drift During High Load
-**Problem:** Under peak load, scheduled tasks experience significant drift from their intended execution time. A task scheduled for `2 AM` might execute at `2:15 AM`, causing cascading delays for dependent operations.
+
+**Problem:** Under peak load, scheduled tasks experience significant drift from their intended
+execution time. A task scheduled for `2 AM` might execute at `2:15 AM`, causing cascading delays for
+dependent operations.
 
 **Contributing Factors:**
 
@@ -184,11 +205,14 @@ export function getLogger(context: FunctionContext) {
 ---
 
 ## 4. Architectural Recommendations
+
 ### Rec 1: Implement Graduated Task Execution Framework
+
 **Status:** Approved by Platform Architecture\
 **Complexity:** High (3–4 weeks)
 
-**Objective:** Provide a unified abstraction for scheduling operations with configurable backoff, retry, and isolation semantics.
+**Objective:** Provide a unified abstraction for scheduling operations with configurable backoff,
+retry, and isolation semantics.
 
 **Design:**
 
@@ -228,6 +252,7 @@ export type IsolationLevel =
 ---
 
 ### Rec 2: Establish Exactly-Once Semantics via Distributed Locking
+
 **Status:** Approved (MVP + Deferred Enhanced)\
 **Complexity:** Medium (2–3 weeks)
 
@@ -277,6 +302,7 @@ export const resetUserTiers = onSchedule("0 0 * * MON", async () => {
 ---
 
 ### Rec 3: Standardize Observability via Structured Logging Codec
+
 **Status:** Approved\
 **Complexity:** Low (1 week)
 
@@ -320,7 +346,9 @@ export type TaskExecutionLog = Readonly<{
 ---
 
 ## 5. Exemplary Patterns & Anti-Patterns
+
 ### ✅ Good: Isolated Task with Validated Retry Config
+
 ```typescript
 // ✅ EXEMPLARY
 export const archiveExpiredInvoices = onSchedule(
@@ -370,6 +398,7 @@ const retryPolicy: RetryPolicy = {
 ---
 
 ### ❌ Bad: Unvalidated Retry Storm
+
 ```typescript
 // ❌ ANTI-PATTERN: High-risk retry configuration
 export const processUserEvents = onSchedule(
@@ -405,6 +434,7 @@ export const processUserEvents = onSchedule(
 ---
 
 ### ⚠️ Legacy: Database Transaction Coordination
+
 ```typescript
 // ⚠️ LEGACY PATTERN: Still in use but requires refactoring
 export const dailyResetQuotas = onSchedule("0 0 * * *", async () => {
@@ -455,7 +485,9 @@ export const dailyResetQuotas = onSchedule("0 0 * * *", async () => {
 ---
 
 ## 6. Reverse-Engineered SDK Surfaces
+
 ### Cloud Functions Scheduler API
+
 **Module:** `firebase-functions/v2/scheduler`
 
 ```typescript
@@ -479,7 +511,7 @@ export type OnSchedule = (
 **Constraints:**
 
 - Schedule string must be valid cron or recognized descriptor
-- `timeZone` defaults to America/Los\_Angeles
+- `timeZone` defaults to America/Los_Angeles
 - `retryCount` defaults to 1; max is typically 5 per Cloud Tasks limits
 - Minimum schedule frequency is 15 minutes
 
@@ -498,6 +530,7 @@ onSchedule({ schedule: "0 2 * * *", timeZone: "invalid/tz" }, handler); // ✗ I
 ---
 
 ### Firestore Task Scheduling (Internal Pattern)
+
 **Location:** `src/services/scheduler/firestore-tasks.ts`
 
 ```typescript
@@ -534,7 +567,9 @@ export async function scheduleTask(
 ---
 
 ## 7. Known Limitations & Future Directions
+
 ### Current Limitations
+
 | Limitation                   | Severity | Workaround                           |
 | ---------------------------- | -------- | ------------------------------------ |
 | No sub-minute scheduling     | Medium   | Use Pub/Sub for high-frequency tasks |
@@ -543,6 +578,7 @@ export async function scheduleTask(
 | Dashboard visibility limited | Low      | Export logs to BigQuery for analysis |
 
 ### Future Enhancements (Roadmap)
+
 1. **Priority Queue Abstraction** (Q1 2025)
    - Enable urgent vs. background task scheduling
    - Prevent low-priority work from blocking critical operations
@@ -559,6 +595,7 @@ export async function scheduleTask(
 ---
 
 ## 8. Checklist for Implementation
+
 - \[ ] **Backoff Validation:** Deploy `SchedulingPolicy` codec with bounds checking
 - \[ ] **Distributed Locking:** Integrate Redis lock acquisition into task wrapper
 - \[ ] **Observability:** Migrate all scheduled tasks to structured logging codec
@@ -574,25 +611,32 @@ export async function scheduleTask(
 - Strategic/Impact (Victoria): _TBD_
 
 ## 3. Critical Findings (Placeholder)
-Once analysis is run, document Critical/High items here, each with L0–L4 structure and cross-links into L3/L4 sections.
+
+Once analysis is run, document Critical/High items here, each with L0–L4 structure and cross-links
+into L3/L4 sections.
 
 ## 4. Architectural Notes & Invariants
+
 List invariants and constraints that **must** hold true for this subsystem to be healthy.
 
 ## 5. Example Patterns
+
 - **Good Pattern Example:** _TBD_
 - **Bad Pattern Example:** _TBD_
 - **Refactored Pattern:** _TBD_ (often mapped to a new SDK abstraction)
 
 ## 6. Open Questions
+
 Track unresolved decisions and design questions.
 
 ---
 
 ## 9. Related Documentation
+
 **Deprecation & Migration:**
 
-- See `06_SDK_DEPRECATION_LEDGER/scheduling_ledger.md` for comprehensive deprecation mapping, legacy component analysis, and phased migration roadmap through Q3 2026
+- See `06_SDK_DEPRECATION_LEDGER/scheduling_ledger.md` for comprehensive deprecation mapping, legacy
+  component analysis, and phased migration roadmap through Q3 2026
 
 **Complementary Subsystems:**
 

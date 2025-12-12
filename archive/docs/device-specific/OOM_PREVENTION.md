@@ -1,8 +1,8 @@
 # OOM Crash Prevention Guide (Code 9 - SIGKILL)
 
-**Problem**: VSCode process killed by system OOM killer (exit code 9, SIGKILL)
-**Root Cause**: 6.3GB system RAM with 0 swap space + 4.1GB used = insufficient memory pressure buffer
-**Solution**: Swap + process monitoring + memory caps
+**Problem**: VSCode process killed by system OOM killer (exit code 9, SIGKILL) **Root Cause**: 6.3GB
+system RAM with 0 swap space + 4.1GB used = insufficient memory pressure buffer **Solution**: Swap +
+process monitoring + memory caps
 
 ## Quick Fix (1 minute)
 
@@ -81,7 +81,7 @@ echo 'ulimit -v 6291456' >> ~/.bashrc
    free -h
    ```
 
-2. **Increase swap** (if 2GB not enough):
+1. **Increase swap** (if 2GB not enough):
 
    ```bash
    # Add another 2GB
@@ -91,7 +91,7 @@ echo 'ulimit -v 6291456' >> ~/.bashrc
    sudo swapon /swapfile2
    ```
 
-3. **Reduce parallel build tasks**:
+1. **Reduce parallel build tasks**:
 
    ```bash
    # In .env.local
@@ -99,7 +99,7 @@ echo 'ulimit -v 6291456' >> ~/.bashrc
    NODE_OPTIONS="--max-old-space-size=1024"
    ```
 
-4. **Close unnecessary applications**:
+1. **Close unnecessary applications**:
    - VSCode Extensions: Disable Cloud Code, Remote extensions if not using
    - Browser: Close extra tabs
    - Terminal: Kill unused shells
@@ -155,5 +155,4 @@ watch -n 1 'free -h && echo "" && ps aux --sort=-%mem | head -8'
 
 ---
 
-**Last Updated**: November 29, 2025
-**Status**: All safeguards in place, monitoring active
+**Last Updated**: November 29, 2025 **Status**: All safeguards in place, monitoring active

@@ -1,9 +1,9 @@
 // [P0][APP][CODE] Ledger
 // Tags: P0, APP, CODE
-import { onDocumentUpdated } from "firebase-functions/v2/firestore";
-import * as logger from "firebase-functions/logger";
 import { initializeApp, getApps } from "firebase-admin/app";
 import { getFirestore, Firestore, Timestamp } from "firebase-admin/firestore";
+import * as logger from "firebase-functions/logger";
+import { onDocumentUpdated } from "firebase-functions/v2/firestore";
 
 import { calculateShiftPay, ShiftPayBreakdown } from "./domain/billing";
 

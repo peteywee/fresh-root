@@ -1,6 +1,7 @@
 # Keep Copilot + Minimal Speed Loss (Chromebook Edition)
 
-**Updated strategy**: Instead of disabling Copilot, use targeted optimizations to keep it running while minimizing speed impact.
+**Updated strategy**: Instead of disabling Copilot, use targeted optimizations to keep it running
+while minimizing speed impact.
 
 ---
 
@@ -251,12 +252,12 @@ Result: Bigger heap + less parallel = similar memory peak, different distributio
 
 Before each dev session:
 
-- [ ] `free -h` shows ≥1.5GB free RAM
-- [ ] `ps aux | grep code` shows 1-2 VSCode instances (not 5+)
-- [ ] Copilot suggestions appear (Ctrl+K in editor)
-- [ ] `bash scripts/check-memory-preflight.sh` passes
-- [ ] Start safeguard daemon: `bash scripts/safeguard-oom.sh &`
-- [ ] Run `pnpm dev` and wait for "ready on 3000"
+- \[ ] `free -h` shows ≥1.5GB free RAM
+- \[ ] `ps aux | grep code` shows 1-2 VSCode instances (not 5+)
+- \[ ] Copilot suggestions appear (Ctrl+K in editor)
+- \[ ] `bash scripts/check-memory-preflight.sh` passes
+- \[ ] Start safeguard daemon: `bash scripts/safeguard-oom.sh &`
+- \[ ] Run `pnpm dev` and wait for "ready on 3000"
 
 ---
 
@@ -278,7 +279,7 @@ After applying this strategy:
 
 ✅ **Acceptable speed**
 
-- ~10% slower than unconstrained (45s → 50s startup)
+- \~10% slower than unconstrained (45s → 50s startup)
 - Builds still complete in <4 minutes
 - Worth the trade for stability
 
@@ -349,10 +350,8 @@ ps aux | grep copilot
 
 ## TL;DR
 
-✅ **Copilot stays enabled**
-✅ **Builds ~10% slower** (acceptable trade)
-✅ **Memory safe** (peaks at 1.8GB, leaves 4.5GB buffer)
-✅ **No crashes** (daemon monitors, safeguards active)
-✅ **Full productivity** (AI assistance + stability)
+✅ **Copilot stays enabled** ✅ **Builds ~10% slower** (acceptable trade) ✅ **Memory safe** (peaks
+at 1.8GB, leaves 4.5GB buffer) ✅ **No crashes** (daemon monitors, safeguards active) ✅ **Full
+productivity** (AI assistance + stability)
 
 Run `pnpm dev`, use Copilot, and don't worry about code 9.

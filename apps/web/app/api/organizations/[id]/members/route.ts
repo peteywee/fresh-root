@@ -1,9 +1,9 @@
 // [P0][ORG][MEMBERS][API] Organization members endpoint
 
+import { createOrgEndpoint } from "@fresh-schedules/api-framework";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
-import { createOrgEndpoint } from "@fresh-schedules/api-framework";
 import { ok, serverError } from "../../../_shared/validation";
 
 const AddMemberSchema = z.object({

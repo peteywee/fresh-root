@@ -2,7 +2,8 @@
 
 **Created**: December 6, 2025  
 **Last Updated**: December 6, 2025  
-**Purpose**: Comprehensive review of docs, tests, logs, and AI governance files for consolidation and cleanup  
+**Purpose**: Comprehensive review of docs, tests, logs, and AI governance files for consolidation
+and cleanup  
 **Status**: ✅ PHASE 1 COMPLETE – Ready for Phase 2 Planning (PAUSED)
 
 ---
@@ -17,7 +18,8 @@
 - **232 KB mega-book** directory (comprehensive system docs)
 - **4 duplicative governance files** (.github/copilot-instructions.md + docs/copilot-instruction.md)
 
-**Key Problem**: Overlapping doc hierarchies, redundant status/phase reports, and multiple governance instruction sources creating confusion for AI agents.
+**Key Problem**: Overlapping doc hierarchies, redundant status/phase reports, and multiple
+governance instruction sources creating confusion for AI agents.
 
 ---
 
@@ -27,69 +29,69 @@
 
 #### 🟢 KEEP (Active, Essential)
 
-| File | Size | Purpose | Status |
-|------|------|---------|--------|
-| `QUICK_START.md` | 8K | Entry point for new developers | **Active** |
-| `README.md` | 8K | Project overview | **Active** |
-| `CODING_RULES_AND_PATTERNS.md` | 24K | Canonical patterns reference | **Active** ⭐ |
-| `PRODUCTION_DEPLOYMENT_GUIDE.md` | 12K | Deployment procedures | **Active** |
-| `PRODUCTION_ENV_VALIDATION.md` | 12K | Environment setup validation | **Active** |
-| `PRODUCTION_READINESS.md` | 12K | Readiness checklist | **Active** |
-| `FIREBASE_TYPING_STRATEGY.md` | 8K | Firebase SDK typing patterns | **Active** |
-| `VSCODE_TASKS.md` | 8K | VS Code task configuration | **Active** |
+| File                             | Size | Purpose                        | Status        |
+| -------------------------------- | ---- | ------------------------------ | ------------- |
+| `QUICK_START.md`                 | 8K   | Entry point for new developers | **Active**    |
+| `README.md`                      | 8K   | Project overview               | **Active**    |
+| `CODING_RULES_AND_PATTERNS.md`   | 24K  | Canonical patterns reference   | **Active** ⭐ |
+| `PRODUCTION_DEPLOYMENT_GUIDE.md` | 12K  | Deployment procedures          | **Active**    |
+| `PRODUCTION_ENV_VALIDATION.md`   | 12K  | Environment setup validation   | **Active**    |
+| `PRODUCTION_READINESS.md`        | 12K  | Readiness checklist            | **Active**    |
+| `FIREBASE_TYPING_STRATEGY.md`    | 8K   | Firebase SDK typing patterns   | **Active**    |
+| `VSCODE_TASKS.md`                | 8K   | VS Code task configuration     | **Active**    |
 
 ---
 
 #### 🟡 MERGE/CONSOLIDATE (Overlapping Content)
 
-| File | Size | Issue | Action |
-|------|------|-------|--------|
-| `PRODUCTION_READINESS_KPI.md` | 8K | Overlaps with PRODUCTION_READINESS.md | **Merge into PRODUCTION_READINESS.md** |
-| `PRODUCTION_READINESS_SIGN_OFF.md` | 12K | Final checklist; can merge with PRODUCTION_READINESS.md | **Merge into PRODUCTION_READINESS.md** + link from root PR_STAGING_SUMMARY |
-| `PRODUCTION_DOCS_INDEX.md` | 8K | Index of production docs; redundant with nav | **Archive/remove** (link structure instead) |
-| `CODEBASE_ARCHITECTURAL_INDEX.md` | 40K | Overlaps with mega-book structure | **Archive to archive/; reference mega-book** |
-| `ARCHITECTURAL_REVIEW_PANEL_INPUTS.md` | 68K | Strategic input; likely archived after review | **Archive unless active review** |
-| `SESSION_SUMMARY_DEC_1_2025.md` | 12K | Dated session notes | **Archive (date-stamped)** |
+| File                                   | Size | Issue                                                   | Action                                                                     |
+| -------------------------------------- | ---- | ------------------------------------------------------- | -------------------------------------------------------------------------- |
+| `PRODUCTION_READINESS_KPI.md`          | 8K   | Overlaps with PRODUCTION_READINESS.md                   | **Merge into PRODUCTION_READINESS.md**                                     |
+| `PRODUCTION_READINESS_SIGN_OFF.md`     | 12K  | Final checklist; can merge with PRODUCTION_READINESS.md | **Merge into PRODUCTION_READINESS.md** + link from root PR_STAGING_SUMMARY |
+| `PRODUCTION_DOCS_INDEX.md`             | 8K   | Index of production docs; redundant with nav            | **Archive/remove** (link structure instead)                                |
+| `CODEBASE_ARCHITECTURAL_INDEX.md`      | 40K  | Overlaps with mega-book structure                       | **Archive to archive/; reference mega-book**                               |
+| `ARCHITECTURAL_REVIEW_PANEL_INPUTS.md` | 68K  | Strategic input; likely archived after review           | **Archive unless active review**                                           |
+| `SESSION_SUMMARY_DEC_1_2025.md`        | 12K  | Dated session notes                                     | **Archive (date-stamped)**                                                 |
 
 ---
 
 #### 🔴 DELETE/ARCHIVE (Superseded or Redundant)
 
-| File | Size | Reason | Action |
-|------|------|--------|--------|
-| `PHASE_1_TIER_0_FIXES.md` | 8K | Phase 1 work completed; no future reference | **Archive to archive/docs/** |
-| `PHASE_2_TIER_1_FIXES.md` | 8K | Phase 2 work completed | **Archive to archive/docs/** |
-| `PHASE_2_STATUS_REPORT.md` | 8K | Status report, phase complete | **Archive to archive/docs/** |
-| `PHASE_2_COMPLETION_SUMMARY.md` | 8K | Phase complete summary | **Archive to archive/docs/** |
-| `PHASE_3_TIER3_CLEANUP.md` | 8K | Phase work item; reference only | **Archive to archive/docs/** |
-| `MIGRATION_COMPLETE.md` | 16K | Migration complete; archived | **Archive to archive/docs/** |
-| `SDK_MIGRATION_COMPLETE.md` | 8K | SDK migration historic | **Archive to archive/docs/** |
-| `SDK_MIGRATION_STATUS.md` | 8K | Historic status | **Archive to archive/docs/** |
-| `FRESH_ENGINE_MIGRATION_STATUS.md` | 8K | Historic migration | **Archive to archive/docs/** |
-| `DEPLOYMENT_REPORT.md` | 8K | Historic deployment report | **Archive to archive/docs/** |
-| `FINAL_SIGN_OFF.md` | 12K | Historic sign-off | **Archive to archive/docs/** |
-| `STRATEGIC_AUDIT_TODOS.md` | 28K | Dated audit todos | **Archive to archive/docs/** |
-| `CHROMEBOOK_KEEP_COPILOT.md` | 8K | Device-specific guidance; niche use case | **Archive to archive/docs/** |
-| `CHROMEBOOK_MEMORY_STRATEGY.md` | 8K | Device-specific optimization | **Archive to archive/docs/** |
-| `CODE_9_CRASH_ANALYSIS.md` | 8K | Historic crash analysis | **Archive to archive/docs/** |
-| `MEMORY_MANAGEMENT.md` | 4K | Legacy memory notes | **Archive to archive/docs/** |
-| `OOM_PREVENTION.md` | 4K | Legacy OOM notes | **Archive to archive/docs/** |
-| `ERROR_PREVENTION_PATTERNS.md` | 8K | Redundant with CODING_RULES_AND_PATTERNS.md | **Archive; reference from rules** |
-| `FIREBASE_PROMPT_WORKFLOW.md` | 8K | Historic Firebase workflow | **Archive to archive/docs/** |
-| `TEST_INTELLIGENCE_INTEGRATION_REPORT.md` | 20K | Historic test report | **Archive to archive/docs/** |
-| `TEST_INTELLIGENCE_SUMMARY.md` | 16K | Historic test summary | **Archive to archive/docs/** |
-| `qa-report.md` | 8K | Historic QA report | **Archive to archive/docs/** |
-| `qa-postfix-report.md` | 4K | Historic QA postfix | **Archive to archive/docs/** |
-| `PR_STAGING_SUMMARY.md` | 12K | Staging PR notes | **Archive unless active** |
-| `BRANCH_LINKING_GUIDE.md` | 12K | Git workflow guide; check if still used | **Keep or archive based on usage** |
-| `PNPM_ENFORCEMENT.md` | 4K | pnpm setup; covered in QUICK_START | **Merge into QUICK_START or remove** |
-| `RATE_LIMIT_IMPLEMENTATION.md` | 16K | Implementation notes; check if current | **Verify current; move to implementation guides** |
-| `VERSION_v14.5.md` | 4K | Version notes; superseded by current | **Archive to archive/docs/** |
-| `AGENTS.md` | 4K | Agent docs; may be in docs/agents/ | **Consolidate with docs/agents/ structure** |
-| `AGENTS.md` | 4K | Agent docs; check for duplication | **Review against docs/agents/** |
-| `copilot-instruction.md` | 8K | Governance; check against .github/copilot-instructions.md | **See governance section** |
-| `repo-instruction-index.md` | 8K | Index of instructions | **Keep or archive based on maintenance** |
-| `reconciled-rulebook.md` | 16K | Historic rulebook | **Archive unless actively used** |
+| File                                      | Size | Reason                                                    | Action                                            |
+| ----------------------------------------- | ---- | --------------------------------------------------------- | ------------------------------------------------- |
+| `PHASE_1_TIER_0_FIXES.md`                 | 8K   | Phase 1 work completed; no future reference               | **Archive to archive/docs/**                      |
+| `PHASE_2_TIER_1_FIXES.md`                 | 8K   | Phase 2 work completed                                    | **Archive to archive/docs/**                      |
+| `PHASE_2_STATUS_REPORT.md`                | 8K   | Status report, phase complete                             | **Archive to archive/docs/**                      |
+| `PHASE_2_COMPLETION_SUMMARY.md`           | 8K   | Phase complete summary                                    | **Archive to archive/docs/**                      |
+| `PHASE_3_TIER3_CLEANUP.md`                | 8K   | Phase work item; reference only                           | **Archive to archive/docs/**                      |
+| `MIGRATION_COMPLETE.md`                   | 16K  | Migration complete; archived                              | **Archive to archive/docs/**                      |
+| `SDK_MIGRATION_COMPLETE.md`               | 8K   | SDK migration historic                                    | **Archive to archive/docs/**                      |
+| `SDK_MIGRATION_STATUS.md`                 | 8K   | Historic status                                           | **Archive to archive/docs/**                      |
+| `FRESH_ENGINE_MIGRATION_STATUS.md`        | 8K   | Historic migration                                        | **Archive to archive/docs/**                      |
+| `DEPLOYMENT_REPORT.md`                    | 8K   | Historic deployment report                                | **Archive to archive/docs/**                      |
+| `FINAL_SIGN_OFF.md`                       | 12K  | Historic sign-off                                         | **Archive to archive/docs/**                      |
+| `STRATEGIC_AUDIT_TODOS.md`                | 28K  | Dated audit todos                                         | **Archive to archive/docs/**                      |
+| `CHROMEBOOK_KEEP_COPILOT.md`              | 8K   | Device-specific guidance; niche use case                  | **Archive to archive/docs/**                      |
+| `CHROMEBOOK_MEMORY_STRATEGY.md`           | 8K   | Device-specific optimization                              | **Archive to archive/docs/**                      |
+| `CODE_9_CRASH_ANALYSIS.md`                | 8K   | Historic crash analysis                                   | **Archive to archive/docs/**                      |
+| `MEMORY_MANAGEMENT.md`                    | 4K   | Legacy memory notes                                       | **Archive to archive/docs/**                      |
+| `OOM_PREVENTION.md`                       | 4K   | Legacy OOM notes                                          | **Archive to archive/docs/**                      |
+| `ERROR_PREVENTION_PATTERNS.md`            | 8K   | Redundant with CODING_RULES_AND_PATTERNS.md               | **Archive; reference from rules**                 |
+| `FIREBASE_PROMPT_WORKFLOW.md`             | 8K   | Historic Firebase workflow                                | **Archive to archive/docs/**                      |
+| `TEST_INTELLIGENCE_INTEGRATION_REPORT.md` | 20K  | Historic test report                                      | **Archive to archive/docs/**                      |
+| `TEST_INTELLIGENCE_SUMMARY.md`            | 16K  | Historic test summary                                     | **Archive to archive/docs/**                      |
+| `qa-report.md`                            | 8K   | Historic QA report                                        | **Archive to archive/docs/**                      |
+| `qa-postfix-report.md`                    | 4K   | Historic QA postfix                                       | **Archive to archive/docs/**                      |
+| `PR_STAGING_SUMMARY.md`                   | 12K  | Staging PR notes                                          | **Archive unless active**                         |
+| `BRANCH_LINKING_GUIDE.md`                 | 12K  | Git workflow guide; check if still used                   | **Keep or archive based on usage**                |
+| `PNPM_ENFORCEMENT.md`                     | 4K   | pnpm setup; covered in QUICK_START                        | **Merge into QUICK_START or remove**              |
+| `RATE_LIMIT_IMPLEMENTATION.md`            | 16K  | Implementation notes; check if current                    | **Verify current; move to implementation guides** |
+| `VERSION_v14.5.md`                        | 4K   | Version notes; superseded by current                      | **Archive to archive/docs/**                      |
+| `AGENTS.md`                               | 4K   | Agent docs; may be in docs/agents/                        | **Consolidate with docs/agents/ structure**       |
+| `AGENTS.md`                               | 4K   | Agent docs; check for duplication                         | **Review against docs/agents/**                   |
+| `copilot-instruction.md`                  | 8K   | Governance; check against .github/copilot-instructions.md | **See governance section**                        |
+| `repo-instruction-index.md`               | 8K   | Index of instructions                                     | **Keep or archive based on maintenance**          |
+| `reconciled-rulebook.md`                  | 16K  | Historic rulebook                                         | **Archive unless actively used**                  |
 
 ---
 
@@ -98,7 +100,8 @@
 #### **docs/mega-book/** (232 KB)
 
 - **Status**: Comprehensive system documentation
-- **Structure**: L0 (system) → L1 (layers) → L2 (subsystems) → L3 (components) → L4 (tasks) → Appendices
+- **Structure**: L0 (system) → L1 (layers) → L2 (subsystems) → L3 (components) → L4 (tasks) →
+  Appendices
 - **Assessment**:
   - ✅ Well-structured, detailed
   - ⚠️ May be duplicative with CODING_RULES_AND_PATTERNS.md
@@ -187,29 +190,29 @@
 
 #### 🟢 KEEP (Well-scoped, Active)
 
-| File | Scope | Purpose | Status |
-|------|-------|---------|--------|
-| `production-development-directive.instructions.md` | ** | Core prod workflow, hierarchical thinking | ✅ **MASTER DIRECTIVE** |
-| `code-review-generic.instructions.md` | ** | Code review standards | ✅ **ACTIVE** |
-| `security-and-owasp.instructions.md` | * | Security best practices | ✅ **ACTIVE** |
-| `ai-prompt-engineering-safety-best-practices.instructions.md` | * | AI prompt engineering & safety | ✅ **ACTIVE** |
-| `typescript-5-es2022.instructions.md` | **/*.ts | TypeScript standards | ✅ **ACTIVE** |
-| `nextjs-tailwind.instructions.md` | **/*.tsx,*.ts, *.jsx,*.js, *.css | Next.js + Tailwind standards | ✅ **ACTIVE** |
-| `nextjs.instructions.md` | ** | Next.js general standards | ✅ **ACTIVE** |
-| `firebase-typing-and-monorepo-memory.instructions.md` | apps/web/app/api/**/*.ts, apps/web/lib/**/*.ts, packages/*/**/*.ts | Firebase typing & monorepo memory | ✅ **ACTIVE** |
-| `playwright-typescript.instructions.md` | ** | Playwright test patterns | ✅ **ACTIVE** |
-| `performance-optimization.instructions.md` | * | Performance best practices | ✅ **ACTIVE** |
-| `object-calisthenics.instructions.md` | **/*.{cs,ts,java} | OOP principles | ✅ **ACTIVE** |
-| `taming-copilot.instructions.md` | ** | Copilot behavioral control | ✅ **ACTIVE** |
+| File                                                          | Scope                                                                | Purpose                                   | Status                  |
+| ------------------------------------------------------------- | -------------------------------------------------------------------- | ----------------------------------------- | ----------------------- |
+| `production-development-directive.instructions.md`            | \*\*                                                                 | Core prod workflow, hierarchical thinking | ✅ **MASTER DIRECTIVE** |
+| `code-review-generic.instructions.md`                         | \*\*                                                                 | Code review standards                     | ✅ **ACTIVE**           |
+| `security-and-owasp.instructions.md`                          | \*                                                                   | Security best practices                   | ✅ **ACTIVE**           |
+| `ai-prompt-engineering-safety-best-practices.instructions.md` | \*                                                                   | AI prompt engineering & safety            | ✅ **ACTIVE**           |
+| `typescript-5-es2022.instructions.md`                         | \*_/_.ts                                                             | TypeScript standards                      | ✅ **ACTIVE**           |
+| `nextjs-tailwind.instructions.md`                             | \*_/_.tsx,_.ts, _.jsx,_.js, _.css                                    | Next.js + Tailwind standards              | ✅ **ACTIVE**           |
+| `nextjs.instructions.md`                                      | \*\*                                                                 | Next.js general standards                 | ✅ **ACTIVE**           |
+| `firebase-typing-and-monorepo-memory.instructions.md`         | apps/web/app/api/**/\*.ts, apps/web/lib/**/_.ts, packages/_/\*_/_.ts | Firebase typing & monorepo memory         | ✅ **ACTIVE**           |
+| `playwright-typescript.instructions.md`                       | \*\*                                                                 | Playwright test patterns                  | ✅ **ACTIVE**           |
+| `performance-optimization.instructions.md`                    | \*                                                                   | Performance best practices                | ✅ **ACTIVE**           |
+| `object-calisthenics.instructions.md`                         | \*_/_.{cs,ts,java}                                                   | OOP principles                            | ✅ **ACTIVE**           |
+| `taming-copilot.instructions.md`                              | \*\*                                                                 | Copilot behavioral control                | ✅ **ACTIVE**           |
 
 ---
 
 #### 🟡 MERGE/CONSOLIDATE (Overlapping)
 
-| File | Issue | Consolidation Target | Action |
-|------|-------|----------------------|--------|
-| `github-actions-ci-cd-best-practices.instructions.md` | Likely overlaps with workflow standards | Create `.github/workflows/STANDARDS.md` or merge into production-development-directive | **ARCHIVE or FOLD INTO CI STANDARDS DOC** |
-| `self-explanatory-code-commenting.instructions.md` | Coding style guideline | Could merge into code-review-generic or nextjs standards | **OPTIONAL: Keep separate for clarity or fold** |
+| File                                                  | Issue                                   | Consolidation Target                                                                   | Action                                          |
+| ----------------------------------------------------- | --------------------------------------- | -------------------------------------------------------------------------------------- | ----------------------------------------------- |
+| `github-actions-ci-cd-best-practices.instructions.md` | Likely overlaps with workflow standards | Create `.github/workflows/STANDARDS.md` or merge into production-development-directive | **ARCHIVE or FOLD INTO CI STANDARDS DOC**       |
+| `self-explanatory-code-commenting.instructions.md`    | Coding style guideline                  | Could merge into code-review-generic or nextjs standards                               | **OPTIONAL: Keep separate for clarity or fold** |
 
 ---
 
@@ -217,12 +220,13 @@
 
 #### Duplication Issue: Copilot Instructions
 
-| File | Location | Status | Action |
-|-------|----------|--------|--------|
-| `.github/copilot-instructions.md` | `.github/` | **Main governance doc** | ✅ **PRIMARY** (v2.0, comprehensive) |
-| `docs/copilot-instruction.md` | `docs/` | **Duplicate** | ❌ **DELETE** (superseded by .github version) |
+| File                              | Location   | Status                  | Action                                        |
+| --------------------------------- | ---------- | ----------------------- | --------------------------------------------- |
+| `.github/copilot-instructions.md` | `.github/` | **Main governance doc** | ✅ **PRIMARY** (v2.0, comprehensive)          |
+| `docs/copilot-instruction.md`     | `docs/`    | **Duplicate**           | ❌ **DELETE** (superseded by .github version) |
 
-**Recommendation**: Delete `docs/copilot-instruction.md`; ensure `.github/copilot-instructions.md` is linked from QUICK_START.md.
+**Recommendation**: Delete `docs/copilot-instruction.md`; ensure `.github/copilot-instructions.md`
+is linked from QUICK_START.md.
 
 ---
 
@@ -230,18 +234,18 @@
 
 ### Test Configuration Files
 
-| File | Purpose | Status |
-|------|---------|--------|
-| `vitest.config.ts` (root) | Root vitest config | ✅ Active |
-| `vitest.unit.config.ts` | Unit test config | ✅ Active |
-| `vitest.integration.config.ts` | Integration test config | ✅ Active |
-| `vitest.setup.ts` | Setup for vitest | ✅ Active |
-| `vitest.global-setup.ts` | Global setup | ✅ Active |
-| `jest.config.ts` | Jest config (legacy?) | 🟡 Check if active |
-| `jest-playwright.config.js` | Playwright Jest config | 🟡 Check if active (Playwright should use vitest) |
-| `jest.rules.config.js` | Firestore rules testing | ✅ Active (Firebase rules) |
-| `apps/web/vitest.config.ts` | Web app vitest config | ✅ Active |
-| `packages/rules-tests/vitest.config.ts` | Rules test config | ✅ Active |
+| File                                    | Purpose                 | Status                                            |
+| --------------------------------------- | ----------------------- | ------------------------------------------------- |
+| `vitest.config.ts` (root)               | Root vitest config      | ✅ Active                                         |
+| `vitest.unit.config.ts`                 | Unit test config        | ✅ Active                                         |
+| `vitest.integration.config.ts`          | Integration test config | ✅ Active                                         |
+| `vitest.setup.ts`                       | Setup for vitest        | ✅ Active                                         |
+| `vitest.global-setup.ts`                | Global setup            | ✅ Active                                         |
+| `jest.config.ts`                        | Jest config (legacy?)   | 🟡 Check if active                                |
+| `jest-playwright.config.js`             | Playwright Jest config  | 🟡 Check if active (Playwright should use vitest) |
+| `jest.rules.config.js`                  | Firestore rules testing | ✅ Active (Firebase rules)                        |
+| `apps/web/vitest.config.ts`             | Web app vitest config   | ✅ Active                                         |
+| `packages/rules-tests/vitest.config.ts` | Rules test config       | ✅ Active                                         |
 
 **Assessment**:
 
@@ -252,18 +256,19 @@
 
 ### Test File Distribution
 
-| Category | Count | Status |
-|----------|-------|--------|
-| Total test files (*.test.ts,*.spec.ts) | ~335 | Good coverage |
-| Unit tests | ? | In vitest |
-| Integration tests | ? | In vitest |
-| E2E tests | ? | Playwright configs present |
-| Firestore rules tests | ? | jest.rules.config.js + packages/rules-tests/ |
+| Category                               | Count | Status                                       |
+| -------------------------------------- | ----- | -------------------------------------------- |
+| Total test files (_.test.ts,_.spec.ts) | ~335  | Good coverage                                |
+| Unit tests                             | ?     | In vitest                                    |
+| Integration tests                      | ?     | In vitest                                    |
+| E2E tests                              | ?     | Playwright configs present                   |
+| Firestore rules tests                  | ?     | jest.rules.config.js + packages/rules-tests/ |
 
 **Assessment**:
 
 - Good test coverage across types
-- **Recommendation**: Ensure all tests pass; consolidate configs; deprecate jest if vitest is primary
+- **Recommendation**: Ensure all tests pass; consolidate configs; deprecate jest if vitest is
+  primary
 
 ---
 
@@ -271,19 +276,19 @@
 
 ### Root-Level Status/Report Files
 
-| File | Type | Age | Status | Action |
-|------|------|-----|--------|--------|
-| `pattern-validation-report.json` | Report | Current | ✅ Active | Keep (recent) |
-| `repomix-output.xml` | Generated report | 2.2M | ⚠️ Large | **IGNORE** (generated artifact; add to .gitignore?) |
-| `rate-limit.ts` | Implementation file | Current | ✅ Active | Keep |
-| `system-pulse.ts` | Monitoring/health file | Current | ✅ Active | Keep (check if used) |
+| File                             | Type                   | Age     | Status    | Action                                              |
+| -------------------------------- | ---------------------- | ------- | --------- | --------------------------------------------------- |
+| `pattern-validation-report.json` | Report                 | Current | ✅ Active | Keep (recent)                                       |
+| `repomix-output.xml`             | Generated report       | 2.2M    | ⚠️ Large  | **IGNORE** (generated artifact; add to .gitignore?) |
+| `rate-limit.ts`                  | Implementation file    | Current | ✅ Active | Keep                                                |
+| `system-pulse.ts`                | Monitoring/health file | Current | ✅ Active | Keep (check if used)                                |
 
 ---
 
 ### Generated/Cached Files (Should Be in .gitignore)
 
-| File | Purpose | Status | Action |
-|------|---------|--------|--------|
+| File                 | Purpose                  | Status                          | Action                          |
+| -------------------- | ------------------------ | ------------------------------- | ------------------------------- |
 | `repomix-output.xml` | Codebase analysis output | ⚠️ 2.2M, shouldn't be committed | **Add to .gitignore or remove** |
 
 ---
@@ -292,7 +297,8 @@
 
 ### Phase 1: Parallel Batch Cleanup (Execute All Batches, Then Stop)
 
-**Approach**: Execute all cleanup batches in parallel to maximize efficiency. After completion, pause for Phase 2 planning (restructure).
+**Approach**: Execute all cleanup batches in parallel to maximize efficiency. After completion,
+pause for Phase 2 planning (restructure).
 
 ---
 
@@ -319,7 +325,8 @@ find apps packages -type f \( -name "*.ts" -o -name "*.tsx" -o -name "*.js" \) -
 
 #### **BATCH 2: Remove Duplicate Governance File**
 
-**Rationale**: `docs/copilot-instruction.md` is superseded by `.github/copilot-instructions.md` (v2.0).
+**Rationale**: `docs/copilot-instruction.md` is superseded by `.github/copilot-instructions.md`
+(v2.0).
 
 ```bash
 # Delete duplicate
@@ -464,15 +471,15 @@ git log --oneline -1 && echo "✓ Phase 1 commit created"
 
 ### Summary: Phase 1 Parallel Batches
 
-| Batch | Task | Files Affected | Time |
-|-------|------|----------------|------|
-| 1 | Remove Jest build system | 3 config files | 5 min |
-| 2 | Remove duplicate governance | 1 doc file | 2 min |
-| 3 | Archive phase/migration work | 13 doc files | 5 min |
-| 4 | Archive device-specific/legacy | 5 doc files | 5 min |
-| 5 | Archive test/QA reports | 4 doc files | 3 min |
-| 6 | Update .gitignore | 1 config file | 2 min |
-| 7 | Create git commit | 1 commit | 2 min |
+| Batch | Task                           | Files Affected | Time  |
+| ----- | ------------------------------ | -------------- | ----- |
+| 1     | Remove Jest build system       | 3 config files | 5 min |
+| 2     | Remove duplicate governance    | 1 doc file     | 2 min |
+| 3     | Archive phase/migration work   | 13 doc files   | 5 min |
+| 4     | Archive device-specific/legacy | 5 doc files    | 5 min |
+| 5     | Archive test/QA reports        | 4 doc files    | 3 min |
+| 6     | Update .gitignore              | 1 config file  | 2 min |
+| 7     | Create git commit              | 1 commit       | 2 min |
 
 **Total Time**: ~20 min (all batches sequential but simple)  
 **Expected Outcome**:
@@ -500,7 +507,8 @@ After Phase 1 completion:
 ### Phase 2: Consolidation (1-2 hours)
 
 1. **Merge Production Readiness docs**
-   - Consolidate `PRODUCTION_READINESS_KPI.md` and `PRODUCTION_READINESS_SIGN_OFF.md` into `PRODUCTION_READINESS.md`
+   - Consolidate `PRODUCTION_READINESS_KPI.md` and `PRODUCTION_READINESS_SIGN_OFF.md` into
+     `PRODUCTION_READINESS.md`
    - Delete merged files
 
 2. **Review and archive historic docs**
@@ -555,61 +563,61 @@ After Phase 1 completion:
 
 ### Keepers (Keep As-Is)
 
-| Path | Type | Reason |
-|------|------|--------|
-| docs/QUICK_START.md | Nav | Entry point |
-| docs/README.md | Nav | Overview |
-| docs/CODING_RULES_AND_PATTERNS.md | Ref | Canonical patterns |
-| docs/PRODUCTION_DEPLOYMENT_GUIDE.md | Guide | Active use |
-| docs/PRODUCTION_READINESS.md | Guide | Active use |
-| docs/PRODUCTION_ENV_VALIDATION.md | Guide | Active use |
-| docs/FIREBASE_TYPING_STRATEGY.md | Tech | Active use |
-| docs/VSCODE_TASKS.md | Tech | Active use |
-| docs/mega-book/ | Ref | Comprehensive reference |
-| docs/crewops/ | Guide | Agent operations (active) |
-| docs/templates/ | Resource | Code scaffolding |
-| docs/visuals/ | Resource | Architecture diagrams |
-| .github/instructions/*.md | Governance | AI behavior control |
-| .github/copilot-instructions.md | Governance | Master directive |
+| Path                                | Type       | Reason                    |
+| ----------------------------------- | ---------- | ------------------------- |
+| docs/QUICK_START.md                 | Nav        | Entry point               |
+| docs/README.md                      | Nav        | Overview                  |
+| docs/CODING_RULES_AND_PATTERNS.md   | Ref        | Canonical patterns        |
+| docs/PRODUCTION_DEPLOYMENT_GUIDE.md | Guide      | Active use                |
+| docs/PRODUCTION_READINESS.md        | Guide      | Active use                |
+| docs/PRODUCTION_ENV_VALIDATION.md   | Guide      | Active use                |
+| docs/FIREBASE_TYPING_STRATEGY.md    | Tech       | Active use                |
+| docs/VSCODE_TASKS.md                | Tech       | Active use                |
+| docs/mega-book/                     | Ref        | Comprehensive reference   |
+| docs/crewops/                       | Guide      | Agent operations (active) |
+| docs/templates/                     | Resource   | Code scaffolding          |
+| docs/visuals/                       | Resource   | Architecture diagrams     |
+| .github/instructions/\*.md          | Governance | AI behavior control       |
+| .github/copilot-instructions.md     | Governance | Master directive          |
 
 ---
 
 ### Archive Candidates (Move to archive/docs/)
 
-| Path | Reason |
-|------|--------|
-| docs/PHASE_*.md | Phase work complete |
-| docs/SDK_MIGRATION_*.md | Migration complete |
-| docs/CHROMEBOOK_*.md | Device-specific (niche) |
-| docs/CODE_9_CRASH_ANALYSIS.md | Historic crash analysis |
-| docs/TEST_INTELLIGENCE_*.md | Historic test reports |
-| docs/qa-*.md | Historic QA reports |
-| docs/MEMORY_MANAGEMENT.md | Legacy optimization notes |
-| docs/SESSION_SUMMARY_DEC_1_2025.md | Date-stamped session notes |
+| Path                                    | Reason                          |
+| --------------------------------------- | ------------------------------- |
+| docs/PHASE\_\*.md                       | Phase work complete             |
+| docs/SDK*MIGRATION*\*.md                | Migration complete              |
+| docs/CHROMEBOOK\_\*.md                  | Device-specific (niche)         |
+| docs/CODE_9_CRASH_ANALYSIS.md           | Historic crash analysis         |
+| docs/TEST*INTELLIGENCE*\*.md            | Historic test reports           |
+| docs/qa-\*.md                           | Historic QA reports             |
+| docs/MEMORY_MANAGEMENT.md               | Legacy optimization notes       |
+| docs/SESSION_SUMMARY_DEC_1_2025.md      | Date-stamped session notes      |
 | archive/docs/PHASE_3_PROGRESS_REPORT.md | Already archived; confirm clean |
 
 ---
 
 ### Delete/Remove
 
-| Path | Reason |
-|------|--------|
+| Path                        | Reason                                       |
+| --------------------------- | -------------------------------------------- |
 | docs/copilot-instruction.md | Duplicate of .github/copilot-instructions.md |
-| repomix-output.xml | Generated artifact; should be .gitignored |
-| jest.config.ts | If vitest is primary (audit first) |
-| jest-playwright.config.js | If vitest + Playwright is primary |
+| repomix-output.xml          | Generated artifact; should be .gitignored    |
+| jest.config.ts              | If vitest is primary (audit first)           |
+| jest-playwright.config.js   | If vitest + Playwright is primary            |
 
 ---
 
 ### Merge/Consolidate
 
-| From | To | Reason |
-|------|----|----|
-| PRODUCTION_READINESS_KPI.md | PRODUCTION_READINESS.md | Overlapping content |
-| PRODUCTION_READINESS_SIGN_OFF.md | PRODUCTION_READINESS.md | Overlapping content |
-| ERROR_PREVENTION_PATTERNS.md | CODING_RULES_AND_PATTERNS.md | Redundant |
-| docs/AGENTS.md | docs/crewops/ | Consolidate agent docs |
-| PNPM_ENFORCEMENT.md | QUICK_START.md | Package manager setup |
+| From                             | To                           | Reason                 |
+| -------------------------------- | ---------------------------- | ---------------------- |
+| PRODUCTION_READINESS_KPI.md      | PRODUCTION_READINESS.md      | Overlapping content    |
+| PRODUCTION_READINESS_SIGN_OFF.md | PRODUCTION_READINESS.md      | Overlapping content    |
+| ERROR_PREVENTION_PATTERNS.md     | CODING_RULES_AND_PATTERNS.md | Redundant              |
+| docs/AGENTS.md                   | docs/crewops/                | Consolidate agent docs |
+| PNPM_ENFORCEMENT.md              | QUICK_START.md               | Package manager setup  |
 
 ---
 
