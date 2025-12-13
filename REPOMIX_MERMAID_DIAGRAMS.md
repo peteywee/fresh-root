@@ -8,7 +8,7 @@ Visual representations of the REPOMIX 95/100 system using Mermaid.
 
 ```mermaid
 graph TD
-    A["Developer: git push"] -->|0 sec| B["TRIGGER 1: Pre-Push Hook<br/>(Local, 2-3 sec)"]
+   TRIGGER 1: Pre-Push Hook<br/>(Local, 2-3 sec)"]
     B -->|TypeCheck| B1["✅ Validate TypeScript"]
     B -->|Lint| B2["✅ Check Code Style"]
     B -->|Repomix Check| B3["✅ Analyze Dependencies<br/>(non-blocking)"]

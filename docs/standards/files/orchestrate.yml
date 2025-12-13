@@ -8,9 +8,9 @@ name: Pipeline Orchestrator
 
 on:
   pull_request:
-    branches: [main, staging]
+    branches: [main, dev]
   push:
-    branches: [main, staging]
+    branches: [main, dev]
   workflow_dispatch:
     inputs:
       pipeline:

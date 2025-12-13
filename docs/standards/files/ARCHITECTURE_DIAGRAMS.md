@@ -240,30 +240,30 @@ flowchart TD
 ```mermaid
 gitGraph
     commit id: "initial"
-    branch staging
-    checkout staging
-    commit id: "staging-init"
+    branch dev
+    checkout dev
+    commit id: "dev-init"
     branch feature/FS-123-new-feature
     checkout feature/FS-123-new-feature
     commit id: "feat-1"
     commit id: "feat-2"
-    checkout staging
+    checkout dev
     merge feature/FS-123-new-feature id: "squash-merge" type: HIGHLIGHT
     branch feature/FS-124-another
     checkout feature/FS-124-another
     commit id: "feat-3"
-    checkout staging
+    checkout dev
     merge feature/FS-124-another id: "squash-merge-2"
     checkout main
-    merge staging id: "release-1" tag: "v1.0.0" type: HIGHLIGHT
-    checkout staging
+    merge dev id: "release-1" tag: "v1.0.0" type: HIGHLIGHT
+    checkout dev
     commit id: "post-release"
     checkout main
     branch hotfix/URGENT-fix
     commit id: "hotfix"
     checkout main
     merge hotfix/URGENT-fix id: "hotfix-merge" type: REVERSE
-    checkout staging
+    checkout dev
     cherry-pick id: "cherry-pick-hotfix"
 ```
 

@@ -14,14 +14,14 @@ This document defines branch protection rules. Designed to be light and extensib
 ```
 main (production)
 │
-├── staging (pre-production)
+├── dev (pre-production)
 │   │
 │   ├── feature/* (new features)
 │   ├── fix/* (bug fixes)
 │   ├── refactor/* (improvements)
 │   └── chore/* (maintenance)
 │
-└── hotfix/* (emergency fixes → main + staging)
+└── hotfix/* (emergency fixes → main + dev)
 ```
 
 ---
@@ -38,11 +38,11 @@ main (production)
 | **Require status checks** | Yes | Gates must pass |
 | **Required checks** | CI, Orchestrate | Core validation |
 | **Require branches up to date** | Yes | No stale merges |
-| **Restrict push** | staging only | Only from staging |
+| **Restrict push** | dev only | Only from dev |
 | **Allow force push** | No | Never |
 | **Allow deletions** | No | Never |
 
-### staging Branch
+### dev Branch
 
 | Setting | Value | Reason |
 |---------|-------|--------|
@@ -104,13 +104,13 @@ main (production)
 
 | Source | Target | Strategy |
 |--------|--------|----------|
-| `feature/*` | `staging` | Squash |
-| `fix/*` | `staging` | Squash |
-| `refactor/*` | `staging` | Squash |
-| `chore/*` | `staging` | Squash |
-| `staging` | `main` | Merge commit |
+| `feature/*` | `dev` | Squash |
+| `fix/*` | `dev` | Squash |
+| `refactor/*` | `dev` | Squash |
+| `chore/*` | `dev` | Squash |
+| `dev` | `main` | Merge commit |
 | `hotfix/*` | `main` | Merge commit |
-| `hotfix/*` | `staging` | Merge commit |
+| `hotfix/*` | `dev` | Merge commit |
 
 ### Why Squash for Features
 
@@ -131,8 +131,8 @@ main (production)
 ### Standard Flow
 
 ```bash
-# 1. Create branch from staging
-git checkout staging
+# 1. Create branch from dev
+git checkout dev
 git pull
 git checkout -b feature/FS-123-new-feature
 
@@ -141,13 +141,13 @@ git checkout -b feature/FS-123-new-feature
 
 # 3. Push and open PR
 git push -u origin feature/FS-123-new-feature
-# Open PR to staging
+# Open PR to dev
 
 # 4. Review and merge (squash)
 # PR merged → branch auto-deleted
 
 # 5. Release to main
-# Open PR from staging to main
+# Open PR from dev to main
 # 2 approvals → merge commit
 ```
 
@@ -169,8 +169,8 @@ git push -u origin hotfix/FS-999-critical
 # 4. Emergency review (1 approval)
 # Merge to main
 
-# 5. Also merge to staging
-git checkout staging
+# 5. Also merge to dev
+git checkout dev
 git merge hotfix/FS-999-critical
 git push
 ```
@@ -210,11 +210,11 @@ await octokit.repos.updateBranchProtection({
   allow_deletions: false
 });
 
-// Staging branch protection
+// Dev branch protection
 await octokit.repos.updateBranchProtection({
   owner: 'peteywee',
   repo: 'frsh-root',
-  branch: 'staging',
+  branch: 'dev',
   required_status_checks: {
     strict: false,
     contexts: ['CI']
@@ -271,7 +271,7 @@ Example: Adding `docs/*` branches
 # Additional branch type
 docs/*:
   purpose: Documentation changes
-  merges_to: staging
+  merges_to: dev
   strategy: squash
   auto_delete: true
   approvals: 1

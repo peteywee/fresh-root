@@ -258,11 +258,11 @@ pnpm dev
 
 ```bash
 # Update dependencies
-git pull origin staging
+git pull origin dev
 pnpm install
 
 # Create feature branch
-git checkout -b feature/FS-123-my-feature staging
+git checkout -b feature/FS-123-my-feature dev
 
 # Start dev
 pnpm dev
@@ -283,17 +283,17 @@ git push -u origin feature/FS-123-my-feature
 ## INSTRUCTION 06: Deploying to Production
 
 ### Prerequisites
-- All gates pass on `staging`
+- All gates pass on `dev`
 - Required approvals obtained
 - Changelog updated
 
 ### Steps
 
-**Step 1**: Merge staging to main
+**Step 1**: Merge dev to main
 ```bash
 git checkout main
 git pull origin main
-git merge staging --no-ff -m "Release: v1.2.3"
+git merge dev --no-ff -m "Release: v1.2.3"
 git push origin main
 ```
 
@@ -337,15 +337,15 @@ pnpm orchestrate Security.HEAVY
 - Contact team lead
 - Document impact and fix
 
-**Step 5**: Merge to main AND staging
+**Step 5**: Merge to main AND dev
 ```bash
 git checkout main
 git merge hotfix/FS-999-critical-bug --no-ff
 git push origin main
 
-git checkout staging
+git checkout dev
 git merge hotfix/FS-999-critical-bug --no-ff
-git push origin staging
+git push origin dev
 ```
 
 **Step 6**: Tag release

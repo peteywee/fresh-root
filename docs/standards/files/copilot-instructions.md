@@ -144,12 +144,12 @@ pnpm orchestrate Feature.STANDARD  # Explicit
 
 ```
 main (production)
-└── staging (pre-production)
-    ├── feature/* → staging (squash)
-    ├── fix/* → staging (squash)
-    └── refactor/* → staging (squash)
+└── dev (pre-production)
+  ├── feature/* → dev (squash)
+  ├── fix/* → dev (squash)
+  └── refactor/* → dev (squash)
 
-hotfix/* → main + staging (merge commit)
+hotfix/* → main + dev (merge commit)
 ```
 
 **Naming**: `{type}/{ticket}-{description}`
