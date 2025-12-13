@@ -462,7 +462,7 @@ interface GuardContract {
 - {Optional improvement}
 
 ### Approved For
-- [ ] staging
+- [ ] dev
 - [ ] main (requires additional review)
 ```
 

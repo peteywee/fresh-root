@@ -28,9 +28,9 @@ name: CI
 
 on:
   pull_request:
-    branches: [main, staging]
+    branches: [main, dev]
   push:
-    branches: [main, staging]
+    branches: [main, dev]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -130,7 +130,7 @@ name: Orchestrate
 
 on:
   pull_request:
-    branches: [main, staging]
+    branches: [main, dev]
   workflow_dispatch:
     inputs:
       pipeline:
@@ -377,7 +377,7 @@ name: Cleanup
 on:
   pull_request:
     types: [closed]
-    branches: [staging]
+    branches: [dev]
 
 jobs:
   cleanup:
@@ -481,9 +481,9 @@ jobs:
 ```yaml
 # Add to deploy.yml
 jobs:
-  deploy-staging:
-    if: github.ref == 'refs/heads/staging'
-    environment: staging
+  deploy-dev:
+    if: github.ref == 'refs/heads/dev'
+    environment: dev
     # ...
     
   deploy-production:

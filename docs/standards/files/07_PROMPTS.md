@@ -406,7 +406,7 @@ Pre-release checklist:
 4. Generate changelog
 
 Target: main branch
-From: staging
+From: dev
 ```
 
 ### Onboard New Developer
