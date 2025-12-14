@@ -1,6 +1,6 @@
-# PR Staging: Infrastructure Hardening & Architecture
+# PR Dev: Infrastructure Hardening & Architecture
 
-**Branch**: `stage/architecture-and-functions-pr`  
+**Branch**: `dev/architecture-and-functions-pr`  
 **Target**: `dev` → `main`  
 **Date**: November 30, 2025  
 **Status**: 🟢 Ready for Review

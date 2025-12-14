@@ -203,7 +203,7 @@ Define clear responsibilities so reviewers and agents can act predictably.
 
 - QA / Test Engineer
   - Responsibility: validate end-to-end behavior where applicable, coverage for critical flows, and
-    confirm bug fixes in staging.
+    confirm bug fixes in dev.
 
 - Architect / Maintainer
   - Responsibility: approve large refactors and SDK-factory migrations; enforce the migration policy
