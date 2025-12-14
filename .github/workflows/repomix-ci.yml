@@ -18,7 +18,9 @@ jobs:
           node-version: '20'
           cache: 'pnpm'
       - name: Install dependencies
-        run: pnpm install --no-frozen-lockfile
+        run: pnpm install --frozen-lockfile
+      - name: Build packages
+        run: pnpm build
       - name: Generate dependency map (JSON)
         run: pnpm repomix . --style json --output docs/architecture/repomix-ci.json --compress
       - name: Generate dependency map (Markdown)
