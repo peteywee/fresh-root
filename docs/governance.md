@@ -154,11 +154,12 @@ Work items:
 - Sweep `apps/web/app/api/**/route.ts`:
   - Replace raw handlers with endpoint wrappers.
   - Add schema validation where missing.
-  - Ensure orgId comes from context, never from client.
+  - Ensure orgId comes from context and that the authenticated user is a member of that org.
+  - Ensure orgId is never accepted from the client payload.
 
 Acceptance criteria:
 - Pattern validation catches any API route not using endpoint wrappers.
-- No route queries Firestore without org scoping.
+- No route queries Firestore without org scoping and user membership validation.
 
 #### C2) Firestore rules enforcement (D01.2)
 Rules:
