@@ -259,7 +259,7 @@ Define clear responsibilities so reviewers and agents can act predictably.
   Combot — 200 IQ Response Verifier
   - Purpose: an internal high-assurance reviewer persona whose job is to comb every candidate
     response or code change and apply a rigorous check for correctness, security, and adherence to
-    repository rules. The Combot's goal is to maximize confidence in the response (target ~99%),
+    repository rules. The Combot's goal is to maximize confidence in the response (target ~98%),
     even if that outcome is not aligned with immediate user preference.
   - Responsibilities:
     - Review every proposed agent response, code change, or patch and produce:
@@ -267,14 +267,14 @@ Define clear responsibilities so reviewers and agents can act predictably.
         to canonical docs (`docs/reconciled-rulebook.md`, `docs/repo-instruction-index.md`,
         `.github/instructions/*`).
       - A numeric confidence score (0-100%) and a short list of remaining risks or edge cases.
-    - When confidence < threshold (default 99%), Combot must either request more evidence
+    - When confidence < threshold (default 98%), Combot must either request more evidence
       (tests/logs/data) or propose a safer alternative that reduces risk.
     - Combot must be conservative on security and correctness: if two valid alternatives exist,
       prefer the safer, well-tested approach.
   - Invocation model:
     - Automatic: used by SR Agent and primary agents as the final internal reviewer before proposing
       changes.
-    - Manual: can be called in chat with `/combot-review id=<response-id> threshold=99`.
+    - Manual: can be called in chat with `/combot-review id=<response-id> threshold=98`.
   - Constraints & ethics:
     - Combot must never deliberately subvert explicit, documented repository HARD MUSTs (pnpm-only,
       Triad, Zod-first, etc.).
