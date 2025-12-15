@@ -6,6 +6,7 @@ import js from "@eslint/js";
 import importPlugin from "eslint-plugin-import";
 import reactHooks from "eslint-plugin-react-hooks";
 import react from "eslint-plugin-react";
+import unusedImports from "eslint-plugin-unused-imports";
 
 export default [
   {
@@ -63,17 +64,20 @@ export default [
       import: importPlugin,
       "react-hooks": reactHooks,
       react: react,
+      "unused-imports": unusedImports,
     },
     rules: {
+      "unused-imports/no-unused-imports": "warn",
       "@typescript-eslint/no-unused-vars": [
         "warn",
         {
           argsIgnorePattern: "^_",
           varsIgnorePattern: "^_",
           caughtErrorsIgnorePattern: "^_",
+          ignoreRestSiblings: true,
         },
       ],
-      "@typescript-eslint/no-explicit-any": "warn", // Warn on explicit any types
+      "@typescript-eslint/no-explicit-any": "off", // Firebase/Firestore returns untyped data
       // SAFEGUARD: Pattern detected 87x - Firebase/Firestore returns untyped data
       // TODO: Create typed wrappers in src/lib/firebase/typed-wrappers.ts
       // Note: Type-aware rules disabled in main config, enabled per workspace
@@ -92,14 +96,7 @@ export default [
       "no-console": "off", // Disabled: service worker needs console
       "react-hooks/rules-of-hooks": "error",
       "react-hooks/exhaustive-deps": "warn",
-      "import/order": [
-        "warn",
-        {
-          groups: [["builtin", "external"], ["internal"], ["parent", "sibling", "index"]],
-          "newlines-between": "always",
-          alphabetize: { order: "asc", caseInsensitive: true },
-        },
-      ],
+      "import/order": "off", // Delegated to Prettier to avoid conflicts
     },
   },
 

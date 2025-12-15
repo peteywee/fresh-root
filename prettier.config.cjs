@@ -2,6 +2,7 @@
 // Tags: P2, APP, ENV
 // prettier.config.cjs
 // Local Prettier configuration for Fresh Root (no external @iac-fresh dependencies).
+// Coordinated with ESLint to avoid formatting conflicts
 
 /** @type {import("prettier").Config} */
 module.exports = {
