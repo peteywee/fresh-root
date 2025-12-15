@@ -1,5 +1,6 @@
 // [P0][JOIN-TOKENS][API] Join tokens endpoint
 
+import { z } from "zod";
 import { createOrgEndpoint } from "@fresh-schedules/api-framework";
 import { CreateJoinTokenSchema } from "@fresh-schedules/types";
 
@@ -39,13 +40,15 @@ export const POST = createOrgEndpoint({
   input: CreateJoinTokenSchema,
   handler: async ({ input, context }) => {
     try {
+      // Type assertion safe - input validated by SDK factory
+      const typedInput = input as z.infer<typeof CreateJoinTokenSchema>;
       const token = {
         id: `token-${Date.now()}`,
         orgId: context.org?.orgId,
         token: Math.random().toString(36).substring(2, 15),
         createdBy: context.auth?.userId,
         createdAt: Date.now(),
-        expiresAt: input.expiresAt ?? Date.now() + 604800000,
+        expiresAt: typedInput.expiresAt ?? Date.now() + 604800000,
       };
       return ok(token);
     } catch {

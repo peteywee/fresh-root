@@ -1,6 +1,7 @@
 // [P0][ONBOARDING][JOIN][API] Join organization with token endpoint
 // Tags: P0, ONBOARDING, JOIN, API, SDK_FACTORY
 
+import { z } from "zod";
 import { createAuthenticatedEndpoint } from "@fresh-schedules/api-framework";
 import { JoinWithTokenSchema } from "@fresh-schedules/types";
 
@@ -14,9 +15,11 @@ export const POST = createAuthenticatedEndpoint({
   input: JoinWithTokenSchema,
   handler: async ({ input, context }) => {
     try {
+      // Type assertion safe - input validated by SDK factory
+      const typedInput = input as z.infer<typeof JoinWithTokenSchema>;
       const result = {
         userId: context.auth?.userId,
-        token: input.joinToken,
+        token: typedInput.joinToken,
         joinedAt: Date.now(),
         role: "member",
         status: "pending_approval",
@@ -27,7 +30,7 @@ export const POST = createAuthenticatedEndpoint({
       console.error("Join with token failed", {
         error: message,
         userId: context.auth?.userId,
-        token: input.joinToken,
+        token: input instanceof Object && "joinToken" in input ? (input as any).joinToken : "unknown",
       });
       return serverError("Failed to join with token");
     }
