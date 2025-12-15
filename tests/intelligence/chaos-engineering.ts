@@ -5,7 +5,6 @@
  * Injects failures to test system resilience and error handling
  */
 
-import { NextRequest, NextResponse } from "next/server";
 
 interface ChaosExperiment {
   name: string;
@@ -90,7 +89,7 @@ export class ChaosEngineer {
    */
   private async applyChaos(
     experiment: ChaosExperiment,
-    request: Request,
+    _request: Request,
   ): Promise<Response | null> {
     const result = this.results.get(experiment.name)!;
 

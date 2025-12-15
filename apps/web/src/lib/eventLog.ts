@@ -10,7 +10,7 @@
  * - Uses the v14 EventSchema from @fresh-schedules/types
  */
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
+ 
 import { NewEventSchema, type NewEvent } from "@fresh-schedules/types";
 import type { Firestore } from "firebase-admin/firestore";
 
