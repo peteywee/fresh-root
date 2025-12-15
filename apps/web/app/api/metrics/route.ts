@@ -10,7 +10,7 @@ import { ok, serverError } from "../_shared/validation";
  */
 export const GET = createPublicEndpoint({
   rateLimit: { maxRequests: 1000, windowMs: 60000 },
-  handler: async ({ request: _request, context: _context, params: _params }) => {
+  handler: async () => {
     try {
       const metrics = {
         uptime: process.uptime(),
