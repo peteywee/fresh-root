@@ -21,7 +21,9 @@ export const POST = createAuthenticatedEndpoint({
   input: MFAVerifySchema,
   handler: async ({ input, context }) => {
     try {
-      const { secret, token } = input;
+      // Type assertion safe - input validated by SDK factory
+      const typedInput = input as z.infer<typeof MFAVerifySchema>;
+      const { secret, token } = typedInput;
 
       // Verify TOTP token
       const verified = speakeasy.totp.verify({

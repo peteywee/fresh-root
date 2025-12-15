@@ -9,23 +9,39 @@ import { z } from "zod";
 const CreateItemSchema = z.object({
   name: z.string().min(1),
   type: z.string().min(1),
-  config: z.record(z.unknown()).optional(),
+  config: z.record(z.string(), z.unknown()).optional(),
 });
 
 type CreateItem = z.infer<typeof CreateItemSchema>;
 
 // Widget endpoint for testing/demo purposes
 export const POST = createPublicEndpoint({
-  input: CreateItemSchema,
-  handler: async ({ input }: { input: CreateItem }) => {
-    const widget = {
-      id: `widget-${Date.now()}`,
-      name: input.name,
-      type: input.type,
-      config: input.config,
-      createdAt: Date.now(),
-      updatedAt: Date.now(),
-    };
-    return NextResponse.json(widget, { status: 201 });
+  handler: async ({ request }) => {
+    try {
+      const body = await request.json();
+      // Validate with schema
+      const result = CreateItemSchema.safeParse(body);
+      if (!result.success) {
+        return NextResponse.json(
+          { error: "Invalid widget data" },
+          { status: 400 },
+        );
+      }
+      const typedInput = result.data;
+      const widget = {
+        id: `widget-${Date.now()}`,
+        name: typedInput.name,
+        type: typedInput.type,
+        config: typedInput.config,
+        createdAt: Date.now(),
+        updatedAt: Date.now(),
+      };
+      return NextResponse.json(widget, { status: 201 });
+    } catch (error) {
+      return NextResponse.json(
+        { error: "Invalid request" },
+        { status: 400 },
+      );
+    }
   },
 });

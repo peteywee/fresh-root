@@ -1,5 +1,6 @@
 // [P0][ATTENDANCE][API] Attendance tracking endpoint
 
+import { z } from "zod";
 import { createAuthenticatedEndpoint } from "@fresh-schedules/api-framework";
 import { CreateAttendanceRecordSchema } from "@fresh-schedules/types";
 import { NextResponse } from "next/server";
@@ -67,7 +68,8 @@ export const POST = createAuthenticatedEndpoint({
   rateLimit: { maxRequests: 100, windowMs: 60_000 },
   handler: async ({ input, context }) => {
     try {
-      const data = input;
+      // Type assertion safe - input validated by SDK factory
+      const data = input as z.infer<typeof CreateAttendanceRecordSchema>;
 
       // Verify orgId matches context
       if (data.orgId !== context.org!.orgId) {

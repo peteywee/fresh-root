@@ -59,11 +59,13 @@ export const POST = createOrgEndpoint({
   input: AddMemberSchema,
   handler: async ({ input, context, params }) => {
     try {
-      const validated = input;
+      // Type assertion safe - input validated by SDK factory
+      const typedInput = input as z.infer<typeof AddMemberSchema>;
       const member = {
         id: `member-${Date.now()}`,
         orgId: params.id,
-        ...validated,
+        email: typedInput.email,
+        role: typedInput.role,
         joinedAt: Date.now(),
         addedBy: context.auth?.userId,
       };
@@ -83,7 +85,9 @@ export const PATCH = createOrgEndpoint({
   input: UpdateMemberSchema,
   handler: async ({ input, context, params }) => {
     try {
-      const { memberId, role } = input;
+      // Type assertion safe - input validated by SDK factory
+      const typedInput = input as z.infer<typeof UpdateMemberSchema>;
+      const { memberId, role } = typedInput;
       const updated = { memberId, role, updatedBy: context.auth?.userId };
       return ok(updated);
     } catch {
@@ -101,7 +105,9 @@ export const DELETE = createOrgEndpoint({
   input: RemoveMemberSchema,
   handler: async ({ input, context, params }) => {
     try {
-      const { memberId } = input;
+      // Type assertion safe - input validated by SDK factory
+      const typedInput = input as z.infer<typeof RemoveMemberSchema>;
+      const { memberId } = typedInput;
       return ok({ removed: true, memberId });
     } catch {
       return serverError("Failed to remove member");

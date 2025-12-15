@@ -15,19 +15,17 @@ const CreateSessionSchema = z.object({
  * Create a session cookie from a Firebase ID token
  */
 export const POST = createPublicEndpoint({
-  handler: async ({ request }) => {
+  input: CreateSessionSchema,
+  handler: async ({ input, request }) => {
     try {
-      const parsed = await parseJson(request, CreateSessionSchema);
-      if (!parsed.success) {
-        return badRequest("Validation failed", parsed.details);
-      }
-
-      const { idToken } = parsed.data;
+      // Type assertion safe - input validated by SDK factory
+      const typedInput = input as z.infer<typeof CreateSessionSchema>;
+      const { idToken } = typedInput;
 
       const auth = getFirebaseAdminAuth();
       // Verify the idToken and create a session cookie (5 days default)
       const expiresIn = 5 * 24 * 60 * 60 * 1000; // 5 days in milliseconds
-      const sessionCookie = await auth.createSessionCookie(parsed.data.idToken, { expiresIn });
+      const sessionCookie = await auth.createSessionCookie(idToken, { expiresIn });
 
       // Set secure HttpOnly session cookie
       const response = ok({ ok: true });

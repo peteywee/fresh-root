@@ -91,7 +91,9 @@ export const PATCH = createOrgEndpoint({
 
     try {
       const { id } = params;
-      const sanitized = sanitizeObject(input);
+      // Type assertion safe - input validated by SDK factory
+      const typedInput = input as z.infer<typeof UpdatePositionSchema>;
+      const sanitized = sanitizeObject(typedInput as Record<string, unknown>);
 
       // Validate with Zod
       const validationResult = PositionSchema.safeParse(sanitized);
