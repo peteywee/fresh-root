@@ -1,9 +1,9 @@
 ---
+priority: 1
+applyTo: "packages/types/**/*.ts,apps/web/app/api/**/*.ts"
 description:
   "TypeScript schema pattern lessons learned from Zod validation implementation in monorepo. Covers
   module resolution, inline vs. exported schemas, and pragmatic workarounds."
-applyTo: "packages/types/**/*.ts,apps/web/app/api/**/*.ts"
-priority: 2
 ---
 
 # TypeScript Schema & Module Resolution Memory

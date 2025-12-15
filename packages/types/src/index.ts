@@ -3,12 +3,23 @@
 import { z } from "zod";
 
 import { AdminResponsibilityFormSchema } from "./compliance/adminResponsibilityForm";
+// Explicit imports for TypeScript to include in declaration
+import { CreateBatchSchema, CreateBatch } from "./batch";
+import { BackupRequestSchema, BackupRequest } from "./internal";
 
 export const Role = z.enum(["admin", "manager", "staff"]);
 export type Role = z.infer<typeof Role>;
 
 // Type inference from compliance schemas
 export type AdminResponsibilityForm = z.infer<typeof AdminResponsibilityFormSchema>;
+
+// Explicit batch exports
+export { CreateBatchSchema };
+export type { CreateBatch };
+
+// Explicit internal exports
+export { BackupRequestSchema };
+export type { BackupRequest };
 
 // RBAC exports - must be first
 export * from "./rbac";

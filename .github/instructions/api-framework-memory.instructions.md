@@ -4,6 +4,11 @@ description: "API framework typing strategies and Zod integration patterns"
 applyTo: "**/api/**/route.ts,packages/api-framework/**/*.ts"
 ---
 
+---
+priority: 1
+applyTo: "**/api/**/route.ts,packages/api-framework/**/*.ts"
+---
+
 # API Framework Memory
 
 Critical patterns for maintaining type safety and developer experience in the Fresh Schedules API

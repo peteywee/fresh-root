@@ -1,9 +1,9 @@
 ---
+priority: 1
 applyTo: "**/apps/web/**, **/packages/types/**"
 description:
   "Memory file for triage and batch endpoint patterns, testing best practices, and fixes applied for
   schema/api/tests triad issues."
-priority: 2
 ---
 
 # Triage & Batch Endpoint Memory
