@@ -3,22 +3,42 @@ on:
   push:
     branches: [main, dev]
   pull_request:
+  workflow_dispatch:
+
+# Cancel in-progress runs for same workflow on same ref
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  NODE_VERSION: '20'
+  PNPM_VERSION: '9.12.1'
 
 jobs:
   repomix:
+    name: Generate Repository Analysis
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
         with:
-          version: 9.12.1
-      - name: Set up Node.js
+          fetch-depth: 0
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: ${{ env.NODE_VERSION }}
           cache: 'pnpm'
+
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+
       - name: Build packages
         run: pnpm build
       - name: Generate dependency map (JSON)

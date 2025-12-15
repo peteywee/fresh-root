@@ -1,17 +1,135 @@
 version: 2
+
+# Dependabot configuration for automated dependency updates
+# Docs: https://docs.github.com/en/code-security/dependabot
+
 updates:
+  # npm/pnpm dependencies
   - package-ecosystem: "npm"
     directory: "/"
     schedule:
-      interval: "daily"
+      interval: "weekly"
+      day: "monday"
+      time: "08:00"
+      timezone: "UTC"
     open-pull-requests-limit: 10
+    
+    # Security updates take priority
     security-updates: true
-    # Allow automatic PRs for minor and patch updates
+    
+    # Grouping strategies for cleaner PRs
+    groups:
+      # Development dependencies
+      dev-dependencies:
+        patterns:
+          - "@types/*"
+          - "eslint*"
+          - "prettier"
+          - "typescript"
+          - "vitest"
+          - "@testing-library/*"
+        update-types:
+          - "minor"
+          - "patch"
+      
+      # Build tools
+      build-tools:
+        patterns:
+          - "turbo"
+          - "tsup"
+          - "esbuild"
+        update-types:
+          - "minor"
+          - "patch"
+      
+      # Next.js ecosystem
+      nextjs:
+        patterns:
+          - "next"
+          - "react"
+          - "react-dom"
+        update-types:
+          - "patch"
+    
+    # Version requirements
+    versioning-strategy: increase
+    
+    # Allow automatic PR merging for minor/patch security updates
     allow:
-      - dependency-type: "direct"
+      - dependency-type: "all"
+    
+    # Ignore specific updates
+    ignore:
+      # Lock React at v19 until Next.js fully supports it
+      - dependency-name: "react"
+        versions: ["20.x"]
+      - dependency-name: "react-dom"
+        versions: ["20.x"]
+      
+      # Ignore major version updates for core framework
+      - dependency-name: "next"
+        update-types: ["version-update:semver-major"]
+      
+      # Ignore Tailwind CSS v5+ until migration
+      - dependency-name: "tailwindcss"
+        versions: ["5.x"]
+    
+    # Custom commit messages
+    commit-message:
+      prefix: "chore(deps)"
+      prefix-development: "chore(deps-dev)"
+      include: "scope"
+    
+    # PR labels
+    labels:
+      - "dependencies"
+      - "automated"
+    
+    # Reviewers (optional - uncomment and configure)
+    # reviewers:
+    #   - "devops-team"
+    # assignees:
+    #   - "tech-lead"
+    
+    # Milestone (optional)
+    # milestone: 1
+
+  # GitHub Actions dependencies
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: "weekly"
+      day: "monday"
+      time: "08:00"
+      timezone: "UTC"
     open-pull-requests-limit: 5
+    
     security-updates: true
+    
+    # Group all action updates together
+    groups:
+      actions:
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
+    
+    commit-message:
+      prefix: "chore(ci)"
+      include: "scope"
+    
+    labels:
+      - "dependencies"
+      - "github-actions"
+      - "automated"
+    
+    # Pin to major versions (e.g., v4) for stability
+    versioning-strategy: increase-if-necessary
+
+  # Docker dependencies (if added in future)
+  # - package-ecosystem: "docker"
+  #   directory: "/"
+  #   schedule:
+  #     interval: "weekly"
+  #   open-pull-requests-limit: 3

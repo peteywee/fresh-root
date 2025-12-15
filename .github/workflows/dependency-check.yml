@@ -1,0 +1,137 @@
+name: Dependency Check
+
+on:
+  schedule:
+    - cron: '0 8 * * 1' # Weekly on Monday at 8 AM UTC
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'package.json'
+      - 'pnpm-lock.yaml'
+      - '**/package.json'
+
+env:
+  NODE_VERSION: '20'
+  PNPM_VERSION: '9.12.1'
+
+jobs:
+  audit:
+    name: Security Audit
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run audit
+        id: audit
+        run: |
+          pnpm audit --json > audit-report.json || true
+          cat audit-report.json
+
+      - name: Check for critical vulnerabilities
+        run: |
+          CRITICAL=$(cat audit-report.json | grep -o '"severity":"critical"' | wc -l || echo "0")
+          HIGH=$(cat audit-report.json | grep -o '"severity":"high"' | wc -l || echo "0")
+          
+          echo "Critical vulnerabilities: $CRITICAL"
+          echo "High vulnerabilities: $HIGH"
+          
+          if [ "$CRITICAL" -gt "0" ]; then
+            echo "⚠️ Critical vulnerabilities found!"
+            exit 1
+          fi
+
+      - name: Upload audit report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: audit-report
+          path: audit-report.json
+          retention-days: 30
+
+  outdated:
+    name: Check Outdated Dependencies
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+
+      - name: Check for outdated dependencies
+        run: |
+          pnpm outdated || echo "Outdated dependencies check completed"
+
+      - name: Generate dependency report
+        run: |
+          pnpm list --depth=0 > dependency-tree.txt || true
+          echo "Dependency tree saved"
+
+      - name: Upload dependency tree
+        uses: actions/upload-artifact@v4
+        with:
+          name: dependency-tree
+          path: dependency-tree.txt
+          retention-days: 30
+
+  compatibility:
+    name: Version Compatibility Check
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Check Node.js version compatibility
+        run: |
+          REQUIRED_NODE=$(cat package.json | grep -oP '"node":\s*">=?\K[^"]+' || echo "20.10.0")
+          CURRENT_NODE=$(node --version | sed 's/v//')
+          
+          echo "Required Node.js version: >=$REQUIRED_NODE"
+          echo "Current Node.js version: $CURRENT_NODE"
+          
+          # Simple version comparison
+          if [ "$(printf '%s\n' "$REQUIRED_NODE" "$CURRENT_NODE" | sort -V | head -n1)" != "$REQUIRED_NODE" ]; then
+            echo "⚠️ Node.js version may be incompatible"
+          else
+            echo "✅ Node.js version compatible"
+          fi
+
+      - name: Check pnpm version compatibility
+        run: |
+          REQUIRED_PNPM=$(cat package.json | grep -oP '"pnpm":\s*">=?\K[^"]+' || echo "9.0.0")
+          CURRENT_PNPM="${{ env.PNPM_VERSION }}"
+          
+          echo "Required pnpm version: >=$REQUIRED_PNPM"
+          echo "Current pnpm version: $CURRENT_PNPM"
+          
+          if [ "$(printf '%s\n' "$REQUIRED_PNPM" "$CURRENT_PNPM" | sort -V | head -n1)" != "$REQUIRED_PNPM" ]; then
+            echo "⚠️ pnpm version may be incompatible"
+          else
+            echo "✅ pnpm version compatible"
+          fi
