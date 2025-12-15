@@ -1,6 +1,7 @@
 // [P0][ITEMS][API] Items list endpoint
 export const dynamic = "force-dynamic";
 
+import { z } from "zod";
 import { createOrgEndpoint } from "@fresh-schedules/api-framework";
 import { CreateItemSchema } from "@fresh-schedules/types";
 import { NextResponse } from "next/server";
@@ -50,10 +51,12 @@ export const POST = createOrgEndpoint({
   input: CreateItemSchema,
   handler: async ({ input, context }) => {
     try {
+      // Type assertion safe - input validated by SDK factory
+      const typedInput = input as z.infer<typeof CreateItemSchema>;
       const item = {
         id: `item-${Date.now()}`,
         orgId: context.org?.orgId,
-        ...input,
+        ...typedInput,
         createdBy: context.auth?.userId,
         createdAt: Date.now(),
       };

@@ -1,5 +1,6 @@
 // [P0][ORG][MEMBER][DETAIL][API] Organization member detail endpoint
 
+import { z } from "zod";
 import { createOrgEndpoint } from "@fresh-schedules/api-framework";
 import { UpdateMemberApiSchema } from "@fresh-schedules/types";
 
@@ -36,7 +37,9 @@ export const PATCH = createOrgEndpoint({
   input: UpdateMemberApiSchema,
   handler: async ({ input, context, params }) => {
     try {
-      const { role, permissions } = input;
+      // Type assertion safe - input validated by SDK factory
+      const typedInput = input as z.infer<typeof UpdateMemberApiSchema>;
+      const { role, permissions } = typedInput;
       const updated = {
         id: params.memberId,
         orgId: params.id,

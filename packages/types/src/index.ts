@@ -3,12 +3,33 @@
 import { z } from "zod";
 
 import { AdminResponsibilityFormSchema } from "./compliance/adminResponsibilityForm";
+import { CreateBatchSchema, CreateBatch } from "./batch";
+import { BackupRequestSchema, BackupRequest } from "./internal";
+import { AddMemberSchema, AddMemberInput } from "./memberships";
+import { UpdatePositionSchema, UpdatePositionInput } from "./positions";
+import { ActivateNetworkSchema, ActivateNetworkInput } from "./networks";
 
 export const Role = z.enum(["admin", "manager", "staff"]);
 export type Role = z.infer<typeof Role>;
 
 // Type inference from compliance schemas
 export type AdminResponsibilityForm = z.infer<typeof AdminResponsibilityFormSchema>;
+
+// Explicit exports for batch schemas
+export { CreateBatchSchema };
+export type { CreateBatch };
+
+// Explicit exports for internal schemas
+export { BackupRequestSchema };
+export type { BackupRequest };
+
+// Explicit exports for new route migration schemas
+export { AddMemberSchema };
+export type { AddMemberInput };
+export { UpdatePositionSchema };
+export type { UpdatePositionInput };
+export { ActivateNetworkSchema };
+export type { ActivateNetworkInput };
 
 // RBAC exports - must be first
 export * from "./rbac";

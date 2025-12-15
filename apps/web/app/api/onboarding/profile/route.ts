@@ -1,5 +1,6 @@
 // [P0][ONBOARDING][PROFILE][API] Profile onboarding endpoint
 
+import { z } from "zod";
 import { createAuthenticatedEndpoint } from "@fresh-schedules/api-framework";
 import { OnboardingProfileSchema } from "@fresh-schedules/types";
 
@@ -13,7 +14,9 @@ export const POST = createAuthenticatedEndpoint({
   input: OnboardingProfileSchema,
   handler: async ({ input, context }) => {
     try {
-      const { firstName, lastName, avatar, timezone } = input;
+      // Type assertion safe - input validated by SDK factory
+      const typedInput = input as z.infer<typeof OnboardingProfileSchema>;
+      const { firstName, lastName, avatar, timezone } = typedInput;
 
       const profile = {
         userId: context.auth?.userId,

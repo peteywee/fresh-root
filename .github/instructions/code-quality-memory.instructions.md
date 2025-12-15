@@ -1,7 +1,7 @@
 ---
-description: "Pattern-based code quality remediation strategies and ESLint safeguard rule creation"
-
+priority: 1
 applyTo: "**/*.ts,**/*.tsx,**/eslint.config.*,**/.eslintrc.*"
+description: "Pattern-based code quality remediation strategies and ESLint safeguard rule creation"
 ---
 
 # Code Quality Memory

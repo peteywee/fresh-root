@@ -1,10 +1,22 @@
 // [P0][API][CODE] Batch API endpoint
 // Tags: P1, API, CODE, BATCH
 
+import { z } from "zod";
 import { createOrgEndpoint, createBatchHandler } from "@fresh-schedules/api-framework";
-import { CreateBatchSchema } from "@fresh-schedules/types";
 
 import { badRequest, serverError } from "../_shared/validation";
+
+// TODO: Move to packages/types/src/batch.ts once module resolution stabilizes
+// For now, inline to avoid TypeScript import resolution issues in monorepo
+const CreateBatchSchema = z.object({
+  items: z.array(
+    z.object({
+      id: z.string().min(1),
+      payload: z.unknown(),
+    }),
+  ),
+  continueOnError: z.boolean().optional(),
+});
 
 /*
  * POST /api/batch
@@ -44,12 +56,13 @@ export const POST = createOrgEndpoint({
   input: CreateBatchSchema,
   handler: async ({ input, context, request }) => {
     try {
-      // input already validated by createEndpoint
+      // Type assertion safe - input validated by createEndpoint
+      const typedInput = input as z.infer<typeof CreateBatchSchema>;
       // Ensure items is present and an array
-      if (!input || !Array.isArray((input as any).items)) {
+      if (!typedInput || !Array.isArray(typedInput.items)) {
         return badRequest("Invalid payload: items must be an array");
       }
-      const result = await processBatchItems((input as any).items, context, request);
+      const result = await processBatchItems(typedInput.items, context, request);
       return result;
     } catch (err) {
       const message = err instanceof Error ? err.message : "Unexpected error";

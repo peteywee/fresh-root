@@ -35,7 +35,9 @@ export const POST = createAuthenticatedEndpoint({
   input: ActivateNetworkSchema,
   handler: async ({ input, context }) => {
     try {
-      const { networkId } = input;
+      // Type assertion safe - input validated by SDK factory
+      const typedInput = input as z.infer<typeof ActivateNetworkSchema>;
+      const { networkId } = typedInput;
 
       // Local/dev fallback
       if (!adminDb) {

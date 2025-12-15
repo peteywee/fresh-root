@@ -1,6 +1,7 @@
 // [P0][ORG][DETAIL][API] Organization detail endpoint
 // Tags: P0, ORG, DETAIL, API, SDK_FACTORY
 
+import { z } from "zod";
 import { createOrgEndpoint } from "@fresh-schedules/api-framework";
 import { UpdateOrganizationSchema } from "@fresh-schedules/types";
 import { NextResponse } from "next/server";
@@ -40,10 +41,12 @@ export const PATCH = createOrgEndpoint({
   input: UpdateOrganizationSchema,
   handler: async ({ input, context, params }) => {
     try {
+      // Type assertion safe - input validated by SDK factory
+      const typedInput = input as z.infer<typeof UpdateOrganizationSchema>;
       const updated = {
         id: params.id,
-        name: input.name,
-        settings: input.settings,
+        name: typedInput.name,
+        settings: typedInput.settings,
         updatedBy: context.auth?.userId,
         updatedAt: Date.now(),
       };

@@ -1,5 +1,6 @@
 // [P0][ONBOARDING][CORPORATE][API] Create corporate network endpoint
 
+import { z } from "zod";
 import { createAuthenticatedEndpoint } from "@fresh-schedules/api-framework";
 import { CreateCorporateOnboardingSchema } from "@fresh-schedules/types";
 
@@ -13,7 +14,9 @@ export const POST = createAuthenticatedEndpoint({
   input: CreateCorporateOnboardingSchema,
   handler: async ({ input, context }) => {
     try {
-      const { corporateName, brandName, formToken } = input;
+      // Type assertion safe - input validated by SDK factory
+      const typedInput = input as z.infer<typeof CreateCorporateOnboardingSchema>;
+      const { corporateName, brandName, formToken } = typedInput;
       const network = {
         id: `network-${Date.now()}`,
         type: "corporate",
