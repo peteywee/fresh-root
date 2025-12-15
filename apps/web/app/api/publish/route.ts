@@ -22,15 +22,17 @@ type PublishRequest = z.infer<typeof PublishRequestSchema>;
 export const POST = createOrgEndpoint({
   roles: ["manager"],
   input: PublishRequestSchema,
-  handler: async ({ input, context }: { input: PublishRequest; context: any }) => {
+  handler: async ({ input, context }) => {
     try {
+      // Type assertion safe - input validated by SDK factory
+      const typedInput = input as PublishRequest;
       const result = {
         success: true,
-        scheduleId: input.scheduleId,
+        scheduleId: typedInput.scheduleId,
         publishedBy: context.auth?.userId,
-        publishedAt: input.publishAt || Date.now(),
-        notifyUsers: input.notifyUsers,
-        channels: input.channels,
+        publishedAt: typedInput.publishAt || Date.now(),
+        notifyUsers: typedInput.notifyUsers,
+        channels: typedInput.channels,
       };
 
       return ok(result);

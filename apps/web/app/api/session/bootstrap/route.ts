@@ -48,14 +48,16 @@ export const GET = createAuthenticatedEndpoint({
  */
 export const POST = createAuthenticatedEndpoint({
   input: SessionBootstrapSchema,
-  handler: async ({ input, context }: { input: SessionBootstrap; context: any }) => {
+  handler: async ({ input, context }) => {
     try {
+      // Type assertion safe - input validated by SDK factory
+      const typedInput = input as SessionBootstrap;
       const session = {
         userId: context.auth?.userId,
         email: context.auth?.email,
         createdAt: Date.now(),
-        preferences: input.preferences,
-        deviceInfo: input.deviceInfo,
+        preferences: typedInput.preferences,
+        deviceInfo: typedInput.deviceInfo,
       };
       return NextResponse.json(session);
     } catch (err) {
