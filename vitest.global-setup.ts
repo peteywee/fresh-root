@@ -12,8 +12,8 @@ import http from "node:http";
 if (typeof process.listeners !== "function") {
   // Vitest expects process.listeners(event) to be callable when wiring error hooks.
   // Some polyfills/envs can replace it; we guard to keep the test runner stable.
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  (process as any).listeners = ((event: string) => []) as any;
+   
+  (process as any).listeners = ((_event: string) => []) as any;
 }
 
 function waitForHttp(url: string, timeoutMs: number): Promise<void> {

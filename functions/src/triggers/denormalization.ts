@@ -59,7 +59,7 @@ export const onZoneWrite = functions.firestore
 
 export const onMembershipWrite = functions.firestore
   .document("memberships/{membershipId}")
-  .onWrite(async (change, context) => {
+  .onWrite(async (change, _context) => {
     const data = change.after.exists ? change.after.data() : change.before.data();
 
     if (!data?.orgId) {

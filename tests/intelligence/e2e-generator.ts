@@ -3,7 +3,7 @@
  * Creates and runs end-to-end tests for API routes
  */
 
-import { execSync, spawnSync } from "child_process";
+import { execSync } from "child_process";
 import * as fs from "fs";
 import { glob } from "glob";
 import * as path from "path";

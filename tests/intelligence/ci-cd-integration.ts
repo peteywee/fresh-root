@@ -153,7 +153,7 @@ export class CICDIntegration {
         passed++;
         total++;
         console.log(`  ✅ ${testPath} passed`);
-      } catch (error) {
+      } catch (_error) {
         failed++;
         total++;
         console.log(`  ❌ ${testPath} failed`);
@@ -190,7 +190,7 @@ export class CICDIntegration {
   /**
    * Blue-Green deployment
    */
-  private async blueGreenDeploy(environment: string): Promise<boolean> {
+  private async blueGreenDeploy(_environment: string): Promise<boolean> {
     console.log("🔵🟢 Executing Blue-Green deployment...");
 
     // Deploy to green environment
@@ -230,7 +230,7 @@ export class CICDIntegration {
   /**
    * Rolling deployment
    */
-  private async rollingDeploy(environment: string): Promise<boolean> {
+  private async rollingDeploy(_environment: string): Promise<boolean> {
     console.log("🔄 Executing Rolling deployment...");
 
     const instances = 5;
@@ -249,7 +249,7 @@ export class CICDIntegration {
   /**
    * Analyzes canary deployment health
    */
-  private async analyzeCanary(percentage: number): Promise<CanaryAnalysis> {
+  private async analyzeCanary(_percentage: number): Promise<CanaryAnalysis> {
     // Simulate canary metrics collection
     await this.simulateDeployment(1000);
 

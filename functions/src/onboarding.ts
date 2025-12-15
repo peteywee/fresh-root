@@ -150,7 +150,7 @@ export const joinOrganization = onCall<JoinOrganizationRequest>(
       /* --------------------------- Step 1: Read token --------------------------- */
       const tokenRef = db.collection("join_tokens").doc(tokenId);
       const tokenSnapshot = await tokenRef.get();
-      const tokenData = validateJoinToken(tokenSnapshot);
+      const _tokenData = validateJoinToken(tokenSnapshot);
 
       /* ------------------------ Step 2: Create Auth user ------------------------ */
       createdUser = await auth.createUser({

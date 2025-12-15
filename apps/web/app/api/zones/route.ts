@@ -12,7 +12,7 @@ import { badRequest, ok, serverError } from "../_shared/validation";
  * List zones for a venue
  */
 export const GET = createOrgEndpoint({
-  handler: async ({ request, context, params }) => {
+  handler: async ({ request, context, _params }) => {
     try {
       const { searchParams } = new URL(request.url);
       const venueId = searchParams.get("venueId");
@@ -46,7 +46,7 @@ export const GET = createOrgEndpoint({
  */
 export const POST = createOrgEndpoint({
   roles: ["manager"],
-  handler: async ({ request, context, params }) => {
+  handler: async ({ request, context, _params }) => {
     try {
       const body = await request.json();
       const validated = CreateZoneSchema.parse(body);

@@ -24,7 +24,7 @@ export async function fixFiles(input: string) {
         // prefer '_' for emphasis to avoid conflicts with '**'
         emphasis: "_",
       });
-  } catch (err) {
+  } catch (_err) {
     console.error(
       "Optional markdown parsing libraries not found (unified/remark). Run 'pnpm -w install' to enable richer fixes.",
     );
@@ -82,7 +82,7 @@ export async function fixFiles(input: string) {
     const match = line.match(/^(\s*)(\d+)\.\s+/);
     if (match) {
       // Find contiguous block
-      const start = i;
+      const _start = i;
       let counter = 1;
       while (i < lines.length) {
         const curLine = lines[i];
@@ -106,9 +106,9 @@ export async function fixFiles(input: string) {
   content = updatedLines.join("\n");
 
   // 6. Fix checkboxes: ensure single space after bracket.
-  const checkbox = content.replace(/^([\-\*]\s*\[)( |x|X|)\](\s*)/gm, (m) => {
+  const checkbox = content.replace(/^([\-\*]\s*\[)( |x|X|)\](\s*)/gm, (match) => {
     changed = true;
-    return m.replace(/\[( |x|X|)\]/, (mm) => `[_TEMP_]`).replace("_TEMP_", "[ ]");
+    return match.replace(/\[( |x|X|)\]/, (_mm) => `[_TEMP_]`).replace("_TEMP_", "[ ]");
   });
   // The above heuristic is conservative - we already enforced change so let's not rely
   // replace back to original if it was intentional 'x' for checked. We'll instead
