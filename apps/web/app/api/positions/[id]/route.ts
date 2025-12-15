@@ -29,7 +29,7 @@ import { serverError } from "../../_shared/validation";
  * Get position details (requires staff+ role)
  */
 export const GET = createOrgEndpoint({
-  handler: async ({ _request, context, _params }) => {
+  handler: async ({ request, context, params }) => {
     // Apply rate limiting
     const rateLimitResult = await checkRateLimit(request, RateLimits.api);
     if (!rateLimitResult.allowed) {
@@ -74,7 +74,7 @@ export const GET = createOrgEndpoint({
 export const PATCH = createOrgEndpoint({
   roles: ["manager"],
   input: UpdatePositionSchema,
-  handler: async ({ _request, input, context, _params }) => {
+  handler: async ({ request, input, context, params }) => {
     // Apply rate limiting
     const rateLimitResult = await checkRateLimit(request, RateLimits.api);
     if (!rateLimitResult.allowed) {
@@ -128,7 +128,7 @@ export const PATCH = createOrgEndpoint({
  */
 export const DELETE = createOrgEndpoint({
   roles: ["admin"],
-  handler: async ({ request, _context, params }) => {
+  handler: async ({ request, context, params }) => {
     // Apply rate limiting
     const rateLimitResult = await checkRateLimit(request, RateLimits.api);
     if (!rateLimitResult.allowed) {

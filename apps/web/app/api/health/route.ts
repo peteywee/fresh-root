@@ -12,7 +12,7 @@ import { NextResponse } from "next/server";
 export const dynamic = "force-dynamic";
 
 export const GET = createPublicEndpoint({
-  handler: async ({ _request, _input, _context, _params }) => {
+  handler: async ({ request, input, context, params }) => {
     const healthStatus = {
       ok: true,
       status: "healthy",

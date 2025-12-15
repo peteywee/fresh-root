@@ -48,7 +48,7 @@ const _UserProfileSchema = z.object({
   }),
 });
 
-export type UserProfileDoc = z.infer<typeof UserProfileSchema>;
+export type UserProfileDoc = z.infer<typeof _UserProfileSchema>;
 
 export async function ensureUserProfile(args: {
   adminDb: Firestore | any;

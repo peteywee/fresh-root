@@ -12,7 +12,7 @@ import { badRequest, ok, serverError } from "../_shared/validation";
  * List positions for an organization
  */
 export const GET = createOrgEndpoint({
-  handler: async ({ request, context, _params }) => {
+  handler: async ({ request, context, params }) => {
     try {
       const { searchParams } = new URL(request.url);
       const orgId = searchParams.get("orgId") || context.org?.orgId;
@@ -51,7 +51,7 @@ export const GET = createOrgEndpoint({
 export const POST = createOrgEndpoint({
   roles: ["manager"],
   input: CreatePositionSchema,
-  handler: async ({ input, context, _params }: { input: Record<string, unknown>; context: any; params: any }) => {
+  handler: async ({ input, context, params }: { input: Record<string, unknown>; context: any; params: any }) => {
     try {
       const validated = input as Record<string, unknown>;
       const position = {
