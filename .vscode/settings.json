@@ -90,5 +90,14 @@
   },
   "[markdown]": {
     "editor.defaultFormatter": "DavidAnson.vscode-markdownlint"
+  },
+  "github.copilot.chat.experimental.mcpServers": {
+    "fresh-schedules": {
+      "command": "node",
+      "args": ["${workspaceFolder}/tools/mcp-server/dist/index.js"],
+      "env": {
+        "FRESH_SCHEDULES_ROOT": "${workspaceFolder}"
+      }
+    }
   }
 }

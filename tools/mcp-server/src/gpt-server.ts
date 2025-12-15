@@ -95,7 +95,7 @@ app.get("/", (req, res) => {
 
 // READ FILE
 app.get("/file/*", async (req, res) => {
-  const filePath = req.params[0];
+  const filePath = (req.params as string[])[0];
   const { startLine, endLine } = req.query;
   
   if (!isPathSafe(filePath)) {
@@ -239,7 +239,7 @@ app.post("/folder", async (req, res) => {
 
 // LIST DIRECTORY
 app.get("/list/*?", async (req, res) => {
-  const dirPath = req.params[0] || ".";
+  const dirPath = (req.params as string[])[0] || ".";
   const depth = Number(req.query.depth) || 2;
   
   const fullPath = path.join(REPO_ROOT, dirPath);
@@ -341,7 +341,7 @@ app.get("/schema/:name", async (req, res) => {
 
 // GET INDEX
 app.get("/index/*?", async (req, res) => {
-  const dirPath = req.params[0] || ".";
+  const dirPath = (req.params as string[])[0] || ".";
   const indexFile = dirPath === "."
     ? path.join(REPO_ROOT, INDEX_FILE)
     : path.join(REPO_ROOT, dirPath, MINI_INDEX_FILE);
