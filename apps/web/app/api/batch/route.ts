@@ -21,7 +21,7 @@ export async function processBatchItems(
     maxBatchSize: options?.maxBatchSize ?? 200,
     timeoutPerItem: options?.timeoutPerItem ?? 5000,
     continueOnError: options?.continueOnError ?? true,
-    itemHandler: async ({ item, index }) => {
+    itemHandler: async ({ item, _index }) => {
       // Test helpers: support failure and delay flags in payload for test cases
       const payload = (item as any).payload || {};
       if (payload.fail) {

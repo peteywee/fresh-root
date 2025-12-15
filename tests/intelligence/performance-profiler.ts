@@ -70,7 +70,7 @@ export class PerformanceProfiler {
   /**
    * Wraps an API request with performance tracking
    */
-  async profile<T>(
+  async profile<_T>(
     endpoint: string,
     method: string,
     request: () => Promise<Response>,

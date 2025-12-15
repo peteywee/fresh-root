@@ -22,7 +22,7 @@ export const POST = createPublicEndpoint({
         return badRequest("Validation failed", parsed.details);
       }
 
-      const { idToken } = parsed.data;
+      const { idToken: _idToken } = parsed.data;
 
       const auth = getFirebaseAdminAuth();
       // Verify the idToken and create a session cookie (5 days default)

@@ -7,18 +7,10 @@
 
 import { z } from "zod";
 
-import {
-  autoGenerateAllTests,
-  analyzeRouteFile,
-  generateTestsForRoute,
-} from "./auto-test-generator";
-import { chaosEngineer, ChaosEngineer } from "./chaos-engineering";
-import { cicd } from "./ci-cd-integration";
-import { contractTester, ContractTester } from "./contract-testing";
-import { MutationTester } from "./mutation-testing";
-import { performanceProfiler, PerformanceProfiler } from "./performance-profiler";
-import { selfHealingFramework } from "./self-healing-tests";
-import { testAnalytics } from "./test-analytics";
+
+
+import { ContractTester } from "./contract-testing";
+import { PerformanceProfiler } from "./performance-profiler";
 
 async function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -67,7 +59,7 @@ async function runDemo() {
 
   await sleep(500);
 
-  const profiler = new PerformanceProfiler();
+const _profiler = new PerformanceProfiler();
 
   console.log("Simulating API requests with performance tracking:\n");
 
