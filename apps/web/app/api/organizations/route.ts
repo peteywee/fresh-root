@@ -16,7 +16,6 @@ export const GET = createAuthenticatedEndpoint({
   rateLimit: { maxRequests: 100, windowMs: 60000 },
   handler: async ({ request, context }) => {
     try {
-      const { searchParams } = new URL(request.url);
       const userId = context.auth?.userId;
 
       if (!userId) {
