@@ -12,7 +12,7 @@ import { badRequest, ok, serverError } from "../_shared/validation";
  * List venues for an organization
  */
 export const GET = createOrgEndpoint({
-  handler: async ({ _request, context, _params }) => {
+  handler: async ({ request, context }) => {
     try {
       const { searchParams } = new URL(request.url);
       const orgId = searchParams.get("orgId") || context.org?.orgId;
