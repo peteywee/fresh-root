@@ -1,0 +1,387 @@
+openapi: 3.0.0
+info:
+  title: Fresh Schedules Repo API
+  description: |
+    API for managing the Fresh Schedules repository.
+    Use this to read/write files, search code, manage indexes, and run commands.
+  version: 2.0.0
+
+servers:
+  - url: http://localhost:3001
+    description: Local development server
+
+paths:
+  /file/{path}:
+    get:
+      operationId: readFile
+      summary: Read a file from the repository
+      parameters:
+        - name: path
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Relative path from repo root (e.g., apps/web/app/api/route.ts)
+        - name: startLine
+          in: query
+          schema:
+            type: integer
+          description: Start line number (1-indexed)
+        - name: endLine
+          in: query
+          schema:
+            type: integer
+          description: End line number
+      responses:
+        '200':
+          description: File contents
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+
+  /file:
+    post:
+      operationId: createFile
+      summary: Create a new file (auto-creates parent folders)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [path, content]
+              properties:
+                path:
+                  type: string
+                  description: Relative path for new file (max 5 levels deep)
+                content:
+                  type: string
+                  description: File content
+                overwrite:
+                  type: boolean
+                  default: false
+                  description: Allow overwriting existing files
+      responses:
+        '200':
+          $ref: '#/components/responses/StandardResponse'
+
+    put:
+      operationId: updateFile
+      summary: Update an existing file
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [path]
+              properties:
+                path:
+                  type: string
+                  description: File path to update
+                search:
+                  type: string
+                  description: Text to find (for partial update)
+                replace:
+                  type: string
+                  description: Replacement text
+                content:
+                  type: string
+                  description: Full replacement content (if no search/replace)
+      responses:
+        '200':
+          $ref: '#/components/responses/StandardResponse'
+
+    delete:
+      operationId: deleteFile
+      summary: Delete a file
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [path, confirm]
+              properties:
+                path:
+                  type: string
+                  description: File to delete
+                confirm:
+                  type: boolean
+                  description: Must be true to delete
+      responses:
+        '200':
+          $ref: '#/components/responses/StandardResponse'
+
+  /folder:
+    post:
+      operationId: createFolder
+      summary: Create a new folder (max 5 levels deep)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [path]
+              properties:
+                path:
+                  type: string
+                  description: Folder path to create
+                withIndex:
+                  type: boolean
+                  default: true
+                  description: Create a mini-index file (_INDEX.md)
+      responses:
+        '200':
+          $ref: '#/components/responses/StandardResponse'
+
+  /list/{path}:
+    get:
+      operationId: listDirectory
+      summary: List files and folders in a directory
+      parameters:
+        - name: path
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Directory path (use . for root)
+        - name: depth
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 5
+            default: 2
+          description: How deep to list
+      responses:
+        '200':
+          description: Directory listing
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: object
+                    properties:
+                      path:
+                        type: string
+                      count:
+                        type: integer
+                      files:
+                        type: array
+                        items:
+                          type: string
+
+  /search:
+    get:
+      operationId: searchCode
+      summary: Search for patterns in the codebase
+      parameters:
+        - name: query
+          in: query
+          required: true
+          schema:
+            type: string
+            minLength: 2
+          description: Search string or regex pattern
+        - name: path
+          in: query
+          schema:
+            type: string
+            default: "."
+          description: Directory to search in
+        - name: pattern
+          in: query
+          schema:
+            type: string
+            default: "**/*.{ts,tsx,js,jsx}"
+          description: Glob pattern for files
+        - name: max
+          in: query
+          schema:
+            type: integer
+            default: 30
+          description: Maximum results
+      responses:
+        '200':
+          description: Search results
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: object
+                    properties:
+                      query:
+                        type: string
+                      count:
+                        type: integer
+                      results:
+                        type: array
+                        items:
+                          type: string
+
+  /schema/{name}:
+    get:
+      operationId: getSchema
+      summary: Get a schema definition from packages/types/src/schemas
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Schema name (e.g., Schedule, Organization)
+      responses:
+        '200':
+          description: Schema content
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: object
+                    properties:
+                      file:
+                        type: string
+                      content:
+                        type: string
+
+  /index/{path}:
+    get:
+      operationId: getIndex
+      summary: Read the current index file
+      parameters:
+        - name: path
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Directory (use . for REPO_INDEX.md at root)
+      responses:
+        '200':
+          $ref: '#/components/responses/StandardResponse'
+
+  /index:
+    post:
+      operationId: updateIndex
+      summary: Generate or update index files
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                path:
+                  type: string
+                  default: "."
+                  description: Directory to index
+                depth:
+                  type: integer
+                  default: 3
+                  description: How deep to scan
+      responses:
+        '200':
+          $ref: '#/components/responses/StandardResponse'
+
+  /test:
+    post:
+      operationId: createTest
+      summary: Generate a test file for a source file
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [sourcePath]
+              properties:
+                sourcePath:
+                  type: string
+                  description: Source file to test
+                testType:
+                  type: string
+                  enum: [unit, rules, e2e]
+                  default: unit
+                  description: Type of test to generate
+      responses:
+        '200':
+          description: Test file created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: object
+                    properties:
+                      testPath:
+                        type: string
+                      exports:
+                        type: array
+                        items:
+                          type: string
+
+  /run:
+    post:
+      operationId: runCommand
+      summary: Run a predefined command
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [command]
+              properties:
+                command:
+                  type: string
+                  enum:
+                    - typecheck
+                    - lint
+                    - lint:fix
+                    - format
+                    - format:check
+                    - test:unit
+                    - test:rules
+                    - build
+                    - validate
+                  description: Command to run
+      responses:
+        '200':
+          $ref: '#/components/responses/StandardResponse'
+
+components:
+  schemas:
+    Response:
+      type: object
+      properties:
+        success:
+          type: boolean
+        data:
+          oneOf:
+            - type: string
+            - type: object
+
+  responses:
+    StandardResponse:
+      description: Standard response
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Response'

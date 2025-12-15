@@ -57,7 +57,7 @@ export const PATCH = createOrgEndpoint({
  */
 export const DELETE = createOrgEndpoint({
   roles: ["manager"],
-  handler: async ({ context, params }) => {
+  handler: async ({ context: _context, params }) => {
     try {
       return ok({ deleted: true, id: params.id });
     } catch {

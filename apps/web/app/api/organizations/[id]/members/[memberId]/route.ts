@@ -11,7 +11,7 @@ import { ok, serverError } from "../../../../_shared/validation";
  * Get member details
  */
 export const GET = createOrgEndpoint({
-  handler: async ({ context, params }) => {
+  handler: async ({ context: _context, params }) => {
     try {
       const { id, memberId } = params;
       const member = {
@@ -60,7 +60,7 @@ export const PATCH = createOrgEndpoint({
  */
 export const DELETE = createOrgEndpoint({
   roles: ["admin"],
-  handler: async ({ context, params }) => {
+  handler: async ({ context: _context, params }) => {
     try {
       return ok({ removed: true, memberId: params.memberId });
     } catch {
