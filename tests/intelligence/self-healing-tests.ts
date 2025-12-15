@@ -7,8 +7,6 @@
 
 import { diffLines } from "diff";
 import * as fs from "fs";
-import * as path from "path";
-import * as ts from "typescript";
 
 interface TestFailure {
   testFile: string;
@@ -328,12 +326,12 @@ export class SelfHealingTestFramework {
     return match ? match[1] : "";
   }
 
-  private suggestNewSelector(error: string): string {
+  private suggestNewSelector(_error: string): string {
     // This would integrate with actual DOM inspection
     return '[data-testid="suggested-selector"]';
   }
 
-  private extractExpectedValue(error: string): string | null {
+  private extractExpectedValue(_error: string): string | null {
     const match = error.match(/expected ['"`]([^'"`]+)['"`]/i);
     return match ? match[1] : null;
   }

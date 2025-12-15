@@ -21,8 +21,8 @@ const db = admin.firestore();
 
 export const onZoneWrite = functions.firestore
   .document("organizations/{orgId}/venues/{venueId}/zones/{zoneId}")
-  .onWrite(async (change, context) => {
-    const { orgId, venueId, zoneId } = context.params;
+  .onWrite(async (change, _context) => {
+    const { orgId, venueId, zoneId } = _context.params;
 
     functions.logger.info(`[DENORM] Zone write: ${orgId}/${venueId}/${zoneId}`);
 
@@ -59,7 +59,7 @@ export const onZoneWrite = functions.firestore
 
 export const onMembershipWrite = functions.firestore
   .document("memberships/{membershipId}")
-  .onWrite(async (change, context) => {
+  .onWrite(async (change, _context) => {
     const data = change.after.exists ? change.after.data() : change.before.data();
 
     if (!data?.orgId) {

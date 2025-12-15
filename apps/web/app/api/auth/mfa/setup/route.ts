@@ -17,7 +17,7 @@ const MFASetupSchema = z.object({}).passthrough().optional();
 export const POST = createAuthenticatedEndpoint({
   rateLimit: { maxRequests: 50, windowMs: 60000 },
   input: MFASetupSchema,
-  handler: async ({ input, context }) => {
+  handler: async ({ input: _input, context }) => {
     try {
       // input is already validated (may be undefined)
 

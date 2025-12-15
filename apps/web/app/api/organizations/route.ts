@@ -4,7 +4,7 @@ import { createAuthenticatedEndpoint } from "@fresh-schedules/api-framework";
 import { CreateOrganizationSchema } from "@fresh-schedules/types";
 import { NextResponse } from "next/server";
 
-import { badRequest, ok, parseJson, serverError } from "../_shared/validation";
+import { badRequest, ok, serverError } from "../_shared/validation";
 
 // Rate limiting via factory options
 
@@ -16,7 +16,7 @@ export const GET = createAuthenticatedEndpoint({
   rateLimit: { maxRequests: 100, windowMs: 60000 },
   handler: async ({ request, context }) => {
     try {
-      const { searchParams } = new URL(request.url);
+      const { _searchParams } = new URL(request.url);
       const userId = context.auth?.userId;
 
       if (!userId) {

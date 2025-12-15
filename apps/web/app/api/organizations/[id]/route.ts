@@ -39,7 +39,7 @@ export const GET = createOrgEndpoint({
 export const PATCH = createOrgEndpoint({
   roles: ["admin"],
   input: UpdateOrganizationSchema,
-  handler: async ({ input, context, params }) => {
+  handler: async ({ input, context, _params }) => {
     try {
       // Type assertion safe - input validated by SDK factory
       const typedInput = input as z.infer<typeof UpdateOrganizationSchema>;
@@ -65,7 +65,7 @@ export const PATCH = createOrgEndpoint({
  */
 export const DELETE = createOrgEndpoint({
   roles: ["admin"],
-  handler: async ({ context, params }) => {
+  handler: async ({ _context, params }) => {
     try {
       return NextResponse.json({ deleted: true, id: params.id });
     } catch (error) {

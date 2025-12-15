@@ -34,7 +34,7 @@ export const GET = createOrgEndpoint({
 export const PATCH = createOrgEndpoint({
   roles: ["manager"],
   input: UpdateShiftSchema,
-  handler: async ({ input, context, params }) => {
+  handler: async ({ input, context, _params }) => {
     try {
       const shiftData = input as Record<string, unknown>;
       const updated = {
@@ -57,7 +57,7 @@ export const PATCH = createOrgEndpoint({
  */
 export const DELETE = createOrgEndpoint({
   roles: ["manager"],
-  handler: async ({ context, params }) => {
+  handler: async ({ _context, params }) => {
     try {
       return ok({ deleted: true, id: params.id });
     } catch {

@@ -14,7 +14,6 @@ import { cicd } from "./ci-cd-integration";
 import { autoGenerateAPIContracts } from "./contract-testing";
 import { runMutationTesting } from "./mutation-testing";
 import { performanceProfiler } from "./performance-profiler";
-import { selfHealingFramework } from "./self-healing-tests";
 import { testAnalytics } from "./test-analytics";
 
 interface OrchestratorConfig {
@@ -123,7 +122,7 @@ export class TestIntelligenceOrchestrator {
             testsExecuted: report.summary.totalRequests,
             performanceScore: performanceScore.toFixed(1),
           };
-        } catch (error) {
+        } catch (_error) {
           return { testsExecuted: 0, performanceScore: 0 };
         }
       });
@@ -150,7 +149,7 @@ export class TestIntelligenceOrchestrator {
         console.log("\n🌪️  Stage 5: Running Chaos Engineering Tests...");
 
         const chaosRunner = new ChaosTestRunner();
-        const report = await chaosRunner.runAllChaosTests(async () => {
+        const _report = await chaosRunner.runAllChaosTests(async () => {
           // Run sample API requests
           execSync("pnpm vitest run tests/e2e/auth/session-management.test.ts", {
             cwd: process.cwd(),
@@ -279,7 +278,7 @@ export class TestIntelligenceOrchestrator {
     console.log("  - API Documentation: docs/api-docs.html");
     console.log("  - Performance Report: tests/intelligence/performance-report.html\n");
 
-    const successCount = result.stages.filter((s) => s.status === "success").length;
+    const _successCount = result.stages.filter((s) => s.status === "success").length;
     const failCount = result.stages.filter((s) => s.status === "failed").length;
 
     if (failCount === 0) {
