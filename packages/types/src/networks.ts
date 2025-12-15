@@ -75,6 +75,16 @@ export const CreateNetworkSchema = NetworkSchema.pick({
 
 export const UpdateNetworkSchema = NetworkSchema.partial();
 
+/**
+ * Schema for activating a network during onboarding
+ * Used in POST /api/onboarding/activate-network
+ */
+export const ActivateNetworkSchema = z.object({
+  networkId: z.string().min(1, "Network ID is required"),
+  metadata: z.record(z.string(), z.any()).optional(),
+});
+export type ActivateNetworkInput = z.infer<typeof ActivateNetworkSchema>;
+
 export type Network = z.infer<typeof NetworkSchema>;
 export type CreateNetworkInput = z.infer<typeof CreateNetworkSchema>;
 export type UpdateNetworkInput = z.infer<typeof UpdateNetworkSchema>;

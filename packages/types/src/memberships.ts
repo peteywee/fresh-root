@@ -63,6 +63,17 @@ export const UpdateMemberApiSchema = z.object({
 export type UpdateMemberApiInput = z.infer<typeof UpdateMemberApiSchema>;
 
 /**
+ * Schema for adding a member to an organization
+ * Used in POST /api/organizations/{id}/members
+ */
+export const AddMemberSchema = z.object({
+  uid: z.string().min(1, "User ID is required"),
+  role: MembershipRole.default("staff"),
+  status: MembershipStatus.optional().default("active"),
+});
+export type AddMemberInput = z.infer<typeof AddMemberSchema>;
+
+/**
  * Query parameters for listing memberships
  */
 export const ListMembershipsQuerySchema = z.object({
