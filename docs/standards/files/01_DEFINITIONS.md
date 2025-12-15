@@ -219,13 +219,13 @@ type MemberStatus = 'invited' | 'active' | 'suspended' | 'removed';
 
 | Branch | Purpose | Merges To | From |
 |--------|---------|-----------|------|
-| `main` | Production code | Deploys | `staging` only |
-| `staging` | Pre-production validation | `main` | Feature branches |
-| `feature/*` | New functionality | `staging` | `staging` |
-| `fix/*` | Bug fixes | `staging` | `staging` |
-| `refactor/*` | Code improvements | `staging` | `staging` |
-| `chore/*` | Maintenance tasks | `staging` | `staging` |
-| `hotfix/*` | Emergency production fixes | `main` + `staging` | `main` |
+| `main` | Production code | Deploys | `dev` only |
+| `dev` | Pre-production validation | `main` | Feature branches |
+| `feature/*` | New functionality | `dev` | `dev` |
+| `fix/*` | Bug fixes | `dev` | `dev` |
+| `refactor/*` | Code improvements | `dev` | `dev` |
+| `chore/*` | Maintenance tasks | `dev` | `dev` |
+| `hotfix/*` | Emergency production fixes | `main` + `dev` | `main` |
 
 ---
 

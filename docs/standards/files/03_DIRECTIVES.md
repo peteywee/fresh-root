@@ -205,11 +205,11 @@ type(scope): description
 
 **MUST**:
 - Rebase on target before opening PR
-- Squash commits when merging to `staging`
-- Never force-push to `main` or `staging`
+- Squash commits when merging to `dev`
+- Never force-push to `main` or `dev`
 
 **MUST NOT**:
-- Merge directly to `main` (must go through `staging`)
+- Merge directly to `main` (must go through `dev`)
 - Merge with failing gates
 - Merge without required approvals
 

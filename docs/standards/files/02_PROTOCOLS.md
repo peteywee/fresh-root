@@ -178,18 +178,18 @@ interface GateResult {
 
 | Target | From | Requirements |
 |--------|------|--------------|
-| `main` | `staging` only | All gates pass, 2 approvals, no conflicts |
-| `staging` | `feature/*`, `fix/*`, etc. | STATIC + CORRECTNESS pass, 1 approval |
-| `staging` | `hotfix/*` | All gates pass, 1 approval |
+| `main` | `dev` only | All gates pass, 2 approvals, no conflicts |
+| `dev` | `feature/*`, `fix/*`, etc. | STATIC + CORRECTNESS pass, 1 approval |
+| `dev` | `hotfix/*` | All gates pass, 1 approval |
 
 ### Merge Strategies
 
 | Scenario | Strategy | Rationale |
 |----------|----------|-----------|
-| Feature → staging | Squash | Clean history |
-| Fix → staging | Squash | Clean history |
-| Refactor → staging | Squash | Clean history |
-| Staging → main | Merge commit | Preserve PR reference |
+| Feature → dev | Squash | Clean history |
+| Fix → dev | Squash | Clean history |
+| Refactor → dev | Squash | Clean history |
+| Dev → main | Merge commit | Preserve PR reference |
 | Hotfix → main | Merge commit | Audit trail |
 
 ### Conflict Resolution
@@ -220,7 +220,7 @@ interface GateResult {
 2. Implement minimal fix
 3. Run Security.HEAVY pipeline
 4. Get 1 approval (2 for security issues)
-5. Merge to `main` AND `staging`
+5. Merge to `main` AND `dev`
 6. Tag release: `v[major].[minor].[patch+1]`
 7. Post-mortem within 48 hours
 

@@ -179,7 +179,7 @@ If classification is uncertain → NON-TRIVIAL
 
 ```
 main (production)
-├── staging (pre-production validation)
+├── dev (pre-production validation)
 │   ├── feature/* (new features)
 │   ├── fix/* (bug fixes)
 │   ├── refactor/* (code improvements)
@@ -194,7 +194,7 @@ main (production)
 | Branch | Required Checks | Required Reviews | Force Push |
 |--------|-----------------|------------------|------------|
 | `main` | ALL gates | 2 approvals | ❌ NEVER |
-| `staging` | STATIC, CORRECTNESS | 1 approval | ❌ NEVER |
+| `dev` | STATIC, CORRECTNESS | 1 approval | ❌ NEVER |
 | `feature/*` | STATIC | 0 | ✅ ALLOWED |
 
 ### Naming Conventions
@@ -211,21 +211,21 @@ hotfix/URGENT-{description}
 
 | Source → Target | Strategy | Squash |
 |-----------------|----------|--------|
-| `feature/*` → `staging` | Squash merge | YES |
-| `staging` → `main` | Merge commit | NO |
+| `feature/*` → `dev` | Squash merge | YES |
+| `dev` → `main` | Merge commit | NO |
 | `hotfix/*` → `main` | Merge commit | NO |
-| `hotfix/*` → `staging` | Cherry-pick | N/A |
+| `hotfix/*` → `dev` | Cherry-pick | N/A |
 
 ## Governance Triggers
 
 | Event | Action |
 |-------|--------|
-| PR opened to `staging` | Run STATIC + CORRECTNESS gates |
+| PR opened to `dev` | Run STATIC + CORRECTNESS gates |
 | PR opened to `main` | Run ALL gates + require 2 reviews |
 | Direct push to `main` | **BLOCKED** |
 | Force push to protected | **BLOCKED** |
-| PR approved | Trigger staging deployment |
-| Staging deployment success | Enable merge to main |
+| PR approved | Trigger dev deployment |
+| Dev deployment success | Enable merge to main |
 ```
 
 ### 3.2 New Security Directive
@@ -601,7 +601,7 @@ Each agent mode has a defined contract with:
 ### Triggers
 - "As FRESH guard, review..."
 - "Guard mode: check this PR..."
-- PR opened to `staging` or `main`
+- PR opened to `dev` or `main`
 - Manual review request
 
 ### Inputs Required
