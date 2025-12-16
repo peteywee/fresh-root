@@ -1,34 +1,16 @@
 {
+  "version": "1.1.0",
+  "description": "MCP Configuration with Tiered Tool Availability (Phase 1 of 3)",
+  "lastUpdated": "2025-12-16",
   "servers": {
     "github/github-mcp-server": {
       "type": "http",
       "url": "https://api.githubcopilot.com/mcp/",
       "gallery": "${env:GITHUB_MCP_GALLERY_URL}",
-      "version": "0.13.0"
-    },
-    "chromedevtools/chrome-devtools-mcp": {
-      "type": "stdio",
-      "command": "npx",
-      "args": [
-        "chrome-devtools-mcp@0.0.1-seed",
-        "--browserUrl",
-        "${input:browser_url}",
-        "--headless",
-        "${input:headless}",
-        "--isolated",
-        "${input:isolated}",
-        "--channel",
-        "${input:chrome_channel}"
-      ],
-      "gallery": "https://api.mcp.github.com/2025-09-15/v0/servers/13749964-2447-4c31-bcab-32731cced504",
-      "version": "0.0.1-seed"
-    },
-    "firebase": {
-      "type": "stdio",
-      "command": "npx",
-      "args": ["firebase@12.4.0"],
-      "env": {},
-      "cwd": "${workspaceFolder}"
+      "version": "0.13.0",
+      "tier": "always-on",
+      "priority": 1,
+      "description": "Repository, PR, issue, code search operations (25+ tools)"
     },
     "repomix/repomix-mcp": {
       "type": "stdio",
@@ -36,36 +18,58 @@
       "args": ["@repomix/mcp-server@latest"],
       "env": {},
       "cwd": "${workspaceFolder}",
-      "description": "Repomix MCP Server for AI-powered code analysis, packaging, and Claude Agent Skill generation"
+      "tier": "always-on",
+      "priority": 2,
+      "description": "Code analysis, pattern detection, external repo research (7 tools, 70% token compression)"
+    },
+    "firebase": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["firebase@12.4.0"],
+      "env": {},
+      "cwd": "${workspaceFolder}",
+      "tier": "always-on",
+      "priority": 3,
+      "description": "Firestore, Auth, Deployment, Emulator operations (15+ tools)"
+    },
+    "chromedevtools/chrome-devtools-mcp": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "chrome-devtools-mcp@0.0.1-seed",
+        "--channel",
+        "${input:chrome_channel}"
+      ],
+      "gallery": "https://api.mcp.github.com/2025-09-15/v0/servers/13749964-2447-4c31-bcab-32731cced504",
+      "version": "0.0.1-seed",
+      "tier": "on-demand",
+      "priority": 4,
+      "description": "Browser automation, screenshots, DOM inspection (requires input prompts)"
     }
   },
   "inputs": [
     {
-      "id": "browser_url",
-      "type": "promptString",
-      "description": "Optional: connect to an already-running Chrome (remote debugging / port-forward). Example: http://127.0.0.1:9222",
-      "password": false
-    },
-    {
-      "id": "headless",
-      "type": "promptString",
-      "description": "Run Chrome headless (true/false). Default: false",
-      "password": false,
-      "default": "false"
-    },
-    {
-      "id": "isolated",
-      "type": "promptString",
-      "description": "Use a temporary user-data-dir (true/false). Default: false",
-      "password": false,
-      "default": "false"
-    },
-    {
       "id": "chrome_channel",
       "type": "promptString",
-      "description": "Chrome channel: stable | canary | beta | dev (default: stable).",
+      "description": "Chrome channel: stable | canary | beta | dev (default: stable)",
       "password": false,
       "default": "stable"
     }
-  ]
+  ],
+  "toolTiers": {
+    "always-on": {
+      "servers": ["github/github-mcp-server", "repomix/repomix-mcp", "firebase"],
+      "totalTools": 47,
+      "initTime": "100-200ms",
+      "prompts": 0,
+      "description": "Tools that are always ready without user input"
+    },
+    "on-demand": {
+      "servers": ["chromedevtools/chrome-devtools-mcp"],
+      "totalTools": 8,
+      "initTime": "500ms",
+      "prompts": 1,
+      "description": "Tools available but require user configuration"
+    }
+  }
 }
