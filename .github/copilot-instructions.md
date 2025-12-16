@@ -60,20 +60,94 @@ L4: Documentation (docs/)
 ## Table of Contents
 
 1. [Quick Start](#quick-start-1)
-2. [Operational Directives](#operational-directives-1)
-3. [Architecture Overview](#architecture-overview-1)
-4. [The Triad of Trust](#the-triad-of-trust-1)
-5. [SDK Factory Pattern (Current Standard)](#sdk-factory-pattern-current-standard-1)
-6. [Type Safety & Validation](#type-safety--validation-1)
-7. [Authentication & Authorization](#authentication--authorization-1)
-8. [Security Patterns](#security-patterns-1)
-9. [Data Layer & Firebase](#data-layer--firebase-1)
-10. [Testing Patterns](#testing-patterns-1)
-11. [Development Workflows](#development-workflows-1)
-12. [Hard Rules (Must Follow)](#hard-rules-must-follow-1)
-13. [Common Patterns & Examples](#common-patterns--examples-1)
-14. [File Organization](#file-organization-1)
-15. [Troubleshooting](#troubleshooting-1)
+2. [MCP Tool Strategy](#mcp-tool-strategy-1) ⭐ **NEW**
+3. [Operational Directives](#operational-directives-1)
+4. [Architecture Overview](#architecture-overview-1)
+5. [The Triad of Trust](#the-triad-of-trust-1)
+6. [SDK Factory Pattern (Current Standard)](#sdk-factory-pattern-current-standard-1)
+7. [Type Safety & Validation](#type-safety--validation-1)
+8. [Authentication & Authorization](#authentication--authorization-1)
+9. [Security Patterns](#security-patterns-1)
+10. [Data Layer & Firebase](#data-layer--firebase-1)
+11. [Testing Patterns](#testing-patterns-1)
+12. [Development Workflows](#development-workflows-1)
+13. [Hard Rules (Must Follow)](#hard-rules-must-follow-1)
+14. [Common Patterns & Examples](#common-patterns--examples-1)
+15. [File Organization](#file-organization-1)
+16. [Troubleshooting](#troubleshooting-1)
+
+---
+
+## MCP Tool Strategy
+
+**⭐ NEW (December 16, 2025)**: MCP tools are now configured in tiers for automatic availability.
+
+### Always-On Tools (No waiting, use immediately)
+
+You have **47 tools** available automatically without any setup:
+
+| Tier | Tools | Purpose | Status |
+|------|-------|---------|--------|
+| **Tier 1** | GitHub MCP (25+ tools) | Repository, PR, issue operations | ✅ Ready |
+| **Tier 1** | Repomix MCP (7 tools) | Code analysis, pattern detection, external research | ✅ Ready |
+| **Tier 1** | Firebase MCP (15+ tools) | Firestore, Auth, Deployment, Emulators | ✅ Ready |
+| **Tier 2** | Chrome DevTools (8 tools) | Browser automation, screenshots | 🟡 On-demand |
+
+### Tool Selection Guide
+
+**Use GitHub MCP when**:
+- Searching code across repo
+- Managing PRs or issues
+- Querying commits, releases
+- Collaboration operations
+
+**Use Repomix MCP when**:
+- Analyzing code patterns
+- Understanding project structure
+- Researching external repos (competitors, patterns)
+- Generating Claude Agent Skills for team
+- Needing 70% token compression on analysis
+
+**Use Firebase MCP when**:
+- Database operations (Firestore read/write)
+- Authentication queries
+- Deployment (rules, functions)
+- Emulator control
+
+**Use Chrome DevTools when**:
+- Taking screenshots of UI
+- Browser automation for E2E
+- DOM inspection
+- Performance profiling
+
+### Quick Examples
+
+```markdown
+User: "Analyze API route patterns"
+→ Agent uses: mcp_repomix_pack_codebase (zero cost, fast)
+
+User: "Find all error handling in the codebase"
+→ Agent uses: mcp_repomix_grep_repomix_output (pattern search)
+
+User: "Create a PR with these changes"
+→ Agent uses: github/create_pull_request (repo operation)
+
+User: "Deploy Firestore rules"
+→ Agent uses: firebase/deploy (deployment)
+```
+
+### Best Practices
+
+1. **Explicit tool requests**: Say "Use Repomix to analyze..." instead of just "analyze"
+2. **Tool chaining**: Combine tools for better results (pack → grep → analyze)
+3. **Caching**: Reuse packed outputs to save tokens (attach_packed_output)
+4. **Fallbacks**: If MCP tool unavailable, fall back to local tools (read_file, grep_search)
+
+### Reference Documentation
+
+- **Full Reference**: [docs/REPOMIX_MCP_TOOLS_REFERENCE.md](../docs/REPOMIX_MCP_TOOLS_REFERENCE.md) - Detailed tool documentation
+- **Strategy**: [docs/MCP_TOOLING_STRATEGY.md](../docs/MCP_TOOLING_STRATEGY.md) - Tier architecture and planning
+- **Configuration**: [.mcp.json](.mcp.json) - Tool configuration
 
 ---
 

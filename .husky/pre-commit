@@ -4,4 +4,27 @@ if grep -nR --exclude-dir=node_modules --exclude-dir=.git '<<<<<<<\|=======\|>>>
   echo "ERROR: Unresolved merge conflict markers found. Resolve them before committing."
   exit 1
 fi
+
+# Block documentation files from being committed to root directory
+# Only README.md and LICENSE are allowed at root
+DISALLOWED_ROOT_DOCS=$(git diff --cached --name-only | grep -E '\.md$' | grep -v '^README\.md$\|^LICENSE' | grep -v '/' | grep -v '^WARP\.md$' || true)
+if [ ! -z "$DISALLOWED_ROOT_DOCS" ]; then
+  echo "🚫 ERROR: Documentation files should not be committed to root directory"
+  echo ""
+  echo "Disallowed files:"
+  echo "$DISALLOWED_ROOT_DOCS" | sed 's/^/  - /'
+  echo ""
+  echo "✅ Move them to one of these locations:"
+  echo "  - docs/architecture/       (system design, decisions)"
+  echo "  - docs/standards/          (coding patterns, rules)"
+  echo "  - docs/guides/             (how-to tutorials)"
+  echo "  - docs/production/         (operations, deployment)"
+  echo "  - docs/templates/          (reusable templates)"
+  echo "  - docs/reports/            (analysis, audits)"
+  echo "  - archive/                 (historical/superseded docs)"
+  echo ""
+  echo "📝 For details, see: docs/guides/DOCUMENTATION_FILING_GUIDE.md"
+  exit 1
+fi
+
 pnpm -w typecheck && pnpm -w lint

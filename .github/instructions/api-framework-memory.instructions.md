@@ -53,6 +53,46 @@ export const POST = createOrgEndpoint({
 
 **Future enhancement**: Implement overloaded factory functions for proper type inference.
 
+## Handler Parameter Naming Convention
+
+**Pattern**: SDK factory passes `{ request, input, context, params, item, index }` depending on endpoint type.
+
+**Common mistake**: Prefixing with underscores (`_request`, `_context`, `_params`) when parameter isn't used.
+
+**Why this causes issues**: TypeScript compiler rejects unused parameters without underscore prefix, but SDK factory validation doesn't recognize underscore-prefixed names as valid parameter names.
+
+**Correct pattern**:
+
+```typescript
+// ✅ CORRECT: Use actual parameter names or destructure only what's needed
+export const GET = createPublicEndpoint({
+  handler: async ({ request }) => {
+    const url = new URL(request.url);
+    return NextResponse.json({ path: url.pathname });
+  },
+});
+
+// ✅ ALSO CORRECT: Use empty object if no parameters needed
+export const GET = createPublicEndpoint({
+  handler: async ({}) => {
+    return NextResponse.json({ status: "ok" });
+  },
+});
+
+// ❌ WRONG: Don't use underscore-prefixed names
+export const GET = createPublicEndpoint({
+  handler: async ({ _request }) => {
+    // TypeScript error: Property '_request' doesn't exist
+  },
+});
+```
+
+**Migration**: Use `sed` for bulk fixes across routes:
+```bash
+# Remove all underscore-prefixed params in handlers
+find app/api -name "route.ts" -exec sed -i 's/_request/request/g; s/_context/context/g; s/_params/params/g; s/_index/index/g; s/_input/input/g' {} \;
+```
+
 ## Error Protocol Application
 
 **Trigger**: Same error pattern occurring 3+ times across codebase **Action**: Create architectural
