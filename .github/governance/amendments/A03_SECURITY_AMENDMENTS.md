@@ -11,16 +11,19 @@ source: .github/SECURITY_FIXES.md
 # Amendment A03: Security Fix Patterns
 
 ## Purpose
+
 Extends D01 Security Directive with documented security fix patterns and remediation workflow.
 
 ## Security Fix Workflow
 
 ### Step 1: Identify Vulnerabilities
+
 - Check GitHub Security / Dependabot alerts
 - Prioritize by severity: Critical → High → Moderate → Low
 - Document CVE IDs and affected packages
 
 ### Step 2: Apply Minimal Upgrades
+
 ```bash
 # Critical fixes first
 pnpm update <package>@<version> --filter <workspace>
@@ -31,6 +34,7 @@ pnpm test
 ```
 
 ### Step 3: Validate
+
 - [ ] All tests pass
 - [ ] TypeScript compiles
 - [ ] No new vulnerabilities introduced
@@ -39,8 +43,10 @@ pnpm test
 ## Common Security Patterns
 
 ### SF-001: Rate Limit Implementation
+
 **Problem**: Public endpoints without rate limiting  
 **Fix**: Apply rate limiting via SDK factory
+
 ```typescript
 export const POST = createPublicEndpoint({
   rateLimit: { maxRequests: 10, windowMs: 60000 },
@@ -49,8 +55,10 @@ export const POST = createPublicEndpoint({
 ```
 
 ### SF-002: Input Validation
+
 **Problem**: Unvalidated user input  
 **Fix**: Use Zod schemas at API boundary
+
 ```typescript
 export const POST = createOrgEndpoint({
   input: CreateEntitySchema,  // Auto-validates
@@ -59,8 +67,10 @@ export const POST = createOrgEndpoint({
 ```
 
 ### SF-003: Org Scoping
+
 **Problem**: Queries without organization isolation  
 **Fix**: Always scope to `context.org.orgId`
+
 ```typescript
 // ❌ WRONG
 const data = await db.collection("schedules").get();
@@ -70,19 +80,23 @@ const data = await db.collection(`orgs/${context.org!.orgId}/schedules`).get();
 ```
 
 ### SF-004: Session Cookie Flags
+
 **Problem**: Insecure cookie configuration  
 **Fix**: Enforce security flags (automatic in SDK factory)
+
 ```
 HttpOnly; Secure; SameSite=Lax; Path=/
 ```
 
 ### SF-005: CSRF Protection
+
 **Problem**: Mutation endpoints without CSRF protection  
 **Fix**: Enabled by default in SDK factory for POST/PUT/PATCH/DELETE
 
 ## Security Audit Checklist
 
 Before merging:
+
 - [ ] No hardcoded secrets (API keys, passwords)
 - [ ] All inputs validated with Zod
 - [ ] SDK factory used for API routes
@@ -91,5 +105,6 @@ Before merging:
 - [ ] Dependencies up to date (no critical CVEs)
 
 ## Reference
+
 Security alerts: GitHub Security / Dependabot  
 OWASP Top 10: `.github/instructions/03_SECURITY_AND_SAFETY.instructions.md`

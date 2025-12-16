@@ -11,6 +11,7 @@ source: .github/BRANCH_STRATEGY_*.md
 # Amendment A05: Extended Branch Strategy & Workflow
 
 ## Purpose
+
 Extends 10_BRANCH_RULES with detailed branch patterns, commit conventions, and merge strategies.
 
 ## Branch Patterns
@@ -31,6 +32,7 @@ Extends 10_BRANCH_RULES with detailed branch patterns, commit conventions, and m
 **Required format**: `type(scope): description`
 
 ### Types
+
 - `feat` — New feature
 - `fix` — Bug fix
 - `docs` — Documentation changes
@@ -41,6 +43,7 @@ Extends 10_BRANCH_RULES with detailed branch patterns, commit conventions, and m
 - `style` — Formatting, whitespace
 
 ### Examples
+
 ```bash
 feat(api): add batch processing endpoint
 fix(auth): prevent session cookie leakage
@@ -53,27 +56,34 @@ chore(deps): upgrade Next.js to 16.1.0
 ## Merge Strategies
 
 ### Fast-Forward (Preferred)
+
 ```bash
 git checkout main
 git merge --ff-only dev
 ```
+
 **Use when**: Linear history, no conflicts
 
 ### Squash (For Feature Branches)
+
 ```bash
 git merge --squash feature/xyz
 ```
+
 **Use when**: Multiple WIP commits, want clean history
 
 ### Merge Commit (For Integration)
+
 ```bash
 git merge --no-ff dev
 ```
+
 **Use when**: Preserving branch history important
 
 ## Branching Workflow
 
 ### Creating Feature Branch
+
 ```bash
 git checkout dev
 git pull origin dev
@@ -81,6 +91,7 @@ git checkout -b feature/add-batch-api
 ```
 
 ### Before Merge
+
 ```bash
 # Update from target branch
 git checkout dev && git pull
@@ -94,6 +105,7 @@ pnpm lint
 ```
 
 ### Merging
+
 ```bash
 git checkout dev
 git merge --squash feature/add-batch-api
@@ -102,6 +114,7 @@ git push origin dev
 ```
 
 ### Cleanup
+
 ```bash
 git branch -d feature/add-batch-api
 git push origin --delete feature/add-batch-api
@@ -146,4 +159,5 @@ git branch -d hotfix/fix-session-leak
 | `feature/*` | No restrictions |
 
 ## Reference
+
 Detailed workflows: `archive/amendment-sources/BRANCH_STRATEGY_*.md`
