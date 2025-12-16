@@ -31,12 +31,6 @@ System design, architectural decisions, and component interactions.
 | [CREWOPS_MANUAL.md](./architecture/CREWOPS_MANUAL.md) | Multi-agent orchestration | Active |
 | [DEPENDENCY_GRAPH.md](./architecture/DEPENDENCY_GRAPH.md) | Package dependencies | Active |
 | [API_SCHEMA_AUDIT.md](./architecture/API_SCHEMA_AUDIT.md) | API validation patterns | Active |
-| [FUTURE_PROOF_SYSTEM_DESIGN.md](./architecture/FUTURE_PROOF_SYSTEM_DESIGN.md) | 10-year sustainability plan | **Strategic** |
-| [FUTURE_PROOFING_IMPLEMENTATION_CHECKLIST.md](./architecture/FUTURE_PROOFING_IMPLEMENTATION_CHECKLIST.md) | Implementation roadmap | Planning |
-| [REPOMIX_MCP_INTEGRATION_PLAN.md](./architecture/REPOMIX_MCP_INTEGRATION_PLAN.md) | Unlock Repomix MCP tools | **Complete** |
-| [MCP_TOOLING_STRATEGY.md](./MCP_TOOLING_STRATEGY.md) | Tiered MCP tool architecture | **Phase 1 Complete** |
-| [MCP_TOOL_ECOSYSTEM_INVENTORY.md](./MCP_TOOL_ECOSYSTEM_INVENTORY.md) | 47-tool availability map | **Ready** |
-| [REPOMIX_MCP_TOOLS_REFERENCE.md](./REPOMIX_MCP_TOOLS_REFERENCE.md) | Detailed Repomix tool docs | **Ready** |
 
 ---
 
