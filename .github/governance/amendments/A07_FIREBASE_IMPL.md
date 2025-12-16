@@ -11,6 +11,7 @@ source: .github/IMPLEMENTATION_PLAN_FIREBASE.md
 # Amendment A07: Firebase Implementation & Deployment
 
 ## Purpose
+
 Extends 09_CI_CD with Firebase-specific configuration and deployment procedures.
 
 ## Key Configuration Files
@@ -26,31 +27,37 @@ Extends 09_CI_CD with Firebase-specific configuration and deployment procedures.
 ## Firebase Services Used
 
 ### 1. Firebase Authentication
+
 - Session cookie-based auth
 - Admin SDK verification on server
 - Client SDK for login flow
 
 ### 2. Firestore Database
+
 - Document-based NoSQL
 - Hierarchical collections (`orgs/{orgId}/schedules/...`)
 - Security rules enforce org isolation
 
 ### 3. Cloud Functions
+
 - HTTP triggers for webhooks
 - Scheduled functions for cron jobs
 - Firestore triggers for data sync
 
 ### 4. Firebase Hosting
+
 - Next.js static/SSR hosting
 - CDN distribution
 - Custom domain support
 
 ### 5. Firebase Emulators (Development)
+
 ```bash
 NEXT_PUBLIC_USE_EMULATORS=true firebase emulators:start
 ```
 
 Emulator ports:
+
 - Firestore: `localhost:8080`
 - Auth: `localhost:9099`
 - Functions: `localhost:5001`
@@ -60,16 +67,19 @@ Emulator ports:
 ## Deployment Commands
 
 ### Deploy Firestore Rules
+
 ```bash
 firebase deploy --only firestore:rules
 ```
 
 ### Deploy Firestore Indexes
+
 ```bash
 firebase deploy --only firestore:indexes
 ```
 
 ### Deploy Cloud Functions
+
 ```bash
 cd functions
 pnpm build
@@ -78,12 +88,14 @@ firebase deploy --only functions
 ```
 
 ### Deploy Hosting (Next.js)
+
 ```bash
 pnpm build
 firebase deploy --only hosting
 ```
 
 ### Deploy All
+
 ```bash
 pnpm build
 cd functions && pnpm build && cd ..
@@ -93,6 +105,7 @@ firebase deploy
 ## Environment Variables
 
 ### Required for Production
+
 ```bash
 # Firebase Admin SDK
 FIREBASE_PROJECT_ID=your-project-id
@@ -108,6 +121,7 @@ NEXT_PUBLIC_FIREBASE_APP_ID=...
 ```
 
 ### Optional (Development)
+
 ```bash
 # Use emulators
 NEXT_PUBLIC_USE_EMULATORS=true
@@ -116,6 +130,7 @@ NEXT_PUBLIC_USE_EMULATORS=true
 ## CI/CD Integration
 
 ### GitHub Actions Workflow
+
 ```yaml
 name: Deploy to Firebase
 
@@ -182,10 +197,11 @@ pnpm test:rules -- tests/rules/schedules.test.ts
 
 ## Monitoring
 
-- **Console**: https://console.firebase.google.com
+- **Console**: <https://console.firebase.google.com>
 - **Metrics**: Firestore usage, Function invocations, Hosting bandwidth
 - **Logs**: Cloud Functions logs via `firebase functions:log`
 
 ## Reference
+
 Full implementation: `archive/amendment-sources/IMPLEMENTATION_PLAN_FIREBASE.md`  
-Firebase docs: https://firebase.google.com/docs
+Firebase docs: <https://firebase.google.com/docs>

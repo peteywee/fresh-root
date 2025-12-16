@@ -11,6 +11,7 @@ source: .github/BATCH_PROTOCOL_OFFICIAL.md
 # Amendment A01: Batch Processing Protocol
 
 ## Purpose
+
 Extends Protocol P03 with detailed batch endpoint implementation rules and systematic task execution patterns.
 
 ## Scope Classification
@@ -23,6 +24,7 @@ Extends Protocol P03 with detailed batch endpoint implementation rules and syste
 ## Core Rules
 
 ### R01: TODO List (Complex Tasks Only)
+
 **MANDATORY**: Create structured TODO list FIRST for all complex tasks using `manage_todo_list`:
 
 ```typescript
@@ -35,6 +37,7 @@ Extends Protocol P03 with detailed batch endpoint implementation rules and syste
 ```
 
 ### R02: Batch API Endpoints
+
 1. **Accept arrays**: `{ items: T[] }` format
 2. **Maximum batch size**: 100 items per request
 3. **Partial success**: Return `{ succeeded: [], failed: [] }`
@@ -42,6 +45,7 @@ Extends Protocol P03 with detailed batch endpoint implementation rules and syste
 5. **Transaction**: Use Firestore batch writes (max 500 ops)
 
 ### R03: Status Tracking
+
 - Only ONE task `in-progress` at a time
 - Mark `completed` IMMEDIATELY after finishing
 - Don't batch completions
@@ -76,9 +80,11 @@ export const POST = createOrgEndpoint({
 ## Validation Gates
 
 Before proceeding to next task:
+
 - [ ] Previous task marked `completed`
 - [ ] Output validated
 - [ ] No blockers identified
 
 ## Reference
+
 Full protocol: `archive/amendment-sources/BATCH_PROTOCOL_OFFICIAL.md`

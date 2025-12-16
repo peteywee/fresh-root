@@ -11,11 +11,13 @@ source: docs/governance.md
 # Amendment A08: Governance Implementation Plan & Status
 
 ## Purpose
+
 Tracks the rollout of the canonical governance system and documentation consolidation.
 
 ## Implementation Phases
 
 ### Phase 1: Create Canonical Docs ✅ COMPLETE
+
 **Objective**: Define 12 canonical governance documents (L0)
 
 - [x] 01_DEFINITIONS.md - Terms, values, domain entities
@@ -32,6 +34,7 @@ Tracks the rollout of the canonical governance system and documentation consolid
 - [x] 12_DOCUMENTATION.md - Doc standards and format
 
 ### Phase 2: Move to Canonical Location ✅ COMPLETE
+
 **Objective**: Relocate governance docs to `.github/governance/`
 
 - [x] Created `.github/governance/` directory
@@ -40,6 +43,7 @@ Tracks the rollout of the canonical governance system and documentation consolid
 - [x] Added PROTOCOL_DIRECTIVE_IMPROVEMENTS.md
 
 ### Phase 3: Consolidate 357 Files 🏃 IN PROGRESS
+
 **Objective**: Reduce scattered markdown files by 58%
 
 - [x] Phase 1: Archive 39 root-level docs
@@ -51,6 +55,7 @@ Tracks the rollout of the canonical governance system and documentation consolid
 - [ ] Phase 6: Update copilot-instructions.md
 
 ### Phase 4: Create Amendments ✅ COMPLETE (THIS PHASE)
+
 **Objective**: Extract valuable pieces as L1 indexed amendments
 
 | ID | Amendment | Status |
@@ -65,6 +70,7 @@ Tracks the rollout of the canonical governance system and documentation consolid
 | A08 | Implementation Plan | ✅ Created (this file) |
 
 ### Phase 5: Create Indexes ⏸️ PENDING
+
 **Objective**: Build tag-indexed lookup tables
 
 - [ ] `.github/governance/INDEX.md` (L0 + L1 index)
@@ -72,6 +78,7 @@ Tracks the rollout of the canonical governance system and documentation consolid
 - [ ] `.github/instructions/INDEX.md` (instructions catalog)
 
 ### Phase 6: Validate ⏸️ PENDING
+
 **Objective**: Verify consolidation goals met
 
 - [ ] Root .md files ≤2
@@ -81,6 +88,7 @@ Tracks the rollout of the canonical governance system and documentation consolid
 - [ ] No duplicates remain
 
 ### Phase 7: Finalize ⏸️ PENDING
+
 **Objective**: Update references and create PR
 
 - [ ] Update `.github/copilot-instructions.md`
@@ -115,6 +123,7 @@ Tracks the rollout of the canonical governance system and documentation consolid
 4. **Execute Phase 7** - Update copilot-instructions.md, create PR
 
 ## Reference
+
 Full consolidation plan: `docs/standards/DOCUMENTATION_CONSOLIDATION_PLAN.md`  
 Execution TODO: `docs/standards/CONSOLIDATION_TODO.md`  
 Source: `archive/amendment-sources/governance.md`

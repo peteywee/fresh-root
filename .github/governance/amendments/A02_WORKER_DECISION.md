@@ -11,6 +11,7 @@ source: .github/WORKER_DECISION_TREE.md
 # Amendment A02: Worker Decision Tree & Routing
 
 ## Purpose
+
 Extends 06_AGENTS with detailed worker routing logic and hierarchical team structures.
 
 ## Decision Flow
@@ -68,6 +69,7 @@ ORCHESTRATOR (Commander)
 ## Worker Contracts
 
 Each worker must:
+
 1. **Accept** task with clear acknowledgment
 2. **Report** blockers immediately to Orchestrator
 3. **Complete** assigned work before returning control
@@ -80,4 +82,5 @@ Worker → Team Lead → Orchestrator → Security Red Team (if needed)
 ```
 
 ## Reference
+
 Full execution log: `archive/amendment-sources/WORKER_DECISION_TREE.md`
