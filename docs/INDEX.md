@@ -114,16 +114,19 @@ Historical documents, superseded plans, completed migrations.
 ## Quick Links
 
 ### For Developers
+
 - [Coding Standards](./standards/CODING_RULES_AND_PATTERNS.md) - **Start here**
 - [AI Agent Guide](./architecture/AI_AGENT_GUIDE.md) - AI assistant onboarding
 - [Setup Guide](./guides/SETUP.md) - Local environment
 
 ### For AI Agents
+
 - [CrewOps Manual](./architecture/CREWOPS_MANUAL.md) - Multi-agent coordination
 - [Governance Index](../.github/governance/INDEX.md) - Canonical rules (L0/L1)
 - [Instructions Index](../.github/instructions/INDEX.md) - Implementation instructions (L2)
 
 ### For Operators
+
 - [Deployment Checklist](./production/DEPLOYMENT_CHECKLIST.md) - Pre-deploy verification
 - [Deployment Guide](./guides/DEPLOYMENT.md) - Step-by-step deployment
 
@@ -150,12 +153,14 @@ L4: Human Documentation (docs/) ← YOU ARE HERE
 ## Search Tips
 
 ### Find by Topic
+
 - **API patterns**: See [CODING_RULES_AND_PATTERNS.md](./standards/CODING_RULES_AND_PATTERNS.md) § SDK Factory
 - **Security**: See [Governance](../.github/governance/03_DIRECTIVES.md) § D01-D02 + [A03_SECURITY](../.github/governance/amendments/A03_SECURITY_AMENDMENTS.md)
 - **Testing**: See [TESTING.md](./guides/TESTING.md) + [.github/instructions/05_TESTING_AND_REVIEW.instructions.md](../.github/instructions/05_TESTING_AND_REVIEW.instructions.md)
 - **Firebase**: See [FIREBASE.md](./guides/FIREBASE.md) + [A07_FIREBASE](../.github/governance/amendments/A07_FIREBASE_IMPL.md)
 
 ### Find by Role
+
 - **New Developer**: AI_AGENT_GUIDE.md → CODING_RULES_AND_PATTERNS.md → SETUP.md
 - **AI Agent**: Governance INDEX → Instructions INDEX → CREWOPS_MANUAL
 - **Operator**: DEPLOYMENT_CHECKLIST → DEPLOYMENT.md → MONITORING.md
@@ -166,6 +171,7 @@ L4: Human Documentation (docs/) ← YOU ARE HERE
 ## Contributing
 
 When adding new documentation:
+
 1. Place in appropriate folder (architecture/standards/guides/production/templates/reports)
 2. Update this INDEX.md
 3. Add YAML frontmatter (see [AMENDMENT_TEMPLATE.md](./templates/AMENDMENT_TEMPLATE.md))
