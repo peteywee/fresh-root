@@ -12,7 +12,7 @@ import { ok, serverError } from "../_shared/validation";
  */
 export const GET = createOrgEndpoint({
   roles: ["admin"],
-  handler: async ({ context, _params }) => {
+  handler: async ({ context, params }) => {
     try {
       const tokens = [
         {
