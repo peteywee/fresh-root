@@ -98,5 +98,11 @@ repomix-output.*
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+
+# Generated documentation files (Claude skills, Repomix outputs)
+.claude/
+repomix-output.*
+pattern-validation-report.json
+API_SCHEMA_AUDIT_REPORT.json
 /playwright/.auth/
 repomix-output.xml
