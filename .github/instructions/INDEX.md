@@ -69,17 +69,20 @@ Memory files capture lessons learned from recurring issues. Created when error p
 Instructions for specific technologies, frameworks, and workflows.
 
 ### Frontend
+
 | File | Scope | Tags |
 |------|-------|------|
 | [nextjs-tailwind.instructions.md](./nextjs-tailwind.instructions.md) | Next.js + Tailwind | nextjs, tailwind, ui |
 | [nextjs.instructions.md](./nextjs.instructions.md) | Next.js | nextjs, routing, ssr |
 
 ### Testing
+
 | File | Scope | Tags |
 |------|-------|------|
 | [playwright-typescript.instructions.md](./playwright-typescript.instructions.md) | E2E tests | playwright, e2e, testing |
 
 ### Languages
+
 | File | Scope | Tags |
 |------|-------|------|
 | [typescript-5-es2022.instructions.md](./typescript-5-es2022.instructions.md) | TypeScript | typescript, ts5, es2022 |
