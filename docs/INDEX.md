@@ -33,6 +33,7 @@ System design, architectural decisions, and component interactions.
 | [API_SCHEMA_AUDIT.md](./architecture/API_SCHEMA_AUDIT.md) | API validation patterns | Active |
 | [FUTURE_PROOF_SYSTEM_DESIGN.md](./architecture/FUTURE_PROOF_SYSTEM_DESIGN.md) | 10-year sustainability plan | **Strategic** |
 | [FUTURE_PROOFING_IMPLEMENTATION_CHECKLIST.md](./architecture/FUTURE_PROOFING_IMPLEMENTATION_CHECKLIST.md) | Implementation roadmap | Planning |
+| [REPOMIX_MCP_INTEGRATION_PLAN.md](./architecture/REPOMIX_MCP_INTEGRATION_PLAN.md) | Unlock Repomix MCP tools | **Ready** |
 
 ---
 

@@ -29,6 +29,14 @@
       "args": ["firebase@12.4.0"],
       "env": {},
       "cwd": "${workspaceFolder}"
+    },
+    "repomix/repomix-mcp": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["@repomix/mcp-server@latest"],
+      "env": {},
+      "cwd": "${workspaceFolder}",
+      "description": "Repomix MCP Server for AI-powered code analysis, packaging, and Claude Agent Skill generation"
     }
   },
   "inputs": [
