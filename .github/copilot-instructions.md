@@ -25,6 +25,36 @@ binding operational rules:
 
 These directives are **binding**—not suggestions. They define how you must operate in this codebase.
 
+### 📚 New: Hierarchical Governance System
+
+**As of December 2025**, documentation is organized in a 5-level hierarchy for fast AI retrieval:
+
+```
+L0: Canonical Governance (.github/governance/01-12)
+  ↓
+L1: Amendments (.github/governance/amendments/A01-A08)
+  ↓
+L2: Instructions (.github/instructions/)
+  ↓
+L3: Prompts (.github/prompts/)
+  ↓
+L4: Documentation (docs/)
+```
+
+**Quick Navigation**:
+- [Governance INDEX](.github/governance/INDEX.md) - L0/L1 canonical rules, amendments, tag lookup
+- [Instructions INDEX](.github/instructions/INDEX.md) - L2 implementation instructions, memory files
+- [Documentation INDEX](../docs/INDEX.md) - L4 human guides (architecture, standards, guides, production)
+
+**Tag-Based Lookup**: Use the tag tables in INDEX files to quickly find relevant documentation:
+- `api` → SDK Factory, batch protocols, API patterns
+- `security` → OWASP compliance, security patterns, fix protocols
+- `testing` → Test standards, patterns, E2E strategies
+- `firebase` → Firebase config, deployment, rules
+- `patterns` → Coding patterns, validation, architectural decisions
+
+**Amendment System**: Amendments (A01-A08) extend canonical governance with focused implementation details. Each has YAML frontmatter for indexing.
+
 ---
 
 ## Table of Contents
@@ -81,11 +111,17 @@ NEXT_PUBLIC_USE_EMULATORS=true firebase emulators:start
 
 ### Critical Files to Read First
 
-1. `packages/api-framework/src/index.ts` - SDK factory (current standard)
-2. `packages/types/src/index.ts` - Zod schemas (single source of truth)
-3. `docs/CODING_RULES_AND_PATTERNS.md` - Comprehensive coding standards
-4. `firestore.rules` - Security rules (must sync with API routes)
-5. `apps/web/app/api/_template/route.ts` - API route template
+**Navigation Indexes** (Start here for discovery):
+1. [.github/governance/INDEX.md](.github/governance/INDEX.md) - Canonical rules, amendments, tag lookup
+2. [.github/instructions/INDEX.md](.github/instructions/INDEX.md) - Implementation instructions catalog
+3. [docs/INDEX.md](../docs/INDEX.md) - Documentation catalog
+
+**Implementation Essentials**:
+4. `packages/api-framework/src/index.ts` - SDK factory (current standard)
+5. `packages/types/src/index.ts` - Zod schemas (single source of truth)
+6. `docs/standards/CODING_RULES_AND_PATTERNS.md` - Comprehensive coding standards
+7. `firestore.rules` - Security rules (must sync with API routes)
+8. `apps/web/app/api/_template/route.ts` - API route template
 
 ---
 
@@ -1708,11 +1744,16 @@ exists.
 
 | Purpose          | Location                                |
 | ---------------- | --------------------------------------- |
+| **Navigation Indexes** | |
+| Governance INDEX | `.github/governance/INDEX.md` |
+| Instructions INDEX | `.github/instructions/INDEX.md` |
+| Documentation INDEX | `docs/INDEX.md` |
+| **Core Implementation** | |
 | SDK Factory      | `packages/api-framework/src/index.ts`   |
 | Type Schemas     | `packages/types/src/index.ts`           |
 | API Template     | `apps/web/app/api/_template/route.ts`   |
 | Firestore Rules  | `firestore.rules`                       |
-| Coding Standards | `docs/CODING_RULES_AND_PATTERNS.md`     |
+| Coding Standards | `docs/standards/CODING_RULES_AND_PATTERNS.md`     |
 | Firebase Admin   | `apps/web/lib/firebase-admin.ts`        |
 | Test Utilities   | `packages/api-framework/src/testing.ts` |
 
