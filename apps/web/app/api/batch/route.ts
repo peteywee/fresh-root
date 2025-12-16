@@ -19,11 +19,10 @@ const CreateBatchSchema = z.object({
 });
 
 /*
- * POST /api/batch
  * Processes a list of items as a single batch operation.
  * Demonstrates SDK factory + batch handler usage with canonical Zod validation.
  */
-export async function processBatchItems(
+async function processBatchItems(
   items: unknown[],
   context: any,
   request: Request,

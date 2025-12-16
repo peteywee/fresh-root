@@ -1,6 +1,147 @@
+# Instructions Index (L2: Implementation Layer)
+
+> **Location**: L2 (Agent Implementation Layer)  
+> **Purpose**: Detailed instructions for AI agents implementing governance rules  
+> **Last Updated**: 2025-12-16
+
+---
+
+## Quick Navigation
+
+- [Core Instructions (01-05)](#core-instructions-01-05) - **Binding for all agents**
+- [Memory Files](#memory-files-pattern-learnings) - Lessons learned from recurring issues
+- [Domain-Specific](#domain-specific-instructions) - Technology-specific guidance
+- [Best Practices](#best-practices) - General guidelines
+- [Tag Lookup](#quick-tag-lookup) - Find by topic
+- [Rule Index](#repository-instruction-index) - Canonical rules reference
+
+---
+
+## Hierarchy Position
+
+```
+L0: Canonical Governance (.github/governance/01-12)
+  ↓
+L1: Amendments (.github/governance/amendments/)
+  ↓
+L2: Instructions (.github/instructions/) ← YOU ARE HERE
+  ↓
+L3: Prompts (.github/prompts/)
+  ↓
+L4: Documentation (docs/)
+```
+
+**Authority**: Instructions implement L0/L1 governance rules. Conflicts resolved by escalating to canonical docs.
+
+---
+
+## Core Instructions (01-05)
+
+**These files are binding for all agents.** They implement the Master Directive hierarchy.
+
+| File | Scope | Priority | Purpose |
+|------|-------|----------|---------|
+| [01_MASTER_AGENT_DIRECTIVE.instructions.md](./01_MASTER_AGENT_DIRECTIVE.instructions.md) | `**` | P0 | **Binding for all operations** - Tool usage, hierarchy, production standards |
+| [02_CODE_QUALITY_STANDARDS.instructions.md](./02_CODE_QUALITY_STANDARDS.instructions.md) | `**/*.{ts,tsx,js,jsx}` | P1 | Code quality enforcement, linting, formatting |
+| [03_SECURITY_AND_SAFETY.instructions.md](./03_SECURITY_AND_SAFETY.instructions.md) | `*` | P0 | OWASP Top 10, security patterns, AI safety |
+| [04_FRAMEWORK_PATTERNS.instructions.md](./04_FRAMEWORK_PATTERNS.instructions.md) | `apps/**,packages/**` | P1 | Next.js, Firebase, Tailwind, monorepo patterns |
+| [05_TESTING_AND_REVIEW.instructions.md](./05_TESTING_AND_REVIEW.instructions.md) | `**/*.{test,spec}.{ts,tsx},tests/**` | P1 | Vitest, Playwright, code review |
+
+---
+
+## Memory Files (Pattern Learnings)
+
+Memory files capture lessons learned from recurring issues. Created when error pattern detected 3+ times.
+
+| File | Domain | Tags | Purpose |
+|------|--------|------|---------|
+| [api-framework-memory.instructions.md](./api-framework-memory.instructions.md) | API | api, typing, zod | SDK factory typing strategies, Zod integration |
+| [code-quality-memory.instructions.md](./code-quality-memory.instructions.md) | Quality | quality, eslint, patterns | ESLint safeguard rule creation |
+| [firebase-typing-and-monorepo-memory.instructions.md](./firebase-typing-and-monorepo-memory.instructions.md) | Firebase | firebase, typing, monorepo | Firebase SDK v12 typing, dependency management |
+| [orchestration-memory.instructions.md](./orchestration-memory.instructions.md) | Agents | agents, orchestration, crewops | Dynamic personality switching, error protocols |
+| [triage-batch-memory.instructions.md](./triage-batch-memory.instructions.md) | API | batch, testing, endpoints | Triage/batch endpoint patterns, testing |
+| [typescript-schema-pattern-memory.instructions.md](./typescript-schema-pattern-memory.instructions.md) | Types | zod, schema, validation | Zod schema patterns, type inference |
+
+---
+
+## Domain-Specific Instructions
+
+Instructions for specific technologies, frameworks, and workflows.
+
+### Frontend
+
+| File | Scope | Tags |
+|------|-------|------|
+| [nextjs-tailwind.instructions.md](./nextjs-tailwind.instructions.md) | Next.js + Tailwind | nextjs, tailwind, ui |
+| [nextjs.instructions.md](./nextjs.instructions.md) | Next.js | nextjs, routing, ssr |
+
+### Testing
+
+| File | Scope | Tags |
+|------|-------|------|
+| [playwright-typescript.instructions.md](./playwright-typescript.instructions.md) | E2E tests | playwright, e2e, testing |
+
+### Languages
+
+| File | Scope | Tags |
+|------|-------|------|
+| [typescript-5-es2022.instructions.md](./typescript-5-es2022.instructions.md) | TypeScript | typescript, ts5, es2022 |
+
+---
+
+## Best Practices
+
+| File | Scope | Purpose |
+|------|-------|---------|
+| [ai-prompt-engineering-safety-best-practices.instructions.md](./ai-prompt-engineering-safety-best-practices.instructions.md) | `*` | Prompt engineering, AI safety |
+| [github-actions-ci-cd-best-practices.instructions.md](./github-actions-ci-cd-best-practices.instructions.md) | `*` | CI/CD workflow patterns |
+| [object-calisthenics.instructions.md](./object-calisthenics.instructions.md) | `**/*.{cs,ts,java}` | Code organization principles |
+| [performance-optimization.instructions.md](./performance-optimization.instructions.md) | `*` | Performance patterns |
+| [security-and-owasp.instructions.md](./security-and-owasp.instructions.md) | `*` | Security implementation |
+| [self-explanatory-code-commenting.instructions.md](./self-explanatory-code-commenting.instructions.md) | All code | Comment standards |
+
+---
+
+## Meta Instructions
+
+| File | Purpose |
+|------|---------|
+| [code-review-generic.instructions.md](./code-review-generic.instructions.md) | Code review standards |
+| [production-development-directive.instructions.md](./production-development-directive.instructions.md) | Production development philosophy |
+| [taming-copilot.instructions.md](./taming-copilot.instructions.md) | Copilot behavior guidelines |
+
+---
+
+## Quick Tag Lookup
+
+Find instructions by topic:
+
+| Tag | Files |
+|-----|-------|
+| `api` | 01_MASTER, 04_FRAMEWORK, api-framework-memory, triage-batch-memory |
+| `security` | 01_MASTER, 03_SECURITY, security-and-owasp, ai-prompt-engineering |
+| `testing` | 05_TESTING, playwright-typescript, triage-batch-memory |
+| `firebase` | 04_FRAMEWORK, firebase-typing-and-monorepo-memory |
+| `zod` | api-framework-memory, typescript-schema-pattern-memory |
+| `patterns` | 02_CODE_QUALITY, code-quality-memory, object-calisthenics |
+| `agents` | 01_MASTER, orchestration-memory |
+| `nextjs` | 04_FRAMEWORK, nextjs-tailwind, nextjs |
+| `typescript` | typescript-5-es2022, typescript-schema-pattern-memory |
+| `crewops` | orchestration-memory |
+
+---
+
+## Related Indexes
+
+- [Governance Index](../governance/INDEX.md) - Canonical rules (L0/L1)
+- [Documentation Index](../../docs/INDEX.md) - Human guides (L4)
+- [Prompts](../prompts/) - Slash command templates (L3)
+
+---
+
 # Repository Instruction Index
 
-This file collects canonical, high-priority directives extracted from the repository governance
+This section collects canonical, high-priority directives extracted from the repository governance
 documents and agent instructions. Each entry includes the exact quoted directive (when available), a
 short interpretation, tags (MUST / SHOULD / RECOMMENDED), and one or more authoritative source
 references in the repo.
