@@ -3,7 +3,7 @@ import { createPublicEndpoint } from "@fresh-schedules/api-framework";
 import { z } from "zod";
 
 import { getFirebaseAdminAuth } from "../../../lib/firebase-admin";
-import { parseJson, badRequest, serverError, ok } from "../_shared/validation";
+import { serverError, ok } from "../_shared/validation";
 
 // Schema for session creation
 const CreateSessionSchema = z.object({
@@ -16,7 +16,7 @@ const CreateSessionSchema = z.object({
  */
 export const POST = createPublicEndpoint({
   input: CreateSessionSchema,
-  handler: async ({ input, request }) => {
+  handler: async ({ input }) => {
     try {
       // Type assertion safe - input validated by SDK factory
       const typedInput = input as z.infer<typeof CreateSessionSchema>;

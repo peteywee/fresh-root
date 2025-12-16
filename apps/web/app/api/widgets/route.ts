@@ -12,8 +12,6 @@ const CreateItemSchema = z.object({
   config: z.record(z.string(), z.unknown()).optional(),
 });
 
-type CreateItem = z.infer<typeof CreateItemSchema>;
-
 // Widget endpoint for testing/demo purposes
 export const POST = createPublicEndpoint({
   handler: async ({ request }) => {
@@ -37,7 +35,7 @@ export const POST = createPublicEndpoint({
         updatedAt: Date.now(),
       };
       return NextResponse.json(widget, { status: 201 });
-    } catch (error) {
+    } catch (_error) {
       return NextResponse.json(
         { error: "Invalid request" },
         { status: 400 },

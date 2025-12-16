@@ -10,7 +10,7 @@
  * - Safe to call on every session bootstrap (idempotent)
  */
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
+ 
 import type { Firestore } from "firebase-admin/firestore";
 import { z } from "zod";
 
@@ -26,7 +26,7 @@ export type AuthUserClaims = {
   [key: string]: unknown;
 };
 
-const UserProfileSchema = z.object({
+const _UserProfileSchema = z.object({
   id: z.string(),
   createdAt: z.number(),
   updatedAt: z.number(),
