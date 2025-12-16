@@ -53,6 +53,7 @@ graph TB
 ### ✅ PHASE 0: SETUP (COMPLETE)
 
 #### Task 1: Setup .gitignore and commit base files
+
 - **Team**: Research Team
 - **Status**: ✅ COMPLETE
 - **Dependencies**: None
@@ -72,10 +73,12 @@ graph TB
 **Estimated Time**: 10 minutes
 
 #### Task 2: Archive root-level execution docs
+
 - **Status**: ⏸️ PENDING
 - **Dependencies**: Task 1 (Setup complete)
 - **Assignee**: Archive Worker 1
 - **Commands**:
+
   ```bash
   mkdir -p archive/execution
   git mv ACTION_PLAN.md archive/execution/
@@ -87,13 +90,16 @@ graph TB
   git mv WORK_COMPLETION_SUMMARY.md archive/execution/
   git mv README_EXECUTION.md archive/execution/
   ```
+
 - **Files**: 8 files → archive/execution/
 
 #### Task 3: Archive root-level migration docs
+
 - **Status**: ⏸️ PENDING
 - **Dependencies**: Task 1 (Setup complete)
 - **Assignee**: Archive Worker 2
 - **Commands**:
+
   ```bash
   mkdir -p archive/migration
   git mv LEGACY_ROUTE_MIGRATION_PLAN.md archive/migration/
@@ -104,39 +110,48 @@ graph TB
   git mv UNUSED_WARNINGS_FIX_PLAN.md archive/migration/
   git mv DEPLOYMENT_CHECKLIST.sh archive/migration/
   ```
+
 - **Files**: 7 files → archive/migration/
 
 #### Task 4: Archive REPOMIX docs
+
 - **Status**: ⏸️ PENDING
 - **Dependencies**: Task 1 (Setup complete)
 - **Assignee**: Archive Worker 3
 - **Commands**:
+
   ```bash
   mkdir -p archive/repomix
   git mv REPOMIX_*.md archive/repomix/
   git mv REPOMIX_*.txt archive/repomix/
   ```
+
 - **Files**: ~17 files → archive/repomix/
 
 #### Task 5: Delete oversized/temp files
+
 - **Status**: ⏸️ PENDING
 - **Dependencies**: Task 1 (Setup complete)
 - **Assignee**: Archive Worker 1
 - **Commands**:
+
   ```bash
   rm -f DEPENDENCY_GRAPH.md
   rm -f DEPENDENCY_UPDATE_SUMMARY.md
   rm -f DEPLOYMENT_CHECKLIST_REPOMIX_95.md
   rm -f "untitled:plan-fixTypecheck.prompt.md"
   ```
+
 - **Files**: 4 files deleted
 - **⚠️ Warning**: DEPENDENCY_GRAPH.md is 112K lines - no archival needed
 
 #### Task 6: Consolidate archive folders
+
 - **Status**: ⏸️ PENDING
 - **Dependencies**: Tasks 2-5 (other archives complete)
 - **Assignee**: Archive Worker 2
 - **Commands**:
+
   ```bash
   mkdir -p archive/historical
   [ -d docs/archive ] && git mv docs/archive/* archive/historical/ || true
@@ -144,13 +159,16 @@ graph TB
   rmdir docs/archive 2>/dev/null || true
   rmdir archive/docs 2>/dev/null || true
   ```
+
 - **Files**: Consolidate existing archives
 
 #### Task 7: Commit Phase 1
+
 - **Status**: ⏸️ PENDING
 - **Dependencies**: Tasks 2-6 (all Phase 1 complete)
 - **Assignee**: Archive Team Lead
 - **Command**:
+
   ```bash
   git add -A && git commit -m "docs: archive outdated and redundant documentation (Phase 1)"
   ```
@@ -165,10 +183,12 @@ graph TB
 **Estimated Time**: 10 minutes
 
 #### Task 8: Delete duplicate production docs
+
 - **Status**: ⏸️ PENDING
 - **Dependencies**: Task 7 (Phase 1 commit)
 - **Assignee**: Merge Worker 1
 - **Commands**:
+
   ```bash
   rm -f docs/production/PRODUCTION_READINESS.md
   rm -f docs/production/PRODUCTION_READINESS_SIGN_OFF.md
@@ -176,50 +196,62 @@ graph TB
   rm -f docs/production/PRODUCTION_ENV_VALIDATION.md
   rm -f docs/production/PRODUCTION_DOCS_INDEX.md
   ```
+
 - **Files**: 5 files deleted
 
 #### Task 9: Delete duplicate reports
+
 - **Status**: ⏸️ PENDING
 - **Dependencies**: Task 7 (Phase 1 commit)
 - **Assignee**: Merge Worker 1
 - **Commands**:
+
   ```bash
   rm -f docs/reports/PR_STAGING_SUMMARY.md
   rm -f docs/reports/CODEBASE_ARCHITECTURAL_INDEX.md
   rm -f docs/reports/ARCHITECTURAL_REVIEW_PANEL_INPUTS.md
   rm -f docs/production/DEPLOYMENT_REPORT.md
   ```
+
 - **Files**: 4 files deleted
 
 #### Task 10: Archive CrewOps duplicates
+
 - **Status**: ⏸️ PENDING
 - **Dependencies**: Task 7 (Phase 1 commit)
 - **Assignee**: Merge Worker 2
 - **Commands**:
+
   ```bash
   mkdir -p archive/crewops
   git mv agents/crewops.md archive/crewops/
   git mv agents/CREWOPS_*.md archive/crewops/
   rm -f docs/crewops/README.md
   ```
+
 - **Files**: ~9 files → archive/crewops/, 1 deleted
 
 #### Task 11: Archive superseded agent docs
+
 - **Status**: ⏸️ PENDING
 - **Dependencies**: Task 7 (Phase 1 commit)
 - **Assignee**: Merge Worker 2
 - **Commands**:
+
   ```bash
   git mv docs/agents/AGENT_INSTRUCTION_OVERHAUL.md archive/historical/
   git mv docs/AGENTS.md archive/historical/
   ```
+
 - **Files**: 2 files → archive/historical/
 
 #### Task 12: Commit Phase 2
+
 - **Status**: ⏸️ PENDING
 - **Dependencies**: Tasks 8-11 (all Phase 2 complete)
 - **Assignee**: Merge Team Lead
 - **Command**:
+
   ```bash
   git add -A && git commit -m "docs: merge and consolidate duplicate documentation (Phase 2)"
   ```
@@ -234,10 +266,12 @@ graph TB
 **Estimated Time**: 10 minutes
 
 #### Task 13: Relocate plan/ docs
+
 - **Status**: ⏸️ PENDING
 - **Dependencies**: Task 12 (Phase 2 commit)
 - **Assignee**: Merge Worker 1
 - **Commands**:
+
   ```bash
   mkdir -p docs/architecture/plans
   mkdir -p .github/reports/redteam
@@ -245,13 +279,16 @@ graph TB
   git mv plan/redteam/*.md .github/reports/redteam/
   rmdir plan/redteam plan 2>/dev/null || true
   ```
+
 - **Files**: plan/ → docs/architecture/plans/, plan/redteam/ → .github/reports/redteam/
 
 #### Task 14: Relocate orphaned .github docs
+
 - **Status**: ⏸️ PENDING
 - **Dependencies**: Task 12 (Phase 2 commit)
 - **Assignee**: Merge Worker 2
 - **Commands**:
+
   ```bash
   git mv .github/SR_DEV_DIRECTIVE.md .github/instructions/
   git mv .github/IMPLEMENTATION_PLAN_FIREBASE.md docs/architecture/plans/
@@ -259,26 +296,32 @@ graph TB
   git mv .github/PHASE_1_*.md archive/phase-work/
   git mv .github/PROMPTS_SESSION_SUMMARY.md .github/prompts/
   ```
+
 - **Files**: 4+ files relocated
 
 #### Task 15: Relocate docs/ orphans
+
 - **Status**: ⏸️ PENDING
 - **Dependencies**: Task 12 (Phase 2 commit)
 - **Assignee**: Merge Worker 1
 - **Commands**:
+
   ```bash
   git mv docs/repo-instruction-index.md .github/instructions/INDEX.md
   git mv docs/REPOMIX_INDEX.md docs/guides/
   git mv docs/01_SYSTEM_L0_Bible.md docs/architecture/
   git mv docs/02_SYSTEM_L1.md docs/architecture/
   ```
+
 - **Files**: 4 files relocated
 
 #### Task 16: Archive amendment source files
+
 - **Status**: ⏸️ PENDING
 - **Dependencies**: Task 12 (Phase 2 commit)
 - **Assignee**: Merge Worker 2
 - **Commands**:
+
   ```bash
   mkdir -p archive/amendment-sources
   git mv .github/BATCH_PROTOCOL_OFFICIAL.md archive/amendment-sources/
@@ -290,13 +333,16 @@ graph TB
   git mv docs/governance.md archive/amendment-sources/
   git mv .github/GOVERNANCE_DEPLOYMENT_STATUS.md archive/amendment-sources/
   ```
+
 - **Files**: 8-10 files → archive/amendment-sources/
 
 #### Task 17: Commit Phase 3
+
 - **Status**: ⏸️ PENDING
 - **Dependencies**: Tasks 13-16 (all Phase 3 complete)
 - **Assignee**: Merge Team Lead
 - **Command**:
+
   ```bash
   git add -A && git commit -m "docs: relocate orphaned docs and archive amendment sources (Phase 3)"
   ```
@@ -311,21 +357,25 @@ graph TB
 **Estimated Time**: 30 minutes
 
 #### Task 18: Create amendments directory
+
 - **Status**: ⏸️ PENDING
 - **Dependencies**: Task 17 (Phase 3 commit)
 - **Assignee**: Extract Team Lead
 - **Command**:
+
   ```bash
   mkdir -p .github/governance/amendments
   ```
 
 #### Task 19: Extract A01_BATCH_PROTOCOL.md
+
 - **Status**: ⏸️ PENDING
 - **Dependencies**: Task 18 (directory created)
 - **Assignee**: Extract Worker 1
 - **Source**: archive/amendment-sources/BATCH_PROTOCOL_OFFICIAL.md
 - **Target**: .github/governance/amendments/A01_BATCH_PROTOCOL.md
 - **Template**:
+
   ```yaml
   ---
   id: A01
@@ -337,15 +387,18 @@ graph TB
   source: .github/BATCH_PROTOCOL_OFFICIAL.md
   ---
   ```
+
 - **Content**: Extract batch processing rules, validation patterns, example code
 
 #### Task 20: Extract A02_WORKER_DECISION.md
+
 - **Status**: ⏸️ PENDING
 - **Dependencies**: Task 18 (directory created)
 - **Assignee**: Extract Worker 2
 - **Source**: archive/amendment-sources/WORKER_DECISION_TREE.md
 - **Target**: .github/governance/amendments/A02_WORKER_DECISION.md
 - **Template**:
+
   ```yaml
   ---
   id: A02
@@ -357,15 +410,18 @@ graph TB
   source: .github/WORKER_DECISION_TREE.md
   ---
   ```
+
 - **Content**: Extract worker routing logic, decision tree
 
 #### Task 21: Extract A03_SECURITY_AMENDMENTS.md
+
 - **Status**: ⏸️ PENDING
 - **Dependencies**: Task 18 (directory created)
 - **Assignee**: Extract Worker 3
 - **Source**: archive/amendment-sources/SECURITY_FIXES.md
 - **Target**: .github/governance/amendments/A03_SECURITY_AMENDMENTS.md
 - **Template**:
+
   ```yaml
   ---
   id: A03
@@ -377,15 +433,18 @@ graph TB
   source: .github/SECURITY_FIXES.md
   ---
   ```
+
 - **Content**: Extract security fix patterns (SF-001, SF-002, SF-003)
 
 #### Task 22: Extract A04_RECONCILED_RULES.md
+
 - **Status**: ⏸️ PENDING
 - **Dependencies**: Task 18 (directory created)
 - **Assignee**: Extract Worker 4
 - **Source**: archive/amendment-sources/reconciled-rulebook.md
 - **Target**: .github/governance/amendments/A04_RECONCILED_RULES.md
 - **Template**:
+
   ```yaml
   ---
   id: A04
@@ -397,15 +456,18 @@ graph TB
   source: docs/reconciled-rulebook.md
   ---
   ```
+
 - **Content**: Extract rule conflict resolution hierarchy
 
 #### Task 23: Extract A05_BRANCH_STRATEGY.md
+
 - **Status**: ⏸️ PENDING
 - **Dependencies**: Task 18 (directory created)
 - **Assignee**: Extract Worker 1
 - **Source**: archive/amendment-sources/BRANCH_STRATEGY_*.md
 - **Target**: .github/governance/amendments/A05_BRANCH_STRATEGY.md
 - **Template**:
+
   ```yaml
   ---
   id: A05
@@ -417,15 +479,18 @@ graph TB
   source: .github/BRANCH_STRATEGY_*.md
   ---
   ```
+
 - **Content**: Extract branch patterns, commit message format
 
 #### Task 24: Extract A06_CODING_PATTERNS.md
+
 - **Status**: ⏸️ PENDING
 - **Dependencies**: Task 18 (directory created)
 - **Assignee**: Extract Worker 2
 - **Source**: archive/amendment-sources/CODING_RULES_AND_PATTERNS.md
 - **Target**: .github/governance/amendments/A06_CODING_PATTERNS.md
 - **Template**:
+
   ```yaml
   ---
   id: A06
@@ -437,15 +502,18 @@ graph TB
   source: docs/standards/CODING_RULES_AND_PATTERNS.md
   ---
   ```
+
 - **Content**: Extract SDK Factory patterns, Zod-first types, Triad of Trust
 
 #### Task 25: Extract A07_FIREBASE_IMPL.md
+
 - **Status**: ⏸️ PENDING
 - **Dependencies**: Task 18 (directory created)
 - **Assignee**: Extract Worker 3
 - **Source**: archive/amendment-sources/IMPLEMENTATION_PLAN_FIREBASE.md
 - **Target**: .github/governance/amendments/A07_FIREBASE_IMPL.md
 - **Template**:
+
   ```yaml
   ---
   id: A07
@@ -457,15 +525,18 @@ graph TB
   source: .github/IMPLEMENTATION_PLAN_FIREBASE.md
   ---
   ```
+
 - **Content**: Extract Firebase config, deployment commands
 
 #### Task 26: Extract A08_IMPLEMENTATION_PLAN.md
+
 - **Status**: ⏸️ PENDING
 - **Dependencies**: Task 18 (directory created)
 - **Assignee**: Extract Worker 4
 - **Source**: archive/amendment-sources/governance.md
 - **Target**: .github/governance/amendments/A08_IMPLEMENTATION_PLAN.md
 - **Template**:
+
   ```yaml
   ---
   id: A08
@@ -477,13 +548,16 @@ graph TB
   source: docs/governance.md
   ---
   ```
+
 - **Content**: Extract governance rollout phases, status
 
 #### Task 27: Commit Phase 3A
+
 - **Status**: ⏸️ PENDING
 - **Dependencies**: Tasks 19-26 (all amendments extracted)
 - **Assignee**: Extract Team Lead
 - **Command**:
+
   ```bash
   git add .github/governance/amendments/ && git commit -m "docs: create indexed amendments from source files (Phase 3A)"
   ```
@@ -498,6 +572,7 @@ graph TB
 **Estimated Time**: 20 minutes
 
 #### Task 28: Create .github/governance/INDEX.md
+
 - **Status**: ⏸️ PENDING
 - **Dependencies**: Task 27 (Phase 3A commit)
 - **Assignee**: Index Worker 1
@@ -509,6 +584,7 @@ graph TB
   - Quick Reference link
 
 #### Task 29: Create docs/INDEX.md
+
 - **Status**: ⏸️ PENDING
 - **Dependencies**: Task 27 (Phase 3A commit)
 - **Assignee**: Index Worker 2
@@ -522,6 +598,7 @@ graph TB
   - Reports section
 
 #### Task 30: Create .github/instructions/INDEX.md
+
 - **Status**: ⏸️ PENDING
 - **Dependencies**: Task 27 (Phase 3A commit)
 - **Assignee**: Index Worker 3
@@ -533,10 +610,12 @@ graph TB
   - Best Practices
 
 #### Task 31: Commit Phase 4
+
 - **Status**: ⏸️ PENDING
 - **Dependencies**: Tasks 28-30 (all indexes created)
 - **Assignee**: Index Team Lead
 - **Command**:
+
   ```bash
   git add .github/governance/INDEX.md docs/INDEX.md .github/instructions/INDEX.md && git commit -m "docs: create master index files for governance and documentation (Phase 4)"
   ```
@@ -551,10 +630,12 @@ graph TB
 **Estimated Time**: 15 minutes
 
 #### Task 32: File count checks
+
 - **Status**: ⏸️ PENDING
 - **Dependencies**: Task 31 (Phase 4 commit)
 - **Assignee**: Validation Team
 - **Checks**:
+
   ```bash
   # Root .md files ≤2
   find . -maxdepth 1 -name "*.md" | wc -l
@@ -565,13 +646,16 @@ graph TB
   # Total .md <200
   find . -name "*.md" | wc -l
   ```
+
 - **Expected**: ≤2, 0, <200
 
 #### Task 33: Index existence
+
 - **Status**: ⏸️ PENDING
 - **Dependencies**: Task 31 (Phase 4 commit)
 - **Assignee**: Validation Team
 - **Checks**:
+
   ```bash
   test -f .github/governance/INDEX.md && echo "✓ Governance INDEX"
   test -d .github/governance/amendments && echo "✓ Amendments dir"
@@ -581,10 +665,12 @@ graph TB
   ```
 
 #### Task 34: Quality checks
+
 - **Status**: ⏸️ PENDING
 - **Dependencies**: Task 31 (Phase 4 commit)
 - **Assignee**: Validation Team
 - **Checks**:
+
   ```bash
   # No duplicates (same name in different locations)
   find . -name "*.md" -type f | xargs -n1 basename | sort | uniq -d
@@ -597,6 +683,7 @@ graph TB
   ```
 
 #### Task 35: AI retrieval test
+
 - **Status**: ⏸️ PENDING
 - **Dependencies**: Task 31 (Phase 4 commit)
 - **Assignee**: Validation Team
@@ -616,6 +703,7 @@ graph TB
 **Estimated Time**: 15 minutes
 
 #### Task 36: Update copilot-instructions.md
+
 - **Status**: ⏸️ PENDING
 - **Dependencies**: Task 35 (Validation complete)
 - **Assignee**: Index Worker 1
@@ -628,11 +716,13 @@ graph TB
 - **Commit**: `docs: update copilot instructions with new governance paths`
 
 #### Task 37: Create PR
+
 - **Status**: ⏸️ PENDING
 - **Dependencies**: Task 36 (copilot-instructions updated)
 - **Assignee**: Research Team Lead
 - **PR Title**: `docs: consolidate 357 markdown files into hierarchical governance system`
 - **PR Description**:
+
   ```markdown
   ## Summary
   Consolidates 357 scattered markdown files into a hierarchical, indexed, AI-optimized documentation system aligned with canonical governance structure.
@@ -667,7 +757,9 @@ graph TB
 ## Parallel Execution Strategy
 
 ### Wave 1: Archive (Tasks 2-6)
+
 **Run in parallel** - 3 workers, no dependencies
+
 ```bash
 # Terminal 1: Archive Worker 1 (Tasks 2, 5)
 # Terminal 2: Archive Worker 2 (Tasks 3, 6)
@@ -675,21 +767,27 @@ graph TB
 ```
 
 ### Wave 2: Merge (Tasks 8-11)
+
 **Run in parallel** - 2 workers, no dependencies
+
 ```bash
 # Terminal 1: Merge Worker 1 (Tasks 8, 9)
 # Terminal 2: Merge Worker 2 (Tasks 10, 11)
 ```
 
 ### Wave 3: Relocate (Tasks 13-16)
+
 **Run in parallel** - 2 workers, no dependencies
+
 ```bash
 # Terminal 1: Merge Worker 1 (Tasks 13, 15)
 # Terminal 2: Merge Worker 2 (Tasks 14, 16)
 ```
 
 ### Wave 4: Extract (Tasks 19-26)
+
 **Run in parallel** - 4 workers, no dependencies
+
 ```bash
 # Terminal 1: Extract Worker 1 (Tasks 19, 23)
 # Terminal 2: Extract Worker 2 (Tasks 20, 24)
@@ -698,7 +796,9 @@ graph TB
 ```
 
 ### Wave 5: Index (Tasks 28-30)
+
 **Run in parallel** - 3 workers, no dependencies
+
 ```bash
 # Terminal 1: Index Worker 1 (Task 28)
 # Terminal 2: Index Worker 2 (Task 29)
@@ -706,6 +806,7 @@ graph TB
 ```
 
 ### Wave 6: Validation & Final (Tasks 32-37)
+
 **Run sequentially** - must verify in order
 
 ---
@@ -713,6 +814,7 @@ graph TB
 ## Commit Strategy
 
 ### What Gets Committed
+
 - ✅ All markdown files (moves, creates, deletes)
 - ✅ .gitignore updates
 - ✅ INDEX.md files
@@ -720,13 +822,16 @@ graph TB
 - ✅ Updated copilot-instructions.md
 
 ### What Does NOT Get Committed (Already in .gitignore)
+
 - ❌ `.claude/` (generated Claude skills)
 - ❌ `repomix-output.*` (Repomix generated outputs)
 - ❌ `pattern-validation-report.json` (validation reports)
 - ❌ `API_SCHEMA_AUDIT_REPORT.json` (audit reports)
 
 ### Commit Messages
+
 All commits follow conventional commit format:
+
 ```
 docs: <description>
 
@@ -755,13 +860,16 @@ If issues occur during execution:
 
 1. **Identify failed phase** (check last commit)
 2. **Reset to previous commit**:
+
    ```bash
    git reset --hard HEAD~1
    ```
+
 3. **Review error** and fix root cause
 4. **Re-execute from failed task**
 
 **Backup branch** created before execution:
+
 ```bash
 git checkout -b backup/pre-consolidation
 git push origin backup/pre-consolidation
@@ -773,6 +881,7 @@ git checkout fix/lockfile-update
 ## Progress Tracking
 
 Update this file as tasks complete:
+
 - Change ⏸️ PENDING → 🏃 IN PROGRESS → ✅ COMPLETE
 - Add completion timestamps
 - Note any issues or blockers
