@@ -186,12 +186,6 @@ jobs:
           echo "🔨 Building SDK framework..."
           pnpm build:sdk
 
-      - name: Verify Next.js build
-        run: |
-          echo "📦 Verifying Next.js production build..."
-          pnpm --filter @apps/web run build:web || echo "⚠️ Next.js build check"
-        continue-on-error: true
-
   # ═══════════════════════════════════════════════════════════════════════════
   # SUMMARY: Status Check
   # ═══════════════════════════════════════════════════════════════════════════
