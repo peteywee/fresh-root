@@ -10,20 +10,21 @@ export let serverAvailable = false;
  * Check if the server is available before running tests
  */
 export async function checkServerHealth(): Promise<boolean> {
-  try {
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 3000);
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 3000);
 
+  try {
     const response = await fetch(`${BASE_URL}/api/health`, {
       signal: controller.signal,
     });
 
-    clearTimeout(timeout);
     serverAvailable = response.ok;
     return serverAvailable;
   } catch {
     serverAvailable = false;
     return false;
+  } finally {
+    clearTimeout(timeout);
   }
 }
 
@@ -73,7 +74,7 @@ export interface TestResult {
   endpoint: string;
   method: string;
   status: "pass" | "fail" | "skip";
-  expectedStatus?: number;
+  expectedStatus?: number | string;
   actualStatus?: number;
   error?: string;
 }
