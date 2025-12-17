@@ -38,10 +38,13 @@ export function calculateShiftPay({
     ? (overtimeMinutes / 60) * hourlyRate * overtimeRules.overtimeMultiplier
     : 0;
 
+  const roundedRegularPay = Math.round(regularPay * 100) / 100;
+  const roundedOvertimePay = Math.round(overtimePay * 100) / 100;
+
   return {
-    regularPay: Math.round(regularPay * 100) / 100,
-    overtimePay: Math.round(overtimePay * 100) / 100,
-    totalPay: Math.round((regularPay + overtimePay) * 100) / 100,
+    regularPay: roundedRegularPay,
+    overtimePay: roundedOvertimePay,
+    totalPay: roundedRegularPay + roundedOvertimePay,
     overtimeMinutes,
   };
 }

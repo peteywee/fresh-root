@@ -97,7 +97,13 @@ function checkRateLimit(key: string, config: RateLimitConfig) {
   const recentRequests = requests.filter(t => now - t < config.windowMs);
 
   if (recentRequests.length >= config.maxRequests) {
+    rateLimitStore.set(key, recentRequests); // Prune old timestamps even when rate limited
     return false;  // Rate limited
+  }
+
+  if (recentRequests.length === 0 && requests.length > 0) {
+    // If all previous requests for this key have expired, remove the key.
+    rateLimitStore.delete(key);
   }
 
   recentRequests.push(now);
