@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 # Block commits with unresolved merge markers
-if grep -nR --exclude-dir=node_modules --exclude-dir=.git '<<<<<<<\|=======\|>>>>>>>' >/dev/null; then
+# Use regex anchors and exact 7-char patterns to avoid false positives from decorative lines
+if grep -nRE --exclude-dir=node_modules --exclude-dir=.git '^<<<<<<<|^=======$|^>>>>>>>' . 2>/dev/null | grep -v '.husky/pre-commit' >/dev/null; then
   echo "ERROR: Unresolved merge conflict markers found. Resolve them before committing."
+  grep -nRE --exclude-dir=node_modules --exclude-dir=.git '^<<<<<<<|^=======$|^>>>>>>>' . 2>/dev/null | grep -v '.husky/pre-commit' | head -10
   exit 1
 fi
 
