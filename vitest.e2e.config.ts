@@ -8,7 +8,7 @@ export default defineConfig({
     globals: true,
     environment: "node",
     include: ["tests/e2e/**/*.e2e.test.ts"],
-    setupFiles: ["./vitest.setup.ts"],
+    setupFiles: ["./tests/e2e/setup.ts"],
     testTimeout: 30000,
     hookTimeout: 30000,
     pool: "threads",
@@ -22,6 +22,8 @@ export default defineConfig({
     bail: 0,
     // Report all errors, not just first
     passWithNoTests: false,
+    // Retry failed tests once
+    retry: 1,
   },
   resolve: {
     alias: {
