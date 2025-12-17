@@ -11,11 +11,7 @@ import { ok, serverError } from "../../../../_shared/validation";
  * Get member details
  */
 export const GET = createOrgEndpoint({
-<<<<<<< HEAD
-  handler: async ({ params }) => {
-=======
   handler: async ({ context, params }) => {
->>>>>>> worktree-2025-12-17T02-57-06
     try {
       const { id, memberId } = params;
       const member = {
@@ -64,11 +60,7 @@ export const PATCH = createOrgEndpoint({
  */
 export const DELETE = createOrgEndpoint({
   roles: ["admin"],
-<<<<<<< HEAD
-  handler: async ({ params }) => {
-=======
   handler: async ({ context, params }) => {
->>>>>>> worktree-2025-12-17T02-57-06
     try {
       return ok({ removed: true, memberId: params.memberId });
     } catch {
