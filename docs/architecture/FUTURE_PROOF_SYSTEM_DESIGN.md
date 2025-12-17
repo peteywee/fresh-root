@@ -43,11 +43,13 @@ L4: Documentation          → Changes constantly (guides, tutorials)
 ```
 
 **Why this matters**:
+
 - Changes cascade DOWN, not up
 - L0 stability provides foundation for L1-L4 evolution
 - Each level can evolve at different rates without destabilizing others
 
 **Future-proofing**:
+
 - ✅ L0 changes require 2/3 approval + migration plan
 - ✅ L1 changes require technical review + backwards compatibility check
 - ✅ L2-L4 changes can be fast-tracked with single approval
@@ -75,6 +77,7 @@ reviewDate: 2026-12-16  # Annual review
 ```
 
 **Benefits**:
+
 - Version tracking per document
 - Dependency graph analysis
 - Automated staleness detection
@@ -83,12 +86,14 @@ reviewDate: 2026-12-16  # Annual review
 ### 3. Immutable Core + Mutable Extensions
 
 **Immutable Core** (L0 Governance):
+
 - 01_STANDARDS.md - Coding standards (principles)
 - 02_PRINCIPLES.md - Architectural principles
 - 03_DIRECTIVES.md - Core directives
 - 04_DEFINITIONS.md - Terminology (can add, rarely remove)
 
 **Mutable Extensions** (L1 Amendments):
+
 - A01-A99 (99 slots for future growth)
 - Amendments can be added, deprecated, superseded
 - No breaking changes to L0 required
@@ -120,6 +125,7 @@ reviewDate: 2026-12-16  # Annual review
 ```
 
 **Benefits**:
+
 - Validation automation
 - Version compatibility checking
 - Schema evolution (v1 → v2 → v3)
@@ -140,11 +146,13 @@ proposed → draft → active → deprecated → archived
 ### Versioning Strategy
 
 **Semantic Versioning for Documents**:
+
 - **Major**: Breaking changes (must migrate)
 - **Minor**: New sections (backwards compatible)
 - **Patch**: Typos, clarifications (no impact)
 
 **Example**:
+
 ```yaml
 # A03_SECURITY_AMENDMENTS.md
 version: 2.1.0
@@ -157,27 +165,32 @@ version: 2.1.0
 ### Deprecation Process
 
 **Phase 1: Announcement (T+0)**
+
 - Add `deprecated: true` to frontmatter
 - Add deprecation notice at top of doc
 - Document migration path
 - Set sunset date (minimum 6 months)
 
 **Phase 2: Parallel Support (T+6mo)**
+
 - Both old and new active
 - Automated warnings when using deprecated
 - Migration tools/scripts provided
 
 **Phase 3: Sunset (T+12mo)**
+
 - Old version moved to archive
 - References updated to new version
 - Automated link redirects
 
 **Phase 4: Archive (T+24mo)**
+
 - Preserved in archive with full context
 - Indexed for historical reference
 - No longer enforced
 
 **Example**:
+
 ```markdown
 <!-- A03_SECURITY_AMENDMENTS.md -->
 
@@ -215,9 +228,11 @@ version: 2.1.0
 **Process**:
 
 1. **Proposal** (Anyone can create)
+
    ```
    .github/governance/proposals/YYYY-MM-DD-topic-name.md
    ```
+
    - Problem statement
    - Proposed solution
    - Impact analysis
@@ -271,6 +286,7 @@ Categories:
 ```
 
 **Benefits**:
+
 - Clear categorization
 - Room for 10 amendments per category
 - Easy to identify domain
@@ -283,6 +299,7 @@ Categories:
 ### Horizontal Scaling (More Documents)
 
 **Current Capacity**:
+
 - L0: 12 slots (01-12)
 - L1: 99 slots (A01-A99)
 - L2: Unlimited (instructions/)
@@ -292,6 +309,7 @@ Categories:
 **Growth Strategy**:
 
 **L0 Growth** (if >12 canonical docs needed):
+
 ```
 .github/governance/
 ├── 01-12_CORE.md
@@ -300,6 +318,7 @@ Categories:
 ```
 
 **L1 Growth** (if >99 amendments needed):
+
 ```
 .github/governance/amendments/
 ├── A01-A99/  ← Current
@@ -340,6 +359,7 @@ peteywee/fresh-root                ← Code + L3 (prompts)
 ```
 
 **Benefits**:
+
 - Independent versioning
 - Smaller clone size
 - Clearer boundaries
@@ -365,6 +385,7 @@ peteywee/fresh-root                ← Code + L3 (prompts)
 4. **Provide export formats** (HTML, PDF, JSON)
 
 **Example Export Script**:
+
 ```bash
 # scripts/export-governance.sh
 #!/bin/bash
@@ -397,12 +418,14 @@ tar -czf governance-$(date +%Y%m%d).tar.gz governance-snapshot.*
    - No Copilot-specific syntax
 
 2. **Model-Agnostic Instructions**
+
    ```markdown
    # Instead of: "Use GitHub Copilot tools"
    # Write: "Use available code analysis tools"
    ```
 
 3. **Multiple Instruction Formats**
+
    ```
    .github/instructions/
    ├── 01_MASTER.instructions.md       ← GitHub Copilot format
@@ -412,6 +435,7 @@ tar -czf governance-$(date +%Y%m%d).tar.gz governance-snapshot.*
    ```
 
 4. **Capability Detection**
+
    ```markdown
    <!-- At start of instruction file -->
    **Required Capabilities**: 
@@ -435,6 +459,7 @@ tar -czf governance-$(date +%Y%m%d).tar.gz governance-snapshot.*
 **Strategy**:
 
 1. **Abstract Git Forge Operations**
+
    ```bash
    # scripts/lib/git-forge.sh
    
@@ -450,6 +475,7 @@ tar -czf governance-$(date +%Y%m%d).tar.gz governance-snapshot.*
    ```
 
 2. **Platform Detection**
+
    ```javascript
    // scripts/lib/platform.mjs
    
@@ -462,6 +488,7 @@ tar -czf governance-$(date +%Y%m%d).tar.gz governance-snapshot.*
    ```
 
 3. **Configuration Mapping**
+
    ```yaml
    # .platform-config.yml
    github:
@@ -562,6 +589,7 @@ export async function migrate(files) {
 **Hypothesis**: Different teams may need different documentation styles
 
 **Implementation**:
+
 ```
 .github/instructions/
 ├── 01_MASTER.md           ← Default (verbose)
@@ -572,6 +600,7 @@ export async function migrate(files) {
 ```
 
 **Metrics**:
+
 - Time to task completion
 - Error rate
 - Agent confidence scores
@@ -586,6 +615,7 @@ export async function migrate(files) {
 ### Automated Validation Pipeline
 
 **Pre-Commit** (Fast):
+
 ```bash
 # .husky/pre-commit
 
@@ -603,6 +633,7 @@ cspell "**/*.md"
 ```
 
 **Pre-Push** (Medium):
+
 ```bash
 # .husky/pre-push
 
@@ -620,6 +651,7 @@ node scripts/verify-indexes.mjs
 ```
 
 **CI Pipeline** (Comprehensive):
+
 ```yaml
 # .github/workflows/governance-validation.yml
 
@@ -711,6 +743,7 @@ Stale Documents (>6mo): 3
 **Process**:
 
 1. **Create Amendment Proposal**
+
    ```
    .github/governance/proposals/2027-03-15-nextjs-20-migration.md
    ```
@@ -721,6 +754,7 @@ Stale Documents (>6mo): 3
    - Both active for 6 months
 
 3. **Migration Tooling**
+
    ```bash
    pnpm migrate:nextjs-20
    ```
@@ -743,6 +777,7 @@ Stale Documents (>6mo): 3
 **Mitigation**:
 
 1. **Capability Detection**
+
    ```markdown
    <!-- In instruction file -->
    **Model Requirements**:
@@ -752,6 +787,7 @@ Stale Documents (>6mo): 3
    ```
 
 2. **Versioned Instructions**
+
    ```
    .github/instructions/
    ├── 01_MASTER.v1.md  ← GPT-4 optimized
@@ -760,6 +796,7 @@ Stale Documents (>6mo): 3
    ```
 
 3. **Graceful Degradation**
+
    ```markdown
    <!-- Instruction file -->
    
@@ -777,6 +814,7 @@ Stale Documents (>6mo): 3
 **Migration Path**:
 
 1. **Create New Repositories**
+
    ```
    peteywee/fresh-root-governance  ← Extract .github/governance
    peteywee/fresh-root-docs       ← Extract docs/
@@ -810,11 +848,13 @@ Stale Documents (>6mo): 3
    - Highlight gaps
 
 2. **Create Compliance Amendment**
+
    ```
    .github/governance/amendments/A11_SOC2_COMPLIANCE.md
    ```
 
 3. **Reference in Existing Amendments**
+
    ```markdown
    <!-- A03_SECURITY_AMENDMENTS.md -->
    
@@ -826,6 +866,7 @@ Stale Documents (>6mo): 3
    ```
 
 4. **Automated Compliance Checking**
+
    ```bash
    pnpm validate:compliance --framework soc2
    ```
@@ -867,6 +908,7 @@ Stale Documents (>6mo): 3
    - Q4: Next annual review prep
 
 5. **Document Results**
+
    ```
    .github/governance/reviews/2026-annual-review.md
    ```
@@ -878,6 +920,7 @@ Stale Documents (>6mo): 3
 **Who**: Governance maintainer (can be automated)
 
 **Checklist**:
+
 - [ ] All links working? (`pnpm check:links`)
 - [ ] Any stale docs? (`pnpm check:staleness`)
 - [ ] Tag taxonomy consistent? (`pnpm validate:tags`)
@@ -905,11 +948,13 @@ Stale Documents (>6mo): 3
    - Major projects (1+ weeks)
 
 3. **Prioritize by ROI**
+
    ```
    ROI = (Impact × Frequency) / Effort
    ```
 
 4. **Create Roadmap**
+
    ```markdown
    # Tech Debt Remediation Plan
    
@@ -928,6 +973,7 @@ Stale Documents (>6mo): 3
 ### Scenario: Governance System Break
 
 **Symptoms**:
+
 - Multiple conflicting amendments
 - Circular dependencies
 - AI agents confused
@@ -962,6 +1008,7 @@ Stale Documents (>6mo): 3
 ### Scenario: Complete System Overhaul Needed
 
 **Indicators**:
+>
 - >50% of documents stale
 - Major technology shift (e.g., migrating from Firebase to Supabase)
 - Governance no longer followed
@@ -969,6 +1016,7 @@ Stale Documents (>6mo): 3
 **If overhaul truly needed**:
 
 1. **Preserve History**
+
    ```bash
    # Archive entire governance system
    git tag governance-v1-final
@@ -976,6 +1024,7 @@ Stale Documents (>6mo): 3
    ```
 
 2. **Create v2 in Parallel**
+
    ```
    .github/governance-v2/
    ```
@@ -1050,6 +1099,7 @@ Stale Documents (>6mo): 3
 ## Roadmap (Next 10 Years)
 
 ### Phase 1: Foundation (2025-2026) ✅
+
 - ✅ Establish 5-level hierarchy
 - ✅ Create initial amendments (A01-A08)
 - ✅ Build INDEX system
@@ -1058,6 +1108,7 @@ Stale Documents (>6mo): 3
 - 🔄 Create validation pipeline
 
 ### Phase 2: Automation (2026-2027)
+
 - Add semantic versioning to docs
 - Automated staleness detection
 - Dependency graph analysis
@@ -1065,18 +1116,21 @@ Stale Documents (>6mo): 3
 - AI readability scoring
 
 ### Phase 3: Intelligence (2027-2028)
+
 - Predictive maintenance (ML-based)
 - Automated amendment proposals
 - Smart search (semantic, not keyword)
 - Context-aware documentation (shows relevant docs based on current task)
 
 ### Phase 4: Maturity (2028-2030)
+
 - Multi-repository federation (if needed)
 - API for governance system (machine-readable)
 - Real-time collaboration (multiple agents editing governance)
 - Governance-as-Code (executable policies)
 
 ### Phase 5: Optimization (2030-2035)
+
 - Self-healing documentation (auto-updates from code changes)
 - Governance marketplace (community-contributed amendments)
 - AI-native documentation (LLM-first, human-readable second)

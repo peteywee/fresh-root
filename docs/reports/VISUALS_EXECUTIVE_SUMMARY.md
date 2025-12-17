@@ -85,6 +85,7 @@ Added only what was necessary:
    ```
 
 1. **`scripts/analyze-tree-diff.mjs`** (350+ lines)
+
    ```bash
    pnpm deps:analyze              # Full analysis with tree diff
    pnpm deps:analyze:verbose      # Detailed findings
@@ -345,19 +346,19 @@ This system operates under:
 
 ## Support & Troubleshooting
 
-### Visuals not generating?
+### Visuals not generating
 
 ```bash
 pnpm visuals:generate:verbose
 ```
 
-### Dependency analysis failing?
+### Dependency analysis failing
 
 ```bash
 pnpm deps:analyze:verbose
 ```
 
-### Need to force regenerate?
+### Need to force regenerate
 
 ```bash
 # Delete old versions manually, then regenerate

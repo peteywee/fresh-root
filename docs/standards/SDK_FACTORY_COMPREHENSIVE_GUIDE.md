@@ -20,7 +20,7 @@
 
 ## Overview
 
-### What is the SDK Factory?
+### What is the SDK Factory
 
 The **SDK Factory** (`@fresh-schedules/api-framework`) is a declarative, type-safe framework for
 building Next.js API routes with:

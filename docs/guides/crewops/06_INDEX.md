@@ -62,7 +62,7 @@
 
 - Typical workflow example
 
-## **Purpose**: High-level view of entire implementation.
+## **Purpose**: High-level view of entire implementation
 
 ### 6. **guides/crewops/07_RED_TEAM_WORKFLOW.md** (NEW) 🔴 SECURITY HANDOFF
 

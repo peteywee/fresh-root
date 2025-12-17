@@ -10,6 +10,7 @@
 ## Current State Assessment
 
 ### ✅ What We Have
+
 - Repomix as npm package (`repomix@1.10.0`)
 - CLI usage via `pnpm repomix`
 - CI/CD automation (`.github/workflows/repomix-ci.yml`)
@@ -17,6 +18,7 @@
 - 95% effectiveness on existing features
 
 ### ❌ What We're Missing
+
 - **Repomix MCP Server** not configured in `.mcp.json`
 - **AI Agent Tools** not accessible (`mcp_repomix_*`)
 - **Claude Agent Skills** generation not automated
@@ -47,6 +49,7 @@
 ### Impact Assessment
 
 **Without Repomix MCP**:
+
 - AI agents use generic `read_file` + `list_dir` (no security validation)
 - No real-time codebase packing during conversation
 - Cannot analyze external GitHub repos on-demand
@@ -54,6 +57,7 @@
 - No grep functionality within packed outputs
 
 **With Repomix MCP**:
+
 - AI agents get security-validated file access
 - Real-time analysis: "Pack the API framework and analyze its patterns"
 - Research competitors: "Analyze github.com/competitor/repo and compare patterns"
@@ -147,10 +151,12 @@ When analyzing code structure or external repositories:
 
 **Example Usage**:
 ```
+
 User: "Analyze the API framework patterns"
 Agent: [Calls mcp_repomix_pack_codebase on packages/api-framework]
 Agent: [Analyzes packed output, identifies patterns]
 Agent: "Found 3 core patterns: middleware pipeline, Zod validation, role-based auth"
+
 ```
 ```
 
@@ -201,24 +207,28 @@ console.log('Result: .claude/skills/sdk-factory-pattern/ created');
 **Test Scenarios**:
 
 1. **Test 1: Pack Local Codebase**
+
    ```
    User: "Pack the types package and show me all Zod schemas"
    Expected: Agent calls mcp_repomix_pack_codebase, then greps for "z.object"
    ```
 
 2. **Test 2: Analyze External Repo**
+
    ```
    User: "How does Next.js handle API routes? Analyze their repo"
    Expected: Agent calls mcp_repomix_pack_remote_repository on vercel/next.js
    ```
 
 3. **Test 3: Generate Skill**
+
    ```
    User: "Create a Claude Skill for our SDK factory pattern"
    Expected: Agent calls mcp_repomix_generate_skill on packages/api-framework
    ```
 
 4. **Test 4: Security Validation**
+
    ```
    User: "Read .env file"
    Expected: mcp_repomix_file_system_read_file detects secrets, blocks or warns
@@ -231,6 +241,7 @@ console.log('Result: .claude/skills/sdk-factory-pattern/ created');
 ### 1. **Real-Time Code Analysis** (Game Changer)
 
 **Before**:
+
 ```
 User: "Analyze our API patterns"
 Agent: "I'll read the files..." [calls read_file 20+ times]
@@ -238,6 +249,7 @@ Agent: [Token limit hit, incomplete analysis]
 ```
 
 **After**:
+
 ```
 User: "Analyze our API patterns"
 Agent: [Calls mcp_repomix_pack_codebase with compression]
@@ -250,12 +262,14 @@ Agent: "Found 3 patterns: middleware pipeline, Zod validation, RBAC..."
 ### 2. **Competitor Research** (Strategic Advantage)
 
 **Before**:
+
 ```
 User: "How does competitor X handle auth?"
 Agent: "I can't access external repos"
 ```
 
 **After**:
+
 ```
 User: "How does Next.js handle auth? Compare to ours"
 Agent: [Calls mcp_repomix_pack_remote_repository on vercel/next.js]
@@ -268,12 +282,14 @@ Agent: "Next.js uses middleware chains similar to our SDK factory..."
 ### 3. **Auto-Generated Skills** (Team Scalability)
 
 **Before**:
+
 ```
 User: "Document the SDK factory pattern for the team"
 Agent: "I'll create a markdown doc..." [writes manually]
 ```
 
 **After**:
+
 ```
 User: "Generate a Claude Skill for SDK factory"
 Agent: [Calls mcp_repomix_generate_skill]
@@ -286,12 +302,14 @@ Agent: "Team can now use '@sdk-factory' in their prompts"
 ### 4. **Security by Default** (Risk Reduction)
 
 **Before**:
+
 ```
 Agent: [Calls read_file(".env")]
 Agent: [Reads secrets, potentially leaks in response]
 ```
 
 **After**:
+
 ```
 Agent: [Calls mcp_repomix_file_system_read_file(".env")]
 MCP: [Detects sensitive data]
@@ -304,6 +322,7 @@ Agent: "Cannot read .env - contains secrets"
 ### 5. **Fast Search Within Packed Outputs** (Efficiency)
 
 **Before**:
+
 ```
 User: "Find all error handling in API routes"
 Agent: [Re-packs entire codebase]
@@ -311,6 +330,7 @@ Agent: [Searches through 50k tokens]
 ```
 
 **After**:
+
 ```
 User: "Find all error handling in the packed output"
 Agent: [Calls mcp_repomix_grep_repomix_output]
@@ -324,18 +344,21 @@ Agent: [Returns only matching sections with context]
 ## Success Metrics
 
 ### Immediate (Week 1)
+
 - ✅ MCP server configured in `.mcp.json`
 - ✅ All 7 Repomix MCP tools accessible
 - ✅ Documentation updated
 - ✅ Example scripts created
 
 ### Short-Term (Month 1)
+
 - ✅ 10+ AI conversations using Repomix MCP tools
 - ✅ 3+ Claude Skills auto-generated
 - ✅ 1+ external repo analysis completed
 - ✅ Security validation preventing secret leaks
 
 ### Long-Term (Quarter 1)
+
 - ✅ Team adoption: 80%+ engineers know about MCP tools
 - ✅ Skill library: 10+ team-shared skills in `.claude/skills/`
 - ✅ Competitor research: Regular pattern analysis
@@ -346,12 +369,14 @@ Agent: [Returns only matching sections with context]
 ## Risk Assessment
 
 ### Low Risk
+
 - MCP server is isolated (stdio, not network)
 - No production dependencies (devDependency only)
 - Can disable anytime by removing from `.mcp.json`
 - Falls back gracefully if MCP unavailable
 
 ### Mitigation
+
 - Test in dev environment first
 - Document rollback procedure
 - Add to `.mcp.json.example` for opt-in

@@ -12,3 +12,8 @@ coverage/
 ## Ignore MDX files (handled by other tooling)
 
 **/*.mdx
+
+# Focus linting on developer docs only; ignore governance/instructions/archive
+.github/governance/**
+.github/instructions/**
+archive/**

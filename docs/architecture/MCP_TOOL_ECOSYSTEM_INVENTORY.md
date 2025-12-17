@@ -247,21 +247,25 @@ Result: Complete data migration with zero manual Firebase CLI commands
 Based on development task patterns:
 
 ### Critical (Daily)
+
 - ✅ **GitHub MCP**: `search_code` (10+ times/day)
 - ✅ **GitHub MCP**: `list_pull_requests` (5+ times/day)
 - ✅ **Repomix MCP**: `pack_codebase` (3+ times/day when analyzing)
 
 ### Common (Weekly)
+
 - ✅ **Firebase MCP**: Firestore CRUD operations (2-3 times/week)
 - ✅ **Repomix MCP**: `grep_repomix_output` (pattern searches)
 - ✅ **GitHub MCP**: `create_pull_request`, `create_issue`
 
 ### Specialized (Monthly)
+
 - 🟡 **Chrome DevTools**: E2E test debugging
 - ✅ **Firebase MCP**: Rules deployment
 - ✅ **Repomix MCP**: `generate_skill` (team knowledge sharing)
 
 ### Rare (On-demand)
+
 - ✅ **Repomix MCP**: `pack_remote_repository` (competitor research)
 - ✅ **Firebase MCP**: Emulator control
 - 🟡 **Chrome DevTools**: Performance profiling
@@ -273,6 +277,7 @@ Based on development task patterns:
 ### Tier 1: Always-On Configuration
 
 **GitHub MCP**:
+
 ```json
 {
   "type": "http",
@@ -284,6 +289,7 @@ Based on development task patterns:
 ```
 
 **Repomix MCP**:
+
 ```json
 {
   "type": "stdio",
@@ -295,6 +301,7 @@ Based on development task patterns:
 ```
 
 **Firebase MCP**:
+
 ```json
 {
   "type": "stdio",
@@ -308,6 +315,7 @@ Based on development task patterns:
 ### Tier 2: On-Demand Configuration
 
 **Chrome DevTools**:
+
 ```json
 {
   "type": "stdio",
@@ -340,6 +348,7 @@ The agent should automatically activate tools based on keywords:
 ### Manual Override
 
 Agents can explicitly request tools:
+
 ```
 "Use Repomix to analyze..." 
 "Use GitHub MCP to search..."
@@ -362,11 +371,13 @@ Agents can explicitly request tools:
 ### Next Phases
 
 **Phase 2 (This Week)**:
+
 - Create MCP manifest (.mcp-manifest.json)
 - Add tool usage logging
 - Build agent decision tree
 
 **Phase 3 (Next Week)**:
+
 - Auto-activation engine
 - Tool performance metrics
 - Usage analytics dashboard
@@ -376,11 +387,13 @@ Agents can explicitly request tools:
 ## 🔑 Key Takeaways
 
 ### Always Use These (Never Manual)
+
 1. **GitHub MCP** — Search code, manage PRs/issues
 2. **Repomix MCP** — Analyze code patterns, research external repos
 3. **Firebase MCP** — Database operations, deployments
 
 ### Tool Advantages
+
 - 🚀 **47 tools** available without setup
 - 💾 **70% token savings** with Repomix compression
 - ⚡ **10x faster** analysis vs manual CLI
@@ -388,6 +401,7 @@ Agents can explicitly request tools:
 - 📊 **Real-time** code intelligence
 
 ### When Tools Fail
+
 - Fallback to local tools: `read_file`, `grep_search`, `file_search`
 - Don't give up — try MCP tool again (transient failures)
 - Report errors so team can debug
