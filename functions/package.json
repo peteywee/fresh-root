@@ -5,7 +5,8 @@
   "scripts": {
     "build": "echo \"(functions) build stub\"",
     "typecheck": "echo \"(functions) typecheck stub\"",
-    "lint": "echo \"(functions) lint stub\""
+    "lint": "echo \"(functions) lint stub\"",
+    "test": "vitest run"
   },
   "dependencies": {
     "firebase-admin": "^13.6.0",
