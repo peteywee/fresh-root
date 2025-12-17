@@ -198,7 +198,7 @@ function convertFile(filepath) {
 
     const newExport = `(${newContent.slice(idx, newContent.indexOf('=', idx))} = ${factory}({\n  ${configStr}handler: async ({ request, input, context, params }) => ${strippedHandler}\n}));`;
 
-    // Replace the withSecurity(...) expression with newExport - carefull: we only want to replace the expression starting at idx up to callEnd
+    // Replace the withSecurity(...) expression with newExport - careful: we only want to replace the expression starting at idx up to callEnd
     const replaceStart = idx;
     const replaceEnd = callEnd + 1; // include closing paren
     newContent = newContent.slice(0, replaceStart) + newExport + newContent.slice(replaceEnd);

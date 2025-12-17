@@ -1,0 +1,35 @@
+{
+  "errors": [],
+  "warnings": [],
+  "info": [
+    {
+      "file": "apps/web/app/api/batch/route.ts",
+      "pattern": "API_ROUTE",
+      "name": "Header Present",
+      "message": "Missing standard header: // [P#][API][CODE] description",
+      "tier": 3,
+      "severity": "info"
+    }
+  ],
+  "triadStatus": [
+    {
+      "entity": "Schedule",
+      "schema": true,
+      "api": true,
+      "rules": true
+    },
+    {
+      "entity": "Organization",
+      "schema": true,
+      "api": true,
+      "rules": true
+    },
+    {
+      "entity": "Shift",
+      "schema": true,
+      "api": true,
+      "rules": true
+    }
+  ],
+  "minScore": 90
+}

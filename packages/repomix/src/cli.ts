@@ -30,7 +30,7 @@ Arguments:
   <path-or-repo>    Local directory path or GitHub repository URL
 
 Options:
-  --style <format>        Output format: xml (default), markdown, json, plain
+  --style <format>        Output format: xml (default), markdown, plain
   --ignore <patterns>     Patterns to ignore (comma-separated)
   --include <patterns>    Patterns to include (comma-separated)
   --output <path>        Output file path
@@ -90,28 +90,21 @@ For more information, visit: https://github.com/yamadashy/repomix
  */
 function parseCliArgs(args: string[]): Record<string, unknown> {
   const options: Record<string, unknown> = {};
-  const output: Record<string, unknown> = {};
 
   for (let i = 0; i < args.length; i++) {
     const arg = args[i];
 
     if (arg === "--style" && i + 1 < args.length) {
-      output.style = args[++i];
+      options.style = args[++i];
     } else if (arg === "--output" && i + 1 < args.length) {
-      output.filePath = args[++i];
+      options.output = args[++i];
     } else if (arg === "--ignore" && i + 1 < args.length) {
-      const patterns = args[++i]?.split(",") || [];
-      options.ignore = { customPatterns: patterns };
+      options.ignore = args[++i];
     } else if (arg === "--include" && i + 1 < args.length) {
-      const patterns = args[++i]?.split(",") || [];
-      options.include = { customPatterns: patterns };
+      options.include = args[++i];
     } else if (arg === "--compress") {
       options.compress = true;
     }
-  }
-
-  if (Object.keys(output).length > 0) {
-    options.output = output;
   }
 
   return options;
