@@ -11,7 +11,7 @@ import { NextResponse } from "next/server";
  * Get organization details
  */
 export const GET = createOrgEndpoint({
-  handler: async ({ context, params }) => {
+  handler: async ({ request: _request, input: _input, context, params }) => {
     try {
       const { id } = params;
       const org = {
@@ -39,7 +39,7 @@ export const GET = createOrgEndpoint({
 export const PATCH = createOrgEndpoint({
   roles: ["admin"],
   input: UpdateOrganizationSchema,
-  handler: async ({ input, context, params }) => {
+  handler: async ({ request: _request, input, context, params }) => {
     try {
       // Type assertion safe - input validated by SDK factory
       const typedInput = input as z.infer<typeof UpdateOrganizationSchema>;
@@ -65,7 +65,7 @@ export const PATCH = createOrgEndpoint({
  */
 export const DELETE = createOrgEndpoint({
   roles: ["admin"],
-  handler: async ({ context, params }) => {
+  handler: async ({ request: _request, input: _input, context, params }) => {
     try {
       return NextResponse.json({ deleted: true, id: params.id });
     } catch (error) {

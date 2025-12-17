@@ -14,7 +14,7 @@ const CreateItemSchema = z.object({
 
 // Widget endpoint for testing/demo purposes
 export const POST = createPublicEndpoint({
-  handler: async ({ request }) => {
+  handler: async ({ request, input: _input, context: _context, params: _params }) => {
     try {
       const body = await request.json();
       // Validate with schema

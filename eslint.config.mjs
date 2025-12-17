@@ -149,4 +149,22 @@ export default [
       "@typescript-eslint/no-array-delete": "off",
     },
   },
+
+  // SDK Factory Routes: A09 Handler Signature Invariant
+  // All handlers must destructure { request, input, context, params }
+  // Unused params prefixed with underscore to satisfy lint without deleting them
+  // See: .github/governance/amendments/A09_HANDLER_SIGNATURE_INVARIANT.md
+  {
+    files: ["apps/web/app/api/**/route.ts"],
+    rules: {
+      "@typescript-eslint/no-unused-vars": [
+        "warn",
+        {
+          argsIgnorePattern: "^_",
+          destructuredArrayIgnorePattern: "^_",
+          caughtErrorsIgnorePattern: "^_",
+        },
+      ],
+    },
+  },
 ];

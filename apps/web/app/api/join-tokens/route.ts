@@ -12,7 +12,7 @@ import { ok, serverError } from "../_shared/validation";
  */
 export const GET = createOrgEndpoint({
   roles: ["admin"],
-  handler: async ({ context, params }) => {
+  handler: async ({ request: _request, input: _input, context, params }) => {
     try {
       const tokens = [
         {
@@ -38,7 +38,7 @@ export const GET = createOrgEndpoint({
 export const POST = createOrgEndpoint({
   roles: ["admin"],
   input: CreateJoinTokenSchema,
-  handler: async ({ input, context }) => {
+  handler: async ({ request: _request, input, context, params: _params }) => {
     try {
       // Type assertion safe - input validated by SDK factory
       const typedInput = input as z.infer<typeof CreateJoinTokenSchema>;

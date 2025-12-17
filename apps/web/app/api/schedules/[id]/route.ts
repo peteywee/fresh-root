@@ -10,7 +10,7 @@ import { badRequest, ok, parseJson, serverError } from "../../_shared/validation
  * Fetch a schedule by ID
  */
 export const GET = createOrgEndpoint({
-  handler: async ({ request, context, params }) => {
+  handler: async ({ request, input: _input, context, params }) => {
     try {
       const { id } = params;
       if (!id) {
@@ -41,7 +41,7 @@ export const GET = createOrgEndpoint({
  */
 export const PATCH = createOrgEndpoint({
   roles: ["manager"],
-  handler: async ({ request, context, params }) => {
+  handler: async ({ request, input: _input, context, params }) => {
     try {
       const { id } = params;
       const parsed = await parseJson(request, UpdateScheduleSchema);
@@ -74,7 +74,7 @@ export const PATCH = createOrgEndpoint({
  */
 export const DELETE = createOrgEndpoint({
   roles: ["manager"],
-  handler: async ({ context, params }) => {
+  handler: async ({ request: _request, input: _input, context, params }) => {
     try {
       const { id } = params;
       if (!id) {

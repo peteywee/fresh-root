@@ -141,7 +141,7 @@ const createSchedule = async (request: Request, context: RequestContext) => {
  */
 export const GET = createOrgEndpoint({
   rateLimit: { maxRequests: 100, windowMs: 60_000 },
-  handler: async ({ request, context }) => {
+  handler: async ({ request, input: _input, context, params: _params }) => {
     return listSchedules(request, context);
   },
 });
@@ -153,7 +153,7 @@ export const GET = createOrgEndpoint({
 export const POST = createOrgEndpoint({
   roles: ["scheduler"],
   rateLimit: { maxRequests: 50, windowMs: 60_000 },
-  handler: async ({ request, context }) => {
+  handler: async ({ request, input: _input, context, params: _params }) => {
     return createSchedule(request, context);
   },
 });

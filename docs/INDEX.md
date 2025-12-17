@@ -174,7 +174,7 @@ When adding new documentation:
 
 1. Place in appropriate folder (architecture/standards/guides/production/templates/reports)
 2. Update this INDEX.md
-3. Add YAML frontmatter (see [AMENDMENT_TEMPLATE.md](./templates/AMENDMENT_TEMPLATE.md))
+3. Add YAML formatter (see [AMENDMENT_TEMPLATE.md](./templates/AMENDMENT_TEMPLATE.md))
 4. Link from related documents
 5. Verify alignment with [Governance](../.github/governance/INDEX.md)
 

@@ -13,7 +13,7 @@ export const GET = createPublicEndpoint({
     maxRequests: 1000,
     windowMs: 60000,
   },
-  handler: async ({ context }) => {
+  handler: async ({ request: _request, input: _input, context, params: _params }) => {
     return ok({
       status: "healthy",
       timestamp: Date.now(),
@@ -27,7 +27,7 @@ export const GET = createPublicEndpoint({
  * Health check HEAD
  */
 export const HEAD = createPublicEndpoint({
-  handler: async ({ context }) => {
+  handler: async ({ request: _request, input: _input, context, params: _params }) => {
     return ok({ status: "healthy" });
   },
 });

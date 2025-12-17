@@ -12,7 +12,7 @@ import { NextResponse } from "next/server";
 export const GET = createAuthenticatedEndpoint({
   org: "required",
   rateLimit: { maxRequests: 100, windowMs: 60_000 },
-  handler: async ({ request, context }) => {
+  handler: async ({ request, input: _input, context, params: _params }) => {
     try {
       const { searchParams } = new URL(request.url);
       const orgId = searchParams.get("orgId") || context.org!.orgId;
@@ -66,7 +66,7 @@ export const POST = createAuthenticatedEndpoint({
   roles: ["scheduler"],
   input: CreateAttendanceRecordSchema,
   rateLimit: { maxRequests: 100, windowMs: 60_000 },
-  handler: async ({ input, context }) => {
+  handler: async ({ request: _request, input, context, params: _params }) => {
     try {
       // Type assertion safe - input validated by SDK factory
       const data = input as z.infer<typeof CreateAttendanceRecordSchema>;

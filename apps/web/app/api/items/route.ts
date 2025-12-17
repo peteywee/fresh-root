@@ -13,7 +13,7 @@ import { badRequest, ok, serverError } from "../_shared/validation";
  * List items for an organization
  */
 export const GET = createOrgEndpoint({
-  handler: async ({ request, context, params }) => {
+  handler: async ({ request, input: _input, context, params }) => {
     try {
       const { searchParams } = new URL(request.url);
       const orgId = searchParams.get("orgId") || context.org?.orgId;
@@ -49,7 +49,7 @@ export const GET = createOrgEndpoint({
 export const POST = createOrgEndpoint({
   roles: ["manager"],
   input: CreateItemSchema,
-  handler: async ({ input, context }) => {
+  handler: async ({ request: _request, input, context, params: _params }) => {
     try {
       // Type assertion safe - input validated by SDK factory
       const typedInput = input as z.infer<typeof CreateItemSchema>;

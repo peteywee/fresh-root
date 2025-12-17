@@ -13,7 +13,7 @@ export const GET = createAuthenticatedEndpoint({
     maxRequests: 100,
     windowMs: 60000,
   },
-  handler: async ({ context }) => {
+  handler: async ({ request: _request, input: _input, context, params: _params }) => {
     try {
       const profile = {
         userId: context.auth?.userId,

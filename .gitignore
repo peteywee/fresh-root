@@ -100,3 +100,4 @@ repomix-output.*
 /playwright/.cache/
 /playwright/.auth/
 repomix-output.xml
+.eslintcache
