@@ -23,13 +23,11 @@ export default defineConfig({
     maxWorkers: 1,
 
     // Global setup – we’ll use this to guard process.listeners and import other setup.
-    setupFiles: ["./vitest.setup.ts"],
+    setupFiles: [path.resolve(__dirname, "./vitest.setup.ts")],
 
     // Test globs across your workspaces.
     include: [
-      "apps/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}",
-      "services/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}",
-      "packages/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}",
+      "**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}",
     ],
   },
   resolve: {

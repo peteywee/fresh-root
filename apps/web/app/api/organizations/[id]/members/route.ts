@@ -33,18 +33,24 @@ const RemoveMemberSchema = z.object({
 export const GET = createOrgEndpoint({
   handler: async ({ request: _request, input: _input, context, params }) => {
     try {
+      const { getFirestore } = await import("firebase-admin/firestore");
+      const db = getFirestore();
       const { id } = params;
-      const members = [
-        {
-          id: "member-1",
-          orgId: id,
-          email: "user@example.com",
-          role: "admin",
-          joinedAt: Date.now(),
-        },
-      ];
+
+      const snapshot = await db
+        .collection("memberships")
+        .where("orgId", "==", id)
+        .where("status", "in", ["active", "invited"])
+        .get();
+
+      const members = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+
       return ok({ members, total: members.length });
-    } catch {
+    } catch (error) {
+      console.error("Failed to fetch members", error);
       return serverError("Failed to fetch members");
     }
   },
