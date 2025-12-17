@@ -53,7 +53,7 @@ export const POST = createOrgEndpoint({
   rateLimit: { maxRequests: 40, windowMs: 60_000 },
   csrf: false,
   input: CreateBatchSchema,
-  handler: async ({ input, context, request }) => {
+  handler: async ({ request, input, context, params: _params }) => {
     try {
       // Type assertion safe - input validated by createEndpoint
       const typedInput = input as z.infer<typeof CreateBatchSchema>;

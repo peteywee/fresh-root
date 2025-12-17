@@ -21,7 +21,7 @@ const BackupRequestSchema = z.object({
  */
 export const POST = createAuthenticatedEndpoint({
   input: BackupRequestSchema,
-  handler: async ({ input, context }) => {
+  handler: async ({ request: _request, input, context, params: _params }) => {
     try {
       // Type assertion safe - input validated by SDK factory
       const typedInput = input as z.infer<typeof BackupRequestSchema>;

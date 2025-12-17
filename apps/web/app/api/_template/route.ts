@@ -24,7 +24,7 @@ const TemplatePostSchema = z.object({
  */
 
 export const GET = createPublicEndpoint({
-  handler: async ({ request }) => {
+  handler: async ({ request, input: _input, context: _context, params: _params }) => {
     try {
       const url = new URL(request.url);
       const message = url.searchParams.get("message") ?? "Hello from SDK endpoint";
@@ -40,7 +40,7 @@ export const GET = createPublicEndpoint({
 
 export const POST = createPublicEndpoint({
   input: TemplatePostSchema,
-  handler: async ({ input }) => {
+  handler: async ({ request: _request, input, context: _context, params: _params }) => {
     const payload = input ?? {};
     return NextResponse.json({ ok: true, payload }, { status: 201 });
   },

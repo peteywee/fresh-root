@@ -16,7 +16,7 @@ const CreateSessionSchema = z.object({
  */
 export const POST = createPublicEndpoint({
   input: CreateSessionSchema,
-  handler: async ({ input }) => {
+  handler: async ({ request: _request, input, context: _context, params: _params }) => {
     try {
       // Type assertion safe - input validated by SDK factory
       const typedInput = input as z.infer<typeof CreateSessionSchema>;

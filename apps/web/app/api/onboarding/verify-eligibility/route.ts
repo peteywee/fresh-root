@@ -16,7 +16,7 @@ export const POST = createAuthenticatedEndpoint({
     maxRequests: 100,
     windowMs: 24 * 60 * 60 * 1000, // 24 hours
   },
-  handler: async ({ request, context }) => {
+  handler: async ({ request, input: _input, context, params: _params }) => {
     try {
       const body = await request.json().catch(() => ({}));
       const result = VerifyEligibilitySchema.safeParse(body);

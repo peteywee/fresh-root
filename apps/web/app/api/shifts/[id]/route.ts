@@ -10,7 +10,7 @@ import { ok, serverError } from "../../_shared/validation";
  * Get shift details
  */
 export const GET = createOrgEndpoint({
-  handler: async ({ context, params }) => {
+  handler: async ({ request: _request, input: _input, context, params }) => {
     try {
       const { id } = params;
       const shift = {
@@ -34,7 +34,7 @@ export const GET = createOrgEndpoint({
 export const PATCH = createOrgEndpoint({
   roles: ["manager"],
   input: UpdateShiftSchema,
-  handler: async ({ input, context, params }) => {
+  handler: async ({ request: _request, input, context, params }) => {
     try {
       const shiftData = input as Record<string, unknown>;
       const updated = {
@@ -57,7 +57,7 @@ export const PATCH = createOrgEndpoint({
  */
 export const DELETE = createOrgEndpoint({
   roles: ["manager"],
-  handler: async ({ params }) => {
+  handler: async ({ request: _request, input: _input, context: _context, params }) => {
     try {
       return ok({ deleted: true, id: params.id });
     } catch {

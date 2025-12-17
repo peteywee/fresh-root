@@ -21,7 +21,7 @@ type SessionBootstrap = z.infer<typeof SessionBootstrapSchema>;
  * Bootstrap authenticated session (no input validation needed for GET)
  */
 export const GET = createAuthenticatedEndpoint({
-  handler: async ({ context }) => {
+  handler: async ({ request: _request, input: _input, context, params: _params }) => {
     try {
       const session = {
         userId: context.auth?.userId,

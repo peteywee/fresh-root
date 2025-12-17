@@ -12,7 +12,7 @@ import { ok, serverError } from "../../_shared/validation";
  */
 export const POST = createAuthenticatedEndpoint({
   input: CreateCorporateOnboardingSchema,
-  handler: async ({ input, context }) => {
+  handler: async ({ request: _request, input, context, params: _params }) => {
     try {
       // Type assertion safe - input validated by SDK factory
       const typedInput = input as z.infer<typeof CreateCorporateOnboardingSchema>;

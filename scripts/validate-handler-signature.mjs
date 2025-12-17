@@ -174,6 +174,12 @@ function validate() {
   log.info(`Checking: apps/web/app/api/**/route.ts`);
   log.info(`Standard: A09_HANDLER_SIGNATURE_INVARIANT\n`);
   
+  // Paths to skip (templates, examples) from file-level validity counting
+  const SKIP_FILES = new Set([
+    'apps/web/app/api/_template/route.ts',
+    'apps/web/app/api/_shared/rate-limit-examples.ts',
+  ]);
+
   const routeFiles = globbySync(['apps/web/app/api/**/route.ts'], {
     cwd: ROOT,
     ignore: ['**/node_modules/**', '**/__tests__/**'],
@@ -191,8 +197,10 @@ function validate() {
     const fullPath = path.join(ROOT, routeFile);
     const content = fs.readFileSync(fullPath, 'utf-8');
     
-    totalFiles++;
     const handlers = findHandlers(content);
+    // Count file-level validity only if not in skip list AND file has handlers we can validate
+    const countFileValidity = !SKIP_FILES.has(routeFile) && handlers.length > 0;
+    if (countFileValidity) totalFiles++;
     totalHandlers += handlers.length;
     
     // Check for merge markers
@@ -223,7 +231,7 @@ function validate() {
       }
     }
     
-    if (fileValid && handlers.length > 0) {
+    if (countFileValidity && fileValid) {
       validFiles++;
     }
   }

@@ -31,7 +31,7 @@ const RemoveMemberSchema = z.object({
  * List members of an organization
  */
 export const GET = createOrgEndpoint({
-  handler: async ({ context, params }) => {
+  handler: async ({ request: _request, input: _input, context, params }) => {
     try {
       const { id } = params;
       const members = [
@@ -57,7 +57,7 @@ export const GET = createOrgEndpoint({
 export const POST = createOrgEndpoint({
   roles: ["admin"],
   input: AddMemberSchema,
-  handler: async ({ input, context, params }) => {
+  handler: async ({ request: _request, input, context, params }) => {
     try {
       // Type assertion safe - input validated by SDK factory
       const typedInput = input as z.infer<typeof AddMemberSchema>;
@@ -83,7 +83,7 @@ export const POST = createOrgEndpoint({
 export const PATCH = createOrgEndpoint({
   roles: ["admin"],
   input: UpdateMemberSchema,
-  handler: async ({ input, context, params }) => {
+  handler: async ({ request: _request, input, context, params }) => {
     try {
       // Type assertion safe - input validated by SDK factory
       const typedInput = input as z.infer<typeof UpdateMemberSchema>;
@@ -103,7 +103,7 @@ export const PATCH = createOrgEndpoint({
 export const DELETE = createOrgEndpoint({
   roles: ["admin"],
   input: RemoveMemberSchema,
-  handler: async ({ input, context, params }) => {
+  handler: async ({ request: _request, input, context, params }) => {
     try {
       // Type assertion safe - input validated by SDK factory
       const typedInput = input as z.infer<typeof RemoveMemberSchema>;

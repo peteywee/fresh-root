@@ -19,7 +19,7 @@ const MFAVerifySchema = z.object({
 export const POST = createAuthenticatedEndpoint({
   rateLimit: { maxRequests: 50, windowMs: 60000 },
   input: MFAVerifySchema,
-  handler: async ({ input, context }) => {
+  handler: async ({ request: _request, input, context, params: _params }) => {
     try {
       // Type assertion safe - input validated by SDK factory
       const typedInput = input as z.infer<typeof MFAVerifySchema>;
