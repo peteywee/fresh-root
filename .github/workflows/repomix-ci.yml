@@ -50,10 +50,10 @@ jobs:
         run: mkdir -p docs/architecture
       
       - name: Generate dependency map (JSON)
-        run: pnpm repomix -- . --style json --output docs/architecture/repomix-ci.json --compress
+        run: pnpm repomix . --style json --output docs/architecture/repomix-ci.json
       
       - name: Generate dependency map (Markdown)
-        run: pnpm repomix -- . --style markdown --output docs/architecture/repomix-ci.md
+        run: pnpm repomix . --style markdown --output docs/architecture/repomix-ci.md
       
       - name: Update architecture index (for PR preview)
         run: pnpm docs:update || echo "⚠️ Non-critical update skipped"
