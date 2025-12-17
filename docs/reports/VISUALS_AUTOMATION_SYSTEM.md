@@ -284,7 +284,7 @@ Minimal dependencies added to `package.json`:
 
 ### In Browser
 
-1. Go to https://mermaid.live
+1. Go to <https://mermaid.live>
 2. Paste diagram code from `.md` files
 3. Diagram renders interactively
 
@@ -303,11 +303,13 @@ Minimal dependencies added to `package.json`:
 1. **Detection**: `generate-visuals.yml` finds deprecated packages
 2. **Report**: `DEPENDENCY_REMEDIATION_REPORT.md` lists with reasons
 3. **Fix Steps**:
+
    ```bash
    pnpm remove <deprecated-package>
    pnpm add <replacement>
    pnpm install --frozen-lockfile
    ```
+
 4. **Verify**: Run `pnpm test` and `pnpm typecheck`
 
 ### For Peer Dependency Issues

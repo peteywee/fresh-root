@@ -260,9 +260,9 @@ cat error-report.txt | wc -l  # Should stay at 13 (React version only)
 
 ## References
 
-- **TypeScript Error Codes**: https://www.typescriptlang.org/docs/handbook/error-index.html
-- **ESLint Rules**: https://eslint.org/docs/rules/
-- **Husky Docs**: https://typicode.github.io/husky/
+- **TypeScript Error Codes**: <https://www.typescriptlang.org/docs/handbook/error-index.html>
+- **ESLint Rules**: <https://eslint.org/docs/rules/>
+- **Husky Docs**: <https://typicode.github.io/husky/>
 - **Series-A Standards**: See `docs/PRODUCTION_READINESS.md`
 
 ---

@@ -26,7 +26,7 @@ node scripts/generate-visuals.mjs --verbose
 
 - **GitHub**: Renders automatically in `.md` files
 - **VS Code**: Install "Markdown Preview Mermaid Support" extension
-- **Web**: Use https://mermaid.live to paste diagrams
+- **Web**: Use <https://mermaid.live> to paste diagrams
 
 ---
 

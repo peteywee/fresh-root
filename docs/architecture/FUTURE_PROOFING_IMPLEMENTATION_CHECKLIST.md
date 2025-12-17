@@ -13,10 +13,12 @@
 **Priority**: P0 (Foundation for everything else)
 
 **Affected Files**:
+
 - [ ] All `.github/governance/01-12_*.md` files
 - [ ] All `.github/governance/amendments/A01-A08.md` files
 
 **Template**:
+
 ```yaml
 ---
 id: "01_STANDARDS"
@@ -34,6 +36,7 @@ lastModified: "2025-12-16"
 ```
 
 **Scripts Needed**:
+
 - [ ] `scripts/add-frontmatter.mjs` - Bulk add frontmatter
 - [ ] `scripts/validate-frontmatter.mjs` - Validate all frontmatter
 - [ ] `.husky/pre-commit` - Update to validate frontmatter
@@ -51,44 +54,52 @@ lastModified: "2025-12-16"
 **Scripts to Create**:
 
 #### a) Link Checker
+
 ```bash
 # scripts/check-links.mjs
 # Validates all internal/external links
 # Usage: pnpm check:links [--internal-only]
 ```
+
 - [ ] Check markdown links
 - [ ] Check frontmatter references
 - [ ] Check dependency references
 - [ ] Report broken links
 
 #### b) Staleness Detector
+
 ```bash
 # scripts/detect-stale-docs.mjs
 # Finds docs not updated in >6 months
 # Usage: pnpm check:staleness
 ```
+
 - [ ] Check lastModified vs reviewDate
 - [ ] Flag docs >6 months old
 - [ ] Create GitHub issues automatically
 - [ ] Generate staleness report
 
 #### c) Tag Validator
+
 ```bash
 # scripts/validate-tags.mjs
 # Ensures tag consistency across files
 # Usage: pnpm validate:tags
 ```
+
 - [ ] Check tags match taxonomy
 - [ ] Find orphaned tags
 - [ ] Suggest missing tags
 - [ ] Update INDEX with new tags
 
 #### d) Circular Dependency Checker
+
 ```bash
 # scripts/check-circular-deps.mjs
 # Detects circular dependencies in frontmatter
 # Usage: pnpm check:deps
 ```
+
 - [ ] Parse all dependencies
 - [ ] Build dependency graph
 - [ ] Detect cycles
@@ -116,12 +127,14 @@ lastModified: "2025-12-16"
 ```
 
 **Each Schema Should Define**:
+
 - Required fields (id, title, version, tags)
 - Optional fields (dependencies, deprecates, supersededBy)
 - Field types and formats
 - Validation rules
 
 **Validation**:
+
 - [ ] Add schema validation to CI
 - [ ] Add pre-commit hook for schema check
 - [ ] Document schema in README
@@ -137,11 +150,13 @@ lastModified: "2025-12-16"
 **Priority**: P1 (Tracks dependencies)
 
 **File to Create**:
+
 ```
 .github/governance/COMPATIBILITY_MATRIX.md
 ```
 
 **Content**:
+
 ```markdown
 | Document | Version | Status | Compatible With | Conflicts With | Sunset Date |
 |----------|---------|--------|-----------------|----------------|-------------|
@@ -151,6 +166,7 @@ lastModified: "2025-12-16"
 ```
 
 **Automation**:
+
 - [ ] Script to generate from frontmatter: `scripts/generate-compatibility-matrix.mjs`
 - [ ] Add to CI pipeline
 - [ ] Update on every governance change
@@ -168,12 +184,14 @@ lastModified: "2025-12-16"
 **Priority**: P1 (Formal change management)
 
 **Templates to Create**:
+
 ```
 .github/governance/proposals/
 └── TEMPLATE.md  # RFC-style proposal template
 ```
 
 **Proposal Template Sections**:
+
 - Problem statement
 - Proposed solution
 - Impact analysis (backwards compatibility, performance, security)
@@ -182,6 +200,7 @@ lastModified: "2025-12-16"
 - Review checklist
 
 **Process Documentation**:
+
 - [ ] Create `.github/governance/AMENDMENT_PROCESS.md`
 - [ ] Document approval thresholds (L0: 2/3, L1: majority)
 - [ ] Create GitHub issue templates for proposals
@@ -198,6 +217,7 @@ lastModified: "2025-12-16"
 **Priority**: P2 (Prevents version chaos)
 
 **Script to Create**:
+
 ```bash
 # scripts/validate-semver.mjs
 # Ensures version bumps follow semver rules
@@ -205,6 +225,7 @@ lastModified: "2025-12-16"
 ```
 
 **Features**:
+
 - [ ] Parse old/new versions
 - [ ] Detect breaking changes from frontmatter
 - [ ] Enforce semver rules
@@ -222,6 +243,7 @@ lastModified: "2025-12-16"
 **Priority**: P2 (Smooth version transitions)
 
 **Structure**:
+
 ```
 scripts/migrations/
 ├── README.md                  # Migration guide
@@ -230,6 +252,7 @@ scripts/migrations/
 ```
 
 **Migration Script Features**:
+
 - [ ] File pattern matching
 - [ ] Content transformation
 - [ ] Validation
@@ -237,6 +260,7 @@ scripts/migrations/
 - [ ] Progress reporting
 
 **Usage**:
+
 ```bash
 pnpm migrate:governance <migration-name>
 ```
@@ -252,6 +276,7 @@ pnpm migrate:governance <migration-name>
 **Priority**: P2 (Prevents doc rot)
 
 **GitHub Action to Create**:
+
 ```yaml
 # .github/workflows/stale-docs-check.yml
 name: Stale Documentation Check
@@ -271,6 +296,7 @@ jobs:
 ```
 
 **Issue Template**:
+
 ```markdown
 ## Stale Document Review Needed
 
@@ -302,6 +328,7 @@ If outdated, create amendment or deprecate.
 **Priority**: P2 (Disaster recovery)
 
 **Scripts**:
+
 ```bash
 # scripts/export-governance.sh
 # Exports to JSON, HTML, PDF
@@ -309,6 +336,7 @@ If outdated, create amendment or deprecate.
 ```
 
 **Features**:
+
 - [ ] JSON export (machine-readable)
 - [ ] HTML export (offline viewing)
 - [ ] PDF export (archival)
@@ -316,6 +344,7 @@ If outdated, create amendment or deprecate.
 - [ ] S3/cloud storage upload
 
 **Automation**:
+
 - [ ] Monthly automatic export
 - [ ] Upload to archive storage
 - [ ] Version-tagged snapshots
@@ -331,6 +360,7 @@ If outdated, create amendment or deprecate.
 **Priority**: P3 (Quality tracking)
 
 **Script**:
+
 ```bash
 # scripts/generate-coverage-report.mjs
 # Generates governance coverage report
@@ -338,6 +368,7 @@ If outdated, create amendment or deprecate.
 ```
 
 **Metrics to Track**:
+
 - [ ] L0-L4 document counts
 - [ ] Tag coverage per domain
 - [ ] Orphaned documents
@@ -346,6 +377,7 @@ If outdated, create amendment or deprecate.
 - [ ] Amendment usage stats
 
 **Dashboard**:
+
 - [ ] Generate HTML dashboard
 - [ ] Add to CI artifacts
 - [ ] Trend tracking over time
@@ -361,6 +393,7 @@ If outdated, create amendment or deprecate.
 **Priority**: P3 (Proactive maintenance)
 
 **Automation**:
+
 ```yaml
 # .github/workflows/quarterly-health-check.yml
 name: Quarterly Governance Health Check
@@ -371,6 +404,7 @@ on:
 ```
 
 **Checklist Items**:
+
 - [ ] Run all validation scripts
 - [ ] Generate coverage report
 - [ ] Check for stale docs
@@ -391,6 +425,7 @@ on:
 **Priority**: P3 (Optimize for AI)
 
 **Metrics**:
+
 - Clarity (ambiguity detection)
 - Completeness (missing context)
 - Consistency (pattern matching)
@@ -408,6 +443,7 @@ on:
 **Priority**: P3 (Improve discovery)
 
 **Features**:
+
 - Semantic search (not just keyword)
 - Context-aware suggestions
 - Related document recommendations
@@ -423,18 +459,21 @@ on:
 ## Success Criteria
 
 ### Phase 1 Complete (Q1 2026)
+
 - ✅ All governance docs have YAML frontmatter
 - ✅ Validation pipeline running in CI
 - ✅ JSON schemas defined
 - ✅ Compatibility matrix generated
 
 ### Phase 2 Complete (Q2-Q3 2026)
+
 - ✅ Amendment proposal process operational
 - ✅ Migration tooling framework available
 - ✅ Automated staleness detection active
 - ✅ Export/archive scripts functional
 
 ### Phase 3 Complete (Q4 2026+)
+
 - ✅ Coverage metrics dashboard live
 - ✅ Quarterly health checks automated
 - ✅ AI readability scoring implemented
@@ -445,6 +484,7 @@ on:
 ## Resource Allocation
 
 ### Development Time Estimate
+
 - **Immediate (30 days)**: ~40 hours
 - **Short-term (90 days)**: ~100 hours
 - **Medium-term (6 months)**: ~160 hours
@@ -453,6 +493,7 @@ on:
 **Total**: ~540 hours over 1 year (~3-4 months of dedicated work)
 
 ### Team Needs
+
 - **Developer**: 70% (scripting, tooling, CI)
 - **Technical Writer**: 20% (docs, templates, guides)
 - **DevOps**: 10% (CI/CD, automation)

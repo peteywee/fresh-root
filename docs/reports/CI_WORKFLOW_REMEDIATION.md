@@ -93,6 +93,7 @@ Please use "./proxy.ts" only.
 **Resolution**:
 
 1. Added pnpm overrides in `package.json`:
+
    ```json
    "pnpm": {
      "overrides": {
@@ -102,6 +103,7 @@ Please use "./proxy.ts" only.
      }
    }
    ```
+
 1. Replaced vulnerable `xlsx` with `exceljs` in `apps/web/src/lib/imports/_template.import.ts`
 1. Ran `pnpm store prune && pnpm install` to force override application
 

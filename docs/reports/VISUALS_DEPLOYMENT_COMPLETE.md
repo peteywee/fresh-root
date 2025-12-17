@@ -327,7 +327,7 @@ fresh-root/
 
 ### Online
 
-1. Go to https://mermaid.live
+1. Go to <https://mermaid.live>
 2. Paste diagram code
 3. Renders interactively
 

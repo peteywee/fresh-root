@@ -12,12 +12,14 @@
 We have **4 MCP servers configured** with **25+ total tools** available. The challenge: ensuring agents automatically access the **right tools at the right time** without manual intervention.
 
 **Current Problem**:
+
 - Chrome DevTools requires manual input prompts (browser URL, headless mode, isolation)
 - Firebase requires Firebase CLI initialization per project
 - Repomix requires conscious activation
 - GitHub MCP has no initialization overhead ✅
 
 **Desired State**:
+
 - 80%+ of tools "just work" without prompts
 - Agent automatically selects best tools for task
 - Zero manual configuration during analysis
@@ -42,6 +44,7 @@ We have **4 MCP servers configured** with **25+ total tools** available. The cha
 ```
 
 **Tools**:
+
 - Repository operations (search, list, read)
 - Pull request management (create, list, review)
 - Issue tracking (search, create, comment)
@@ -50,13 +53,15 @@ We have **4 MCP servers configured** with **25+ total tools** available. The cha
 - Commit operations
 - Release management
 
-**Why Always-On**: 
+**Why Always-On**:
+
 - No initialization required
 - Highest utility (repo context, PR management, issue tracking)
 - Zero latency (HTTP)
 - Critical for dev workflow
 
 **Tool Frequency** (estimated):
+
 - 🔴 HIGH: `search_*`, `list_pull_requests`, `create_pull_request`
 - 🟡 MEDIUM: `get_issues`, `create_issue`, `comment_on_pr`
 - 🟢 LOW: `list_releases`, `get_commits`
@@ -80,6 +85,7 @@ We have **4 MCP servers configured** with **25+ total tools** available. The cha
 ```
 
 **Tools**:
+
 - Firestore database operations (read, write, delete)
 - Authentication operations
 - Deployment (rules, functions, hosting)
@@ -87,16 +93,19 @@ We have **4 MCP servers configured** with **25+ total tools** available. The cha
 - Configuration management
 
 **Why Semi-Always-On**:
+
 - Database operations are critical for our system
 - Most API routes depend on Firebase
 - Project context pre-initialized (firebase.json exists)
 
 **Tool Frequency** (estimated):
+
 - 🔴 HIGH: Firestore CRUD, rules deployment, emulator start
 - 🟡 MEDIUM: Auth operations, config read
 - 🟢 LOW: Hosting deployment (rare during dev)
 
 **Optimization Needed**:
+
 - Pre-initialize Firebase context on startup
 - Cache Firebase state (project ID, auth status)
 - Reduce initialization prompts
@@ -119,6 +128,7 @@ We have **4 MCP servers configured** with **25+ total tools** available. The cha
 ```
 
 **Tools**:
+
 1. `mcp_repomix_pack_codebase` — Local analysis (compression 70%)
 2. `mcp_repomix_pack_remote_repository` — External repo research
 3. `mcp_repomix_attach_packed_output` — Reuse previous analysis
@@ -128,12 +138,14 @@ We have **4 MCP servers configured** with **25+ total tools** available. The cha
 7. `mcp_repomix_file_system_read_directory` — Safe directory listing
 
 **Why ON-DEMAND (Not Always-On)**:
+
 - Code analysis isn't needed for every task
 - Packing takes 1-2 seconds (acceptable latency)
 - Agent can decide when to use intelligently
 - Zero initialization overhead (good candidate for auto-activation)
 
 **Tool Frequency** (estimated):
+
 - 🔴 HIGH: `pack_codebase`, `pack_remote_repository` (analysis-heavy tasks)
 - 🟡 MEDIUM: `grep_repomix_output`, `generate_skill`
 - 🟢 LOW: File system operations (better handled by local tools)
@@ -158,18 +170,21 @@ We have **4 MCP servers configured** with **25+ total tools** available. The cha
 ```
 
 **Tools**:
+
 - Browser automation
 - Screenshot capture
 - DOM inspection
 - Performance profiling
 
 **Why LOW PRIORITY**:
+
 - Requires 3 input prompts (friction)
 - E2E testing is still mostly Playwright-driven
 - Browser automation handled by Playwright in tests
 - Low frequency in dev workflow (mostly QA/testing)
 
 **Issues**:
+
 - ❌ Prompts block agent execution
 - ❌ Not suitable for auto-activation
 - ❌ Requires specific browser setup
@@ -231,6 +246,7 @@ These should initialize automatically when VS Code opens:
 3. **Firebase** (zero prompts) → **Pre-initialize context**
 
 **Implementation**:
+
 ```json
 {
   "servers": {
@@ -265,6 +281,7 @@ These activate when agent detects specific keywords:
 1. **Chrome DevTools** → Activate only if user asks for screenshot/browser task
 
 **Implementation**:
+
 ```json
 {
   "servers": {
@@ -278,7 +295,8 @@ These activate when agent detects specific keywords:
 }
 ```
 
-**Behavior**: 
+**Behavior**:
+
 - Agent detects "screenshot" in request
 - Auto-activates Chrome DevTools
 - Prompts for settings if needed
@@ -289,6 +307,7 @@ These activate when agent detects specific keywords:
 ### **TIER 3: Manual (Full Setup)**
 
 These require explicit user action (leave as-is):
+
 - Custom integrations
 - Third-party services
 - One-time setup tasks
@@ -433,6 +452,7 @@ When planning a task:
 **Auto-Activation Engine**:
 
 Create smart activation that:
+
 - Detects task type from user request
 - Pre-activates optimal tool combinations
 - Caches tool state (warm starts)
@@ -555,6 +575,7 @@ Some tasks have multiple tool options:
 - ✅ Automatic tool selection for 80% of tasks
 
 **Measurement**:
+
 ```bash
 # Add logging to .mcp.json activation
 # Track metrics in scripts/mcp-metrics.json
@@ -566,20 +587,24 @@ pnpm report:mcp-metrics
 ## Summary: Always-On vs. On-Demand
 
 **TIER 1 (Always-On, no waiting)**:
+
 1. ✅ GitHub MCP — Repo/PR/issue operations
 2. ✅ Repomix MCP — Code analysis (zero init cost)
 3. ✅ Firebase MCP — Database operations
 
 **TIER 2 (On-Demand, auto-activate on need)**:
+
 1. 🟡 Chrome DevTools — Browser automation
 
 **Key Strategy**:
+
 - **Make Repomix always-on** (zero cost, high value)
 - **Pre-init Firebase context** (eliminate prompts)
 - **Keep Chrome tools on-demand** (complex setup)
 - **Agent selects tools automatically** based on task type
 
-**Implementation**: 
+**Implementation**:
+
 1. Phase 1 (Today): Update .mcp.json with tier annotations
 2. Phase 2 (This week): Create MCP manifest + agent instructions
 3. Phase 3 (Next week): Build auto-activation engine

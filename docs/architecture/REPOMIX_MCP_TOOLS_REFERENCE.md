@@ -14,6 +14,7 @@
 **Purpose**: Package a local code directory for AI analysis
 
 **Parameters**:
+
 ```typescript
 {
   directory: string;           // Absolute path to directory
@@ -26,6 +27,7 @@
 ```
 
 **Example Usage**:
+
 ```
 User: "Pack the API framework and analyze its patterns"
 
@@ -44,6 +46,7 @@ Result: Structured output showing:
 ```
 
 **Best For**:
+
 - Real-time codebase analysis during conversation
 - Understanding project structure
 - Identifying patterns and anti-patterns
@@ -58,6 +61,7 @@ Result: Structured output showing:
 **Purpose**: Clone and analyze a GitHub repository
 
 **Parameters**:
+
 ```typescript
 {
   remote: string;              // GitHub URL or user/repo format
@@ -70,11 +74,13 @@ Result: Structured output showing:
 ```
 
 **Supported Formats**:
+
 - `"yamadashy/repomix"` (user/repo)
 - `"https://github.com/user/repo"`
 - `"https://github.com/user/repo/tree/branch"` (specific branch)
 
 **Example Usage**:
+
 ```
 User: "How does Next.js structure their API routes? Compare to ours"
 
@@ -90,6 +96,7 @@ Result: Analyzes Next.js repo, compares patterns with ours
 ```
 
 **Best For**:
+
 - Competitor analysis
 - Research external patterns
 - Learn from established projects
@@ -105,6 +112,7 @@ Result: Analyzes Next.js repo, compares patterns with ours
 **Purpose**: Load an existing packed output file for AI analysis
 
 **Parameters**:
+
 ```typescript
 {
   path: string;                // Path to packed file (.xml, .md, .json, .txt)
@@ -113,6 +121,7 @@ Result: Analyzes Next.js repo, compares patterns with ours
 ```
 
 **Example Usage**:
+
 ```
 User: "Analyze yesterday's repomix output"
 
@@ -125,6 +134,7 @@ Result: Loads the packed output, makes it available for analysis
 ```
 
 **Best For**:
+
 - Analyzing archived snapshots
 - Comparing codebase over time
 - Iterative analysis without re-packing
@@ -137,6 +147,7 @@ Result: Loads the packed output, makes it available for analysis
 **Purpose**: Search within a packed Repomix output (like grep)
 
 **Parameters**:
+
 ```typescript
 {
   outputId: string;            // ID of packed output (from attach_packed_output)
@@ -149,6 +160,7 @@ Result: Loads the packed output, makes it available for analysis
 ```
 
 **Example Usage**:
+
 ```
 User: "Find all error handling in the API framework"
 
@@ -164,6 +176,7 @@ Result: Returns all matches with 2 lines before/after
 ```
 
 **Best For**:
+
 - Fast search without re-packing
 - Pattern discovery
 - Code quality checks
@@ -171,6 +184,7 @@ Result: Returns all matches with 2 lines before/after
 - Security scanning (e.g., "find all fetch calls")
 
 **RegExp Syntax**: Full JavaScript RegExp support
+
 ```
 // Examples:
 "catch|throw|Error"           // Multiple patterns
@@ -186,6 +200,7 @@ Result: Returns all matches with 2 lines before/after
 **Purpose**: Generate a Claude Agent Skill from a codebase
 
 **Parameters**:
+
 ```typescript
 {
   directory: string;                     // Absolute path
@@ -197,6 +212,7 @@ Result: Returns all matches with 2 lines before/after
 ```
 
 **Output Structure**:
+
 ```
 .claude/skills/<skill-name>/
 ├── SKILL.md                            # Entry point with metadata
@@ -208,6 +224,7 @@ Result: Returns all matches with 2 lines before/after
 ```
 
 **Example Usage**:
+
 ```
 User: "Create a Claude Skill for the SDK factory pattern"
 
@@ -227,6 +244,7 @@ Result:
 ```
 
 **Best For**:
+
 - Team knowledge sharing
 - Creating reusable pattern libraries
 - Onboarding new team members
@@ -234,6 +252,7 @@ Result:
 - Building institutional knowledge
 
 **Skill Features**:
+
 - YAML frontmatter for indexing
 - Auto-detected tech stack
 - Line count metrics
@@ -246,6 +265,7 @@ Result:
 **Purpose**: Read a file with built-in security validation
 
 **Parameters**:
+
 ```typescript
 {
   path: string;     // Absolute path to file
@@ -253,6 +273,7 @@ Result:
 ```
 
 **Example Usage**:
+
 ```
 User: "Read the API handler pattern"
 
@@ -265,6 +286,7 @@ Result: File contents (with security checks)
 ```
 
 **Security Features**:
+
 - ✅ Detects API keys, passwords, secrets
 - ✅ Blocks access to `.env` files
 - ✅ Warns on files with sensitive patterns
@@ -272,6 +294,7 @@ Result: File contents (with security checks)
 - ✅ Audit trail of file access
 
 **Example Security Detection**:
+
 ```
 User: "Read .env"
 
@@ -286,6 +309,7 @@ Message: "File contains sensitive data (API keys, tokens).
 ```
 
 **Best For**:
+
 - Safe file reading in conversations
 - Preventing secret leaks
 - Audit trail compliance
@@ -298,6 +322,7 @@ Message: "File contains sensitive data (API keys, tokens).
 **Purpose**: List directory contents with security awareness
 
 **Parameters**:
+
 ```typescript
 {
   path: string;     // Absolute path to directory
@@ -305,6 +330,7 @@ Message: "File contains sensitive data (API keys, tokens).
 ```
 
 **Output Format**:
+
 ```
 folder-name/
 ├── [FILE] index.ts
@@ -314,6 +340,7 @@ folder-name/
 ```
 
 **Example Usage**:
+
 ```
 User: "What files are in the API framework?"
 
@@ -330,12 +357,14 @@ Result:
 ```
 
 **Security Features**:
+
 - ✅ Hides `.env` and `.env.*` files by default
 - ✅ Warns if sensitive files detected
 - ✅ Respects `.gitignore` patterns
 - ✅ Prevents directory traversal attacks
 
 **Best For**:
+
 - Exploring project structure
 - Finding files to analyze
 - Verifying sensitive file isolation
@@ -427,17 +456,21 @@ Result: Security vulnerabilities found + fixed
 ## 🚀 Quick Start
 
 ### Step 1: Restart GitHub Copilot
+
 - Close VS Code
 - Reopen VS Code
 - The `.mcp.json` changes should load
 
 ### Step 2: Verify MCP Connection
+
 Ask in Copilot chat:
+
 ```
 "What Repomix MCP tools are available?"
 ```
 
 Expected response:
+
 ```
 Available Repomix MCP Tools:
 1. mcp_repomix_pack_codebase
@@ -450,11 +483,13 @@ Available Repomix MCP Tools:
 ```
 
 ### Step 3: Test with Simple Request
+
 ```
 "Pack the types package and show me the structure"
 ```
 
 Agent should:
+
 1. Call `mcp_repomix_pack_codebase` on `packages/types`
 2. Return structured output
 3. Summarize contents
@@ -465,14 +500,15 @@ Agent should:
 
 - **Setup**: See `.mcp.json` for configuration
 - **Integration Plan**: [REPOMIX_MCP_INTEGRATION_PLAN.md](./REPOMIX_MCP_INTEGRATION_PLAN.md)
-- **Repomix Docs**: https://repomix.com/docs/mcp
-- **MCP Protocol**: https://modelcontextprotocol.io/
+- **Repomix Docs**: <https://repomix.com/docs/mcp>
+- **MCP Protocol**: <https://modelcontextprotocol.io/>
 
 ---
 
 ## ⚙️ Configuration Details
 
 **In `.mcp.json`**:
+
 ```json
 "repomix/repomix-mcp": {
   "type": "stdio",
@@ -485,6 +521,7 @@ Agent should:
 ```
 
 **Why npx?**
+
 - Auto-updates to latest version
 - No local dependency needed
 - Easy to disable (just remove from `.mcp.json`)
@@ -494,19 +531,22 @@ Agent should:
 
 ## 🔧 Troubleshooting
 
-### Tools not appearing?
+### Tools not appearing
+
 - [ ] Restart VS Code completely
 - [ ] Check `.mcp.json` is valid (use online JSON validator)
 - [ ] Check terminal for MCP server errors
 - [ ] Try: `npx @repomix/mcp-server@latest --version`
 
-### MCP server not connecting?
+### MCP server not connecting
+
 - [ ] Verify Node.js >= 20.10.0
 - [ ] Verify npx available: `which npx`
 - [ ] Check firewall/network settings
 - [ ] Look for MCP error logs in VS Code output
 
-### Performance slow?
+### Performance slow
+
 - [ ] Use `compress: true` to reduce tokens by 70%
 - [ ] Use `grep_repomix_output` instead of re-packing
 - [ ] Limit with `includePatterns` (e.g., `"src/**/*.ts"`)
