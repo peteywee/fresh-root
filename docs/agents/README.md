@@ -8,6 +8,14 @@ protocols.
 - [Agent Instruction Overhaul](./AGENT_INSTRUCTION_OVERHAUL.md) - Master project plan for
   instruction system restructuring
 - [Global Cognition Agent](./GLOBAL_COGNITION_AGENT.md) - Repository-aware analysis agent
+- [Special Personas (SR Agent & Combot)](./SPECIAL_PERSONAS.md) - Canonical definition for the
+  emergency rescue and high-assurance verifier personas sourced from the reconciled rulebook.
+
+### Machine-readable manifests
+
+- [`/.github/agents/personas.manifest.json`](/.github/agents/personas.manifest.json) - JSON manifest
+  for automation to dynamically load persona metadata (purpose, activation triggers, responsibilities,
+  safeguards).
 
 ## Related Documentation
 

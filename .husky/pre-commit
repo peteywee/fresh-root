@@ -7,6 +7,16 @@ if grep -nRE --exclude-dir=node_modules --exclude-dir=.git '^<<<<<<<|^=======$|^
   exit 1
 fi
 
+# [A09] Validate handler signature invariant (route.ts files)
+# Prevent merge conflicts on SDK factory handler destructuring
+node scripts/validate-handler-signature.mjs
+if [ $? -ne 0 ]; then
+  echo ""
+  echo "❌ Handler signature validation failed."
+  echo "   See .github/governance/amendments/A09_HANDLER_SIGNATURE_INVARIANT.md"
+  exit 1
+fi
+
 # Block documentation files from being committed to root directory
 # Only README.md and LICENSE are allowed at root
 DISALLOWED_ROOT_DOCS=$(git diff --cached --name-only | grep -E '\.md$' | grep -v '^README\.md$\|^LICENSE' | grep -v '/' | grep -v '^WARP\.md$' || true)
