@@ -12,7 +12,7 @@ import { badRequest, ok, serverError } from "../_shared/validation";
  * List shifts for an organization
  */
 export const GET = createOrgEndpoint({
-  handler: async ({ _request, context, _params }) => {
+  handler: async ({ request, context }) => {
     try {
       const { searchParams } = new URL(request.url);
       const orgId = searchParams.get("orgId") || context.org?.orgId;
@@ -47,7 +47,7 @@ export const GET = createOrgEndpoint({
 export const POST = createOrgEndpoint({
   roles: ["manager"],
   input: CreateShiftSchema,
-  handler: async ({ input, context, _params }) => {
+  handler: async ({ input, context }) => {
     try {
       const validated = input as Record<string, unknown>;
 
