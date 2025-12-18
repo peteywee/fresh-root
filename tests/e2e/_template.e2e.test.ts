@@ -21,20 +21,20 @@ describe("_template API E2E Tests", () => {
   });
 
   describe("GET /api/_template", () => {
-    it("should return 200 for valid request", async () => {
+    it("should return 404 (template route is not routable)", async () => {
       const { response } = await safeFetch(`${BASE_URL}/api/_template`);
       if (!serverAvailable || !response) {
         expect(true).toBe(true); // Skip gracefully
         return;
       }
-      expect(response.status).toBe(200);
+      expect(response.status).toBe(404);
     });
   });
 
   describe("POST /api/_template", () => {
     // Input: TemplatePostSchema
 
-    it("should return 400 for invalid input", async () => {
+    it("should return 404 (template route is not routable)", async () => {
       const { response } = await safeFetch(`${BASE_URL}/api/_template`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -44,33 +44,27 @@ describe("_template API E2E Tests", () => {
         expect(true).toBe(true); // Skip gracefully
         return;
       }
-      expect([400, 401, 422]).toContain(response.status);
+      expect(response.status).toBe(404);
     });
 
-    it("should handle valid request", async () => {
-      const validPayload = {
-        // TODO: Add valid payload based on TemplatePostSchema
-      };
-
+    it("should return 404 (template route is not routable)", async () => {
       const { response } = await safeFetch(`${BASE_URL}/api/_template`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(validPayload),
+        body: JSON.stringify({ message: "hello" }),
       });
       if (!serverAvailable || !response) {
         expect(true).toBe(true); // Skip gracefully
         return;
       }
-
-      // Expect success or auth required
-      expect([200, 201, 401, 403]).toContain(response.status);
+      expect(response.status).toBe(404);
     });
   });
 
   describe("PATCH /api/_template", () => {
     // Input: TemplatePostSchema
 
-    it("should return 400 for invalid input", async () => {
+    it("should return 404 (template route is not routable)", async () => {
       const { response } = await safeFetch(`${BASE_URL}/api/_template`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
@@ -80,31 +74,25 @@ describe("_template API E2E Tests", () => {
         expect(true).toBe(true); // Skip gracefully
         return;
       }
-      expect([400, 401, 422]).toContain(response.status);
+      expect(response.status).toBe(404);
     });
 
-    it("should handle valid request", async () => {
-      const validPayload = {
-        // TODO: Add valid payload based on TemplatePostSchema
-      };
-
+    it("should return 404 (template route is not routable)", async () => {
       const { response } = await safeFetch(`${BASE_URL}/api/_template`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(validPayload),
+        body: JSON.stringify({ message: "hello" }),
       });
       if (!serverAvailable || !response) {
         expect(true).toBe(true); // Skip gracefully
         return;
       }
-
-      // Expect success or auth required
-      expect([200, 201, 401, 403]).toContain(response.status);
+      expect(response.status).toBe(404);
     });
   });
 
   describe("DELETE /api/_template", () => {
-    it("should require authentication", async () => {
+    it("should return 404 (template route is not routable)", async () => {
       const { response } = await safeFetch(`${BASE_URL}/api/_template`, {
         method: "DELETE",
       });
@@ -112,7 +100,7 @@ describe("_template API E2E Tests", () => {
         expect(true).toBe(true); // Skip gracefully
         return;
       }
-      expect([401, 403, 404]).toContain(response.status);
+      expect(response.status).toBe(404);
     });
   });
 });

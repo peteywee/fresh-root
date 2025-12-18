@@ -27,6 +27,12 @@ const securityHeaders = [
   { key: "Strict-Transport-Security", value: "max-age=63072000; includeSubDomains; preload" },
 ];
 
+// Explicitly disable Turbopack's default serverExternalPackages (which includes
+// firebase-admin) to stop the noisy "can't be external" warnings. Keeping this
+// empty means everything is bundled; we don't rely on externalization for these
+// server-only deps in our runtime setup.
+const serverExternalPackages = [];
+
 const nextConfig = {
   output: "standalone",
   reactStrictMode: true,
@@ -37,32 +43,9 @@ const nextConfig = {
   compress: true,
   productionBrowserSourceMaps: false,
   typedRoutes: true,
-  // Mark server-only packages as external so they won't be bundled by Turbopack
-  // This prevents module resolution errors for optional packages and instrumentation libs
-  serverExternalPackages: [
-    // Optional Redis adapters (not installed in all deployments)
-    "@upstash/redis",
-    "ioredis",
-    // OpenTelemetry and Sentry instrumentation (server-side only)
-    "import-in-the-middle",
-    "require-in-the-middle",
-    // Firebase Admin and google-cloud libs are server-only (Node) and must not be
-    // bundled into Edge runtimes or client bundles. Mark them external so Turbopack
-    // doesn't try to inline CJS/Node-only code into Edge chunks.
-    "firebase-admin",
-    "@google-cloud/firestore",
-    "google-auth-library",
-    "@grpc/grpc-js",
-    "@opentelemetry/instrumentation",
-    "@opentelemetry/instrumentation-http",
-    "@opentelemetry/instrumentation-express",
-    "@opentelemetry/instrumentation-aws-lambda",
-    "@opentelemetry/instrumentation-fs",
-    "@opentelemetry/instrumentation-pg",
-    "@opentelemetry/auto-instrumentations-node",
-    "@sentry/profiling-node",
-    "elastic-apm-node",
-  ],
+  // Keep serverExternalPackages empty to force bundling and silence Turbopack's
+  // firebase-admin externalization warnings
+  serverExternalPackages,
   images: {
     formats: ["image/avif", "image/webp"],
     remotePatterns: [
@@ -92,6 +75,9 @@ const nextConfig = {
   experimental: {
     optimizePackageImports: ["react", "react-dom", "@fresh-schedules/types", "@fresh-schedules/ui"],
     serverActions: { bodySizeLimit: "1mb" },
+    // Mirror the empty allowlist so both config locations disable the default
+    // firebase-admin externalization.
+    serverExternalPackages,
   },
   // Turbopack sometimes infers the workspace root incorrectly when there are
   // multiple lockfiles on the machine (e.g., a stray pnpm-lock.yaml in $HOME).
