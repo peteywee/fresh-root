@@ -496,17 +496,17 @@ export function createEndpoint<TInput = unknown, TOutput = unknown>(
       // Return success response
       // If the handler returns a Response/NextResponse, pass it through unchanged.
       // Otherwise, wrap the value in the standard { data, meta } envelope.
-      if (result instanceof NextResponse) {
-        result.headers.set("x-request-id", requestId);
-        result.headers.set("x-duration-ms", String(duration));
-        return result;
-      }
-
       if (result instanceof Response) {
-        const response = new NextResponse(result.body, {
-          status: result.status,
-          headers: result.headers,
-        });
+        // `NextResponse` is a subclass of `Response`, so we handle it here.
+        // If it's not already a `NextResponse`, we create one to make headers mutable.
+        const response =
+          result instanceof NextResponse
+            ? result
+            : new NextResponse(result.body, {
+                status: result.status,
+                headers: result.headers,
+              });
+
         response.headers.set("x-request-id", requestId);
         response.headers.set("x-duration-ms", String(duration));
         return response;
