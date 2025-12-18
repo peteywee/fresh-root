@@ -3,7 +3,7 @@
 // Created: 2025-12-17
 // Purpose: Test Zod schemas against adversarial inputs
 
-import { z, ZodSchema, ZodError } from "zod";
+import { ZodSchema, ZodError } from "zod";
 import type { LabeledValue, EdgeCaseCategory } from "./generators";
 
 /**

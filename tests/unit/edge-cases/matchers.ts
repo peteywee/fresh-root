@@ -3,9 +3,9 @@
 // Created: 2025-12-17
 // Purpose: Extend Vitest with edge-case-specific matchers
 
-import { z, ZodSchema } from "zod";
+import { ZodSchema } from "zod";
 import type { LabeledValue } from "./generators";
-import { validateEdgeCase, validateEdgeCases } from "./validators";
+import { validateEdgeCases } from "./validators";
 
 /**
  * Custom matcher declarations for TypeScript
