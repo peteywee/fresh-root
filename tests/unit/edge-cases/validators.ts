@@ -2,7 +2,7 @@
 // Tags: P0, TEST, EDGE-CASES, VALIDATORS
 // Created: 2025-12-17
 
-import { z, ZodSchema, ZodError } from "zod";
+import { type ZodSchema, ZodError } from "zod";
 import type { LabeledValue, EdgeCaseCategory } from "./generators.js";
 
 export interface ValidationResult {
