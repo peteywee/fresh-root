@@ -27,7 +27,7 @@ export const GET = createPublicEndpoint({
  * Health check HEAD
  */
 export const HEAD = createPublicEndpoint({
-  handler: async ({ request: _request, input: _input, context, params: _params }) => {
+  handler: async ({ request: _request, input: _input, context: _context, params: _params }) => {
     return ok({ status: "healthy" });
   },
 });
