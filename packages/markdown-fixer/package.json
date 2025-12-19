@@ -16,17 +16,17 @@
   },
   "dependencies": {
     "commander": "^14.0.2",
-    "remark": "^15.0.0",
-    "unified": "^11.0.0",
+    "remark": "^15.0.1",
     "remark-parse": "^11.0.0",
-    "remark-stringify": "^11.0.0"
+    "remark-stringify": "^11.0.0",
+    "unified": "^11.0.5"
   },
   "devDependencies": {
-    "ts-node": "^10.9.1",
-    "typescript": "^5.6.3",
-    "vitest": "^4.0.14",
-    "eslint": "^9.39.1",
-    "tsx": "^4.10.0",
-    "@types/node": "^24.0.0"
+    "@types/node": "^24.10.4",
+    "eslint": "^9.39.2",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.16"
   }
 }
