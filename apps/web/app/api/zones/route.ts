@@ -14,21 +14,36 @@ import { FLAGS } from "../../../src/lib/features";
  * List zones for a venue
  */
 export const GET = createOrgEndpoint({
+  rateLimit: { maxRequests: 100, windowMs: 60_000 },
   handler: async ({ request, input: _input, context, params: _params }) => {
     try {
       const { searchParams } = new URL(request.url);
       const venueId = searchParams.get("venueId");
+      const orgId = context.org?.orgId;
 
       if (!venueId) {
         return badRequest("venueId query parameter is required");
       }
 
-      // Mock data - in production, fetch from Firestore
+      // D6: Fetch from Firestore if FIRESTORE_WRITES enabled
+      if (FLAGS.FIRESTORE_WRITES && orgId) {
+        const db = getFirestore();
+        const snapshot = await db
+          .collection(`orgs/${orgId}/zones`)
+          .where("venueId", "==", venueId)
+          .orderBy("name")
+          .get();
+        
+        const zones = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+        return ok({ zones, total: zones.length });
+      }
+
+      // Fallback: Mock data when Firestore disabled
       const zones = [
         {
           id: "zone-1",
           venueId,
-          orgId: context.org?.orgId,
+          orgId,
           name: "Front of House",
           description: "Customer-facing area",
           isActive: true,
@@ -48,20 +63,29 @@ export const GET = createOrgEndpoint({
  */
 export const POST = createOrgEndpoint({
   roles: ["manager"],
-  handler: async ({ request, input: _input, context, params: _params }) => {
+  input: CreateZoneSchema,
+  rateLimit: { maxRequests: 50, windowMs: 60_000 },
+  handler: async ({ request: _request, input, context, params: _params }) => {
     try {
-      const body = await request.json();
-      const validated = CreateZoneSchema.parse(body);
+      const validated = input as Record<string, unknown>;
+      const orgId = context.org?.orgId;
 
       const zone = {
-        id: `zone-${Date.now()}`,
-        orgId: context.org?.orgId,
+        orgId,
         ...validated,
         createdBy: context.auth?.userId,
         createdAt: Date.now(),
+        updatedAt: Date.now(),
       };
 
-      return NextResponse.json(zone, { status: 201 });
+      // D6: Write to Firestore if enabled
+      if (FLAGS.FIRESTORE_WRITES && orgId) {
+        const db = getFirestore();
+        const docRef = await db.collection(`orgs/${orgId}/zones`).add(zone);
+        return NextResponse.json({ id: docRef.id, ...zone }, { status: 201 });
+      }
+
+      return NextResponse.json({ id: `zone-${Date.now()}`, ...zone }, { status: 201 });
     } catch {
       return serverError("Failed to create zone");
     }
