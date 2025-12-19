@@ -39,4 +39,18 @@ if [ ! -z "$DISALLOWED_ROOT_DOCS" ]; then
   exit 1
 fi
 
+# Docs lint (staged Markdown only)
+# Fail fast on markdownlint violations (e.g., MD040 fenced code language, MD060 table style)
+STAGED_MD_FILES=$(git diff --cached --name-only --diff-filter=ACM | grep -E '\.md$' || true)
+if [ ! -z "$STAGED_MD_FILES" ]; then
+  echo "🧾 Running markdownlint on staged Markdown files..."
+  pnpm exec markdownlint-cli2 --config .markdownlint.json $STAGED_MD_FILES
+  if [ $? -ne 0 ]; then
+    echo ""
+    echo "❌ Markdown lint failed."
+    echo "   Quick fix: pnpm --filter @fresh-root/markdown-fixer fix && pnpm format"
+    exit 1
+  fi
+fi
+
 pnpm -w typecheck && pnpm -w lint
