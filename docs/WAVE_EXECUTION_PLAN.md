@@ -1,7 +1,7 @@
 # Wave Execution Plan - Hybrid Optimal Strategy
 
-**Created**: 2025-12-18 **Updated**: 2025-12-18 **Strategy**: Plan 10 - Hybrid Optimal (Score:
-37/40) **Status**: Wave 1 D-Tasks COMPLETE ✅ **Remaining Tasks**: 28/45
+**Created**: 2025-12-18 **Updated**: 2025-12-19 **Strategy**: Plan 10 - Hybrid Optimal (Score:
+37/40) **Status**: Wave 1 COMPLETE ✅ | Wave 2 IN PROGRESS **Remaining Tasks**: 20/45
 
 ---
 
@@ -19,6 +19,28 @@
 | D6   | `apps/web/app/api/zones/route.ts`         | ✅ Complete                       | 12aef8f         |
 | D7   | `apps/web/app/api/widgets/route.ts`       | ⏭️ Skipped - Public demo endpoint | N/A             |
 | D8   | `apps/web/app/api/users/profile/route.ts` | ⏭️ Skipped - Firebase Auth claims | N/A             |
+
+### Wave 1 C-Tasks (Frontend UX Shell) - COMPLETE ✅
+
+| Task | File                                  | Status                   | Commit   |
+| ---- | ------------------------------------- | ------------------------ | -------- |
+| C1   | `apps/web/src/components/Header.tsx`  | ✅ Complete (pre-exists) | Previous |
+| C2   | `apps/web/src/components/Sidebar.tsx` | ✅ Complete (pre-exists) | Previous |
+| C4   | `apps/web/src/lib/org-context.tsx`    | ✅ Complete (wired)      | Previous |
+| C5   | `apps/web/next.config.mjs`            | ✅ CSP configured        | Previous |
+
+### Wave 1 E-Tasks (Type Cleanup) - DEFERRED
+
+| Task  | Description        | Status                                    |
+| ----- | ------------------ | ----------------------------------------- |
+| E1-E4 | Remove `any` types | ⏭️ Deferred - mostly in helper/middleware |
+
+**Wave 1 Quality Gates**:
+
+- ✅ Pattern Validator: 130/90 PERFECT
+- ✅ Handler Validator: 37/37 valid
+- ✅ Typecheck: 7/7 packages pass
+- ✅ Lint: 0 errors
 
 ### Routes Still Using Mock Data (Low Priority)
 
@@ -213,23 +235,25 @@ git push origin dev feature/wave-1-hybrid
 
 ---
 
-## Wave 2 Execution (Depends on Wave 1)
+## Wave 2 Execution (Depends on Wave 1) - IN PROGRESS
 
 ### Tasks
 
-- **C3**: Profile page (needs D8 user API)
-- **E5-E8**: Schema creation (needs all D\* APIs)
-- **F1**: Publish schedule (needs D3 schedules API)
-- **F2**: Schedule builder (needs C2 sidebar, D3 schedules)
+| Task  | Description                    | Status                   | Notes                         |
+| ----- | ------------------------------ | ------------------------ | ----------------------------- |
+| C3    | Profile page (needs D8)        | ✅ Complete (pre-exists) | `app/onboarding/profile/`     |
+| E5-E8 | Schema creation (needs D\*)    | ✅ Complete (pre-exists) | All schemas in packages/types |
+| F1    | Publish schedule (needs D3)    | ✅ Complete              | Firestore integrated          |
+| F2    | Schedule builder (needs C2,D3) | ✅ Complete (pre-exists) | `app/schedules/builder/`      |
 
 ### Dependency Graph
 
 ```text
-Wave 1 Complete
-├─→ C3 (requires D8)
-├─→ E5-E8 (requires D1-D8)
-├─→ F1 (requires D3)
-└─→ F2 (requires C2, D3)
+Wave 1 Complete ✅
+├─→ C3 (requires D8) ✅
+├─→ E5-E8 (requires D1-D8) ✅
+├─→ F1 (requires D3) ✅
+└─→ F2 (requires C2, D3) ✅
 ```
 
 ---
