@@ -1,9 +1,12 @@
-// [P0][ATTENDANCE][API] Attendance tracking endpoint
+// [P0][ATTENDANCE][API][D1] Attendance tracking endpoint with Firestore persistence
 
 import { z } from "zod";
 import { createAuthenticatedEndpoint } from "@fresh-schedules/api-framework";
 import { CreateAttendanceRecordSchema } from "@fresh-schedules/types";
+import { getFirestore } from "firebase-admin/firestore";
 import { NextResponse } from "next/server";
+
+import { FLAGS } from "../../../src/lib/features";
 
 /**
  * GET /api/attendance
@@ -24,7 +27,23 @@ export const GET = createAuthenticatedEndpoint({
         return NextResponse.json({ error: "orgId query parameter is required" }, { status: 400 });
       }
 
-      // Mock data - in production, fetch from Firestore
+      // D1: Fetch from Firestore if FIRESTORE_WRITES enabled
+      if (FLAGS.FIRESTORE_WRITES) {
+        const db = getFirestore();
+        let query = db.collection('attendance_records').doc(orgId).collection('records');
+
+        // Apply filters
+        if (shiftId) query = query.where('shiftId', '==', shiftId) as any;
+        if (scheduleId) query = query.where('scheduleId', '==', scheduleId) as any;
+        if (staffUid) query = query.where('staffUid', '==', staffUid) as any;
+
+        const snapshot = await query.get();
+        const records = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+        return NextResponse.json({ records, total: records.length }, { status: 200 });
+      }
+
+      // Fallback: Mock data when Firestore disabled
       const records = [
         {
           id: "att-1",
@@ -37,7 +56,7 @@ export const GET = createAuthenticatedEndpoint({
           scheduledEnd: Date.now() + 6 * 60 * 60 * 1000,
           actualCheckIn: Date.now() - 2 * 60 * 60 * 1000,
           checkInMethod: "qr_code",
-          scheduledDuration: 480, // 8 hours in minutes
+          scheduledDuration: 480,
           breakDuration: 30,
           createdAt: Date.now() - 2 * 60 * 60 * 1000,
           updatedAt: Date.now(),
@@ -81,9 +100,9 @@ export const POST = createAuthenticatedEndpoint({
       const scheduledStart = Number(data.scheduledStart);
       const scheduledDuration = Math.floor((scheduledEnd - scheduledStart) / (60 * 1000));
 
-      // In production, create in Firestore
+      const recordId = `att-${Date.now()}`;
       const newRecord = {
-        id: `att-${Date.now()}`,
+        id: recordId,
         ...data,
         status: "scheduled" as const,
         scheduledDuration,
@@ -91,6 +110,17 @@ export const POST = createAuthenticatedEndpoint({
         createdAt: Date.now(),
         updatedAt: Date.now(),
       };
+
+      // D1: Write to Firestore if enabled
+      if (FLAGS.FIRESTORE_WRITES) {
+        const db = getFirestore();
+        await db
+          .collection('attendance_records')
+          .doc(data.orgId)
+          .collection('records')
+          .doc(recordId)
+          .set(newRecord);
+      }
 
       return NextResponse.json(newRecord, { status: 201 });
     } catch (error) {
