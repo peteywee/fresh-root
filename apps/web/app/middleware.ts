@@ -1,14 +1,24 @@
-// [P2][API][MIDDLEWARE] Next.js middleware for security headers
-// Tags: P2, API, MIDDLEWARE
-import { NextResponse } from "next/server";
+// [P1][API][MIDDLEWARE] Next.js middleware with route protection via proxy
+// Tags: P1, API, MIDDLEWARE, AUTH
 import type { NextRequest } from "next/server";
+import { proxy } from "../proxy";
 
 /**
- * Global middleware for the web app. Applies basic security headers
- * and can later enforce auth / routing rules as needed.
+ * Global middleware for the web app. Applies:
+ * 1. Route protection (via proxy function)
+ * 2. Security headers
  */
-export function middleware(_request: NextRequest) {
-  const response = NextResponse.next();
+export function middleware(request: NextRequest) {
+  // First, apply route protection
+  const authResponse = proxy(request);
+
+  // If proxy returns a redirect (unauthorized), return it immediately
+  if (authResponse.status === 307 || authResponse.status === 308) {
+    return authResponse;
+  }
+
+  // Otherwise, add security headers to the response
+  const response = authResponse;
 
   // Basic security headers (tune as needed).
   response.headers.set("X-Frame-Options", "SAMEORIGIN");
@@ -22,7 +32,7 @@ export function middleware(_request: NextRequest) {
   return response;
 }
 
-// Limit middleware to app + onboarding routes (adjust as needed).
+// Apply to all routes except those handled by proxy's PUBLIC list
 export const config = {
-  matcher: ["/app/:path*", "/onboarding/:path*"],
+  matcher: ["/((?!_next|favicon.ico).*)"],
 };
