@@ -1,17 +1,20 @@
-// [P0][CORE][API] Positions list endpoint
+// [P0][CORE][API][D2] Positions list endpoint with Firestore
 export const dynamic = "force-dynamic";
 
 import { createOrgEndpoint } from "@fresh-schedules/api-framework";
 import { CreatePositionSchema } from "@fresh-schedules/types";
+import { getFirestore } from "firebase-admin/firestore";
 import { NextResponse } from "next/server";
 
 import { badRequest, ok, serverError } from "../_shared/validation";
+import { FLAGS } from "../../../src/lib/features";
 
 /**
  * GET /api/positions
  * List positions for an organization
  */
 export const GET = createOrgEndpoint({
+  rateLimit: { maxRequests: 100, windowMs: 60_000 },
   handler: async ({ request, input: _input, context, params: _params }) => {
     try {
       const { searchParams } = new URL(request.url);
@@ -21,7 +24,19 @@ export const GET = createOrgEndpoint({
         return badRequest("orgId query parameter is required");
       }
 
-      // Mock data - in production, fetch from Firestore
+      // D2: Fetch from Firestore if FIRESTORE_WRITES enabled
+      if (FLAGS.FIRESTORE_WRITES) {
+        const db = getFirestore();
+        const snapshot = await db
+          .collection(`orgs/${orgId}/positions`)
+          .orderBy("name")
+          .get();
+        
+        const positions = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+        return ok({ positions, total: positions.length });
+      }
+
+      // Fallback: Mock data when Firestore disabled
       const positions = [
         {
           id: "pos-1",
@@ -51,18 +66,28 @@ export const GET = createOrgEndpoint({
 export const POST = createOrgEndpoint({
   roles: ["manager"],
   input: CreatePositionSchema,
-  handler: async ({ input, context, params: _params }: { input: Record<string, unknown>; context: any; params: any }) => {
+  rateLimit: { maxRequests: 50, windowMs: 60_000 },
+  handler: async ({ request: _request, input, context, params: _params }) => {
     try {
       const validated = input as Record<string, unknown>;
+      const orgId = context.org?.orgId;
+
       const position = {
-        id: `pos-${Date.now()}`,
-        orgId: context.org?.orgId,
+        orgId,
         ...validated,
         createdBy: context.auth?.userId,
         createdAt: Date.now(),
+        updatedAt: Date.now(),
       };
 
-      return NextResponse.json(position, { status: 201 });
+      // D2: Write to Firestore if enabled
+      if (FLAGS.FIRESTORE_WRITES && orgId) {
+        const db = getFirestore();
+        const docRef = await db.collection(`orgs/${orgId}/positions`).add(position);
+        return NextResponse.json({ id: docRef.id, ...position }, { status: 201 });
+      }
+
+      return NextResponse.json({ id: `pos-${Date.now()}`, ...position }, { status: 201 });
     } catch {
       return serverError("Failed to create position");
     }

@@ -1,5 +1,5 @@
-// [P0][API][CODE] Batch API endpoint
-// Tags: P1, API, CODE, BATCH
+// [P0][BATCH][API] Batch API endpoint
+// Tags: P0, BATCH, API, CODE
 
 import { z } from "zod";
 import { createOrgEndpoint, createBatchHandler } from "@fresh-schedules/api-framework";

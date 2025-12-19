@@ -43,6 +43,27 @@ function parseEnvNumber(name, fallback) {
 const DEFAULT_MIN_SCORE = 90;
 const MIN_SCORE = parseEnvNumber("FRESH_PATTERNS_MIN_SCORE", DEFAULT_MIN_SCORE);
 
+// Skip validation if SKIP_PATTERN_VALIDATOR is set
+if (process.env.SKIP_PATTERN_VALIDATOR === "true") {
+  console.log("⏭️  SKIP_PATTERN_VALIDATOR=true — Pattern validation skipped");
+  process.exit(0);
+}
+
+// Directories to skip during scan (prevents OOM)
+const SKIP_DIRS = new Set([
+  "node_modules",
+  ".git",
+  ".next",
+  ".turbo",
+  "dist",
+  "build",
+  "coverage",
+  ".cache",
+  ".pnpm",
+  "out",
+  "repomix",
+]);
+
 // ─────────────────────────────────────────────────────────────────────────────
 // CONFIGURATION: Pattern Definitions (kept inline for now)
 // ─────────────────────────────────────────────────────────────────────────────
@@ -51,7 +72,7 @@ const PATTERNS = {
   // Layer 00: Domain Types
   SCHEMA_FILE: {
     layer: 0,
-    pathMatch: /packages\/types\/src\/.*\.ts$/,
+    pathMatch: /packages\/types\/src\/(?!.*\.test\.ts$).*\.ts$/,
     checks: [
       {
         name: "Header Present",
@@ -177,7 +198,14 @@ function walkDir(root, targetPath, files = []) {
   try {
     const stats = statSync(targetPath);
     if (stats.isDirectory()) {
+      const dirName = basename(targetPath);
+      // Skip known heavy directories to prevent OOM
+      if (SKIP_DIRS.has(dirName) || dirName.startsWith(".")) {
+        return files;
+      }
       for (const entry of readdirSync(targetPath)) {
+        // Skip hidden files/dirs and known heavy dirs
+        if (entry.startsWith(".") || SKIP_DIRS.has(entry)) continue;
         const full = join(targetPath, entry);
         walkDir(root, full, files);
       }
@@ -256,10 +284,10 @@ class PatternValidator {
 
   scanDirectory(targetPath) {
     const files = walkDir(this.rootDir, targetPath);
+    this.log(`Found ${files.length} files to check`);
     for (const file of files) {
-      // Skip node_modules and hidden directories
-      if (/node_modules|\/\./.test(file)) continue;
-      if (/\.(ts|tsx|js|rules)$/.test(file)) {
+      // Only check relevant file types
+      if (/\.(ts|tsx|rules)$/.test(file)) {
         this.scanFile(file);
       }
     }

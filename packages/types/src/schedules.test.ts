@@ -1,5 +1,13 @@
+// [P1][TYPES][TEST] Schedule schema validation tests
+// Tags: P1, TYPES, TEST, SCHEMA
+
 import { describe, it, expect } from "vitest";
-import { CreateScheduleSchema } from "./schedules";
+import { z } from "zod";
+import { CreateScheduleSchema, Schedule } from "./schedules";
+
+// Type inference validation (ensures types derived from schemas)
+type _ScheduleType = z.infer<typeof CreateScheduleSchema>;
+const _typeCheck: _ScheduleType = {} as Schedule;
 
 describe("CreateScheduleSchema", () => {
   it("should validate a valid schedule", () => {
