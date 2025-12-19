@@ -8,7 +8,7 @@
 
 ## Visual Overview
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────────────────────────┐
 │                           FRESH SCHEDULES USER JOURNEY                          │
 └─────────────────────────────────────────────────────────────────────────────────┘
@@ -70,7 +70,7 @@
 
 ## Phase 1: Authentication (Actual Code)
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────────────────────────┐
 │                           AUTHENTICATION PHASE                                   │
 ├─────────────────────────────────────────────────────────────────────────────────┤
@@ -130,7 +130,7 @@
 
 ## Phase 2: Org Check Gate (Middleware)
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────────────────────────┐
 │                           ORG CHECK GATE                                         │
 ├─────────────────────────────────────────────────────────────────────────────────┤
@@ -176,7 +176,7 @@
 
 ## Phase 3: Onboarding Wizard (Complete Flow)
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────────────────────────┐
 │                           ONBOARDING WIZARD                                      │
 ├─────────────────────────────────────────────────────────────────────────────────┤
@@ -328,7 +328,7 @@
 ### Gap 1: Frontend pages don't call their APIs
 
 | Page | Expected API Call | Actual Behavior |
-|------|-------------------|-----------------|
+| --- | --- | --- |
 | `/onboarding/create-network-org/page.tsx` | `POST /api/onboarding/create-network-org` | **Comment only**: "Real implementation would POST..." then `nav.push("/onboarding/block-4")` |
 | `/onboarding/create-network-corporate/page.tsx` | `POST /api/onboarding/create-network-corporate` | **Comment only**: "Real implementation would POST..." then `nav.push("/onboarding/block-4")` |
 | `/onboarding/join/page.tsx` | `POST /api/onboarding/join-with-token` | **Comment only**: "Real implementation would POST..." then `nav.push("/onboarding/block-4")` |
@@ -340,7 +340,7 @@
 ### Gap 2: Missing orgId cookie set
 
 | Where Expected | What Should Happen | What Actually Happens |
-|----------------|--------------------|-----------------------|
+| --- | --- | --- |
 | After network creation | Set `orgId` cookie so `proxy.ts` allows access | **Not implemented** - cookie never set |
 | `/api/onboarding/create-network-org` | Should `response.cookies.set("orgId", ...)` | Returns mock data only |
 | `/api/onboarding/create-network-corporate` | Should `response.cookies.set("orgId", ...)` | Returns mock data only |
@@ -352,7 +352,7 @@
 ### Gap 3: No profile persistence
 
 | Route | Expected | Actual |
-|-------|----------|--------|
+| --- | --- | --- |
 | `POST /api/onboarding/profile` | Write to Firestore `/users/{uid}` | **Not found** - route may not exist or doesn't persist |
 
 **Impact**: User profile data collected but never saved.
@@ -362,7 +362,7 @@
 ### Gap 4: API routes return mock data (no Firestore writes)
 
 | Route | Returns | Actually Writes to Firestore? |
-|-------|---------|-------------------------------|
+| --- | --- | --- |
 | `/api/onboarding/create-network-org` | `{ id, name, type, ownerId, createdAt, status }` | ❌ **No** - mock data only |
 | `/api/onboarding/create-network-corporate` | `{ id, type, corporateName, brandName, ... }` | ❌ **No** - mock data only |
 | `/api/onboarding/activate-network` | `{ ok, networkId, status }` | ✅ **Yes** - writes to `/networks/{id}` |
@@ -373,7 +373,7 @@
 ### Gap 5: activate-network never called
 
 | Expected Flow | Actual Flow |
-|---------------|-------------|
+| --- | --- |
 | create-network-* → activate-network → block-4 | create-network-* → **skip** → block-4 |
 
 **Impact**: Networks created but never activated.
@@ -382,7 +382,7 @@
 
 ## 📋 Recommended Fixes
 
-```
+```text
 Priority 1 (Critical - Flow Broken):
 ├── Wire frontend pages to call their API routes
 ├── Set orgId cookie after successful network creation
@@ -404,7 +404,7 @@ Priority 3 (Polish):
 ## API Route Summary
 
 | Route | Method | Auth | Input Schema | Writes to Firestore |
-|-------|--------|------|--------------|---------------------|
+| --- | --- | --- | --- | --- |
 | `/api/session` | POST | Public | `CreateSessionSchema` | N/A (cookie only) |
 | `/api/session` | DELETE | Public | None | N/A (cookie only) |
 | `/api/onboarding/verify-eligibility` | POST | Authenticated | None | ❌ No |
@@ -420,7 +420,7 @@ Priority 3 (Polish):
 ## Related Files
 
 | Category | Path |
-|----------|------|
+| --- | --- |
 | Auth Helpers | `apps/web/src/lib/auth-helpers.ts` |
 | Firebase Client | `apps/web/app/lib/firebaseClient.ts` |
 | Firebase Admin | `apps/web/lib/firebase-admin.ts` |
@@ -432,7 +432,7 @@ Priority 3 (Polish):
 
 ## Schedule & Shift Flow (Actual Code)
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────────────────────────┐
 │                      SCHEDULE & SHIFT MANAGEMENT                                 │
 ├─────────────────────────────────────────────────────────────────────────────────┤
@@ -573,7 +573,7 @@ interface ScheduleDoc {
 ## 🔴 Additional Gaps Found in Schedule/Shift Flow
 
 | # | Gap | Location | Impact |
-|---|-----|----------|--------|
+| --- | --- | --- | --- |
 | **6** | GET /schedules/[id] returns mock data | `schedules/[id]/route.ts` | No real schedule fetch |
 | **7** | PATCH/DELETE schedules return mock data | `schedules/[id]/route.ts` | Updates don't persist |
 | **8** | All shift endpoints return mock data | `shifts/route.ts`, `shifts/[id]/route.ts` | No real shift persistence |
@@ -744,7 +744,7 @@ return response;
 
 ## Execution Order
 
-```
+```text
 Phase 1 (Critical Path - Onboarding Broken)
 ├── 1.4: Add POST to admin-form (enables frontend to get formToken)
 ├── 1.6: Add Firestore writes to create-network-org (persistence)
