@@ -72,7 +72,7 @@ const PATTERNS = {
   // Layer 00: Domain Types
   SCHEMA_FILE: {
     layer: 0,
-    pathMatch: /packages\/types\/src\/.*\.ts$/,
+    pathMatch: /packages\/types\/src\/(?!.*\.test\.ts$).*\.ts$/,
     checks: [
       {
         name: "Header Present",

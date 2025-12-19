@@ -12,7 +12,7 @@ import { validateEdgeCases } from "./validators";
  * Add to vitest.d.ts or global.d.ts
  */
 declare module "vitest" {
-  interface Assertion<T = unknown> {
+  interface Assertion<_T = unknown> {
     /** Assert that a Zod schema rejects this value */
     toBeRejectedBySchema(schema: ZodSchema): void;
     /** Assert that a Zod schema accepts this value */
