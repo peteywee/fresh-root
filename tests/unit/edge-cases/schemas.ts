@@ -16,18 +16,12 @@ export const SafeStringSchema = z
   .string()
   .min(1, "String cannot be empty")
   .max(255, "String too long (max 255 characters)")
-  .refine(
-    (val) => val.trim().length > 0,
-    "String cannot be only whitespace"
-  )
-  .refine(
-    (val) => !/<script/i.test(val),
-    "HTML script tags not allowed"
-  )
-  .refine(
-    (val) => !/[<>]/.test(val) || !/on\w+=/i.test(val),
-    "Potential XSS detected"
-  );
+  .refine((val) => val.trim().length > 0, "String cannot be only whitespace")
+  .refine((val) => !val.includes("\u0000"), "NULL bytes not allowed")
+  .refine((val) => !/<script/i.test(val), "HTML script tags not allowed")
+  .refine((val) => !/javascript:/i.test(val), "JavaScript URLs not allowed")
+  .refine((val) => !/on\w+\s*=/i.test(val), "Event handlers not allowed")
+  .refine((val) => !/<\s*img[^>]*>/i.test(val), "HTML img tags not allowed");
 
 /**
  * Safe email schema with comprehensive validation
@@ -83,22 +77,36 @@ export const SafeUUIDSchema = z
   );
 
 /**
+ * Check if an object has prototype pollution attempts
+ * This is a standalone function because z.record has Zod 4 edge cases
+ */
+export function hasPrototypePollution(obj: unknown): boolean {
+  if (typeof obj !== "object" || obj === null) return false;
+  
+  // Check for __proto__ as own property
+  if (Object.hasOwn(obj, "__proto__")) return true;
+  
+  // Check for prototype key
+  if (Object.hasOwn(obj, "prototype")) return true;
+  
+  // Check for constructor with prototype (pollution vector)
+  const rec = obj as Record<string, unknown>;
+  const c = rec["constructor"];
+  if (c && typeof c === "object" && c !== null && "prototype" in c) {
+    return true;
+  }
+  
+  return false;
+}
+
+/**
  * Safe JSON object schema (protects against prototype pollution)
+ * Note: Use z.object for specific schemas; this is for loose object validation
  */
 export const SafeObjectSchema = z
-  .record(z.unknown())
-  .refine(
-    (obj) => !("__proto__" in obj),
-    "Prototype pollution attempt detected"
-  )
-  .refine(
-    (obj) => !("constructor" in obj),
-    "Constructor injection attempt detected"
-  )
-  .refine(
-    (obj) => !("prototype" in obj),
-    "Prototype injection attempt detected"
-  );
+  .object({})
+  .passthrough()
+  .refine((obj) => !hasPrototypePollution(obj), "Prototype pollution attempt detected");
 
 /**
  * Safe array schema with length limits

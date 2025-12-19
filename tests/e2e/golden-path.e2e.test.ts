@@ -149,7 +149,7 @@ describe("Golden Path E2E Tests", () => {
         endpoint,
         method: "POST",
         status: passed ? "pass" : "fail",
-        expectedStatus: 400,
+        expectedStatus: "400/401/422",
         actualStatus: response.status,
       });
       expect([400, 401, 422]).toContain(response.status);

@@ -33,7 +33,7 @@ export interface NetworkDoc {
  */
 export const POST = createAuthenticatedEndpoint({
   input: ActivateNetworkSchema,
-  handler: async ({ request: _request, input, context, params: _params }) => {
+  handler: async ({ request: _request, input, context: _context, params: _params }) => {
     try {
       // Type assertion safe - input validated by SDK factory
       const typedInput = input as z.infer<typeof ActivateNetworkSchema>;

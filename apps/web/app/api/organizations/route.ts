@@ -14,9 +14,8 @@ import { badRequest, ok, serverError } from "../_shared/validation";
  */
 export const GET = createAuthenticatedEndpoint({
   rateLimit: { maxRequests: 100, windowMs: 60000 },
-  handler: async ({ request, input: _input, context, params: _params }) => {
+  handler: async ({ request: _request, input: _input, context, params: _params }) => {
     try {
-      const { searchParams } = new URL(request.url);
       const userId = context.auth?.userId;
 
       if (!userId) {

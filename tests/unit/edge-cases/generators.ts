@@ -714,6 +714,14 @@ export function nullishEdgeCases(): LabeledValue<unknown>[] {
  * Generate type coercion edge cases (values that might be wrongly coerced)
  */
 export function typeCoercionEdgeCases(): LabeledValue<unknown>[] {
+  // Create object with __proto__ as a real enumerable key
+  const protoObject = Object.create(null);
+  Object.defineProperty(protoObject, "__proto__", {
+    value: { admin: true },
+    enumerable: true,
+    writable: true,
+    configurable: true,
+  });
   return [
     // String to number coercion
     {
@@ -791,7 +799,7 @@ export function typeCoercionEdgeCases(): LabeledValue<unknown>[] {
     // Prototype pollution attempts
     {
       label: "__proto__ key",
-      value: { __proto__: { admin: true } },
+      value: protoObject,
       shouldReject: true,
       category: "injection",
       severity: "critical",

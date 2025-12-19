@@ -26,7 +26,7 @@ export type AuthUserClaims = {
   [key: string]: unknown;
 };
 
-const UserProfileSchema = z.object({
+export const UserProfileSchema = z.object({
   id: z.string(),
   createdAt: z.number(),
   updatedAt: z.number(),
