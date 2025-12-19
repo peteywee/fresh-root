@@ -1,11 +1,13 @@
-// [P0][VENUES][API] Venues list endpoint
+// [P0][VENUES][API][D5] Venues list endpoint with Firestore
 export const dynamic = "force-dynamic";
 
 import { createOrgEndpoint } from "@fresh-schedules/api-framework";
 import { CreateVenueSchema } from "@fresh-schedules/types";
 import { NextResponse } from "next/server";
 
+import { getFirestore } from "firebase-admin/firestore";
 import { badRequest, ok, serverError } from "../_shared/validation";
+import { FLAGS } from "../../../src/lib/features";
 
 /**
  * GET /api/venues

@@ -1,11 +1,13 @@
-// [P0][CORE][API] Positions list endpoint
+// [P0][CORE][API][D2] Positions list endpoint with Firestore
 export const dynamic = "force-dynamic";
 
 import { createOrgEndpoint } from "@fresh-schedules/api-framework";
 import { CreatePositionSchema } from "@fresh-schedules/types";
+import { getFirestore } from "firebase-admin/firestore";
 import { NextResponse } from "next/server";
 
 import { badRequest, ok, serverError } from "../_shared/validation";
+import { FLAGS } from "../../../src/lib/features";
 
 /**
  * GET /api/positions

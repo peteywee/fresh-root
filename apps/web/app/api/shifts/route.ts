@@ -1,11 +1,13 @@
-// [P0][SHIFTS][API] Shifts list endpoint
+// [P0][SHIFTS][API][D4] Shifts list endpoint with Firestore
 export const dynamic = "force-dynamic";
 
 import { createOrgEndpoint } from "@fresh-schedules/api-framework";
 import { CreateShiftSchema } from "@fresh-schedules/types";
 import { NextResponse } from "next/server";
 
+import { getFirestore } from "firebase-admin/firestore";
 import { badRequest, ok, serverError } from "../_shared/validation";
+import { FLAGS } from "../../../src/lib/features";
 
 /**
  * GET /api/shifts
