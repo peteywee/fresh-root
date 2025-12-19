@@ -36,7 +36,8 @@ describe("widgets API E2E Tests", () => {
 
     it("should handle valid request", async () => {
       const validPayload = {
-        // TODO: Add valid payload based on schema
+        name: "Test Widget",
+        type: "demo",
       };
 
       const { response } = await safeFetch(`${BASE_URL}/api/widgets`, {
@@ -49,8 +50,7 @@ describe("widgets API E2E Tests", () => {
         return;
       }
 
-      // Expect success or auth required
-      expect([200, 201, 401, 403]).toContain(response.status);
+      expect(response.status).toBe(201);
     });
   });
 });

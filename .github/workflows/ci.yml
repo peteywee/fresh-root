@@ -70,7 +70,7 @@ jobs:
             echo "❌ Pattern validation failed"
             exit 1
           }
-        continue-on-error: true
+        continue-on-error: false
 
       - name: Audit dependencies
         run: |
@@ -135,8 +135,8 @@ jobs:
         if: matrix.test-type == 'rules'
         run: |
           echo "🔥 Running Firestore rules tests..."
-          pnpm test:rules || echo "⚠️ Rules tests: check output above"
-        continue-on-error: true
+          pnpm test:rules
+        continue-on-error: false
 
   # ═══════════════════════════════════════════════════════════════════════════
   # GATE 4: BUILD VERIFICATION

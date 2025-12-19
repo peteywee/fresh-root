@@ -51,6 +51,20 @@ vi.mock("../../apps/web/src/lib/firebase/typed-wrappers", () => ({
   transactionWithType: async (_db: unknown, cb: any) => fakeDb.runTransaction(cb),
 }));
 
+vi.mock("@/lib/firebase-admin", () => ({
+  getFirebaseAdminDb: () => fakeDb,
+}));
+
+vi.mock("@/src/lib/firebase/typed-wrappers", () => ({
+  setDocWithType: async (_db: unknown, ref: any, data: any) => ref.set(data),
+  getDocWithType: async (_db: unknown, ref: any) => {
+    const snap = await ref.get();
+    return snap.exists ? snap.data() : null;
+  },
+  updateDocWithType: async (_db: unknown, ref: any, data: any) => ref.update(data),
+  transactionWithType: async (_db: unknown, cb: any) => fakeDb.runTransaction(cb),
+}));
+
 import {
   consumeAdminFormDraft,
   createAdminFormDraft,
