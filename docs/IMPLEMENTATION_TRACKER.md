@@ -1,15 +1,15 @@
 # Fresh Schedules Implementation Tracker
 
-**Last Updated**: 2025-12-18 (Updated after Phase 1 completion)
-**Current Phase**: Phase 2 - Data Persistence
-**Branch**: feature/phase-1-auth-chain (ready to transition to phase-2)
+**Last Updated**: 2025-12-18 (Updated after Phase 2 completion)
+**Current Phase**: Phase 3 - UX Completion
+**Branch**: feature/phase-2-data-persistence (ready to transition to phase-3)
 **Source Plan**: [docs/plans/IMPLEMENTATION_PLAN_v4.md](./plans/IMPLEMENTATION_PLAN_v4.md)
 
 ## 🎯 Progress Overview
 
-**Completed**: 8/45 tasks (18%)
-**In Progress**: Phase 2 (Data Persistence)
-**Next Up**: B1, B2 (Alpha-1 tasks)
+**Completed**: 13/45 tasks (29%)
+**In Progress**: Phase 3 (UX Completion)
+**Next Up**: C1, C2 (Bravo-1 tasks)
 
 ---
 
@@ -45,6 +45,32 @@
   - **File**: `apps/web/app/api/onboarding/join-with-token/route.ts`
   - **Changes**: Creates membership in Firestore, marks token used, sets orgId cookie
   - **Status**: ✅ Deployed to dev
+
+### Phase 2: Data Persistence (100% COMPLETE ✅)
+- ✅ **B1**: Write org document to Firestore
+  - **File**: `apps/web/app/api/onboarding/create-network-org/route.ts`
+  - **Changes**: Writes organization to `organizations/{orgId}` collection
+  - **Status**: ✅ Deployed to dev
+
+- ✅ **B2**: Create org_owner membership for creator
+  - **File**: `apps/web/app/api/onboarding/create-network-org/route.ts`
+  - **Changes**: Creates membership with `org_owner` role in `organizations/{orgId}/members/{userId}`
+  - **Status**: ✅ Deployed to dev
+
+- ✅ **B3**: Write corporate network document to Firestore
+  - **File**: `apps/web/app/api/onboarding/create-network-corporate/route.ts`
+  - **Changes**: Writes network to `networks/{networkId}` collection
+  - **Status**: ✅ Deployed to dev
+
+- ✅ **B4**: Mark invite tokens as consumed
+  - **File**: `apps/web/app/api/onboarding/join-with-token/route.ts`
+  - **Changes**: Updates token with `used: true`, `usedBy`, `usedAt` fields (completed in A5)
+  - **Status**: ✅ Deployed to dev
+
+- ✅ **B5**: Write and run Firestore security rules tests
+  - **File**: `tests/rules/rules-smoke.spec.mts`
+  - **Changes**: Comprehensive tests for B1-B4 tasks, all 6 tests passing
+  - **Status**: ✅ Tests passing
 
 ---
 
@@ -281,12 +307,14 @@
 
 | Metric | Target | Current | Status |
 |--------|--------|---------|--------|
-| Gaps Closed | 41/41 | 5/45 | 🟡 11% |
+| Gaps Closed | 41/41 | 13/45 | 🟡 29% |
 | Pattern Score | ≥95 | ~85 | 🟡 Pending |
 | TypeScript Errors | 0 | 0 | ✅ Pass |
 | ESLint Warnings | 0 | 1 | 🟡 1 warning |
+| Rules Tests | Pass | 6/6 | ✅ Pass |
 | Phase 0 | 100% | 100% | ✅ Complete |
 | Phase 1 | 100% | 100% | ✅ Complete |
+| Phase 2 | 100% | 100% | ✅ Complete |
 
 ---
 
@@ -309,7 +337,17 @@ main (production)
 
 ## 📝 Notes & Decisions
 
-### 2025-12-18
+### 2025-12-18 (Phase 2 Complete)
+- ✅ **PHASE 2 COMPLETE**: All B1-B5 tasks finished
+- B1: Organization documents written to Firestore `organizations/{orgId}`
+- B2: Org creator memberships with `org_owner` role in `organizations/{orgId}/members/{userId}`
+- B3: Corporate network documents in `networks/{networkId}` collection
+- B4: Token consumption tracking (completed in A5, verified in tests)
+- B5: Comprehensive Firestore rules tests - 6/6 passing
+- All validations passing (typecheck, lint, test:rules)
+- **Gate 2 PASSED**: Ready for Phase 3
+
+### 2025-12-18 (Phase 1 Complete)
 - ✅ **PHASE 1 COMPLETE**: All A1-A5 tasks finished
 - A1: Wired useAuth() with REAL_AUTH feature flag support
 - A2: Integrated proxy into middleware for route protection
