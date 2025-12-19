@@ -31,7 +31,7 @@ const RemoveMemberSchema = z.object({
  * List members of an organization
  */
 export const GET = createOrgEndpoint({
-  handler: async ({ request: _request, input: _input, context, params }) => {
+  handler: async ({ request: _request, input: _input, context: _context, params }) => {
     try {
       const { getFirestore } = await import("firebase-admin/firestore");
       const db = getFirestore();
@@ -89,7 +89,7 @@ export const POST = createOrgEndpoint({
 export const PATCH = createOrgEndpoint({
   roles: ["admin"],
   input: UpdateMemberSchema,
-  handler: async ({ request: _request, input, context, params }) => {
+  handler: async ({ request: _request, input, context, params: _params }) => {
     try {
       // Type assertion safe - input validated by SDK factory
       const typedInput = input as z.infer<typeof UpdateMemberSchema>;
@@ -109,7 +109,7 @@ export const PATCH = createOrgEndpoint({
 export const DELETE = createOrgEndpoint({
   roles: ["admin"],
   input: RemoveMemberSchema,
-  handler: async ({ request: _request, input, context, params }) => {
+  handler: async ({ request: _request, input, context: _context, params: _params }) => {
     try {
       // Type assertion safe - input validated by SDK factory
       const typedInput = input as z.infer<typeof RemoveMemberSchema>;

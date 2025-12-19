@@ -23,6 +23,7 @@ function getDoc(refPath: string) {
 // Minimal mock of Firestore's collection/doc reference
 const fakeFirestore = {
   collection: (path: string) => ({
+    withConverter: () => fakeFirestore.collection(path),
     doc: (id?: string) => {
       const pathId = id || `doc-${Date.now()}`;
       const refPath = `${path}/${pathId}`;
@@ -149,6 +150,12 @@ vi.mock("firebase-admin", async () => {
     initializeApp: vi.fn(),
   };
 });
+
+vi.mock("firebase-admin/firestore", () => ({
+  getFirestore: () => fakeFirestore,
+  FieldValue: fakeFirestore.FieldValue,
+  Timestamp: fakeFirestore.Timestamp,
+}));
 
 // Import the handler after mocking firebase-admin
 const { joinOrganizationHandler } = await import("../../functions/src/joinOrganization");

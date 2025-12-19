@@ -44,8 +44,10 @@ function makeDb() {
   };
 }
 
-const mockConsume = vi.fn();
-const mockGetDraft = vi.fn();
+const { mockConsume, mockGetDraft } = vi.hoisted(() => ({
+  mockConsume: vi.fn(),
+  mockGetDraft: vi.fn(),
+}));
 
 vi.mock("../../apps/web/src/lib/onboarding/adminFormDrafts", () => ({
   consumeAdminFormDraft: mockConsume,

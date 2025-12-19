@@ -1,52 +1,21 @@
-// [P0][TEST][INDEX] Edge Case Testing Infrastructure
-// Tags: P0, TEST, EDGE-CASES, BARREL
+// [P0][TEST][EDGE-CASES] Edge Case Testing Utilities
+// Tags: P0, TEST, EDGE-CASES, FUTURE-PROOF
 // Created: 2025-12-17
-// Purpose: Central export for edge case testing utilities
+// Purpose: Comprehensive adversarial input testing for 10+ year maintainability
+//
+// ARCHITECTURE NOTES FOR FUTURE MAINTAINERS:
+// =========================================
+// 1. All edge case generators are pure functions - no side effects
+// 2. Each category is independently extensible
+// 3. Test data is deterministic for reproducibility
+// 4. Designed to work with any validation library (Zod, Yup, Joi, etc.)
+// 5. Export patterns follow ES modules - should remain stable
+//
+// TO EXTEND: Add new generators to the appropriate category object
+// TO CUSTOMIZE: Override defaults via function parameters
+// TO DEBUG: Each generator has a `label` field explaining the test case
 
-// Generators
-export {
-  numericEdgeCases,
-  timestampEdgeCases,
-  stringEdgeCases,
-  injectionEdgeCases,
-  arrayEdgeCases,
-  nestedObjectEdgeCases,
-  nullishEdgeCases,
-  typeCoercionEdgeCases,
-  getEdgeCasesByCategory,
-  getEdgeCasesBySeverity,
-  getSecurityEdgeCases,
-  type LabeledValue,
-  type EdgeCaseCategory,
-} from "./generators.js";
-
-// Validators
-export {
-  validateEdgeCase,
-  validateEdgeCases,
-  CommonFieldEdgeCases,
-  printValidationSummary,
-  type ValidationResult,
-  type ValidationSummary,
-} from "./validators.js";
-
-// Schemas
-export {
-  SafeStringSchema,
-  SafeEmailSchema,
-  SafePositiveIntegerSchema,
-  SafeTimestampSchema,
-  SafeUUIDSchema,
-  SafeObjectSchema,
-  DateRangeInputSchema,
-  hasPrototypePollution,
-} from "./schemas.js";
-
-// Matchers
-export {
-  toBeRejectedBySchema,
-  toBeAcceptedBySchema,
-  toHandleEdgeCases,
-  toHandleCriticalEdgeCases,
-  registerEdgeCaseMatchers,
-} from "./matchers.js";
+export * from "./generators";
+export * from "./validators";
+export * from "./matchers";
+export * from "./schemas";
