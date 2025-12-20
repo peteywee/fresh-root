@@ -31,6 +31,45 @@ export const EnvSchema = z.object({
   // --- OpenTelemetry exporter endpoint ---
   // Optional. When set, OTEL tracing will be active.
   OTEL_EXPORTER_OTLP_ENDPOINT: z.string().url().optional(),
+
+  // --- Observability feature toggles ---
+  // Defaults align with: logs enabled, traces disabled.
+  OBSERVABILITY_ENABLED: z
+    .enum(["true", "false"])
+    .optional()
+    .default("false")
+    .transform((v) => v === "true"),
+
+  OBSERVABILITY_HEAD_SAMPLING_RATE: z.coerce.number().optional().default(1),
+
+  OBSERVABILITY_LOGS_ENABLED: z
+    .enum(["true", "false"])
+    .optional()
+    .default("true")
+    .transform((v) => v === "true"),
+  OBSERVABILITY_LOGS_HEAD_SAMPLING_RATE: z.coerce.number().optional().default(1),
+  OBSERVABILITY_LOGS_PERSIST: z
+    .enum(["true", "false"])
+    .optional()
+    .default("true")
+    .transform((v) => v === "true"),
+  OBSERVABILITY_LOGS_INVOCATION_LOGS: z
+    .enum(["true", "false"])
+    .optional()
+    .default("true")
+    .transform((v) => v === "true"),
+
+  OBSERVABILITY_TRACES_ENABLED: z
+    .enum(["true", "false"])
+    .optional()
+    .default("false")
+    .transform((v) => v === "true"),
+  OBSERVABILITY_TRACES_HEAD_SAMPLING_RATE: z.coerce.number().optional().default(1),
+  OBSERVABILITY_TRACES_PERSIST: z
+    .enum(["true", "false"])
+    .optional()
+    .default("true")
+    .transform((v) => v === "true"),
 });
 
 /**

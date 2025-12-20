@@ -51,6 +51,12 @@ export function withRequestLogging<TReq extends BasicReq, C = any>(
   handler: Handler<TReq, C> | ((req: TReq, ctx: C) => Promise<Response>),
 ): (req: TReq, ctx: C) => Promise<Response> {
   return async (req: TReq, ctx: C): Promise<Response> => {
+    // Lazy-load env to avoid build-time side effects in Next.
+    const { env } = require("@/src/env");
+
+    const logsEnabled = Boolean(env.OBSERVABILITY_LOGS_ENABLED);
+    const invocationLogsEnabled = Boolean(env.OBSERVABILITY_LOGS_INVOCATION_LOGS);
+
     const requestId = generateRequestId();
     const start = Date.now();
 
@@ -61,16 +67,18 @@ export function withRequestLogging<TReq extends BasicReq, C = any>(
 
     // Structured "start" log
 
-    console.log(
-      JSON.stringify({
-        level: "info",
-        msg: "request_start",
-        requestId,
-        method,
-        url,
-        ts: new Date().toISOString(),
-      }),
-    );
+    if (logsEnabled && invocationLogsEnabled) {
+      console.log(
+        JSON.stringify({
+          level: "info",
+          msg: "request_start",
+          requestId,
+          method,
+          url,
+          ts: new Date().toISOString(),
+        }),
+      );
+    }
 
     try {
       // Handle both single-arg and two-arg handlers
@@ -80,18 +88,20 @@ export function withRequestLogging<TReq extends BasicReq, C = any>(
 
       // Structured "end" log
 
-      console.log(
-        JSON.stringify({
-          level: "info",
-          msg: "request_end",
-          requestId,
-          method,
-          url,
-          durationMs,
-          status: res?.status ?? 0,
-          ts: new Date().toISOString(),
-        }),
-      );
+      if (logsEnabled && invocationLogsEnabled) {
+        console.log(
+          JSON.stringify({
+            level: "info",
+            msg: "request_end",
+            requestId,
+            method,
+            url,
+            durationMs,
+            status: res?.status ?? 0,
+            ts: new Date().toISOString(),
+          }),
+        );
+      }
 
       return res;
     } catch (err) {
@@ -99,18 +109,20 @@ export function withRequestLogging<TReq extends BasicReq, C = any>(
 
       // Structured error log
 
-      console.error(
-        JSON.stringify({
-          level: "error",
-          msg: "request_error",
-          requestId,
-          method,
-          url,
-          durationMs,
-          error: err instanceof Error ? err.message : String(err),
-          ts: new Date().toISOString(),
-        }),
-      );
+      if (logsEnabled && invocationLogsEnabled) {
+        console.error(
+          JSON.stringify({
+            level: "error",
+            msg: "request_error",
+            requestId,
+            method,
+            url,
+            durationMs,
+            error: err instanceof Error ? err.message : String(err),
+            ts: new Date().toISOString(),
+          }),
+        );
+      }
 
       throw err;
     }
