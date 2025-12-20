@@ -297,10 +297,10 @@ export default function OpsClient({ orgId }: { orgId: string }) {
             fetchAnalysis();
             fetchBuildPerformance();
           }}
-          disabled={isRefreshing || metrics.isAnalyzing}
+          disabled={isRefreshing || metrics.isAnalyzing || metrics.isLoadingBuildPerformance}
           className="rounded-md border bg-white px-3 py-2 text-sm font-medium text-gray-900 hover:bg-gray-50 disabled:opacity-50"
         >
-          {isRefreshing ? "Refreshing..." : "Refresh"}
+          {isRefreshing || metrics.isAnalyzing || metrics.isLoadingBuildPerformance ? "Refreshing..." : "Refresh"}
         </button>
       </div>
 
