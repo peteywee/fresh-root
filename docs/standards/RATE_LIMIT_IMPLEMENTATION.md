@@ -1,4 +1,4 @@
-c# Rate Limit Middleware Implementation Guide
+# Rate Limit Middleware Implementation Guide
 
 **Status**: ✅ **FULLY IMPLEMENTED**
 
@@ -61,7 +61,7 @@ That's it. The middleware:
 
 ### Data Flow
 
-```
+```text
 Client Request
     ↓
 withRateLimit middleware
@@ -555,12 +555,22 @@ describe("withRateLimit", () => {
 Before deploying with rate limiting:
 
 - [ ] Choose `max` and `windowSeconds` for each route
-- [ ] Set `REDIS_URL` in production environment
+- [ ] Set `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN` in production
+- [ ] Set `USE_REDIS_RATE_LIMIT=true` to enable Redis backend
 - [ ] Test Redis connection in production
 - [ ] Monitor 429 responses in production
 - [ ] Document rate limits in API docs
 - [ ] Add `Retry-After` handling to client code
 - [ ] Set up alerts for unusual 429 spike patterns
+
+### Environment Variables
+
+```bash
+# Upstash Redis (recommended for serverless/Edge)
+UPSTASH_REDIS_REST_URL=https://xxx.upstash.io
+UPSTASH_REDIS_REST_TOKEN=AXxx...
+USE_REDIS_RATE_LIMIT=true  # Enable Redis, false = in-memory fallback
+```
 
 ---
 
