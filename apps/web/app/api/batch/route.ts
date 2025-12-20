@@ -2,49 +2,64 @@
 // Tags: P0, BATCH, API, CODE
 
 import { z } from "zod";
-import { createOrgEndpoint, createBatchHandler } from "@fresh-schedules/api-framework";
+import { createOrgEndpoint, createBatchHandler, type RequestContext } from "@fresh-schedules/api-framework";
 
 import { badRequest, serverError } from "../_shared/validation";
 
-// TODO: Move to packages/types/src/batch.ts once module resolution stabilizes
-// For now, inline to avoid TypeScript import resolution issues in monorepo
+// Batch item schema - validates each item in the batch
+const BatchItemSchema = z.object({
+  id: z.string().min(1),
+  payload: z
+    .object({
+      fail: z.boolean().optional(),
+      delay: z.number().optional(),
+    })
+    .passthrough()
+    .optional()
+    .default({}),
+});
+
+type BatchItem = z.infer<typeof BatchItemSchema>;
+
 const CreateBatchSchema = z.object({
-  items: z.array(
-    z.object({
-      id: z.string().min(1),
-      payload: z.unknown(),
-    }),
-  ),
+  items: z.array(BatchItemSchema),
   continueOnError: z.boolean().optional(),
 });
+
+type CreateBatchInput = z.infer<typeof CreateBatchSchema>;
 
 /*
  * Processes a list of items as a single batch operation.
  * Demonstrates SDK factory + batch handler usage with canonical Zod validation.
  */
 async function processBatchItems(
-  items: unknown[],
-  context: any,
+  items: BatchItem[],
+  context: RequestContext,
+  // NOTE: Using Request type to avoid Next.js version mismatch between packages
+  // (apps/web uses next@16.1.0, api-framework uses next@16.0.10)
+  // TODO: Align Next.js versions across monorepo packages
   request: Request,
   options?: { maxBatchSize?: number; timeoutPerItem?: number; continueOnError?: boolean },
 ) {
-  const handler = createBatchHandler({
+  const handler = createBatchHandler<BatchItem, { id: string; processedAt: number }>({
     maxBatchSize: options?.maxBatchSize ?? 200,
     timeoutPerItem: options?.timeoutPerItem ?? 5000,
     continueOnError: options?.continueOnError ?? true,
     itemHandler: async ({ item }) => {
       // Test helpers: support failure and delay flags in payload for test cases
-      const payload = (item as any).payload || {};
+      const payload = item.payload ?? {};
       if (payload.fail) {
         throw new Error("Item failed intentionally");
       }
       if (typeof payload.delay === "number" && payload.delay > 0) {
         await new Promise((r) => setTimeout(r, payload.delay));
       }
-      return { id: (item as any).id, processedAt: Date.now() } as unknown;
+      return { id: item.id, processedAt: Date.now() };
     },
   });
 
+  // Type assertion required due to Next.js version mismatch between packages
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return handler(items, context, request as any);
 }
 

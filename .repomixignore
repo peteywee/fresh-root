@@ -1,0 +1,21 @@
+# Repomix ignore patterns
+# Exclude archive folder from analysis to reduce token count
+
+# Archived documentation and old phase work
+archive/**
+
+# Build outputs and dependencies (already ignored by default, but explicit)
+**/node_modules/**
+**/.next/**
+**/dist/**
+**/.turbo/**
+
+# Generated repomix outputs
+docs/architecture/repomix-*.xml
+docs/architecture/repomix-*.md
+
+# VS Code search results (should never be committed)
+**/*.code-search
+
+# Large generated files
+**/pnpm-lock.yaml
