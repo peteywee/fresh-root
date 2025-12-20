@@ -26,8 +26,6 @@ const CreateBatchSchema = z.object({
   continueOnError: z.boolean().optional(),
 });
 
-type CreateBatchInput = z.infer<typeof CreateBatchSchema>;
-
 /*
  * Processes a list of items as a single batch operation.
  * Demonstrates SDK factory + batch handler usage with canonical Zod validation.
@@ -59,7 +57,6 @@ async function processBatchItems(
   });
 
   // Type assertion required due to Next.js version mismatch between packages
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return handler(items, context, request as any);
 }
 

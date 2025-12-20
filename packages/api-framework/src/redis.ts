@@ -11,6 +11,10 @@ export interface RedisClient {
   incr(key: string): Promise<number>;
   expire(key: string, seconds: number): Promise<void>;
   ttl(key: string): Promise<number>;
+  // Added for idempotency support
+  get(key: string): Promise<string | null>;
+  set(key: string, value: string, options?: { ex?: number }): Promise<void>;
+  del(key: string): Promise<void>;
 }
 
 /**
@@ -19,6 +23,7 @@ export interface RedisClient {
  */
 class InMemoryRedis implements RedisClient {
   private store = new Map<string, { count: number; resetAt: number }>();
+  private stringStore = new Map<string, { value: string; expiresAt: number }>();
 
   async incr(key: string): Promise<number> {
     const now = Date.now();
@@ -45,6 +50,26 @@ class InMemoryRedis implements RedisClient {
     if (!entry) return -2; // key does not exist (Redis convention)
     const ttl = Math.ceil((entry.resetAt - Date.now()) / 1000);
     return ttl > 0 ? ttl : -2;
+  }
+
+  async get(key: string): Promise<string | null> {
+    const entry = this.stringStore.get(key);
+    if (!entry) return null;
+    if (entry.expiresAt > 0 && entry.expiresAt < Date.now()) {
+      this.stringStore.delete(key);
+      return null;
+    }
+    return entry.value;
+  }
+
+  async set(key: string, value: string, options?: { ex?: number }): Promise<void> {
+    const expiresAt = options?.ex ? Date.now() + options.ex * 1000 : 0;
+    this.stringStore.set(key, { value, expiresAt });
+  }
+
+  async del(key: string): Promise<void> {
+    this.store.delete(key);
+    this.stringStore.delete(key);
   }
 }
 
@@ -84,6 +109,22 @@ class UpstashClient implements RedisClient {
 
   async ttl(key: string): Promise<number> {
     return await this.exec<number>("TTL", key);
+  }
+
+  async get(key: string): Promise<string | null> {
+    return await this.exec<string | null>("GET", key);
+  }
+
+  async set(key: string, value: string, options?: { ex?: number }): Promise<void> {
+    if (options?.ex) {
+      await this.exec<string>("SET", key, value, "EX", options.ex);
+    } else {
+      await this.exec<string>("SET", key, value);
+    }
+  }
+
+  async del(key: string): Promise<void> {
+    await this.exec<number>("DEL", key);
   }
 }
 
@@ -125,6 +166,19 @@ async function createUnifiedRedisClient(): Promise<RedisClient> {
         async ttl(key: string): Promise<number> {
           return await client.ttl(key);
         },
+        async get(key: string): Promise<string | null> {
+          return await client.get(key);
+        },
+        async set(key: string, value: string, options?: { ex?: number }): Promise<void> {
+          if (options?.ex) {
+            await client.set(key, value, "EX", options.ex);
+          } else {
+            await client.set(key, value);
+          }
+        },
+        async del(key: string): Promise<void> {
+          await client.del(key);
+        },
       };
     } catch (err) {
       console.warn("Failed to initialize ioredis client:", err);
@@ -142,7 +196,11 @@ async function createUnifiedRedisClient(): Promise<RedisClient> {
 let redisClient: RedisClient | null = null;
 let initPromise: Promise<RedisClient> | null = null;
 
-async function getRedisClient(): Promise<RedisClient> {
+/**
+ * Get the Redis client instance (lazy-initialized singleton)
+ * Used by rate limiting and idempotency middleware
+ */
+export async function getRedisClient(): Promise<RedisClient> {
   if (redisClient) return redisClient;
   if (!initPromise) {
     initPromise = createUnifiedRedisClient();
