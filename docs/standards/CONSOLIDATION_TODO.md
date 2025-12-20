@@ -12,7 +12,7 @@
 ## Teams & Roles
 
 | Team | Role | Parallelizable? |
-|------|------|-----------------|
+| --- | --- | --- |
 | **Research Team** | Discovery, analysis, validation | YES (for verification tasks) |
 | **Archive Team** | Move files to archive/ folders | YES (independent moves) |
 | **Merge Team** | Delete duplicates, relocate files | PARTIAL (after Archive) |
@@ -58,7 +58,7 @@ graph TB
 - **Status**: ✅ COMPLETE
 - **Dependencies**: None
 - **Actions**:
-  - [x] Add `.claude/`, `repomix-output.*`, `pattern-validation-report.json`, `API_SCHEMA_AUDIT_REPORT.json` to .gitignore
+  - [x] Add `.claude/`, `repomix-output.*`, `docs/reports/pattern-validation-report.json`, `API_SCHEMA_AUDIT_REPORT.json` to .gitignore
   - [x] Commit DOCUMENTATION_CONSOLIDATION_PLAN.md and ORCHESTRATOR_SUMMARY.md
 - **Commit**: `docs: add consolidation plan and update .gitignore for generated files`
 - **Result**: Baseline established
@@ -878,14 +878,14 @@ graph TB
 
 - ❌ `.claude/` (generated Claude skills)
 - ❌ `repomix-output.*` (Repomix generated outputs)
-- ❌ `pattern-validation-report.json` (validation reports)
+- ❌ `docs/reports/pattern-validation-report.json` (validation reports)
 - ❌ `API_SCHEMA_AUDIT_REPORT.json` (audit reports)
 
 ### Commit Messages
 
 All commits follow conventional commit format:
 
-```
+```text
 docs: <description>
 
 [detailed explanation if needed]

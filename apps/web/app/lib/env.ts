@@ -23,8 +23,15 @@ function isNextProductionBuildPhase(): boolean {
   return process.env.NEXT_PHASE === "phase-production-build";
 }
 
-function explainIssues(issues: { path: (string | number)[]; message: string }[]) {
-  return issues.map((issue) => `  - ${issue.path.join(".")}: ${issue.message}`).join("\n");
+function explainIssues(issues: { path: readonly PropertyKey[]; message: string }[]) {
+  return issues
+    .map((issue) => {
+      const path = issue.path
+        .map((p) => (typeof p === "symbol" ? p.toString() : String(p)))
+        .join(".");
+      return `  - ${path}: ${issue.message}`;
+    })
+    .join("\n");
 }
 
 export function loadClientEnv(options?: { allowDuringBuild?: boolean }): ClientEnv {
