@@ -354,8 +354,11 @@ jobs:
           git add docs/metrics/build-performance.log
           git commit -m "chore(metrics): append build performance [skip ci]" || exit 0
 
-          git pull --rebase origin main
-          git push
+          for i in 1 2 3; do
+            git pull --rebase origin main && git push && break
+            echo "Push failed, retrying ($i/3)..."
+            sleep 5
+          done
 
   # ═══════════════════════════════════════════════════════════════════════════
   # SUMMARY: Status Check
