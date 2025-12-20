@@ -15,7 +15,7 @@
 
 import { z } from "zod";
 
-import { EnvSchema, type Env } from "./index";
+import { EnvSchema, type Env } from "./schema";
 
 /* ============================================================================ */
 /* Production Environment Requirements                                         */
@@ -32,6 +32,7 @@ import { EnvSchema, type Env } from "./index";
 export const ProdEnvSchema = EnvSchema.extend({
   NODE_ENV: z.literal("production"),
   REDIS_URL: z.string().url().describe("Redis URL required for production"),
+  NEXT_PUBLIC_FIREBASE_API_KEY: z.string().min(1),
   FIREBASE_PROJECT_ID: z.string().min(1),
 });
 

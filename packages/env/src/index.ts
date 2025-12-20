@@ -13,64 +13,9 @@
  * - Optional vars: features that aren't enabled if omitted (e.g., OTEL/Redis).
  */
 
-import { z } from "zod";
+import { EnvSchema, type Env } from "./schema";
 
-export const EnvSchema = z.object({
-  NODE_ENV: z.enum(["development", "test", "production"]).default("development"),
-
-  // --- Firebase core (minimal; extend as needed to match your real config) ---
-  NEXT_PUBLIC_FIREBASE_API_KEY: z.string().min(1),
-  // NOTE: FIREBASE_PROJECT_ID is validated only in production runtime,
-  // not at build time. This allows builds to succeed without secrets.
-  FIREBASE_PROJECT_ID: z.string().min(1).optional(),
-
-  // --- Redis for distributed rate limiting ---
-  // Required ONLY when running multi-instance production. Optional in dev/single.
-  REDIS_URL: z.string().url().optional(),
-
-  // --- OpenTelemetry exporter endpoint ---
-  // Optional. When set, OTEL tracing will be active.
-  OTEL_EXPORTER_OTLP_ENDPOINT: z.string().url().optional(),
-
-  // --- Observability feature toggles ---
-  // Defaults align with: logs enabled, traces disabled.
-  OBSERVABILITY_ENABLED: z
-    .enum(["true", "false"])
-    .optional()
-    .default("false")
-    .transform((v) => v === "true"),
-
-  OBSERVABILITY_HEAD_SAMPLING_RATE: z.coerce.number().optional().default(1),
-
-  OBSERVABILITY_LOGS_ENABLED: z
-    .enum(["true", "false"])
-    .optional()
-    .default("true")
-    .transform((v) => v === "true"),
-  OBSERVABILITY_LOGS_HEAD_SAMPLING_RATE: z.coerce.number().optional().default(1),
-  OBSERVABILITY_LOGS_PERSIST: z
-    .enum(["true", "false"])
-    .optional()
-    .default("true")
-    .transform((v) => v === "true"),
-  OBSERVABILITY_LOGS_INVOCATION_LOGS: z
-    .enum(["true", "false"])
-    .optional()
-    .default("true")
-    .transform((v) => v === "true"),
-
-  OBSERVABILITY_TRACES_ENABLED: z
-    .enum(["true", "false"])
-    .optional()
-    .default("false")
-    .transform((v) => v === "true"),
-  OBSERVABILITY_TRACES_HEAD_SAMPLING_RATE: z.coerce.number().optional().default(1),
-  OBSERVABILITY_TRACES_PERSIST: z
-    .enum(["true", "false"])
-    .optional()
-    .default("true")
-    .transform((v) => v === "true"),
-});
+export { EnvSchema, type Env };
 
 /**
  * Parse and freeze process.env once at startup.
@@ -81,8 +26,6 @@ export const env = EnvSchema.parse(process.env);
 /**
  * Helper type for consumers.
  */
-export type Env = typeof env;
-
 // Re-export production validation utilities
 export {
   assertNotProduction,
