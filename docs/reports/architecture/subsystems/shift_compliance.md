@@ -1,45 +1,64 @@
 # L2 — Shift Lifecycle & Compliance
 
-> **Status:** Skeleton generated.\
-> This file is intended to hold the full 9-panel deep dive for this subsystem, including:
->
-> - Critical findings
-> - High/Medium/Low findings
-> - Architectural recommendations
-> - Examples (good, bad, legacy)
-> - Reverse-engineered SDK surfaces (where applicable)
+> **Status:** Draft (repo-grounded fill).
+
+This subsystem covers shift lifecycle (draft → published → worked/attended) and compliance-related
+rules/data (break tracking, attestations/forms, overtime/pay rules).
 
 ## 1. Role in the System
 
-_TBD — to be filled with a concise description of how this subsystem contributes to the L0 mission._
+- Define the “shape” of shift and attendance records and their invariants.
+- Track compliance artifacts (forms/attestations) associated with orgs and onboarding.
+- Support downstream calculations (e.g., pay/overtime) and policy enforcement.
 
-## 2. Panel Summary (Once Filled)
+Key locations in this repo:
 
-- Distributed Systems (Elena): _TBD_
-- Security (Marcus): _TBD_
-- DDD (Ingrid): _TBD_
-- Platform (Kenji): _TBD_
-- Staff Engineer (Priya): _TBD_
-- Database (Omar): _TBD_
-- API Design (Sarah): _TBD_
-- Devil's Advocate (Rafael): _TBD_
-- Strategic/Impact (Victoria): _TBD_
+- Shift schema includes break minutes: `packages/types/src/shifts.ts`.
+- Attendance schema includes break duration: `packages/types/src/attendance.ts`.
+- Compliance container docs + schemas:
+  - `packages/types/src/compliance.ts`
+  - `packages/types/src/compliance/adminResponsibilityForm.ts`
+- Backend pay/overtime calculation helper: `functions/src/domain/billing.ts`.
+- Onboarding creates compliance doc artifacts: `apps/web/src/lib/onboarding/createNetworkOrg.ts`.
 
-## 3. Critical Findings (Placeholder)
+## 2. Panel Summary (Initial Pass)
 
-Once analysis is run, document Critical/High items here, each with L0–L4 structure and cross-links
-into L3/L4 sections.
+- Distributed Systems (Elena): Compliance events must be durable and ordered; be careful with multi-writer workflows.
+- Security (Marcus): Compliance docs can contain sensitive/legal attestations; treat as sensitive data and log carefully.
+- DDD (Ingrid): Model compliance as first-class domain concepts (Attestation, Policy, Rule Set), not ad-hoc flags.
+- Platform (Kenji): Ensure compliance checks are enforceable both client- and server-side.
+- Staff Engineer (Priya): Put compliance rules behind well-tested pure functions and shared schema contracts.
+- Database (Omar): Define explicit document paths and indexing; avoid storing compliance in ambiguous “misc” docs.
+- API Design (Sarah): Expose explicit endpoints/operations for compliance transitions (sign, revoke, version).
+- Devil's Advocate (Rafael): “Compliance” can balloon; constrain scope and document supported jurisdictions/rules.
+- Strategic/Impact (Victoria): Compliance is trust; mistakes can be catastrophic. Favor correctness and auditability.
+
+## 3. Critical Findings (Current)
+
+No confirmed “Critical” issues recorded in this doc yet.
+
+Concrete areas to validate:
+
+- Schema consistency between scheduling helpers and `packages/types` (avoid drift between app-level `ShiftDoc` and canonical schema).
+- Overtime logic location: `functions/src/domain/billing.ts` currently defines overtime threshold + multiplier calculation.
 
 ## 4. Architectural Notes & Invariants
 
-List invariants and constraints that **must** hold true for this subsystem to be healthy.
+- Compliance artifacts are immutable or versioned (no silent rewrites of signed attestations).
+- Break minutes/durations are non-negative integers; shift start/end invariants hold.
+- Overtime rules (thresholds/multipliers) are explicit and stored with the policy/jurisdiction that produced them.
+- Any “publish schedule” action should be auditable and role-gated.
 
 ## 5. Example Patterns
 
-- **Good Pattern Example:** _TBD_
-- **Bad Pattern Example:** _TBD_
-- **Refactored Pattern:** _TBD_ (often mapped to a new SDK abstraction)
+- **Good Pattern Example:** Strong Zod schemas in `packages/types` for compliance artifacts.
+- **Good Pattern Example:** Backend pay computation isolated in a small helper (`functions/src/domain/billing.ts`).
+- **Risky Pattern Example:** Duplicated shift schema definitions across app and types packages.
+- **Refactored Pattern:** Create a single canonical shift/attendance model in `packages/types` and use it everywhere (client, functions, API).
 
 ## 6. Open Questions
 
-Track unresolved decisions and design questions.
+- Which compliance rules are in-scope (break rules, minors, overtime, maximum shift length, rest periods)?
+- Where is the source-of-truth for overtime policy (per org, per jurisdiction, per role)?
+- How are compliance artifacts audited and retained (retention policy and export needs)?
+

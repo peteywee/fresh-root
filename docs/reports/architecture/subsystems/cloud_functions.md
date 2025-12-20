@@ -1,45 +1,66 @@
 # L2 — Cloud Functions & Backend Services
 
-> **Status:** Skeleton generated.\
-> This file is intended to hold the full 9-panel deep dive for this subsystem, including:
->
-> - Critical findings
-> - High/Medium/Low findings
-> - Architectural recommendations
-> - Examples (good, bad, legacy)
-> - Reverse-engineered SDK surfaces (where applicable)
+> **Status:** Draft (repo-grounded fill).
+
+This subsystem covers Firebase Cloud Functions (server-side backend logic), Firestore triggers, and
+backend services that complement the Next.js web app.
 
 ## 1. Role in the System
 
-_TBD — to be filled with a concise description of how this subsystem contributes to the L0 mission._
+- Provide trusted server-side operations that cannot safely run in the browser.
+- Enforce atomic workflows (e.g., org join) and maintain denormalized data for read efficiency.
+- Own the “backend of record” behaviors around Firestore data correctness.
 
-## 2. Panel Summary (Once Filled)
+Primary code locations:
 
-- Distributed Systems (Elena): _TBD_
-- Security (Marcus): _TBD_
-- DDD (Ingrid): _TBD_
-- Platform (Kenji): _TBD_
-- Staff Engineer (Priya): _TBD_
-- Database (Omar): _TBD_
-- API Design (Sarah): _TBD_
-- Devil's Advocate (Rafael): _TBD_
-- Strategic/Impact (Victoria): _TBD_
+- `functions/src/index.ts` (Cloud Functions v2 entrypoint).
+- `functions/src/joinOrganization.ts` (atomic join flow).
+- `functions/src/triggers/denormalization.ts` (Firestore triggers + scheduled reconciliation).
+- `functions/src/domain/` (domain helpers used by backend code).
 
-## 3. Critical Findings (Placeholder)
+## 2. Panel Summary (Initial Pass)
 
-Once analysis is run, document Critical/High items here, each with L0–L4 structure and cross-links
-into L3/L4 sections.
+- Distributed Systems (Elena): Trigger fan-out and retries are the main risks; design for idempotency.
+- Security (Marcus): Backend runs with elevated privileges; guard all entrypoints and validate inputs.
+- DDD (Ingrid): Keep domain logic in `functions/src/domain/` or shared packages; avoid logic in trigger wiring.
+- Platform (Kenji): Treat functions as deployable units; keep cold-start, retries, and timeouts in mind.
+- Staff Engineer (Priya): Centralize Firestore access patterns and validation helpers; keep code testable.
+- Database (Omar): Denormalization triggers must preserve data consistency and be bounded in cost.
+- API Design (Sarah): Prefer explicit, versionable server operations; document input/output schemas.
+- Devil's Advocate (Rafael): Triggers can become invisible coupling; ensure observability and clear ownership.
+- Strategic/Impact (Victoria): Correctness here is “business safety”; failures directly impact customer trust.
+
+## 3. Critical Findings (Current)
+
+No confirmed “Critical” items recorded in this doc yet.
+
+Immediate correctness hotspots worth reviewing:
+
+- Atomic join flow: `functions/src/index.ts` exports `joinOrganization` and documents transaction boundaries.
+- Denormalization: `functions/src/index.ts` exports trigger functions from `functions/src/triggers/denormalization.ts`.
 
 ## 4. Architectural Notes & Invariants
 
-List invariants and constraints that **must** hold true for this subsystem to be healthy.
+- All function entrypoints are input-validated and safe to retry.
+- Firestore-triggered handlers are idempotent (duplicate deliveries do not corrupt data).
+- Denormalized fields must be derivable from source-of-truth documents; scheduled reconciliation exists as a safety net.
+- Shared Firestore schema understanding lives in `packages/types/` (paths and Zod schemas).
+
+Notable schema references:
+
+- `packages/types/src/memberships.ts` documents membership paths and RBAC context.
+- `packages/types/src/shifts.ts` and `packages/types/src/schedules.ts` document scheduling/shifts paths.
 
 ## 5. Example Patterns
 
-- **Good Pattern Example:** _TBD_
-- **Bad Pattern Example:** _TBD_
-- **Refactored Pattern:** _TBD_ (often mapped to a new SDK abstraction)
+- **Good Pattern Example:** Explicit entrypoint documentation and wiring in `functions/src/index.ts`.
+- **Good Pattern Example:** Domain helpers (e.g., `functions/src/domain/billing.ts`) kept separate from trigger wiring.
+- **Risky Pattern Example:** Trigger handlers that scan large collections or do unbounded fan-out.
+- **Refactored Pattern:** Introduce small, shared libraries in `packages/` for validation and Firestore access to reduce duplication.
 
 ## 6. Open Questions
 
-Track unresolved decisions and design questions.
+- Are Cloud Functions intended to be the only backend, or will there also be a separate service (Cloud Run / Workers)?
+- Where should backend-only schemas live vs shared client/server schemas (`packages/types` vs `functions/src/domain`)?
+- What is the expected trigger retry/idempotency policy for each exported function?
+

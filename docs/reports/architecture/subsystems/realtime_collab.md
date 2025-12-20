@@ -1,45 +1,59 @@
-# L2 — Real-Time Collaboration
+# L2 — Real-time Collaboration
 
-> **Status:** Skeleton generated.\
-> This file is intended to hold the full 9-panel deep dive for this subsystem, including:
->
-> - Critical findings
-> - High/Medium/Low findings
-> - Architectural recommendations
-> - Examples (good, bad, legacy)
-> - Reverse-engineered SDK surfaces (where applicable)
+> **Status:** Draft (repo-grounded fill).
+
+This subsystem describes “multi-user, shared state” behaviors: concurrent schedule edits, shared
+drafts, and any presence/locking/merge mechanics.
 
 ## 1. Role in the System
 
-_TBD — to be filled with a concise description of how this subsystem contributes to the L0 mission._
+- Enable multiple users in the same org to work on schedules without losing updates.
+- Provide near-real-time feedback (draft changes, comments, admin forms) when applicable.
+- Define conflict resolution, optimistic concurrency, and audit trails.
 
-## 2. Panel Summary (Once Filled)
+In this repo, “collaboration primitives” are currently Firestore-backed data models and helpers:
 
-- Distributed Systems (Elena): _TBD_
-- Security (Marcus): _TBD_
-- DDD (Ingrid): _TBD_
-- Platform (Kenji): _TBD_
-- Staff Engineer (Priya): _TBD_
-- Database (Omar): _TBD_
-- API Design (Sarah): _TBD_
-- Devil's Advocate (Rafael): _TBD_
-- Strategic/Impact (Victoria): _TBD_
+- Firestore typed wrappers and patterns: `apps/web/src/lib/firebase/typed-wrappers.ts`.
+- Schedule data helpers: `apps/web/src/lib/api/schedules.ts`.
+- Onboarding drafts: `apps/web/src/lib/onboarding/adminFormDrafts.ts`.
 
-## 3. Critical Findings (Placeholder)
+## 2. Panel Summary (Initial Pass)
 
-Once analysis is run, document Critical/High items here, each with L0–L4 structure and cross-links
-into L3/L4 sections.
+- Distributed Systems (Elena): Firestore concurrency and eventual consistency are the core; design for retries and conflicts.
+- Security (Marcus): Collaboration data is org-scoped; ensure strict access controls and validate org membership.
+- DDD (Ingrid): Model collaboration as explicit aggregates (Schedule Draft, Shift, Comment) with clear invariants.
+- Platform (Kenji): Prefer patterns that work offline/spotty connections; avoid complex real-time infra unless needed.
+- Staff Engineer (Priya): Standardize how client code reads/writes Firestore (wrappers, schema validation).
+- Database (Omar): Define canonical document paths, indexes, and denormalized projections for fast reads.
+- API Design (Sarah): If exposing APIs, ensure concurrency semantics are documented (ETags, version fields, etc.).
+- Devil's Advocate (Rafael): “Real-time” is costly; validate product need before building presence/locking.
+- Strategic/Impact (Victoria): Collaboration is a differentiator if done well; half-implemented collab is user-hostile.
+
+## 3. Critical Findings (Current)
+
+No confirmed “Critical” issues recorded in this doc yet.
+
+Gaps to validate (current code suggests early-stage collaboration support):
+
+- Client helpers use Firestore reads/writes; real-time listeners are not obvious in the scanned surfaces.
+- Draft workflows exist (e.g., admin form drafts) and should define conflict rules.
 
 ## 4. Architectural Notes & Invariants
 
-List invariants and constraints that **must** hold true for this subsystem to be healthy.
+- All collaborative documents are org-scoped and access-controlled.
+- Writes are validated against shared schemas (prefer `packages/types` Zod schemas).
+- Conflict strategy is explicit (last-write-wins is acceptable only if documented and safe).
+- Edits are auditable (who/when), especially for schedule publish/archival.
 
 ## 5. Example Patterns
 
-- **Good Pattern Example:** _TBD_
-- **Bad Pattern Example:** _TBD_
-- **Refactored Pattern:** _TBD_ (often mapped to a new SDK abstraction)
+- **Good Pattern Example:** Centralized Firestore access helpers (`apps/web/src/lib/api/schedules.ts`).
+- **Risky Pattern Example:** Direct Firestore writes from many UI components without a shared wrapper/validation.
+- **Refactored Pattern:** Introduce a shared “collab draft” schema and a single write API (client helper or backend endpoint) with validation + audit logging.
 
 ## 6. Open Questions
 
-Track unresolved decisions and design questions.
+- What is the intended concurrency model for schedule edits (optimistic versioning, locks, or LWW)?
+- Do we need real-time cursors/presence, or is “refresh on interval / on save” sufficient?
+- Where should audit events live (Firestore `events` collection, Cloud Function triggers, or both)?
+
