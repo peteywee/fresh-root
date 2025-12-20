@@ -68,6 +68,9 @@ async function fetchBuildPerformanceLogFromGitHub(params: {
   });
 
   if (!res.ok) {
+    if (res.status === 404) {
+      return "";
+    }
     throw new Error(`GitHub fetch failed: ${res.status}`);
   }
 
@@ -77,6 +80,12 @@ async function fetchBuildPerformanceLogFromGitHub(params: {
   }
 
   return Buffer.from(data.content.replace(/\n/g, ""), "base64").toString("utf8");
+}
+
+function isFsNotFoundError(err: unknown): boolean {
+  if (typeof err !== "object" || err === null) return false;
+  if (!("code" in err)) return false;
+  return (err as { code?: unknown }).code === "ENOENT";
 }
 
 export const GET = createAdminEndpoint({
@@ -93,55 +102,56 @@ export const GET = createAdminEndpoint({
     const repo = process.env.GITHUB_METRICS_REPO || "fresh-root";
     const ref = process.env.GITHUB_METRICS_REF || "main";
 
-    try {
-      let content: string;
-      let source: "github" | "file";
+    let content = "";
+    const source: "github" | "file" = token ? "github" : "file";
 
+    try {
       if (token) {
         content = await fetchBuildPerformanceLogFromGitHub({ owner, repo, ref, token });
-        source = "github";
       } else {
         // Fallback: local file (may be stale until deploy)
         content = await fs.readFile(logPath, "utf-8");
-        source = "file";
       }
-
-      const entries = parseJsonl(content, limit);
-
-      return NextResponse.json(
-        {
-          ok: true,
-          source,
-          path: "docs/metrics/build-performance.log",
-          orgId: context.org?.orgId,
-          entries,
-        },
-        {
-          status: 200,
-          headers: {
-            "Cache-Control": "no-store",
-          },
-        },
-      );
     } catch (err) {
-      const message = err instanceof Error ? err.message : "Unknown error";
-
-      return NextResponse.json(
-        {
-          ok: false,
-          source: token ? "github" : "file",
-          path: "docs/metrics/build-performance.log",
-          orgId: context.org?.orgId,
-          entries: [],
-          error: message,
-        },
-        {
-          status: 200,
-          headers: {
-            "Cache-Control": "no-store",
+      // Missing log is a normal "no data yet" case.
+      if (isFsNotFoundError(err)) {
+        content = "";
+      } else {
+        return NextResponse.json(
+          {
+            ok: false,
+            source,
+            path: "docs/metrics/build-performance.log",
+            orgId: context.org?.orgId,
+            entries: [],
+            error: "Failed to load build performance metrics",
           },
-        },
-      );
+          {
+            status: 500,
+            headers: {
+              "Cache-Control": "no-store",
+            },
+          },
+        );
+      }
     }
+
+    const entries = parseJsonl(content, limit);
+
+    return NextResponse.json(
+      {
+        ok: true,
+        source,
+        path: "docs/metrics/build-performance.log",
+        orgId: context.org?.orgId,
+        entries,
+      },
+      {
+        status: 200,
+        headers: {
+          "Cache-Control": "no-store",
+        },
+      },
+    );
   },
 });
