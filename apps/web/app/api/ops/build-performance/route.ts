@@ -92,7 +92,8 @@ export const GET = createAdminEndpoint({
   handler: async ({ request, input: _input, context, params: _params }) => {
     const url = new URL(request.url);
     const limitParam = url.searchParams.get("limit");
-    const limit = Math.max(1, Math.min(50, Number(limitParam ?? 10) || 10));
+    const parsedLimit = parseInt(limitParam ?? "10", 10);
+    const limit = Math.max(1, Math.min(50, Number.isNaN(parsedLimit) ? 10 : parsedLimit));
 
     const projectRoot = process.cwd();
     const logPath = path.join(projectRoot, "docs", "metrics", "build-performance.log");
