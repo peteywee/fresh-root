@@ -40,6 +40,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 <Link href="/protected/dashboard" className="hover:text-white">
                   Dashboard
                 </Link>
+                <Link href="/ops" className="hover:text-white">
+                  Ops
+                </Link>
               </div>
             </nav>
           </header>

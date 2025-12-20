@@ -16,12 +16,14 @@ import {
 } from "firebase/firestore";
 
 import { cached } from "./cache";
-import { ENV } from "./env";
+import { getClientEnv } from "./env";
+
+const env = getClientEnv();
 
 const app = initializeApp({
-  apiKey: ENV.NEXT_PUBLIC_FIREBASE_API_KEY,
-  authDomain: ENV.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
-  projectId: ENV.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+  apiKey: env.NEXT_PUBLIC_FIREBASE_API_KEY,
+  authDomain: env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+  projectId: env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
 });
 const db = getFirestore(app);
 

@@ -1,0 +1,59 @@
+name: Semgrep Security Scan
+
+on:
+  push:
+    branches: [main, dev]
+  pull_request:
+    branches: [main, dev]
+  schedule:
+    # Run weekly on Sunday at midnight
+    - cron: '0 0 * * 0'
+
+jobs:
+  semgrep:
+    name: Security Analysis
+    runs-on: ubuntu-latest
+    container:
+      image: semgrep/semgrep
+    
+    # Skip if dependabot or renovate
+    if: (github.actor != 'dependabot[bot]' && github.actor != 'renovate[bot]')
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Run Semgrep
+        run: semgrep scan --config=auto --config=p/nextjs --config=p/typescript --config=p/react --sarif --output=semgrep-results.sarif
+        env:
+          # Optional: Add token for private rules
+          # SEMGREP_APP_TOKEN: ${{ secrets.SEMGREP_APP_TOKEN }}
+          SEMGREP_RULES: >-
+            p/security-audit
+            p/secrets
+            p/owasp-top-ten
+            p/xss
+            p/sql-injection
+            p/command-injection
+        continue-on-error: true
+      
+      - name: Upload SARIF to GitHub Security
+        uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        with:
+          sarif_file: semgrep-results.sarif
+        continue-on-error: true
+      
+      - name: Semgrep Summary
+        if: always()
+        run: |
+          echo "## 🔒 Semgrep Security Scan Complete" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Results uploaded to GitHub Security tab." >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Rule Packs Used:" >> $GITHUB_STEP_SUMMARY
+          echo "- \`p/security-audit\` - General security issues" >> $GITHUB_STEP_SUMMARY
+          echo "- \`p/secrets\` - Hardcoded secrets detection" >> $GITHUB_STEP_SUMMARY
+          echo "- \`p/owasp-top-ten\` - OWASP Top 10 vulnerabilities" >> $GITHUB_STEP_SUMMARY
+          echo "- \`p/nextjs\` - Next.js specific patterns" >> $GITHUB_STEP_SUMMARY
+          echo "- \`p/typescript\` - TypeScript patterns" >> $GITHUB_STEP_SUMMARY
+          echo "- \`p/react\` - React patterns" >> $GITHUB_STEP_SUMMARY

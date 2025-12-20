@@ -481,7 +481,7 @@ const exitCode = validator.run(targetPath);
 
 // Write machine-readable report for tooling/agents to consume
 try {
-  const outPath = join(ROOT, "pattern-validation-report.json");
+  const outPath = join(ROOT, "docs", "reports", "pattern-validation-report.json");
   const report = {
     errors: validator.results.errors,
     warnings: validator.results.warnings,
