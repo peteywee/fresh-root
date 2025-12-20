@@ -21,7 +21,7 @@ function isOtelEnabled(): boolean {
     // Import env only when actually checking if OTEL is enabled
 
     const { env } = require("@/src/env");
-    OTEL_ENABLED = Boolean(env.OTEL_EXPORTER_OTLP_ENDPOINT);
+    OTEL_ENABLED = Boolean(env.OTEL_EXPORTER_OTLP_ENDPOINT) && Boolean(env.OBSERVABILITY_TRACES_ENABLED);
   }
   return OTEL_ENABLED;
 }

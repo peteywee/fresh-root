@@ -1,6 +1,6 @@
 // [P1][OPS][API] Repomix codebase analysis endpoint
 // Tags: P1, OPS, API, repomix, analysis
-import { createPublicEndpoint } from "@fresh-schedules/api-framework";
+import { createAdminEndpoint } from "@fresh-schedules/api-framework";
 import { NextResponse } from "next/server";
 import { promises as fs } from "fs";
 import path from "path";
@@ -182,7 +182,7 @@ async function listFiles(dir: string): Promise<string[]> {
  * Deep codebase analysis using file system traversal
  * Returns comprehensive metrics about the codebase structure
  */
-export const GET = createPublicEndpoint({
+export const GET = createAdminEndpoint({
   handler: async ({ request: _request, input: _input, context: _context, params: _params }) => {
     const startTime = Date.now();
 

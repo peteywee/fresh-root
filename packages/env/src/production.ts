@@ -15,7 +15,7 @@
 
 import { z } from "zod";
 
-import type { Env } from "./index";
+import { EnvSchema, type Env } from "./schema";
 
 /* ============================================================================ */
 /* Production Environment Requirements                                         */
@@ -29,7 +29,7 @@ import type { Env } from "./index";
  * - NODE_ENV must be explicitly "production"
  * - No optional values; all critical infra must be configured
  */
-export const ProdEnvSchema = z.object({
+export const ProdEnvSchema = EnvSchema.extend({
   NODE_ENV: z.literal("production"),
   REDIS_URL: z.string().url().describe("Redis URL required for production"),
   NEXT_PUBLIC_FIREBASE_API_KEY: z.string().min(1),
