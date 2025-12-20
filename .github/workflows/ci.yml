@@ -17,6 +17,7 @@ jobs:
   static:
     name: Static Analysis
     runs-on: ubuntu-latest
+    if: ${{ !(github.event_name == 'push' && contains(github.event.head_commit.message, '[skip ci]')) }}
     strategy:
       matrix:
         task: [typecheck, lint]
@@ -46,6 +47,7 @@ jobs:
     name: Safety & Security Checks
     runs-on: ubuntu-latest
     needs: static
+    if: ${{ !(github.event_name == 'push' && contains(github.event.head_commit.message, '[skip ci]')) }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -98,6 +100,7 @@ jobs:
     name: Testing Suite
     runs-on: ubuntu-latest
     needs: safety
+    if: ${{ !(github.event_name == 'push' && contains(github.event.head_commit.message, '[skip ci]')) }}
     strategy:
       matrix:
         test-type:
@@ -167,6 +170,9 @@ jobs:
     name: Build Verification
     runs-on: ubuntu-latest
     needs: test
+    if: ${{ !(github.event_name == 'push' && contains(github.event.head_commit.message, '[skip ci]')) }}
+    permissions:
+      contents: write
     env:
       # Firebase Configuration
       NEXT_PUBLIC_FIREBASE_API_KEY: ${{ secrets.NEXT_PUBLIC_FIREBASE_API_KEY }}
@@ -195,18 +201,161 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'pnpm'
 
+      # ──────────────────────────────────────────────────────────────
+      # START: Performance tracking
+      # ──────────────────────────────────────────────────────────────
+      - name: 📊 Start performance tracking
+        id: perf-start
+        run: |
+          echo "start_time=$(date +%s)" >> $GITHUB_OUTPUT
+          echo "workflow_start=$(date -u '+%Y-%m-%d %H:%M:%S UTC')" >> $GITHUB_OUTPUT
+
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        id: install-deps
+        run: |
+          INSTALL_START=$(date +%s)
+          pnpm install --frozen-lockfile
+          INSTALL_END=$(date +%s)
+          echo "duration=$((INSTALL_END - INSTALL_START))" >> $GITHUB_OUTPUT
+
+      - name: Cache Next.js build
+        id: cache-nextjs
+        uses: actions/cache@v4
+        with:
+          path: |
+            apps/web/.next/cache
+            .turbo
+          key: ${{ runner.os }}-nextjs-${{ hashFiles('pnpm-lock.yaml') }}-${{ hashFiles('apps/web/**/*.ts', 'apps/web/**/*.tsx', 'packages/**/*.ts') }}
+          restore-keys: |
+            ${{ runner.os }}-nextjs-${{ hashFiles('pnpm-lock.yaml') }}-
+            ${{ runner.os }}-nextjs-
 
       - name: Build all packages
+        id: build-packages
         run: |
+          BUILD_START=$(date +%s)
           echo "🏗️ Building all packages..."
           pnpm build
+          BUILD_END=$(date +%s)
+          echo "duration=$((BUILD_END - BUILD_START))" >> $GITHUB_OUTPUT
 
       - name: Build SDK
+        id: build-sdk
         run: |
+          SDK_START=$(date +%s)
           echo "🔨 Building SDK framework..."
           pnpm build:sdk
+          SDK_END=$(date +%s)
+          echo "duration=$((SDK_END - SDK_START))" >> $GITHUB_OUTPUT
+
+      # ──────────────────────────────────────────────────────────────
+      # END: Generate performance report
+      # ──────────────────────────────────────────────────────────────
+      - name: 📊 Generate Performance Report
+        if: always()
+        run: |
+          END_TIME=$(date +%s)
+          TOTAL_DURATION=$((END_TIME - ${{ steps.perf-start.outputs.start_time }}))
+          INSTALL_TIME="${{ steps.install-deps.outputs.duration || '0' }}"
+          BUILD_TIME="${{ steps.build-packages.outputs.duration || '0' }}"
+          SDK_TIME="${{ steps.build-sdk.outputs.duration || '0' }}"
+          CACHE_HIT="${{ steps.cache-nextjs.outputs.cache-hit }}"
+
+          # Determine cache status emoji
+          if [ "$CACHE_HIT" = "true" ]; then
+            CACHE_EMOJI="✅"
+            CACHE_STATUS="HIT"
+          else
+            CACHE_EMOJI="❌"
+            CACHE_STATUS="MISS"
+          fi
+
+          # Identify bottleneck
+          BOTTLENECK="None"
+          if [ "$BUILD_TIME" -gt 180 ]; then
+            BOTTLENECK="⚠️ Package build (${BUILD_TIME}s > 180s target)"
+          elif [ "$SDK_TIME" -gt 120 ]; then
+            BOTTLENECK="⚠️ SDK build (${SDK_TIME}s > 120s target)"
+          elif [ "$INSTALL_TIME" -gt 60 ]; then
+            BOTTLENECK="⚠️ Dependency install (${INSTALL_TIME}s > 60s target)"
+          fi
+
+          # Write to job summary
+          cat >> $GITHUB_STEP_SUMMARY <<EOF
+          ## 📊 Build Performance Report
+
+          **Run**: [\`${GITHUB_RUN_ID}\`](https://github.com/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID})
+          **Commit**: [\`${GITHUB_SHA:0:7}\`](https://github.com/${GITHUB_REPOSITORY}/commit/${GITHUB_SHA})
+          **Started**: ${{ steps.perf-start.outputs.workflow_start }}
+
+          ### ⏱️ Timing Breakdown
+
+          | Phase | Duration | Status |
+          |-------|----------|--------|
+          | Dependency Install | ${INSTALL_TIME}s | $([ "$INSTALL_TIME" -lt 60 ] && echo "✅" || echo "⚠️") |
+          | Next.js Cache | - | $CACHE_EMOJI $CACHE_STATUS |
+          | Package Build | ${BUILD_TIME}s | $([ "$BUILD_TIME" -lt 180 ] && echo "✅" || echo "⚠️") |
+          | SDK Build | ${SDK_TIME}s | $([ "$SDK_TIME" -lt 120 ] && echo "✅" || echo "⚠️") |
+          | **Total Duration** | **${TOTAL_DURATION}s** | $([ "$TOTAL_DURATION" -lt 360 ] && echo "✅" || echo "⚠️") |
+
+          ### 🎯 Performance Targets
+
+          - Install: <60s
+          - Package Build: <180s (with cache), <300s (without)
+          - SDK Build: <120s
+          - Total: <360s (6 min)
+
+          ### 🔍 Bottleneck Analysis
+
+          **Detected**: $BOTTLENECK
+
+          ### 📈 Cache Efficiency
+
+          - Next.js Cache Hit: **$CACHE_HIT**
+          - Cache Key: \`${{ runner.os }}-nextjs-${{ hashFiles('pnpm-lock.yaml') }}-${{ hashFiles('apps/web/**/*.ts', 'apps/web/**/*.tsx', 'packages/**/*.ts') }}\`
+
+          ---
+
+          _💡 To improve performance: ensure cache hits, use \`pnpm install --prefer-offline\`, optimize bundle splits_
+          EOF
+
+          # Also output to console for quick viewing
+          echo "=========================================="
+          echo "📊 BUILD PERFORMANCE SUMMARY"
+          echo "=========================================="
+          echo "Total Duration: ${TOTAL_DURATION}s"
+          echo "Cache Hit: $CACHE_HIT"
+          echo "Bottleneck: $BOTTLENECK"
+          echo "=========================================="
+
+      - name: Persist build performance metrics (time-series)
+        if: always() && github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          mkdir -p docs/metrics
+
+          TS=$(date -u +'%Y-%m-%dT%H:%M:%SZ')
+          INSTALL_TIME="${{ steps.install-deps.outputs.duration }}"
+          BUILD_TIME="${{ steps.build-packages.outputs.duration }}"
+          SDK_TIME="${{ steps.build-sdk.outputs.duration }}"
+          CACHE_HIT="${{ steps.cache-nextjs.outputs.cache-hit }}"
+          TOTAL_SECONDS=$(( $(date +%s) - ${{ steps.perf-start.outputs.start_time }} ))
+
+          INSTALL_TIME=${INSTALL_TIME:-0}
+          BUILD_TIME=${BUILD_TIME:-0}
+          SDK_TIME=${SDK_TIME:-0}
+          CACHE_HIT=${CACHE_HIT:-""}
+
+          cat >> docs/metrics/build-performance.log <<EOF
+          {"timestamp":"$TS","repository":"$GITHUB_REPOSITORY","ref":"$GITHUB_REF","sha":"$GITHUB_SHA","runId":"$GITHUB_RUN_ID","runAttempt":"$GITHUB_RUN_ATTEMPT","installSeconds":$INSTALL_TIME,"buildSeconds":$BUILD_TIME,"sdkSeconds":$SDK_TIME,"totalSeconds":$TOTAL_SECONDS,"cacheHit":"$CACHE_HIT"}
+          EOF
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/metrics/build-performance.log
+          git commit -m "chore(metrics): append build performance [skip ci]" || exit 0
+
+          git pull --rebase origin main
+          git push
 
   # ═══════════════════════════════════════════════════════════════════════════
   # SUMMARY: Status Check
@@ -215,7 +364,7 @@ jobs:
     name: CI Status Summary
     runs-on: ubuntu-latest
     needs: [static, safety, test, build]
-    if: always()
+    if: ${{ always() && !(github.event_name == 'push' && contains(github.event.head_commit.message, '[skip ci]')) }}
     steps:
       - name: Check CI Status
         run: |

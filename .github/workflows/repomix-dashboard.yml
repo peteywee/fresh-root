@@ -4,6 +4,9 @@ on:
     - cron: '0 2 * * *' # nightly at 2 AM UTC
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   generate-dashboard:
     runs-on: ubuntu-latest
@@ -43,10 +46,13 @@ jobs:
         run: pnpm repomix . --style json --output docs/architecture/repomix-dashboard.json --compress
       - name: Update architecture index
         run: pnpm docs:update
+
+      - name: Collect metrics (append-only)
+        run: pnpm docs:analyze || echo "⚠️ Metrics collection failed (non-critical)"
       - name: Commit and push docs
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add docs/architecture/
-          git commit -m "🧭 Update Repomix dashboard [skip ci]" || echo "No changes to commit"
+          git add docs/architecture/ docs/metrics/
+          git commit -m "🧭 Update Repomix dashboard + metrics [skip ci]" || echo "No changes to commit"
           git push

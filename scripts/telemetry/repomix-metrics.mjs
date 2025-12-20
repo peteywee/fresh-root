@@ -7,7 +7,8 @@ import path from "path";
 import { fileURLToPath } from "url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const metricsDir = path.resolve(__dirname, "../docs/metrics");
+const repoRoot = path.resolve(__dirname, "../..");
+const metricsDir = path.resolve(repoRoot, "docs/metrics");
 const metricsLog = path.resolve(metricsDir, "repomix-metrics.log");
 
 // Ensure directory exists
@@ -16,7 +17,7 @@ if (!fs.existsSync(metricsDir)) {
 }
 
 // Read JSON report if available
-const reportPath = path.resolve(__dirname, "../docs/architecture/repomix-ci.json");
+const reportPath = path.resolve(repoRoot, "docs/architecture/repomix-ci.json");
 
 if (!fs.existsSync(reportPath)) {
   console.warn("⚠️ No Repomix JSON report found. Skipping metrics collection.");
