@@ -30,6 +30,17 @@ export const EnvSchema = z.object({
   // Required ONLY when running multi-instance production. Optional in dev/single.
   REDIS_URL: z.string().url().optional(),
 
+  // --- Upstash Redis (serverless, Edge-compatible) ---
+  // REST-based Redis for rate limiting and idempotency in Edge/serverless
+  UPSTASH_REDIS_REST_URL: z.string().url().optional(),
+  UPSTASH_REDIS_REST_TOKEN: z.string().min(1).optional(),
+  // Feature flag to enable Redis-backed rate limiting (defaults to in-memory)
+  USE_REDIS_RATE_LIMIT: z
+    .enum(["true", "false"])
+    .optional()
+    .default("false")
+    .transform((v) => v === "true"),
+
   // --- OpenTelemetry exporter endpoint ---
   // Optional. When set, OTEL tracing will be active.
   OTEL_EXPORTER_OTLP_ENDPOINT: z.string().url().optional(),

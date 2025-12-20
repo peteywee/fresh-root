@@ -29,6 +29,7 @@
   },
   "dependencies": {
     "@fresh-schedules/types": "workspace:*",
+    "@upstash/redis": "^1.35.8",
     "zod": "^4.2.1"
   },
   "peerDependencies": {

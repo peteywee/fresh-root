@@ -591,6 +591,8 @@ export function createWebhookEndpoint<TPayload = unknown>(
 // ENHANCEMENT 5: IDEMPOTENCY KEY SUPPORT
 // =============================================================================
 
+import { getRedisClient } from "./redis";
+
 /**
  * Cached idempotent response
  */
@@ -604,10 +606,10 @@ interface IdempotentRecord {
   expiresAt: number;
 }
 
-// In-memory idempotency store (use Redis in production)
+// In-memory idempotency store (fallback when Redis not available)
 const idempotencyStore = new Map<string, IdempotentRecord>();
 
-// Cleanup expired records
+// Cleanup expired records from in-memory store
 setInterval(() => {
   const now = Date.now();
   for (const [key, record] of idempotencyStore.entries()) {
@@ -658,8 +660,32 @@ export function getIdempotencyKey(
 
 /**
  * Get cached idempotent response if exists
+ * Tries Redis first, falls back to in-memory store
  */
-export function getIdempotentResponse(key: string): NextResponse | null {
+export async function getIdempotentResponse(key: string): Promise<NextResponse | null> {
+  const redisKey = `idem:${key}`;
+
+  try {
+    const redis = await getRedisClient();
+    const cached = await redis.get(redisKey);
+
+    if (cached) {
+      const record = JSON.parse(cached) as IdempotentRecord;
+      // Return cached response from Redis
+      return NextResponse.json(record.response.body, {
+        status: record.response.status,
+        headers: {
+          ...record.response.headers,
+          "x-idempotent-replayed": "true",
+          "x-idempotent-source": "redis",
+        },
+      });
+    }
+  } catch {
+    // Redis unavailable, fall back to in-memory
+  }
+
+  // Fallback: check in-memory store
   const record = idempotencyStore.get(key);
 
   if (!record) {
@@ -671,12 +697,13 @@ export function getIdempotentResponse(key: string): NextResponse | null {
     return null;
   }
 
-  // Return cached response
+  // Return cached response from memory
   const response = NextResponse.json(record.response.body, {
     status: record.response.status,
     headers: {
       ...record.response.headers,
       "x-idempotent-replayed": "true",
+      "x-idempotent-source": "memory",
     },
   });
 
@@ -685,22 +712,23 @@ export function getIdempotentResponse(key: string): NextResponse | null {
 
 /**
  * Store idempotent response
+ * Stores in Redis if available, with in-memory fallback
  */
 export function storeIdempotentResponse(
   key: string,
   response: NextResponse,
-  ttl: number = 24 * 60 * 60 * 1000, // 24 hours
+  ttl: number = 24 * 60 * 60 * 1000, // 24 hours in ms
 ): void {
   // Clone and extract response data
-  const cloneResponse = async () => {
+  const cloneAndStore = async () => {
     try {
       const body = await response.clone().json();
       const headers: Record<string, string> = {};
-      response.headers.forEach((value, key) => {
-        headers[key] = value;
+      response.headers.forEach((value, headerKey) => {
+        headers[headerKey] = value;
       });
 
-      idempotencyStore.set(key, {
+      const record: IdempotentRecord = {
         response: {
           status: response.status,
           body,
@@ -708,14 +736,25 @@ export function storeIdempotentResponse(
         },
         createdAt: Date.now(),
         expiresAt: Date.now() + ttl,
-      });
+      };
+
+      // Try to store in Redis first
+      try {
+        const redis = await getRedisClient();
+        const redisKey = `idem:${key}`;
+        const ttlSeconds = Math.ceil(ttl / 1000);
+        await redis.set(redisKey, JSON.stringify(record), { ex: ttlSeconds });
+      } catch {
+        // Redis unavailable, fall back to in-memory
+        idempotencyStore.set(key, record);
+      }
     } catch {
       // Non-JSON response, don't cache
     }
   };
 
   // Store asynchronously
-  cloneResponse();
+  cloneAndStore();
 }
 
 /**
@@ -766,7 +805,7 @@ export function withIdempotency<TOutput>(
 
     // Check for cached response
     if (key) {
-      const cached = getIdempotentResponse(key);
+      const cached = await getIdempotentResponse(key);
       if (cached) {
         return cached as NextResponse<TOutput>;
       }
