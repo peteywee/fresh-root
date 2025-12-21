@@ -12,6 +12,7 @@ import {
   rateLimit as inMemoryRateLimit,
   securityHeaders,
 } from "./security";
+import { unauthorized, forbidden, serverError } from "./validation";
 import { getFirebaseAdminAuth } from "../../../lib/firebase-admin";
 // Removed unused imports (csrfProtection, createRedisRateLimit) to satisfy lint no-unused-vars
 import { Logger } from "../../../src/lib/logger";
@@ -46,7 +47,7 @@ export async function requireSession(
         span.setStatus({ code: SpanStatusCode.ERROR, message: "No session cookie" });
         span.setAttribute("http.status_code", 401);
         span.end();
-        return NextResponse.json({ error: "Unauthorized: No session cookie" }, { status: 401 });
+        return unauthorized("No session cookie");
       }
 
       const auth = getFirebaseAdminAuth();
@@ -82,7 +83,7 @@ export async function requireSession(
       span.recordException(error as Error);
       span.setStatus({ code: SpanStatusCode.ERROR });
       span.end();
-      return NextResponse.json({ error: "Unauthorized: Invalid session" }, { status: 401 });
+      return unauthorized("Invalid session");
     }
   });
 }
@@ -108,10 +109,7 @@ export async function require2FAForManagers(
         span.setStatus({ code: SpanStatusCode.ERROR, message: "2FA required" });
         span.setAttribute("http.status_code", 403);
         span.end();
-        return NextResponse.json(
-          { error: "Forbidden: 2FA required for this operation" },
-          { status: 403 },
-        );
+        return forbidden("2FA required for this operation");
       }
 
       try {
@@ -194,7 +192,7 @@ export function withSecurity(
       return securityHeaders(afterCors);
     } catch (error) {
       console.error("withSecurity middleware error:", error);
-      return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+      return serverError("Internal Server Error");
     }
   };
 }

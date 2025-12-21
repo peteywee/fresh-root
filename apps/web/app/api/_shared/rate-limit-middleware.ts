@@ -75,8 +75,10 @@ export function withRateLimit(
     if (!result.allowed) {
       return NextResponse.json(
         {
-          error: "Too Many Requests",
-          message: "Rate limit exceeded. Please try again later.",
+          error: {
+            code: "RATE_LIMITED",
+            message: "Rate limit exceeded. Please try again later.",
+          },
         },
         {
           status: 429,
