@@ -3,7 +3,14 @@ import { createPublicEndpoint } from "@fresh-schedules/api-framework";
 import { z } from "zod";
 
 import { getFirebaseAdminAuth } from "../../../lib/firebase-admin";
-import { serverError, ok } from "../_shared/validation";
+import { serverError, ok, unauthorized } from "../_shared/validation";
+
+function isFirebaseAuthFailure(error: unknown): boolean {
+  if (typeof error !== "object" || error === null) return false;
+  if (!("code" in error)) return false;
+  const code = (error as { code?: unknown }).code;
+  return typeof code === "string" && code.startsWith("auth/");
+}
 
 // Schema for session creation
 const CreateSessionSchema = z.object({
@@ -40,8 +47,13 @@ export const POST = createPublicEndpoint({
       return response;
     } catch (error) {
       console.error("Session creation error:", error);
-      // Return a generic message to avoid leaking internal error details
-      return serverError("Invalid token or internal error", undefined, "UNAUTHORIZED");
+      // If Firebase says the token is invalid/expired/etc, that is a 401.
+      if (isFirebaseAuthFailure(error)) {
+        return unauthorized("Invalid token");
+      }
+
+      // Otherwise, treat as internal.
+      return serverError("Internal Server Error");
     }
   },
 });
