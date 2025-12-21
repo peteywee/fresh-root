@@ -34,7 +34,7 @@ describe("session API E2E Tests", () => {
       expect([400, 401, 422]).toContain(response.status);
     });
 
-    it("should handle valid request", async () => {
+    it("should return 401 for invalid token", async () => {
       const validPayload = {
         idToken: "fake-id-token",
       };
@@ -49,10 +49,9 @@ describe("session API E2E Tests", () => {
         return;
       }
 
-      // Expect success or auth required
-      // If Firebase Admin is not fully configured in this environment, this may fail
-      // after schema validation with a server error.
-      expect([200, 201, 401, 403, 500]).toContain(response.status);
+      // A syntactically valid request with an invalid token should be UNAUTHORIZED.
+      // If Firebase Admin is misconfigured, a 5xx may still occur; that's a separate issue.
+      expect([401, 500]).toContain(response.status);
     });
   });
 
