@@ -2,6 +2,8 @@
 // Tags: P0, SECURITY, MIDDLEWARE
 import { NextRequest, NextResponse } from "next/server";
 
+import { rateLimited as rateLimitedResponse } from "./validation";
+
 /**
  * Security headers middleware using Helmet-style configuration
  */
@@ -84,20 +86,12 @@ export function rateLimit(maxRequests = 100, windowMs = 15 * 60 * 1000) {
     }
 
     if (entry.count >= maxRequests) {
-      // Rate limit exceeded
-      const retryAfter = Math.ceil((entry.resetTime - now) / 1000);
-      return NextResponse.json(
-        { error: "Too many requests. Please try again later." },
-        {
-          status: 429,
-          headers: {
-            "Retry-After": retryAfter.toString(),
-            "X-RateLimit-Limit": maxRequests.toString(),
-            "X-RateLimit-Remaining": "0",
-            "X-RateLimit-Reset": entry.resetTime.toString(),
-          },
-        },
-      );
+      // Rate limit exceeded - use standardized error response
+      const response = rateLimitedResponse(entry.resetTime, "Too many requests. Please try again later.");
+      response.headers.set("X-RateLimit-Limit", maxRequests.toString());
+      response.headers.set("X-RateLimit-Remaining", "0");
+      response.headers.set("X-RateLimit-Reset", entry.resetTime.toString());
+      return response;
     }
 
     // Increment count
@@ -168,7 +162,7 @@ export function requestSizeLimit(maxBytes = 10 * 1024 * 1024) {
 
     if (contentLength && parseInt(contentLength, 10) > maxBytes) {
       return NextResponse.json(
-        { error: "Request body too large" },
+        { error: { code: "PAYLOAD_TOO_LARGE", message: "Request body too large" } },
         {
           status: 413,
           headers: {
