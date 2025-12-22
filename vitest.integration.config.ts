@@ -12,11 +12,7 @@ export default defineConfig({
     testTimeout: 30000,
     hookTimeout: 30000,
     pool: "forks", // Better isolation for Firebase
-    poolOptions: {
-      forks: {
-        singleFork: true, // Run tests sequentially
-      },
-    },
+    fileParallelism: false, // Run tests sequentially
     coverage: {
       provider: "v8",
       reporter: ["text", "html", "json"],

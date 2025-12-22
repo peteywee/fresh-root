@@ -14,11 +14,7 @@ export default defineConfig({
 
     // Avoid forking processes; keep tests single-threaded and predictable.
     pool: "threads",
-    poolOptions: {
-      threads: {
-        singleThread: true,
-      },
-    },
+    fileParallelism: false,
 
     // Also clamp max workers for lower RAM and less weird concurrency
     maxWorkers: 1,

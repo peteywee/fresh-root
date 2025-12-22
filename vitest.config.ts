@@ -13,11 +13,7 @@ export default defineConfig({
 
     // Avoid fork-based pools; use threads and force single-thread behaviour.
     pool: "threads",
-    poolOptions: {
-      threads: {
-        singleThread: true,
-      },
-    },
+    fileParallelism: false,
 
     // Clamp workers down to keep memory/CPU predictable in Crostini.
     maxWorkers: 1,
