@@ -330,6 +330,7 @@ jobs:
 
       - name: Persist build performance metrics (time-series)
         if: always() && github.event_name == 'push' && github.ref == 'refs/heads/main'
+        continue-on-error: true
         run: |
           mkdir -p docs/metrics
 
@@ -352,12 +353,11 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add docs/metrics/build-performance.log
-          git diff --cached --quiet && exit 0  # Nothing to commit
-          git stash -u || true  # Stash any build artifacts
-          git commit -m "chore(metrics): append build performance [skip ci]"
-          git pull --rebase origin main || true
-          git push || true
-          git stash pop || true
+          git diff --cached --quiet && exit 0
+          git commit -m "chore(metrics): append build performance [skip ci]" || true
+          git fetch origin main
+          git rebase origin/main || git rebase --abort || true
+          git push origin HEAD:main || true
 
   # ═══════════════════════════════════════════════════════════════════════════
   # SUMMARY: Status Check
