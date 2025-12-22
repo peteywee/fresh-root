@@ -1,27 +1,47 @@
-// [P0][SHIFTS][DETAIL][API] Shift detail endpoint
-
+// [P2][D4][SHIFTS][DETAIL][API] Shift detail endpoint with Firestore persistence
+// Tags: P2, D4, API, SHIFTS, FIRESTORE
 import { createOrgEndpoint } from "@fresh-schedules/api-framework";
-import { UpdateShiftSchema } from "@fresh-schedules/types";
+import { UpdateShiftSchema, type Shift } from "@fresh-schedules/types";
+import { getFirestore } from "firebase-admin/firestore";
+import { NextResponse } from "next/server";
 
-import { ok, serverError } from "../../_shared/validation";
+import { serverError } from "../../_shared/validation";
 
 /**
  * GET /api/shifts/[id]
- * Get shift details
+ * Get shift details from Firestore
  */
 export const GET = createOrgEndpoint({
   handler: async ({ request: _request, input: _input, context, params }) => {
     try {
       const { id } = params;
-      const shift = {
-        id,
-        name: "Sample Shift",
-        orgId: context.org?.orgId,
-        startTime: Date.now(),
-        endTime: Date.now() + 28800000,
-      };
-      return ok(shift);
-    } catch {
+      const orgId = context.org!.orgId;
+
+      // Fetch from Firestore
+      const db = getFirestore();
+      const shiftRef = db.collection('orgs').doc(orgId).collection('shifts').doc(id);
+      const snap = await shiftRef.get();
+
+      if (!snap.exists) {
+        return NextResponse.json(
+          { error: "Shift not found" },
+          { status: 404 },
+        );
+      }
+
+      const shift = snap.data() as Shift;
+
+      // Verify the shift belongs to this org
+      if (shift.orgId !== orgId) {
+        return NextResponse.json(
+          { error: "Unauthorized" },
+          { status: 403 },
+        );
+      }
+
+      return NextResponse.json(shift, { status: 200 });
+    } catch (error) {
+      console.error("Error fetching shift:", error);
       return serverError("Failed to fetch shift");
     }
   },
@@ -29,23 +49,57 @@ export const GET = createOrgEndpoint({
 
 /**
  * PATCH /api/shifts/[id]
- * Update shift
+ * Update shift in Firestore (requires manager+ role)
  */
 export const PATCH = createOrgEndpoint({
   roles: ["manager"],
   input: UpdateShiftSchema,
   handler: async ({ request: _request, input, context, params }) => {
     try {
-      const shiftData = input as Record<string, unknown>;
-      const updated = {
-        id: params.id,
-        name: shiftData.name,
-        startTime: shiftData.startTime,
-        endTime: shiftData.endTime,
-        updatedBy: context.auth?.userId,
+      const { id } = params;
+      const orgId = context.org!.orgId;
+      const userId = context.auth!.userId;
+
+      // Fetch current document to verify orgId and apply partial updates
+      const db = getFirestore();
+      const shiftRef = db.collection('orgs').doc(orgId).collection('shifts').doc(id);
+      const snap = await shiftRef.get();
+
+      if (!snap.exists) {
+        return NextResponse.json(
+          { error: "Shift not found" },
+          { status: 404 },
+        );
+      }
+
+      const current = snap.data() as Shift;
+
+      // Verify org ownership
+      if (current.orgId !== orgId) {
+        return NextResponse.json(
+          { error: "Unauthorized" },
+          { status: 403 },
+        );
+      }
+
+      // Build update object with timestamp
+      const updateData: Partial<Shift> & { updatedAt: number } = {
+        ...(input as Partial<Shift>),
+        updatedAt: Date.now(),
       };
-      return ok(updated);
-    } catch {
+
+      // Update in Firestore
+      await shiftRef.update(updateData);
+
+      // Return updated shift
+      const updatedShift: Shift = {
+        ...current,
+        ...updateData,
+      } as Shift;
+
+      return NextResponse.json(updatedShift, { status: 200 });
+    } catch (error) {
+      console.error("Error updating shift:", error);
       return serverError("Failed to update shift");
     }
   },
@@ -53,14 +107,49 @@ export const PATCH = createOrgEndpoint({
 
 /**
  * DELETE /api/shifts/[id]
- * Delete shift
+ * Soft delete a shift (requires manager+ role, sets status to cancelled)
  */
 export const DELETE = createOrgEndpoint({
   roles: ["manager"],
-  handler: async ({ request: _request, input: _input, context: _context, params }) => {
+  handler: async ({ request: _request, input: _input, context, params }) => {
     try {
-      return ok({ deleted: true, id: params.id });
-    } catch {
+      const { id } = params;
+      const orgId = context.org!.orgId;
+
+      // Fetch current document
+      const db = getFirestore();
+      const shiftRef = db.collection('orgs').doc(orgId).collection('shifts').doc(id);
+      const snap = await shiftRef.get();
+
+      if (!snap.exists) {
+        return NextResponse.json(
+          { error: "Shift not found" },
+          { status: 404 },
+        );
+      }
+
+      const current = snap.data() as Shift;
+
+      // Verify org ownership
+      if (current.orgId !== orgId) {
+        return NextResponse.json(
+          { error: "Unauthorized" },
+          { status: 403 },
+        );
+      }
+
+      // Soft delete: set status to cancelled
+      await shiftRef.update({
+        status: "cancelled",
+        updatedAt: Date.now(),
+      });
+
+      return NextResponse.json({
+        message: "Shift deleted successfully",
+        id,
+      }, { status: 200 });
+    } catch (error) {
+      console.error("Error deleting shift:", error);
       return serverError("Failed to delete shift");
     }
   },

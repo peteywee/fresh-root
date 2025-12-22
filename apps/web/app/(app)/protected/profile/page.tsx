@@ -5,8 +5,8 @@
 import React, { useEffect, useState } from "react";
 import { useAuth } from "../../../../src/lib/auth-context";
 import { useOrg } from "../../../../src/lib/org-context";
-import ProtectedRoute from "../../../../components/ProtectedRoute";
-import { db } from "../../../../app/lib/firebaseClient";
+import ProtectedRoute from "../../../components/ProtectedRoute";
+import { db } from "../../../lib/firebaseClient";
 import { doc, getDoc, setDoc, updateDoc, Timestamp } from "firebase/firestore";
 
 interface UserProfile {
@@ -36,12 +36,12 @@ export default function ProfilePage() {
 
   // Load profile from Firestore
   useEffect(() => {
-    if (!user || !orgId) return;
+    if (!user || !orgId || !db) return;
 
     const loadProfile = async () => {
       try {
         const profileRef = doc(
-          db,
+          db!,
           `organizations/${orgId}/members/${user.uid}`
         );
         const snap = await getDoc(profileRef);
@@ -81,8 +81,8 @@ export default function ProfilePage() {
   };
 
   const handleSave = async () => {
-    if (!user || !orgId) {
-      setError("Not authenticated");
+    if (!user || !orgId || !db) {
+      setError("Not authenticated or database not ready");
       return;
     }
 
@@ -93,7 +93,7 @@ export default function ProfilePage() {
     try {
       const now = Timestamp.now();
       const profileRef = doc(
-        db,
+        db!,
         `organizations/${orgId}/members/${user.uid}`
       );
 

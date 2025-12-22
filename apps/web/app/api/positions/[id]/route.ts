@@ -1,7 +1,9 @@
-// [P0][CORE][API] Position management endpoint
+// [P2][D2][POSITIONS][DETAIL][API] Position detail endpoint with Firestore persistence
+// Tags: P2, D2, API, POSITIONS, FIRESTORE
 export const dynamic = "force-dynamic";
 import { createOrgEndpoint } from "@fresh-schedules/api-framework";
-import { PositionSchema } from "@fresh-schedules/types";
+import { PositionSchema, type Position } from "@fresh-schedules/types";
+import { getFirestore } from "firebase-admin/firestore";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
@@ -26,7 +28,7 @@ import { serverError } from "../../_shared/validation";
 
 /**
  * GET /api/positions/[id]
- * Get position details (requires staff+ role)
+ * Get position details from Firestore (requires staff+ role)
  */
 export const GET = createOrgEndpoint({
   handler: async ({ request, input: _input, context, params }) => {
@@ -46,22 +48,33 @@ export const GET = createOrgEndpoint({
 
     try {
       const { id } = params;
+      const orgId = context.org!.orgId;
 
-      // In production, fetch from Firestore and verify orgId matches
-      const position = {
-        id,
-        orgId: context.org!.orgId,
-        title: "Server",
-        description: "Front of house server position",
-        hourlyRate: 15.0,
-        color: "#2196F3",
-        isActive: true,
-        createdAt: new Date().toISOString(),
-        createdBy: "user-123",
-      };
+      // Fetch from Firestore
+      const db = getFirestore();
+      const positionRef = db.collection('orgs').doc(orgId).collection('positions').doc(id);
+      const snap = await positionRef.get();
 
-      return NextResponse.json(position);
-    } catch {
+      if (!snap.exists) {
+        return NextResponse.json(
+          { error: "Position not found" },
+          { status: 404 },
+        );
+      }
+
+      const position = snap.data() as Position;
+
+      // Verify the position belongs to this org
+      if (position.orgId !== orgId) {
+        return NextResponse.json(
+          { error: "Unauthorized" },
+          { status: 403 },
+        );
+      }
+
+      return NextResponse.json(position, { status: 200 });
+    } catch (error) {
+      console.error("Error fetching position:", error);
       return serverError("Failed to fetch position");
     }
   },
@@ -69,7 +82,7 @@ export const GET = createOrgEndpoint({
 
 /**
  * PATCH /api/positions/[id]
- * Update position details (requires manager+ role)
+ * Update position details in Firestore (requires manager+ role)
  */
 export const PATCH = createOrgEndpoint({
   roles: ["manager"],
@@ -91,12 +104,15 @@ export const PATCH = createOrgEndpoint({
 
     try {
       const { id } = params;
+      const orgId = context.org!.orgId;
+      const userId = context.auth!.userId;
+
       // Type assertion safe - input validated by SDK factory
       const typedInput = input as z.infer<typeof UpdatePositionSchema>;
       const sanitized = sanitizeObject(typedInput as Record<string, unknown>);
 
       // Validate with Zod
-      const validationResult = PositionSchema.safeParse(sanitized);
+      const validationResult = UpdatePositionSchema.safeParse(sanitized);
       if (!validationResult.success) {
         return NextResponse.json(
           { error: "Invalid position data", details: validationResult.error.issues },
@@ -104,19 +120,46 @@ export const PATCH = createOrgEndpoint({
         );
       }
 
-      const data = validationResult.data;
+      // Fetch current document to verify orgId and apply partial updates
+      const db = getFirestore();
+      const positionRef = db.collection('orgs').doc(orgId).collection('positions').doc(id);
+      const snap = await positionRef.get();
 
-      // In production, update in Firestore after verifying orgId matches
-      const updatedPosition = {
-        id,
-        orgId: context.org!.orgId,
-        title: "Server",
-        ...data,
-        updatedAt: new Date().toISOString(),
+      if (!snap.exists) {
+        return NextResponse.json(
+          { error: "Position not found" },
+          { status: 404 },
+        );
+      }
+
+      const current = snap.data() as Position;
+
+      // Verify org ownership
+      if (current.orgId !== orgId) {
+        return NextResponse.json(
+          { error: "Unauthorized" },
+          { status: 403 },
+        );
+      }
+
+      // Build update object with timestamp
+      const updateData = {
+        ...sanitized,
+        updatedAt: Date.now(),
       };
 
-      return NextResponse.json(updatedPosition);
-    } catch {
+      // Update in Firestore
+      await positionRef.update(updateData);
+
+      // Return updated position
+      const updatedPosition: Position = {
+        ...current,
+        ...updateData,
+      } as Position;
+
+      return NextResponse.json(updatedPosition, { status: 200 });
+    } catch (error) {
+      console.error("Error updating position:", error);
       return serverError("Failed to update position");
     }
   },
@@ -124,11 +167,11 @@ export const PATCH = createOrgEndpoint({
 
 /**
  * DELETE /api/positions/[id]
- * Delete a position (requires admin+ role, soft delete - set isActive to false)
+ * Soft delete a position (requires admin+ role, sets isActive to false)
  */
 export const DELETE = createOrgEndpoint({
   roles: ["admin"],
-  handler: async ({ request, input: _input, context: _context, params }) => {
+  handler: async ({ request, input: _input, context, params }) => {
     // Apply rate limiting
     const rateLimitResult = await checkRateLimit(request, RateLimits.api);
     if (!rateLimitResult.allowed) {
@@ -145,13 +188,42 @@ export const DELETE = createOrgEndpoint({
 
     try {
       const { id } = params;
+      const orgId = context.org!.orgId;
 
-      // In production, soft delete by setting isActive = false after verifying orgId
+      // Fetch current document
+      const db = getFirestore();
+      const positionRef = db.collection('orgs').doc(orgId).collection('positions').doc(id);
+      const snap = await positionRef.get();
+
+      if (!snap.exists) {
+        return NextResponse.json(
+          { error: "Position not found" },
+          { status: 404 },
+        );
+      }
+
+      const current = snap.data() as Position;
+
+      // Verify org ownership
+      if (current.orgId !== orgId) {
+        return NextResponse.json(
+          { error: "Unauthorized" },
+          { status: 403 },
+        );
+      }
+
+      // Soft delete: set isActive to false
+      await positionRef.update({
+        isActive: false,
+        updatedAt: Date.now(),
+      });
+
       return NextResponse.json({
         message: "Position deleted successfully",
         id,
-      });
-    } catch {
+      }, { status: 200 });
+    } catch (error) {
+      console.error("Error deleting position:", error);
       return serverError("Failed to delete position");
     }
   },
