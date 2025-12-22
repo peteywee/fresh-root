@@ -90,7 +90,7 @@ function isFsNotFoundError(err: unknown): boolean {
 }
 
 export const GET = createAdminEndpoint({
-  handler: async ({ request, input: _input, context, params: _params }) => {
+  handler: async ({ request, input: _input, context: _context, params: _params }) => {
     const url = new URL(request.url);
     const limitParam = url.searchParams.get("limit");
     const limit = Math.max(1, Math.min(50, Number(limitParam ?? 10) || 10));

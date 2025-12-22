@@ -2,7 +2,7 @@
 // Tags: P2, D2, API, POSITIONS, FIRESTORE
 export const dynamic = "force-dynamic";
 import { createOrgEndpoint } from "@fresh-schedules/api-framework";
-import { PositionSchema, type Position } from "@fresh-schedules/types";
+import { type Position } from "@fresh-schedules/types";
 import { getFirestore } from "firebase-admin/firestore";
 import { NextResponse } from "next/server";
 import { z } from "zod";
@@ -105,7 +105,6 @@ export const PATCH = createOrgEndpoint({
     try {
       const { id } = params;
       const orgId = context.org!.orgId;
-      const userId = context.auth!.userId;
 
       // Type assertion safe - input validated by SDK factory
       const typedInput = input as z.infer<typeof UpdatePositionSchema>;
