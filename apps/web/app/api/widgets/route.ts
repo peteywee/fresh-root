@@ -44,7 +44,9 @@ export const POST = createPublicEndpoint({
       }
 
       const typedInput = result.data;
-      const widgetId = `widget-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+      const db = getFirestore();
+      const docRef = db.collection('widgets').doc();
+      const widgetId = docRef.id;
 
       const widget: Widget = {
         id: widgetId,
@@ -56,8 +58,7 @@ export const POST = createPublicEndpoint({
       };
 
       // Persist to Firestore in a public widgets collection
-      const db = getFirestore();
-      await db.collection('widgets').doc(widgetId).set(widget);
+      await docRef.set(widget);
 
       return NextResponse.json(widget, { status: 201 });
     } catch (error) {

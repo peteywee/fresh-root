@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 // @ts-nocheck
 // Dashboard demo component with intentional loose typing for rapid prototyping
 "use client";

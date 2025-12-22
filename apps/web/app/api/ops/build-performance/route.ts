@@ -192,9 +192,10 @@ export const POST = createAdminEndpoint({
     }
 
     try {
-      // Validate timestamp is ISO datetime
+      // Validate timestamp is ISO datetime using Date.parse to avoid weak regex
       const timestamp = String(body.timestamp);
-      if (!/^\d{4}-\d{2}-\d{2}T/.test(timestamp)) {
+      const parsedTimestamp = Date.parse(timestamp);
+      if (!Number.isFinite(parsedTimestamp)) {
         return NextResponse.json(
           { ok: false, error: "timestamp must be ISO datetime format" },
           { status: 400 }
