@@ -28,6 +28,12 @@ export type BuildPerformanceEntry = z.infer<typeof BuildPerformanceEntrySchema>;
 export const CreateBuildPerformanceSchema = BuildPerformanceEntrySchema.omit({
   id: true,
   createdAt: true,
+}).extend({
+  timestamp: z.string().datetime(),
+  installSeconds: z.number().int().min(0),
+  buildSeconds: z.number().int().min(0),
+  sdkSeconds: z.number().int().min(0),
+  totalSeconds: z.number().int().min(0),
 });
 
 export type CreateBuildPerformance = z.infer<typeof CreateBuildPerformanceSchema>;

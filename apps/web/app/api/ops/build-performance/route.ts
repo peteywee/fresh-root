@@ -121,11 +121,12 @@ export const GET = createAdminEndpoint({
         return NextResponse.json(
           {
             ok: false,
-            source,
-            path: "docs/metrics/build-performance.log",
-            orgId: context.org?.orgId,
-            entries: [],
-            error: "Failed to load build performance metrics",
+            data: [],
+            meta: {
+              source,
+              limit,
+              error: "Failed to load build performance metrics",
+            },
           },
           {
             status: 500,
@@ -142,10 +143,12 @@ export const GET = createAdminEndpoint({
     return NextResponse.json(
       {
         ok: true,
-        source,
-        path: "docs/metrics/build-performance.log",
-        orgId: context.org?.orgId,
-        entries,
+        data: entries,
+        meta: {
+          source,
+          limit,
+          total: entries.length,
+        },
       },
       {
         status: 200,
@@ -157,13 +160,15 @@ export const GET = createAdminEndpoint({
   },
 });
 
-// POST: Write new build performance entry to Firestore  
+// POST: Write new build performance entry to Firestore
+// NOTE: Uses manual validation. Should be refactored to use SDK factory input pattern
+// once @fresh-schedules/types exports are working (see RED_TEAM_ANALYSIS.md)
 export const POST = createAdminEndpoint({
   handler: async ({ request }) => {
     const db = getFirestore();
     const body = await request.json() as Record<string, unknown>;
 
-    // Validate required fields
+    // Validate required fields with type checking
     const requiredFields = [
       "timestamp",
       "repository",
@@ -187,17 +192,48 @@ export const POST = createAdminEndpoint({
     }
 
     try {
+      // Validate timestamp is ISO datetime
+      const timestamp = String(body.timestamp);
+      if (!/^\d{4}-\d{2}-\d{2}T/.test(timestamp)) {
+        return NextResponse.json(
+          { ok: false, error: "timestamp must be ISO datetime format" },
+          { status: 400 }
+        );
+      }
+
+      // Coerce numbers and validate non-negative
+      const installSeconds = Number(body.installSeconds);
+      const buildSeconds = Number(body.buildSeconds);
+      const sdkSeconds = Number(body.sdkSeconds);
+      const totalSeconds = Number(body.totalSeconds);
+
+      if (
+        installSeconds < 0 ||
+        buildSeconds < 0 ||
+        sdkSeconds < 0 ||
+        totalSeconds < 0 ||
+        isNaN(installSeconds) ||
+        isNaN(buildSeconds) ||
+        isNaN(sdkSeconds) ||
+        isNaN(totalSeconds)
+      ) {
+        return NextResponse.json(
+          { ok: false, error: "Duration fields must be non-negative numbers" },
+          { status: 400 }
+        );
+      }
+
       const entry = {
-        timestamp: body.timestamp,
-        repository: body.repository,
-        ref: body.ref,
-        sha: body.sha,
-        runId: body.runId,
-        runAttempt: body.runAttempt,
-        installSeconds: Number(body.installSeconds),
-        buildSeconds: Number(body.buildSeconds),
-        sdkSeconds: Number(body.sdkSeconds),
-        totalSeconds: Number(body.totalSeconds),
+        timestamp,
+        repository: String(body.repository),
+        ref: String(body.ref),
+        sha: String(body.sha),
+        runId: String(body.runId),
+        runAttempt: String(body.runAttempt),
+        installSeconds,
+        buildSeconds,
+        sdkSeconds,
+        totalSeconds,
         cacheHit: body.cacheHit === "true" || body.cacheHit === true,
         createdAt: Date.now(),
       };
@@ -207,7 +243,7 @@ export const POST = createAdminEndpoint({
         .add(entry);
 
       return NextResponse.json(
-        { ok: true, id: docRef.id, ...entry },
+        { ok: true, id: docRef.id },
         { status: 201 }
       );
     } catch (err) {

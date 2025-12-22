@@ -24,13 +24,11 @@ type BuildPerformanceEntry = {
 
 interface ApiResponse {
   ok: boolean;
-  source: string;
   data: BuildPerformanceEntry[];
   meta: {
-    total: number;
+    source: string;
     limit: number;
-    offset: number;
-    hasMore: boolean;
+    total: number;
   };
 }
 
