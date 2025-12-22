@@ -1,10 +1,11 @@
 // [P1][API][CODE] Terminal execution API endpoint
 // Tags: P1, API, CODE, terminal, execution
 
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { spawn } from 'child_process';
 import { z } from 'zod';
 import * as path from 'path';
+import { createAuthenticatedEndpoint } from '@fresh-schedules/api-framework';
 
 const WORKSPACE_ROOT = '/workspaces/fresh-root';
 
@@ -80,19 +81,10 @@ function validateCommand(cmd: string): { valid: boolean; reason?: string } {
   return { valid: true };
 }
 
-export async function POST(request: NextRequest) {
-  try {
-    const body = await request.json();
-    const parsed = TerminalInputSchema.safeParse(body);
-
-    if (!parsed.success) {
-      return NextResponse.json(
-        { stdout: '', stderr: 'Invalid input', exitCode: 1 },
-        { status: 400 }
-      );
-    }
-
-    const { command, cwd } = parsed.data;
+export const POST = createAuthenticatedEndpoint({
+  input: TerminalInputSchema,
+  handler: async ({ input }: { input: z.infer<typeof TerminalInputSchema> }) => {
+    const { command, cwd } = input;
 
     // Validate cwd is within workspace
     if (!validateCwd(cwd)) {
@@ -117,14 +109,8 @@ export async function POST(request: NextRequest) {
     const result = await executeCommand(command, cwd);
 
     return NextResponse.json(result);
-  } catch (error) {
-    console.error('Terminal API error:', error);
-    return NextResponse.json(
-      { stdout: '', stderr: 'Internal server error', exitCode: 1 },
-      { status: 500 }
-    );
-  }
-}
+  },
+});
 
 function executeCommand(
   command: string,
