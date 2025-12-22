@@ -82,7 +82,7 @@ function isExtensionAllowed(filePath: string): boolean {
 
 // GET - Read file content
 export const GET = createAuthenticatedEndpoint({
-  handler: async ({ request }) => {
+  handler: async ({ request, input: _input, context: _context, params: _params }) => {
     const { searchParams } = new URL(request.url);
     const filePath = searchParams.get('path');
 
@@ -250,7 +250,7 @@ export const POST = createAuthenticatedEndpoint({
 
 // DELETE - Remove file
 export const DELETE = createAuthenticatedEndpoint({
-  handler: async ({ request }) => {
+  handler: async ({ request, input: _input, context: _context, params: _params }) => {
     const { searchParams } = new URL(request.url);
     const filePath = searchParams.get('path');
 
