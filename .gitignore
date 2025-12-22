@@ -48,6 +48,7 @@ scripts-local/
 # Local TODOs
 TODO.md
 *.log
+!docs/metrics/*.log
 
 # TypeScript incremental and tsbuildinfo files
 **/tsconfig.tsbuildinfo
