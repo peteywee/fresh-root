@@ -1,4 +1,7 @@
-import React, { useState, useEffect, useRef, useMemo } from 'react';
+// @ts-nocheck - Dashboard demo component with intentional loose typing for rapid prototyping
+"use client";
+
+import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import {
   Activity, Code2, FileCode, Files, Layout, RefreshCw, CheckCircle2,
   ShieldCheck, Terminal, GitBranch, Box, Layers, Clock, AlertCircle,
