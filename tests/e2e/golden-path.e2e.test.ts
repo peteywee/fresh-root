@@ -15,7 +15,9 @@ import {
   BASE_URL,
   checkServerHealth,
   safeFetch,
-  serverAvailable,
+  authFetch,
+  authenticateForTests,
+  clearAuthToken,
   testResults,
   recordResult,
   generateReport,
@@ -398,6 +400,282 @@ describe("Golden Path E2E Tests", () => {
         actualStatus: response.status,
       });
       expect(response.status).toBe(401);
+    });
+  });
+
+  // ============================================================
+  // AUTHENTICATED CRUD GOLDEN PATH
+  // Tests authenticated operations with proper error code validation
+  // ============================================================
+  describe("Authenticated CRUD Golden Path", () => {
+    let isAuthenticated = false;
+    let createdOrgId: string | null = null;
+    let createdScheduleId: string | null = null;
+
+    beforeAll(async () => {
+      if (isServerUp) {
+        const token = await authenticateForTests();
+        isAuthenticated = !!token;
+        if (!isAuthenticated) {
+          console.warn("⚠️ Auth not available - authenticated tests will be skipped");
+        }
+      }
+    });
+
+    afterAll(() => {
+      clearAuthToken();
+    });
+
+    it("POST /api/organizations with auth should return 201 or 400", async () => {
+      const endpoint = "/api/organizations";
+
+      if (!isServerUp || !isAuthenticated) {
+        recordResult({
+          endpoint,
+          method: "POST",
+          status: "skip",
+          error: !isServerUp ? "Server not available" : "Not authenticated",
+        });
+        expect(true).toBe(true);
+        return;
+      }
+
+      const { response, error } = await authFetch(`${BASE_URL}${endpoint}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: `Test Org ${Date.now()}`,
+          type: "network",
+        }),
+      });
+
+      if (!response) {
+        recordResult({
+          endpoint,
+          method: "POST",
+          status: "fail",
+          error: error || "No response",
+        });
+        expect(response).toBeTruthy();
+        return;
+      }
+
+      // 201 = created, 400 = validation error (both are valid responses with proper error shape)
+      const passed = [201, 400].includes(response.status);
+      recordResult({
+        endpoint,
+        method: "POST",
+        status: passed ? "pass" : "fail",
+        expectedStatus: "201/400",
+        actualStatus: response.status,
+      });
+
+      if (response.status === 201) {
+        const data = await response.json();
+        createdOrgId = data.id || data.orgId;
+        expect(data).toHaveProperty("id");
+      } else if (response.status === 400) {
+        const data = await response.json();
+        // Verify consistent error shape
+        expect(data.error).toBeDefined();
+        expect(data.error.code).toBeDefined();
+        expect(data.error.message).toBeDefined();
+      }
+
+      expect([201, 400]).toContain(response.status);
+    });
+
+    it("POST /api/schedules with auth should return 201 or 400", async () => {
+      const endpoint = "/api/schedules";
+
+      if (!isServerUp || !isAuthenticated) {
+        recordResult({
+          endpoint,
+          method: "POST",
+          status: "skip",
+          error: !isServerUp ? "Server not available" : "Not authenticated",
+        });
+        expect(true).toBe(true);
+        return;
+      }
+
+      const { response, error } = await authFetch(`${BASE_URL}${endpoint}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: `Test Schedule ${Date.now()}`,
+          orgId: createdOrgId || "test-org-001",
+          startDate: new Date().toISOString(),
+          endDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
+        }),
+      });
+
+      if (!response) {
+        recordResult({
+          endpoint,
+          method: "POST",
+          status: "fail",
+          error: error || "No response",
+        });
+        expect(response).toBeTruthy();
+        return;
+      }
+
+      const passed = [201, 400].includes(response.status);
+      recordResult({
+        endpoint,
+        method: "POST",
+        status: passed ? "pass" : "fail",
+        expectedStatus: "201/400",
+        actualStatus: response.status,
+      });
+
+      if (response.status === 201) {
+        const data = await response.json();
+        createdScheduleId = data.id || data.scheduleId;
+        expect(data).toHaveProperty("id");
+      } else if (response.status === 400) {
+        const data = await response.json();
+        expect(data.error).toBeDefined();
+        expect(data.error.code).toBeDefined();
+      }
+
+      expect([201, 400]).toContain(response.status);
+    });
+
+    it("GET /api/schedules/[id] with auth should return 200 or 404", async () => {
+      const scheduleId = createdScheduleId || "test-schedule-001";
+      const endpoint = `/api/schedules/${scheduleId}`;
+
+      if (!isServerUp || !isAuthenticated) {
+        recordResult({
+          endpoint,
+          method: "GET",
+          status: "skip",
+          error: !isServerUp ? "Server not available" : "Not authenticated",
+        });
+        expect(true).toBe(true);
+        return;
+      }
+
+      const { response, error } = await authFetch(`${BASE_URL}${endpoint}`);
+
+      if (!response) {
+        recordResult({
+          endpoint,
+          method: "GET",
+          status: "fail",
+          error: error || "No response",
+        });
+        expect(response).toBeTruthy();
+        return;
+      }
+
+      const passed = [200, 404].includes(response.status);
+      recordResult({
+        endpoint,
+        method: "GET",
+        status: passed ? "pass" : "fail",
+        expectedStatus: "200/404",
+        actualStatus: response.status,
+      });
+
+      if (response.status === 404) {
+        const data = await response.json();
+        expect(data.error).toBeDefined();
+        expect(data.error.code).toBe("NOT_FOUND");
+      }
+
+      expect([200, 404]).toContain(response.status);
+    });
+
+    it("DELETE /api/schedules/[id] with auth should return 200/204 or 404", async () => {
+      const scheduleId = createdScheduleId || "test-schedule-001";
+      const endpoint = `/api/schedules/${scheduleId}`;
+
+      if (!isServerUp || !isAuthenticated) {
+        recordResult({
+          endpoint,
+          method: "DELETE",
+          status: "skip",
+          error: !isServerUp ? "Server not available" : "Not authenticated",
+        });
+        expect(true).toBe(true);
+        return;
+      }
+
+      const { response, error } = await authFetch(`${BASE_URL}${endpoint}`, {
+        method: "DELETE",
+      });
+
+      if (!response) {
+        recordResult({
+          endpoint,
+          method: "DELETE",
+          status: "fail",
+          error: error || "No response",
+        });
+        expect(response).toBeTruthy();
+        return;
+      }
+
+      const passed = [200, 204, 404].includes(response.status);
+      recordResult({
+        endpoint,
+        method: "DELETE",
+        status: passed ? "pass" : "fail",
+        expectedStatus: "200/204/404",
+        actualStatus: response.status,
+      });
+
+      if (response.status === 404) {
+        const data = await response.json();
+        expect(data.error).toBeDefined();
+        expect(data.error.code).toBe("NOT_FOUND");
+      }
+
+      expect([200, 204, 404]).toContain(response.status);
+    });
+
+    it("DELETE /api/session should return 200/204 (logout)", async () => {
+      const endpoint = "/api/session";
+
+      if (!isServerUp || !isAuthenticated) {
+        recordResult({
+          endpoint,
+          method: "DELETE",
+          status: "skip",
+          error: !isServerUp ? "Server not available" : "Not authenticated",
+        });
+        expect(true).toBe(true);
+        return;
+      }
+
+      const { response, error } = await authFetch(`${BASE_URL}${endpoint}`, {
+        method: "DELETE",
+      });
+
+      if (!response) {
+        recordResult({
+          endpoint,
+          method: "DELETE",
+          status: "fail",
+          error: error || "No response",
+        });
+        expect(response).toBeTruthy();
+        return;
+      }
+
+      const passed = [200, 204].includes(response.status);
+      recordResult({
+        endpoint,
+        method: "DELETE",
+        status: passed ? "pass" : "fail",
+        expectedStatus: "200/204",
+        actualStatus: response.status,
+      });
+
+      expect([200, 204]).toContain(response.status);
     });
   });
 });

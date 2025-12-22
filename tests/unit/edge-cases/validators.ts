@@ -52,7 +52,7 @@ export function validateEdgeCase<T>(
     actuallyRejected = true;
     if (e instanceof ZodError) {
       zodError = e;
-      errorMessage = e.errors.map((err) => err.message).join("; ");
+      errorMessage = e.issues?.map((err) => err.message).join("; ") || e.message || "Validation failed";
     } else if (e instanceof Error) {
       errorMessage = e.message;
     }

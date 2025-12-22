@@ -67,17 +67,23 @@ export function withRateLimit(
   ) => {
     const uid = req.user?.uid;
     if (!uid) {
-      return NextResponse.json({ error: "not_authenticated" }, { status: 401 });
+      return NextResponse.json(
+        { error: { code: "UNAUTHORIZED", message: "Not authenticated" } },
+        { status: 401 },
+      );
     }
 
     const limit = checkRateLimit(uid);
     if (!limit.allowed) {
+      const retryAfter = Math.ceil((limit.resetAt - Date.now()) / 1000);
       return NextResponse.json(
         {
-          error: "rate_limit_exceeded",
-          retryAfter: Math.ceil((limit.resetAt - Date.now()) / 1000),
+          error: {
+            code: "RATE_LIMITED",
+            message: "Rate limit exceeded. Please try again later.",
+          },
         },
-        { status: 429, headers: { "Retry-After": String(limit.resetAt) } },
+        { status: 429, headers: { "Retry-After": String(retryAfter) } },
       );
     }
 

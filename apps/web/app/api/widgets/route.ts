@@ -5,6 +5,8 @@ import { createPublicEndpoint } from "@fresh-schedules/api-framework";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
+import { badRequest } from "../_shared/validation";
+
 // Widget item schema
 const CreateItemSchema = z.object({
   name: z.string().min(1),
@@ -20,10 +22,7 @@ export const POST = createPublicEndpoint({
       // Validate with schema
       const result = CreateItemSchema.safeParse(body);
       if (!result.success) {
-        return NextResponse.json(
-          { error: "Invalid widget data" },
-          { status: 400 },
-        );
+        return badRequest("Invalid widget data", result.error.issues);
       }
       const typedInput = result.data;
       const widget = {
@@ -36,10 +35,7 @@ export const POST = createPublicEndpoint({
       };
       return NextResponse.json(widget, { status: 201 });
     } catch (_error) {
-      return NextResponse.json(
-        { error: "Invalid request" },
-        { status: 400 },
-      );
+      return badRequest("Invalid request");
     }
   },
 });

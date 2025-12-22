@@ -22,7 +22,7 @@ const UpdatePositionSchema = z.object({
 
 import { checkRateLimit, RateLimits } from "../../../../src/lib/api/rate-limit";
 import { sanitizeObject } from "../../../../src/lib/api/sanitize";
-import { serverError } from "../../_shared/validation";
+import { badRequest, rateLimited, serverError } from "../../_shared/validation";
 
 /**
  * GET /api/positions/[id]
@@ -33,15 +33,7 @@ export const GET = createOrgEndpoint({
     // Apply rate limiting
     const rateLimitResult = await checkRateLimit(request, RateLimits.api);
     if (!rateLimitResult.allowed) {
-      return NextResponse.json(
-        { error: "Rate limit exceeded" },
-        {
-          status: 429,
-          headers: {
-            "Retry-After": String(Math.ceil((rateLimitResult.resetAt - Date.now()) / 1000)),
-          },
-        },
-      );
+      return rateLimited(rateLimitResult.resetAt);
     }
 
     try {
@@ -78,15 +70,7 @@ export const PATCH = createOrgEndpoint({
     // Apply rate limiting
     const rateLimitResult = await checkRateLimit(request, RateLimits.api);
     if (!rateLimitResult.allowed) {
-      return NextResponse.json(
-        { error: "Rate limit exceeded" },
-        {
-          status: 429,
-          headers: {
-            "Retry-After": String(Math.ceil((rateLimitResult.resetAt - Date.now()) / 1000)),
-          },
-        },
-      );
+      return rateLimited(rateLimitResult.resetAt);
     }
 
     try {
@@ -98,10 +82,7 @@ export const PATCH = createOrgEndpoint({
       // Validate with Zod
       const validationResult = PositionSchema.safeParse(sanitized);
       if (!validationResult.success) {
-        return NextResponse.json(
-          { error: "Invalid position data", details: validationResult.error.issues },
-          { status: 400 },
-        );
+        return badRequest("Invalid position data", validationResult.error.issues);
       }
 
       const data = validationResult.data;
@@ -132,15 +113,7 @@ export const DELETE = createOrgEndpoint({
     // Apply rate limiting
     const rateLimitResult = await checkRateLimit(request, RateLimits.api);
     if (!rateLimitResult.allowed) {
-      return NextResponse.json(
-        { error: "Rate limit exceeded" },
-        {
-          status: 429,
-          headers: {
-            "Retry-After": String(Math.ceil((rateLimitResult.resetAt - Date.now()) / 1000)),
-          },
-        },
-      );
+      return rateLimited(rateLimitResult.resetAt);
     }
 
     try {
