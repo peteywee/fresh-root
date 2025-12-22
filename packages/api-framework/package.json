@@ -1,50 +1,38 @@
 {
   "name": "@fresh-schedules/api-framework",
   "version": "1.0.0",
-  "description": "Internal SDK for building secure, consistent API routes",
-  "main": "./dist/index.js",
-  "module": "./dist/index.mjs",
+  "private": true,
+  "type": "module",
+  "main": "./dist/index.mjs",
   "types": "./dist/index.d.mts",
   "exports": {
     ".": {
       "types": "./dist/index.d.mts",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.js"
+      "import": "./dist/index.mjs"
     },
     "./testing": {
       "types": "./dist/testing.d.mts",
-      "import": "./dist/testing.mjs",
-      "require": "./dist/testing.js"
+      "import": "./dist/testing.mjs"
     }
   },
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "tsup",
-    "dev": "tsup --watch",
-    "lint": "eslint . --cache --ext .ts,.tsx,.js,.jsx",
-    "lint:fix": "eslint . --cache --ext .ts,.tsx,.js,.jsx --fix",
-    "typecheck": "tsc --noEmit",
-    "test": "vitest run --passWithNoTests",
-    "test:watch": "vitest",
-    "clean": "rm -rf dist"
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@fresh-schedules/types": "workspace:*",
     "@upstash/redis": "^1.35.8",
-    "zod": "^4.2.1"
-  },
-  "peerDependencies": {
     "firebase-admin": "^13.6.0",
-    "next": "^16.0.5"
+    "next": "^16.0.5",
+    "zod": "^4.2.1"
   },
   "devDependencies": {
     "@types/node": "^24.10.4",
     "tsup": "^8.5.1",
     "typescript": "^5.9.3",
     "vitest": "^4.0.16"
-  },
-  "files": [
-    "dist",
-    "README.md",
-    "eslint.config.js"
-  ]
+  }
 }

@@ -16,7 +16,6 @@
       "@fresh-schedules/api-framework/testing": ["packages/api-framework/src/testing.ts"],
       "@packages/env": ["packages/env/src/index.ts"]
     },
-    "typeRoots": ["./types", "./node_modules/@types"],
     "types": ["node"]
   },
   "include": ["types/**/*.d.ts"],
