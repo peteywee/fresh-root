@@ -223,11 +223,20 @@ export const POST = createAdminEndpoint({
         );
       }
 
+      // Validate SHA is 40 chars (git full hash)
+      const sha = String(body.sha);
+      if (!/^[a-f0-9]{40}$/.test(sha)) {
+        return NextResponse.json(
+          { ok: false, error: "sha must be 40-character hex string (git full hash)" },
+          { status: 400 }
+        );
+      }
+
       const entry = {
         timestamp,
         repository: String(body.repository),
         ref: String(body.ref),
-        sha: String(body.sha),
+        sha,
         runId: String(body.runId),
         runAttempt: String(body.runAttempt),
         installSeconds,
