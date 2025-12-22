@@ -164,7 +164,7 @@ export const GET = createAdminEndpoint({
 // NOTE: Uses manual validation. Should be refactored to use SDK factory input pattern
 // once @fresh-schedules/types exports are working (see RED_TEAM_ANALYSIS.md)
 export const POST = createAdminEndpoint({
-  handler: async ({ request }) => {
+  handler: async ({ request, input: _input, context: _context, params: _params }) => {
     const db = getFirestore();
     const body = await request.json() as Record<string, unknown>;
 
