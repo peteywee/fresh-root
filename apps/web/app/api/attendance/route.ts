@@ -6,6 +6,8 @@ import { CreateAttendanceRecordSchema } from "@fresh-schedules/types";
 import { getFirestore } from "firebase-admin/firestore";
 import { NextResponse } from "next/server";
 
+import { badRequest, forbidden, serverError } from "../_shared/validation";
+
 import { FLAGS } from "../../../src/lib/features";
 
 /**
@@ -24,7 +26,7 @@ export const GET = createAuthenticatedEndpoint({
       const staffUid = searchParams.get("staffUid");
 
       if (!orgId) {
-        return NextResponse.json({ error: "orgId query parameter is required" }, { status: 400 });
+        return badRequest("orgId query parameter is required");
       }
 
       // D1: Fetch from Firestore if FIRESTORE_WRITES enabled
@@ -71,7 +73,7 @@ export const GET = createAuthenticatedEndpoint({
 
       return NextResponse.json({ records: filtered, total: filtered.length }, { status: 200 });
     } catch {
-      return NextResponse.json({ error: "Failed to fetch attendance records" }, { status: 500 });
+      return serverError("Failed to fetch attendance records");
     }
   },
 });
@@ -92,7 +94,7 @@ export const POST = createAuthenticatedEndpoint({
 
       // Verify orgId matches context
       if (data.orgId !== context.org!.orgId) {
-        return NextResponse.json({ error: "Organization ID mismatch" }, { status: 403 });
+        return forbidden("Organization ID mismatch");
       }
 
       // Calculate scheduled duration in minutes (coerce to number to satisfy TS)
@@ -125,9 +127,9 @@ export const POST = createAuthenticatedEndpoint({
       return NextResponse.json(newRecord, { status: 201 });
     } catch (error) {
       if (error instanceof Error && error.name === "ZodError") {
-        return NextResponse.json({ error: "Invalid attendance record data" }, { status: 400 });
+        return badRequest("Invalid attendance record data");
       }
-      return NextResponse.json({ error: "Failed to create attendance record" }, { status: 500 });
+      return serverError("Failed to create attendance record");
     }
   },
 });
