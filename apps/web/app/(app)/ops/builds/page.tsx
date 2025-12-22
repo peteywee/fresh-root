@@ -119,10 +119,16 @@ export default function BuildsPage() {
 
   const chartData = useMemo(() => {
     if (!data?.data) return [];
-    return data.data.map((entry) => ({
-      createdAt: new Date(entry.timestamp).getTime(),
-      totalDurationSec: entry.totalSeconds,
-    }));
+    return data.data
+      .filter((entry) => {
+        // Filter out entries with invalid timestamps (NaN would break chart)
+        const time = new Date(entry.timestamp).getTime();
+        return !isNaN(time);
+      })
+      .map((entry) => ({
+        createdAt: new Date(entry.timestamp).getTime(),
+        totalDurationSec: entry.totalSeconds,
+      }));
   }, [data]);
 
   if (error) {
@@ -197,29 +203,35 @@ export default function BuildsPage() {
                 </td>
               </tr>
             ) : (
-              data?.data.slice(0, 20).map((entry) => (
-                <tr key={entry.id} className="hover:bg-slate-800/30">
-                  <td className="whitespace-nowrap px-4 py-3 text-sm text-slate-300">
-                    {new Date(entry.timestamp).toLocaleString()}
-                  </td>
-                  <td className="px-4 py-3 font-mono text-xs text-slate-400">{entry.sha.slice(0, 7)}</td>
-                  <td className="whitespace-nowrap px-4 py-3 text-right text-sm text-slate-300">
-                    {formatDuration(entry.installSeconds)}
-                  </td>
-                  <td className="whitespace-nowrap px-4 py-3 text-right text-sm text-slate-300">
-                    {formatDuration(entry.buildSeconds)}
-                  </td>
-                  <td className="whitespace-nowrap px-4 py-3 text-right text-sm text-slate-300">
-                    {formatDuration(entry.sdkSeconds)}
-                  </td>
-                  <td className="whitespace-nowrap px-4 py-3 text-right text-sm font-medium text-slate-100">
-                    {formatDuration(entry.totalSeconds)}
-                  </td>
-                  <td className="px-4 py-3 text-center text-sm">
-                    {entry.cacheHit ? "✅" : "❌"}
-                  </td>
-                </tr>
-              ))
+              data?.data.slice(0, 20).map((entry) => {
+                // Validate timestamp before rendering
+                const ts = new Date(entry.timestamp);
+                const isValidDate = !isNaN(ts.getTime());
+                
+                return (
+                  <tr key={entry.id} className="hover:bg-slate-800/30">
+                    <td className="whitespace-nowrap px-4 py-3 text-sm text-slate-300">
+                      {isValidDate ? ts.toLocaleString() : "Invalid date"}
+                    </td>
+                    <td className="px-4 py-3 font-mono text-xs text-slate-400">{entry.sha.slice(0, 7)}</td>
+                    <td className="whitespace-nowrap px-4 py-3 text-right text-sm text-slate-300">
+                      {formatDuration(entry.installSeconds)}
+                    </td>
+                    <td className="whitespace-nowrap px-4 py-3 text-right text-sm text-slate-300">
+                      {formatDuration(entry.buildSeconds)}
+                    </td>
+                    <td className="whitespace-nowrap px-4 py-3 text-right text-sm text-slate-300">
+                      {formatDuration(entry.sdkSeconds)}
+                    </td>
+                    <td className="whitespace-nowrap px-4 py-3 text-right text-sm font-medium text-slate-100">
+                      {formatDuration(entry.totalSeconds)}
+                    </td>
+                    <td className="px-4 py-3 text-center text-sm">
+                      {entry.cacheHit ? "✅" : "❌"}
+                    </td>
+                  </tr>
+                );
+              })
             )}
           </tbody>
         </table>
