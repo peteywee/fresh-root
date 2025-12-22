@@ -4,10 +4,11 @@ import { createOrgEndpoint } from "@fresh-schedules/api-framework";
 import { UpdateScheduleSchema } from "@fresh-schedules/types";
 
 import { badRequest, ok, parseJson, serverError } from "../../_shared/validation";
+import { adminDb } from "@/src/lib/firebase.server";
 
 /**
  * GET /api/schedules/[id]
- * Fetch a schedule by ID
+ * Fetch a schedule by ID from Firestore
  */
 export const GET = createOrgEndpoint({
   handler: async ({ request: _request, input: _input, context, params }) => {
@@ -17,26 +18,33 @@ export const GET = createOrgEndpoint({
         return badRequest("Schedule ID is required");
       }
 
-      // Mock data
-      const schedule = {
-        id,
-        orgId: context.org?.orgId,
-        name: "Q1 2025 Schedule",
-        status: "draft",
-        createdBy: context.auth?.userId,
-        createdAt: Date.now(),
-      };
+      if (!adminDb) {
+        return serverError("Database not initialized");
+      }
 
-      return ok(schedule);
-    } catch {
-      return serverError("Failed to fetch schedule");
+      // Query Firestore for the schedule
+      const docRef = adminDb.doc(
+        `organizations/${context.org!.orgId}/schedules/${id}`
+      );
+      const docSnap = await docRef.get();
+
+      if (!docSnap.exists) {
+        return badRequest("Schedule not found", undefined, "NOT_FOUND");
+      }
+
+      const data = docSnap.data();
+      return ok({ id: docSnap.id, ...data });
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : "Failed to fetch schedule";
+      return serverError(message);
     }
   },
 });
 
 /**
  * PATCH /api/schedules/[id]
- * Update a schedule
+ * Update a schedule in Firestore
  * Note: Requires 'manager' role for broader Series-A access
  */
 export const PATCH = createOrgEndpoint({
@@ -49,41 +57,63 @@ export const PATCH = createOrgEndpoint({
         return badRequest("Validation failed", parsed.details);
       }
 
-      const validated = parsed.data as Record<string, unknown>;
-      const updated = {
-        id,
-        ...(validated || {}),
-        updatedBy: context.auth?.userId,
-        updatedAt: Date.now(),
-      };
+      if (!adminDb) {
+        return serverError("Database not initialized");
+      }
 
-      return ok(updated);
+      const validated = parsed.data as Record<string, unknown>;
+      const docRef = adminDb.doc(
+        `organizations/${context.org!.orgId}/schedules/${id}`
+      );
+
+      // Update the document
+      await docRef.update({
+        ...validated,
+        updatedBy: context.auth?.userId,
+        updatedAt: new Date(),
+      });
+
+      const updated = await docRef.get();
+      return ok({ id: updated.id, ...updated.data() });
     } catch (error) {
       if (error instanceof Error && error.name === "ZodError") {
         return badRequest("Invalid schedule data");
       }
-      return serverError("Failed to update schedule");
+      const message =
+        error instanceof Error ? error.message : "Failed to update schedule";
+      return serverError(message);
     }
   },
 });
 
 /**
  * DELETE /api/schedules/[id]
- * Delete a schedule
+ * Delete a schedule from Firestore
  * Note: Requires 'manager' role for broader Series-A access
  */
 export const DELETE = createOrgEndpoint({
   roles: ["manager"],
-  handler: async ({ request: _request, input: _input, context: _context, params }) => {
+  handler: async ({ request: _request, input: _input, context, params }) => {
     try {
       const { id } = params;
       if (!id) {
         return badRequest("Schedule ID is required");
       }
 
+      if (!adminDb) {
+        return serverError("Database not initialized");
+      }
+
+      const docRef = adminDb.doc(
+        `organizations/${context.org!.orgId}/schedules/${id}`
+      );
+      await docRef.delete();
+
       return ok({ deleted: true, id });
-    } catch {
-      return serverError("Failed to delete schedule");
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : "Failed to delete schedule";
+      return serverError(message);
     }
   },
 });
