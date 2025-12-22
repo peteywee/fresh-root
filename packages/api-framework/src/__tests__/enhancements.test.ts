@@ -599,12 +599,9 @@ describe("Idempotency", () => {
     const key = `test-key-${Date.now()}`;
     const response = NextResponse.json({ created: true }, { status: 201 });
 
-    storeIdempotentResponse(key, response, 60000); // 1 minute TTL
+    await storeIdempotentResponse(key, response, 60000); // 1 minute TTL
 
-    // Wait a moment for async storage
-    await new Promise((r) => setTimeout(r, 10));
-
-    const cached = getIdempotentResponse(key);
+    const cached = await getIdempotentResponse(key);
 
     expect(cached).not.toBeNull();
     expect(cached?.status).toBe(201);
@@ -617,12 +614,9 @@ describe("Idempotency", () => {
     const key = `replay-key-${Date.now()}`;
     const response = NextResponse.json({ data: "original" }, { status: 200 });
 
-    storeIdempotentResponse(key, response, 60000);
+    await storeIdempotentResponse(key, response, 60000);
 
-    // Wait a moment for async storage
-    await new Promise((r) => setTimeout(r, 10));
-
-    const cached = getIdempotentResponse(key);
+    const cached = await getIdempotentResponse(key);
 
     expect(cached?.headers.get("x-idempotent-replayed")).toBe("true");
   });

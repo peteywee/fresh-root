@@ -714,47 +714,41 @@ export async function getIdempotentResponse(key: string): Promise<NextResponse |
  * Store idempotent response
  * Stores in Redis if available, with in-memory fallback
  */
-export function storeIdempotentResponse(
+export async function storeIdempotentResponse(
   key: string,
   response: NextResponse,
   ttl: number = 24 * 60 * 60 * 1000, // 24 hours in ms
-): void {
-  // Clone and extract response data
-  const cloneAndStore = async () => {
+): Promise<void> {
+  try {
+    const body = await response.clone().json();
+    const headers: Record<string, string> = {};
+    response.headers.forEach((value, headerKey) => {
+      headers[headerKey] = value;
+    });
+
+    const record: IdempotentRecord = {
+      response: {
+        status: response.status,
+        body,
+        headers,
+      },
+      createdAt: Date.now(),
+      expiresAt: Date.now() + ttl,
+    };
+
+    // Try to store in Redis first
     try {
-      const body = await response.clone().json();
-      const headers: Record<string, string> = {};
-      response.headers.forEach((value, headerKey) => {
-        headers[headerKey] = value;
-      });
-
-      const record: IdempotentRecord = {
-        response: {
-          status: response.status,
-          body,
-          headers,
-        },
-        createdAt: Date.now(),
-        expiresAt: Date.now() + ttl,
-      };
-
-      // Try to store in Redis first
-      try {
-        const redis = await getRedisClient();
-        const redisKey = `idem:${key}`;
-        const ttlSeconds = Math.ceil(ttl / 1000);
-        await redis.set(redisKey, JSON.stringify(record), { ex: ttlSeconds });
-      } catch {
-        // Redis unavailable, fall back to in-memory
-        idempotencyStore.set(key, record);
-      }
+      const redis = await getRedisClient();
+      const redisKey = `idem:${key}`;
+      const ttlSeconds = Math.ceil(ttl / 1000);
+      await redis.set(redisKey, JSON.stringify(record), { ex: ttlSeconds });
     } catch {
-      // Non-JSON response, don't cache
+      // Redis unavailable, fall back to in-memory
+      idempotencyStore.set(key, record);
     }
-  };
-
-  // Store asynchronously
-  cloneAndStore();
+  } catch {
+    // Non-JSON response, don't cache
+  }
 }
 
 /**
