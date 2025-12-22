@@ -1,4 +1,6 @@
-// @ts-nocheck - Dashboard demo component with intentional loose typing for rapid prototyping
+/* eslint-disable @typescript-eslint/no-explicit-any */
+// @ts-nocheck
+// Dashboard demo component with intentional loose typing for rapid prototyping
 "use client";
 
 import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
