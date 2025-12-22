@@ -54,6 +54,7 @@ export * from "./errors";
 export * from "./session";
 export * from "./internal";
 export * from "./links";
+export * from "./ops-metrics";
 
 // Additional collections and convenience exports added by v14.5
 export * as corporates from "./corporates";

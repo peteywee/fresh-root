@@ -42,7 +42,8 @@ const nextConfig = {
   },
   compress: true,
   productionBrowserSourceMaps: false,
-  typedRoutes: true,
+  // typedRoutes disabled - causes type conflicts with dynamic routes
+  // typedRoutes: true,
   // Keep serverExternalPackages empty to force bundling and silence Turbopack's
   // firebase-admin externalization warnings
   serverExternalPackages,
