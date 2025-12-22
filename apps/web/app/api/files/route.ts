@@ -39,6 +39,11 @@ const PROTECTED_FILES = new Set([
 ]);
 
 async function resolveAndValidatePath(inputPath: string, allowNonexistent = false): Promise<string | null> {
+  // Fast-fail traversal attempts and null bytes before any filesystem calls
+  if (inputPath.includes('\0')) return null;
+  const hasTraversal = inputPath.split(/[/\\]+/).includes('..');
+  if (hasTraversal) return null;
+
   const absolute = path.isAbsolute(inputPath)
     ? path.normalize(inputPath)
     : path.normalize(path.join(WORKSPACE_ROOT, inputPath));

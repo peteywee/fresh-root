@@ -63,6 +63,14 @@ function validateCommand(cmd: string): { valid: boolean; reason?: string } {
     return { valid: false, reason: 'Blocked: newlines not allowed' };
   }
 
+  // Allow only safe characters (no quotes, pipes, or shell metacharacters)
+  // This keeps spawn() arguments literal and prevents shell expansion even further.
+  const SAFE_TOKEN = /^[A-Za-z0-9._@:\/+-]+$/;
+  const tokens = trimmed.split(/\s+/);
+  if (tokens.some((token) => !SAFE_TOKEN.test(token))) {
+    return { valid: false, reason: 'Blocked: command contains unsafe characters' };
+  }
+
   // Check blocked patterns
   for (const pattern of BLOCKED_PATTERNS) {
     if (pattern.test(trimmed)) {

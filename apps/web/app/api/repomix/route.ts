@@ -53,6 +53,14 @@ export async function POST(request: NextRequest) {
 
     const config = parsed.data;
 
+    // Quick traversal guard before hitting filesystem
+    if (config.directory.includes('\0') || config.directory.split(/[/\\]+/).includes('..')) {
+      return NextResponse.json(
+        { success: false, error: 'Invalid directory path' },
+        { status: 400 }
+      );
+    }
+
     // Validate directory is within workspace
     const isValidDir = await validateDirectory(config.directory);
     if (!isValidDir) {
