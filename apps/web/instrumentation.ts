@@ -77,14 +77,14 @@ export function register() {
  * If needed, OTEL can be initialized lazily on first request or via a separate process.
  */
 function initializeOpenTelemetryWithTimeout(): void {
-  // OTEL initialization is deferred to avoid hanging during module load.
-  // In production, you should initialize OTEL in a separate worker or defer it.
-  // For now, we skip OTEL initialization to keep startup fast and unblocking.
-
-  if (process.env.OTEL_EXPORTER_OTLP_ENDPOINT) {
-    // eslint-disable-next-line no-console
-    console.warn(
-      "[instrumentation] OTEL_EXPORTER_OTLP_ENDPOINT is set but OTEL SDK not initialized during module load to prevent hangs. Consider initializing in a separate worker.",
-    );
+  // OTEL is optional and must never block startup.
+  // We rely on `ensureOtelStarted()` which is idempotent and does not await
+  // network I/O on startup.
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const { ensureOtelStarted } = require("./app/api/_shared/otel-init");
+    ensureOtelStarted();
+  } catch (err) {
+    console.warn("[instrumentation] OTEL initialization skipped:", err);
   }
 }

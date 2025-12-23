@@ -36,6 +36,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { ZodError } from "zod";
 
+import { checkRateLimit as checkRedisRateLimit } from "./redis";
+
 import type { OrgRole } from "../../types/src/rbac";
 
 // =============================================================================
@@ -157,6 +159,20 @@ async function checkRateLimit(
   key: string,
   config: { maxRequests: number; windowMs: number },
 ): Promise<{ allowed: boolean; remaining: number; resetAt: number }> {
+  if (process.env.USE_REDIS_RATE_LIMIT === "true") {
+    const windowSeconds = Math.max(1, Math.ceil(config.windowMs / 1000));
+    const result = await checkRedisRateLimit(key, {
+      max: config.maxRequests,
+      windowSeconds,
+    });
+
+    return {
+      allowed: result.allowed,
+      remaining: result.remaining,
+      resetAt: result.resetAt,
+    };
+  }
+
   const now = Date.now();
   const record = rateLimitStore.get(key);
 
