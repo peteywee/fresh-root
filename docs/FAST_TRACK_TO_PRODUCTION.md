@@ -99,23 +99,61 @@ Firestore ✅ Auth, data persistence, UX complete ✅ Security patterns validate
 
 ---
 
-#### Task 4: Deploy to Staging (1h) - **MEDIUM PRIORITY**
+#### Task 4: Deploy to Staging (1h)
 
-**Why Important**: Verifies deployment process works
+**Why Important**: Verifies deployment process works (Vercel OR Cloudflare)
 
-**Steps**:
+##### Option A: Vercel Deployment (Recommended)
 
-1. Create Vercel preview deployment
-2. Configure Firebase for staging
-3. Run smoke tests manually
-4. Run E2E against staging
+1. Test local production build first:
+
+   ```bash
+   pnpm --filter web build
+   pnpm --filter web start
+   ```
+
+2. Push to GitHub - Vercel auto-deploys preview on PR
+3. Configure environment variables in Vercel dashboard:
+   - All `NEXT_PUBLIC_*` vars from `.env.local`
+   - `GOOGLE_APPLICATION_CREDENTIALS_JSON_BASE64` secret
+4. Verify deployment at preview URL
+
+##### Option B: Cloudflare Pages (Alternative)
+
+1. Build locally to verify:
+
+   ```bash
+   pnpm --filter web build
+   ```
+
+2. Deploy via Wrangler:
+
+   ```bash
+   pnpm wrangler pages deploy apps/web/.next/standalone --project-name fresh-schedules
+   ```
+
+3. Configure secrets in Cloudflare dashboard
+4. Verify at `*.pages.dev` URL
+
+**Common Build Issues & Fixes**:
+
+| Issue                           | Platform   | Fix                                                                              |
+| ------------------------------- | ---------- | -------------------------------------------------------------------------------- |
+| `Dynamic server usage: cookies` | Both       | Expected - pages use cookies (not static) ✅                                     |
+| OpenTelemetry warnings          | Both       | Non-blocking warnings (safe to ignore) ✅                                        |
+| `outputFileTracingRoot` warning | Vercel     | Add to `next.config.js`: `outputFileTracingRoot: path.join(__dirname, '../../')` |
+| `process.exit` not supported    | Cloudflare | Comment out in `instrumentation.ts` for edge runtime                             |
+| Firebase Admin SDK              | Cloudflare | Use REST API instead of Admin SDK                                                |
+| Missing env vars                | Both       | Copy from `.env.local`, add to platform dashboard                                |
 
 **Acceptance**:
 
-- [ ] Staging URL accessible
+- [ ] Local production build succeeds
+- [ ] Staging URL accessible (Vercel OR Cloudflare)
 - [ ] Firebase connected
-- [ ] E2E passes against staging
-- [ ] Manual smoke test passes
+- [ ] Homepage loads
+- [ ] Login page loads
+- [ ] No critical errors in browser console
 
 ---
 
@@ -138,30 +176,106 @@ Firestore ✅ Auth, data persistence, UX complete ✅ Security patterns validate
 
 ---
 
-## Execution Timeline (6.5 hours)
+## Execution Timeline (2.5 hours remaining)
 
 ```text
-Hour 0-4:   E2E Golden Path Test (Task 1)
-            └─ Write test scenarios
-            └─ Implement test steps
-            └─ Debug and fix issues
-            └─ Verify CI passes
+✅ Hour 0-2:   E2E Golden Path Test (Task 1) - COMPLETE
+            └─ Created golden-path.spec.ts with 6 passing tests
+            └─ Configured Playwright with auto dev server
+            └─ All tests passing in Chromium
 
-Hour 4-5:   Performance Audit (Task 2)
+⏭️ Hour 2-3:   Performance Audit (Task 2) - NEXT
             └─ Build production
             └─ Run Lighthouse
             └─ Fix any critical perf issues
 
-Hour 5-5.5: ARIA Audit (Task 3)
+⏭️ Hour 3-3.5: ARIA Audit (Task 3)
             └─ Run axe DevTools
             └─ Fix critical violations
 
-Hour 5.5-6.5: Deploy Staging (Task 4)
-            └─ Vercel deploy
-            └─ Firebase config
-            └─ Verify E2E on staging
+⏭️ Hour 3.5-4.5: Deploy Staging (Task 4)
+            └─ Try Vercel first (auto-deploy from GitHub)
+            └─ Fallback to Cloudflare if Vercel fails
+            └─ Configure Firebase env vars
+            └─ Verify homepage + login work
 
 DONE: Ready for production! 🚀
+```
+
+---
+
+## Deployment Troubleshooting Guide
+
+### Pre-Deployment Checklist
+
+✅ Local build succeeds: `pnpm --filter web build`  
+✅ All tests pass: `pnpm test`  
+✅ E2E tests pass: `pnpm playwright test`  
+✅ TypeScript clean: `pnpm typecheck`  
+✅ Linting clean: `pnpm lint`
+
+### Vercel Deployment Issues
+
+**Issue**: Build fails with "Dynamic server usage"  
+**Solution**: This is expected! Pages using `cookies()` can't be static. ✅ Normal behavior.
+
+**Issue**: "outputFileTracingRoot" warning  
+**Solution**: Add to `apps/web/next.config.js`:
+
+```javascript
+outputFileTracingRoot: path.join(__dirname, "../../");
+```
+
+**Issue**: Missing environment variables  
+**Solution**: Add all vars from `.env.local` to Vercel project settings → Environment Variables
+
+**Issue**: Firebase Admin SDK not working  
+**Solution**: Ensure `GOOGLE_APPLICATION_CREDENTIALS_JSON_BASE64` is set in Vercel secrets
+
+### Cloudflare Pages Issues
+
+**Issue**: `process.exit` not supported in edge runtime  
+**Solution**: Wrap in check:
+
+```typescript
+if (typeof process !== "undefined" && process.exit) {
+  process.exit(1);
+}
+```
+
+**Issue**: Firebase Admin SDK doesn't work  
+**Solution**: Use Firebase REST API instead (Cloudflare Edge doesn't support Node.js APIs)
+
+**Issue**: Build output not compatible  
+**Solution**: Ensure `output: 'standalone'` in `next.config.js`
+
+### Firebase Configuration
+
+Required environment variables for both platforms:
+
+```bash
+NEXT_PUBLIC_FIREBASE_API_KEY=
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=
+NEXT_PUBLIC_FIREBASE_PROJECT_ID=
+NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=
+NEXT_PUBLIC_FIREBASE_APP_ID=
+NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=
+NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID=
+FIREBASE_PROJECT_ID=
+GOOGLE_APPLICATION_CREDENTIALS_JSON_BASE64=
+```
+
+### Quick Deployment Test
+
+Test deployment works before committing:
+
+```bash
+# Test Vercel locally
+pnpm i -g vercel
+vercel --prod=false
+
+# Test Cloudflare locally
+pnpm wrangler pages dev apps/web/.next
 ```
 
 ---
