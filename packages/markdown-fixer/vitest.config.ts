@@ -9,11 +9,7 @@ export default defineConfig({
     globals: true,
     environment: "node",
     pool: "threads",
-    poolOptions: {
-      threads: {
-        singleThread: true,
-      },
-    },
+    fileParallelism: false,
     maxWorkers: 1,
     include: [
       "src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}",

@@ -7,8 +7,6 @@ import { authenticateForTests, authFetch, BASE_URL } from "./setup";
 
 // Test users for different orgs/roles
 let user1OrgAToken: string | null = null;
-let user2OrgBToken: string | null = null;
-let user3OrgAManagerToken: string | null = null;
 
 beforeAll(async () => {
   // Authenticate test users with different roles

@@ -76,9 +76,6 @@ const nextConfig = {
   experimental: {
     optimizePackageImports: ["react", "react-dom", "@fresh-schedules/types", "@fresh-schedules/ui"],
     serverActions: { bodySizeLimit: "1mb" },
-    // Mirror the empty allowlist so both config locations disable the default
-    // firebase-admin externalization.
-    serverExternalPackages,
   },
   // Turbopack sometimes infers the workspace root incorrectly when there are
   // multiple lockfiles on the machine (e.g., a stray pnpm-lock.yaml in $HOME).

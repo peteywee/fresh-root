@@ -58,7 +58,6 @@ export const PATCH = createOrgEndpoint({
     try {
       const { id } = params;
       const orgId = context.org!.orgId;
-      const userId = context.auth!.userId;
 
       // Fetch current document to verify orgId and apply partial updates
       const db = getFirestore();

@@ -63,6 +63,14 @@ function validateCommand(cmd: string): { valid: boolean; reason?: string } {
     return { valid: false, reason: 'Blocked: newlines not allowed' };
   }
 
+  // Allow only safe characters (no quotes, pipes, or shell metacharacters)
+  // This keeps spawn() arguments literal and prevents shell expansion even further.
+  const SAFE_TOKEN = /^[A-Za-z0-9._@:\/+-]+$/;
+  const tokens = trimmed.split(/\s+/);
+  if (tokens.some((token) => !SAFE_TOKEN.test(token))) {
+    return { valid: false, reason: 'Blocked: command contains unsafe characters' };
+  }
+
   // Check blocked patterns
   for (const pattern of BLOCKED_PATTERNS) {
     if (pattern.test(trimmed)) {
@@ -121,19 +129,24 @@ function executeCommand(
     let stdout = '';
     let stderr = '';
     let killed = false;
-    
-    // Use bash to execute the command
-    const child = spawn('bash', ['-c', command], {
+
+    // Split command into binary + args to avoid shell interpretation
+    const parts = command.trim().split(/\s+/);
+    const binary = parts[0];
+    const args = parts.slice(1);
+
+    const child = spawn(binary, args, {
       cwd,
       env: { ...process.env, TERM: 'xterm-256color' },
       timeout,
+      shell: false,
     });
-    
+
     const timer = setTimeout(() => {
       killed = true;
       child.kill('SIGTERM');
     }, timeout);
-    
+
     child.stdout.on('data', (data) => {
       stdout += data.toString();
       // Limit output size
@@ -142,11 +155,11 @@ function executeCommand(
         child.kill('SIGTERM');
       }
     });
-    
+
     child.stderr.on('data', (data) => {
       stderr += data.toString();
     });
-    
+
     child.on('close', (code) => {
       clearTimeout(timer);
       resolve({
@@ -155,7 +168,7 @@ function executeCommand(
         exitCode: code ?? 1,
       });
     });
-    
+
     child.on('error', (err) => {
       clearTimeout(timer);
       resolve({

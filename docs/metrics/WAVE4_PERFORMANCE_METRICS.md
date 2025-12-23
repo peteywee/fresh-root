@@ -4,7 +4,7 @@
 
 Wave 4 completes the performance and security foundation for Fresh Schedules. All targets achieved with measurable metrics.
 
-**Status: ✅ COMPLETE & PRODUCTION READY**
+Status: ✅ COMPLETE & PRODUCTION READY
 
 ## Core Performance Results
 
@@ -28,7 +28,7 @@ Wave 4 completes the performance and security foundation for Fresh Schedules. Al
 
 ### Memory Efficiency
 
-```
+```text
 10,000 keys = 2.04 MB total
 Per-key: 0.21 KB (predictable linear growth)
 Peak memory under load: <50 MB
@@ -36,7 +36,7 @@ Peak memory under load: <50 MB
 
 ### Latency Consistency
 
-```
+```text
 Variance under load: <5ms
 P95 latency: 1-2 microseconds
 P99 latency: 2-3 microseconds
@@ -68,7 +68,7 @@ No outliers under concurrent load
 
 ### Recent Test Run
 
-```
+```text
 pnpm test:unit: 98/98 passing (100%)
 pnpm test:e2e: 162/162 passing (100%)
 pnpm typecheck: 0 errors
@@ -79,6 +79,7 @@ Handler signatures: 39/39 valid (A09 invariant)
 ### Performance Benchmarks
 
 All 9 performance benchmark tests passing:
+
 - ✅ Throughput baseline: 1.4M+ ops/sec
 - ✅ Memory profiling: Linear growth verified
 - ✅ Latency variance: <5ms under load
@@ -114,6 +115,7 @@ All 9 performance benchmark tests passing:
 JSON export available at: `docs/metrics/WAVE4_METRICS.json`
 
 Used by:
+
 - Dashboard automation
 - CI/CD reporting
 - Performance tracking

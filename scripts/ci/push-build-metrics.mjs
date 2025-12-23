@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import admin from "firebase-admin";
 
 function must(name) {

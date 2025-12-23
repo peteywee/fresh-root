@@ -38,33 +38,53 @@ const PROTECTED_FILES = new Set([
   '.ssh',
 ]);
 
-async function isPathSafe(filePath: string): Promise<boolean> {
-  // Resolve to real path to prevent symlink attacks
-  let realPath: string;
-  try {
-    realPath = await fs.realpath(filePath);
-  } catch {
-    // If file doesn't exist, check the parent directory
-    realPath = filePath;
-  }
+async function resolveAndValidatePath(inputPath: string, allowNonexistent = false): Promise<string | null> {
+  // Fast-fail traversal attempts and null bytes before any filesystem calls
+  if (inputPath.includes('\0')) return null;
+  const hasTraversal = inputPath.split(/[/\\]+/).includes('..');
+  if (hasTraversal) return null;
 
-  const normalized = path.normalize(realPath);
+  const absolute = path.isAbsolute(inputPath)
+    ? path.normalize(inputPath)
+    : path.normalize(path.join(WORKSPACE_ROOT, inputPath));
+
+  // Ensure the normalized path stays under the workspace
   const workspaceReal = path.normalize(WORKSPACE_ROOT);
-
-  // Must be within workspace
-  if (!normalized.startsWith(workspaceReal)) {
-    return false;
+  if (!absolute.startsWith(workspaceReal)) {
+    return null;
   }
 
-  // Check for blocked directories in path
-  const parts = normalized.split(path.sep);
-  for (const part of parts) {
-    if (BLOCKED_DIRS.has(part)) {
-      return false;
+  // Resolve symlinks for existing paths; for new files validate parent dir
+  try {
+    const real = await fs.realpath(absolute);
+    if (!real.startsWith(workspaceReal)) {
+      return null;
+    }
+    const parts = path.relative(workspaceReal, real).split(path.sep);
+    if (parts.some((part) => BLOCKED_DIRS.has(part))) {
+      return null;
+    }
+    return real;
+  } catch {
+    if (!allowNonexistent) {
+      return null;
+    }
+    // For new files, validate the parent directory instead
+    const parentDir = path.dirname(absolute);
+    try {
+      const parentReal = await fs.realpath(parentDir);
+      if (!parentReal.startsWith(workspaceReal)) {
+        return null;
+      }
+      const parts = path.relative(workspaceReal, parentReal).split(path.sep);
+      if (parts.some((part) => BLOCKED_DIRS.has(part))) {
+        return null;
+      }
+      return path.join(parentReal, path.basename(absolute));
+    } catch {
+      return null;
     }
   }
-
-  return true;
 }
 
 function isExtensionAllowed(filePath: string): boolean {
@@ -90,11 +110,8 @@ export const GET = createAuthenticatedEndpoint({
       return NextResponse.json({ error: 'Path required' }, { status: 400 });
     }
 
-    const fullPath = path.isAbsolute(filePath)
-      ? filePath
-      : path.join(WORKSPACE_ROOT, filePath);
-
-    if (!(await isPathSafe(fullPath))) {
+    const fullPath = await resolveAndValidatePath(filePath);
+    if (!fullPath) {
       return NextResponse.json({ error: 'Access denied' }, { status: 403 });
     }
 
@@ -159,11 +176,8 @@ export const PUT = createAuthenticatedEndpoint({
   handler: async ({ input }: { input: z.infer<typeof UpdateSchema> }) => {
     const { path: filePath, content, createIfNotExists } = input;
 
-    const fullPath = path.isAbsolute(filePath)
-      ? filePath
-      : path.join(WORKSPACE_ROOT, filePath);
-
-    if (!(await isPathSafe(fullPath))) {
+    const fullPath = await resolveAndValidatePath(filePath, true);
+    if (!fullPath) {
       return NextResponse.json({ error: 'Access denied' }, { status: 403 });
     }
 
@@ -213,11 +227,8 @@ export const POST = createAuthenticatedEndpoint({
   handler: async ({ input }: { input: z.infer<typeof CreateSchema> }) => {
     const { path: filePath, content, type } = input;
 
-    const fullPath = path.isAbsolute(filePath)
-      ? filePath
-      : path.join(WORKSPACE_ROOT, filePath);
-
-    if (!(await isPathSafe(fullPath))) {
+    const fullPath = await resolveAndValidatePath(filePath, true);
+    if (!fullPath) {
       return NextResponse.json({ error: 'Access denied' }, { status: 403 });
     }
 
@@ -258,11 +269,8 @@ export const DELETE = createAuthenticatedEndpoint({
       return NextResponse.json({ error: 'Path required' }, { status: 400 });
     }
 
-    const fullPath = path.isAbsolute(filePath)
-      ? filePath
-      : path.join(WORKSPACE_ROOT, filePath);
-
-    if (!(await isPathSafe(fullPath))) {
+    const fullPath = await resolveAndValidatePath(filePath);
+    if (!fullPath) {
       return NextResponse.json({ error: 'Access denied' }, { status: 403 });
     }
 

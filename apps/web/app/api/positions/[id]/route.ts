@@ -2,7 +2,7 @@
 // Tags: P2, D2, API, POSITIONS, FIRESTORE
 export const dynamic = "force-dynamic";
 import { createOrgEndpoint } from "@fresh-schedules/api-framework";
-import { PositionSchema, type Position } from "@fresh-schedules/types";
+import { type Position } from "@fresh-schedules/types";
 import { getFirestore } from "firebase-admin/firestore";
 import { NextResponse } from "next/server";
 import { z } from "zod";
@@ -24,7 +24,7 @@ const UpdatePositionSchema = z.object({
 
 import { checkRateLimit, RateLimits } from "../../../../src/lib/api/rate-limit";
 import { sanitizeObject } from "../../../../src/lib/api/sanitize";
-import { badRequest, rateLimited, serverError } from "../../_shared/validation";
+import { serverError } from "../../_shared/validation";
 
 /**
  * GET /api/positions/[id]
@@ -35,7 +35,15 @@ export const GET = createOrgEndpoint({
     // Apply rate limiting
     const rateLimitResult = await checkRateLimit(request, RateLimits.api);
     if (!rateLimitResult.allowed) {
-      return rateLimited(rateLimitResult.resetAt);
+      return NextResponse.json(
+        { error: "Rate limit exceeded" },
+        {
+          status: 429,
+          headers: {
+            "Retry-After": String(Math.ceil((rateLimitResult.resetAt - Date.now()) / 1000)),
+          },
+        },
+      );
     }
 
     try {
@@ -83,13 +91,20 @@ export const PATCH = createOrgEndpoint({
     // Apply rate limiting
     const rateLimitResult = await checkRateLimit(request, RateLimits.api);
     if (!rateLimitResult.allowed) {
-      return rateLimited(rateLimitResult.resetAt);
+      return NextResponse.json(
+        { error: "Rate limit exceeded" },
+        {
+          status: 429,
+          headers: {
+            "Retry-After": String(Math.ceil((rateLimitResult.resetAt - Date.now()) / 1000)),
+          },
+        },
+      );
     }
 
     try {
       const { id } = params;
       const orgId = context.org!.orgId;
-      const userId = context.auth!.userId;
 
       // Type assertion safe - input validated by SDK factory
       const typedInput = input as z.infer<typeof UpdatePositionSchema>;
@@ -98,7 +113,10 @@ export const PATCH = createOrgEndpoint({
       // Validate with Zod
       const validationResult = UpdatePositionSchema.safeParse(sanitized);
       if (!validationResult.success) {
-        return badRequest("Invalid position data", validationResult.error.issues);
+        return NextResponse.json(
+          { error: "Invalid position data", details: validationResult.error.issues },
+          { status: 400 },
+        );
       }
 
       // Fetch current document to verify orgId and apply partial updates
@@ -156,7 +174,15 @@ export const DELETE = createOrgEndpoint({
     // Apply rate limiting
     const rateLimitResult = await checkRateLimit(request, RateLimits.api);
     if (!rateLimitResult.allowed) {
-      return rateLimited(rateLimitResult.resetAt);
+      return NextResponse.json(
+        { error: "Rate limit exceeded" },
+        {
+          status: 429,
+          headers: {
+            "Retry-After": String(Math.ceil((rateLimitResult.resetAt - Date.now()) / 1000)),
+          },
+        },
+      );
     }
 
     try {

@@ -1,41 +1,72 @@
-// [P0][CORE][API] Widgets management endpoint
-// Tags: P0, CORE, API, SDK_FACTORY
+// [P2][D7][WIDGETS][API] Widgets management endpoint with Firestore persistence
+// Tags: P2, D7, API, SDK_FACTORY, FIRESTORE
 
 import { createPublicEndpoint } from "@fresh-schedules/api-framework";
+import { getFirestore } from "firebase-admin/firestore";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
-import { badRequest } from "../_shared/validation";
-
 // Widget item schema
 const CreateItemSchema = z.object({
-  name: z.string().min(1),
-  type: z.string().min(1),
+  name: z.string().min(1).max(200),
+  type: z.string().min(1).max(100),
   config: z.record(z.string(), z.unknown()).optional(),
 });
 
-// Widget endpoint for testing/demo purposes
+/**
+ * Widget interface
+ */
+interface Widget {
+  id: string;
+  name: string;
+  type: string;
+  config?: Record<string, unknown>;
+  createdAt: number;
+  updatedAt: number;
+}
+
+/**
+ * POST /api/widgets
+ * Create a new widget (public endpoint)
+ */
 export const POST = createPublicEndpoint({
   handler: async ({ request, input: _input, context: _context, params: _params }) => {
     try {
       const body = await request.json();
+
       // Validate with schema
       const result = CreateItemSchema.safeParse(body);
       if (!result.success) {
-        return badRequest("Invalid widget data", result.error.issues);
+        return NextResponse.json(
+          { error: "Invalid widget data", details: result.error.issues },
+          { status: 400 },
+        );
       }
+
       const typedInput = result.data;
-      const widget = {
-        id: `widget-${Date.now()}`,
+      const db = getFirestore();
+      const docRef = db.collection('widgets').doc();
+      const widgetId = docRef.id;
+
+      const widget: Widget = {
+        id: widgetId,
         name: typedInput.name,
         type: typedInput.type,
-        config: typedInput.config,
+        config: typedInput.config || {},
         createdAt: Date.now(),
         updatedAt: Date.now(),
       };
+
+      // Persist to Firestore in a public widgets collection
+      await docRef.set(widget);
+
       return NextResponse.json(widget, { status: 201 });
-    } catch (_error) {
-      return badRequest("Invalid request");
+    } catch (error) {
+      console.error("Error creating widget:", error);
+      return NextResponse.json(
+        { error: "Failed to create widget" },
+        { status: 500 },
+      );
     }
   },
 });
