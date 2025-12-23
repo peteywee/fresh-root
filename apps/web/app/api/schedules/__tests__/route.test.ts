@@ -44,7 +44,13 @@ const { mockAuth, mockFirestore, clearAllMockData } = vi.hoisted(() => {
       firestoreData.set(path, data);
     },
     update: async (data: Record<string, unknown>) => {
-      const existing = firestoreData.get(path) || {};
+      // Firestore throws if document doesn't exist on update
+      const existing = firestoreData.get(path);
+      if (!existing) {
+        const error = new Error(`No document to update: ${path}`);
+        error.name = "FirebaseError";
+        throw error;
+      }
       firestoreData.set(path, { ...existing, ...data });
     },
     delete: async () => {

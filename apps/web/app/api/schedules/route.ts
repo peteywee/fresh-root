@@ -97,7 +97,13 @@ const listSchedules = async (request: Request, context: RequestContext) => {
  * Create a new schedule with full type safety
  */
 const createSchedule = async (request: Request, context: RequestContext) => {
-  const parsed = await parseJson(request, CreateScheduleSchema);
+  let parsed;
+  try {
+    parsed = await parseJson(request, CreateScheduleSchema);
+  } catch (_err) {
+    return badRequest("Invalid JSON body");
+  }
+  
   if (!parsed.success) {
     return badRequest("Invalid payload", parsed.details);
   }
