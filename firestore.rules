@@ -36,7 +36,7 @@ service cloud.firestore {
 
     // Users: self only; no enumeration
     match /users/{userId} {
-      allow read, create, update: if isSignedIn() && userId == uid();
+      allow get, create, update: if isSignedIn() && userId == uid();
       allow list: if false;
     }
 
@@ -71,9 +71,10 @@ service cloud.firestore {
           request.resource.data.diff(resource.data).changedKeys().hasOnly(['notes','checkInTime','updatedAt']);
       }
 
-      // Join tokens - managers can create/manage
+      // Join tokens - managers can create/manage; no enumeration
       match /join_tokens/{tokenId} {
-        allow read: if isSignedIn() && (sameOrg(orgId) || isOrgMember(orgId));
+        allow get: if isSignedIn() && (sameOrg(orgId) || isOrgMember(orgId));
+        allow list: if false;
         allow write: if isSignedIn() && ((isManager() && sameOrg(orgId)) || hasAnyRoleLegacy(orgId, ['owner','admin','manager']));
       }
     }
@@ -91,9 +92,10 @@ service cloud.firestore {
         allow write: if isSignedIn() && ((isManager() && sameOrg(orgId)) || hasAnyRoleLegacy(orgId, ['owner','admin','manager']));
       }
 
-      // Receipts - members can create their own receipts only
+      // Receipts - members can create their own receipts only; no enumeration
       match /receipts/{receiptId} {
-        allow read: if isSignedIn() && (sameOrg(orgId) || isOrgMember(orgId));
+        allow get: if isSignedIn() && (sameOrg(orgId) || isOrgMember(orgId));
+        allow list: if false;
         allow create: if isSignedIn() && (sameOrg(orgId) || isOrgMember(orgId)) && request.resource.data.userId == uid();
         allow update, delete: if isSignedIn() && resource.data.userId == uid();
       }
@@ -115,7 +117,7 @@ service cloud.firestore {
     // Token-based: managers can create/update
     // Legacy: users can create their own
     match /memberships/{membershipId} {
-      allow read: if isSignedIn() && (
+      allow get: if isSignedIn() && (
         resource.data.uid == uid() ||
         (isManager() && sameOrg(resource.data.orgId)) ||
         hasAnyRoleLegacy(resource.data.orgId, ['owner','admin','manager'])
@@ -225,9 +227,10 @@ service cloud.firestore {
         allow create, update, delete: if false;
       }
 
-      // Network-level memberships (reserved for future v14+ work)
+      // Network-level memberships (reserved for future v14+ work); no enumeration
       match /memberships/{membershipId} {
-        allow read: if isSignedIn();
+        allow get: if isSignedIn();
+        allow list: if false;
         allow create, update, delete: if false;
       }
 

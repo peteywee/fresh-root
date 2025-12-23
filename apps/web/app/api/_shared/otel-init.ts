@@ -13,17 +13,13 @@ import { OTLPTraceExporter } from "@opentelemetry/exporter-trace-otlp-http";
 import { NodeSDK, resources } from "@opentelemetry/sdk-node";
 import { SemanticResourceAttributes } from "@opentelemetry/semantic-conventions";
 
-// Lazy-import env to avoid module-level side effects during build
-let OTEL_ENABLED: boolean | null = null;
-
 function isOtelEnabled(): boolean {
-  if (OTEL_ENABLED === null) {
-    // Import env only when actually checking if OTEL is enabled
-
-    const { env } = require("@/src/env");
-    OTEL_ENABLED = Boolean(env.OTEL_EXPORTER_OTLP_ENDPOINT) && Boolean(env.OBSERVABILITY_TRACES_ENABLED);
-  }
-  return OTEL_ENABLED;
+  // Avoid importing env modules here (keeps this safe in tests/build tooling).
+  // These env vars are already validated elsewhere at runtime.
+  return (
+    Boolean(process.env.OTEL_EXPORTER_OTLP_ENDPOINT) &&
+    process.env.OBSERVABILITY_TRACES_ENABLED === "true"
+  );
 }
 
 let sdk: NodeSDK | null = null;
@@ -44,32 +40,48 @@ export function ensureOtelStarted(): void {
     return;
   }
 
+  // Set early to prevent races in concurrent startup paths.
+  g.__freshRootOtelStarted = true;
+
   // Import env here, inside the function, to avoid module-level side effects
-
-  const { env } = require("@/src/env");
-
   const exporter = new OTLPTraceExporter({
-    url: env.OTEL_EXPORTER_OTLP_ENDPOINT as string,
+    url: process.env.OTEL_EXPORTER_OTLP_ENDPOINT as string,
   });
 
   sdk = new NodeSDK({
     traceExporter: exporter,
     resource: resources.resourceFromAttributes({
       [SemanticResourceAttributes.SERVICE_NAME]: "fresh-root-web-api",
-      [SemanticResourceAttributes.DEPLOYMENT_ENVIRONMENT]: env.NODE_ENV,
+      [SemanticResourceAttributes.DEPLOYMENT_ENVIRONMENT]: process.env.NODE_ENV,
     }),
   });
 
-  // Start the SDK synchronously
   try {
-    sdk.start();
+    const startResult = sdk.start();
+    const maybePromise = startResult as unknown as Promise<void> | void;
 
-    console.log("[otel] OpenTelemetry SDK started");
+    if (maybePromise && typeof (maybePromise as any).then === "function") {
+      const timeoutMs = 5_000;
+      const timeout = setTimeout(() => {
+        console.warn(`[otel] OpenTelemetry SDK start still pending after ${timeoutMs}ms`);
+      }, timeoutMs);
+
+      void (maybePromise as Promise<void>)
+        .then(() => {
+          console.log("[otel] OpenTelemetry SDK started");
+        })
+        .catch((err) => {
+          console.error("[otel] Failed to start OpenTelemetry SDK", err);
+        })
+        .finally(() => {
+          clearTimeout(timeout);
+        });
+    } else {
+      console.log("[otel] OpenTelemetry SDK started");
+    }
   } catch (err) {
     console.error("[otel] Failed to start OpenTelemetry SDK", err);
   }
-
-  g.__freshRootOtelStarted = true;
 }
 
 /**

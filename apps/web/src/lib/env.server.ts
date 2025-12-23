@@ -46,7 +46,7 @@ const ServerEnvSchema = z.object({
   FIRESTORE_BACKUP_BUCKET: z.string().optional(),
 
   // === Cache & Storage ===
-  REDIS_URL: z.string().optional(),
+  REDIS_URL: z.string().url().optional(),
 
   // === CORS & Rate Limiting ===
   CORS_ORIGINS: z.string().optional(),
@@ -66,7 +66,7 @@ const ServerEnvSchema = z.object({
   SENTRY_ORG: z.string().optional(),
   SENTRY_PROJECT: z.string().optional(),
   SENTRY_AUTH_TOKEN: z.string().optional(),
-  OTEL_EXPORTER_OTLP_TRACES_ENDPOINT: z.string().url().optional(),
+  OTEL_EXPORTER_OTLP_ENDPOINT: z.string().url().optional(),
   OTEL_EXPORTER_OTLP_HEADERS: z.string().optional(),
   OTEL_SERVICE_NAME: z.string().optional().default("fresh-schedules-web"),
 
@@ -103,10 +103,30 @@ export function loadServerEnv(): ServerEnv {
       .join("\n");
 
     console.error(`[env.server] Environment validation failed:\n${errors}`);
-    throw new Error("Invalid server environment configuration");
+    throw new Error(`Invalid server environment configuration:\n${errors}`);
   }
 
-  const env = parsed.data;
+  let env = parsed.data;
+
+  // Backward-compatible support for legacy var name.
+  // Prefer OTEL_EXPORTER_OTLP_ENDPOINT (standard / used elsewhere in repo),
+  // but accept OTEL_EXPORTER_OTLP_TRACES_ENDPOINT if present.
+  const legacyTracesEndpoint = process.env.OTEL_EXPORTER_OTLP_TRACES_ENDPOINT;
+  if (!env.OTEL_EXPORTER_OTLP_ENDPOINT && legacyTracesEndpoint) {
+    const legacyParsed = z.string().url().safeParse(legacyTracesEndpoint);
+    if (legacyParsed.success) {
+      env = { ...env, OTEL_EXPORTER_OTLP_ENDPOINT: legacyTracesEndpoint };
+      process.env.OTEL_EXPORTER_OTLP_ENDPOINT = legacyTracesEndpoint;
+      console.warn(
+        "[env.server] OTEL_EXPORTER_OTLP_TRACES_ENDPOINT is deprecated; use OTEL_EXPORTER_OTLP_ENDPOINT instead",
+      );
+    } else {
+      console.error(
+        "[env.server] OTEL_EXPORTER_OTLP_TRACES_ENDPOINT must be a valid URL when set",
+      );
+      throw new Error("Invalid OTEL_EXPORTER_OTLP_TRACES_ENDPOINT");
+    }
+  }
 
   // === Additional runtime validations ===
 
