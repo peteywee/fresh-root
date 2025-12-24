@@ -5,6 +5,9 @@ import { z } from "zod";
 import { getFirebaseAdminAuth } from "../../../lib/firebase-admin";
 import { serverError, ok, unauthorized } from "../_shared/validation";
 
+// Super admin emails that get isSuperAdmin cookie set
+const SUPER_ADMIN_EMAILS = ["admin@email.com"];
+
 function isFirebaseAuthFailure(error: unknown): boolean {
   if (typeof error !== "object" || error === null) return false;
   if (!("code" in error)) return false;
@@ -30,12 +33,30 @@ export const POST = createPublicEndpoint({
       const { idToken } = typedInput;
 
       const auth = getFirebaseAdminAuth();
-      // Verify the idToken and create a session cookie (5 days default)
+      
+      // Verify the token first to get user info
+      const decodedToken = await auth.verifyIdToken(idToken);
+      const email = decodedToken.email || "";
+      const isSuperAdmin = SUPER_ADMIN_EMAILS.includes(email.toLowerCase());
+      
+      // Create a session cookie (5 days default)
       const expiresIn = 5 * 24 * 60 * 60 * 1000; // 5 days in milliseconds
       const sessionCookie = await auth.createSessionCookie(idToken, { expiresIn });
 
+      // If super admin, set custom claims for admin role
+      if (isSuperAdmin) {
+        const existingClaims = decodedToken.customClaims || {};
+        const existingRoles = (existingClaims.roles as string[]) || [];
+        if (!existingRoles.includes("admin")) {
+          await auth.setCustomUserClaims(decodedToken.uid, {
+            ...existingClaims,
+            roles: [...new Set([...existingRoles, "admin"])],
+          });
+        }
+      }
+
       // Set secure HttpOnly session cookie
-      const response = ok({ ok: true });
+      const response = ok({ ok: true, isSuperAdmin });
       response.cookies.set("session", sessionCookie, {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
@@ -43,6 +64,17 @@ export const POST = createPublicEndpoint({
         path: "/",
         maxAge: expiresIn / 1000, // maxAge in seconds
       });
+
+      // Set isSuperAdmin cookie for proxy to skip onboarding
+      if (isSuperAdmin) {
+        response.cookies.set("isSuperAdmin", "true", {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === "production",
+          sameSite: "lax",
+          path: "/",
+          maxAge: expiresIn / 1000,
+        });
+      }
 
       return response;
     } catch (error) {
@@ -64,9 +96,16 @@ export const POST = createPublicEndpoint({
  */
 export const DELETE = createPublicEndpoint({
   handler: async () => {
-    // Clear session cookie
+    // Clear session cookie and isSuperAdmin cookie
     const response = ok({ ok: true });
     response.cookies.set("session", "", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      path: "/",
+      maxAge: 0,
+    });
+    response.cookies.set("isSuperAdmin", "", {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",

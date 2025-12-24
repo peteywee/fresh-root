@@ -5,44 +5,87 @@
 import { useRouter } from "next/navigation";
 import React, { FormEvent, useState } from "react";
 
-// Narrow router type to only the push method we use.
-type NavRouter = Pick<ReturnType<typeof useRouter>, "push">;
+import { useOnboardingWizard } from "../_wizard/OnboardingWizardContext";
 
 type OrgFormState = {
-  orgName: string;
+  displayName: string;
   venueName: string;
   city: string;
   state: string;
+  segment: string;
 };
 
 export default function CreateNetworkOrgPage() {
   const router = useRouter();
-  const nav: NavRouter = { push: router.push };
+  const { setOrgId, setNetworkId } = useOnboardingWizard();
   const [form, setForm] = useState<OrgFormState>({
-    orgName: "",
+    displayName: "",
     venueName: "",
     city: "",
     state: "",
+    segment: "restaurant",
   });
   const [error, setError] = useState<string | null>(null);
+  const [submitting, setSubmitting] = useState(false);
 
-  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+  function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
   }
 
-  function handleSubmit(e: FormEvent) {
+  async function handleSubmit(e: FormEvent) {
     e.preventDefault();
 
-    if (!form.orgName.trim() || !form.venueName.trim()) {
+    if (!form.displayName.trim() || !form.venueName.trim()) {
       setError("Organization name and primary venue are required.");
       return;
     }
 
     setError(null);
+    setSubmitting(true);
 
-    // Real implementation would POST to /api/onboarding/create-network-org.
-    nav.push("/onboarding/block-4");
+    try {
+      const slug = form.displayName
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-|-$/g, "");
+
+      const res = await fetch("/api/onboarding/create-network-org", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          slug,
+          displayName: form.displayName,
+          kind: "independent_org",
+          segment: form.segment,
+          metadata: {
+            venueName: form.venueName,
+            city: form.city,
+            state: form.state,
+          },
+        }),
+      });
+
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        setError(data.error?.message || "Failed to create organization");
+        setSubmitting(false);
+        return;
+      }
+
+      const data = await res.json();
+
+      if (data.data?.id) {
+        setOrgId(data.data.id);
+        setNetworkId(data.data.id);
+      }
+
+      router.push("/onboarding/block-4");
+    } catch (err) {
+      console.error("Create org failed:", err);
+      setError("Network error. Please try again.");
+      setSubmitting(false);
+    }
   }
 
   return (
@@ -56,18 +99,41 @@ export default function CreateNetworkOrgPage() {
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="space-y-1">
-          <label htmlFor="orgName" className="block text-sm font-medium text-gray-800">
+          <label htmlFor="displayName" className="block text-sm font-medium text-gray-800">
             Organization name
           </label>
           <input
-            id="orgName"
-            name="orgName"
+            id="displayName"
+            name="displayName"
             type="text"
-            value={form.orgName}
+            value={form.displayName}
             onChange={handleChange}
-            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
-            placeholder="e.g., Top Shelf Service – Main Location"
+            disabled={submitting}
+            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm disabled:opacity-50"
+            placeholder="e.g., Top Shelf Service"
           />
+        </div>
+
+        <div className="space-y-1">
+          <label htmlFor="segment" className="block text-sm font-medium text-gray-800">
+            Business type
+          </label>
+          <select
+            id="segment"
+            name="segment"
+            value={form.segment}
+            onChange={handleChange}
+            disabled={submitting}
+            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm disabled:opacity-50"
+          >
+            <option value="restaurant">Restaurant</option>
+            <option value="qsr">Quick Service Restaurant</option>
+            <option value="bar">Bar / Nightclub</option>
+            <option value="hotel">Hotel / Hospitality</option>
+            <option value="retail">Retail</option>
+            <option value="nonprofit">Nonprofit</option>
+            <option value="other">Other</option>
+          </select>
         </div>
 
         <div className="space-y-1">
@@ -80,7 +146,8 @@ export default function CreateNetworkOrgPage() {
             type="text"
             value={form.venueName}
             onChange={handleChange}
-            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
+            disabled={submitting}
+            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm disabled:opacity-50"
             placeholder="e.g., Arlington Cafe"
           />
         </div>
@@ -96,7 +163,8 @@ export default function CreateNetworkOrgPage() {
               type="text"
               value={form.city}
               onChange={handleChange}
-              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
+              disabled={submitting}
+              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm disabled:opacity-50"
             />
           </div>
           <div className="w-24 space-y-1">
@@ -109,7 +177,8 @@ export default function CreateNetworkOrgPage() {
               type="text"
               value={form.state}
               onChange={handleChange}
-              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
+              disabled={submitting}
+              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm disabled:opacity-50"
               placeholder="TX"
             />
           </div>
@@ -120,17 +189,19 @@ export default function CreateNetworkOrgPage() {
         <div className="flex items-center justify-between gap-4">
           <button
             type="button"
-            onClick={() => nav.push("/onboarding/admin-responsibility")}
-            className="text-sm text-gray-600 underline"
+            onClick={() => router.push("/onboarding/admin-responsibility")}
+            disabled={submitting}
+            className="text-sm text-gray-600 underline disabled:opacity-50"
           >
             Back to Admin responsibilities
           </button>
 
           <button
             type="submit"
-            className="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white"
+            disabled={submitting}
+            className="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white disabled:opacity-50"
           >
-            Continue to Finalization
+            {submitting ? "Creating..." : "Continue to Finalization"}
           </button>
         </div>
       </form>

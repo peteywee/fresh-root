@@ -3,35 +3,53 @@
 
 import { z } from "zod";
 import { createAuthenticatedEndpoint } from "@fresh-schedules/api-framework";
-import { CreateNetworkSchema } from "@fresh-schedules/types";
 import { getFirestore } from "firebase-admin/firestore";
 import { NextResponse } from "next/server";
 
-import { ok, serverError } from "../../_shared/validation";
+import { serverError } from "../../_shared/validation";
 import { FLAGS } from "../../../../src/lib/features";
+
+// Extended schema that accepts metadata for venue info
+const CreateOrgNetworkSchema = z.object({
+  slug: z.string().min(1),
+  displayName: z.string().min(1),
+  kind: z.enum(["independent_org", "corporate_network", "franchise_network", "nonprofit_network", "test_sandbox"]),
+  segment: z.enum(["restaurant", "qsr", "bar", "hotel", "nonprofit", "shelter", "church", "retail", "other"]),
+  metadata: z.object({
+    venueName: z.string().optional(),
+    city: z.string().optional(),
+    state: z.string().optional(),
+  }).optional(),
+});
 
 /**
  * POST /api/onboarding/create-network-org
  * Create organization network and set orgId cookie
  */
 export const POST = createAuthenticatedEndpoint({
-  input: CreateNetworkSchema,
+  input: CreateOrgNetworkSchema,
+  rateLimit: { maxRequests: 10, windowMs: 60000 },
   handler: async ({ request: _request, input, context, params: _params }) => {
     try {
-      // Type assertion safe - input validated by SDK factory
-      const typedInput = input as z.infer<typeof CreateNetworkSchema>;
+      const typedInput = input as z.infer<typeof CreateOrgNetworkSchema>;
       const userId = context.auth?.userId;
 
       if (!userId) {
         return serverError("User ID is required");
       }
 
+      const orgId = `org-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+      const now = Date.now();
+
       const org = {
-        id: `org-${Date.now()}`,
-        name: typedInput.organizationName,
-        type: typedInput.type,
+        id: orgId,
+        slug: typedInput.slug,
+        displayName: typedInput.displayName,
+        kind: typedInput.kind,
+        segment: typedInput.segment,
         ownerId: userId,
-        createdAt: Date.now(),
+        createdAt: now,
+        updatedAt: now,
         status: "active",
       };
 
@@ -40,34 +58,37 @@ export const POST = createAuthenticatedEndpoint({
         const db = getFirestore();
 
         // B1: Write organization document to Firestore
-        const orgData = {
-          name: org.name,
-          type: org.type,
-          ownerId: userId,
-          createdAt: org.createdAt,
-          status: org.status,
-        };
-        await db.collection("organizations").doc(org.id).set(orgData);
+        await db.collection("organizations").doc(orgId).set(org);
 
         // B2: Create membership document for org creator with org_owner role
         const membershipData = {
           userId,
-          orgId: org.id,
+          orgId,
           role: "org_owner",
           status: "active",
-          joinedAt: org.createdAt,
+          joinedAt: now,
         };
-        await db
-          .collection("organizations")
-          .doc(org.id)
-          .collection("members")
-          .doc(userId)
-          .set(membershipData);
+        await db.collection("organizations").doc(orgId).collection("members").doc(userId).set(membershipData);
+
+        // Create initial venue if provided
+        if (typedInput.metadata?.venueName) {
+          const venueId = `venue-${Date.now()}`;
+          const venueData = {
+            id: venueId,
+            name: typedInput.metadata.venueName,
+            city: typedInput.metadata.city || "",
+            state: typedInput.metadata.state || "",
+            orgId,
+            createdAt: now,
+            status: "active",
+          };
+          await db.collection("organizations").doc(orgId).collection("venues").doc(venueId).set(venueData);
+        }
       }
 
       // A3: Set orgId cookie for session persistence
-      const response = NextResponse.json(ok(org));
-      response.cookies.set("orgId", org.id, {
+      const response = NextResponse.json({ success: true, data: org });
+      response.cookies.set("orgId", orgId, {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
         sameSite: "lax",

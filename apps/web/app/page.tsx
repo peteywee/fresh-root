@@ -5,9 +5,19 @@ import Link from "next/link";
 export default function Home() {
   return (
     <main className="space-y-8 p-6">
-      <div>
-        <h1 className="text-3xl font-bold">Fresh Schedules</h1>
-        <p className="mt-2 text-gray-400">Staff scheduling built for speed and control.</p>
+      <div className="flex items-start justify-between">
+        <div>
+          <h1 className="text-3xl font-bold">Fresh Schedules</h1>
+          <p className="mt-2 text-gray-400">Staff scheduling built for speed and control.</p>
+        </div>
+        <div className="flex gap-3">
+          <Link
+            href="/login"
+            className="rounded-lg border border-blue-500 bg-blue-600 px-4 py-2 font-medium text-white transition-colors hover:bg-blue-500"
+          >
+            Sign In
+          </Link>
+        </div>
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">

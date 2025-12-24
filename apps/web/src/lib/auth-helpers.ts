@@ -7,6 +7,8 @@ import {
   isSignInWithEmailLink,
   sendSignInLinkToEmail,
   signInWithEmailLink,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
   getRedirectResult,
 } from "firebase/auth";
 
@@ -130,5 +132,43 @@ export async function logoutEverywhere() {
     await signOut(auth!);
   } catch (e) {
     reportError(e, { phase: "client_signout" });
+  }
+}
+
+/**
+ * Sign in with email and password.
+ * Returns the user credential on success.
+ */
+export async function signInWithPassword(email: string, password: string) {
+  if (!auth) {
+    throw new Error(
+      "Firebase auth is not initialized. Ensure NEXT_PUBLIC_FIREBASE_* env vars are set.",
+    );
+  }
+  try {
+    const result = await signInWithEmailAndPassword(auth, email, password);
+    return result;
+  } catch (e) {
+    reportError(e, { phase: "email_password_sign_in" });
+    throw e;
+  }
+}
+
+/**
+ * Create a new account with email and password.
+ * Returns the user credential on success.
+ */
+export async function signUpWithPassword(email: string, password: string) {
+  if (!auth) {
+    throw new Error(
+      "Firebase auth is not initialized. Ensure NEXT_PUBLIC_FIREBASE_* env vars are set.",
+    );
+  }
+  try {
+    const result = await createUserWithEmailAndPassword(auth, email, password);
+    return result;
+  } catch (e) {
+    reportError(e, { phase: "email_password_sign_up" });
+    throw e;
   }
 }
