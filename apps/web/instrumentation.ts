@@ -50,7 +50,8 @@ export function register() {
       const info = getMultiInstanceInfo(env);
       if (info.riskLevel === "critical") {
         console.error(`\n❌ CRITICAL: ${info.message}`);
-        process.exit(1);
+        // Use throw instead of process.exit to avoid Edge Runtime incompatibility
+        throw new Error(`Critical environment validation failure: ${info.message}`);
       }
     }
   } catch (error) {
