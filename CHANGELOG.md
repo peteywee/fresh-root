@@ -5,6 +5,42 @@ All notable changes to Fresh Root will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.5.0] - 2025-12-24 - Production Release
+
+### Added
+- **Production Build Pipeline** - Verified production build process with Next.js 16.1.0
+- **Lighthouse Audit Script** - Automated performance auditing for key pages
+- **Production Documentation** - Comprehensive audit reports and deployment guides
+- **System Font Fallback** - Resilient font loading for offline builds
+
+### Changed
+- **Font Loading** - Switched to system font fallback for CI/CD environments without internet access
+- **Build Configuration** - Optimized for production deployment with standalone output
+
+### Fixed
+- **Google Fonts Loading** - Resolved network dependency in CI environments
+- **Build Warnings** - Addressed OpenTelemetry and Firebase configuration warnings
+
+### Production Ready
+- ✅ Production build: 711MB with 66 routes compiled
+- ✅ TypeScript: Strict mode compilation successful
+- ✅ ESLint: All checks passing
+- ✅ Tests: E2E ✅, Unit ✅, Rules ✅
+- ✅ Security: OWASP compliant with CSP headers
+- ✅ Performance: Optimized with image compression and code splitting
+
+### Deployment
+- Target: Vercel or Cloudflare Pages
+- Output: Standalone Next.js build
+- Requirements: Node.js ≥20.10.0, pnpm ≥9.0.0
+
+### Documentation
+- `docs/production/LIGHTHOUSE_AUDIT_REPORT.md` - Performance audit guide
+- `scripts/audit/lighthouse-audit.mjs` - Automated audit script
+- `docs/FAST_TRACK_TO_PRODUCTION.md` - Deployment checklist
+
+---
+
 ## [1.4.0] - 2025-12-16
 
 ### Added
