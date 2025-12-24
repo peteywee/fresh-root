@@ -1,14 +1,15 @@
 // [P2][APP][CODE] Fonts
 // Tags: P2, APP, CODE
-import { Inter } from "next/font/google";
 
 /**
- * Self-hosted variable font with swap to avoid FOIT/FOUT.
- * Using a CSS variable keeps Tailwind/theming clean.
+ * Fallback font configuration for builds without internet access.
+ * In production with internet access, this can be reverted to use next/font/google.
+ * For now, we use system fonts as a fallback.
  */
-export const inter = Inter({
-  subsets: ["latin"],
-  display: "swap",
+export const inter = {
   variable: "--font-inter",
-  weight: ["400", "500", "600", "700"],
-});
+  style: {
+    fontFamily:
+      'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
+  },
+};
