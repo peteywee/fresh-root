@@ -49,12 +49,18 @@ const PAGES = [
  */
 function runLighthouse(page) {
   const url = `${BASE_URL}${page.path}`;
-  const outputPath = join(OUTPUT_DIR, `${page.name}.json`);
-  const htmlPath = join(OUTPUT_DIR, `${page.name}.html`);
 
   console.log(`\n🔍 Auditing: ${page.description} (${url})`);
 
   try {
+    // Check if lighthouse is available
+    try {
+      execSync("pnpm exec lighthouse --version", { stdio: "ignore" });
+    } catch (error) {
+      console.error("❌ Lighthouse not found. Install it with: pnpm add -D lighthouse");
+      process.exit(1);
+    }
+
     // Run Lighthouse with recommended settings
     const command = [
       "pnpm exec lighthouse",
@@ -62,7 +68,7 @@ function runLighthouse(page) {
       "--output=json",
       "--output=html",
       `--output-path=${join(OUTPUT_DIR, page.name)}`,
-      "--chrome-flags='--headless --no-sandbox --disable-gpu'",
+      "--chrome-flags=--headless --no-sandbox --disable-gpu",
       "--quiet",
       "--only-categories=performance,accessibility,best-practices,seo",
     ].join(" ");

@@ -1,13 +1,13 @@
-# Lighthouse Audit Report - Fresh Schedules v1.0.0
+# Lighthouse Audit Report - Fresh Schedules v1.5.0
 
 **Date**: December 24, 2024  
-**Version**: 1.0.0  
+**Version**: 1.5.0  
 **Environment**: Production Build  
 **Auditor**: GitHub Copilot Agent
 
 ## Executive Summary
 
-This document describes the Lighthouse audit process for Fresh Schedules v1.0.0 and documents expected performance characteristics based on the application architecture.
+This document describes the Lighthouse audit process for Fresh Schedules v1.5.0 and documents expected performance characteristics based on the application architecture.
 
 ## Build Characteristics
 

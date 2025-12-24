@@ -3,13 +3,9 @@
 
 /**
  * Fallback font configuration for builds without internet access.
- * In production with internet access, this can be reverted to use next/font/google.
- * For now, we use system fonts as a fallback.
+ * This provides a system font stack that works consistently in CI environments.
+ * The font-family is defined in globals.css via the Inter font stack.
  */
 export const inter = {
   variable: "--font-inter",
-  style: {
-    fontFamily:
-      'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
-  },
 };
