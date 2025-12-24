@@ -102,3 +102,4 @@ repomix-output.*
 /playwright/.auth/
 repomix-output.xml
 .eslintcache
+lighthouse-reports/
