@@ -47,7 +47,7 @@ export const POST = createAuthenticatedEndpoint({
           createdAt: org.createdAt,
           status: org.status,
         };
-        await db.collection('organizations').doc(org.id).set(orgData);
+        await db.collection("organizations").doc(org.id).set(orgData);
 
         // B2: Create membership document for org creator with org_owner role
         const membershipData = {
@@ -57,17 +57,22 @@ export const POST = createAuthenticatedEndpoint({
           status: "active",
           joinedAt: org.createdAt,
         };
-        await db.collection('organizations').doc(org.id).collection('members').doc(userId).set(membershipData);
+        await db
+          .collection("organizations")
+          .doc(org.id)
+          .collection("members")
+          .doc(userId)
+          .set(membershipData);
       }
 
       // A3: Set orgId cookie for session persistence
       const response = NextResponse.json(ok(org));
-      response.cookies.set('orgId', org.id, {
+      response.cookies.set("orgId", org.id, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'lax',
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
         maxAge: 60 * 60 * 24 * 30, // 30 days
-        path: '/',
+        path: "/",
       });
 
       return response;

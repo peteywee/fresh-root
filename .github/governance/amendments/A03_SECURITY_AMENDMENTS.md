@@ -50,7 +50,9 @@ pnpm test
 ```typescript
 export const POST = createPublicEndpoint({
   rateLimit: { maxRequests: 10, windowMs: 60000 },
-  handler: async () => { /* ... */ }
+  handler: async () => {
+    /* ... */
+  },
 });
 ```
 
@@ -61,8 +63,10 @@ export const POST = createPublicEndpoint({
 
 ```typescript
 export const POST = createOrgEndpoint({
-  input: CreateEntitySchema,  // Auto-validates
-  handler: async ({ input }) => { /* input is typed & validated */ }
+  input: CreateEntitySchema, // Auto-validates
+  handler: async ({ input }) => {
+    /* input is typed & validated */
+  },
 });
 ```
 

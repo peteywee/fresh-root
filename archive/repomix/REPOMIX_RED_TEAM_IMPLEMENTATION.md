@@ -8,7 +8,8 @@
 
 ## Executive Summary
 
-Complete automated Repomix analysis pipeline with production-grade security, error handling, and observability. All three tiers (local, CI, documentation) are implemented and validated.
+Complete automated Repomix analysis pipeline with production-grade security, error handling, and
+observability. All three tiers (local, CI, documentation) are implemented and validated.
 
 ---
 
@@ -81,8 +82,8 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
-          cache: 'pnpm'
+          node-version: "20"
+          cache: "pnpm"
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
       - name: Generate dependency map (JSON)
@@ -442,12 +443,12 @@ Next steps:
 
 ## Appendix: File Locations
 
-| Component | File | Status |
-|-----------|------|--------|
-| Pre-push hook | `.husky/pre-push` | ✅ Implemented |
-| CI workflow | `.github/workflows/repomix-ci.yml` | ✅ Implemented |
-| Docs sync script | `scripts/docs-auto-update.mjs` | ✅ Implemented |
-| Package scripts | `package.json` (scripts section) | ✅ Configured |
+| Component        | File                               | Status         |
+| ---------------- | ---------------------------------- | -------------- |
+| Pre-push hook    | `.husky/pre-push`                  | ✅ Implemented |
+| CI workflow      | `.github/workflows/repomix-ci.yml` | ✅ Implemented |
+| Docs sync script | `scripts/docs-auto-update.mjs`     | ✅ Implemented |
+| Package scripts  | `package.json` (scripts section)   | ✅ Configured  |
 
 ---
 

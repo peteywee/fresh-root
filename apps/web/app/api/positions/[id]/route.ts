@@ -52,24 +52,18 @@ export const GET = createOrgEndpoint({
 
       // Fetch from Firestore
       const db = getFirestore();
-      const positionRef = db.collection('orgs').doc(orgId).collection('positions').doc(id);
+      const positionRef = db.collection("orgs").doc(orgId).collection("positions").doc(id);
       const snap = await positionRef.get();
 
       if (!snap.exists) {
-        return NextResponse.json(
-          { error: "Position not found" },
-          { status: 404 },
-        );
+        return NextResponse.json({ error: "Position not found" }, { status: 404 });
       }
 
       const position = snap.data() as Position;
 
       // Verify the position belongs to this org
       if (position.orgId !== orgId) {
-        return NextResponse.json(
-          { error: "Unauthorized" },
-          { status: 403 },
-        );
+        return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
       }
 
       return NextResponse.json(position, { status: 200 });
@@ -121,24 +115,18 @@ export const PATCH = createOrgEndpoint({
 
       // Fetch current document to verify orgId and apply partial updates
       const db = getFirestore();
-      const positionRef = db.collection('orgs').doc(orgId).collection('positions').doc(id);
+      const positionRef = db.collection("orgs").doc(orgId).collection("positions").doc(id);
       const snap = await positionRef.get();
 
       if (!snap.exists) {
-        return NextResponse.json(
-          { error: "Position not found" },
-          { status: 404 },
-        );
+        return NextResponse.json({ error: "Position not found" }, { status: 404 });
       }
 
       const current = snap.data() as Position;
 
       // Verify org ownership
       if (current.orgId !== orgId) {
-        return NextResponse.json(
-          { error: "Unauthorized" },
-          { status: 403 },
-        );
+        return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
       }
 
       // Build update object with timestamp
@@ -191,24 +179,18 @@ export const DELETE = createOrgEndpoint({
 
       // Fetch current document
       const db = getFirestore();
-      const positionRef = db.collection('orgs').doc(orgId).collection('positions').doc(id);
+      const positionRef = db.collection("orgs").doc(orgId).collection("positions").doc(id);
       const snap = await positionRef.get();
 
       if (!snap.exists) {
-        return NextResponse.json(
-          { error: "Position not found" },
-          { status: 404 },
-        );
+        return NextResponse.json({ error: "Position not found" }, { status: 404 });
       }
 
       const current = snap.data() as Position;
 
       // Verify org ownership
       if (current.orgId !== orgId) {
-        return NextResponse.json(
-          { error: "Unauthorized" },
-          { status: 403 },
-        );
+        return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
       }
 
       // Soft delete: set isActive to false
@@ -217,10 +199,13 @@ export const DELETE = createOrgEndpoint({
         updatedAt: Date.now(),
       });
 
-      return NextResponse.json({
-        message: "Position deleted successfully",
-        id,
-      }, { status: 200 });
+      return NextResponse.json(
+        {
+          message: "Position deleted successfully",
+          id,
+        },
+        { status: 200 },
+      );
     } catch (error) {
       console.error("Error deleting position:", error);
       return serverError("Failed to delete position");

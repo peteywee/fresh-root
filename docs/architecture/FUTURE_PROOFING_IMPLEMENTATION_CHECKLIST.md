@@ -158,11 +158,11 @@ lastModified: "2025-12-16"
 **Content**:
 
 ```markdown
-| Document | Version | Status | Compatible With | Conflicts With | Sunset Date |
-|----------|---------|--------|-----------------|----------------|-------------|
-| 01_STANDARDS | 1.0.0 | Active | All | - | - |
-| A03_SECURITY | 2.1.0 | Active | A01, A02, A07 | - | - |
-| A08_IMPL_PLAN | 1.0.0 | Deprecated | - | - | 2027-01-01 |
+| Document      | Version | Status     | Compatible With | Conflicts With | Sunset Date |
+| ------------- | ------- | ---------- | --------------- | -------------- | ----------- |
+| 01_STANDARDS  | 1.0.0   | Active     | All             | -              | -           |
+| A03_SECURITY  | 2.1.0   | Active     | A01, A02, A07   | -              | -           |
+| A08_IMPL_PLAN | 1.0.0   | Deprecated | -               | -              | 2027-01-01  |
 ```
 
 **Automation**:
@@ -283,7 +283,7 @@ name: Stale Documentation Check
 
 on:
   schedule:
-    - cron: '0 0 1 * *'  # Monthly on 1st
+    - cron: "0 0 1 * *" # Monthly on 1st
   workflow_dispatch:
 
 jobs:
@@ -300,9 +300,7 @@ jobs:
 ```markdown
 ## Stale Document Review Needed
 
-**Document**: {path}
-**Last Updated**: {date}
-**Review Date**: {reviewDate}
+**Document**: {path} **Last Updated**: {date} **Review Date**: {reviewDate}
 
 This document hasn't been updated in over 6 months. Please review:
 
@@ -311,8 +309,7 @@ This document hasn't been updated in over 6 months. Please review:
 - [ ] Links are valid
 - [ ] No deprecated patterns
 
-If accurate, update `lastModified` date.
-If outdated, create amendment or deprecate.
+If accurate, update `lastModified` date. If outdated, create amendment or deprecate.
 ```
 
 **Effort**: 3 hours  
@@ -400,7 +397,7 @@ name: Quarterly Governance Health Check
 
 on:
   schedule:
-    - cron: '0 0 1 1,4,7,10 *'  # Quarterly
+    - cron: "0 0 1 1,4,7,10 *" # Quarterly
 ```
 
 **Checklist Items**:

@@ -3,6 +3,7 @@
 ## Target
 
 Ops Hub Implementation:
+
 - `/api/ops/build-performance/route.ts` - GET/POST endpoint
 - `/ops/builds/page.tsx` - Client page displaying metrics
 - `packages/types/src/ops-metrics.ts` - Zod schemas
@@ -24,9 +25,11 @@ Ops Hub Implementation:
 
 - [x] **FAIL** - Response leaks internal directory structure
   - Finding: GET response exposes file paths in response body
-  - Evidence: Lines 155-161, response includes `path: "docs/metrics/build-performance.log"` and `source: "github" | "file"`
+  - Evidence: Lines 155-161, response includes `path: "docs/metrics/build-performance.log"` and
+    `source: "github" | "file"`
   - Risk: Attacker learns internal project structure
-  - Severity: **LOW** - Non-sensitive info (public repo anyway), but violates principle of least exposure
+  - Severity: **LOW** - Non-sensitive info (public repo anyway), but violates principle of least
+    exposure
   - Fix: Remove or redact `path` from response
 
 - [x] **WARN** - Client-side data handling
@@ -39,7 +42,7 @@ Ops Hub Implementation:
 ### SEC-03: Injection
 
 - [x] **PASS** - No injection vectors
-  - Evidence: 
+  - Evidence:
     - GitHub API: Constructed with safe URL class (Line 54-56)
     - File paths: Uses `path.join()` with safe basePath (Line 99)
     - JSON parsing: Uses JSON.parse with try/catch safeguards (Line 28-36)
@@ -62,7 +65,7 @@ Ops Hub Implementation:
 ### SEC-05: Secret Handling
 
 - [x] **PASS** - No secrets in code
-  - Evidence: 
+  - Evidence:
     - GitHub token used from env vars (Line 104: `process.env.GITHUB_TOKEN`)
     - All env vars used safely, never logged
     - Firebase credentials via SDK (Line 6)
@@ -136,13 +139,15 @@ Ops Hub Implementation:
 - [x] **FAIL** - SDK Factory pattern not fully applied
   - Finding: POST handler doesn't use Zod input validation
   - Evidence: Line 164-169 uses manual field checking instead of SDK factory's `input` parameter
-  - Should be: `export const POST = createAdminEndpoint({ input: CreateBuildPerformanceSchema, handler: ... })`
+  - Should be:
+    `export const POST = createAdminEndpoint({ input: CreateBuildPerformanceSchema, handler: ... })`
   - Severity: **HIGH** - Inconsistent with codebase patterns
   - Fix: Refactor POST to use SDK factory input validation
 
 - [x] **FAIL** - Response format inconsistent
   - Finding: GET returns `{ ok, source, path, orgId, entries }` but builds/page expects `{ data }`
-  - Evidence: Line 110 of builds/page.tsx uses `data.data` - accessing `.data` field that doesn't exist in response
+  - Evidence: Line 110 of builds/page.tsx uses `data.data` - accessing `.data` field that doesn't
+    exist in response
   - Risk: TypeError at runtime when accessing undefined
   - Severity: **CRITICAL** - Feature broken
   - Fix: Either rename API response field to `data` or update client to use `entries`
@@ -240,17 +245,18 @@ Ops Hub Implementation:
 
 ## Summary
 
-| Category | Count | Critical | High | Medium | Low |
-|----------|-------|----------|------|--------|-----|
-| **Security** | 5 | 0 | 1 | 1 | 2 |
-| **Logic** | 7 | 1 | 1 | 2 | 2 |
-| **Patterns** | 8 | 1 | 2 | 2 | 1 |
-| **Edge Cases** | 9 | 0 | 0 | 2 | 4 |
-| **TOTAL** | **29** | **2** | **4** | **7** | **9** |
+| Category       | Count  | Critical | High  | Medium | Low   |
+| -------------- | ------ | -------- | ----- | ------ | ----- |
+| **Security**   | 5      | 0        | 1     | 1      | 2     |
+| **Logic**      | 7      | 1        | 1     | 2      | 2     |
+| **Patterns**   | 8      | 1        | 2     | 2      | 1     |
+| **Edge Cases** | 9      | 0        | 0     | 2      | 4     |
+| **TOTAL**      | **29** | **2**    | **4** | **7**  | **9** |
 
 ### Critical Issues (BLOCKS DELIVERY)
 
-1. **CRITICAL-PAT-01**: API response format mismatch - client expects `data.data` but API returns `entries`
+1. **CRITICAL-PAT-01**: API response format mismatch - client expects `data.data` but API returns
+   `entries`
    - Severity: **BLOCKS FEATURE** - Page will crash
    - Fix Required: Immediately
 
@@ -271,12 +277,14 @@ Ops Hub Implementation:
 
 **BLOCKED** - Cannot merge until critical issues fixed.
 
-**Reason**: 
+**Reason**:
+
 1. API response structure mismatch will cause runtime errors
 2. SDK factory pattern not followed (inconsistent with codebase standards)
 3. Timestamp validation missing (data quality)
 
 **Blockers Must Fix**:
+
 - Fix API response to return `data` field (or rename in client)
 - Implement POST with Zod input validation via SDK factory
 - Add timestamp validation to prevent invalid dates
@@ -288,6 +296,7 @@ Ops Hub Implementation:
 ## Issues Analysis
 
 All findings are valid. Identified:
+
 - 2 Critical issues blocking delivery
 - 4 High-priority security/pattern violations
 - 7 Medium-priority data quality issues
@@ -326,7 +335,7 @@ return NextResponse.json({
   meta: {
     source,
     limit,
-  }
+  },
 });
 ```
 
@@ -359,7 +368,7 @@ const sha = String(body.sha);
 if (!/^[a-f0-9]{40}$/.test(sha)) {
   return NextResponse.json(
     { ok: false, error: "sha must be 40-character hex string" },
-    { status: 400 }
+    { status: 400 },
   );
 }
 ```
@@ -380,6 +389,7 @@ if (!/^[a-f0-9]{40}$/.test(sha)) {
 🟢 **APPROVED** - All blockers fixed
 
 ### Issues Fixed (Post-Analysis):
+
 1. ✅ API response format (renamed `entries` → `data`)
 2. ✅ Client interface to match
 3. ✅ POST handler timestamp validation (ISO datetime regex)
@@ -390,6 +400,7 @@ if (!/^[a-f0-9]{40}$/.test(sha)) {
 8. ✅ SHA validation (40-char hex requirement)
 
 ### Deferred (Non-Blocking, Lower Priority):
+
 - SDK factory input pattern (once types exports working)
 - Remove file paths from response (already removed)
 - Import types from package (types export issue)

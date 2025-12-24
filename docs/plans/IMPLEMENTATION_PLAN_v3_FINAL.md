@@ -9,7 +9,8 @@
 
 ## Executive Summary
 
-This plan remediates 41 production gaps across 6 work streams in 9 days using 4 parallel teams. All blocking issues from v1/v2 are now resolved.
+This plan remediates 41 production gaps across 6 work streams in 9 days using 4 parallel teams. All
+blocking issues from v1/v2 are now resolved.
 
 ### Key Improvements from v2
 
@@ -32,7 +33,7 @@ This plan remediates 41 production gaps across 6 work streams in 9 days using 4 
 
 ```typescript
 // apps/web/src/lib/features.ts
-import { z } from 'zod';
+import { z } from "zod";
 
 const FeatureFlags = z.object({
   REAL_AUTH: z.boolean().default(false),
@@ -42,10 +43,10 @@ const FeatureFlags = z.object({
 });
 
 export const FLAGS = FeatureFlags.parse({
-  REAL_AUTH: process.env.NEXT_PUBLIC_FEATURE_REAL_AUTH === 'true',
-  FIRESTORE_WRITES: process.env.NEXT_PUBLIC_FEATURE_FIRESTORE_WRITES === 'true',
-  NEW_NAVIGATION: process.env.NEXT_PUBLIC_FEATURE_NEW_NAVIGATION === 'true',
-  PUBLISH_ENABLED: process.env.NEXT_PUBLIC_FEATURE_PUBLISH_ENABLED === 'true',
+  REAL_AUTH: process.env.NEXT_PUBLIC_FEATURE_REAL_AUTH === "true",
+  FIRESTORE_WRITES: process.env.NEXT_PUBLIC_FEATURE_FIRESTORE_WRITES === "true",
+  NEW_NAVIGATION: process.env.NEXT_PUBLIC_FEATURE_NEW_NAVIGATION === "true",
+  PUBLISH_ENABLED: process.env.NEXT_PUBLIC_FEATURE_PUBLISH_ENABLED === "true",
 });
 ```
 
@@ -55,29 +56,31 @@ export const FLAGS = FeatureFlags.parse({
 
 ```typescript
 // tests/e2e/fixtures/auth.ts
-import { test as base } from '@playwright/test';
+import { test as base } from "@playwright/test";
 
 export const test = base.extend<{ authenticatedPage: Page }>({
   authenticatedPage: async ({ page, context }, use) => {
     // Pre-seed Firebase emulator with test user
-    await fetch('http://localhost:9099/emulator/v1/projects/fresh-schedules-test/accounts', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+    await fetch("http://localhost:9099/emulator/v1/projects/fresh-schedules-test/accounts", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        uid: 'test-user-123',
-        email: 'test@example.com',
-        displayName: 'Test User',
+        uid: "test-user-123",
+        email: "test@example.com",
+        displayName: "Test User",
       }),
     });
-    
+
     // Set session cookie
-    await context.addCookies([{
-      name: 'session',
-      value: 'mock-session-token',
-      domain: 'localhost',
-      path: '/',
-    }]);
-    
+    await context.addCookies([
+      {
+        name: "session",
+        value: "mock-session-token",
+        domain: "localhost",
+        path: "/",
+      },
+    ]);
+
     await use(page);
   },
 });
@@ -94,31 +97,31 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
-          
+          node-version: "20"
+
       - name: Install pnpm
         uses: pnpm/action-setup@v2
         with:
           version: 9
-          
+
       - name: Install Firebase CLI
         run: npm install -g firebase-tools
-        
+
       - name: Start Emulators
         run: |
           firebase emulators:start --only auth,firestore &
           sleep 10  # Wait for startup
-          
+
       - name: Run E2E
         run: pnpm test:e2e
         env:
-          NEXT_PUBLIC_USE_EMULATORS: 'true'
-          FIREBASE_AUTH_EMULATOR_HOST: 'localhost:9099'
-          FIRESTORE_EMULATOR_HOST: 'localhost:8080'
+          NEXT_PUBLIC_USE_EMULATORS: "true"
+          FIREBASE_AUTH_EMULATOR_HOST: "localhost:9099"
+          FIRESTORE_EMULATOR_HOST: "localhost:8080"
 ```
 
 **Time**: 45 min
@@ -134,13 +137,13 @@ jobs:
 
 ## Team Structure (Unchanged)
 
-| Team | Lead | Streams | Members Needed |
-|------|------|---------|----------------|
-| **Alpha** | Backend Lead | A, B, D | 2 |
-| **Bravo** | Frontend Lead | C, F | 2 |
-| **Charlie** | Quality Lead | E, QA | 1-2 |
-| **Security Red** | Security Lead | All | 1 |
-| **Orchestrator** | PM | Coordination | 1 |
+| Team             | Lead          | Streams      | Members Needed |
+| ---------------- | ------------- | ------------ | -------------- |
+| **Alpha**        | Backend Lead  | A, B, D      | 2              |
+| **Bravo**        | Frontend Lead | C, F         | 2              |
+| **Charlie**      | Quality Lead  | E, QA        | 1-2            |
+| **Security Red** | Security Lead | All          | 1              |
+| **Orchestrator** | PM            | Coordination | 1              |
 
 ---
 
@@ -148,79 +151,79 @@ jobs:
 
 ### Stream A: Auth Chain (Alpha)
 
-| ID | Task | Subtasks | Est. | Owner | Deps | Accept Criteria |
-|----|------|----------|------|-------|------|-----------------|
-| A1 | Wire useAuth | 6 | 2h | Alpha-1 | P0 | Firebase user in context |
-| A2 | Wire proxy | 6 | 1.5h | Alpha-1 | A1 | Unauthenticated redirects to /login |
-| A3 | Set orgId cookie | 5 | 2h | Alpha-2 | A2 | Cookie set on org creation |
-| A4 | Validate invite tokens | 5 | 2h | Alpha-2 | A3 | Invalid tokens rejected |
-| A5 | Create membership | 5 | 1.5h | Alpha-2 | A4 | Membership doc exists |
+| ID  | Task                   | Subtasks | Est. | Owner   | Deps | Accept Criteria                     |
+| --- | ---------------------- | -------- | ---- | ------- | ---- | ----------------------------------- |
+| A1  | Wire useAuth           | 6        | 2h   | Alpha-1 | P0   | Firebase user in context            |
+| A2  | Wire proxy             | 6        | 1.5h | Alpha-1 | A1   | Unauthenticated redirects to /login |
+| A3  | Set orgId cookie       | 5        | 2h   | Alpha-2 | A2   | Cookie set on org creation          |
+| A4  | Validate invite tokens | 5        | 2h   | Alpha-2 | A3   | Invalid tokens rejected             |
+| A5  | Create membership      | 5        | 1.5h | Alpha-2 | A4   | Membership doc exists               |
 
 **Total Stream A**: 9 hours
 
 ### Stream B: Data Persistence (Alpha)
 
-| ID | Task | Subtasks | Est. | Owner | Deps | Accept Criteria |
-|----|------|----------|------|-------|------|-----------------|
-| B1 | create-network-org writes | 5 | 3h | Alpha-1 | A3 | Org doc in Firestore |
-| B2 | Create membership doc | 4 | 1.5h | Alpha-1 | B1 | Membership doc exists |
-| B3 | create-corporate writes | 3 | 2h | Alpha-2 | B1 | Network doc exists |
-| B4 | join-with-token writes | 3 | 1.5h | Alpha-2 | A5 | Token consumed |
-| B5 | Firestore rules tests | 4 | 2h | Alpha-1 | B1-B4 | All rules tests pass |
+| ID  | Task                      | Subtasks | Est. | Owner   | Deps  | Accept Criteria       |
+| --- | ------------------------- | -------- | ---- | ------- | ----- | --------------------- |
+| B1  | create-network-org writes | 5        | 3h   | Alpha-1 | A3    | Org doc in Firestore  |
+| B2  | Create membership doc     | 4        | 1.5h | Alpha-1 | B1    | Membership doc exists |
+| B3  | create-corporate writes   | 3        | 2h   | Alpha-2 | B1    | Network doc exists    |
+| B4  | join-with-token writes    | 3        | 1.5h | Alpha-2 | A5    | Token consumed        |
+| B5  | Firestore rules tests     | 4        | 2h   | Alpha-1 | B1-B4 | All rules tests pass  |
 
 **Total Stream B**: 10 hours
 
 ### Stream C: UX Completion (Bravo)
 
-| ID | Task | Subtasks | Est. | Owner | Deps | Accept Criteria |
-|----|------|----------|------|-------|------|-----------------|
-| C1 | Header with logout | 6 | 2h | Bravo-1 | A1 | Logout clears session |
-| C2 | Sidebar navigation | 4 | 2h | Bravo-1 | C1 | All routes navigable |
-| C3 | Profile persistence | 3 | 2h | Bravo-2 | B2 | Profile saves to Firestore |
-| C4 | OrgContext | 4 | 2h | Bravo-2 | A3 | Context available in /app/* |
-| C5 | Fix CSP | 3 | 1h | Bravo-1 | - | No CSP errors |
+| ID  | Task                | Subtasks | Est. | Owner   | Deps | Accept Criteria              |
+| --- | ------------------- | -------- | ---- | ------- | ---- | ---------------------------- |
+| C1  | Header with logout  | 6        | 2h   | Bravo-1 | A1   | Logout clears session        |
+| C2  | Sidebar navigation  | 4        | 2h   | Bravo-1 | C1   | All routes navigable         |
+| C3  | Profile persistence | 3        | 2h   | Bravo-2 | B2   | Profile saves to Firestore   |
+| C4  | OrgContext          | 4        | 2h   | Bravo-2 | A3   | Context available in /app/\* |
+| C5  | Fix CSP             | 3        | 1h   | Bravo-1 | -    | No CSP errors                |
 
 **Total Stream C**: 9 hours
 
 ### Stream D: API Migration (Alpha)
 
-| ID | Task | Collection | Est. | Owner | Deps | Accept Criteria |
-|----|------|------------|------|-------|------|-----------------|
-| D1 | attendance | `orgs/{o}/attendance` | 1.5h | Alpha-1 | B5 | GET returns real data |
-| D2 | positions | `orgs/{o}/positions` | 1.5h | Alpha-1 | B5 | GET returns real data |
-| D3 | schedules | `orgs/{o}/schedules` | 2h | Alpha-2 | B5 | CRUD works |
-| D4 | shifts | `orgs/{o}/.../shifts` | 2h | Alpha-2 | D3 | CRUD works |
-| D5 | venues | `orgs/{o}/venues` | 1.5h | Alpha-1 | B5 | GET returns real data |
-| D6 | zones | `orgs/{o}/zones` | 1.5h | Alpha-1 | B5 | GET returns real data |
-| D7 | widgets | `widgets` | 1h | Alpha-2 | - | GET returns real data |
-| D8 | profile | `users/{uid}` | 1.5h | Alpha-2 | B2 | GET/POST works |
+| ID  | Task       | Collection            | Est. | Owner   | Deps | Accept Criteria       |
+| --- | ---------- | --------------------- | ---- | ------- | ---- | --------------------- |
+| D1  | attendance | `orgs/{o}/attendance` | 1.5h | Alpha-1 | B5   | GET returns real data |
+| D2  | positions  | `orgs/{o}/positions`  | 1.5h | Alpha-1 | B5   | GET returns real data |
+| D3  | schedules  | `orgs/{o}/schedules`  | 2h   | Alpha-2 | B5   | CRUD works            |
+| D4  | shifts     | `orgs/{o}/.../shifts` | 2h   | Alpha-2 | D3   | CRUD works            |
+| D5  | venues     | `orgs/{o}/venues`     | 1.5h | Alpha-1 | B5   | GET returns real data |
+| D6  | zones      | `orgs/{o}/zones`      | 1.5h | Alpha-1 | B5   | GET returns real data |
+| D7  | widgets    | `widgets`             | 1h   | Alpha-2 | -    | GET returns real data |
+| D8  | profile    | `users/{uid}`         | 1.5h | Alpha-2 | B2   | GET/POST works        |
 
 **Total Stream D**: 12.5 hours
 
 ### Stream E: Type Safety (Charlie)
 
-| ID | Task | Files | Est. | Owner | Deps | Accept Criteria |
-|----|------|-------|------|-------|------|-----------------|
-| E1-E4 | Remove `any` types | 5 files | 2h | Charlie | - | `pnpm typecheck` passes |
-| E5 | Structured error logging | All handlers | 3h | Charlie | D1-D8 | All handlers have try/catch |
-| E6 | BatchOperationSchema | types/batch.ts | 1h | Charlie | - | Schema in types package |
-| E7 | BackupRequestSchema | types/internal.ts | 1h | Charlie | - | Schema in types package |
-| E8 | Consolidate wrappers | firebase/ | 2h | Charlie | - | Single source |
+| ID    | Task                     | Files             | Est. | Owner   | Deps  | Accept Criteria             |
+| ----- | ------------------------ | ----------------- | ---- | ------- | ----- | --------------------------- |
+| E1-E4 | Remove `any` types       | 5 files           | 2h   | Charlie | -     | `pnpm typecheck` passes     |
+| E5    | Structured error logging | All handlers      | 3h   | Charlie | D1-D8 | All handlers have try/catch |
+| E6    | BatchOperationSchema     | types/batch.ts    | 1h   | Charlie | -     | Schema in types package     |
+| E7    | BackupRequestSchema      | types/internal.ts | 1h   | Charlie | -     | Schema in types package     |
+| E8    | Consolidate wrappers     | firebase/         | 2h   | Charlie | -     | Single source               |
 
 **Total Stream E**: 9 hours
 
 ### Stream F: Feature Completion (Bravo + Alpha)
 
-| ID | Task | Est. | Owner | Deps | Accept Criteria |
-|----|------|------|-------|------|-----------------|
-| F1 | publishSchedule | 3h | Alpha-1 | D3 | Schedule status changes |
-| F2 | Connect schedule builder | 4h | Bravo-1 | D3, D4 | Saves to Firestore |
-| F3 | File upload | 3h | Bravo-2 | C3 | Files persist |
-| F4 | Loading states | 1.5h | Bravo-1 | C1-C4 | Spinners visible |
-| F5 | Error boundaries | 1.5h | Bravo-2 | C1-C4 | Errors caught |
-| F6 | ARIA labels | 1h | Bravo-1 | C1-C4 | Lighthouse passes |
-| F7 | Prefetching | 0.5h | Bravo-2 | C2 | Links prefetch |
-| F8 | E2E golden path | 4h | Charlie | All | E2E passes |
+| ID  | Task                     | Est. | Owner   | Deps   | Accept Criteria         |
+| --- | ------------------------ | ---- | ------- | ------ | ----------------------- |
+| F1  | publishSchedule          | 3h   | Alpha-1 | D3     | Schedule status changes |
+| F2  | Connect schedule builder | 4h   | Bravo-1 | D3, D4 | Saves to Firestore      |
+| F3  | File upload              | 3h   | Bravo-2 | C3     | Files persist           |
+| F4  | Loading states           | 1.5h | Bravo-1 | C1-C4  | Spinners visible        |
+| F5  | Error boundaries         | 1.5h | Bravo-2 | C1-C4  | Errors caught           |
+| F6  | ARIA labels              | 1h   | Bravo-1 | C1-C4  | Lighthouse passes       |
+| F7  | Prefetching              | 0.5h | Bravo-2 | C2     | Links prefetch          |
+| F8  | E2E golden path          | 4h   | Charlie | All    | E2E passes              |
 
 **Total Stream F**: 18.5 hours
 
@@ -268,67 +271,67 @@ P0 (Feature Flags + E2E Setup)
 
 ### Gate 1: Auth Complete (End of Day 2)
 
-| Check | Command | Expected |
-|-------|---------|----------|
-| A1-A5 complete | Review PRs | All merged |
-| Auth works locally | Manual test | Login/logout works |
-| Cookie set | Browser DevTools | orgId cookie visible |
-| Security review | Red Team sign-off | Approved |
+| Check              | Command           | Expected             |
+| ------------------ | ----------------- | -------------------- |
+| A1-A5 complete     | Review PRs        | All merged           |
+| Auth works locally | Manual test       | Login/logout works   |
+| Cookie set         | Browser DevTools  | orgId cookie visible |
+| Security review    | Red Team sign-off | Approved             |
 
 ### Gate 2: Data Complete (End of Day 3)
 
-| Check | Command | Expected |
-|-------|---------|----------|
-| B1-B5 complete | Review PRs | All merged |
-| Rules tests | `pnpm test:rules` | All pass |
-| Org in Firestore | Emulator UI | Doc visible |
-| Membership in Firestore | Emulator UI | Doc visible |
+| Check                   | Command           | Expected    |
+| ----------------------- | ----------------- | ----------- |
+| B1-B5 complete          | Review PRs        | All merged  |
+| Rules tests             | `pnpm test:rules` | All pass    |
+| Org in Firestore        | Emulator UI       | Doc visible |
+| Membership in Firestore | Emulator UI       | Doc visible |
 
 ### Gate 3: UX Complete (End of Day 4)
 
-| Check | Command | Expected |
-|-------|---------|----------|
-| C1-C5 complete | Review PRs | All merged |
-| Navigation works | Manual test | All routes accessible |
-| Profile saves | Manual test | Refresh persists |
-| No CSP errors | Browser console | Clean |
+| Check            | Command         | Expected              |
+| ---------------- | --------------- | --------------------- |
+| C1-C5 complete   | Review PRs      | All merged            |
+| Navigation works | Manual test     | All routes accessible |
+| Profile saves    | Manual test     | Refresh persists      |
+| No CSP errors    | Browser console | Clean                 |
 
 ### Gate 4: API Complete (End of Day 5)
 
-| Check | Command | Expected |
-|-------|---------|----------|
-| D1-D8 complete | Review PRs | All merged |
-| No mock data | grep for "mock" | 0 matches |
-| API tests pass | `pnpm test -- --grep "api"` | All pass |
-| Type check | `pnpm typecheck` | 0 errors |
+| Check          | Command                     | Expected   |
+| -------------- | --------------------------- | ---------- |
+| D1-D8 complete | Review PRs                  | All merged |
+| No mock data   | grep for "mock"             | 0 matches  |
+| API tests pass | `pnpm test -- --grep "api"` | All pass   |
+| Type check     | `pnpm typecheck`            | 0 errors   |
 
 ### Gate 5: Quality Complete (End of Day 6)
 
-| Check | Command | Expected |
-|-------|---------|----------|
-| E1-E8 complete | Review PRs | All merged |
-| No `any` types | grep for ": any" | 0 matches |
-| Pattern score | `validate-patterns.mjs` | ≥95 |
-| Lint clean | `pnpm lint` | 0 warnings |
+| Check          | Command                 | Expected   |
+| -------------- | ----------------------- | ---------- |
+| E1-E8 complete | Review PRs              | All merged |
+| No `any` types | grep for ": any"        | 0 matches  |
+| Pattern score  | `validate-patterns.mjs` | ≥95        |
+| Lint clean     | `pnpm lint`             | 0 warnings |
 
 ### Gate 6: Features Complete (End of Day 8)
 
-| Check | Command | Expected |
-|-------|---------|----------|
-| F1-F8 complete | Review PRs | All merged |
-| E2E passes | `pnpm test:e2e` | 100% pass |
-| Golden path works | Manual test | Complete flow |
-| Coverage | `pnpm test:coverage` | ≥80% |
+| Check             | Command              | Expected      |
+| ----------------- | -------------------- | ------------- |
+| F1-F8 complete    | Review PRs           | All merged    |
+| E2E passes        | `pnpm test:e2e`      | 100% pass     |
+| Golden path works | Manual test          | Complete flow |
+| Coverage          | `pnpm test:coverage` | ≥80%          |
 
 ### Gate 7: Production Ready (Day 9)
 
-| Check | Command | Expected |
-|-------|---------|----------|
-| Staging deployed | Vercel preview | Live |
-| Staging E2E | Run against staging | All pass |
-| Security audit | Red Team final | Approved |
-| Performance | Lighthouse | ≥90 all categories |
-| Accessibility | axe-core | 0 critical |
+| Check            | Command             | Expected           |
+| ---------------- | ------------------- | ------------------ |
+| Staging deployed | Vercel preview      | Live               |
+| Staging E2E      | Run against staging | All pass           |
+| Security audit   | Red Team final      | Approved           |
+| Performance      | Lighthouse          | ≥90 all categories |
+| Accessibility    | axe-core            | 0 critical         |
 
 ---
 
@@ -423,22 +426,22 @@ vercel --prod
 
 ## Communication Matrix
 
-| Event | Channel | Participants | Timing |
-|-------|---------|--------------|--------|
-| Daily standup | #standup | All teams | 9:00 AM |
-| Gate review | #gates | Leads + Orchestrator | End of gate day |
-| Blocker | #urgent | Affected + Orchestrator | Immediately |
-| Security issue | #security | Security Red + Leads | Immediately |
-| Deployment | #deploys | All | Before/after |
+| Event          | Channel   | Participants            | Timing          |
+| -------------- | --------- | ----------------------- | --------------- |
+| Daily standup  | #standup  | All teams               | 9:00 AM         |
+| Gate review    | #gates    | Leads + Orchestrator    | End of gate day |
+| Blocker        | #urgent   | Affected + Orchestrator | Immediately     |
+| Security issue | #security | Security Red + Leads    | Immediately     |
+| Deployment     | #deploys  | All                     | Before/after    |
 
 ### Escalation Timing
 
-| Severity | Max Time to Escalate |
-|----------|---------------------|
-| P0 (Blocker) | 30 minutes |
-| P1 (Critical) | 2 hours |
-| P2 (Major) | 4 hours |
-| P3 (Minor) | Next standup |
+| Severity      | Max Time to Escalate |
+| ------------- | -------------------- |
+| P0 (Blocker)  | 30 minutes           |
+| P1 (Critical) | 2 hours              |
+| P2 (Major)    | 4 hours              |
+| P3 (Minor)    | Next standup         |
 
 ---
 
@@ -446,27 +449,27 @@ vercel --prod
 
 ### Quantitative
 
-| Metric | Target | Method |
-|--------|--------|--------|
-| Gaps closed | 41/41 | Count tasks |
-| Pattern score | ≥95 | validate-patterns.mjs |
-| TypeScript errors | 0 | pnpm typecheck |
-| ESLint warnings | 0 | pnpm lint |
-| Test coverage | ≥80% | vitest --coverage |
-| E2E pass rate | 100% | pnpm test:e2e |
-| Lighthouse perf | ≥90 | Lighthouse CI |
-| Lighthouse a11y | ≥95 | Lighthouse CI |
-| OWASP violations | 0 | Security audit |
+| Metric            | Target | Method                |
+| ----------------- | ------ | --------------------- |
+| Gaps closed       | 41/41  | Count tasks           |
+| Pattern score     | ≥95    | validate-patterns.mjs |
+| TypeScript errors | 0      | pnpm typecheck        |
+| ESLint warnings   | 0      | pnpm lint             |
+| Test coverage     | ≥80%   | vitest --coverage     |
+| E2E pass rate     | 100%   | pnpm test:e2e         |
+| Lighthouse perf   | ≥90    | Lighthouse CI         |
+| Lighthouse a11y   | ≥95    | Lighthouse CI         |
+| OWASP violations  | 0      | Security audit        |
 
 ### Qualitative
 
-| Criteria | Validator |
-|----------|-----------|
+| Criteria                      | Validator    |
+| ----------------------------- | ------------ |
 | User can complete golden path | QA + Product |
-| Data persists across sessions | QA |
-| No console errors | QA |
-| Responsive on mobile | QA |
-| Secure (no OWASP issues) | Security Red |
+| Data persists across sessions | QA           |
+| No console errors             | QA           |
+| Responsive on mobile          | QA           |
+| Secure (no OWASP issues)      | Security Red |
 
 ---
 
@@ -526,16 +529,16 @@ Total: 45 tasks (including P0)
 
 ## Appendix B: Estimated Hours
 
-| Stream | Hours | Team |
-|--------|-------|------|
-| Phase 0 | 2h | Charlie |
-| Stream A | 9h | Alpha |
-| Stream B | 10h | Alpha |
-| Stream C | 9h | Bravo |
-| Stream D | 12.5h | Alpha |
-| Stream E | 9h | Charlie |
-| Stream F | 18.5h | Bravo + Alpha |
-| **Total** | **70h** | |
+| Stream    | Hours   | Team          |
+| --------- | ------- | ------------- |
+| Phase 0   | 2h      | Charlie       |
+| Stream A  | 9h      | Alpha         |
+| Stream B  | 10h     | Alpha         |
+| Stream C  | 9h      | Bravo         |
+| Stream D  | 12.5h   | Alpha         |
+| Stream E  | 9h      | Charlie       |
+| Stream F  | 18.5h   | Bravo + Alpha |
+| **Total** | **70h** |               |
 
 With 2 people per team working 6h/day:
 
@@ -551,19 +554,23 @@ With 2 people per team working 6h/day:
 
 ```markdown
 ## Summary
+
 [What this PR does]
 
 ## Tasks Completed
+
 - [ ] A1.1 Read current implementation
 - [ ] A1.2 Import onAuthStateChanged
 - [ ] ...
 
 ## Testing
+
 - [ ] Unit tests added
 - [ ] Integration tests pass
 - [ ] Manual QA completed
 
 ## Checklist
+
 - [ ] `pnpm typecheck` passes
 - [ ] `pnpm lint` passes
 - [ ] `pnpm test` passes
@@ -571,6 +578,7 @@ With 2 people per team working 6h/day:
 - [ ] Feature flag added (if applicable)
 
 ## Security
+
 - [ ] No secrets in code
 - [ ] Input validated with Zod
 - [ ] Org scoping verified

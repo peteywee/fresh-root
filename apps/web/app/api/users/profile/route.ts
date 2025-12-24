@@ -49,9 +49,9 @@ export const GET = createAuthenticatedEndpoint({
       if (orgId) {
         const db = getFirestore();
         const profileRef = db
-          .collection('organizations')
+          .collection("organizations")
           .doc(orgId)
-          .collection('members')
+          .collection("members")
           .doc(userId);
 
         const snap = await profileRef.get();

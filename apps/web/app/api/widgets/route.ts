@@ -45,7 +45,7 @@ export const POST = createPublicEndpoint({
 
       const typedInput = result.data;
       const db = getFirestore();
-      const docRef = db.collection('widgets').doc();
+      const docRef = db.collection("widgets").doc();
       const widgetId = docRef.id;
 
       const widget: Widget = {
@@ -63,10 +63,7 @@ export const POST = createPublicEndpoint({
       return NextResponse.json(widget, { status: 201 });
     } catch (error) {
       console.error("Error creating widget:", error);
-      return NextResponse.json(
-        { error: "Failed to create widget" },
-        { status: 500 },
-      );
+      return NextResponse.json({ error: "Failed to create widget" }, { status: 500 });
     }
   },
 });

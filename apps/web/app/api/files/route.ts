@@ -1,47 +1,60 @@
 // [P1][API][CODE] File management API endpoint
 // Tags: P1, API, CODE, files, editor
 
-import { NextResponse } from 'next/server';
-import * as fs from 'fs/promises';
-import * as path from 'path';
-import { z } from 'zod';
-import { createAuthenticatedEndpoint } from '@fresh-schedules/api-framework';
+import { NextResponse } from "next/server";
+import * as fs from "fs/promises";
+import * as path from "path";
+import { z } from "zod";
+import { createAuthenticatedEndpoint } from "@fresh-schedules/api-framework";
 
-const WORKSPACE_ROOT = '/workspaces/fresh-root';
+const WORKSPACE_ROOT = "/workspaces/fresh-root";
 
 // Allowed file extensions for editing
 const ALLOWED_EXTENSIONS = [
-  '.ts', '.tsx', '.js', '.jsx', '.json', '.md', '.mdx',
-  '.css', '.scss', '.html', '.yaml', '.yml', '.toml',
-  '.txt', '.sh', '.bash', '.zsh',
-  '.gitignore', '.eslintrc', '.prettierrc',
+  ".ts",
+  ".tsx",
+  ".js",
+  ".jsx",
+  ".json",
+  ".md",
+  ".mdx",
+  ".css",
+  ".scss",
+  ".html",
+  ".yaml",
+  ".yml",
+  ".toml",
+  ".txt",
+  ".sh",
+  ".bash",
+  ".zsh",
+  ".gitignore",
+  ".eslintrc",
+  ".prettierrc",
 ];
 
 // Blocked directory patterns
-const BLOCKED_DIRS = new Set([
-  'node_modules',
-  '.git',
-  'dist',
-  '.next',
-  'coverage',
-]);
+const BLOCKED_DIRS = new Set(["node_modules", ".git", "dist", ".next", "coverage"]);
 
 // Never allow these files
 const PROTECTED_FILES = new Set([
-  'package.json',
-  'pnpm-lock.yaml',
-  'yarn.lock',
-  'package-lock.json',
-  '.env',
-  '.env.local',
-  '.env.production',
-  '.ssh',
+  "package.json",
+  "pnpm-lock.yaml",
+  "yarn.lock",
+  "package-lock.json",
+  ".env",
+  ".env.local",
+  ".env.production",
+  ".ssh",
 ]);
 
-async function resolveAndValidatePath(inputPath: string, allowNonexistent = false): Promise<string | null> {
+async function resolveAndValidatePath(
+  inputPath: string,
+  allowNonexistent = false,
+): Promise<string | null> {
   // Fast-fail traversal attempts and null bytes before any filesystem calls
-  if (inputPath.includes('\0')) return null;
-  const hasTraversal = inputPath.split(/[/\\]+/).includes('..');
+  if (inputPath.includes("\0")) return null;
+  const hasTraversal = inputPath.split(/[/\\]+/).includes("..");
   if (hasTraversal) return null;
 
   const absolute = path.isAbsolute(inputPath)
@@ -104,15 +117,15 @@ function isExtensionAllowed(filePath: string): boolean {
 export const GET = createAuthenticatedEndpoint({
   handler: async ({ request, input: _input, context: _context, params: _params }) => {
     const { searchParams } = new URL(request.url);
-    const filePath = searchParams.get('path');
+    const filePath = searchParams.get("path");
 
     if (!filePath) {
-      return NextResponse.json({ error: 'Path required' }, { status: 400 });
+      return NextResponse.json({ error: "Path required" }, { status: 400 });
     }
 
     const fullPath = await resolveAndValidatePath(filePath);
     if (!fullPath) {
-      return NextResponse.json({ error: 'Access denied' }, { status: 403 });
+      return NextResponse.json({ error: "Access denied" }, { status: 403 });
     }
 
     try {
@@ -123,31 +136,31 @@ export const GET = createAuthenticatedEndpoint({
         // List directory
         const entries = await fs.readdir(fullPath, { withFileTypes: true });
         const items = entries
-          .filter(entry => {
+          .filter((entry) => {
             // Filter out blocked directories
             return !BLOCKED_DIRS.has(entry.name);
           })
-          .map(entry => ({
+          .map((entry) => ({
             name: entry.name,
-            type: entry.isDirectory() ? 'directory' : 'file',
+            type: entry.isDirectory() ? "directory" : "file",
             path: path.relative(WORKSPACE_ROOT, path.join(fullPath, entry.name)),
           }));
-        return NextResponse.json({ type: 'directory', items });
+        return NextResponse.json({ type: "directory", items });
       }
 
       // Read file
       if (!isExtensionAllowed(fullPath)) {
-        return NextResponse.json({ error: 'File type not allowed' }, { status: 403 });
+        return NextResponse.json({ error: "File type not allowed" }, { status: 403 });
       }
 
       // Check file size (max 1MB)
       if (stat.size > 1024 * 1024) {
-        return NextResponse.json({ error: 'File too large (max 1MB)' }, { status: 413 });
+        return NextResponse.json({ error: "File too large (max 1MB)" }, { status: 413 });
       }
 
-      const content = await fs.readFile(fullPath, 'utf-8');
+      const content = await fs.readFile(fullPath, "utf-8");
       return NextResponse.json({
-        type: 'file',
+        type: "file",
         path: relPath,
         content,
         size: stat.size,
@@ -155,11 +168,11 @@ export const GET = createAuthenticatedEndpoint({
       });
     } catch (error: unknown) {
       const err = error as { code?: string };
-      if (err.code === 'ENOENT') {
-        return NextResponse.json({ error: 'File not found' }, { status: 404 });
+      if (err.code === "ENOENT") {
+        return NextResponse.json({ error: "File not found" }, { status: 404 });
       }
-      console.error('File read error:', error);
-      return NextResponse.json({ error: 'Failed to read file' }, { status: 500 });
+      console.error("File read error:", error);
+      return NextResponse.json({ error: "Failed to read file" }, { status: 500 });
     }
   },
 });
@@ -178,11 +191,11 @@ export const PUT = createAuthenticatedEndpoint({
 
     const fullPath = await resolveAndValidatePath(filePath, true);
     if (!fullPath) {
-      return NextResponse.json({ error: 'Access denied' }, { status: 403 });
+      return NextResponse.json({ error: "Access denied" }, { status: 403 });
     }
 
     if (!isExtensionAllowed(fullPath)) {
-      return NextResponse.json({ error: 'File type not allowed' }, { status: 403 });
+      return NextResponse.json({ error: "File type not allowed" }, { status: 403 });
     }
 
     // Check if file exists by attempting to stat (will throw if doesn't exist)
@@ -192,7 +205,7 @@ export const PUT = createAuthenticatedEndpoint({
       exists = true;
     } catch {
       if (!createIfNotExists) {
-        return NextResponse.json({ error: 'File not found' }, { status: 404 });
+        return NextResponse.json({ error: "File not found" }, { status: 404 });
       }
     }
 
@@ -202,7 +215,7 @@ export const PUT = createAuthenticatedEndpoint({
     }
 
     // Write file atomically
-    await fs.writeFile(fullPath, content, 'utf-8');
+    await fs.writeFile(fullPath, content, "utf-8");
 
     const stat = await fs.stat(fullPath);
     const relPath = path.relative(WORKSPACE_ROOT, fullPath);
@@ -218,8 +231,8 @@ export const PUT = createAuthenticatedEndpoint({
 // POST - Create new file
 const CreateSchema = z.object({
   path: z.string().min(1),
-  content: z.string().default(''),
-  type: z.enum(['file', 'directory']).default('file'),
+  content: z.string().default(""),
+  type: z.enum(["file", "directory"]).default("file"),
 });
 
 export const POST = createAuthenticatedEndpoint({
@@ -229,33 +242,33 @@ export const POST = createAuthenticatedEndpoint({
 
     const fullPath = await resolveAndValidatePath(filePath, true);
     if (!fullPath) {
-      return NextResponse.json({ error: 'Access denied' }, { status: 403 });
+      return NextResponse.json({ error: "Access denied" }, { status: 403 });
     }
 
     // Check if already exists
     try {
       await fs.stat(fullPath);
-      return NextResponse.json({ error: 'File already exists' }, { status: 409 });
+      return NextResponse.json({ error: "File already exists" }, { status: 409 });
     } catch {
       // Good, doesn't exist
     }
 
-    if (type === 'directory') {
+    if (type === "directory") {
       await fs.mkdir(fullPath, { recursive: true });
       const relPath = path.relative(WORKSPACE_ROOT, fullPath);
-      return NextResponse.json({ success: true, path: relPath, type: 'directory' });
+      return NextResponse.json({ success: true, path: relPath, type: "directory" });
     }
 
     if (!isExtensionAllowed(fullPath)) {
-      return NextResponse.json({ error: 'File type not allowed' }, { status: 403 });
+      return NextResponse.json({ error: "File type not allowed" }, { status: 403 });
     }
 
     // Create parent directories
     await fs.mkdir(path.dirname(fullPath), { recursive: true });
-    await fs.writeFile(fullPath, content, 'utf-8');
+    await fs.writeFile(fullPath, content, "utf-8");
 
     const relPath = path.relative(WORKSPACE_ROOT, fullPath);
-    return NextResponse.json({ success: true, path: relPath, type: 'file' });
+    return NextResponse.json({ success: true, path: relPath, type: "file" });
   },
 });
 
@@ -263,23 +276,23 @@ export const POST = createAuthenticatedEndpoint({
 export const DELETE = createAuthenticatedEndpoint({
   handler: async ({ request, input: _input, context: _context, params: _params }) => {
     const { searchParams } = new URL(request.url);
-    const filePath = searchParams.get('path');
+    const filePath = searchParams.get("path");
 
     if (!filePath) {
-      return NextResponse.json({ error: 'Path required' }, { status: 400 });
+      return NextResponse.json({ error: "Path required" }, { status: 400 });
     }
 
     const fullPath = await resolveAndValidatePath(filePath);
     if (!fullPath) {
-      return NextResponse.json({ error: 'Access denied' }, { status: 403 });
+      return NextResponse.json({ error: "Access denied" }, { status: 403 });
     }
 
     // Check for protected files and directories
     const basename = path.basename(fullPath);
     const relativePath = path.relative(WORKSPACE_ROOT, fullPath);
 
-    if (PROTECTED_FILES.has(basename) || relativePath === '' || BLOCKED_DIRS.has(basename)) {
-      return NextResponse.json({ error: 'Cannot delete protected files' }, { status: 403 });
+    if (PROTECTED_FILES.has(basename) || relativePath === "" || BLOCKED_DIRS.has(basename)) {
+      return NextResponse.json({ error: "Cannot delete protected files" }, { status: 403 });
     }
 
     try {
@@ -295,11 +308,11 @@ export const DELETE = createAuthenticatedEndpoint({
       return NextResponse.json({ success: true, deleted: relPath });
     } catch (error: unknown) {
       const err = error as { code?: string };
-      if (err.code === 'ENOENT') {
-        return NextResponse.json({ error: 'File not found' }, { status: 404 });
+      if (err.code === "ENOENT") {
+        return NextResponse.json({ error: "File not found" }, { status: 404 });
       }
-      console.error('File delete error:', error);
-      return NextResponse.json({ error: 'Failed to delete file' }, { status: 500 });
+      console.error("File delete error:", error);
+      return NextResponse.json({ error: "Failed to delete file" }, { status: 500 });
     }
   },
 });

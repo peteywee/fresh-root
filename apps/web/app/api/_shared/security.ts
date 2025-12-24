@@ -87,7 +87,10 @@ export function rateLimit(maxRequests = 100, windowMs = 15 * 60 * 1000) {
 
     if (entry.count >= maxRequests) {
       // Rate limit exceeded - use standardized error response
-      const response = rateLimitedResponse(entry.resetTime, "Too many requests. Please try again later.");
+      const response = rateLimitedResponse(
+        entry.resetTime,
+        "Too many requests. Please try again later.",
+      );
       response.headers.set("X-RateLimit-Limit", maxRequests.toString());
       response.headers.set("X-RateLimit-Remaining", "0");
       response.headers.set("X-RateLimit-Reset", entry.resetTime.toString());

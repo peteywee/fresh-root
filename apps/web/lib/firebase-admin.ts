@@ -25,7 +25,9 @@ function getServiceAccount(): Record<string, unknown> {
 
   // Guard against empty strings (falsy but not undefined)
   if (!credsJson && !credsB64) {
-    throw new Error("GOOGLE_APPLICATION_CREDENTIALS_JSON or GOOGLE_APPLICATION_CREDENTIALS_JSON_BASE64 must be set");
+    throw new Error(
+      "GOOGLE_APPLICATION_CREDENTIALS_JSON or GOOGLE_APPLICATION_CREDENTIALS_JSON_BASE64 must be set",
+    );
   }
 
   if (credsB64 === "") {
@@ -41,7 +43,9 @@ function getServiceAccount(): Record<string, unknown> {
       const decoded = Buffer.from(credsB64, "base64").toString("utf8");
       return JSON.parse(decoded) as Record<string, unknown>;
     } catch (e) {
-      throw new Error("Invalid GOOGLE_APPLICATION_CREDENTIALS_JSON_BASE64: base64 or JSON parsing failed");
+      throw new Error(
+        "Invalid GOOGLE_APPLICATION_CREDENTIALS_JSON_BASE64: base64 or JSON parsing failed",
+      );
     }
   }
 

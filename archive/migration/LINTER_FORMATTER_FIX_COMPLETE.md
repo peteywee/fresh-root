@@ -139,10 +139,10 @@ These can be addressed gradually by:
 
    ```typescript
    // ❌ Triggers warning
-   async function handler(request, input, context) { }
+   async function handler(request, input, context) {}
 
    // ✅ No warning
-   async function handler(_request, _input, _context) { }
+   async function handler(_request, _input, _context) {}
    ```
 
 4. **Type-only imports** should use `type` keyword:
@@ -159,14 +159,14 @@ These can be addressed gradually by:
 
 ## Configuration Summary
 
-| Tool | Rule | Status | Note |
-| --- | --- | --- | --- |
-| ESLint | no-unused-vars | ✅ Optimized | Added ignoreRestSiblings |
-| ESLint | no-explicit-any | ✅ Disabled | Firebase compatibility |
-| ESLint | import/order | ✅ Disabled | Delegated to Prettier |
-| ESLint | unused-imports | ✅ Enabled | Auto-removes unused imports |
-| Prettier | Basic formatting | ✅ Active | 100 char line width, 2-space tabs |
-| Prettier | Import ordering | ✅ Inactive | Handled by ESLint's unused-imports |
+| Tool     | Rule             | Status       | Note                               |
+| -------- | ---------------- | ------------ | ---------------------------------- |
+| ESLint   | no-unused-vars   | ✅ Optimized | Added ignoreRestSiblings           |
+| ESLint   | no-explicit-any  | ✅ Disabled  | Firebase compatibility             |
+| ESLint   | import/order     | ✅ Disabled  | Delegated to Prettier              |
+| ESLint   | unused-imports   | ✅ Enabled   | Auto-removes unused imports        |
+| Prettier | Basic formatting | ✅ Active    | 100 char line width, 2-space tabs  |
+| Prettier | Import ordering  | ✅ Inactive  | Handled by ESLint's unused-imports |
 
 ---
 

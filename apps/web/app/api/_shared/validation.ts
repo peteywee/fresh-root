@@ -39,13 +39,10 @@ export function notFound(message = "Not found", code = "NOT_FOUND") {
 /** Build a 429 rate limit error response */
 export function rateLimited(resetAt: number, message = "Rate limit exceeded") {
   const retryAfter = Math.ceil((resetAt - Date.now()) / 1000);
-  return NextResponse.json(
-    { error: { code: "RATE_LIMITED", message } } as ApiError,
-    {
-      status: 429,
-      headers: { "Retry-After": String(Math.max(1, retryAfter)) },
-    },
-  );
+  return NextResponse.json({ error: { code: "RATE_LIMITED", message } } as ApiError, {
+    status: 429,
+    headers: { "Retry-After": String(Math.max(1, retryAfter)) },
+  });
 }
 
 /** Build a 200 response */

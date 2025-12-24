@@ -58,16 +58,16 @@ Tracks the rollout of the canonical governance system and documentation consolid
 
 **Objective**: Extract valuable pieces as L1 indexed amendments
 
-| ID | Amendment | Status |
-|----|-----------|--------|
-| A01 | Batch Protocol | ✅ Created |
-| A02 | Worker Decision Tree | ✅ Created |
-| A03 | Security Amendments | ✅ Created |
-| A04 | Reconciled Rules | ✅ Created |
-| A05 | Branch Strategy | ✅ Created |
-| A06 | Coding Patterns | ✅ Created |
-| A07 | Firebase Implementation | ✅ Created |
-| A08 | Implementation Plan | ✅ Created (this file) |
+| ID  | Amendment               | Status                 |
+| --- | ----------------------- | ---------------------- |
+| A01 | Batch Protocol          | ✅ Created             |
+| A02 | Worker Decision Tree    | ✅ Created             |
+| A03 | Security Amendments     | ✅ Created             |
+| A04 | Reconciled Rules        | ✅ Created             |
+| A05 | Branch Strategy         | ✅ Created             |
+| A06 | Coding Patterns         | ✅ Created             |
+| A07 | Firebase Implementation | ✅ Created             |
+| A08 | Implementation Plan     | ✅ Created (this file) |
 
 ### Phase 5: Create Indexes ⏸️ PENDING
 
@@ -97,23 +97,23 @@ Tracks the rollout of the canonical governance system and documentation consolid
 
 ## Hierarchy Levels (Established)
 
-| Level | Location | Purpose | Binding? |
-|-------|----------|---------|----------|
-| **L0** | `.github/governance/` | Canonical 12-doc system | YES |
-| **L1** | `.github/governance/amendments/` | Extensions to canonical docs | YES |
-| **L2** | `.github/instructions/` | Agent context/memory | YES (for agents) |
-| **L3** | `.github/prompts/` | Slash command templates | NO |
-| **L4** | `docs/` | Human guides & references | NO |
+| Level  | Location                         | Purpose                      | Binding?         |
+| ------ | -------------------------------- | ---------------------------- | ---------------- |
+| **L0** | `.github/governance/`            | Canonical 12-doc system      | YES              |
+| **L1** | `.github/governance/amendments/` | Extensions to canonical docs | YES              |
+| **L2** | `.github/instructions/`          | Agent context/memory         | YES (for agents) |
+| **L3** | `.github/prompts/`               | Slash command templates      | NO               |
+| **L4** | `docs/`                          | Human guides & references    | NO               |
 
 ## Success Metrics
 
-| Metric | Before | Target | Current |
-|--------|--------|--------|---------|
-| Total .md files | 357 | ~150 | TBD |
-| Root loose docs | 39 | 1 | 3 |
-| Duplicates | 50+ | 0 | TBD |
-| Indexed files | 0 | 100% | Partial |
-| AI retrieval confidence | ~60% | 99% | TBD |
+| Metric                  | Before | Target | Current |
+| ----------------------- | ------ | ------ | ------- |
+| Total .md files         | 357    | ~150   | TBD     |
+| Root loose docs         | 39     | 1      | 3       |
+| Duplicates              | 50+    | 0      | TBD     |
+| Indexed files           | 0      | 100%   | Partial |
+| AI retrieval confidence | ~60%   | 99%    | TBD     |
 
 ## Next Actions
 

@@ -36,7 +36,7 @@ export async function checkServerHealth(): Promise<boolean> {
  */
 export async function safeFetch(
   url: string,
-  options?: RequestInit
+  options?: RequestInit,
 ): Promise<{ response: Response | null; error: string | null }> {
   if (!serverAvailable) {
     return { response: null, error: "Server not available" };
@@ -128,7 +128,9 @@ export function generateReport() {
     testResults
       .filter((r) => r.status === "fail")
       .forEach((r) => {
-        console.log(`  - ${r.method} ${r.endpoint}: Expected ${r.expectedStatus}, got ${r.actualStatus}`);
+        console.log(
+          `  - ${r.method} ${r.endpoint}: Expected ${r.expectedStatus}, got ${r.actualStatus}`,
+        );
         if (r.error) console.log(`    Error: ${r.error}`);
       });
   }
@@ -230,7 +232,7 @@ export async function authenticateForTests(): Promise<string | null> {
  */
 export async function authFetch(
   url: string,
-  options?: RequestInit
+  options?: RequestInit,
 ): Promise<{ response: Response | null; error: string | null }> {
   if (!serverAvailable) {
     return { response: null, error: "Server not available" };

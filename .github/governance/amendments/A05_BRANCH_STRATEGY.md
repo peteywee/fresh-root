@@ -16,16 +16,16 @@ Extends 10_BRANCH_RULES with detailed branch patterns, commit conventions, and m
 
 ## Branch Patterns
 
-| Pattern | Purpose | Merge Target | Lifespan |
-|---------|---------|--------------|----------|
-| `main` | Production-ready code | N/A | Permanent |
-| `dev` | Integration branch | `main` | Permanent |
-| `feature/*` | New features | `dev` | Short-term |
-| `fix/*` | Bug fixes | `dev` or `main` | Short-term |
-| `hotfix/*` | Production emergency | `main` + backport | Immediate |
-| `chore/*` | Maintenance, refactor | `dev` | Short-term |
-| `docs/*` | Documentation only | `dev` | Short-term |
-| `test/*` | Test improvements | `dev` | Short-term |
+| Pattern     | Purpose               | Merge Target      | Lifespan   |
+| ----------- | --------------------- | ----------------- | ---------- |
+| `main`      | Production-ready code | N/A               | Permanent  |
+| `dev`       | Integration branch    | `main`            | Permanent  |
+| `feature/*` | New features          | `dev`             | Short-term |
+| `fix/*`     | Bug fixes             | `dev` or `main`   | Short-term |
+| `hotfix/*`  | Production emergency  | `main` + backport | Immediate  |
+| `chore/*`   | Maintenance, refactor | `dev`             | Short-term |
+| `docs/*`    | Documentation only    | `dev`             | Short-term |
+| `test/*`    | Test improvements     | `dev`             | Short-term |
 
 ## Commit Message Format
 
@@ -152,11 +152,11 @@ git branch -d hotfix/fix-session-leak
 
 ## Branch Protection Rules
 
-| Branch | Rules |
-|--------|-------|
-| `main` | Require PR, 1 approval, passing CI |
-| `dev` | Require PR, passing CI |
-| `feature/*` | No restrictions |
+| Branch      | Rules                              |
+| ----------- | ---------------------------------- |
+| `main`      | Require PR, 1 approval, passing CI |
+| `dev`       | Require PR, passing CI             |
+| `feature/*` | No restrictions                    |
 
 ## Reference
 

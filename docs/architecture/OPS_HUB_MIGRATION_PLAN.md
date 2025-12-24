@@ -9,6 +9,7 @@
 ## Executive Summary
 
 Transform the monolithic ops dashboard into a **multi-section observability hub** with:
+
 - **4 Sections**: Overview, Build Performance, Security Scans, Codebase Analytics
 - **Firestore-backed metrics** (replacing JSONL files - fixes concurrent write race condition)
 - **Trend charts & visualizations** using Recharts
@@ -33,13 +34,13 @@ apps/web/app/api/ops/
 
 ### Current Issues
 
-| Issue | Impact | Priority |
-|-------|--------|----------|
-| **Concurrent JSONL writes** | Race condition in CI, data corruption | P0 |
-| **No pagination** | Large datasets crash browser | P1 |
-| **Missing visualizations** | Raw tables only, no trends | P2 |
-| **Monolithic component** | 418 lines, hard to maintain | P2 |
-| **No Semgrep display** | Security results only in GitHub tab | P2 |
+| Issue                       | Impact                                | Priority |
+| --------------------------- | ------------------------------------- | -------- |
+| **Concurrent JSONL writes** | Race condition in CI, data corruption | P0       |
+| **No pagination**           | Large datasets crash browser          | P1       |
+| **Missing visualizations**  | Raw tables only, no trends            | P2       |
+| **Monolithic component**    | 418 lines, hard to maintain           | P2       |
+| **No Semgrep display**      | Security results only in GitHub tab   | P2       |
 
 ---
 
@@ -97,23 +98,23 @@ packages/types/src/
 // Zod Schema
 export const BuildPerformanceEntrySchema = z.object({
   // Identity
-  id: z.string(),                           // Auto-generated doc ID
-  timestamp: z.string().datetime(),         // ISO 8601
-  repository: z.string(),                   // "peteywee/fresh-root"
-  ref: z.string(),                          // "refs/heads/main"
-  sha: z.string().length(40),               // Full commit SHA
-  runId: z.string(),                        // GitHub Actions run ID
-  runAttempt: z.string(),                   // Attempt number
-  
+  id: z.string(), // Auto-generated doc ID
+  timestamp: z.string().datetime(), // ISO 8601
+  repository: z.string(), // "peteywee/fresh-root"
+  ref: z.string(), // "refs/heads/main"
+  sha: z.string().length(40), // Full commit SHA
+  runId: z.string(), // GitHub Actions run ID
+  runAttempt: z.string(), // Attempt number
+
   // Metrics
   installSeconds: z.number().int().min(0),
   buildSeconds: z.number().int().min(0),
   sdkSeconds: z.number().int().min(0),
   totalSeconds: z.number().int().min(0),
-  cacheHit: z.boolean(),                    // Changed from string
-  
+  cacheHit: z.boolean(), // Changed from string
+
   // Metadata
-  createdAt: z.number().int(),              // Unix timestamp for TTL
+  createdAt: z.number().int(), // Unix timestamp for TTL
 });
 
 export type BuildPerformanceEntry = z.infer<typeof BuildPerformanceEntrySchema>;
@@ -129,7 +130,7 @@ export const SecurityScanEntrySchema = z.object({
   ref: z.string(),
   sha: z.string(),
   tool: z.enum(["semgrep", "codeql", "snyk"]),
-  
+
   findings: z.object({
     critical: z.number().int().min(0),
     high: z.number().int().min(0),
@@ -137,9 +138,9 @@ export const SecurityScanEntrySchema = z.object({
     low: z.number().int().min(0),
     informational: z.number().int().min(0),
   }),
-  
-  files: z.array(z.string()),               // Files with findings
-  rules: z.array(z.string()),               // Rule IDs triggered
+
+  files: z.array(z.string()), // Files with findings
+  rules: z.array(z.string()), // Rule IDs triggered
   createdAt: z.number().int(),
 });
 
@@ -153,23 +154,25 @@ export const CodebaseAnalyticsEntrySchema = z.object({
   id: z.string(),
   timestamp: z.string().datetime(),
   repository: z.string(),
-  
+
   stats: z.object({
     totalFiles: z.number().int().min(0),
     totalLines: z.number().int().min(0),
-    byExtension: z.record(z.object({
-      files: z.number().int().min(0),
-      lines: z.number().int().min(0),
-    })),
+    byExtension: z.record(
+      z.object({
+        files: z.number().int().min(0),
+        lines: z.number().int().min(0),
+      }),
+    ),
   }),
-  
+
   metrics: z.object({
     apiRoutes: z.number().int().min(0),
     components: z.number().int().min(0),
     schemas: z.number().int().min(0),
     testFiles: z.number().int().min(0),
   }),
-  
+
   createdAt: z.number().int(),
 });
 
@@ -182,9 +185,9 @@ export type CodebaseAnalyticsEntry = z.infer<typeof CodebaseAnalyticsEntrySchema
 // Add to firestore.rules
 match /_metrics/{metricType}/entries/{entryId} {
   // Read: Admin/org_owner only
-  allow read: if isSignedIn() 
+  allow read: if isSignedIn()
               && hasAnyRole(request.auth.uid, ['admin', 'org_owner']);
-  
+
   // Write: Only via API (service account)
   allow write: if false;  // All writes via Admin SDK
 }
@@ -197,12 +200,14 @@ match /_metrics/{metricType}/entries/{entryId} {
 ### Phase 1: Foundation (Day 1, ~3 hours)
 
 #### Step 1.1: Install Dependencies
+
 ```bash
 pnpm add recharts --filter @apps/web
 pnpm add -D @types/recharts --filter @apps/web
 ```
 
 #### Step 1.2: Create Zod Schemas
+
 ```bash
 # Create file
 touch packages/types/src/ops-metrics.ts
@@ -212,12 +217,12 @@ touch packages/types/src/ops-metrics.ts
 
 #### Step 1.3: Create Reusable Chart Components
 
-| Component | Purpose | Props |
-|-----------|---------|-------|
-| `TrendLineChart.tsx` | Line chart wrapper | `data`, `xKey`, `yKeys`, `colors` |
-| `StatSummaryCard.tsx` | Stat with delta | `title`, `value`, `delta`, `trend` |
-| `StatusBadge.tsx` | Status indicator | `status: 'ok' \| 'warning' \| 'error'` |
-| `MetricCard.tsx` | Metric display | `title`, `value`, `description`, `status` |
+| Component             | Purpose            | Props                                     |
+| --------------------- | ------------------ | ----------------------------------------- |
+| `TrendLineChart.tsx`  | Line chart wrapper | `data`, `xKey`, `yKeys`, `colors`         |
+| `StatSummaryCard.tsx` | Stat with delta    | `title`, `value`, `delta`, `trend`        |
+| `StatusBadge.tsx`     | Status indicator   | `status: 'ok' \| 'warning' \| 'error'`    |
+| `MetricCard.tsx`      | Metric display     | `title`, `value`, `description`, `status` |
 
 #### Step 1.4: Create Ops Layout with Sidebar
 
@@ -229,9 +234,7 @@ export default function OpsLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex min-h-screen">
       <OpsSidebar />
-      <main className="flex-1 overflow-auto p-6">
-        {children}
-      </main>
+      <main className="flex-1 overflow-auto p-6">{children}</main>
     </div>
   );
 }
@@ -253,8 +256,8 @@ const routes = [
 
 export default function OpsSidebar() {
   const pathname = usePathname();
-  
-  const isActive = (href: string, exact?: boolean) => 
+
+  const isActive = (href: string, exact?: boolean) =>
     exact ? pathname === href : pathname.startsWith(href);
 
   return (
@@ -294,20 +297,20 @@ export const POST = createAdminEndpoint({
   input: BuildPerformanceEntrySchema.omit({ id: true, createdAt: true }),
   handler: async ({ input }) => {
     const db = getFirebaseAdminDb();
-    
+
     const entry = {
       ...input,
       id: `build-${Date.now()}-${crypto.randomUUID().slice(0, 8)}`,
       createdAt: Date.now(),
     };
-    
+
     await db
       .collection("_metrics")
       .doc("build-performance")
       .collection("entries")
       .doc(entry.id)
       .set(entry);
-    
+
     return NextResponse.json({ ok: true, docId: entry.id }, { status: 201 });
   },
 });
@@ -324,7 +327,7 @@ export const GET = createAdminEndpoint({
     const limit = Math.min(50, Math.max(1, Number(url.searchParams.get("limit")) || 20));
     const offset = Math.max(0, Number(url.searchParams.get("offset")) || 0);
     const since = url.searchParams.get("since"); // ISO date string
-    
+
     const db = getFirebaseAdminDb();
     let query = db
       .collection("_metrics")
@@ -332,21 +335,21 @@ export const GET = createAdminEndpoint({
       .collection("entries")
       .orderBy("createdAt", "desc")
       .limit(limit + 1); // +1 to check hasMore
-    
+
     if (since) {
       const sinceTs = new Date(since).getTime();
       query = query.where("createdAt", ">=", sinceTs);
     }
-    
+
     if (offset > 0) {
       // Use cursor-based pagination for efficiency
       // For now, skip is acceptable for small datasets
     }
-    
+
     const snapshot = await query.get();
-    const entries = snapshot.docs.slice(0, limit).map(doc => doc.data());
+    const entries = snapshot.docs.slice(0, limit).map((doc) => doc.data());
     const hasMore = snapshot.docs.length > limit;
-    
+
     // Count total (expensive, cache this in production)
     const countSnap = await db
       .collection("_metrics")
@@ -354,7 +357,7 @@ export const GET = createAdminEndpoint({
       .collection("entries")
       .count()
       .get();
-    
+
     return NextResponse.json({
       ok: true,
       source: "firestore",
@@ -383,14 +386,14 @@ export const GET = createAdminEndpoint({
   run: |
     TOTAL_SECONDS=$(( $(date +%s) - ${{ steps.perf-start.outputs.start_time }} ))
     CACHE_HIT="${{ steps.cache-nextjs.outputs.cache-hit }}"
-    
+
     # Convert cache-hit string to boolean
     if [ "$CACHE_HIT" = "true" ]; then
       CACHE_BOOL=true
     else
       CACHE_BOOL=false
     fi
-    
+
     curl -X POST "$OPS_API_URL" \
       -H "Content-Type: application/json" \
       -H "Authorization: Bearer $OPS_API_KEY" \
@@ -435,9 +438,9 @@ async function migrate() {
   console.log("📦 Reading JSONL file...");
   const content = readFileSync(JSONL_PATH, "utf-8");
   const lines = content.split("\n").filter(Boolean);
-  
+
   console.log(`📊 Found ${lines.length} entries to migrate`);
-  
+
   const entries = lines
     .map((line, i) => {
       try {
@@ -454,14 +457,14 @@ async function migrate() {
       }
     })
     .filter(Boolean);
-  
+
   console.log(`✅ Parsed ${entries.length} valid entries`);
-  
+
   // Batch write
   for (let i = 0; i < entries.length; i += BATCH_SIZE) {
     const batch = db.batch();
     const chunk = entries.slice(i, i + BATCH_SIZE);
-    
+
     for (const entry of chunk) {
       const ref = db
         .collection("_metrics")
@@ -470,11 +473,11 @@ async function migrate() {
         .doc(entry.id);
       batch.set(ref, entry);
     }
-    
+
     await batch.commit();
     console.log(`✅ Migrated ${Math.min(i + BATCH_SIZE, entries.length)}/${entries.length}`);
   }
-  
+
   console.log("🎉 Migration complete!");
 }
 
@@ -494,7 +497,7 @@ export const GET = createAdminEndpoint({
     const db = getFirebaseAdminDb();
     const now = Date.now();
     const sevenDaysAgo = now - 7 * 24 * 60 * 60 * 1000;
-    
+
     const snapshot = await db
       .collection("_metrics")
       .doc("build-performance")
@@ -502,31 +505,33 @@ export const GET = createAdminEndpoint({
       .where("createdAt", ">=", sevenDaysAgo)
       .orderBy("createdAt", "desc")
       .get();
-    
-    const entries = snapshot.docs.map(d => d.data());
-    
+
+    const entries = snapshot.docs.map((d) => d.data());
+
     if (entries.length === 0) {
       return NextResponse.json({ ok: true, stats: null });
     }
-    
-    const totalSeconds = entries.map(e => e.totalSeconds);
+
+    const totalSeconds = entries.map((e) => e.totalSeconds);
     const sorted = [...totalSeconds].sort((a, b) => a - b);
-    
+
     const stats = {
       totalBuilds: entries.length,
       avgTotalSeconds: Math.round(totalSeconds.reduce((a, b) => a + b, 0) / entries.length),
       medianTotalSeconds: sorted[Math.floor(sorted.length / 2)],
       p95TotalSeconds: sorted[Math.floor(sorted.length * 0.95)],
-      cacheHitRate: Math.round((entries.filter(e => e.cacheHit).length / entries.length) * 100),
-      avgInstallSeconds: Math.round(entries.reduce((a, e) => a + e.installSeconds, 0) / entries.length),
+      cacheHitRate: Math.round((entries.filter((e) => e.cacheHit).length / entries.length) * 100),
+      avgInstallSeconds: Math.round(
+        entries.reduce((a, e) => a + e.installSeconds, 0) / entries.length,
+      ),
       avgBuildSeconds: Math.round(entries.reduce((a, e) => a + e.buildSeconds, 0) / entries.length),
       avgSdkSeconds: Math.round(entries.reduce((a, e) => a + e.sdkSeconds, 0) / entries.length),
     };
-    
+
     // Baseline comparison (current week vs previous week)
-    const thisWeek = entries.filter(e => e.createdAt >= now - 7 * 24 * 60 * 60 * 1000);
+    const thisWeek = entries.filter((e) => e.createdAt >= now - 7 * 24 * 60 * 60 * 1000);
     const thisWeekAvg = thisWeek.reduce((a, e) => a + e.totalSeconds, 0) / (thisWeek.length || 1);
-    
+
     // Previous 7 days before that
     const prevWeekStart = sevenDaysAgo - 7 * 24 * 60 * 60 * 1000;
     const prevWeekSnap = await db
@@ -536,12 +541,14 @@ export const GET = createAdminEndpoint({
       .where("createdAt", ">=", prevWeekStart)
       .where("createdAt", "<", sevenDaysAgo)
       .get();
-    
-    const prevWeekEntries = prevWeekSnap.docs.map(d => d.data());
-    const prevWeekAvg = prevWeekEntries.reduce((a, e) => a + e.totalSeconds, 0) / (prevWeekEntries.length || 1);
-    
-    const delta = prevWeekAvg > 0 ? Math.round(((thisWeekAvg - prevWeekAvg) / prevWeekAvg) * 100) : 0;
-    
+
+    const prevWeekEntries = prevWeekSnap.docs.map((d) => d.data());
+    const prevWeekAvg =
+      prevWeekEntries.reduce((a, e) => a + e.totalSeconds, 0) / (prevWeekEntries.length || 1);
+
+    const delta =
+      prevWeekAvg > 0 ? Math.round(((thisWeekAvg - prevWeekAvg) / prevWeekAvg) * 100) : 0;
+
     return NextResponse.json({
       ok: true,
       period: {
@@ -587,18 +594,21 @@ Refactor existing `/api/ops/analyze` endpoint output into the new page format.
 ## Part 5: Implementation Order (Parallel Batches)
 
 ### Batch 1 (Parallel) - Foundation
+
 - [ ] Install Recharts dependency
 - [ ] Create `packages/types/src/ops-metrics.ts` with all Zod schemas
 - [ ] Create `OpsSidebar.tsx` navigation component
 - [ ] Create `ops/layout.tsx` with sidebar
 
 ### Batch 2 (Parallel) - Chart Components
+
 - [ ] Create `TrendLineChart.tsx`
 - [ ] Create `StatSummaryCard.tsx`
 - [ ] Extract `StatusBadge.tsx` from OpsClient
 - [ ] Extract `MetricCard.tsx` from OpsClient
 
 ### Batch 3 (Sequential) - Firestore Migration
+
 - [ ] Add POST handler to build-performance route
 - [ ] Modify GET handler for Firestore + pagination
 - [ ] Update CI workflow to POST metrics
@@ -606,17 +616,20 @@ Refactor existing `/api/ops/analyze` endpoint output into the new page format.
 - [ ] Verify data in Firestore console
 
 ### Batch 4 (Parallel) - Pages
+
 - [ ] Create `ops/builds/page.tsx` (Build Performance)
 - [ ] Create `ops/security/page.tsx` (Security Scans)
 - [ ] Create `ops/analytics/page.tsx` (Codebase Analytics)
 - [ ] Refactor `ops/page.tsx` (Overview)
 
 ### Batch 5 (Sequential) - API Endpoints
+
 - [ ] Create `build-performance/summary/route.ts`
 - [ ] Create `security-scans/route.ts`
 - [ ] Create `codebase-analytics/route.ts`
 
 ### Batch 6 - Testing & Cleanup
+
 - [ ] Add unit tests for all new endpoints
 - [ ] Remove old JSONL persistence code from CI
 - [ ] Update Firestore security rules
@@ -636,12 +649,12 @@ If migration fails:
 
 ## Part 7: Success Metrics
 
-| Metric | Target | Measurement |
-|--------|--------|-------------|
-| Build metrics persisted | 100% of main branch builds | Check Firestore count vs GitHub runs |
-| Page load time | < 2 seconds | Lighthouse performance score |
-| Chart render time | < 500ms | React DevTools profiler |
-| No concurrent write errors | 0 in 30 days | Monitor logs for duplicate keys |
+| Metric                     | Target                     | Measurement                          |
+| -------------------------- | -------------------------- | ------------------------------------ |
+| Build metrics persisted    | 100% of main branch builds | Check Firestore count vs GitHub runs |
+| Page load time             | < 2 seconds                | Lighthouse performance score         |
+| Chart render time          | < 500ms                    | React DevTools profiler              |
+| No concurrent write errors | 0 in 30 days               | Monitor logs for duplicate keys      |
 
 ---
 
@@ -657,6 +670,7 @@ FIREBASE_PROJECT_ID=fresh-schedules
 ```
 
 Generate OPS_API_KEY:
+
 ```bash
 openssl rand -base64 32
 ```

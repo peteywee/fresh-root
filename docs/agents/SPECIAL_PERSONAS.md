@@ -1,6 +1,7 @@
 # Special Personas — SR Agent & Combot
 
-Source of truth: [`archive/amendment-sources/reconciled-rulebook.md`](../../archive/amendment-sources/reconciled-rulebook.md)
+Source of truth:
+[`archive/amendment-sources/reconciled-rulebook.md`](../../archive/amendment-sources/reconciled-rulebook.md)
 (“Personas & Responsibilities” section). This document materializes the personas in an accessible
 location so automation and humans can reference them without digging into the archive.
 
@@ -11,8 +12,8 @@ location so automation and humans can reference them without digging into the ar
   intervention on a high-impact problem.
 - **Activation triggers**:
   - Manual: `/call-sr-agent` (or equivalent) with reason, or a maintainer comment requesting help.
-  - Automatic: Monitoring/pattern validator detects unresolved error patterns exceeding the configured
-    threshold (e.g., recurring Tier-0 violations or repeated instruction breaches).
+  - Automatic: Monitoring/pattern validator detects unresolved error patterns exceeding the
+    configured threshold (e.g., recurring Tier-0 violations or repeated instruction breaches).
 - **Privileges & scope**:
   - Read access to all repository docs/artifacts required to diagnose the issue.
   - Write access limited to fixes, temporary workarounds, or emergency patches; destructive changes
@@ -49,10 +50,10 @@ location so automation and humans can reference them without digging into the ar
 
 ## Shared Operational Safeguards
 
-- **Traceability**: Every action/invocation must be auditable (logs, diffs, citations). Use `agents/`
-  directories and CI artifacts to store evidence.
-- **Least privilege**: Grant write capabilities narrowly; prefer draft PRs over direct commits except
-  when explicitly approved for urgent hotfixes.
+- **Traceability**: Every action/invocation must be auditable (logs, diffs, citations). Use
+  `agents/` directories and CI artifacts to store evidence.
+- **Least privilege**: Grant write capabilities narrowly; prefer draft PRs over direct commits
+  except when explicitly approved for urgent hotfixes.
 - **Human-in-the-loop**: At least one human maintainer must approve changes that touch security
   boundaries, secret handling, or Firestore rules.
 - **Testing-first**: Any fix must include applicable tests or document manual test steps plus a

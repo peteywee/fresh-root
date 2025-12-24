@@ -1,6 +1,6 @@
 // [P0][SECURITY][RATE_LIMIT] Rate Limit
 // Tags: P0, SECURITY, RATE_LIMIT
- 
+
 /**
  * apps/web/src/lib/api/rate-limit.ts
  *

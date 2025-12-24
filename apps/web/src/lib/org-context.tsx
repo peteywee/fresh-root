@@ -10,10 +10,10 @@ type OrgContextState = {
 
 const OrgContext = createContext<OrgContextState | undefined>(undefined);
 
-export function OrgProvider({ 
+export function OrgProvider({
   children,
   initialOrgId = null,
-}: { 
+}: {
   children: React.ReactNode;
   initialOrgId?: string | null;
 }) {
@@ -28,11 +28,7 @@ export function OrgProvider({
     }
   }, [orgId]);
 
-  return (
-    <OrgContext.Provider value={{ orgId, setOrgId }}>
-      {children}
-    </OrgContext.Provider>
-  );
+  return <OrgContext.Provider value={{ orgId, setOrgId }}>{children}</OrgContext.Provider>;
 }
 
 export function useOrg() {

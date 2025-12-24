@@ -1,6 +1,7 @@
 # 🏗️ Architecture Documentation
 
-This directory contains **auto-generated architectural documentation** for the Fresh Schedules codebase.
+This directory contains **auto-generated architectural documentation** for the Fresh Schedules
+codebase.
 
 ## Files
 
@@ -12,12 +13,12 @@ This directory contains **auto-generated architectural documentation** for the F
 
 ## Auto-Generation
 
-| Trigger      | Script                 | Output              | Frequency    |
-|--------------|------------------------|---------------------|--------------|
-| Push / PR    | `.github/workflows/repomix-ci.yml` | `repomix-ci.*` | On every push/PR |
-| Nightly      | `.github/workflows/repomix-dashboard.yml` | `repomix-dashboard.*` | 2 AM UTC daily |
-| Manual       | `pnpm repomix:ci`      | All CI files         | On-demand |
-| Manual       | `pnpm repomix:dashboard` | All files + metrics  | On-demand |
+| Trigger   | Script                                    | Output                | Frequency        |
+| --------- | ----------------------------------------- | --------------------- | ---------------- |
+| Push / PR | `.github/workflows/repomix-ci.yml`        | `repomix-ci.*`        | On every push/PR |
+| Nightly   | `.github/workflows/repomix-dashboard.yml` | `repomix-dashboard.*` | 2 AM UTC daily   |
+| Manual    | `pnpm repomix:ci`                         | All CI files          | On-demand        |
+| Manual    | `pnpm repomix:dashboard`                  | All files + metrics   | On-demand        |
 
 ## Local Development
 
@@ -69,5 +70,4 @@ SKIP_REPOMIX=1 git push
 
 ---
 
-**Last Generated:** Auto-managed by automation
-**Maintained By:** GitHub Actions + Husky hooks
+**Last Generated:** Auto-managed by automation **Maintained By:** GitHub Actions + Husky hooks

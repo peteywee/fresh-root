@@ -33,7 +33,7 @@ export const GET = createOrgEndpoint({
           .where("venueId", "==", venueId)
           .orderBy("name")
           .get();
-        
+
         const zones = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
         return ok({ zones, total: zones.length });
       }

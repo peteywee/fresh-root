@@ -39,24 +39,22 @@ START
 
 ### Classification Matrix
 
-| Dimension | TRIVIAL | NON-TRIVIAL | CRITICAL |
-|-----------|---------|-------------|----------|
-| **Files** | 1 | 2-10 | >10 or security files |
-| **Scope** | Single component | Cross-module | System-wide |
-| **Domain** | UI/copy only | Business logic | Auth/billing/data |
-| **Data** | None | Read-only queries | Mutations/migrations |
-| **Tests** | Existing pass | New tests needed | Security tests required |
-| **Rollback** | Trivial | Planned | Migration script required |
+| Dimension    | TRIVIAL          | NON-TRIVIAL       | CRITICAL                  |
+| ------------ | ---------------- | ----------------- | ------------------------- |
+| **Files**    | 1                | 2-10              | >10 or security files     |
+| **Scope**    | Single component | Cross-module      | System-wide               |
+| **Domain**   | UI/copy only     | Business logic    | Auth/billing/data         |
+| **Data**     | None             | Read-only queries | Mutations/migrations      |
+| **Tests**    | Existing pass    | New tests needed  | Security tests required   |
+| **Rollback** | Trivial          | Planned           | Migration script required |
 
 ### Output Format
 
 After classification, document:
 
 ```markdown
-**Classification**: [TRIVIAL | NON-TRIVIAL | CRITICAL]
-**Rationale**: [Why this classification]
-**Pipeline**: [Selected pipeline]
-**Risk Flags**: [Any concerns]
+**Classification**: [TRIVIAL | NON-TRIVIAL | CRITICAL] **Rationale**: [Why this classification]
+**Pipeline**: [Selected pipeline] **Risk Flags**: [Any concerns]
 ```
 
 ---
@@ -67,35 +65,35 @@ After classification, document:
 
 ### Pipeline Families
 
-| Family | When to Use | Minimum Gates |
-|--------|-------------|---------------|
-| **Feature** | New functionality | STATIC |
-| **Bug** | Fixing broken behavior | STATIC, CORRECTNESS |
-| **Schema** | Type/schema changes | STATIC, CORRECTNESS, SAFETY |
-| **Refactor** | Code improvements (no behavior change) | STATIC, CORRECTNESS |
-| **Security** | Auth, rules, secrets | ALL GATES |
+| Family       | When to Use                            | Minimum Gates               |
+| ------------ | -------------------------------------- | --------------------------- |
+| **Feature**  | New functionality                      | STATIC                      |
+| **Bug**      | Fixing broken behavior                 | STATIC, CORRECTNESS         |
+| **Schema**   | Type/schema changes                    | STATIC, CORRECTNESS, SAFETY |
+| **Refactor** | Code improvements (no behavior change) | STATIC, CORRECTNESS         |
+| **Security** | Auth, rules, secrets                   | ALL GATES                   |
 
 ### Variant Selection
 
-| Variant | Criteria | Gates Included |
-|---------|----------|----------------|
-| **FAST** | 1 file, no domain logic | STATIC only |
-| **STANDARD** | 2-5 files OR single domain | STATIC, CORRECTNESS |
-| **HEAVY** | >5 files OR multi-domain OR security | All applicable gates |
+| Variant      | Criteria                             | Gates Included       |
+| ------------ | ------------------------------------ | -------------------- |
+| **FAST**     | 1 file, no domain logic              | STATIC only          |
+| **STANDARD** | 2-5 files OR single domain           | STATIC, CORRECTNESS  |
+| **HEAVY**    | >5 files OR multi-domain OR security | All applicable gates |
 
 ### Selection Matrix
 
-| Scenario | Pipeline |
-|----------|----------|
-| Fix typo in component | Feature.FAST |
-| Add new button | Feature.FAST |
-| New API endpoint | Feature.STANDARD |
-| Bug in schedule calculation | Bug.STANDARD |
-| Fix auth bypass | Security.HEAVY |
-| Add new schema field | Schema.STANDARD |
+| Scenario                     | Pipeline          |
+| ---------------------------- | ----------------- |
+| Fix typo in component        | Feature.FAST      |
+| Add new button               | Feature.FAST      |
+| New API endpoint             | Feature.STANDARD  |
+| Bug in schedule calculation  | Bug.STANDARD      |
+| Fix auth bypass              | Security.HEAVY    |
+| Add new schema field         | Schema.STANDARD   |
 | Rename function across files | Refactor.STANDARD |
-| Multi-entity feature | Feature.HEAVY |
-| Firestore rules change | Security.HEAVY |
+| Multi-entity feature         | Feature.HEAVY     |
+| Firestore rules change       | Security.HEAVY    |
 
 ---
 
@@ -117,50 +115,50 @@ After classification, document:
 
 #### STATIC Gate
 
-| Check | Command | Fail Behavior |
-|-------|---------|---------------|
-| TypeScript | `pnpm typecheck` | BLOCK |
-| Lint | `pnpm lint:check` | BLOCK |
-| Format | `pnpm format:check` | BLOCK (auto-fixable) |
+| Check      | Command             | Fail Behavior        |
+| ---------- | ------------------- | -------------------- |
+| TypeScript | `pnpm typecheck`    | BLOCK                |
+| Lint       | `pnpm lint:check`   | BLOCK                |
+| Format     | `pnpm format:check` | BLOCK (auto-fixable) |
 
 **Auto-Fix Available**: `pnpm lint --fix && pnpm format`
 
 #### CORRECTNESS Gate
 
-| Check | Command | Fail Behavior |
-|-------|---------|---------------|
-| Unit Tests | `pnpm test:unit` | BLOCK |
-| Rules Tests | `pnpm test:rules` | BLOCK |
-| E2E Tests | `pnpm test:e2e` | BLOCK (HEAVY only) |
+| Check       | Command           | Fail Behavior      |
+| ----------- | ----------------- | ------------------ |
+| Unit Tests  | `pnpm test:unit`  | BLOCK              |
+| Rules Tests | `pnpm test:rules` | BLOCK              |
+| E2E Tests   | `pnpm test:e2e`   | BLOCK (HEAVY only) |
 
 #### SAFETY Gate
 
-| Check | Command | Fail Behavior |
-|-------|---------|---------------|
-| Pattern Validation | `pnpm validate:patterns` | BLOCK if <90 score |
-| Secret Scan | `git secrets --scan` | BLOCK |
-| Dependency Audit | `pnpm audit` | BLOCK on high/critical |
+| Check              | Command                  | Fail Behavior          |
+| ------------------ | ------------------------ | ---------------------- |
+| Pattern Validation | `pnpm validate:patterns` | BLOCK if <90 score     |
+| Secret Scan        | `git secrets --scan`     | BLOCK                  |
+| Dependency Audit   | `pnpm audit`             | BLOCK on high/critical |
 
 #### PERF Gate
 
-| Check | Command | Fail Behavior |
-|-------|---------|---------------|
+| Check       | Command              | Fail Behavior         |
+| ----------- | -------------------- | --------------------- |
 | Bundle Size | `pnpm build:analyze` | Warn if >10% increase |
-| Lighthouse | CI only | Warn if <80 score |
+| Lighthouse  | CI only              | Warn if <80 score     |
 
 #### AI Gate
 
-| Check | Purpose | Fail Behavior |
-|-------|---------|---------------|
-| Context Validator | Verify agent context complete | Advisory |
-| Hallucination Check | Flag uncertain claims | Advisory |
+| Check               | Purpose                       | Fail Behavior |
+| ------------------- | ----------------------------- | ------------- |
+| Context Validator   | Verify agent context complete | Advisory      |
+| Hallucination Check | Flag uncertain claims         | Advisory      |
 
 ### Gate Result Format
 
 ```typescript
 interface GateResult {
-  gate: 'STATIC' | 'CORRECTNESS' | 'SAFETY' | 'PERF' | 'AI';
-  status: 'PASSED' | 'FAILED' | 'SKIPPED' | 'ADVISORY';
+  gate: "STATIC" | "CORRECTNESS" | "SAFETY" | "PERF" | "AI";
+  status: "PASSED" | "FAILED" | "SKIPPED" | "ADVISORY";
   duration: number; // ms
   errors: string[];
   warnings: string[];
@@ -176,21 +174,21 @@ interface GateResult {
 
 ### Merge Requirements by Branch
 
-| Target | From | Requirements |
-|--------|------|--------------|
-| `main` | `dev` only | All gates pass, 2 approvals, no conflicts |
-| `dev` | `feature/*`, `fix/*`, etc. | STATIC + CORRECTNESS pass, 1 approval |
-| `dev` | `hotfix/*` | All gates pass, 1 approval |
+| Target | From                       | Requirements                              |
+| ------ | -------------------------- | ----------------------------------------- |
+| `main` | `dev` only                 | All gates pass, 2 approvals, no conflicts |
+| `dev`  | `feature/*`, `fix/*`, etc. | STATIC + CORRECTNESS pass, 1 approval     |
+| `dev`  | `hotfix/*`                 | All gates pass, 1 approval                |
 
 ### Merge Strategies
 
-| Scenario | Strategy | Rationale |
-|----------|----------|-----------|
-| Feature → dev | Squash | Clean history |
-| Fix → dev | Squash | Clean history |
-| Refactor → dev | Squash | Clean history |
-| Dev → main | Merge commit | Preserve PR reference |
-| Hotfix → main | Merge commit | Audit trail |
+| Scenario       | Strategy     | Rationale             |
+| -------------- | ------------ | --------------------- |
+| Feature → dev  | Squash       | Clean history         |
+| Fix → dev      | Squash       | Clean history         |
+| Refactor → dev | Squash       | Clean history         |
+| Dev → main     | Merge commit | Preserve PR reference |
+| Hotfix → main  | Merge commit | Audit trail           |
 
 ### Conflict Resolution
 
@@ -207,12 +205,12 @@ interface GateResult {
 
 ### Severity Levels
 
-| Level | Definition | Response Time |
-|-------|------------|---------------|
-| **P0** | Production down, data loss, security breach | Immediate |
-| **P1** | Major feature broken, revenue impact | <1 hour |
-| **P2** | Minor feature broken, workaround exists | <4 hours |
-| **P3** | Cosmetic issue, no functional impact | Next sprint |
+| Level  | Definition                                  | Response Time |
+| ------ | ------------------------------------------- | ------------- |
+| **P0** | Production down, data loss, security breach | Immediate     |
+| **P1** | Major feature broken, revenue impact        | <1 hour       |
+| **P2** | Minor feature broken, workaround exists     | <4 hours      |
+| **P3** | Cosmetic issue, no functional impact        | Next sprint   |
 
 ### Hotfix Protocol
 
@@ -241,14 +239,14 @@ interface GateResult {
 
 ### Invocation Patterns
 
-| Pattern | Agent Routed | Example |
-|---------|--------------|---------|
-| `@architect {verb} {target}` | Architect | `@architect design TimeOff` |
-| `@refactor {verb} {file}` | Refactor | `@refactor fix schedule.ts` |
-| `@guard {verb} PR#{n}` | Guard | `@guard review PR#42` |
-| `@auditor {verb}` | Auditor | `@auditor report` |
-| Natural language design | Orchestrator → Architect | "Design a new leave request feature" |
-| Natural language review | Orchestrator → Guard | "Is this PR ready?" |
+| Pattern                      | Agent Routed             | Example                              |
+| ---------------------------- | ------------------------ | ------------------------------------ |
+| `@architect {verb} {target}` | Architect                | `@architect design TimeOff`          |
+| `@refactor {verb} {file}`    | Refactor                 | `@refactor fix schedule.ts`          |
+| `@guard {verb} PR#{n}`       | Guard                    | `@guard review PR#42`                |
+| `@auditor {verb}`            | Auditor                  | `@auditor report`                    |
+| Natural language design      | Orchestrator → Architect | "Design a new leave request feature" |
+| Natural language review      | Orchestrator → Guard     | "Is this PR ready?"                  |
 
 ### Orchestrator Routing Rules
 
@@ -295,14 +293,14 @@ When orchestrator detects multi-agent task:
 
 ### Error Categories
 
-| Category | HTTP Code | User Message | Log Level |
-|----------|-----------|--------------|-----------|
-| Validation | 400 | Specific field errors | INFO |
-| Auth | 401 | "Authentication required" | WARN |
-| Forbidden | 403 | "Permission denied" | WARN |
-| Not Found | 404 | "Resource not found" | INFO |
-| Conflict | 409 | Specific conflict reason | INFO |
-| Server | 500 | "Something went wrong" | ERROR |
+| Category   | HTTP Code | User Message              | Log Level |
+| ---------- | --------- | ------------------------- | --------- |
+| Validation | 400       | Specific field errors     | INFO      |
+| Auth       | 401       | "Authentication required" | WARN      |
+| Forbidden  | 403       | "Permission denied"       | WARN      |
+| Not Found  | 404       | "Resource not found"      | INFO      |
+| Conflict   | 409       | Specific conflict reason  | INFO      |
+| Server     | 500       | "Something went wrong"    | ERROR     |
 
 ### Response Format
 
@@ -326,12 +324,12 @@ When orchestrator detects multi-agent task:
 
 ### Recovery Procedures
 
-| Error Type | Recovery Action |
-|------------|-----------------|
+| Error Type         | Recovery Action                             |
+| ------------------ | ------------------------------------------- |
 | Validation failure | Return field-level errors, let user correct |
-| Auth expired | Trigger re-auth flow |
-| Rate limited | Return `Retry-After` header |
-| Server error | Log full context, return generic message |
+| Auth expired       | Trigger re-auth flow                        |
+| Rate limited       | Return `Retry-After` header                 |
+| Server error       | Log full context, return generic message    |
 
 ---
 
@@ -341,23 +339,23 @@ When orchestrator detects multi-agent task:
 
 ### Documentation Requirements
 
-| Change Type | Required Docs |
-|-------------|---------------|
-| New API endpoint | OpenAPI spec, README example |
-| New schema | Schema catalog entry, migration notes |
-| New component | Storybook story, props documentation |
-| Config change | Update relevant config docs |
-| Breaking change | Migration guide, changelog entry |
+| Change Type      | Required Docs                         |
+| ---------------- | ------------------------------------- |
+| New API endpoint | OpenAPI spec, README example          |
+| New schema       | Schema catalog entry, migration notes |
+| New component    | Storybook story, props documentation  |
+| Config change    | Update relevant config docs           |
+| Breaking change  | Migration guide, changelog entry      |
 
 ### Location Standards
 
-| Doc Type | Location |
-|----------|----------|
-| API Reference | `docs/api/` |
-| Schema Catalog | `docs/schemas/` |
-| Architecture | `docs/architecture/` |
-| Governance | `.github/` |
-| Component Docs | Storybook / inline |
+| Doc Type       | Location             |
+| -------------- | -------------------- |
+| API Reference  | `docs/api/`          |
+| Schema Catalog | `docs/schemas/`      |
+| Architecture   | `docs/architecture/` |
+| Governance     | `.github/`           |
+| Component Docs | Storybook / inline   |
 
 ---
 

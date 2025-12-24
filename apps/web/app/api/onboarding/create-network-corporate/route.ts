@@ -49,17 +49,17 @@ export const POST = createAuthenticatedEndpoint({
           ownerId: userId,
           createdAt: network.createdAt,
         };
-        await db.collection('networks').doc(network.id).set(networkData);
+        await db.collection("networks").doc(network.id).set(networkData);
       }
 
       // A3: Set orgId cookie for session persistence
       const response = NextResponse.json(ok(network));
-      response.cookies.set('orgId', network.id, {
+      response.cookies.set("orgId", network.id, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'lax',
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
         maxAge: 60 * 60 * 24 * 30, // 30 days
-        path: '/',
+        path: "/",
       });
 
       return response;

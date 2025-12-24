@@ -121,9 +121,7 @@ export function loadServerEnv(): ServerEnv {
         "[env.server] OTEL_EXPORTER_OTLP_TRACES_ENDPOINT is deprecated; use OTEL_EXPORTER_OTLP_ENDPOINT instead",
       );
     } else {
-      console.error(
-        "[env.server] OTEL_EXPORTER_OTLP_TRACES_ENDPOINT must be a valid URL when set",
-      );
+      console.error("[env.server] OTEL_EXPORTER_OTLP_TRACES_ENDPOINT must be a valid URL when set");
       throw new Error("Invalid OTEL_EXPORTER_OTLP_TRACES_ENDPOINT");
     }
   }

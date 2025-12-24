@@ -25,7 +25,8 @@ export default async function AnalyticsPage() {
       <div className="rounded-xl border border-slate-800 bg-slate-900/40 p-4">
         <div className="text-sm font-semibold text-white">Coming Soon</div>
         <p className="mt-2 text-sm text-slate-300">
-          Codebase analytics using Repomix. Displays repository structure, file counts, language distribution, and health indicators.
+          Codebase analytics using Repomix. Displays repository structure, file counts, language
+          distribution, and health indicators.
         </p>
       </div>
     </div>

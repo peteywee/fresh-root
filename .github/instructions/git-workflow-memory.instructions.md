@@ -6,11 +6,13 @@ priority: 2
 
 # Git Workflow Memory
 
-Effective patterns for maintaining repository health, preventing common mistakes, and automating quality gates.
+Effective patterns for maintaining repository health, preventing common mistakes, and automating
+quality gates.
 
 ## Pre-Commit Hook: Documentation File Organization
 
-**Problem**: Documentation files accumulate at repository root, cluttering the main directory. Without enforcement, docs end up in wrong locations.
+**Problem**: Documentation files accumulate at repository root, cluttering the main directory.
+Without enforcement, docs end up in wrong locations.
 
 **Solution**: Add pre-commit hook to block `.md` files from root except whitelisted files.
 
@@ -62,6 +64,7 @@ echo "# Doc" > docs/guides/GOOD_GUIDE.md && git add docs/guides/GOOD_GUIDE.md &&
 **Git hooks configuration**:
 
 Ensure git knows where to find hooks:
+
 ```bash
 git config core.hooksPath .husky
 ```
@@ -71,6 +74,7 @@ git config core.hooksPath .husky
 **Pattern**: Hooks run in sequence. Order matters for efficiency.
 
 **Recommended order**:
+
 1. **Merge conflict check** — Fast, blocks bad state early
 2. **File organization checks** — Fast, prevents clutter
 3. **TypeScript typecheck** — Medium (2-3s), catches type errors early
@@ -83,12 +87,14 @@ git config core.hooksPath .husky
 **Before deploying a hook**:
 
 1. **Test blocking case** — Try to commit file that SHOULD be blocked
+
    ```bash
    # Should fail
    echo "# Test" > BAD.md && git add BAD.md && git commit -m "test" 2>&1 | grep -q "ERROR"
    ```
 
 2. **Test allowing case** — Commit files that SHOULD be allowed
+
    ```bash
    # Should succeed
    echo "# Test" > docs/guides/GOOD.md && git add docs/guides/GOOD.md && git commit -m "test"
@@ -109,6 +115,7 @@ git config core.hooksPath .husky
 ## When Hooks Fail to Execute
 
 **Diagnosis**:
+
 ```bash
 # Check if hooks path is set
 git config core.hooksPath
@@ -121,6 +128,7 @@ head -1 .husky/pre-commit  # Should be #!/usr/bin/env bash
 ```
 
 **Solutions**:
+
 1. Set hooks path: `git config core.hooksPath .husky`
 2. Make executable: `chmod +x .husky/pre-commit`
 3. Verify shebang: First line must be `#!/usr/bin/env bash`
@@ -128,6 +136,7 @@ head -1 .husky/pre-commit  # Should be #!/usr/bin/env bash
 ## Preventing Documentation Clutter: The Full Picture
 
 **Hierarchy (enforced by hook)**:
+
 ```
 Root (BLOCKED except README.md, LICENSE, WARP.md)
   └── Block docs from accumulating here

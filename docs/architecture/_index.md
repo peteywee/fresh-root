@@ -4,12 +4,12 @@
 
 ## Automation Status
 
-| Component | Status | Next Update |
-|-----------|--------|------------|
-| Pre-push hook | ✅ Configured | Before your next push |
-| GitHub Actions CI | ✅ Configured | Next push/PR |
-| Nightly dashboard | ✅ Scheduled | 2 AM UTC |
-| Metrics tracking | ✅ Configured | After dashboard runs |
+| Component         | Status        | Next Update           |
+| ----------------- | ------------- | --------------------- |
+| Pre-push hook     | ✅ Configured | Before your next push |
+| GitHub Actions CI | ✅ Configured | Next push/PR          |
+| Nightly dashboard | ✅ Scheduled  | 2 AM UTC              |
+| Metrics tracking  | ✅ Configured | After dashboard runs  |
 
 ## Getting Started
 
@@ -62,5 +62,5 @@ git push
 
 ---
 
-**Maintained by:** Repomix automation
-**Last Updated:** This is a placeholder (real updates begin on first push)
+**Maintained by:** Repomix automation **Last Updated:** This is a placeholder (real updates begin on
+first push)

@@ -23,9 +23,7 @@ function NavLink({
       href={href}
       className={[
         "flex items-center gap-2 rounded-lg px-3 py-2 text-sm transition",
-        active
-          ? "bg-slate-900 text-white"
-          : "text-slate-300 hover:bg-slate-900 hover:text-white",
+        active ? "bg-slate-900 text-white" : "text-slate-300 hover:bg-slate-900 hover:text-white",
       ].join(" ")}
     >
       <Icon className="h-4 w-4" />

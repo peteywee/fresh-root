@@ -48,11 +48,14 @@ describe("organizations-[id]-members-[memberId] API E2E Tests", () => {
     // Input: UpdateMemberApiSchema
 
     it("should return 400 for invalid input", async () => {
-      const { response } = await safeFetch(`${BASE_URL}/api/organizations/[id]/members/[memberId]`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({}),
-      });
+      const { response } = await safeFetch(
+        `${BASE_URL}/api/organizations/[id]/members/[memberId]`,
+        {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({}),
+        },
+      );
       if (!serverAvailable || !response) {
         expect(true).toBe(true); // Skip gracefully
         return;
@@ -65,11 +68,14 @@ describe("organizations-[id]-members-[memberId] API E2E Tests", () => {
         // TODO: Add valid payload based on UpdateMemberApiSchema
       };
 
-      const { response } = await safeFetch(`${BASE_URL}/api/organizations/[id]/members/[memberId]`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(validPayload),
-      });
+      const { response } = await safeFetch(
+        `${BASE_URL}/api/organizations/[id]/members/[memberId]`,
+        {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(validPayload),
+        },
+      );
       if (!serverAvailable || !response) {
         expect(true).toBe(true); // Skip gracefully
         return;
@@ -84,9 +90,12 @@ describe("organizations-[id]-members-[memberId] API E2E Tests", () => {
     // Requires authentication
 
     it("should require authentication", async () => {
-      const { response } = await safeFetch(`${BASE_URL}/api/organizations/[id]/members/[memberId]`, {
-        method: "DELETE",
-      });
+      const { response } = await safeFetch(
+        `${BASE_URL}/api/organizations/[id]/members/[memberId]`,
+        {
+          method: "DELETE",
+        },
+      );
       if (!serverAvailable || !response) {
         expect(true).toBe(true); // Skip gracefully
         return;

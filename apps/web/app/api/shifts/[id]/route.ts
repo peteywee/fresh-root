@@ -19,24 +19,18 @@ export const GET = createOrgEndpoint({
 
       // Fetch from Firestore
       const db = getFirestore();
-      const shiftRef = db.collection('orgs').doc(orgId).collection('shifts').doc(id);
+      const shiftRef = db.collection("orgs").doc(orgId).collection("shifts").doc(id);
       const snap = await shiftRef.get();
 
       if (!snap.exists) {
-        return NextResponse.json(
-          { error: "Shift not found" },
-          { status: 404 },
-        );
+        return NextResponse.json({ error: "Shift not found" }, { status: 404 });
       }
 
       const shift = snap.data() as Shift;
 
       // Verify the shift belongs to this org
       if (shift.orgId !== orgId) {
-        return NextResponse.json(
-          { error: "Unauthorized" },
-          { status: 403 },
-        );
+        return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
       }
 
       return NextResponse.json(shift, { status: 200 });
@@ -61,24 +55,18 @@ export const PATCH = createOrgEndpoint({
 
       // Fetch current document to verify orgId and apply partial updates
       const db = getFirestore();
-      const shiftRef = db.collection('orgs').doc(orgId).collection('shifts').doc(id);
+      const shiftRef = db.collection("orgs").doc(orgId).collection("shifts").doc(id);
       const snap = await shiftRef.get();
 
       if (!snap.exists) {
-        return NextResponse.json(
-          { error: "Shift not found" },
-          { status: 404 },
-        );
+        return NextResponse.json({ error: "Shift not found" }, { status: 404 });
       }
 
       const current = snap.data() as Shift;
 
       // Verify org ownership
       if (current.orgId !== orgId) {
-        return NextResponse.json(
-          { error: "Unauthorized" },
-          { status: 403 },
-        );
+        return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
       }
 
       // Build update object with timestamp
@@ -117,24 +105,18 @@ export const DELETE = createOrgEndpoint({
 
       // Fetch current document
       const db = getFirestore();
-      const shiftRef = db.collection('orgs').doc(orgId).collection('shifts').doc(id);
+      const shiftRef = db.collection("orgs").doc(orgId).collection("shifts").doc(id);
       const snap = await shiftRef.get();
 
       if (!snap.exists) {
-        return NextResponse.json(
-          { error: "Shift not found" },
-          { status: 404 },
-        );
+        return NextResponse.json({ error: "Shift not found" }, { status: 404 });
       }
 
       const current = snap.data() as Shift;
 
       // Verify org ownership
       if (current.orgId !== orgId) {
-        return NextResponse.json(
-          { error: "Unauthorized" },
-          { status: 403 },
-        );
+        return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
       }
 
       // Soft delete: set status to cancelled
@@ -143,10 +125,13 @@ export const DELETE = createOrgEndpoint({
         updatedAt: Date.now(),
       });
 
-      return NextResponse.json({
-        message: "Shift deleted successfully",
-        id,
-      }, { status: 200 });
+      return NextResponse.json(
+        {
+          message: "Shift deleted successfully",
+          id,
+        },
+        { status: 200 },
+      );
     } catch (error) {
       console.error("Error deleting shift:", error);
       return serverError("Failed to delete shift");

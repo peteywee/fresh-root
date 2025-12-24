@@ -145,7 +145,7 @@ Anal │Work│base  │ser  │
       │ If external research:          │
       │- pack_remote_repository        │
       └────────────────────────────────┘
-      
+
       ┌──────────────────┐
       │ Not local data?  │
       └───┬──────────┬───┘
@@ -335,22 +335,22 @@ Based on development task patterns:
 
 The agent should automatically activate tools based on keywords:
 
-| Keyword | Tool | Action |
-|---------|------|--------|
-| "analyze", "pattern", "structure" | Repomix MCP | Pack codebase |
-| "search", "find", "grep" | GitHub MCP or Repomix | Search code |
-| "create PR", "merge", "branch" | GitHub MCP | PR operations |
-| "Firestore", "database", "query" | Firebase MCP | DB operations |
-| "screenshot", "browser", "E2E" | Chrome DevTools | Browser automation |
-| "external repo", "competitor" | Repomix MCP | Pack remote repo |
-| "deploy", "rules", "functions" | Firebase MCP | Deployment |
+| Keyword                           | Tool                  | Action             |
+| --------------------------------- | --------------------- | ------------------ |
+| "analyze", "pattern", "structure" | Repomix MCP           | Pack codebase      |
+| "search", "find", "grep"          | GitHub MCP or Repomix | Search code        |
+| "create PR", "merge", "branch"    | GitHub MCP            | PR operations      |
+| "Firestore", "database", "query"  | Firebase MCP          | DB operations      |
+| "screenshot", "browser", "E2E"    | Chrome DevTools       | Browser automation |
+| "external repo", "competitor"     | Repomix MCP           | Pack remote repo   |
+| "deploy", "rules", "functions"    | Firebase MCP          | Deployment         |
 
 ### Manual Override
 
 Agents can explicitly request tools:
 
 ```
-"Use Repomix to analyze..." 
+"Use Repomix to analyze..."
 "Use GitHub MCP to search..."
 "Use Firebase to query..."
 ```
@@ -410,8 +410,10 @@ Agents can explicitly request tools:
 
 ## 📚 Reference Files
 
-- [MCP_TOOLING_STRATEGY.md](./MCP_TOOLING_STRATEGY.md) — Detailed tier architecture and implementation plan
-- [REPOMIX_MCP_TOOLS_REFERENCE.md](./REPOMIX_MCP_TOOLS_REFERENCE.md) — Complete Repomix tool documentation
+- [MCP_TOOLING_STRATEGY.md](./MCP_TOOLING_STRATEGY.md) — Detailed tier architecture and
+  implementation plan
+- [REPOMIX_MCP_TOOLS_REFERENCE.md](./REPOMIX_MCP_TOOLS_REFERENCE.md) — Complete Repomix tool
+  documentation
 - [.mcp.json](../.mcp.json) — Current MCP configuration (view source)
 - [.github/copilot-instructions.md](../.github/copilot-instructions.md) — Agent guidelines
 
@@ -421,4 +423,4 @@ Agents can explicitly request tools:
 **Last Updated**: December 16, 2025  
 **Next Review**: December 23, 2025 (Phase 2 kickoff)
 
-*"47 tools, zero prompts, infinite possibilities"*
+_"47 tools, zero prompts, infinite possibilities"_

@@ -166,7 +166,7 @@ export const GET = createAdminEndpoint({
 export const POST = createAdminEndpoint({
   handler: async ({ request, input: _input, context: _context, params: _params }) => {
     const db = getFirestore();
-    const body = await request.json() as Record<string, unknown>;
+    const body = (await request.json()) as Record<string, unknown>;
 
     // Validate required fields with type checking
     const requiredFields = [
@@ -187,7 +187,7 @@ export const POST = createAdminEndpoint({
     if (missing.length > 0) {
       return NextResponse.json(
         { ok: false, error: `Missing fields: ${missing.join(", ")}` },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -198,7 +198,7 @@ export const POST = createAdminEndpoint({
       if (!Number.isFinite(parsedTimestamp)) {
         return NextResponse.json(
           { ok: false, error: "timestamp must be ISO datetime format" },
-          { status: 400 }
+          { status: 400 },
         );
       }
 
@@ -220,7 +220,7 @@ export const POST = createAdminEndpoint({
       ) {
         return NextResponse.json(
           { ok: false, error: "Duration fields must be non-negative numbers" },
-          { status: 400 }
+          { status: 400 },
         );
       }
 
@@ -229,7 +229,7 @@ export const POST = createAdminEndpoint({
       if (!/^[a-f0-9]{40}$/.test(sha)) {
         return NextResponse.json(
           { ok: false, error: "sha must be 40-character hex string (git full hash)" },
-          { status: 400 }
+          { status: 400 },
         );
       }
 
@@ -248,20 +248,12 @@ export const POST = createAdminEndpoint({
         createdAt: Date.now(),
       };
 
-      const docRef = await db
-        .collection("_metrics/build-performance/entries")
-        .add(entry);
+      const docRef = await db.collection("_metrics/build-performance/entries").add(entry);
 
-      return NextResponse.json(
-        { ok: true, id: docRef.id },
-        { status: 201 }
-      );
+      return NextResponse.json({ ok: true, id: docRef.id }, { status: 201 });
     } catch (err) {
       const message = err instanceof Error ? err.message : "Unknown error";
-      return NextResponse.json(
-        { ok: false, error: message },
-        { status: 500 }
-      );
+      return NextResponse.json({ ok: false, error: message }, { status: 500 });
     }
   },
 });

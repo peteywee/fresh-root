@@ -13,21 +13,21 @@ This document defines all pipeline configurations.
 
 ### Families
 
-| Family | Purpose | Trigger |
-|--------|---------|---------|
-| **Feature** | New functionality | `feature/*` branches |
-| **Bug** | Fixing broken behavior | `fix/*` branches |
-| **Schema** | Type/schema changes | Changes to `packages/types/` |
-| **Refactor** | Code improvements | `refactor/*` branches |
-| **Security** | Auth, rules, secrets | Changes to security files |
+| Family       | Purpose                | Trigger                      |
+| ------------ | ---------------------- | ---------------------------- |
+| **Feature**  | New functionality      | `feature/*` branches         |
+| **Bug**      | Fixing broken behavior | `fix/*` branches             |
+| **Schema**   | Type/schema changes    | Changes to `packages/types/` |
+| **Refactor** | Code improvements      | `refactor/*` branches        |
+| **Security** | Auth, rules, secrets   | Changes to security files    |
 
 ### Variants
 
-| Variant | Criteria | Speed |
-|---------|----------|-------|
-| **FAST** | 1 file, no domain logic | ~30 seconds |
-| **STANDARD** | 2-5 files, single domain | ~2 minutes |
-| **HEAVY** | >5 files, multi-domain, security | ~5 minutes |
+| Variant      | Criteria                         | Speed       |
+| ------------ | -------------------------------- | ----------- |
+| **FAST**     | 1 file, no domain logic          | ~30 seconds |
+| **STANDARD** | 2-5 files, single domain         | ~2 minutes  |
+| **HEAVY**    | >5 files, multi-domain, security | ~5 minutes  |
 
 ---
 
@@ -46,7 +46,7 @@ trigger:
 gates:
   - STATIC
 
-timeout: 60_000  # 1 minute
+timeout: 60_000 # 1 minute
 parallel: true
 failFast: true
 ```
@@ -69,8 +69,8 @@ gates:
   - STATIC
   - CORRECTNESS
 
-timeout: 180_000  # 3 minutes
-parallel: false  # Gates run sequentially
+timeout: 180_000 # 3 minutes
+parallel: false # Gates run sequentially
 failFast: true
 ```
 
@@ -187,7 +187,7 @@ gates:
   - CORRECTNESS
   - SAFETY
 
-timeout: 240_000  # 4 minutes
+timeout: 240_000 # 4 minutes
 parallel: false
 failFast: true
 ```
@@ -211,9 +211,9 @@ gates:
   - CORRECTNESS
   - SAFETY
   - PERF
-  - AI  # Advisory for migration impact
+  - AI # Advisory for migration impact
 
-timeout: 360_000  # 6 minutes
+timeout: 360_000 # 6 minutes
 parallel: false
 failFast: true
 ```
@@ -335,7 +335,7 @@ gates:
   - PERF
   - AI
 
-timeout: 420_000  # 7 minutes
+timeout: 420_000 # 7 minutes
 parallel: false
 failFast: true
 required_approvals: 2
@@ -354,38 +354,31 @@ security_review: required
 function detectPipeline(changedFiles: string[]): Pipeline {
   // 1. Security detection (highest priority)
   const securityPatterns = [
-    'firestore.rules',
-    '.env',
-    '**/auth/**',
-    '**/security/**',
-    'packages/api-framework/**'
+    "firestore.rules",
+    ".env",
+    "**/auth/**",
+    "**/security/**",
+    "packages/api-framework/**",
   ];
-  
+
   if (matchesAny(changedFiles, securityPatterns)) {
-    return isBreaking(changedFiles) 
-      ? 'Security.HEAVY' 
-      : 'Security.STANDARD';
+    return isBreaking(changedFiles) ? "Security.HEAVY" : "Security.STANDARD";
   }
-  
+
   // 2. Schema detection
-  const schemaPatterns = [
-    'packages/types/src/schemas/**',
-    '**/*.schema.ts'
-  ];
-  
+  const schemaPatterns = ["packages/types/src/schemas/**", "**/*.schema.ts"];
+
   if (matchesAny(changedFiles, schemaPatterns)) {
-    return isBreaking(changedFiles) 
-      ? 'Schema.HEAVY' 
-      : 'Schema.STANDARD';
+    return isBreaking(changedFiles) ? "Schema.HEAVY" : "Schema.STANDARD";
   }
-  
+
   // 3. Size-based detection
   const fileCount = changedFiles.length;
   const packages = uniquePackages(changedFiles);
-  
+
   // Determine family from branch name or content
   const family = detectFamily(changedFiles);
-  
+
   if (fileCount === 1) {
     return `${family}.FAST`;
   } else if (fileCount <= 5 && packages.length === 1) {
@@ -402,20 +395,20 @@ function detectPipeline(changedFiles: string[]): Pipeline {
 function detectFamily(changedFiles: string[]): Family {
   // Check branch name first
   const branch = getCurrentBranch();
-  
-  if (branch.startsWith('feature/')) return 'Feature';
-  if (branch.startsWith('fix/')) return 'Bug';
-  if (branch.startsWith('refactor/')) return 'Refactor';
-  if (branch.startsWith('hotfix/')) return 'Security';
-  
+
+  if (branch.startsWith("feature/")) return "Feature";
+  if (branch.startsWith("fix/")) return "Bug";
+  if (branch.startsWith("refactor/")) return "Refactor";
+  if (branch.startsWith("hotfix/")) return "Security";
+
   // Fall back to content analysis
-  const hasNewFiles = changedFiles.some(f => isNewFile(f));
-  const hasTestChanges = changedFiles.some(f => f.includes('.test.') || f.includes('.spec.'));
-  
-  if (hasNewFiles && !hasTestChanges) return 'Feature';
-  if (!hasNewFiles && hasTestChanges) return 'Bug';
-  
-  return 'Feature'; // Default
+  const hasNewFiles = changedFiles.some((f) => isNewFile(f));
+  const hasTestChanges = changedFiles.some((f) => f.includes(".test.") || f.includes(".spec."));
+
+  if (hasNewFiles && !hasTestChanges) return "Feature";
+  if (!hasNewFiles && hasTestChanges) return "Bug";
+
+  return "Feature"; // Default
 }
 ```
 
@@ -434,7 +427,7 @@ commands:
   - pnpm typecheck
 timeout: 120_000
 blocking: true
-parallel: true  # Commands can run in parallel
+parallel: true # Commands can run in parallel
 autoFix:
   - pnpm lint --fix
   - pnpm format
@@ -448,7 +441,7 @@ displayName: Tests & Correctness
 commands:
   - pnpm test:unit
   - pnpm test:rules
-  - pnpm test:e2e  # Only in HEAVY variants
+  - pnpm test:e2e # Only in HEAVY variants
 timeout: 180_000
 blocking: true
 parallel: false
@@ -470,8 +463,8 @@ timeout: 120_000
 blocking: true
 parallel: true
 thresholds:
-  patternScore: 90  # Minimum pattern compliance
-  auditLevel: high   # Block on high+ vulnerabilities
+  patternScore: 90 # Minimum pattern compliance
+  auditLevel: high # Block on high+ vulnerabilities
 ```
 
 ### PERF Gate
@@ -483,11 +476,11 @@ commands:
   - pnpm build
   - pnpm analyze:bundle
 timeout: 180_000
-blocking: false  # Advisory in most cases
+blocking: false # Advisory in most cases
 parallel: false
 thresholds:
-  bundleIncrease: 10  # Warn if >10% increase
-  lighthouseScore: 80  # Warn if <80
+  bundleIncrease: 10 # Warn if >10% increase
+  lighthouseScore: 80 # Warn if <80
 ```
 
 ### AI Gate
@@ -499,7 +492,7 @@ commands:
   - Context validation (internal)
   - Hallucination check (internal)
 timeout: 60_000
-blocking: false  # Never blocks, only advises
+blocking: false # Never blocks, only advises
 parallel: true
 ```
 
@@ -524,11 +517,13 @@ parallel: true
 ### Fail-Fast Behavior
 
 When `failFast: true`:
+
 - First gate failure stops pipeline
 - Remaining gates skipped
 - Result indicates which gate failed
 
 When `failFast: false`:
+
 - All gates run regardless of failures
 - Full report of all issues
 - Used for comprehensive audits
@@ -538,13 +533,13 @@ When `failFast: false`:
 ```typescript
 interface PipelineResult {
   pipeline: string;
-  status: 'PASSED' | 'FAILED' | 'PARTIAL';
+  status: "PASSED" | "FAILED" | "PARTIAL";
   duration: number;
   timestamp: string;
   commit: string;
   gates: {
     name: string;
-    status: 'PASSED' | 'FAILED' | 'SKIPPED' | 'ADVISORY';
+    status: "PASSED" | "FAILED" | "SKIPPED" | "ADVISORY";
     duration: number;
     errors: string[];
     warnings: string[];

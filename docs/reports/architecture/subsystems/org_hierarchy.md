@@ -1,13 +1,13 @@
 # L2 — Organization/Venue/Team Hierarchy
 
-> **Status:** ✅ Documented from actual codebase analysis
-> **Last Updated:** 2025-12-17
-> **Analyzed Routes:** 12 endpoints, ~800 LOC
-> **Type Schemas:** 8 core types (Organization, Venue, Zone, Membership, Corporate, Network, Links)
+> **Status:** ✅ Documented from actual codebase analysis **Last Updated:** 2025-12-17 **Analyzed
+> Routes:** 12 endpoints, ~800 LOC **Type Schemas:** 8 core types (Organization, Venue, Zone,
+> Membership, Corporate, Network, Links)
 
 ## 1. Role in the System
 
-The Organization Hierarchy subsystem implements the multi-tenant organizational structure that scopes all resources in Fresh Schedules. It provides the foundational data model for:
+The Organization Hierarchy subsystem implements the multi-tenant organizational structure that
+scopes all resources in Fresh Schedules. It provides the foundational data model for:
 
 1. **Network → Organization → Venue → Zone** hierarchical containment
 2. **Corporate → Organization** ownership/partnership relationships via links
@@ -15,7 +15,8 @@ The Organization Hierarchy subsystem implements the multi-tenant organizational 
 4. **Organization settings and configuration** for per-tenant customization
 5. **Multi-tenancy scoping** ensuring all data operations are isolated by `orgId`
 
-This is a **P0 Critical** subsystem - all other features (schedules, shifts, attendance) depend on this hierarchy for data scoping and access control.
+This is a **P0 Critical** subsystem - all other features (schedules, shifts, attendance) depend on
+this hierarchy for data scoping and access control.
 
 ## 2. Actual Implementation Analysis
 
@@ -35,6 +36,7 @@ Network (Top Level - Multi-tenant Container)
 ```
 
 **Key Design Principles:**
+
 - **`orgId` is the primary tenant boundary** - all resources must have orgId
 - **`networkId` is optional** - allows independent orgs OR corporate networks
 - **Link collections** (`corpOrgLinks`, `orgVenueAssignments`) model flexible relationships
@@ -42,24 +44,25 @@ Network (Top Level - Multi-tenant Container)
 
 ### 2.2 Endpoints Inventory
 
-| Endpoint | Method | Purpose | Auth | RBAC | Validation |
-|----------|--------|---------|------|------|------------|
-| `/api/organizations` | GET | List user's orgs | ✅ | User | Query params |
-| `/api/organizations` | POST | Create new org | ✅ | User | `CreateOrganizationSchema` |
-| `/api/organizations/[id]` | GET | Get org details | ✅ | Org member | - |
-| `/api/organizations/[id]` | PATCH | Update org | ✅ | Admin+ | `UpdateOrganizationSchema` |
-| `/api/organizations/[id]` | DELETE | Delete org | ✅ | Admin+ | - |
-| `/api/organizations/[id]/members` | GET | List members | ✅ | Org member | - |
-| `/api/organizations/[id]/members` | POST | Add member | ✅ | Admin+ | `AddMemberSchema` |
-| `/api/organizations/[id]/members/[memberId]` | GET | Get member | ✅ | Org member | - |
-| `/api/organizations/[id]/members/[memberId]` | PATCH | Update member | ✅ | Admin+ | `UpdateMemberApiSchema` |
-| `/api/organizations/[id]/members/[memberId]` | DELETE | Remove member | ✅ | Admin+ | - |
-| `/api/venues` | GET | List venues | ✅ | Org member | Query params |
-| `/api/venues` | POST | Create venue | ✅ | Manager+ | `CreateVenueSchema` |
-| `/api/zones` | GET | List zones | ✅ | Org member | Query params |
-| `/api/zones` | POST | Create zone | ✅ | Manager+ | `CreateZoneSchema` |
+| Endpoint                                     | Method | Purpose          | Auth | RBAC       | Validation                 |
+| -------------------------------------------- | ------ | ---------------- | ---- | ---------- | -------------------------- |
+| `/api/organizations`                         | GET    | List user's orgs | ✅   | User       | Query params               |
+| `/api/organizations`                         | POST   | Create new org   | ✅   | User       | `CreateOrganizationSchema` |
+| `/api/organizations/[id]`                    | GET    | Get org details  | ✅   | Org member | -                          |
+| `/api/organizations/[id]`                    | PATCH  | Update org       | ✅   | Admin+     | `UpdateOrganizationSchema` |
+| `/api/organizations/[id]`                    | DELETE | Delete org       | ✅   | Admin+     | -                          |
+| `/api/organizations/[id]/members`            | GET    | List members     | ✅   | Org member | -                          |
+| `/api/organizations/[id]/members`            | POST   | Add member       | ✅   | Admin+     | `AddMemberSchema`          |
+| `/api/organizations/[id]/members/[memberId]` | GET    | Get member       | ✅   | Org member | -                          |
+| `/api/organizations/[id]/members/[memberId]` | PATCH  | Update member    | ✅   | Admin+     | `UpdateMemberApiSchema`    |
+| `/api/organizations/[id]/members/[memberId]` | DELETE | Remove member    | ✅   | Admin+     | -                          |
+| `/api/venues`                                | GET    | List venues      | ✅   | Org member | Query params               |
+| `/api/venues`                                | POST   | Create venue     | ✅   | Manager+   | `CreateVenueSchema`        |
+| `/api/zones`                                 | GET    | List zones       | ✅   | Org member | Query params               |
+| `/api/zones`                                 | POST   | Create zone      | ✅   | Manager+   | `CreateZoneSchema`         |
 
-**All endpoints** use `createOrgEndpoint()` or `createAuthenticatedEndpoint()` from the API framework - **A09 Handler Signature Invariant** is enforced.
+**All endpoints** use `createOrgEndpoint()` or `createAuthenticatedEndpoint()` from the API
+framework - **A09 Handler Signature Invariant** is enforced.
 
 ### 2.3 Data Models & Types
 
@@ -70,7 +73,7 @@ From `packages/types/src/orgs.ts`:
 ```typescript
 export const OrganizationSchema = z.object({
   id: z.string().min(1),
-  networkId: z.string().min(1).optional(),  // ✅ Network scoping
+  networkId: z.string().min(1).optional(), // ✅ Network scoping
   name: z.string().min(1).max(100),
   description: z.string().max(500).optional(),
   industry: z.string().max(100).optional(),
@@ -104,6 +107,7 @@ export const OrganizationSchema = z.object({
 ```
 
 **Organization Settings:**
+
 ```typescript
 export const OrganizationSettingsSchema = z.object({
   timezone: z.string().default("America/New_York"),
@@ -118,18 +122,13 @@ export const OrganizationSettingsSchema = z.object({
 ```
 
 **Organization Status & Size:**
+
 ```typescript
-export const OrganizationStatus = z.enum([
-  "active", "suspended", "trial", "cancelled"
-]);
+export const OrganizationStatus = z.enum(["active", "suspended", "trial", "cancelled"]);
 
-export const OrganizationSize = z.enum([
-  "1-10", "11-50", "51-200", "201-500", "500+"
-]);
+export const OrganizationSize = z.enum(["1-10", "11-50", "51-200", "201-500", "500+"]);
 
-export const SubscriptionTier = z.enum([
-  "free", "starter", "professional", "enterprise"
-]);
+export const SubscriptionTier = z.enum(["free", "starter", "professional", "enterprise"]);
 ```
 
 #### 2.3.2 Venue Schema
@@ -139,8 +138,8 @@ From `packages/types/src/venues.ts`:
 ```typescript
 export const VenueSchema = z.object({
   id: z.string().min(1),
-  networkId: z.string().min(1).optional(),  // ✅ Network scoping
-  orgId: z.string().min(1),                  // ✅ Primary tenant scope
+  networkId: z.string().min(1).optional(), // ✅ Network scoping
+  orgId: z.string().min(1), // ✅ Primary tenant scope
   name: z.string().min(1).max(100),
   description: z.string().max(500).optional(),
   type: VenueType.default("indoor"),
@@ -165,9 +164,7 @@ export const VenueSchema = z.object({
   updatedAt: z.number().int().positive(),
 });
 
-export const VenueType = z.enum([
-  "indoor", "outdoor", "hybrid", "virtual"
-]);
+export const VenueType = z.enum(["indoor", "outdoor", "hybrid", "virtual"]);
 
 export const AddressSchema = z.object({
   street: z.string().min(1).max(200),
@@ -190,8 +187,8 @@ From `packages/types/src/zones.ts`:
 ```typescript
 export const ZoneSchema = z.object({
   id: z.string().min(1),
-  orgId: z.string().min(1),      // ✅ Primary tenant scope
-  venueId: z.string().min(1),     // ✅ Parent venue reference
+  orgId: z.string().min(1), // ✅ Primary tenant scope
+  venueId: z.string().min(1), // ✅ Parent venue reference
   name: z.string().min(1).max(100),
   description: z.string().max(500).optional(),
   type: ZoneType.default("other"),
@@ -200,7 +197,10 @@ export const ZoneSchema = z.object({
   capacity: z.number().int().positive().optional(),
   floor: z.string().max(50).optional(),
   isActive: z.boolean().default(true),
-  color: z.string().regex(/^#[0-9A-Fa-f]{6}$/).optional(),
+  color: z
+    .string()
+    .regex(/^#[0-9A-Fa-f]{6}$/)
+    .optional(),
   notes: z.string().max(1000).optional(),
 
   // Audit
@@ -225,8 +225,8 @@ From `packages/types/src/memberships.ts`:
 
 ```typescript
 export const MembershipSchema = z.object({
-  uid: z.string().min(1),              // User ID
-  orgId: z.string().min(1),            // ✅ Org scope
+  uid: z.string().min(1), // User ID
+  orgId: z.string().min(1), // ✅ Org scope
   roles: z.array(MembershipRole).min(1),
   status: MembershipStatus.default("active"),
 
@@ -244,18 +244,18 @@ export const MembershipSchema = z.object({
 // ✅ Composite key ensures unique user-org pairing
 
 export const MembershipRole = z.enum([
-  "org_owner",  // Full control, can delete org
-  "admin",      // Manage members, settings
-  "manager",    // Create/edit schedules, venues
-  "scheduler",  // Create/edit schedules only
-  "staff"       // View schedules, check in/out
+  "org_owner", // Full control, can delete org
+  "admin", // Manage members, settings
+  "manager", // Create/edit schedules, venues
+  "scheduler", // Create/edit schedules only
+  "staff", // View schedules, check in/out
 ]);
 
 export const MembershipStatus = z.enum([
-  "active",     // Active member
-  "suspended",  // Temporarily disabled
-  "invited",    // Invitation sent, not yet joined
-  "removed"     // Removed from org
+  "active", // Active member
+  "suspended", // Temporarily disabled
+  "invited", // Invitation sent, not yet joined
+  "removed", // Removed from org
 ]);
 ```
 
@@ -295,10 +295,12 @@ export const NetworkSchema = z.object({
   allowedEmailDomains: z.array(z.string()).optional(),
 
   // Features
-  features: z.object({
-    analytics: z.boolean().optional(),
-    apiAccess: z.boolean().optional(),
-  }).optional(),
+  features: z
+    .object({
+      analytics: z.boolean().optional(),
+      apiAccess: z.boolean().optional(),
+    })
+    .optional(),
 
   // Ownership
   ownerUserId: z.string().optional(),
@@ -309,21 +311,26 @@ export const NetworkSchema = z.object({
 });
 
 export const NetworkKind = z.enum([
-  "independent_org",    // Single org, no network
-  "corporate_network",  // HQ with multiple orgs
-  "franchise_network",  // Franchisee model
-  "nonprofit_network",  // Nonprofit org
-  "test_sandbox"        // Development/testing
+  "independent_org", // Single org, no network
+  "corporate_network", // HQ with multiple orgs
+  "franchise_network", // Franchisee model
+  "nonprofit_network", // Nonprofit org
+  "test_sandbox", // Development/testing
 ]);
 
 export const NetworkSegment = z.enum([
-  "restaurant", "qsr", "bar", "hotel", "nonprofit",
-  "shelter", "church", "retail", "other"
+  "restaurant",
+  "qsr",
+  "bar",
+  "hotel",
+  "nonprofit",
+  "shelter",
+  "church",
+  "retail",
+  "other",
 ]);
 
-export const NetworkStatus = z.enum([
-  "pending_verification", "active", "suspended", "closed"
-]);
+export const NetworkStatus = z.enum(["pending_verification", "active", "suspended", "closed"]);
 ```
 
 #### 2.3.6 Corporate Schema
@@ -363,8 +370,8 @@ export const CorpOrgLinkSchema = z.object({
   networkId: z.string().min(1).optional(),
   corporateId: z.string().min(1),
   orgId: z.string().min(1),
-  relationType: CorpOrgRelationType,  // owner/sponsor/partner/affiliate
-  status: CorpOrgStatus,              // active/suspended/pending
+  relationType: CorpOrgRelationType, // owner/sponsor/partner/affiliate
+  status: CorpOrgStatus, // active/suspended/pending
   createdAt: DateLike,
   updatedAt: DateLike.optional(),
   createdBy: z.string().optional(),
@@ -372,15 +379,13 @@ export const CorpOrgLinkSchema = z.object({
 });
 
 export const CorpOrgRelationType = z.enum([
-  "owner",     // Corporate owns org
-  "sponsor",   // Corporate sponsors org
-  "partner",   // Partnership relationship
-  "affiliate"  // Loose affiliation
+  "owner", // Corporate owns org
+  "sponsor", // Corporate sponsors org
+  "partner", // Partnership relationship
+  "affiliate", // Loose affiliation
 ]);
 
-export const CorpOrgStatus = z.enum([
-  "active", "suspended", "pending"
-]);
+export const CorpOrgStatus = z.enum(["active", "suspended", "pending"]);
 ```
 
 **Organization-Venue Assignments** (`packages/types/src/links/orgVenueAssignments.ts`):
@@ -391,7 +396,7 @@ export const OrgVenueAssignmentSchema = z.object({
   networkId: z.string().min(1).optional(),
   orgId: z.string().min(1),
   venueId: z.string().min(1),
-  role: z.string().min(1),  // e.g., "primary", "shared", "temporary"
+  role: z.string().min(1), // e.g., "primary", "shared", "temporary"
   status: z.string().min(1).optional(),
   createdAt: DateLike,
   updatedAt: DateLike.optional(),
@@ -403,6 +408,7 @@ export const OrgVenueAssignmentSchema = z.object({
 ### 2.4 Firestore Collections Used
 
 **Primary Collections:**
+
 - **`/networks/{networkId}`** - Top-level network documents
 - **`/corporates/{corporateId}`** - Corporate entity documents
 - **`/organizations/{orgId}`** or **`/orgs/{orgId}`** - Organization documents
@@ -411,10 +417,12 @@ export const OrgVenueAssignmentSchema = z.object({
 - **`/memberships/{uid}_{orgId}`** - User-org membership records
 
 **Link Collections:**
+
 - **`/corpOrgLinks/{linkId}`** - Corporate-Org relationships
 - **`/orgVenueAssignments/{assignmentId}`** - Org-Venue assignments
 
 **Collection Path Patterns:**
+
 ```
 /networks/{networkId}
 /corporates/{corporateId}
@@ -427,6 +435,7 @@ export const OrgVenueAssignmentSchema = z.object({
 ```
 
 **Key Design Notes:**
+
 - ✅ `orgId` appears in all venue/zone paths for tenant isolation
 - ✅ Memberships use composite key `{uid}_{orgId}` for uniqueness
 - ✅ Links are top-level collections with refs to both sides
@@ -458,31 +467,33 @@ All routes use `createOrgEndpoint()` which provides:
 ```
 
 **RBAC Role Hierarchy:**
+
 ```
 org_owner > admin > manager > scheduler > staff
 ```
 
 **Permission Matrix:**
 
-| Action | org_owner | admin | manager | scheduler | staff |
-|--------|-----------|-------|---------|-----------|-------|
-| Delete org | ✅ | ❌ | ❌ | ❌ | ❌ |
-| Manage members | ✅ | ✅ | ❌ | ❌ | ❌ |
-| Update settings | ✅ | ✅ | ❌ | ❌ | ❌ |
-| Create venues | ✅ | ✅ | ✅ | ❌ | ❌ |
-| Create zones | ✅ | ✅ | ✅ | ❌ | ❌ |
-| Create schedules | ✅ | ✅ | ✅ | ✅ | ❌ |
-| View schedules | ✅ | ✅ | ✅ | ✅ | ✅ |
-| Check in/out | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Action           | org_owner | admin | manager | scheduler | staff |
+| ---------------- | --------- | ----- | ------- | --------- | ----- |
+| Delete org       | ✅        | ❌    | ❌      | ❌        | ❌    |
+| Manage members   | ✅        | ✅    | ❌      | ❌        | ❌    |
+| Update settings  | ✅        | ✅    | ❌      | ❌        | ❌    |
+| Create venues    | ✅        | ✅    | ✅      | ❌        | ❌    |
+| Create zones     | ✅        | ✅    | ✅      | ❌        | ❌    |
+| Create schedules | ✅        | ✅    | ✅      | ✅        | ❌    |
+| View schedules   | ✅        | ✅    | ✅      | ✅        | ✅    |
+| Check in/out     | ✅        | ✅    | ✅      | ✅        | ✅    |
 
 ## 3. Critical Findings
 
 ### 🔴 CRITICAL-01: Missing Firestore Persistence Across All Endpoints
 
-**Location:** All organization/venue/zone routes
-**Issue:** Mock data returned without persisting to Firestore
+**Location:** All organization/venue/zone routes **Issue:** Mock data returned without persisting to
+Firestore
 
 **Example from `/api/organizations` route:**
+
 ```typescript
 // File: organizations/route.ts (line 3657)
 // ❌ PROBLEM: Returns hardcoded mock data
@@ -503,6 +514,7 @@ export const GET = createAuthenticatedEndpoint({
 ```
 
 **Impact:**
+
 - Organizations created via POST are not persisted
 - Venues/zones created are lost on refresh
 - Membership changes not recorded
@@ -512,10 +524,11 @@ export const GET = createAuthenticatedEndpoint({
 
 ### 🔴 CRITICAL-02: No Network-Organization Relationship Enforcement
 
-**Location:** `CreateOrganizationSchema`, `CreateVenueSchema`
-**Issue:** `networkId` is optional but never validated or used in queries
+**Location:** `CreateOrganizationSchema`, `CreateVenueSchema` **Issue:** `networkId` is optional but
+never validated or used in queries
 
 **Impact:**
+
 - No way to enforce network-level policies
 - Cannot query "all orgs in network X"
 - Corporate relationships cannot be traversed
@@ -525,24 +538,22 @@ export const GET = createAuthenticatedEndpoint({
 
 ### 🔴 CRITICAL-03: Membership Role Consistency Issues
 
-**Location:** `packages/types/src/memberships.ts` vs `packages/types/src/rbac.ts`
-**Issue:** Two different role enums exist with overlapping values
+**Location:** `packages/types/src/memberships.ts` vs `packages/types/src/rbac.ts` **Issue:** Two
+different role enums exist with overlapping values
 
 **Evidence:**
+
 ```typescript
 // File: memberships.ts (line 9)
-export const MembershipRole = z.enum([
-  "org_owner", "admin", "manager", "scheduler", "staff"
-]);
+export const MembershipRole = z.enum(["org_owner", "admin", "manager", "scheduler", "staff"]);
 
 // File: rbac.ts (line 1484)
-export const OrgRole = z.enum([
-  "org_owner", "admin", "manager", "scheduler", "corporate", "staff"
-]);
+export const OrgRole = z.enum(["org_owner", "admin", "manager", "scheduler", "corporate", "staff"]);
 // ❌ "corporate" role only in OrgRole, not MembershipRole
 ```
 
 **Impact:**
+
 - Cannot assign "corporate" role via membership creation
 - RBAC checks may use different enum than membership storage
 - Type errors when mapping between membership and RBAC contexts
@@ -551,8 +562,8 @@ export const OrgRole = z.enum([
 
 ### 🟡 HIGH-01: Missing Org-Venue Authorization Checks
 
-**Location:** `/api/venues` route
-**Issue:** Venue creation doesn't verify user has access to specified `orgId`
+**Location:** `/api/venues` route **Issue:** Venue creation doesn't verify user has access to
+specified `orgId`
 
 **Impact:** User could create venues in other orgs by manipulating input
 
@@ -560,8 +571,8 @@ export const OrgRole = z.enum([
 
 ### 🟡 HIGH-02: Zone Queries Missing venueId Validation
 
-**Location:** `/api/zones` GET route
-**Issue:** Queries zones by `venueId` but doesn't verify venue belongs to user's org
+**Location:** `/api/zones` GET route **Issue:** Queries zones by `venueId` but doesn't verify venue
+belongs to user's org
 
 **Impact:** User could query zones for venues in other orgs by guessing venueIds
 
@@ -569,10 +580,11 @@ export const OrgRole = z.enum([
 
 ### 🟡 HIGH-03: Missing Corporate-Org Link Management Routes
 
-**Location:** No API routes found
-**Issue:** `CorpOrgLinkSchema` and `OrgVenueAssignmentSchema` defined but no CRUD endpoints
+**Location:** No API routes found **Issue:** `CorpOrgLinkSchema` and `OrgVenueAssignmentSchema`
+defined but no CRUD endpoints
 
 **Impact:**
+
 - Cannot create/manage corporate-org relationships via API
 - Cannot assign orgs to venues programmatically
 - Network-level operations impossible
@@ -581,10 +593,11 @@ export const OrgRole = z.enum([
 
 ### 🟡 HIGH-04: Organization Settings Not Enforced
 
-**Location:** `OrganizationSettingsSchema` defined but not used
-**Issue:** Settings like `allowSelfScheduling`, `requireShiftConfirmation` exist but no enforcement logic
+**Location:** `OrganizationSettingsSchema` defined but not used **Issue:** Settings like
+`allowSelfScheduling`, `requireShiftConfirmation` exist but no enforcement logic
 
 **Impact:**
+
 - Settings stored but never enforced in business logic
 - Users can bypass org policies (e.g., self-assign shifts even if disabled)
 - Geofencing configuration ignored in attendance checks
@@ -593,15 +606,16 @@ export const OrgRole = z.enum([
 
 ### 🟢 MEDIUM-01: Inconsistent Timestamp Formats
 
-**Location:** Multiple schemas
-**Issue:** Mix of `number` (Unix ms), `string` (ISO), and `Timestamp` types
+**Location:** Multiple schemas **Issue:** Mix of `number` (Unix ms), `string` (ISO), and `Timestamp`
+types
 
-**Recommendation:** Standardize on Unix milliseconds (`number`) for API layer, convert to Timestamp only when writing to Firestore.
+**Recommendation:** Standardize on Unix milliseconds (`number`) for API layer, convert to Timestamp
+only when writing to Firestore.
 
 ### 🟢 MEDIUM-02: No Cascade Delete Logic
 
-**Location:** Organization/Venue delete endpoints
-**Issue:** Deleting org doesn't handle child venues/zones/memberships
+**Location:** Organization/Venue delete endpoints **Issue:** Deleting org doesn't handle child
+venues/zones/memberships
 
 **Recommendation:** See §5 for cascade delete pattern with transactions.
 
@@ -609,12 +623,14 @@ export const OrgRole = z.enum([
 
 ### ✅ Enforced Invariants
 
-1. **A09 Handler Signature Invariant** - All routes use SDK factory pattern (`createOrgEndpoint()` or `createAuthenticatedEndpoint()`)
+1. **A09 Handler Signature Invariant** - All routes use SDK factory pattern (`createOrgEndpoint()`
+   or `createAuthenticatedEndpoint()`)
 2. **Input Validation** - Zod schemas validate all request bodies before handler execution
 3. **Authentication Required** - `createOrgEndpoint()` blocks unauthenticated requests
 4. **Type Safety** - Typed wrappers (`getDocWithType`, `setDocWithType`) used consistently
 5. **RBAC Role Checks** - `roles: ["manager"]` enforced by SDK before handler runs
-6. **orgId Scoping** - All venue/zone queries include orgId (in theory - not in mock implementations)
+6. **orgId Scoping** - All venue/zone queries include orgId (in theory - not in mock
+   implementations)
 
 ### ⚠️ Missing Invariants
 
@@ -627,10 +643,9 @@ export const OrgRole = z.enum([
 
 ### Hierarchy Scoping Rules
 
-**Rule 1: Every resource MUST have orgId**
-**Rule 2: Firestore paths MUST include orgId for subcollections**
-**Rule 3: Queries MUST filter by orgId from context**
-**Rule 4: Membership determines org access**
+**Rule 1: Every resource MUST have orgId** **Rule 2: Firestore paths MUST include orgId for
+subcollections** **Rule 3: Queries MUST filter by orgId from context** **Rule 4: Membership
+determines org access**
 
 ## 5. Example Patterns
 
@@ -662,13 +677,14 @@ export const GET = createOrgEndpoint({
 
     return ok({
       venues: result.data,
-      total: result.data.length
+      total: result.data.length,
     });
   },
 });
 ```
 
 **Why Good:**
+
 - ✅ Uses context.org.orgId for automatic scoping
 - ✅ Type-safe query with `queryWithType<Venue>()`
 - ✅ Filters inactive venues
@@ -678,13 +694,14 @@ export const GET = createOrgEndpoint({
 
 ```typescript
 // ❌ Returns hardcoded mock data, no persistence
-const venues = [{ id: "venue-1", name: "Main Venue", /* ... */ }];
+const venues = [{ id: "venue-1", name: "Main Venue" /* ... */ }];
 return ok({ venues });
 ```
 
 ### ✅ Refactored Pattern: Complete Implementation
 
 See full code examples in sections above for:
+
 - Member addition with validation
 - Hierarchical zone queries
 - Network validation during org creation
@@ -703,18 +720,18 @@ See full code examples in sections above for:
 
 ## 7. Recommendations Summary
 
-| Priority | Action | Estimated Effort |
-|----------|--------|-----------------|
-| 🔴 P0 | Implement Firestore persistence for all org/venue/zone routes | 4-5 days |
-| 🔴 P0 | Enforce networkId relationships and validation | 2-3 days |
-| 🔴 P0 | Unify MembershipRole and OrgRole enums | 1 day |
-| 🟡 P1 | Add authorization checks for org/venue/zone operations | 2-3 days |
-| 🟡 P1 | Implement Corporate-Org link CRUD endpoints | 2 days |
-| 🟡 P1 | Add organization settings enforcement in business logic | 2-3 days |
-| 🟡 P1 | Implement cascade delete/soft delete for orgs | 2 days |
-| 🟢 P2 | Standardize timestamp formats across all schemas | 1-2 days |
-| 🟢 P2 | Add audit logging for hierarchy changes | 1 day |
-| 🟢 P2 | Document required Firestore composite indexes | 1 day |
+| Priority | Action                                                        | Estimated Effort |
+| -------- | ------------------------------------------------------------- | ---------------- |
+| 🔴 P0    | Implement Firestore persistence for all org/venue/zone routes | 4-5 days         |
+| 🔴 P0    | Enforce networkId relationships and validation                | 2-3 days         |
+| 🔴 P0    | Unify MembershipRole and OrgRole enums                        | 1 day            |
+| 🟡 P1    | Add authorization checks for org/venue/zone operations        | 2-3 days         |
+| 🟡 P1    | Implement Corporate-Org link CRUD endpoints                   | 2 days           |
+| 🟡 P1    | Add organization settings enforcement in business logic       | 2-3 days         |
+| 🟡 P1    | Implement cascade delete/soft delete for orgs                 | 2 days           |
+| 🟢 P2    | Standardize timestamp formats across all schemas              | 1-2 days         |
+| 🟢 P2    | Add audit logging for hierarchy changes                       | 1 day            |
+| 🟢 P2    | Document required Firestore composite indexes                 | 1 day            |
 
 **Total Estimated Effort:** ~22-32 days
 
@@ -735,6 +752,4 @@ See full code examples in sections above for:
 
 ---
 
-**Document Version:** 1.0
-**Author:** Claude (Automated Analysis)
-**Next Review Date:** 2025-12-24
+**Document Version:** 1.0 **Author:** Claude (Automated Analysis) **Next Review Date:** 2025-12-24

@@ -99,7 +99,7 @@ Trigger: Push event (or pull_request event)
 │ Artifacts available, PR commented                        │
 └──────────────────────────────────────────────────────────┘
 
-Files Created: 
+Files Created:
   - docs/architecture/repomix-ci.json (uploaded to artifacts)
   - docs/architecture/repomix-ci.md (uploaded to artifacts)
   - PR comment (if on pull_request event)
@@ -244,9 +244,9 @@ const reportPath = path.resolve(__dirname, "../docs/architecture/repomix-ci.md")
 const dashboardPath = path.resolve(__dirname, "../docs/architecture/repomix-dashboard.md");
 
 // This is the self-healing magic:
-const activePath = fs.existsSync(reportPath) 
-  ? reportPath      // ← If CI report exists, use it (most recent)
-  : dashboardPath;  // ← Otherwise fall back to dashboard
+const activePath = fs.existsSync(reportPath)
+  ? reportPath // ← If CI report exists, use it (most recent)
+  : dashboardPath; // ← Otherwise fall back to dashboard
 
 // If neither exists (edge case), fail with clear message
 if (!fs.existsSync(activePath)) {
@@ -318,29 +318,23 @@ MAXIMUM STALENESS: 28 hours
 
 The 9-point gap is intentional for these reasons:
 
-### Gap 1: CI Doesn't Update _index.md (Design Choice)
+### Gap 1: CI Doesn't Update \_index.md (Design Choice)
 
-**Reason:** Keep CI immutable (GitHub best practice)
-**Cost:** _index.md waits until nightly (~16-28 hours)
-**Benefit:** No accidental overwrites, clean CI state
-**Self-Healing:** Nightly dashboard heals it
-**Verdict:** ✅ Acceptable tradeoff
+**Reason:** Keep CI immutable (GitHub best practice) **Cost:** \_index.md waits until nightly
+(~16-28 hours) **Benefit:** No accidental overwrites, clean CI state **Self-Healing:** Nightly
+dashboard heals it **Verdict:** ✅ Acceptable tradeoff
 
-### Gap 2: No Real-Time _index.md for PR Review (Minor UX Issue)
+### Gap 2: No Real-Time \_index.md for PR Review (Minor UX Issue)
 
-**Issue:** Reviewers must download artifacts to see full report
-**Could Fix:** Add `pnpm docs:update` to CI (2-minute change)
-**Impact:** Would increase score to 95/100
-**Current Status:** System works without it (just less convenient)
-**Verdict:** ⚠️ Optional improvement
+**Issue:** Reviewers must download artifacts to see full report **Could Fix:** Add
+`pnpm docs:update` to CI (2-minute change) **Impact:** Would increase score to 95/100 **Current
+Status:** System works without it (just less convenient) **Verdict:** ⚠️ Optional improvement
 
 ### Gap 3: Metrics Collected Daily, Not Per-Push (Efficiency)
 
-**Design:** 1 metric per day (nightly) vs. per-push
-**Why:** Reduces redundant processing, sufficient for tracking
-**Result:** 365 data points/year (excellent for trends)
-**Self-Healing:** Always appends, never overwrites
-**Verdict:** ✅ Intentional, efficient design
+**Design:** 1 metric per day (nightly) vs. per-push **Why:** Reduces redundant processing,
+sufficient for tracking **Result:** 365 data points/year (excellent for trends) **Self-Healing:**
+Always appends, never overwrites **Verdict:** ✅ Intentional, efficient design
 
 ---
 

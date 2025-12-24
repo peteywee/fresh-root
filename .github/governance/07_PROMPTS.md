@@ -230,7 +230,7 @@ Target: {branch}
 
 Gates passed:
 - [ ] STATIC
-- [ ] CORRECTNESS  
+- [ ] CORRECTNESS
 - [ ] SAFETY
 
 Approvals: {count}

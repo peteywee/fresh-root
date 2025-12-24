@@ -101,9 +101,8 @@ error TS7006: Parameter 'x' implicitly has an 'any' type.
 [husky] Typecheck failed
 ```
 
-**Handling**: ✅ BLOCKS PUSH
-**Prevention**: ESLint + Prettier pre-commit
-**Bypass**: None (intentional - protects main branch)
+**Handling**: ✅ BLOCKS PUSH **Prevention**: ESLint + Prettier pre-commit **Bypass**: None
+(intentional - protects main branch)
 
 ---
 
@@ -117,9 +116,8 @@ error: Unexpected console statement (no-console)
 [husky] Lint failed
 ```
 
-**Handling**: ✅ BLOCKS PUSH
-**Prevention**: ESLint rule enforcement
-**Bypass**: None (intentional - protects code quality)
+**Handling**: ✅ BLOCKS PUSH **Prevention**: ESLint rule enforcement **Bypass**: None (intentional -
+protects code quality)
 
 ---
 
@@ -132,9 +130,8 @@ $ git push origin feature
 FATAL ERROR: CALL_AND_RETRY_LAST Allocation failed
 ```
 
-**Handling**: ✅ SKIPPABLE (SKIP_LINT=1)
-**Prevention**: Local skip flag for development
-**Bypass**: Set `SKIP_LINT=1` environment variable
+**Handling**: ✅ SKIPPABLE (SKIP_LINT=1) **Prevention**: Local skip flag for development **Bypass**:
+Set `SKIP_LINT=1` environment variable
 
 ---
 
@@ -142,8 +139,7 @@ FATAL ERROR: CALL_AND_RETRY_LAST Allocation failed
 
 **Detection**: Repomix fails to generate JSON/Markdown
 
-**Handling**: ✅ CONTINUES (non-critical)
-**Prevention**: Separate critical/non-critical steps in CI
+**Handling**: ✅ CONTINUES (non-critical) **Prevention**: Separate critical/non-critical steps in CI
 **Logging**: Full error logged, workflow continues
 
 ---
@@ -152,9 +148,8 @@ FATAL ERROR: CALL_AND_RETRY_LAST Allocation failed
 
 **Detection**: GitHub API rate limit or permission issue
 
-**Handling**: ✅ CONTINUES (non-critical)
-**Prevention**: Separate PR comment action from critical path
-**Fallback**: Artifacts still available for manual review
+**Handling**: ✅ CONTINUES (non-critical) **Prevention**: Separate PR comment action from critical
+path **Fallback**: Artifacts still available for manual review
 
 ---
 
@@ -162,8 +157,7 @@ FATAL ERROR: CALL_AND_RETRY_LAST Allocation failed
 
 **Detection**: Multiple versions of same document
 
-**Handling**: ✅ AUTO-CLEANED
-**Prevention**: docs-auto-update script runs on schedule
+**Handling**: ✅ AUTO-CLEANED **Prevention**: docs-auto-update script runs on schedule
 **Operation**: Keep only latest, delete old versions
 
 ---
@@ -371,7 +365,7 @@ git push origin feature/repomix-automation-final
 ```
 Watch GitHub Actions > Repomix CI Analysis
 ✓ Typecheck
-✓ Lint  
+✓ Lint
 ✓ Generate reports
 ✓ Upload artifacts
 ✓ Comment PR

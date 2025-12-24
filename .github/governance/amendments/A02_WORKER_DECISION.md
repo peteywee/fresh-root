@@ -35,15 +35,15 @@ graph TD
 
 ## Routing Rules
 
-| Condition | Route To | Authority Level |
-|-----------|----------|-----------------|
-| Auth bypass risk | Security Red Team | **VETO** (can block) |
-| Data leakage | Security Red Team | **VETO** |
-| Type system design | Systems Architect | High |
-| Multi-file changes | Implementation Engineer | Medium |
-| Pattern verification | Research Analyst | Medium |
-| Test generation | QA Engineer | Medium |
-| Single file edit | Orchestrator (direct) | Low |
+| Condition            | Route To                | Authority Level      |
+| -------------------- | ----------------------- | -------------------- |
+| Auth bypass risk     | Security Red Team       | **VETO** (can block) |
+| Data leakage         | Security Red Team       | **VETO**             |
+| Type system design   | Systems Architect       | High                 |
+| Multi-file changes   | Implementation Engineer | Medium               |
+| Pattern verification | Research Analyst        | Medium               |
+| Test generation      | QA Engineer             | Medium               |
+| Single file edit     | Orchestrator (direct)   | Low                  |
 
 ## Hierarchical Team Structure
 

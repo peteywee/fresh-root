@@ -1,13 +1,13 @@
 # L2 — Staff Management
 
-> **Status:** ✅ Documented from actual codebase analysis
-> **Last Updated:** 2025-12-17
-> **Analyzed Routes:** 12 endpoints, ~800 LOC
-> **Related Collections:** users, memberships, positions, attendance_records, shifts
+> **Status:** ✅ Documented from actual codebase analysis **Last Updated:** 2025-12-17 **Analyzed
+> Routes:** 12 endpoints, ~800 LOC **Related Collections:** users, memberships, positions,
+> attendance_records, shifts
 
 ## 1. Role in the System
 
-The Staff Management subsystem handles user profiles, organization membership, position assignments, and staff-related operations within the Fresh Schedules platform. It provides:
+The Staff Management subsystem handles user profiles, organization membership, position assignments,
+and staff-related operations within the Fresh Schedules platform. It provides:
 
 1. **User Profile Management** - Basic identity and onboarding state tracking
 2. **Organization Membership** - Role-based access control within organizations
@@ -23,35 +23,36 @@ All routes use the `@fresh-schedules/api-framework` SDK with typed validation an
 
 #### User Profile & Membership Endpoints
 
-| Endpoint | Method | Purpose | Auth | Validation |
-|----------|--------|---------|------|------------|
-| `/api/onboarding/profile` | POST | Complete user profile setup | ✅ Required | `OnboardingProfileSchema` |
-| `/api/organizations/[id]/members` | GET | List organization members | ✅ Required (org) | None |
-| `/api/organizations/[id]/members` | POST | Add member to organization | ✅ Required (admin) | `AddMemberSchema` |
-| `/api/organizations/[id]/members` | PATCH | Update member role | ✅ Required (admin) | `UpdateMemberSchema` |
-| `/api/organizations/[id]/members` | DELETE | Remove member | ✅ Required (admin) | `RemoveMemberSchema` |
-| `/api/organizations/[id]/members/[memberId]` | GET | Get member details | ✅ Required (org) | None |
-| `/api/organizations/[id]/members/[memberId]` | PATCH | Update specific member | ✅ Required (admin) | `UpdateMemberApiSchema` |
-| `/api/organizations/[id]/members/[memberId]` | DELETE | Remove specific member | ✅ Required (admin) | None |
+| Endpoint                                     | Method | Purpose                     | Auth                | Validation                |
+| -------------------------------------------- | ------ | --------------------------- | ------------------- | ------------------------- |
+| `/api/onboarding/profile`                    | POST   | Complete user profile setup | ✅ Required         | `OnboardingProfileSchema` |
+| `/api/organizations/[id]/members`            | GET    | List organization members   | ✅ Required (org)   | None                      |
+| `/api/organizations/[id]/members`            | POST   | Add member to organization  | ✅ Required (admin) | `AddMemberSchema`         |
+| `/api/organizations/[id]/members`            | PATCH  | Update member role          | ✅ Required (admin) | `UpdateMemberSchema`      |
+| `/api/organizations/[id]/members`            | DELETE | Remove member               | ✅ Required (admin) | `RemoveMemberSchema`      |
+| `/api/organizations/[id]/members/[memberId]` | GET    | Get member details          | ✅ Required (org)   | None                      |
+| `/api/organizations/[id]/members/[memberId]` | PATCH  | Update specific member      | ✅ Required (admin) | `UpdateMemberApiSchema`   |
+| `/api/organizations/[id]/members/[memberId]` | DELETE | Remove specific member      | ✅ Required (admin) | None                      |
 
 #### Position Management Endpoints
 
-| Endpoint | Method | Purpose | Auth | Validation |
-|----------|--------|---------|------|------------|
-| `/api/positions` | GET | List positions for org | ✅ Required (org) | Query params |
-| `/api/positions` | POST | Create new position | ✅ Required (manager+) | `CreatePositionSchema` |
-| `/api/positions/[id]` | GET | Get position details | ✅ Required (staff+) | None |
-| `/api/positions/[id]` | PATCH | Update position | ✅ Required (manager+) | `UpdatePositionSchema` |
-| `/api/positions/[id]` | DELETE | Delete position (soft) | ✅ Required (admin+) | None |
+| Endpoint              | Method | Purpose                | Auth                   | Validation             |
+| --------------------- | ------ | ---------------------- | ---------------------- | ---------------------- |
+| `/api/positions`      | GET    | List positions for org | ✅ Required (org)      | Query params           |
+| `/api/positions`      | POST   | Create new position    | ✅ Required (manager+) | `CreatePositionSchema` |
+| `/api/positions/[id]` | GET    | Get position details   | ✅ Required (staff+)   | None                   |
+| `/api/positions/[id]` | PATCH  | Update position        | ✅ Required (manager+) | `UpdatePositionSchema` |
+| `/api/positions/[id]` | DELETE | Delete position (soft) | ✅ Required (admin+)   | None                   |
 
 #### Attendance & Shift Endpoints
 
-| Endpoint | Method | Purpose | Auth | Validation |
-|----------|--------|---------|------|------------|
-| `/api/attendance` | GET | List attendance records | ✅ Required | Query params |
-| `/api/attendance` | POST | Create attendance record | ✅ Required (scheduler+) | `CreateAttendanceRecordSchema` |
+| Endpoint          | Method | Purpose                  | Auth                     | Validation                     |
+| ----------------- | ------ | ------------------------ | ------------------------ | ------------------------------ |
+| `/api/attendance` | GET    | List attendance records  | ✅ Required              | Query params                   |
+| `/api/attendance` | POST   | Create attendance record | ✅ Required (scheduler+) | `CreateAttendanceRecordSchema` |
 
-**All endpoints** use SDK factory patterns (`createOrgEndpoint`, `createAuthenticatedEndpoint`) - **A09 Handler Signature Invariant** is enforced.
+**All endpoints** use SDK factory patterns (`createOrgEndpoint`, `createAuthenticatedEndpoint`) -
+**A09 Handler Signature Invariant** is enforced.
 
 ### 2.2 Data Models & Types
 
@@ -95,20 +96,9 @@ export interface UserProfileDoc {
 From `packages/types/src/memberships.ts`:
 
 ```typescript
-export const MembershipRole = z.enum([
-  "org_owner",
-  "admin",
-  "manager",
-  "scheduler",
-  "staff"
-]);
+export const MembershipRole = z.enum(["org_owner", "admin", "manager", "scheduler", "staff"]);
 
-export const MembershipStatus = z.enum([
-  "active",
-  "suspended",
-  "invited",
-  "removed"
-]);
+export const MembershipStatus = z.enum(["active", "suspended", "invited", "removed"]);
 
 export interface Membership {
   uid: string;
@@ -135,19 +125,9 @@ export interface Membership {
 From `packages/types/src/positions.ts`:
 
 ```typescript
-export const PositionType = z.enum([
-  "full_time",
-  "part_time",
-  "contractor",
-  "volunteer"
-]);
+export const PositionType = z.enum(["full_time", "part_time", "contractor", "volunteer"]);
 
-export const SkillLevel = z.enum([
-  "entry",
-  "intermediate",
-  "advanced",
-  "expert"
-]);
+export const SkillLevel = z.enum(["entry", "intermediate", "advanced", "expert"]);
 
 export interface Position {
   id: string;
@@ -185,16 +165,10 @@ export const AttendanceStatus = z.enum([
   "checked_out",
   "no_show",
   "excused_absence",
-  "late"
+  "late",
 ]);
 
-export const CheckMethod = z.enum([
-  "manual",
-  "qr_code",
-  "nfc",
-  "geofence",
-  "admin_override"
-]);
+export const CheckMethod = z.enum(["manual", "qr_code", "nfc", "geofence", "admin_override"]);
 
 export interface AttendanceRecord {
   id: string;
@@ -251,7 +225,7 @@ export const AssignmentStatus = z.enum([
   "assigned",
   "confirmed",
   "declined",
-  "no_show"
+  "no_show",
 ]);
 
 export interface ShiftAssignment {
@@ -361,8 +335,8 @@ All routes receive:
 
 ### 🔴 CRITICAL-01: No Firestore Persistence in Member Operations
 
-**Location:** `/api/organizations/[id]/members/*`
-**Issue:** Member endpoints return mock data without Firestore operations
+**Location:** `/api/organizations/[id]/members/*` **Issue:** Member endpoints return mock data
+without Firestore operations
 
 **Example from members route:**
 
@@ -404,7 +378,7 @@ export const GET = createOrgEndpoint({
       .where("status", "==", "active")
       .get();
 
-    const members = snapshot.docs.map(doc => doc.data());
+    const members = snapshot.docs.map((doc) => doc.data());
     return ok({ members, total: members.length });
   },
 });
@@ -412,8 +386,8 @@ export const GET = createOrgEndpoint({
 
 ### 🔴 CRITICAL-02: Position Operations Missing Firestore Integration
 
-**Location:** `/api/positions/*`
-**Issue:** Position CRUD endpoints return mock data without persistence
+**Location:** `/api/positions/*` **Issue:** Position CRUD endpoints return mock data without
+persistence
 
 **Example from positions route:**
 
@@ -447,8 +421,8 @@ export const GET = createOrgEndpoint({
 
 ### 🔴 CRITICAL-03: Missing User Profile Extended Data
 
-**Location:** `apps/web/src/lib/userProfile.ts`
-**Issue:** User profile only stores basic identity, no staff-specific data
+**Location:** `apps/web/src/lib/userProfile.ts` **Issue:** User profile only stores basic identity,
+no staff-specific data
 
 **Current schema:**
 
@@ -518,8 +492,8 @@ profile: {
 
 ### 🟡 HIGH-01: No Composite Queries for Shift Assignment
 
-**Location:** Shift assignment logic (theoretical)
-**Issue:** Cannot efficiently query staff by position skills, availability, and qualifications
+**Location:** Shift assignment logic (theoretical) **Issue:** Cannot efficiently query staff by
+position skills, availability, and qualifications
 
 **Missing capabilities:**
 
@@ -550,8 +524,8 @@ interface StaffAssignmentIndex {
 
 ### 🟡 HIGH-02: Attendance Check-In Has No Validation
 
-**Location:** `/api/attendance` POST endpoint
-**Issue:** No validation of check-in location, time, or duplicate prevention
+**Location:** `/api/attendance` POST endpoint **Issue:** No validation of check-in location, time,
+or duplicate prevention
 
 **Example vulnerable code:**
 
@@ -617,8 +591,8 @@ async function validateCheckIn(input: CheckInInput, shift: Shift): Promise<Valid
 
 ### 🟡 HIGH-03: No Staff Directory / Roster View
 
-**Location:** Missing endpoint entirely
-**Issue:** No way to list all staff across organization with profiles
+**Location:** Missing endpoint entirely **Issue:** No way to list all staff across organization with
+profiles
 
 **Missing functionality:**
 
@@ -638,8 +612,8 @@ async function validateCheckIn(input: CheckInInput, shift: Shift): Promise<Valid
 
 ### 🟢 MEDIUM-01: Position Required Certifications Unstructured
 
-**Location:** `packages/types/src/positions.ts`
-**Issue:** `requiredCertifications: string[]` is free-text, not structured data
+**Location:** `packages/types/src/positions.ts` **Issue:** `requiredCertifications: string[]` is
+free-text, not structured data
 
 **Current schema:**
 
@@ -686,8 +660,8 @@ interface StaffCertification {
 
 ### 🟢 MEDIUM-02: No Bulk Operations for Staff Management
 
-**Location:** All member/staff endpoints
-**Issue:** No batch endpoints for bulk invites, role updates, or removals
+**Location:** All member/staff endpoints **Issue:** No batch endpoints for bulk invites, role
+updates, or removals
 
 **Missing:**
 
@@ -715,7 +689,8 @@ export const POST = createOrgEndpoint({
     const results = [];
 
     for (const member of members) {
-      const membershipRef = adminDb.collection("memberships")
+      const membershipRef = adminDb
+        .collection("memberships")
         .doc(`${member.uid}_${context.org!.orgId}`);
 
       batch.set(membershipRef, {
@@ -742,7 +717,8 @@ export const POST = createOrgEndpoint({
 
 1. **A09 Handler Signature Invariant** - All routes use SDK factory pattern
 2. **Input Validation** - Zod schemas validate all request bodies before handler execution
-3. **Authentication Required** - All endpoints use `createAuthenticatedEndpoint()` or `createOrgEndpoint()`
+3. **Authentication Required** - All endpoints use `createAuthenticatedEndpoint()` or
+   `createOrgEndpoint()`
 4. **Type Safety** - Typed wrappers (`getDocWithType`, `setDocWithType`) for Firestore operations
 5. **Org Scoping** - `createOrgEndpoint()` automatically validates user belongs to requested org
 6. **Role-Based Access** - `roles: ["admin"]` enforces permission checks
@@ -844,7 +820,7 @@ export async function ensureUserProfile(args: {
       },
       updatedAt: now,
     },
-    { merge: true }
+    { merge: true },
   );
 }
 ```
@@ -874,7 +850,7 @@ export const PATCH = createOrgEndpoint({
       });
       return NextResponse.json(
         { error: { code: "FORBIDDEN", message: "Access denied" } },
-        { status: 403 }
+        { status: 403 },
       );
     }
 
@@ -929,7 +905,7 @@ export const GET = createOrgEndpoint({
       .orderBy("joinedAt", "desc")
       .get();
 
-    const members = snapshot.docs.map(doc => ({
+    const members = snapshot.docs.map((doc) => ({
       id: doc.id,
       ...doc.data(),
     }));
@@ -999,16 +975,14 @@ export const GET = createOrgEndpoint({
     const orgId = context.org!.orgId;
 
     // 1. Get all memberships for this org
-    let membershipsQuery = adminDb
-      .collection("memberships")
-      .where("orgId", "==", orgId);
+    let membershipsQuery = adminDb.collection("memberships").where("orgId", "==", orgId);
 
     if (query.status !== "all") {
       membershipsQuery = membershipsQuery.where("status", "==", query.status);
     }
 
     const membershipsSnap = await membershipsQuery.get();
-    const uids = membershipsSnap.docs.map(doc => doc.data().uid);
+    const uids = membershipsSnap.docs.map((doc) => doc.data().uid);
 
     if (uids.length === 0) {
       return ok({ staff: [], total: 0 });
@@ -1017,27 +991,28 @@ export const GET = createOrgEndpoint({
     // 2. Fetch user profiles for all members
     const usersRef = adminDb.collection("users");
     const userProfiles = await Promise.all(
-      uids.map(uid => getDocWithType<UserProfileDoc>(adminDb, usersRef.doc(uid)))
+      uids.map((uid) => getDocWithType<UserProfileDoc>(adminDb, usersRef.doc(uid))),
     );
 
     // 3. Filter by position qualification (if specified)
     let staff = userProfiles
-      .filter(profile => profile !== null)
-      .map(profile => ({
+      .filter((profile) => profile !== null)
+      .map((profile) => ({
         uid: profile!.id,
         email: profile!.profile.email,
         displayName: profile!.profile.displayName,
         avatarUrl: profile!.profile.avatarUrl,
-        roles: membershipsSnap.docs.find(d => d.data().uid === profile!.id)?.data().roles,
+        roles: membershipsSnap.docs.find((d) => d.data().uid === profile!.id)?.data().roles,
         // Additional staff fields would go here
       }));
 
     // 4. Apply search filter
     if (query.search) {
       const searchLower = query.search.toLowerCase();
-      staff = staff.filter(s =>
-        s.displayName?.toLowerCase().includes(searchLower) ||
-        s.email?.toLowerCase().includes(searchLower)
+      staff = staff.filter(
+        (s) =>
+          s.displayName?.toLowerCase().includes(searchLower) ||
+          s.email?.toLowerCase().includes(searchLower),
       );
     }
 
@@ -1060,8 +1035,7 @@ export const GET_DETAIL = createOrgEndpoint({
     const orgId = context.org!.orgId;
 
     // 1. Verify staff belongs to this org
-    const membershipRef = adminDb.collection("memberships")
-      .doc(`${uid}_${orgId}`);
+    const membershipRef = adminDb.collection("memberships").doc(`${uid}_${orgId}`);
     const membershipSnap = await membershipRef.get();
 
     if (!membershipSnap.exists) {
@@ -1132,9 +1106,7 @@ export const POST = createOrgEndpoint({
     const orgId = context.org!.orgId;
 
     // 1. Get shift details
-    const shiftRef = adminDb
-      .collection(`organizations/${orgId}/shifts`)
-      .doc(shiftId);
+    const shiftRef = adminDb.collection(`organizations/${orgId}/shifts`).doc(shiftId);
     const shiftSnap = await shiftRef.get();
 
     if (!shiftSnap.exists) {
@@ -1144,9 +1116,7 @@ export const POST = createOrgEndpoint({
     const shift = shiftSnap.data() as Shift;
 
     // 2. Verify staff is active member of org
-    const membershipRef = adminDb
-      .collection("memberships")
-      .doc(`${staffUid}_${orgId}`);
+    const membershipRef = adminDb.collection("memberships").doc(`${staffUid}_${orgId}`);
     const membershipSnap = await membershipRef.get();
 
     if (!membershipSnap.exists) {
@@ -1159,9 +1129,7 @@ export const POST = createOrgEndpoint({
     }
 
     // 3. Get position to check requirements
-    const positionRef = adminDb
-      .collection(`positions/${orgId}`)
-      .doc(shift.positionId);
+    const positionRef = adminDb.collection(`positions/${orgId}`).doc(shift.positionId);
     const positionSnap = await positionRef.get();
 
     if (!positionSnap.exists) {
@@ -1174,7 +1142,7 @@ export const POST = createOrgEndpoint({
     if (position.requiredCertificationIds?.length > 0) {
       const staffProfile = await getDocWithType<UserProfileDoc>(
         adminDb,
-        adminDb.collection("users").doc(staffUid)
+        adminDb.collection("users").doc(staffUid),
       );
 
       if (!staffProfile) {
@@ -1182,14 +1150,14 @@ export const POST = createOrgEndpoint({
       }
 
       // Check if staff has all required certifications
-      const staffCertIds = staffProfile.profile.certifications?.map(c => c.certificationId) || [];
+      const staffCertIds = staffProfile.profile.certifications?.map((c) => c.certificationId) || [];
       const missingCerts = position.requiredCertificationIds.filter(
-        id => !staffCertIds.includes(id)
+        (id) => !staffCertIds.includes(id),
       );
 
       if (missingCerts.length > 0) {
         return badRequest(
-          `Staff member is missing required certifications: ${missingCerts.join(", ")}`
+          `Staff member is missing required certifications: ${missingCerts.join(", ")}`,
         );
       }
     }
@@ -1221,9 +1189,7 @@ export const POST = createOrgEndpoint({
     });
 
     // 7. Create attendance record
-    const attendanceRef = adminDb
-      .collection(`attendance_records/${orgId}`)
-      .doc();
+    const attendanceRef = adminDb.collection(`attendance_records/${orgId}`).doc();
 
     await attendanceRef.set({
       id: attendanceRef.id,
@@ -1312,20 +1278,20 @@ export const POST = createOrgEndpoint({
 
 ## 7. Recommendations Summary
 
-| Priority | Action | Estimated Effort |
-|----------|--------|-----------------|
-| 🔴 P0 | Add Firestore persistence to member operations | 3-4 days |
-| 🔴 P0 | Add Firestore persistence to position operations | 2-3 days |
-| 🔴 P0 | Extend user profile with staff-specific fields | 2-3 days |
-| 🟡 P1 | Implement staff directory endpoint (`/api/staff`) | 2-3 days |
-| 🟡 P1 | Add attendance check-in validation (geofence, time, duplicates) | 2-3 days |
-| 🟡 P1 | Create staff assignment index for efficient queries | 3-4 days |
-| 🟢 P2 | Implement structured certification system | 3-4 days |
-| 🟢 P2 | Add bulk member operations endpoints | 1-2 days |
-| 🟢 P2 | Add staff qualifications/certifications endpoints | 2-3 days |
-| 🟢 P2 | Implement availability preferences system | 4-5 days |
-| 🟢 P3 | Add staff performance tracking | 3-4 days |
-| 🟢 P3 | Implement comprehensive audit logging | 2-3 days |
+| Priority | Action                                                          | Estimated Effort |
+| -------- | --------------------------------------------------------------- | ---------------- |
+| 🔴 P0    | Add Firestore persistence to member operations                  | 3-4 days         |
+| 🔴 P0    | Add Firestore persistence to position operations                | 2-3 days         |
+| 🔴 P0    | Extend user profile with staff-specific fields                  | 2-3 days         |
+| 🟡 P1    | Implement staff directory endpoint (`/api/staff`)               | 2-3 days         |
+| 🟡 P1    | Add attendance check-in validation (geofence, time, duplicates) | 2-3 days         |
+| 🟡 P1    | Create staff assignment index for efficient queries             | 3-4 days         |
+| 🟢 P2    | Implement structured certification system                       | 3-4 days         |
+| 🟢 P2    | Add bulk member operations endpoints                            | 1-2 days         |
+| 🟢 P2    | Add staff qualifications/certifications endpoints               | 2-3 days         |
+| 🟢 P2    | Implement availability preferences system                       | 4-5 days         |
+| 🟢 P3    | Add staff performance tracking                                  | 3-4 days         |
+| 🟢 P3    | Implement comprehensive audit logging                           | 2-3 days         |
 
 **Total Estimated Effort:** ~30-40 days
 

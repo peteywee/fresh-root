@@ -5,8 +5,9 @@ applyTo: "**/api/**/route.ts,packages/api-framework/**/*.ts"
 ---
 
 ---
-priority: 1
-applyTo: "**/api/**/route.ts,packages/api-framework/**/*.ts"
+
+priority: 1 applyTo: "**/api/**/route.ts,packages/api-framework/\*_/_.ts"
+
 ---
 
 # API Framework Memory
@@ -55,11 +56,14 @@ export const POST = createOrgEndpoint({
 
 ## Handler Parameter Naming Convention
 
-**Pattern**: SDK factory passes `{ request, input, context, params, item, index }` depending on endpoint type.
+**Pattern**: SDK factory passes `{ request, input, context, params, item, index }` depending on
+endpoint type.
 
-**Common mistake**: Prefixing with underscores (`_request`, `_context`, `_params`) when parameter isn't used.
+**Common mistake**: Prefixing with underscores (`_request`, `_context`, `_params`) when parameter
+isn't used.
 
-**Why this causes issues**: TypeScript compiler rejects unused parameters without underscore prefix, but SDK factory validation doesn't recognize underscore-prefixed names as valid parameter names.
+**Why this causes issues**: TypeScript compiler rejects unused parameters without underscore prefix,
+but SDK factory validation doesn't recognize underscore-prefixed names as valid parameter names.
 
 **Correct pattern**:
 
@@ -88,6 +92,7 @@ export const GET = createPublicEndpoint({
 ```
 
 **Migration**: Use `sed` for bulk fixes across routes:
+
 ```bash
 # Remove all underscore-prefixed params in handlers
 find app/api -name "route.ts" -exec sed -i 's/_request/request/g; s/_context/context/g; s/_params/params/g; s/_index/index/g; s/_input/input/g' {} \;

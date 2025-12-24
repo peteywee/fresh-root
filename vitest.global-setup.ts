@@ -12,7 +12,7 @@ import http from "node:http";
 if (typeof process.listeners !== "function") {
   // Vitest expects process.listeners(event) to be callable when wiring error hooks.
   // Some polyfills/envs can replace it; we guard to keep the test runner stable.
-   
+
   (process as any).listeners = ((_event: string) => []) as any;
 }
 

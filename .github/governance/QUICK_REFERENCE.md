@@ -6,49 +6,49 @@
 
 ## Task Classification
 
-| If ANY of these → | Classification |
-|-------------------|----------------|
-| >1 file | **NON-TRIVIAL** |
+| If ANY of these →                                 | Classification  |
+| ------------------------------------------------- | --------------- |
+| >1 file                                           | **NON-TRIVIAL** |
 | Domain logic (Org, Venue, Schedule, Shift, Staff) | **NON-TRIVIAL** |
-| Auth/security paths | **NON-TRIVIAL** |
-| Schema/query changes | **NON-TRIVIAL** |
-| Data migration | **NON-TRIVIAL** |
-| Uncertain? | **NON-TRIVIAL** |
+| Auth/security paths                               | **NON-TRIVIAL** |
+| Schema/query changes                              | **NON-TRIVIAL** |
+| Data migration                                    | **NON-TRIVIAL** |
+| Uncertain?                                        | **NON-TRIVIAL** |
 
-| If ALL of these → | Classification |
-|-------------------|----------------|
-| ≤1 file | TRIVIAL |
-| UI/copy only | TRIVIAL |
-| Cosmetic risk only | TRIVIAL |
-| Existing test coverage | TRIVIAL |
+| If ALL of these →      | Classification |
+| ---------------------- | -------------- |
+| ≤1 file                | TRIVIAL        |
+| UI/copy only           | TRIVIAL        |
+| Cosmetic risk only     | TRIVIAL        |
+| Existing test coverage | TRIVIAL        |
 
 ---
 
 ## Pipeline Selection
 
-| Scenario | Pipeline |
-|----------|----------|
-| New feature, single file | `Feature.FAST` |
-| New feature, multiple files | `Feature.STANDARD` |
-| New feature, security relevant | `Feature.HEAVY` |
-| Bug fix, obvious | `Bug.FAST` |
-| Bug fix, domain logic | `Bug.STANDARD` |
-| Schema change | `Schema.STANDARD` |
-| Refactor, isolated | `Refactor.FAST` |
-| Refactor, cross-module | `Refactor.HEAVY` |
-| Security fix | `Security.STANDARD` |
+| Scenario                       | Pipeline            |
+| ------------------------------ | ------------------- |
+| New feature, single file       | `Feature.FAST`      |
+| New feature, multiple files    | `Feature.STANDARD`  |
+| New feature, security relevant | `Feature.HEAVY`     |
+| Bug fix, obvious               | `Bug.FAST`          |
+| Bug fix, domain logic          | `Bug.STANDARD`      |
+| Schema change                  | `Schema.STANDARD`   |
+| Refactor, isolated             | `Refactor.FAST`     |
+| Refactor, cross-module         | `Refactor.HEAVY`    |
+| Security fix                   | `Security.STANDARD` |
 
 ---
 
 ## Gate Classes
 
-| Gate | Commands | Blocking |
-|------|----------|----------|
-| **STATIC** | `pnpm lint:check && pnpm format:check && pnpm typecheck` | ✅ YES |
-| **CORRECTNESS** | `pnpm test:unit && pnpm test:e2e && pnpm test:rules` | ✅ YES |
-| **SAFETY** | `pnpm validate:patterns && pnpm validate:secrets` | ✅ YES |
-| **PERF** | `pnpm analyze:bundle` | ⚠️ Conditional |
-| **AI** | `pnpm validate:ai-context` | ℹ️ Advisory |
+| Gate            | Commands                                                 | Blocking       |
+| --------------- | -------------------------------------------------------- | -------------- |
+| **STATIC**      | `pnpm lint:check && pnpm format:check && pnpm typecheck` | ✅ YES         |
+| **CORRECTNESS** | `pnpm test:unit && pnpm test:e2e && pnpm test:rules`     | ✅ YES         |
+| **SAFETY**      | `pnpm validate:patterns && pnpm validate:secrets`        | ✅ YES         |
+| **PERF**        | `pnpm analyze:bundle`                                    | ⚠️ Conditional |
+| **AI**          | `pnpm validate:ai-context`                               | ℹ️ Advisory    |
 
 ---
 
@@ -63,27 +63,27 @@
 
 ### Agent Decision Outputs
 
-| Agent | Outputs |
-|-------|---------|
-| **Architect** | Schema + API skeleton + Rules + Diagram |
-| **Refactor** | Unified diff + Before/after |
-| **Guard** | PASS / BLOCK / NEEDS_CHANGES + Violations |
-| **Auditor** | Full report + Score + Recommendations |
+| Agent         | Outputs                                   |
+| ------------- | ----------------------------------------- |
+| **Architect** | Schema + API skeleton + Rules + Diagram   |
+| **Refactor**  | Unified diff + Before/after               |
+| **Guard**     | PASS / BLOCK / NEEDS_CHANGES + Violations |
+| **Auditor**   | Full report + Score + Recommendations     |
 
 ---
 
 ## Pattern IDs
 
-| ID | Layer | Description | Severity |
-|----|-------|-------------|----------|
-| `API_001` | API | createOrgEndpoint required | ERROR |
-| `API_002` | API | Zod validation required | ERROR |
-| `API_003` | API | Standardized error responses | ERROR |
-| `UI_001` | UI | "use client" for hooks | ERROR |
-| `UI_002` | UI | Typed props interface | WARNING |
-| `SEC_001` | Rules | sameOrg() check required | ERROR |
-| `SEC_002` | Rules | list: false by default | ERROR |
-| `SEC_003` | Rules | RBAC on writes | ERROR |
+| ID        | Layer | Description                  | Severity |
+| --------- | ----- | ---------------------------- | -------- |
+| `API_001` | API   | createOrgEndpoint required   | ERROR    |
+| `API_002` | API   | Zod validation required      | ERROR    |
+| `API_003` | API   | Standardized error responses | ERROR    |
+| `UI_001`  | UI    | "use client" for hooks       | ERROR    |
+| `UI_002`  | UI    | Typed props interface        | WARNING  |
+| `SEC_001` | Rules | sameOrg() check required     | ERROR    |
+| `SEC_002` | Rules | list: false by default       | ERROR    |
+| `SEC_003` | Rules | RBAC on writes               | ERROR    |
 
 ---
 
@@ -191,12 +191,12 @@ next_steps:
 
 ## Emergency Contacts
 
-| Situation | Action |
-|-----------|--------|
-| Production down | `hotfix/*` branch → direct to `main` |
+| Situation       | Action                                 |
+| --------------- | -------------------------------------- |
+| Production down | `hotfix/*` branch → direct to `main`   |
 | Security breach | Alert team → `Security.HEAVY` pipeline |
 | Data corruption | Freeze writes → investigate → rollback |
 
 ---
 
-*Fresh Schedules Protocol v2.0 | December 2025*
+_Fresh Schedules Protocol v2.0 | December 2025_

@@ -39,12 +39,16 @@ tests/unit/edge-cases/
 ## Design Principles (10-Year Maintainability)
 
 ### 1. Pure Functions Only
-All generators are pure functions with no side effects. They take input and return output deterministically.
+
+All generators are pure functions with no side effects. They take input and return output
+deterministically.
 
 ```typescript
 // ✅ Good - Pure function
 function numericEdgeCases(): LabeledValue<number>[] {
-  return [/* ... */];
+  return [
+    /* ... */
+  ];
 }
 
 // ❌ Bad - Side effects
@@ -54,43 +58,46 @@ function numericEdgeCases(): void {
 ```
 
 ### 2. Labeled Values
+
 Every test value has metadata for debugging and filtering:
 
 ```typescript
 interface LabeledValue<T> {
-  label: string;        // Human-readable description
-  value: T;             // The actual test value
+  label: string; // Human-readable description
+  value: T; // The actual test value
   shouldReject: boolean; // Expected behavior
-  category: string;      // For filtering
-  severity: string;      // Security priority
+  category: string; // For filtering
+  severity: string; // Security priority
 }
 ```
 
 ### 3. Category-Based Organization
+
 Edge cases are organized by category for easy filtering:
 
-| Category | Description | Example |
-|----------|-------------|---------|
-| `overflow` | Values too large | `Number.MAX_SAFE_INTEGER + 1` |
-| `underflow` | Values too small | `Number.MIN_SAFE_INTEGER - 1` |
-| `unicode` | Non-ASCII characters | `"💀🔥"`, `"مرحبا"` |
-| `injection` | Security attacks | `"'; DROP TABLE--"` |
-| `null` | Null/undefined values | `null`, `undefined` |
-| `empty` | Empty values | `""`, `[]`, `{}` |
-| `boundary` | Edge of valid range | `255` chars, `0`, `-1` |
-| `type-coercion` | Type confusion | `"123"`, `[1]` |
-| `nested` | Deep/wide objects | 100 levels deep |
-| `array` | Array size extremes | 10000 items |
+| Category        | Description           | Example                       |
+| --------------- | --------------------- | ----------------------------- |
+| `overflow`      | Values too large      | `Number.MAX_SAFE_INTEGER + 1` |
+| `underflow`     | Values too small      | `Number.MIN_SAFE_INTEGER - 1` |
+| `unicode`       | Non-ASCII characters  | `"💀🔥"`, `"مرحبا"`           |
+| `injection`     | Security attacks      | `"'; DROP TABLE--"`           |
+| `null`          | Null/undefined values | `null`, `undefined`           |
+| `empty`         | Empty values          | `""`, `[]`, `{}`              |
+| `boundary`      | Edge of valid range   | `255` chars, `0`, `-1`        |
+| `type-coercion` | Type confusion        | `"123"`, `[1]`                |
+| `nested`        | Deep/wide objects     | 100 levels deep               |
+| `array`         | Array size extremes   | 10000 items                   |
 
 ### 4. Severity-Based Prioritization
+
 Security cases are prioritized by severity:
 
-| Severity | Description | Action |
-|----------|-------------|--------|
-| `critical` | Security vulnerability | Must reject |
-| `high` | Potential attack vector | Should reject |
-| `medium` | Suspicious input | Consider rejecting |
-| `low` | Edge case | Document behavior |
+| Severity   | Description             | Action             |
+| ---------- | ----------------------- | ------------------ |
+| `critical` | Security vulnerability  | Must reject        |
+| `high`     | Potential attack vector | Should reject      |
+| `medium`   | Suspicious input        | Consider rejecting |
+| `low`      | Edge case               | Document behavior  |
 
 ---
 
@@ -123,15 +130,10 @@ const injectionCases = getEdgeCasesByCategory("injection");
 ```typescript
 import { createEdgeCaseTestSuite, stringEdgeCases } from "./edge-cases";
 
-const testSuite = createEdgeCaseTestSuite(
-  "MySchema",
-  MySchema,
-  stringEdgeCases(),
-  {
-    minSeverity: "high",
-    categories: ["injection", "overflow"],
-  }
-);
+const testSuite = createEdgeCaseTestSuite("MySchema", MySchema, stringEdgeCases(), {
+  minSeverity: "high",
+  categories: ["injection", "overflow"],
+});
 
 // Use in Vitest
 testSuite(describe, it, expect);
@@ -164,7 +166,7 @@ expect("'; DROP TABLE--").toBeRejectedBySchema(SafeStringSchema);
 export function stringEdgeCases(): LabeledValue<string>[] {
   return [
     // ... existing cases ...
-    
+
     // NEW: Add your case
     {
       label: "Zero-width space attack",
@@ -193,7 +195,9 @@ export type EdgeCaseCategory =
 
 ```typescript
 export function yourNewCategoryEdgeCases(): LabeledValue<unknown>[] {
-  return [/* ... */];
+  return [
+    /* ... */
+  ];
 }
 ```
 
@@ -208,10 +212,7 @@ export function yourNewCategoryEdgeCases(): LabeledValue<unknown>[] {
 export const SafePhoneNumberSchema = z
   .string()
   .regex(/^\+?[1-9]\d{1,14}$/, "Invalid phone number format")
-  .refine(
-    (val) => !/<script/i.test(val),
-    "Invalid characters"
-  );
+  .refine((val) => !/<script/i.test(val), "Invalid characters");
 ```
 
 ---
@@ -219,18 +220,22 @@ export const SafePhoneNumberSchema = z
 ## Testing Schedule
 
 ### Continuous (Every PR)
+
 - Run full edge case suite
 - Block merge on security failures
 
 ### Weekly
+
 - Review new CVEs for new attack patterns
 - Update injection cases if needed
 
 ### Quarterly
+
 - Review edge case coverage
 - Add any new categories discovered
 
 ### Annually
+
 - Full audit of edge case generators
 - Update for new JavaScript/TypeScript features
 - Review severity classifications
@@ -241,11 +246,11 @@ export const SafePhoneNumberSchema = z
 
 This framework follows semantic versioning for the API:
 
-| Version | Changes |
-|---------|---------|
-| 1.0.0 | Initial release (2025-12-17) |
-| 1.x.x | New edge cases, new generators (backward compatible) |
-| 2.0.0 | Breaking changes to interfaces (would require migration guide) |
+| Version | Changes                                                        |
+| ------- | -------------------------------------------------------------- |
+| 1.0.0   | Initial release (2025-12-17)                                   |
+| 1.x.x   | New edge cases, new generators (backward compatible)           |
+| 2.0.0   | Breaking changes to interfaces (would require migration guide) |
 
 ---
 
@@ -282,10 +287,10 @@ const firstBatch = allCases.slice(0, 100);
 
 ## Dependencies
 
-| Dependency | Version | Purpose | Upgrade Notes |
-|------------|---------|---------|---------------|
-| `zod` | ^3.x | Schema validation | Major version changes may need adapter |
-| `vitest` | ^1.x | Test runner | Matcher API may change |
+| Dependency | Version | Purpose           | Upgrade Notes                          |
+| ---------- | ------- | ----------------- | -------------------------------------- |
+| `zod`      | ^3.x    | Schema validation | Major version changes may need adapter |
+| `vitest`   | ^1.x    | Test runner       | Matcher API may change                 |
 
 ---
 
@@ -300,6 +305,7 @@ const firstBatch = allCases.slice(0, 100);
 ## Change Log
 
 ### 2025-12-17 - Initial Release
+
 - Created edge case generators for:
   - Numeric (overflow, underflow, special values)
   - String (unicode, injection, length)
@@ -315,4 +321,5 @@ const firstBatch = allCases.slice(0, 100);
 
 ---
 
-**This framework is designed to evolve. When in doubt, add more edge cases rather than removing them.**
+**This framework is designed to evolve. When in doubt, add more edge cases rather than removing
+them.**

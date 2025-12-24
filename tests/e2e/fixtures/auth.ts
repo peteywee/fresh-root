@@ -77,9 +77,7 @@ export async function createTestUser(): Promise<typeof TEST_USER> {
  * This function performs OAuth-like authentication flow in E2E tests
  * by directly setting the auth state in the emulator.
  */
-export async function authenticateTestUser(
-  page: Page
-): Promise<void> {
+export async function authenticateTestUser(page: Page): Promise<void> {
   const emulatorRunning = await isEmulatorRunning();
 
   if (!emulatorRunning) {
@@ -98,11 +96,14 @@ export async function authenticateTestUser(
     await page.evaluate((user) => {
       // This would set the auth state in localStorage/sessionStorage
       // to simulate a logged-in user
-      localStorage.setItem("firebase:authUser", JSON.stringify({
-        uid: user.uid,
-        email: user.email,
-        displayName: user.displayName,
-      }));
+      localStorage.setItem(
+        "firebase:authUser",
+        JSON.stringify({
+          uid: user.uid,
+          email: user.email,
+          displayName: user.displayName,
+        }),
+      );
     }, TEST_USER);
 
     console.log("✅ Test user authenticated:", TEST_USER.email);
@@ -160,8 +161,8 @@ export async function setupAuthFixture(): Promise<void> {
   if (!emulatorRunning) {
     console.warn(
       "\n⚠️ WARNING: Firebase Emulator is not running!\n" +
-      "   E2E tests requiring authentication will be skipped.\n" +
-      "   Start emulators with: pnpm firebase:emulators\n"
+        "   E2E tests requiring authentication will be skipped.\n" +
+        "   Start emulators with: pnpm firebase:emulators\n",
     );
     return;
   }

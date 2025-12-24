@@ -37,7 +37,7 @@ export const POST = createOrgEndpoint({
       if (FLAGS.FIRESTORE_WRITES && orgId) {
         const db = getFirestore();
         const scheduleRef = db.doc(`orgs/${orgId}/schedules/${validated.scheduleId}`);
-        
+
         // Verify schedule exists
         const scheduleSnap = await scheduleRef.get();
         if (!scheduleSnap.exists) {

@@ -1,13 +1,29 @@
 # Fresh Schedules Implementation Tracker
 
-**Last Updated**: 2025-12-23 (Phase 4 Complete - API Migration) **Current Phase**: Phase 5 - Type
-Safety (Ready to Start) **Branch**: dev (Phase 4 merged) **Source Plan**:
-[docs/plans/IMPLEMENTATION_PLAN_v4.md](./plans/IMPLEMENTATION_PLAN_v4.md)
+**Last Updated**: 2025-12-23 (Sprint v4.0 Active)  
+**Current Phase**: Phase 5 - Type Safety (Ready to Start)  
+**Branch**: dev (Phase 4 merged)  
+**Source Plan**: [docs/plans/IMPLEMENTATION_PLAN_v4.md](./plans/IMPLEMENTATION_PLAN_v4.md)  
+**Active Sprint**:
+[Sprint v4.0 - Mock→Firestore + Infra](https://github.com/peteywee/fresh-root/issues/195)
 
 ## 🎯 Progress Overview
 
-**Completed**: 26/45 tasks (58%) **In Progress**: Phase 5 (Type Safety) - Ready to start **Next
-Up**: E1-E8 (Type safety and schema improvements)
+**Completed**: 26/45 tasks (58%)  
+**In Progress**: Phase 5 (Type Safety) - Ready to start  
+**Next Up**: E1-E8 (Type safety and schema improvements)
+
+### 🚀 Active Sprint Issues
+
+| Track        | Issue                                                                           | Priority    | Status             |
+| ------------ | ------------------------------------------------------------------------------- | ----------- | ------------------ |
+| **Master**   | [#195 Sprint Tracker](https://github.com/peteywee/fresh-root/issues/195)        | -           | Active             |
+| **Alpha**    | [#196 Redis Rate Limiting](https://github.com/peteywee/fresh-root/issues/196)   | 🔴 CRITICAL | Not Started        |
+| **Alpha**    | [#197 OpenTelemetry Init](https://github.com/peteywee/fresh-root/issues/197)    | 🟡 HIGH     | Not Started        |
+| **Alpha**    | [#198 Env Validation](https://github.com/peteywee/fresh-root/issues/198)        | 🟠 MEDIUM   | Not Started        |
+| **Bravo**    | [#199 Mock→Firestore Routes](https://github.com/peteywee/fresh-root/issues/199) | ✅ DONE     | Complete (Phase 4) |
+| **Delta**    | [#200 Schema + Test Fixes](https://github.com/peteywee/fresh-root/issues/200)   | 🟠 MEDIUM   | Not Started        |
+| **Workflow** | [#201 Execution Protocols](https://github.com/peteywee/fresh-root/issues/201)   | -           | Reference          |
 
 ---
 
@@ -272,14 +288,14 @@ Up**: E1-E8 (Type safety and schema improvements)
 
 ## 📍 Current Location
 
-**Branch**: `feature/phase-1-auth-chain` **Next Steps**:
+**Branch**: `dev` (Phase 4 complete, ready for Phase 5)  
+**Next Steps**:
 
-1. Complete A3: Set orgId cookie
-2. Complete A4: Validate invite tokens
-3. Complete A5: Create membership on join
-4. Run Gate 1 Checkpoint validations
-5. Merge to `dev` branch
-6. Start Phase 2
+1. Start Phase 5: Type Safety (E1-E8)
+2. Address Sprint #196: Redis Rate Limiting (Alpha track)
+3. Address Sprint #200: Schema + Test Fixes (Delta track)
+4. Run Gate 5 Checkpoint validations
+5. Continue toward production readiness
 
 ---
 
@@ -300,10 +316,39 @@ Up**: E1-E8 (Type safety and schema improvements)
 - [x] orgId cookie visible after org creation
 - [x] Token validation operational
 - [x] Membership creation functional
-- [ ] SecRed review approved (pending)
-- [x] **STATUS**: READY FOR SECURITY REVIEW
+- [x] SecRed review approved
+- [x] **STATUS**: PASSED
 
-### Gate 2-7: (Not Started)
+### Gate 2: Data Persistence ✅ PASSED
+
+- [x] B1-B5 complete
+- [x] Organizations written to Firestore
+- [x] Memberships created with roles
+- [x] Tokens marked as consumed
+- [x] **STATUS**: PASSED
+
+### Gate 3: UX Completion ✅ PASSED
+
+- [x] C1-C5 complete
+- [x] Header/Sidebar functional
+- [x] Profile persists to Firestore
+- [x] **STATUS**: PASSED
+
+### Gate 4: API Migration ✅ PASSED
+
+- [x] D1-D8 complete
+- [x] All routes have Firestore integration
+- [x] Mock fallback behind feature flags
+- [x] **STATUS**: PASSED
+
+### Gate 5: Type Safety (Current)
+
+- [ ] E1-E8 complete
+- [ ] No `any` types in main codebase
+- [ ] Structured error logging
+- [ ] **STATUS**: NOT STARTED
+
+### Gate 6-7: (Pending)
 
 ---
 

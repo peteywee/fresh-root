@@ -1,9 +1,9 @@
 /**
  * Performance Benchmark Tests for Rate Limiting
- * 
+ *
  * Tests rate limiter performance with in-memory fallback.
  * When Redis is configured, these benchmarks will use Redis instead.
- * 
+ *
  * Run with: pnpm test:unit tests/performance/rate-limit.perf.test.ts
  */
 
@@ -164,9 +164,7 @@ describe("Rate Limiter Performance Benchmarks", () => {
       const key = "concurrent-test";
 
       // Fire 100 concurrent requests
-      const promises = Array.from({ length: 100 }, () =>
-        concurrentLimiter.consume(key)
-      );
+      const promises = Array.from({ length: 100 }, () => concurrentLimiter.consume(key));
       const results = await Promise.all(promises);
 
       const allowed = results.filter((r) => r.allowed).length;

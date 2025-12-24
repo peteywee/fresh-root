@@ -537,9 +537,7 @@ export function injectionEdgeCases(): LabeledValue<string>[] {
 /**
  * Generate array edge cases including empty, large, and nested arrays
  */
-export function arrayEdgeCases<T>(
-  itemGenerator: () => T
-): LabeledValue<T[]>[] {
+export function arrayEdgeCases<T>(itemGenerator: () => T): LabeledValue<T[]>[] {
   return [
     {
       label: "Empty array",
@@ -633,18 +631,14 @@ export function nestedObjectEdgeCases(maxDepth: number = 100): LabeledValue<obje
     },
     {
       label: "Wide object (100 keys)",
-      value: Object.fromEntries(
-        Array.from({ length: 100 }, (_, i) => [`key${i}`, i])
-      ),
+      value: Object.fromEntries(Array.from({ length: 100 }, (_, i) => [`key${i}`, i])),
       shouldReject: false,
       category: "nested",
       severity: "low",
     },
     {
       label: "Very wide object (10000 keys)",
-      value: Object.fromEntries(
-        Array.from({ length: 10000 }, (_, i) => [`key${i}`, i])
-      ),
+      value: Object.fromEntries(Array.from({ length: 10000 }, (_, i) => [`key${i}`, i])),
       shouldReject: true,
       category: "nested",
       severity: "high",
@@ -821,9 +815,7 @@ export function typeCoercionEdgeCases(): LabeledValue<unknown>[] {
 /**
  * Get all edge cases for a specific category
  */
-export function getEdgeCasesByCategory(
-  category: EdgeCaseCategory
-): LabeledValue<unknown>[] {
+export function getEdgeCasesByCategory(category: EdgeCaseCategory): LabeledValue<unknown>[] {
   const allCases: LabeledValue<unknown>[] = [
     ...numericEdgeCases(),
     ...timestampEdgeCases(),
@@ -842,7 +834,7 @@ export function getEdgeCasesByCategory(
  * Get all edge cases above a certain severity
  */
 export function getEdgeCasesBySeverity(
-  minSeverity: "low" | "medium" | "high" | "critical"
+  minSeverity: "low" | "medium" | "high" | "critical",
 ): LabeledValue<unknown>[] {
   const severityOrder = { low: 0, medium: 1, high: 2, critical: 3 };
   const minLevel = severityOrder[minSeverity];
@@ -858,9 +850,7 @@ export function getEdgeCasesBySeverity(
     ...arrayEdgeCases(() => "item"),
   ];
 
-  return allCases.filter(
-    (c) => severityOrder[c.severity] >= minLevel
-  );
+  return allCases.filter((c) => severityOrder[c.severity] >= minLevel);
 }
 
 /**

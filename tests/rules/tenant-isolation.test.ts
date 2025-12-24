@@ -17,11 +17,14 @@ describe("rules: tenant isolation", () => {
       await db.collection("orgs").doc(orgB).set({ name: "Org B" });
 
       // Legacy membership doc granting user-a membership in orgA only.
-      await db.collection("memberships").doc(membershipId("user-a", orgA)).set({
-        uid: "user-a",
-        orgId: orgA,
-        roles: ["employee"],
-      });
+      await db
+        .collection("memberships")
+        .doc(membershipId("user-a", orgA))
+        .set({
+          uid: "user-a",
+          orgId: orgA,
+          roles: ["employee"],
+        });
 
       await db
         .collection("orgs")
@@ -47,7 +50,9 @@ describe("rules: tenant isolation", () => {
     const db = ctxUser(env, "user-a", { orgId: orgA, roles: ["employee"] }).firestore();
 
     await assertSucceeds(db.collection("orgs").doc(orgA).get());
-    await assertSucceeds(db.collection("orgs").doc(orgA).collection("schedules").doc("sched-a").get());
+    await assertSucceeds(
+      db.collection("orgs").doc(orgA).collection("schedules").doc("sched-a").get(),
+    );
   });
 
   it("denies reads across org boundary", async () => {

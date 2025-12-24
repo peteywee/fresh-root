@@ -9,7 +9,9 @@
 
 ## Executive Summary
 
-This document outlines the architectural principles, processes, and mechanisms to ensure the governance and documentation system remains relevant, maintainable, and effective for at least 10 years without requiring a complete overhaul.
+This document outlines the architectural principles, processes, and mechanisms to ensure the
+governance and documentation system remains relevant, maintainable, and effective for at least 10
+years without requiring a complete overhaul.
 
 **Core Philosophy**: **Flexibility through structure, evolution through process**
 
@@ -66,13 +68,13 @@ L4: Documentation          → Changes constantly (guides, tutorials)
 ---
 id: A03
 title: Security Amendments
-version: 2.1.0  # Semantic versioning
+version: 2.1.0 # Semantic versioning
 tags: [security, owasp, api, patterns]
-dependencies: [01_STANDARDS, 02_PRINCIPLES]  # Explicit dependencies
-deprecates: []  # What this replaces
-supersededBy: null  # Future replacement
+dependencies: [01_STANDARDS, 02_PRINCIPLES] # Explicit dependencies
+deprecates: [] # What this replaces
+supersededBy: null # Future replacement
 effectiveDate: 2025-12-16
-reviewDate: 2026-12-16  # Annual review
+reviewDate: 2026-12-16 # Annual review
 ---
 ```
 
@@ -194,9 +196,9 @@ version: 2.1.0
 ```markdown
 <!-- A03_SECURITY_AMENDMENTS.md -->
 
-> **⚠️ DEPRECATED**: This amendment is deprecated as of 2026-01-01 and will be 
-> archived on 2027-01-01. Please migrate to [A10_SECURITY_V2.md](./A10_SECURITY_V2.md).
-> 
+> **⚠️ DEPRECATED**: This amendment is deprecated as of 2026-01-01 and will be archived on
+> 2027-01-01. Please migrate to [A10_SECURITY_V2.md](./A10_SECURITY_V2.md).
+>
 > **Migration Guide**: See [migration/A03-to-A10.md](../../docs/guides/migration/A03-to-A10.md)
 
 ---
@@ -209,10 +211,10 @@ version: 2.1.0
 **Maintained in**: `.github/governance/COMPATIBILITY_MATRIX.md`
 
 ```markdown
-| Amendment | Supports | Compatible With | Conflicts With | Sunset Date |
-|-----------|----------|-----------------|----------------|-------------|
-| A03 v2.1  | Active   | A01, A02, A07   | A10 (supersedes) | 2027-01-01 |
-| A10 v1.0  | Active   | A01, A02, A07   | A03 (replaces)  | -          |
+| Amendment | Supports | Compatible With | Conflicts With   | Sunset Date |
+| --------- | -------- | --------------- | ---------------- | ----------- |
+| A03 v2.1  | Active   | A01, A02, A07   | A10 (supersedes) | 2027-01-01  |
+| A10 v1.0  | Active   | A01, A02, A07   | A03 (replaces)   | -           |
 ```
 
 ---
@@ -421,6 +423,7 @@ tar -czf governance-$(date +%Y%m%d).tar.gz governance-snapshot.*
 
    ```markdown
    # Instead of: "Use GitHub Copilot tools"
+
    # Write: "Use available code analysis tools"
    ```
 
@@ -438,13 +441,16 @@ tar -czf governance-$(date +%Y%m%d).tar.gz governance-snapshot.*
 
    ```markdown
    <!-- At start of instruction file -->
-   **Required Capabilities**: 
+
+   **Required Capabilities**:
+
    - Code search (semantic or grep)
    - File read/write
    - Terminal execution
    - Git operations
-   
+
    **Optional Capabilities**:
+
    - Web browsing
    - Image generation
    - Code execution sandbox
@@ -462,7 +468,7 @@ tar -czf governance-$(date +%Y%m%d).tar.gz governance-snapshot.*
 
    ```bash
    # scripts/lib/git-forge.sh
-   
+
    create_pr() {
      if command -v gh &> /dev/null; then
        gh pr create "$@"
@@ -478,12 +484,12 @@ tar -czf governance-$(date +%Y%m%d).tar.gz governance-snapshot.*
 
    ```javascript
    // scripts/lib/platform.mjs
-   
+
    export function detectPlatform() {
-     if (process.env.GITHUB_ACTIONS) return 'github';
-     if (process.env.GITLAB_CI) return 'gitlab';
-     if (process.env.BITBUCKET_PIPELINE) return 'bitbucket';
-     return 'unknown';
+     if (process.env.GITHUB_ACTIONS) return "github";
+     if (process.env.GITLAB_CI) return "gitlab";
+     if (process.env.BITBUCKET_PIPELINE) return "bitbucket";
+     return "unknown";
    }
    ```
 
@@ -514,15 +520,15 @@ questions:
   - id: clarity
     text: "Rate clarity of governance docs (1-5)"
     type: scale
-  
+
   - id: discoverability
     text: "How easy to find relevant docs? (1-5)"
     type: scale
-  
+
   - id: pain_points
     text: "What's most frustrating about current system?"
     type: text
-  
+
   - id: missing
     text: "What documentation is missing?"
     type: text
@@ -541,7 +547,7 @@ const staleThreshold = 6 * 30 * 24 * 60 * 60 * 1000; // 6 months
 for (const doc of allDocs) {
   const lastModified = getLastModifiedDate(doc);
   const age = Date.now() - lastModified;
-  
+
   if (age > staleThreshold) {
     if (doc.reviewDate && Date.now() > new Date(doc.reviewDate)) {
       console.warn(`⚠️ ${doc.path} - Review date passed`);
@@ -565,18 +571,15 @@ for (const doc of allDocs) {
 export async function migrate(files) {
   for (const file of files) {
     let content = await readFile(file);
-    
+
     // Replace deprecated pattern
-    content = content.replace(
-      /oldSecurityPattern\(/g,
-      'newSecurityPattern('
-    );
-    
+    content = content.replace(/oldSecurityPattern\(/g, "newSecurityPattern(");
+
     // Add required headers
-    if (!content.includes('X-Security-Version')) {
+    if (!content.includes("X-Security-Version")) {
       content = addSecurityHeader(content);
     }
-    
+
     await writeFile(file, content);
   }
 }
@@ -665,16 +668,16 @@ jobs:
     steps:
       - name: Validate schemas
         run: pnpm validate:schemas
-      
+
       - name: Check backwards compatibility
         run: pnpm validate:compatibility
-      
+
       - name: Lint documentation
         run: pnpm lint:docs
-      
+
       - name: Generate diff report
         run: pnpm generate:doc-diff
-      
+
       - name: AI readability score
         run: pnpm test:ai-readability
 ```
@@ -686,20 +689,20 @@ jobs:
 ```javascript
 // Ensure version bumps follow semver rules
 export function validateVersionBump(oldVer, newVer, changes) {
-  const [oldMajor, oldMinor, oldPatch] = oldVer.split('.').map(Number);
-  const [newMajor, newMinor, newPatch] = newVer.split('.').map(Number);
-  
-  const hasBreakingChanges = changes.some(c => c.breaking);
-  const hasNewFeatures = changes.some(c => c.type === 'feat');
-  
+  const [oldMajor, oldMinor, oldPatch] = oldVer.split(".").map(Number);
+  const [newMajor, newMinor, newPatch] = newVer.split(".").map(Number);
+
+  const hasBreakingChanges = changes.some((c) => c.breaking);
+  const hasNewFeatures = changes.some((c) => c.type === "feat");
+
   if (hasBreakingChanges && newMajor <= oldMajor) {
-    throw new Error('Breaking changes require major version bump');
+    throw new Error("Breaking changes require major version bump");
   }
-  
+
   if (hasNewFeatures && newMinor <= oldMinor && newMajor === oldMajor) {
-    throw new Error('New features require minor version bump');
+    throw new Error("New features require minor version bump");
   }
-  
+
   // ... more rules
 }
 ```
@@ -780,7 +783,9 @@ Stale Documents (>6mo): 3
 
    ```markdown
    <!-- In instruction file -->
+
    **Model Requirements**:
+
    - Minimum: GPT-4 level (128k context)
    - Recommended: GPT-4.5+ (function calling)
    - Optimal: GPT-5 (native code execution)
@@ -799,12 +804,11 @@ Stale Documents (>6mo): 3
 
    ```markdown
    <!-- Instruction file -->
-   
-   **For Advanced Models** (GPT-5+):
-   Use native code execution to validate changes before applying.
-   
-   **For Standard Models** (GPT-4):
-   Describe changes and provide validation commands for user to run.
+
+   **For Advanced Models** (GPT-5+): Use native code execution to validate changes before applying.
+
+   **For Standard Models** (GPT-4): Describe changes and provide validation commands for user to
+   run.
    ```
 
 ### Scenario 3: Repository Split
@@ -857,11 +861,12 @@ Stale Documents (>6mo): 3
 
    ```markdown
    <!-- A03_SECURITY_AMENDMENTS.md -->
-   
+
    **Compliance**: This amendment satisfies SOC 2 controls:
+
    - CC6.1: Logical access controls
    - CC6.6: Encryption
-   
+
    See also: [A11_SOC2_COMPLIANCE.md](./A11_SOC2_COMPLIANCE.md)
    ```
 
@@ -957,12 +962,14 @@ Stale Documents (>6mo): 3
 
    ```markdown
    # Tech Debt Remediation Plan
-   
+
    ## Q1 2026
+
    - [ ] Consolidate duplicate security docs (3 days, high impact)
    - [ ] Update Firebase examples to v10 (2 days, medium impact)
-   
+
    ## Q2 2026
+
    - [ ] Redesign INDEX system for better search (5 days, high impact)
    ```
 
@@ -1008,8 +1015,10 @@ Stale Documents (>6mo): 3
 ### Scenario: Complete System Overhaul Needed
 
 **Indicators**:
+
 >
-- >50% of documents stale
+
+- > 50% of documents stale
 - Major technology shift (e.g., migrating from Firebase to Supabase)
 - Governance no longer followed
 

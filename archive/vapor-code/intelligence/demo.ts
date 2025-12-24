@@ -7,8 +7,6 @@
 
 import { z } from "zod";
 
-
-
 import { ContractTester } from "./contract-testing";
 import { PerformanceProfiler } from "./performance-profiler";
 
@@ -59,7 +57,7 @@ async function runDemo() {
 
   await sleep(500);
 
-const _profiler = new PerformanceProfiler();
+  const _profiler = new PerformanceProfiler();
 
   console.log("Simulating API requests with performance tracking:\n");
 

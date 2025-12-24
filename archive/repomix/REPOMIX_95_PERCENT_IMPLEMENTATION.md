@@ -44,7 +44,7 @@ SUBTOTAL             91/100
 
 **Gap:**
 
-- CI generates reports but doesn't update _index.md
+- CI generates reports but doesn't update \_index.md
 - Reviewers must download artifacts or wait for nightly
 - **User Friction:** MODERATE
 
@@ -63,7 +63,7 @@ SUBTOTAL             95/100
 
 **Remaining Gaps (Intentional):**
 
-- Gap 1: CI doesn't commit _index.md (keeps CI immutable) — 4 points
+- Gap 1: CI doesn't commit \_index.md (keeps CI immutable) — 4 points
 - Gap 2: Metrics once daily not per-push (efficiency by design) — 1 point
 - **Total Intentional Gap:** 5 points
 
@@ -71,13 +71,14 @@ SUBTOTAL             95/100
 
 ## Why 95/100 is the Practical Optimum
 
-| Effectiveness | Effort | Risk | Benefit | User Impact |
-|---------------|--------|------|---------|-------------|
-| 91 → 95 | 2 min | None | HIGH | Excellent UX |
-| 95 → 98 | 30 min | Medium | Low | Marginal improvement |
-| 98 → 100 | 1+ hr | High | None | Theoretical only |
+| Effectiveness | Effort | Risk   | Benefit | User Impact          |
+| ------------- | ------ | ------ | ------- | -------------------- |
+| 91 → 95       | 2 min  | None   | HIGH    | Excellent UX         |
+| 95 → 98       | 30 min | Medium | Low     | Marginal improvement |
+| 98 → 100      | 1+ hr  | High   | None    | Theoretical only     |
 
-**Red Team Verdict:** 95/100 is the sweet spot. Beyond that, you're optimizing for perfection at the cost of reliability and simplicity.
+**Red Team Verdict:** 95/100 is the sweet spot. Beyond that, you're optimizing for perfection at the
+cost of reliability and simplicity.
 
 ---
 
@@ -161,7 +162,8 @@ NIGHTLY DASHBOARD
   └─ Commit
 ```
 
-**Key Insight:** CI generates _index.md for PR preview, but nightly commits the official version. No conflicts because CI doesn't commit.
+**Key Insight:** CI generates \_index.md for PR preview, but nightly commits the official version.
+No conflicts because CI doesn't commit.
 
 ---
 
@@ -187,7 +189,7 @@ To eliminate the remaining 5 points would require:
    - Risk: Storage quota issues
    - Benefit: Negligible (nightly is sufficient)
 
-2. **Real-time _index.md commits** (CI commits changes)
+2. **Real-time \_index.md commits** (CI commits changes)
    - Cost: Breaks CI immutability principle
    - Risk: Conflicts between CI and nightly
    - Benefit: None (nightly already commits it)
@@ -197,7 +199,8 @@ To eliminate the remaining 5 points would require:
    - Risk: Race conditions
    - Benefit: None (sequential is simpler)
 
-**Verdict:** Not worth it. 95/100 respects the Pareto Principle — 80% of value comes from 20% of effort.
+**Verdict:** Not worth it. 95/100 respects the Pareto Principle — 80% of value comes from 20% of
+effort.
 
 ---
 
@@ -235,10 +238,9 @@ To eliminate the remaining 5 points would require:
 
 1. Commit the workflow change
 2. Merge to main/dev
-3. Monitor first CI run to verify _index.md generation
+3. Monitor first CI run to verify \_index.md generation
 4. Celebrate reaching 95/100 effectiveness ✅
 
 ---
 
 **System Status:** Production-ready, 95/100 effectiveness, zero technical debt
-

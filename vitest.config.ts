@@ -22,9 +22,7 @@ export default defineConfig({
     setupFiles: [path.resolve(__dirname, "./vitest.setup.ts")],
 
     // Test globs across your workspaces.
-    include: [
-      "**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}",
-    ],
+    include: ["**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}"],
   },
   resolve: {
     alias: {

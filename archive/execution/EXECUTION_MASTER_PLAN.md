@@ -1,14 +1,16 @@
 # EXECUTION MASTER PLAN
+
 **Date**: December 15, 2025  
 **Status**: READY FOR EXECUTION  
 **Time Estimate**: 3 hours 50 minutes  
-**Team Size**: 1-6 people (parallel recommended)  
+**Team Size**: 1-6 people (parallel recommended)
 
 ---
 
 ## QUICK START
 
 ### For Solo Execution (1 person)
+
 ```bash
 # Follow TRACK A → TRACK B → TRACK C → TRACK D sequentially
 # Total time: ~4 hours
@@ -16,6 +18,7 @@
 ```
 
 ### For Team Execution (4-6 people)
+
 ```bash
 # Person 1: TRACK A (30-50 min, blocks others)
 # Persons 2-4: Wait for A3 gate, then start TRACK B in parallel
@@ -71,18 +74,21 @@ LEVEL 3: DEPRECATED (DELETED - NO ARCHIVE)
 ## SUPERCEDENCE RULES
 
 **Within Canonical 12-Docs**:
+
 ```
 01 > 02 > 03 > 04 > 05 > 06 > 07 > 08 > 09 > 10 > 11 > 12
 (Lower numbers always win in conflicts)
 ```
 
 **Across Levels**:
+
 ```
 Level 0 (Constitution) > Level 1 (Canonical) > Level 2 (Operational)
 (Never the other way around)
 ```
 
 **Old Content→New Content**:
+
 ```
 Old files CONFORM to canonical style, canonical does NOT conform to old style
 (Old shapes itself to canonical, not vice versa)
@@ -93,21 +99,25 @@ Old files CONFORM to canonical style, canonical does NOT conform to old style
 ## EXECUTION TRACKS
 
 ### TRACK A: FOUNDATION (30-50 min, SEQUENTIAL)
+
 - **A1**: Read canonical files (30 min)
 - **A2**: Document hierarchy (20 min)
 - **A3**: Validate logic (15 min) ← **GATE OPENS for B & C**
 
 ### TRACK B: ASSIMILATION (75-90 min, Parallel start, sequential end)
+
 - **B1**: Read old files (45 min, starts after A1)
 - **B2**: Create merge content (60 min, starts after A3, 6x parallel)
 - **B3**: Generate merge instructions (15 min, starts after B2) ← **Needed for D**
 
 ### TRACK C: CLEANUP (40 min, Sequential)
+
 - **C1**: Identify trash (20 min, starts after A3)
 - **C2**: Delete trash (10 min, starts after C1)
 - **C3**: Validate cleanup (10 min, starts after C2) ← **Commit after this**
 
 ### TRACK D: IMPLEMENTATION (120 min, Starts after B3 & C3)
+
 - **D1-D6**: Enhance canonical docs (60 min, 6x parallel, commit each)
 - **D7-D12**: Finalize (60 min, sequential)
 
@@ -132,6 +142,7 @@ Old files CONFORM to canonical style, canonical does NOT conform to old style
 See: `/tmp/EXECUTION_TASK_BREAKDOWN.md` (1111 lines, comprehensive)
 
 Key sections:
+
 - TRACK A (3 tasks): Foundation & logic validation
 - TRACK B (3 tasks): Content assimilation & merge prep
 - TRACK C (3 tasks): Identification, deletion, validation
@@ -142,6 +153,7 @@ Key sections:
 ## VALIDATION GATES (CRITICAL)
 
 ### A3 Gate: Logic Validation
+
 ```
 Verify before opening:
 - [ ] No circular dependencies in hierarchy
@@ -151,6 +163,7 @@ Verify before opening:
 ```
 
 ### C1 Gate: Zero Loss Verification
+
 ```
 Verify before deleting:
 - [ ] All ASSIMILATE content has home in canonical
@@ -160,6 +173,7 @@ Verify before deleting:
 ```
 
 ### D10 Gate: Reference Validation
+
 ```
 Verify after enhancing:
 - [ ] No broken references (grep for old file paths)
@@ -209,6 +223,7 @@ docs/
 ```
 
 ### Deleted (31 files, NO ARCHIVE)
+
 ```
 .github/instructions/*                  (all 25 files)
 .github/GOVERNANCE_DEPLOYMENT_STATUS.md
@@ -244,6 +259,7 @@ docs/reconciled-rulebook.md
 8. **Track D starts**: After B3 and C3 both complete
 
 ### Time Estimate
+
 - Solo: 4 hours
 - Team (4 people): 2.5 hours
 - Team (6 people): 2 hours
@@ -253,7 +269,9 @@ docs/reconciled-rulebook.md
 ## SUPPORT FILES
 
 - Full task breakdown: `/tmp/EXECUTION_TASK_BREAKDOWN.md`
-- This plan: `/home/patrick/peteywee/fresh-root.worktrees/worktree-2025-12-14T08-35-30/EXECUTION_MASTER_PLAN.md` (this file)
+- This plan:
+  `/home/patrick/peteywee/fresh-root.worktrees/worktree-2025-12-14T08-35-30/EXECUTION_MASTER_PLAN.md`
+  (this file)
 
 ---
 

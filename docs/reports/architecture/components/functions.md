@@ -9,15 +9,15 @@ This file documents all Firebase Cloud Functions in the Fresh Schedules system.
 Cloud Functions are located in `functions/src/` and handle background processing, triggers, and
 callable operations.
 
-| File                      | Purpose                                    |
-| ------------------------- | ------------------------------------------ |
-| `index.ts`                | Main exports and function registration     |
-| `onboarding.ts`           | Onboarding flow functions                  |
-| `joinOrganization.ts`     | Join organization callable                 |
-| `denormalization.ts`      | Data denormalization triggers              |
+| File                          | Purpose                                |
+| ----------------------------- | -------------------------------------- |
+| `index.ts`                    | Main exports and function registration |
+| `onboarding.ts`               | Onboarding flow functions              |
+| `joinOrganization.ts`         | Join organization callable             |
+| `denormalization.ts`          | Data denormalization triggers          |
 | `triggers/denormalization.ts` | V2 Firestore triggers                  |
-| `ledger.ts`               | Billing/ledger operations                  |
-| `domain/billing.ts`       | Billing domain logic                       |
+| `ledger.ts`                   | Billing/ledger operations              |
+| `domain/billing.ts`           | Billing domain logic                   |
 
 ---
 
@@ -30,10 +30,9 @@ callable operations.
 **Purpose**: React to schedule changes for denormalization and notifications
 
 ```typescript
-export const onScheduleUpdate = functions.firestore
-  .onUpdate(async (change, context) => {
-    // Denormalization logic
-  });
+export const onScheduleUpdate = functions.firestore.onUpdate(async (change, context) => {
+  // Denormalization logic
+});
 ```
 
 ---
@@ -45,12 +44,9 @@ export const onScheduleUpdate = functions.firestore
 **Purpose**: Handle zone creation/updates for denormalization
 
 ```typescript
-export const onZoneWrite = onDocumentWritten(
-  "zones/{orgId}/zones/{zoneId}",
-  async (event) => {
-    // Zone denormalization
-  }
-);
+export const onZoneWrite = onDocumentWritten("zones/{orgId}/zones/{zoneId}", async (event) => {
+  // Zone denormalization
+});
 ```
 
 ---
@@ -66,7 +62,7 @@ export const onAttendanceApproved = onDocumentUpdated(
   "attendance_records/{orgId}/records/{recordId}",
   async (event) => {
     // Process approval
-  }
+  },
 );
 ```
 
@@ -85,20 +81,20 @@ interface JoinOrganizationRequest {
   orgId: string;
 }
 
-export const joinOrganization = onCall<JoinOrganizationRequest>(
-  async (request) => {
-    // Validate token
-    // Create membership
-    // Return result
-  }
-);
+export const joinOrganization = onCall<JoinOrganizationRequest>(async (request) => {
+  // Validate token
+  // Create membership
+  // Return result
+});
 ```
 
 **Input Schema**:
+
 - `token`: string - Join token from invite
 - `orgId`: string - Organization ID to join
 
 **Returns**:
+
 - `success`: boolean
 - `membership`: MembershipData (on success)
 - `error`: string (on failure)
@@ -158,10 +154,10 @@ firebase deploy --only functions:onScheduleUpdate
 
 Functions require these environment variables (set via Firebase config):
 
-| Variable                | Purpose                              |
-| ----------------------- | ------------------------------------ |
-| `FIREBASE_PROJECT_ID`   | Project identifier                   |
-| `ADMIN_SDK_CREDENTIALS` | Service account JSON                 |
+| Variable                | Purpose              |
+| ----------------------- | -------------------- |
+| `FIREBASE_PROJECT_ID`   | Project identifier   |
+| `ADMIN_SDK_CREDENTIALS` | Service account JSON |
 
 ---
 

@@ -2,7 +2,7 @@
 
 > **Complete User Journey** from sign-in to logout  
 > **Generated**: 2025-12-16  
-> **Based on**: Actual code inspection via Repomix analysis  
+> **Based on**: Actual code inspection via Repomix analysis
 
 ---
 
@@ -89,9 +89,9 @@ The login page provides two authentication methods:
 // startGooglePopup() → Firebase handles OAuth
 // On success:
 await establishServerSession();
-router.replace("/");  // Direct to home
+router.replace("/"); // Direct to home
 // On failure:
-router.replace("/auth/callback");  // Retry via callback
+router.replace("/auth/callback"); // Retry via callback
 ```
 
 ### 1.3 Magic Link Flow
@@ -138,7 +138,7 @@ export default function AuthCallbackPage() {
       const completedGoogle = await completeGoogleRedirectOnce();
       // Check for current user
       const hasCurrentUser = !!(auth && auth.currentUser);
-      
+
       if (completedEmail || completedGoogle || hasCurrentUser) {
         await establishServerSession();
       }
@@ -156,14 +156,14 @@ export default function AuthCallbackPage() {
 export async function establishServerSession() {
   const user = auth?.currentUser;
   if (!user) throw new Error("No user is currently signed in");
-  
+
   const idToken = await user.getIdToken(true);
   const resp = await fetch("/api/session", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ idToken }),
   });
-  
+
   if (!resp.ok) throw new Error("Failed to create session");
 }
 ```
@@ -198,19 +198,19 @@ Before entering protected app routes, the proxy checks for organization context:
 export function proxy(req: NextRequest) {
   // Public routes bypass
   const PUBLIC = [/^\/onboarding/, /^\/signin/, /^\/api/, /^\/_next/];
-  
-  if (PUBLIC.some(rx => rx.test(pathname))) {
+
+  if (PUBLIC.some((rx) => rx.test(pathname))) {
     return NextResponse.next();
   }
-  
+
   // Check for orgId cookie
   const orgId = req.cookies.get("orgId")?.value;
-  
+
   if (!orgId) {
     // No org context → redirect to onboarding
     return NextResponse.redirect(new URL("/onboarding", req.url));
   }
-  
+
   return NextResponse.next();
 }
 ```
@@ -224,13 +224,13 @@ The middleware only sets security headers (no auth logic):
 ```typescript
 export function middleware(_request: NextRequest) {
   const response = NextResponse.next();
-  
+
   // Security headers
   response.headers.set("X-Frame-Options", "DENY");
   response.headers.set("X-Content-Type-Options", "nosniff");
   response.headers.set("Content-Security-Policy", "...CSP rules...");
   // ... more headers
-  
+
   return response;
 }
 
@@ -408,7 +408,7 @@ export default function Block4Page() {
     <div>
       <h1>You're in.</h1>
       <p>{description}</p>
-      
+
       {/* Display IDs */}
       {networkId && <div>Network ID: {networkId}</div>}
       {orgId && <div>Org ID: {orgId}</div>}
@@ -501,7 +501,7 @@ export default function DashboardPage() {
       <main>
         <h1>Dashboard</h1>
         <button onClick={onPublish}>🚀 Publish Schedule</button>
-        
+
         <MonthView />  {/* Calendar component */}
         <Inbox />      {/* Notifications/messages */}
       </main>
@@ -581,7 +581,7 @@ export default function ScheduleBuilder() {
     <div>
       <h2>Week view (prototype)</h2>
       <button onClick={() => addDemoShift(0)}>Add shift</button>
-      
+
       <div className="grid grid-cols-7">
         {["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map((day, i) => (
           <div key={day}>
@@ -624,7 +624,7 @@ export async function logoutEverywhere() {
   } catch (e) {
     reportError(e, { phase: "session_delete" });
   }
-  
+
   // Step 2: Clear client Firebase auth
   try {
     const { signOut } = await import("firebase/auth");
@@ -643,16 +643,16 @@ export async function logoutEverywhere() {
 export const DELETE = createPublicEndpoint({
   handler: async () => {
     const response = ok({ ok: true });
-    
+
     // Clear cookie by setting maxAge: 0
     response.cookies.set("session", "", {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
       path: "/",
-      maxAge: 0,  // Immediate expiration
+      maxAge: 0, // Immediate expiration
     });
-    
+
     return response;
   },
 });
@@ -829,41 +829,41 @@ export const DELETE = createPublicEndpoint({
 
 ### Authentication
 
-| File | Purpose |
-|------|---------|
-| `apps/web/app/(auth)/login/page.tsx` | Login page (Google + Magic Link) |
-| `apps/web/app/auth/callback/page.tsx` | Auth completion handler |
-| `apps/web/src/lib/auth-helpers.ts` | Auth utilities (login, logout, session) |
-| `apps/web/app/api/session/route.ts` | Session creation/deletion API |
+| File                                  | Purpose                                 |
+| ------------------------------------- | --------------------------------------- |
+| `apps/web/app/(auth)/login/page.tsx`  | Login page (Google + Magic Link)        |
+| `apps/web/app/auth/callback/page.tsx` | Auth completion handler                 |
+| `apps/web/src/lib/auth-helpers.ts`    | Auth utilities (login, logout, session) |
+| `apps/web/app/api/session/route.ts`   | Session creation/deletion API           |
 
 ### Middleware & Guards
 
-| File | Purpose |
-|------|---------|
-| `apps/web/app/middleware.ts` | Security headers only |
-| `apps/web/lib/proxy.ts` | Org gate check |
+| File                                         | Purpose                |
+| -------------------------------------------- | ---------------------- |
+| `apps/web/app/middleware.ts`                 | Security headers only  |
+| `apps/web/lib/proxy.ts`                      | Org gate check         |
 | `apps/web/app/components/ProtectedRoute.tsx` | Client-side auth guard |
 
 ### Onboarding
 
-| File | Purpose |
-|------|---------|
-| `apps/web/app/onboarding/profile/page.tsx` | Profile collection |
-| `apps/web/app/onboarding/intent/page.tsx` | Path selection |
-| `apps/web/app/onboarding/join/page.tsx` | Join existing workspace |
-| `apps/web/app/onboarding/admin-responsibility/page.tsx` | Admin confirmation |
-| `apps/web/app/onboarding/create-network-org/page.tsx` | Create org |
-| `apps/web/app/onboarding/create-network-corporate/page.tsx` | Create corporate |
-| `apps/web/app/onboarding/block-4/page.tsx` | Completion step |
-| `apps/web/app/onboarding/_wizard/OnboardingWizardContext.tsx` | Wizard state |
+| File                                                          | Purpose                 |
+| ------------------------------------------------------------- | ----------------------- |
+| `apps/web/app/onboarding/profile/page.tsx`                    | Profile collection      |
+| `apps/web/app/onboarding/intent/page.tsx`                     | Path selection          |
+| `apps/web/app/onboarding/join/page.tsx`                       | Join existing workspace |
+| `apps/web/app/onboarding/admin-responsibility/page.tsx`       | Admin confirmation      |
+| `apps/web/app/onboarding/create-network-org/page.tsx`         | Create org              |
+| `apps/web/app/onboarding/create-network-corporate/page.tsx`   | Create corporate        |
+| `apps/web/app/onboarding/block-4/page.tsx`                    | Completion step         |
+| `apps/web/app/onboarding/_wizard/OnboardingWizardContext.tsx` | Wizard state            |
 
 ### Protected App
 
-| File | Purpose |
-|------|---------|
-| `apps/web/app/(app)/protected/page.tsx` | Protected demo page |
-| `apps/web/app/(app)/protected/dashboard/page.tsx` | Main dashboard |
-| `apps/web/app/schedules/builder/page.tsx` | Schedule builder prototype |
+| File                                              | Purpose                    |
+| ------------------------------------------------- | -------------------------- |
+| `apps/web/app/(app)/protected/page.tsx`           | Protected demo page        |
+| `apps/web/app/(app)/protected/dashboard/page.tsx` | Main dashboard             |
+| `apps/web/app/schedules/builder/page.tsx`         | Schedule builder prototype |
 
 ---
 
@@ -875,49 +875,49 @@ export const DELETE = createPublicEndpoint({
 
 ### 🔴 P0: BLOCKING (Production cannot ship)
 
-| # | Category | Gap | Evidence | Impact |
-|---|----------|-----|----------|--------|
-| **1** | **Auth** | `useAuth()` is a **stub** | `auth-context.tsx:22`: `setUser(null)` always | Auth guard always fails → infinite redirect loop |
-| **2** | **Auth** | `proxy.ts` **never called** | `middleware.ts` doesn't import/call `proxy()` | Org gate is dead code |
-| **3** | **Data** | `orgId` cookie **never set** | No `response.cookies.set("orgId",...)` anywhere | Post-onboarding redirect loop |
-| **4** | **Data** | Onboarding APIs **don't write to Firestore** | `create-network-org/route.ts`: returns mock `{ id: org-${Date.now()} }` | No data persisted |
-| **5** | **Data** | `join-with-token` **doesn't validate token** | Returns mock `status: "pending_approval"` | Anyone can "join" any org |
+| #     | Category | Gap                                          | Evidence                                                                | Impact                                           |
+| ----- | -------- | -------------------------------------------- | ----------------------------------------------------------------------- | ------------------------------------------------ |
+| **1** | **Auth** | `useAuth()` is a **stub**                    | `auth-context.tsx:22`: `setUser(null)` always                           | Auth guard always fails → infinite redirect loop |
+| **2** | **Auth** | `proxy.ts` **never called**                  | `middleware.ts` doesn't import/call `proxy()`                           | Org gate is dead code                            |
+| **3** | **Data** | `orgId` cookie **never set**                 | No `response.cookies.set("orgId",...)` anywhere                         | Post-onboarding redirect loop                    |
+| **4** | **Data** | Onboarding APIs **don't write to Firestore** | `create-network-org/route.ts`: returns mock `{ id: org-${Date.now()} }` | No data persisted                                |
+| **5** | **Data** | `join-with-token` **doesn't validate token** | Returns mock `status: "pending_approval"`                               | Anyone can "join" any org                        |
 
 ---
 
 ### 🟠 P1: CRITICAL (Core flows broken)
 
-| # | Category | Gap | Evidence | Impact |
-|---|----------|-----|----------|--------|
-| **6** | **UX** | No logout button | `logoutEverywhere()` exported but never wired | Users can't sign out |
-| **7** | **UX** | No navigation | No header/sidebar component | Users can't navigate between pages |
-| **8** | **Data** | No profile persistence | `POST /api/onboarding/profile` doesn't write to `/users/{uid}` | Profile data lost |
-| **9** | **Security** | Session cookie not HttpOnly in dev | `secure: process.env.NODE_ENV === 'production'` | XSS can steal session in dev |
-| **10** | **Integration** | Dashboard uses hardcoded orgId | `_orgId = "orgA"` in dashboard | Wrong data displayed |
+| #      | Category        | Gap                                | Evidence                                                       | Impact                             |
+| ------ | --------------- | ---------------------------------- | -------------------------------------------------------------- | ---------------------------------- |
+| **6**  | **UX**          | No logout button                   | `logoutEverywhere()` exported but never wired                  | Users can't sign out               |
+| **7**  | **UX**          | No navigation                      | No header/sidebar component                                    | Users can't navigate between pages |
+| **8**  | **Data**        | No profile persistence             | `POST /api/onboarding/profile` doesn't write to `/users/{uid}` | Profile data lost                  |
+| **9**  | **Security**    | Session cookie not HttpOnly in dev | `secure: process.env.NODE_ENV === 'production'`                | XSS can steal session in dev       |
+| **10** | **Integration** | Dashboard uses hardcoded orgId     | `_orgId = "orgA"` in dashboard                                 | Wrong data displayed               |
 
 ---
 
 ### 🟡 P2: IMPORTANT (Degraded experience)
 
-| # | Category | Gap | Evidence | Impact |
-|---|----------|-----|----------|--------|
-| **11** | **Data** | Schedule builder is local-only | `useState([...])` in `builder/page.tsx` | Schedules don't persist |
-| **12** | **Data** | No membership documents created | No Firestore write for `/memberships/{userId}_{orgId}` | Role checks will fail |
-| **13** | **Security** | CSP blocks Firebase | `connect-src 'self'` doesn't allow Firebase domains | Firebase calls blocked |
-| **14** | **Validation** | `ActivateNetworkSchema` is local | Not exported from `@fresh-schedules/types` | Triad violation |
-| **15** | **Error** | Generic error messages | `serverError("Failed to create organization network")` | No debugging info |
+| #      | Category       | Gap                              | Evidence                                               | Impact                  |
+| ------ | -------------- | -------------------------------- | ------------------------------------------------------ | ----------------------- |
+| **11** | **Data**       | Schedule builder is local-only   | `useState([...])` in `builder/page.tsx`                | Schedules don't persist |
+| **12** | **Data**       | No membership documents created  | No Firestore write for `/memberships/{userId}_{orgId}` | Role checks will fail   |
+| **13** | **Security**   | CSP blocks Firebase              | `connect-src 'self'` doesn't allow Firebase domains    | Firebase calls blocked  |
+| **14** | **Validation** | `ActivateNetworkSchema` is local | Not exported from `@fresh-schedules/types`             | Triad violation         |
+| **15** | **Error**      | Generic error messages           | `serverError("Failed to create organization network")` | No debugging info       |
 
 ---
 
 ### 🟢 P3: MINOR (Polish)
 
-| # | Category | Gap | Evidence | Impact |
-|---|----------|-----|----------|--------|
-| **16** | **UX** | No loading states in onboarding | Missing `isSubmitting` state | Form resubmission possible |
-| **17** | **UX** | No error boundaries | No `error.tsx` files | Crashes show blank page |
-| **18** | **A11y** | Missing ARIA labels | Forms lack `aria-describedby` | Screen reader issues |
-| **19** | **Perf** | No route prefetching | Missing `<Link prefetch>` | Slower navigation |
-| **20** | **Test** | No E2E for golden path | `login_publish_logout.e2e.spec.ts` gitignored | Flow untested |
+| #      | Category | Gap                             | Evidence                                      | Impact                     |
+| ------ | -------- | ------------------------------- | --------------------------------------------- | -------------------------- |
+| **16** | **UX**   | No loading states in onboarding | Missing `isSubmitting` state                  | Form resubmission possible |
+| **17** | **UX**   | No error boundaries             | No `error.tsx` files                          | Crashes show blank page    |
+| **18** | **A11y** | Missing ARIA labels             | Forms lack `aria-describedby`                 | Screen reader issues       |
+| **19** | **Perf** | No route prefetching            | Missing `<Link prefetch>`                     | Slower navigation          |
+| **20** | **Test** | No E2E for golden path          | `login_publish_logout.e2e.spec.ts` gitignored | Flow untested              |
 
 ---
 
@@ -929,7 +929,7 @@ export const DELETE = createPublicEndpoint({
 // apps/web/src/lib/auth-context.tsx:20-24
 useEffect(() => {
   setTimeout(() => {
-    setUser(null);  // ← ALWAYS sets to null
+    setUser(null); // ← ALWAYS sets to null
     setIsLoading(false);
   }, 10);
 }, []);
@@ -968,7 +968,7 @@ import { proxy } from "../../proxy";
 export function middleware(request: NextRequest) {
   const proxyResponse = proxy(request);
   if (proxyResponse.status !== 200) return proxyResponse;
-  
+
   const response = NextResponse.next();
   // ...headers
 }
@@ -981,11 +981,11 @@ export function middleware(request: NextRequest) {
 ```typescript
 // apps/web/app/api/onboarding/create-network-org/route.ts:21-28
 const org = {
-  id: `org-${Date.now()}`,  // ← Generated, not persisted
+  id: `org-${Date.now()}`, // ← Generated, not persisted
   name: typedInput.organizationName,
   // ...
 };
-return ok(org);  // ← Returns mock, no db.collection().add()
+return ok(org); // ← Returns mock, no db.collection().add()
 ```
 
 **Exception**: `activate-network/route.ts` DOES write:
@@ -1088,14 +1088,14 @@ Day 4:
 
 After fixes, verify each gate:
 
-| Gate | Test | Expected |
-|------|------|----------|
-| **Auth** | Visit `/` unauthenticated | Redirect to `/login` |
-| **Login** | Google OAuth flow | Session cookie set, redirect to `/` |
-| **Org Gate** | Visit `/` without orgId cookie | Redirect to `/onboarding` |
-| **Onboarding** | Complete create-org flow | Firestore doc created, orgId cookie set |
-| **App** | Visit `/app/protected/dashboard` | Dashboard renders with real data |
-| **Logout** | Click logout button | Session cleared, redirect to `/login` |
+| Gate           | Test                             | Expected                                |
+| -------------- | -------------------------------- | --------------------------------------- |
+| **Auth**       | Visit `/` unauthenticated        | Redirect to `/login`                    |
+| **Login**      | Google OAuth flow                | Session cookie set, redirect to `/`     |
+| **Org Gate**   | Visit `/` without orgId cookie   | Redirect to `/onboarding`               |
+| **Onboarding** | Complete create-org flow         | Firestore doc created, orgId cookie set |
+| **App**        | Visit `/app/protected/dashboard` | Dashboard renders with real data        |
+| **Logout**     | Click logout button              | Session cleared, redirect to `/login`   |
 
 ---
 
@@ -1103,73 +1103,75 @@ After fixes, verify each gate:
 
 ### 🔴 Mock Data Routes (Returning Static Data Instead of Firestore)
 
-**Discovered Pattern**: Multiple API routes return hardcoded mock data instead of querying Firestore.
+**Discovered Pattern**: Multiple API routes return hardcoded mock data instead of querying
+Firestore.
 
-| Route | Issue | Evidence |
-|-------|-------|----------|
-| `/api/attendance` | Mock data | `// Mock data - in production, fetch from Firestore` |
-| `/api/positions` | Mock data | Returns hardcoded position array |
-| `/api/schedules` | Mock data | Returns mock schedule list |
-| `/api/shifts` | Mock data | Returns mock shift list |
-| `/api/venues` | Mock data | Returns mock venue list |
-| `/api/widgets` | Mock data | Returns mock widget list |
-| `/api/zones` | Mock data | Returns mock zone list |
-| `/api/users/profile` | Mock data | Returns mock user profile |
+| Route                | Issue     | Evidence                                             |
+| -------------------- | --------- | ---------------------------------------------------- |
+| `/api/attendance`    | Mock data | `// Mock data - in production, fetch from Firestore` |
+| `/api/positions`     | Mock data | Returns hardcoded position array                     |
+| `/api/schedules`     | Mock data | Returns mock schedule list                           |
+| `/api/shifts`        | Mock data | Returns mock shift list                              |
+| `/api/venues`        | Mock data | Returns mock venue list                              |
+| `/api/widgets`       | Mock data | Returns mock widget list                             |
+| `/api/zones`         | Mock data | Returns mock zone list                               |
+| `/api/users/profile` | Mock data | Returns mock user profile                            |
 
-**Impact**: App "works" visually but no data persists. Users create content that vanishes on refresh.
+**Impact**: App "works" visually but no data persists. Users create content that vanishes on
+refresh.
 
 ---
 
 ### 🟡 Type Safety Issues
 
-| File | Issue | Line | Fix |
-|------|-------|------|-----|
-| `_shared/middleware.ts` | `ctx: any` parameter | L642, L644 | Type as `RouteContext` |
-| `batch/route.ts` | `context: any` | L1322 | Type as `RequestContext` |
-| `rate-limit.ts` | `req: any` | L4057 | Type as `NextRequest` |
-| `test-utils/authHelpers.ts` | `options: any` | L5674 | Type as `MockRequestOptions` |
+| File                        | Issue                | Line       | Fix                          |
+| --------------------------- | -------------------- | ---------- | ---------------------------- |
+| `_shared/middleware.ts`     | `ctx: any` parameter | L642, L644 | Type as `RouteContext`       |
+| `batch/route.ts`            | `context: any`       | L1322      | Type as `RequestContext`     |
+| `rate-limit.ts`             | `req: any`           | L4057      | Type as `NextRequest`        |
+| `test-utils/authHelpers.ts` | `options: any`       | L5674      | Type as `MockRequestOptions` |
 
 ---
 
 ### 🟡 TODO Comments Still in Code
 
-| File | TODO | Line |
-|------|------|------|
-| `publishSchedule` | `TODO: perform the privileged write` | `schedules.ts:503` |
-| `batch/route.ts` | `TODO: Move to packages/types/src/batch.ts` | `route.ts:1313` |
-| `internal/backup/route.ts` | `TODO: Move to packages/types/src/internal.ts` | `route.ts:1377` |
+| File                       | TODO                                           | Line               |
+| -------------------------- | ---------------------------------------------- | ------------------ |
+| `publishSchedule`          | `TODO: perform the privileged write`           | `schedules.ts:503` |
+| `batch/route.ts`           | `TODO: Move to packages/types/src/batch.ts`    | `route.ts:1313`    |
+| `internal/backup/route.ts` | `TODO: Move to packages/types/src/internal.ts` | `route.ts:1377`    |
 
 ---
 
 ### 🟡 Stub/Placeholder Implementations
 
-| File | Issue |
-|------|-------|
-| `src/lib/auth-context.tsx` | `Placeholder: replace with real initialization` - Always returns null user |
-| `components/UploadStub.tsx` | File upload is completely stubbed |
-| `proxy.ts` | Contains `TEMPORARY: Set BYPASS_ONBOARDING_GUARD` bypass flag |
-| `firebase.server.ts` | Returns early in stub mode, no real Firestore |
+| File                        | Issue                                                                      |
+| --------------------------- | -------------------------------------------------------------------------- |
+| `src/lib/auth-context.tsx`  | `Placeholder: replace with real initialization` - Always returns null user |
+| `components/UploadStub.tsx` | File upload is completely stubbed                                          |
+| `proxy.ts`                  | Contains `TEMPORARY: Set BYPASS_ONBOARDING_GUARD` bypass flag              |
+| `firebase.server.ts`        | Returns early in stub mode, no real Firestore                              |
 
 ---
 
 ### 🟢 Code Quality Observations
 
-| Category | Finding |
-|----------|---------|
-| **SDK Factory Adoption** | ✅ Good - 36 routes using SDK factory patterns |
-| **Endpoint Types** | 6 `createPublicEndpoint`, 15 `createAuthenticatedEndpoint`, 15 `createOrgEndpoint` |
-| **Error Handling** | ⚠️ Minimal - Only 3 catch blocks in entire codebase |
-| **Console Logging** | ⚠️ 27 console/debug references (should use structured logger) |
-| **TypeScript Any** | ⚠️ 11 `any` type usages found |
+| Category                 | Finding                                                                            |
+| ------------------------ | ---------------------------------------------------------------------------------- |
+| **SDK Factory Adoption** | ✅ Good - 36 routes using SDK factory patterns                                     |
+| **Endpoint Types**       | 6 `createPublicEndpoint`, 15 `createAuthenticatedEndpoint`, 15 `createOrgEndpoint` |
+| **Error Handling**       | ⚠️ Minimal - Only 3 catch blocks in entire codebase                                |
+| **Console Logging**      | ⚠️ 27 console/debug references (should use structured logger)                      |
+| **TypeScript Any**       | ⚠️ 11 `any` type usages found                                                      |
 
 ---
 
 ### 🟢 Duplicate Code Detection
 
-| Pattern | Files | Recommendation |
-|---------|-------|----------------|
-| `typed-wrappers.ts` | Duplicated in 2 locations | Consolidate to single `@fresh-schedules/firebase` package |
-| `adminFormDrafts.ts` | Duplicated in `lib/` and `src/lib/` | Consolidate to single location |
+| Pattern              | Files                               | Recommendation                                            |
+| -------------------- | ----------------------------------- | --------------------------------------------------------- |
+| `typed-wrappers.ts`  | Duplicated in 2 locations           | Consolidate to single `@fresh-schedules/firebase` package |
+| `adminFormDrafts.ts` | Duplicated in `lib/` and `src/lib/` | Consolidate to single location                            |
 
 ---
 
@@ -1181,7 +1183,7 @@ After fixes, verify each gate:
 Day 5:
 ├── 5.1 /api/attendance: Replace mock with Firestore query
 ├── 5.2 /api/positions: Replace mock with Firestore query
-├── 5.3 /api/schedules: Replace mock with Firestore query  
+├── 5.3 /api/schedules: Replace mock with Firestore query
 ├── 5.4 /api/shifts: Replace mock with Firestore query
 ├── 5.5 /api/venues: Replace mock with Firestore query
 ├── 5.6 /api/zones: Replace mock with Firestore query
@@ -1204,17 +1206,17 @@ Day 6:
 
 ## 17.0 Gap Summary Matrix
 
-| Priority | Count | Category | Status |
-|----------|-------|----------|--------|
-| 🔴 P0 | 5 | Auth Chain | Blocking |
-| 🟠 P1 | 5 | Critical UX | Broken |
-| 🟡 P2 | 5 | Degraded Experience | Impaired |
-| 🟢 P3 | 5 | Polish | Minor |
-| 🔴 NEW | 8 | Mock Data Routes | Data Not Persisting |
-| 🟡 NEW | 4 | Type Safety | TypeScript Violations |
-| 🟡 NEW | 3 | TODO Comments | Incomplete Features |
-| 🟡 NEW | 4 | Stub Implementations | Placeholder Code |
-| 🟢 NEW | 2 | Duplicate Code | Technical Debt |
+| Priority | Count | Category             | Status                |
+| -------- | ----- | -------------------- | --------------------- |
+| 🔴 P0    | 5     | Auth Chain           | Blocking              |
+| 🟠 P1    | 5     | Critical UX          | Broken                |
+| 🟡 P2    | 5     | Degraded Experience  | Impaired              |
+| 🟢 P3    | 5     | Polish               | Minor                 |
+| 🔴 NEW   | 8     | Mock Data Routes     | Data Not Persisting   |
+| 🟡 NEW   | 4     | Type Safety          | TypeScript Violations |
+| 🟡 NEW   | 3     | TODO Comments        | Incomplete Features   |
+| 🟡 NEW   | 4     | Stub Implementations | Placeholder Code      |
+| 🟢 NEW   | 2     | Duplicate Code       | Technical Debt        |
 
 **Total Gaps**: 41 issues identified
 

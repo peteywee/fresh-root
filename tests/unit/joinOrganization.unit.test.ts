@@ -196,7 +196,7 @@ describe("joinOrganizationHandler (unit, mocked admin)", () => {
     // Note: In real Firestore, increment() returns a FieldValue transform
     // In mock, we need to check if it's numeric or a transform object
     const currentUses =
-      typeof token.currentUses === "number" ? token.currentUses : token.currentUses?.operand ?? 1;
+      typeof token.currentUses === "number" ? token.currentUses : (token.currentUses?.operand ?? 1);
     expect(currentUses).toBe(1);
 
     // membership exists
@@ -245,7 +245,7 @@ describe("joinOrganizationHandler (unit, mocked admin)", () => {
     // Since the second call returns existing membership (idempotent), it should NOT consume token again
     // Handle both numeric and FieldValue.increment() transform objects
     const currentUses =
-      typeof token.currentUses === "number" ? token.currentUses : token.currentUses?.operand ?? 1;
+      typeof token.currentUses === "number" ? token.currentUses : (token.currentUses?.operand ?? 1);
     expect(currentUses).toBe(1);
   });
 });

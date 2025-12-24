@@ -32,15 +32,15 @@ export const GET = createAuthenticatedEndpoint({
       // D1: Fetch from Firestore if FIRESTORE_WRITES enabled
       if (FLAGS.FIRESTORE_WRITES) {
         const db = getFirestore();
-        let query = db.collection('attendance_records').doc(orgId).collection('records');
+        let query = db.collection("attendance_records").doc(orgId).collection("records");
 
         // Apply filters
-        if (shiftId) query = query.where('shiftId', '==', shiftId) as any;
-        if (scheduleId) query = query.where('scheduleId', '==', scheduleId) as any;
-        if (staffUid) query = query.where('staffUid', '==', staffUid) as any;
+        if (shiftId) query = query.where("shiftId", "==", shiftId) as any;
+        if (scheduleId) query = query.where("scheduleId", "==", scheduleId) as any;
+        if (staffUid) query = query.where("staffUid", "==", staffUid) as any;
 
         const snapshot = await query.get();
-        const records = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        const records = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
 
         return NextResponse.json({ records, total: records.length }, { status: 200 });
       }
@@ -117,9 +117,9 @@ export const POST = createAuthenticatedEndpoint({
       if (FLAGS.FIRESTORE_WRITES) {
         const db = getFirestore();
         await db
-          .collection('attendance_records')
+          .collection("attendance_records")
           .doc(data.orgId)
-          .collection('records')
+          .collection("records")
           .doc(recordId)
           .set(newRecord);
       }

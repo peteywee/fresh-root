@@ -5,7 +5,8 @@
 
 ## Summary
 
-Repomix has been successfully integrated into your Fresh Schedules monorepo as both a **CLI tool** and a **library package**.
+Repomix has been successfully integrated into your Fresh Schedules monorepo as both a **CLI tool**
+and a **library package**.
 
 ## What Was Added
 
@@ -85,31 +86,27 @@ pnpm repomix . --compress
 ### Quick Start - Library
 
 ```typescript
-import { runDefaultAction, setLogLevel } from '@fresh-schedules/repomix';
+import { runDefaultAction, setLogLevel } from "@fresh-schedules/repomix";
 
-setLogLevel('info');
+setLogLevel("info");
 
-await runDefaultAction(
-  ['packages/api-framework'],
-  process.cwd(),
-  {
-    output: { style: 'markdown', filePath: './api-analysis.md' },
-    compress: false
-  }
-);
+await runDefaultAction(["packages/api-framework"], process.cwd(), {
+  output: { style: "markdown", filePath: "./api-analysis.md" },
+  compress: false,
+});
 ```
 
 ## Package Details
 
-| Aspect | Details |
-|--------|---------|
-| **Package Name** | `@fresh-schedules/repomix` |
-| **Version** | 0.1.0 |
-| **Language** | TypeScript (ESM) |
-| **Underlying Tool** | repomix 0.2.43 |
-| **Node Requirement** | >=20.10.0 |
-| **Build Status** | ✅ Complete |
-| **Types Status** | ✅ Full type support |
+| Aspect               | Details                    |
+| -------------------- | -------------------------- |
+| **Package Name**     | `@fresh-schedules/repomix` |
+| **Version**          | 0.1.0                      |
+| **Language**         | TypeScript (ESM)           |
+| **Underlying Tool**  | repomix 0.2.43             |
+| **Node Requirement** | >=20.10.0                  |
+| **Build Status**     | ✅ Complete                |
+| **Types Status**     | ✅ Full type support       |
 
 ## Available Commands
 

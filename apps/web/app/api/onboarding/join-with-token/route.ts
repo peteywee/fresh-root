@@ -30,7 +30,7 @@ export const POST = createAuthenticatedEndpoint({
       // A4: Validate invite token if FIRESTORE_WRITES enabled
       if (FLAGS.FIRESTORE_WRITES) {
         const db = getFirestore();
-        const tokenDocRef = db.collection('invite_tokens').doc(joinToken as string);
+        const tokenDocRef = db.collection("invite_tokens").doc(joinToken as string);
         const tokenDoc = await tokenDocRef.get();
 
         if (!tokenDoc.exists) {
@@ -64,7 +64,12 @@ export const POST = createAuthenticatedEndpoint({
           invitedBy: tokenData.createdBy,
         };
 
-        await db.collection('organizations').doc(orgId as string).collection('members').doc(userId).set(membershipData);
+        await db
+          .collection("organizations")
+          .doc(orgId as string)
+          .collection("members")
+          .doc(userId)
+          .set(membershipData);
 
         // Mark token as used (part of B4, but doing it here for atomicity)
         await tokenDocRef.update({
@@ -74,17 +79,19 @@ export const POST = createAuthenticatedEndpoint({
         });
 
         // Set orgId cookie
-        const response = NextResponse.json(ok({
-          ...membershipData,
-          joinedAt: Date.now(),
-        }));
+        const response = NextResponse.json(
+          ok({
+            ...membershipData,
+            joinedAt: Date.now(),
+          }),
+        );
 
-        response.cookies.set('orgId', orgId, {
+        response.cookies.set("orgId", orgId, {
           httpOnly: true,
-          secure: process.env.NODE_ENV === 'production',
-          sameSite: 'lax',
+          secure: process.env.NODE_ENV === "production",
+          sameSite: "lax",
           maxAge: 60 * 60 * 24 * 30, // 30 days
-          path: '/',
+          path: "/",
         });
 
         return response;
@@ -104,7 +111,8 @@ export const POST = createAuthenticatedEndpoint({
       console.error("Join with token failed", {
         error: message,
         userId: context.auth?.userId,
-        token: input instanceof Object && "joinToken" in input ? (input as any).joinToken : "unknown",
+        token:
+          input instanceof Object && "joinToken" in input ? (input as any).joinToken : "unknown",
       });
       return serverError("Failed to join with token");
     }

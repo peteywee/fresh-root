@@ -8,7 +8,8 @@
 
 ## Overview
 
-This document provides **detailed migration guides for each subsystem** of Fresh Schedules. Each section can be migrated independently, allowing for incremental migration.
+This document provides **detailed migration guides for each subsystem** of Fresh Schedules. Each
+section can be migrated independently, allowing for incremental migration.
 
 ---
 
@@ -17,12 +18,14 @@ This document provides **detailed migration guides for each subsystem** of Fresh
 ### Current State (Firebase Auth)
 
 **Files**:
+
 - `apps/web/lib/firebase-admin.ts` - Server-side auth verification
 - `apps/web/app/lib/firebaseClient.ts` - Client-side auth
 - `apps/web/src/lib/auth-context.tsx` - React auth context
 - `apps/web/app/api/session/route.ts` - Session cookie management
 
 **Features Used**:
+
 - Email/password authentication
 - Google OAuth
 - Session cookies (5-day expiry)
@@ -52,7 +55,7 @@ import { cookies } from "next/headers";
 
 export async function createClient() {
   const cookieStore = await cookies();
-  
+
   return createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
@@ -68,7 +71,7 @@ export async function createClient() {
           cookieStore.set({ name, value: "", ...options });
         },
       },
-    }
+    },
   );
 }
 ```
@@ -80,7 +83,7 @@ import { createBrowserClient } from "@supabase/ssr";
 export function createClient() {
   return createBrowserClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
   );
 }
 ```
@@ -109,9 +112,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  
+
   const supabase = createClient();
-  
+
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, session) => {
@@ -120,15 +123,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         setIsLoading(false);
       }
     );
-    
+
     return () => subscription.unsubscribe();
   }, []);
-  
+
   const signIn = async (email: string, password: string) => {
     const { error } = await supabase.auth.signInWithPassword({ email, password });
     if (error) throw error;
   };
-  
+
   const signInWithGoogle = async () => {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
@@ -136,11 +139,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     });
     if (error) throw error;
   };
-  
+
   const signOut = async () => {
     await supabase.auth.signOut();
   };
-  
+
   return (
     <AuthContext.Provider value={{ user, session, isLoading, signIn, signInWithGoogle, signOut }}>
       {children}
@@ -163,10 +166,13 @@ import { createClient } from "@/lib/supabase/server";
 
 export async function verifyAuth(request: NextRequest): Promise<AuthContext | null> {
   const supabase = await createClient();
-  const { data: { user }, error } = await supabase.auth.getUser();
-  
+  const {
+    data: { user },
+    error,
+  } = await supabase.auth.getUser();
+
   if (error || !user) return null;
-  
+
   return {
     userId: user.id,
     email: user.email!,
@@ -183,19 +189,16 @@ export async function verifyAuth(request: NextRequest): Promise<AuthContext | nu
 import { getAuth } from "firebase-admin/auth";
 import { createClient } from "@supabase/supabase-js";
 
-const supabase = createClient(
-  process.env.SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
+const supabase = createClient(process.env.SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!);
 
 async function migrateUsers() {
   const firebaseAuth = getAuth();
   let nextPageToken: string | undefined;
   let migrated = 0;
-  
+
   do {
     const result = await firebaseAuth.listUsers(1000, nextPageToken);
-    
+
     for (const user of result.users) {
       try {
         await supabase.auth.admin.createUser({
@@ -214,10 +217,10 @@ async function migrateUsers() {
         console.error(`Failed to migrate ${user.email}:`, err);
       }
     }
-    
+
     nextPageToken = result.pageToken;
   } while (nextPageToken);
-  
+
   console.log(`✅ Migrated ${migrated} users`);
 }
 ```
@@ -235,11 +238,13 @@ async function migrateUsers() {
 ### Current State
 
 **Files**:
+
 - `apps/web/lib/firebase-admin.ts` - `getFirebaseAdminDb()`
 - `apps/web/src/lib/firebase/typed-wrappers.ts` - Type-safe Firestore operations
 - All API routes under `apps/web/app/api/`
 
 **Collections**:
+
 - `/organizations/{orgId}`
 - `/organizations/{orgId}/members/{userId}`
 - `/orgs/{orgId}/schedules/{scheduleId}`
@@ -284,11 +289,11 @@ model User {
   phone         String?
   createdAt     DateTime @default(now()) @map("created_at")
   updatedAt     DateTime @updatedAt @map("updated_at")
-  
+
   memberships   Membership[]
   createdShifts Shift[]     @relation("ShiftCreator")
   assignedShifts Shift[]    @relation("ShiftAssignee")
-  
+
   @@map("users")
 }
 
@@ -301,12 +306,12 @@ model Organization {
   settings  Json     @default("{}")
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
-  
+
   memberships Membership[]
   schedules   Schedule[]
   positions   Position[]
   venues      Venue[]
-  
+
   @@map("organizations")
 }
 
@@ -318,10 +323,10 @@ model Membership {
   status    String   @default("active")
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
-  
+
   user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
   organization Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
-  
+
   @@unique([userId, orgId])
   @@map("memberships")
 }
@@ -337,11 +342,11 @@ model Schedule {
   publishedAt DateTime? @map("published_at")
   createdAt   DateTime  @default(now()) @map("created_at")
   updatedAt   DateTime  @updatedAt @map("updated_at")
-  
+
   organization Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
   venue        Venue?       @relation(fields: [venueId], references: [id])
   shifts       Shift[]
-  
+
   @@map("schedules")
 }
 
@@ -357,12 +362,12 @@ model Shift {
   notes      String?
   createdAt  DateTime @default(now()) @map("created_at")
   updatedAt  DateTime @updatedAt @map("updated_at")
-  
+
   schedule Schedule  @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
   position Position? @relation(fields: [positionId], references: [id])
   assignee User?     @relation("ShiftAssignee", fields: [userId], references: [id])
   creator  User?     @relation("ShiftCreator", fields: [createdBy], references: [id])
-  
+
   @@map("shifts")
 }
 
@@ -376,10 +381,10 @@ model Position {
   isActive    Boolean  @default(true) @map("is_active")
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @updatedAt @map("updated_at")
-  
+
   organization Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
   shifts       Shift[]
-  
+
   @@map("positions")
 }
 
@@ -391,10 +396,10 @@ model Venue {
   isActive  Boolean  @default(true) @map("is_active")
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
-  
+
   organization Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
   schedules    Schedule[]
-  
+
   @@map("venues")
 }
 ```
@@ -409,30 +414,30 @@ export interface DatabaseClient {
   getUserByEmail(email: string): Promise<User | null>;
   createUser(data: CreateUserInput): Promise<User>;
   updateUser(id: string, data: UpdateUserInput): Promise<User>;
-  
+
   // Organizations
   getOrgById(id: string): Promise<Organization | null>;
   getOrgBySlug(slug: string): Promise<Organization | null>;
   createOrg(data: CreateOrgInput): Promise<Organization>;
-  
+
   // Memberships
   getMembership(userId: string, orgId: string): Promise<Membership | null>;
   getUserMemberships(userId: string): Promise<Membership[]>;
   createMembership(data: CreateMembershipInput): Promise<Membership>;
-  
+
   // Schedules
   getSchedulesByOrg(orgId: string, filters?: ScheduleFilters): Promise<Schedule[]>;
   getScheduleById(id: string): Promise<Schedule | null>;
   createSchedule(data: CreateScheduleInput): Promise<Schedule>;
   updateSchedule(id: string, data: UpdateScheduleInput): Promise<Schedule>;
-  
+
   // Shifts
   getShiftsBySchedule(scheduleId: string): Promise<Shift[]>;
   getShiftById(id: string): Promise<Shift | null>;
   createShift(data: CreateShiftInput): Promise<Shift>;
   updateShift(id: string, data: UpdateShiftInput): Promise<Shift>;
   deleteShift(id: string): Promise<void>;
-  
+
   // Positions
   getPositionsByOrg(orgId: string): Promise<Position[]>;
   getPositionById(id: string): Promise<Position | null>;
@@ -447,22 +452,22 @@ import { getFirebaseAdminDb } from "@/lib/firebase-admin";
 
 export class FirestoreClient implements DatabaseClient {
   private db = getFirebaseAdminDb();
-  
+
   async getUserById(id: string): Promise<User | null> {
     const doc = await this.db.collection("users").doc(id).get();
     if (!doc.exists) return null;
     return { id: doc.id, ...doc.data() } as User;
   }
-  
+
   async getSchedulesByOrg(orgId: string, filters?: ScheduleFilters): Promise<Schedule[]> {
     let query = this.db.collection(`orgs/${orgId}/schedules`);
     if (filters?.status) {
       query = query.where("status", "==", filters.status);
     }
     const snapshot = await query.get();
-    return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Schedule));
+    return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }) as Schedule);
   }
-  
+
   // ... implement all methods
 }
 ```
@@ -477,7 +482,7 @@ export class PostgresClient implements DatabaseClient {
   async getUserById(id: string): Promise<User | null> {
     return prisma.user.findUnique({ where: { id } });
   }
-  
+
   async getSchedulesByOrg(orgId: string, filters?: ScheduleFilters): Promise<Schedule[]> {
     return prisma.schedule.findMany({
       where: {
@@ -490,7 +495,7 @@ export class PostgresClient implements DatabaseClient {
       },
     });
   }
-  
+
   // ... implement all methods
 }
 ```
@@ -536,7 +541,7 @@ const prisma = new PrismaClient();
 async function migrateOrganizations() {
   console.log("📦 Migrating organizations...");
   const orgsSnap = await firestore.collection("organizations").get();
-  
+
   for (const doc of orgsSnap.docs) {
     const data = doc.data();
     await prisma.organization.upsert({
@@ -560,12 +565,10 @@ async function migrateSchedules() {
   console.log("📦 Migrating schedules...");
   const orgsSnap = await firestore.collection("organizations").get();
   let total = 0;
-  
+
   for (const orgDoc of orgsSnap.docs) {
-    const schedulesSnap = await firestore
-      .collection(`orgs/${orgDoc.id}/schedules`)
-      .get();
-    
+    const schedulesSnap = await firestore.collection(`orgs/${orgDoc.id}/schedules`).get();
+
     for (const schedDoc of schedulesSnap.docs) {
       const data = schedDoc.data();
       await prisma.schedule.upsert({
@@ -620,18 +623,17 @@ main();
 ### Current State (Firestore Listeners)
 
 **Files**:
+
 - React components using `onSnapshot()`
 - Schedule builder with live updates
 
 **Usage Pattern**:
+
 ```typescript
-const unsubscribe = onSnapshot(
-  collection(db, `orgs/${orgId}/schedules`),
-  (snapshot) => {
-    const schedules = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-    setSchedules(schedules);
-  }
-);
+const unsubscribe = onSnapshot(collection(db, `orgs/${orgId}/schedules`), (snapshot) => {
+  const schedules = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+  setSchedules(schedules);
+});
 ```
 
 ### Target State: Supabase Realtime
@@ -658,7 +660,7 @@ export function useRealtimeSchedules(orgId: string) {
   const [schedules, setSchedules] = useState<Schedule[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const supabase = createClient();
-  
+
   useEffect(() => {
     // Initial fetch
     const fetchSchedules = async () => {
@@ -667,7 +669,7 @@ export function useRealtimeSchedules(orgId: string) {
         .select("*")
         .eq("org_id", orgId)
         .order("week_start", { ascending: false });
-      
+
       if (error) {
         console.error("Failed to fetch schedules:", error);
       } else {
@@ -675,9 +677,9 @@ export function useRealtimeSchedules(orgId: string) {
       }
       setIsLoading(false);
     };
-    
+
     fetchSchedules();
-    
+
     // Subscribe to changes
     const channel = supabase
       .channel(`schedules:${orgId}`)
@@ -691,25 +693,21 @@ export function useRealtimeSchedules(orgId: string) {
         },
         (payload: RealtimePostgresChangesPayload<Schedule>) => {
           if (payload.eventType === "INSERT") {
-            setSchedules(prev => [payload.new, ...prev]);
+            setSchedules((prev) => [payload.new, ...prev]);
           } else if (payload.eventType === "UPDATE") {
-            setSchedules(prev =>
-              prev.map(s => s.id === payload.new.id ? payload.new : s)
-            );
+            setSchedules((prev) => prev.map((s) => (s.id === payload.new.id ? payload.new : s)));
           } else if (payload.eventType === "DELETE") {
-            setSchedules(prev =>
-              prev.filter(s => s.id !== payload.old.id)
-            );
+            setSchedules((prev) => prev.filter((s) => s.id !== payload.old.id));
           }
-        }
+        },
       )
       .subscribe();
-    
+
     return () => {
       supabase.removeChannel(channel);
     };
   }, [orgId, supabase]);
-  
+
   return { schedules, isLoading };
 }
 ```
@@ -734,6 +732,7 @@ Real-time can be disabled without affecting core functionality. Fallback to poll
 ### Current State
 
 **Files**:
+
 - `functions/src/onboarding.ts` - Join organization callable
 - `functions/src/ledger.ts` - Attendance triggers
 - `functions/src/domain/billing.ts` - Payment calculations
@@ -747,6 +746,7 @@ All functions moved to Next.js API routes (already mostly done).
 #### Step 1: Convert Callable Functions to API Routes
 
 **Before (Firebase Callable)**:
+
 ```typescript
 // functions/src/onboarding.ts
 export const joinOrganization = onCall(async (request) => {
@@ -757,6 +757,7 @@ export const joinOrganization = onCall(async (request) => {
 ```
 
 **After (Next.js API Route)**:
+
 ```typescript
 // apps/web/app/api/organizations/join/route.ts
 import { createAuthenticatedEndpoint } from "@fresh-schedules/api-framework";
@@ -775,14 +776,12 @@ export const POST = createAuthenticatedEndpoint({
 #### Step 2: Convert Firestore Triggers to Webhooks
 
 **Before (Firestore Trigger)**:
+
 ```typescript
 // functions/src/ledger.ts
-export const onAttendanceApproved = onDocumentUpdated(
-  "attendance/{docId}",
-  async (event) => {
-    // Calculate pay, update ledger
-  }
-);
+export const onAttendanceApproved = onDocumentUpdated("attendance/{docId}", async (event) => {
+  // Calculate pay, update ledger
+});
 ```
 
 **After (API Route + PostgreSQL Trigger)**:
@@ -812,13 +811,13 @@ export const POST = async (request: NextRequest) => {
   if (secret !== process.env.WEBHOOK_SECRET) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
-  
+
   const { id, data } = await request.json();
-  
+
   // Process attendance approval
   const payBreakdown = calculateShiftPay(data);
   await prisma.ledgerEntry.create({ data: payBreakdown });
-  
+
   return NextResponse.json({ success: true });
 };
 ```
@@ -834,10 +833,12 @@ Keep Cloud Functions deployed but disabled. Can re-enable if needed.
 ### Current State
 
 **Files**:
+
 - `apps/web/app/lib/firebaseClient.ts` - Storage client
 - File upload components
 
 **Bucket Structure**:
+
 ```
 gs://fresh-schedules.appspot.com/
 ├── avatars/{userId}/{filename}
@@ -889,17 +890,13 @@ import { createClient } from "@/lib/supabase/client";
 async function uploadAvatar(file: File, userId: string) {
   const supabase = createClient();
   const filePath = `${userId}/${file.name}`;
-  
-  const { error } = await supabase.storage
-    .from("avatars")
-    .upload(filePath, file, { upsert: true });
-  
+
+  const { error } = await supabase.storage.from("avatars").upload(filePath, file, { upsert: true });
+
   if (error) throw error;
-  
-  const { data } = supabase.storage
-    .from("avatars")
-    .getPublicUrl(filePath);
-  
+
+  const { data } = supabase.storage.from("avatars").getPublicUrl(filePath);
+
   return data.publicUrl;
 }
 ```
@@ -911,40 +908,39 @@ async function uploadAvatar(file: File, userId: string) {
 import { getStorage } from "firebase-admin/storage";
 import { createClient } from "@supabase/supabase-js";
 
-const supabase = createClient(
-  process.env.SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
+const supabase = createClient(process.env.SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!);
 
 async function migrateStorage() {
   const firebaseBucket = getStorage().bucket();
   const [files] = await firebaseBucket.getFiles();
-  
+
   let migrated = 0;
-  
+
   for (const file of files) {
     const [content] = await file.download();
     const path = file.name;
-    
+
     // Determine bucket from path
-    const bucket = path.startsWith("avatars/") ? "avatars"
-                 : path.startsWith("documents/") ? "documents"
-                 : "exports";
-    
+    const bucket = path.startsWith("avatars/")
+      ? "avatars"
+      : path.startsWith("documents/")
+        ? "documents"
+        : "exports";
+
     const { error } = await supabase.storage
       .from(bucket)
       .upload(path.replace(`${bucket}/`, ""), content, {
         contentType: file.metadata.contentType,
         upsert: true,
       });
-    
+
     if (error) {
       console.error(`Failed to migrate ${path}:`, error);
     } else {
       migrated++;
     }
   }
-  
+
   console.log(`✅ Migrated ${migrated}/${files.length} files`);
 }
 ```
@@ -957,13 +953,13 @@ Keep Firebase Storage files until migration verified. Update URLs in database.
 
 ## Summary: Migration Order
 
-| Priority | Subsystem | Complexity | Time |
-|----------|-----------|------------|------|
-| 1 | Data Layer | High | 1 week |
-| 2 | Authentication | Medium | 2-3 days |
-| 3 | Cloud Functions | Low | 1-2 days |
-| 4 | Real-time | Medium | 2-3 days |
-| 5 | Cloud Storage | Low | 1 day |
+| Priority | Subsystem       | Complexity | Time     |
+| -------- | --------------- | ---------- | -------- |
+| 1        | Data Layer      | High       | 1 week   |
+| 2        | Authentication  | Medium     | 2-3 days |
+| 3        | Cloud Functions | Low        | 1-2 days |
+| 4        | Real-time       | Medium     | 2-3 days |
+| 5        | Cloud Storage   | Low        | 1 day    |
 
 **Total Estimated Time**: 2-3 weeks for full migration
 

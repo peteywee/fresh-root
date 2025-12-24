@@ -10,14 +10,17 @@
 
 ### Scope (Default)
 
-- Targets: API routes under `/api/*`, auth/session, org scoping, rate limiting, error contract, and the “golden path” CRUD lifecycle.
-- Exclusions unless explicitly approved: destructive prod actions, non-emulated third-party integrations, load testing beyond basic rate-limit validation.
+- Targets: API routes under `/api/*`, auth/session, org scoping, rate limiting, error contract, and
+  the “golden path” CRUD lifecycle.
+- Exclusions unless explicitly approved: destructive prod actions, non-emulated third-party
+  integrations, load testing beyond basic rate-limit validation.
 
 ### Rules of Engagement
 
 - No secrets exfiltration attempts beyond validation of access control boundaries.
 - No fuzzing that destabilizes shared dev environments; prefer isolated runs.
-- All findings must include a reproduction script (curl or test), expected vs actual, and a recommended fix.
+- All findings must include a reproduction script (curl or test), expected vs actual, and a
+  recommended fix.
 
 ### Success Criteria (Exit)
 
@@ -33,7 +36,8 @@
   - P1: Broken rate limiting, inconsistent error contract causing unsafe client behavior.
   - P2: Validation gaps, missing negative tests, flaky test architecture.
 - Deliverables per finding:
-  - Title, severity, impacted endpoints, steps to reproduce, evidence, fix guidance, verification steps.
+  - Title, severity, impacted endpoints, steps to reproduce, evidence, fix guidance, verification
+    steps.
 
 ### Handoff Packet Checklist (What Red Team Receives)
 
@@ -58,13 +62,16 @@
 
 ### Team 3 — Deep Analysis (Background)
 
-- Goal: Catch “minor” issues that create outsized bug impact (silent data corruption, contract drift, edge-case auth failures).
+- Goal: Catch “minor” issues that create outsized bug impact (silent data corruption, contract
+  drift, edge-case auth failures).
 - Tactics:
-  - Review golden-path coverage for missing state transitions (create/read/update/delete/logout) and invariants.
+  - Review golden-path coverage for missing state transitions (create/read/update/delete/logout) and
+    invariants.
   - Probe concurrency and idempotency edges (double-submit, retry storms, replay with same body).
   - Validate error semantics at boundaries (wrong-org vs not-found, validation vs forbidden).
   - Scan for inconsistent shapes/fields across endpoints (contract drift) that can break clients.
-- Output: A short “Bug-Impact Findings” appendix (P2/P3) with reproduction steps and a suggested test to prevent regression.
+- Output: A short “Bug-Impact Findings” appendix (P2/P3) with reproduction steps and a suggested
+  test to prevent regression.
 
 ### Team 4 — Abuse / Rate Limit / Replay
 
@@ -107,14 +114,14 @@
 
 ## 📋 Issues Identified
 
-| # | Issue | Current State | Impact |
-| --- | --- | --- | --- |
-| 1 | **No DELETE in golden path** | Flow ends at PUBLISH, skips cleanup | Data leaks, no teardown verification |
-| 2 | **Redundant POST on publish** | Diagram shows POST twice confusingly | Visual error, no functional issue |
-| 3 | **DELETE should be on /schedules/[id]** | DELETE exists but not tested in flow | CRUD incomplete |
-| 4 | **Error codes are inconsistent** | Mix of `{ error: "string" }` and `{ error: { code, message } }` | Poor DX, hard to parse |
-| 5 | **Auth fixture not wired** | EXISTS but unused | Zero authenticated tests |
-| 6 | **Tests are garbage** | Only 401 rejection tested | False confidence |
+| #   | Issue                                   | Current State                                                   | Impact                               |
+| --- | --------------------------------------- | --------------------------------------------------------------- | ------------------------------------ |
+| 1   | **No DELETE in golden path**            | Flow ends at PUBLISH, skips cleanup                             | Data leaks, no teardown verification |
+| 2   | **Redundant POST on publish**           | Diagram shows POST twice confusingly                            | Visual error, no functional issue    |
+| 3   | **DELETE should be on /schedules/[id]** | DELETE exists but not tested in flow                            | CRUD incomplete                      |
+| 4   | **Error codes are inconsistent**        | Mix of `{ error: "string" }` and `{ error: { code, message } }` | Poor DX, hard to parse               |
+| 5   | **Auth fixture not wired**              | EXISTS but unused                                               | Zero authenticated tests             |
+| 6   | **Tests are garbage**                   | Only 401 rejection tested                                       | False confidence                     |
 
 ---
 
@@ -122,7 +129,7 @@
 
 **Philosophy:** Smallest change, fastest ship  
 **Effort:** 2 hours  
-**Risk:** Low  
+**Risk:** Low
 
 ### Changes
 
@@ -143,12 +150,12 @@
 
 ### Core Value Score
 
-| Value | Score | Reason |
-| --- | --- | --- |
-| Speed | ⭐⭐⭐⭐⭐ | 2 hrs |
-| Accuracy | ⭐⭐ | Still incomplete |
-| Efficiency | ⭐⭐⭐ | Minimal rework |
-| Security | ⭐⭐ | Auth still untested |
+| Value      | Score      | Reason              |
+| ---------- | ---------- | ------------------- |
+| Speed      | ⭐⭐⭐⭐⭐ | 2 hrs               |
+| Accuracy   | ⭐⭐       | Still incomplete    |
+| Efficiency | ⭐⭐⭐     | Minimal rework      |
+| Security   | ⭐⭐       | Auth still untested |
 
 Total: 12/20
 
@@ -158,7 +165,7 @@ Total: 12/20
 
 **Philosophy:** Fix the foundation before adding features  
 **Effort:** 6 hours  
-**Risk:** Medium  
+**Risk:** Medium
 
 ### Changes
 
@@ -166,7 +173,7 @@ Total: 12/20
 2. **Add authenticated login test** — POST /api/session with valid creds
 3. **Add full CRUD sequence:**
    - POST /api/organizations → create org
-   - POST /api/schedules → create schedule  
+   - POST /api/schedules → create schedule
    - POST /api/shifts → create shift
    - GET /api/schedules/[id] → verify
    - DELETE /api/schedules/[id] → cleanup
@@ -188,12 +195,12 @@ Total: 12/20
 
 ### Core Value Score
 
-| Value | Score | Reason |
-| --- | --- | --- |
-| Speed | ⭐⭐⭐ | 6 hrs |
-| Accuracy | ⭐⭐⭐⭐ | Full CRUD tested |
+| Value      | Score    | Reason                   |
+| ---------- | -------- | ------------------------ |
+| Speed      | ⭐⭐⭐   | 6 hrs                    |
+| Accuracy   | ⭐⭐⭐⭐ | Full CRUD tested         |
 | Efficiency | ⭐⭐⭐⭐ | Foundation for all tests |
-| Security | ⭐⭐⭐⭐ | Auth flow verified |
+| Security   | ⭐⭐⭐⭐ | Auth flow verified       |
 
 Total: 15/20
 
@@ -203,7 +210,7 @@ Total: 15/20
 
 **Philosophy:** Fix API contract first, tests follow  
 **Effort:** 8 hours  
-**Risk:** Medium-High  
+**Risk:** Medium-High
 
 ### Changes
 
@@ -213,7 +220,7 @@ Total: 15/20
    // BEFORE: Inconsistent
    { error: "Rate limit exceeded" }        // string
    { error: { code: "FORBIDDEN", message } } // object
-   
+
    // AFTER: Consistent
    {
      error: {
@@ -265,12 +272,12 @@ Total: 15/20
 
 ### Core Value Score
 
-| Value | Score | Reason |
-| --- | --- | --- |
-| Speed | ⭐⭐ | 8 hrs |
-| Accuracy | ⭐⭐⭐⭐⭐ | Clean API contract |
-| Efficiency | ⭐⭐⭐ | Rework now, clean later |
-| Security | ⭐⭐⭐⭐ | Auth + error codes |
+| Value      | Score      | Reason                  |
+| ---------- | ---------- | ----------------------- |
+| Speed      | ⭐⭐       | 8 hrs                   |
+| Accuracy   | ⭐⭐⭐⭐⭐ | Clean API contract      |
+| Efficiency | ⭐⭐⭐     | Rework now, clean later |
+| Security   | ⭐⭐⭐⭐   | Auth + error codes      |
 
 Total: 14/20
 
@@ -280,7 +287,7 @@ Total: 14/20
 
 **Philosophy:** Tests define the contract, implementation follows  
 **Effort:** 12 hours  
-**Risk:** High  
+**Risk:** High
 
 ### Changes
 
@@ -288,23 +295,27 @@ Total: 14/20
 
    ```markdown
    # API Contract Specification
-   
+
    ## /api/session
+
    POST: Login with Firebase ID token
-     - 200: { session: { userId, expiresAt } }
-     - 400: { error: { code: "VALIDATION_ERROR", ... } }
-     - 401: { error: { code: "UNAUTHORIZED", ... } }
-   
+
+   - 200: { session: { userId, expiresAt } }
+   - 400: { error: { code: "VALIDATION_ERROR", ... } }
+   - 401: { error: { code: "UNAUTHORIZED", ... } }
+
    DELETE: Logout
-     - 204: No content
-     - 401: { error: { code: "UNAUTHORIZED", ... } }
-   
+
+   - 204: No content
+   - 401: { error: { code: "UNAUTHORIZED", ... } }
+
    ## /api/schedules
+
    GET: List schedules (requires auth + org)
-     - 200: { data: Schedule[], meta: { total, page } }
-     - 401: Unauthorized
-     - 403: Forbidden (wrong org)
-   ...
+
+   - 200: { data: Schedule[], meta: { total, page } }
+   - 401: Unauthorized
+   - 403: Forbidden (wrong org) ...
    ```
 
 2. **Generate tests from specification**
@@ -334,12 +345,12 @@ Total: 14/20
 
 ### Core Value Score
 
-| Value | Score | Reason |
-| --- | --- | --- |
-| Speed | ⭐ | 12+ hrs |
-| Accuracy | ⭐⭐⭐⭐⭐ | Spec-driven |
-| Efficiency | ⭐⭐ | High upfront cost |
-| Security | ⭐⭐⭐⭐⭐ | Explicit security tests |
+| Value      | Score      | Reason                  |
+| ---------- | ---------- | ----------------------- |
+| Speed      | ⭐         | 12+ hrs                 |
+| Accuracy   | ⭐⭐⭐⭐⭐ | Spec-driven             |
+| Efficiency | ⭐⭐       | High upfront cost       |
+| Security   | ⭐⭐⭐⭐⭐ | Explicit security tests |
 
 Total: 13/20
 
@@ -349,7 +360,7 @@ Total: 13/20
 
 **Philosophy:** Fix auth foundation AND clean up error contract in one pass  
 **Effort:** 10 hours  
-**Risk:** Medium  
+**Risk:** Medium
 
 ### Changes
 
@@ -369,9 +380,9 @@ Total: 13/20
      RATE_LIMITED: 429,
      INTERNAL_ERROR: 500,
    } as const;
-   
+
    export type ErrorCode = keyof typeof ErrorCode;
-   
+
    export interface ApiErrorResponse {
      error: {
        code: ErrorCode;
@@ -387,14 +398,14 @@ Total: 13/20
 
 3. **Fix inconsistent error returns:**
 
-  ```typescript
-   // BEFORE (scattered across routes)
-   { error: "Rate limit exceeded" }           // ❌ string
-   { error: { code: "FORBIDDEN", message } }  // ✅ object
-   
-   // AFTER (all routes)
-   { error: { code: "RATE_LIMITED", message: "Rate limit exceeded", ... } }
-   ```
+```typescript
+ // BEFORE (scattered across routes)
+ { error: "Rate limit exceeded" }           // ❌ string
+ { error: { code: "FORBIDDEN", message } }  // ✅ object
+
+ // AFTER (all routes)
+ { error: { code: "RATE_LIMITED", message: "Rate limit exceeded", ... } }
+```
 
 #### Phase 2: Auth Fixture Wiring (2 hrs)
 
@@ -431,13 +442,13 @@ Total: 13/20
 
 ### Routes Requiring Error Fixes
 
-| Route | Current Error Format | Fix |
-| --- | --- | --- |
-| `/api/attendance` | `{ error: "string" }` | → `{ error: { code, message } }` |
-| `/api/widgets` | `{ error: "string" }` | → `{ error: { code, message } }` |
-| `/api/positions/[id]` | `{ error: "Rate limit exceeded" }` | → `{ error: { code: "RATE_LIMITED", ... } }` |
-| `/api/schedules` | Mixed | Standardize |
-| `/api/organizations/[id]` | `{ error: { code, message } }` ✅ | Already correct |
+| Route                     | Current Error Format               | Fix                                          |
+| ------------------------- | ---------------------------------- | -------------------------------------------- |
+| `/api/attendance`         | `{ error: "string" }`              | → `{ error: { code, message } }`             |
+| `/api/widgets`            | `{ error: "string" }`              | → `{ error: { code, message } }`             |
+| `/api/positions/[id]`     | `{ error: "Rate limit exceeded" }` | → `{ error: { code: "RATE_LIMITED", ... } }` |
+| `/api/schedules`          | Mixed                              | Standardize                                  |
+| `/api/organizations/[id]` | `{ error: { code, message } }` ✅  | Already correct                              |
 
 ### Pros
 
@@ -456,12 +467,12 @@ Total: 13/20
 
 ### Core Value Score
 
-| Value | Score | Reason |
-| --- | --- | --- |
-| Speed | ⭐⭐⭐ | 10 hrs (acceptable) |
-| Accuracy | ⭐⭐⭐⭐⭐ | Clean API contract + full CRUD |
-| Efficiency | ⭐⭐⭐⭐ | One PR, two problems solved |
-| Security | ⭐⭐⭐⭐⭐ | Auth + consistent error codes |
+| Value      | Score      | Reason                         |
+| ---------- | ---------- | ------------------------------ |
+| Speed      | ⭐⭐⭐     | 10 hrs (acceptable)            |
+| Accuracy   | ⭐⭐⭐⭐⭐ | Clean API contract + full CRUD |
+| Efficiency | ⭐⭐⭐⭐   | One PR, two problems solved    |
+| Security   | ⭐⭐⭐⭐⭐ | Auth + consistent error codes  |
 
 Total: 17/20 ⭐ HIGHEST SCORE
 
@@ -512,12 +523,12 @@ Total: 17/20 ⭐ HIGHEST SCORE
 
 ### Why Not Others
 
-| Plan | Rejection Reason |
-| --- | --- |
-| A (Minimal) | Kicks can down road, doesn't solve real problem |
-| B (Auth Only) | Misses opportunity to fix error codes |
-| C (Errors Only) | Doesn't enable auth testing |
-| D (Full Overhaul) | Overkill, blocks other work, scope creep risk |
+| Plan              | Rejection Reason                                |
+| ----------------- | ----------------------------------------------- |
+| A (Minimal)       | Kicks can down road, doesn't solve real problem |
+| B (Auth Only)     | Misses opportunity to fix error codes           |
+| C (Errors Only)   | Doesn't enable auth testing                     |
+| D (Full Overhaul) | Overkill, blocks other work, scope creep risk   |
 
 ---
 
@@ -599,14 +610,14 @@ Total: 17/20 ⭐ HIGHEST SCORE
 
 ## 🔒 Security Considerations
 
-| Test | Expected Result | Error Code |
-| --- | --- | --- |
-| Request without auth | 401 | UNAUTHORIZED |
-| Request with expired token | 401 | UNAUTHORIZED |
-| Request to wrong org | 403 | FORBIDDEN |
-| Request after logout | 401 | UNAUTHORIZED |
-| Rate limit exceeded | 429 | RATE_LIMITED |
-| Invalid request body | 400 | VALIDATION_ERROR |
+| Test                       | Expected Result | Error Code       |
+| -------------------------- | --------------- | ---------------- |
+| Request without auth       | 401             | UNAUTHORIZED     |
+| Request with expired token | 401             | UNAUTHORIZED     |
+| Request to wrong org       | 403             | FORBIDDEN        |
+| Request after logout       | 401             | UNAUTHORIZED     |
+| Rate limit exceeded        | 429             | RATE_LIMITED     |
+| Invalid request body       | 400             | VALIDATION_ERROR |
 
 ---
 
@@ -615,31 +626,38 @@ Total: 17/20 ⭐ HIGHEST SCORE
 1. **Cross-org security tests** — Ensure org scoping works
 2. **Rate limit tests** — Verify Redis rate limiting
 3. **Batch endpoint tests** — Add missing batch.e2e.test.ts
-4. **Admin endpoint tests** — Add ops/*.e2e.test.ts
+4. **Admin endpoint tests** — Add ops/\*.e2e.test.ts
 5. **MFA flow tests** — Verify 2FA setup/verify
 
 ---
 
 ## 📎 Appendix A — Team 3 Background Deep Analysis (Bug-Impact Findings)
 
-This appendix is intentionally focused on “small-looking” inconsistencies that can cause large bug impact: contract drift, incorrect status codes, and endpoints that return successful responses without verifying existence/ownership.
+This appendix is intentionally focused on “small-looking” inconsistencies that can cause large bug
+impact: contract drift, incorrect status codes, and endpoints that return successful responses
+without verifying existence/ownership.
 
 ### A1) Invalid token returns HTTP 500 with `error.code = UNAUTHORIZED`
 
-- Evidence: `POST /api/session` returns `serverError("Invalid token or internal error", ..., "UNAUTHORIZED")` which hard-codes HTTP 500.
-- Why it matters: Clients and intermediaries will treat auth failure as a server outage (retries, circuit breakers, noisy alerts). Also breaks “branch on 401” logic.
+- Evidence: `POST /api/session` returns
+  `serverError("Invalid token or internal error", ..., "UNAUTHORIZED")` which hard-codes HTTP 500.
+- Why it matters: Clients and intermediaries will treat auth failure as a server outage (retries,
+  circuit breakers, noisy alerts). Also breaks “branch on 401” logic.
 - Repro:
   - `POST /api/session` with an invalid `idToken`.
   - Observe HTTP 500 with an auth-ish code.
 - Expected:
   - HTTP 401 with `{ error: { code: "UNAUTHORIZED", message } }`.
 - Suggested regression test:
-  - Add an e2e test that submits a known-bad token and asserts HTTP 401 + `error.code === "UNAUTHORIZED"`.
+  - Add an e2e test that submits a known-bad token and asserts HTTP 401 +
+    `error.code === "UNAUTHORIZED"`.
 
 ### A2) `GET /api/schedules/[id]` does not verify existence and returns mock data
 
-- Evidence: The handler returns a hard-coded schedule object (e.g. `name: "Q1 2025 Schedule"`) and does not query Firestore.
-- Why it matters: A “read after write” golden-path test can pass even if persistence is broken; clients may behave as if schedules exist when they don’t.
+- Evidence: The handler returns a hard-coded schedule object (e.g. `name: "Q1 2025 Schedule"`) and
+  does not query Firestore.
+- Why it matters: A “read after write” golden-path test can pass even if persistence is broken;
+  clients may behave as if schedules exist when they don’t.
 - Repro:
   - `GET /api/schedules/does-not-exist` while authenticated.
   - Observe HTTP 200 with mock payload.
@@ -651,15 +669,18 @@ This appendix is intentionally focused on “small-looking” inconsistencies th
 
 ### A3) Field drift: schedule “state” vs “status”
 
-- Evidence: `POST /api/schedules` writes `state: "draft"`, but `GET /api/schedules/[id]` returns `status: "draft"`.
-- Why it matters: UI/client code will fork on one field, causing silent bugs (filters, rendering, publish flow logic).
+- Evidence: `POST /api/schedules` writes `state: "draft"`, but `GET /api/schedules/[id]` returns
+  `status: "draft"`.
+- Why it matters: UI/client code will fork on one field, causing silent bugs (filters, rendering,
+  publish flow logic).
 - Suggested regression test:
   - Assert a single canonical field name across list/create/detail responses.
 
 ### A4) `GET /api/shifts/[id]` returns a sample payload for any ID
 
 - Evidence: The handler returns `{ name: "Sample Shift", ... }` without verifying the ID exists.
-- Why it matters: Same “false confidence” problem as schedules; also breaks negative tests and client error handling.
+- Why it matters: Same “false confidence” problem as schedules; also breaks negative tests and
+  client error handling.
 - Repro:
   - `GET /api/shifts/does-not-exist` while authenticated.
   - Observe HTTP 200.
@@ -668,22 +689,28 @@ This appendix is intentionally focused on “small-looking” inconsistencies th
 
 ### A5) Path-param org endpoints may not validate `params.id` matches org context
 
-- Evidence: `GET /api/organizations/[id]` returns `id: params.id` while org context is derived elsewhere; there is no explicit guard that `params.id === context.org.orgId`.
-- Why it matters: Even without true data exposure, it creates correctness bugs (client shows org “id” that user doesn’t belong to) and can mask broken authorization.
+- Evidence: `GET /api/organizations/[id]` returns `id: params.id` while org context is derived
+  elsewhere; there is no explicit guard that `params.id === context.org.orgId`.
+- Why it matters: Even without true data exposure, it creates correctness bugs (client shows org
+  “id” that user doesn’t belong to) and can mask broken authorization.
 - Suggested regression tests:
   - Request org detail with a mismatched `id` should return 403 or 404 (decide policy), never 200.
 
 ### A6) Response-contract drift still exists outside the golden-path routes
 
 - Evidence:
-  - `GET /api/ops/build-performance` returns `{ ok: false, error: "Failed to load..." }` (string error field).
-  - Legacy rate limiter middleware returns `{ error: "Too Many Requests", message: "Rate limit exceeded..." }`.
+  - `GET /api/ops/build-performance` returns `{ ok: false, error: "Failed to load..." }` (string
+    error field).
+  - Legacy rate limiter middleware returns
+    `{ error: "Too Many Requests", message: "Rate limit exceeded..." }`.
   - There are multiple response helper systems (`_shared/validation.ts` vs `_shared/response.ts`).
-- Why it matters: Client wrappers (like typed fetch) often assume a single error shape; drift creates “works in one area, breaks in another” bugs.
+- Why it matters: Client wrappers (like typed fetch) often assume a single error shape; drift
+  creates “works in one area, breaks in another” bugs.
 - Suggested approach:
-  - Decide whether ops/legacy endpoints are exempt from the main API error contract. If not exempt, standardize their errors to `{ error: { code, message, details? } }`.
-  - Add a single contract test that iterates a small allowlist of representative endpoints and asserts error shape on non-2xx.
-
+  - Decide whether ops/legacy endpoints are exempt from the main API error contract. If not exempt,
+    standardize their errors to `{ error: { code, message, details? } }`.
+  - Add a single contract test that iterates a small allowlist of representative endpoints and
+    asserts error shape on non-2xx.
 
 ## ✅ APPROVED — Starting Implementation
 
@@ -693,4 +720,5 @@ This appendix is intentionally focused on “small-looking” inconsistencies th
 
 ---
 
-*Document updated 2025-12-20. Core values (Speed • Accuracy • Efficiency • Security) guide all recommendations.*
+_Document updated 2025-12-20. Core values (Speed • Accuracy • Efficiency • Security) guide all
+recommendations._

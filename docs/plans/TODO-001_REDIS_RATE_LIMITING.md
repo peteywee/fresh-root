@@ -1,18 +1,16 @@
 # TODO-001: Redis Rate Limiting + Idempotency Implementation Plan
 
-**Priority:** ✅ COMPLETE
-**Estimated Effort:** 8-12 hours → **Actual: ~3 hours**
-**Dependencies:** Upstash Redis account or self-hosted Redis instance
-**Completed:** December 20, 2025
-**Commit:** `f973a41`
+**Priority:** ✅ COMPLETE **Estimated Effort:** 8-12 hours → **Actual: ~3 hours** **Dependencies:**
+Upstash Redis account or self-hosted Redis instance **Completed:** December 20, 2025 **Commit:**
+`f973a41`
 
 ---
 
 ## Executive Summary
 
-~~The current rate limiter uses in-memory storage, which breaks in multi-instance deployments
-(each instance has its own counter).~~ **RESOLVED:** Redis-backed rate limiting and idempotency
-storage implemented using Upstash Redis (serverless, Edge-compatible).
+~~The current rate limiter uses in-memory storage, which breaks in multi-instance deployments (each
+instance has its own counter).~~ **RESOLVED:** Redis-backed rate limiting and idempotency storage
+implemented using Upstash Redis (serverless, Edge-compatible).
 
 ---
 
@@ -33,12 +31,12 @@ packages/api-framework/src/rate-limit.ts
 
 ### Affected Files
 
-| File | Issue |
-| ---- | ----- |
-| `packages/api-framework/src/rate-limit.ts` | In-memory rate limit store |
-| `packages/api-framework/src/idempotency.ts` | Stub implementation |
-| `packages/env/src/server.ts` | Missing `UPSTASH_REDIS_*` env vars |
-| `apps/web/app/api/**/route.ts` | All rate-limited endpoints |
+| File                                        | Issue                              |
+| ------------------------------------------- | ---------------------------------- |
+| `packages/api-framework/src/rate-limit.ts`  | In-memory rate limit store         |
+| `packages/api-framework/src/idempotency.ts` | Stub implementation                |
+| `packages/env/src/server.ts`                | Missing `UPSTASH_REDIS_*` env vars |
+| `apps/web/app/api/**/route.ts`              | All rate-limited endpoints         |
 
 ---
 
@@ -70,11 +68,11 @@ packages/api-framework/src/rate-limit.ts
 // packages/env/src/server.ts
 export const ServerEnvSchema = z.object({
   // ... existing fields
-  
+
   // Redis (optional in dev, required in prod multi-instance)
   UPSTASH_REDIS_REST_URL: z.string().url().optional(),
   UPSTASH_REDIS_REST_TOKEN: z.string().min(1).optional(),
-  
+
   // Feature flag for gradual rollout
   USE_REDIS_RATE_LIMIT: z.enum(["true", "false"]).default("false"),
 });
@@ -110,23 +108,23 @@ let redisInstance: Redis | null = null;
 
 export function getRedisClient(): Redis | null {
   const env = loadServerEnv();
-  
+
   if (env.USE_REDIS_RATE_LIMIT !== "true") {
     return null; // Fall back to in-memory
   }
-  
+
   if (!env.UPSTASH_REDIS_REST_URL || !env.UPSTASH_REDIS_REST_TOKEN) {
     console.warn("[Redis] USE_REDIS_RATE_LIMIT=true but credentials missing");
     return null;
   }
-  
+
   if (!redisInstance) {
     redisInstance = new Redis({
       url: env.UPSTASH_REDIS_REST_URL,
       token: env.UPSTASH_REDIS_REST_TOKEN,
     });
   }
-  
+
   return redisInstance;
 }
 
@@ -160,11 +158,11 @@ export async function checkRateLimit(
   windowMs: number,
 ): Promise<{ allowed: boolean; remaining: number; resetAt: number }> {
   const redis = getRedisClient();
-  
+
   if (redis) {
     return checkRateLimitRedis(redis, key, maxRequests, windowMs);
   }
-  
+
   return checkRateLimitMemory(key, maxRequests, windowMs);
 }
 
@@ -176,22 +174,22 @@ async function checkRateLimitRedis(
 ): Promise<{ allowed: boolean; remaining: number; resetAt: number }> {
   const now = Date.now();
   const windowKey = `ratelimit:${key}:${Math.floor(now / windowMs)}`;
-  
+
   // Atomic increment with TTL
   const pipeline = redis.pipeline();
   pipeline.incr(windowKey);
   pipeline.pttl(windowKey);
-  
+
   const [[count], [ttl]] = await pipeline.exec();
-  
+
   // Set TTL on first request in window
   if (ttl === -1) {
     await redis.pexpire(windowKey, windowMs);
   }
-  
+
   const remaining = Math.max(0, maxRequests - (count as number));
   const resetAt = now + (ttl > 0 ? ttl : windowMs);
-  
+
   return {
     allowed: (count as number) <= maxRequests,
     remaining,
@@ -206,15 +204,15 @@ function checkRateLimitMemory(
 ): { allowed: boolean; remaining: number; resetAt: number } {
   const now = Date.now();
   const entry = memoryStore.get(key);
-  
+
   if (!entry || now > entry.resetTime) {
     memoryStore.set(key, { count: 1, resetTime: now + windowMs });
     return { allowed: true, remaining: maxRequests - 1, resetAt: now + windowMs };
   }
-  
+
   entry.count++;
   const remaining = Math.max(0, maxRequests - entry.count);
-  
+
   return {
     allowed: entry.count <= maxRequests,
     remaining,
@@ -230,11 +228,12 @@ function checkRateLimitMemory(
 
 export function withRateLimit(config: RateLimitConfig) {
   return async (request: NextRequest, context: RequestContext) => {
-    const key = config.keyGenerator?.(request, context) 
-      ?? buildRateLimitKey({ userId: context.auth?.userId, ip: request.ip });
-    
+    const key =
+      config.keyGenerator?.(request, context) ??
+      buildRateLimitKey({ userId: context.auth?.userId, ip: request.ip });
+
     const result = await checkRateLimit(key, config.maxRequests, config.windowMs);
-    
+
     if (!result.allowed) {
       return new NextResponse(
         JSON.stringify({ error: "Rate limit exceeded", retryAfter: result.resetAt }),
@@ -249,7 +248,7 @@ export function withRateLimit(config: RateLimitConfig) {
         },
       );
     }
-    
+
     // Continue to handler, attach rate limit headers to response
     return null; // Proceed
   };
@@ -279,11 +278,9 @@ interface IdempotentEntry {
 // In-memory fallback for dev
 const memoryCache = new Map<string, IdempotentEntry>();
 
-export async function getIdempotentResponse(
-  key: string,
-): Promise<NextResponse | null> {
+export async function getIdempotentResponse(key: string): Promise<NextResponse | null> {
   const redis = getRedisClient();
-  
+
   if (redis) {
     const entry = await redis.get<IdempotentEntry>(`idempotency:${key}`);
     if (entry) {
@@ -294,7 +291,7 @@ export async function getIdempotentResponse(
     }
     return null;
   }
-  
+
   // Memory fallback
   const entry = memoryCache.get(key);
   if (entry && Date.now() - entry.createdAt < IDEMPOTENCY_TTL_MS) {
@@ -303,30 +300,27 @@ export async function getIdempotentResponse(
       headers: entry.headers,
     });
   }
-  
+
   return null;
 }
 
-export async function storeIdempotentResponse(
-  key: string,
-  response: NextResponse,
-): Promise<void> {
+export async function storeIdempotentResponse(key: string, response: NextResponse): Promise<void> {
   const entry: IdempotentEntry = {
     status: response.status,
     body: await response.clone().text(),
     headers: Object.fromEntries(response.headers.entries()),
     createdAt: Date.now(),
   };
-  
+
   const redis = getRedisClient();
-  
+
   if (redis) {
     await redis.set(`idempotency:${key}`, entry, {
       px: IDEMPOTENCY_TTL_MS,
     });
     return;
   }
-  
+
   // Memory fallback
   memoryCache.set(key, entry);
 }
@@ -340,12 +334,12 @@ export async function storeIdempotentResponse(
 export function withIdempotency(config?: IdempotencyConfig) {
   return async (request: NextRequest, context: RequestContext) => {
     const idempotencyKey = request.headers.get("Idempotency-Key");
-    
+
     if (!idempotencyKey) {
       // No key provided, proceed without idempotency
       return null;
     }
-    
+
     // Check for cached response
     const cached = await getIdempotentResponse(idempotencyKey);
     if (cached) {
@@ -353,7 +347,7 @@ export function withIdempotency(config?: IdempotencyConfig) {
       cached.headers.set("X-Idempotent-Replayed", "true");
       return cached;
     }
-    
+
     // Proceed with handler, store result after
     return null;
   };
@@ -372,27 +366,27 @@ export function withIdempotency(config?: IdempotencyConfig) {
 export function createEndpoint(config: EndpointConfig) {
   return async (request: NextRequest, routeContext: RouteContext) => {
     // ... existing auth/org middleware
-    
+
     // Rate limiting (now async)
     if (config.rateLimit) {
       const rateLimitResult = await withRateLimit(config.rateLimit)(request, context);
       if (rateLimitResult) return rateLimitResult;
     }
-    
+
     // Idempotency check
     if (config.idempotent) {
       const cachedResponse = await withIdempotency()(request, context);
       if (cachedResponse) return cachedResponse;
     }
-    
+
     // ... handler execution
-    
+
     // Store idempotent response if key provided
     const idempotencyKey = request.headers.get("Idempotency-Key");
     if (idempotencyKey && config.idempotent) {
       await storeIdempotentResponse(idempotencyKey, response);
     }
-    
+
     return response;
   };
 }
@@ -408,10 +402,10 @@ describe("Redis Rate Limiting", () => {
     process.env.USE_REDIS_RATE_LIMIT = "true";
     // Use test Redis or mock
   });
-  
+
   it("should rate limit across instances", async () => {
     const key = `test:${Date.now()}`;
-    
+
     // Simulate 10 requests
     for (let i = 0; i < 10; i++) {
       const result = await checkRateLimit(key, 5, 60_000);
@@ -422,13 +416,13 @@ describe("Redis Rate Limiting", () => {
       }
     }
   });
-  
+
   it("should replay idempotent responses", async () => {
     const key = `idempotency:${Date.now()}`;
     const response = NextResponse.json({ created: true }, { status: 201 });
-    
+
     await storeIdempotentResponse(key, response);
-    
+
     const cached = await getIdempotentResponse(key);
     expect(cached?.status).toBe(201);
   });
@@ -470,17 +464,17 @@ Add dashboard metrics:
 
 ## File Checklist
 
-| File | Action | Priority |
-| ---- | ------ | -------- |
-| `packages/env/src/server.ts` | Add Redis env vars | P0 |
-| `packages/api-framework/package.json` | Add `@upstash/redis` | P0 |
-| `packages/api-framework/src/redis-client.ts` | Create | P0 |
-| `packages/api-framework/src/rate-limit.ts` | Refactor | P0 |
-| `packages/api-framework/src/idempotency.ts` | Implement | P0 |
-| `packages/api-framework/src/factory.ts` | Update middleware order | P1 |
-| `packages/api-framework/tests/*.test.ts` | Add integration tests | P1 |
-| `.env.example` | Document new vars | P2 |
-| `docs/guides/RATE_LIMITING.md` | Update docs | P2 |
+| File                                         | Action                  | Priority |
+| -------------------------------------------- | ----------------------- | -------- |
+| `packages/env/src/server.ts`                 | Add Redis env vars      | P0       |
+| `packages/api-framework/package.json`        | Add `@upstash/redis`    | P0       |
+| `packages/api-framework/src/redis-client.ts` | Create                  | P0       |
+| `packages/api-framework/src/rate-limit.ts`   | Refactor                | P0       |
+| `packages/api-framework/src/idempotency.ts`  | Implement               | P0       |
+| `packages/api-framework/src/factory.ts`      | Update middleware order | P1       |
+| `packages/api-framework/tests/*.test.ts`     | Add integration tests   | P1       |
+| `.env.example`                               | Document new vars       | P2       |
+| `docs/guides/RATE_LIMITING.md`               | Update docs             | P2       |
 
 ---
 
@@ -499,13 +493,12 @@ If issues occur after enabling Redis:
 
 - [x] Rate limits work correctly across multiple Vercel instances
 - [x] Idempotent requests return cached responses within 24h
-- [ ] p95 latency increase < 5ms per request *(needs production validation)*
-- [ ] Zero Redis-related errors in production logs *(needs production validation)*
+- [ ] p95 latency increase < 5ms per request _(needs production validation)_
+- [ ] Zero Redis-related errors in production logs _(needs production validation)_
 - [x] Existing rate limit tests still pass
 - [x] New Redis integration tests added (13 tests)
 
 ---
 
-**Last Updated:** December 20, 2025
-**Owner:** @srdev
-**Status:** ✅ IMPLEMENTED - Ready for Production Deployment
+**Last Updated:** December 20, 2025 **Owner:** @srdev **Status:** ✅ IMPLEMENTED - Ready for
+Production Deployment

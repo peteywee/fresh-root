@@ -103,7 +103,7 @@ const createSchedule = async (request: Request, context: RequestContext) => {
   } catch (_err) {
     return badRequest("Invalid JSON body");
   }
-  
+
   if (!parsed.success) {
     return badRequest("Invalid payload", parsed.details);
   }
