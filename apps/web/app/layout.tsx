@@ -29,7 +29,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <Header />
           <main className="min-h-screen">{children}</main>
           <footer className="border-t border-neutral-900 bg-[#0b0f14] px-4 py-10 text-xs text-neutral-500">
-            <p className="mx-auto max-w-6xl">© {new Date().getFullYear()} Top Shelf Service LLC. All rights reserved.</p>
+            <p className="mx-auto max-w-6xl">
+              © {new Date().getFullYear()} Top Shelf Service LLC. All rights reserved.
+            </p>
           </footer>
         </Providers>
       </body>

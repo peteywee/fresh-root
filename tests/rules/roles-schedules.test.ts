@@ -49,35 +49,61 @@ describe("rules: role-based schedules/shifts", () => {
   it("employees can read schedules", async () => {
     const db = ctxUser(env, "staff-1", { orgId, roles: ["employee"] }).firestore();
 
-    await assertSucceeds(db.collection("orgs").doc(orgId).collection("schedules").doc(scheduleId).get());
+    await assertSucceeds(
+      db.collection("orgs").doc(orgId).collection("schedules").doc(scheduleId).get(),
+    );
   });
 
   it("employees cannot create/update/delete schedules", async () => {
     const db = ctxUser(env, "staff-1", { orgId, roles: ["employee"] }).firestore();
 
     await assertFails(
-      db.collection("orgs").doc(orgId).collection("schedules").doc("new-sched").set({ orgId, name: "X" }),
+      db
+        .collection("orgs")
+        .doc(orgId)
+        .collection("schedules")
+        .doc("new-sched")
+        .set({ orgId, name: "X" }),
     );
 
     await assertFails(
-      db.collection("orgs").doc(orgId).collection("schedules").doc(scheduleId).update({ name: "Nope" }),
+      db
+        .collection("orgs")
+        .doc(orgId)
+        .collection("schedules")
+        .doc(scheduleId)
+        .update({ name: "Nope" }),
     );
 
-    await assertFails(db.collection("orgs").doc(orgId).collection("schedules").doc(scheduleId).delete());
+    await assertFails(
+      db.collection("orgs").doc(orgId).collection("schedules").doc(scheduleId).delete(),
+    );
   });
 
   it("managers can create/update/delete schedules", async () => {
     const db = ctxUser(env, "mgr-1", { orgId, roles: ["manager"] }).firestore();
 
     await assertSucceeds(
-      db.collection("orgs").doc(orgId).collection("schedules").doc("mgr-sched").set({ orgId, name: "Mgr" }),
+      db
+        .collection("orgs")
+        .doc(orgId)
+        .collection("schedules")
+        .doc("mgr-sched")
+        .set({ orgId, name: "Mgr" }),
     );
 
     await assertSucceeds(
-      db.collection("orgs").doc(orgId).collection("schedules").doc(scheduleId).update({ name: "Updated" }),
+      db
+        .collection("orgs")
+        .doc(orgId)
+        .collection("schedules")
+        .doc(scheduleId)
+        .update({ name: "Updated" }),
     );
 
-    await assertSucceeds(db.collection("orgs").doc(orgId).collection("schedules").doc(scheduleId).delete());
+    await assertSucceeds(
+      db.collection("orgs").doc(orgId).collection("schedules").doc(scheduleId).delete(),
+    );
   });
 
   it("staff can update their own shift with limited fields only", async () => {

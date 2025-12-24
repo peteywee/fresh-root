@@ -2,7 +2,8 @@
 
 Repomix CLI and library integration for the Fresh Schedules codebase.
 
-Repomix packages entire codebases into a single file for AI analysis, making it easier to analyze and understand large projects.
+Repomix packages entire codebases into a single file for AI analysis, making it easier to analyze
+and understand large projects.
 
 ## Installation
 
@@ -41,23 +42,23 @@ pnpm repomix /path/to/code --include "src/**" --ignore "node_modules/**"
 Use repomix programmatically in your code:
 
 ```typescript
-import { packLocalDirectory, packRemoteRepository } from '@fresh-schedules/repomix';
+import { packLocalDirectory, packRemoteRepository } from "@fresh-schedules/repomix";
 
 // Pack a local directory
-const output = await packLocalDirectory('/path/to/code', {
-  style: 'markdown',
-  includePatterns: 'src/**',
+const output = await packLocalDirectory("/path/to/code", {
+  style: "markdown",
+  includePatterns: "src/**",
   compress: false,
 });
 
 // Pack a GitHub repository
-const repoOutput = await packRemoteRepository('user/repo', {
-  style: 'xml',
+const repoOutput = await packRemoteRepository("user/repo", {
+  style: "xml",
   compress: true,
 });
 
 // Get version info
-import { getVersion } from '@fresh-schedules/repomix';
+import { getVersion } from "@fresh-schedules/repomix";
 const version = await getVersion();
 console.log(`Package version: ${version}`);
 ```
@@ -92,4 +93,3 @@ pnpm repomix . --include "apps/web/app/api/**" --style markdown
 - `pnpm build` - Build the package
 - `pnpm typecheck` - Type check
 - `pnpm clean` - Clean build artifacts
-

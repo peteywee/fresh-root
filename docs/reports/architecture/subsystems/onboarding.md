@@ -1,12 +1,12 @@
 # L2 — Onboarding & Network Creation
 
-> **Status:** ✅ Documented from actual codebase analysis
-> **Last Updated:** 2025-12-17
-> **Analyzed Routes:** 7 endpoints, ~400 LOC
+> **Status:** ✅ Documented from actual codebase analysis **Last Updated:** 2025-12-17 **Analyzed
+> Routes:** 7 endpoints, ~400 LOC
 
 ## 1. Role in the System
 
-The Onboarding subsystem handles new user registration and organization network setup. It provides three distinct flows:
+The Onboarding subsystem handles new user registration and organization network setup. It provides
+three distinct flows:
 
 1. **Create Organization Network** - New organizations starting from scratch
 2. **Create Corporate Network** - Enterprise/corporate onboarding with admin controls
@@ -18,17 +18,18 @@ All routes use the `@fresh-schedules/api-framework` SDK with typed validation an
 
 ### 2.1 Endpoints Inventory
 
-| Endpoint | Method | Purpose | Auth | Validation |
-|----------|--------|---------|------|------------|
-| `/api/onboarding/profile` | POST | Complete user profile setup | ✅ Required | `OnboardingProfileSchema` |
-| `/api/onboarding/verify-eligibility` | POST | Check if user can create network | ✅ Required | Custom schema |
-| `/api/onboarding/create-network-org` | POST | Create new organization network | ✅ Required | `CreateOrgOnboardingSchema` |
-| `/api/onboarding/create-network-corporate` | POST | Create corporate network | ✅ Required | `CreateCorporateOnboardingSchema` |
-| `/api/onboarding/join-with-token` | POST | Join existing network via token | ✅ Required | `OnboardingJoinWithTokenSchema` |
-| `/api/onboarding/activate-network` | POST | Activate network post-creation | ✅ Required | `ActivateNetworkSchema` |
-| `/api/onboarding/admin-form` | POST | Admin-specific onboarding data | ✅ Required | TBD |
+| Endpoint                                   | Method | Purpose                          | Auth        | Validation                        |
+| ------------------------------------------ | ------ | -------------------------------- | ----------- | --------------------------------- |
+| `/api/onboarding/profile`                  | POST   | Complete user profile setup      | ✅ Required | `OnboardingProfileSchema`         |
+| `/api/onboarding/verify-eligibility`       | POST   | Check if user can create network | ✅ Required | Custom schema                     |
+| `/api/onboarding/create-network-org`       | POST   | Create new organization network  | ✅ Required | `CreateOrgOnboardingSchema`       |
+| `/api/onboarding/create-network-corporate` | POST   | Create corporate network         | ✅ Required | `CreateCorporateOnboardingSchema` |
+| `/api/onboarding/join-with-token`          | POST   | Join existing network via token  | ✅ Required | `OnboardingJoinWithTokenSchema`   |
+| `/api/onboarding/activate-network`         | POST   | Activate network post-creation   | ✅ Required | `ActivateNetworkSchema`           |
+| `/api/onboarding/admin-form`               | POST   | Admin-specific onboarding data   | ✅ Required | TBD                               |
 
-**All endpoints** use `createAuthenticatedEndpoint()` from the API framework - **A09 Handler Signature Invariant** is enforced.
+**All endpoints** use `createAuthenticatedEndpoint()` from the API framework - **A09 Handler
+Signature Invariant** is enforced.
 
 ### 2.2 Data Models & Types
 
@@ -36,18 +37,10 @@ From `packages/types/src/onboarding.ts`:
 
 ```typescript
 // Onboarding Intent
-export const OnboardingIntent = z.enum([
-  "create_org",
-  "create_corporate",
-  "join_existing"
-]);
+export const OnboardingIntent = z.enum(["create_org", "create_corporate", "join_existing"]);
 
 // Onboarding Status
-export const OnboardingStatus = z.enum([
-  "not_started",
-  "in_progress",
-  "complete"
-]);
+export const OnboardingStatus = z.enum(["not_started", "in_progress", "complete"]);
 
 // Profile Input
 export const OnboardingProfileSchema = z.object({
@@ -81,11 +74,13 @@ export const OnboardingJoinWithTokenSchema = z.object({
   - Fields: `id`, `name`, `status`, `activatedAt`, `createdAt`, `updatedAt`, `ownerId`
   - Status enum: `"active" | "inactive" | "pending"`
 
-**Note:** Limited Firestore usage detected in packed code. Most onboarding logic appears to return mock/local data for development.
+**Note:** Limited Firestore usage detected in packed code. Most onboarding logic appears to return
+mock/local data for development.
 
 ### 2.4 Authentication & Context
 
 All routes receive:
+
 ```typescript
 {
   request: NextRequest,
@@ -102,16 +97,18 @@ All routes receive:
 }
 ```
 
-Authentication is **required** via `createAuthenticatedEndpoint()` - unauthorized requests are rejected before handler execution.
+Authentication is **required** via `createAuthenticatedEndpoint()` - unauthorized requests are
+rejected before handler execution.
 
 ## 3. Critical Findings
 
 ### 🔴 CRITICAL-01: Missing Actual Firestore Operations
 
-**Location:** All onboarding routes
-**Issue:** Most endpoints return `ok(mockData)` without persisting to Firestore
+**Location:** All onboarding routes **Issue:** Most endpoints return `ok(mockData)` without
+persisting to Firestore
 
 **Example from profile route:**
+
 ```typescript
 // ❌ PROBLEM: No Firestore write operation
 const profile = {
@@ -123,54 +120,56 @@ const profile = {
   updatedAt: Date.now(),
   onboardingComplete: true,
 };
-return ok(profile);  // Just returns data, doesn't save
+return ok(profile); // Just returns data, doesn't save
 ```
 
-**Impact:** User profiles/onboarding state not persisted
-**Recommendation:** Add Firestore writes using typed wrappers:
+**Impact:** User profiles/onboarding state not persisted **Recommendation:** Add Firestore writes
+using typed wrappers:
+
 ```typescript
 await updateDocWithType<UserProfile>(adminDb, userRef, profile);
 ```
 
 ### 🔴 CRITICAL-02: Placeholder Test Coverage
 
-**Location:** `apps/web/app/api/onboarding/__tests__/`
-**Issue:** All tests are placeholders with no actual assertions
+**Location:** `apps/web/app/api/onboarding/__tests__/` **Issue:** All tests are placeholders with no
+actual assertions
 
 **Example:**
+
 ```typescript
 describe("api/onboarding/profile route", () => {
   it("is wired for tests (placeholder)", () => {
-    expect(true).toBe(true);  // ❌ Not testing anything
+    expect(true).toBe(true); // ❌ Not testing anything
   });
 });
 ```
 
-**Impact:** Zero coverage of critical onboarding flows
-**Recommendation:** Implement contract tests for each endpoint (see §5 for examples)
+**Impact:** Zero coverage of critical onboarding flows **Recommendation:** Implement contract tests
+for each endpoint (see §5 for examples)
 
 ### 🟡 HIGH-01: No Validation of Network Ownership
 
-**Location:** `activate-network/route.ts`
-**Issue:** Any authenticated user can activate any networkId
+**Location:** `activate-network/route.ts` **Issue:** Any authenticated user can activate any
+networkId
 
 ```typescript
 const { networkId } = typedInput;
 const networkRef = adb.collection("networks").doc(String(networkId));
 await updateDocWithType<NetworkDoc>(adb, networkRef, {
-  status: "active",  // ❌ No ownership check!
+  status: "active", // ❌ No ownership check!
 });
 ```
 
-**Impact:** Authorization bypass vulnerability
-**Recommendation:** Verify `context.auth.userId === network.ownerId` before activation
+**Impact:** Authorization bypass vulnerability **Recommendation:** Verify
+`context.auth.userId === network.ownerId` before activation
 
 ### 🟡 HIGH-02: Missing Idempotency
 
-**Location:** All POST endpoints
-**Issue:** Repeated requests can cause duplicate network creation
+**Location:** All POST endpoints **Issue:** Repeated requests can cause duplicate network creation
 
 **Recommendation:** Use idempotency keys:
+
 ```typescript
 export const POST = createAuthenticatedEndpoint({
   input: Schema,
@@ -202,7 +201,7 @@ export const POST = createAuthenticatedEndpoint({
 ```typescript
 // File: onboarding/profile/route.ts
 export const POST = createAuthenticatedEndpoint({
-  input: OnboardingProfileSchema,  // ✅ Typed validation
+  input: OnboardingProfileSchema, // ✅ Typed validation
   handler: async ({ request, input, context, params }) => {
     // ✅ Type-safe input
     const { firstName, lastName, avatar, timezone } = input;
@@ -212,13 +211,14 @@ export const POST = createAuthenticatedEndpoint({
       userId: context.auth?.userId,
       firstName,
       lastName,
-      onboardingComplete: true
+      onboardingComplete: true,
     });
   },
 });
 ```
 
 **Why Good:**
+
 - Uses standard SDK factory
 - Input automatically validated
 - Type-safe throughout
@@ -320,15 +320,15 @@ export const POST = createAuthenticatedEndpoint({
 
 ## 7. Recommendations Summary
 
-| Priority | Action | Estimated Effort |
-|----------|--------|-----------------|
-| 🔴 P0 | Add Firestore persistence to all endpoints | 2-3 days |
-| 🔴 P0 | Implement real test coverage (not placeholders) | 3-4 days |
-| 🟡 P1 | Add authorization checks (ownership validation) | 1-2 days |
-| 🟡 P1 | Add idempotency support to POST endpoints | 1 day |
-| 🟢 P2 | Add audit logging for onboarding events | 1 day |
-| 🟢 P2 | Add rate limiting to prevent abuse | 1 day |
-| 🟢 P3 | Document complete onboarding flow diagram | 1 day |
+| Priority | Action                                          | Estimated Effort |
+| -------- | ----------------------------------------------- | ---------------- |
+| 🔴 P0    | Add Firestore persistence to all endpoints      | 2-3 days         |
+| 🔴 P0    | Implement real test coverage (not placeholders) | 3-4 days         |
+| 🟡 P1    | Add authorization checks (ownership validation) | 1-2 days         |
+| 🟡 P1    | Add idempotency support to POST endpoints       | 1 day            |
+| 🟢 P2    | Add audit logging for onboarding events         | 1 day            |
+| 🟢 P2    | Add rate limiting to prevent abuse              | 1 day            |
+| 🟢 P3    | Document complete onboarding flow diagram       | 1 day            |
 
 **Total Estimated Effort:** ~10-15 days
 

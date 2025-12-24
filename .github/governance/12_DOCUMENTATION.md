@@ -34,6 +34,7 @@ The Fresh Schedules SDK provides:
 ### The Problem
 
 You run `pnpm lint --fix` and it:
+
 - Fixes some things ✅
 - Breaks other things ❌
 - Leaves you worse off than before 😤
@@ -58,9 +59,9 @@ const name = "hello";
 // .eslintrc.js
 module.exports = {
   extends: [
-    'next/core-web-vitals',
-    'prettier'  // This disables conflicting rules
-  ]
+    "next/core-web-vitals",
+    "prettier", // This disables conflicting rules
+  ],
 };
 ```
 
@@ -104,7 +105,7 @@ Some patterns can't be auto-fixed:
 // Pattern violation: Missing org scope
 // The fix requires understanding your intent
 export async function GET(req: Request) {
-  return Response.json(data);  // Where's orgId?
+  return Response.json(data); // Where's orgId?
 }
 
 // SDK can't auto-fix because it doesn't know:
@@ -136,17 +137,17 @@ pnpm dedupe
 
 ## FIX CAPABILITY MATRIX
 
-| Issue | Auto-Fix? | SDK Handles? | What to Do |
-|-------|-----------|--------------|------------|
-| Missing semicolon | ✅ Yes | ✅ `pnpm format` | Run format |
-| Wrong quotes | ✅ Yes | ✅ `pnpm format` | Run format |
-| Unused import | ✅ Yes | ✅ `pnpm lint --fix` | Run lint fix |
-| Missing return type | ⚠️ Partial | ⚠️ Suggests | Add manually |
-| Implicit any | ⚠️ Partial | ⚠️ Detects | Add type annotation |
-| Module not found | ❌ No | ❌ Reports | Fix tsconfig |
-| Pattern violation | ⚠️ Varies | ✅ Reports | Follow pattern guide |
-| Type mismatch | ❌ No | ❌ Reports | Fix logic |
-| Security issue | ❌ No | ✅ Reports | Manual review |
+| Issue               | Auto-Fix?  | SDK Handles?         | What to Do           |
+| ------------------- | ---------- | -------------------- | -------------------- |
+| Missing semicolon   | ✅ Yes     | ✅ `pnpm format`     | Run format           |
+| Wrong quotes        | ✅ Yes     | ✅ `pnpm format`     | Run format           |
+| Unused import       | ✅ Yes     | ✅ `pnpm lint --fix` | Run lint fix         |
+| Missing return type | ⚠️ Partial | ⚠️ Suggests          | Add manually         |
+| Implicit any        | ⚠️ Partial | ⚠️ Detects           | Add type annotation  |
+| Module not found    | ❌ No      | ❌ Reports           | Fix tsconfig         |
+| Pattern violation   | ⚠️ Varies  | ✅ Reports           | Follow pattern guide |
+| Type mismatch       | ❌ No      | ❌ Reports           | Fix logic            |
+| Security issue      | ❌ No      | ✅ Reports           | Manual review        |
 
 ### Legend
 
@@ -167,6 +168,7 @@ Cannot find module '@fresh-schedules/types' or its corresponding type declaratio
 **Cause**: Path mapping not configured
 
 **Fix**:
+
 ```json
 // tsconfig.json
 {
@@ -178,8 +180,7 @@ Cannot find module '@fresh-schedules/types' or its corresponding type declaratio
 }
 ```
 
-**SDK can**: Detect and report
-**SDK cannot**: Modify tsconfig
+**SDK can**: Detect and report **SDK cannot**: Modify tsconfig
 
 ---
 
@@ -192,32 +193,33 @@ Argument of type 'ZodObject<...>' is not assignable to parameter of type 'ZodTyp
 **Common Causes**:
 
 1. **Zod version mismatch**
+
    ```bash
    pnpm why zod
    pnpm dedupe
    ```
 
 2. **Over-constrained generics**
+
    ```typescript
    // WRONG
    function validate(schema: ZodType<unknown>) {...}
-   
+
    // RIGHT
    function validate<T extends ZodTypeAny>(schema: T): z.infer<T> {...}
    ```
 
 3. **Missing generic preservation**
+
    ```typescript
    // WRONG - loses type info
    const wrapped = (schema) => schema.parse(data);
-   
+
    // RIGHT - preserves type
-   const wrapped = <T extends ZodTypeAny>(schema: T) => 
-     schema.parse(data) as z.infer<T>;
+   const wrapped = <T extends ZodTypeAny>(schema: T) => schema.parse(data) as z.infer<T>;
    ```
 
-**SDK can**: Detect the error, suggest fixes
-**SDK cannot**: Auto-fix without understanding context
+**SDK can**: Detect the error, suggest fixes **SDK cannot**: Auto-fix without understanding context
 
 ---
 
@@ -230,6 +232,7 @@ Parameter 'req' implicitly has an 'any' type.
 **Cause**: Missing type annotation
 
 **Fix**:
+
 ```typescript
 // BEFORE
 export async function GET(req) {...}
@@ -239,8 +242,7 @@ import { NextRequest } from 'next/server';
 export async function GET(req: NextRequest) {...}
 ```
 
-**SDK can**: Detect and sometimes suggest type
-**SDK cannot**: Always know the correct type
+**SDK can**: Detect and sometimes suggest type **SDK cannot**: Always know the correct type
 
 ---
 
@@ -251,22 +253,22 @@ export async function GET(req: NextRequest) {...}
 ```typescript
 // VIOLATION
 export async function GET(req: Request) {
-  const data = await db.collection('schedules').get();
+  const data = await db.collection("schedules").get();
   return Response.json(data);
 }
 
 // FIX
 export const GET = createOrgEndpoint({
-  roles: ['scheduler'],
+  roles: ["scheduler"],
   handler: async ({ context }) => {
     const data = await getSchedules(context.orgId);
     return { success: true, data };
-  }
+  },
 });
 ```
 
-**SDK can**: Detect violation, show correct pattern
-**SDK cannot**: Auto-refactor (different structure)
+**SDK can**: Detect violation, show correct pattern **SDK cannot**: Auto-refactor (different
+structure)
 
 ---
 
@@ -285,8 +287,7 @@ match /organizations/{orgId}/schedules/{scheduleId} {
 }
 ```
 
-**SDK can**: Detect pattern deviation
-**SDK cannot**: Understand your data model
+**SDK can**: Detect pattern deviation **SDK cannot**: Understand your data model
 
 ---
 
@@ -370,6 +371,7 @@ node scripts/validate-patterns.mjs --verbose
 Pattern validation is **detection**, not **transformation**.
 
 To auto-fix, the SDK would need to:
+
 1. Parse the code AST
 2. Understand the semantic meaning
 3. Generate correct replacement
@@ -396,26 +398,31 @@ This file tells VS Code Copilot about your project. All governance docs should b
 # Fresh Schedules - Copilot Instructions
 
 ## Project Overview
+
 Multi-tenant SaaS scheduling platform using Next.js, TypeScript, Firebase.
 
 ## Key Patterns
+
 - API routes use `createOrgEndpoint()` from `@fresh-schedules/api-framework`
 - All types use Zod schemas in `packages/types/`
 - Firestore rules enforce org isolation
 
 ## Agent Invocations
+
 - `@architect design {feature}` - Design new features
 - `@refactor fix {file}` - Fix pattern violations
 - `@guard review` - Review current changes
 - `@auditor report` - Generate compliance report
 
 ## Common Commands
+
 - `pnpm typecheck` - Check types
 - `pnpm lint` - Run linter
 - `pnpm test:unit` - Run unit tests
 - `pnpm orchestrate --auto` - Run appropriate pipeline
 
 ## Governance Docs
+
 See `.github/governance/` for full documentation.
 ```
 
@@ -426,7 +433,7 @@ For VS Code to run agents in parallel:
 ```jsonc
 // .vscode/settings.json
 {
-  "github.copilot.chat.agentMode.enabled": true
+  "github.copilot.chat.agentMode.enabled": true,
 }
 ```
 
@@ -436,13 +443,13 @@ For VS Code to run agents in parallel:
 
 ### When to Update
 
-| Event | Update |
-|-------|--------|
-| New pattern added | 01_DEFINITIONS, 11_GATES |
-| New agent added | 06_AGENTS, copilot-instructions |
-| Pipeline change | 08_PIPELINES, 09_CI_CD |
-| Branch rule change | 10_BRANCH_RULES |
-| SDK limitation found | 12_DOCUMENTATION |
+| Event                | Update                          |
+| -------------------- | ------------------------------- |
+| New pattern added    | 01_DEFINITIONS, 11_GATES        |
+| New agent added      | 06_AGENTS, copilot-instructions |
+| Pipeline change      | 08_PIPELINES, 09_CI_CD          |
+| Branch rule change   | 10_BRANCH_RULES                 |
+| SDK limitation found | 12_DOCUMENTATION                |
 
 ### Document Hierarchy
 
@@ -470,16 +477,19 @@ For VS Code to run agents in parallel:
 ## QUICK REFERENCE
 
 ### Fix Order
+
 ```
 format → lint --fix → typecheck → validate:patterns
 ```
 
 ### Gate Order
+
 ```
 STATIC → CORRECTNESS → SAFETY → PERF → AI
 ```
 
 ### Agent Order (for complex tasks)
+
 ```
 Architect (design) → Refactor (implement) → Guard (review) → Auditor (verify)
 ```
@@ -500,19 +510,19 @@ Architect (design) → Refactor (implement) → Guard (review) → Auditor (veri
 
 ## FILE INDEX
 
-| File | Purpose |
-|------|---------|
-| 01_DEFINITIONS.md | All terms, values, entities |
-| 02_PROTOCOLS.md | How things work |
-| 03_DIRECTIVES.md | What's required |
-| 04_INSTRUCTIONS.md | How to do things |
-| 05_BEHAVIORS.md | Expected behaviors |
-| 06_AGENTS.md | Agent specifications |
-| 07_PROMPTS.md | Prompt templates |
-| 08_PIPELINES.md | Pipeline configurations |
-| 09_CI_CD.md | GitHub Actions workflows |
-| 10_BRANCH_RULES.md | Git branch rules |
-| 11_GATES.md | Gate configurations |
-| 12_DOCUMENTATION.md | This file |
+| File                | Purpose                     |
+| ------------------- | --------------------------- |
+| 01_DEFINITIONS.md   | All terms, values, entities |
+| 02_PROTOCOLS.md     | How things work             |
+| 03_DIRECTIVES.md    | What's required             |
+| 04_INSTRUCTIONS.md  | How to do things            |
+| 05_BEHAVIORS.md     | Expected behaviors          |
+| 06_AGENTS.md        | Agent specifications        |
+| 07_PROMPTS.md       | Prompt templates            |
+| 08_PIPELINES.md     | Pipeline configurations     |
+| 09_CI_CD.md         | GitHub Actions workflows    |
+| 10_BRANCH_RULES.md  | Git branch rules            |
+| 11_GATES.md         | Gate configurations         |
+| 12_DOCUMENTATION.md | This file                   |
 
 **Total**: 12 documents covering complete governance system

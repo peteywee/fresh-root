@@ -27,16 +27,8 @@ export default function Home() {
           description="System health and codebase analysis"
           highlight
         />
-        <NavCard
-          href="/planning"
-          title="🗓️ Planning"
-          description="Schedule planning tools"
-        />
-        <NavCard
-          href="/onboarding"
-          title="🚀 Onboarding"
-          description="Setup and configuration"
-        />
+        <NavCard href="/planning" title="🗓️ Planning" description="Schedule planning tools" />
+        <NavCard href="/onboarding" title="🚀 Onboarding" description="Setup and configuration" />
         <NavCard
           href="/protected"
           title="🔒 Protected Demo"

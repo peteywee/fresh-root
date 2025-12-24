@@ -15,7 +15,7 @@ graph TD
     B1 --> B4["Result: .repomix-cache.json"]
     B2 --> B4
     B3 --> B4
-    
+
     B4 -->|push succeeds| C["TRIGGER 2: CI Pipeline<br/>(GitHub Actions, 0-10 sec)"]
     C -->|Generate| C1["📄 repomix-ci.json"]
     C -->|Generate| C2["📄 repomix-ci.md"]
@@ -27,7 +27,7 @@ graph TD
     C3 --> C6
     C4 --> C6
     C5 --> C6
-    
+
     C6 -->|next day 2 AM UTC| D["TRIGGER 3: Nightly Dashboard<br/>(Scheduled, 10-15 sec)"]
     D -->|Generate| D1["📄 repomix-dashboard.md"]
     D -->|Generate| D2["📄 repomix-dashboard.json"]
@@ -39,8 +39,9 @@ graph TD
     D3 --> D6
     D4 --> D6
     D5 --> D6
-    
+
     style B fill:#e1f5ff
     style C fill:#fff3e0
     style D fill:#f3e5f5
     style D6 fill:#c8e6c9
+```

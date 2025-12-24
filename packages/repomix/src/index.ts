@@ -28,4 +28,3 @@ export type { RepomixConfig, CliOptions } from "repomix";
 export async function getVersion(): Promise<string> {
   return "0.1.0"; // @fresh-schedules/repomix version
 }
-

@@ -265,7 +265,8 @@ export default function OpsClient({ orgId }: { orgId: string }) {
     {
       title: "API Latency",
       value: metrics.apiLatency !== null ? `${metrics.apiLatency}ms` : "—",
-      status: metrics.apiLatency !== null ? (metrics.apiLatency < 500 ? "ok" : "warning") : "loading",
+      status:
+        metrics.apiLatency !== null ? (metrics.apiLatency < 500 ? "ok" : "warning") : "loading",
       description: "Round-trip health check latency",
     },
     {
@@ -314,7 +315,9 @@ export default function OpsClient({ orgId }: { orgId: string }) {
         <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700">
           {metrics.error && <div>Health: {metrics.error}</div>}
           {metrics.analysisError && <div>Analysis: {metrics.analysisError}</div>}
-          {metrics.buildPerformanceError && <div>Build performance: {metrics.buildPerformanceError}</div>}
+          {metrics.buildPerformanceError && (
+            <div>Build performance: {metrics.buildPerformanceError}</div>
+          )}
         </div>
       )}
 
@@ -345,13 +348,23 @@ export default function OpsClient({ orgId }: { orgId: string }) {
             </thead>
             <tbody className="divide-y divide-gray-100 bg-white">
               {(metrics.buildPerformance ?? []).map((e) => (
-                <tr key={`${e.runId}-${e.runAttempt}`}> 
+                <tr key={`${e.runId}-${e.runAttempt}`}>
                   <td className="whitespace-nowrap px-3 py-2 text-gray-700">{e.timestamp}</td>
-                  <td className="whitespace-nowrap px-3 py-2 font-mono text-gray-700">{e.sha.slice(0, 7)}</td>
-                  <td className="whitespace-nowrap px-3 py-2 text-right text-gray-700">{e.installSeconds}</td>
-                  <td className="whitespace-nowrap px-3 py-2 text-right text-gray-700">{e.buildSeconds}</td>
-                  <td className="whitespace-nowrap px-3 py-2 text-right text-gray-700">{e.sdkSeconds}</td>
-                  <td className="whitespace-nowrap px-3 py-2 text-right font-medium text-gray-900">{e.totalSeconds}</td>
+                  <td className="whitespace-nowrap px-3 py-2 font-mono text-gray-700">
+                    {e.sha.slice(0, 7)}
+                  </td>
+                  <td className="whitespace-nowrap px-3 py-2 text-right text-gray-700">
+                    {e.installSeconds}
+                  </td>
+                  <td className="whitespace-nowrap px-3 py-2 text-right text-gray-700">
+                    {e.buildSeconds}
+                  </td>
+                  <td className="whitespace-nowrap px-3 py-2 text-right text-gray-700">
+                    {e.sdkSeconds}
+                  </td>
+                  <td className="whitespace-nowrap px-3 py-2 text-right font-medium text-gray-900">
+                    {e.totalSeconds}
+                  </td>
                   <td className="whitespace-nowrap px-3 py-2 text-center text-gray-700">
                     {e.cacheHit === "true" ? "✅" : e.cacheHit === "false" ? "❌" : "—"}
                   </td>
@@ -398,7 +411,9 @@ export default function OpsClient({ orgId }: { orgId: string }) {
                 <div className="mt-1 text-sm text-gray-600">
                   Tests: {metrics.codebaseAnalysis.health.hasTests ? "✅" : "❌"}
                 </div>
-                <div className="text-sm text-gray-600">CI: {metrics.codebaseAnalysis.health.hasCI ? "✅" : "❌"}</div>
+                <div className="text-sm text-gray-600">
+                  CI: {metrics.codebaseAnalysis.health.hasCI ? "✅" : "❌"}
+                </div>
                 <div className="text-sm text-gray-600">
                   TypeScript: {metrics.codebaseAnalysis.health.hasTypeScript ? "✅" : "❌"}
                 </div>
@@ -408,7 +423,9 @@ export default function OpsClient({ orgId }: { orgId: string }) {
               </div>
             </div>
           ) : (
-            <div className="text-sm text-gray-600">{metrics.isAnalyzing ? "Analyzing..." : "No analysis yet"}</div>
+            <div className="text-sm text-gray-600">
+              {metrics.isAnalyzing ? "Analyzing..." : "No analysis yet"}
+            </div>
           )}
         </div>
       </section>

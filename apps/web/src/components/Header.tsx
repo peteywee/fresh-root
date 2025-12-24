@@ -56,9 +56,7 @@ export default function Header() {
                       className="h-8 w-8 rounded-full"
                     />
                   )}
-                  <span className="text-sm text-gray-300">
-                    {user.displayName || user.email}
-                  </span>
+                  <span className="text-sm text-gray-300">{user.displayName || user.email}</span>
                 </div>
                 <button
                   onClick={handleLogout}

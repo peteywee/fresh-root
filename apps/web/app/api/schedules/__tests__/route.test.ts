@@ -171,11 +171,9 @@ vi.mock("@/src/lib/firebase.server", () => ({
 
 // Mock the typed-wrappers to use our mock firestore
 vi.mock("@/src/lib/firebase/typed-wrappers", () => ({
-  setDocWithType: vi.fn(
-    async (_db: any, ref: { path: string }, data: Record<string, unknown>) => {
-      mockFirestore._setMockData(ref.path, data);
-    }
-  ),
+  setDocWithType: vi.fn(async (_db: any, ref: { path: string }, data: Record<string, unknown>) => {
+    mockFirestore._setMockData(ref.path, data);
+  }),
   queryWithType: vi.fn(async (_db: any, query: any) => {
     const snapshot = await query.get();
     return {
@@ -206,15 +204,17 @@ vi.mock("@fresh-schedules/api-framework", () => ({
       if (!sessionCookie) {
         return new Response(
           JSON.stringify({ error: { code: "UNAUTHORIZED", message: "Authentication required" } }),
-          { status: 401, headers: { "Content-Type": "application/json" } }
+          { status: 401, headers: { "Content-Type": "application/json" } },
         );
       }
 
       // Check organization context
       if (!orgId) {
         return new Response(
-          JSON.stringify({ error: { code: "FORBIDDEN", message: "Organization context required" } }),
-          { status: 403, headers: { "Content-Type": "application/json" } }
+          JSON.stringify({
+            error: { code: "FORBIDDEN", message: "Organization context required" },
+          }),
+          { status: 403, headers: { "Content-Type": "application/json" } },
         );
       }
 
@@ -236,7 +236,7 @@ vi.mock("@fresh-schedules/api-framework", () => ({
             JSON.stringify({
               error: { code: "FORBIDDEN", message: "Insufficient permissions" },
             }),
-            { status: 403, headers: { "Content-Type": "application/json" } }
+            { status: 403, headers: { "Content-Type": "application/json" } },
           );
         }
       }
@@ -271,7 +271,7 @@ function createAuthenticatedRequest(
     orgId?: string;
     role?: string;
     searchParams?: Record<string, string>;
-  } = {}
+  } = {},
 ) {
   const { body, orgId = VALID_ORG_ID, role = "manager", searchParams } = options;
   return createMockRequest(method, url, {
@@ -430,11 +430,7 @@ describe("Schedules API", () => {
 
     describe("Authentication & Authorization", () => {
       it("should return 401 without session cookie", async () => {
-        const request = createUnauthenticatedRequest(
-          "POST",
-          "/api/schedules",
-          validScheduleInput
-        );
+        const request = createUnauthenticatedRequest("POST", "/api/schedules", validScheduleInput);
         const response = await callEndpoint(POST, request);
 
         expect(response.status).toBe(401);
@@ -589,7 +585,7 @@ describe("Schedules API", () => {
 
         expect(response.status).toBe(200);
         const data = await parseJsonResponse<{ success: boolean; schedule: { name: string } }>(
-          response
+          response,
         );
         expect(data.success).toBe(true);
         expect(data.schedule).toBeDefined();
@@ -643,10 +639,7 @@ describe("Schedules API", () => {
   describe("GET /api/schedules/[id]", () => {
     describe("Authentication & Authorization", () => {
       it("should return 401 without session cookie", async () => {
-        const request = createUnauthenticatedRequest(
-          "GET",
-          `/api/schedules/${VALID_SCHEDULE_ID}`
-        );
+        const request = createUnauthenticatedRequest("GET", `/api/schedules/${VALID_SCHEDULE_ID}`);
         const response = await callEndpoint(GET_BY_ID, request, { id: VALID_SCHEDULE_ID });
 
         expect(response.status).toBe(401);
@@ -667,15 +660,12 @@ describe("Schedules API", () => {
         // Set up mock schedule data
         mockFirestore._setMockData(
           `organizations/${VALID_ORG_ID}/schedules/${VALID_SCHEDULE_ID}`,
-          createMockScheduleData()
+          createMockScheduleData(),
         );
       });
 
       it("should return schedule for valid ID", async () => {
-        const request = createAuthenticatedRequest(
-          "GET",
-          `/api/schedules/${VALID_SCHEDULE_ID}`
-        );
+        const request = createAuthenticatedRequest("GET", `/api/schedules/${VALID_SCHEDULE_ID}`);
         const response = await callEndpoint(GET_BY_ID, request, { id: VALID_SCHEDULE_ID });
 
         expect(response.status).toBe(200);
@@ -716,7 +706,7 @@ describe("Schedules API", () => {
         const request = createUnauthenticatedRequest(
           "PATCH",
           `/api/schedules/${VALID_SCHEDULE_ID}`,
-          updatePayload
+          updatePayload,
         );
         const response = await callEndpoint(PATCH, request, { id: VALID_SCHEDULE_ID });
 
@@ -734,14 +724,10 @@ describe("Schedules API", () => {
       });
 
       it("should return 403 for staff role (requires manager)", async () => {
-        const request = createAuthenticatedRequest(
-          "PATCH",
-          `/api/schedules/${VALID_SCHEDULE_ID}`,
-          {
-            body: updatePayload,
-            role: "staff",
-          }
-        );
+        const request = createAuthenticatedRequest("PATCH", `/api/schedules/${VALID_SCHEDULE_ID}`, {
+          body: updatePayload,
+          role: "staff",
+        });
         const response = await callEndpoint(PATCH, request, { id: VALID_SCHEDULE_ID });
 
         expect(response.status).toBe(403);
@@ -752,14 +738,10 @@ describe("Schedules API", () => {
       });
 
       it("should return 403 for scheduler role (requires manager)", async () => {
-        const request = createAuthenticatedRequest(
-          "PATCH",
-          `/api/schedules/${VALID_SCHEDULE_ID}`,
-          {
-            body: updatePayload,
-            role: "scheduler",
-          }
-        );
+        const request = createAuthenticatedRequest("PATCH", `/api/schedules/${VALID_SCHEDULE_ID}`, {
+          body: updatePayload,
+          role: "scheduler",
+        });
         const response = await callEndpoint(PATCH, request, { id: VALID_SCHEDULE_ID });
 
         expect(response.status).toBe(403);
@@ -768,17 +750,13 @@ describe("Schedules API", () => {
       it("should succeed for manager role", async () => {
         mockFirestore._setMockData(
           `organizations/${VALID_ORG_ID}/schedules/${VALID_SCHEDULE_ID}`,
-          createMockScheduleData()
+          createMockScheduleData(),
         );
 
-        const request = createAuthenticatedRequest(
-          "PATCH",
-          `/api/schedules/${VALID_SCHEDULE_ID}`,
-          {
-            body: updatePayload,
-            role: "manager",
-          }
-        );
+        const request = createAuthenticatedRequest("PATCH", `/api/schedules/${VALID_SCHEDULE_ID}`, {
+          body: updatePayload,
+          role: "manager",
+        });
         const response = await callEndpoint(PATCH, request, { id: VALID_SCHEDULE_ID });
 
         expect(response.status).toBe(200);
@@ -787,17 +765,13 @@ describe("Schedules API", () => {
       it("should succeed for admin role", async () => {
         mockFirestore._setMockData(
           `organizations/${VALID_ORG_ID}/schedules/${VALID_SCHEDULE_ID}`,
-          createMockScheduleData()
+          createMockScheduleData(),
         );
 
-        const request = createAuthenticatedRequest(
-          "PATCH",
-          `/api/schedules/${VALID_SCHEDULE_ID}`,
-          {
-            body: updatePayload,
-            role: "admin",
-          }
-        );
+        const request = createAuthenticatedRequest("PATCH", `/api/schedules/${VALID_SCHEDULE_ID}`, {
+          body: updatePayload,
+          role: "admin",
+        });
         const response = await callEndpoint(PATCH, request, { id: VALID_SCHEDULE_ID });
 
         expect(response.status).toBe(200);
@@ -808,61 +782,45 @@ describe("Schedules API", () => {
       beforeEach(() => {
         mockFirestore._setMockData(
           `organizations/${VALID_ORG_ID}/schedules/${VALID_SCHEDULE_ID}`,
-          createMockScheduleData()
+          createMockScheduleData(),
         );
       });
 
       it("should reject empty name", async () => {
-        const request = createAuthenticatedRequest(
-          "PATCH",
-          `/api/schedules/${VALID_SCHEDULE_ID}`,
-          {
-            body: { name: "" },
-            role: "manager",
-          }
-        );
+        const request = createAuthenticatedRequest("PATCH", `/api/schedules/${VALID_SCHEDULE_ID}`, {
+          body: { name: "" },
+          role: "manager",
+        });
         const response = await callEndpoint(PATCH, request, { id: VALID_SCHEDULE_ID });
 
         expect(response.status).toBe(400);
       });
 
       it("should reject name exceeding max length", async () => {
-        const request = createAuthenticatedRequest(
-          "PATCH",
-          `/api/schedules/${VALID_SCHEDULE_ID}`,
-          {
-            body: { name: "A".repeat(101) },
-            role: "manager",
-          }
-        );
+        const request = createAuthenticatedRequest("PATCH", `/api/schedules/${VALID_SCHEDULE_ID}`, {
+          body: { name: "A".repeat(101) },
+          role: "manager",
+        });
         const response = await callEndpoint(PATCH, request, { id: VALID_SCHEDULE_ID });
 
         expect(response.status).toBe(400);
       });
 
       it("should accept valid partial update", async () => {
-        const request = createAuthenticatedRequest(
-          "PATCH",
-          `/api/schedules/${VALID_SCHEDULE_ID}`,
-          {
-            body: { name: "New Name" },
-            role: "manager",
-          }
-        );
+        const request = createAuthenticatedRequest("PATCH", `/api/schedules/${VALID_SCHEDULE_ID}`, {
+          body: { name: "New Name" },
+          role: "manager",
+        });
         const response = await callEndpoint(PATCH, request, { id: VALID_SCHEDULE_ID });
 
         expect(response.status).toBe(200);
       });
 
       it("should accept description update", async () => {
-        const request = createAuthenticatedRequest(
-          "PATCH",
-          `/api/schedules/${VALID_SCHEDULE_ID}`,
-          {
-            body: { description: "Updated description" },
-            role: "manager",
-          }
-        );
+        const request = createAuthenticatedRequest("PATCH", `/api/schedules/${VALID_SCHEDULE_ID}`, {
+          body: { description: "Updated description" },
+          role: "manager",
+        });
         const response = await callEndpoint(PATCH, request, { id: VALID_SCHEDULE_ID });
 
         expect(response.status).toBe(200);
@@ -873,19 +831,15 @@ describe("Schedules API", () => {
       beforeEach(() => {
         mockFirestore._setMockData(
           `organizations/${VALID_ORG_ID}/schedules/${VALID_SCHEDULE_ID}`,
-          createMockScheduleData()
+          createMockScheduleData(),
         );
       });
 
       it("should return updated schedule", async () => {
-        const request = createAuthenticatedRequest(
-          "PATCH",
-          `/api/schedules/${VALID_SCHEDULE_ID}`,
-          {
-            body: { name: "Updated Name" },
-            role: "manager",
-          }
-        );
+        const request = createAuthenticatedRequest("PATCH", `/api/schedules/${VALID_SCHEDULE_ID}`, {
+          body: { name: "Updated Name" },
+          role: "manager",
+        });
         const response = await callEndpoint(PATCH, request, { id: VALID_SCHEDULE_ID });
 
         expect(response.status).toBe(200);
@@ -914,7 +868,7 @@ describe("Schedules API", () => {
       it("should return 401 without session cookie", async () => {
         const request = createUnauthenticatedRequest(
           "DELETE",
-          `/api/schedules/${VALID_SCHEDULE_ID}`
+          `/api/schedules/${VALID_SCHEDULE_ID}`,
         );
         const response = await callEndpoint(DELETE, request, { id: VALID_SCHEDULE_ID });
 
@@ -936,7 +890,7 @@ describe("Schedules API", () => {
           `/api/schedules/${VALID_SCHEDULE_ID}`,
           {
             role: "staff",
-          }
+          },
         );
         const response = await callEndpoint(DELETE, request, { id: VALID_SCHEDULE_ID });
 
@@ -953,7 +907,7 @@ describe("Schedules API", () => {
           `/api/schedules/${VALID_SCHEDULE_ID}`,
           {
             role: "scheduler",
-          }
+          },
         );
         const response = await callEndpoint(DELETE, request, { id: VALID_SCHEDULE_ID });
 
@@ -963,7 +917,7 @@ describe("Schedules API", () => {
       it("should succeed for manager role", async () => {
         mockFirestore._setMockData(
           `organizations/${VALID_ORG_ID}/schedules/${VALID_SCHEDULE_ID}`,
-          createMockScheduleData()
+          createMockScheduleData(),
         );
 
         const request = createAuthenticatedRequest(
@@ -971,7 +925,7 @@ describe("Schedules API", () => {
           `/api/schedules/${VALID_SCHEDULE_ID}`,
           {
             role: "manager",
-          }
+          },
         );
         const response = await callEndpoint(DELETE, request, { id: VALID_SCHEDULE_ID });
 
@@ -981,7 +935,7 @@ describe("Schedules API", () => {
       it("should succeed for admin role", async () => {
         mockFirestore._setMockData(
           `organizations/${VALID_ORG_ID}/schedules/${VALID_SCHEDULE_ID}`,
-          createMockScheduleData()
+          createMockScheduleData(),
         );
 
         const request = createAuthenticatedRequest(
@@ -989,7 +943,7 @@ describe("Schedules API", () => {
           `/api/schedules/${VALID_SCHEDULE_ID}`,
           {
             role: "admin",
-          }
+          },
         );
         const response = await callEndpoint(DELETE, request, { id: VALID_SCHEDULE_ID });
 
@@ -999,7 +953,7 @@ describe("Schedules API", () => {
       it("should succeed for org_owner role", async () => {
         mockFirestore._setMockData(
           `organizations/${VALID_ORG_ID}/schedules/${VALID_SCHEDULE_ID}`,
-          createMockScheduleData()
+          createMockScheduleData(),
         );
 
         const request = createAuthenticatedRequest(
@@ -1007,7 +961,7 @@ describe("Schedules API", () => {
           `/api/schedules/${VALID_SCHEDULE_ID}`,
           {
             role: "org_owner",
-          }
+          },
         );
         const response = await callEndpoint(DELETE, request, { id: VALID_SCHEDULE_ID });
 
@@ -1019,7 +973,7 @@ describe("Schedules API", () => {
       beforeEach(() => {
         mockFirestore._setMockData(
           `organizations/${VALID_ORG_ID}/schedules/${VALID_SCHEDULE_ID}`,
-          createMockScheduleData()
+          createMockScheduleData(),
         );
       });
 
@@ -1029,7 +983,7 @@ describe("Schedules API", () => {
           `/api/schedules/${VALID_SCHEDULE_ID}`,
           {
             role: "manager",
-          }
+          },
         );
         const response = await callEndpoint(DELETE, request, { id: VALID_SCHEDULE_ID });
 
@@ -1073,7 +1027,7 @@ describe("Schedules API", () => {
       // Set up schedule in Org A
       mockFirestore._setMockData(
         `organizations/${ORG_A}/schedules/${SCHEDULE_A}`,
-        createMockScheduleData({ id: SCHEDULE_A, orgId: ORG_A })
+        createMockScheduleData({ id: SCHEDULE_A, orgId: ORG_A }),
       );
     });
 
@@ -1112,20 +1066,14 @@ describe("Schedules API", () => {
 
     it("Org A schedule should still exist after Org B delete attempt", async () => {
       // First, Org B attempts delete
-      const deleteRequest = createAuthenticatedRequest(
-        "DELETE",
-        `/api/schedules/${SCHEDULE_A}`,
-        {
-          orgId: ORG_B,
-          role: "manager",
-        }
-      );
+      const deleteRequest = createAuthenticatedRequest("DELETE", `/api/schedules/${SCHEDULE_A}`, {
+        orgId: ORG_B,
+        role: "manager",
+      });
       await callEndpoint(DELETE, deleteRequest, { id: SCHEDULE_A });
 
       // Verify Org A's schedule still exists
-      const orgAData = mockFirestore._getMockData(
-        `organizations/${ORG_A}/schedules/${SCHEDULE_A}`
-      );
+      const orgAData = mockFirestore._getMockData(`organizations/${ORG_A}/schedules/${SCHEDULE_A}`);
       expect(orgAData).toBeDefined();
       expect(orgAData?.id).toBe(SCHEDULE_A);
     });
@@ -1205,12 +1153,10 @@ describe("Schedules API", () => {
     describe("Concurrent Requests", () => {
       it("should handle multiple simultaneous GET requests", async () => {
         const requests = Array.from({ length: 5 }, () =>
-          createAuthenticatedRequest("GET", "/api/schedules")
+          createAuthenticatedRequest("GET", "/api/schedules"),
         );
 
-        const responses = await Promise.all(
-          requests.map((req) => callEndpoint(GET, req))
-        );
+        const responses = await Promise.all(requests.map((req) => callEndpoint(GET, req)));
 
         responses.forEach((response) => {
           expect(response.status).toBe(200);

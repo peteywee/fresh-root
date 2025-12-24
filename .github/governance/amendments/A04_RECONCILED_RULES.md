@@ -62,10 +62,12 @@ If resolution unclear:
 
 ```typescript
 // ❌ WRONG: Performance over security
-if (input.length > 0) { process(input); }  // No validation
+if (input.length > 0) {
+  process(input);
+} // No validation
 
 // ✅ CORRECT: Security first
-const validated = InputSchema.parse(input);  // Always validate
+const validated = InputSchema.parse(input); // Always validate
 process(validated);
 ```
 
@@ -73,7 +75,9 @@ process(validated);
 
 ```typescript
 // ❌ WRONG: Convenience over correctness
-try { await action(); } catch {}  // Silent failure
+try {
+  await action();
+} catch {} // Silent failure
 
 // ✅ CORRECT: Explicit error handling
 try {

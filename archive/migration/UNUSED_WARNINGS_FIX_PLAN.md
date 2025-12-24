@@ -18,9 +18,11 @@
 
 ### Type 1: Unused Function Parameters (30+ warnings)
 
-These are typically Next.js API route handlers that follow a standard signature but don't use all parameters.
+These are typically Next.js API route handlers that follow a standard signature but don't use all
+parameters.
 
 **Pattern:**
+
 ```typescript
 // ❌ Current (triggers warning)
 async function handler(request, input, context, params) {
@@ -34,6 +36,7 @@ async function handler(_request, _input, _context, _params) {
 ```
 
 **Common in:**
+
 - `apps/web/app/api/**/*.ts` (API routes)
 - Next.js handlers with standard signatures
 
@@ -42,11 +45,13 @@ async function handler(_request, _input, _context, _params) {
 Variables assigned but never used - can be removed or prefixed.
 
 **Examples:**
+
 - `const idToken = ...` but never used
 - `const searchParams = ...` but never used
 - `const profiler = ...` but never used
 
 **Pattern:**
+
 ```typescript
 // ❌ Current
 const idToken = extractToken(req);
@@ -61,9 +66,11 @@ const _idToken = extractToken(req);
 
 ### Type 3: Type-Only Imports (1 warning)
 
-[apps/web/src/lib/userProfile.ts:28](apps/web/src/lib/userProfile.ts#L28) - `UserProfileSchema` used only as a type.
+[apps/web/src/lib/userProfile.ts:28](apps/web/src/lib/userProfile.ts#L28) - `UserProfileSchema` used
+only as a type.
 
 **Pattern:**
+
 ```typescript
 // ❌ Current
 import { UserProfileSchema } from "./types";
@@ -77,32 +84,40 @@ const schema: typeof UserProfileSchema = ...;
 ## Implementation Plan
 
 ### Phase 1: API Routes (Highest Impact)
+
 **Files:** 22 API route files  
 **Warnings to Fix:** ~35
 
 #### Step 1.1: Handler Parameters
+
 Files with multiple unused parameters in handlers:
+
 - [apps/web/app/api/health/route.ts](apps/web/app/api/health/route.ts#L15) - 4 unused params
-- [apps/web/app/api/organizations/[id]/members/route.ts](apps/web/app/api/organizations/[id]/members/route.ts#L34) - 4 unused params
+- [apps/web/app/api/organizations/[id]/members/route.ts](apps/web/app/api/organizations/[id]/members/route.ts#L34) -
+  4 unused params
 - [apps/web/app/api/batch/route.ts](apps/web/app/api/batch/route.ts#L24) - 1 unused param
 - Many others with 1-2 unused params
 
 **Action:** Prefix unused parameters with `_`
 
 ### Phase 2: Core Application Files
+
 **Files:** 7 files  
 **Warnings to Fix:** ~12
 
-1. [apps/web/src/lib/userProfile.ts](apps/web/src/lib/userProfile.ts#L28) - Type import (use `type` keyword)
+1. [apps/web/src/lib/userProfile.ts](apps/web/src/lib/userProfile.ts#L28) - Type import (use `type`
+   keyword)
 2. [functions/src/onboarding.ts](functions/src/onboarding.ts#L153) - Unused variable `tokenData`
 3. [packages/markdown-fixer/src/fixer.ts](packages/markdown-fixer/src/fixer.ts) - 3 unused variables
 4. Other assignments that should be removed
 
 ### Phase 3: Test Files
+
 **Files:** 7 test/intelligence files  
 **Warnings to Fix:** ~7
 
 Test files often have unused parameters in callbacks. Options:
+
 - Prefix with `_` to indicate intentionally unused
 - Remove if truly not needed
 
@@ -110,72 +125,78 @@ Test files often have unused parameters in callbacks. Options:
 
 ### Tier 1: Quick Wins (1-2 line changes each)
 
-| File | Issue | Count | Fix |
-|------|-------|-------|-----|
-| [apps/web/app/api/auth/mfa/setup/route.ts](apps/web/app/api/auth/mfa/setup/route.ts#L20) | `input` unused | 1 | Prefix with `_` |
-| [apps/web/app/api/batch/route.ts](apps/web/app/api/batch/route.ts#L24) | `index` unused | 1 | Prefix with `_` |
-| [apps/web/app/api/items/route.ts](apps/web/app/api/items/route.ts#L15) | `params` unused | 1 | Prefix with `_` |
-| [apps/web/app/api/join-tokens/route.ts](apps/web/app/api/join-tokens/route.ts#L14) | `params` unused | 1 | Prefix with `_` |
-| [apps/web/app/api/metrics/route.ts](apps/web/app/api/metrics/route.ts#L13) | 3 unused params | 3 | Prefix with `_` |
-| [apps/web/app/api/onboarding/activate-network/route.ts](apps/web/app/api/onboarding/activate-network/route.ts#L36) | `context` unused | 1 | Prefix with `_` |
+| File                                                                                                               | Issue            | Count | Fix             |
+| ------------------------------------------------------------------------------------------------------------------ | ---------------- | ----- | --------------- |
+| [apps/web/app/api/auth/mfa/setup/route.ts](apps/web/app/api/auth/mfa/setup/route.ts#L20)                           | `input` unused   | 1     | Prefix with `_` |
+| [apps/web/app/api/batch/route.ts](apps/web/app/api/batch/route.ts#L24)                                             | `index` unused   | 1     | Prefix with `_` |
+| [apps/web/app/api/items/route.ts](apps/web/app/api/items/route.ts#L15)                                             | `params` unused  | 1     | Prefix with `_` |
+| [apps/web/app/api/join-tokens/route.ts](apps/web/app/api/join-tokens/route.ts#L14)                                 | `params` unused  | 1     | Prefix with `_` |
+| [apps/web/app/api/metrics/route.ts](apps/web/app/api/metrics/route.ts#L13)                                         | 3 unused params  | 3     | Prefix with `_` |
+| [apps/web/app/api/onboarding/activate-network/route.ts](apps/web/app/api/onboarding/activate-network/route.ts#L36) | `context` unused | 1     | Prefix with `_` |
 
 ### Tier 2: Multiple Parameters
 
-| File | Issue | Count | Fix |
-|------|-------|-------|-----|
-| [apps/web/app/api/health/route.ts](apps/web/app/api/health/route.ts#L15) | 4 unused params | 4 | `(_request, _input, _context, _params)` |
-| [apps/web/app/api/healthz/route.ts](apps/web/app/api/healthz/route.ts#L30) | `context` unused | 1 | Prefix with `_` |
-| [apps/web/app/api/organizations/[id]/members/[memberId]/route.ts](apps/web/app/api/organizations/[id]/members/[memberId]/route.ts#L13) | 2 unused params | 2 | Prefix with `_` |
-| [apps/web/app/api/organizations/[id]/members/route.ts](apps/web/app/app/api/organizations/[id]/members/route.ts#L34) | Multiple unused | 4 | Prefix with `_` |
-| [apps/web/app/api/organizations/[id]/route.ts](apps/web/app/api/organizations/[id]/route.ts#L65) | `context` unused | 1 | Prefix with `_` |
-| [apps/web/app/api/organizations/route.ts](apps/web/app/api/organizations/route.ts#L19) | Unused variable | 1 | Remove or prefix |
-| [apps/web/app/api/positions/[id]/route.ts](apps/web/app/api/positions/[id]/route.ts#L129) | `context` unused | 1 | Prefix with `_` |
-| [apps/web/app/api/positions/route.ts](apps/web/app/api/positions/route.ts#L15) | 2 unused params | 2 | Prefix with `_` |
+| File                                                                                                                                   | Issue            | Count | Fix                                     |
+| -------------------------------------------------------------------------------------------------------------------------------------- | ---------------- | ----- | --------------------------------------- |
+| [apps/web/app/api/health/route.ts](apps/web/app/api/health/route.ts#L15)                                                               | 4 unused params  | 4     | `(_request, _input, _context, _params)` |
+| [apps/web/app/api/healthz/route.ts](apps/web/app/api/healthz/route.ts#L30)                                                             | `context` unused | 1     | Prefix with `_`                         |
+| [apps/web/app/api/organizations/[id]/members/[memberId]/route.ts](apps/web/app/api/organizations/[id]/members/[memberId]/route.ts#L13) | 2 unused params  | 2     | Prefix with `_`                         |
+| [apps/web/app/api/organizations/[id]/members/route.ts](apps/web/app/app/api/organizations/[id]/members/route.ts#L34)                   | Multiple unused  | 4     | Prefix with `_`                         |
+| [apps/web/app/api/organizations/[id]/route.ts](apps/web/app/api/organizations/[id]/route.ts#L65)                                       | `context` unused | 1     | Prefix with `_`                         |
+| [apps/web/app/api/organizations/route.ts](apps/web/app/api/organizations/route.ts#L19)                                                 | Unused variable  | 1     | Remove or prefix                        |
+| [apps/web/app/api/positions/[id]/route.ts](apps/web/app/api/positions/[id]/route.ts#L129)                                              | `context` unused | 1     | Prefix with `_`                         |
+| [apps/web/app/api/positions/route.ts](apps/web/app/api/positions/route.ts#L15)                                                         | 2 unused params  | 2     | Prefix with `_`                         |
 
 ### Tier 3: Variable Assignments
 
-| File | Issue | Count | Fix |
-|------|-------|-------|-----|
-| [apps/web/app/api/session/route.ts](apps/web/app/api/session/route.ts#L25) | `idToken` unused | 1 | Remove if not needed |
-| [apps/web/src/lib/userProfile.ts](apps/web/src/lib/userProfile.ts#L28) | Type-only import | 1 | Add `type` keyword |
-| [functions/src/onboarding.ts](functions/src/onboarding.ts#L153) | `tokenData` unused | 1 | Remove if not needed |
-| [packages/markdown-fixer/src/fixer.ts](packages/markdown-fixer/src/fixer.ts) | Multiple unused | 3 | Review and remove |
+| File                                                                         | Issue              | Count | Fix                  |
+| ---------------------------------------------------------------------------- | ------------------ | ----- | -------------------- |
+| [apps/web/app/api/session/route.ts](apps/web/app/api/session/route.ts#L25)   | `idToken` unused   | 1     | Remove if not needed |
+| [apps/web/src/lib/userProfile.ts](apps/web/src/lib/userProfile.ts#L28)       | Type-only import   | 1     | Add `type` keyword   |
+| [functions/src/onboarding.ts](functions/src/onboarding.ts#L153)              | `tokenData` unused | 1     | Remove if not needed |
+| [packages/markdown-fixer/src/fixer.ts](packages/markdown-fixer/src/fixer.ts) | Multiple unused    | 3     | Review and remove    |
 
 ### Tier 4: Test/Intelligence Files
 
-| File | Issues | Count | Fix |
-|------|--------|-------|-----|
-| [tests/intelligence/chaos-engineering.ts](tests/intelligence/chaos-engineering.ts#L91) | `request` unused | 1 | Prefix with `_` |
-| [tests/intelligence/ci-cd-integration.ts](tests/intelligence/ci-cd-integration.ts) | Multiple unused | 4 | Prefix with `_` |
-| [tests/intelligence/demo.ts](tests/intelligence/demo.ts#L60) | `profiler` unused | 1 | Remove if not needed |
-| [tests/intelligence/orchestrator.ts](tests/intelligence/orchestrator.ts) | Multiple unused | 3 | Prefix with `_` or remove |
-| [tests/intelligence/performance-profiler.ts](tests/intelligence/performance-profiler.ts#L73) | `T` generic unused | 1 | Prefix with `_` |
-| [tests/intelligence/self-healing-tests.ts](tests/intelligence/self-healing-tests.ts#L329) | `error` unused | 1 | Prefix with `_` |
-| [vitest.global-setup.ts](vitest.global-setup.ts#L16) | `event` unused | 1 | Prefix with `_` |
+| File                                                                                         | Issues             | Count | Fix                       |
+| -------------------------------------------------------------------------------------------- | ------------------ | ----- | ------------------------- |
+| [tests/intelligence/chaos-engineering.ts](tests/intelligence/chaos-engineering.ts#L91)       | `request` unused   | 1     | Prefix with `_`           |
+| [tests/intelligence/ci-cd-integration.ts](tests/intelligence/ci-cd-integration.ts)           | Multiple unused    | 4     | Prefix with `_`           |
+| [tests/intelligence/demo.ts](tests/intelligence/demo.ts#L60)                                 | `profiler` unused  | 1     | Remove if not needed      |
+| [tests/intelligence/orchestrator.ts](tests/intelligence/orchestrator.ts)                     | Multiple unused    | 3     | Prefix with `_` or remove |
+| [tests/intelligence/performance-profiler.ts](tests/intelligence/performance-profiler.ts#L73) | `T` generic unused | 1     | Prefix with `_`           |
+| [tests/intelligence/self-healing-tests.ts](tests/intelligence/self-healing-tests.ts#L329)    | `error` unused     | 1     | Prefix with `_`           |
+| [vitest.global-setup.ts](vitest.global-setup.ts#L16)                                         | `event` unused     | 1     | Prefix with `_`           |
 
 ## Implementation Strategy
 
 ### Strategy A: Quick Fix (30 min - 1 hour)
+
 Prefix all unused parameters with `_` without removing code logic.
 
 **Pros:**
+
 - No behavioral changes
 - Quick to implement
 - Safe and conservative
 
 **Cons:**
+
 - Leaves unused variables in place
 - Code may still do unnecessary work
 
 ### Strategy B: Thorough Fix (2-3 hours)
+
 Actually remove unused assignments and parameters where safe.
 
 **Pros:**
+
 - Cleaner code
 - Better performance
 - Reduced cognitive load
 
 **Cons:**
+
 - Requires deeper analysis of each case
 - Risk of removing needed code
 
@@ -194,7 +215,7 @@ git checkout -b fix/unused-variable-warnings
 
 # Step 2: Fix files tier by tier (use find-replace or manual edits)
 # Tier 1: Quick single-parameter fixes
-# Tier 2: Multiple parameter fixes  
+# Tier 2: Multiple parameter fixes
 # Tier 3: Variable assignment cleanup
 # Tier 4: Test file cleanup
 

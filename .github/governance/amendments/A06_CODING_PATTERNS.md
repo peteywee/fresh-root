@@ -31,7 +31,7 @@ export const POST = createOrgEndpoint({
   handler: async ({ input, context }) => {
     // input is typed & validated
     // context has auth + org
-  }
+  },
 });
 ```
 
@@ -42,7 +42,9 @@ export const POST = createOrgEndpoint({
 ```typescript
 // ❌ WRONG
 export const UserSchema = z.object({ name: z.string() });
-interface User { name: string; }  // Duplicate!
+interface User {
+  name: string;
+} // Duplicate!
 
 // ✅ CORRECT
 export const UserSchema = z.object({ name: z.string() });
@@ -66,9 +68,7 @@ Every domain entity MUST have all three:
 const schedules = await db.collection("schedules").get();
 
 // ✅ CORRECT
-const schedules = await db
-  .collection(`orgs/${context.org!.orgId}/schedules`)
-  .get();
+const schedules = await db.collection(`orgs/${context.org!.orgId}/schedules`).get();
 ```
 
 ### Pattern 5: File Headers
@@ -98,18 +98,16 @@ export const GET = createOrgEndpoint({
   handler: async ({ context }) => {
     const { getFirestore } = await import("firebase-admin/firestore");
     const db = getFirestore();
-    
-    const snapshot = await db
-      .collection(`orgs/${context.org!.orgId}/schedules`)
-      .get();
-    
-    const schedules = snapshot.docs.map(doc => ({
+
+    const snapshot = await db.collection(`orgs/${context.org!.orgId}/schedules`).get();
+
+    const schedules = snapshot.docs.map((doc) => ({
       id: doc.id,
-      ...doc.data()
+      ...doc.data(),
     }));
-    
+
     return NextResponse.json({ data: schedules });
-  }
+  },
 });
 
 export const POST = createOrgEndpoint({
@@ -119,23 +117,18 @@ export const POST = createOrgEndpoint({
   handler: async ({ input, context }) => {
     const { getFirestore } = await import("firebase-admin/firestore");
     const db = getFirestore();
-    
+
     const schedule = {
       ...input,
       orgId: context.org!.orgId,
       createdAt: Date.now(),
-      updatedAt: Date.now()
+      updatedAt: Date.now(),
     };
-    
-    const docRef = await db
-      .collection(`orgs/${context.org!.orgId}/schedules`)
-      .add(schedule);
-    
-    return NextResponse.json(
-      { id: docRef.id, ...schedule },
-      { status: 201 }
-    );
-  }
+
+    const docRef = await db.collection(`orgs/${context.org!.orgId}/schedules`).add(schedule);
+
+    return NextResponse.json({ id: docRef.id, ...schedule }, { status: 201 });
+  },
 });
 ```
 
@@ -148,19 +141,21 @@ export const POST = createOrgEndpoint({
 import { z } from "zod";
 
 // Base schema (full document)
-export const ScheduleSchema = z.object({
-  id: z.string().min(1),
-  orgId: z.string().min(1),
-  name: z.string().min(1).max(100),
-  startDate: z.number().int().positive(),
-  endDate: z.number().int().positive(),
-  status: z.enum(["draft", "published", "cancelled"]).default("draft"),
-  createdAt: z.number().int().positive(),
-  updatedAt: z.number().int().positive()
-}).refine(data => data.endDate > data.startDate, {
-  message: "End date must be after start date",
-  path: ["endDate"]
-});
+export const ScheduleSchema = z
+  .object({
+    id: z.string().min(1),
+    orgId: z.string().min(1),
+    name: z.string().min(1).max(100),
+    startDate: z.number().int().positive(),
+    endDate: z.number().int().positive(),
+    status: z.enum(["draft", "published", "cancelled"]).default("draft"),
+    createdAt: z.number().int().positive(),
+    updatedAt: z.number().int().positive(),
+  })
+  .refine((data) => data.endDate > data.startDate, {
+    message: "End date must be after start date",
+    path: ["endDate"],
+  });
 
 export type Schedule = z.infer<typeof ScheduleSchema>;
 
@@ -168,12 +163,12 @@ export type Schedule = z.infer<typeof ScheduleSchema>;
 export const CreateScheduleSchema = ScheduleSchema.omit({
   id: true,
   createdAt: true,
-  updatedAt: true
+  updatedAt: true,
 });
 
 export const UpdateScheduleSchema = ScheduleSchema.partial().omit({
   id: true,
-  orgId: true  // Immutable
+  orgId: true, // Immutable
 });
 ```
 
@@ -188,12 +183,9 @@ try {
   console.error("Operation failed", {
     error: message,
     userId: context.auth?.userId,
-    orgId: context.org?.orgId
+    orgId: context.org?.orgId,
   });
-  return NextResponse.json(
-    { error: { code: "INTERNAL_ERROR", message } },
-    { status: 500 }
-  );
+  return NextResponse.json({ error: { code: "INTERNAL_ERROR", message } }, { status: 500 });
 }
 ```
 

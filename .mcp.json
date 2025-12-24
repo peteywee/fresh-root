@@ -35,11 +35,7 @@
     "chromedevtools/chrome-devtools-mcp": {
       "type": "stdio",
       "command": "npx",
-      "args": [
-        "chrome-devtools-mcp@0.0.1-seed",
-        "--channel",
-        "${input:chrome_channel}"
-      ],
+      "args": ["chrome-devtools-mcp@0.0.1-seed", "--channel", "${input:chrome_channel}"],
       "gallery": "https://api.mcp.github.com/2025-09-15/v0/servers/13749964-2447-4c31-bcab-32731cced504",
       "version": "0.0.1-seed",
       "tier": "on-demand",

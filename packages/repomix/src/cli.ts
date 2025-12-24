@@ -5,7 +5,7 @@
 
 /**
  * CLI wrapper for repomix
- * 
+ *
  * This CLI provides convenient access to repomix functionality
  * with Fresh Schedules branding.
  *
@@ -56,25 +56,21 @@ For more information, visit: https://github.com/yamadashy/repomix
   try {
     // Use repomix's runDefaultAction for CLI execution
     const { runDefaultAction } = await import("repomix");
-    
+
     // Parse arguments - first arg is the target
     const target = args[0];
-    
+
     if (!target) {
       console.error("Error: Please provide a target directory or repository");
       process.exit(1);
     }
-    
+
     const cliOptions = parseCliArgs(args.slice(1));
-    
+
     console.log(`\n📦 Running repomix on: ${target}\n`);
-    
+
     // Call repomix with proper arguments
-    await runDefaultAction(
-      [target],
-      process.cwd(),
-      cliOptions as Record<string, unknown>
-    );
+    await runDefaultAction([target], process.cwd(), cliOptions as Record<string, unknown>);
 
     process.exit(0);
   } catch (error) {

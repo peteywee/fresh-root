@@ -30,11 +30,7 @@ import {
   getSecurityEdgeCases,
 } from "./generators.js";
 
-import {
-  validateEdgeCases,
-  CommonFieldEdgeCases,
-  printValidationSummary,
-} from "./validators.js";
+import { validateEdgeCases, CommonFieldEdgeCases, printValidationSummary } from "./validators.js";
 
 import {
   SafeStringSchema,
@@ -80,7 +76,7 @@ describe("Edge Case Test Suite", () => {
     it("should handle all string edge cases", () => {
       const cases = stringEdgeCases().filter(
         // Filter to only cases that make sense for a string schema
-        (c) => typeof c.value === "string"
+        (c) => typeof c.value === "string",
       );
       const summary = validateEdgeCases(schema, cases);
 
@@ -134,7 +130,9 @@ describe("Edge Case Test Suite", () => {
       if (summary.failed > 0) {
         console.log("\nNumeric edge case failures:");
         summary.failures.forEach((f) => {
-          console.log(`  ${f.label}: expected ${f.expectedToReject ? "reject" : "accept"}, got ${f.actuallyRejected ? "rejected" : "accepted"}`);
+          console.log(
+            `  ${f.label}: expected ${f.expectedToReject ? "reject" : "accept"}, got ${f.actuallyRejected ? "rejected" : "accepted"}`,
+          );
         });
       }
     });
@@ -252,9 +250,9 @@ describe("Edge Case Test Suite", () => {
     it("should detect __proto__ pollution via helper", () => {
       // Create object with __proto__ as own property
       const malicious = Object.create(null);
-      Object.defineProperty(malicious, "__proto__", { 
-        value: { admin: true }, 
-        enumerable: true 
+      Object.defineProperty(malicious, "__proto__", {
+        value: { admin: true },
+        enumerable: true,
       });
       expect(hasPrototypePollution(malicious)).toBe(true);
     });
@@ -274,32 +272,22 @@ describe("Edge Case Test Suite", () => {
 
     it("should accept valid date ranges", () => {
       const now = Date.now();
-      expect(
-        schema.safeParse({ startTime: now, endTime: now + 86400000 }).success
-      ).toBe(true);
+      expect(schema.safeParse({ startTime: now, endTime: now + 86400000 }).success).toBe(true);
     });
 
     it("should reject end before start", () => {
       const now = Date.now();
-      expect(
-        schema.safeParse({ startTime: now, endTime: now - 1 }).success
-      ).toBe(false);
+      expect(schema.safeParse({ startTime: now, endTime: now - 1 }).success).toBe(false);
     });
 
     it("should reject equal start and end", () => {
       const now = Date.now();
-      expect(
-        schema.safeParse({ startTime: now, endTime: now }).success
-      ).toBe(false);
+      expect(schema.safeParse({ startTime: now, endTime: now }).success).toBe(false);
     });
 
     it("should reject invalid timestamps in range", () => {
-      expect(
-        schema.safeParse({ startTime: -1, endTime: Date.now() }).success
-      ).toBe(false);
-      expect(
-        schema.safeParse({ startTime: Date.now(), endTime: Infinity }).success
-      ).toBe(false);
+      expect(schema.safeParse({ startTime: -1, endTime: Date.now() }).success).toBe(false);
+      expect(schema.safeParse({ startTime: Date.now(), endTime: Infinity }).success).toBe(false);
     });
   });
 
@@ -314,9 +302,7 @@ describe("Edge Case Test Suite", () => {
       const injectionCases = injectionEdgeCases();
 
       it("should reject all SQL injection patterns", () => {
-        const sqlCases = injectionCases.filter((c) =>
-          c.label.toLowerCase().includes("sql")
-        );
+        const sqlCases = injectionCases.filter((c) => c.label.toLowerCase().includes("sql"));
 
         for (const c of sqlCases) {
           const result = SafeStringSchema.safeParse(c.value);
@@ -328,9 +314,7 @@ describe("Edge Case Test Suite", () => {
 
       it("should reject all XSS patterns", () => {
         const xssCases = injectionCases.filter(
-          (c) =>
-            c.label.toLowerCase().includes("xss") ||
-            c.label.toLowerCase().includes("script")
+          (c) => c.label.toLowerCase().includes("xss") || c.label.toLowerCase().includes("script"),
         );
 
         for (const c of xssCases) {
@@ -340,9 +324,7 @@ describe("Edge Case Test Suite", () => {
       });
 
       it("should reject path traversal attempts", () => {
-        const pathCases = injectionCases.filter((c) =>
-          c.label.toLowerCase().includes("path")
-        );
+        const pathCases = injectionCases.filter((c) => c.label.toLowerCase().includes("path"));
 
         for (const c of pathCases) {
           // Path traversal in a string context - should be rejected if contains ../
@@ -356,9 +338,7 @@ describe("Edge Case Test Suite", () => {
       const coercionCases = typeCoercionEdgeCases();
 
       it("should detect prototype pollution attempts", () => {
-        const protoCase = coercionCases.find((c) =>
-          c.label.includes("__proto__")
-        );
+        const protoCase = coercionCases.find((c) => c.label.includes("__proto__"));
         expect(protoCase).toBeDefined();
 
         // Use the helper function to detect prototype pollution
@@ -366,9 +346,7 @@ describe("Edge Case Test Suite", () => {
       });
 
       it("should detect constructor injection attempts", () => {
-        const constructorCase = coercionCases.find((c) =>
-          c.label.includes("constructor")
-        );
+        const constructorCase = coercionCases.find((c) => c.label.includes("constructor"));
         expect(constructorCase).toBeDefined();
 
         expect(hasPrototypePollution(constructorCase!.value)).toBe(true);
@@ -433,18 +411,14 @@ describe("Edge Case Test Suite", () => {
     });
 
     it("should identify deeply nested objects", () => {
-      const deepCase = nestedCases.find((c) =>
-        c.label.includes("100 levels")
-      );
+      const deepCase = nestedCases.find((c) => c.label.includes("100 levels"));
 
       expect(deepCase).toBeDefined();
       expect(deepCase!.shouldReject).toBe(true);
     });
 
     it("should identify very wide objects", () => {
-      const wideCase = nestedCases.find((c) =>
-        c.label.includes("10000 keys")
-      );
+      const wideCase = nestedCases.find((c) => c.label.includes("10000 keys"));
 
       expect(wideCase).toBeDefined();
       expect(wideCase!.shouldReject).toBe(true);
@@ -496,11 +470,9 @@ describe("Edge Case Coverage Summary", () => {
     console.log("\n=== Edge Case Test Coverage ===");
     console.log(`Total edge cases defined: ${allCases.length}`);
     console.log(
-      `Security (critical) cases: ${allCases.filter((c) => c.severity === "critical").length}`
+      `Security (critical) cases: ${allCases.filter((c) => c.severity === "critical").length}`,
     );
-    console.log(
-      `High severity cases: ${allCases.filter((c) => c.severity === "high").length}`
-    );
+    console.log(`High severity cases: ${allCases.filter((c) => c.severity === "high").length}`);
 
     // Group by category
     const byCategory = new Map<string, number>();

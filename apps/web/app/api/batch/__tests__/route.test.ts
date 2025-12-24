@@ -7,7 +7,7 @@ import { describe, it, expect } from "vitest";
 // and will be expanded into a full API contract test.
 
 describe("api/batch route", () => {
-	it("is wired for tests (placeholder)", () => {
-		expect(true).toBe(true);
-	});
+  it("is wired for tests (placeholder)", () => {
+    expect(true).toBe(true);
+  });
 });

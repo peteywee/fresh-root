@@ -13,7 +13,7 @@
 import { z } from "zod";
 
 // Type-only import for Firestore Timestamp (avoid runtime dependency)
- 
+
 type Timestamp = any;
 
 // ===== MAIN CORPORATE SCHEMA =====

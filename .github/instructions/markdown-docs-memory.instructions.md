@@ -5,7 +5,8 @@ description: "Project memory for Markdown docs formatting, linting, and auto-fix
 
 # Markdown Docs Memory
 
-Keep Markdown documents lint-clean and diff-friendly by standardizing fenced code languages and table formatting.
+Keep Markdown documents lint-clean and diff-friendly by standardizing fenced code languages and
+table formatting.
 
 ## Always specify fenced code languages (MD040)
 
@@ -45,7 +46,8 @@ Guidelines:
 
 ## Preferred auto-fix workflow
 
-When docs lint warnings show up (especially `MD040` / `MD060`), run the repo’s formatter/fixer pipeline:
+When docs lint warnings show up (especially `MD040` / `MD060`), run the repo’s formatter/fixer
+pipeline:
 
 ```bash
 pnpm --filter @fresh-root/markdown-fixer fix

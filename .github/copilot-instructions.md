@@ -42,18 +42,22 @@ L4: Documentation (docs/)
 ```
 
 **Quick Navigation**:
+
 - [Governance INDEX](.github/governance/INDEX.md) - L0/L1 canonical rules, amendments, tag lookup
 - [Instructions INDEX](.github/instructions/INDEX.md) - L2 implementation instructions, memory files
-- [Documentation INDEX](../docs/INDEX.md) - L4 human guides (architecture, standards, guides, production)
+- [Documentation INDEX](../docs/INDEX.md) - L4 human guides (architecture, standards, guides,
+  production)
 
 **Tag-Based Lookup**: Use the tag tables in INDEX files to quickly find relevant documentation:
+
 - `api` → SDK Factory, batch protocols, API patterns
 - `security` → OWASP compliance, security patterns, fix protocols
 - `testing` → Test standards, patterns, E2E strategies
 - `firebase` → Firebase config, deployment, rules
 - `patterns` → Coding patterns, validation, architectural decisions
 
-**Amendment System**: Amendments (A01-A08) extend canonical governance with focused implementation details. Each has YAML frontmatter for indexing.
+**Amendment System**: Amendments (A01-A08) extend canonical governance with focused implementation
+details. Each has YAML frontmatter for indexing.
 
 ---
 
@@ -86,22 +90,24 @@ L4: Documentation (docs/)
 
 You have **47 tools** available automatically without any setup:
 
-| Tier | Tools | Purpose | Status |
-|------|-------|---------|--------|
-| **Tier 1** | GitHub MCP (25+ tools) | Repository, PR, issue operations | ✅ Ready |
-| **Tier 1** | Repomix MCP (7 tools) | Code analysis, pattern detection, external research | ✅ Ready |
-| **Tier 1** | Firebase MCP (15+ tools) | Firestore, Auth, Deployment, Emulators | ✅ Ready |
-| **Tier 2** | Chrome DevTools (8 tools) | Browser automation, screenshots | 🟡 On-demand |
+| Tier       | Tools                     | Purpose                                             | Status       |
+| ---------- | ------------------------- | --------------------------------------------------- | ------------ |
+| **Tier 1** | GitHub MCP (25+ tools)    | Repository, PR, issue operations                    | ✅ Ready     |
+| **Tier 1** | Repomix MCP (7 tools)     | Code analysis, pattern detection, external research | ✅ Ready     |
+| **Tier 1** | Firebase MCP (15+ tools)  | Firestore, Auth, Deployment, Emulators              | ✅ Ready     |
+| **Tier 2** | Chrome DevTools (8 tools) | Browser automation, screenshots                     | 🟡 On-demand |
 
 ### Tool Selection Guide
 
 **Use GitHub MCP when**:
+
 - Searching code across repo
 - Managing PRs or issues
 - Querying commits, releases
 - Collaboration operations
 
 **Use Repomix MCP when**:
+
 - Analyzing code patterns
 - Understanding project structure
 - Researching external repos (competitors, patterns)
@@ -109,12 +115,14 @@ You have **47 tools** available automatically without any setup:
 - Needing 70% token compression on analysis
 
 **Use Firebase MCP when**:
+
 - Database operations (Firestore read/write)
 - Authentication queries
 - Deployment (rules, functions)
 - Emulator control
 
 **Use Chrome DevTools when**:
+
 - Taking screenshots of UI
 - Browser automation for E2E
 - DOM inspection
@@ -123,17 +131,14 @@ You have **47 tools** available automatically without any setup:
 ### Quick Examples
 
 ```markdown
-User: "Analyze API route patterns"
-→ Agent uses: mcp_repomix_pack_codebase (zero cost, fast)
+User: "Analyze API route patterns" → Agent uses: mcp_repomix_pack_codebase (zero cost, fast)
 
-User: "Find all error handling in the codebase"
-→ Agent uses: mcp_repomix_grep_repomix_output (pattern search)
+User: "Find all error handling in the codebase" → Agent uses: mcp_repomix_grep_repomix_output
+(pattern search)
 
-User: "Create a PR with these changes"
-→ Agent uses: github/create_pull_request (repo operation)
+User: "Create a PR with these changes" → Agent uses: github/create_pull_request (repo operation)
 
-User: "Deploy Firestore rules"
-→ Agent uses: firebase/deploy (deployment)
+User: "Deploy Firestore rules" → Agent uses: firebase/deploy (deployment)
 ```
 
 ### Best Practices
@@ -145,8 +150,11 @@ User: "Deploy Firestore rules"
 
 ### Reference Documentation
 
-- **Full Reference**: [docs/REPOMIX_MCP_TOOLS_REFERENCE.md](../docs/REPOMIX_MCP_TOOLS_REFERENCE.md) - Detailed tool documentation
-- **Strategy**: [docs/MCP_TOOLING_STRATEGY.md](../docs/MCP_TOOLING_STRATEGY.md) - Tier architecture and planning
+- **Full Reference**:
+  [docs/REPOMIX_MCP_TOOLS_REFERENCE.md](../docs/REPOMIX_MCP_TOOLS_REFERENCE.md) - Detailed tool
+  documentation
+- **Strategy**: [docs/MCP_TOOLING_STRATEGY.md](../docs/MCP_TOOLING_STRATEGY.md) - Tier architecture
+  and planning
 - **Configuration**: [.mcp.json](.mcp.json) - Tool configuration
 
 ---
@@ -164,7 +172,7 @@ User: "Deploy Firestore rules"
 
 ### First Commands
 
-```bash
+````bash
 # Install dependencies (use pnpm only!)
 pnpm install --frozen-lockfile
 
@@ -1963,3 +1971,4 @@ This codebase follows a **Zod-first, SDK factory pattern** with **hierarchical R
 ---
 
 **Last Updated**: December 10, 2025 by AI Agent Analysis
+````

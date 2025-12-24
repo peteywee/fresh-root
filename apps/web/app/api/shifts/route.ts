@@ -31,7 +31,7 @@ export const GET = createOrgEndpoint({
           .collection(`orgs/${orgId}/shifts`)
           .orderBy("createdAt", "desc")
           .get();
-        
+
         const shifts = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
         return ok({ shifts, total: shifts.length });
       }

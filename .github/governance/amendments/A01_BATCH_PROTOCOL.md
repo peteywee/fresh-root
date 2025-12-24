@@ -12,14 +12,15 @@ source: .github/BATCH_PROTOCOL_OFFICIAL.md
 
 ## Purpose
 
-Extends Protocol P03 with detailed batch endpoint implementation rules and systematic task execution patterns.
+Extends Protocol P03 with detailed batch endpoint implementation rules and systematic task execution
+patterns.
 
 ## Scope Classification
 
-| Task Type | Duration | Actions | Protocol |
-|-----------|----------|---------|----------|
-| **Simple** | <5 min | Single action | Execute immediately |
-| **Complex** | ≥5 min | Multiple steps | Full batch protocol |
+| Task Type   | Duration | Actions        | Protocol            |
+| ----------- | -------- | -------------- | ------------------- |
+| **Simple**  | <5 min   | Single action  | Execute immediately |
+| **Complex** | ≥5 min   | Multiple steps | Full batch protocol |
 
 ## Core Rules
 
@@ -54,26 +55,26 @@ Extends Protocol P03 with detailed batch endpoint implementation rules and syste
 
 ```typescript
 export const POST = createOrgEndpoint({
-  input: z.object({ 
-    items: ItemSchema.array().min(1).max(100) 
+  input: z.object({
+    items: ItemSchema.array().min(1).max(100),
   }),
   handler: async ({ input, context }) => {
     const results = { succeeded: [], failed: [] };
-    
+
     for (const item of input.items) {
       try {
         const created = await createItem(item, context.org!.orgId);
         results.succeeded.push(created);
       } catch (err) {
-        results.failed.push({ 
-          item, 
-          error: err.message 
+        results.failed.push({
+          item,
+          error: err.message,
         });
       }
     }
-    
+
     return NextResponse.json(results);
-  }
+  },
 });
 ```
 

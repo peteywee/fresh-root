@@ -21,8 +21,14 @@ describe("rules: auth boundaries", () => {
       await db.collection("orgs").doc(orgId).set({ name: "Org A" });
       await db.collection("organizations").doc(orgId).set({ name: "Org A" });
       // Seed user documents
-      await db.collection("users").doc("user-a").set({ displayName: "User A", email: "a@example.com" });
-      await db.collection("users").doc("user-b").set({ displayName: "User B", email: "b@example.com" });
+      await db
+        .collection("users")
+        .doc("user-a")
+        .set({ displayName: "User A", email: "a@example.com" });
+      await db
+        .collection("users")
+        .doc("user-b")
+        .set({ displayName: "User B", email: "b@example.com" });
     });
   });
 
@@ -67,14 +73,14 @@ describe("rules: auth boundaries", () => {
     it("allows authenticated user to create their own user doc", async () => {
       const user = ctxUser(env, "new-user", { orgId, roles: ["employee"] }).firestore();
       await assertSucceeds(
-        user.collection("users").doc("new-user").set({ displayName: "New User" })
+        user.collection("users").doc("new-user").set({ displayName: "New User" }),
       );
     });
 
     it("denies authenticated user from creating another user's doc", async () => {
       const user = ctxUser(env, "user-a", { orgId, roles: ["employee"] }).firestore();
       await assertFails(
-        user.collection("users").doc("impersonated").set({ displayName: "Impersonated" })
+        user.collection("users").doc("impersonated").set({ displayName: "Impersonated" }),
       );
     });
   });
@@ -115,11 +121,14 @@ describe("rules: auth boundaries", () => {
     it("allows legacy membership-based access when membership doc exists", async () => {
       // Seed a membership doc for user in org-a
       await seed(env, async (db) => {
-        await db.collection("memberships").doc(membershipId("legacy-user", orgId)).set({
-          uid: "legacy-user",
-          orgId: orgId,
-          roles: ["employee"],
-        });
+        await db
+          .collection("memberships")
+          .doc(membershipId("legacy-user", orgId))
+          .set({
+            uid: "legacy-user",
+            orgId: orgId,
+            roles: ["employee"],
+          });
       });
 
       // User without orgId token but with membership doc

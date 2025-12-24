@@ -9,7 +9,8 @@
 
 ## Executive Summary
 
-The current Repomix automation system is **production-ready at 91/100**, but the 9-point gap represents **real friction points** for users. Red team analysis identifies:
+The current Repomix automation system is **production-ready at 91/100**, but the 9-point gap
+represents **real friction points** for users. Red team analysis identifies:
 
 1. **Immediate Fix** (2 minutes): Add `pnpm docs:update` to CI → **95/100** ✅
 2. **Architecture Consideration** (strategic): Why NOT 100/100 by design
@@ -21,13 +22,13 @@ The current Repomix automation system is **production-ready at 91/100**, but the
 
 ### What Works Perfectly (The 91 Points)
 
-| Effectiveness Area | Score | Why Perfect |
-|-------------------|-------|-----------|
-| **Pre-push hook validation** | ✅ 20/20 | Catches errors locally, non-blocking, graceful |
-| **CI report generation** | ✅ 20/20 | Instant JSON+Markdown, artifacts available, PR comment |
-| **Nightly self-healing** | ✅ 20/20 | Automatic daily refresh, never fails, idempotent |
-| **Metrics accumulation** | ✅ 20/20 | JSONL append-only, historical trending, no overwrites |
-| **Integration reliability** | ✅ 11/11 | All layers connected, fallback logic, graceful degradation |
+| Effectiveness Area           | Score    | Why Perfect                                                |
+| ---------------------------- | -------- | ---------------------------------------------------------- |
+| **Pre-push hook validation** | ✅ 20/20 | Catches errors locally, non-blocking, graceful             |
+| **CI report generation**     | ✅ 20/20 | Instant JSON+Markdown, artifacts available, PR comment     |
+| **Nightly self-healing**     | ✅ 20/20 | Automatic daily refresh, never fails, idempotent           |
+| **Metrics accumulation**     | ✅ 20/20 | JSONL append-only, historical trending, no overwrites      |
+| **Integration reliability**  | ✅ 11/11 | All layers connected, fallback logic, graceful degradation |
 
 **Subtotal: 91/100**
 
@@ -60,7 +61,7 @@ TOTAL GAP: 9 points (4 + 4 + 1)
 
 ---
 
-## Gap 2 Analysis: Real-Time _index.md (The Fixable Gap)
+## Gap 2 Analysis: Real-Time \_index.md (The Fixable Gap)
 
 ### Current Behavior (The Problem)
 
@@ -83,7 +84,7 @@ DEVELOPER PUSH
 **User Friction:** Reviewers have to either:
 
 1. Download artifact zip file (inconvenient)
-2. Wait until nightly to see unified _index.md (delayed)
+2. Wait until nightly to see unified \_index.md (delayed)
 3. Trust that CI report is fresh (requires knowledge of system)
 
 ### The Fix: Add `docs:update` to CI
@@ -131,7 +132,7 @@ DEVELOPER PUSH
 
 **CRITICAL DESIGN DECISION:**
 
-We should **NOT** commit _index.md in CI because:
+We should **NOT** commit \_index.md in CI because:
 
 1. **CI Must Be Immutable**
    - GitHub best practice: CI generates artifacts, doesn't mutate repo
@@ -147,11 +148,11 @@ We should **NOT** commit _index.md in CI because:
    - Similar to how pre-push hook creates `.repomix-cache.json`
    - Temporary artifact for workflow, not stored
 
-**Solution: Generate _index.md, But Don't Commit It**
+**Solution: Generate \_index.md, But Don't Commit It**
 
 ```yaml
 - name: Update architecture index (for PR preview)
-  run: pnpm docs:update || true  # Non-blocking
+  run: pnpm docs:update || true # Non-blocking
   # ↑ Generates fresh _index.md but doesn't commit
   # ↑ Nightly dashboard will commit the official version
 ```
@@ -178,22 +179,22 @@ To reach absolute 100%, we'd need to address **all 9 points**, but this requires
 - ✅ Keep CI immutable (no commits)
 - ✅ Keep nightly as documentation owner
 - ✅ Metrics once daily (efficient)
-- ✅ Add _index.md generation to CI (non-committed) → **95/100**
+- ✅ Add \_index.md generation to CI (non-committed) → **95/100**
 
 **Trade-offs:**
 
-- ⚠️ Don't commit _index.md in CI (but nightly will fix it within 28 hours)
+- ⚠️ Don't commit \_index.md in CI (but nightly will fix it within 28 hours)
 - ⚠️ Metrics once daily (but 365/year is excellent)
 
 **User Impact:** Minimal friction, excellent reliability
 
 ---
 
-### Option 2: Real-Time _index.md + Metrics (Hypothetical 98/100)
+### Option 2: Real-Time \_index.md + Metrics (Hypothetical 98/100)
 
 **What Would Be Required:**
 
-1. CI generates _index.md AND commits it (**dangerous**)
+1. CI generates \_index.md AND commits it (**dangerous**)
 2. Per-push metrics collection (**expensive**)
 
 **Why This Breaks:**
@@ -211,7 +212,7 @@ To reach absolute 100%, we'd need to address **all 9 points**, but this requires
 
 **What Would Be Needed:**
 
-1. Real-time _index.md that reviewers see
+1. Real-time \_index.md that reviewers see
 2. Real-time metrics per-push
 3. Conflict-free commit strategy
 4. Historical metrics preservation
@@ -232,21 +233,21 @@ To reach absolute 100%, we'd need to address **all 9 points**, but this requires
 
 ### Matrix: Features vs. Cost
 
-| Feature | Effectiveness | Effort | Cost | Benefit | Risk |
-|---------|---------------|--------|------|---------|------|
-| Pre-push validation | +20 | ✅ Done | Free | High | None |
-| CI reports | +20 | ✅ Done | Free | High | None |
-| Nightly self-healing | +20 | ✅ Done | Free | High | None |
-| Metrics JSONL | +20 | ✅ Done | Free | High | None |
-| Integration reliability | +11 | ✅ Done | Free | High | None |
-| **CI _index.md gen** | **+4** | **2 min** | **+1 sec/run** | **HIGH** | **None** |
-| Per-push metrics | +2 | 30 min | +$100/mo | Low | High |
-| Real-time commits | +2 | 1 hr | Complex | Low | HIGH ⚠️ |
-| Notification system | +1 | 2 hrs | Medium | Low | None |
+| Feature                 | Effectiveness | Effort    | Cost           | Benefit  | Risk     |
+| ----------------------- | ------------- | --------- | -------------- | -------- | -------- |
+| Pre-push validation     | +20           | ✅ Done   | Free           | High     | None     |
+| CI reports              | +20           | ✅ Done   | Free           | High     | None     |
+| Nightly self-healing    | +20           | ✅ Done   | Free           | High     | None     |
+| Metrics JSONL           | +20           | ✅ Done   | Free           | High     | None     |
+| Integration reliability | +11           | ✅ Done   | Free           | High     | None     |
+| **CI \_index.md gen**   | **+4**        | **2 min** | **+1 sec/run** | **HIGH** | **None** |
+| Per-push metrics        | +2            | 30 min    | +$100/mo       | Low      | High     |
+| Real-time commits       | +2            | 1 hr      | Complex        | Low      | HIGH ⚠️  |
+| Notification system     | +1            | 2 hrs     | Medium         | Low      | None     |
 
 **Red Team Recommendation:**
 
-- ✅ **IMPLEMENT:** Add CI _index.md generation (4 points, 2 minutes, zero risk)
+- ✅ **IMPLEMENT:** Add CI \_index.md generation (4 points, 2 minutes, zero risk)
 - ❌ **SKIP:** Per-push metrics (2 points, 30 min, low value)
 - ❌ **SKIP:** Real-time commits (2 points, high complexity, high risk)
 - ❌ **SKIP:** Notification system (1 point, low value)
@@ -279,15 +280,15 @@ To reach absolute 100%, we'd need to address **all 9 points**, but this requires
 
 CI should NOT commit this file. The workflow is:
 
-1. **CI (every push):** Generate _index.md (in workspace, for PR review)
-2. **Nightly (daily):** Commit _index.md to repo (official version)
+1. **CI (every push):** Generate \_index.md (in workspace, for PR review)
+2. **Nightly (daily):** Commit \_index.md to repo (official version)
 
 No conflicts because CI doesn't commit.
 
 ### Step 3: Test the Change
 
 1. Create test PR
-2. Verify _index.md is generated in CI workspace
+2. Verify \_index.md is generated in CI workspace
 3. Verify PR reviewers can access unified view
 4. Verify nightly still works (commits the official version)
 
@@ -299,7 +300,7 @@ No conflicts because CI doesn't commit.
 
 **91 → 95 (+4 points):**
 
-- ✅ Real-time _index.md for reviewers
+- ✅ Real-time \_index.md for reviewers
 - ✅ Better PR experience
 - ✅ Immediate architecture context
 - ✅ No wait for nightly
@@ -317,7 +318,8 @@ No conflicts because CI doesn't commit.
 - ❌ Per-request processing (infeasible at scale)
 - ❌ Multiple simultaneous writers (conflict nightmare)
 
-**Conclusion:** 95/100 is the **practical optimum**. Beyond that, you're optimizing for theoretical perfection at the cost of real reliability.
+**Conclusion:** 95/100 is the **practical optimum**. Beyond that, you're optimizing for theoretical
+perfection at the cost of real reliability.
 
 ---
 
@@ -327,11 +329,13 @@ No conflicts because CI doesn't commit.
 
 **Q: Could 100% be achieved with better architecture?**
 
-- A: No. 95% represents the limit of safe, reliable automation. Beyond that requires unsafe patterns (multiple commits, race conditions, unnecessary processing).
+- A: No. 95% represents the limit of safe, reliable automation. Beyond that requires unsafe patterns
+  (multiple commits, race conditions, unnecessary processing).
 
 **Q: Is 91% "good enough"?**
 
-- A: Yes. Docs refresh within 28 hours, fully automated, zero manual work. Most organizations would be thrilled.
+- A: Yes. Docs refresh within 28 hours, fully automated, zero manual work. Most organizations would
+  be thrilled.
 
 **Q: Should we implement the 95% improvement?**
 
@@ -339,21 +343,22 @@ No conflicts because CI doesn't commit.
 
 **Q: Why not push for 100%?**
 
-- A: Law of diminishing returns. Each additional point costs exponentially more (effort, complexity, risk). 95 is the sane optimum.
+- A: Law of diminishing returns. Each additional point costs exponentially more (effort, complexity,
+  risk). 95 is the sane optimum.
 
 ---
 
 ## Recommendation Summary
 
-| Metric | Current | Recommended | Impact |
-|--------|---------|-------------|--------|
-| **Effectiveness Score** | 91/100 | 95/100 | +4 points |
-| **Effort to Implement** | N/A | 2 minutes | Trivial |
-| **Risk Level** | N/A | None | Zero breaking changes |
-| **User Experience** | Good | Excellent | PR reviewers see unified view immediately |
-| **System Reliability** | Excellent | Excellent | No change to reliability |
-| **Maintenance Burden** | Minimal | Minimal | +1 sec per CI run |
-| **Architectural Cleanliness** | Good | Excellent | Better separation of concerns |
+| Metric                        | Current   | Recommended | Impact                                    |
+| ----------------------------- | --------- | ----------- | ----------------------------------------- |
+| **Effectiveness Score**       | 91/100    | 95/100      | +4 points                                 |
+| **Effort to Implement**       | N/A       | 2 minutes   | Trivial                                   |
+| **Risk Level**                | N/A       | None        | Zero breaking changes                     |
+| **User Experience**           | Good      | Excellent   | PR reviewers see unified view immediately |
+| **System Reliability**        | Excellent | Excellent   | No change to reliability                  |
+| **Maintenance Burden**        | Minimal   | Minimal     | +1 sec per CI run                         |
+| **Architectural Cleanliness** | Good      | Excellent   | Better separation of concerns             |
 
 ---
 
@@ -362,20 +367,20 @@ No conflicts because CI doesn't commit.
 ### Before (repomix-ci.yml line 27)
 
 ```yaml
-      - name: Comment PR with analysis
-        if: github.event_name == 'pull_request'
-        uses: actions/github-script@v7
+- name: Comment PR with analysis
+  if: github.event_name == 'pull_request'
+  uses: actions/github-script@v7
 ```
 
 ### After (insert before)
 
 ```yaml
-      - name: Update architecture index (for PR preview)
-        run: pnpm docs:update || echo "⚠️ Non-critical update skipped"
-        continue-on-error: true
-      - name: Comment PR with analysis
-        if: github.event_name == 'pull_request'
-        uses: actions/github-script@v7
+- name: Update architecture index (for PR preview)
+  run: pnpm docs:update || echo "⚠️ Non-critical update skipped"
+  continue-on-error: true
+- name: Comment PR with analysis
+  if: github.event_name == 'pull_request'
+  uses: actions/github-script@v7
 ```
 
 ---
@@ -384,9 +389,12 @@ No conflicts because CI doesn't commit.
 
 **Red Team Verdict:**
 
-The Repomix automation system is already **excellent at 91/100**. The 9-point gap is mostly by design for safety. However, a **single 2-minute change** (adding CI _index.md generation) moves you to **95/100** with zero risk and significant UX improvement.
+The Repomix automation system is already **excellent at 91/100**. The 9-point gap is mostly by
+design for safety. However, a **single 2-minute change** (adding CI \_index.md generation) moves you
+to **95/100** with zero risk and significant UX improvement.
 
-**Recommendation:** Implement the improvement to reach 95/100, then declare system complete. Don't chase 100/100 — it's a theoretical limit that requires unsafe trade-offs.
+**Recommendation:** Implement the improvement to reach 95/100, then declare system complete. Don't
+chase 100/100 — it's a theoretical limit that requires unsafe trade-offs.
 
 **Implementation:** 3 lines of YAML, 2 minutes, zero breaking changes.
 

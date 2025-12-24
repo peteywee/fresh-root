@@ -97,10 +97,7 @@ export type CreateSecurityScan = z.infer<typeof CreateSecurityScanSchema>;
 export const CodebaseStatsSchema = z.object({
   totalFiles: z.number().int().min(0),
   totalLines: z.number().int().min(0),
-  byExtension: z.record(
-    z.string(),
-    z.object({ files: z.number().int(), lines: z.number().int() })
-  ),
+  byExtension: z.record(z.string(), z.object({ files: z.number().int(), lines: z.number().int() })),
 });
 
 export type CodebaseStats = z.infer<typeof CodebaseStatsSchema>;

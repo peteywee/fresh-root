@@ -14,8 +14,8 @@ protocols.
 ### Machine-readable manifests
 
 - [`/.github/agents/personas.manifest.json`](/.github/agents/personas.manifest.json) - JSON manifest
-  for automation to dynamically load persona metadata (purpose, activation triggers, responsibilities,
-  safeguards).
+  for automation to dynamically load persona metadata (purpose, activation triggers,
+  responsibilities, safeguards).
 
 ## Related Documentation
 

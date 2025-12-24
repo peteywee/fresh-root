@@ -6,12 +6,12 @@
 
 ## 🎯 What MCP Tools Should Always Be On
 
-| Tool | Status | Should Always Be On? | Why? |
-|------|--------|----------------------|------|
-| **GitHub MCP** | ✅ HTTP | **YES** | 0ms overhead, 25+ critical tools |
-| **Repomix MCP** | ✅ stdio | **YES** | 100ms init, 70% token savings, 7 powerful tools |
-| **Firebase MCP** | ✅ stdio | **YES** | 200ms init, critical for data ops, pre-initialized |
-| **Chrome DevTools** | 🟡 stdio | NO (on-demand) | 500ms init + 1 prompt, browser-specific use |
+| Tool                | Status   | Should Always Be On? | Why?                                               |
+| ------------------- | -------- | -------------------- | -------------------------------------------------- |
+| **GitHub MCP**      | ✅ HTTP  | **YES**              | 0ms overhead, 25+ critical tools                   |
+| **Repomix MCP**     | ✅ stdio | **YES**              | 100ms init, 70% token savings, 7 powerful tools    |
+| **Firebase MCP**    | ✅ stdio | **YES**              | 200ms init, critical for data ops, pre-initialized |
+| **Chrome DevTools** | 🟡 stdio | NO (on-demand)       | 500ms init + 1 prompt, browser-specific use        |
 
 ---
 
@@ -169,13 +169,13 @@ All Repomix file operations:
 
 ## 📊 Performance Expectations
 
-| Operation | Time | Tokens |
-|-----------|------|--------|
-| GitHub search | <5s | 500-2000 |
+| Operation            | Time | Tokens                                   |
+| -------------------- | ---- | ---------------------------------------- |
+| GitHub search        | <5s  | 500-2000                                 |
 | Repomix pack (local) | 1-2s | 5000-15000 (or 1500-4500 w/ compression) |
-| Repomix grep | <1s | 100-500 |
-| Firebase query | 1-5s | 500-2000 |
-| Chrome screenshot | 2-5s | 1000-5000 |
+| Repomix grep         | <1s  | 100-500                                  |
+| Firebase query       | 1-5s | 500-2000                                 |
+| Chrome screenshot    | 2-5s | 1000-5000                                |
 
 ---
 
@@ -215,19 +215,16 @@ All Repomix file operations:
 
 ### "Getting wrong results"
 
-→ Be more specific. Example: "Pack only src/ directory"
-→ Use explicit tool: "Use Repomix to..."
+→ Be more specific. Example: "Pack only src/ directory" → Use explicit tool: "Use Repomix to..."
 
 ### "Takes too long"
 
-→ Use compression: Repomix compresses 70%
-→ Use grep instead of re-packing: Faster, no token cost
+→ Use compression: Repomix compresses 70% → Use grep instead of re-packing: Faster, no token cost
 
 ### "Too many tokens"
 
-→ Use Repomix compression (auto, 70% savings)
-→ Use grep on packed output (search without re-pack)
-→ Limit scope with patterns: includePatterns="src/**"
+→ Use Repomix compression (auto, 70% savings) → Use grep on packed output (search without re-pack) →
+Limit scope with patterns: includePatterns="src/\*\*"
 
 ---
 
@@ -237,7 +234,8 @@ For detailed information:
 
 - **Strategy & Architecture**: [MCP_TOOLING_STRATEGY.md](./docs/MCP_TOOLING_STRATEGY.md)
 - **Tool Reference**: [REPOMIX_MCP_TOOLS_REFERENCE.md](./docs/REPOMIX_MCP_TOOLS_REFERENCE.md)
-- **Inventory & Workflows**: [MCP_TOOL_ECOSYSTEM_INVENTORY.md](./docs/MCP_TOOL_ECOSYSTEM_INVENTORY.md)
+- **Inventory & Workflows**:
+  [MCP_TOOL_ECOSYSTEM_INVENTORY.md](./docs/MCP_TOOL_ECOSYSTEM_INVENTORY.md)
 - **Agent Guide**: [.github/copilot-instructions.md](./.github/copilot-instructions.md)
 
 ---

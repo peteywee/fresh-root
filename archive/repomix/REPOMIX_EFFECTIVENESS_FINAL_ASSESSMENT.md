@@ -66,11 +66,11 @@ Points awarded for:
 
 ### The 5-Point Intentional Gap (Not Worth Fixing)
 
-| Gap | Points | Why Intentional | Cost to Fix | Why Skip |
-|-----|--------|-----------------|-------------|----------|
-| CI doesn't commit _index.md | 4 | Preserves immutability | High (architectural change) | Would break safety principle |
-| Metrics once/day not per-push | 1 | Efficiency | 365x more runs | Unnecessary granularity |
-| *(Hypothetical additional gaps)* | — | — | — | Not applicable |
+| Gap                              | Points | Why Intentional        | Cost to Fix                 | Why Skip                     |
+| -------------------------------- | ------ | ---------------------- | --------------------------- | ---------------------------- |
+| CI doesn't commit \_index.md     | 4      | Preserves immutability | High (architectural change) | Would break safety principle |
+| Metrics once/day not per-push    | 1      | Efficiency             | 365x more runs              | Unnecessary granularity      |
+| _(Hypothetical additional gaps)_ | —      | —                      | —                           | Not applicable               |
 
 ---
 
@@ -83,9 +83,9 @@ Points awarded for:
 **Lines Added:** 3
 
 ```yaml
-      - name: Update architecture index (for PR preview)
-        run: pnpm docs:update || echo "⚠️ Non-critical update skipped"
-        continue-on-error: true
+- name: Update architecture index (for PR preview)
+  run: pnpm docs:update || echo "⚠️ Non-critical update skipped"
+  continue-on-error: true
 ```
 
 ### Why This Works
@@ -122,13 +122,13 @@ AFTER:
 
 ### Questions Answered
 
-| Question | Answer | Evidence |
-|----------|--------|----------|
-| Is the system production-ready NOW? | ✅ YES | All 5 layers work, self-healing proven |
-| Should we implement the 4-point improvement? | ✅ YES | 2 minutes, zero risk, better UX |
-| Can we reach 100% safely? | ❌ NO | Would require unsafe trade-offs |
-| Is 95% "good enough"? | ✅ EXCELLENT | Docs refresh within 28 hours auto |
-| What's the biggest remaining gap? | CI doesn't auto-commit | But nightly heals within 28 hours |
+| Question                                     | Answer                 | Evidence                               |
+| -------------------------------------------- | ---------------------- | -------------------------------------- |
+| Is the system production-ready NOW?          | ✅ YES                 | All 5 layers work, self-healing proven |
+| Should we implement the 4-point improvement? | ✅ YES                 | 2 minutes, zero risk, better UX        |
+| Can we reach 100% safely?                    | ❌ NO                  | Would require unsafe trade-offs        |
+| Is 95% "good enough"?                        | ✅ EXCELLENT           | Docs refresh within 28 hours auto      |
+| What's the biggest remaining gap?            | CI doesn't auto-commit | But nightly heals within 28 hours      |
 
 ### Trade-Off Analysis
 
@@ -143,7 +143,7 @@ EFFORT vs. IMPROVEMENT CURVE
 │
 │  95%──── ✅ SWEET SPOT
 │   (requires 2 min, zero risk)
-│   
+│
 │  91%── (current state)
 │
 └────────────────────────────→ EFFORT
@@ -200,14 +200,14 @@ LAYER 5: SELF-HEALING LOGIC (docs-sync.mjs)
 
 ### Self-Healing Guarantees
 
-| Metric | Guarantee |
-|--------|-----------|
-| **Max documentation staleness** | 28 hours (then auto-healed) |
-| **Manual intervention required** | 0% (fully automatic) |
-| **Likelihood of failure** | <1% (fallback logic prevents it) |
-| **Cost to run** | <$1/month (automation is cheap) |
-| **Setup time** | 17 files + 10 minutes |
-| **Maintenance burden** | Minimal (runs automatically) |
+| Metric                           | Guarantee                        |
+| -------------------------------- | -------------------------------- |
+| **Max documentation staleness**  | 28 hours (then auto-healed)      |
+| **Manual intervention required** | 0% (fully automatic)             |
+| **Likelihood of failure**        | <1% (fallback logic prevents it) |
+| **Cost to run**                  | <$1/month (automation is cheap)  |
+| **Setup time**                   | 17 files + 10 minutes            |
+| **Maintenance burden**           | Minimal (runs automatically)     |
 
 ---
 
@@ -261,25 +261,26 @@ ADVANTAGE: Immediate visibility, no waiting, better review
 
 ### Executive Summary
 
-| Aspect | Status |
-|--------|--------|
-| **System Readiness** | ✅ Production-Ready |
-| **Current Effectiveness** | ✅ 91/100 (excellent) |
-| **Implementable Improvement** | ✅ +4 points (2 minutes) |
-| **Target Effectiveness** | ✅ 95/100 (optimal) |
-| **Risk Level** | ✅ Zero (no breaking changes) |
-| **Maintenance Burden** | ✅ Minimal (fully automatic) |
-| **User Benefit** | ✅ Significant (better PR experience) |
+| Aspect                        | Status                                |
+| ----------------------------- | ------------------------------------- |
+| **System Readiness**          | ✅ Production-Ready                   |
+| **Current Effectiveness**     | ✅ 91/100 (excellent)                 |
+| **Implementable Improvement** | ✅ +4 points (2 minutes)              |
+| **Target Effectiveness**      | ✅ 95/100 (optimal)                   |
+| **Risk Level**                | ✅ Zero (no breaking changes)         |
+| **Maintenance Burden**        | ✅ Minimal (fully automatic)          |
+| **User Benefit**              | ✅ Significant (better PR experience) |
 
 ### Final Verdict
 
 ✅ **IMPLEMENTATION COMPLETE**
 
-The Repomix automation system now operates at **95/100 effectiveness**, which represents the practical optimum. This was achieved through:
+The Repomix automation system now operates at **95/100 effectiveness**, which represents the
+practical optimum. This was achieved through:
 
 1. ✅ **Comprehensive 5-layer automation** (pre-push → CI → nightly dashboard)
 2. ✅ **Self-healing documentation** (max 28-hour refresh, auto-commit)
-3. ✅ **Real-time PR preview** (_index.md generated immediately)
+3. ✅ **Real-time PR preview** (\_index.md generated immediately)
 4. ✅ **Historical metrics tracking** (JSONL append-only)
 5. ✅ **Zero manual intervention** (fully automatic)
 
@@ -342,4 +343,3 @@ These trade-offs are **not worth fixing** — they preserve system reliability a
 - v2.0: Would need different architecture
 
 **Status:** 🎯 Target achieved, system complete
-

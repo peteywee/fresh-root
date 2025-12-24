@@ -23,9 +23,7 @@ export const GET = createOrgEndpoint({
       }
 
       // Query Firestore for the schedule
-      const docRef = adminDb.doc(
-        `organizations/${context.org!.orgId}/schedules/${id}`
-      );
+      const docRef = adminDb.doc(`organizations/${context.org!.orgId}/schedules/${id}`);
       const docSnap = await docRef.get();
 
       if (!docSnap.exists) {
@@ -35,8 +33,7 @@ export const GET = createOrgEndpoint({
       const data = docSnap.data();
       return ok({ id: docSnap.id, ...data });
     } catch (error) {
-      const message =
-        error instanceof Error ? error.message : "Failed to fetch schedule";
+      const message = error instanceof Error ? error.message : "Failed to fetch schedule";
       return serverError(message);
     }
   },
@@ -62,9 +59,7 @@ export const PATCH = createOrgEndpoint({
       }
 
       const validated = parsed.data as Record<string, unknown>;
-      const docRef = adminDb.doc(
-        `organizations/${context.org!.orgId}/schedules/${id}`
-      );
+      const docRef = adminDb.doc(`organizations/${context.org!.orgId}/schedules/${id}`);
 
       // Update the document
       await docRef.update({
@@ -79,8 +74,7 @@ export const PATCH = createOrgEndpoint({
       if (error instanceof Error && error.name === "ZodError") {
         return badRequest("Invalid schedule data");
       }
-      const message =
-        error instanceof Error ? error.message : "Failed to update schedule";
+      const message = error instanceof Error ? error.message : "Failed to update schedule";
       return serverError(message);
     }
   },
@@ -104,15 +98,12 @@ export const DELETE = createOrgEndpoint({
         return serverError("Database not initialized");
       }
 
-      const docRef = adminDb.doc(
-        `organizations/${context.org!.orgId}/schedules/${id}`
-      );
+      const docRef = adminDb.doc(`organizations/${context.org!.orgId}/schedules/${id}`);
       await docRef.delete();
 
       return ok({ deleted: true, id });
     } catch (error) {
-      const message =
-        error instanceof Error ? error.message : "Failed to delete schedule";
+      const message = error instanceof Error ? error.message : "Failed to delete schedule";
       return serverError(message);
     }
   },

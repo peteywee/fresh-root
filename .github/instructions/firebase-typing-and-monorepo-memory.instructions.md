@@ -1,6 +1,6 @@
 ---
-priority: 1
-applyTo: "apps/web/app/api/**/\*.ts,apps/web/lib/**/_.ts,packages/_/\*\*/\*.ts"
+
+priority: 1 applyTo: "apps/web/app/api/**/\*.ts,apps/web/lib/**/_.ts,packages/_/\*\*/\*.ts"
 
 description: "Key learnings from Firebase SDK v12 typing strategy and monorepo dependency
 resolution"

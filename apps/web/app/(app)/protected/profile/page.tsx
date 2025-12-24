@@ -40,10 +40,7 @@ export default function ProfilePage() {
 
     const loadProfile = async () => {
       try {
-        const profileRef = doc(
-          db!,
-          `organizations/${orgId}/members/${user.uid}`
-        );
+        const profileRef = doc(db!, `organizations/${orgId}/members/${user.uid}`);
         const snap = await getDoc(profileRef);
 
         if (snap.exists()) {
@@ -62,18 +59,14 @@ export default function ProfilePage() {
           });
         }
       } catch (err) {
-        setError(
-          err instanceof Error ? err.message : "Failed to load profile"
-        );
+        setError(err instanceof Error ? err.message : "Failed to load profile");
       }
     };
 
     loadProfile();
   }, [user, orgId]);
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.currentTarget;
     setProfile((prev) => ({ ...prev, [name]: value }));
     setError(null);
@@ -92,10 +85,7 @@ export default function ProfilePage() {
 
     try {
       const now = Timestamp.now();
-      const profileRef = doc(
-        db!,
-        `organizations/${orgId}/members/${user.uid}`
-      );
+      const profileRef = doc(db!, `organizations/${orgId}/members/${user.uid}`);
 
       const profileData = {
         uid: user.uid,
@@ -145,9 +135,7 @@ export default function ProfilePage() {
       <main className="mx-auto max-w-2xl space-y-6 py-6">
         <div>
           <h1 className="text-3xl font-bold text-white">Profile Settings</h1>
-          <p className="mt-1 text-gray-400">
-            Manage your account and organization settings
-          </p>
+          <p className="mt-1 text-gray-400">Manage your account and organization settings</p>
         </div>
 
         {/* Profile Card */}
@@ -175,9 +163,7 @@ export default function ProfilePage() {
           <div className="space-y-4">
             {/* Display Name */}
             <div>
-              <label className="block text-sm font-medium text-gray-300">
-                Display Name
-              </label>
+              <label className="block text-sm font-medium text-gray-300">Display Name</label>
               <input
                 type="text"
                 name="displayName"
@@ -190,9 +176,7 @@ export default function ProfilePage() {
 
             {/* Phone */}
             <div>
-              <label className="block text-sm font-medium text-gray-300">
-                Phone Number
-              </label>
+              <label className="block text-sm font-medium text-gray-300">Phone Number</label>
               <input
                 type="tel"
                 name="phone"
@@ -205,9 +189,7 @@ export default function ProfilePage() {
 
             {/* Role */}
             <div>
-              <label className="block text-sm font-medium text-gray-300">
-                Role
-              </label>
+              <label className="block text-sm font-medium text-gray-300">Role</label>
               <select
                 name="role"
                 value={profile.role || "member"}
@@ -223,9 +205,7 @@ export default function ProfilePage() {
             {/* Organization ID */}
             {orgId && (
               <div>
-                <label className="block text-sm font-medium text-gray-300">
-                  Organization ID
-                </label>
+                <label className="block text-sm font-medium text-gray-300">Organization ID</label>
                 <input
                   type="text"
                   value={orgId}
@@ -238,9 +218,7 @@ export default function ProfilePage() {
 
           {/* Error Message */}
           {error && (
-            <div className="mt-4 rounded bg-red-900/20 p-3 text-sm text-red-400">
-              {error}
-            </div>
+            <div className="mt-4 rounded bg-red-900/20 p-3 text-sm text-red-400">{error}</div>
           )}
 
           {/* Success Message */}
@@ -265,9 +243,7 @@ export default function ProfilePage() {
         {/* Danger Zone */}
         <div className="rounded-lg border border-red-900/50 bg-red-900/10 p-6">
           <h2 className="mb-2 text-lg font-semibold text-red-400">Danger Zone</h2>
-          <p className="mb-4 text-sm text-gray-400">
-            These actions cannot be undone.
-          </p>
+          <p className="mb-4 text-sm text-gray-400">These actions cannot be undone.</p>
           <button className="rounded bg-red-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-red-700">
             Delete Account
           </button>

@@ -3,10 +3,7 @@
 import fs from "node:fs";
 import path from "node:path";
 
-import {
-  initializeTestEnvironment,
-  RulesTestEnvironment,
-} from "@firebase/rules-unit-testing";
+import { initializeTestEnvironment, RulesTestEnvironment } from "@firebase/rules-unit-testing";
 
 const PROJECT_ID = "fresh-schedules-test";
 
@@ -67,7 +64,7 @@ export const ctxAnon = ctxUnauth;
  */
 export async function seed(
   env: RulesTestEnvironment,
-  callback: (db: FirebaseFirestore.Firestore) => Promise<void>
+  callback: (db: FirebaseFirestore.Firestore) => Promise<void>,
 ): Promise<void> {
   await env.withSecurityRulesDisabled(async (context) => {
     const db = context.firestore();

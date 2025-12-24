@@ -33,7 +33,7 @@ declare module "vitest" {
 
 /**
  * Install custom matchers - call in vitest.setup.ts
- * 
+ *
  * @example
  * // vitest.setup.ts
  * import { installEdgeCaseMatchers } from "./tests/unit/edge-cases/matchers";
@@ -83,7 +83,7 @@ export function installEdgeCaseMatchers(): void {
           (f) =>
             `  - ${f.label} [${f.severity}]: expected ${
               f.expectedToReject ? "reject" : "accept"
-            }, got ${f.actuallyRejected ? "rejected" : "accepted"}`
+            }, got ${f.actuallyRejected ? "rejected" : "accepted"}`,
         )
         .join("\n");
 
@@ -106,7 +106,7 @@ export function installEdgeCaseMatchers(): void {
           (f) =>
             `  ⚠️ SECURITY: ${f.label}: expected ${
               f.expectedToReject ? "reject" : "accept"
-            }, got ${f.actuallyRejected ? "rejected" : "accepted"}`
+            }, got ${f.actuallyRejected ? "rejected" : "accepted"}`,
         )
         .join("\n");
 
@@ -131,7 +131,7 @@ export function installEdgeCaseMatchers(): void {
  */
 export function createSchemaTestCases<T>(
   schema: ZodSchema<T>,
-  edgeCases: LabeledValue<unknown>[]
+  edgeCases: LabeledValue<unknown>[],
 ): Array<{
   name: string;
   value: unknown;
@@ -150,14 +150,14 @@ export function createSchemaTestCases<T>(
 
 /**
  * Run edge case tests using test.each pattern
- * 
+ *
  * @example
  * const cases = createSchemaTestCases(MySchema, stringEdgeCases());
  * runEdgeCaseTests(cases, MySchema);
  */
 export function runEdgeCaseTests<T>(
   testCases: ReturnType<typeof createSchemaTestCases>,
-  schema: ZodSchema<T>
+  schema: ZodSchema<T>,
 ): void {
   const { describe, it, expect } = require("vitest") as typeof import("vitest");
 
@@ -185,7 +185,7 @@ export function runEdgeCaseTests<T>(
  */
 export function snapshotEdgeCaseBehavior<T>(
   schema: ZodSchema<T>,
-  edgeCases: LabeledValue<unknown>[]
+  edgeCases: LabeledValue<unknown>[],
 ): Record<string, { accepted: boolean; error?: string }> {
   const snapshot: Record<string, { accepted: boolean; error?: string }> = {};
 
@@ -193,9 +193,7 @@ export function snapshotEdgeCaseBehavior<T>(
     const result = schema.safeParse(ec.value);
     snapshot[ec.label] = {
       accepted: result.success,
-      error: !result.success
-        ? result.error.errors.map((e) => e.message).join("; ")
-        : undefined,
+      error: !result.success ? result.error.errors.map((e) => e.message).join("; ") : undefined,
     };
   }
 

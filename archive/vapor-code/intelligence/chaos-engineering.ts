@@ -5,7 +5,6 @@
  * Injects failures to test system resilience and error handling
  */
 
-
 interface ChaosExperiment {
   name: string;
   type: ChaosType;

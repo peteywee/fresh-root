@@ -5,7 +5,8 @@
 
 ## Overview
 
-Repomix has been successfully integrated into your Fresh Schedules monorepo as both a **CLI tool** and a **library package**. You can now:
+Repomix has been successfully integrated into your Fresh Schedules monorepo as both a **CLI tool**
+and a **library package**. You can now:
 
 - **Use via CLI**: `pnpm repomix <target> [options]`
 - **Use as Library**: `import { runDefaultAction } from '@fresh-schedules/repomix'`
@@ -31,7 +32,8 @@ Repomix has been successfully integrated into your Fresh Schedules monorepo as b
 - **Comprehensive Guide**: [docs/guides/REPOMIX_INTEGRATION.md](docs/guides/REPOMIX_INTEGRATION.md)
 - **Setup Summary**: [REPOMIX_SETUP_COMPLETE.md](REPOMIX_SETUP_COMPLETE.md)
 - **Package Docs**: [packages/repomix/README.md](packages/repomix/README.md)
-- **Examples**: [scripts/examples/repomix-usage-example.mjs](scripts/examples/repomix-usage-example.mjs)
+- **Examples**:
+  [scripts/examples/repomix-usage-example.mjs](scripts/examples/repomix-usage-example.mjs)
 
 ## Quick Start
 
@@ -57,18 +59,14 @@ pnpm repomix packages/api-framework
 ### Library - Programmatic Use
 
 ```typescript
-import { runDefaultAction } from '@fresh-schedules/repomix';
+import { runDefaultAction } from "@fresh-schedules/repomix";
 
-await runDefaultAction(
-  ['packages/types'],
-  process.cwd(),
-  {
-    output: {
-      style: 'markdown',
-      filePath: './analysis.md'
-    }
-  }
-);
+await runDefaultAction(["packages/types"], process.cwd(), {
+  output: {
+    style: "markdown",
+    filePath: "./analysis.md",
+  },
+});
 ```
 
 ## File Structure
@@ -86,15 +84,15 @@ packages/repomix/          ← New workspace package
 
 ## Package Information
 
-| Property | Value |
-|----------|-------|
-| **Name** | `@fresh-schedules/repomix` |
-| **Version** | 0.1.0 |
-| **Location** | `packages/repomix/` |
-| **Underlying Tool** | repomix v0.2.43 |
-| **Build System** | tsup |
-| **Language** | TypeScript (ESM) |
-| **Node** | >=20.10.0 |
+| Property            | Value                      |
+| ------------------- | -------------------------- |
+| **Name**            | `@fresh-schedules/repomix` |
+| **Version**         | 0.1.0                      |
+| **Location**        | `packages/repomix/`        |
+| **Underlying Tool** | repomix v0.2.43            |
+| **Build System**    | tsup                       |
+| **Language**        | TypeScript (ESM)           |
+| **Node**            | >=20.10.0                  |
 
 ## Available Commands
 
@@ -114,26 +112,26 @@ pnpm --filter @fresh-schedules/repomix clean     # Clean dist/
 
 ## CLI Options Reference
 
-| Option | Description | Default |
-|--------|-------------|---------|
-| `<path>` | Target directory or repo | Required |
-| `--style` | Output format | `xml` |
-| `--output` | Output file path | Auto-generated |
-| `--compress` | Enable compression | `false` |
-| `--ignore` | Patterns to ignore | None |
-| `--include` | Patterns to include | None |
-| `-h, --help` | Show help | — |
-| `-v, --version` | Show version | — |
+| Option          | Description              | Default        |
+| --------------- | ------------------------ | -------------- |
+| `<path>`        | Target directory or repo | Required       |
+| `--style`       | Output format            | `xml`          |
+| `--output`      | Output file path         | Auto-generated |
+| `--compress`    | Enable compression       | `false`        |
+| `--ignore`      | Patterns to ignore       | None           |
+| `--include`     | Patterns to include      | None           |
+| `-h, --help`    | Show help                | —              |
+| `-v, --version` | Show version             | —              |
 
 ## Export Reference
 
 ```typescript
 // Functions
-export { runDefaultAction, setLogLevel } from '@fresh-schedules/repomix'
-export async function getVersion(): Promise<string>
+export { runDefaultAction, setLogLevel } from "@fresh-schedules/repomix";
+export async function getVersion(): Promise<string>;
 
 // Types
-export type { RepomixConfig, CliOptions }
+export type { RepomixConfig, CliOptions };
 ```
 
 ## Common Use Cases
@@ -173,12 +171,12 @@ pnpm repomix . \
 
 ## Documentation Index
 
-| Document | Purpose |
-|----------|---------|
-| [docs/guides/REPOMIX_INTEGRATION.md](docs/guides/REPOMIX_INTEGRATION.md) | Comprehensive integration guide with examples |
-| [REPOMIX_SETUP_COMPLETE.md](REPOMIX_SETUP_COMPLETE.md) | Setup summary and next steps |
-| [packages/repomix/README.md](packages/repomix/README.md) | Package-specific documentation |
-| [scripts/examples/repomix-usage-example.mjs](scripts/examples/repomix-usage-example.mjs) | Practical usage examples |
+| Document                                                                                 | Purpose                                       |
+| ---------------------------------------------------------------------------------------- | --------------------------------------------- |
+| [docs/guides/REPOMIX_INTEGRATION.md](docs/guides/REPOMIX_INTEGRATION.md)                 | Comprehensive integration guide with examples |
+| [REPOMIX_SETUP_COMPLETE.md](REPOMIX_SETUP_COMPLETE.md)                                   | Setup summary and next steps                  |
+| [packages/repomix/README.md](packages/repomix/README.md)                                 | Package-specific documentation                |
+| [scripts/examples/repomix-usage-example.mjs](scripts/examples/repomix-usage-example.mjs) | Practical usage examples                      |
 
 ## Verification Checklist
 
@@ -215,11 +213,11 @@ fresh-root (workspace root)
 
 ## Troubleshooting
 
-| Issue | Solution |
-|-------|----------|
-| CLI not found | Run `pnpm --filter @fresh-schedules/repomix build` |
-| Type errors | Ensure importing from `@fresh-schedules/repomix` not dist |
-| Build fails | Clean and rebuild: `pnpm --filter @fresh-schedules/repomix clean && build` |
+| Issue         | Solution                                                                   |
+| ------------- | -------------------------------------------------------------------------- |
+| CLI not found | Run `pnpm --filter @fresh-schedules/repomix build`                         |
+| Type errors   | Ensure importing from `@fresh-schedules/repomix` not dist                  |
+| Build fails   | Clean and rebuild: `pnpm --filter @fresh-schedules/repomix clean && build` |
 
 ## Support
 

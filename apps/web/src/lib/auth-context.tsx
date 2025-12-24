@@ -27,7 +27,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     // Guard: if auth is not initialized (no Firebase config), fallback gracefully
     if (!auth) {
-      console.warn("Firebase auth not initialized - check NEXT_PUBLIC_FIREBASE_* environment variables");
+      console.warn(
+        "Firebase auth not initialized - check NEXT_PUBLIC_FIREBASE_* environment variables",
+      );
       setIsLoading(false);
       return;
     }
@@ -43,7 +45,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         console.error("Firebase auth state change error:", error);
         setUser(null);
         setIsLoading(false);
-      }
+      },
     );
 
     // Cleanup subscription on unmount

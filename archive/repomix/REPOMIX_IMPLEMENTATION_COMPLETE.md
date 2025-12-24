@@ -52,16 +52,16 @@ Codebase growth tracked in metrics/repomix-metrics.log
 
 ## 📦 What Was Installed
 
-| Category | Component | File | Purpose |
-|----------|-----------|------|---------|
-| **Local** | Husky Hook | `.husky/pre-push` | Lightweight pre-push check |
-| **CI** | Workflow | `.github/workflows/repomix-ci.yml` | Full analysis on push/PR |
-| **Scheduled** | Workflow | `.github/workflows/repomix-dashboard.yml` | Nightly auto-update |
-| **Sync** | Script | `scripts/docs-sync.mjs` | Merge reports → docs |
-| **Metrics** | Script | `scripts/telemetry/repomix-metrics.mjs` | Track codebase growth |
-| **Commands** | NPM Scripts | `package.json` | 4 new `pnpm` commands |
-| **Docs** | Architecture | `docs/architecture/` | Auto-generated reports |
-| **Docs** | Metrics | `docs/metrics/` | Growth tracking |
+| Category      | Component    | File                                      | Purpose                    |
+| ------------- | ------------ | ----------------------------------------- | -------------------------- |
+| **Local**     | Husky Hook   | `.husky/pre-push`                         | Lightweight pre-push check |
+| **CI**        | Workflow     | `.github/workflows/repomix-ci.yml`        | Full analysis on push/PR   |
+| **Scheduled** | Workflow     | `.github/workflows/repomix-dashboard.yml` | Nightly auto-update        |
+| **Sync**      | Script       | `scripts/docs-sync.mjs`                   | Merge reports → docs       |
+| **Metrics**   | Script       | `scripts/telemetry/repomix-metrics.mjs`   | Track codebase growth      |
+| **Commands**  | NPM Scripts  | `package.json`                            | 4 new `pnpm` commands      |
+| **Docs**      | Architecture | `docs/architecture/`                      | Auto-generated reports     |
+| **Docs**      | Metrics      | `docs/metrics/`                           | Growth tracking            |
 
 ---
 
@@ -97,13 +97,13 @@ SKIP_CHECKS=1 git push
 
 ## 📍 Where Reports Go
 
-| Report | Generated | Location | Viewer |
-|--------|-----------|----------|--------|
-| **CI JSON** | Every push/PR | `docs/architecture/repomix-ci.json` | Machine-readable |
-| **CI Markdown** | Every push/PR | `docs/architecture/repomix-ci.md` | Human-readable |
-| **Dashboard** | Nightly | `docs/architecture/repomix-dashboard.{json,md}` | Comprehensive |
-| **Index** | Every push + nightly | `docs/architecture/_index.md` | Main overview |
-| **Metrics Log** | Nightly | `docs/metrics/repomix-metrics.log` | Growth tracking |
+| Report          | Generated            | Location                                        | Viewer           |
+| --------------- | -------------------- | ----------------------------------------------- | ---------------- |
+| **CI JSON**     | Every push/PR        | `docs/architecture/repomix-ci.json`             | Machine-readable |
+| **CI Markdown** | Every push/PR        | `docs/architecture/repomix-ci.md`               | Human-readable   |
+| **Dashboard**   | Nightly              | `docs/architecture/repomix-dashboard.{json,md}` | Comprehensive    |
+| **Index**       | Every push + nightly | `docs/architecture/_index.md`                   | Main overview    |
+| **Metrics Log** | Nightly              | `docs/metrics/repomix-metrics.log`              | Growth tracking  |
 
 ---
 
@@ -169,14 +169,14 @@ At **2 AM UTC**, the nightly dashboard will run automatically. You'll see:
 
 ## 📊 Automation Cost
 
-| Item | Cost |
-|------|------|
-| Pre-push hook (local) | ~2-3 seconds per push |
-| CI workflow (per push) | ~5-10 seconds |
-| Nightly dashboard | ~10-15 seconds |
-| Artifact storage | ~100 KB per month |
-| CI minutes | Negligible (seconds/month) |
-| **Total Impact** | **Minimal** |
+| Item                   | Cost                       |
+| ---------------------- | -------------------------- |
+| Pre-push hook (local)  | ~2-3 seconds per push      |
+| CI workflow (per push) | ~5-10 seconds              |
+| Nightly dashboard      | ~10-15 seconds             |
+| Artifact storage       | ~100 KB per month          |
+| CI minutes             | Negligible (seconds/month) |
+| **Total Impact**       | **Minimal**                |
 
 ---
 
@@ -344,26 +344,26 @@ git push
 
 ## 📖 Quick Reference
 
-| Need | Command |
-|------|---------|
-| Generate reports locally | `pnpm repomix:ci` |
-| Full automation suite | `pnpm repomix:dashboard` |
-| Update docs only | `pnpm docs:sync` |
-| Collect metrics only | `pnpm docs:analyze` |
-| Skip pre-push check | `SKIP_REPOMIX=1 git push` |
-| Skip all checks | `SKIP_CHECKS=1 git push` |
+| Need                     | Command                   |
+| ------------------------ | ------------------------- |
+| Generate reports locally | `pnpm repomix:ci`         |
+| Full automation suite    | `pnpm repomix:dashboard`  |
+| Update docs only         | `pnpm docs:sync`          |
+| Collect metrics only     | `pnpm docs:analyze`       |
+| Skip pre-push check      | `SKIP_REPOMIX=1 git push` |
+| Skip all checks          | `SKIP_CHECKS=1 git push`  |
 
 ---
 
 ## 📞 Support Resources
 
-| Resource | Purpose |
-|----------|---------|
-| `REPOMIX_QUICK_START.md` | Start here (5 min read) |
-| `REPOMIX_AUTOMATION_SETUP.md` | Deep dive (15 min read) |
-| `docs/architecture/README.md` | Automation overview |
-| `.github/workflows/repomix-*.yml` | Workflow configuration |
-| `scripts/docs-sync.mjs` | Synchronization logic |
+| Resource                          | Purpose                 |
+| --------------------------------- | ----------------------- |
+| `REPOMIX_QUICK_START.md`          | Start here (5 min read) |
+| `REPOMIX_AUTOMATION_SETUP.md`     | Deep dive (15 min read) |
+| `docs/architecture/README.md`     | Automation overview     |
+| `.github/workflows/repomix-*.yml` | Workflow configuration  |
+| `scripts/docs-sync.mjs`           | Synchronization logic   |
 
 ---
 
@@ -383,15 +383,15 @@ Before pushing, confirm:
 
 ## 🎉 Status Report
 
-| Component | Status | Details |
-|-----------|--------|---------|
-| **Pre-push hook** | ✅ Ready | Runs on every push |
-| **CI workflow** | ✅ Ready | Generates reports on push/PR |
-| **Dashboard** | ✅ Ready | Scheduled nightly |
-| **Metrics** | ✅ Ready | Tracks growth over time |
-| **Docs sync** | ✅ Ready | Auto-updates index |
-| **Configuration** | ✅ Complete | Zero setup needed |
-| **Documentation** | ✅ Complete | Comprehensive guides |
+| Component         | Status      | Details                      |
+| ----------------- | ----------- | ---------------------------- |
+| **Pre-push hook** | ✅ Ready    | Runs on every push           |
+| **CI workflow**   | ✅ Ready    | Generates reports on push/PR |
+| **Dashboard**     | ✅ Ready    | Scheduled nightly            |
+| **Metrics**       | ✅ Ready    | Tracks growth over time      |
+| **Docs sync**     | ✅ Ready    | Auto-updates index           |
+| **Configuration** | ✅ Complete | Zero setup needed            |
+| **Documentation** | ✅ Complete | Comprehensive guides         |
 
 ---
 

@@ -9,7 +9,7 @@ flowchart TB
         Push[Push to Branch]
         Manual[Manual Dispatch]
     end
-    
+
     subgraph Classify["Classification Layer"]
         Detector{Change Detector}
         Detector -->|Security Files| SecPipe[Security.*]
@@ -18,7 +18,7 @@ flowchart TB
         Detector -->|2-5 Files| StdPipe[*.STANDARD]
         Detector -->|>5 Files| HeavyPipe[*.HEAVY]
     end
-    
+
     subgraph Gates["Gate Layer"]
         Static[STATIC Gate]
         Correct[CORRECTNESS Gate]
@@ -26,13 +26,13 @@ flowchart TB
         Perf[PERF Gate]
         AI[AI Gate]
     end
-    
+
     subgraph Verdict["Verdict Layer"]
         Pass[✅ PASS]
         Block[❌ BLOCK]
         Needs[⚠️ NEEDS_CHANGES]
     end
-    
+
     Trigger --> Detector
     SecPipe & SchemaPipe & FastPipe & StdPipe & HeavyPipe --> Static
     Static -->|Pass| Correct
@@ -57,7 +57,7 @@ sequenceDiagram
     participant Agent as Selected Agent
     participant Tools as Tool Layer
     participant Out as Output
-    
+
     Dev->>Inv: @architect design TimeOff
     Inv->>Reg: parseInvocation()
     Reg->>Agent: ARCHITECT_CONTRACT
@@ -74,9 +74,9 @@ sequenceDiagram
 ```mermaid
 stateDiagram-v2
     [*] --> PENDING
-    
+
     PENDING --> STATIC: Start Pipeline
-    
+
     state STATIC {
         [*] --> lint
         lint --> format: Pass
@@ -86,32 +86,32 @@ stateDiagram-v2
         format --> FAILED: Fail
         typecheck --> FAILED: Fail
     }
-    
+
     STATIC --> CORRECTNESS: All Pass
     STATIC --> BLOCKED: Any Fail
-    
+
     state CORRECTNESS {
         [*] --> unit
         unit --> e2e: Pass
         e2e --> rules: Pass
         rules --> [*]: Pass
     }
-    
+
     CORRECTNESS --> SAFETY: All Pass
     CORRECTNESS --> BLOCKED: Any Fail
-    
+
     state SAFETY {
         [*] --> patterns
         patterns --> secrets: Pass
         secrets --> audit: Pass
         audit --> [*]: Pass/Advisory
     }
-    
+
     SAFETY --> PERF: All Pass
     SAFETY --> BLOCKED: Critical Fail
-    
+
     PERF --> PASSED: Complete
-    
+
     BLOCKED --> [*]
     PASSED --> [*]
 ```
@@ -123,7 +123,7 @@ graph TD
     subgraph Meta["Meta Layer"]
         M00[00_META_PROTOCOL]
     end
-    
+
     subgraph Protocols["Protocol Layer"]
         P01[01_CLASSIFICATION]
         P02[02_PIPELINE]
@@ -131,26 +131,26 @@ graph TD
         P04[04_BATCH]
         P05[05_EMERGENCY]
     end
-    
+
     subgraph Directives["Directive Layer"]
         D1[SR_DEV_DIRECTIVE]
         D2[BRANCH_DIRECTIVE]
         D3[SECURITY_DIRECTIVE]
         D4[DEPLOYMENT_DIRECTIVE]
     end
-    
+
     subgraph Contracts["Contract Layer"]
         C1[AGENT_CONTRACTS]
         C2[TOOL_CONTRACTS]
         C3[API_CONTRACTS]
     end
-    
+
     subgraph Indexes["Index Layer"]
         I1[QUICK_REFERENCE]
         I2[TOOL_REGISTRY]
         I3[PATTERN_CATALOG]
     end
-    
+
     M00 --> P01 & P02 & P03 & P04 & P05
     P01 --> D1
     P02 --> D2
@@ -167,24 +167,24 @@ flowchart LR
     subgraph Client
         Req[Request]
     end
-    
+
     subgraph APIRoute["API Route Layer"]
         Endpoint[createOrgEndpoint]
         Zod[Zod Validation]
         RBAC[Role Check]
         Handler[Handler Function]
     end
-    
+
     subgraph Services["Service Layer"]
         SDK[SDK Wrapper]
         Admin[Firebase Admin]
     end
-    
+
     subgraph Data["Data Layer"]
         Firestore[(Firestore)]
         Rules[Security Rules]
     end
-    
+
     Req --> Endpoint
     Endpoint --> Zod
     Zod -->|Valid| RBAC
@@ -205,30 +205,30 @@ flowchart LR
 ```mermaid
 flowchart TD
     Start[Receive Invocation] --> Parse{Parse Invocation}
-    
+
     Parse -->|@architect| ArchQ{Has feature spec?}
     Parse -->|@refactor| RefQ{Has file path?}
     Parse -->|@guard| GuardQ{Has PR/diff?}
     Parse -->|@auditor| AuditQ{Has scope?}
     Parse -->|Unknown| Clarify[Request clarification]
-    
+
     ArchQ -->|Yes| ArchLoad[Load schemas + routes]
     ArchQ -->|No| AskSpec[Ask for requirements]
-    
+
     RefQ -->|Yes| RefLoad[Load file + patterns]
     RefQ -->|No| AskFile[Ask for file path]
-    
+
     GuardQ -->|Yes| GuardLoad[Load diff + rules]
     GuardQ -->|No| AskPR[Ask for PR reference]
-    
+
     AuditQ -->|Yes| AuditLoad[Load scope files]
     AuditQ -->|No| AuditFull[Default: full repo]
-    
+
     ArchLoad --> ArchGen[Generate artifacts]
     RefLoad --> RefGen[Generate diff]
     GuardLoad --> GuardEval[Evaluate compliance]
     AuditLoad & AuditFull --> AuditScan[Scan & score]
-    
+
     ArchGen --> ArchOut[Schema + API + Rules + Diagram]
     RefGen --> RefOut[Diff + Explanation]
     GuardEval --> GuardOut[Verdict + Violations]
@@ -282,13 +282,13 @@ pie title Pattern Compliance by Category
 
 ## Diagram Placement Guide
 
-| Diagram | Location | Purpose |
-|---------|----------|---------|
+| Diagram                    | Location                             | Purpose                         |
+| -------------------------- | ------------------------------------ | ------------------------------- |
 | Orchestration Architecture | `docs/architecture/orchestration.md` | Overview of new pipeline system |
-| Agent Interaction | `docs/architecture/agents.md` | How agents process requests |
-| Gate Execution | `docs/architecture/gates.md` | Gate state machine |
-| Protocol Hierarchy | `docs/protocols/README.md` | Document organization |
-| Data Flow | `docs/architecture/security.md` | API security pattern |
-| Agent Decision Tree | `docs/agents/README.md` | Agent routing logic |
-| Branch Strategy | `docs/git/branching.md` | Git workflow |
-| Compliance Scoring | `docs/reports/compliance/` | Audit reports |
+| Agent Interaction          | `docs/architecture/agents.md`        | How agents process requests     |
+| Gate Execution             | `docs/architecture/gates.md`         | Gate state machine              |
+| Protocol Hierarchy         | `docs/protocols/README.md`           | Document organization           |
+| Data Flow                  | `docs/architecture/security.md`      | API security pattern            |
+| Agent Decision Tree        | `docs/agents/README.md`              | Agent routing logic             |
+| Branch Strategy            | `docs/git/branching.md`              | Git workflow                    |
+| Compliance Scoring         | `docs/reports/compliance/`           | Audit reports                   |

@@ -11,19 +11,20 @@ This document defines gate configurations that don't interfere with each other.
 
 ## GATE OVERVIEW
 
-| Gate | Purpose | Blocking | Can Run Parallel |
-|------|---------|----------|------------------|
-| **STATIC** | Syntax, types, style | Yes | Within itself |
-| **CORRECTNESS** | Tests pass | Yes | No |
-| **SAFETY** | Security, patterns | Yes | Within itself |
-| **PERF** | Performance budget | Conditional | No |
-| **AI** | Advisory checks | No | Yes |
+| Gate            | Purpose              | Blocking    | Can Run Parallel |
+| --------------- | -------------------- | ----------- | ---------------- |
+| **STATIC**      | Syntax, types, style | Yes         | Within itself    |
+| **CORRECTNESS** | Tests pass           | Yes         | No               |
+| **SAFETY**      | Security, patterns   | Yes         | Within itself    |
+| **PERF**        | Performance budget   | Conditional | No               |
+| **AI**          | Advisory checks      | No          | Yes              |
 
 ---
 
 ## GATE: STATIC
 
 ### Purpose
+
 Validate code compiles, passes lint, and follows formatting.
 
 ### Configuration
@@ -60,6 +61,7 @@ Validate code compiles, passes lint, and follows formatting.
 ### Related Configs
 
 #### tsconfig.json
+
 ```json
 {
   "compilerOptions": {
@@ -75,21 +77,20 @@ Validate code compiles, passes lint, and follows formatting.
 ```
 
 #### .eslintrc.js
+
 ```javascript
 module.exports = {
-  extends: [
-    'next/core-web-vitals',
-    'plugin:@typescript-eslint/recommended'
-  ],
+  extends: ["next/core-web-vitals", "plugin:@typescript-eslint/recommended"],
   rules: {
-    '@typescript-eslint/no-explicit-any': 'error',
-    '@typescript-eslint/explicit-function-return-type': 'warn',
-    'no-console': ['warn', { allow: ['warn', 'error'] }]
-  }
+    "@typescript-eslint/no-explicit-any": "error",
+    "@typescript-eslint/explicit-function-return-type": "warn",
+    "no-console": ["warn", { allow: ["warn", "error"] }],
+  },
 };
 ```
 
 #### .prettierrc
+
 ```json
 {
   "semi": true,
@@ -101,6 +102,7 @@ module.exports = {
 ```
 
 ### Non-Interference
+
 - TypeScript, ESLint, Prettier run in parallel (no file conflicts)
 - ESLint and Prettier are configured to not conflict:
   - Prettier handles formatting
@@ -112,6 +114,7 @@ module.exports = {
 ## GATE: CORRECTNESS
 
 ### Purpose
+
 Validate tests pass and behavior is correct.
 
 ### Configuration
@@ -153,57 +156,61 @@ Validate tests pass and behavior is correct.
 ### Related Configs
 
 #### vitest.config.ts (Unit)
+
 ```typescript
-import { defineConfig } from 'vitest/config';
+import { defineConfig } from "vitest/config";
 
 export default defineConfig({
   test: {
-    environment: 'node',
-    include: ['**/*.test.ts'],
-    exclude: ['**/e2e/**', '**/rules/**'],
+    environment: "node",
+    include: ["**/*.test.ts"],
+    exclude: ["**/e2e/**", "**/rules/**"],
     coverage: {
-      reporter: ['text', 'json', 'html'],
+      reporter: ["text", "json", "html"],
       thresholds: {
         lines: 80,
         branches: 70,
         functions: 80,
-        statements: 80
-      }
-    }
-  }
+        statements: 80,
+      },
+    },
+  },
 });
 ```
 
 #### vitest.config.rules.ts (Rules)
+
 ```typescript
-import { defineConfig } from 'vitest/config';
+import { defineConfig } from "vitest/config";
 
 export default defineConfig({
   test: {
-    environment: 'node',
-    include: ['tests/rules/**/*.spec.ts'],
-    setupFiles: ['tests/rules/setup.ts'],
-    testTimeout: 30000
-  }
+    environment: "node",
+    include: ["tests/rules/**/*.spec.ts"],
+    setupFiles: ["tests/rules/setup.ts"],
+    testTimeout: 30000,
+  },
 });
 ```
 
 #### playwright.config.ts (E2E)
+
 ```typescript
-import { defineConfig } from '@playwright/test';
+import { defineConfig } from "@playwright/test";
 
 export default defineConfig({
-  testDir: './tests/e2e',
+  testDir: "./tests/e2e",
   timeout: 60000,
   retries: process.env.CI ? 2 : 0,
   use: {
-    baseURL: 'http://localhost:3000',
-    trace: 'on-first-retry'
-  }
+    baseURL: "http://localhost:3000",
+    trace: "on-first-retry",
+  },
 });
 ```
 
 ### Non-Interference
+
 - Tests run sequentially (not parallel) to avoid:
   - Firebase emulator conflicts
   - Port collisions
@@ -216,6 +223,7 @@ export default defineConfig({
 ## GATE: SAFETY
 
 ### Purpose
+
 Validate security patterns, secrets, and dependencies.
 
 ### Configuration
@@ -264,25 +272,26 @@ Validate security patterns, secrets, and dependencies.
 ### Related Configs
 
 #### Pattern Validator (validate-patterns.mjs)
+
 ```javascript
 const patterns = [
   {
-    id: 'API_001',
-    name: 'API Route Security',
-    severity: 'CRITICAL',
+    id: "API_001",
+    name: "API Route Security",
+    severity: "CRITICAL",
     pattern: /createOrgEndpoint|createNetworkEndpoint/,
-    files: ['apps/web/app/api/**/*.ts'],
-    message: 'API routes must use createOrgEndpoint or createNetworkEndpoint'
+    files: ["apps/web/app/api/**/*.ts"],
+    message: "API routes must use createOrgEndpoint or createNetworkEndpoint",
   },
   {
-    id: 'SEC_001',
-    name: 'Firebase Auth',
-    severity: 'CRITICAL',
+    id: "SEC_001",
+    name: "Firebase Auth",
+    severity: "CRITICAL",
     pattern: /getAuth\(\)|useAuth\(\)/,
-    files: ['**/*.ts', '**/*.tsx'],
-    exclude: ['**/test/**'],
-    message: 'Use Firebase Auth for authentication'
-  }
+    files: ["**/*.ts", "**/*.tsx"],
+    exclude: ["**/test/**"],
+    message: "Use Firebase Auth for authentication",
+  },
   // ... more patterns
 ];
 
@@ -290,6 +299,7 @@ export default patterns;
 ```
 
 #### .gitsecrets
+
 ```
 # AWS
 [a-zA-Z0-9/+=]{40}
@@ -303,6 +313,7 @@ secret[_-]?key[_-]?=.{20,}
 ```
 
 ### Non-Interference
+
 - Pattern validation, secret scan, and audit run in parallel
 - No file modifications during safety checks
 - Each check reads independently
@@ -312,6 +323,7 @@ secret[_-]?key[_-]?=.{20,}
 ## GATE: PERF
 
 ### Purpose
+
 Validate performance budgets and bundle size.
 
 ### Configuration
@@ -353,11 +365,12 @@ Validate performance budgets and bundle size.
 ### Related Configs
 
 #### next.config.mjs (Bundle Analysis)
+
 ```javascript
-import withBundleAnalyzer from '@next/bundle-analyzer';
+import withBundleAnalyzer from "@next/bundle-analyzer";
 
 const config = withBundleAnalyzer({
-  enabled: process.env.ANALYZE === 'true'
+  enabled: process.env.ANALYZE === "true",
 })({
   // ... other config
 });
@@ -366,6 +379,7 @@ export default config;
 ```
 
 #### lighthouserc.json
+
 ```json
 {
   "ci": {
@@ -385,6 +399,7 @@ export default config;
 ```
 
 ### Non-Interference
+
 - Build must complete before analysis
 - Sequential execution prevents resource conflicts
 - Only blocks if threshold exceeded
@@ -394,6 +409,7 @@ export default config;
 ## GATE: AI
 
 ### Purpose
+
 Advisory checks for context validation and quality.
 
 ### Configuration
@@ -420,6 +436,7 @@ Advisory checks for context validation and quality.
 ```
 
 ### Behavior
+
 - Never blocks pipeline
 - Provides advisory feedback
 - Run by agents, not CI
@@ -461,26 +478,26 @@ pnpm typecheck
 
 ### SDK Fix Capabilities
 
-| Issue Type | Auto-Fix? | Why Not? |
-|------------|-----------|----------|
-| Formatting | ✅ Yes | Prettier handles |
-| Simple lint | ✅ Yes | ESLint --fix |
-| Missing semicolon | ✅ Yes | Formatter |
-| Implicit any | ⚠️ Partial | Needs type info |
-| Module resolution | ❌ No | Config change |
-| Pattern violation | ⚠️ Partial | Depends on pattern |
-| Type mismatch | ❌ No | Needs understanding |
+| Issue Type        | Auto-Fix?  | Why Not?            |
+| ----------------- | ---------- | ------------------- |
+| Formatting        | ✅ Yes     | Prettier handles    |
+| Simple lint       | ✅ Yes     | ESLint --fix        |
+| Missing semicolon | ✅ Yes     | Formatter           |
+| Implicit any      | ⚠️ Partial | Needs type info     |
+| Module resolution | ❌ No      | Config change       |
+| Pattern violation | ⚠️ Partial | Depends on pattern  |
+| Type mismatch     | ❌ No      | Needs understanding |
 
 ### Documenting Fix Limitations
 
 ```typescript
 interface PatternDefinition {
   id: string;
-  severity: 'CRITICAL' | 'ERROR' | 'WARNING';
+  severity: "CRITICAL" | "ERROR" | "WARNING";
   autoFixable: boolean;
   fixCommand?: string;
-  manualFixGuide?: string;  // Link to docs
-  whyNotAutoFixable?: string;  // Explanation
+  manualFixGuide?: string; // Link to docs
+  whyNotAutoFixable?: string; // Explanation
 }
 ```
 
@@ -569,12 +586,12 @@ playwright.config.ts # E2E tests (separate!)
 
 ### Preventing Overlap
 
-| Tool A | Tool B | Conflict? | Resolution |
-|--------|--------|-----------|------------|
-| ESLint | Prettier | Format rules | eslint-config-prettier |
-| Vitest | Playwright | Test files | Separate include patterns |
-| TypeScript | ESLint | Type rules | @typescript-eslint |
-| Pattern Validator | ESLint | Custom rules | Different domains |
+| Tool A            | Tool B     | Conflict?    | Resolution                |
+| ----------------- | ---------- | ------------ | ------------------------- |
+| ESLint            | Prettier   | Format rules | eslint-config-prettier    |
+| Vitest            | Playwright | Test files   | Separate include patterns |
+| TypeScript        | ESLint     | Type rules   | @typescript-eslint        |
+| Pattern Validator | ESLint     | Custom rules | Different domains         |
 
 ---
 

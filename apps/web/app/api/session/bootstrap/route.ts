@@ -8,10 +8,12 @@ import { z } from "zod";
 // Session bootstrap schema
 const SessionBootstrapSchema = z.object({
   preferences: z.record(z.string(), z.unknown()).optional(),
-  deviceInfo: z.object({
-    userAgent: z.string().optional(),
-    platform: z.string().optional(),
-  }).optional(),
+  deviceInfo: z
+    .object({
+      userAgent: z.string().optional(),
+      platform: z.string().optional(),
+    })
+    .optional(),
 });
 
 type SessionBootstrap = z.infer<typeof SessionBootstrapSchema>;

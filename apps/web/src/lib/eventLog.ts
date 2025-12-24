@@ -10,7 +10,6 @@
  * - Uses the v14 EventSchema from @fresh-schedules/types
  */
 
- 
 import { NewEventSchema, type NewEvent } from "@fresh-schedules/types";
 import type { Firestore } from "firebase-admin/firestore";
 

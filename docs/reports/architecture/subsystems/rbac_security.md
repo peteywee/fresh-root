@@ -1,14 +1,16 @@
 # L2 — RBAC / Security / Access Control
 
-> **Status:** ✅ Documented from actual codebase analysis
-> **Last Updated:** 2025-12-17
-> **Coverage:** 6 role types, 44 protected endpoints
+> **Status:** ✅ Documented from actual codebase analysis **Last Updated:** 2025-12-17 **Coverage:**
+> 6 role types, 44 protected endpoints
 
 ## 1. Role in the System
 
-The RBAC (Role-Based Access Control) subsystem defines the authorization model for the entire platform. It enforces who can access what resources based on organizational membership and assigned roles.
+The RBAC (Role-Based Access Control) subsystem defines the authorization model for the entire
+platform. It enforces who can access what resources based on organizational membership and assigned
+roles.
 
 **Core Responsibilities:**
+
 - Define role hierarchy (`org_owner` → `admin` → `manager` → `scheduler` → `corporate` → `staff`)
 - Enforce permissions on API endpoints via SDK factory
 - Manage organization membership and context
@@ -22,16 +24,17 @@ From `packages/types/src/rbac.ts`:
 
 ```typescript
 export const OrgRole = z.enum([
-  "org_owner",    // Full control over organization
-  "admin",        // Administrative access
-  "manager",      // Manage schedules and staff
-  "scheduler",    // Create/edit schedules
-  "corporate",    // Corporate network access
-  "staff"         // View-only/limited access
+  "org_owner", // Full control over organization
+  "admin", // Administrative access
+  "manager", // Manage schedules and staff
+  "scheduler", // Create/edit schedules
+  "corporate", // Corporate network access
+  "staff", // View-only/limited access
 ]);
 ```
 
 **Permission Levels (Inferred from usage):**
+
 ```
 org_owner  > admin  > manager  > scheduler  > corporate > staff
    100       80        60          40           20        10
@@ -44,32 +47,34 @@ All protected endpoints receive:
 ```typescript
 interface RequestContext {
   auth: {
-    userId: string,
-    email: string,
-    emailVerified: boolean,
-    customClaims: Record<string, unknown>
-  },
+    userId: string;
+    email: string;
+    emailVerified: boolean;
+    customClaims: Record<string, unknown>;
+  };
   org: {
-    orgId: string,
-    role: OrgRole,        // User's role in this org
-    membershipId: string  // Membership document ID
-  } | null
+    orgId: string;
+    role: OrgRole; // User's role in this org
+    membershipId: string; // Membership document ID
+  } | null;
 }
 ```
 
 ### 2.3 Enforcement Mechanisms
 
 **API Level (SDK Factory):**
+
 ```typescript
 export const POST = createOrgEndpoint({
-  roles: ["admin", "manager"],  // ✅ Enforced automatically
+  roles: ["admin", "manager"], // ✅ Enforced automatically
   handler: async ({ context }) => {
     // context.org.role is guaranteed to be "admin" or "manager"
-  }
+  },
 });
 ```
 
 **Test Level (from integration.test.ts):**
+
 ```typescript
 it("should require manager role or higher", () => {
   const roleHierarchy: Record<string, number> = {
@@ -92,8 +97,8 @@ it("should require manager role or higher", () => {
 
 ### 🔴 CRITICAL-01: Role Hierarchy Not Enforced in Code
 
-**Location:** `packages/api-framework/src/index.ts`
-**Issue:** SDK factory uses exact match, not hierarchical check
+**Location:** `packages/api-framework/src/index.ts` **Issue:** SDK factory uses exact match, not
+hierarchical check
 
 ```typescript
 // ❌ CURRENT: Exact role match only
@@ -107,6 +112,7 @@ if (config.roles && config.roles.length > 0) {
 ```
 
 **Expected Behavior:**
+
 ```typescript
 // ✅ SHOULD BE: Hierarchical permission check
 const roleHierarchy = { org_owner: 100, admin: 80, manager: 60, ... };
@@ -118,11 +124,13 @@ function hasPermission(userRole: OrgRole, allowedRoles: OrgRole[]): boolean {
 ```
 
 **Impact:**
+
 - ❌ Admins can't perform manager actions
 - ❌ Org owners can't perform admin actions
 - ❌ Every endpoint must explicitly list ALL higher roles
 
 **Example from actual code:**
+
 ```typescript
 // File: organizations/[id]/members/route.ts
 // ❌ Must list both roles explicitly
@@ -134,8 +142,7 @@ export const POST = createOrgEndpoint({
 
 ### 🟡 HIGH-01: No Permission Auditing
 
-**Location:** All endpoints
-**Issue:** No logging of authorization checks or denials
+**Location:** All endpoints **Issue:** No logging of authorization checks or denials
 
 ```typescript
 // When a user is denied access, no audit trail:
@@ -146,6 +153,7 @@ if (!config.roles.includes(context.org.role)) {
 ```
 
 **Recommendation:**
+
 ```typescript
 if (!hasPermission(context.org.role, config.roles)) {
   await logSecurityEvent({
@@ -163,8 +171,7 @@ if (!hasPermission(context.org.role, config.roles)) {
 
 ### 🟡 HIGH-02: Missing Resource-Level Permissions
 
-**Location:** All CRUD endpoints
-**Issue:** Only org-level RBAC, no resource ownership checks
+**Location:** All CRUD endpoints **Issue:** Only org-level RBAC, no resource ownership checks
 
 ```typescript
 // File: schedules/[id]/route.ts
@@ -177,12 +184,13 @@ export const DELETE = createOrgEndpoint({
     // ❌ MISSING: Check if user created this schedule
     // ❌ MISSING: Check if schedule is locked/published
 
-    await deleteSchedule(scheduleId);  // Deletes ANY schedule!
-  }
+    await deleteSchedule(scheduleId); // Deletes ANY schedule!
+  },
 });
 ```
 
 **Recommendation:**
+
 ```typescript
 // ✅ Add resource ownership validation
 const schedule = await getSchedule(scheduleId);
@@ -198,24 +206,23 @@ if (schedule.status === "published" && context.org.role !== "admin") {
 
 ### 🟢 MEDIUM-01: Membership Claims vs Actual Membership
 
-**Location:** `packages/types/src/rbac.ts`
-**Issue:** Two competing membership models
+**Location:** `packages/types/src/rbac.ts` **Issue:** Two competing membership models
 
 ```typescript
 // Model 1: MembershipClaims (legacy?)
 export const MembershipClaimsSchema = z.object({
   orgId: z.string(),
   userId: z.string(),
-  roles: z.array(OrgRole),  // ❌ Array of roles (can have multiple)
+  roles: z.array(OrgRole), // ❌ Array of roles (can have multiple)
   createdAt: z.number(),
   updatedAt: z.number(),
 });
 
 // Model 2: OrgContext (current)
 interface OrgContext {
-  orgId: string,
-  role: OrgRole,  // ✅ Single role
-  membershipId: string
+  orgId: string;
+  role: OrgRole; // ✅ Single role
+  membershipId: string;
 }
 ```
 
@@ -228,10 +235,10 @@ interface OrgContext {
 ```typescript
 // Authorization is configuration, not code
 export const POST = createOrgEndpoint({
-  roles: ["admin"],  // ✅ Clear, declarative
+  roles: ["admin"], // ✅ Clear, declarative
   handler: async ({ context }) => {
     // No manual auth checks needed
-  }
+  },
 });
 ```
 
@@ -250,25 +257,23 @@ export const POST = createOrgEndpoint({
 
 ```typescript
 // Zod enum ensures only valid roles
-export const OrgRole = z.enum([
-  "org_owner", "admin", "manager", "scheduler", "corporate", "staff"
-]);
+export const OrgRole = z.enum(["org_owner", "admin", "manager", "scheduler", "corporate", "staff"]);
 
 // TypeScript enforces at compile time
-function assignRole(role: OrgRole) { }  // ✅ Only accepts valid roles
-assignRole("superuser");  // ❌ Compile error
+function assignRole(role: OrgRole) {} // ✅ Only accepts valid roles
+assignRole("superuser"); // ❌ Compile error
 ```
 
 ## 5. Role Definitions & Use Cases
 
-| Role | Permissions | Typical Use Case |
-|------|-------------|------------------|
-| `org_owner` | Full control | Organization founder/CEO |
-| `admin` | Manage settings, users, billing | IT admin, HR manager |
-| `manager` | Create schedules, assign shifts | Department head, team lead |
-| `scheduler` | Edit schedules | Scheduling coordinator |
-| `corporate` | View across organizations | Corporate oversight |
-| `staff` | View own schedule | Front-line employees |
+| Role        | Permissions                     | Typical Use Case           |
+| ----------- | ------------------------------- | -------------------------- |
+| `org_owner` | Full control                    | Organization founder/CEO   |
+| `admin`     | Manage settings, users, billing | IT admin, HR manager       |
+| `manager`   | Create schedules, assign shifts | Department head, team lead |
+| `scheduler` | Edit schedules                  | Scheduling coordinator     |
+| `corporate` | View across organizations       | Corporate oversight        |
+| `staff`     | View own schedule               | Front-line employees       |
 
 ## 6. Org Context Loading Flow
 
@@ -307,15 +312,15 @@ assignRole("superuser");  // ❌ Compile error
 
 ## 8. Recommendations
 
-| Priority | Action | Effort | Impact |
-|----------|--------|--------|--------|
-| 🔴 P0 | Implement hierarchical permission checks | 1-2 days | Critical - Fixes broken permissions |
-| 🔴 P0 | Add resource ownership validation | 2-3 days | Critical - Prevents unauthorized access |
-| 🟡 P1 | Implement security audit logging | 1-2 days | High - Compliance requirement |
-| 🟡 P1 | Add permission caching (Redis) | 1 day | High - Performance |
-| 🟢 P2 | Document role permission matrix | 1 day | Medium - Clarity |
-| 🟢 P2 | Add integration tests for RBAC | 2 days | Medium - Test coverage |
-| 🟢 P3 | Support multi-org users | 3-4 days | Low - Future feature |
+| Priority | Action                                   | Effort   | Impact                                  |
+| -------- | ---------------------------------------- | -------- | --------------------------------------- |
+| 🔴 P0    | Implement hierarchical permission checks | 1-2 days | Critical - Fixes broken permissions     |
+| 🔴 P0    | Add resource ownership validation        | 2-3 days | Critical - Prevents unauthorized access |
+| 🟡 P1    | Implement security audit logging         | 1-2 days | High - Compliance requirement           |
+| 🟡 P1    | Add permission caching (Redis)           | 1 day    | High - Performance                      |
+| 🟢 P2    | Document role permission matrix          | 1 day    | Medium - Clarity                        |
+| 🟢 P2    | Add integration tests for RBAC           | 2 days   | Medium - Test coverage                  |
+| 🟢 P3    | Support multi-org users                  | 3-4 days | Low - Future feature                    |
 
 **Total Estimated Effort:** ~11-15 days
 

@@ -90,12 +90,8 @@ describe("Array Operations", () => {
 });
 
 describe("Object Operations", () => {
-  const smallObject = Object.fromEntries(
-    Array.from({ length: 10 }, (_, i) => [`key${i}`, i]),
-  );
-  const largeObject = Object.fromEntries(
-    Array.from({ length: 1000 }, (_, i) => [`key${i}`, i]),
-  );
+  const smallObject = Object.fromEntries(Array.from({ length: 10 }, (_, i) => [`key${i}`, i]));
+  const largeObject = Object.fromEntries(Array.from({ length: 1000 }, (_, i) => [`key${i}`, i]));
 
   bench("Object.keys", () => {
     Object.keys(largeObject);

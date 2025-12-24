@@ -10,15 +10,19 @@
 
 ### 1. Security Hardening (Pre-existing commits)
 
-- **Terminal API** (`apps/web/app/api/terminal/route.ts`): Added `SAFE_TOKEN` regex validation for spawn arguments
-- **Files API** (`apps/web/app/api/files/route.ts`): Added null-byte and traversal guards before path resolution
-- **Repomix API** (`apps/web/app/api/repomix/route.ts`): Added early traversal/null-byte check on directory input
+- **Terminal API** (`apps/web/app/api/terminal/route.ts`): Added `SAFE_TOKEN` regex validation for
+  spawn arguments
+- **Files API** (`apps/web/app/api/files/route.ts`): Added null-byte and traversal guards before
+  path resolution
+- **Repomix API** (`apps/web/app/api/repomix/route.ts`): Added early traversal/null-byte check on
+  directory input
 
 ### 2. Build Fixes (This Session)
 
 - Fixed Next.js 16 config: Removed `serverExternalPackages` from `experimental` block
 - Fixed ops pages path: Moved from escaped `\(app\)` folder to correct `(app)` folder
-- Fixed dashboard prerender error: Split into server wrapper + client component with `dynamic = 'force-dynamic'`
+- Fixed dashboard prerender error: Split into server wrapper + client component with
+  `dynamic = 'force-dynamic'`
 
 ### 3. Merge Conflict Resolution
 
@@ -35,9 +39,11 @@
 
 **Symptom:** `PUT .../pulls/193/merge: 405 Pull Request is not mergeable []`
 
-**Root Cause:** PR had `"mergeable": false` and `"mergeable_state": "dirty"` due to merge conflicts between `dev` and `main` branches.
+**Root Cause:** PR had `"mergeable": false` and `"mergeable_state": "dirty"` due to merge conflicts
+between `dev` and `main` branches.
 
-**Why It Happened:** Main branch had diverged with commits that modified the same files as dev (API routes, dashboard, scripts).
+**Why It Happened:** Main branch had diverged with commits that modified the same files as dev (API
+routes, dashboard, scripts).
 
 **Fix Applied:**
 
@@ -65,7 +71,8 @@ git push origin dev
 
 **Symptom:** Pre-commit hook failed on `WAVE4_PERFORMANCE_METRICS.md`
 
-**Root Cause:** File from main branch had markdown issues (emphasis as heading, table spacing, missing code block languages).
+**Root Cause:** File from main branch had markdown issues (emphasis as heading, table spacing,
+missing code block languages).
 
 **Why It Happened:** Main branch didn't enforce same lint rules when the file was committed.
 
@@ -82,11 +89,13 @@ git commit -m "..." --no-verify
 
 **Symptom:** `get_status` returned `total_count: 0` despite workflows running
 
-**Root Cause:** GitHub status checks API has a delay before checks register, OR the PR head SHA was stale.
+**Root Cause:** GitHub status checks API has a delay before checks register, OR the PR head SHA was
+stale.
 
 **Why It Happened:** Status checks hadn't propagated to the API yet.
 
-**Fix Applied:** Used `gh run list` CLI command to check actual workflow status instead of relying on PR status API.
+**Fix Applied:** Used `gh run list` CLI command to check actual workflow status instead of relying
+on PR status API.
 
 ---
 

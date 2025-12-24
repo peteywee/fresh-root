@@ -40,11 +40,11 @@ pnpm docs:analyze
 
 ## 🔄 Automatic Triggers
 
-| Trigger | What Runs | When |
-|---------|-----------|------|
-| `git push` | Pre-push hook + CI | Now + immediately |
-| PR creation | CI analysis | On every PR |
-| Nightly | Dashboard + metrics | 2 AM UTC daily |
+| Trigger     | What Runs           | When              |
+| ----------- | ------------------- | ----------------- |
+| `git push`  | Pre-push hook + CI  | Now + immediately |
+| PR creation | CI analysis         | On every PR       |
+| Nightly     | Dashboard + metrics | 2 AM UTC daily    |
 
 ---
 

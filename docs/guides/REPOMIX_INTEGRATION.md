@@ -1,6 +1,7 @@
 # Repomix Integration Guide
 
-Repomix has been integrated into Fresh Schedules as both a **CLI tool** and a **library** for analyzing and packaging codebases.
+Repomix has been integrated into Fresh Schedules as both a **CLI tool** and a **library** for
+analyzing and packaging codebases.
 
 ## Quick Start
 
@@ -41,22 +42,22 @@ pnpm repomix user/repo --style markdown
 Use repomix programmatically in your code:
 
 ```typescript
-import { runDefaultAction, setLogLevel } from '@fresh-schedules/repomix';
+import { runDefaultAction, setLogLevel } from "@fresh-schedules/repomix";
 
 // Set log level (optional)
-setLogLevel('info');
+setLogLevel("info");
 
 // Run repomix on directories
 await runDefaultAction(
-  ['./apps', './packages'], // Directories to analyze
-  process.cwd(),             // Working directory
+  ["./apps", "./packages"], // Directories to analyze
+  process.cwd(), // Working directory
   {
     output: {
-      style: 'markdown',
-      filePath: './analysis.md'
+      style: "markdown",
+      filePath: "./analysis.md",
     },
-    compress: false
-  }
+    compress: false,
+  },
 );
 ```
 
@@ -143,14 +144,14 @@ pnpm --filter @fresh-schedules/repomix clean
 export async function runDefaultAction(
   directories: string[],
   cwd: string,
-  options: CliOptions
-): Promise<DefaultActionRunnerResult>
+  options: CliOptions,
+): Promise<DefaultActionRunnerResult>;
 
 // Set logging level
-export function setLogLevel(level: string): void
+export function setLogLevel(level: string): void;
 
 // Get library version
-export async function getVersion(): Promise<string>
+export async function getVersion(): Promise<string>;
 ```
 
 ### Exported Types
@@ -200,27 +201,23 @@ pnpm repomix . \
 
 ```typescript
 // scripts/analyze-codebase.ts
-import { runDefaultAction, setLogLevel } from '@fresh-schedules/repomix';
+import { runDefaultAction, setLogLevel } from "@fresh-schedules/repomix";
 
 async function main() {
-  setLogLevel('info');
+  setLogLevel("info");
 
   // Analyze production code
-  await runDefaultAction(
-    ['apps/web', 'packages'],
-    process.cwd(),
-    {
-      output: {
-        style: 'xml',
-        filePath: './reports/codebase-analysis.xml'
-      },
-      ignore: {
-        customPatterns: ['**/*.test.ts', '**/__tests__/**']
-      }
-    }
-  );
+  await runDefaultAction(["apps/web", "packages"], process.cwd(), {
+    output: {
+      style: "xml",
+      filePath: "./reports/codebase-analysis.xml",
+    },
+    ignore: {
+      customPatterns: ["**/*.test.ts", "**/__tests__/**"],
+    },
+  });
 
-  console.log('✅ Analysis complete!');
+  console.log("✅ Analysis complete!");
 }
 
 main().catch(console.error);
@@ -262,10 +259,10 @@ Ensure you're importing from the correct path:
 
 ```typescript
 // ✅ Correct
-import { runDefaultAction } from '@fresh-schedules/repomix';
+import { runDefaultAction } from "@fresh-schedules/repomix";
 
 // ❌ Wrong
-import { runDefaultAction } from '@fresh-schedules/repomix/dist/index';
+import { runDefaultAction } from "@fresh-schedules/repomix/dist/index";
 ```
 
 ## Architecture

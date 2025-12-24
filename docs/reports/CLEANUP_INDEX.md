@@ -197,7 +197,7 @@ governance instruction sources creating confusion for AI agents.
 | `security-and-owasp.instructions.md`                          | \*                                                                   | Security best practices                   | ✅ **ACTIVE**           |
 | `ai-prompt-engineering-safety-best-practices.instructions.md` | \*                                                                   | AI prompt engineering & safety            | ✅ **ACTIVE**           |
 | `typescript-5-es2022.instructions.md`                         | \*_/_.ts                                                             | TypeScript standards                      | ✅ **ACTIVE**           |
-| `nextjs-tailwind.instructions.md`                             | \*_/_.tsx,_.ts, _.jsx,_.js,_.css                                    | Next.js + Tailwind standards              | ✅ **ACTIVE**           |
+| `nextjs-tailwind.instructions.md`                             | \*_/_.tsx,_.ts, _.jsx,_.js,_.css                                     | Next.js + Tailwind standards              | ✅ **ACTIVE**           |
 | `nextjs.instructions.md`                                      | \*\*                                                                 | Next.js general standards                 | ✅ **ACTIVE**           |
 | `firebase-typing-and-monorepo-memory.instructions.md`         | apps/web/app/api/**/\*.ts, apps/web/lib/**/_.ts, packages/_/\*_/_.ts | Firebase typing & monorepo memory         | ✅ **ACTIVE**           |
 | `playwright-typescript.instructions.md`                       | \*\*                                                                 | Playwright test patterns                  | ✅ **ACTIVE**           |

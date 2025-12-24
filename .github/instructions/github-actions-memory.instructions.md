@@ -1,18 +1,22 @@
 ---
-description: "Lessons learned from GitHub Actions workflows, environment variables, and CI debugging"
+description:
+  "Lessons learned from GitHub Actions workflows, environment variables, and CI debugging"
 applyTo: ".github/workflows/*.yml,.github/workflows/**/*.yml"
 priority: 2
 ---
 
 # GitHub Actions Memory
 
-Hard-won lessons from CI/CD pipeline debugging, environment configuration, and workflow optimization.
+Hard-won lessons from CI/CD pipeline debugging, environment configuration, and workflow
+optimization.
 
 ## Environment Variables in Build Jobs
 
-**Pattern**: Environment variables from GitHub Secrets must be explicitly declared in the `env:` block of each job that needs them.
+**Pattern**: Environment variables from GitHub Secrets must be explicitly declared in the `env:`
+block of each job that needs them.
 
-**Why**: Unlike local development, GitHub Actions jobs are isolated. Environment variables aren't inherited across jobs or steps automatically.
+**Why**: Unlike local development, GitHub Actions jobs are isolated. Environment variables aren't
+inherited across jobs or steps automatically.
 
 **Implementation**:
 
@@ -31,16 +35,20 @@ jobs:
 ```
 
 **Key Points**:
+
 - Add env block at job level (applies to all steps) or step level (applies to specific step)
 - Use `${{ secrets.SECRET_NAME }}` syntax to reference GitHub Secrets
-- If a build works locally but fails in CI with "missing environment variable" errors, check the env block first
+- If a build works locally but fails in CI with "missing environment variable" errors, check the env
+  block first
 - All workflows that run builds need the same environment variables configured
 
 ## pnpm Script Argument Passing
 
-**Pattern**: When using `pnpm <script>` with arguments, avoid the `--` separator if the underlying command will interpret it literally.
+**Pattern**: When using `pnpm <script>` with arguments, avoid the `--` separator if the underlying
+command will interpret it literally.
 
-**Issue**: `pnpm repomix -- . --style markdown` passes `"--"` as a literal argument to the script, breaking CLI parsers that don't expect it.
+**Issue**: `pnpm repomix -- . --style markdown` passes `"--"` as a literal argument to the script,
+breaking CLI parsers that don't expect it.
 
 **Solution**: Remove the `--` separator:
 
@@ -53,38 +61,44 @@ run: pnpm repomix . --style markdown --output result.md
 ```
 
 **When to Use `--`**:
+
 - Only when the underlying CLI tool explicitly supports it for argument separation
 - Not needed for most npm/pnpm scripts that simply proxy to the actual command
 
 ## CLI Wrapper API Alignment
 
-**Pattern**: When wrapping external CLI libraries, match their exact API expectations rather than creating abstractions.
+**Pattern**: When wrapping external CLI libraries, match their exact API expectations rather than
+creating abstractions.
 
-**Lesson**: We wrapped `repomix` library and tried to pass `output: { filePath: string, style: string }` but the library expected `output: string, style: string` as separate flat properties.
+**Lesson**: We wrapped `repomix` library and tried to pass
+`output: { filePath: string, style: string }` but the library expected
+`output: string, style: string` as separate flat properties.
 
 **Key Principle**: Read the TypeScript types of the library you're wrapping and match them exactly:
 
 ```typescript
 // ❌ Wrong - creating nested structure
 const options = {
-  output: { filePath: args.output, style: args.style }
+  output: { filePath: args.output, style: args.style },
 };
 
 // ✅ Correct - matching library's flat API
 const options = {
   output: args.output,
-  style: args.style
+  style: args.style,
 };
 ```
 
 **Validation Strategy**:
+
 1. Check the library's TypeScript definitions (`.d.ts` files in `node_modules`)
 2. Test locally with the exact command format before committing
 3. Match the library's expected structure precisely
 
 ## Local Testing Before CI
 
-**Pattern**: Test CLI commands locally using the exact syntax that will run in CI before pushing changes.
+**Pattern**: Test CLI commands locally using the exact syntax that will run in CI before pushing
+changes.
 
 **Workflow**:
 
@@ -95,11 +109,12 @@ pnpm repomix . --style markdown --output /tmp/test.md
 # Verify it completes successfully before pushing
 # Check for:
 # - Argument parsing errors
-# - Missing environment variables  
+# - Missing environment variables
 # - Unexpected output formats
 ```
 
-**Why**: CI debugging is slow (commit → push → wait → check logs). Local testing catches issues in seconds.
+**Why**: CI debugging is slow (commit → push → wait → check logs). Local testing catches issues in
+seconds.
 
 **Time Saved**: A 5-minute local test can save 30+ minutes of CI iteration cycles.
 
@@ -107,11 +122,14 @@ pnpm repomix . --style markdown --output /tmp/test.md
 
 **Pattern**: A successful build in CI doesn't guarantee the application will run correctly.
 
-**Example**: Next.js builds can succeed even if runtime environment variables are missing, but page generation fails with Zod validation errors.
+**Example**: Next.js builds can succeed even if runtime environment variables are missing, but page
+generation fails with Zod validation errors.
 
 **What to Check**:
+
 - Build logs for warnings (not just errors)
 - Page data collection phase in Next.js builds
 - Any "optional" environment variables that are actually required at runtime
 
-**Verification**: Test the built application locally with production environment settings before assuming CI success means production-ready.
+**Verification**: Test the built application locally with production environment settings before
+assuming CI success means production-ready.

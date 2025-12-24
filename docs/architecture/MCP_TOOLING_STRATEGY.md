@@ -9,7 +9,8 @@
 
 ## Executive Summary
 
-We have **4 MCP servers configured** with **25+ total tools** available. The challenge: ensuring agents automatically access the **right tools at the right time** without manual intervention.
+We have **4 MCP servers configured** with **25+ total tools** available. The challenge: ensuring
+agents automatically access the **right tools at the right time** without manual intervention.
 
 **Current Problem**:
 
@@ -252,19 +253,19 @@ These should initialize automatically when VS Code opens:
   "servers": {
     "github/github-mcp-server": {
       "type": "http",
-      "autoConnect": true,  // Always initialize
+      "autoConnect": true, // Always initialize
       "priority": 1
     },
     "repomix/repomix-mcp": {
       "type": "stdio",
-      "autoConnect": true,  // Always initialize (zero cost)
+      "autoConnect": true, // Always initialize (zero cost)
       "priority": 2
     },
     "firebase": {
       "type": "stdio",
-      "autoConnect": true,  // Pre-init context
+      "autoConnect": true, // Pre-init context
       "priority": 3,
-      "preInit": "firebase emulators:start"  // If in dev mode
+      "preInit": "firebase emulators:start" // If in dev mode
     }
   }
 }
@@ -316,12 +317,12 @@ These require explicit user action (leave as-is):
 
 ## Tool Availability Matrix
 
-| Tool | Tier | Status | Init Time | Prompts | Frequency | Priority |
-|------|------|--------|-----------|---------|-----------|----------|
-| GitHub MCP | 1 | ✅ Ready | 0ms | 0 | HIGH | P0 |
-| Repomix MCP | 1 | ✅ Ready | 100ms | 0 | MEDIUM | P1 |
-| Firebase MCP | 1 | 🟡 Needs Init | 200ms | 0 | HIGH | P1 |
-| Chrome Tools | 2 | 🟡 Ready | 500ms | 3 | LOW | P3 |
+| Tool         | Tier | Status        | Init Time | Prompts | Frequency | Priority |
+| ------------ | ---- | ------------- | --------- | ------- | --------- | -------- |
+| GitHub MCP   | 1    | ✅ Ready      | 0ms       | 0       | HIGH      | P0       |
+| Repomix MCP  | 1    | ✅ Ready      | 100ms     | 0       | MEDIUM    | P1       |
+| Firebase MCP | 1    | 🟡 Needs Init | 200ms     | 0       | HIGH      | P1       |
+| Chrome Tools | 2    | 🟡 Ready      | 500ms     | 3       | LOW       | P3       |
 
 ---
 
@@ -407,15 +408,8 @@ Create an MCP availability manifest that agents can query:
       "repomix:pack_codebase",
       "firebase:firestore_read"
     ],
-    "common": [
-      "github:get_issues",
-      "repomix:grep_repomix_output",
-      "firebase:deploy_rules"
-    ],
-    "specialized": [
-      "chrome:screenshot",
-      "github:list_releases"
-    ]
+    "common": ["github:get_issues", "repomix:grep_repomix_output", "firebase:deploy_rules"],
+    "specialized": ["chrome:screenshot", "github:list_releases"]
   }
 }
 ```
@@ -471,14 +465,14 @@ const MCPActivationEngine = {
     "ci/cd work" → ["github", "firebase"],
     "e2e testing" → ["chrome"],
   },
-  
+
   preActivate: async (task) => {
     const toolsNeeded = MCPActivationEngine.taskAnalysis[task.type];
     for (const tool of toolsNeeded) {
       await mcp.activate(tool);
     }
   },
-  
+
   reportMetrics: {
     toolUsageByTask: {...},
     avgActivationTime: 0,
@@ -552,14 +546,14 @@ Example:
 
 Some tasks have multiple tool options:
 
-| Task | Best Tool | Fallback 1 | Fallback 2 |
-|------|-----------|-----------|-----------|
-| Search code | GitHub MCP | Local grep_search | — |
-| Analyze patterns | Repomix MCP | read_file + grep | — |
-| Create PR | GitHub MCP | Manual git | — |
-| Deploy rules | Firebase MCP | Manual firebase CLI | — |
-| Read file safely | Repomix file_system | read_file | — |
-| Repo research | Repomix pack_remote | GitHub MCP search | Manual research |
+| Task             | Best Tool           | Fallback 1          | Fallback 2      |
+| ---------------- | ------------------- | ------------------- | --------------- |
+| Search code      | GitHub MCP          | Local grep_search   | —               |
+| Analyze patterns | Repomix MCP         | read_file + grep    | —               |
+| Create PR        | GitHub MCP          | Manual git          | —               |
+| Deploy rules     | Firebase MCP        | Manual firebase CLI | —               |
+| Read file safely | Repomix file_system | read_file           | —               |
+| Repo research    | Repomix pack_remote | GitHub MCP search   | Manual research |
 
 ---
 
@@ -615,4 +609,3 @@ pnpm report:mcp-metrics
 **Owner**: Development Team  
 **Next Step**: Update `.mcp.json` with tier configuration  
 **Estimated Time**: 30 minutes (Phase 1)
-

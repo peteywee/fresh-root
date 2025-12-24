@@ -15,40 +15,40 @@ All domain types are defined in `packages/types/src/` using Zod schemas. Types a
 
 ### Scheduling Domain
 
-| Schema                | File              | Purpose                           |
-| --------------------- | ----------------- | --------------------------------- |
-| `ScheduleSchema`      | `schedules.ts`    | Schedule entity definition        |
-| `CreateScheduleSchema`| `schedules.ts`    | Schedule creation input           |
-| `UpdateScheduleSchema`| `schedules.ts`    | Schedule update input             |
-| `ShiftSchema`         | `shifts.ts`       | Shift entity definition           |
-| `CreateShiftSchema`   | `shifts.ts`       | Shift creation input              |
-| `UpdateShiftSchema`   | `shifts.ts`       | Shift update input                |
-| `PositionSchema`      | `positions.ts`    | Position/role definition          |
+| Schema                 | File           | Purpose                    |
+| ---------------------- | -------------- | -------------------------- |
+| `ScheduleSchema`       | `schedules.ts` | Schedule entity definition |
+| `CreateScheduleSchema` | `schedules.ts` | Schedule creation input    |
+| `UpdateScheduleSchema` | `schedules.ts` | Schedule update input      |
+| `ShiftSchema`          | `shifts.ts`    | Shift entity definition    |
+| `CreateShiftSchema`    | `shifts.ts`    | Shift creation input       |
+| `UpdateShiftSchema`    | `shifts.ts`    | Shift update input         |
+| `PositionSchema`       | `positions.ts` | Position/role definition   |
 
 ### Organization Domain
 
-| Schema                | File              | Purpose                           |
-| --------------------- | ----------------- | --------------------------------- |
-| `OrgSchema`           | `orgs.ts`         | Organization entity               |
-| `MembershipSchema`    | `memberships.ts`  | User-org membership               |
-| `VenueSchema`         | `venues.ts`       | Venue/location entity             |
-| `ZoneSchema`          | `zones.ts`        | Zone within venue                 |
+| Schema             | File             | Purpose               |
+| ------------------ | ---------------- | --------------------- |
+| `OrgSchema`        | `orgs.ts`        | Organization entity   |
+| `MembershipSchema` | `memberships.ts` | User-org membership   |
+| `VenueSchema`      | `venues.ts`      | Venue/location entity |
+| `ZoneSchema`       | `zones.ts`       | Zone within venue     |
 
 ### Staff Management
 
-| Schema                    | File              | Purpose                           |
-| ------------------------- | ----------------- | --------------------------------- |
-| `AttendanceRecordSchema`  | `attendance.ts`   | Attendance tracking               |
-| `CreateAttendanceSchema`  | `attendance.ts`   | Clock-in/out input                |
-| `CheckInSchema`           | `attendance.ts`   | Check-in payload                  |
-| `CheckOutSchema`          | `attendance.ts`   | Check-out payload                 |
+| Schema                   | File            | Purpose             |
+| ------------------------ | --------------- | ------------------- |
+| `AttendanceRecordSchema` | `attendance.ts` | Attendance tracking |
+| `CreateAttendanceSchema` | `attendance.ts` | Clock-in/out input  |
+| `CheckInSchema`          | `attendance.ts` | Check-in payload    |
+| `CheckOutSchema`         | `attendance.ts` | Check-out payload   |
 
 ### RBAC & Security
 
-| Schema                | File              | Purpose                           |
-| --------------------- | ----------------- | --------------------------------- |
-| `OrgRoleSchema`       | `rbac.ts`         | Role enumeration                  |
-| `PermissionSchema`    | `rbac.ts`         | Permission definitions            |
+| Schema             | File      | Purpose                |
+| ------------------ | --------- | ---------------------- |
+| `OrgRoleSchema`    | `rbac.ts` | Role enumeration       |
+| `PermissionSchema` | `rbac.ts` | Permission definitions |
 
 ---
 
@@ -56,14 +56,14 @@ All domain types are defined in `packages/types/src/` using Zod schemas. Types a
 
 Located in `packages/types/src/onboarding.ts`:
 
-| Schema                          | Purpose                              |
-| ------------------------------- | ------------------------------------ |
-| `AdminResponsibilityFormSchema` | Admin responsibility form input      |
-| `CreateNetworkOrgSchema`        | Network org creation                 |
-| `CreateNetworkCorporateSchema`  | Corporate entity creation            |
-| `ActivateNetworkSchema`         | Network activation                   |
-| `JoinWithTokenSchema`           | Join via invite token                |
-| `VerifyEligibilitySchema`       | Eligibility check                    |
+| Schema                          | Purpose                         |
+| ------------------------------- | ------------------------------- |
+| `AdminResponsibilityFormSchema` | Admin responsibility form input |
+| `CreateNetworkOrgSchema`        | Network org creation            |
+| `CreateNetworkCorporateSchema`  | Corporate entity creation       |
+| `ActivateNetworkSchema`         | Network activation              |
+| `JoinWithTokenSchema`           | Join via invite token           |
+| `VerifyEligibilitySchema`       | Eligibility check               |
 
 ---
 
@@ -71,11 +71,11 @@ Located in `packages/types/src/onboarding.ts`:
 
 Located in `packages/types/src/compliance/`:
 
-| Schema                          | File                          | Purpose                    |
-| ------------------------------- | ----------------------------- | -------------------------- |
-| `AdminResponsibilityFormSchema` | `adminResponsibilityForm.ts`  | Admin responsibility form  |
-| `ComplianceDocSchema`           | `compliance.ts`               | Generic compliance doc     |
-| `CertificationSchema`           | `compliance.ts`               | Certification tracking     |
+| Schema                          | File                         | Purpose                   |
+| ------------------------------- | ---------------------------- | ------------------------- |
+| `AdminResponsibilityFormSchema` | `adminResponsibilityForm.ts` | Admin responsibility form |
+| `ComplianceDocSchema`           | `compliance.ts`              | Generic compliance doc    |
+| `CertificationSchema`           | `compliance.ts`              | Certification tracking    |
 
 ---
 
@@ -83,31 +83,31 @@ Located in `packages/types/src/compliance/`:
 
 Located in `packages/types/src/`:
 
-| Schema                    | File              | Purpose                           |
-| ------------------------- | ----------------- | --------------------------------- |
-| `NetworkSchema`           | `networks.ts`     | Network tenant root               |
-| `CorporateSchema`         | `corporates.ts`   | Corporate entity                  |
-| `CreateCorporateSchema`   | `corporates.ts`   | Corporate creation                |
-| `UpdateCorporateSchema`   | `corporates.ts`   | Corporate update                  |
-| `CorpOrgLinkSchema`       | `links/corpOrgLinks.ts` | Corp-org relationships      |
-| `OrgVenueAssignmentSchema`| `links/orgVenueAssignments.ts` | Org-venue assignments  |
+| Schema                     | File                           | Purpose                |
+| -------------------------- | ------------------------------ | ---------------------- |
+| `NetworkSchema`            | `networks.ts`                  | Network tenant root    |
+| `CorporateSchema`          | `corporates.ts`                | Corporate entity       |
+| `CreateCorporateSchema`    | `corporates.ts`                | Corporate creation     |
+| `UpdateCorporateSchema`    | `corporates.ts`                | Corporate update       |
+| `CorpOrgLinkSchema`        | `links/corpOrgLinks.ts`        | Corp-org relationships |
+| `OrgVenueAssignmentSchema` | `links/orgVenueAssignments.ts` | Org-venue assignments  |
 
 ---
 
 ## 6. Utility Schemas
 
-| Schema                | File              | Purpose                           |
-| --------------------- | ----------------- | --------------------------------- |
-| `ErrorResponseSchema` | `errors.ts`       | Standardized error response       |
-| `EventSchema`         | `events.ts`       | Event/audit logging               |
-| `BatchItemSchema`     | `batch.ts`        | Batch operation item              |
-| `CreateBatchSchema`   | `batch.ts`        | Batch operation input             |
-| `SessionSchema`       | `session.ts`      | Session data                      |
-| `MessageSchema`       | `messages.ts`     | In-app messaging                  |
-| `ReceiptSchema`       | `receipts.ts`     | Message receipts                  |
-| `JoinTokenSchema`     | `join-tokens.ts`  | Invite token                      |
-| `WidgetSchema`        | `widgets.ts`      | Widget configuration              |
-| `ItemSchema`          | `items.ts`        | Generic items                     |
+| Schema                | File             | Purpose                     |
+| --------------------- | ---------------- | --------------------------- |
+| `ErrorResponseSchema` | `errors.ts`      | Standardized error response |
+| `EventSchema`         | `events.ts`      | Event/audit logging         |
+| `BatchItemSchema`     | `batch.ts`       | Batch operation item        |
+| `CreateBatchSchema`   | `batch.ts`       | Batch operation input       |
+| `SessionSchema`       | `session.ts`     | Session data                |
+| `MessageSchema`       | `messages.ts`    | In-app messaging            |
+| `ReceiptSchema`       | `receipts.ts`    | Message receipts            |
+| `JoinTokenSchema`     | `join-tokens.ts` | Invite token                |
+| `WidgetSchema`        | `widgets.ts`     | Widget configuration        |
+| `ItemSchema`          | `items.ts`       | Generic items               |
 
 ---
 
@@ -186,16 +186,15 @@ export const UpdateEntitySchema = EntitySchema.partial().omit({
 Complex validation using Zod refinements:
 
 ```typescript
-export const ShiftSchema = z.object({
-  startTime: z.number().int().positive(),
-  endTime: z.number().int().positive(),
-}).refine(
-  (data) => data.endTime > data.startTime,
-  {
+export const ShiftSchema = z
+  .object({
+    startTime: z.number().int().positive(),
+    endTime: z.number().int().positive(),
+  })
+  .refine((data) => data.endTime > data.startTime, {
     message: "End time must be after start time",
     path: ["endTime"],
-  }
-);
+  });
 ```
 
 ---

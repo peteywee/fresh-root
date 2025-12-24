@@ -36,10 +36,9 @@ describe("Security: Cross-Organization Boundaries", () => {
 
   it("should handle requests for non-existent schedule resources", async () => {
     try {
-      const response = await authFetch(
-        `${BASE_URL}/api/schedules/fake-schedule-id-12345`,
-        { method: "GET" }
-      );
+      const response = await authFetch(`${BASE_URL}/api/schedules/fake-schedule-id-12345`, {
+        method: "GET",
+      });
 
       // Should return 403, 404, or other non-5xx error
       if (response?.status) {
@@ -52,10 +51,7 @@ describe("Security: Cross-Organization Boundaries", () => {
 
   it("should protect DELETE operations on schedules", async () => {
     try {
-      const response = await authFetch(
-        `${BASE_URL}/api/schedules/fake-id`,
-        { method: "DELETE" }
-      );
+      const response = await authFetch(`${BASE_URL}/api/schedules/fake-id`, { method: "DELETE" });
 
       // Should be authenticated (have valid session)
       // Response should not be 401 (already authenticated)
@@ -306,7 +302,7 @@ describe("Security: Input Validation & Injection Prevention", () => {
     try {
       const response = await authFetch(
         `${BASE_URL}/api/schedules?search='; DROP TABLE schedules; --`,
-        { method: "GET" }
+        { method: "GET" },
       );
 
       // Query parameter handling should be safe - just shouldn't crash

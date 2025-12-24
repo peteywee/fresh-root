@@ -327,11 +327,11 @@
 
 ### Gap 1: Frontend pages don't call their APIs
 
-| Page | Expected API Call | Actual Behavior |
-| --- | --- | --- |
-| `/onboarding/create-network-org/page.tsx` | `POST /api/onboarding/create-network-org` | **Comment only**: "Real implementation would POST..." then `nav.push("/onboarding/block-4")` |
+| Page                                            | Expected API Call                               | Actual Behavior                                                                              |
+| ----------------------------------------------- | ----------------------------------------------- | -------------------------------------------------------------------------------------------- |
+| `/onboarding/create-network-org/page.tsx`       | `POST /api/onboarding/create-network-org`       | **Comment only**: "Real implementation would POST..." then `nav.push("/onboarding/block-4")` |
 | `/onboarding/create-network-corporate/page.tsx` | `POST /api/onboarding/create-network-corporate` | **Comment only**: "Real implementation would POST..." then `nav.push("/onboarding/block-4")` |
-| `/onboarding/join/page.tsx` | `POST /api/onboarding/join-with-token` | **Comment only**: "Real implementation would POST..." then `nav.push("/onboarding/block-4")` |
+| `/onboarding/join/page.tsx`                     | `POST /api/onboarding/join-with-token`          | **Comment only**: "Real implementation would POST..." then `nav.push("/onboarding/block-4")` |
 
 **Impact**: The API routes exist and work, but the frontend bypasses them entirely.
 
@@ -339,20 +339,21 @@
 
 ### Gap 2: Missing orgId cookie set
 
-| Where Expected | What Should Happen | What Actually Happens |
-| --- | --- | --- |
-| After network creation | Set `orgId` cookie so `proxy.ts` allows access | **Not implemented** - cookie never set |
-| `/api/onboarding/create-network-org` | Should `response.cookies.set("orgId", ...)` | Returns mock data only |
-| `/api/onboarding/create-network-corporate` | Should `response.cookies.set("orgId", ...)` | Returns mock data only |
+| Where Expected                             | What Should Happen                             | What Actually Happens                  |
+| ------------------------------------------ | ---------------------------------------------- | -------------------------------------- |
+| After network creation                     | Set `orgId` cookie so `proxy.ts` allows access | **Not implemented** - cookie never set |
+| `/api/onboarding/create-network-org`       | Should `response.cookies.set("orgId", ...)`    | Returns mock data only                 |
+| `/api/onboarding/create-network-corporate` | Should `response.cookies.set("orgId", ...)`    | Returns mock data only                 |
 
-**Impact**: Users complete onboarding but `proxy.ts` will redirect them back to `/onboarding` because `orgId` cookie is never set.
+**Impact**: Users complete onboarding but `proxy.ts` will redirect them back to `/onboarding`
+because `orgId` cookie is never set.
 
 ---
 
 ### Gap 3: No profile persistence
 
-| Route | Expected | Actual |
-| --- | --- | --- |
+| Route                          | Expected                          | Actual                                                 |
+| ------------------------------ | --------------------------------- | ------------------------------------------------------ |
 | `POST /api/onboarding/profile` | Write to Firestore `/users/{uid}` | **Not found** - route may not exist or doesn't persist |
 
 **Impact**: User profile data collected but never saved.
@@ -361,20 +362,20 @@
 
 ### Gap 4: API routes return mock data (no Firestore writes)
 
-| Route | Returns | Actually Writes to Firestore? |
-| --- | --- | --- |
-| `/api/onboarding/create-network-org` | `{ id, name, type, ownerId, createdAt, status }` | ❌ **No** - mock data only |
-| `/api/onboarding/create-network-corporate` | `{ id, type, corporateName, brandName, ... }` | ❌ **No** - mock data only |
-| `/api/onboarding/activate-network` | `{ ok, networkId, status }` | ✅ **Yes** - writes to `/networks/{id}` |
-| `/api/onboarding/admin-form` | `{ formToken }` | **Unknown** - needs verification |
+| Route                                      | Returns                                          | Actually Writes to Firestore?           |
+| ------------------------------------------ | ------------------------------------------------ | --------------------------------------- |
+| `/api/onboarding/create-network-org`       | `{ id, name, type, ownerId, createdAt, status }` | ❌ **No** - mock data only              |
+| `/api/onboarding/create-network-corporate` | `{ id, type, corporateName, brandName, ... }`    | ❌ **No** - mock data only              |
+| `/api/onboarding/activate-network`         | `{ ok, networkId, status }`                      | ✅ **Yes** - writes to `/networks/{id}` |
+| `/api/onboarding/admin-form`               | `{ formToken }`                                  | **Unknown** - needs verification        |
 
 ---
 
 ### Gap 5: activate-network never called
 
-| Expected Flow | Actual Flow |
-| --- | --- |
-| create-network-* → activate-network → block-4 | create-network-* → **skip** → block-4 |
+| Expected Flow                                  | Actual Flow                            |
+| ---------------------------------------------- | -------------------------------------- |
+| create-network-\* → activate-network → block-4 | create-network-\* → **skip** → block-4 |
 
 **Impact**: Networks created but never activated.
 
@@ -403,30 +404,30 @@ Priority 3 (Polish):
 
 ## API Route Summary
 
-| Route | Method | Auth | Input Schema | Writes to Firestore |
-| --- | --- | --- | --- | --- |
-| `/api/session` | POST | Public | `CreateSessionSchema` | N/A (cookie only) |
-| `/api/session` | DELETE | Public | None | N/A (cookie only) |
-| `/api/onboarding/verify-eligibility` | POST | Authenticated | None | ❌ No |
-| `/api/onboarding/profile` | POST | Authenticated | `ProfileSchema`? | ❓ Unknown |
-| `/api/onboarding/admin-form` | POST | Authenticated | `AdminFormSchema`? | ❓ Unknown |
-| `/api/onboarding/create-network-org` | POST | Authenticated | `CreateNetworkSchema` | ❌ No (mock) |
-| `/api/onboarding/create-network-corporate` | POST | Authenticated | `CreateCorporateOnboardingSchema` | ❌ No (mock) |
-| `/api/onboarding/activate-network` | POST | Authenticated | `ActivateNetworkSchema` | ✅ Yes |
-| `/api/onboarding/join-with-token` | POST | Authenticated | `JoinWithTokenSchema`? | ❓ Unknown |
+| Route                                      | Method | Auth          | Input Schema                      | Writes to Firestore |
+| ------------------------------------------ | ------ | ------------- | --------------------------------- | ------------------- |
+| `/api/session`                             | POST   | Public        | `CreateSessionSchema`             | N/A (cookie only)   |
+| `/api/session`                             | DELETE | Public        | None                              | N/A (cookie only)   |
+| `/api/onboarding/verify-eligibility`       | POST   | Authenticated | None                              | ❌ No               |
+| `/api/onboarding/profile`                  | POST   | Authenticated | `ProfileSchema`?                  | ❓ Unknown          |
+| `/api/onboarding/admin-form`               | POST   | Authenticated | `AdminFormSchema`?                | ❓ Unknown          |
+| `/api/onboarding/create-network-org`       | POST   | Authenticated | `CreateNetworkSchema`             | ❌ No (mock)        |
+| `/api/onboarding/create-network-corporate` | POST   | Authenticated | `CreateCorporateOnboardingSchema` | ❌ No (mock)        |
+| `/api/onboarding/activate-network`         | POST   | Authenticated | `ActivateNetworkSchema`           | ✅ Yes              |
+| `/api/onboarding/join-with-token`          | POST   | Authenticated | `JoinWithTokenSchema`?            | ❓ Unknown          |
 
 ---
 
 ## Related Files
 
-| Category | Path |
-| --- | --- |
-| Auth Helpers | `apps/web/src/lib/auth-helpers.ts` |
-| Firebase Client | `apps/web/app/lib/firebaseClient.ts` |
-| Firebase Admin | `apps/web/lib/firebase-admin.ts` |
-| Proxy Middleware | `apps/web/proxy.ts` |
+| Category           | Path                                                          |
+| ------------------ | ------------------------------------------------------------- |
+| Auth Helpers       | `apps/web/src/lib/auth-helpers.ts`                            |
+| Firebase Client    | `apps/web/app/lib/firebaseClient.ts`                          |
+| Firebase Admin     | `apps/web/lib/firebase-admin.ts`                              |
+| Proxy Middleware   | `apps/web/proxy.ts`                                           |
 | Onboarding Context | `apps/web/app/onboarding/_wizard/OnboardingWizardContext.tsx` |
-| Onboarding Types | `packages/types/src/onboarding.ts` |
+| Onboarding Types   | `packages/types/src/onboarding.ts`                            |
 
 ---
 
@@ -555,16 +556,16 @@ Priority 3 (Polish):
 
 ```typescript
 interface ScheduleDoc {
-  id: string;                           // Auto-generated
-  orgId: string;                        // From context.org.orgId
-  name: string;                         // User input
-  startDate: Timestamp;                 // Firebase Timestamp
-  endDate: Timestamp;                   // Firebase Timestamp
-  state: "draft" | "published" | "archived";  // Lifecycle state
-  createdAt: Timestamp;                 // Server timestamp
-  updatedAt: Timestamp;                 // Server timestamp
-  createdBy: string;                    // From context.auth.userId
-  publishedAt?: Timestamp;              // Set when published
+  id: string; // Auto-generated
+  orgId: string; // From context.org.orgId
+  name: string; // User input
+  startDate: Timestamp; // Firebase Timestamp
+  endDate: Timestamp; // Firebase Timestamp
+  state: "draft" | "published" | "archived"; // Lifecycle state
+  createdAt: Timestamp; // Server timestamp
+  updatedAt: Timestamp; // Server timestamp
+  createdBy: string; // From context.auth.userId
+  publishedAt?: Timestamp; // Set when published
 }
 ```
 
@@ -572,13 +573,13 @@ interface ScheduleDoc {
 
 ## 🔴 Additional Gaps Found in Schedule/Shift Flow
 
-| # | Gap | Location | Impact |
-| --- | --- | --- | --- |
-| **6** | GET /schedules/[id] returns mock data | `schedules/[id]/route.ts` | No real schedule fetch |
-| **7** | PATCH/DELETE schedules return mock data | `schedules/[id]/route.ts` | Updates don't persist |
-| **8** | All shift endpoints return mock data | `shifts/route.ts`, `shifts/[id]/route.ts` | No real shift persistence |
-| **9** | Positions return mock data | `positions/route.ts` | No real position persistence |
-| **10** | Publish doesn't update schedule state | `publish/route.ts` | Schedule stays "draft" |
+| #      | Gap                                     | Location                                  | Impact                       |
+| ------ | --------------------------------------- | ----------------------------------------- | ---------------------------- |
+| **6**  | GET /schedules/[id] returns mock data   | `schedules/[id]/route.ts`                 | No real schedule fetch       |
+| **7**  | PATCH/DELETE schedules return mock data | `schedules/[id]/route.ts`                 | Updates don't persist        |
+| **8**  | All shift endpoints return mock data    | `shifts/route.ts`, `shifts/[id]/route.ts` | No real shift persistence    |
+| **9**  | Positions return mock data              | `positions/route.ts`                      | No real position persistence |
+| **10** | Publish doesn't update schedule state   | `publish/route.ts`                        | Schedule stays "draft"       |
 
 ---
 
@@ -671,7 +672,7 @@ nav.push("/onboarding/block-4");
 
 ```typescript
 export const POST = createAuthenticatedEndpoint({
-  input: AdminFormSchema,  // Need to create in packages/types
+  input: AdminFormSchema, // Need to create in packages/types
   handler: async ({ input, context }) => {
     const formToken = crypto.randomUUID();
     // Optionally persist to Firestore

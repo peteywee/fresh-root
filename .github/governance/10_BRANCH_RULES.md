@@ -30,47 +30,47 @@ main (production)
 
 ### main Branch
 
-| Setting | Value | Reason |
-|---------|-------|--------|
-| **Require PR** | Yes | No direct pushes |
-| **Required approvals** | 2 | Critical review |
-| **Dismiss stale reviews** | Yes | Changes need re-review |
-| **Require status checks** | Yes | Gates must pass |
-| **Required checks** | CI, Orchestrate | Core validation |
-| **Require branches up to date** | Yes | No stale merges |
-| **Restrict push** | dev only | Only from dev |
-| **Allow force push** | No | Never |
-| **Allow deletions** | No | Never |
+| Setting                         | Value           | Reason                 |
+| ------------------------------- | --------------- | ---------------------- |
+| **Require PR**                  | Yes             | No direct pushes       |
+| **Required approvals**          | 2               | Critical review        |
+| **Dismiss stale reviews**       | Yes             | Changes need re-review |
+| **Require status checks**       | Yes             | Gates must pass        |
+| **Required checks**             | CI, Orchestrate | Core validation        |
+| **Require branches up to date** | Yes             | No stale merges        |
+| **Restrict push**               | dev only        | Only from dev          |
+| **Allow force push**            | No              | Never                  |
+| **Allow deletions**             | No              | Never                  |
 
 ### dev Branch
 
-| Setting | Value | Reason |
-|---------|-------|--------|
-| **Require PR** | Yes | No direct pushes |
-| **Required approvals** | 1 | Standard review |
-| **Dismiss stale reviews** | Yes | Changes need re-review |
-| **Require status checks** | Yes | Gates must pass |
-| **Required checks** | CI | Core validation |
-| **Require branches up to date** | No | Flexible merging |
-| **Allow force push** | No | Never |
-| **Allow deletions** | No | Never |
+| Setting                         | Value | Reason                 |
+| ------------------------------- | ----- | ---------------------- |
+| **Require PR**                  | Yes   | No direct pushes       |
+| **Required approvals**          | 1     | Standard review        |
+| **Dismiss stale reviews**       | Yes   | Changes need re-review |
+| **Require status checks**       | Yes   | Gates must pass        |
+| **Required checks**             | CI    | Core validation        |
+| **Require branches up to date** | No    | Flexible merging       |
+| **Allow force push**            | No    | Never                  |
+| **Allow deletions**             | No    | Never                  |
 
-### Feature Branches (feature/*, fix/*, refactor/*, chore/*)
+### Feature Branches (feature/_, fix/_, refactor/_, chore/_)
 
-| Setting | Value | Reason |
-|---------|-------|--------|
-| **Require PR** | No | Can push directly |
-| **Auto-delete on merge** | Yes | Keep clean |
-| **Allow force push** | Yes | Allow rebasing |
+| Setting                  | Value | Reason            |
+| ------------------------ | ----- | ----------------- |
+| **Require PR**           | No    | Can push directly |
+| **Auto-delete on merge** | Yes   | Keep clean        |
+| **Allow force push**     | Yes   | Allow rebasing    |
 
-### Hotfix Branches (hotfix/*)
+### Hotfix Branches (hotfix/\*)
 
-| Setting | Value | Reason |
-|---------|-------|--------|
-| **Require PR** | Yes | Still needs review |
-| **Required approvals** | 1 | Quick turnaround |
-| **Required checks** | CI | Must pass |
-| **Can merge to main** | Yes | Emergency path |
+| Setting                | Value | Reason             |
+| ---------------------- | ----- | ------------------ |
+| **Require PR**         | Yes   | Still needs review |
+| **Required approvals** | 1     | Quick turnaround   |
+| **Required checks**    | CI    | Must pass          |
+| **Can merge to main**  | Yes   | Emergency path     |
 
 ---
 
@@ -84,13 +84,13 @@ main (production)
 
 ### Types
 
-| Type | Purpose | Example |
-|------|---------|---------|
-| `feature` | New functionality | `feature/FS-123-add-time-off` |
-| `fix` | Bug fixes | `fix/FS-456-schedule-calc` |
-| `refactor` | Code improvement | `refactor/FS-789-cleanup` |
-| `chore` | Maintenance | `chore/update-deps` |
-| `hotfix` | Emergency fix | `hotfix/FS-999-auth-bypass` |
+| Type       | Purpose           | Example                       |
+| ---------- | ----------------- | ----------------------------- |
+| `feature`  | New functionality | `feature/FS-123-add-time-off` |
+| `fix`      | Bug fixes         | `fix/FS-456-schedule-calc`    |
+| `refactor` | Code improvement  | `refactor/FS-789-cleanup`     |
+| `chore`    | Maintenance       | `chore/update-deps`           |
+| `hotfix`   | Emergency fix     | `hotfix/FS-999-auth-bypass`   |
 
 ### Validation Regex
 
@@ -102,15 +102,15 @@ main (production)
 
 ## MERGE STRATEGIES
 
-| Source | Target | Strategy |
-|--------|--------|----------|
-| `feature/*` | `dev` | Squash |
-| `fix/*` | `dev` | Squash |
-| `refactor/*` | `dev` | Squash |
-| `chore/*` | `dev` | Squash |
-| `dev` | `main` | Merge commit |
-| `hotfix/*` | `main` | Merge commit |
-| `hotfix/*` | `dev` | Merge commit |
+| Source       | Target | Strategy     |
+| ------------ | ------ | ------------ |
+| `feature/*`  | `dev`  | Squash       |
+| `fix/*`      | `dev`  | Squash       |
+| `refactor/*` | `dev`  | Squash       |
+| `chore/*`    | `dev`  | Squash       |
+| `dev`        | `main` | Merge commit |
+| `hotfix/*`   | `main` | Merge commit |
+| `hotfix/*`   | `dev`  | Merge commit |
 
 ### Why Squash for Features
 
@@ -183,50 +183,50 @@ git push
 
 ```javascript
 // scripts/setup-branch-protection.mjs
-const { Octokit } = require('@octokit/rest');
+const { Octokit } = require("@octokit/rest");
 
 const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
 
 // Main branch protection
 await octokit.repos.updateBranchProtection({
-  owner: 'peteywee',
-  repo: 'frsh-root',
-  branch: 'main',
+  owner: "peteywee",
+  repo: "frsh-root",
+  branch: "main",
   required_status_checks: {
     strict: true,
-    contexts: ['CI', 'Orchestrate']
+    contexts: ["CI", "Orchestrate"],
   },
   enforce_admins: true,
   required_pull_request_reviews: {
     required_approving_review_count: 2,
-    dismiss_stale_reviews: true
+    dismiss_stale_reviews: true,
   },
   restrictions: {
     users: [],
     teams: [],
-    apps: []
+    apps: [],
   },
   allow_force_pushes: false,
-  allow_deletions: false
+  allow_deletions: false,
 });
 
 // Dev branch protection
 await octokit.repos.updateBranchProtection({
-  owner: 'peteywee',
-  repo: 'frsh-root',
-  branch: 'dev',
+  owner: "peteywee",
+  repo: "frsh-root",
+  branch: "dev",
   required_status_checks: {
     strict: false,
-    contexts: ['CI']
+    contexts: ["CI"],
   },
   enforce_admins: false,
   required_pull_request_reviews: {
     required_approving_review_count: 1,
-    dismiss_stale_reviews: true
+    dismiss_stale_reviews: true,
   },
   restrictions: null,
   allow_force_pushes: false,
-  allow_deletions: false
+  allow_deletions: false,
 });
 ```
 
@@ -286,7 +286,7 @@ docs/*:
 ```javascript
 // Add new required check
 required_status_checks: {
-  contexts: ['CI', 'Orchestrate', 'NewCheck']
+  contexts: ["CI", "Orchestrate", "NewCheck"];
 }
 ```
 
@@ -294,9 +294,9 @@ required_status_checks: {
 
 ```javascript
 // Different rules per environment
-if (process.env.ENV === 'enterprise') {
+if (process.env.ENV === "enterprise") {
   required_approving_review_count = 3;
-  required_checks.push('SecurityScan', 'Compliance');
+  required_checks.push("SecurityScan", "Compliance");
 }
 ```
 
@@ -306,11 +306,11 @@ if (process.env.ENV === 'enterprise') {
 
 ### Common Violations
 
-| Violation | Solution |
-|-----------|----------|
-| Direct push to main | Always use PR |
-| Skipped approvals | Wait for reviews |
-| Stale branch | Rebase on target |
+| Violation            | Solution           |
+| -------------------- | ------------------ |
+| Direct push to main  | Always use PR      |
+| Skipped approvals    | Wait for reviews   |
+| Stale branch         | Rebase on target   |
 | Wrong merge strategy | Use correct button |
 
 ### Recovery

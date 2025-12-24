@@ -236,7 +236,7 @@ Agent calls:
     includePatterns: "**/src/**/*.ts"
   })
 
-Result: 
+Result:
   ✅ .claude/skills/sdk-factory-pattern/ created
   ✅ SKILL.md with usage guide
   ✅ references/ with full structure
@@ -268,7 +268,7 @@ Result:
 
 ```typescript
 {
-  path: string;     // Absolute path to file
+  path: string; // Absolute path to file
 }
 ```
 
@@ -304,7 +304,7 @@ Agent calls:
   })
 
 Result: ❌ BLOCKED
-Message: "File contains sensitive data (API keys, tokens). 
+Message: "File contains sensitive data (API keys, tokens).
          Use environment variable access instead."
 ```
 
@@ -325,7 +325,7 @@ Message: "File contains sensitive data (API keys, tokens).
 
 ```typescript
 {
-  path: string;     // Absolute path to directory
+  path: string; // Absolute path to directory
 }
 ```
 
@@ -374,15 +374,15 @@ Result:
 
 ## 📊 Comparison Matrix
 
-| Tool | Real-Time | Compression | External | Security | Token Efficient |
-|------|-----------|-------------|----------|----------|-----------------|
-| `pack_codebase` | ✅ | ✅ | ❌ | ⚠️ Basic | ✅ 70% savings |
-| `pack_remote_repository` | ✅ | ✅ | ✅ | ✅ High | ✅ 70% savings |
-| `attach_packed_output` | ✅ | — | — | ✅ High | ✅ Reuses data |
-| `grep_repomix_output` | ✅ | — | — | ✅ High | ✅ No re-pack |
-| `generate_skill` | ✅ | ✅ | ❌ | ✅ High | ✅ Indexed |
-| `file_system_read_file` | ✅ | ❌ | ❌ | ✅ Excellent | ⚠️ Full content |
-| `file_system_read_directory` | ✅ | N/A | ❌ | ✅ Excellent | ✅ Metadata only |
+| Tool                         | Real-Time | Compression | External | Security     | Token Efficient  |
+| ---------------------------- | --------- | ----------- | -------- | ------------ | ---------------- |
+| `pack_codebase`              | ✅        | ✅          | ❌       | ⚠️ Basic     | ✅ 70% savings   |
+| `pack_remote_repository`     | ✅        | ✅          | ✅       | ✅ High      | ✅ 70% savings   |
+| `attach_packed_output`       | ✅        | —           | —        | ✅ High      | ✅ Reuses data   |
+| `grep_repomix_output`        | ✅        | —           | —        | ✅ High      | ✅ No re-pack    |
+| `generate_skill`             | ✅        | ✅          | ❌       | ✅ High      | ✅ Indexed       |
+| `file_system_read_file`      | ✅        | ❌          | ❌       | ✅ Excellent | ⚠️ Full content  |
+| `file_system_read_directory` | ✅        | N/A         | ❌       | ✅ Excellent | ✅ Metadata only |
 
 ---
 
@@ -556,14 +556,14 @@ Agent should:
 
 ## 📈 Benefits Summary
 
-| Benefit | Impact | Example |
-|---------|--------|---------|
-| **Speed** | 10x faster analysis | Analyze API framework in <1 minute |
-| **Tokens** | 70% reduction | 50k → 15k tokens with compression |
-| **Intelligence** | Real-time insights | "Find all error handling" with grep |
-| **Security** | Built-in protection | Blocks .env, detects secrets |
-| **Knowledge** | Team scalability | Auto-generate Claude Skills |
-| **Research** | Competitive advantage | Analyze any GitHub repo instantly |
+| Benefit          | Impact                | Example                             |
+| ---------------- | --------------------- | ----------------------------------- |
+| **Speed**        | 10x faster analysis   | Analyze API framework in <1 minute  |
+| **Tokens**       | 70% reduction         | 50k → 15k tokens with compression   |
+| **Intelligence** | Real-time insights    | "Find all error handling" with grep |
+| **Security**     | Built-in protection   | Blocks .env, detects secrets        |
+| **Knowledge**    | Team scalability      | Auto-generate Claude Skills         |
+| **Research**     | Competitive advantage | Analyze any GitHub repo instantly   |
 
 ---
 
@@ -574,4 +574,5 @@ Agent should:
 
 ---
 
-*"You now have 7 powerful tools for code analysis. Start with: 'Pack the API framework and analyze its patterns'"*
+_"You now have 7 powerful tools for code analysis. Start with: 'Pack the API framework and analyze
+its patterns'"_

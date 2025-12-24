@@ -1,34 +1,40 @@
 # L2 — Notifications & Communication
 
-> **Status:** Documented from actual codebase analysis
-> **Last Updated:** 2025-12-17
-> **Analyzed Routes:** 2 endpoints (publish, messages), 5 schemas
+> **Status:** Documented from actual codebase analysis **Last Updated:** 2025-12-17 **Analyzed
+> Routes:** 2 endpoints (publish, messages), 5 schemas
 
 ## 1. Role in the System
 
-The Notifications & Communication subsystem is responsible for delivering timely updates to users about schedule changes, shift assignments, and organizational events. The system currently defines the foundational schemas and minimal infrastructure for multi-channel notifications (email, SMS, push) but **lacks complete implementation**.
+The Notifications & Communication subsystem is responsible for delivering timely updates to users
+about schedule changes, shift assignments, and organizational events. The system currently defines
+the foundational schemas and minimal infrastructure for multi-channel notifications (email, SMS,
+push) but **lacks complete implementation**.
 
 **Key Responsibilities:**
+
 1. **Schedule Publishing Notifications** - Alert staff when schedules are published
 2. **In-App Messaging** - Lightweight message system for org-wide and targeted communications
 3. **Audit Receipts** - Track notification delivery and user acknowledgments
-4. **Event Triggers** - Emit notifications based on system events (schedule.publish, shift.assign, etc.)
+4. **Event Triggers** - Emit notifications based on system events (schedule.publish, shift.assign,
+   etc.)
 
-**Current State:** The subsystem is in **EARLY STAGE** - schemas are defined but delivery mechanisms, queuing, templates, and retry logic are NOT implemented.
+**Current State:** The subsystem is in **EARLY STAGE** - schemas are defined but delivery
+mechanisms, queuing, templates, and retry logic are NOT implemented.
 
 ## 2. Actual Implementation Analysis
 
 ### 2.1 Endpoints Inventory
 
-| Endpoint | Method | Purpose | Auth | Status |
-|----------|--------|---------|------|--------|
-| `/api/publish` | POST | Publish schedule with notifications | Org (manager) | Schema only |
+| Endpoint       | Method | Purpose                             | Auth          | Status      |
+| -------------- | ------ | ----------------------------------- | ------------- | ----------- |
+| `/api/publish` | POST   | Publish schedule with notifications | Org (manager) | Schema only |
 
 **Note:** No dedicated `/api/notifications` or `/api/messages` CRUD endpoints exist yet.
 
 ### 2.2 Data Models & Types
 
 #### Message Schema
+
 From `/packages/types/src/messages.ts`:
 
 ```typescript
@@ -51,12 +57,14 @@ export const MessageSchema = z.object({
   ]),
 
   // Linkage to resources
-  links: z.array(
-    z.object({
-      type: z.string().min(1), // "schedule", "shift", etc.
-      id: z.string().min(1),
-    })
-  ).optional(),
+  links: z
+    .array(
+      z.object({
+        type: z.string().min(1), // "schedule", "shift", etc.
+        id: z.string().min(1),
+      }),
+    )
+    .optional(),
 
   // Read tracking
   readBy: z.array(z.string()).default([]),
@@ -64,12 +72,14 @@ export const MessageSchema = z.object({
 ```
 
 **Design Notes:**
+
 - **Channel segregation** - System vs user-facing messages
 - **Flexible targeting** - Org-wide or specific members
 - **Resource linking** - Connect messages to schedules/shifts
 - **Read tracking** - Array-based tracking (potential scalability issue)
 
 #### PublishRequest Schema
+
 From `/packages/types/src/internal.ts`:
 
 ```typescript
@@ -82,11 +92,13 @@ export const PublishRequestSchema = z.object({
 ```
 
 **Design Notes:**
+
 - **Multi-channel** - Email, push, SMS delivery (not implemented)
 - **Opt-in/out** - `notifyUsers` flag for silent publishing
 - **Scheduling** - `publishAt` for delayed notifications (not implemented)
 
 #### Receipt Schema
+
 From `/packages/types/src/receipts.ts`:
 
 ```typescript
@@ -102,21 +114,25 @@ export const ReceiptSchema = z.object({
     "mfa.enroll",
     "mfa.verify",
   ]),
-  resource: z.object({
-    type: z.string().min(1),
-    id: z.string().min(1),
-  }).optional(),
+  resource: z
+    .object({
+      type: z.string().min(1),
+      id: z.string().min(1),
+    })
+    .optional(),
   createdAt: z.string(), // ISO
   meta: z.record(z.string(), z.any()).default({}),
 });
 ```
 
 **Design Notes:**
+
 - **Audit trail** - Track who did what and when
 - **Resource context** - Link to the affected resource
 - **Flexible metadata** - Store delivery status, error details, etc.
 
 #### Event Schema
+
 From `/packages/types/src/events.ts`:
 
 ```typescript
@@ -137,6 +153,7 @@ export const EventSchema = z.object({
 ```
 
 **Design Notes:**
+
 - **Event sourcing** - Append-only log for audit and analytics
 - **Future AI data** - Events feed into future AI recommendations
 - **Missing notification events** - No "schedule.published" or "shift.assigned" events defined
@@ -158,6 +175,7 @@ export const EventSchema = z.object({
   - Fields: `id, at, category, type, actorUserId, networkId, orgId, payload`
 
 **Missing Collections:**
+
 - **`notification_preferences`** - User opt-in/out settings
 - **`notification_queue`** - Pending notifications for delivery
 - **`notification_templates`** - Email/SMS templates
@@ -166,6 +184,7 @@ export const EventSchema = z.object({
 ### 2.4 Implementation Status
 
 #### Publish Route Analysis
+
 From `/apps/web/app/api/publish/route.ts`:
 
 ```typescript
@@ -191,6 +210,7 @@ export const POST = createOrgEndpoint({
 ```
 
 **Critical Issues:**
+
 1. No actual Firestore write to mark schedule as published
 2. No notification delivery (no emails/SMS/push sent)
 3. No receipt creation for audit trail
@@ -201,10 +221,11 @@ export const POST = createOrgEndpoint({
 
 ### CRITICAL-01: No Notification Delivery Infrastructure
 
-**Location:** Entire subsystem
-**Issue:** Notification channels (email, SMS, push) are defined in schemas but have ZERO implementation
+**Location:** Entire subsystem **Issue:** Notification channels (email, SMS, push) are defined in
+schemas but have ZERO implementation
 
 **Evidence:**
+
 ```typescript
 // packages/types/src/internal.ts
 channels: z.array(z.enum(["email", "push", "sms"])).default(["email"]),
@@ -214,11 +235,13 @@ return ok({ channels: input.channels }); // Just echoes back
 ```
 
 **Impact:**
+
 - Users receive NO notifications when schedules are published
 - Staff assignment changes are silent
 - System appears functional but doesn't deliver on core promise
 
 **Missing Components:**
+
 1. **Email Service** - No SendGrid/AWS SES/Nodemailer integration
 2. **SMS Service** - No Twilio/AWS SNS integration
 3. **Push Service** - No Firebase Cloud Messaging (FCM) setup
@@ -230,8 +253,8 @@ return ok({ channels: input.channels }); // Just echoes back
 
 ### CRITICAL-02: Read Tracking Array Scalability Issue
 
-**Location:** `/packages/types/src/messages.ts`
-**Issue:** `readBy` array grows unbounded, causing performance degradation
+**Location:** `/packages/types/src/messages.ts` **Issue:** `readBy` array grows unbounded, causing
+performance degradation
 
 ```typescript
 export const MessageSchema = z.object({
@@ -240,12 +263,14 @@ export const MessageSchema = z.object({
 ```
 
 **Problem:**
+
 - Org-wide message to 1000 users = 1000-element array
 - Firestore document max size = 1MB (arrays count toward limit)
 - Array updates require full document read/write
 - No pagination support for large teams
 
 **Impact:**
+
 - Message documents hit size limits in large orgs
 - Read status queries become slow (O(n) array scans)
 - Concurrent mark-as-read operations cause write conflicts
@@ -254,16 +279,17 @@ export const MessageSchema = z.object({
 
 ### CRITICAL-03: No Notification Preferences
 
-**Location:** Missing implementation
-**Issue:** Users cannot opt-in/opt-out of notification channels
+**Location:** Missing implementation **Issue:** Users cannot opt-in/opt-out of notification channels
 
 **Missing:**
+
 - User preference schema for email/SMS/push toggles
 - Per-notification-type preferences (schedule changes, shift swaps, etc.)
 - Quiet hours / Do Not Disturb settings
 - Notification frequency controls (instant, digest, weekly)
 
 **Impact:**
+
 - Privacy/GDPR violations - cannot honor user preferences
 - Spam complaints - users receive unwanted notifications
 - Regulatory risk - CAN-SPAM Act requires opt-out mechanism
@@ -272,10 +298,11 @@ export const MessageSchema = z.object({
 
 ### HIGH-01: No Queue System for Async Delivery
 
-**Location:** Missing implementation
-**Issue:** Synchronous notification delivery blocks API responses
+**Location:** Missing implementation **Issue:** Synchronous notification delivery blocks API
+responses
 
 **Current Flow (if implemented):**
+
 ```typescript
 // BAD: Blocking delivery
 await sendEmail(user.email, template);
@@ -284,6 +311,7 @@ return ok({ published: true }); // Waits for delivery
 ```
 
 **Problems:**
+
 - API latency increases with number of recipients
 - Single delivery failure fails entire request
 - No retry mechanism for transient failures
@@ -293,10 +321,11 @@ return ok({ published: true }); // Waits for delivery
 
 ### HIGH-02: No Template System
 
-**Location:** Missing implementation
-**Issue:** Hardcoded message content prevents localization and personalization
+**Location:** Missing implementation **Issue:** Hardcoded message content prevents localization and
+personalization
 
 **Missing:**
+
 - Template storage (Firestore or external CMS)
 - Variable substitution ({{userName}}, {{scheduleName}})
 - Multi-language support (i18n)
@@ -304,6 +333,7 @@ return ok({ published: true }); // Waits for delivery
 - Preview/testing tools
 
 **Impact:**
+
 - Cannot personalize notifications ("Hi Patrick" vs "Hi User")
 - No localization (Spanish, French, etc.)
 - Difficult to A/B test messaging
@@ -313,16 +343,17 @@ return ok({ published: true }); // Waits for delivery
 
 ### HIGH-03: Missing Delivery Status Tracking
 
-**Location:** No implementation
-**Issue:** Cannot track if notifications were successfully delivered
+**Location:** No implementation **Issue:** Cannot track if notifications were successfully delivered
 
 **Missing:**
+
 - Delivery logs (sent, delivered, failed, bounced)
 - Webhook handling for email bounces / SMS failures
 - Retry queue for failed deliveries
 - User-facing delivery status ("Sent 10m ago", "Delivered")
 
 **Impact:**
+
 - Cannot debug delivery failures
 - No visibility into notification health
 - Cannot resend failed notifications
@@ -332,10 +363,10 @@ return ok({ published: true }); // Waits for delivery
 
 ### MEDIUM-01: No Rate Limiting on Notifications
 
-**Location:** Missing implementation
-**Issue:** No protection against notification spam
+**Location:** Missing implementation **Issue:** No protection against notification spam
 
 **Risk Scenarios:**
+
 - Buggy code triggers 1000s of notifications
 - Malicious actor abuses publish endpoint
 - Accidental spam from rapid schedule updates
@@ -345,10 +376,10 @@ return ok({ published: true }); // Waits for delivery
 
 ### MEDIUM-02: Missing Notification Deduplication
 
-**Location:** Missing implementation
-**Issue:** Users may receive duplicate notifications
+**Location:** Missing implementation **Issue:** Users may receive duplicate notifications
 
 **Scenarios:**
+
 - Schedule published twice within 5 minutes
 - Retry logic resends on transient failure
 - Multiple admins publish same schedule
@@ -357,8 +388,8 @@ return ok({ published: true }); // Waits for delivery
 
 ### MEDIUM-03: No Event Schema for Notifications
 
-**Location:** `/packages/types/src/events.ts`
-**Issue:** Event types don't include notification-relevant events
+**Location:** `/packages/types/src/events.ts` **Issue:** Event types don't include
+notification-relevant events
 
 ```typescript
 export const EventType = z.enum([
@@ -499,16 +530,19 @@ export const MessageSchema = z.object({
       memberIds: z.array(z.string().min(1)).min(1),
     }),
   ]),
-  links: z.array(
-    z.object({
-      type: z.string().min(1),
-      id: z.string().min(1),
-    })
-  ).optional(),
+  links: z
+    .array(
+      z.object({
+        type: z.string().min(1),
+        id: z.string().min(1),
+      }),
+    )
+    .optional(),
 });
 ```
 
 **Why Good:**
+
 - **Channel segregation** - Separates system alerts from user messages
 - **Flexible targeting** - Supports both broadcast and targeted delivery
 - **Resource linking** - Connects messages to related entities
@@ -525,6 +559,7 @@ export const MessageSchema = z.object({
 ```
 
 **Why Bad:**
+
 - **Unbounded growth** - Array grows with every reader
 - **Document size limit** - Firestore 1MB limit hit in large orgs
 - **Write conflicts** - Concurrent reads cause conflicts
@@ -578,6 +613,7 @@ export const POST = createOrgEndpoint({
 ```
 
 **Why Bad:**
+
 - No Firestore write to mark schedule as published
 - No notification delivery code
 - No receipt creation for audit
@@ -630,7 +666,7 @@ export const POST = createOrgEndpoint({
     // 4. Queue notifications (if enabled)
     if (input.notifyUsers) {
       const staff = await getScheduleStaff(scheduleId);
-      const jobs = staff.map(user => ({
+      const jobs = staff.map((user) => ({
         type: "notification.schedule.published",
         userId: user.uid,
         scheduleId,
@@ -722,7 +758,6 @@ export async function processNotificationQueue() {
       } else {
         await markJobFailed(job.id, "max_retries_exceeded");
       }
-
     } catch (error) {
       console.error("Notification processing failed", { job, error });
       await handleJobError(job.id, error);
@@ -794,22 +829,22 @@ export async function processNotificationQueue() {
 
 ## 7. Recommendations Summary
 
-| Priority | Action | Estimated Effort |
-|----------|--------|-----------------|
-| P0 | Implement notification delivery pipeline (email, SMS, push) | 2-3 weeks |
-| P0 | Create notification queue system (Cloud Tasks or Bull/Redis) | 1 week |
-| P0 | Add notification preferences schema and UI | 1 week |
-| P0 | Fix read tracking scalability (subcollection or map) | 2-3 days |
-| P1 | Implement template system with variable substitution | 1 week |
-| P1 | Add delivery status tracking and logging | 1 week |
-| P1 | Create notification-related event types | 2 days |
-| P1 | Implement idempotency and deduplication | 3 days |
-| P2 | Add rate limiting per user/org | 2-3 days |
-| P2 | Build notification history UI for users | 1 week |
-| P2 | Add retry logic with exponential backoff | 3-4 days |
-| P2 | Implement digest mode (daily/weekly summaries) | 1 week |
-| P3 | Add A/B testing for notification templates | 1 week |
-| P3 | Multi-language support (i18n) | 1-2 weeks |
+| Priority | Action                                                       | Estimated Effort |
+| -------- | ------------------------------------------------------------ | ---------------- |
+| P0       | Implement notification delivery pipeline (email, SMS, push)  | 2-3 weeks        |
+| P0       | Create notification queue system (Cloud Tasks or Bull/Redis) | 1 week           |
+| P0       | Add notification preferences schema and UI                   | 1 week           |
+| P0       | Fix read tracking scalability (subcollection or map)         | 2-3 days         |
+| P1       | Implement template system with variable substitution         | 1 week           |
+| P1       | Add delivery status tracking and logging                     | 1 week           |
+| P1       | Create notification-related event types                      | 2 days           |
+| P1       | Implement idempotency and deduplication                      | 3 days           |
+| P2       | Add rate limiting per user/org                               | 2-3 days         |
+| P2       | Build notification history UI for users                      | 1 week           |
+| P2       | Add retry logic with exponential backoff                     | 3-4 days         |
+| P2       | Implement digest mode (daily/weekly summaries)               | 1 week           |
+| P3       | Add A/B testing for notification templates                   | 1 week           |
+| P3       | Multi-language support (i18n)                                | 1-2 weeks        |
 
 **Total Estimated Effort:** 10-14 weeks
 
@@ -896,10 +931,7 @@ export async function sendEmail(params: EmailParams): Promise<DeliveryResult> {
 ```typescript
 import twilio from "twilio";
 
-const client = twilio(
-  process.env.TWILIO_ACCOUNT_SID,
-  process.env.TWILIO_AUTH_TOKEN
-);
+const client = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
 
 interface SMSParams {
   to: string; // E.164 format: +15551234567
@@ -984,6 +1016,7 @@ export async function sendPush(params: PushParams): Promise<DeliveryResult> {
 ---
 
 **Document Metadata:**
+
 - **Analyzed Files:** 8 type definitions, 2 API routes, 0 implementations
 - **Lines of Code Analyzed:** ~400 LOC (schemas only)
 - **Critical Findings:** 3 blocking issues

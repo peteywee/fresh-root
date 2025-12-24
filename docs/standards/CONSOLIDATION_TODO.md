@@ -11,14 +11,14 @@
 
 ## Teams & Roles
 
-| Team | Role | Parallelizable? |
-| --- | --- | --- |
-| **Research Team** | Discovery, analysis, validation | YES (for verification tasks) |
-| **Archive Team** | Move files to archive/ folders | YES (independent moves) |
-| **Merge Team** | Delete duplicates, relocate files | PARTIAL (after Archive) |
-| **Extract Team** | Create amendment files from sources | YES (after sources archived) |
-| **Index Team** | Create INDEX.md files | YES (after amendments created) |
-| **Validation Team** | Test and verify results | SEQUENTIAL (after all phases) |
+| Team                | Role                                | Parallelizable?                |
+| ------------------- | ----------------------------------- | ------------------------------ |
+| **Research Team**   | Discovery, analysis, validation     | YES (for verification tasks)   |
+| **Archive Team**    | Move files to archive/ folders      | YES (independent moves)        |
+| **Merge Team**      | Delete duplicates, relocate files   | PARTIAL (after Archive)        |
+| **Extract Team**    | Create amendment files from sources | YES (after sources archived)   |
+| **Index Team**      | Create INDEX.md files               | YES (after amendments created) |
+| **Validation Team** | Test and verify results             | SEQUENTIAL (after all phases)  |
 
 ---
 
@@ -34,7 +34,7 @@ graph TB
     F --> G[Validation]
     G --> H[Update copilot-instructions]
     H --> I[Create PR]
-    
+
     style A fill:#90EE90
     style B fill:#FFD700
     style C fill:#FFD700
@@ -58,7 +58,8 @@ graph TB
 - **Status**: ✅ COMPLETE
 - **Dependencies**: None
 - **Actions**:
-  - [x] Add `.claude/`, `repomix-output.*`, `docs/reports/pattern-validation-report.json`, `API_SCHEMA_AUDIT_REPORT.json` to .gitignore
+  - [x] Add `.claude/`, `repomix-output.*`, `docs/reports/pattern-validation-report.json`,
+        `API_SCHEMA_AUDIT_REPORT.json` to .gitignore
   - [x] Commit DOCUMENTATION_CONSOLIDATION_PLAN.md and ORCHESTRATOR_SUMMARY.md
 - **Commit**: `docs: add consolidation plan and update .gitignore for generated files`
 - **Result**: Baseline established
@@ -499,7 +500,7 @@ graph TB
 - **Status**: ⏸️ PENDING
 - **Dependencies**: Task 18 (directory created)
 - **Assignee**: Extract Worker 1
-- **Source**: archive/amendment-sources/BRANCH_STRATEGY_*.md
+- **Source**: archive/amendment-sources/BRANCH*STRATEGY*\*.md
 - **Target**: .github/governance/amendments/A05_BRANCH_STRATEGY.md
 - **Template**:
 
@@ -682,10 +683,10 @@ graph TB
   ```bash
   # Root .md files ≤2
   find . -maxdepth 1 -name "*.md" | wc -l
-  
+
   # No docs/*.md at root
   find docs/ -maxdepth 1 -name "*.md" -type f | wc -l
-  
+
   # Total .md <200
   find . -name "*.md" | wc -l
   ```
@@ -719,10 +720,10 @@ graph TB
   ```bash
   # No duplicates (same name in different locations)
   find . -name "*.md" -type f | xargs -n1 basename | sort | uniq -d
-  
+
   # Archive populated
   ls archive/ | wc -l  # Should have multiple subdirs
-  
+
   # All amendments have YAML frontmatter
   grep -L "^---$" .github/governance/amendments/*.md
   ```
@@ -778,29 +779,35 @@ graph TB
 
   ```markdown
   ## Summary
-  Consolidates 357 scattered markdown files into a hierarchical, indexed, AI-optimized documentation system aligned with canonical governance structure.
-  
+
+  Consolidates 357 scattered markdown files into a hierarchical, indexed, AI-optimized documentation
+  system aligned with canonical governance structure.
+
   ## Metrics
+
   - Total .md files: 357 → ~150 (58% reduction)
   - Root-level loose docs: 39 → 1 (97% reduction)
   - Duplicate files: 50+ → 0 (100% reduction)
   - Indexed files: 0 → 100% (complete coverage)
   - AI retrieval confidence: ~60% → 99% (39% improvement)
-  
+
   ## Changes
+
   - ✅ Archived 39 root-level docs
   - ✅ Deleted 50+ duplicates
   - ✅ Created 8 indexed amendments (L1)
   - ✅ Created 3 master INDEX.md files
   - ✅ Preserved canonical 12 governance docs (L0)
-  
+
   ## Testing
+
   - [x] File count validation
   - [x] Index existence verification
   - [x] AI retrieval tests passed
   - [x] No duplicate files found
-  
+
   ## References
+
   - Plan: docs/standards/DOCUMENTATION_CONSOLIDATION_PLAN.md
   - Execution: docs/standards/CONSOLIDATION_TODO.md
   ```

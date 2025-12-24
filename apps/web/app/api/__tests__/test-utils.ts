@@ -105,7 +105,11 @@ export interface MockFirebaseAuth {
   verifyIdToken: (token: string, checkRevoked?: boolean) => Promise<MockFirebaseUser>;
   createSessionCookie: (idToken: string, options?: unknown) => Promise<string>;
   createCustomToken: (uid: string, claims?: Record<string, unknown>) => Promise<string>;
-  createUser: (data: { email: string; password: string; displayName?: string }) => Promise<{ uid: string; email: string; displayName?: string }>;
+  createUser: (data: {
+    email: string;
+    password: string;
+    displayName?: string;
+  }) => Promise<{ uid: string; email: string; displayName?: string }>;
   deleteUser: (uid: string) => Promise<void>;
   getUserByEmail: (email: string) => Promise<MockFirebaseUser>;
   getUser: (uid: string) => Promise<MockFirebaseUser>;
@@ -134,7 +138,7 @@ export interface MockFirebaseAuth {
 export function createMockRequest(
   method: string,
   url: string,
-  options: MockRequestOptions = {}
+  options: MockRequestOptions = {},
 ): NextRequest {
   const { body, headers = {}, cookies = {}, searchParams = {} } = options;
 
@@ -161,7 +165,10 @@ export function createMockRequest(
     init.body = JSON.stringify(body);
   }
 
-  const request = new NextRequest(urlObj.toString(), init as RequestInit & { signal?: AbortSignal });
+  const request = new NextRequest(
+    urlObj.toString(),
+    init as RequestInit & { signal?: AbortSignal },
+  );
 
   // Mock cookies
   Object.entries(cookies).forEach(([name, value]) => {
@@ -188,7 +195,7 @@ export function createMockRequest(
  */
 export function createMockAuthContext(
   userId: string,
-  claims: Record<string, unknown> = {}
+  claims: Record<string, unknown> = {},
 ): AuthContext {
   return {
     userId,
@@ -218,7 +225,7 @@ export function createMockAuthContext(
 export function createMockOrgContext(
   orgId: string,
   role: OrgRole,
-  membershipId?: string
+  membershipId?: string,
 ): OrgContext {
   return {
     orgId,
@@ -285,8 +292,7 @@ export function mockFirebaseAdmin() {
   });
 
   const createMockCollection = (collectionPath: string): MockCollectionReference => ({
-    doc: (docId?: string) =>
-      createMockDocRef(`${collectionPath}/${docId || `doc-${Date.now()}`}`),
+    doc: (docId?: string) => createMockDocRef(`${collectionPath}/${docId || `doc-${Date.now()}`}`),
     where: function () {
       return this;
     },
@@ -472,7 +478,7 @@ export function mockFirebaseAdmin() {
 
 export type RouteHandler = (
   request: NextRequest,
-  context?: { params: Promise<Record<string, string>> }
+  context?: { params: Promise<Record<string, string>> },
 ) => Promise<NextResponse> | NextResponse;
 
 /**
@@ -498,7 +504,7 @@ export type RouteHandler = (
 export async function callEndpoint(
   handler: RouteHandler,
   request: NextRequest,
-  params: Record<string, string> = {}
+  params: Record<string, string> = {},
 ): Promise<NextResponse> {
   const context = {
     params: Promise.resolve(params),
@@ -541,7 +547,7 @@ export async function expectSuccess<T = unknown>(response: NextResponse): Promis
 export async function expectError(
   response: NextResponse,
   expectedStatus: number,
-  expectedCode?: string
+  expectedCode?: string,
 ): Promise<{ code: string; message: string }> {
   if (response.status !== expectedStatus) {
     const body = await response.text();

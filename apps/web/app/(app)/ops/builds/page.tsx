@@ -150,7 +150,11 @@ export default function BuildsPage() {
         <StatCard
           title="Avg Build Time"
           value={stats ? formatDuration(stats.avgTotal) : "-"}
-          subtext={stats && stats.trend !== "neutral" ? `${stats.trendPercent.toFixed(0)}% ${stats.trend === "up" ? "improving" : "degrading"}` : "Stable"}
+          subtext={
+            stats && stats.trend !== "neutral"
+              ? `${stats.trendPercent.toFixed(0)}% ${stats.trend === "up" ? "improving" : "degrading"}`
+              : "Stable"
+          }
         />
         <StatCard title="P50 Duration" value={stats ? formatDuration(stats.p50) : "-"} />
         <StatCard title="P95 Duration" value={stats ? formatDuration(stats.p95) : "-"} />
@@ -207,13 +211,15 @@ export default function BuildsPage() {
                 // Validate timestamp before rendering
                 const ts = new Date(entry.timestamp);
                 const isValidDate = !isNaN(ts.getTime());
-                
+
                 return (
                   <tr key={entry.id} className="hover:bg-slate-800/30">
                     <td className="whitespace-nowrap px-4 py-3 text-sm text-slate-300">
                       {isValidDate ? ts.toLocaleString() : "Invalid date"}
                     </td>
-                    <td className="px-4 py-3 font-mono text-xs text-slate-400">{entry.sha.slice(0, 7)}</td>
+                    <td className="px-4 py-3 font-mono text-xs text-slate-400">
+                      {entry.sha.slice(0, 7)}
+                    </td>
                     <td className="whitespace-nowrap px-4 py-3 text-right text-sm text-slate-300">
                       {formatDuration(entry.installSeconds)}
                     </td>

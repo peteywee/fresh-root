@@ -12,7 +12,8 @@ relatedAmendments: ["A07_FIREBASE_IMPL.md", "A03_SECURITY_AMENDMENTS.md"]
 
 ## Problem Statement
 
-SDK factory routes (`createOrgEndpoint`, `createPublicEndpoint`, etc.) have experienced repeated merge conflicts and automated rewrites due to conflicting incentives:
+SDK factory routes (`createOrgEndpoint`, `createPublicEndpoint`, etc.) have experienced repeated
+merge conflicts and automated rewrites due to conflicting incentives:
 
 - **Lint cleanup** removes unused handler parameters to satisfy ESLint.
 - **SDK standardization** re-adds parameters (especially `context`) to maintain type consistency.
@@ -29,7 +30,8 @@ Result:    MERGE CONFLICT on the same line
 
 ## Solution: Handler Signature Invariant
 
-All SDK factory routes MUST follow a locked-in handler destructuring shape. This breaks the churn cycle by:
+All SDK factory routes MUST follow a locked-in handler destructuring shape. This breaks the churn
+cycle by:
 
 1. **Fixing the type shape** so scripts stop re-adding/removing parameters.
 2. **Using underscore convention** to satisfy ESLint without deleting parameters.
@@ -39,35 +41,38 @@ All SDK factory routes MUST follow a locked-in handler destructuring shape. This
 
 ### Rule
 
-All handlers created via any SDK factory endpoint (`createEndpoint`, `createOrgEndpoint`, `createPublicEndpoint`, `createAuthenticatedEndpoint`, `createAdminEndpoint`, `createRateLimitedEndpoint`) MUST destructure exactly these four parameters:
+All handlers created via any SDK factory endpoint (`createEndpoint`, `createOrgEndpoint`,
+`createPublicEndpoint`, `createAuthenticatedEndpoint`, `createAdminEndpoint`,
+`createRateLimitedEndpoint`) MUST destructure exactly these four parameters:
 
 ```typescript
 handler: async ({ request, input, context, params }) => {
   // business logic
-}
+};
 ```
 
 ### Unused Parameter Convention
 
-If a parameter is not used in the handler, rename it with an underscore prefix **in the destructuring**:
+If a parameter is not used in the handler, rename it with an underscore prefix **in the
+destructuring**:
 
 ```typescript
 // ✅ CORRECT: Keep shape, prefix unused param
 handler: async ({ request: _request, input, context: _context, params }) => {
   // Only uses 'params'
-}
+};
 
 // ❌ WRONG: Deleting params changes shape
 handler: async ({ params }) => {
   // This triggers re-standardization on next SDK update
-}
+};
 
 // ❌ WRONG: Renaming at assignment level (defeats linting)
 handler: async ({ request, input, context, params }) => {
   const _request = request;
   const _input = input;
   // This still triggers "unused import" warnings
-}
+};
 ```
 
 ### Why Underscore Inside Destructuring
@@ -99,11 +104,13 @@ Routes MUST configure ESLint to allow underscore-prefixed destructured arguments
 },
 ```
 
-This exempts underscore-prefixed destructured arguments from lint warnings, removing the incentive to delete them.
+This exempts underscore-prefixed destructured arguments from lint warnings, removing the incentive
+to delete them.
 
 ## Script Safeguards
 
-All scripts that modify route.ts files (`scripts/complete-migrate-routes.mjs`, `scripts/safe-migrate-routes.mjs`, `scripts/refactor-all.mjs`) MUST:
+All scripts that modify route.ts files (`scripts/complete-migrate-routes.mjs`,
+`scripts/safe-migrate-routes.mjs`, `scripts/refactor-all.mjs`) MUST:
 
 1. **Preserve the canonical shape** when replacing handler code.
 2. **Never delete top-level destructuring parameters** from handler signatures.
@@ -134,7 +141,8 @@ A validator script (`scripts/validate-handler-signature.mjs`) MUST run in:
 
 The validator checks:
 
-- All handlers in route.ts files destructure exactly 4 parameters: `request`, `input`, `context`, `params`.
+- All handlers in route.ts files destructure exactly 4 parameters: `request`, `input`, `context`,
+  `params`.
 - Parameters may be underscore-prefixed if unused.
 - No merge conflict markers in handler code.
 - No parameter reordering (destructure in order: request, input, context, params).
@@ -145,12 +153,12 @@ Validator output on violation:
 ❌ HANDLER SIGNATURE VIOLATION
    File: apps/web/app/api/schedules/route.ts
    Handler: POST (line 42)
-   
+
    Expected: handler: async ({ request, input, context, params }) => ...
    Found:    handler: async ({ context, params }) => ...
-   
+
    Reason: Missing 'request' and 'input' parameters
-   
+
    Fix: Rename unused params with underscore prefix:
         handler: async ({ request: _request, input: _input, context, params }) => ...
 ```
@@ -211,7 +219,7 @@ handler: async ({ request, input, context, params }) => {
   const _request = request;
   const _input = input;
   // ❌ VIOLATES INTENT: Still triggers ESLint warnings; ESLint rule won't match
-}
+};
 ```
 
 **Wrong parameter order:**
@@ -223,14 +231,14 @@ handler: async ({ context, request, params, input }) => { ... }
 
 ## Implementation Timeline
 
-| Phase | Action | Owner | Target Date |
-|-------|--------|-------|-------------|
-| **1** | Lock canonical rule (this amendment) | AI Agent | Dec 17, 2025 |
-| **2** | Update ESLint config + fix current route | AI Agent | Dec 17, 2025 |
-| **3** | Audit and harden migration scripts | AI Agent | Dec 17, 2025 |
+| Phase | Action                                            | Owner    | Target Date  |
+| ----- | ------------------------------------------------- | -------- | ------------ |
+| **1** | Lock canonical rule (this amendment)              | AI Agent | Dec 17, 2025 |
+| **2** | Update ESLint config + fix current route          | AI Agent | Dec 17, 2025 |
+| **3** | Audit and harden migration scripts                | AI Agent | Dec 17, 2025 |
 | **4** | Create validator script + integrate CI/pre-commit | AI Agent | Dec 17, 2025 |
-| **5** | Backfill all 22 remaining routes | AI Agent | Dec 17, 2025 |
-| **6** | Multi-pass verification (confirm churn is dead) | AI Agent | Dec 17, 2025 |
+| **5** | Backfill all 22 remaining routes                  | AI Agent | Dec 17, 2025 |
+| **6** | Multi-pass verification (confirm churn is dead)   | AI Agent | Dec 17, 2025 |
 
 ## Success Criteria
 
@@ -249,15 +257,18 @@ handler: async ({ context, request, params, input }) => { ... }
 ## Rollout
 
 1. **Apply to all existing routes** (Phase 5 of master plan).
-2. **Update API route template** (`apps/web/app/api/_template/route.ts`) to demonstrate canonical signature.
+2. **Update API route template** (`apps/web/app/api/_template/route.ts`) to demonstrate canonical
+   signature.
 3. **Document in README and instructions** (reference this amendment).
 4. **Monitor CI validator** for any violations (should be zero after backfill).
 
 ## Related Standards
 
-- [A03_SECURITY_AMENDMENTS.md](./A03_SECURITY_AMENDMENTS.md) — Organization scoping and auth patterns.
+- [A03_SECURITY_AMENDMENTS.md](./A03_SECURITY_AMENDMENTS.md) — Organization scoping and auth
+  patterns.
 - [A07_FIREBASE_IMPL.md](./A07_FIREBASE_IMPL.md) — Firebase Admin SDK usage.
-- [api-framework-memory.instructions.md](../.github/instructions/api-framework-memory.instructions.md) — SDK factory typing strategy.
+- [api-framework-memory.instructions.md](../.github/instructions/api-framework-memory.instructions.md)
+  — SDK factory typing strategy.
 
 ---
 

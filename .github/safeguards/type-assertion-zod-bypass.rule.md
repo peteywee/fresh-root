@@ -11,11 +11,14 @@
 ## Problem Definition
 
 The **Triad of Trust** pattern requires:
+
 1. ✅ Zod schema in `packages/types/src/`
 2. ✅ API route with input validation
 3. ✅ Firestore rules enforcement
 
-**This pattern violates rule #2** by using type assertions (`as Record<string, unknown>`, `as any`) that:
+**This pattern violates rule #2** by using type assertions (`as Record<string, unknown>`, `as any`)
+that:
+
 - Bypass Zod schema validation
 - Hide type mismatches at runtime
 - Defeat TypeScript's type safety
@@ -31,6 +34,7 @@ const result = await process(input as any);
 ```
 
 **Why this breaks trust**:
+
 ```
 Zod validation ✅ → Type Assertion ❌ → No validation happening!
                     (Trust broken here)
@@ -41,6 +45,7 @@ Zod validation ✅ → Type Assertion ❌ → No validation happening!
 ## Detection Rules
 
 ### ESLint Configuration
+
 Add to `eslint.config.mjs`:
 
 ```javascript
@@ -61,6 +66,7 @@ Add to `eslint.config.mjs`:
 ```
 
 ### Pre-Commit Hook Check
+
 Add to `.husky/pre-commit`:
 
 ```bash
@@ -92,7 +98,7 @@ export const PATCH = createOrgEndpoint({
   handler: async ({ input, context }) => {
     // input is type-safe and validated
     const shiftData = input;  // ✅ No type assertion needed
-    
+
     // Firestore operation
     await db.doc(...).update(shiftData);
     return NextResponse.json(shiftData);
@@ -118,27 +124,30 @@ export const PATCH = createOrgEndpoint({
 
 ## Files Requiring Fix (Priority Order)
 
-| File | Issue | Fix |
-|------|-------|-----|
-| `batch/route.ts` | 6× `as any` | Define item schema, validate array |
-| `shifts/route.ts` | 3× type assertions | Use SDK factory input validation |
-| `positions/route.ts` | 2× type assertions | Use SDK factory input validation |
-| `organizations/route.ts` | 2× type assertions | Use SDK factory input validation |
-| `session/bootstrap/route.ts` | `context: any` | Type context parameter |
-| `publish/route.ts` | `context: any` | Type context parameter |
+| File                         | Issue              | Fix                                |
+| ---------------------------- | ------------------ | ---------------------------------- |
+| `batch/route.ts`             | 6× `as any`        | Define item schema, validate array |
+| `shifts/route.ts`            | 3× type assertions | Use SDK factory input validation   |
+| `positions/route.ts`         | 2× type assertions | Use SDK factory input validation   |
+| `organizations/route.ts`     | 2× type assertions | Use SDK factory input validation   |
+| `session/bootstrap/route.ts` | `context: any`     | Type context parameter             |
+| `publish/route.ts`           | `context: any`     | Type context parameter             |
 
 ---
 
 ## Validation Gates
 
 ### Before Commit
+
 ```bash
 # Must pass with 0 violations
 eslint --rule '@typescript-eslint/no-explicit-any: error' apps/web/app/api/**/*.ts
 ```
 
 ### TypeScript Strict Mode
+
 Ensure `tsconfig.json`:
+
 ```json
 {
   "compilerOptions": {
@@ -151,7 +160,9 @@ Ensure `tsconfig.json`:
 ```
 
 ### Test Coverage
+
 All routes with assertions must have:
+
 - ✅ Input validation tests
 - ✅ Type safety tests
 - ✅ Firestore rule tests
@@ -172,7 +183,8 @@ API Route (Validates input)
 Firestore Rules (Enforces at DB)
 ```
 
-Type assertions break this chain at step 2, allowing invalid data to flow to Firestore where security rules might also fail, leaving gaps.
+Type assertions break this chain at step 2, allowing invalid data to flow to Firestore where
+security rules might also fail, leaving gaps.
 
 ### Long-term Solution
 
@@ -186,6 +198,7 @@ Type assertions break this chain at step 2, allowing invalid data to flow to Fir
 ## Red Team Veto Triggers
 
 🚫 **BLOCK DEPLOYMENT IF:**
+
 - New type assertions added to API routes
 - Any `as any` in handler functions
 - Input parameter typed as `unknown` instead of validated schema

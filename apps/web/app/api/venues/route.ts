@@ -27,11 +27,8 @@ export const GET = createOrgEndpoint({
       // D5: Fetch from Firestore if FIRESTORE_WRITES enabled
       if (FLAGS.FIRESTORE_WRITES) {
         const db = getFirestore();
-        const snapshot = await db
-          .collection(`orgs/${orgId}/venues`)
-          .orderBy("name")
-          .get();
-        
+        const snapshot = await db.collection(`orgs/${orgId}/venues`).orderBy("name").get();
+
         const venues = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
         return ok({ venues, total: venues.length });
       }

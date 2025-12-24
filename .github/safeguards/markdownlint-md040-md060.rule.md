@@ -12,7 +12,7 @@
 Two recurring markdownlint issues degrade doc quality and create noisy CI/editor warnings:
 
 1. **`MD040`**: Fenced code blocks without a language specifier
-   - Example: a plain fence like ``` without `bash` / `typescript` / `text`
+   - Example: a plain fence like ```without`bash`/`typescript`/`text`
    - Impact: inconsistent rendering, missing syntax highlighting, lint noise
 
 2. **`MD060`**: Tables with inconsistent spacing/padding around pipes and separators

@@ -1,7 +1,7 @@
 # /iterate — Multi-Agent Implementation Orchestrator
 
-> **Usage:** `/iterate <objective>`
-> **Purpose:** Break complex objectives into optimized task graphs, assign to specialized subagents, validate via red team, finalize with srdev, then execute.
+> **Usage:** `/iterate <objective>` **Purpose:** Break complex objectives into optimized task
+> graphs, assign to specialized subagents, validate via red team, finalize with srdev, then execute.
 
 ---
 
@@ -32,40 +32,40 @@ success_criteria:
 
 ### 1.1 Decomposition Rules
 
-| Complexity | Strategy | Max Parallel | Max Depth |
-| ---------- | -------- | ------------ | --------- |
-| Trivial | Single sequential | 1 | 1 |
-| Moderate | Parallel batch | 3 | 2 |
-| Complex | Hybrid DAG | 5 | 3 |
-| Epic | Phased hybrid | 8 | 4 |
+| Complexity | Strategy          | Max Parallel | Max Depth |
+| ---------- | ----------------- | ------------ | --------- |
+| Trivial    | Single sequential | 1            | 1         |
+| Moderate   | Parallel batch    | 3            | 2         |
+| Complex    | Hybrid DAG        | 5            | 3         |
+| Epic       | Phased hybrid     | 8            | 4         |
 
 ### 1.2 Task Schema
 
 ```typescript
 interface Task {
-  id: string;                    // T-001, T-002, etc.
-  title: string;                 // Action-oriented (verb + noun)
-  agent: AgentRole;              // Who executes
+  id: string; // T-001, T-002, etc.
+  title: string; // Action-oriented (verb + noun)
+  agent: AgentRole; // Who executes
   type: "parallel" | "sequential" | "gate";
-  dependencies: string[];        // Task IDs that must complete first
-  inputs: string[];              // Artifacts from dependencies
-  outputs: string[];             // Artifacts produced
-  success_criteria: string[];    // Must all pass for completion
-  dod: string[];                 // Definition of Done checklist
+  dependencies: string[]; // Task IDs that must complete first
+  inputs: string[]; // Artifacts from dependencies
+  outputs: string[]; // Artifacts produced
+  success_criteria: string[]; // Must all pass for completion
+  dod: string[]; // Definition of Done checklist
   estimated_minutes: number;
   risk: "low" | "medium" | "high";
 }
 
-type AgentRole = 
-  | "architect"     // System design, API contracts, schema changes
-  | "implementer"   // Code writing, refactoring
-  | "tester"        // Test creation, coverage analysis
-  | "reviewer"      // Code review, pattern validation
-  | "docs"          // Documentation updates
-  | "ops"           // CI/CD, deployment, infrastructure
-  | "security"      // Security audit, vulnerability check
-  | "redteam"       // Adversarial review, edge cases
-  | "srdev";        // Final authority, synthesis
+type AgentRole =
+  | "architect" // System design, API contracts, schema changes
+  | "implementer" // Code writing, refactoring
+  | "tester" // Test creation, coverage analysis
+  | "reviewer" // Code review, pattern validation
+  | "docs" // Documentation updates
+  | "ops" // CI/CD, deployment, infrastructure
+  | "security" // Security audit, vulnerability check
+  | "redteam" // Adversarial review, edge cases
+  | "srdev"; // Final authority, synthesis
 ```
 
 ### 1.3 Graph Optimization
@@ -112,55 +112,54 @@ type AgentRole =
 ```markdown
 ## Task Assignment: {task.id}
 
-**Agent:** @{agent_role}
-**Title:** {task.title}
-**Type:** {task.type}
-**Dependencies:** {task.dependencies.join(", ") || "None"}
+**Agent:** @{agent_role} **Title:** {task.title} **Type:** {task.type} **Dependencies:**
+{task.dependencies.join(", ") || "None"}
 
 ### Context
+
 {relevant_context_from_codebase}
 
 ### Inputs
+
 {task.inputs.map(i => `- ${i}`).join("\n")}
 
 ### Deliverables
+
 {task.outputs.map(o => `- [ ] ${o}`).join("\n")}
 
 ### Success Criteria
+
 {task.success_criteria.map((c, i) => `${i+1}. ${c}`).join("\n")}
 
 ### Definition of Done
+
 {task.dod.map(d => `- [ ] ${d}`).join("\n")}
 
 ### Constraints
+
 - Time budget: {task.estimated_minutes} minutes
 - Risk level: {task.risk}
 - Must not break: {constraints.must_preserve.join(", ")}
 
 ### Handoff
-When complete, produce artifact and report:
-\`\`\`yaml
-task_id: {task.id}
-status: complete | blocked | failed
-artifacts: []
-blockers: []
-notes: ""
-\`\`\`
+
+When complete, produce artifact and report: \`\`\`yaml task_id: {task.id} status: complete | blocked
+| failed artifacts: [] blockers: [] notes: "" \`\`\`
 ```
 
 ### 2.2 Agent Specializations
 
-| Agent | Focus | Tools | Validation |
-| ----- | ----- | ----- | ---------- |
-| **architect** | Design decisions, contracts | read_file, semantic_search, create_file | Schema compiles, no circular deps |
-| **implementer** | Code changes | replace_string_in_file, create_file | TypeScript compiles, lint passes |
-| **tester** | Test coverage | create_file, runTests | Tests pass, coverage ≥ threshold |
-| **reviewer** | Pattern validation | grep_search, read_file | No anti-patterns found |
-| **docs** | Documentation | create_file, replace_string_in_file | Links valid, examples run |
-| **ops** | Infrastructure | run_in_terminal, create_file | CI passes, deploys work |
-| **security** | Vulnerabilities | grep_search, semantic_search | No secrets, no injection vectors |
-| **redteam** | Break it | All tools | Finds edge cases, documents risks |
-| **srdev** | Final synthesis | All tools | Integrates all feedback, final call |
+| Agent           | Focus                       | Tools                                   | Validation                          |
+| --------------- | --------------------------- | --------------------------------------- | ----------------------------------- |
+| **architect**   | Design decisions, contracts | read_file, semantic_search, create_file | Schema compiles, no circular deps   |
+| **implementer** | Code changes                | replace_string_in_file, create_file     | TypeScript compiles, lint passes    |
+| **tester**      | Test coverage               | create_file, runTests                   | Tests pass, coverage ≥ threshold    |
+| **reviewer**    | Pattern validation          | grep_search, read_file                  | No anti-patterns found              |
+| **docs**        | Documentation               | create_file, replace_string_in_file     | Links valid, examples run           |
+| **ops**         | Infrastructure              | run_in_terminal, create_file            | CI passes, deploys work             |
+| **security**    | Vulnerabilities             | grep_search, semantic_search            | No secrets, no injection vectors    |
+| **redteam**     | Break it                    | All tools                               | Finds edge cases, documents risks   |
+| **srdev**       | Final synthesis             | All tools                               | Integrates all feedback, final call |
 
 ---
 
@@ -172,24 +171,24 @@ notes: ""
 def execute_graph(tasks: List[Task]) -> ExecutionResult:
     completed = set()
     results = {}
-    
+
     while len(completed) < len(tasks):
         # Find ready tasks (all deps satisfied)
-        ready = [t for t in tasks 
-                 if t.id not in completed 
+        ready = [t for t in tasks
+                 if t.id not in completed
                  and all(d in completed for d in t.dependencies)]
-        
+
         # Batch by type
         parallel_batch = [t for t in ready if t.type == "parallel"]
         sequential = [t for t in ready if t.type == "sequential"]
         gates = [t for t in ready if t.type == "gate"]
-        
+
         # Execute parallel batch concurrently
         if parallel_batch:
             batch_results = parallel_execute(parallel_batch)
             results.update(batch_results)
             completed.update(t.id for t in parallel_batch if batch_results[t.id].success)
-        
+
         # Execute sequential one at a time
         for task in sequential:
             result = execute_single(task)
@@ -198,7 +197,7 @@ def execute_graph(tasks: List[Task]) -> ExecutionResult:
                 completed.add(task.id)
             else:
                 break  # Stop on failure
-        
+
         # Gates must pass before continuing
         for gate in gates:
             result = execute_single(gate)
@@ -206,7 +205,7 @@ def execute_graph(tasks: List[Task]) -> ExecutionResult:
             if not result.success:
                 return ExecutionResult(success=False, blocked_by=gate.id)
             completed.add(gate.id)
-    
+
     return ExecutionResult(success=True, results=results)
 ```
 
@@ -228,12 +227,12 @@ On task failure:
 ```markdown
 ## 🔴 Red Team Review: {objective}
 
-**Review Scope:**
-{completed_tasks.map(t => `- ${t.id}: ${t.title}`).join("\n")}
+**Review Scope:** {completed_tasks.map(t => `- ${t.id}: ${t.title}`).join("\n")}
 
 **Your Mission:** Find problems before production does.
 
 ### Attack Vectors
+
 1. **Input Validation** — Can malformed input crash or bypass?
 2. **Race Conditions** — What if concurrent requests hit this?
 3. **Edge Cases** — Empty arrays, null refs, max values?
@@ -242,6 +241,7 @@ On task failure:
 6. **Rollback** — If this fails in prod, can we recover?
 
 ### Review Checklist
+
 - [ ] All success criteria actually verified (not just "looks good")
 - [ ] Error paths tested, not just happy path
 - [ ] Breaking changes have migration path
@@ -250,17 +250,11 @@ On task failure:
 - [ ] Logging doesn't leak PII
 
 ### Output Format
-\`\`\`yaml
-verdict: approved | conditional | rejected
-issues:
-  - severity: critical | high | medium | low
-    title: ""
-    description: ""
-    affected_tasks: []
-    suggested_fix: ""
-recommendations: []
-risks_accepted: []
-\`\`\`
+
+\`\`\`yaml verdict: approved | conditional | rejected issues:
+
+- severity: critical | high | medium | low title: "" description: "" affected_tasks: []
+  suggested_fix: "" recommendations: [] risks_accepted: [] \`\`\`
 ```
 
 ---
@@ -272,13 +266,12 @@ risks_accepted: []
 ```markdown
 ## 🎯 SrDev Final Review: {objective}
 
-**Implementation Summary:**
-{task_results_summary}
+**Implementation Summary:** {task_results_summary}
 
-**Red Team Findings:**
-{redteam_output}
+**Red Team Findings:** {redteam_output}
 
 ### Your Responsibilities
+
 1. **Validate** — Are success criteria actually met?
 2. **Integrate** — Do all pieces work together?
 3. **Correct** — Fix any issues red team found
@@ -286,9 +279,11 @@ risks_accepted: []
 5. **Decide** — Ship, iterate, or abort?
 
 ### Corrections Required
+
 {redteam_issues.filter(i => i.severity in ["critical", "high"]).map(format)}
 
 ### Considerations
+
 - Backward compatibility impact
 - Documentation gaps
 - Test coverage adequacy
@@ -296,21 +291,11 @@ risks_accepted: []
 - Rollout strategy
 
 ### Final Implementation Plan
-\`\`\`yaml
-decision: ship | iterate | abort
-corrections:
-  - task_id: ""
-    action: ""
-    owner: ""
-rollout:
-  strategy: immediate | staged | feature-flagged
-  stages: []
-monitoring:
-  alerts: []
-  dashboards: []
-documentation:
-  updates_required: []
-\`\`\`
+
+\`\`\`yaml decision: ship | iterate | abort corrections:
+
+- task_id: "" action: "" owner: "" rollout: strategy: immediate | staged | feature-flagged stages:
+  [] monitoring: alerts: [] dashboards: [] documentation: updates_required: [] \`\`\`
 ```
 
 ---
@@ -322,27 +307,30 @@ documentation:
 ```markdown
 ## ⚡ Execute Implementation Plan
 
-**Decision:** {srdev_decision}
-**Corrections Applied:** {corrections_count}
+**Decision:** {srdev_decision} **Corrections Applied:** {corrections_count}
 
 ### Execution Order
+
 {final_task_order.map((t, i) => `${i+1}. ${t.id}: ${t.title}`).join("\n")}
 
 ### Pre-Flight Checks
+
 - [ ] All corrections from srdev applied
 - [ ] Tests passing locally
 - [ ] No merge conflicts with main
 - [ ] CI/CD pipeline ready
 
 ### Execute
+
 {for each task in order}
-  1. Apply changes for {task.id}
-  2. Verify success criteria
-  3. Run tests
-  4. Commit with message: "{task.id}: {task.title}"
-{end for}
+
+1. Apply changes for {task.id}
+2. Verify success criteria
+3. Run tests
+4. Commit with message: "{task.id}: {task.title}" {end for}
 
 ### Post-Execution
+
 - [ ] All tests green
 - [ ] Commit history clean
 - [ ] PR ready for review (if applicable)
@@ -386,54 +374,54 @@ tasks:
     type: gate
     dependencies: []
     outputs: [schema.ts, validation-rules.md]
-    
+
   - id: T-002
     title: Implement CSV parser with streaming
     agent: implementer
     type: parallel
     dependencies: [T-001]
     outputs: [csv-parser.ts]
-    
+
   - id: T-003
     title: Implement validation pipeline
     agent: implementer
     type: parallel
     dependencies: [T-001]
     outputs: [validator.ts]
-    
+
   - id: T-004
     title: Create bulk import API endpoint
     agent: implementer
     type: sequential
     dependencies: [T-002, T-003]
     outputs: [route.ts]
-    
+
   - id: T-005
     title: Unit tests for parser and validator
     agent: tester
     type: parallel
     dependencies: [T-002, T-003]
     outputs: [*.test.ts]
-    
+
   - id: T-006
     title: Integration tests for import flow
     agent: tester
     type: sequential
     dependencies: [T-004, T-005]
     outputs: [import.integration.test.ts]
-    
+
   - id: T-007
     title: Red Team Review
     agent: redteam
     type: gate
     dependencies: [T-006]
-    
+
   - id: T-008
     title: SrDev Final
     agent: srdev
     type: gate
     dependencies: [T-007]
-    
+
   - id: T-009
     title: Execute
     agent: implementer
@@ -457,15 +445,15 @@ execution_order:
 
 ### Weighting Factors for Task Type Selection
 
-| Factor | Parallel Weight | Sequential Weight |
-| ------ | --------------- | ----------------- |
-| Independent files | +2 | 0 |
-| Shared state | -3 | +3 |
-| Test vs implementation | +1 | 0 |
-| Schema/contract changes | -2 | +2 |
-| Documentation | +2 | 0 |
-| High risk | -1 | +1 |
-| Time critical | +1 | -1 |
+| Factor                  | Parallel Weight | Sequential Weight |
+| ----------------------- | --------------- | ----------------- |
+| Independent files       | +2              | 0                 |
+| Shared state            | -3              | +3                |
+| Test vs implementation  | +1              | 0                 |
+| Schema/contract changes | -2              | +2                |
+| Documentation           | +2              | 0                 |
+| High risk               | -1              | +1                |
+| Time critical           | +1              | -1                |
 
 **Formula:**
 
@@ -476,15 +464,15 @@ if (is_blocking_downstream) task_type = "gate"
 
 ### Agent Selection Heuristics
 
-| Task Keywords | Primary Agent | Backup |
-| ------------- | ------------- | ------ |
-| schema, type, interface, contract | architect | srdev |
-| implement, create, add, fix | implementer | srdev |
-| test, coverage, spec | tester | implementer |
-| review, audit, check | reviewer | security |
-| docs, readme, guide | docs | implementer |
-| deploy, ci, pipeline | ops | srdev |
-| auth, security, encrypt | security | srdev |
+| Task Keywords                     | Primary Agent | Backup      |
+| --------------------------------- | ------------- | ----------- |
+| schema, type, interface, contract | architect     | srdev       |
+| implement, create, add, fix       | implementer   | srdev       |
+| test, coverage, spec              | tester        | implementer |
+| review, audit, check              | reviewer      | security    |
+| docs, readme, guide               | docs          | implementer |
+| deploy, ci, pipeline              | ops           | srdev       |
+| auth, security, encrypt           | security      | srdev       |
 
 ---
 
@@ -494,25 +482,25 @@ if (is_blocking_downstream) task_type = "gate"
 
 Each completed task receives a confidence score:
 
-| Score | Label | Meaning | Action |
-| ----- | ----- | ------- | ------ |
-| 90-100 | 🟢 **Ship** | Production ready, fully validated | Commit immediately |
-| 75-89 | 🟡 **Review** | Solid but needs second look | Peer review before commit |
-| 50-74 | 🟠 **Iterate** | Works but has gaps | Address gaps, re-score |
-| 25-49 | 🔴 **Rework** | Fundamental issues | Return to agent for fixes |
-| 0-24 | ⛔ **Abort** | Wrong approach entirely | Redesign from scratch |
+| Score  | Label          | Meaning                           | Action                    |
+| ------ | -------------- | --------------------------------- | ------------------------- |
+| 90-100 | 🟢 **Ship**    | Production ready, fully validated | Commit immediately        |
+| 75-89  | 🟡 **Review**  | Solid but needs second look       | Peer review before commit |
+| 50-74  | 🟠 **Iterate** | Works but has gaps                | Address gaps, re-score    |
+| 25-49  | 🔴 **Rework**  | Fundamental issues                | Return to agent for fixes |
+| 0-24   | ⛔ **Abort**   | Wrong approach entirely           | Redesign from scratch     |
 
 ### Confidence Calculation Formula
 
 ```typescript
 interface ConfidenceFactors {
-  tests_passing: number;        // 0-25 pts
+  tests_passing: number; // 0-25 pts
   success_criteria_met: number; // 0-25 pts
-  no_type_errors: number;       // 0-15 pts
-  no_lint_errors: number;       // 0-10 pts
+  no_type_errors: number; // 0-15 pts
+  no_lint_errors: number; // 0-10 pts
   documentation_complete: number; // 0-10 pts
-  security_reviewed: number;    // 0-10 pts
-  edge_cases_covered: number;   // 0-5 pts
+  security_reviewed: number; // 0-10 pts
+  edge_cases_covered: number; // 0-5 pts
 }
 
 function calculateConfidence(factors: ConfidenceFactors): number {
@@ -540,20 +528,20 @@ commit_confidence:
       abort: 0.0
 
   thresholds:
-    commit: 85      # Auto-commit if ≥85
-    review: 70      # Requires human review if 70-84
-    block: <70      # Cannot commit, must iterate
+    commit: 85 # Auto-commit if ≥85
+    review: 70 # Requires human review if 70-84
+    block: <70 # Cannot commit, must iterate
 ```
 
 ### Weight Assignment by Task Type
 
-| Task Type | Base Weight | Risk Multiplier | Final Weight |
-| --------- | ----------- | --------------- | ------------ |
-| Schema/Contract (gate) | 3.0 | × risk_factor | 3.0-4.5 |
-| Core Implementation | 2.0 | × risk_factor | 2.0-3.0 |
-| Tests | 1.5 | × 1.0 | 1.5 |
-| Documentation | 1.0 | × 1.0 | 1.0 |
-| Refactor | 1.0 | × risk_factor | 1.0-1.5 |
+| Task Type              | Base Weight | Risk Multiplier | Final Weight |
+| ---------------------- | ----------- | --------------- | ------------ |
+| Schema/Contract (gate) | 3.0         | × risk_factor   | 3.0-4.5      |
+| Core Implementation    | 2.0         | × risk_factor   | 2.0-3.0      |
+| Tests                  | 1.5         | × 1.0           | 1.5          |
+| Documentation          | 1.0         | × 1.0           | 1.0          |
+| Refactor               | 1.0         | × risk_factor   | 1.0-1.5      |
 
 ```typescript
 const RISK_MULTIPLIERS = {
@@ -570,7 +558,7 @@ const RISK_MULTIPLIERS = {
 confidence_report:
   timestamp: "2025-12-19T23:45:00Z"
   objective: "Implement Redis rate limiting"
-  
+
   tasks:
     - id: T-001
       title: "Design Redis client singleton"
@@ -585,7 +573,7 @@ confidence_report:
         security_reviewed: 7
         edge_cases_covered: 0
       weight: 3.0
-      
+
     - id: T-002
       title: "Implement rate limiter"
       agent: implementer
@@ -599,25 +587,25 @@ confidence_report:
         security_reviewed: 5
         edge_cases_covered: 3
       weight: 2.5
-  
+
   gates:
     redteam:
       verdict: conditional
       modifier: 0.85
       issues_found: 2
       issues_resolved: 1
-      
+
     srdev:
       decision: ship
       modifier: 1.0
       corrections: 1
-  
+
   aggregate:
     raw_score: 84.2
-    weighted_score: 71.57  # After modifiers
+    weighted_score: 71.57 # After modifiers
     final_confidence: 72
     recommendation: review
-    
+
   commit_decision:
     can_commit: false
     reason: "Below auto-commit threshold (85)"
@@ -666,16 +654,14 @@ confidence_report:
 
 ### Confidence-Based Actions
 
-| Final Score | Commit | Next Action |
-| ----------- | ------ | ----------- |
-| ≥ 90 | ✅ Auto | Deploy to staging |
-| 85-89 | ✅ Auto | Monitor closely |
-| 75-84 | 🔍 Review | Human approval required |
-| 60-74 | ⏸️ Hold | Fix blocking issues, re-iterate |
-| < 60 | ❌ Block | Major rework or abort |
+| Final Score | Commit    | Next Action                     |
+| ----------- | --------- | ------------------------------- |
+| ≥ 90        | ✅ Auto   | Deploy to staging               |
+| 85-89       | ✅ Auto   | Monitor closely                 |
+| 75-84       | 🔍 Review | Human approval required         |
+| 60-74       | ⏸️ Hold   | Fix blocking issues, re-iterate |
+| < 60        | ❌ Block  | Major rework or abort           |
 
 ---
 
-**Version:** 1.1.0
-**Last Updated:** December 19, 2025
-**Owner:** @srdev
+**Version:** 1.1.0 **Last Updated:** December 19, 2025 **Owner:** @srdev

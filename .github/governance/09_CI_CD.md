@@ -11,12 +11,12 @@ This document defines CI/CD workflows. Designed to be light and extensible.
 
 ## WORKFLOW OVERVIEW
 
-| Workflow | Trigger | Purpose |
-|----------|---------|---------|
-| `ci.yml` | PR, Push | Core validation |
-| `orchestrate.yml` | PR, Manual | Pipeline orchestration |
-| `deploy.yml` | Push to main | Production deployment |
-| `cleanup.yml` | Merged PR | Branch cleanup |
+| Workflow          | Trigger      | Purpose                |
+| ----------------- | ------------ | ---------------------- |
+| `ci.yml`          | PR, Push     | Core validation        |
+| `orchestrate.yml` | PR, Manual   | Pipeline orchestration |
+| `deploy.yml`      | Push to main | Production deployment  |
+| `cleanup.yml`     | Merged PR    | Branch cleanup         |
 
 ---
 
@@ -42,24 +42,24 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
+
       - uses: pnpm/action-setup@v2
         with:
           version: 8
-          
+
       - uses: actions/setup-node@v4
         with:
-          node-version: '20'
-          cache: 'pnpm'
-          
+          node-version: "20"
+          cache: "pnpm"
+
       - run: pnpm install --frozen-lockfile
-      
+
       - name: TypeScript
         run: pnpm typecheck
-        
+
       - name: Lint
         run: pnpm lint:check
-        
+
       - name: Format
         run: pnpm format:check
 
@@ -69,24 +69,24 @@ jobs:
     needs: static
     steps:
       - uses: actions/checkout@v4
-      
+
       - uses: pnpm/action-setup@v2
         with:
           version: 8
-          
+
       - uses: actions/setup-node@v4
         with:
-          node-version: '20'
-          cache: 'pnpm'
-          
+          node-version: "20"
+          cache: "pnpm"
+
       - run: pnpm install --frozen-lockfile
-      
+
       - name: Unit Tests
         run: pnpm test:unit
-        
+
       - name: Rules Tests
         run: pnpm test:rules
-        
+
       - name: Upload Coverage
         uses: codecov/codecov-action@v3
         if: always()
@@ -97,21 +97,21 @@ jobs:
     needs: test
     steps:
       - uses: actions/checkout@v4
-      
+
       - uses: pnpm/action-setup@v2
         with:
           version: 8
-          
+
       - uses: actions/setup-node@v4
         with:
-          node-version: '20'
-          cache: 'pnpm'
-          
+          node-version: "20"
+          cache: "pnpm"
+
       - run: pnpm install --frozen-lockfile
-      
+
       - name: Build
         run: pnpm build
-        
+
       - name: Upload Build
         uses: actions/upload-artifact@v4
         with:
@@ -134,7 +134,7 @@ on:
   workflow_dispatch:
     inputs:
       pipeline:
-        description: 'Pipeline to run'
+        description: "Pipeline to run"
         required: false
         type: choice
         options:
@@ -161,7 +161,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          
+
       - name: Detect Pipeline
         id: detect
         run: |
@@ -169,23 +169,23 @@ jobs:
             echo "pipeline=${{ inputs.pipeline }}" >> $GITHUB_OUTPUT
             exit 0
           fi
-          
+
           # Get changed files
           FILES=$(git diff --name-only origin/${{ github.base_ref }}...HEAD)
           FILE_COUNT=$(echo "$FILES" | wc -l)
-          
+
           # Check for security files
           IS_SECURITY=false
           if echo "$FILES" | grep -qE "(firestore\.rules|\.env|/auth/|/security/|api-framework)"; then
             IS_SECURITY=true
           fi
-          
+
           # Check for schema files
           IS_SCHEMA=false
           if echo "$FILES" | grep -qE "(packages/types/src/schemas|\.schema\.ts)"; then
             IS_SCHEMA=true
           fi
-          
+
           # Determine pipeline
           if [ "$IS_SECURITY" = true ]; then
             PIPELINE="Security.STANDARD"
@@ -198,7 +198,7 @@ jobs:
           else
             PIPELINE="Feature.HEAVY"
           fi
-          
+
           echo "pipeline=$PIPELINE" >> $GITHUB_OUTPUT
           echo "is_security=$IS_SECURITY" >> $GITHUB_OUTPUT
           echo "file_count=$FILE_COUNT" >> $GITHUB_OUTPUT
@@ -209,24 +209,24 @@ jobs:
     needs: classify
     steps:
       - uses: actions/checkout@v4
-      
+
       - uses: pnpm/action-setup@v2
         with:
           version: 8
-          
+
       - uses: actions/setup-node@v4
         with:
-          node-version: '20'
-          cache: 'pnpm'
-          
+          node-version: "20"
+          cache: "pnpm"
+
       - run: pnpm install --frozen-lockfile
-      
+
       - name: TypeScript
         run: pnpm typecheck
-        
+
       - name: Lint
         run: pnpm lint:check
-        
+
       - name: Format
         run: pnpm format:check
 
@@ -234,27 +234,29 @@ jobs:
     name: CORRECTNESS Gate
     runs-on: ubuntu-latest
     needs: [classify, static]
-    if: contains(fromJson('["Feature.STANDARD","Feature.HEAVY","Bug.STANDARD","Bug.HEAVY","Schema.STANDARD","Schema.HEAVY","Refactor.STANDARD","Refactor.HEAVY","Security.STANDARD","Security.HEAVY"]'), needs.classify.outputs.pipeline)
+    if:
+      contains(fromJson('["Feature.STANDARD","Feature.HEAVY","Bug.STANDARD","Bug.HEAVY","Schema.STANDARD","Schema.HEAVY","Refactor.STANDARD","Refactor.HEAVY","Security.STANDARD","Security.HEAVY"]'),
+      needs.classify.outputs.pipeline)
     steps:
       - uses: actions/checkout@v4
-      
+
       - uses: pnpm/action-setup@v2
         with:
           version: 8
-          
+
       - uses: actions/setup-node@v4
         with:
-          node-version: '20'
-          cache: 'pnpm'
-          
+          node-version: "20"
+          cache: "pnpm"
+
       - run: pnpm install --frozen-lockfile
-      
+
       - name: Unit Tests
         run: pnpm test:unit
-        
+
       - name: Rules Tests
         run: pnpm test:rules
-        
+
       - name: E2E Tests
         if: contains(needs.classify.outputs.pipeline, 'HEAVY')
         run: pnpm test:e2e
@@ -263,24 +265,26 @@ jobs:
     name: SAFETY Gate
     runs-on: ubuntu-latest
     needs: [classify, static]
-    if: contains(fromJson('["Feature.HEAVY","Bug.HEAVY","Schema.STANDARD","Schema.HEAVY","Refactor.HEAVY","Security.STANDARD","Security.HEAVY"]'), needs.classify.outputs.pipeline)
+    if:
+      contains(fromJson('["Feature.HEAVY","Bug.HEAVY","Schema.STANDARD","Schema.HEAVY","Refactor.HEAVY","Security.STANDARD","Security.HEAVY"]'),
+      needs.classify.outputs.pipeline)
     steps:
       - uses: actions/checkout@v4
-      
+
       - uses: pnpm/action-setup@v2
         with:
           version: 8
-          
+
       - uses: actions/setup-node@v4
         with:
-          node-version: '20'
-          cache: 'pnpm'
-          
+          node-version: "20"
+          cache: "pnpm"
+
       - run: pnpm install --frozen-lockfile
-      
+
       - name: Pattern Validation
         run: node scripts/validate-patterns.mjs
-        
+
       - name: Secret Scan
         run: |
           if command -v git-secrets &> /dev/null; then
@@ -288,7 +292,7 @@ jobs:
           else
             echo "git-secrets not installed, skipping"
           fi
-          
+
       - name: Dependency Audit
         run: pnpm audit --audit-level=high
         continue-on-error: true
@@ -308,9 +312,11 @@ jobs:
           echo "| STATIC | ${{ needs.static.result }} |" >> $GITHUB_STEP_SUMMARY
           echo "| CORRECTNESS | ${{ needs.correctness.result }} |" >> $GITHUB_STEP_SUMMARY
           echo "| SAFETY | ${{ needs.safety.result }} |" >> $GITHUB_STEP_SUMMARY
-          
+
       - name: Check Results
-        if: needs.static.result == 'failure' || needs.correctness.result == 'failure' || needs.safety.result == 'failure'
+        if:
+          needs.static.result == 'failure' || needs.correctness.result == 'failure' ||
+          needs.safety.result == 'failure'
         run: exit 1
 ```
 
@@ -333,34 +339,36 @@ jobs:
     environment: production
     steps:
       - uses: actions/checkout@v4
-      
+
       - uses: pnpm/action-setup@v2
         with:
           version: 8
-          
+
       - uses: actions/setup-node@v4
         with:
-          node-version: '20'
-          cache: 'pnpm'
-          
+          node-version: "20"
+          cache: "pnpm"
+
       - run: pnpm install --frozen-lockfile
-      
+
       - name: Build
         run: pnpm build
         env:
           NEXT_PUBLIC_FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
           # Add other env vars as needed
-          
+
       - name: Deploy to Vercel
         uses: amondnet/vercel-action@v25
         with:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
-          vercel-args: '--prod'
-          
+          vercel-args: "--prod"
+
       - name: Deploy Firestore Rules
-        if: contains(github.event.head_commit.message, '[rules]') || contains(github.event.head_commit.modified, 'firestore.rules')
+        if:
+          contains(github.event.head_commit.message, '[rules]') ||
+          contains(github.event.head_commit.modified, 'firestore.rules')
         run: |
           npm install -g firebase-tools
           firebase deploy --only firestore:rules --token ${{ secrets.FIREBASE_TOKEN }}
@@ -391,7 +399,7 @@ jobs:
           script: |
             const branch = context.payload.pull_request.head.ref;
             const patterns = ['feature/', 'fix/', 'refactor/', 'chore/'];
-            
+
             if (patterns.some(p => branch.startsWith(p))) {
               await github.rest.git.deleteRef({
                 owner: context.repo.owner,
@@ -421,12 +429,12 @@ runs:
     - uses: pnpm/action-setup@v2
       with:
         version: 8
-        
+
     - uses: actions/setup-node@v4
       with:
-        node-version: '20'
-        cache: 'pnpm'
-        
+        node-version: "20"
+        cache: "pnpm"
+
     - run: pnpm install --frozen-lockfile
       shell: bash
 ```
@@ -451,21 +459,21 @@ jobs:
 1. Add job to `orchestrate.yml`:
 
 ```yaml
-  new_gate:
-    name: NEW_GATE
-    needs: [classify, static]
-    if: contains(needs.classify.outputs.pipeline, 'HEAVY')
-    steps:
-      - uses: actions/checkout@v4
-      - uses: ./.github/actions/setup
-      - run: pnpm run new-check
+new_gate:
+  name: NEW_GATE
+  needs: [classify, static]
+  if: contains(needs.classify.outputs.pipeline, 'HEAVY')
+  steps:
+    - uses: actions/checkout@v4
+    - uses: ./.github/actions/setup
+    - run: pnpm run new-check
 ```
 
 2. Add to summary job `needs`:
 
 ```yaml
-  summary:
-    needs: [classify, static, correctness, safety, new_gate]
+summary:
+  needs: [classify, static, correctness, safety, new_gate]
 ```
 
 3. Update pipeline configs in `08_PIPELINES.md`
@@ -485,7 +493,7 @@ jobs:
     if: github.ref == 'refs/heads/dev'
     environment: dev
     # ...
-    
+
   deploy-production:
     if: github.ref == 'refs/heads/main'
     environment: production
@@ -496,13 +504,13 @@ jobs:
 
 ## SECRETS REQUIRED
 
-| Secret | Used By | Purpose |
-|--------|---------|---------|
-| `VERCEL_TOKEN` | deploy.yml | Vercel deployment |
-| `VERCEL_ORG_ID` | deploy.yml | Vercel organization |
-| `VERCEL_PROJECT_ID` | deploy.yml | Vercel project |
-| `FIREBASE_TOKEN` | deploy.yml | Firebase CLI auth |
-| `CODECOV_TOKEN` | ci.yml | Coverage reporting |
+| Secret              | Used By    | Purpose             |
+| ------------------- | ---------- | ------------------- |
+| `VERCEL_TOKEN`      | deploy.yml | Vercel deployment   |
+| `VERCEL_ORG_ID`     | deploy.yml | Vercel organization |
+| `VERCEL_PROJECT_ID` | deploy.yml | Vercel project      |
+| `FIREBASE_TOKEN`    | deploy.yml | Firebase CLI auth   |
+| `CODECOV_TOKEN`     | ci.yml     | Coverage reporting  |
 
 ---
 
@@ -510,22 +518,22 @@ jobs:
 
 ### Gate Failures
 
-| Issue | Solution |
-|-------|----------|
-| TypeScript errors | Run `pnpm typecheck` locally |
-| Lint failures | Run `pnpm lint --fix` |
-| Format failures | Run `pnpm format` |
-| Test failures | Run `pnpm test:unit` locally |
+| Issue              | Solution                                 |
+| ------------------ | ---------------------------------------- |
+| TypeScript errors  | Run `pnpm typecheck` locally             |
+| Lint failures      | Run `pnpm lint --fix`                    |
+| Format failures    | Run `pnpm format`                        |
+| Test failures      | Run `pnpm test:unit` locally             |
 | Pattern violations | Run `node scripts/validate-patterns.mjs` |
 
 ### Workflow Issues
 
-| Issue | Solution |
-|-------|----------|
-| Workflow not triggering | Check branch patterns in `on:` |
-| Concurrency conflicts | Check `concurrency:` group names |
-| Secrets not found | Verify secrets in repo settings |
-| Cache issues | Clear cache in Actions settings |
+| Issue                   | Solution                         |
+| ----------------------- | -------------------------------- |
+| Workflow not triggering | Check branch patterns in `on:`   |
+| Concurrency conflicts   | Check `concurrency:` group names |
+| Secrets not found       | Verify secrets in repo settings  |
+| Cache issues            | Clear cache in Actions settings  |
 
 ---
 

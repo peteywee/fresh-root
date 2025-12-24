@@ -31,20 +31,20 @@
 
 ### Category 1: Code Analysis (5 Tools) ❌ UNUSED
 
-| Tool | Purpose | Current Usage | Missed Opportunity |
-|------|---------|---------------|-------------------|
-| `mcp_repomix_pack_codebase` | Package local dirs for AI | ❌ Manual CLI only | Real-time AI analysis during chat |
-| `mcp_repomix_pack_remote_repository` | Analyze external repos | ❌ Not available | Compare with competitors, research patterns |
-| `mcp_repomix_attach_packed_output` | Load existing packed files | ❌ Not available | Iterative analysis without re-packing |
-| `mcp_repomix_grep_repomix_output` | Search within outputs | ❌ Not available | Fast lookup without full re-read |
-| `mcp_repomix_generate_skill` | Create Claude Skills | ❌ Not available | Auto-generate team-shared skills |
+| Tool                                 | Purpose                    | Current Usage      | Missed Opportunity                          |
+| ------------------------------------ | -------------------------- | ------------------ | ------------------------------------------- |
+| `mcp_repomix_pack_codebase`          | Package local dirs for AI  | ❌ Manual CLI only | Real-time AI analysis during chat           |
+| `mcp_repomix_pack_remote_repository` | Analyze external repos     | ❌ Not available   | Compare with competitors, research patterns |
+| `mcp_repomix_attach_packed_output`   | Load existing packed files | ❌ Not available   | Iterative analysis without re-packing       |
+| `mcp_repomix_grep_repomix_output`    | Search within outputs      | ❌ Not available   | Fast lookup without full re-read            |
+| `mcp_repomix_generate_skill`         | Create Claude Skills       | ❌ Not available   | Auto-generate team-shared skills            |
 
 ### Category 2: File System (2 Tools) ❌ UNUSED
 
-| Tool | Purpose | Current Usage | Missed Opportunity |
-|------|---------|---------------|-------------------|
-| `mcp_repomix_file_system_read_directory` | List dirs with security | ❌ Using `list_dir` instead | Built-in sensitive file detection |
-| `mcp_repomix_file_system_read_file` | Read with security validation | ❌ Using `read_file` instead | Auto-detect secrets/API keys |
+| Tool                                     | Purpose                       | Current Usage                | Missed Opportunity                |
+| ---------------------------------------- | ----------------------------- | ---------------------------- | --------------------------------- |
+| `mcp_repomix_file_system_read_directory` | List dirs with security       | ❌ Using `list_dir` instead  | Built-in sensitive file detection |
+| `mcp_repomix_file_system_read_file`      | Read with security validation | ❌ Using `read_file` instead | Auto-detect secrets/API keys      |
 
 ### Impact Assessment
 
@@ -80,7 +80,7 @@ Add Repomix MCP server configuration:
     "github/github-mcp-server": { ... },
     "chromedevtools/chrome-devtools-mcp": { ... },
     "firebase": { ... },
-    
+
     "repomix/repomix-mcp": {
       "type": "stdio",
       "command": "npx",
@@ -129,7 +129,7 @@ pnpm add -D @repomix/mcp-server@latest
 
 When analyzing code structure or external repositories:
 
-- **Pack codebase**: `mcp_repomix_pack_codebase` 
+- **Pack codebase**: `mcp_repomix_pack_codebase`
   - Package a local directory for AI analysis
   - Supports XML, Markdown, JSON, Plain text formats
   - Optional Tree-sitter compression (70% token reduction)
@@ -152,12 +152,12 @@ When analyzing code structure or external repositories:
 **Example Usage**:
 ```
 
-User: "Analyze the API framework patterns"
-Agent: [Calls mcp_repomix_pack_codebase on packages/api-framework]
-Agent: [Analyzes packed output, identifies patterns]
-Agent: "Found 3 core patterns: middleware pipeline, Zod validation, role-based auth"
+User: "Analyze the API framework patterns" Agent: [Calls mcp_repomix_pack_codebase on
+packages/api-framework] Agent: [Analyzes packed output, identifies patterns] Agent: "Found 3 core
+patterns: middleware pipeline, Zod validation, role-based auth"
 
 ```
+
 ```
 
 ### Phase 3: Create Usage Examples (1 hour)
@@ -169,37 +169,37 @@ Agent: "Found 3 core patterns: middleware pipeline, Zod validation, role-based a
 
 /**
  * Repomix MCP Usage Examples
- * 
+ *
  * Demonstrates how AI agents can use Repomix MCP tools
  * for real-time code analysis during conversation
  */
 
 // Example 1: Pack API Framework
-console.log('Example 1: Pack API Framework for Analysis');
-console.log('AI Agent would call:');
-console.log('  mcp_repomix_pack_codebase({');
+console.log("Example 1: Pack API Framework for Analysis");
+console.log("AI Agent would call:");
+console.log("  mcp_repomix_pack_codebase({");
 console.log('    directory: "packages/api-framework",');
 console.log('    style: "markdown",');
-console.log('    compress: true');
-console.log('  })');
+console.log("    compress: true");
+console.log("  })");
 
 // Example 2: Analyze External Repo
-console.log('\nExample 2: Analyze Competitor Patterns');
-console.log('AI Agent would call:');
-console.log('  mcp_repomix_pack_remote_repository({');
+console.log("\nExample 2: Analyze Competitor Patterns");
+console.log("AI Agent would call:");
+console.log("  mcp_repomix_pack_remote_repository({");
 console.log('    repository: "https://github.com/competitor/repo",');
 console.log('    style: "json"');
-console.log('  })');
+console.log("  })");
 
 // Example 3: Generate Skill
-console.log('\nExample 3: Auto-Generate Claude Skill');
-console.log('AI Agent would call:');
-console.log('  mcp_repomix_generate_skill({');
+console.log("\nExample 3: Auto-Generate Claude Skill");
+console.log("AI Agent would call:");
+console.log("  mcp_repomix_generate_skill({");
 console.log('    directory: "packages/api-framework",');
 console.log('    skillName: "sdk-factory-pattern",');
-console.log('    compress: true');
-console.log('  })');
-console.log('Result: .claude/skills/sdk-factory-pattern/ created');
+console.log("    compress: true");
+console.log("  })");
+console.log("Result: .claude/skills/sdk-factory-pattern/ created");
 ```
 
 ### Phase 4: Integration Testing (30 min)
@@ -406,7 +406,8 @@ Agent: [Returns only matching sections with context]
 
 ## Related Documents
 
-- [Repomix Effectiveness Assessment](../archive/repomix/REPOMIX_EFFECTIVENESS_FINAL_ASSESSMENT.md) - Current 95% implementation
+- [Repomix Effectiveness Assessment](../archive/repomix/REPOMIX_EFFECTIVENESS_FINAL_ASSESSMENT.md) -
+  Current 95% implementation
 - [FUTURE_PROOF_SYSTEM_DESIGN.md](./FUTURE_PROOF_SYSTEM_DESIGN.md) - Long-term strategy
 - [AI_AGENT_GUIDE.md](./AI_AGENT_GUIDE.md) - Agent onboarding
 - `.mcp.json` - MCP server configuration
@@ -418,4 +419,4 @@ Agent: [Returns only matching sections with context]
 **Timeline**: 2-3 hours total effort  
 **Next Review**: After Phase 1 complete
 
-*"We've built 70% of the capability. Let's unlock the other 30%."*
+_"We've built 70% of the capability. Let's unlock the other 30%."_

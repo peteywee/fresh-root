@@ -16,13 +16,13 @@ Extends 09_CI_CD with Firebase-specific configuration and deployment procedures.
 
 ## Key Configuration Files
 
-| File | Purpose | Location |
-|------|---------|----------|
-| `firebase.json` | Hosting & emulator config | Root |
-| `firestore.rules` | Security rules | Root |
-| `firestore.indexes.json` | Query index definitions | Root |
-| `storage.rules` | Storage security | Root |
-| `functions/package.json` | Cloud Functions deps | `functions/` |
+| File                     | Purpose                   | Location     |
+| ------------------------ | ------------------------- | ------------ |
+| `firebase.json`          | Hosting & emulator config | Root         |
+| `firestore.rules`        | Security rules            | Root         |
+| `firestore.indexes.json` | Query index definitions   | Root         |
+| `storage.rules`          | Storage security          | Root         |
+| `functions/package.json` | Cloud Functions deps      | `functions/` |
 
 ## Firebase Services Used
 
@@ -144,13 +144,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v2
-      
+
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-      
+
       - name: Build
         run: pnpm build
-      
+
       - name: Deploy to Firebase
         run: firebase deploy --token ${{ secrets.FIREBASE_TOKEN }}
 ```
@@ -162,7 +162,7 @@ jobs:
 match /orgs/{orgId} {
   allow read: if isSignedIn() && isOrgMember(orgId);
   allow write: if isSignedIn() && hasAnyRole(orgId, ['org_owner', 'admin']);
-  
+
   match /schedules/{scheduleId} {
     allow read: if isSignedIn() && isOrgMember(orgId);
     allow write: if isSignedIn() && hasAnyRole(orgId, ['org_owner', 'admin', 'manager']);
