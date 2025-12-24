@@ -1,14 +1,11 @@
 // [P2][APP][CODE] Fonts
 // Tags: P2, APP, CODE
-import { Inter } from "next/font/google";
 
 /**
- * Self-hosted variable font with swap to avoid FOIT/FOUT.
- * Using a CSS variable keeps Tailwind/theming clean.
+ * Fallback font configuration for builds without internet access.
+ * This provides a system font stack that works consistently in CI environments.
+ * The font-family is defined in globals.css via the Inter font stack.
  */
-export const inter = Inter({
-  subsets: ["latin"],
-  display: "swap",
+export const inter = {
   variable: "--font-inter",
-  weight: ["400", "500", "600", "700"],
-});
+};
