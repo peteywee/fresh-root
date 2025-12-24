@@ -1,5 +1,12 @@
 // [P1][INTEGRITY][RULES] Firestore security rules for multi-tenant RBAC
 // Tags: P1, INTEGRITY, FIRESTORE, RULES, SECURITY, RBAC, TENANT_ISOLATION
+// Role Hierarchy:
+//   admin (100) - Super admin, system-wide access
+//   corporate (90) - Network/multi-org scope
+//   org_owner (85) - Single org owner
+//   manager (60) - Manages schedules/staff
+//   scheduler (50) - Creates/edits schedules
+//   staff (40) - Views own schedule
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
@@ -14,6 +21,11 @@ service cloud.firestore {
       return isSignedIn() && userRoles() != null && userRoles().hasAny(roles);
     }
 
+    // Super admin check - admin role has system-wide access
+    function isSuperAdmin() {
+      return hasAnyRole(['admin']);
+    }
+
     // Org membership checking (legacy style with membership docs)
     function isOrgMember(orgId) {
       return exists(/databases/$(database)/documents/memberships/$(uid() + "_" + orgId));
@@ -25,9 +37,9 @@ service cloud.firestore {
         get(/databases/$(database)/documents/memberships/$(uid() + "_" + orgId)).data.roles.hasAny(roles);
     }
 
-    // Combined check: token-based (preferred) or legacy membership doc
+    // Combined check: admin always passes, then org-scoped roles
     function isManager() {
-      return hasAnyRole(['org_owner','admin','manager']);
+      return isSuperAdmin() || hasAnyRole(['corporate','org_owner','manager']);
     }
 
     function sameOrg(resourceOrgId) {
@@ -40,13 +52,13 @@ service cloud.firestore {
       allow list: if false;
     }
 
-    // Orgs - read by members, write by org_owner
+    // Orgs - read by members, write by org_owner; admin can access all
     match /orgs/{orgId} {
-      allow get: if isSignedIn() && (sameOrg(orgId) || isOrgMember(orgId));
+      allow get: if isSignedIn() && (isSuperAdmin() || sameOrg(orgId) || isOrgMember(orgId));
       allow create: if isSignedIn();
-      // Only org_owner (token) or legacy owner/admin can update/delete
-  allow update, delete: if isSignedIn() && ((hasAnyRole(['org_owner']) && sameOrg(orgId)) || hasAnyRoleLegacy(orgId, ['owner','admin']));
-      allow list: if false;
+      // Admin can update/delete any org; org_owner can update/delete their own
+  allow update, delete: if isSignedIn() && (isSuperAdmin() || (hasAnyRole(['org_owner']) && sameOrg(orgId)) || hasAnyRoleLegacy(orgId, ['owner','admin']));
+      allow list: if isSuperAdmin();
 
       // Schedules as subcollection under orgs
       match /schedules/{scheduleId} {

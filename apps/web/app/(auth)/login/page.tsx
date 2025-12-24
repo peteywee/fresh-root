@@ -1,5 +1,5 @@
-// [P0][AUTH][LOGGING] Page page component
-// Tags: P0, AUTH, LOGGING
+// [P0][AUTH][LOGIN] Login page with Google, Email/Password, and Magic Link
+// Tags: P0, AUTH, LOGIN
 "use client";
 
 import { isSignInWithEmailLink } from "firebase/auth";
@@ -10,17 +10,38 @@ import React, { useCallback, useEffect, useState, Suspense } from "react";
 import {
   sendEmailLinkRobust,
   startGooglePopup,
+  signInWithPassword,
+  signUpWithPassword,
   establishServerSession,
 } from "../../../src/lib/auth-helpers";
 import { auth } from "../../lib/firebaseClient";
 
+type AuthMode = "signin" | "signup" | "magic-link";
+
+// Super admin emails go straight to dashboard
+const SUPER_ADMIN_EMAILS = ["admin@email.com"];
+
 const LoginForm = React.memo(() => {
   const router = useRouter();
   const params = useSearchParams();
+  const redirectParam = params?.get("redirect");
+  
+  const [mode, setMode] = useState<AuthMode>("signin");
   const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
   const [status, setStatus] = useState<string>("");
   const [error, setError] = useState<string>("");
-  const [sending, setSending] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  // Determine redirect based on user type
+  const getRedirectPath = useCallback((userEmail: string) => {
+    const isSuperAdmin = SUPER_ADMIN_EMAILS.includes(userEmail.toLowerCase());
+    // Super admins go to dashboard unless they explicitly requested another page
+    if (isSuperAdmin && !redirectParam) {
+      return "/dashboard";
+    }
+    return redirectParam || "/";
+  }, [redirectParam]);
 
   // If the page loads with an email link, complete sign-in
   useEffect(() => {
@@ -28,101 +49,158 @@ const LoginForm = React.memo(() => {
 
     const href = window.location.href;
     const code = params?.get("oobCode") || "";
-    // Use Firebase SDK to check if this is a valid email link, falling back to URL param check
     let looksLikeEmailLink = false;
     if (auth) {
       looksLikeEmailLink = isSignInWithEmailLink(auth, href) || !!code;
     } else {
-      // If auth is not available, we cannot check the email link via Firebase SDK.
-      // Optionally, log a warning for debugging.
       console.warn("Firebase auth instance is undefined; cannot check email link via SDK.");
       looksLikeEmailLink = !!code;
     }
     if (looksLikeEmailLink) {
-      // Delegate handling to the dedicated callback route for consistency
       router.replace("/auth/callback");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const onSendMagicLink = useCallback(
+  const handleEmailPassword = useCallback(
     async (e: React.FormEvent) => {
       e.preventDefault();
       setError("");
       setStatus("");
-      const trimmed = email.trim();
-      if (!trimmed) {
+      
+      const trimmedEmail = email.trim();
+      if (!trimmedEmail) {
         setError("Please enter your email");
         return;
       }
+      if (!password || password.length < 6) {
+        setError("Password must be at least 6 characters");
+        return;
+      }
+
       try {
-        setSending(true);
-        // Optimistically show sending status so user sees activity immediately
-        setStatus("Sending magic link…");
-        await sendEmailLinkRobust(trimmed);
-        setStatus("Magic link sent! Check your email and click the link to finish signing in.");
+        setLoading(true);
+        
+        if (mode === "signup") {
+          setStatus("Creating account...");
+          await signUpWithPassword(trimmedEmail, password);
+        } else {
+          setStatus("Signing in...");
+          await signInWithPassword(trimmedEmail, password);
+        }
+        
+        // Establish server session
+        await establishServerSession();
+        router.replace(getRedirectPath(trimmedEmail));
+      } catch (e) {
+        console.error(e);
+        const err = e as { code?: string; message?: string };
+        // Provide user-friendly error messages
+        if (err.code === "auth/user-not-found") {
+          setError("No account found with this email. Try signing up instead.");
+        } else if (err.code === "auth/wrong-password") {
+          setError("Incorrect password. Please try again.");
+        } else if (err.code === "auth/email-already-in-use") {
+          setError("An account already exists with this email. Try signing in.");
+        } else if (err.code === "auth/weak-password") {
+          setError("Password is too weak. Use at least 6 characters.");
+        } else if (err.code === "auth/invalid-email") {
+          setError("Please enter a valid email address.");
+        } else {
+          setError(err.message || "Authentication failed");
+        }
+      } finally {
+        setLoading(false);
+      }
+    },
+    [email, password, mode, router, getRedirectPath],
+  );
+
+  const handleMagicLink = useCallback(
+    async (e: React.FormEvent) => {
+      e.preventDefault();
+      setError("");
+      setStatus("");
+      
+      const trimmedEmail = email.trim();
+      if (!trimmedEmail) {
+        setError("Please enter your email");
+        return;
+      }
+
+      try {
+        setLoading(true);
+        setStatus("Sending magic link...");
+        await sendEmailLinkRobust(trimmedEmail);
+        setStatus("Magic link sent! Check your email and click the link to sign in.");
       } catch (e) {
         console.error(e);
         const errorMessage = e instanceof Error ? e.message : "Failed to send magic link";
         setError(errorMessage);
       } finally {
-        setSending(false);
+        setLoading(false);
       }
     },
     [email],
   );
 
-  const onGoogle = useCallback(async () => {
+  const handleGoogle = useCallback(async () => {
     setError("");
     setStatus("");
     try {
-      // Start the popup synchronously to avoid popup blockers, then await completion.
-      // When the popup flow completes the returned credential will include a user
-      // so we can establish a server session immediately and redirect home.
-      await startGooglePopup();
+      setLoading(true);
+      setStatus("Opening Google sign-in...");
+      const result = await startGooglePopup() as { user?: { email?: string } } | null;
+      const userEmail = result?.user?.email || "";
+      
       try {
-        // Try to establish a server session directly after popup sign-in.
         await establishServerSession();
-        router.replace("/");
-        return;
+        router.replace(getRedirectPath(userEmail));
       } catch (sessErr) {
-        // If session creation fails, fall back to callback route to retry the
-        // session creation flow there.
         console.warn("Session creation after popup failed, falling back to callback", sessErr);
         router.replace("/auth/callback");
-        return;
       }
     } catch (e) {
       console.error(e);
       const errorMessage = e instanceof Error ? e.message : "Google sign-in failed";
       setError(errorMessage);
+    } finally {
+      setLoading(false);
     }
-  }, [router]);
+  }, [router, getRedirectPath]);
 
   return (
     <main className="flex min-h-screen items-center justify-center bg-gradient-to-br from-surface via-surface-card to-surface-accent p-6">
       <div className="card w-full max-w-md animate-slide-up">
         <div className="mb-6 space-y-2 text-center">
-          <h1 className="text-3xl font-bold text-primary">Welcome Back</h1>
-          <p className="text-text-muted">Sign in to access your dashboard</p>
+          <h1 className="text-3xl font-bold text-primary">
+            {mode === "signup" ? "Create Account" : "Welcome Back"}
+          </h1>
+          <p className="text-text-muted">
+            {mode === "signup" 
+              ? "Sign up to get started with Fresh Schedules" 
+              : "Sign in to access your dashboard"}
+          </p>
         </div>
 
         {error && (
-          <div className="animate-fade-in rounded-lg border border-red-500 bg-red-500/10 p-3 text-sm text-red-400">
+          <div className="mb-4 animate-fade-in rounded-lg border border-red-500 bg-red-500/10 p-3 text-sm text-red-400">
             {error}
           </div>
         )}
         {status && (
-          <div className="animate-fade-in rounded-lg border border-secondary bg-secondary/10 p-3 text-sm text-secondary">
+          <div className="mb-4 animate-fade-in rounded-lg border border-secondary bg-secondary/10 p-3 text-sm text-secondary">
             {status}
           </div>
         )}
 
+        {/* Google Sign-In Button */}
         <button
           type="button"
-          onClick={onGoogle}
+          onClick={handleGoogle}
+          disabled={loading}
           aria-label="Continue with Google"
-          className="btn-primary mb-4 flex w-full items-center justify-center gap-2"
+          className="btn-primary mb-4 flex w-full items-center justify-center gap-2 disabled:cursor-not-allowed disabled:opacity-50"
         >
           <svg className="h-5 w-5" viewBox="0 0 24 24">
             <path
@@ -151,31 +229,138 @@ const LoginForm = React.memo(() => {
           <div className="h-px flex-1 bg-surface-accent" />
         </div>
 
-        <form onSubmit={onSendMagicLink} className="space-y-4">
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="you@example.com"
-            className="input-field w-full"
-            autoComplete="email"
-            required
-          />
+        {/* Auth Mode Tabs */}
+        <div className="mb-4 flex gap-1 rounded-lg bg-surface-accent/50 p-1">
           <button
-            type="submit"
-            disabled={sending}
-            className="btn-secondary w-full disabled:cursor-not-allowed disabled:opacity-50"
+            type="button"
+            onClick={() => setMode("signin")}
+            className={`flex-1 rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${
+              mode === "signin" 
+                ? "bg-surface-card text-primary shadow-sm" 
+                : "text-text-muted hover:text-primary"
+            }`}
           >
-            {sending ? (
-              <div className="flex items-center justify-center gap-2">
-                <div className="loading-skeleton h-4 w-4 rounded-full"></div>
-                Sending…
-              </div>
-            ) : (
-              "Email me a magic link"
-            )}
+            Sign In
           </button>
-        </form>
+          <button
+            type="button"
+            onClick={() => setMode("signup")}
+            className={`flex-1 rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${
+              mode === "signup" 
+                ? "bg-surface-card text-primary shadow-sm" 
+                : "text-text-muted hover:text-primary"
+            }`}
+          >
+            Sign Up
+          </button>
+          <button
+            type="button"
+            onClick={() => setMode("magic-link")}
+            className={`flex-1 rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${
+              mode === "magic-link" 
+                ? "bg-surface-card text-primary shadow-sm" 
+                : "text-text-muted hover:text-primary"
+            }`}
+          >
+            Magic Link
+          </button>
+        </div>
+
+        {/* Email/Password Form */}
+        {(mode === "signin" || mode === "signup") && (
+          <form onSubmit={handleEmailPassword} className="space-y-4" autoComplete="on">
+            <div>
+              <label htmlFor="email" className="mb-1 block text-sm font-medium text-text-muted">
+                Email
+              </label>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="you@example.com"
+                className="input-field w-full"
+                autoComplete="email"
+                autoFocus
+                required
+              />
+            </div>
+            <div>
+              <label htmlFor="password" className="mb-1 block text-sm font-medium text-text-muted">
+                Password
+              </label>
+              <input
+                id="password"
+                name="password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="••••••••"
+                className="input-field w-full"
+                autoComplete={mode === "signup" ? "new-password" : "current-password"}
+                minLength={6}
+                required
+              />
+            </div>
+            <button
+              type="submit"
+              disabled={loading}
+              className="btn-secondary w-full disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              {loading ? (
+                <div className="flex items-center justify-center gap-2">
+                  <div className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
+                  {mode === "signup" ? "Creating account..." : "Signing in..."}
+                </div>
+              ) : mode === "signup" ? (
+                "Create Account"
+              ) : (
+                "Sign In"
+              )}
+            </button>
+          </form>
+        )}
+
+        {/* Magic Link Form */}
+        {mode === "magic-link" && (
+          <form onSubmit={handleMagicLink} className="space-y-4" autoComplete="on">
+            <div>
+              <label htmlFor="magic-email" className="mb-1 block text-sm font-medium text-text-muted">
+                Email
+              </label>
+              <input
+                id="magic-email"
+                name="email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="you@example.com"
+                className="input-field w-full"
+                autoComplete="email"
+                autoFocus
+                required
+              />
+            </div>
+            <p className="text-xs text-text-muted">
+              We&apos;ll send you a secure link to sign in without a password.
+            </p>
+            <button
+              type="submit"
+              disabled={loading}
+              className="btn-secondary w-full disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              {loading ? (
+                <div className="flex items-center justify-center gap-2">
+                  <div className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
+                  Sending...
+                </div>
+              ) : (
+                "Send Magic Link"
+              )}
+            </button>
+          </form>
+        )}
 
         <div className="mt-6 text-center">
           <Link href="/" className="text-sm text-text-muted transition-colors hover:text-primary">
@@ -191,7 +376,11 @@ LoginForm.displayName = "LoginForm";
 
 const LoginPage = () => (
   <Suspense
-    fallback={<div className="flex min-h-screen items-center justify-center">Loading...</div>}
+    fallback={
+      <div className="flex min-h-screen items-center justify-center">
+        <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
+      </div>
+    }
   >
     <LoginForm />
   </Suspense>

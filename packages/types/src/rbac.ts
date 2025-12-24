@@ -2,7 +2,14 @@
 // Tags: P0, RBAC, CODE
 import { z } from "zod";
 
-export const OrgRole = z.enum(["org_owner", "admin", "manager", "scheduler", "corporate", "staff"]);
+// Role hierarchy (highest to lowest):
+// admin (100) - Super admin, cross-org access, system-wide
+// corporate (90) - Network/multi-org scope, adjacent to org_owner
+// org_owner (85) - Owner of a single organization
+// manager (60) - Manages schedules, staff within org
+// scheduler (50) - Creates/edits schedules
+// staff (40) - Views own schedule, limited self-updates
+export const OrgRole = z.enum(["admin", "corporate", "org_owner", "manager", "scheduler", "staff"]);
 export type OrgRole = z.infer<typeof OrgRole>;
 
 export const UserClaims = z.object({

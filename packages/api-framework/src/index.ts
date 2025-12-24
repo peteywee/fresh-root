@@ -260,12 +260,13 @@ async function loadOrgContext(userId: string, request: NextRequest): Promise<Org
  * Check if user has required role (hierarchical)
  */
 function hasRequiredRole(userRole: OrgRole, requiredRoles: OrgRole[]): boolean {
+  // Role hierarchy: admin is SUPER ADMIN (highest), corporate adjacent to org_owner
   const roleHierarchy: Record<OrgRole, number> = {
-    org_owner: 100,
-    admin: 80,
+    admin: 100,      // Super admin - system-wide access
+    corporate: 90,   // Network/multi-org scope
+    org_owner: 85,   // Single org owner
     manager: 60,
     scheduler: 50,
-    corporate: 45,
     staff: 40,
   };
 
