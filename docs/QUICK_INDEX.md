@@ -9,15 +9,16 @@
 
 | Issue | Location | Fix Required |
 |-------|----------|--------------|
-| **Onboarding doesn't persist** | `apps/web/app/onboarding/create-network-org/page.tsx:42` | Wire form to API |
-| **23 routes missing rate limiting** | See audit below | Add rateLimit config |
-| **17 routes not using SDK factory** | See audit below | Migrate to SDK |
+| **Onboarding doesn't persist** | `apps/web/app/onboarding/create-network-org/page.tsx` | Wire form to API |
+| **23 routes missing rate limiting** | [See audit](./reports/INFRASTRUCTURE_REALITY_AUDIT.md#1-rate-limiting---partial-️) | Add rateLimit config |
+| **17 routes not using SDK factory** | [See audit](./reports/INFRASTRUCTURE_REALITY_AUDIT.md#4-sdk-factory---partial-️) | Migrate to SDK |
 
 ---
 
 ## 📁 Key File Locations
 
 ### Infrastructure
+
 | Component | Path |
 |-----------|------|
 | Rate Limit Middleware | `apps/web/app/api/_shared/rate-limit-middleware.ts` |
@@ -28,6 +29,7 @@
 | SDK Factory | `packages/api-framework/src/index.ts` |
 
 ### Onboarding
+
 | Component | Path |
 |-----------|------|
 | Wizard Context | `apps/web/app/onboarding/_wizard/OnboardingWizardContext.tsx` |
@@ -37,6 +39,7 @@
 | Profile API | `apps/web/app/api/onboarding/profile/route.ts` |
 
 ### Core APIs
+
 | Resource | Path |
 |----------|------|
 | Organizations | `apps/web/app/api/organizations/route.ts` |
@@ -46,6 +49,7 @@
 | Attendance | `apps/web/app/api/attendance/route.ts` |
 
 ### Ops Dashboard
+
 | Component | Path |
 |-----------|------|
 | Metrics API | `apps/web/app/api/metrics/route.ts` |

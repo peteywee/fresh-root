@@ -1,5 +1,7 @@
 # Infrastructure Reality Audit - 2025-12-23
 
+**Note**: This document reflects the state of the codebase as of the date above. Some information may have changed since this audit was performed.
+
 ## Executive Summary
 
 **Previous Assessment Was WRONG.** Infrastructure IS implemented but has coverage gaps.
@@ -16,16 +18,19 @@
 **Configured:** `USE_REDIS_RATE_LIMIT=true` with Upstash credentials in `.env.local`
 
 **Implementation Files:**
+
 - `apps/web/app/api/_shared/rate-limit-middleware.ts`
 - `apps/web/app/api/_shared/rate-limit-examples.ts`
 - `apps/web/app/api/_shared/security.ts`
 - `apps/web/app/api/onboarding/_shared/rateLimit.ts`
 
 **Routes WITH rate limiting (16):**
+
 - attendance, auth/mfa/*, batch, healthz, metrics, verify-eligibility
 - organizations (root), positions/*, publish, schedules
 
 **Routes WITHOUT rate limiting (23):**
+
 - ALL onboarding routes (except verify-eligibility)
 - organizations/[id]/* (members, single org)
 - session/*, widgets, shifts/*, files, repomix, terminal
@@ -34,11 +39,13 @@
 ## 2. Sentry - GLOBAL ✅
 
 **Config Files:**
+
 - `apps/web/sentry.client.config.ts`
 - `apps/web/sentry.edge.config.ts`
 - `apps/web/sentry.server.config.ts`
 
 **Integration:**
+
 - Middleware imports `* as Sentry from "@sentry/nextjs"`
 - `Sentry.setUser()` called in `requireSession()`
 - Global error boundary coverage via Next.js integration
@@ -46,10 +53,12 @@
 ## 3. OpenTelemetry - GLOBAL ✅
 
 **Implementation Files:**
+
 - `apps/web/app/api/_shared/otel-init.ts`
 - `apps/web/app/api/_shared/otel.ts`
 
 **Integration:**
+
 - Middleware uses `trace.getTracer()` and `startActiveSpan()`
 - 23 trace/span references in middleware.ts
 - All authenticated routes get automatic tracing via `requireSession()`
@@ -57,10 +66,12 @@
 ## 4. SDK Factory - PARTIAL ⚠️
 
 **Routes using SDK factory (22):**
+
 - Uses `createAuthenticatedEndpoint` or `createPublicEndpoint`
 - Gets automatic input validation, auth, error handling
 
 **Routes NOT using SDK factory (17):**
+
 - batch, items, join-tokens
 - organizations/[id]/*, positions/*, publish
 - schedules/*, shifts/*, venues, zones
@@ -70,13 +81,15 @@
 
 **Problem:** UI pages don't call APIs!
 
-`apps/web/app/onboarding/create-network-org/page.tsx` line 42:
+`apps/web/app/onboarding/create-network-org/page.tsx` around line 45:
+
 ```tsx
 // Real implementation would POST to /api/onboarding/create-network-org.
 nav.push("/onboarding/block-4");
 ```
 
 **APIs exist but UI doesn't use them:**
+
 - `/api/onboarding/create-network-org` - POST handler ready
 - `/api/onboarding/create-network-corporate` - POST handler ready
 - `/api/onboarding/join-with-token` - POST handler ready
@@ -88,26 +101,31 @@ nav.push("/onboarding/block-4");
 ## 6. Metrics/Dashboard Access
 
 **Existing endpoints:**
+
 - `GET /api/metrics` - exists with rate limiting
 - `GET /api/healthz` - exists
 - `GET /api/ops/build-performance` - exists (no auth?)
 
 **Missing for ops dashboard:**
+
 - Connection to actual OTEL data
 - Sentry project dashboard integration
 - Real-time metrics aggregation
 
 ## Recommendations
 
-### IMMEDIATE (Fix Today):
+### IMMEDIATE (Fix Today)
+
 1. **Wire onboarding UI to APIs** - Forms submit but don't POST
 2. **Add rate limiting to onboarding routes** - Currently unprotected
 
-### SHORT TERM:
+### SHORT TERM
+
 3. Migrate remaining 17 routes to SDK factory
 4. Add rate limiting to remaining 23 routes
 
-### FOR OPS DASHBOARD:
+### FOR OPS DASHBOARD
+
 5. Create `/api/ops/metrics` that aggregates OTEL spans
 6. Create `/api/ops/errors` that fetches from Sentry API
 7. Create `/api/ops/health-summary` composite endpoint
