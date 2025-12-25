@@ -32,7 +32,7 @@ const nextConfig = {
   reactStrictMode: true,
   transpilePackages: ["@fresh-schedules/types", "@fresh-schedules/ui"],
   typescript: {
-    ignoreBuildErrors: true,
+    ignoreBuildErrors: false,
   },
   compress: true,
   productionBrowserSourceMaps: false,
