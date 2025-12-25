@@ -215,8 +215,8 @@ describe("Batch Operations", () => {
     expect(result.successCount).toBe(4);
     expect(result.failureCount).toBe(1);
     expect(result.partialSuccess).toBe(true);
-    expect(result.results[2].success).toBe(false);
-    expect(result.results[2].error?.message).toBe("Item 2 failed");
+    expect(result.results[2]!.success).toBe(false);
+    expect(result.results[2]!.error?.message).toBe("Item 2 failed");
   });
 
   it("should stop on error when continueOnError is false", async () => {
@@ -238,9 +238,9 @@ describe("Batch Operations", () => {
 
     expect(result.successCount).toBe(2); // Only 0 and 1
     expect(result.failureCount).toBe(3); // 2 failed, 3 and 4 skipped
-    expect(result.results[2].error?.code).toBe("ITEM_FAILED");
-    expect(result.results[3].error?.code).toBe("SKIPPED");
-    expect(result.results[4].error?.code).toBe("SKIPPED");
+    expect(result.results[2]!.error?.code).toBe("ITEM_FAILED");
+    expect(result.results[3]!.error?.code).toBe("SKIPPED");
+    expect(result.results[4]!.error?.code).toBe("SKIPPED");
   });
 
   it("should reject batch exceeding max size", async () => {
@@ -293,8 +293,8 @@ describe("Batch Operations", () => {
 
     const result = await handler(items, context, request);
 
-    expect(result.results[1].success).toBe(false);
-    expect(result.results[1].error?.message).toContain("timed out");
+    expect(result.results[1]!.success).toBe(false);
+    expect(result.results[1]!.error?.message).toContain("timed out");
   });
 });
 

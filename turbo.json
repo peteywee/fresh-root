@@ -4,10 +4,10 @@
     "build": {
       "dependsOn": ["^build"],
       "outputs": [
-        "apps/web/.next/**",
-        "!apps/web/.next/cache/**",
-        "packages/**/dist/**",
-        "functions/lib/**"
+        ".next/**",
+        "!.next/cache/**",
+        "dist/**",
+        "lib/**"
       ]
     },
     "test": {

@@ -1,15 +1,28 @@
-// [P0][SECURITY][RATE_LIMIT] Rate Limit
+// [P0][SECURITY][RATE_LIMIT] Rate Limit (Server-Only)
 // Tags: P0, SECURITY, RATE_LIMIT
+//
+// IMPORTANT: This file is renamed from rate-limit.ts to rate-limit.server.ts
+// The .server.ts extension + import "server-only" ensures Next.js will NEVER
+// bundle this into Edge Runtime or client bundles.
 
 /**
- * apps/web/src/lib/api/rate-limit.ts
+ * apps/web/src/lib/api/rate-limit.server.ts
  *
  * Distributed rate limiting helper for Next.js API routes.
  *
  * - In development / test: uses an in-memory map.
  * - In production with REDIS_URL set: uses a Redis-backed limiter that is
  *   safe across multiple instances.
+ *
+ * WHY .server.ts?
+ * The ioredis package uses Node.js APIs (net, tls, etc.) that don't exist
+ * in Edge Runtime. By using .server.ts + "server-only", we guarantee this
+ * file is only ever imported in Node.js server contexts.
  */
+
+// This directive causes a build error if this file is ever imported
+// in a client component or Edge Runtime context
+import "server-only";
 
 import Redis from "ioredis";
 

@@ -38,7 +38,10 @@ import { ZodError } from "zod";
 
 import { checkRateLimit as checkRedisRateLimit } from "./redis";
 
-import type { OrgRole } from "../../types/src/rbac";
+// Use package alias - this is resolved at build time via:
+// 1. tsconfig paths for development/typecheck
+// 2. tsup externals for production builds
+import type { OrgRole } from "@fresh-schedules/types";
 
 // =============================================================================
 // TYPES
@@ -244,12 +247,12 @@ async function loadOrgContext(userId: string, request: NextRequest): Promise<Org
       return null;
     }
 
-    const membership = membershipQuery.docs[0].data();
+    const membership = membershipQuery.docs[0]!.data();
 
     return {
       orgId,
       role: membership.role as OrgRole,
-      membershipId: membershipQuery.docs[0].id,
+      membershipId: membershipQuery.docs[0]!.id,
     };
   } catch {
     return null;

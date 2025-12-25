@@ -97,6 +97,16 @@ export default [
       "react-hooks/rules-of-hooks": "error",
       "react-hooks/exhaustive-deps": "warn",
       "import/order": "off", // Delegated to Prettier to avoid conflicts
+      // GUARDRAIL: Prevent relative imports across packages (breaks after build)
+      "import/no-relative-packages": "error",
+    },
+    settings: {
+      "import/resolver": {
+        typescript: {
+          alwaysTryTypes: true,
+          project: "./tsconfig.base.json",
+        },
+      },
     },
   },
 
