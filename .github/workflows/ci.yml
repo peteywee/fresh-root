@@ -121,7 +121,7 @@ jobs:
       - name: Validate coding patterns
         run: |
           echo "🔍 Validating coding patterns..."
-          pnpm validate:patterns:verbose || {
+          pnpm validate:all || {
             echo "❌ Pattern validation failed"
             exit 1
           }
@@ -130,7 +130,7 @@ jobs:
       - name: Audit dependencies
         run: |
           echo "🔐 Running security audit..."
-          pnpm deps:check
+          pnpm audit
         continue-on-error: true
 
       - name: Analyze tree diff & deprecations
