@@ -39,6 +39,21 @@ if [ ! -z "$DISALLOWED_ROOT_DOCS" ]; then
   exit 1
 fi
 
+# Block re-introduction of deprecated scripts
+# Prevents accidental re-addition of test:all, deps:check, deps:dedupe
+DEPRECATED_SCRIPTS="test:all|deps:check|deps:dedupe"
+if git diff --cached package.json | grep -E '"('"$DEPRECATED_SCRIPTS"')"' >/dev/null; then
+  echo "🚫 ERROR: Attempt to add deprecated script(s) detected"
+  echo ""
+  echo "Deprecated scripts (removed Dec 25, 2025):"
+  echo "  - test:all (use specific test:* scripts instead)"
+  echo "  - deps:check (use 'pnpm audit' instead)"
+  echo "  - deps:dedupe (pnpm handles this automatically)"
+  echo ""
+  echo "📖 See: docs/DEPRECATIONS.md for rationale and migrations"
+  exit 1
+fi
+
 # Docs lint (staged Markdown only)
 # Fail fast on markdownlint violations (e.g., MD040 fenced code language, MD060 table style)
 STAGED_MD_FILES=$(git diff --cached --name-only --diff-filter=ACM | grep -E '\.md$' || true)

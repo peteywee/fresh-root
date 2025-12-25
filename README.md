@@ -9,9 +9,18 @@ Built with Next.js 16, Firebase, TypeScript, and a modern monorepo architecture 
 
 ---
 
-## 🎯 What's New (v1.4.0)
+## 🎯 What's New (v1.5.0)
 
-### 📚 Documentation Consolidation & Governance
+### 🛡️ Guardrails Automation & Script Cleanup
+
+- **✅ Guardrails Hardening** — Automated CI/CD checks for guardrail validation
+- **🚫 Script Cleanup** — Removed 3 unused scripts (test:all, deps:check, deps:dedupe)
+- **📋 Deprecations Guide** — Documented removed scripts with migration paths
+- **🔐 Pre-commit Blocker** — Prevents re-introduction of deprecated scripts
+- **🧪 Syncpack Integration** — Version consistency validation in pre-push hooks
+- **📚 Guardrails Documentation** — 3 comprehensive guides (679 + 642 + 266 lines)
+
+### 📚 Previous: Documentation Consolidation & Governance
 
 - **🗂️ Hierarchical Documentation System** — 357 scattered files consolidated into 5-level hierarchy
   (L0-L4)
@@ -35,7 +44,7 @@ Built with Next.js 16, Firebase, TypeScript, and a modern monorepo architecture 
 
 ### 📦 New Structure
 
-```
+```plaintext
 .github/
 ├── governance/
 │   ├── INDEX.md              # L0/L1 canonical + amendments
@@ -43,14 +52,26 @@ Built with Next.js 16, Firebase, TypeScript, and a modern monorepo architecture 
 │   └── amendments/           # A01-A08 implementation patterns
 ├── instructions/
 │   └── INDEX.md              # L2 agent instructions catalog
+├── workflows/
+│   └── guardrails-ci.yml     # CI/CD guardrails validation
 docs/
 ├── INDEX.md                  # L4 human documentation
+├── DEPRECATIONS.md           # Removed scripts & migration paths
 ├── architecture/             # System design
 ├── standards/                # Coding patterns
-├── guides/                   # How-to tutorials
+├── guides/
+│   ├── GUARDRAILS_GUIDE.md        # Deep dive into guardrail tools
+│   ├── GUARDRAILS_EXAMPLES.md     # 10 real-world scenarios
+│   └── GUARDRAILS_SCRIPTS.md      # npm scripts quick reference
 └── production/               # Operations
 archive/                      # 136 historical files
 ```
+
+**Key Quick Links:**
+
+- **Guardrails:** See [docs/guides/GUARDRAILS_GUIDE.md](docs/guides/GUARDRAILS_GUIDE.md) — Learn how eslint-plugin-import, @manypkg/cli, and syncpack protect code quality
+- **Scripts:** See [docs/guides/GUARDRAILS_SCRIPTS.md](docs/guides/GUARDRAILS_SCRIPTS.md) — Reference for all npm scripts
+- **Deprecated:** See [docs/DEPRECATIONS.md](docs/DEPRECATIONS.md) — Removed scripts (test:all, deps:check, deps:dedupe) with migration paths
 
 ---
 
@@ -58,7 +79,7 @@ archive/                      # 136 historical files
 
 Fresh Root uses a **production-grade monorepo** with clear separation of concerns:
 
-```
+```plaintext
 fresh-root/
 ├── apps/web/                           # Next.js PWA application
 │   ├── app/                            # App Router with API routes
@@ -137,7 +158,7 @@ cp .env.example .env.local
 
 **Layer 1: Detection** → **Layer 2: Generation** → **Layer 3: Implementation**
 
-```
+```plaintext
 Push Code
     ↓
 test-coverage.yml measures coverage
@@ -237,7 +258,7 @@ pnpm test:e2e
 
 ### Test Structure
 
-```
+```plaintext
 apps/web/app/api/schedules/
 ├── route.ts                          # API endpoint
 └── __tests__/

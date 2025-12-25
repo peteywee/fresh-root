@@ -5,10 +5,22 @@
 # - Set SKIP_CHECKS=1 to skip all checks
 # - Set SKIP_LINT=1 to skip only the lint step
 # - Set SKIP_REPOMIX=1 to skip Repomix dependency check
+# - Set SKIP_SYNCPACK=1 to skip syncpack version validation
 
 if [ -n "$SKIP_CHECKS" ]; then
 	echo "[husky] SKIP_CHECKS set — skipping all pre-push checks."
 	exit 0
+fi
+
+# Syncpack version validation (guardrails). Set SKIP_SYNCPACK=1 to skip.
+if [ -n "$SKIP_SYNCPACK" ]; then
+	echo "[husky] SKIP_SYNCPACK set — skipping syncpack."
+else
+	echo "📦 Validating dependency versions..."
+	pnpm -w syncpack list-mismatches >/dev/null 2>&1
+	if [ $? -ne 0 ]; then
+		echo "⚠️ Version mismatches found (run 'pnpm deps:sync:check' for details)"
+	fi
 fi
 
 # Always run typecheck by default (keeps CI safety). Set SKIP_TYPECHECK=1 to skip it.

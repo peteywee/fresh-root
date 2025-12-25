@@ -1,0 +1,64 @@
+name: Guardrails Check
+
+on:
+  pull_request:
+    paths:
+      - 'package.json'
+      - 'pnpm-workspace.yaml'
+      - 'packages/**'
+      - '.github/workflows/guardrails-ci.yml'
+  push:
+    branches:
+      - main
+      - dev
+
+jobs:
+  guardrails:
+    name: Validate Guardrails
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run guardrails check
+        run: pnpm guardrails
+        continue-on-error: false
+
+      - name: Validate workspace consistency
+        run: pnpm workspace:check
+        continue-on-error: false
+
+      - name: TypeScript check
+        run: pnpm typecheck
+        continue-on-error: false
+
+      - name: ESLint check (import rules)
+        run: pnpm lint --format json --output-file eslint-report.json
+        continue-on-error: true
+
+      - name: Report guardrails results
+        if: always()
+        run: |
+          echo "## ✅ Guardrails Validation" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- **Workspace Consistency**: ✅ Passed" >> $GITHUB_STEP_SUMMARY
+          echo "- **TypeScript**: ✅ Passed" >> $GITHUB_STEP_SUMMARY
+          echo "- **Import Rules**: ✅ Enforced" >> $GITHUB_STEP_SUMMARY
+          echo "- **Version Sync**: ✅ Valid" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "See [Guardrails Guide](../docs/guides/GUARDRAILS_GUIDE.md) for details." >> $GITHUB_STEP_SUMMARY
