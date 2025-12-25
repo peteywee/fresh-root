@@ -7,12 +7,8 @@ import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import React, { useCallback, useEffect, useState, Suspense } from "react";
 
-import {
-  establishServerSession,
-} from "../../../src/lib/auth-helpers";
+import { establishServerSession } from "../../../src/lib/auth-helpers";
 import { auth } from "../../lib/firebaseClient";
-
-type AuthMode = "signin" | "signup" | "magic-link";
 
 // Super admin emails go straight to dashboard
 const SUPER_ADMIN_EMAILS = ["admin@email.com"];
