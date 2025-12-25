@@ -9,21 +9,15 @@ const securityHeaders = [
   { key: "X-Content-Type-Options", value: "nosniff" },
   { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
   { key: "Permissions-Policy", value: "geolocation=(), microphone=(), camera=()" },
-  { key: "Cross-Origin-Opener-Policy", value: "same-origin" },
-  { key: "Cross-Origin-Embedder-Policy", value: "require-corp" },
+  // Firebase Google popup auth requires opener access to communicate between
+  // the app and the popup. `same-origin` can cause the popup flow to fail and
+  // surface as `auth/popup-closed-by-user`.
+  { key: "Cross-Origin-Opener-Policy", value: "same-origin-allow-popups" },
+  // COEP is intentionally omitted. `require-corp` can break cross-origin auth
+  // resources and is not needed for this app.
   { key: "Cross-Origin-Resource-Policy", value: "same-origin" },
-  {
-    key: "Content-Security-Policy",
-    value: [
-      "default-src 'self'",
-      "script-src 'self'", // 'unsafe-inline' and 'unsafe-eval' removed
-      "style-src 'self' 'unsafe-inline'", // 'unsafe-inline' is often needed for CSS-in-JS, but should be reviewed
-      "img-src 'self' data: blob: https:", // Added https: for external images
-      "font-src 'self' data:",
-      "connect-src 'self' https://*.googleapis.com https://*.firebaseio.com wss://* https://accounts.google.com",
-      "frame-ancestors 'none'",
-    ].join("; "),
-  },
+  // CSP is applied via middleware (apps/web/src/middleware.ts) so it can
+  // safely include the Firebase/Google directives needed for auth.
   { key: "Strict-Transport-Security", value: "max-age=63072000; includeSubDomains; preload" },
 ];
 

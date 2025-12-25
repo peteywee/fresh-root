@@ -1,4 +1,5 @@
 // [P0][SESSION][API] Session management endpoint
+import { Buffer } from "node:buffer";
 import { createPublicEndpoint } from "@fresh-schedules/api-framework";
 import { z } from "zod";
 
@@ -31,6 +32,60 @@ export const POST = createPublicEndpoint({
       // Type assertion safe - input validated by SDK factory
       const typedInput = input as z.infer<typeof CreateSessionSchema>;
       const { idToken } = typedInput;
+
+      // Development fallback: if no Firebase Admin credentials, use a dev session
+      const hasAdminCredentials = !!(
+        process.env.GOOGLE_APPLICATION_CREDENTIALS_JSON ||
+        process.env.GOOGLE_APPLICATION_CREDENTIALS_JSON_BASE64
+      );
+
+      if (!hasAdminCredentials && process.env.NODE_ENV === "development") {
+        console.warn("[DEV MODE] No Firebase Admin credentials - using development session fallback");
+        
+        // Parse the ID token to extract email (JWT format: header.payload.signature)
+        let email = "dev@localhost";
+        try {
+          const payload = idToken.split(".")[1];
+          const decoded = JSON.parse(Buffer.from(payload, "base64").toString("utf8"));
+          email = decoded.email || email;
+        } catch {
+          // Ignore parsing errors, use default email
+        }
+        
+        const isSuperAdmin = SUPER_ADMIN_EMAILS.includes(email.toLowerCase());
+        const expiresIn = 5 * 24 * 60 * 60 * 1000;
+        
+        // Create a dev session cookie (just use the idToken as-is for dev)
+        const response = ok({ ok: true, isSuperAdmin, dev: true });
+        response.cookies.set("session", `dev_${idToken.slice(0, 100)}`, {
+          httpOnly: true,
+          secure: false,
+          sameSite: "lax",
+          path: "/",
+          maxAge: expiresIn / 1000,
+        });
+        
+        if (isSuperAdmin) {
+          response.cookies.set("isSuperAdmin", "true", {
+            httpOnly: true,
+            secure: false,
+            sameSite: "lax",
+            path: "/",
+            maxAge: expiresIn / 1000,
+          });
+        }
+        
+        // Also set orgId cookie for dev mode to bypass onboarding
+        response.cookies.set("orgId", "dev-org", {
+          httpOnly: true,
+          secure: false,
+          sameSite: "lax",
+          path: "/",
+          maxAge: expiresIn / 1000,
+        });
+        
+        return response;
+      }
 
       const auth = getFirebaseAdminAuth();
       
