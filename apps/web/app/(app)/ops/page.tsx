@@ -13,7 +13,7 @@ async function requireOpsSuperAccess(): Promise<{ orgId: string }> {
   const cookieStore = await cookies();
   const sessionCookie = cookieStore.get("session")?.value;
   if (!sessionCookie) {
-    redirect("/signin");
+    redirect("/login");
   }
 
   const orgId = cookieStore.get("orgId")?.value;
@@ -27,7 +27,7 @@ async function requireOpsSuperAccess(): Promise<{ orgId: string }> {
   try {
     decodedClaims = await auth.verifySessionCookie(sessionCookie, true);
   } catch {
-    redirect("/signin");
+    redirect("/login");
   }
 
   const db = getFirebaseAdminDb();
