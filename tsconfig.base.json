@@ -31,10 +31,12 @@
     "paths": {
       // Note: @ alias removed from base config; each project defines its own
       // apps/web defines @ to map to its root directory for @/app/* and @/src/* imports
-      "@fresh-schedules/types": ["packages/types/src/index.ts"],
-      "@fresh-schedules/api-framework": ["packages/api-framework/src/index.ts"],
-      "@fresh-schedules/api-framework/testing": ["packages/api-framework/src/testing.ts"],
-      "@types/*": ["packages/types/src/*"],
+      // Point to dist for composite projects that have built output (TypeScript will resolve .d.ts files)
+      // Source-only packages remain pointing to src/
+      "@fresh-schedules/types": ["packages/types/dist/index.d.ts"],
+      "@fresh-schedules/api-framework": ["packages/api-framework/dist/index.d.ts"],
+      "@fresh-schedules/api-framework/testing": ["packages/api-framework/dist/testing.d.ts"],
+      "@types/*": ["packages/types/dist/*"],
       "@ui/*": ["packages/ui/src/*"],
       "@config/*": ["packages/config/src/*"]
     }

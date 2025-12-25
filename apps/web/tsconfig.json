@@ -12,9 +12,9 @@
     "paths": {
       // @ maps to the web app root, enabling @/app/* and @/src/* imports
       "@/*": ["./*"],
-      "@fresh-schedules/types": ["../../packages/types/src/index.ts"],
-      "@fresh-schedules/api-framework": ["../../packages/api-framework/src/index.ts"],
-      "@fresh-schedules/api-framework/testing": ["../../packages/api-framework/src/testing.ts"],
+      "@fresh-schedules/types": ["../../packages/types/dist/index.d.ts"],
+      "@fresh-schedules/api-framework": ["../../packages/api-framework/dist/index.d.ts"],
+      "@fresh-schedules/api-framework/testing": ["../../packages/api-framework/dist/testing.d.ts"],
       "@fresh-schedules/ui": ["../../packages/ui/src/index.ts"],
       "@packages/env": ["../../packages/env/src/index.ts"]
     },
