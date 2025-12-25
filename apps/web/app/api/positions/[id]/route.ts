@@ -22,7 +22,7 @@ const UpdatePositionSchema = z.object({
   requiredCertifications: z.array(z.string()).optional(),
 });
 
-import { checkRateLimit, RateLimits } from "../../../../src/lib/api/rate-limit";
+import { checkRateLimit, RateLimits } from "../../../../src/lib/api/rate-limit.server";
 import { sanitizeObject } from "../../../../src/lib/api/sanitize";
 import { serverError } from "../../_shared/validation";
 

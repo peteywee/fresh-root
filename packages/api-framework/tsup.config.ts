@@ -8,8 +8,26 @@ export default defineConfig({
     testing: "src/testing.ts",
   },
   format: ["esm"],
-  dts: true,
+  dts: {
+    compilerOptions: {
+      composite: false,
+      incremental: false,
+      rootDir: undefined,
+    },
+  },
   sourcemap: true,
   clean: true,
-  external: ["next", "firebase-admin", "zod"],
+  // External dependencies that should NOT be bundled:
+  // - @fresh-schedules/types: resolved via package.json dependency
+  // - ioredis: server-only, resolved at runtime
+  // - firebase-admin: server-only, resolved at runtime
+  // - next: peer dependency
+  // - zod: peer dependency
+  external: [
+    "@fresh-schedules/types",
+    "next",
+    "firebase-admin",
+    "zod",
+    "ioredis",
+  ],
 });

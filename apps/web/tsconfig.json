@@ -32,5 +32,9 @@
     "**/*.test.tsx",
     "**/*.bench.ts",
     "vitest.setup.ts"
+  ],
+  "references": [
+    { "path": "../../packages/types" },
+    { "path": "../../packages/api-framework" }
   ]
 }

@@ -4,7 +4,7 @@ import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 
 // Super admin emails that skip onboarding and go straight to dashboard
-const SUPER_ADMIN_EMAILS = ["admin@email.com"];
+const _SUPER_ADMIN_EMAILS = ["admin@email.com"];
 
 /**
  * Gate: Check authentication and org membership.

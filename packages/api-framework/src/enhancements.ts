@@ -89,6 +89,10 @@ export async function executeMiddlewareChain<TInput>(
     const currentMiddleware = middleware[index];
     index++;
 
+    if (!currentMiddleware) {
+      throw new Error(`Middleware at index ${index - 1} is undefined`);
+    }
+
     return currentMiddleware({
       ...params,
       next: executeNext,
@@ -223,7 +227,7 @@ export function createBatchHandler<TItem, TOutput>(
     let failureCount = 0;
 
     for (let i = 0; i < items.length; i++) {
-      const item = items[i];
+      const item = items[i]!;
 
       try {
         const data = await withTimeout(

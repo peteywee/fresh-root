@@ -48,7 +48,7 @@ if (typeof (restoreInterval as any).unref === "function") {
 // so all existing setup keeps working.
 try {
   // Vitest will resolve this TS module just fine.
-  await import("./apps/web/vitest.setup");
+  await import("@apps/web/vitest.setup");
 } catch {
   // If apps/web/vitest.setup.ts doesn't exist, ignore.
 }

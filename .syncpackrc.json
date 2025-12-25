@@ -1,0 +1,45 @@
+{
+  "$schema": "https://unpkg.com/syncpack@13/dist/schema.json",
+  "indent": "  ",
+  "sortFirst": ["name", "version", "description", "private", "type", "main", "types", "exports"],
+  "versionGroups": [
+    {
+      "label": "Consistent TypeScript version",
+      "packages": ["**"],
+      "dependencies": ["typescript"],
+      "policy": "sameRange"
+    },
+    {
+      "label": "Consistent React version",
+      "packages": ["**"],
+      "dependencies": ["react", "react-dom", "@types/react", "@types/react-dom"],
+      "policy": "sameRange"
+    },
+    {
+      "label": "Consistent Zod version",
+      "packages": ["**"],
+      "dependencies": ["zod"],
+      "policy": "sameRange"
+    },
+    {
+      "label": "Consistent Next.js version",
+      "packages": ["**"],
+      "dependencies": ["next"],
+      "policy": "sameRange"
+    },
+    {
+      "label": "Consistent Vitest version",
+      "packages": ["**"],
+      "dependencies": ["vitest", "@vitest/coverage-v8", "@vitest/ui"],
+      "policy": "sameRange"
+    }
+  ],
+  "semverGroups": [
+    {
+      "label": "Use exact versions in production",
+      "packages": ["@apps/*", "@functions/*"],
+      "dependencyTypes": ["prod"],
+      "range": ""
+    }
+  ]
+}

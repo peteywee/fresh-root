@@ -33,7 +33,7 @@ describe("CreateScheduleSchema", () => {
     const result = CreateScheduleSchema.safeParse(invalidSchedule);
     expect(result.success).toBe(false);
     if (!result.success) {
-      expect(result.error.issues[0].message).toBe("End date must be after start date");
+      expect(result.error.issues[0]!.message).toBe("End date must be after start date");
     }
   });
 

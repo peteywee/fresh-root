@@ -12,11 +12,64 @@ env:
 
 jobs:
   # ═══════════════════════════════════════════════════════════════════════════
+  # GATE 0: IMPORT VERIFICATION (Before Static Analysis)
+  # ═══════════════════════════════════════════════════════════════════════════
+  verify-imports:
+    name: Verify Import Patterns
+    runs-on: ubuntu-latest
+    if: ${{ !(github.event_name == 'push' && github.event.head_commit != null && contains(github.event.head_commit.message, '[skip ci]')) }}
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Check for relative cross-package imports
+        run: |
+          echo "Checking for forbidden relative imports in api-framework..."
+          
+          # Fail if api-framework imports from types using relative paths
+          if grep -rE "from ['\"]\.\.\/\.\.\/types" packages/api-framework/src/; then
+            echo ""
+            echo "❌ ERROR: Found relative imports to types package!"
+            echo "   Use @fresh-schedules/types instead of relative paths."
+            echo "   Relative imports break after tsup builds the package."
+            exit 1
+          fi
+          
+          echo "✅ No forbidden relative imports found"
+          
+      - name: Check for ignoreBuildErrors
+        run: |
+          echo "Checking next.config.mjs for ignoreBuildErrors..."
+          
+          if grep -E "ignoreBuildErrors\s*:\s*true" apps/web/next.config.mjs; then
+            echo ""
+            echo "❌ ERROR: ignoreBuildErrors must be false!"
+            echo "   This setting masks TypeScript errors and causes silent failures."
+            exit 1
+          fi
+          
+          echo "✅ ignoreBuildErrors is not enabled"
+          
+      - name: Check for dangerous dynamic import patterns
+        run: |
+          echo "Checking for CSP-unsafe dynamic import patterns..."
+          
+          # The new Function() pattern is blocked by CSP
+          if grep -rE "new Function\(" packages/ apps/; then
+            echo ""
+            echo "⚠️ WARNING: Found new Function() usage"
+            echo "   This pattern is blocked by Content Security Policy."
+            echo "   Use proper dynamic imports: const mod = await import('module')"
+          fi
+          
+          echo "✅ Dynamic import check complete"
+
+  # ═══════════════════════════════════════════════════════════════════════════
   # GATE 1: STATIC ANALYSIS (TypeScript + ESLint)
   # ═══════════════════════════════════════════════════════════════════════════
   static:
     name: Static Analysis
     runs-on: ubuntu-latest
+    needs: verify-imports
     if: ${{ !(github.event_name == 'push' && github.event.head_commit != null && contains(github.event.head_commit.message, '[skip ci]')) }}
     strategy:
       matrix:
