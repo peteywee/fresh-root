@@ -53,6 +53,7 @@
     "validate:full": "pnpm fix:all && pnpm guardrails:fix && pnpm validate:all && pnpm test:unit",
     "validate:pre-commit": "pnpm lint:fix && pnpm workspace:check && pnpm typecheck",
     "validate:pre-push": "pnpm lint && pnpm workspace:check && pnpm deps:sync:check && pnpm typecheck",
+    "check": "pnpm lint:fix && pnpm workspace:check && pnpm typecheck",
     "import:report": "pnpm lint:check && cat eslint-report.json | jq '.[] | select(.messages | map(.ruleId == \"import/no-relative-packages\") | any)'",
     "import:find": "grep -r \"from ['\\\"]\\.\\.\" --include=\"*.ts\" --include=\"*.tsx\" --include=\"*.js\" . || true",
     "pkg:validate": "manypkg check",
