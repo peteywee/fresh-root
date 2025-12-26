@@ -370,11 +370,15 @@ Shows duplicate packages in node_modules.
 
 **Pattern 5: Production-only exact versions**
 
+> ⚠️ **Caution:** If using this pattern, ensure workspace packages are ignored first
+> (see "Critical Configuration: Syncpack vs Manypkg Conflict" below). Otherwise, this
+> will conflict with manypkg's `workspace:*` requirement.
+
 ```json
 {
   "semverGroups": [
     {
-      "label": "Use exact versions in production",
+      "label": "Use exact versions in production (external deps only)",
       "packages": ["@apps/*"],
       "dependencyTypes": ["prod"],
       "range": "" // 1.5.0, not ^1.5.0
@@ -383,7 +387,7 @@ Shows duplicate packages in node_modules.
 }
 ```
 
-Ensures production apps use exact tested versions.
+Ensures production apps use exact tested versions for **external dependencies**.
 
 ### Common Issues & Fixes
 
@@ -430,6 +434,109 @@ pnpm typecheck      # Verify TypeScript happy
     }
   ]
 }
+```
+
+---
+
+## Critical Configuration: Known Conflicts & Resolutions
+
+### Syncpack vs Manypkg Conflict (IMPORTANT)
+
+**Problem:** These two tools have fundamentally incompatible expectations for local workspace packages:
+
+- **manypkg** requires `workspace:*` protocol for internal packages
+- **syncpack** (with semverGroups) wants exact versions like `0.1.1`
+
+Running `pnpm deps:sync` could change `workspace:*` to version numbers, breaking manypkg. This creates a circular breakage pattern.
+
+**Solution:** Configure syncpack to **ignore** all `@fresh-schedules/*` internal packages:
+
+```json
+// .syncpackrc.json
+{
+  "versionGroups": [
+    {
+      "label": "Ignore local workspace packages",
+      "packages": ["**"],
+      "dependencies": ["@fresh-schedules/*"],
+      "isIgnored": true
+    }
+    // ...other groups for external dependencies
+  ]
+}
+```
+
+**What this means:**
+
+- Syncpack will NOT check or modify `@fresh-schedules/*` dependencies
+- Manypkg handles workspace package references (enforcing `workspace:*`)
+- External dependencies are still version-synced by syncpack
+
+**⚠️ NEVER DO THIS:**
+
+```json
+// ❌ WRONG: Don't force exact versions on workspace packages
+{
+  "semverGroups": [
+    {
+      "packages": ["@apps/**", "@functions/**"],
+      "range": ""  // Forces exact versions
+    }
+  ]
+}
+```
+
+This conflicts with manypkg's `workspace:*` requirement.
+
+### TypeScript Composite Project Paths (IMPORTANT)
+
+**Problem:** TypeScript can't resolve types from packages that have a build step.
+
+When a package like `@fresh-schedules/types` has a `tsconfig.json` with `"composite": true`, TypeScript expects to find `.d.ts` files in the output directory, not source files.
+
+**Solution:** Configure `tsconfig.base.json` paths based on package type:
+
+```json
+// tsconfig.base.json
+{
+  "compilerOptions": {
+    "paths": {
+      // Built packages → point to dist (has .d.ts files)
+      "@fresh-schedules/types": ["packages/types/dist/index.d.ts"],
+      "@fresh-schedules/api-framework": ["packages/api-framework/dist/index.d.ts"],
+      
+      // Source-only packages → point to src (no build step)
+      "@ui/*": ["packages/ui/src/*"],
+      "@config/*": ["packages/config/src/*"],
+      "@env/*": ["packages/env/src/*"]
+    }
+  }
+}
+```
+
+**How to determine which path to use:**
+
+1. Check if the package has a build script (`"build": "tsup"` or similar)
+2. Check if it has `"composite": true` in its tsconfig
+3. If YES to either → use `dist/index.d.ts`
+4. If NO to both → use `src/index.ts`
+
+**⚠️ Symptoms of wrong paths:**
+
+- `Cannot find module '@fresh-schedules/types'` during Next.js build
+- TypeScript errors resolve locally but fail in CI
+- Import auto-complete works but build breaks
+
+**After adding a new built package:**
+
+```bash
+# 1. Build the package first
+pnpm build --filter=@fresh-schedules/new-package
+
+# 2. Update tsconfig.base.json paths to point to dist
+
+# 3. Verify
+pnpm typecheck
 ```
 
 ---
