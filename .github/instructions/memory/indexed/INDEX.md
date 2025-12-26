@@ -1,0 +1,134 @@
+# Memory Index
+
+_Indexed, searchable knowledge base organized by domain and lesson type._
+
+**Last Updated**: 2025-12-25
+**Total Lessons**: 0
+**Domains**: (to be populated)
+
+## How to Use
+
+1. **Search by domain**: Find related lessons in the domain table below
+2. **Search by type**: Find gotchas, patterns, best-practices organized by category
+3. **Search by tags**: Cross-referenced lessons sharing context/concern
+4. **AI reference**: AI assistants use this index + metadata to find relevant guidance
+
+## By Domain
+
+_Lessons organized by their primary domain. Each domain folder at `memory/indexed/{domain}/` contains individual lessons._
+
+| Domain | Lesson Count | Recent Lessons | Tags |
+|--------|-------------|-----------------|------|
+| (none yet) | — | — | — |
+
+## By Type
+
+### Patterns (Reusable Solutions)
+
+_Effective approaches and best-practice patterns discovered across the codebase._
+
+| Lesson | Domain | Priority | Created |
+|--------|--------|----------|---------|
+| (none yet) | — | — | — |
+
+### Gotchas (Common Mistakes)
+
+_Frequent mistakes, subtle bugs, and gotchas to avoid._
+
+| Lesson | Domain | Priority | Created |
+|--------|--------|----------|---------|
+| (none yet) | — | — | — |
+
+### Best Practices
+
+_Standards, conventions, and proven approaches._
+
+| Lesson | Domain | Priority | Created |
+|--------|--------|----------|---------|
+| (none yet) | — | — | — |
+
+### Automation & Workflows
+
+_Scripts, tools, and workflow improvements._
+
+| Lesson | Domain | Priority | Created |
+|--------|--------|----------|---------|
+| (none yet) | — | — | — |
+
+### Critical Warnings
+
+_High-priority lessons with safety, security, or major impact implications._
+
+| Lesson | Domain | Priority | Created |
+|--------|--------|----------|---------|
+| (none yet) | — | — | — |
+
+## By Tag
+
+_Cross-referenced lessons sharing tags for related discovery._
+
+### Common Tags
+
+- `#pattern` - Reusable design patterns
+- `#gotcha` - Common mistakes to avoid
+- `#best-practice` - Standards and conventions
+- `#automation` - Tools and scripts
+- `#critical` - High-impact lessons
+- `#debugging` - Debug techniques
+- `#testing` - Test patterns
+- `#performance` - Optimization
+- `#security` - Security concerns
+- `#typescript` - TypeScript specific
+- `#git` - Git/SCM workflows
+- `#monorepo` - Monorepo patterns
+- `#ci-cd` - CI/CD pipelines
+
+## Quick Links
+
+- **[New Memory](https://github.com/peteywee/fresh-root/blob/main/.github/prompts/remember-enhanced.prompt.md)** - Use `/remember` to add new lessons
+- **[Create Skill](https://github.com/peteywee/fresh-root/blob/main/.claude/skills/)** - Generate Claude Agent Skills from memory domains
+- **[Memory Guidelines](https://github.com/peteywee/fresh-root/blob/main/.github/prompts/remember-enhanced.prompt.md#quality-standards)** - Best practices for memory entries
+
+---
+
+## Template: Adding New Lessons
+
+When creating a new lesson in `memory/indexed/{domain}/{lesson-id}.md`, use this structure:
+
+```yaml
+---
+description: "Brief domain/lesson responsibility"
+applyTo: ["glob/patterns/**"]
+tags: ["tag1", "tag2", "tag3"]
+type: "pattern|gotcha|best-practice|automation|workflow"
+domain: "domain-name"
+priority: 1-3
+created: "YYYY-MM-DD"
+updated: "YYYY-MM-DD"
+relatedDomains: ["related-domain"]
+relatedLessons: ["lesson-id"]
+keywords: ["keyword1", "keyword2"]
+---
+
+# Lesson Title
+
+_Brief tagline._
+
+## Problem
+
+What problem or mistake this addresses.
+
+## Solution
+
+How to do it correctly.
+
+## Why
+
+Why this matters.
+
+## Example
+
+Code or concrete example.
+```
+
+Then update this INDEX with the new entry in the appropriate section.
