@@ -1,3 +1,5 @@
+"use client";
+
 import FirebaseSignIn from "@/app/components/FirebaseSignIn";
 import Link from "next/link";
 
