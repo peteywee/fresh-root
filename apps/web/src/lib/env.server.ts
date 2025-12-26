@@ -47,6 +47,11 @@ const ServerEnvSchema = z.object({
 
   // === Cache & Storage ===
   REDIS_URL: z.string().url().optional(),
+  
+  // === Upstash Redis (Rate Limiting) ===
+  UPSTASH_REDIS_REST_URL: z.string().url().optional(),
+  UPSTASH_REDIS_REST_TOKEN: z.string().optional(),
+  USE_REDIS_RATE_LIMIT: z.enum(["true", "false"]).optional().default("false"),
 
   // === CORS & Rate Limiting ===
   CORS_ORIGINS: z.string().optional(),
@@ -62,6 +67,7 @@ const ServerEnvSchema = z.object({
     .transform((val) => parseInt(val, 10)),
 
   // === Observability ===
+  OBSERVABILITY_TRACES_ENABLED: z.enum(["true", "false"]).optional().default("false"),
   SENTRY_DSN: z.string().optional(),
   SENTRY_ORG: z.string().optional(),
   SENTRY_PROJECT: z.string().optional(),
@@ -145,6 +151,21 @@ export function loadServerEnv(): ServerEnv {
     if (!env.CORS_ORIGINS || env.CORS_ORIGINS.trim().length === 0) {
       console.error("[env.server] Production requires CORS_ORIGINS to be configured");
       throw new Error("Missing CORS_ORIGINS in production");
+    }
+    
+    // Validate Redis configuration for multi-instance deployments
+    if (env.USE_REDIS_RATE_LIMIT === "true") {
+      if (!env.UPSTASH_REDIS_REST_URL && !env.REDIS_URL) {
+        console.error(
+          "[env.server] Production with USE_REDIS_RATE_LIMIT=true requires either UPSTASH_REDIS_REST_URL or REDIS_URL",
+        );
+        throw new Error("Missing Redis configuration for rate limiting in production");
+      }
+      
+      if (env.UPSTASH_REDIS_REST_URL && !env.UPSTASH_REDIS_REST_TOKEN) {
+        console.error("[env.server] UPSTASH_REDIS_REST_URL requires UPSTASH_REDIS_REST_TOKEN");
+        throw new Error("Missing UPSTASH_REDIS_REST_TOKEN in production");
+      }
     }
   }
 
