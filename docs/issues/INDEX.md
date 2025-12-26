@@ -12,9 +12,9 @@ This document provides a complete index of GitHub issues #195-#218, mapping them
 
 | Status        | Count | Issues                         |
 | ------------- | ----- | ------------------------------ |
-| ✅ Complete   | 4     | #196, #197, #198, #199         |
+| ✅ Complete   | 5     | #196, #197, #198, #199, #202   |
 | 🟡 Active     | 1     | #195                           |
-| 🔴 Not Started| 19    | #200-#218                      |
+| 🔴 Not Started| 18    | #200-#201, #203-#218           |
 
 ## Issue Mapping
 
@@ -33,7 +33,7 @@ This document provides a complete index of GitHub issues #195-#218, mapping them
 | ----- | ------------------------------- | -------- | ----------- | ------ | -------- |
 | #199  | Mock→Firestore Route Migration  | -        | ✅ Complete | -      | Phase 4  |
 | #200  | Schema + Test Fixes             | MEDIUM   | Deferred    | 4h     | Delta    |
-| #202  | Firestore Rules Test Coverage   | HIGH     | Not Started | 8h     | TODO-004 |
+| #202  | Firestore Rules Test Coverage   | HIGH     | ✅ Complete | 9.5h   | TODO-004 |
 | #203  | API Endpoint Test Coverage      | MEDIUM   | Not Started | 12h    | TODO-005 |
 
 ### Phase 3: Observability & Operations (Week 4)
