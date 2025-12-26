@@ -4,6 +4,12 @@
   "sortFirst": ["name", "version", "description", "private", "type", "main", "types", "exports"],
   "versionGroups": [
     {
+      "label": "Ignore local workspace packages",
+      "packages": ["**"],
+      "dependencies": ["@fresh-schedules/*"],
+      "isIgnored": true
+    },
+    {
       "label": "Consistent TypeScript version",
       "packages": ["**"],
       "dependencies": ["typescript"],
@@ -32,14 +38,6 @@
       "packages": ["**"],
       "dependencies": ["vitest", "@vitest/coverage-v8", "@vitest/ui"],
       "policy": "sameRange"
-    }
-  ],
-  "semverGroups": [
-    {
-      "label": "Use exact versions in production",
-      "packages": ["@apps/*", "@functions/*"],
-      "dependencyTypes": ["prod"],
-      "range": ""
     }
   ]
 }
