@@ -1,244 +1,48 @@
-// [P1][OPS][CODE] Build performance page with trend charts
-// Tags: P1, OPS, CODE, builds, charts
-"use client";
-
-import { useEffect, useState, useMemo } from "react";
-import StatCard from "../_components/StatCard";
-import TrendChart from "../_components/TrendChart";
-
-type BuildPerformanceEntry = {
-  id: string;
-  timestamp: string;
-  repository: string;
-  ref: string;
-  sha: string;
-  runId: string;
-  runAttempt: string;
-  installSeconds: number;
-  buildSeconds: number;
-  sdkSeconds: number;
-  totalSeconds: number;
-  cacheHit: boolean;
-  createdAt: number;
-};
-
-interface ApiResponse {
-  ok: boolean;
-  data: BuildPerformanceEntry[];
-  meta: {
-    source: string;
-    limit: number;
-    total: number;
-  };
-}
-
-function formatDuration(seconds: number): string {
-  if (seconds < 60) return `${seconds.toFixed(0)}s`;
-  const mins = Math.floor(seconds / 60);
-  const secs = seconds % 60;
-  return `${mins}m ${secs.toFixed(0)}s`;
-}
-
-function calculateStats(entries: BuildPerformanceEntry[]) {
-  if (entries.length === 0) {
-    return {
-      avgTotal: 0,
-      avgInstall: 0,
-      avgBuild: 0,
-      avgSdk: 0,
-      cacheHitRate: 0,
-      p50: 0,
-      p95: 0,
-      trend: "neutral" as const,
-      trendPercent: 0,
-    };
-  }
-
-  const totals = entries.map((e) => e.totalSeconds);
-  const sorted = [...totals].sort((a, b) => a - b);
-
-  const avg = (arr: number[]) => arr.reduce((a, b) => a + b, 0) / arr.length;
-  const percentile = (arr: number[], p: number) => {
-    const idx = Math.floor(arr.length * p);
-    return arr[Math.min(idx, arr.length - 1)];
-  };
-
-  const avgTotal = avg(totals);
-  const cacheHits = entries.filter((e) => e.cacheHit).length;
-
-  // Trend: compare last 5 to previous 5
-  let trend: "up" | "down" | "neutral" = "neutral";
-  let trendPercent = 0;
-
-  if (entries.length >= 10) {
-    const recent5 = avg(totals.slice(0, 5));
-    const prev5 = avg(totals.slice(5, 10));
-    const diff = ((recent5 - prev5) / prev5) * 100;
-    trendPercent = Math.abs(diff);
-    trend = diff < -5 ? "up" : diff > 5 ? "down" : "neutral";
-  }
-
-  return {
-    avgTotal,
-    avgInstall: avg(entries.map((e) => e.installSeconds)),
-    avgBuild: avg(entries.map((e) => e.buildSeconds)),
-    avgSdk: avg(entries.map((e) => e.sdkSeconds)),
-    cacheHitRate: cacheHits / entries.length,
-    p50: percentile(sorted, 0.5),
-    p95: percentile(sorted, 0.95),
-    trend,
-    trendPercent,
-  };
-}
-
 export default function BuildsPage() {
-  const [data, setData] = useState<ApiResponse | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const res = await fetch("/api/ops/build-performance?limit=50");
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        const json = (await res.json()) as ApiResponse;
-        setData(json);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : "Failed to fetch");
-      } finally {
-        setLoading(false);
-      }
-    }
-    fetchData();
-  }, []);
-
-  const stats = useMemo(() => {
-    if (!data?.data) return null;
-    return calculateStats(data.data);
-  }, [data]);
-
-  const chartData = useMemo(() => {
-    if (!data?.data) return [];
-    return data.data
-      .filter((entry) => {
-        // Filter out entries with invalid timestamps (NaN would break chart)
-        const time = new Date(entry.timestamp).getTime();
-        return !isNaN(time);
-      })
-      .map((entry) => ({
-        createdAt: new Date(entry.timestamp).getTime(),
-        totalDurationSec: entry.totalSeconds,
-      }));
-  }, [data]);
-
-  if (error) {
-    return (
-      <div className="rounded-lg border border-red-200 bg-red-900/20 p-4">
-        <p className="text-sm text-red-400">Failed to load build performance: {error}</p>
-      </div>
-    );
-  }
-
   return (
-    <div className="space-y-6">
+    <div className="space-y-8 animate-fade-in-up">
       <div>
-        <h1 className="text-2xl font-semibold text-white">Build Performance</h1>
-        <p className="mt-1 text-sm text-slate-400">CI/CD build metrics from GitHub Actions</p>
+        <h1 className="text-3xl font-heading font-bold text-foreground">Build Pipeline</h1>
+        <p className="text-muted-foreground">CI/CD Status and Deployment History.</p>
       </div>
 
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <StatCard
-          title="Avg Build Time"
-          value={stats ? formatDuration(stats.avgTotal) : "-"}
-          subtext={
-            stats && stats.trend !== "neutral"
-              ? `${stats.trendPercent.toFixed(0)}% ${stats.trend === "up" ? "improving" : "degrading"}`
-              : "Stable"
-          }
-        />
-        <StatCard title="P50 Duration" value={stats ? formatDuration(stats.p50) : "-"} />
-        <StatCard title="P95 Duration" value={stats ? formatDuration(stats.p95) : "-"} />
-        <StatCard
-          title="Cache Hit Rate"
-          value={stats ? `${(stats.cacheHitRate * 100).toFixed(0)}%` : "-"}
-        />
-      </div>
-
-      <TrendChart data={chartData} />
-
-      <div className="overflow-hidden rounded-xl border border-slate-800 bg-slate-900/40">
-        <table className="min-w-full divide-y divide-slate-800">
-          <thead className="bg-slate-900/60">
+      <div className="rounded-md border border-border bg-card overflow-hidden">
+        <table className="w-full text-left text-sm">
+          <thead className="bg-secondary text-muted-foreground font-mono uppercase text-xs">
             <tr>
-              <th className="px-4 py-3 text-left text-xs font-medium uppercase text-slate-400">
-                Timestamp
-              </th>
-              <th className="px-4 py-3 text-left text-xs font-medium uppercase text-slate-400">
-                SHA
-              </th>
-              <th className="px-4 py-3 text-right text-xs font-medium uppercase text-slate-400">
-                Install
-              </th>
-              <th className="px-4 py-3 text-right text-xs font-medium uppercase text-slate-400">
-                Build
-              </th>
-              <th className="px-4 py-3 text-right text-xs font-medium uppercase text-slate-400">
-                SDK
-              </th>
-              <th className="px-4 py-3 text-right text-xs font-medium uppercase text-slate-400">
-                Total
-              </th>
-              <th className="px-4 py-3 text-center text-xs font-medium uppercase text-slate-400">
-                Cache
-              </th>
+              <th className="p-4 font-medium">Status</th>
+              <th className="p-4 font-medium">Commit</th>
+              <th className="p-4 font-medium">Branch</th>
+              <th className="p-4 font-medium">Time</th>
+              <th className="p-4 font-medium text-right">Duration</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-800">
-            {loading ? (
-              <tr>
-                <td colSpan={7} className="px-4 py-8 text-center text-sm text-slate-400">
-                  Loading...
+          <tbody className="divide-y divide-border/50">
+            {[
+              { status: "success", commit: "a9f2b3", msg: "feat: update schedule colors", branch: "main", time: "10m ago", dur: "2m 14s" },
+              { status: "running", commit: "88c1d2", msg: "fix: nav layout", branch: "dev", time: "15m ago", dur: "Running..." },
+              { status: "failed", commit: "7b2a11", msg: "chore: db migration", branch: "feat/db", time: "1h ago", dur: "45s" },
+              { status: "success", commit: "6c5d44", msg: "docs: update readme", branch: "main", time: "3h ago", dur: "1m 30s" },
+            ].map((build, i) => (
+              <tr key={i} className="group hover:bg-muted/20 transition-colors">
+                <td className="p-4">
+                  <span className={`inline-flex items-center px-2 py-1 rounded text-xs font-bold uppercase tracking-wider
+                    ${build.status === 'success' ? 'bg-schedule-green/20 text-schedule-green' : 
+                      build.status === 'running' ? 'bg-schedule-blue/20 text-schedule-blue animate-pulse' :
+                      'bg-schedule-rose/20 text-schedule-rose'
+                    }`}>
+                    {build.status}
+                  </span>
                 </td>
-              </tr>
-            ) : data?.data.length === 0 ? (
-              <tr>
-                <td colSpan={7} className="px-4 py-8 text-center text-sm text-slate-400">
-                  No build data available
+                <td className="p-4">
+                  <div className="font-mono text-primary">{build.commit}</div>
+                  <div className="text-muted-foreground text-xs">{build.msg}</div>
                 </td>
+                <td className="p-4 font-mono text-xs">{build.branch}</td>
+                <td className="p-4 text-muted-foreground">{build.time}</td>
+                <td className="p-4 text-right font-mono text-xs">{build.dur}</td>
               </tr>
-            ) : (
-              data?.data.slice(0, 20).map((entry) => {
-                // Validate timestamp before rendering
-                const ts = new Date(entry.timestamp);
-                const isValidDate = !isNaN(ts.getTime());
-
-                return (
-                  <tr key={entry.id} className="hover:bg-slate-800/30">
-                    <td className="whitespace-nowrap px-4 py-3 text-sm text-slate-300">
-                      {isValidDate ? ts.toLocaleString() : "Invalid date"}
-                    </td>
-                    <td className="px-4 py-3 font-mono text-xs text-slate-400">
-                      {entry.sha.slice(0, 7)}
-                    </td>
-                    <td className="whitespace-nowrap px-4 py-3 text-right text-sm text-slate-300">
-                      {formatDuration(entry.installSeconds)}
-                    </td>
-                    <td className="whitespace-nowrap px-4 py-3 text-right text-sm text-slate-300">
-                      {formatDuration(entry.buildSeconds)}
-                    </td>
-                    <td className="whitespace-nowrap px-4 py-3 text-right text-sm text-slate-300">
-                      {formatDuration(entry.sdkSeconds)}
-                    </td>
-                    <td className="whitespace-nowrap px-4 py-3 text-right text-sm font-medium text-slate-100">
-                      {formatDuration(entry.totalSeconds)}
-                    </td>
-                    <td className="px-4 py-3 text-center text-sm">
-                      {entry.cacheHit ? "✅" : "❌"}
-                    </td>
-                  </tr>
-                );
-              })
-            )}
+            ))}
           </tbody>
         </table>
       </div>

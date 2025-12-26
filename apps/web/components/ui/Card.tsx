@@ -1,24 +1,86 @@
-// [P2][UI][CODE] Card
-// Tags: P2, UI, CODE
-import * as React from "react";
+import * as React from "react"
+import { cn } from "@/lib/utils"
 
-export function Card({ className = "", ...props }: React.HTMLAttributes<HTMLDivElement>) {
-  return (
-    <div
-      className={`rounded-2xl border border-neutral-900 bg-[#0f131a] shadow-lg ${className}`}
-      {...props}
-    />
-  );
+interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
+  variant?: 'default' | 'solid' | 'outline'
 }
 
-export function CardHeader({ className = "", ...props }: React.HTMLAttributes<HTMLDivElement>) {
-  return <div className={`border-b border-neutral-900 px-4 py-3 ${className}`} {...props} />;
-}
+const Card = React.forwardRef<HTMLDivElement, CardProps>(
+  ({ className, variant = 'default', ...props }, ref) => {
+    const variants = {
+      default: "bg-card text-card-foreground shadow-sm border border-border",
+      solid: "bg-secondary text-secondary-foreground border border-border/20",
+      outline: "bg-transparent border-2 border-dashed border-border/60 text-muted-foreground"
+    }
 
-export function CardContent({ className = "", ...props }: React.HTMLAttributes<HTMLDivElement>) {
-  return <div className={`px-4 py-4 ${className}`} {...props} />;
-}
+    return (
+      <div
+        ref={ref}
+        className={cn("rounded-sm", variants[variant], className)}
+        {...props}
+      />
+    )
+  }
+)
+Card.displayName = "Card"
 
-export function CardFooter({ className = "", ...props }: React.HTMLAttributes<HTMLDivElement>) {
-  return <div className={`border-t border-neutral-900 px-4 py-3 ${className}`} {...props} />;
-}
+const CardHeader = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <div
+    ref={ref}
+    className={cn("flex flex-col space-y-1.5 p-6", className)}
+    {...props}
+  />
+))
+CardHeader.displayName = "CardHeader"
+
+const CardTitle = React.forwardRef<
+  HTMLParagraphElement,
+  React.HTMLAttributes<HTMLHeadingElement>
+>(({ className, ...props }, ref) => (
+  <h3
+    ref={ref}
+    className={cn(
+      "text-2xl font-heading font-semibold leading-none tracking-tight",
+      className
+    )}
+    {...props}
+  />
+))
+CardTitle.displayName = "CardTitle"
+
+const CardDescription = React.forwardRef<
+  HTMLParagraphElement,
+  React.HTMLAttributes<HTMLParagraphElement>
+>(({ className, ...props }, ref) => (
+  <p
+    ref={ref}
+    className={cn("text-sm text-muted-foreground", className)}
+    {...props}
+  />
+))
+CardDescription.displayName = "CardDescription"
+
+const CardContent = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <div ref={ref} className={cn("p-6 pt-0", className)} {...props} />
+))
+CardContent.displayName = "CardContent"
+
+const CardFooter = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <div
+    ref={ref}
+    className={cn("flex items-center p-6 pt-0", className)}
+    {...props}
+  />
+))
+CardFooter.displayName = "CardFooter"
+
+export { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent }
