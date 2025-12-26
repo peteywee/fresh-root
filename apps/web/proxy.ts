@@ -19,7 +19,16 @@ export function proxy(req: NextRequest) {
   const pathname = url.pathname;
 
   // Public routes: home, sign-in, login, onboarding, auth callback, assets, api
-  const PUBLIC = [/^\/$/, /^\/onboarding/, /^\/signin/, /^\/login/, /^\/auth/, /^\/api/, /^\/_next/, /^\/favicon\.ico$/];
+  const PUBLIC = [
+    /^\/$/,
+    /^\/onboarding/,
+    /^\/signin/,
+    /^\/login/,
+    /^\/auth/,
+    /^\/api/,
+    /^\/_next/,
+    /^\/favicon\.ico$/,
+  ];
   if (PUBLIC.some((rx) => rx.test(pathname))) return NextResponse.next();
 
   // TEMPORARY: Allow bypassing the guard for development only

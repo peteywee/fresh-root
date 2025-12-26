@@ -13,7 +13,7 @@ export const GET = createAuthenticatedEndpoint({
   rateLimit: { maxRequests: 100, windowMs: 60000 },
   handler: async ({ request: _request, input: _input, context, params: _params }) => {
     const tracer = trace.getTracer("ops-dashboard");
-    
+
     return await tracer.startActiveSpan("ops.dashboard.get", async (span) => {
       try {
         const now = Date.now();
@@ -61,7 +61,9 @@ export const GET = createAuthenticatedEndpoint({
         const rateLimiting = {
           enabled: process.env.USE_REDIS_RATE_LIMIT === "true",
           provider: process.env.UPSTASH_REDIS_REST_URL ? "upstash" : "in-memory",
-          configured: !!(process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN),
+          configured: !!(
+            process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN
+          ),
         };
 
         // Build basic health indicators
@@ -96,10 +98,13 @@ export const GET = createAuthenticatedEndpoint({
       } catch (error) {
         span.recordException(error as Error);
         span.end();
-        
+
         return NextResponse.json(
-          { success: false, error: { code: "INTERNAL_ERROR", message: "Failed to fetch dashboard metrics" } },
-          { status: 500 }
+          {
+            success: false,
+            error: { code: "INTERNAL_ERROR", message: "Failed to fetch dashboard metrics" },
+          },
+          { status: 500 },
         );
       }
     });
@@ -111,13 +116,13 @@ function formatUptime(seconds: number): string {
   const hours = Math.floor((seconds % 86400) / 3600);
   const mins = Math.floor((seconds % 3600) / 60);
   const secs = Math.floor(seconds % 60);
-  
+
   const parts = [];
   if (days > 0) parts.push(`${days}d`);
   if (hours > 0) parts.push(`${hours}h`);
   if (mins > 0) parts.push(`${mins}m`);
   parts.push(`${secs}s`);
-  
+
   return parts.join(" ");
 }
 
@@ -125,11 +130,11 @@ function formatBytes(bytes: number): string {
   const units = ["B", "KB", "MB", "GB"];
   let size = bytes;
   let unitIndex = 0;
-  
+
   while (size >= 1024 && unitIndex < units.length - 1) {
     size /= 1024;
     unitIndex++;
   }
-  
+
   return `${size.toFixed(1)} ${units[unitIndex]}`;
 }

@@ -14,9 +14,9 @@ export const GET = createPublicEndpoint({
     try {
       const memory = process.memoryUsage();
       const heapPercent = (memory.heapUsed / memory.heapTotal) * 100;
-      
+
       const status = heapPercent < 90 ? "healthy" : heapPercent < 95 ? "degraded" : "unhealthy";
-      
+
       return NextResponse.json({
         status,
         timestamp: Date.now(),
@@ -28,10 +28,7 @@ export const GET = createPublicEndpoint({
         version: process.env.npm_package_version || "unknown",
       });
     } catch {
-      return NextResponse.json(
-        { status: "error", timestamp: Date.now() },
-        { status: 500 }
-      );
+      return NextResponse.json({ status: "error", timestamp: Date.now() }, { status: 500 });
     }
   },
 });

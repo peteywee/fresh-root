@@ -2,10 +2,10 @@
 // Tags: P0, SCRIPT, ADMIN, SETUP
 /**
  * Creates the super admin user in Firebase Auth.
- * 
+ *
  * Run with: npx ts-node scripts/seed-super-admin.ts
  * Or: pnpm tsx scripts/seed-super-admin.ts
- * 
+ *
  * Requires GOOGLE_APPLICATION_CREDENTIALS or Firebase Admin SDK credentials.
  */
 
@@ -26,7 +26,7 @@ async function seedSuperAdmin() {
   try {
     // Try to get existing user
     let user: admin.auth.UserRecord;
-    
+
     try {
       user = await auth.getUserByEmail(SUPER_ADMIN_EMAIL);
       console.log(`✓ Super admin user already exists: ${user.uid}`);
@@ -61,7 +61,6 @@ async function seedSuperAdmin() {
     console.log("  - Access /ops dashboard");
     console.log("  - Access all organizations");
     console.log("  - Perform any action in the system");
-
   } catch (error) {
     console.error("Error seeding super admin:", error);
     process.exit(1);

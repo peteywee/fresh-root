@@ -370,9 +370,9 @@ Shows duplicate packages in node_modules.
 
 **Pattern 5: Production-only exact versions**
 
-> ⚠️ **Caution:** If using this pattern, ensure workspace packages are ignored first
-> (see "Critical Configuration: Syncpack vs Manypkg Conflict" below). Otherwise, this
-> will conflict with manypkg's `workspace:*` requirement.
+> ⚠️ **Caution:** If using this pattern, ensure workspace packages are ignored first (see "Critical
+> Configuration: Syncpack vs Manypkg Conflict" below). Otherwise, this will conflict with manypkg's
+> `workspace:*` requirement.
 
 ```json
 {
@@ -442,12 +442,14 @@ pnpm typecheck      # Verify TypeScript happy
 
 ### Syncpack vs Manypkg Conflict (IMPORTANT)
 
-**Problem:** These two tools have fundamentally incompatible expectations for local workspace packages:
+**Problem:** These two tools have fundamentally incompatible expectations for local workspace
+packages:
 
 - **manypkg** requires `workspace:*` protocol for internal packages
 - **syncpack** (with semverGroups) wants exact versions like `0.1.1`
 
-Running `pnpm deps:sync` could change `workspace:*` to version numbers, breaking manypkg. This creates a circular breakage pattern.
+Running `pnpm deps:sync` could change `workspace:*` to version numbers, breaking manypkg. This
+creates a circular breakage pattern.
 
 **Solution:** Configure syncpack to **ignore** all `@fresh-schedules/*` internal packages:
 
@@ -480,7 +482,7 @@ Running `pnpm deps:sync` could change `workspace:*` to version numbers, breaking
   "semverGroups": [
     {
       "packages": ["@apps/**", "@functions/**"],
-      "range": ""  // Forces exact versions
+      "range": "" // Forces exact versions
     }
   ]
 }
@@ -492,7 +494,8 @@ This conflicts with manypkg's `workspace:*` requirement.
 
 **Problem:** TypeScript can't resolve types from packages that have a build step.
 
-When a package like `@fresh-schedules/types` has a `tsconfig.json` with `"composite": true`, TypeScript expects to find `.d.ts` files in the output directory, not source files.
+When a package like `@fresh-schedules/types` has a `tsconfig.json` with `"composite": true`,
+TypeScript expects to find `.d.ts` files in the output directory, not source files.
 
 **Solution:** Configure `tsconfig.base.json` paths based on package type:
 
@@ -504,7 +507,7 @@ When a package like `@fresh-schedules/types` has a `tsconfig.json` with `"compos
       // Built packages → point to dist (has .d.ts files)
       "@fresh-schedules/types": ["packages/types/dist/index.d.ts"],
       "@fresh-schedules/api-framework": ["packages/api-framework/dist/index.d.ts"],
-      
+
       // Source-only packages → point to src (no build step)
       "@ui/*": ["packages/ui/src/*"],
       "@config/*": ["packages/config/src/*"],

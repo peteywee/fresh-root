@@ -172,7 +172,8 @@ pnpm lint:preview      # Preview without applying
 pnpm import:report     # Show import violations only
 ```
 
-**Why it matters:** Relative imports like `import x from "../../types"` work in dev but fail after tsup bundling. Must use package aliases like `import x from "@fresh-schedules/types"`.
+**Why it matters:** Relative imports like `import x from "../../types"` work in dev but fail after
+tsup bundling. Must use package aliases like `import x from "@fresh-schedules/types"`.
 
 ### 2. @manypkg/cli
 
@@ -183,7 +184,8 @@ pnpm workspace:check   # Validate
 pnpm workspace:fix     # Auto-fix
 ```
 
-**Why it matters:** Ensures all internal package references use `workspace:*` protocol, preventing version mismatches between local and published versions.
+**Why it matters:** Ensures all internal package references use `workspace:*` protocol, preventing
+version mismatches between local and published versions.
 
 ### 3. syncpack
 
@@ -195,19 +197,20 @@ pnpm deps:sync         # Fix all mismatches
 pnpm install           # Update lock file
 ```
 
-**Why it matters:** Same dependency installed in 3 versions wastes 2x space and causes type inconsistencies. Syncs all packages to single consistent version.
+**Why it matters:** Same dependency installed in 3 versions wastes 2x space and causes type
+inconsistencies. Syncs all packages to single consistent version.
 
 ---
 
 ## Common Errors & Fixes
 
-| Error | Check | Fix |
-| --- | --- | --- |
-| Relative import breaks after build | `pnpm lint` | `pnpm lint:fix` |
-| Package version mismatches | `pnpm workspace:check` | `pnpm workspace:fix` |
-| Dependency bloat in node_modules | `pnpm deps:sync:check` | `pnpm deps:sync && pnpm install` |
-| TypeScript won't compile | `pnpm typecheck` | Fix errors manually + `pnpm typecheck` |
-| Multiple issues at once | `pnpm validate:all` | `pnpm guardrails:fix` then validate |
+| Error                              | Check                  | Fix                                    |
+| ---------------------------------- | ---------------------- | -------------------------------------- |
+| Relative import breaks after build | `pnpm lint`            | `pnpm lint:fix`                        |
+| Package version mismatches         | `pnpm workspace:check` | `pnpm workspace:fix`                   |
+| Dependency bloat in node_modules   | `pnpm deps:sync:check` | `pnpm deps:sync && pnpm install`       |
+| TypeScript won't compile           | `pnpm typecheck`       | Fix errors manually + `pnpm typecheck` |
+| Multiple issues at once            | `pnpm validate:all`    | `pnpm guardrails:fix` then validate    |
 
 ---
 
@@ -259,6 +262,7 @@ For detailed information, see:
 ## Key Takeaway
 
 **Run before committing:**
+
 ```bash
 pnpm lint:fix && pnpm workspace:check && pnpm typecheck
 ```

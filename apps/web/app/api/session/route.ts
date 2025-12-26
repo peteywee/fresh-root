@@ -40,8 +40,10 @@ export const POST = createPublicEndpoint({
       );
 
       if (!hasAdminCredentials && process.env.NODE_ENV === "development") {
-        console.warn("[DEV MODE] No Firebase Admin credentials - using development session fallback");
-        
+        console.warn(
+          "[DEV MODE] No Firebase Admin credentials - using development session fallback",
+        );
+
         // Parse the ID token to extract email (JWT format: header.payload.signature)
         let email = "dev@localhost";
         try {
@@ -51,10 +53,10 @@ export const POST = createPublicEndpoint({
         } catch {
           // Ignore parsing errors, use default email
         }
-        
+
         const isSuperAdmin = SUPER_ADMIN_EMAILS.includes(email.toLowerCase());
         const expiresIn = 5 * 24 * 60 * 60 * 1000;
-        
+
         // Create a dev session cookie (just use the idToken as-is for dev)
         const response = ok({ ok: true, isSuperAdmin, dev: true });
         response.cookies.set("session", `dev_${idToken.slice(0, 100)}`, {
@@ -64,7 +66,7 @@ export const POST = createPublicEndpoint({
           path: "/",
           maxAge: expiresIn / 1000,
         });
-        
+
         if (isSuperAdmin) {
           response.cookies.set("isSuperAdmin", "true", {
             httpOnly: true,
@@ -74,7 +76,7 @@ export const POST = createPublicEndpoint({
             maxAge: expiresIn / 1000,
           });
         }
-        
+
         // Also set orgId cookie for dev mode to bypass onboarding
         response.cookies.set("orgId", "dev-org", {
           httpOnly: true,
@@ -83,17 +85,17 @@ export const POST = createPublicEndpoint({
           path: "/",
           maxAge: expiresIn / 1000,
         });
-        
+
         return response;
       }
 
       const auth = getFirebaseAdminAuth();
-      
+
       // Verify the token first to get user info
       const decodedToken = await auth.verifyIdToken(idToken);
       const email = decodedToken.email || "";
       const isSuperAdmin = SUPER_ADMIN_EMAILS.includes(email.toLowerCase());
-      
+
       // Create a session cookie (5 days default)
       const expiresIn = 5 * 24 * 60 * 60 * 1000; // 5 days in milliseconds
       const sessionCookie = await auth.createSessionCookie(idToken, { expiresIn });

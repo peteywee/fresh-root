@@ -5,43 +5,50 @@
 ## One-Minute Overview
 
 When you learn something:
+
 ```
 /remember >domain #tag1 #tag2 what you learned and why it matters
 ```
 
-✅ Lesson created in `memory/indexed/{domain}/{lesson-id}.md`
-✅ Full CPMEM metadata captured
-✅ Indexed for AI search via INDEX.md
-✅ Tagged for cross-domain discovery
+✅ Lesson created in `memory/indexed/{domain}/{lesson-id}.md` ✅ Full CPMEM metadata captured ✅
+Indexed for AI search via INDEX.md ✅ Tagged for cross-domain discovery
 
 ## Syntax Cheatsheet
 
 ### Basic (Global Scope)
+
 ```
 /remember >git-workflow #automation use grep -v -E for patterns
 ```
+
 Creates: `memory/indexed/git-workflow/use-grep-pattern-matching.md`
 
 ### Workspace-Specific
+
 ```
 /remember >testing workspace #pattern #safety use setup/teardown functions
 ```
+
 Creates: `.github/instructions/memory/indexed/testing/setup-teardown-functions.md`
 
 ### With Multiple Tags
+
 ```
 /remember >typescript #gotcha #critical #types never use any without considering alternatives
 ```
 
 ### Minimal (Auto-Detects Domain)
+
 ```
 /remember #debugging this technique helped find race conditions
 ```
+
 AI infers domain and creates metadata automatically.
 
 ## Tag Reference
 
 **Type Tags** (what kind of lesson):
+
 - `#pattern` - Best practice / design pattern
 - `#gotcha` - Common mistake to avoid
 - `#best-practice` - Standard approach
@@ -51,10 +58,12 @@ AI infers domain and creates metadata automatically.
 - `#workflow` - Process improvement
 
 **Domain Tags** (where it applies):
+
 - `#typescript`, `#javascript`, `#git`, `#testing`, `#performance`, `#security`
 - `#monorepo`, `#ci-cd`, `#docker`, `#firebase`, etc.
 
 **Context Tags** (when/how to use):
+
 - `#debugging` - For troubleshooting
 - `#refactoring` - During code cleanup
 - `#collaboration` - Team workflows
@@ -100,6 +109,7 @@ created: 2025-12-25
 All lessons indexed at: `.github/instructions/memory/indexed/INDEX.md`
 
 The index shows:
+
 - Lessons by domain
 - Lessons by type (gotchas vs patterns vs best-practices)
 - Lessons by tag (cross-domain discovery)
@@ -108,21 +118,25 @@ The index shows:
 ## Common Workflows
 
 ### After Debugging a Tricky Issue
+
 ```
 /remember >domain #gotcha #debugging #subtle detailed lesson from session
 ```
 
 ### Establishing a New Best Practice
+
 ```
 /remember >domain #best-practice #pattern clear guidance and examples
 ```
 
 ### Creating Automation
+
 ```
 /remember >domain #automation #workflow step-by-step for script/tool
 ```
 
 ### Critical Learning
+
 ```
 /remember >domain #critical #warning what could break and how to prevent
 ```
@@ -157,4 +171,5 @@ Global memories use same structure under: `~/.config/Code/User/prompts/memory/in
 
 ---
 
-**Enhanced from original `/remember` prompt** combining CPMEM metadata + indexed, searchable architecture for institutional memory.
+**Enhanced from original `/remember` prompt** combining CPMEM metadata + indexed, searchable
+architecture for institutional memory.

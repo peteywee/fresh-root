@@ -7,12 +7,14 @@
 ## Quick Start
 
 ### Prerequisites
+
 - Node.js ≥20.10.0
 - pnpm ≥9.0.0
 - Vercel or Cloudflare account
 - Firebase project configured
 
 ### Local Production Build
+
 ```bash
 # 1. Install dependencies
 pnpm install --frozen-lockfile
@@ -31,20 +33,22 @@ pnpm --filter web start
 ### Option 1: Vercel (Recommended)
 
 #### Initial Setup
+
 1. **Connect Repository**
+
    ```bash
    # Install Vercel CLI
    pnpm add -g vercel
-   
+
    # Login and link project
    vercel login
    vercel link
    ```
 
 2. **Configure Environment Variables**
-   
+
    In Vercel Dashboard → Project → Settings → Environment Variables:
-   
+
    ```bash
    # Firebase Configuration (required)
    NEXT_PUBLIC_FIREBASE_API_KEY=your_api_key
@@ -54,35 +58,38 @@ pnpm --filter web start
    NEXT_PUBLIC_FIREBASE_APP_ID=1:000000000000:web:abcdef123456
    NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=000000000000
    NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID=G-XXXXXXXXXX
-   
+
    # Firebase Admin (required)
    FIREBASE_PROJECT_ID=your_project_id
    GOOGLE_APPLICATION_CREDENTIALS_JSON_BASE64=base64_encoded_service_account_json
-   
+
    # Redis (optional, for rate limiting)
    UPSTASH_REDIS_REST_URL=https://your-redis.upstash.io
    UPSTASH_REDIS_REST_TOKEN=your_token
    USE_REDIS_RATE_LIMIT=true
-   
+
    # OpenTelemetry (optional)
    OTEL_EXPORTER_OTLP_ENDPOINT=http://your-otel-collector:4318/v1/traces
-   
+
    # Node.js Configuration
    NODE_OPTIONS=--max-old-space-size=2048 --expose-gc
    SWC_NUM_THREADS=2
    ```
 
 3. **Deploy**
+
    ```bash
    # Preview deployment (test first)
    vercel
-   
+
    # Production deployment
    vercel --prod
    ```
 
 #### Vercel Configuration
+
 The project includes optimal Vercel settings in `next.config.mjs`:
+
 - `output: "standalone"` - Optimized build output
 - Security headers configured
 - Image optimization enabled
@@ -91,29 +98,34 @@ The project includes optimal Vercel settings in `next.config.mjs`:
 ### Option 2: Cloudflare Pages
 
 #### Initial Setup
+
 1. **Install Wrangler**
+
    ```bash
    pnpm add -g wrangler
    wrangler login
    ```
 
 2. **Build for Cloudflare**
+
    ```bash
    pnpm --filter web build
    ```
 
 3. **Deploy**
+
    ```bash
    wrangler pages deploy apps/web/.next/standalone --project-name fresh-schedules
    ```
 
 4. **Configure Environment Variables**
-   
+
    In Cloudflare Dashboard → Pages → Settings → Environment Variables:
    - Add all Firebase variables (same as Vercel list above)
    - Note: Firebase Admin SDK has limited support on Edge runtime
 
 #### Cloudflare Considerations
+
 - Edge runtime limitations (no full Node.js APIs)
 - Firebase Admin SDK may require REST API fallback
 - `process.exit` not supported (handled in code)
@@ -122,25 +134,25 @@ The project includes optimal Vercel settings in `next.config.mjs`:
 
 ### Required Variables
 
-| Variable | Purpose | Example |
-|----------|---------|---------|
-| `NEXT_PUBLIC_FIREBASE_API_KEY` | Firebase client config | `AIza...` |
-| `NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN` | Firebase auth domain | `project.firebaseapp.com` |
-| `NEXT_PUBLIC_FIREBASE_PROJECT_ID` | Firebase project ID | `my-project-123` |
-| `NEXT_PUBLIC_FIREBASE_APP_ID` | Firebase app ID | `1:123:web:abc` |
-| `FIREBASE_PROJECT_ID` | Server-side project ID | `my-project-123` |
-| `GOOGLE_APPLICATION_CREDENTIALS_JSON_BASE64` | Service account (base64) | `eyJ0eXA...` |
+| Variable                                     | Purpose                  | Example                   |
+| -------------------------------------------- | ------------------------ | ------------------------- |
+| `NEXT_PUBLIC_FIREBASE_API_KEY`               | Firebase client config   | `AIza...`                 |
+| `NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN`           | Firebase auth domain     | `project.firebaseapp.com` |
+| `NEXT_PUBLIC_FIREBASE_PROJECT_ID`            | Firebase project ID      | `my-project-123`          |
+| `NEXT_PUBLIC_FIREBASE_APP_ID`                | Firebase app ID          | `1:123:web:abc`           |
+| `FIREBASE_PROJECT_ID`                        | Server-side project ID   | `my-project-123`          |
+| `GOOGLE_APPLICATION_CREDENTIALS_JSON_BASE64` | Service account (base64) | `eyJ0eXA...`              |
 
 ### Optional Variables
 
-| Variable | Purpose | Default |
-|----------|---------|---------|
-| `UPSTASH_REDIS_REST_URL` | Redis for rate limiting | In-memory fallback |
-| `UPSTASH_REDIS_REST_TOKEN` | Redis token | N/A |
-| `USE_REDIS_RATE_LIMIT` | Enable Redis | `false` |
-| `OTEL_EXPORTER_OTLP_ENDPOINT` | OpenTelemetry endpoint | Disabled |
-| `NODE_OPTIONS` | Node memory/GC | `--max-old-space-size=1536` |
-| `SWC_NUM_THREADS` | Build parallelism | CPU cores |
+| Variable                      | Purpose                 | Default                     |
+| ----------------------------- | ----------------------- | --------------------------- |
+| `UPSTASH_REDIS_REST_URL`      | Redis for rate limiting | In-memory fallback          |
+| `UPSTASH_REDIS_REST_TOKEN`    | Redis token             | N/A                         |
+| `USE_REDIS_RATE_LIMIT`        | Enable Redis            | `false`                     |
+| `OTEL_EXPORTER_OTLP_ENDPOINT` | OpenTelemetry endpoint  | Disabled                    |
+| `NODE_OPTIONS`                | Node memory/GC          | `--max-old-space-size=1536` |
+| `SWC_NUM_THREADS`             | Build parallelism       | CPU cores                   |
 
 ### How to Encode Service Account
 
@@ -154,6 +166,7 @@ cat service-account.json | base64 -w 0 > service-account.base64.txt
 ## Deployment Checklist
 
 ### Pre-Deployment
+
 - [ ] All tests passing (`pnpm test`, `pnpm test:e2e`, `pnpm test:rules`)
 - [ ] TypeScript compiles (`pnpm typecheck`)
 - [ ] ESLint clean (`pnpm lint`)
@@ -161,6 +174,7 @@ cat service-account.json | base64 -w 0 > service-account.base64.txt
 - [ ] Local production server runs (`pnpm --filter web start`)
 
 ### Staging Deployment
+
 - [ ] Environment variables configured
 - [ ] Staging URL accessible
 - [ ] Homepage loads without errors
@@ -170,6 +184,7 @@ cat service-account.json | base64 -w 0 > service-account.base64.txt
 - [ ] Smoke test: create/view a schedule
 
 ### Production Deployment
+
 - [ ] Staging verification complete
 - [ ] PR merged to `main` branch
 - [ ] Git tag created (`v1.5.0`)
@@ -185,39 +200,48 @@ cat service-account.json | base64 -w 0 > service-account.base64.txt
 ### Build Failures
 
 #### "Dynamic server usage: cookies"
+
 **Cause**: Routes using cookies can't be statically rendered  
 **Solution**: This is expected behavior. Next.js will render these routes on-demand.
 
 #### "Firebase env validation failed"
+
 **Cause**: Missing Firebase environment variables  
 **Solution**: Ensure all `NEXT_PUBLIC_FIREBASE_*` variables are set
 
 #### "Google Fonts fetch failed"
+
 **Cause**: No internet access during build  
 **Solution**: System font fallback is already configured
 
 ### Runtime Errors
 
 #### "Firebase Admin not initialized"
+
 **Cause**: Missing or invalid service account credentials  
-**Solution**: Verify `GOOGLE_APPLICATION_CREDENTIALS_JSON_BASE64` is correctly set and base64-encoded
+**Solution**: Verify `GOOGLE_APPLICATION_CREDENTIALS_JSON_BASE64` is correctly set and
+base64-encoded
 
 #### "Rate limit exceeded"
+
 **Cause**: In-memory rate limiter in multi-instance deployment  
 **Solution**: Configure Redis with `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN`
 
 #### "OpenTelemetry warnings"
+
 **Cause**: Optional tracing dependencies  
 **Solution**: These are non-blocking warnings. Can be ignored or configure OTEL endpoint.
 
 ## Performance Optimization
 
 ### CDN Configuration
+
 - Enable Vercel Edge Network (automatic)
 - Or configure Cloudflare CDN
 - Cache static assets aggressively
 
 ### Database Optimization
+
 - Enable Firestore indexes (check console warnings)
 - Use composite indexes for complex queries
 - Monitor Firebase quota usage
@@ -225,18 +249,21 @@ cat service-account.json | base64 -w 0 > service-account.base64.txt
 ### Monitoring Setup
 
 #### Sentry
+
 ```bash
 # Already configured via @sentry/nextjs
 # Set SENTRY_DSN in environment variables
 ```
 
 #### Firebase Performance
+
 ```javascript
 // Already imported in Firebase config
 // Automatically tracks page loads and API calls
 ```
 
 #### Google Analytics
+
 ```bash
 # Set NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID
 # Analytics will track automatically
@@ -258,6 +285,7 @@ cat service-account.json | base64 -w 0 > service-account.base64.txt
 ## Rollback Procedure
 
 ### Vercel
+
 ```bash
 # List recent deployments
 vercel ls
@@ -267,12 +295,14 @@ vercel rollback [deployment-url]
 ```
 
 ### Cloudflare
+
 ```bash
 # Redeploy previous build
 wrangler pages deploy apps/web/.next/standalone --project-name fresh-schedules
 ```
 
 ### Manual Rollback
+
 ```bash
 # Revert to previous git tag
 git checkout v1.4.0
@@ -283,6 +313,7 @@ pnpm --filter web build
 ## Post-Deployment Verification
 
 ### Automated Checks
+
 ```bash
 # Run Lighthouse audit
 node scripts/audit/lighthouse-audit.mjs --url=https://your-domain.com
@@ -294,6 +325,7 @@ curl -I https://your-domain.com/dashboard
 ```
 
 ### Manual Checks
+
 1. **Homepage**: Loads, displays navigation
 2. **Login**: Authentication flow works
 3. **Dashboard**: Protected route accessible
@@ -304,17 +336,20 @@ curl -I https://your-domain.com/dashboard
 ## Support
 
 ### Documentation
+
 - [Next.js Deployment](https://nextjs.org/docs/deployment)
 - [Vercel Platform](https://vercel.com/docs)
 - [Cloudflare Pages](https://developers.cloudflare.com/pages)
 - [Firebase Hosting](https://firebase.google.com/docs/hosting)
 
 ### Internal Docs
+
 - `docs/FAST_TRACK_TO_PRODUCTION.md` - Deployment checklist
 - `docs/production/LIGHTHOUSE_AUDIT_REPORT.md` - Performance guide
 - `.github/instructions/` - Development standards
 
 ### Getting Help
+
 - GitHub Issues: https://github.com/peteywee/fresh-root/issues
 - Team Chat: [Your team channel]
 - On-call: [Your on-call rotation]

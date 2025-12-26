@@ -5,33 +5,40 @@
 ## What You've Set Up
 
 ### 1. **Enhanced `/remember` Prompt**
-   - **File**: [.github/prompts/remember-enhanced.prompt.md](.github/prompts/remember-enhanced.prompt.md)
-   - **Purpose**: Transforms lessons into CPMEM-enriched memory files with rich metadata
-   - **Syntax**: `/remember [>domain [scope]] [#tags] lesson content`
+
+- **File**:
+  [.github/prompts/remember-enhanced.prompt.md](.github/prompts/remember-enhanced.prompt.md)
+- **Purpose**: Transforms lessons into CPMEM-enriched memory files with rich metadata
+- **Syntax**: `/remember [>domain [scope]] [#tags] lesson content`
 
 ### 2. **Indexed Folder Structure**
-   - **Location**: `.github/instructions/memory/indexed/{domain}/`
-   - **File pattern**: `memory/indexed/{domain}/{lesson-id}.md`
-   - **Each file includes**:
-     - CPMEM metadata frontmatter
-     - Type/priority/tags for AI search
-     - Structured lesson content (Problem → Solution → Why → Example)
-     - Cross-domain linking
+
+- **Location**: `.github/instructions/memory/indexed/{domain}/`
+- **File pattern**: `memory/indexed/{domain}/{lesson-id}.md`
+- **Each file includes**:
+  - CPMEM metadata frontmatter
+  - Type/priority/tags for AI search
+  - Structured lesson content (Problem → Solution → Why → Example)
+  - Cross-domain linking
 
 ### 3. **Master Index**
-   - **File**: [.github/instructions/memory/indexed/INDEX.md](.github/instructions/memory/indexed/INDEX.md)
-   - **Purpose**: Searchable registry of all lessons
-   - **Shows**:
-     - Lessons by domain
-     - Lessons by type (pattern/gotcha/best-practice/automation/warning)
-     - Lessons by tag
-     - Statistics and coverage
-   - **Auto-updated** when you use `/remember`
+
+- **File**:
+  [.github/instructions/memory/indexed/INDEX.md](.github/instructions/memory/indexed/INDEX.md)
+- **Purpose**: Searchable registry of all lessons
+- **Shows**:
+  - Lessons by domain
+  - Lessons by type (pattern/gotcha/best-practice/automation/warning)
+  - Lessons by tag
+  - Statistics and coverage
+- **Auto-updated** when you use `/remember`
 
 ### 4. **Quick Start Guide**
-   - **File**: [.github/instructions/memory/REMEMBER_QUICKSTART.md](.github/instructions/memory/REMEMBER_QUICKSTART.md)
-   - **For**: Quick syntax reference, examples, workflows
-   - **Share this** with teammates
+
+- **File**:
+  [.github/instructions/memory/REMEMBER_QUICKSTART.md](.github/instructions/memory/REMEMBER_QUICKSTART.md)
+- **For**: Quick syntax reference, examples, workflows
+- **Share this** with teammates
 
 ## How It Works
 
@@ -42,9 +49,10 @@
 ```
 
 **What happens**:
+
 1. ✅ AI parses: domain=`git-workflow`, tags=`[automation, pattern]`, scope=`global` (default)
 2. ✅ Analyzes lesson and generates: type=`pattern`, priority=`2`, CPMEM classification
-3. ✅ Creates lesson-id: `use-grep-pattern-matching` 
+3. ✅ Creates lesson-id: `use-grep-pattern-matching`
 4. ✅ Writes full file to: `memory/indexed/git-workflow/use-grep-pattern-matching.md`
 5. ✅ **Includes frontmatter**:
    ```yaml
@@ -65,6 +73,7 @@
 ### AI Searching Memories
 
 When building prompts or solving problems, AI can:
+
 - Search INDEX.md by domain: Find all git-workflow lessons
 - Search INDEX.md by type: Find all gotchas (mistakes to avoid)
 - Search INDEX.md by tag: Find #automation lessons across all domains
@@ -74,10 +83,12 @@ When building prompts or solving problems, AI can:
 ### Workspace vs Global
 
 **Global** (default): `~/.config/Code/User/prompts/memory/indexed/`
+
 - Applies to ALL projects
 - Use for: general learnings, cross-project patterns
 
 **Workspace**: `.github/instructions/memory/indexed/` ← Current location
+
 - Applies only to this project
 - Use for: Fresh-Schedules-specific patterns, optimizations, architecture decisions
 
@@ -95,8 +106,8 @@ Every memory file captures CPMEM metadata:
 description: "Domain responsibility"
 tags: ["type-tag", "domain-tag", "context-tag"]
 type: "pattern|gotcha|best-practice|automation|workflow|trick|warning"
-priority: 1-3  # 1=critical, 2=important, 3=nice-to-know
-classification: "TRIVIAL|NON-TRIVIAL"  # From CPMEM
+priority: 1-3 # 1=critical, 2=important, 3=nice-to-know
+classification: "TRIVIAL|NON-TRIVIAL" # From CPMEM
 relatedDomains: ["domain1", "domain2"]
 relatedLessons: ["lesson-id1", "lesson-id2"]
 keywords: ["word1", "word2"]
@@ -104,6 +115,7 @@ keywords: ["word1", "word2"]
 ```
 
 **Benefits**:
+
 - ✅ Rich metadata for AI search and correlation
 - ✅ Type/priority makes impact clear
 - ✅ Cross-domain links prevent silos
@@ -113,11 +125,13 @@ keywords: ["word1", "word2"]
 ## Example: Complete Workflow
 
 ### Day 1: Learn a lesson
+
 ```
 /remember >typescript workspace #gotcha #subtle check strict null checks - undefined optional is not nullable
 ```
 
 Created: `memory/indexed/typescript/undefined-vs-nullable.md`
+
 - Type: gotcha
 - Priority: 2 (important)
 - Tags: gotcha, subtle, typescript
@@ -125,24 +139,29 @@ Created: `memory/indexed/typescript/undefined-vs-nullable.md`
 - INDEX updated automatically
 
 ### Day 2: Related lesson
+
 ```
 /remember >typescript workspace #pattern #best-practice use optional chaining ?. with type guards for safe access
 ```
 
 Created: `memory/indexed/typescript/optional-chaining-pattern.md`
+
 - Links to: `undefined-vs-nullable` (in relatedLessons)
 - Complements: the gotcha with solution pattern
 
 ### Day 3: Cross-domain learning
+
 ```
 /remember >testing workspace #pattern #typescript use generics for type-safe test fixtures
 ```
 
 Created: `memory/indexed/testing/generic-test-fixtures.md`
+
 - Tags: typescript, testing, pattern (connects both domains)
 - INDEX groups by both domains
 
 ### Week 1: Review & Share
+
 ```
 Check: .github/instructions/memory/indexed/INDEX.md
 - Shows 3 typescript lessons
@@ -198,21 +217,22 @@ Check: .github/instructions/memory/indexed/INDEX.md
 
 ## Key Benefits
 
-| Feature | Benefit |
-|---------|---------|
-| **CPMEM Metadata** | Rich classification enables smart filtering and correlation |
-| **Multiple Tags** | Cross-domain discoverability without silos |
-| **Indexed Structure** | AI can search and reference memories efficiently |
-| **Priority Levels** | Distinguishes critical learning from nice-to-knows |
-| **Related Links** | Prevents duplicate knowledge, enables pattern discovery |
-| **Workspace + Global** | Mix of project-specific and cross-project knowledge |
-| **Type Categories** | Gotchas separate from patterns separate from best-practices |
+| Feature                | Benefit                                                     |
+| ---------------------- | ----------------------------------------------------------- |
+| **CPMEM Metadata**     | Rich classification enables smart filtering and correlation |
+| **Multiple Tags**      | Cross-domain discoverability without silos                  |
+| **Indexed Structure**  | AI can search and reference memories efficiently            |
+| **Priority Levels**    | Distinguishes critical learning from nice-to-knows          |
+| **Related Links**      | Prevents duplicate knowledge, enables pattern discovery     |
+| **Workspace + Global** | Mix of project-specific and cross-project knowledge         |
+| **Type Categories**    | Gotchas separate from patterns separate from best-practices |
 
 ## Tags Quick Reference
 
 **Always include 2-3 tags minimum** for best AI discoverability:
 
 **Type Tags** (pick one):
+
 - `#pattern` - Solution to implement
 - `#gotcha` - Mistake to avoid
 - `#best-practice` - Standard approach
@@ -222,10 +242,13 @@ Check: .github/instructions/memory/indexed/INDEX.md
 - `#warning` - Critical issue
 
 **Domain Tags** (pick one or more):
+
 - `#typescript`, `#javascript`, `#git`, `#testing`, `#performance`, etc.
 
 **Context Tags** (pick as needed):
-- `#debugging`, `#refactoring`, `#scaling`, `#collaboration`, `#migration`, `#subtle`, `#critical`, `#cross-domain`
+
+- `#debugging`, `#refactoring`, `#scaling`, `#collaboration`, `#migration`, `#subtle`, `#critical`,
+  `#cross-domain`
 
 ---
 

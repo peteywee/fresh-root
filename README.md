@@ -1,6 +1,6 @@
 # Fresh Root
 
-**Status:** ✅ Production Ready | **Version:** 1.4.0 | **Last Updated:** December 16, 2025
+**Status:** ✅ Production Ready | **Version:** 1.4.0 | **Last Updated:** December 25, 2025
 
 A production-ready Progressive Web App (PWA) for staff scheduling with enterprise-grade security,
 comprehensive testing automation, and hierarchical governance documentation system.
@@ -69,9 +69,12 @@ archive/                      # 136 historical files
 
 **Key Quick Links:**
 
-- **Guardrails:** See [docs/guides/GUARDRAILS_GUIDE.md](docs/guides/GUARDRAILS_GUIDE.md) — Learn how eslint-plugin-import, @manypkg/cli, and syncpack protect code quality
-- **Scripts:** See [docs/guides/GUARDRAILS_SCRIPTS.md](docs/guides/GUARDRAILS_SCRIPTS.md) — Reference for all npm scripts
-- **Deprecated:** See [docs/DEPRECATIONS.md](docs/DEPRECATIONS.md) — Removed scripts (test:all, deps:check, deps:dedupe) with migration paths
+- **Guardrails:** See [docs/guides/GUARDRAILS_GUIDE.md](docs/guides/GUARDRAILS_GUIDE.md) — Learn how
+  eslint-plugin-import, @manypkg/cli, and syncpack protect code quality
+- **Scripts:** See [docs/guides/GUARDRAILS_SCRIPTS.md](docs/guides/GUARDRAILS_SCRIPTS.md) —
+  Reference for all npm scripts
+- **Deprecated:** See [docs/DEPRECATIONS.md](docs/DEPRECATIONS.md) — Removed scripts (test:all,
+  deps:check, deps:dedupe) with migration paths
 
 ---
 
@@ -126,7 +129,6 @@ pnpm install --frozen-lockfile
 # 3. Start development server
 pnpm dev
 # Opens http://localhost:3000
-
 # 4. Run tests
 pnpm test                      # Unit tests
 pnpm test -- --coverage        # With coverage report
@@ -280,7 +282,7 @@ Each auto-generated test has:
 
 ---
 
-## 🔒 Security
+## 🔒 Security & Data Sanitization
 
 ### Core Principles
 
@@ -289,6 +291,24 @@ Each auto-generated test has:
 - **Secure Defaults** — Deny by default, require explicit allow
 - **Encrypted Transport** — HTTPS only, TLS 1.3+
 
+### Data Sanitization
+
+- 🧹 **HTML Sanitization** — DOMPurify for user-generated content (schedules, notes, comments)
+- 🔤 **Input Sanitization** — Zod schemas with `.trim()`, `.toLowerCase()` where applicable
+- 🚫 **XSS Prevention** — Content Security Policy (CSP) headers, React's built-in escaping
+- 💉 **SQL Injection Protection** — Firestore parameterized queries (no string interpolation)
+- 📋 **Template Injection** — No dynamic `eval()` or `Function()` constructors
+- 🔐 **Sensitive Data Masking** — PII redacted in logs, auth tokens rotated hourly
+
+**Sanitization Pipeline:**
+
+```
+User Input → Trim/Normalize → Zod Validation → SQL Escape → HTML Sanitize → DB Write
+           ↓                ↓                  ↓            ↓              ↓
+         Remove         Type check         Pattern       Firestore      Safe for
+         whitespace     & coerce           validation    parameterized   rendering
+```
+
 ### Features
 
 - 🔐 **Session-based Auth** — Firebase session cookies (HttpOnly, Secure, SameSite=Lax)
@@ -296,9 +316,10 @@ Each auto-generated test has:
 - 👥 **RBAC** — Hierarchical roles: staff < corporate < scheduler < manager < admin < org_owner
 - 🚦 **Rate Limiting** — Redis-backed per-endpoint rate limits
 - 🔒 **CSRF Protection** — Double-submit cookie pattern
-- 📝 **Audit Logging** — Comprehensive request/response logging
-- 🛡️ **Input Validation** — Zod-first validation on all API inputs
+- 📝 **Audit Logging** — Comprehensive request/response logging (PII masked)
+- 🛡️ **Input Validation** — Zod-first validation on all API inputs with automatic sanitization
 - 🏢 **Organization Isolation** — Multi-tenant data segregation via Firestore
+- 🔄 **Sanitization Library** — DOMPurify + custom sanitizers for edge cases
 
 ### Firestore Security Rules
 
@@ -307,7 +328,32 @@ match /orgs/{orgId}/schedules/{scheduleId} {
   allow read: if isSignedIn() && isOrgMember(orgId);
   allow write: if isSignedIn() && hasRole(orgId, 'manager');
   allow delete: if isSignedIn() && hasRole(orgId, 'admin');
+
+  // Field-level sanitization (rules can validate but sanitize in app layer)
+  allow write: if request.resource.data.title.size() <= 255
+            && request.resource.data.description.size() <= 5000;
 }
+```
+
+### Sanitization Configuration
+
+**Enabled everywhere:**
+
+- API routes: `createOrgEndpoint()` applies input sanitization
+- Database writes: `@firestore` decorators enforce schemas
+- Client components: DOMPurify on user-generated HTML
+- Error messages: No stack traces in production
+
+```bash
+# Check sanitization in use
+grep -r "DOMPurify\|sanitize\|trim()" src/
+
+# Run security audit
+pnpm audit
+pnpm typecheck                # Catches unsafe typing
+
+# Validate patterns
+node scripts/validate-patterns.mjs
 ```
 
 ---
@@ -356,7 +402,6 @@ git commit -m "feat: description"
 # Push and create PR
 git push origin feature/my-feature
 # Then create PR on GitHub
-
 # After review and merge
 git checkout main
 git pull origin main
@@ -374,7 +419,208 @@ Hooks automatically run:
 
 ---
 
-## 📊 SDK Factory Pattern
+## � Repomix: Repository Analysis & Packed Format
+
+### What is Repomix?
+
+Repomix generates **compact, AI-ready representations** of your codebase. Perfect for:
+
+- 🤖 Feeding entire repos to Claude/ChatGPT
+- 📊 Deep code analysis and refactoring suggestions
+- 📈 Dependency visualization
+- 🔍 Coverage gap detection
+- 📁 Repository state snapshots
+
+### Quick Start
+
+```bash
+# View help
+pnpm repomix --help
+
+# Generate markdown for humans
+pnpm repomix . --style markdown --output codebase-analysis.md
+
+# Generate compressed XML for AI analysis
+pnpm repomix . --compress --style xml --output ai-input.xml
+
+# Analyze specific package
+pnpm repomix packages/api-framework --style markdown
+
+# Generate JSON for programmatic use
+pnpm repomix . --style json --output repo-snapshot.json
+```
+
+### Output Formats
+
+| Format             | Size      | Best For                     | Command                  |
+| ------------------ | --------- | ---------------------------- | ------------------------ |
+| **Markdown**       | 2-5MB     | Human reading, documentation | `--style markdown`       |
+| **XML**            | 3-8MB     | AI analysis, detailed review | `--style xml`            |
+| **JSON**           | 2-4MB     | Programmatic processing      | `--style json`           |
+| **Compressed XML** | 500KB-1MB | AI input (tokenized)         | `--style xml --compress` |
+
+### Deep Analysis Examples
+
+```bash
+# 1. Full repo deep dive
+pnpm repomix . --style markdown \
+  --output analysis-full.md
+
+# 2. Security analysis (API routes + rules)
+pnpm repomix . --include "app/api/**,firestore.rules,security/**" \
+  --style markdown --output security-analysis.md
+
+# 3. Architecture overview
+pnpm repomix . --include "packages/**,apps/**" \
+  --exclude "node_modules/**,dist/**,.next/**" \
+  --style json --output architecture.json
+
+# 4. Prepare for AI review (compressed)
+pnpm repomix . --compress --style xml > ai-analysis.xml
+# Then paste into Claude/ChatGPT for deep review
+```
+
+### Mini-Index & Deep Index
+
+**Available reports:**
+
+| File                           | Type | Scope         | Generated |
+| ------------------------------ | ---- | ------------- | --------- |
+| `docs/architecture/_index.md`  | Full | Entire repo   | On push   |
+| `docs/guides/REPOMIX_INDEX.md` | Ref  | CLI reference | Manual    |
+| Generated via CLI              | Mini | Custom scope  | On demand |
+
+**Generate custom mini-indexes:**
+
+```bash
+# Just API routes
+pnpm repomix apps/web/app/api --style markdown --output api-mini-index.md
+
+# Just shared packages
+pnpm repomix packages --style markdown --output packages-mini-index.md
+
+# Security-focused deep index
+pnpm repomix . --include "**/*security*,**/*auth*,**/*rules*" \
+  --style markdown --output security-deep-index.md
+```
+
+### Repository State Commands
+
+```bash
+# Get current repo stats
+pnpm repomix . --style json | jq '.summary'
+
+# See file structure
+pnpm repomix . --include "src/**,packages/**,apps/**" --style markdown | head -100
+
+# Generate timestamped snapshot
+TIMESTAMP=$(date +%Y%m%d_%H%M%S)
+pnpm repomix . --style json --output "repo-snapshots/state-${TIMESTAMP}.json"
+
+# Compare snapshots (manual: use jq or other tools)
+diff <(jq '.summary.totalLines' repo-snapshots/state-old.json) \
+     <(jq '.summary.totalLines' repo-snapshots/state-new.json)
+```
+
+### Automation Status
+
+- ✅ **Pre-push hook** — Runs lightweight Repomix check before pushing
+- ✅ **GitHub Actions CI** — Full analysis on every push/PR
+- ✅ **Nightly Dashboard** — Auto-updates `docs/architecture/_index.md` at 2 AM UTC
+- ✅ **Metrics Tracking** — Growth tracked in `docs/metrics/repomix-metrics.log`
+
+Skip pre-push check if needed:
+
+```bash
+SKIP_REPOMIX=1 git push
+```
+
+---
+
+## 🌿 Branch Management
+
+### Repository Branches
+
+**Protected branches:**
+
+- `main` — Production releases only
+- `dev` — Development integration branch
+
+**Current branches:**
+
+```
+Remote Branches (Latest):
+  origin/main (2025-12-26) ← Latest changes
+  origin/dev (2025-12-25)
+  origin/chore/sync-dev-with-main (2025-12-24)
+
+Local Branches:
+  main, dev, chore/sync-dev-with-main
+  copilot/vscode-mjjfrc4h-ii3s
+  sync/guardrails-to-dev
+  test/guardrails-ci-blocker
+  worktree-2025-12-25T05-43-41
+```
+
+### Cleanup Stale Branches
+
+```bash
+# List all branches (local + remote)
+git branch -a
+
+# Delete local feature branches (not main/dev)
+git branch -D feature/old-feature
+
+# Delete remote branches (requires push permissions)
+git push origin --delete feature/old-feature
+
+# Clean up deleted remote branches (local references)
+git remote prune origin
+
+# Bulk cleanup script (delete all except main/dev)
+git branch -D $(git branch | grep -v 'main\|dev' | xargs)
+
+# Or safer: list branches to review before delete
+git branch | grep -v 'main\|dev' | head -20
+# Review the list, then:
+git branch | grep -v 'main\|dev' | xargs git branch -D
+```
+
+### Branch Naming Convention
+
+- **Features:** `feature/description`
+- **Fixes:** `fix/issue-number-description`
+- **Chores:** `chore/description`
+- **Releases:** `release/version` (protected)
+- **Hotfixes:** `hotfix/issue-number` (urgent production fixes)
+
+### Repository State
+
+**Current stats** (from latest repomix run):
+
+```
+  Total Files: 733 files
+  Total Tokens: 1,058,874 tokens
+  Total Chars: 3,921,379 chars
+  Security Issues Detected: 1 (excluded from output)
+```
+
+**Check branch hygiene:**
+
+```bash
+# How many branches exist?
+git branch -r | wc -l
+
+# Old branches (not updated in 30+ days)
+git for-each-ref --sort='-committerdate' --format='%(refname:short) %(committerdate:short)' refs/remotes
+
+# Branches merged into main (safe to delete)
+git branch -r --merged origin/main | grep -v main | sed 's/ *origin\///'
+```
+
+---
+
+## �📊 SDK Factory Pattern
 
 The **SDK factory** is our standard for building API routes with built-in security and validation.
 
@@ -535,4 +781,10 @@ Built with modern tools and best practices:
 
 ---
 
-**Last Updated:** December 7, 2025 | **Version:** 1.2.0 | **Status:** ✅ Production Ready
+**Last Updated:** December 25, 2025 | **Version:** 1.4.0 | **Status:** ✅ Production Ready
+
+---
+
+### Repository Metrics (Auto-generated)
+
+Generated via Repomix automation. See docs/architecture/\_index.md for latest stats.

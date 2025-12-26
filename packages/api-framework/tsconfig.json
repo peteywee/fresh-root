@@ -10,9 +10,7 @@
     "types": ["node"],
     "typeRoots": ["../../node_modules/@types"]
   },
-  "references": [
-    { "path": "../types" }
-  ],
+  "references": [{ "path": "../types" }],
   "include": ["src"],
   "exclude": ["node_modules", "dist"]
 }
