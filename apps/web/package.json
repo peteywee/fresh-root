@@ -17,8 +17,8 @@
     "bench": "vitest bench --config vitest.bench.config.ts"
   },
   "dependencies": {
-    "@fresh-schedules/api-framework": "1.0.0",
-    "@fresh-schedules/types": "0.1.1",
+    "@fresh-schedules/api-framework": "workspace:*",
+    "@fresh-schedules/types": "workspace:*",
     "@grpc/grpc-js": "1.14.3",
     "@opentelemetry/api": "1.9.0",
     "@opentelemetry/auto-instrumentations-node": "0.67.3",
