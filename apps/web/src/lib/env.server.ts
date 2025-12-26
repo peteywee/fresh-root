@@ -67,6 +67,7 @@ const ServerEnvSchema = z.object({
     .transform((val) => parseInt(val, 10)),
 
   // === Observability ===
+  OBSERVABILITY_TRACES_ENABLED: z.enum(["true", "false"]).optional().default("false"),
   SENTRY_DSN: z.string().optional(),
   SENTRY_ORG: z.string().optional(),
   SENTRY_PROJECT: z.string().optional(),
