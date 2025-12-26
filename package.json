@@ -31,7 +31,8 @@
     "guardrails:fix": "pnpm workspace:fix && pnpm deps:sync && pnpm install",
     "validate:all": "pnpm lint && pnpm workspace:check && pnpm deps:sync:check && pnpm typecheck",
     "validate:full": "pnpm fix:all && pnpm guardrails:fix && pnpm validate:all && pnpm test:unit",
-    "check": "pnpm lint:fix && pnpm workspace:check && pnpm typecheck"
+    "check": "pnpm lint:fix && pnpm workspace:check && pnpm typecheck",
+    "visuals:generate": "node scripts/generate-visuals.mjs"
   },
   "engines": {
     "node": ">=20.10.0",
