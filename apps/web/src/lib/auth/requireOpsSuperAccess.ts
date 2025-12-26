@@ -12,7 +12,7 @@ import { getFirebaseAdminAuth, getFirebaseAdminDb } from "../../../lib/firebase-
 export async function requireOpsSuperAccess(): Promise<{ orgId: string; userId: string }> {
   const cookieStore = await cookies();
   const sessionCookie = cookieStore.get("session")?.value;
-  
+
   if (!sessionCookie) {
     redirect("/login?redirect=/ops");
   }
@@ -30,9 +30,9 @@ export async function requireOpsSuperAccess(): Promise<{ orgId: string; userId: 
   const roles = decodedClaims.roles as string[] | undefined;
   if (roles?.includes("admin")) {
     // Super admin - return with system-level access
-    return { 
-      orgId: cookieStore.get("orgId")?.value || "system", 
-      userId: decodedClaims.uid 
+    return {
+      orgId: cookieStore.get("orgId")?.value || "system",
+      userId: decodedClaims.uid,
     };
   }
 
@@ -51,7 +51,7 @@ export async function requireOpsSuperAccess(): Promise<{ orgId: string; userId: 
     .get();
 
   const role = memberDoc.exists ? (memberDoc.data()?.role as string | undefined) : undefined;
-  
+
   // Only admin (super admin) can access ops - org_owner is NOT enough
   if (role !== "admin") {
     redirect("/");

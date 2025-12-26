@@ -1,17 +1,18 @@
 # Infrastructure Reality Audit - 2025-12-23
 
-**Note**: This document reflects the state of the codebase as of the date above. Some information may have changed since this audit was performed.
+**Note**: This document reflects the state of the codebase as of the date above. Some information
+may have changed since this audit was performed.
 
 ## Executive Summary
 
 **Previous Assessment Was WRONG.** Infrastructure IS implemented but has coverage gaps.
 
-| Component | Files Exist | Wired to Routes | Coverage |
-|-----------|-------------|-----------------|----------|
-| Rate Limiting | ✅ 4 files | 16/39 | **41%** |
-| Sentry | ✅ 3 configs | Via middleware | **Global** |
-| OTEL | ✅ 2 files | Via middleware | **Global** |
-| SDK Factory | ✅ 1 framework | 22/39 | **56%** |
+| Component     | Files Exist    | Wired to Routes | Coverage   |
+| ------------- | -------------- | --------------- | ---------- |
+| Rate Limiting | ✅ 4 files     | 16/39           | **41%**    |
+| Sentry        | ✅ 3 configs   | Via middleware  | **Global** |
+| OTEL          | ✅ 2 files     | Via middleware  | **Global** |
+| SDK Factory   | ✅ 1 framework | 22/39           | **56%**    |
 
 ## 1. Rate Limiting - PARTIAL ⚠️
 
@@ -26,14 +27,14 @@
 
 **Routes WITH rate limiting (16):**
 
-- attendance, auth/mfa/*, batch, healthz, metrics, verify-eligibility
-- organizations (root), positions/*, publish, schedules
+- attendance, auth/mfa/\*, batch, healthz, metrics, verify-eligibility
+- organizations (root), positions/\*, publish, schedules
 
 **Routes WITHOUT rate limiting (23):**
 
 - ALL onboarding routes (except verify-eligibility)
-- organizations/[id]/* (members, single org)
-- session/*, widgets, shifts/*, files, repomix, terminal
+- organizations/[id]/\* (members, single org)
+- session/_, widgets, shifts/_, files, repomix, terminal
 - ops/build-performance, internal/backup
 
 ## 2. Sentry - GLOBAL ✅
@@ -73,8 +74,8 @@
 **Routes NOT using SDK factory (17):**
 
 - batch, items, join-tokens
-- organizations/[id]/*, positions/*, publish
-- schedules/*, shifts/*, venues, zones
+- organizations/[id]/_, positions/_, publish
+- schedules/_, shifts/_, venues, zones
 - ops/build-performance, repomix
 
 ## 5. CRITICAL: Onboarding Flow BROKEN 🔴

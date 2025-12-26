@@ -23,11 +23,5 @@ export default defineConfig({
   // - firebase-admin: server-only, resolved at runtime
   // - next: peer dependency
   // - zod: peer dependency
-  external: [
-    "@fresh-schedules/types",
-    "next",
-    "firebase-admin",
-    "zod",
-    "ioredis",
-  ],
+  external: ["@fresh-schedules/types", "next", "firebase-admin", "zod", "ioredis"],
 });

@@ -26,7 +26,7 @@ export function middleware(request: NextRequest) {
   response.headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
   // Required for Firebase Google popup auth to communicate with opener
   response.headers.set("Cross-Origin-Opener-Policy", "same-origin-allow-popups");
-  
+
   // CSP: Allow Firebase Auth and Google APIs for authentication
   const csp = [
     "default-src 'self'",

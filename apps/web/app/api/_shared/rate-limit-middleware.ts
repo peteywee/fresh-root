@@ -25,7 +25,11 @@
 
 import { NextRequest, NextResponse } from "next/server";
 
-import { buildRateLimitKey, getRateLimiter, type RateLimitOptions } from "@/src/lib/api/rate-limit.server";
+import {
+  buildRateLimitKey,
+  getRateLimiter,
+  type RateLimitOptions,
+} from "@/src/lib/api/rate-limit.server";
 
 interface RateLimitConfig extends RateLimitOptions {
   /**

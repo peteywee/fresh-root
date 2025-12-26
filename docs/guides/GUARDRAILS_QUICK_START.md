@@ -10,23 +10,18 @@ Every commit and push runs **three guardrails** automatically:
 
 ### Pre-Commit (When You Type `git commit`)
 
-✅ Handler signature validation (A09 invariant)
-✅ Markdown linting
-✅ Block merge conflict markers
+✅ Handler signature validation (A09 invariant) ✅ Markdown linting ✅ Block merge conflict markers
 ✅ **Block deprecated scripts** (test:all, deps:check, deps:dedupe)
 
 ### Pre-Push (When You Type `git push`)
 
-✅ TypeScript typecheck (all packages)
-✅ ESLint (import rules enforced)
-✅ Syncpack version validation
-✅ Repomix dependency analysis (non-blocking)
+✅ TypeScript typecheck (all packages) ✅ ESLint (import rules enforced) ✅ Syncpack version
+validation ✅ Repomix dependency analysis (non-blocking)
 
 ### Pull Request (GitHub Actions)
 
-✅ Full guardrails suite blocking (breaking PR if it fails)
-✅ Handler signature validation
-✅ Typecheck + Lint + Workspace consistency
+✅ Full guardrails suite blocking (breaking PR if it fails) ✅ Handler signature validation ✅
+Typecheck + Lint + Workspace consistency
 
 ---
 
@@ -66,13 +61,13 @@ git commit -m "chore: add script 'check'"
 
 **Common blockers:**
 
-| Error | Cause | Fix |
-| --- | --- | --- |
-| `Handler signature failed` | route.ts mismatch | See A09_HANDLER_SIGNATURE_INVARIANT.md |
-| `Deprecated script added` | test:all, deps:check, deps:dedupe | See DEPRECATIONS.md |
-| `Markdown lint failed` | MD040, MD022 spacing | Run `pnpm format` |
-| `Typecheck failed` | TypeScript errors | Run `pnpm typecheck` |
-| `Lint failed` | ESLint violations | Run `pnpm lint:fix` |
+| Error                      | Cause                             | Fix                                    |
+| -------------------------- | --------------------------------- | -------------------------------------- |
+| `Handler signature failed` | route.ts mismatch                 | See A09_HANDLER_SIGNATURE_INVARIANT.md |
+| `Deprecated script added`  | test:all, deps:check, deps:dedupe | See DEPRECATIONS.md                    |
+| `Markdown lint failed`     | MD040, MD022 spacing              | Run `pnpm format`                      |
+| `Typecheck failed`         | TypeScript errors                 | Run `pnpm typecheck`                   |
+| `Lint failed`              | ESLint violations                 | Run `pnpm lint:fix`                    |
 
 To skip locally (not recommended):
 
@@ -121,21 +116,21 @@ SKIP_CHECKS=1 git push origin branch-name
 
 ## What Guardrails Prevent
 
-| Issue | Guardrail | Tool |
-| --- | --- | --- |
-| Cross-package imports leaking APIs | Import rules | `eslint-plugin-import` |
-| Version mismatches | Version sync | `syncpack` |
-| Workspace inconsistency | Workspace validation | `@manypkg/cli` |
-| API handler signature mismatch | A09 invariant | Custom validator |
-| Missing types | Typecheck | `turbo run typecheck` |
-| Deprecated scripts | Blocker | Pre-commit hook |
+| Issue                              | Guardrail            | Tool                   |
+| ---------------------------------- | -------------------- | ---------------------- |
+| Cross-package imports leaking APIs | Import rules         | `eslint-plugin-import` |
+| Version mismatches                 | Version sync         | `syncpack`             |
+| Workspace inconsistency            | Workspace validation | `@manypkg/cli`         |
+| API handler signature mismatch     | A09 invariant        | Custom validator       |
+| Missing types                      | Typecheck            | `turbo run typecheck`  |
+| Deprecated scripts                 | Blocker              | Pre-commit hook        |
 
 ---
 
 ## Still Stuck
 
 1. Read the error message — it tells you what to do
-2. Check the error reference (e.g., "See .github/governance/amendments/A09_...")
+2. Check the error reference (e.g., "See .github/governance/amendments/A09\_...")
 3. Run the suggested quick fix command
 4. If stuck, reach out with the full error output
 

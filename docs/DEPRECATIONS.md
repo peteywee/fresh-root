@@ -129,9 +129,11 @@ These scripts remain and are actively maintained:
 Before adding new npm scripts, check:
 
 1. **Is it a one-liner?** Add it. (e.g., `"clean": "turbo run clean"`)
-2. **Does it combine 2+ scripts?** Create an alias with clear naming. (e.g., `"check": "pnpm lint:fix && pnpm workspace:check && pnpm typecheck"`)
+2. **Does it combine 2+ scripts?** Create an alias with clear naming. (e.g.,
+   `"check": "pnpm lint:fix && pnpm workspace:check && pnpm typecheck"`)
 3. **Is it rarely used?** Don't add it — document the manual command instead.
-4. **Does it duplicate existing tools?** Use the existing tool. (e.g., don't create `deps:check` when `pnpm audit` exists)
+4. **Does it duplicate existing tools?** Use the existing tool. (e.g., don't create `deps:check`
+   when `pnpm audit` exists)
 
 **Criteria for Removal:**
 

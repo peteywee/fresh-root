@@ -13,13 +13,31 @@ import { FLAGS } from "../../../../src/lib/features";
 const CreateOrgNetworkSchema = z.object({
   slug: z.string().min(1),
   displayName: z.string().min(1),
-  kind: z.enum(["independent_org", "corporate_network", "franchise_network", "nonprofit_network", "test_sandbox"]),
-  segment: z.enum(["restaurant", "qsr", "bar", "hotel", "nonprofit", "shelter", "church", "retail", "other"]),
-  metadata: z.object({
-    venueName: z.string().optional(),
-    city: z.string().optional(),
-    state: z.string().optional(),
-  }).optional(),
+  kind: z.enum([
+    "independent_org",
+    "corporate_network",
+    "franchise_network",
+    "nonprofit_network",
+    "test_sandbox",
+  ]),
+  segment: z.enum([
+    "restaurant",
+    "qsr",
+    "bar",
+    "hotel",
+    "nonprofit",
+    "shelter",
+    "church",
+    "retail",
+    "other",
+  ]),
+  metadata: z
+    .object({
+      venueName: z.string().optional(),
+      city: z.string().optional(),
+      state: z.string().optional(),
+    })
+    .optional(),
 });
 
 /**
@@ -68,7 +86,12 @@ export const POST = createAuthenticatedEndpoint({
           status: "active",
           joinedAt: now,
         };
-        await db.collection("organizations").doc(orgId).collection("members").doc(userId).set(membershipData);
+        await db
+          .collection("organizations")
+          .doc(orgId)
+          .collection("members")
+          .doc(userId)
+          .set(membershipData);
 
         // Create initial venue if provided
         if (typedInput.metadata?.venueName) {
@@ -82,7 +105,12 @@ export const POST = createAuthenticatedEndpoint({
             createdAt: now,
             status: "active",
           };
-          await db.collection("organizations").doc(orgId).collection("venues").doc(venueId).set(venueData);
+          await db
+            .collection("organizations")
+            .doc(orgId)
+            .collection("venues")
+            .doc(venueId)
+            .set(venueData);
         }
       }
 
