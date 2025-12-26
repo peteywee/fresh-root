@@ -23,7 +23,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@fresh-schedules/types": "workspace:*",
+    "@fresh-schedules/types": "0.1.1",
     "@upstash/redis": "^1.35.8",
     "firebase-admin": "^13.6.0",
     "ioredis": "^5.8.2",
