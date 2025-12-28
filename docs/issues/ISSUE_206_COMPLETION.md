@@ -104,37 +104,39 @@ Successfully implemented comprehensive E2E test suite using Playwright, covering
 
 ```bash
 # Run all E2E tests
-npx playwright test
+pnpm test:playwright
+# Or use pnpm exec directly
+pnpm exec playwright test
 
 # Run specific test file
-npx playwright test e2e/auth-flow.spec.ts
+pnpm exec playwright test e2e/auth-flow.spec.ts
 
 # Run in UI mode (interactive debugging)
-npx playwright test --ui
+pnpm exec playwright test --ui
 
 # Run in headed mode (see browser)
-npx playwright test --headed
+pnpm exec playwright test --headed
 
 # Run with specific browser
-npx playwright test --project=chromium
-npx playwright test --project=firefox
-npx playwright test --project=webkit
+pnpm exec playwright test --project=chromium
+pnpm exec playwright test --project=firefox
+pnpm exec playwright test --project=webkit
 
 # Generate test report
-npx playwright show-report
+pnpm exec playwright show-report
 
 # Debug specific test
-npx playwright test e2e/auth-flow.spec.ts --debug
+pnpm exec playwright test e2e/auth-flow.spec.ts --debug
 ```
 
 ### CI Integration
 
 ```bash
 # CI mode (with retries, no parallel)
-CI=1 npx playwright test
+CI=1 pnpm exec playwright test
 
 # Generate JUnit XML for CI
-npx playwright test --reporter=junit
+pnpm exec playwright test --reporter=junit
 ```
 
 ---
