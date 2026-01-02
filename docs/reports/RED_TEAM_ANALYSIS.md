@@ -388,7 +388,7 @@ if (!/^[a-f0-9]{40}$/.test(sha)) {
 
 🟢 **APPROVED** - All blockers fixed
 
-### Issues Fixed (Post-Analysis):
+### Issues Fixed (Post-Analysis)
 
 1. ✅ API response format (renamed `entries` → `data`)
 2. ✅ Client interface to match
@@ -399,7 +399,7 @@ if (!/^[a-f0-9]{40}$/.test(sha)) {
 7. ✅ Table date rendering with fallback
 8. ✅ SHA validation (40-char hex requirement)
 
-### Deferred (Non-Blocking, Lower Priority):
+### Deferred (Non-Blocking, Lower Priority)
 
 - SDK factory input pattern (once types exports working)
 - Remove file paths from response (already removed)

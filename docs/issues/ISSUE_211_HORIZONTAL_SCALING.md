@@ -12,6 +12,7 @@ Implement infrastructure changes to enable horizontal scaling for multi-instance
 ## Scope
 
 **In:**
+
 - Redis for rate limiting (Issue #196)
 - Redis for session storage
 - Database query caching
@@ -20,6 +21,7 @@ Implement infrastructure changes to enable horizontal scaling for multi-instance
 - Stateless application design
 
 **Out:**
+
 - Auto-scaling policies (future work)
 - Database sharding (future work)
 - Multi-region deployment (future work)

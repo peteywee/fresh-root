@@ -137,19 +137,19 @@ each file.
 
 ## Troubleshooting
 
-### Lesson not created?
+### Lesson not created
 
 - Check syntax: `/remember >domain #tag1 #tag2 lesson`
 - Ensure scope specified or using default (global)
 - Check file permissions on `.github/instructions/memory/indexed/`
 
-### INDEX.md not updated?
+### INDEX.md not updated
 
 - Verify enhanced prompt is being used
 - Check if AI actually wrote the lesson file
 - Manually run: `cat memory/indexed/{domain}/{lesson-id}.md`
 
-### Can't find lessons?
+### Can't find lessons
 
 - Check INDEX.md for listing
 - Use: `grep -r "your-lesson" memory/indexed/`

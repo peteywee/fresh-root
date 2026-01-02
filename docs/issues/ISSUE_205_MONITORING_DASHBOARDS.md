@@ -12,12 +12,14 @@ Create comprehensive monitoring dashboards for system health and business metric
 ## Scope
 
 **In:**
+
 - System health dashboard (CPU, memory, request rate, error rate)
 - Business metrics dashboard (active users, schedules created, tenant growth)
 - Alert configuration (CPU, memory, errors, latency)
 - Dashboard documentation
 
 **Out:**
+
 - Custom ML-based anomaly detection (future work)
 - Real-time alerting infrastructure (use existing tools)
 

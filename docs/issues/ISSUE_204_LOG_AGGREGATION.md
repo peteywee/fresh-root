@@ -12,6 +12,7 @@ Configure centralized log aggregation to enable efficient debugging of productio
 ## Scope
 
 **In:**
+
 - Log aggregation service setup (Datadog/ELK/Loki)
 - Structured logging configuration
 - Log shipping setup
@@ -19,6 +20,7 @@ Configure centralized log aggregation to enable efficient debugging of productio
 - Alert configuration for critical log patterns
 
 **Out:**
+
 - Log analytics/ML (future work)
 - Custom log parsing (use standard formats)
 - Historical log migration

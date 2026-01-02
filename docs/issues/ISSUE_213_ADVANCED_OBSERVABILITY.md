@@ -12,6 +12,7 @@ Implement comprehensive observability with distributed tracing, custom business 
 ## Scope
 
 **In:**
+
 - Distributed tracing across all services
 - Custom business metrics dashboard
 - Automated anomaly detection
@@ -19,6 +20,7 @@ Implement comprehensive observability with distributed tracing, custom business 
 - Advanced alerting with ML
 
 **Out:**
+
 - Real-time ML inference (future work)
 - Predictive scaling (future work)
 - Full AIOps platform (future work)

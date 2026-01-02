@@ -42,12 +42,14 @@
 ### Collections Covered by Rules
 
 #### Primary Collections (9 total)
+
 1. `/users/{userId}` - User profiles (self-only)
 2. `/orgs/{orgId}` - Organizations (member access)
 3. `/organizations/{orgId}` - Alternate org path
 4. `/memberships/{membershipId}` - Org memberships
 
 #### Org-Scoped Subcollections (7 total under /orgs/)
+
 5. `/orgs/{orgId}/schedules/{scheduleId}`
 6. `/orgs/{orgId}/positions/{positionId}`
 7. `/orgs/{orgId}/schedules/{scheduleId}/shifts/{shiftId}`
@@ -58,6 +60,7 @@
 12. `/organizations/{orgId}/positions/{positionId}`
 
 #### Top-Level Per-Org Collections (6 total)
+
 13. `/venues/{orgId}/venues/{venueId}`
 14. `/zones/{orgId}/zones/{zoneId}`
 15. `/positions/{orgId}/positions/{positionId}`
@@ -75,6 +78,7 @@
 ### High Priority Gaps (Critical Security Paths)
 
 #### 1. Shifts Collection (NOT TESTED)
+
 - ❌ No tests for `/orgs/{orgId}/schedules/{scheduleId}/shifts/{shiftId}`
 - ❌ No tests for `/shifts/{orgId}/shifts/{shiftId}`
 - ❌ Staff self-service limited updates not tested
@@ -82,6 +86,7 @@
 - **Effort**: 2 hours
 
 #### 2. Positions Collection (NOT TESTED)
+
 - ❌ No tests for `/orgs/{orgId}/positions/{positionId}`
 - ❌ No tests for `/positions/{orgId}/positions/{positionId}`
 - ❌ Manager+ write access not verified
@@ -89,6 +94,7 @@
 - **Effort**: 1.5 hours
 
 #### 3. Venues & Zones (NOT TESTED)
+
 - ❌ No tests for `/venues/{orgId}/venues/{venueId}`
 - ❌ No tests for `/zones/{orgId}/zones/{zoneId}`
 - ❌ Tenant isolation not verified for these collections
@@ -96,12 +102,14 @@
 - **Effort**: 1.5 hours
 
 #### 4. Attendance Records (NOT TESTED)
+
 - ❌ No tests for `/attendance_records/{orgId}/records/{recordId}`
 - ❌ Scheduler+ write access not verified
 - **Risk**: Unauthorized attendance modifications
 - **Effort**: 1 hour
 
 #### 5. Join Tokens (NOT TESTED)
+
 - ❌ No tests for `/orgs/{orgId}/join_tokens/{tokenId}`
 - ❌ No tests for `/join_tokens/{orgId}/join_tokens/{tokenId}`
 - ❌ Manager-only access not verified
@@ -109,6 +117,7 @@
 - **Effort**: 1 hour
 
 #### 6. Messages & Receipts (NOT TESTED)
+
 - ❌ No tests for `/organizations/{orgId}/messages/{messageId}`
 - ❌ No tests for `/organizations/{orgId}/receipts/{receiptId}`
 - ❌ Self-service receipt creation not tested
@@ -118,6 +127,7 @@
 ### Medium Priority Gaps
 
 #### 7. RBAC Role Hierarchy (PARTIAL)
+
 - ⚠️ Only schedules tested for RBAC
 - ❌ No tests for other collections with role checks
 - ❌ Admin super-access not fully tested
@@ -125,6 +135,7 @@
 - **Effort**: 1.5 hours
 
 #### 8. Memberships Collection (PARTIAL)
+
 - ⚠️ Basic membership tested
 - ❌ Manager-created memberships not tested
 - ❌ Self-created memberships not tested
@@ -132,6 +143,7 @@
 - **Effort**: 1 hour
 
 #### 9. Organizations Collection (PARTIAL)
+
 - ⚠️ Basic org access tested
 - ❌ Alternate path (`/organizations/`) not tested
 - ❌ Create/update/delete not fully tested
@@ -140,6 +152,7 @@
 ### Low Priority Gaps
 
 #### 10. Edge Cases & Error Paths
+
 - ❌ Invalid custom claims handling
 - ❌ Missing orgId in token
 - ❌ Malformed membership IDs
@@ -281,17 +294,20 @@ describe("rules: collection_name", () => {
 ### For Each Collection Path
 
 #### Authentication (3 tests)
+
 - [ ] Unauthenticated read denied
 - [ ] Unauthenticated write denied
 - [ ] Unauthenticated list denied
 
 #### Tenant Isolation (4 tests)
+
 - [ ] Same-org read allowed
 - [ ] Cross-org read denied
 - [ ] Same-org write allowed (if authorized)
 - [ ] Cross-org write denied
 
 #### RBAC - Read (6 tests)
+
 - [ ] Staff can read (if applicable)
 - [ ] Scheduler can read
 - [ ] Manager can read
@@ -300,6 +316,7 @@ describe("rules: collection_name", () => {
 - [ ] Corporate can read (if applicable)
 
 #### RBAC - Write (6 tests)
+
 - [ ] Staff write denied (unless self-service)
 - [ ] Scheduler write allowed (if applicable)
 - [ ] Manager write allowed
@@ -308,6 +325,7 @@ describe("rules: collection_name", () => {
 - [ ] Role hierarchy enforced
 
 #### Special Cases (varies)
+
 - [ ] Self-service operations (if applicable)
 - [ ] Limited field updates (shifts, receipts)
 - [ ] No-enumeration enforcement (list denied)

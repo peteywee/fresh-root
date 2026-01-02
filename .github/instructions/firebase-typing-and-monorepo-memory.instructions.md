@@ -41,6 +41,7 @@ SDK**, not a bug.
    ```
 
 1. **Create type-safe wrapper functions** for complex operations (optional enhancement):
+
    ```typescript
    export async function getDocWithType<T>(
      db: Firestore,

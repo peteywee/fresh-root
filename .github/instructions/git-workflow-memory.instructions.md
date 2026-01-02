@@ -101,6 +101,7 @@ git config core.hooksPath .husky
    ```
 
 3. **Test edge cases** — README.md, LICENSE, files with spaces in names
+
    ```bash
    touch "My Doc.md" && git add "My Doc.md" && git commit -m "test"  # Should block
    ```

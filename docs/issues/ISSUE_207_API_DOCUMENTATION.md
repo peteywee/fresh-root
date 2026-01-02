@@ -12,6 +12,7 @@ Generate comprehensive OpenAPI documentation for all API endpoints with interact
 ## Scope
 
 **In:**
+
 - OpenAPI spec generation from Zod schemas
 - Swagger UI endpoint
 - All endpoints documented
@@ -19,6 +20,7 @@ Generate comprehensive OpenAPI documentation for all API endpoints with interact
 - API playground
 
 **Out:**
+
 - SDK generation (future work)
 - Versioning strategy (future work)
 - Rate limit documentation (covered in API responses)

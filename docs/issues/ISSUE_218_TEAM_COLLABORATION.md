@@ -12,6 +12,7 @@ Implement team collaboration features including real-time updates, notifications
 ## Scope
 
 **In:**
+
 - Real-time schedule updates (WebSocket/Firebase)
 - In-app notifications system
 - Activity feed for team actions
@@ -19,6 +20,7 @@ Implement team collaboration features including real-time updates, notifications
 - Notification preferences
 
 **Out:**
+
 - Video calling (use external services)
 - File sharing (separate feature)
 - Project management (out of scope)

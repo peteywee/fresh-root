@@ -12,6 +12,7 @@ Enhance CI/CD pipeline with automated quality gates, deployment strategies, and 
 ## Scope
 
 **In:**
+
 - Automated quality gates (coverage, performance, security)
 - Blue-green deployment implementation
 - Automated rollback on failure
@@ -19,6 +20,7 @@ Enhance CI/CD pipeline with automated quality gates, deployment strategies, and 
 - Release automation
 
 **Out:**
+
 - Multi-region deployment (future work)
 - Canary deployments (future work)
 - GitOps full implementation (future work)

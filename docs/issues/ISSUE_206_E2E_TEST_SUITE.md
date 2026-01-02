@@ -12,12 +12,14 @@ Implement comprehensive E2E test suite covering critical user flows to prevent U
 ## Scope
 
 **In:**
+
 - 5 critical user flows tested
 - Visual regression testing setup
 - CI/CD integration for staging environment
 - Test documentation
 
 **Out:**
+
 - Performance testing (separate work)
 - Cross-browser testing (initially Chrome only)
 - Mobile-specific testing (future work)

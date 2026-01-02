@@ -55,6 +55,7 @@
 3. ✅ Creates lesson-id: `use-grep-pattern-matching`
 4. ✅ Writes full file to: `memory/indexed/git-workflow/use-grep-pattern-matching.md`
 5. ✅ **Includes frontmatter**:
+
    ```yaml
    ---
    type: pattern
@@ -67,6 +68,7 @@
    relatedDomains: ["code-quality", "automation"]
    ---
    ```
+
 6. ✅ Updates INDEX.md with new entry
 7. ✅ **Response formatted as**: CPMEM header + lesson content + tags + file path
 

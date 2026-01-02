@@ -12,6 +12,7 @@ Achieve 80%+ test coverage for Firestore security rules to prevent authorization
 ## Scope
 
 **In:**
+
 - Permission boundary tests (unauthenticated access prevention)
 - Tenant isolation tests (cross-organization data access prevention)
 - Role-based access control tests (RBAC enforcement)
@@ -19,6 +20,7 @@ Achieve 80%+ test coverage for Firestore security rules to prevent authorization
 - Regression tests for known security issues
 
 **Out:**
+
 - Performance testing of rules
 - Rules optimization (future work)
 - Client SDK testing (separate from rules testing)

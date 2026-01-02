@@ -272,6 +272,7 @@ git diff --cached | grep -v -E '(node_modules|\.git|build)'
 3. **Review INDEX.md** for coverage
 
 4. **Archive old file** (optional):
+
    ```bash
    mv .github/instructions/typescript-5-es2022.instructions.md archive/
    ```

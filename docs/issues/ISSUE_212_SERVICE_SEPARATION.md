@@ -12,6 +12,7 @@ Separate monolithic application into autonomous microservices for better scalabi
 ## Scope
 
 **In:**
+
 - Extract API service as autonomous service
 - Implement event-driven architecture
 - Service-to-service authentication
@@ -19,6 +20,7 @@ Separate monolithic application into autonomous microservices for better scalabi
 - Service mesh (optional)
 
 **Out:**
+
 - Frontend separation (future work)
 - Database per service (future work)
 - Complete service mesh (optional for v1)

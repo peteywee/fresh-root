@@ -12,6 +12,7 @@ Document and test disaster recovery procedures to ensure business continuity in 
 ## Scope
 
 **In:**
+
 - Backup procedure documentation
 - Restore procedure documentation
 - Disaster recovery testing
@@ -19,6 +20,7 @@ Document and test disaster recovery procedures to ensure business continuity in 
 - Incident response plan
 
 **Out:**
+
 - Automated failover (future work)
 - Multi-region deployment (future work)
 - Business continuity plan (broader than technical)

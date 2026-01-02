@@ -27,6 +27,7 @@
 ### Multi-Instance Production Ready ✅
 
 **Redis Rate Limiting**:
+
 - Backend: Upstash REST API (serverless-friendly)
 - Fallback: ioredis TCP (traditional)
 - Development: In-memory (local dev)
@@ -34,6 +35,7 @@
 - Tests: Comprehensive (redis.test.ts, rate-limit.test.ts)
 
 **Configuration**:
+
 ```bash
 UPSTASH_REDIS_REST_URL=https://your-db.upstash.io
 UPSTASH_REDIS_REST_TOKEN=your-token
@@ -43,12 +45,14 @@ USE_REDIS_RATE_LIMIT=true
 ### Distributed Observability ✅
 
 **OpenTelemetry Tracing**:
+
 - SDK: @opentelemetry/sdk-node (integrated)
 - Exporter: OTLP HTTP
 - Backends: Jaeger, New Relic, Honeycomb, Tempo
 - Overhead: <5% CPU, <10ms latency per request
 
 **Configuration**:
+
 ```bash
 OBSERVABILITY_TRACES_ENABLED=true
 OTEL_EXPORTER_OTLP_ENDPOINT=https://otlp.nr-data.net
@@ -58,6 +62,7 @@ OTEL_EXPORTER_OTLP_HEADERS=api-key=YOUR_KEY
 ### Environment Safety ✅
 
 **Validation**:
+
 - Zod schema validation for all env vars
 - Production-specific requirements (Firebase, CORS, Redis, Session)
 - Fail-fast at startup with clear errors
@@ -155,18 +160,21 @@ All should pass before deploying to production.
 ### High Priority Issues (24h total)
 
 **Issue #202: Firestore Rules Test Coverage** (8h)
+
 - **Objective**: Achieve 80% test coverage for Firestore security rules
 - **Scope**: Critical security paths, org isolation, RBAC enforcement
 - **Files**: `tests/rules/*.test.ts`, `firestore.rules`
 - **Success**: 80%+ coverage, all critical paths tested
 
 **Issue #203: API Endpoint Test Coverage** (12h)
+
 - **Objective**: Achieve 60% test coverage for API endpoints
 - **Scope**: Authentication, authorization, validation, error handling
 - **Files**: `apps/web/app/api/**/route.ts`, `apps/web/app/api/**/__tests__/*.test.ts`
 - **Success**: 60%+ coverage, critical routes fully tested
 
 **Issue #204: Log Aggregation Configuration** (4h)
+
 - **Objective**: Configure centralized logging for production
 - **Scope**: Structured logging, error tracking, log shipping
 - **Options**: CloudWatch, Datadog, New Relic, Grafana Loki
@@ -175,6 +183,7 @@ All should pass before deploying to production.
 ### Medium Priority Issues (4h total)
 
 **Issue #205: Monitoring Dashboards** (4h)
+
 - **Objective**: Create production monitoring dashboards
 - **Scope**: Redis metrics, API health, OTEL traces, error rates
 - **Platform**: Grafana, New Relic, or Datadog
@@ -183,11 +192,13 @@ All should pass before deploying to production.
 ### Implementation Strategy
 
 **Week 2 Focus**: Testing infrastructure
+
 1. Start with Issue #202 (Firestore rules) - security critical
 2. Follow with Issue #203 (API endpoints) - quality critical
 3. Build test patterns that can be reused
 
 **Week 3 Focus**: Observability infrastructure
+
 1. Complete Issue #204 (log aggregation)
 2. Complete Issue #205 (monitoring dashboards)
 3. Establish baseline metrics for performance tracking
@@ -196,17 +207,20 @@ All should pass before deploying to production.
 
 ## Key Decisions & Rationale
 
-### Why Redis First?
+### Why Redis First
+
 - **Multi-instance requirement**: Production needs horizontal scaling
 - **Already implemented**: Infrastructure existed, needed docs/tests
 - **Foundation**: Enables load balancing and reliability
 
-### Why OpenTelemetry?
+### Why OpenTelemetry
+
 - **Observability**: Critical for debugging distributed systems
 - **Vendor-neutral**: Works with multiple backends
 - **Already integrated**: Just needed configuration
 
-### Why Environment Validation?
+### Why Environment Validation
+
 - **Fail-fast**: Catch misconfigurations before deployment
 - **Production safety**: Prevent runtime errors from missing config
 - **Quick win**: 2 hours to implement, immediate value
@@ -294,18 +308,21 @@ All systems tested and validated. Ready for production deployment.
 ### Handoff Notes
 
 **For Next Developer**:
+
 - All Week 1 documentation complete and in `docs/`
 - Test infrastructure ready (`env.server.test.ts` as pattern)
 - Next tasks clearly defined in INDEX.md
 - Configuration examples in all setup guides
 
 **For DevOps Team**:
+
 - Production deployment checklist complete
 - Environment variables documented
 - Health check endpoints ready
 - Monitoring hooks in place
 
 **For QA Team**:
+
 - Test patterns established
 - Coverage targets defined
 - Acceptance criteria in each issue doc
@@ -352,6 +369,7 @@ Week 1 commits (7 total):
 ## Resources & Links
 
 **Documentation**:
+
 - Master Index: `docs/issues/INDEX.md`
 - Implementation Summary: `docs/issues/IMPLEMENTATION_SUMMARY.md`
 - Week 1 Report: `docs/issues/WEEK_1_COMPLETION_REPORT.md`
@@ -359,11 +377,13 @@ Week 1 commits (7 total):
 - OTEL Guide: `docs/OPENTELEMETRY_SETUP.md`
 
 **Code**:
+
 - Environment Validation: `apps/web/src/lib/env.server.ts`
 - Redis Adapter: `packages/api-framework/src/redis.ts`
 - OTEL Init: `apps/web/app/api/_shared/otel-init.ts`
 
 **Tests**:
+
 - Environment Tests: `apps/web/src/lib/__tests__/env.server.test.ts`
 - Redis Tests: `packages/api-framework/src/__tests__/redis.test.ts`
 - Rate Limit Tests: `packages/api-framework/src/__tests__/index.rate-limit.test.ts`

@@ -49,7 +49,7 @@ packages/api-framework/src/index.ts:2:1  error
 **Option 1: Auto-fix**
 
 ```bash
-$ pnpm lint:fix
+pnpm lint:fix
 ```
 
 ESLint auto-suggests and applies the fix:
@@ -76,9 +76,9 @@ import type { OrgRole } from "@fresh-schedules/types";
 ### Validation
 
 ```bash
-$ pnpm lint              # Should pass now
-$ pnpm typecheck         # Verify TypeScript works
-$ pnpm build:sdk         # Build the package
+pnpm lint              # Should pass now
+pnpm typecheck         # Verify TypeScript works
+pnpm build:sdk         # Build the package
 ```
 
 ---
@@ -91,15 +91,15 @@ $ pnpm build:sdk         # Build the package
 ### Step 1: Create Package Structure
 
 ```bash
-$ mkdir packages/validators
-$ cd packages/validators
-$ npm init -y
+mkdir packages/validators
+cd packages/validators
+npm init -y
 ```
 
 ### Step 2: ❌ Wrong: Add with version
 
 ```bash
-$ pnpm add @fresh-schedules/validators@0.1.0
+pnpm add @fresh-schedules/validators@0.1.0
 ```
 
 This creates:
@@ -114,7 +114,7 @@ This creates:
 ### Step 3: ✅ Right: Add with workspace protocol
 
 ```bash
-$ pnpm add -D @fresh-schedules/validators@workspace:*
+pnpm add -D @fresh-schedules/validators@workspace:*
 ```
 
 This creates:
@@ -146,19 +146,19 @@ $ pnpm workspace:check
 Auto-fix:
 
 ```bash
-$ pnpm workspace:fix
+pnpm workspace:fix
 ```
 
 **Check imports:**
 
 ```bash
-$ pnpm lint  # No relative import errors
+pnpm lint  # No relative import errors
 ```
 
 **Check types:**
 
 ```bash
-$ pnpm typecheck
+pnpm typecheck
 ```
 
 ### Step 5: Update tsconfig (if TypeScript)
@@ -181,7 +181,7 @@ Add path alias to `/tsconfig.base.json`:
 Validate:
 
 ```bash
-$ pnpm typecheck  # Should resolve types from new package
+pnpm typecheck  # Should resolve types from new package
 ```
 
 ---
@@ -193,7 +193,7 @@ $ pnpm typecheck  # Should resolve types from new package
 ### Step 1: Upgrade in Root
 
 ```bash
-$ pnpm upgrade -D typescript@5.10.0 --save-exact
+pnpm upgrade -D typescript@5.10.0 --save-exact
 ```
 
 Updates `package.json`:
@@ -205,7 +205,7 @@ Updates `package.json`:
 ### Step 2: Check Version Consistency
 
 ```bash
-$ pnpm deps:sync:check
+pnpm deps:sync:check
 ```
 
 **Output:**
@@ -220,7 +220,7 @@ SemverRangeMismatch found:
 ### Step 3: Sync Versions
 
 ```bash
-$ pnpm deps:sync
+pnpm deps:sync
 ```
 
 Updates all packages to use new version:
@@ -233,15 +233,15 @@ Updates all packages to use new version:
 ### Step 4: Update Lock File
 
 ```bash
-$ pnpm install
+pnpm install
 ```
 
 ### Step 5: Validate Everything
 
 ```bash
-$ pnpm typecheck      # Verify TypeScript works
-$ pnpm lint           # Check linting still passes
-$ pnpm test:unit      # Run tests
+pnpm typecheck      # Verify TypeScript works
+pnpm lint           # Check linting still passes
+pnpm test:unit      # Run tests
 ```
 
 ### Full Example
@@ -265,7 +265,7 @@ pnpm upgrade -D typescript@latest --save-exact && \
 ### Analyze Duplication
 
 ```bash
-$ pnpm deps:analyze
+pnpm deps:analyze
 ```
 
 **Output (example):**
@@ -319,8 +319,8 @@ $ du -sh node_modules
 In CI logs or locally:
 
 ```bash
-$ pnpm lint:check
-$ cat eslint-report.json | jq '.[] | select(.messages | length > 0)'
+pnpm lint:check
+cat eslint-report.json | jq '.[] | select(.messages | length > 0)'
 ```
 
 **Output:**
@@ -341,7 +341,7 @@ $ cat eslint-report.json | jq '.[] | select(.messages | length > 0)'
 ### Step 2: Fix Automatically
 
 ```bash
-$ pnpm lint:fix
+pnpm lint:fix
 ```
 
 ESLint updates the import to use package alias.
@@ -349,16 +349,16 @@ ESLint updates the import to use package alias.
 ### Step 3: Verify
 
 ```bash
-$ pnpm typecheck
-$ pnpm build:sdk
+pnpm typecheck
+pnpm build:sdk
 ```
 
 ### Step 4: Commit
 
 ```bash
-$ git add .
-$ git commit -m "fix: use package alias instead of relative import"
-$ git push origin branch-name
+git add .
+git commit -m "fix: use package alias instead of relative import"
+git push origin branch-name
 ```
 
 ---
@@ -370,14 +370,14 @@ $ git push origin branch-name
 ### Install husky
 
 ```bash
-$ pnpm add -D husky
-$ npx husky install
+pnpm add -D husky
+npx husky install
 ```
 
 ### Create Pre-Commit Hook
 
 ```bash
-$ npx husky add .husky/pre-commit "pnpm lint:fix && pnpm workspace:check"
+npx husky add .husky/pre-commit "pnpm lint:fix && pnpm workspace:check"
 ```
 
 This creates `.husky/pre-commit`:
@@ -410,7 +410,7 @@ $ git commit -m "test"
 ### Find Mismatches
 
 ```bash
-$ pnpm deps:sync:check
+pnpm deps:sync:check
 ```
 
 **Output:**
@@ -426,7 +426,7 @@ SemverRangeMismatch found:
 ### Fix Automatically
 
 ```bash
-$ pnpm deps:sync
+pnpm deps:sync
 ```
 
 For workspace: mismatches:
@@ -440,14 +440,14 @@ For semver mismatches:
 ### Install
 
 ```bash
-$ pnpm install
+pnpm install
 ```
 
 ### Validate
 
 ```bash
-$ pnpm deps:sync:check  # Should show no mismatches
-$ pnpm typecheck        # Ensure everything still works
+pnpm deps:sync:check  # Should show no mismatches
+pnpm typecheck        # Ensure everything still works
 ```
 
 ---
@@ -459,15 +459,15 @@ $ pnpm typecheck        # Ensure everything still works
 ### Step 1: Clone & Install
 
 ```bash
-$ git clone https://github.com/peteywee/fresh-root.git
-$ cd fresh-root
-$ pnpm install
+git clone https://github.com/peteywee/fresh-root.git
+cd fresh-root
+pnpm install
 ```
 
 ### Step 2: Run Guardrails
 
 ```bash
-$ pnpm guardrails
+pnpm guardrails
 ```
 
 This runs:
@@ -485,7 +485,7 @@ This runs:
 ### Step 3: Validate Full Setup
 
 ```bash
-$ pnpm validate:all
+pnpm validate:all
 ```
 
 This runs:
@@ -500,8 +500,8 @@ This runs:
 ### Step 4: Set Up Pre-Commit
 
 ```bash
-$ pnpm install -D husky
-$ npx husky install
+pnpm install -D husky
+npx husky install
 ```
 
 Now they're protected against accidentally committing broken code.

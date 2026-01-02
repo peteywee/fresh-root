@@ -12,6 +12,7 @@ Conduct external security penetration testing to identify and remediate vulnerab
 ## Scope
 
 **In:**
+
 - External security firm engagement
 - Web application security (OWASP Top 10)
 - API security testing
@@ -20,6 +21,7 @@ Conduct external security penetration testing to identify and remediate vulnerab
 - Remediation of findings
 
 **Out:**
+
 - Code review (separate internal process)
 - Compliance certifications (SOC2, etc. - future work)
 - Physical security testing

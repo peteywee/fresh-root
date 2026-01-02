@@ -7,6 +7,7 @@
 ## Overview
 
 Fresh Schedules uses OpenTelemetry for distributed tracing, providing visibility into:
+
 - API request flows
 - Service-to-service communication
 - Performance bottlenecks
@@ -68,6 +69,7 @@ DEPLOYMENT_ENVIRONMENT=production
 **Best for**: Local development, self-hosted observability
 
 **Setup**:
+
 ```bash
 # Run Jaeger with Docker
 docker run -d \
@@ -82,15 +84,17 @@ OBSERVABILITY_TRACES_ENABLED=true
 OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:4318/v1/traces
 ```
 
-**Access**: UI at http://localhost:16686
+**Access**: UI at <http://localhost:16686>
 
 **Advantages**:
+
 - ✅ Free and open source
 - ✅ No external dependencies
 - ✅ Great for development
 - ✅ Simple setup
 
 **Disadvantages**:
+
 - ⚠️ Self-hosted infrastructure
 - ⚠️ Limited advanced features
 - ⚠️ Requires maintenance
@@ -100,6 +104,7 @@ OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:4318/v1/traces
 **Best for**: Enterprise production, full-stack observability
 
 **Setup**:
+
 ```bash
 OBSERVABILITY_TRACES_ENABLED=true
 OTEL_EXPORTER_OTLP_ENDPOINT=https://otlp.nr-data.net
@@ -107,12 +112,14 @@ OTEL_EXPORTER_OTLP_HEADERS=api-key=YOUR_LICENSE_KEY
 ```
 
 **Advantages**:
+
 - ✅ Fully managed
 - ✅ Advanced analytics
 - ✅ APM integration
 - ✅ Alerting and dashboards
 
 **Disadvantages**:
+
 - ⚠️ Paid service
 - ⚠️ Higher latency (external SaaS)
 
@@ -121,6 +128,7 @@ OTEL_EXPORTER_OTLP_HEADERS=api-key=YOUR_LICENSE_KEY
 **Best for**: High-cardinality data, modern observability
 
 **Setup**:
+
 ```bash
 OBSERVABILITY_TRACES_ENABLED=true
 OTEL_EXPORTER_OTLP_ENDPOINT=https://api.honeycomb.io
@@ -128,12 +136,14 @@ OTEL_EXPORTER_OTLP_HEADERS=x-honeycomb-team=YOUR_API_KEY
 ```
 
 **Advantages**:
+
 - ✅ Excellent UX
 - ✅ High-cardinality queries
 - ✅ BubbleUp for anomaly detection
 - ✅ Great for debugging
 
 **Disadvantages**:
+
 - ⚠️ Paid service
 - ⚠️ Learning curve
 
@@ -142,6 +152,7 @@ OTEL_EXPORTER_OTLP_HEADERS=x-honeycomb-team=YOUR_API_KEY
 **Best for**: Cost-effective, self-hosted, scales well
 
 **Setup**:
+
 ```bash
 # Run Tempo with Docker
 docker run -d \
@@ -154,12 +165,14 @@ OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:4318/v1/traces
 ```
 
 **Advantages**:
+
 - ✅ Cost-effective (object storage)
 - ✅ Scales horizontally
 - ✅ Integrates with Grafana
 - ✅ No sampling required
 
 **Disadvantages**:
+
 - ⚠️ Self-hosted
 - ⚠️ Requires Grafana for visualization
 
@@ -170,6 +183,7 @@ OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:4318/v1/traces
 Most HTTP requests, database calls, and external API calls are automatically instrumented by the OpenTelemetry SDK. No code changes needed.
 
 **Instrumented automatically**:
+
 - ✅ Next.js API routes
 - ✅ HTTP client requests (fetch, axios)
 - ✅ Database queries (if instrumented)
@@ -204,6 +218,7 @@ export async function processSchedule(scheduleId: string) {
 ### Span Attributes
 
 Standard attributes (automatically added):
+
 - `service.name` - Service identifier
 - `deployment.environment` - prod/staging/dev
 - `http.method` - HTTP verb
@@ -211,6 +226,7 @@ Standard attributes (automatically added):
 - `http.status_code` - Response status
 
 Custom attributes (add as needed):
+
 - `user.id` - Authenticated user
 - `org.id` - Organization context
 - `request.id` - Request identifier
@@ -239,11 +255,13 @@ Custom attributes (add as needed):
 ### Example Queries
 
 **Jaeger UI**:
+
 - Service: `fresh-root-web-api`
 - Operation: `POST /api/schedules`
 - Tags: `error=true`
 
 **Grafana/Tempo**:
+
 ```promql
 # 95th percentile latency
 histogram_quantile(0.95, rate(traces_spanmetrics_latency_bucket[5m]))
@@ -261,18 +279,22 @@ sum(rate(traces_spanmetrics_calls_total[5m]))
 **Symptoms**: Logs show "OpenTelemetry SDK started" but no traces appear
 
 **Causes**:
+
 - `OBSERVABILITY_TRACES_ENABLED` not set to `true`
 - `OTEL_EXPORTER_OTLP_ENDPOINT` not configured
 - Backend endpoint unreachable
 
 **Fixes**:
+
 1. Check environment variables:
+
    ```bash
    echo $OBSERVABILITY_TRACES_ENABLED  # Must be "true"
    echo $OTEL_EXPORTER_OTLP_ENDPOINT   # Must be valid URL
    ```
 
 2. Test endpoint connectivity:
+
    ```bash
    curl -X POST $OTEL_EXPORTER_OTLP_ENDPOINT \
      -H "Content-Type: application/json" \
@@ -280,6 +302,7 @@ sum(rate(traces_spanmetrics_calls_total[5m]))
    ```
 
 3. Check application logs for errors:
+
    ```bash
    grep -i "otel\|telemetry" logs/app.log
    ```
@@ -289,18 +312,21 @@ sum(rate(traces_spanmetrics_calls_total[5m]))
 **Symptoms**: SDK starts successfully but traces don't appear in Jaeger/New Relic/etc.
 
 **Causes**:
+
 - Wrong endpoint URL
 - Missing authentication headers
 - Backend sampling configuration
 - Network firewall blocking
 
 **Fixes**:
+
 1. Verify endpoint format:
    - Jaeger: `http://HOST:4318/v1/traces`
    - New Relic: `https://otlp.nr-data.net`
    - Honeycomb: `https://api.honeycomb.io`
 
 2. Check authentication:
+
    ```bash
    # New Relic
    OTEL_EXPORTER_OTLP_HEADERS=api-key=YOUR_KEY
@@ -310,6 +336,7 @@ sum(rate(traces_spanmetrics_calls_total[5m]))
    ```
 
 3. Test with curl:
+
    ```bash
    curl -X POST $OTEL_EXPORTER_OTLP_ENDPOINT \
      -H "Content-Type: application/protobuf" \
@@ -322,13 +349,16 @@ sum(rate(traces_spanmetrics_calls_total[5m]))
 **Symptoms**: API requests slower after enabling tracing
 
 **Causes**:
+
 - Synchronous export blocking requests
 - Too many spans per trace
 - Network latency to backend
 
 **Fixes**:
+
 1. Use async export (default in our setup)
 2. Sample traces (reduce volume):
+
    ```typescript
    // In otel-init.ts
    import { ParentBasedSampler, TraceIdRatioBasedSampler } from "@opentelemetry/sdk-trace-node";
@@ -350,12 +380,15 @@ sum(rate(traces_spanmetrics_calls_total[5m]))
 **Symptoms**: Incomplete traces with gaps
 
 **Causes**:
+
 - Missing context propagation
 - Async operations not awaited
 - Errors not propagated
 
 **Fixes**:
+
 1. Ensure all async operations use `await`:
+
    ```typescript
    // ❌ Bad
    fetchData().then(process);
@@ -365,6 +398,7 @@ sum(rate(traces_spanmetrics_calls_total[5m]))
    ```
 
 2. Propagate context in callbacks:
+
    ```typescript
    import { context } from "@opentelemetry/api";
    
@@ -382,7 +416,7 @@ sum(rate(traces_spanmetrics_calls_total[5m]))
 1. **Use Jaeger locally**
    - Run with Docker Compose
    - Enable tracing in `.env.local`
-   - Browse traces at http://localhost:16686
+   - Browse traces at <http://localhost:16686>
 
 2. **Test trace propagation**
    - Make multi-service calls
@@ -435,12 +469,14 @@ sum(rate(traces_spanmetrics_calls_total[5m]))
 ## Performance Impact
 
 **Expected overhead**:
+
 - CPU: <5% increase
 - Memory: ~50MB additional
 - Latency: <10ms per request
 - Network: ~1KB per trace
 
 **Tuning for scale**:
+
 - Sample traces (10-20% for high volume)
 - Use batch exporting (default)
 - Deploy local OTEL Collector

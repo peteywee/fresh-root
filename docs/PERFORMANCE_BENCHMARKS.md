@@ -12,12 +12,14 @@ This guide documents the performance optimization infrastructure, benchmarking r
 ## Performance Budgets
 
 ### API Endpoints
+
 - **p50**: < 100ms
 - **p95**: < 200ms
 - **p99**: < 500ms
 - **Timeout**: 30s (hard limit)
 
 ### Page Loads
+
 - **p50**: < 1s
 - **p95**: < 2s
 - **p99**: < 3s
@@ -26,12 +28,14 @@ This guide documents the performance optimization infrastructure, benchmarking r
 - **TTI (Time to Interactive)**: < 3.5s
 
 ### Database Queries
+
 - **p50**: < 25ms
 - **p95**: < 50ms
 - **p99**: < 100ms
 - **Slow Query Threshold**: 100ms
 
 ### Resource Usage
+
 - **Memory**: < 512MB per instance
 - **CPU**: < 70% average
 - **Disk I/O**: < 5MB/s sustained
@@ -45,12 +49,14 @@ This guide documents the performance optimization infrastructure, benchmarking r
 **Implementation**: `packages/api-framework/src/performance.ts`
 
 **Strategy**:
+
 - Organization data: 5min TTL
 - User memberships: 10min TTL
 - Schedule metadata: 2min TTL
 - Position lists: 5min TTL
 
 **Usage Example**:
+
 ```typescript
 import { cachedOperation, buildCacheKey } from '@fresh-schedules/api-framework';
 
@@ -74,6 +80,7 @@ export const GET = createOrgEndpoint({
 ```
 
 **Cache Invalidation**:
+
 ```typescript
 import { invalidateCache } from '@fresh-schedules/api-framework';
 
@@ -87,6 +94,7 @@ await invalidateCache('org:org-123');
 ### 2. Query Optimization
 
 **Batch Fetching**:
+
 ```typescript
 import { QueryOptimization } from '@fresh-schedules/api-framework';
 
@@ -99,6 +107,7 @@ const schedulesMap = await QueryOptimization.batchFetch(
 ```
 
 **Field Projection**:
+
 ```typescript
 // Only fetch required fields to reduce payload size
 const doc = await db.doc('orgs/org-123').get();
@@ -108,6 +117,7 @@ const fields = QueryOptimization.selectFields(doc, ['name', 'status', 'plan']);
 ### 3. Memory Optimization
 
 **Pagination for Large Datasets**:
+
 ```typescript
 import { MemoryOptimization } from '@fresh-schedules/api-framework';
 
@@ -123,6 +133,7 @@ for await (const batch of MemoryOptimization.paginateQuery(query, 50)) {
 ### 4. Performance Monitoring
 
 **Operation Measurement**:
+
 ```typescript
 import { measurePerformance } from '@fresh-schedules/api-framework';
 
@@ -143,6 +154,7 @@ export const GET = createOrgEndpoint({
 ```
 
 **Slow Query Logging**:
+
 - Automatic logging of queries > 100ms
 - Exported to OpenTelemetry traces
 - Alerts configured for sustained slow queries
@@ -154,6 +166,7 @@ export const GET = createOrgEndpoint({
 ### Real-Time Metrics
 
 **Global Performance Metrics**:
+
 ```typescript
 import { globalMetrics } from '@fresh-schedules/api-framework';
 
@@ -182,6 +195,7 @@ OTEL_EXPORTER_OTLP_HEADERS=api-key=YOUR_KEY
 ```
 
 **Metrics Exported**:
+
 - `performance.duration_ms` - Operation duration
 - `performance.slow` - Boolean flag for slow queries
 - `operation` - Operation name
@@ -197,6 +211,7 @@ OTEL_EXPORTER_OTLP_HEADERS=api-key=YOUR_KEY
 **Location**: `apps/web/src/lib/__benchmarks__/`
 
 **Run Benchmarks**:
+
 ```bash
 # Run all benchmarks
 pnpm bench
@@ -211,6 +226,7 @@ pnpm bench --prof
 ### Lighthouse Performance Auditing
 
 **Automated Lighthouse Checks**:
+
 ```bash
 # Run Lighthouse on local dev
 pnpm lighthouse
@@ -223,6 +239,7 @@ pnpm lighthouse:prod
 ```
 
 **Target Scores**:
+
 - Performance: 90+
 - Accessibility: 95+
 - Best Practices: 95+
@@ -231,6 +248,7 @@ pnpm lighthouse:prod
 ### API Load Testing
 
 **Using Apache Bench (ab)**:
+
 ```bash
 # Test API endpoint (100 requests, 10 concurrent)
 ab -n 100 -c 10 -H "Cookie: session=YOUR_SESSION" \
@@ -238,6 +256,7 @@ ab -n 100 -c 10 -H "Cookie: session=YOUR_SESSION" \
 ```
 
 **Using k6**:
+
 ```javascript
 // k6-test.js
 import http from 'k6/http';
@@ -266,6 +285,7 @@ export default function() {
 ```
 
 **Run k6**:
+
 ```bash
 k6 run k6-test.js
 ```
@@ -300,6 +320,7 @@ k6 run k6-test.js
 ### Grafana Dashboards
 
 **Pre-built Dashboard Templates** (See `docs/MONITORING_DASHBOARDS_SETUP.md`):
+
 - API Health Dashboard
 - Redis Cache Dashboard
 - Database Performance Dashboard
@@ -312,6 +333,7 @@ k6 run k6-test.js
 ### Automated Performance Tests
 
 **CI/CD Integration**:
+
 ```yaml
 # .github/workflows/performance.yml
 name: Performance Tests
@@ -340,6 +362,7 @@ jobs:
 ### Performance Budget Enforcement
 
 **Budget Configuration** (`performance-budget.json`):
+
 ```json
 {
   "api_endpoints": {
@@ -359,6 +382,7 @@ jobs:
 ```
 
 **Validation Script**:
+
 ```bash
 # Check if current performance meets budgets
 pnpm perf:check
@@ -373,6 +397,7 @@ pnpm perf:check
 ### Slow API Responses
 
 **Diagnosis Steps**:
+
 1. Check OpenTelemetry traces for the request
 2. Look for slow database queries (> 100ms)
 3. Check cache hit rate for hot paths
@@ -380,6 +405,7 @@ pnpm perf:check
 5. Check for N+1 query patterns
 
 **Solutions**:
+
 - Add caching for frequently accessed data
 - Optimize database queries with proper indexes
 - Use batch fetching for related data
@@ -388,12 +414,14 @@ pnpm perf:check
 ### High Memory Usage
 
 **Diagnosis Steps**:
+
 1. Check for memory leaks (increasing over time)
 2. Look for large query results loaded into memory
 3. Check cache size and eviction policy
 4. Profile memory usage with Node.js heap snapshots
 
 **Solutions**:
+
 - Use pagination for large datasets
 - Implement streaming for large responses
 - Clear unnecessary caches
@@ -402,12 +430,14 @@ pnpm perf:check
 ### Cache Issues
 
 **Low Cache Hit Rate**:
+
 - Verify Redis connection is stable
 - Check TTL values (too short?)
 - Ensure cache keys are consistent
 - Monitor cache evictions
 
 **Cache Invalidation Problems**:
+
 - Use pattern-based invalidation
 - Implement cache versioning
 - Add manual cache clear endpoints
@@ -466,6 +496,7 @@ configurePerformance({
 ## Continuous Performance Testing
 
 ### Weekly Performance Review
+
 1. Review p95/p99 latency trends
 2. Check for performance regressions
 3. Analyze slow query patterns
@@ -473,6 +504,7 @@ configurePerformance({
 5. Assess resource usage trends
 
 ### Monthly Capacity Planning
+
 1. Project traffic growth
 2. Identify scaling bottlenecks
 3. Plan infrastructure upgrades

@@ -12,6 +12,7 @@ Establish foundation for mobile application development using React Native or PW
 ## Scope
 
 **In:**
+
 - Mobile strategy decision (React Native vs Enhanced PWA)
 - Initial mobile architecture
 - Shared component library
@@ -19,6 +20,7 @@ Establish foundation for mobile application development using React Native or PW
 - Basic mobile UI scaffolding
 
 **Out:**
+
 - Full mobile feature parity (future phases)
 - App store deployment (future work)
 - Mobile-specific features (future work)

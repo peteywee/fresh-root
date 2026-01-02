@@ -12,6 +12,7 @@ Implement GraphQL API layer alongside REST API for more flexible client queries 
 ## Scope
 
 **In:**
+
 - GraphQL schema design
 - GraphQL server setup (Apollo/GraphQL Yoga)
 - Type generation from schemas
@@ -19,6 +20,7 @@ Implement GraphQL API layer alongside REST API for more flexible client queries 
 - Query optimization
 
 **Out:**
+
 - Complete REST API replacement (maintain both)
 - Real-time subscriptions (future work)
 - GraphQL federation (future work)

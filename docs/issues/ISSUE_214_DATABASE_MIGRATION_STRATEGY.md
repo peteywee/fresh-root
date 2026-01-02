@@ -12,6 +12,7 @@ Design and implement database migration strategy for future PostgreSQL migration
 ## Scope
 
 **In:**
+
 - Migration strategy documentation
 - Dual-write pattern implementation
 - Data synchronization tools
@@ -19,6 +20,7 @@ Design and implement database migration strategy for future PostgreSQL migration
 - Migration testing
 
 **Out:**
+
 - Complete PostgreSQL migration (future phases)
 - Real-time sync architecture (use batch initially)
 - Schema versioning (future work)

@@ -230,7 +230,7 @@ cat .github/instructions/memory/indexed/INDEX.md
 
 ---
 
-## Questions?
+## Questions
 
 - **Quick syntax?** → See
   [REMEMBER_QUICKSTART.md](.github/instructions/memory/REMEMBER_QUICKSTART.md)

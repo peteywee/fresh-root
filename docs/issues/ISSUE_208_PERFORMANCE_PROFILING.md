@@ -12,6 +12,7 @@ Profile critical endpoints, identify bottlenecks, and optimize for production pe
 ## Scope
 
 **In:**
+
 - Profiling tools setup (clinic.js, Lighthouse CI)
 - Critical endpoint profiling
 - N+1 query identification
@@ -19,6 +20,7 @@ Profile critical endpoints, identify bottlenecks, and optimize for production pe
 - Performance budgets definition
 
 **Out:**
+
 - Full application profiling (focus on critical paths)
 - Database migration optimizations (separate work)
 - CDN configuration (separate work)

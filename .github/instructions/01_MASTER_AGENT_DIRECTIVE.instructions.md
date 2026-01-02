@@ -276,7 +276,7 @@ Types: feat, fix, docs, refactor, test, chore
 
 | File            | When Loaded                     |
 | --------------- | ------------------------------- |
-| 02_CODE_QUALITY | _.ts, _.tsx, _.js, _.jsx, \*.md |
+| 02_CODE_QUALITY | _.ts,_.tsx, _.js,_.jsx, \*.md |
 | 03_SECURITY     | api/, auth/, security code      |
 | 04_FRAMEWORK    | apps/, packages/                |
 | 05_TESTING      | test, spec, **tests**           |

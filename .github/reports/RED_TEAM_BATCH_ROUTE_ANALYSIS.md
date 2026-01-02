@@ -495,7 +495,7 @@ export const CreateBatchSchema = z.object({
 
 **This route CANNOT be deployed in current state.**
 
-### Blocking Issues:
+### Blocking Issues
 
 1. 🔴 **Data Leakage** (SEC-02)
    - Type assertions allow field injection

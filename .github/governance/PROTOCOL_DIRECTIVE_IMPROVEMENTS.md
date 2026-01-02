@@ -187,8 +187,8 @@ If classification is uncertain → NON-TRIVIAL
 ## Branch Hierarchy
 ```
 
-main (production) ├── dev (pre-production validation) │ ├── feature/_ (new features) │ ├── fix/_
-(bug fixes) │ ├── refactor/_ (code improvements) │ └── chore/_ (maintenance) └── hotfix/\*
+main (production) ├── dev (pre-production validation) │ ├── feature/_(new features) │ ├── fix/_
+(bug fixes) │ ├── refactor/_(code improvements) │ └── chore/_ (maintenance) └── hotfix/\*
 (emergency production fixes)
 
 ```

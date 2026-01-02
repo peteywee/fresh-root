@@ -58,7 +58,7 @@ import type { OrgRole } from "@fresh-schedules/types"; // ✅ Package alias work
 When you try to import from a relative path across packages:
 
 ```bash
-$ pnpm lint
+pnpm lint
 ```
 
 **Output:**
@@ -155,7 +155,7 @@ Without workspace validation:
 ### How It Works
 
 ```bash
-$ pnpm workspace:check
+pnpm workspace:check
 ```
 
 **Success:**
@@ -278,7 +278,7 @@ Results in:
 ### How It Works
 
 ```bash
-$ pnpm deps:sync:check
+pnpm deps:sync:check
 ```
 
 **Output:**
@@ -293,7 +293,7 @@ Run: pnpm deps:sync
 ```
 
 ```bash
-$ pnpm deps:sync
+pnpm deps:sync
 ```
 
 Updates all to consistent range (usually the most permissive).

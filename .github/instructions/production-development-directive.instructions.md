@@ -310,7 +310,7 @@ Before marking any task complete:
 - \[ ] Firestore rules updated (if applicable)
 - \[ ] API contracts versioned (if changed)
 
-### No Junk Code. Ever.
+### No Junk Code. Ever
 
 - ❌ Placeholder variables (`let temp = ...`, `let x = ...`)
 - ❌ Magic numbers or strings (use constants)
@@ -321,7 +321,7 @@ Before marking any task complete:
 - ❌ Functions doing multiple things (split responsibility)
 - ❌ Catch blocks that silently fail (always log and handle)
 
-### No Junk Logic. Ever.
+### No Junk Logic. Ever
 
 - ❌ Guessing at behavior (verify with code/tools)
 - ❌ Assuming patterns exist (read actual implementations)
@@ -403,7 +403,7 @@ When a request comes in:
 - Architecture docs? **Constraints** (understand them)
 - Type definitions? **Constraints** (enforce them)
 
-### But Also...
+### But Also
 
 - Missing a rule? **You have judgment.** Propose it.
 - Pattern seems wrong? **Question it.** Research why it exists.

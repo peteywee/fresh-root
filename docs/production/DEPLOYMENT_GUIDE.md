@@ -350,7 +350,7 @@ curl -I https://your-domain.com/dashboard
 
 ### Getting Help
 
-- GitHub Issues: https://github.com/peteywee/fresh-root/issues
+- GitHub Issues: <https://github.com/peteywee/fresh-root/issues>
 - Team Chat: [Your team channel]
 - On-call: [Your on-call rotation]
 

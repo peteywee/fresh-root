@@ -153,10 +153,10 @@ description: "Java Spring Boot development standards"
 
 **Fetch these awesome-copilot directories:**
 
-- **Instructions**: https://github.com/github/awesome-copilot/tree/main/instructions
-- **Prompts**: https://github.com/github/awesome-copilot/tree/main/prompts
-- **Chat Modes**: https://github.com/github/awesome-copilot/tree/main/chatmodes
-- **Collections**: https://github.com/github/awesome-copilot/blob/main/docs/README.collections.md
+- **Instructions**: <https://github.com/github/awesome-copilot/tree/main/instructions>
+- **Prompts**: <https://github.com/github/awesome-copilot/tree/main/prompts>
+- **Chat Modes**: <https://github.com/github/awesome-copilot/tree/main/chatmodes>
+- **Collections**: <https://github.com/github/awesome-copilot/blob/main/docs/README.collections.md>
 
 **Awesome-Copilot Collections to Check:**
 

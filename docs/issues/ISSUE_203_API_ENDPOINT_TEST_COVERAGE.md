@@ -12,6 +12,7 @@ Achieve 60%+ test coverage for API routes to prevent regression bugs and ensure 
 ## Scope
 
 **In:**
+
 - CRUD operation tests for all major endpoints
 - Authorization edge case tests
 - Input validation tests (Zod schemas)
@@ -19,6 +20,7 @@ Achieve 60%+ test coverage for API routes to prevent regression bugs and ensure 
 - Error handling tests
 
 **Out:**
+
 - Performance/load testing (separate work)
 - Integration with external services
 - Frontend component testing
