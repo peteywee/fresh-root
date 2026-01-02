@@ -678,3 +678,10 @@ export function createRateLimitedEndpoint<TOutput = unknown>(
 // =============================================================================
 // Export all enhancement modules for advanced use cases
 export * from "./enhancements";
+
+// =============================================================================
+// PERFORMANCE & OPTIMIZATION
+// =============================================================================
+export * from "./performance";
+export type { PerformanceConfig } from "./performance";
+export { measurePerformance, cachedOperation, invalidateCache, QueryOptimization, MemoryOptimization } from "./performance";

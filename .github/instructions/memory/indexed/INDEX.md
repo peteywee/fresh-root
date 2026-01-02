@@ -2,7 +2,7 @@
 
 _Indexed, searchable knowledge base organized by domain and lesson type._
 
-**Last Updated**: 2025-12-25 **Total Lessons**: 0 **Domains**: (to be populated)
+**Last Updated**: 2025-12-28 **Total Lessons**: 2 **Domains**: 2
 
 ## How to Use
 
@@ -16,9 +16,10 @@ _Indexed, searchable knowledge base organized by domain and lesson type._
 _Lessons organized by their primary domain. Each domain folder at `memory/indexed/{domain}/`
 contains individual lessons._
 
-| Domain     | Lesson Count | Recent Lessons | Tags |
-| ---------- | ------------ | -------------- | ---- |
-| (none yet) | —            | —              | —    |
+|Domain|Lesson Count|Recent Lessons|Tags|
+|---|---|---|---|
+|ci-cd|1|[issue-215-deployment-pipeline-enhancement-scope](ci-cd/issue-215-deployment-pipeline-enhancement-scope.md)|#ci-cd #deployment #rollback|
+|project-handoff|1|[session-closeout-verify-claims-before-summary](project-handoff/session-closeout-verify-claims-before-summary.md)|#workflow #handoff #verification|
 
 ## By Type
 
@@ -26,41 +27,42 @@ contains individual lessons._
 
 _Effective approaches and best-practice patterns discovered across the codebase._
 
-| Lesson     | Domain | Priority | Created |
-| ---------- | ------ | -------- | ------- |
-| (none yet) | —      | —        | —       |
+|Lesson|Domain|Priority|Created|
+|---|---|---|---|
+|(none yet)|—|—|—|
 
 ### Gotchas (Common Mistakes)
 
 _Frequent mistakes, subtle bugs, and gotchas to avoid._
 
-| Lesson     | Domain | Priority | Created |
-| ---------- | ------ | -------- | ------- |
-| (none yet) | —      | —        | —       |
+|Lesson|Domain|Priority|Created|
+|---|---|---|---|
+|(none yet)|—|—|—|
 
 ### Best Practices
 
 _Standards, conventions, and proven approaches._
 
-| Lesson     | Domain | Priority | Created |
-| ---------- | ------ | -------- | ------- |
-| (none yet) | —      | —        | —       |
+|Lesson|Domain|Priority|Created|
+|---|---|---|---|
+|(none yet)|—|—|—|
 
 ### Automation & Workflows
 
 _Scripts, tools, and workflow improvements._
 
-| Lesson     | Domain | Priority | Created |
-| ---------- | ------ | -------- | ------- |
-| (none yet) | —      | —        | —       |
+|Lesson|Domain|Priority|Created|
+|---|---|---|---|
+|[Issue #215: CI/CD enhancement scope (don’t break existing gates)](ci-cd/issue-215-deployment-pipeline-enhancement-scope.md)|ci-cd|1|2025-12-28|
+|[Session closeout: verify before you summarize](project-handoff/session-closeout-verify-claims-before-summary.md)|project-handoff|2|2025-12-28|
 
 ### Critical Warnings
 
 _High-priority lessons with safety, security, or major impact implications._
 
-| Lesson     | Domain | Priority | Created |
-| ---------- | ------ | -------- | ------- |
-| (none yet) | —      | —        | —       |
+|Lesson|Domain|Priority|Created|
+|---|---|---|---|
+|(none yet)|—|—|—|
 
 ## By Tag
 
