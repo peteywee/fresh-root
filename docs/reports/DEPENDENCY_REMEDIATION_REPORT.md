@@ -1,12 +1,10 @@
 # Dependency Remediation Report
-
 **Generated**: 2025-12-07T08:13:50.618Z\
-**Repository**: <https://github.com/peteywee/fresh-root\> **Branch**: main
+**Repository**: <https://github.com/peteywee/fresh-root\\> **Branch**: main
 
 ---
 
 ## Summary
-
 | Category               | Count | Severity |
 | ---------------------- | ----- | -------- |
 | Deprecated Packages    | 0     | ✅ OK    |
@@ -17,25 +15,21 @@
 ---
 
 ## 1. Deprecated Packages
-
 ✅ No deprecated packages found
 
 ---
 
 ## 2. Peer Dependency Issues
-
 ✅ No peer dependency issues
 
 ---
 
 ## 3. Duplicate Dependency Versions
-
 ✅ No duplicate versions
 
 ---
 
 ## 4. Unused Dependencies
-
 Found **18** potentially unused dependencies:
 
 - @fresh-schedules/types
@@ -55,7 +49,6 @@ Found **18** potentially unused dependencies:
 - next-themes
 
 ### Investigation Steps
-
 1. Verify if truly unused with grep: `grep -r "@fresh-schedules/types" src/`
 2. Check if used in templates or scripts
 3. Remove if confirmed unused: `pnpm remove <package>`
@@ -66,7 +59,6 @@ Found **18** potentially unused dependencies:
 ---
 
 ## Remediation Checklist
-
 - \[ ] Review deprecated packages and plan migration
 - \[ ] Fix peer dependency issues with `pnpm install`
 - \[ ] Consolidate versions with `pnpm dedupe`
@@ -77,7 +69,6 @@ Found **18** potentially unused dependencies:
 - \[ ] Commit changes with clear message
 
 ## Automated Remediation Commands
-
 ```bash
 # Fix peer dependencies
 pnpm install
@@ -99,7 +90,6 @@ pnpm update --interactive
 ```
 
 ## CI/CD Integration
-
 This report is generated automatically on every push to `main` and `dev` branches.
 
 **Workflow**: `.github/workflows/dependency-health.yml`

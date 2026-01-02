@@ -23,8 +23,10 @@ program
     const targets: string[] = [];
     const excludeDirs = new Set(["node_modules", ".next", "dist"]);
     const { collectMarkdownFiles } = await import("./fsHelpers");
+    // Resolve paths from the original cwd, not the package directory
+    const cwd = process.env.INIT_CWD || process.cwd();
     for (const p of paths) {
-      const absolute = path.resolve(p);
+      const absolute = path.isAbsolute(p) ? p : path.resolve(cwd, p);
       if (fs.existsSync(absolute)) {
         const stats = fs.statSync(absolute);
         if (stats.isDirectory()) {

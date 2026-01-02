@@ -1,31 +1,26 @@
 ---
+
 id: A01
-extends: 02_PROTOCOLS.md
+extends: 02\_PROTOCOLS.md
 section: P03 Batch Processing
-tags: [api, batch, validation, patterns, protocol]
+tags: \[api, batch, validation, patterns, protocol]
 status: canonical
 priority: P1
-source: .github/BATCH_PROTOCOL_OFFICIAL.md
----
+## source: .github/BATCH\_PROTOCOL\_OFFICIAL.md
 
 # Amendment A01: Batch Processing Protocol
-
 ## Purpose
-
 Extends Protocol P03 with detailed batch endpoint implementation rules and systematic task execution
 patterns.
 
 ## Scope Classification
-
 | Task Type   | Duration | Actions        | Protocol            |
 | ----------- | -------- | -------------- | ------------------- |
 | **Simple**  | <5 min   | Single action  | Execute immediately |
 | **Complex** | ≥5 min   | Multiple steps | Full batch protocol |
 
 ## Core Rules
-
 ### R01: TODO List (Complex Tasks Only)
-
 **MANDATORY**: Create structured TODO list FIRST for all complex tasks using `manage_todo_list`:
 
 ```typescript
@@ -38,7 +33,6 @@ patterns.
 ```
 
 ### R02: Batch API Endpoints
-
 1. **Accept arrays**: `{ items: T[] }` format
 2. **Maximum batch size**: 100 items per request
 3. **Partial success**: Return `{ succeeded: [], failed: [] }`
@@ -46,13 +40,11 @@ patterns.
 5. **Transaction**: Use Firestore batch writes (max 500 ops)
 
 ### R03: Status Tracking
-
 - Only ONE task `in-progress` at a time
 - Mark `completed` IMMEDIATELY after finishing
 - Don't batch completions
 
 ## Example: Batch Endpoint
-
 ```typescript
 export const POST = createOrgEndpoint({
   input: z.object({
@@ -79,13 +71,11 @@ export const POST = createOrgEndpoint({
 ```
 
 ## Validation Gates
-
 Before proceeding to next task:
 
-- [ ] Previous task marked `completed`
-- [ ] Output validated
-- [ ] No blockers identified
+- \[ ] Previous task marked `completed`
+- \[ ] Output validated
+- \[ ] No blockers identified
 
 ## Reference
-
 Full protocol: `archive/amendment-sources/BATCH_PROTOCOL_OFFICIAL.md`

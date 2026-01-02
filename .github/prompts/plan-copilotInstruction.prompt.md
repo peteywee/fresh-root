@@ -22,7 +22,7 @@ Tasks (same as TODOs)
   `.github/copilot-instructions.md`, `docs/`, `packages/*/`, and any README or top-level policy
   files.
 
-2. Extract agent & instruction directives (not-started)
+1. Extract agent & instruction directives (not-started)
 
 - Goal: From the indexed files, extract authoritative directives and constraints (for example: "use
   pnpm only", "Zod-first schema rules", "SDK factory pattern", file header rules, test gating
@@ -30,7 +30,7 @@ Tasks (same as TODOs)
 - Acceptance: Structured list of directives grouped by category (Security, Tools, Testing, API
   patterns, CI, Commit/PR rules, File headers, Comments rules, etc.) with source references.
 
-3. Reconcile and prioritize rules (not-started)
+1. Reconcile and prioritize rules (not-started)
 
 - Goal: Identify contradictions or duplicates and resolve them into a single precedence model. Mark
   rules that are "hard/mandatory" vs "recommended" and note when additional validation
@@ -38,7 +38,7 @@ Tasks (same as TODOs)
 - Acceptance: Reconciled rulebook with preconditions and precedence (e.g., "Hard rules: pnpm;
   Zod-first; Triad-of-Trust. Recommended: code style details").
 
-4. Draft single authoritative Copilot instruction (not-started)
+1. Draft single authoritative Copilot instruction (not-started)
 
 - Goal: Synthesize the reconciled rulebook into one Copilot instruction document. It should:
   - Be written as a prescriptive instruction for an AI assistant (Copilot) working in this repo.
@@ -52,14 +52,14 @@ Tasks (same as TODOs)
 - Acceptance: A single file (Markdown) with clear sections (Scope, Hard Rules, Tooling Expectations,
   Directory and File Conventions, Example Patterns, QA checklist).
 
-5. Review & QA the draft (not-started)
+1. Review & QA the draft (not-started)
 
 - Goal: Validate the draft against repository hard rules and ensure no sensitive secrets were
   leaked. Run quick automated checks where possible and surface any outstanding ambiguities that
   need human decision.
 - Acceptance: Checklist marked complete and minor fixes applied.
 
-6. Write plan file for refinement (this file) (not-started)
+1. Write plan file for refinement (this file) (not-started)
 
 - Goal: Present the plan to the user for refinement and sign-off before indexing and drafting the
   authoritative instruction.
@@ -80,8 +80,8 @@ Timeline & Next Steps
 2. After confirmation, proceed to Step 1 (index the repo). I will: search known instruction
    directories, read the attached `.github/instructions/*` files, `AGENTS.md`,
    `.github/copilot-instructions.md`, `docs/*` policy docs, and the `packages` folder for patterns.
-3. Produce the index and share it for review.
-4. Extract directives and reconcile into the draft instruction.
+1. Produce the index and share it for review.
+2. Extract directives and reconcile into the draft instruction.
 
 Questions / Choices for you
 

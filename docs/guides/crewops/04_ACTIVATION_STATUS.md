@@ -1,5 +1,4 @@
 # CREWOPS Protocol: Activation Status
-
 **Status**: ✅ ACTIVE\
 **Date**: December 4, 2025\
 **Binding**: Automatic
@@ -7,9 +6,7 @@
 ---
 
 ## What's Active
-
 ### 1. **CrewOps Manual (agents/crewops.md)**
-
 The complete operating manual for the TopShelf CrewOps Engine:
 
 - Constitution (7 non-negotiable laws)
@@ -23,8 +20,7 @@ The complete operating manual for the TopShelf CrewOps Engine:
 **Size**: 718 lines\
 **Reference**: Link at Section 0.1.5 in crewops.md
 
-### 2. **Automatic Activation Framework (agents/CREWOPS_ACTIVATION.md)**
-
+### 2. **Automatic Activation Framework (agents/CREWOPS\_ACTIVATION.md)**
 The protocol that automatically engages:
 
 - On session bootstrap (no user action needed)
@@ -35,7 +31,7 @@ The protocol that automatically engages:
 - Activation sequence (Stage 1, 2, 3)
 - Non-trivial prompt detection
 - Phase execution workflow
-- Keyword modifiers (CREWOPS_OK, CREWOPS_DESIGN_ONLY, CREWOPS_EXECUTE, CREWOPS_EMERGENCY)
+- Keyword modifiers (CREWOPS\_OK, CREWOPS\_DESIGN\_ONLY, CREWOPS\_EXECUTE, CREWOPS\_EMERGENCY)
 - Tool auto-activation per role
 - Worker responsibilities matrix
 - Orchestrator checklist
@@ -47,9 +43,7 @@ The protocol that automatically engages:
 ---
 
 ## How It Works
-
 ### On Session Start
-
 ```
 Agent boots → Load CREWOPS.md + CREWOPS_ACTIVATION.md →
 Display activation message → Ready for prompts
@@ -73,7 +67,6 @@ Phase A→E Execution: Context Saturation → Plan & Team → Action Matrix →
 ```
 
 ### On Non-Trivial Prompt
-
 ```
 User sends request (code, architecture, research, deployment) →
 Orchestrator detects "non-trivial" →
@@ -98,7 +91,6 @@ Audit trail recorded
 - Reference lookups
 
 ### Protocol Flow (Every Non-Trivial Request)
-
 ```
 🏷️ CONTEXT INTAKE
    ├─ Read goal + constraints + deliverable type
@@ -136,7 +128,6 @@ Audit trail recorded
 ---
 
 ## Keyword Modifiers (Optional)
-
 Users can modify protocol behavior with keywords in their prompt:
 
 | Keyword               | Effect              | Use Case                      |
@@ -153,11 +144,9 @@ Users can modify protocol behavior with keywords in their prompt:
 ---
 
 ## Tool Activation Rules (Automatic)
-
 When protocol engages, tools auto-activate by role:
 
 ### Research Analyst
-
 ```
 Tools: read_file | semantic_search | grep_search | file_search
 MCP: mcp_firecrawl_* (web research)
@@ -165,14 +154,12 @@ Responsibility: Verify all non-trivial claims
 ```
 
 ### QA/Test Engineer
-
 ```
 Tools: get_errors | run_in_terminal (test runners)
 Responsibility: Validate green gates
 ```
 
 ### Scribe/Documentation Lead
-
 ```
 Tools: list_dir | semantic_search
 MCP: mcp_github_* (PR/issue work)
@@ -180,14 +167,12 @@ Responsibility: Audit trail + decision tracking
 ```
 
 ### Security Red Team
-
 ```
 Constitutional Clause: Security Supremacy (Section 2.3)
 Responsibility: Veto Phase E (auth bypass, data leakage, insecure defaults, etc.)
 ```
 
 ### Orchestrator
-
 ```
 Authority: Route tools, arbitrate conflicts, synthesize results
 Responsibility: Enforce Constitution + Priority Order + All Phases
@@ -196,7 +181,6 @@ Responsibility: Enforce Constitution + Priority Order + All Phases
 ---
 
 ## Binding Priority (Immutable)
-
 Conflicts resolved in order:
 
 1. System instructions + safety policy
@@ -210,7 +194,6 @@ Conflicts resolved in order:
 ---
 
 ## Files Created/Modified
-
 | File                           | Action   | Size       | Purpose                         |
 | ------------------------------ | -------- | ---------- | ------------------------------- |
 | `agents/crewops.md`            | Enhanced | 747 lines  | Main manual + tool/MCP sections |
@@ -219,16 +202,13 @@ Conflicts resolved in order:
 ---
 
 ## Quick Reference: What Gets Displayed When
-
 ### On Session Start
-
 ```
 ✅ CREWOPS Protocol Active
 [Binding Framework, Constitution, Crew, Tools, Phase A→E]
 ```
 
 ### On Non-Trivial Prompt
-
 ```
 ✅ CREWOPS PROTOCOL ENGAGED
 
@@ -241,7 +221,6 @@ Ready for Phases A→E execution.
 ```
 
 ### After Phase A (Context Saturation)
-
 ```
 📖 PHASE A: CONTEXT SATURATION
 Context Loaded: [summary]
@@ -250,7 +229,6 @@ Assumptions Verified: [list]
 ```
 
 ### After Phase B+C (Planning)
-
 ```
 🧠 PHASE B+C: HIERARCHICAL DECOMPOSITION + WORKER SPAWNING
 Batch 1: [scope] → [SPAWNING WORKER]: "Name" (Constitutional clauses)
@@ -259,7 +237,6 @@ Batch 2: [scope] → [SPAWNING WORKER]: "Name" (Constitutional clauses)
 ```
 
 ### After Phase D (Execution)
-
 ```
 ⚡ PHASE D: ACTION MATRIX
 [x] Action 1 (Worker X) → [tool] → [observation] → [decision]
@@ -268,7 +245,6 @@ Batch 2: [scope] → [SPAWNING WORKER]: "Name" (Constitutional clauses)
 ```
 
 ### After Phase E (Veto + Validation)
-
 ```
 🛡️ PHASE E: SECURITY VETO + REFLEXION
 Red Team: ✅ Veto passed / ❌ Veto blocked (reason)
@@ -283,7 +259,6 @@ What Changed: [list of revisions]
 ---
 
 ## Protocol Enforcement
-
 **Orchestrator Checklist (Before Responding)**:
 
 - \[ ] Constitution loaded (Section 2)
@@ -302,7 +277,6 @@ If ANY box unchecked: Fail-closed, state missing item(s), do not proceed.
 ---
 
 ## Emergency Fallback
-
 If CREWOPS cannot initialize:
 
 ```
@@ -314,7 +288,6 @@ Override: Include CREWOPS_FORCE to re-attempt
 ---
 
 ## Session Memory (Store After Each Task)
-
 1. **Tool Effectiveness**: Which tools most productive?
 2. **Assumption Accuracy**: Were assumptions correct?
 3. **Crew Dynamics**: Which workers should start earlier?
@@ -324,7 +297,6 @@ Override: Include CREWOPS_FORCE to re-attempt
 ---
 
 ## Status Summary
-
 | Component             | Status     | Location                                       |
 | --------------------- | ---------- | ---------------------------------------------- |
 | CrewOps Manual        | ✅ Active  | `agents/crewops.md`                            |
@@ -350,4 +322,4 @@ Override: Include CREWOPS_FORCE to re-attempt
 **Protocol Binding**: Automatic activation on session bootstrap + all non-trivial prompts.\
 **Last Updated**: December 4, 2025\
 **Owner**: TopShelfService LLC\
-**Reference**: agents/crewops.md + agents/CREWOPS_ACTIVATION.md
+**Reference**: agents/crewops.md + agents/CREWOPS\_ACTIVATION.md

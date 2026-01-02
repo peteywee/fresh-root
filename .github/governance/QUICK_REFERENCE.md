@@ -1,11 +1,9 @@
 # Fresh Schedules Quick Reference Card
-
 > Print this. Keep it nearby. Reference daily.
 
 ---
 
 ## Task Classification
-
 | If ANY of these →                                 | Classification  |
 | ------------------------------------------------- | --------------- |
 | >1 file                                           | **NON-TRIVIAL** |
@@ -25,7 +23,6 @@
 ---
 
 ## Pipeline Selection
-
 | Scenario                       | Pipeline            |
 | ------------------------------ | ------------------- |
 | New feature, single file       | `Feature.FAST`      |
@@ -41,7 +38,6 @@
 ---
 
 ## Gate Classes
-
 | Gate            | Commands                                                 | Blocking       |
 | --------------- | -------------------------------------------------------- | -------------- |
 | **STATIC**      | `pnpm lint:check && pnpm format:check && pnpm typecheck` | ✅ YES         |
@@ -53,7 +49,6 @@
 ---
 
 ## Agent Invocations
-
 ```
 @architect design {feature}      # Design new feature
 @refactor fix {file}             # Fix pattern violation
@@ -62,18 +57,16 @@
 ```
 
 ### Agent Decision Outputs
-
 | Agent         | Outputs                                   |
 | ------------- | ----------------------------------------- |
 | **Architect** | Schema + API skeleton + Rules + Diagram   |
 | **Refactor**  | Unified diff + Before/after               |
-| **Guard**     | PASS / BLOCK / NEEDS_CHANGES + Violations |
+| **Guard**     | PASS / BLOCK / NEEDS\_CHANGES + Violations |
 | **Auditor**   | Full report + Score + Recommendations     |
 
 ---
 
 ## Pattern IDs
-
 | ID        | Layer | Description                  | Severity |
 | --------- | ----- | ---------------------------- | -------- |
 | `API_001` | API   | createOrgEndpoint required   | ERROR    |
@@ -88,7 +81,6 @@
 ---
 
 ## API Route Template
-
 ```typescript
 // apps/web/app/api/{domain}/route.ts
 import { createOrgEndpoint } from '@fresh-schedules/api-framework';
@@ -112,7 +104,6 @@ export const POST = createOrgEndpoint({
 ---
 
 ## Firestore Rule Template
-
 ```javascript
 match /{domain}/{orgId}/{subcollection}/{docId} {
   allow read: if isAuthenticated() && sameOrg(orgId);
@@ -126,7 +117,6 @@ match /{domain}/{orgId}/{subcollection}/{docId} {
 ---
 
 ## Common Commands
-
 ```bash
 # Development
 pnpm dev                    # Start dev server
@@ -152,7 +142,6 @@ pnpm orchestrate Security.HEAVY --verbose # Full security audit
 ---
 
 ## Branch Naming
-
 ```
 feature/FS-{ticket}-{description}
 fix/FS-{ticket}-{description}
@@ -164,7 +153,6 @@ hotfix/URGENT-{description}
 ---
 
 ## CPMEM Template
-
 ```
 [CPMEM]
 task_id: {id}
@@ -190,7 +178,6 @@ next_steps:
 ---
 
 ## Emergency Contacts
-
 | Situation       | Action                                 |
 | --------------- | -------------------------------------- |
 | Production down | `hotfix/*` branch → direct to `main`   |

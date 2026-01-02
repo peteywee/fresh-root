@@ -1,12 +1,10 @@
 # Keep Copilot + Minimal Speed Loss (Chromebook Edition)
-
 **Updated strategy**: Instead of disabling Copilot, use targeted optimizations to keep it running
 while minimizing speed impact.
 
 ---
 
 ## The Balanced Approach
-
 **Goal**: Keep Copilot + Maintain ~90% of normal build speed
 
 | Setting           | Before   | Optimized   | Impact                    |
@@ -23,9 +21,7 @@ while minimizing speed impact.
 ---
 
 ## What Changed
-
 ### 1. Build Config (apps/web/.env.local)
-
 ```bash
 # More balanced limits
 NODE_OPTIONS="--max-old-space-size=1280"    # 256MB less aggressive
@@ -36,7 +32,6 @@ TURBO_TASKS_CONCURRENCY=4                    # Moderate queue depth
 Effect: Build spikes capped at ~1.8GB (was 2.5GB aggressively), but keeps speed.
 
 ### 2. Copilot Settings (.vscode/settings.json)
-
 ```json
 "github.copilot.enable": {
   "*": true,
@@ -59,9 +54,7 @@ Effect: Build spikes capped at ~1.8GB (was 2.5GB aggressively), but keeps speed.
 ---
 
 ## Setup (3 Steps)
-
 ### Step 1: Verify Config Updated
-
 ```bash
 grep -E "NODE_OPTIONS|SWC_NUM|TURBO_TASKS" apps/web/.env.local
 ```
@@ -75,12 +68,10 @@ TURBO_TASKS_CONCURRENCY=4
 ```
 
 ### Step 2: Restart VSCode
-
 - Close and reopen VSCode (picks up new settings)
 - Copilot should be enabled (you'll see suggestions)
 
 ### Step 3: Monitor First Build
-
 ```bash
 # Terminal 1: Watch memory
 watch -n 2 'free -h'
@@ -98,7 +89,6 @@ Expected: Build completes, free memory stays >800MB, no code 9 crashes.
 ---
 
 ## Memory Breakdown (With Copilot)
-
 **Before optimization:**
 
 - VSCode (Copilot): 1.1GB
@@ -120,7 +110,6 @@ Margins: ~2.2GB free during build (safe).
 ---
 
 ## Build Speed Comparison
-
 Realistic timing on Chromebook (6.3GB RAM):
 
 | Task               | Before Optimization | After   | Delta   |
@@ -136,16 +125,13 @@ Realistic timing on Chromebook (6.3GB RAM):
 ---
 
 ## When to Use Each Strategy
-
 ### Use This (Keep Copilot) if
-
 - ✅ You value AI assistance for coding
 - ✅ Builds <5 minutes acceptable
 - ✅ You can afford ~10% speed loss
 - ✅ You want stability without complex workarounds
 
 ### Use Disable-Copilot if
-
 - 🚫 Builds are critical path (CI/CD production)
 - 🚫 You need maximum speed
 - 🚫 You can work without suggestions
@@ -154,9 +140,7 @@ Realistic timing on Chromebook (6.3GB RAM):
 ---
 
 ## Monitoring (Keep These Running)
-
 ### Terminal 1: Memory Watch
-
 ```bash
 watch -n 2 'free -h'
 ```
@@ -167,7 +151,6 @@ watch -n 2 'free -h'
 - No "Out of memory" messages in dmesg
 
 ### Terminal 2: Safeguard Daemon (Optional but Recommended)
-
 ```bash
 bash scripts/safeguard-oom.sh &
 tail -f ~/.oom-safeguard.log
@@ -183,7 +166,6 @@ tail -f ~/.oom-safeguard.log
 If you see warnings, code 9 was about to happen—daemon prevented it.
 
 ### Terminal 3: Dev Work
-
 ```bash
 pnpm dev
 ```
@@ -191,17 +173,14 @@ pnpm dev
 ---
 
 ## If You Still Get Crashes
-
 Try in order:
 
 ### Option A: Close Chrome Tabs (Frees 200-400MB)
-
 1. Close Chrome windows except what you need
 2. Keep only 1-2 localhost:3000 tabs
 3. Retry build
 
 ### Option B: Reduce Turbo Concurrency Further
-
 Edit `apps/web/.env.local`:
 
 ```bash
@@ -211,7 +190,6 @@ TURBO_TASKS_CONCURRENCY=2  # was 4
 Then restart: `pnpm dev`
 
 ### Option C: Selective Component Build
-
 ```bash
 # Instead of building everything:
 cd apps/web && pnpm build  # Build just web
@@ -220,7 +198,6 @@ pnpm -w typecheck          # Type-check separately
 ```
 
 ### Option D: Increase Node Heap (Trade Speed for Headroom)
-
 Edit `apps/web/.env.local`:
 
 ```bash
@@ -233,7 +210,6 @@ Result: Bigger heap + less parallel = similar memory peak, different distributio
 ---
 
 ## Why This Works
-
 **Key insight**: On Chromebook with 6.3GB RAM and 0 swap:
 
 - You CAN'T add swap (container limitation)
@@ -249,20 +225,18 @@ Result: Bigger heap + less parallel = similar memory peak, different distributio
 ---
 
 ## Verification Checklist
-
 Before each dev session:
 
-- [ ] `free -h` shows ≥1.5GB free RAM
-- [ ] `ps aux | grep code` shows 1-2 VSCode instances (not 5+)
-- [ ] Copilot suggestions appear (Ctrl+K in editor)
-- [ ] `bash scripts/check-memory-preflight.sh` passes
-- [ ] Start safeguard daemon: `bash scripts/safeguard-oom.sh &`
-- [ ] Run `pnpm dev` and wait for "ready on 3000"
+- \[ ] `free -h` shows ≥1.5GB free RAM
+- \[ ] `ps aux | grep code` shows 1-2 VSCode instances (not 5+)
+- \[ ] Copilot suggestions appear (Ctrl+K in editor)
+- \[ ] `bash scripts/check-memory-preflight.sh` passes
+- \[ ] Start safeguard daemon: `bash scripts/safeguard-oom.sh &`
+- \[ ] Run `pnpm dev` and wait for "ready on 3000"
 
 ---
 
 ## Expected Results
-
 After applying this strategy:
 
 ✅ **Copilot active and responsive**
@@ -279,7 +253,7 @@ After applying this strategy:
 
 ✅ **Acceptable speed**
 
-- ~10% slower than unconstrained (45s → 50s startup)
+- \~10% slower than unconstrained (45s → 50s startup)
 - Builds still complete in <4 minutes
 - Worth the trade for stability
 
@@ -292,9 +266,7 @@ After applying this strategy:
 ---
 
 ## Long-Term Considerations
-
 ### If You Plan to Keep This System
-
 **Short term (now)**: Use this strategy, accept 10% slower builds.
 
 **Medium term (3-6 months)**: Monitor if Chromebook can upgrade to 8GB Crostini.
@@ -313,7 +285,6 @@ cat /proc/meminfo | grep MemTotal
 ---
 
 ## Support Commands
-
 **Check current memory state:**
 
 ```bash
@@ -349,7 +320,6 @@ ps aux | grep copilot
 ---
 
 ## TL;DR
-
 ✅ **Copilot stays enabled** ✅ **Builds ~10% slower** (acceptable trade) ✅ **Memory safe** (peaks
 at 1.8GB, leaves 4.5GB buffer) ✅ **No crashes** (daemon monitors, safeguards active) ✅ **Full
 productivity** (AI assistance + stability)

@@ -1,10 +1,8 @@
 # L2 — RBAC / Security / Access Control
-
 > **Status:** ✅ Documented from actual codebase analysis **Last Updated:** 2025-12-17 **Coverage:**
 > 6 role types, 44 protected endpoints
 
 ## 1. Role in the System
-
 The RBAC (Role-Based Access Control) subsystem defines the authorization model for the entire
 platform. It enforces who can access what resources based on organizational membership and assigned
 roles.
@@ -17,9 +15,7 @@ roles.
 - Support multi-tenancy through network scoping
 
 ## 2. Implementation Analysis
-
 ### 2.1 Role Hierarchy
-
 From `packages/types/src/rbac.ts`:
 
 ```typescript
@@ -41,7 +37,6 @@ org_owner  > admin  > manager  > scheduler  > corporate > staff
 ```
 
 ### 2.2 Context Loading
-
 All protected endpoints receive:
 
 ```typescript
@@ -61,7 +56,6 @@ interface RequestContext {
 ```
 
 ### 2.3 Enforcement Mechanisms
-
 **API Level (SDK Factory):**
 
 ```typescript
@@ -94,9 +88,7 @@ it("should require manager role or higher", () => {
 ```
 
 ## 3. Critical Findings
-
 ### 🔴 CRITICAL-01: Role Hierarchy Not Enforced in Code
-
 **Location:** `packages/api-framework/src/index.ts` **Issue:** SDK factory uses exact match, not
 hierarchical check
 
@@ -141,7 +133,6 @@ export const POST = createOrgEndpoint({
 ```
 
 ### 🟡 HIGH-01: No Permission Auditing
-
 **Location:** All endpoints **Issue:** No logging of authorization checks or denials
 
 ```typescript
@@ -170,7 +161,6 @@ if (!hasPermission(context.org.role, config.roles)) {
 ```
 
 ### 🟡 HIGH-02: Missing Resource-Level Permissions
-
 **Location:** All CRUD endpoints **Issue:** Only org-level RBAC, no resource ownership checks
 
 ```typescript
@@ -205,7 +195,6 @@ if (schedule.status === "published" && context.org.role !== "admin") {
 ```
 
 ### 🟢 MEDIUM-01: Membership Claims vs Actual Membership
-
 **Location:** `packages/types/src/rbac.ts` **Issue:** Two competing membership models
 
 ```typescript
@@ -229,9 +218,7 @@ interface OrgContext {
 **Question:** Can users have multiple roles? If yes, how is precedence determined?
 
 ## 4. Architectural Patterns
-
 ### ✅ Good Pattern: Declarative Authorization
-
 ```typescript
 // Authorization is configuration, not code
 export const POST = createOrgEndpoint({
@@ -243,7 +230,6 @@ export const POST = createOrgEndpoint({
 ```
 
 ### ❌ Anti-Pattern: Commented-Out Role Checks
-
 ```typescript
 // From Standard_API_Route.md:
 // import { requireSession, requireRole } from "@/src/lib/api";
@@ -254,7 +240,6 @@ export const POST = createOrgEndpoint({
 ```
 
 ### ✅ Good Pattern: Type-Safe Roles
-
 ```typescript
 // Zod enum ensures only valid roles
 export const OrgRole = z.enum(["org_owner", "admin", "manager", "scheduler", "corporate", "staff"]);
@@ -265,7 +250,6 @@ assignRole("superuser"); // ❌ Compile error
 ```
 
 ## 5. Role Definitions & Use Cases
-
 | Role        | Permissions                     | Typical Use Case           |
 | ----------- | ------------------------------- | -------------------------- |
 | `org_owner` | Full control                    | Organization founder/CEO   |
@@ -276,34 +260,30 @@ assignRole("superuser"); // ❌ Compile error
 | `staff`     | View own schedule               | Front-line employees       |
 
 ## 6. Org Context Loading Flow
-
 ```
 1. Extract auth token from request
    ↓
-2. Verify Firebase ID token → AuthContext
+1. Verify Firebase ID token → AuthContext
    ↓
-3. Query Firestore memberships collection
+1. Query Firestore memberships collection
    WHERE userId == AuthContext.userId
    ↓
-4. Load user's membership in target org
+1. Load user's membership in target org
    ↓
-5. Build OrgContext { orgId, role, membershipId }
+1. Build OrgContext { orgId, role, membershipId }
    ↓
-6. Pass to handler via context parameter
+1. Pass to handler via context parameter
 ```
 
 **Performance Note:** This is 2 external calls per request (Firebase + Firestore). Should be cached.
 
 ## 7. Security Invariants
-
 ### ✅ Enforced
-
 1. **All org endpoints require authentication** - `createOrgEndpoint` enforces this
 2. **Org membership required** - Can't access org resources without membership
 3. **Type-safe roles** - Invalid roles rejected at compile time
 
 ### ⚠️ Missing
-
 1. **Hierarchical permissions** - Admins can't do manager actions
 2. **Resource ownership checks** - Can operate on any resource in org
 3. **Audit logging** - No trail of security events
@@ -311,7 +291,6 @@ assignRole("superuser"); // ❌ Compile error
 5. **Multi-org user support** - Unclear how users switch orgs
 
 ## 8. Recommendations
-
 | Priority | Action                                   | Effort   | Impact                                  |
 | -------- | ---------------------------------------- | -------- | --------------------------------------- |
 | 🔴 P0    | Implement hierarchical permission checks | 1-2 days | Critical - Fixes broken permissions     |
@@ -325,28 +304,25 @@ assignRole("superuser"); // ❌ Compile error
 **Total Estimated Effort:** ~11-15 days
 
 ## 9. Related Subsystems
-
 - **API Framework** - Enforces RBAC via `createOrgEndpoint`
 - **Organizations** - Defines org structure
 - **Memberships** - Stores user→org→role mappings
 - **Authentication** - Provides user identity (Firebase Auth)
 
 ## 10. Open Questions
-
 1. **Can users have multiple roles in same org?**
    - Current code suggests single role, but `MembershipClaimsSchema` has `roles: z.array()`
 
-2. **How do corporate users access multiple orgs?**
+1. **How do corporate users access multiple orgs?**
    - Is there a network-level permission system?
 
-3. **Who can change user roles?**
+1. **Who can change user roles?**
    - Only `org_owner`? Or `admin` too?
 
-4. **Is there role inheritance across org hierarchy?**
+1. **Is there role inheritance across org hierarchy?**
    - If Network → Org, do network admins have org access?
 
 ## 11. Next Steps
-
 1. Fix hierarchical permission logic in SDK factory
 2. Add resource ownership checks to all CRUD endpoints
 3. Implement security audit logging

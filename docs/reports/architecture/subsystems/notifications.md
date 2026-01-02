@@ -1,10 +1,8 @@
 # L2 — Notifications & Communication
-
 > **Status:** Documented from actual codebase analysis **Last Updated:** 2025-12-17 **Analyzed
 > Routes:** 2 endpoints (publish, messages), 5 schemas
 
 ## 1. Role in the System
-
 The Notifications & Communication subsystem is responsible for delivering timely updates to users
 about schedule changes, shift assignments, and organizational events. The system currently defines
 the foundational schemas and minimal infrastructure for multi-channel notifications (email, SMS,
@@ -22,9 +20,7 @@ push) but **lacks complete implementation**.
 mechanisms, queuing, templates, and retry logic are NOT implemented.
 
 ## 2. Actual Implementation Analysis
-
 ### 2.1 Endpoints Inventory
-
 | Endpoint       | Method | Purpose                             | Auth          | Status      |
 | -------------- | ------ | ----------------------------------- | ------------- | ----------- |
 | `/api/publish` | POST   | Publish schedule with notifications | Org (manager) | Schema only |
@@ -32,9 +28,7 @@ mechanisms, queuing, templates, and retry logic are NOT implemented.
 **Note:** No dedicated `/api/notifications` or `/api/messages` CRUD endpoints exist yet.
 
 ### 2.2 Data Models & Types
-
 #### Message Schema
-
 From `/packages/types/src/messages.ts`:
 
 ```typescript
@@ -79,7 +73,6 @@ export const MessageSchema = z.object({
 - **Read tracking** - Array-based tracking (potential scalability issue)
 
 #### PublishRequest Schema
-
 From `/packages/types/src/internal.ts`:
 
 ```typescript
@@ -98,7 +91,6 @@ export const PublishRequestSchema = z.object({
 - **Scheduling** - `publishAt` for delayed notifications (not implemented)
 
 #### Receipt Schema
-
 From `/packages/types/src/receipts.ts`:
 
 ```typescript
@@ -132,7 +124,6 @@ export const ReceiptSchema = z.object({
 - **Flexible metadata** - Store delivery status, error details, etc.
 
 #### Event Schema
-
 From `/packages/types/src/events.ts`:
 
 ```typescript
@@ -159,7 +150,6 @@ export const EventSchema = z.object({
 - **Missing notification events** - No "schedule.published" or "shift.assigned" events defined
 
 ### 2.3 Firestore Collections (Expected)
-
 **Collections defined in schemas but NOT confirmed in actual usage:**
 
 - **`messages`** - In-app messages
@@ -182,9 +172,7 @@ export const EventSchema = z.object({
 - **`notification_logs`** - Delivery status and errors
 
 ### 2.4 Implementation Status
-
 #### Publish Route Analysis
-
 From `/apps/web/app/api/publish/route.ts`:
 
 ```typescript
@@ -218,9 +206,7 @@ export const POST = createOrgEndpoint({
 5. Returns mock success response
 
 ## 3. Critical Findings
-
 ### CRITICAL-01: No Notification Delivery Infrastructure
-
 **Location:** Entire subsystem **Issue:** Notification channels (email, SMS, push) are defined in
 schemas but have ZERO implementation
 
@@ -252,7 +238,6 @@ return ok({ channels: input.channels }); // Just echoes back
 **Recommendation:** Implement notification delivery pipeline (see §5 for architecture)
 
 ### CRITICAL-02: Read Tracking Array Scalability Issue
-
 **Location:** `/packages/types/src/messages.ts` **Issue:** `readBy` array grows unbounded, causing
 performance degradation
 
@@ -278,7 +263,6 @@ export const MessageSchema = z.object({
 **Recommendation:** Use separate `message_reads` subcollection or map structure
 
 ### CRITICAL-03: No Notification Preferences
-
 **Location:** Missing implementation **Issue:** Users cannot opt-in/opt-out of notification channels
 
 **Missing:**
@@ -297,7 +281,6 @@ export const MessageSchema = z.object({
 **Recommendation:** Create `NotificationPreferencesSchema` and user settings UI
 
 ### HIGH-01: No Queue System for Async Delivery
-
 **Location:** Missing implementation **Issue:** Synchronous notification delivery blocks API
 responses
 
@@ -320,7 +303,6 @@ return ok({ published: true }); // Waits for delivery
 **Recommendation:** Implement async queue (Firestore Tasks, Cloud Tasks, or Bull/Redis)
 
 ### HIGH-02: No Template System
-
 **Location:** Missing implementation **Issue:** Hardcoded message content prevents localization and
 personalization
 
@@ -342,7 +324,6 @@ personalization
 **Recommendation:** Create template system with Handlebars or similar
 
 ### HIGH-03: Missing Delivery Status Tracking
-
 **Location:** No implementation **Issue:** Cannot track if notifications were successfully delivered
 
 **Missing:**
@@ -362,7 +343,6 @@ personalization
 **Recommendation:** Add `notification_logs` collection with delivery status
 
 ### MEDIUM-01: No Rate Limiting on Notifications
-
 **Location:** Missing implementation **Issue:** No protection against notification spam
 
 **Risk Scenarios:**
@@ -375,7 +355,6 @@ personalization
 **Recommendation:** Implement per-user, per-org rate limits (100/hour, 1000/day)
 
 ### MEDIUM-02: Missing Notification Deduplication
-
 **Location:** Missing implementation **Issue:** Users may receive duplicate notifications
 
 **Scenarios:**
@@ -387,7 +366,6 @@ personalization
 **Recommendation:** Use idempotency keys or deduplication window (5-minute hash)
 
 ### MEDIUM-03: No Event Schema for Notifications
-
 **Location:** `/packages/types/src/events.ts` **Issue:** Event types don't include
 notification-relevant events
 
@@ -406,16 +384,13 @@ export const EventType = z.enum([
 **Recommendation:** Extend EventType to include notification events
 
 ## 4. Architectural Notes & Invariants
-
 ### Enforced Invariants (Schema Level)
-
 1. **Channel Enum** - Only `email`, `push`, `sms` allowed (type-safe)
 2. **Message Channels** - Only `system`, `inbox`, `alerts`, `schedule` (type-safe)
 3. **Receipt Actions** - Limited action types prevent arbitrary strings
 4. **Read Tracking** - `readBy` array tracks user IDs (scalability concern)
 
 ### Missing Invariants (Not Enforced)
-
 1. **Notification Delivery** - No guarantee notifications are actually sent
 2. **Template Validation** - No enforcement of required template variables
 3. **Idempotency** - No deduplication of duplicate publish requests
@@ -424,7 +399,6 @@ export const EventType = z.enum([
 6. **User Preferences** - No enforcement of opt-out requests
 
 ### Design Principles (Implied)
-
 1. **Multi-Channel First** - Design assumes multiple delivery channels
 2. **Audit Everything** - Receipts track all notification-worthy actions
 3. **Resource Linking** - Messages connect to originating resources
@@ -432,9 +406,7 @@ export const EventType = z.enum([
 5. **Read Tracking** - Track message read status (implementation flawed)
 
 ## 5. Example Patterns
-
 ### MISSING PATTERN: Notification Delivery Pipeline
-
 **Current State:** No delivery infrastructure
 
 **Recommended Architecture:**
@@ -517,7 +489,6 @@ interface NotificationLog {
 ```
 
 ### GOOD PATTERN: Message Schema Design
-
 **File:** `/packages/types/src/messages.ts`
 
 ```typescript
@@ -549,7 +520,6 @@ export const MessageSchema = z.object({
 - **Type-safe** - Zod validation prevents invalid data
 
 ### BAD PATTERN: Read Tracking with Array
-
 **File:** `/packages/types/src/messages.ts`
 
 ```typescript
@@ -592,7 +562,6 @@ export const MessageReadSchema = z.object({
 ```
 
 ### BAD PATTERN: No Actual Notification Sending
-
 **File:** `/apps/web/app/api/publish/route.ts`
 
 ```typescript
@@ -689,7 +658,6 @@ export const POST = createOrgEndpoint({
 ```
 
 ### REFACTORED PATTERN: Notification Queue Worker
-
 **Missing Implementation - Recommended:**
 
 ```typescript
@@ -767,68 +735,66 @@ export async function processNotificationQueue() {
 ```
 
 ## 6. Open Questions
-
 1. **What third-party services should we use?**
    - Email: SendGrid, AWS SES, Mailgun, Postmark?
    - SMS: Twilio, AWS SNS, Vonage?
    - Push: Firebase Cloud Messaging (FCM) or custom?
 
-2. **What queue system should we adopt?**
+1. **What queue system should we adopt?**
    - Firestore Tasks (native but limited)?
    - Google Cloud Tasks (managed, scalable)?
    - Bull + Redis (self-hosted, flexible)?
    - Cloud Pub/Sub (GCP native)?
 
-3. **How should templates be stored and managed?**
+1. **How should templates be stored and managed?**
    - Firestore collection for templates?
    - External CMS (Contentful, Strapi)?
    - Git-based templates in codebase?
    - Admin UI for template editing?
 
-4. **What template engine should we use?**
+1. **What template engine should we use?**
    - Handlebars (most common)?
    - Mustache (simpler)?
    - Liquid (Shopify-style)?
    - React Email (JSX-based)?
 
-5. **How should read tracking scale?**
+1. **How should read tracking scale?**
    - Subcollection per message?
    - Separate `message_reads` collection?
    - Map structure with 1000-user limit?
    - Hybrid approach (map for small, subcollection for large)?
 
-6. **What retry strategy should we use?**
+1. **What retry strategy should we use?**
    - Exponential backoff (2^n seconds)?
    - Fixed intervals (1h, 6h, 24h)?
    - Channel-specific strategies?
    - Max retry count (3, 5, 10)?
 
-7. **How should notification preferences be structured?**
+1. **How should notification preferences be structured?**
    - Per-channel opt-in/out?
    - Per-notification-type granularity?
    - Digest mode support (daily, weekly)?
    - Quiet hours per timezone?
 
-8. **What compliance requirements exist?**
+1. **What compliance requirements exist?**
    - CAN-SPAM Act (email unsubscribe)?
    - GDPR (data portability, right to erasure)?
    - TCPA (SMS consent requirements)?
    - CASL (Canadian anti-spam law)?
 
-9. **How should delivery status be exposed to users?**
+1. **How should delivery status be exposed to users?**
    - User-facing notification history page?
    - Delivery receipts ("Sent", "Delivered", "Read")?
    - Failed notification UI?
    - Resend button for failed notifications?
 
-10. **What observability/monitoring is needed?**
+1. **What observability/monitoring is needed?**
     - Delivery success rate metrics?
     - Channel-specific latency tracking?
     - Cost monitoring per provider?
     - Alert on high failure rate?
 
 ## 7. Recommendations Summary
-
 | Priority | Action                                                       | Estimated Effort |
 | -------- | ------------------------------------------------------------ | ---------------- |
 | P0       | Implement notification delivery pipeline (email, SMS, push)  | 2-3 weeks        |
@@ -849,7 +815,6 @@ export async function processNotificationQueue() {
 **Total Estimated Effort:** 10-14 weeks
 
 ## 8. Related Subsystems
-
 - **Scheduling** - Triggers schedule.publish notifications
 - **Staff Management** - Shift assignments trigger notifications
 - **RBAC/Security** - Permissions control who can send org-wide messages
@@ -857,35 +822,32 @@ export async function processNotificationQueue() {
 - **Organizations** - Org context for message scoping
 
 ## 9. Next Steps
-
 1. **P0 (Immediate):**
    - Select third-party providers (SendGrid + Twilio + FCM recommended)
    - Implement basic email delivery for schedule publishing
    - Create `notification_preferences` schema
    - Fix `readBy` scalability issue with subcollection
 
-2. **P1 (Short-term - 1 month):**
+1. **P1 (Short-term - 1 month):**
    - Build queue system with Cloud Tasks or Bull
    - Create template system with Handlebars
    - Add delivery status tracking
    - Implement retry logic
 
-3. **P2 (Medium-term - 3 months):**
+1. **P2 (Medium-term - 3 months):**
    - SMS and push notification delivery
    - Notification history UI
    - Rate limiting and deduplication
    - Digest mode support
 
-4. **P3 (Long-term - 6 months):**
+1. **P3 (Long-term - 6 months):**
    - Multi-language support
    - A/B testing framework
    - Advanced analytics dashboard
    - Cost optimization analysis
 
 ## 10. Code Examples & References
-
 ### Minimal Email Integration (SendGrid)
-
 ```typescript
 import sgMail from "@sendgrid/mail";
 
@@ -927,7 +889,6 @@ export async function sendEmail(params: EmailParams): Promise<DeliveryResult> {
 ```
 
 ### Minimal SMS Integration (Twilio)
-
 ```typescript
 import twilio from "twilio";
 
@@ -963,7 +924,6 @@ export async function sendSMS(params: SMSParams): Promise<DeliveryResult> {
 ```
 
 ### Minimal Push Notification Integration (FCM)
-
 ```typescript
 import { getMessaging } from "firebase-admin/messaging";
 

@@ -1,13 +1,11 @@
 # Instructions Index (L2: Implementation Layer)
-
-> **Location**: L2 (Agent Implementation Layer)  
-> **Purpose**: Detailed instructions for AI agents implementing governance rules  
+> **Location**: L2 (Agent Implementation Layer)\
+> **Purpose**: Detailed instructions for AI agents implementing governance rules\
 > **Last Updated**: 2025-12-16
 
 ---
 
 ## Quick Navigation
-
 - [Core Instructions (01-05)](#core-instructions-01-05) - **Binding for all agents**
 - [Memory Files](#memory-files-pattern-learnings) - Lessons learned from recurring issues
 - [Domain-Specific](#domain-specific-instructions) - Technology-specific guidance
@@ -18,7 +16,6 @@
 ---
 
 ## Hierarchy Position
-
 ```
 L0: Canonical Governance (.github/governance/01-12)
   ↓
@@ -37,21 +34,19 @@ canonical docs.
 ---
 
 ## Core Instructions (01-05)
-
 **These files are binding for all agents.** They implement the Master Directive hierarchy.
 
 | File                                                                                     | Scope                                | Priority | Purpose                                                                      |
 | ---------------------------------------------------------------------------------------- | ------------------------------------ | -------- | ---------------------------------------------------------------------------- |
-| [01_MASTER_AGENT_DIRECTIVE.instructions.md](./01_MASTER_AGENT_DIRECTIVE.instructions.md) | `**`                                 | P0       | **Binding for all operations** - Tool usage, hierarchy, production standards |
-| [02_CODE_QUALITY_STANDARDS.instructions.md](./02_CODE_QUALITY_STANDARDS.instructions.md) | `**/*.{ts,tsx,js,jsx}`               | P1       | Code quality enforcement, linting, formatting                                |
-| [03_SECURITY_AND_SAFETY.instructions.md](./03_SECURITY_AND_SAFETY.instructions.md)       | `*`                                  | P0       | OWASP Top 10, security patterns, AI safety                                   |
-| [04_FRAMEWORK_PATTERNS.instructions.md](./04_FRAMEWORK_PATTERNS.instructions.md)         | `apps/**,packages/**`                | P1       | Next.js, Firebase, Tailwind, monorepo patterns                               |
-| [05_TESTING_AND_REVIEW.instructions.md](./05_TESTING_AND_REVIEW.instructions.md)         | `**/*.{test,spec}.{ts,tsx},tests/**` | P1       | Vitest, Playwright, code review                                              |
+| [01\_MASTER\_AGENT\_DIRECTIVE.instructions.md](./01_MASTER_AGENT_DIRECTIVE.instructions.md) | `**`                                 | P0       | **Binding for all operations** - Tool usage, hierarchy, production standards |
+| [02\_CODE\_QUALITY\_STANDARDS.instructions.md](./02_CODE_QUALITY_STANDARDS.instructions.md) | `**/*.{ts,tsx,js,jsx}`               | P1       | Code quality enforcement, linting, formatting                                |
+| [03\_SECURITY\_AND\_SAFETY.instructions.md](./03_SECURITY_AND_SAFETY.instructions.md)       | `*`                                  | P0       | OWASP Top 10, security patterns, AI safety                                   |
+| [04\_FRAMEWORK\_PATTERNS.instructions.md](./04_FRAMEWORK_PATTERNS.instructions.md)         | `apps/**,packages/**`                | P1       | Next.js, Firebase, Tailwind, monorepo patterns                               |
+| [05\_TESTING\_AND\_REVIEW.instructions.md](./05_TESTING_AND_REVIEW.instructions.md)         | `**/*.{test,spec}.{ts,tsx},tests/**` | P1       | Vitest, Playwright, code review                                              |
 
 ---
 
 ## Memory Files (Pattern Learnings)
-
 Memory files capture lessons learned from recurring issues. Created when error pattern detected 3+
 times.
 
@@ -67,24 +62,20 @@ times.
 ---
 
 ## Domain-Specific Instructions
-
 Instructions for specific technologies, frameworks, and workflows.
 
 ### Frontend
-
 | File                                                                 | Scope              | Tags                 |
 | -------------------------------------------------------------------- | ------------------ | -------------------- |
 | [nextjs-tailwind.instructions.md](./nextjs-tailwind.instructions.md) | Next.js + Tailwind | nextjs, tailwind, ui |
 | [nextjs.instructions.md](./nextjs.instructions.md)                   | Next.js            | nextjs, routing, ssr |
 
 ### Testing
-
 | File                                                                             | Scope     | Tags                     |
 | -------------------------------------------------------------------------------- | --------- | ------------------------ |
 | [playwright-typescript.instructions.md](./playwright-typescript.instructions.md) | E2E tests | playwright, e2e, testing |
 
 ### Languages
-
 | File                                                                         | Scope      | Tags                    |
 | ---------------------------------------------------------------------------- | ---------- | ----------------------- |
 | [typescript-5-es2022.instructions.md](./typescript-5-es2022.instructions.md) | TypeScript | typescript, ts5, es2022 |
@@ -92,7 +83,6 @@ Instructions for specific technologies, frameworks, and workflows.
 ---
 
 ## Best Practices
-
 | File                                                                                                                         | Scope               | Purpose                       |
 | ---------------------------------------------------------------------------------------------------------------------------- | ------------------- | ----------------------------- |
 | [ai-prompt-engineering-safety-best-practices.instructions.md](./ai-prompt-engineering-safety-best-practices.instructions.md) | `*`                 | Prompt engineering, AI safety |
@@ -105,7 +95,6 @@ Instructions for specific technologies, frameworks, and workflows.
 ---
 
 ## Meta Instructions
-
 | File                                                                                                   | Purpose                           |
 | ------------------------------------------------------------------------------------------------------ | --------------------------------- |
 | [code-review-generic.instructions.md](./code-review-generic.instructions.md)                           | Code review standards             |
@@ -115,26 +104,24 @@ Instructions for specific technologies, frameworks, and workflows.
 ---
 
 ## Quick Tag Lookup
-
 Find instructions by topic:
 
 | Tag          | Files                                                              |
 | ------------ | ------------------------------------------------------------------ |
-| `api`        | 01_MASTER, 04_FRAMEWORK, api-framework-memory, triage-batch-memory |
-| `security`   | 01_MASTER, 03_SECURITY, security-and-owasp, ai-prompt-engineering  |
-| `testing`    | 05_TESTING, playwright-typescript, triage-batch-memory             |
-| `firebase`   | 04_FRAMEWORK, firebase-typing-and-monorepo-memory                  |
+| `api`        | 01\_MASTER, 04\_FRAMEWORK, api-framework-memory, triage-batch-memory |
+| `security`   | 01\_MASTER, 03\_SECURITY, security-and-owasp, ai-prompt-engineering  |
+| `testing`    | 05\_TESTING, playwright-typescript, triage-batch-memory             |
+| `firebase`   | 04\_FRAMEWORK, firebase-typing-and-monorepo-memory                  |
 | `zod`        | api-framework-memory, typescript-schema-pattern-memory             |
-| `patterns`   | 02_CODE_QUALITY, code-quality-memory, object-calisthenics          |
-| `agents`     | 01_MASTER, orchestration-memory                                    |
-| `nextjs`     | 04_FRAMEWORK, nextjs-tailwind, nextjs                              |
+| `patterns`   | 02\_CODE\_QUALITY, code-quality-memory, object-calisthenics          |
+| `agents`     | 01\_MASTER, orchestration-memory                                    |
+| `nextjs`     | 04\_FRAMEWORK, nextjs-tailwind, nextjs                              |
 | `typescript` | typescript-5-es2022, typescript-schema-pattern-memory              |
 | `crewops`    | orchestration-memory                                               |
 
 ---
 
 ## Related Indexes
-
 - [Governance Index](../governance/INDEX.md) - Canonical rules (L0/L1)
 - [Documentation Index](../../docs/INDEX.md) - Human guides (L4)
 - [Prompts](../prompts/) - Slash command templates (L3)
@@ -142,7 +129,6 @@ Find instructions by topic:
 ---
 
 # Repository Instruction Index
-
 This section collects canonical, high-priority directives extracted from the repository governance
 documents and agent instructions. Each entry includes the exact quoted directive (when available), a
 short interpretation, tags (MUST / SHOULD / RECOMMENDED), and one or more authoritative source
@@ -151,7 +137,6 @@ references in the repo.
 ---
 
 ## 1) Package manager: pnpm only
-
 - Exact quote: "**RULE**: Use pnpm ONLY. Never use npm or yarn."
 - Tag: MUST
 - Sources:
@@ -161,7 +146,6 @@ references in the repo.
 - Notes: Enforced by pre-commit hooks and CI; follow `pnpm` commands in docs.
 
 ## 2) Zod-first type safety
-
 - Exact quote: "All types that cross boundaries (API, database, UI) MUST originate from Zod
   schemas."
 - Tag: MUST
@@ -173,7 +157,6 @@ references in the repo.
   models must derive from Zod schemas.
 
 ## 3) Triad of Trust (Schema + API + Rules)
-
 - Exact quote: "**CRITICAL PRINCIPLE**: Every domain entity that crosses system boundaries MUST have
   all three:" (followed by the three elements)
 - Tag: MUST
@@ -185,7 +168,6 @@ references in the repo.
   Firestore rules. Run `node scripts/validate-patterns.mjs` to verify coverage.
 
 ## 4) API route pattern: SDK factory
-
 - Exact quote: "**RULE**: All API routes MUST use SDK factory or `withSecurity` wrapper."
 - Tag: MUST
 - Sources:
@@ -197,7 +179,6 @@ references in the repo.
   routes; legacy `withSecurity` wrapper allowed only as a fallback for legacy code.
 
 ## 5) Input validation for mutations (POST/PUT/PATCH)
-
 - Exact quote: "**RULE**: All POST/PUT/PATCH routes MUST validate input via Zod."
 - Tag: MUST
 - Sources:
@@ -208,7 +189,6 @@ references in the repo.
   validation happens before handler execution.
 
 ## 6) Universal file header
-
 - Exact quote: "**RULE**: Every source file MUST have a header:" (header template shown in docs)
 - Tag: MUST
 - Sources:
@@ -219,7 +199,6 @@ references in the repo.
   all new source files per repo standard.
 
 ## 7) Security & CI gating (summary)
-
 - Canonical constraints (examples):
   - Run `pnpm -w typecheck` before PRs
   - Run `pnpm test`, `pnpm lint`, `pnpm lint:patterns`
@@ -242,7 +221,6 @@ Notes on usage:
 Created by automated extraction on 2025-12-05.
 
 ## Lower-level authoritative references (linked)
-
 The following files and directories are lower-level but still important authoritative sources.
 Include these as references when implementing the higher-level rules above. Where appropriate,
 follow the specific guidance inside each file (they are ordered by likely relevance).

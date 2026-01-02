@@ -16,4 +16,9 @@ coverage/
 # Focus linting on developer docs only; ignore governance/instructions/archive
 .github/governance/**
 .github/instructions/**
+.github/prompts/**
+.github/copilot-instructions.md
 archive/**
+
+# Docs with complex formatting that fixer cannot auto-fix (MD022, MD031, MD032, MD058, MD040)
+docs/**

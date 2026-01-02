@@ -1,16 +1,14 @@
 ---
+
 title: Red Team Workflow - Handoff Protocol
 version: 1.0.0
-date_created: 2025-12-08
+date\_created: 2025-12-08
 status: Active
 owner: TopShelfService LLC
-tags: [security, workflow, red-team, handoff, validation]
----
+## tags: \[security, workflow, red-team, handoff, validation]
 
 # Red Team Workflow & Handoff Protocol
-
 ## Overview
-
 Every non-trivial agent response undergoes a three-stage validation workflow before delivery to the
 user. This ensures security, logic correctness, and pattern compliance.
 
@@ -21,9 +19,7 @@ Agent Response → Red Team Attack → Sr Dev Review → User Delivery
 ---
 
 ## Workflow Stages
-
 ### Stage 1: Primary Agent Response
-
 The primary agent completes phases A-D of the CrewOps protocol:
 
 ```
@@ -38,11 +34,9 @@ Phase D: Action Matrix (EXECUTE)
 ---
 
 ### Stage 2: Red Team Attack
-
 The Security Red Team attacks every aspect of the draft response.
 
 #### Attack Vectors
-
 | Vector                         | Description                  | Check Method                             |
 | ------------------------------ | ---------------------------- | ---------------------------------------- |
 | **SEC-01: Auth Bypass**        | Can auth be circumvented?    | Review all auth checks, session handling |
@@ -61,40 +55,33 @@ The Security Red Team attacks every aspect of the draft response.
 | **EDGE-03: Boundary Values**   | Handles limits correctly?    | Test max/min values                      |
 
 #### Red Team Output Format
-
 ```markdown
 ## 🔴 RED TEAM ATTACK REPORT
-
 ### Security Issues
-
-- [ ] **SEC-01**: [PASS/FAIL] Auth bypass check
+- [[ ]] **SEC-01**: [PASS/FAIL] Auth bypass check
   - Finding: [Description]
   - Severity: [CRITICAL/HIGH/MEDIUM/LOW]
   - Fix: [Required action]
 
 ### Logic Issues
-
-- [ ] **LOG-01**: [PASS/FAIL] Logic verification
+- [[ ]] **LOG-01**: [PASS/FAIL] Logic verification
   - Finding: [Description]
   - Severity: [CRITICAL/HIGH/MEDIUM/LOW]
   - Fix: [Required action]
 
 ### Pattern Issues
-
-- [ ] **PAT-01**: [PASS/FAIL] Pattern compliance
+- [[ ]] **PAT-01**: [PASS/FAIL] Pattern compliance
   - Finding: [Description]
   - Severity: [CRITICAL/HIGH/MEDIUM/LOW]
   - Fix: [Required action]
 
 ### Edge Cases
-
-- [ ] **EDGE-01**: [PASS/FAIL] Null handling
+- [[ ]] **EDGE-01**: [PASS/FAIL] Null handling
   - Finding: [Description]
   - Severity: [CRITICAL/HIGH/MEDIUM/LOW]
   - Fix: [Required action]
 
 ### Summary
-
 - Total Issues: X
 - Critical: X (blocks delivery)
 - High: X (should fix)
@@ -102,12 +89,10 @@ The Security Red Team attacks every aspect of the draft response.
 - Low: X (optional)
 
 ### Veto Status
-
 🟢 APPROVED / 🔴 BLOCKED
 ```
 
 #### Veto Triggers (Auto-Block)
-
 The following immediately block delivery:
 
 - ❌ Auth bypass possible
@@ -121,18 +106,15 @@ The following immediately block delivery:
 ---
 
 ### Stage 3: Sr Dev Review
-
 The Sr Dev reviews the Red Team findings and corrects the response.
 
 #### Sr Dev Responsibilities
-
 1. **Evaluate Findings**: Confirm Red Team findings are valid
 2. **Apply Fixes**: Correct all CRITICAL and HIGH issues
 3. **Validate Fixes**: Ensure fixes don't introduce new issues
 4. **Approve/Reject**: Final decision on delivery
 
 #### Sr Dev Correction Criteria
-
 | Finding Severity | Action Required            |
 | ---------------- | -------------------------- |
 | CRITICAL         | Must fix before delivery   |
@@ -141,35 +123,28 @@ The Sr Dev reviews the Red Team findings and corrects the response.
 | LOW              | Optional, note for future  |
 
 #### Sr Dev Output Format
-
 ```markdown
 ## 👨‍💼 SR DEV REVIEW
-
 ### Red Team Findings Addressed
-
-- [x] SEC-01: Fixed auth check in line 45
-- [x] LOG-01: Added edge case handling
-- [ ] PAT-01: Deferred to next iteration (documented)
+- [[ ]] SEC-01: Fixed auth check in line 45
+- [[ ]] LOG-01: Added edge case handling
+- [[ ]] PAT-01: Deferred to next iteration (documented)
 
 ### Corrections Applied
-
 1. [File:Line] Changed X to Y because Z
 2. [File:Line] Added validation for edge case
 3. [File:Line] Removed secret from log statement
 
 ### Validation Results
-
 - TypeScript: ✅
 - Lint: ✅
 - Tests: ✅
 - Pattern Score: ≥90
 
 ### Final Decision
-
 🟢 APPROVED FOR DELIVERY
 
 ### Confidence Score
-
 - Security: 95%
 - Logic: 90%
 - Patterns: 85%
@@ -179,54 +154,48 @@ The Sr Dev reviews the Red Team findings and corrects the response.
 ---
 
 ## Simulated Workflow (Single Response)
-
 For most responses, the workflow executes within a single agent response:
 
 ```markdown
-## Response to: [User Request]
-
----
+## ## Response to: [User Request]
 
 ### 🤖 PHASE D: Implementation
-
 [Draft response content here]
 
 ---
 
 ### 🔴 RED TEAM ATTACK
-
 **Security Checks**
 
-- [x] SEC-01: Auth validated via createOrgEndpoint
-- [x] SEC-02: No PII in logs
-- [x] SEC-03: Zod validates all inputs
-- [x] SEC-04: Org scoping enforced
-- [x] SEC-05: No secrets in code
+- [[ ]] SEC-01: Auth validated via createOrgEndpoint
+- [[ ]] SEC-02: No PII in logs
+- [[ ]] SEC-03: Zod validates all inputs
+- [[ ]] SEC-04: Org scoping enforced
+- [[ ]] SEC-05: No secrets in code
 
 **Logic Checks**
 
-- [x] LOG-01: Logic verified
-- [x] LOG-02: No race conditions
-- [x] LOG-03: Errors caught with proper messages
+- [[ ]] LOG-01: Logic verified
+- [[ ]] LOG-02: No race conditions
+- [[ ]] LOG-03: Errors caught with proper messages
 
 **Pattern Checks**
 
-- [x] PAT-01: Follows SDK factory pattern
-- [x] PAT-02: Types inferred from Zod
-- [x] PAT-03: Matches existing route patterns
+- [[ ]] PAT-01: Follows SDK factory pattern
+- [[ ]] PAT-02: Types inferred from Zod
+- [[ ]] PAT-03: Matches existing route patterns
 
 **Edge Cases**
 
-- [x] EDGE-01: Optional chaining used
-- [x] EDGE-02: Empty array handling verified
-- [x] EDGE-03: Boundary values tested
+- [[ ]] EDGE-01: Optional chaining used
+- [[ ]] EDGE-02: Empty array handling verified
+- [[ ]] EDGE-03: Boundary values tested
 
 **Veto Status**: 🟢 APPROVED
 
 ---
 
 ### 👨‍💼 SR DEV REVIEW
-
 All checks passed. No corrections needed.
 
 **Confidence Score**: 92%
@@ -234,38 +203,31 @@ All checks passed. No corrections needed.
 ---
 
 ### ✅ VALIDATED RESPONSE
-
 [Final response content here]
 ```
 
 ---
 
 ## Manual Workflow (Complex Cases)
-
 For complex requests requiring multiple iterations:
 
 ### Step 1: User Invokes Red Team
-
 ```
 /red-team [paste agent response here]
 ```
 
 ### Step 2: Red Team Returns Findings
-
 Agent responds with attack report.
 
 ### Step 3: User Reviews and Requests Fixes
-
 ```
 Apply fixes for: SEC-01, LOG-02, PAT-01
 ```
 
 ### Step 4: Agent Applies Fixes
-
 Agent corrects issues and re-runs Red Team.
 
 ### Step 5: Sr Dev Approval
-
 ```
 CREWOPS_APPROVE
 ```
@@ -273,7 +235,6 @@ CREWOPS_APPROVE
 ---
 
 ## Integration with CrewOps Phase E
-
 The Red Team workflow integrates with CrewOps Phase E (Security Veto + Reflexion):
 
 ```
@@ -285,7 +246,6 @@ Phase E: Security & Reflexion
 ```
 
 ### Activation
-
 Red Team workflow activates automatically for:
 
 - All code generation requests
@@ -295,7 +255,6 @@ Red Team workflow activates automatically for:
 - All database schema changes
 
 ### Bypass (Not Recommended)
-
 ```
 CREWOPS_SKIP_REDTEAM
 ```
@@ -305,17 +264,12 @@ Only use for trivial changes with explicit user acknowledgment.
 ---
 
 ## Slash Command Integration
-
 ### /red-team Command
-
-```markdown
----
+## ```markdown
 agent: "agent"
-description: "Invoke Red Team attack on a response or code"
----
+## description: "Invoke Red Team attack on a response or code"
 
 # Red Team Attack
-
 Analyze the provided content for:
 
 1. Security vulnerabilities (OWASP Top 10)
@@ -327,15 +281,11 @@ Output: Attack report with findings and veto status.
 ```
 
 ### /approve Command
-
-```markdown
----
+## ```markdown
 agent: "agent"
-description: "Sr Dev approval for Red Team findings"
----
+## description: "Sr Dev approval for Red Team findings"
 
 # Sr Dev Approval
-
 Review Red Team findings and either:
 
 1. Apply fixes for identified issues
@@ -346,9 +296,7 @@ Review Red Team findings and either:
 ---
 
 ## Metrics & Reporting
-
 ### Tracked Metrics
-
 | Metric              | Description                        |
 | ------------------- | ---------------------------------- |
 | Red Team Block Rate | % of responses blocked by Red Team |
@@ -358,7 +306,6 @@ Review Red Team findings and either:
 | Escape Rate         | Issues found post-delivery         |
 
 ### Continuous Improvement
-
 After each blocked response:
 
 1. Document the finding type
@@ -369,9 +316,7 @@ After each blocked response:
 ---
 
 ## Quick Reference
-
 ### Veto = Immediate Block
-
 - Auth bypass
 - Data leakage
 - Injection risk
@@ -379,26 +324,23 @@ After each blocked response:
 - Exposed secrets
 
 ### Must Fix Before Delivery
-
 - CRITICAL severity
 - HIGH severity
 - Tier 0 pattern violations
 - Tier 1 pattern violations
 
 ### Document and Proceed
-
 - MEDIUM severity (with justification)
 - LOW severity (optional)
 - Tier 2-3 pattern violations
 
 ### Confidence Thresholds
-
 - ≥90%: High confidence, proceed
 - 80-89%: Medium confidence, user should verify
 - <80%: Low confidence, recommend manual review
 
 ---
 
-**Last Updated**: December 8, 2025  
-**Owner**: TopShelfService LLC  
+**Last Updated**: December 8, 2025\
+**Owner**: TopShelfService LLC\
 **Status**: Active

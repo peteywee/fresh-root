@@ -5,7 +5,6 @@ AuthenticatedRequest, handler: (req: AuthenticatedRequest) => Promise<NextRespon
 Promise<NextResponse> { // Abstract rate limiter interface export interface RateLimiter {
 
 ### 1.1 Directory Structure
-
 } // In-memory implementation (single-instance only) class InMemoryRateLimiter implements
 RateLimiter { // Redis implementation (multi-instance safe) class RedisRateLimiter implements
 RateLimiter { private readonly redis: Redis;
@@ -18,7 +17,7 @@ Promise<NextResponse>, config: RateLimitConfig, ): (req: NextRequest) => Promise
 Schema definition (source of truth) export const OrganizationSchema = z.object({ id: z.string(),
 name: z.string().min(1, "Organization name required"), export const ScheduleSchema = z.object({ id:
 z.string(), export const ShiftSchema = z.object({ id: z.string(), scheduleId: z.string(), // RBAC
-role hierarchy export const RbacRoleSchema = z.enum(\[ // Firestore security rules rules_version =
+role hierarchy export const RbacRoleSchema = z.enum(\[ // Firestore security rules rules\_version =
 '2'; service cloud.firestore { // Structured logging with context export class Logger { private
 context: Record\<string, unknown>; { "name": "fresh-root", "version": "1.1.0", { "name":
 "@apps/web", "version": "0.1.0", { "compilerOptions": { "target": "ES2022", // Node environment
@@ -26,7 +25,6 @@ import { z } from "zod"; const config = { output: "standalone", // Session creat
 function createSession(idToken: string): Promise<string> { const auth = getFirebaseAdminAuth();
 
 ## Architectural Review Panel - Input Document
-
 **Project:** Fresh Root - Multi-Tenant SaaS Scheduling Platform **Version:** 1.1.0 **Generated:**
 November 30, 2025 **Status:** Production Ready (Single Instance) / Multi-Instance Preparation
 **Codebase Size:** ~500 source files, 248 TypeScript files, 55 React components
@@ -34,9 +32,7 @@ November 30, 2025 **Status:** Production Ready (Single Instance) / Multi-Instanc
 ---
 
 ## SECTION 1: CODEBASE ACCESS
-
 ### 1.1 Directory Structure
-
 ```
 fresh-root/                           # Monorepo root (1.1.0)
 ├── apps/web/                         # Next.js PWA (248 TS files, 55 TSX files)
@@ -161,9 +157,7 @@ fresh-root/                           # Monorepo root (1.1.0)
 ```
 
 ### 1.2 Key File Excerpts
-
 #### 1.2.1 API Middleware Stack
-
 **File:** `/home/patrick/fresh-root/apps/web/app/api/_shared/middleware.ts`
 
 **Purpose:** Session-based authentication with OpenTelemetry tracing
@@ -229,7 +223,6 @@ export async function require2FAForManagers(
 ```
 
 #### 1.2.2 Rate Limiting Implementation
-
 **File:** `/home/patrick/fresh-root/apps/web/src/lib/api/rate-limit.ts`
 
 **Purpose:** Dual-mode rate limiting (in-memory for dev, Redis for production)
@@ -343,7 +336,6 @@ export function withRateLimit(
 ```
 
 #### 1.2.3 Domain Models - Organization
-
 **File:** `/home/patrick/fresh-root/packages/types/src/orgs.ts`
 
 **Purpose:** Zod-first schema with type inference
@@ -374,7 +366,6 @@ export type Organization = z.infer<typeof OrganizationSchema>;
 ```
 
 #### 1.2.4 Domain Models - Schedules & Shifts
-
 **File:** `/home/patrick/fresh-root/packages/types/src/schedules.ts`
 
 ```typescript
@@ -419,7 +410,6 @@ export type Shift = z.infer<typeof ShiftSchema>;
 ```
 
 #### 1.2.5 RBAC & Authorization Patterns
-
 **File:** `/home/patrick/fresh-root/packages/types/src/rbac.ts`
 
 ```typescript
@@ -440,7 +430,6 @@ export type Role = z.infer<typeof RoleSchema>;
 ```
 
 #### 1.2.6 Firestore Security Rules (RBAC Implementation)
-
 **File:** `/home/patrick/fresh-root/firestore.rules`
 
 **Purpose:** Multi-tenant isolation with token-based RBAC
@@ -510,7 +499,6 @@ service cloud.firestore {
 ```
 
 #### 1.2.7 Error Handling Patterns
-
 **File:** `/home/patrick/fresh-root/apps/web/src/lib/logger.ts`
 
 **Purpose:** Structured logging with context
@@ -583,9 +571,7 @@ export class Logger {
 ```
 
 ### 1.3 Dependency Manifests
-
 #### 1.3.1 Root package.json
-
 **File:** `/home/patrick/fresh-root/package.json`
 
 ```json
@@ -624,7 +610,6 @@ export class Logger {
 ```
 
 #### 1.3.2 Web App package.json
-
 **File:** `/home/patrick/fresh-root/apps/web/package.json`
 
 ```json
@@ -660,9 +645,7 @@ export class Logger {
 ```
 
 ### 1.4 Configuration Files
-
 #### 1.4.1 TypeScript Configuration
-
 **File:** `/home/patrick/fresh-root/tsconfig.json`
 
 ```json
@@ -691,7 +674,6 @@ export class Logger {
 ```
 
 #### 1.4.2 Environment Variables Schema
-
 **File:** `/home/patrick/fresh-root/packages/env/src/index.ts` (Expected)
 
 ```typescript
@@ -726,7 +708,6 @@ export const env = EnvSchema.parse(process.env);
 ```
 
 #### 1.4.3 Next.js Configuration
-
 **File:** `/home/patrick/fresh-root/apps/web/next.config.mjs`
 
 ```javascript
@@ -755,9 +736,7 @@ const config = {
 ---
 
 ## SECTION 2: ARCHITECTURE DOCUMENTATION
-
 ### 2.1 System Architecture Overview
-
 Fresh Root is a **multi-tenant SaaS scheduling platform** built using a modern monorepo architecture
 with Next.js 16, Firebase, and a comprehensive security model.
 
@@ -780,9 +759,7 @@ with Next.js 16, Firebase, and a comprehensive security model.
 5. **Infrastructure Layer:** Observability, caching, rate limiting
 
 ### 2.2 Data Flow Patterns
-
 #### 2.2.1 Request Flow - API Endpoint
-
 ```
 Client Request
     ↓
@@ -811,7 +788,6 @@ Client Response
 ```
 
 #### 2.2.2 Authentication Flow
-
 ```
 User Login (Firebase Auth)
     ↓
@@ -837,7 +813,6 @@ User context attached to request
 ```
 
 #### 2.2.3 Data Denormalization Flow
-
 ```
 User creates schedule (via API)
     ↓
@@ -854,7 +829,6 @@ Client receives real-time updates (Firestore listeners)
 ```
 
 ### 2.3 Multi-Tenant Isolation Strategy
-
 **Network-Scoped Isolation (v14.0.0+):**
 
 Fresh Root implements **hierarchical multi-tenancy** using network isolation:
@@ -892,7 +866,6 @@ Fresh Root implements **hierarchical multi-tenancy** using network isolation:
 - SOC 2: Audit logging via Cloud Functions
 
 ### 2.4 Session Management Architecture
-
 **Session Cookie Approach (Custom Implementation):**
 
 Fresh Root uses **server-side session cookies** instead of client-side JWT tokens for enhanced
@@ -947,7 +920,6 @@ async function validateSession(sessionCookie: string) {
 - ✅ Sessions: Server checks Firebase for revocation every request
 
 ### 2.5 API Design Patterns - "The Triad of Trust"
-
 Fresh Root follows a **three-layer security pattern** for all API routes:
 
 ```typescript
@@ -995,11 +967,8 @@ export const POST = withRateLimit(
 - Testable: Each layer can be unit tested independently
 
 ### 2.6 Security Model
-
 #### Layer 1: Firebase Authentication
-
 #### 2.6.1 RBAC (Role-Based Access Control)
-
 **Role Hierarchy:**
 
 ```
@@ -1057,16 +1026,13 @@ function hasAnyRole(roles) {
 ```
 
 #### 2.6.2 Authentication Layers
-
 ##### 1. users
-
 - Email/password authentication
 - Email verification required
 - Password reset flows
 - Account linking
 
 ##### 2. networks
-
 - Server-side session cookies (5-day expiry)
 - httpOnly, Secure, SameSite=Strict
 - Revocation check on every request
@@ -1074,7 +1040,6 @@ function hasAnyRole(roles) {
 **Layer 3: MFA (Multi-Factor Authentication)**
 
 ##### 3. orgs / organizations
-
 - TOTP-based (Speakeasy library)
 - QR code enrollment
 - Required for managers/admins (configurable)
@@ -1083,15 +1048,12 @@ function hasAnyRole(roles) {
 **Layer 4: API Authorization**
 
 ##### 4. schedules
-
 - RBAC role checks
 - Organization membership validation
 - Resource ownership verification
 
 #### 2.6.3 Data Security
-
 ##### 5. shifts
-
 - **In Transit:** HTTPS/TLS 1.3 (enforced by Firebase)
 - **At Rest:** Firestore automatic encryption (AES-256)
 - **Client Secrets:** Environment variables, never committed
@@ -1099,7 +1061,6 @@ function hasAnyRole(roles) {
 **Input Validation:**
 
 ##### 6. positions
-
 - Zod schemas for all API inputs
 - SQL injection: N/A (Firestore is NoSQL)
 - XSS prevention: React automatic escaping + CSP headers
@@ -1108,7 +1069,6 @@ function hasAnyRole(roles) {
 **Rate Limiting:**
 
 ##### 7. venues
-
 - IP-based throttling (30 req/min default)
 - Redis-backed for distributed enforcement
 - Custom limits per endpoint type
@@ -1116,21 +1076,16 @@ function hasAnyRole(roles) {
 **Security Headers:**
 
 ##### 8. zones
-
 X-Frame-Options: DENY X-Content-Type-Options: nosniff Strict-Transport-Security: max-age=63072000;
 includeSubDomains; preload Referrer-Policy: strict-origin-when-cross-origin
 Cross-Origin-Opener-Policy: same-origin Content-Security-Policy: default-src 'self'; ...
 
 ##### 9. memberships
-
 ### 2.7 Database Schema Overview - Firestore Collections
-
 #### Core Collections
-
 **1. users**
 
-##### 10. join_tokens
-
+##### 10. join\_tokens
 - **Path:** `/users/{userId}`
 - **Access:** Self-only (no enumeration)
 - **Purpose:** User profiles and preferences
@@ -1138,8 +1093,7 @@ Cross-Origin-Opener-Policy: same-origin Content-Security-Policy: default-src 'se
 
 **2. networks**
 
-##### 11. attendance_records
-
+##### 11. attendance\_records
 - **Path:** `/networks/{networkId}`
 - **Access:** Server-only (Admin SDK)
 - **Purpose:** Tenant root container (v14.0.0+)
@@ -1148,7 +1102,6 @@ Cross-Origin-Opener-Policy: same-origin Content-Security-Policy: default-src 'se
 **3. orgs / organizations**
 
 ##### 12. compliance
-
 - **Path:** `/orgs/{orgId}` or `/organizations/{orgId}`
 - **Access:** Members read, owner/admin write
 - **Purpose:** Organization entities
@@ -1159,14 +1112,12 @@ Cross-Origin-Opener-Policy: same-origin Content-Security-Policy: default-src 'se
 - **Path:** `/orgs/{orgId}/schedules/{scheduleId}`
 
 ##### 13. messages
-
 - **Purpose:** Work schedules
 - **Fields:** `id`, `orgId`, `name`, `startDate`, `endDate`, `status`, `positions[]`, `createdBy`
 
 **5. shifts**
 
 ##### 14. receipts
-
 - **Path:** `/orgs/{orgId}/schedules/{scheduleId}/shifts/{shiftId}`
 - **Access:** Members read, scheduler+ write, staff limited update
 - **Purpose:** Individual shift assignments
@@ -1174,14 +1125,12 @@ Cross-Origin-Opener-Policy: same-origin Content-Security-Policy: default-src 'se
   `endTime`, `status`, `notes`
 
 ##### 15. widgets
-
 **6. positions**
 
 - **Path:** `/orgs/{orgId}/positions/{positionId}`
 - **Access:** Members read, manager+ write
 
 ##### 16. corporates
-
 - **Fields:** `id`, `orgId`, `name`, `description`, `defaultPayRate`, `requiredSkills[]`
 
 - `/`/`corporates`/`{corporateId}`
@@ -1208,14 +1157,14 @@ Cross-Origin-Opener-Policy: same-origin Content-Security-Policy: default-src 'se
 - **Purpose:** User-org relationships with roles
 - **Fields:** `uid`, `orgId`, `roles[]`, `invitedBy`, `createdAt`
 
-**10. join_tokens**
+**10. join\_tokens**
 
 - **Path:** `/join_tokens/{orgId}/join_tokens/{tokenId}`
 - **Access:** Manager+ read/write
 - **Purpose:** Invitation tokens for onboarding
 - **Fields:** `id`, `orgId`, `token`, `email`, `roles[]`, `expiresAt`, `usedAt`
 
-**11. attendance_records**
+**11. attendance\_records**
 
 - **Path:** `/attendance_records/{orgId}/records/{recordId}`
 - **Access:** Members read, scheduler+ write
@@ -1230,7 +1179,6 @@ Cross-Origin-Opener-Policy: same-origin Content-Security-Policy: default-src 'se
 - **Fields:** `adminName`, `adminEmail`, `acceptedTerms`, `acceptedDate`, `signature`
 
 #### Supporting Collections
-
 **13. messages**
 
 - Organization announcements
@@ -1263,9 +1211,7 @@ Cross-Origin-Opener-Policy: same-origin Content-Security-Policy: default-src 'se
 ---
 
 ## SECTION 3: CONTEXT
-
 ### 3.1 Business Domain
-
 **Industry:** SaaS - Workforce Management & Scheduling
 
 **Product Description:** Fresh Root is a **multi-tenant Progressive Web App** designed for
@@ -1296,7 +1242,6 @@ organizations to:
 - **Multi-Tenant Architecture:** Network-scoped isolation for corporate management
 
 ### 3.2 Current Scale
-
 **Production Status:** ✅ Single-Instance Production Ready
 
 **Current Deployment:**
@@ -1324,7 +1269,6 @@ organizations to:
 - No horizontal auto-scaling
 
 ### 3.3 Target Scale
-
 **Multi-Instance Production (18-24 hours away):**
 
 - Deployment: 2-5 Next.js instances behind load balancer
@@ -1344,7 +1288,6 @@ organizations to:
 - Compliance: SOC 2 Type II certification ready
 
 ### 3.4 Team Information
-
 **Team Size:** Small team (likely 1-3 developers)
 
 **Skill Set:**
@@ -1372,9 +1315,7 @@ organizations to:
 - Redis/distributed systems experience (needed for multi-instance)
 
 ### 3.5 Known Pain Points
-
 #### 3.5.1 Memory Constraints
-
 **Issue:** Development environment limited to **6.3GB RAM** (Chromebook/low-memory system)
 
 **Impact:**
@@ -1397,7 +1338,6 @@ organizations to:
 **Remaining Risk:** Production deployments need 2GB+ heap recommended
 
 #### 3.5.2 Rate Limiting - Multi-Instance Issue
-
 **Issue:** Current rate limiting uses **in-memory buckets** (not multi-instance safe)
 
 **Impact:**
@@ -1414,13 +1354,12 @@ organizations to:
 **Solution Required:**
 
 - Implement Redis-backed rate limiter
-- Configure REDIS_URL in production environment
+- Configure REDIS\_URL in production environment
 - Test with 2+ instances to verify distributed enforcement
 
 **Documentation:** `/home/patrick/fresh-root/RATE_LIMIT_IMPLEMENTATION.md`
 
 #### 3.5.3 Test Coverage Gaps
-
 **Issue:** Only **27% of API endpoints have tests** (6 test files for 22+ endpoints)
 
 **Impact:**
@@ -1447,7 +1386,6 @@ organizations to:
 - API endpoints: 60%+
 
 #### 3.5.4 OpenTelemetry Partial Implementation
-
 **Issue:** OpenTelemetry tracing helpers created but **initialization incomplete**
 
 **Impact:**
@@ -1468,13 +1406,11 @@ organizations to:
 
 **Blockers:**
 
-- Need OTEL_EXPORTER_OTLP_ENDPOINT configured
+- Need OTEL\_EXPORTER\_OTLP\_ENDPOINT configured
 - Need instrumentation hook in `apps/web/instrumentation.ts`
 
 ### 3.6 Compliance Needs
-
 #### 3.6.1 SOC 2 Readiness
-
 **Target:** SOC 2 Type I (initial), Type II (within 12 months)
 
 **Current State:**
@@ -1498,7 +1434,6 @@ organizations to:
 **Timeline:** 6-12 months for Type I certification
 
 #### 3.6.2 GDPR Considerations
-
 **Applicability:** Yes (if serving EU customers)
 
 **Current Compliance:**
@@ -1522,7 +1457,6 @@ organizations to:
 **Timeline:** 3-6 months for full GDPR compliance
 
 #### 3.6.3 Security Standards
-
 **Current Security Posture:**
 
 - ✅ All API endpoints require authentication
@@ -1544,11 +1478,8 @@ organizations to:
 ---
 
 ## SECTION 4: CONSTRAINTS
-
 ### 4.1 Budget & Timeline Constraints
-
 #### 4.1.1 Deployment Timeline
-
 **Current State:** Production-ready for single-instance deployment **today**
 
 **Multi-Instance Timeline:**
@@ -1573,7 +1504,6 @@ organizations to:
 **Total Effort Estimate:** 262 hours (6.5 weeks @ 40 hrs/week for 1 engineer)
 
 #### 4.1.2 Budget Constraints
-
 **Infrastructure Costs (Estimated):**
 
 - Firebase Free Tier: $0/month (current)
@@ -1597,7 +1527,6 @@ organizations to:
 - Time-conscious: Managed SaaS (Datadog, Honeycomb) for faster setup
 
 ### 4.2 Team Skill Constraints
-
 **Strengths:**
 
 - ✅ Strong TypeScript/React expertise
@@ -1632,11 +1561,10 @@ organizations to:
 
 - Use well-documented libraries (ioredis, @opentelemetry/sdk-node)
 - Leverage AI assistance (Claude Code) for implementation
-- Follow TODO checklists in STRATEGIC_AUDIT_TODOS.md
+- Follow TODO checklists in STRATEGIC\_AUDIT\_TODOS.md
 - Schedule external help for penetration testing
 
 ### 4.3 Technology Mandates
-
 **Hard Requirements:**
 
 1. **Firebase Ecosystem**
@@ -1695,9 +1623,7 @@ organizations to:
    - **Rationale:** Firebase lock-in, migration prohibitively expensive
 
 ### 4.4 Infrastructure Constraints
-
 #### 4.4.1 Memory-Constrained Development Environment
-
 **Hard Constraint:** 6.3GB RAM on primary development machine
 
 **Impacts:**
@@ -1717,7 +1643,6 @@ organizations to:
 **Production Impact:** None (production will have 2GB+ heap)
 
 #### 4.4.2 Deployment Platform
-
 **Current:** Vercel (free tier) or Firebase Hosting + Cloud Run
 
 **Constraints:**
@@ -1734,7 +1659,6 @@ organizations to:
 **Recommendation:** Use Vercel for simplicity, Cloud Run if budget-conscious
 
 #### 4.4.3 External Service Dependencies
-
 **Critical Dependencies:**
 
 - Firebase (Firestore, Auth, Cloud Functions)
@@ -1761,11 +1685,8 @@ organizations to:
 ---
 
 ## SECTION 5: OPTIONAL INPUTS
-
 ### 5.1 Production Incidents
-
 #### 5.1.1 Historical OOM Crashes (Resolved)
-
 **Incident Type:** Out-of-Memory (OOM) crashes during development
 
 **Frequency:** Multiple occurrences before mitigation (Nov 2025)
@@ -1806,7 +1727,6 @@ organizations to:
 **Status:** ✅ RESOLVED (no OOM crashes since mitigations)
 
 #### 5.1.2 No Production Outages (Yet)
-
 **Status:** Application is in early production with pilot customers
 
 **Incident Preparedness:**
@@ -1818,15 +1738,13 @@ organizations to:
 
 **Recommended Actions:**
 
-- Create incident response plan (STRATEGIC_AUDIT_TODOS.md)
+- Create incident response plan (STRATEGIC\_AUDIT\_TODOS.md)
 - Document runbooks for common scenarios
 - Set up alerting for error rate spikes
 - Practice disaster recovery procedures
 
 ### 5.2 Performance Metrics
-
 #### 5.2.1 Code Quality Score
-
 **Pattern Validation Score:** **111.5/100** (59% above threshold of 90)
 
 **Breakdown:**
@@ -1850,7 +1768,6 @@ organizations to:
 **CI/CD Integration:** `.github/workflows/pr.yml` blocks PRs below 90 score
 
 #### 5.2.2 API Performance (Estimated)
-
 **Note:** No formal load testing performed yet
 
 **Expected Performance (Single Instance):**
@@ -1875,7 +1792,6 @@ organizations to:
 **Recommended:** Load testing with Apache Bench or k6 (TODO-010)
 
 #### 5.2.3 Frontend Performance
-
 **Lighthouse Score (Expected):**
 
 - Performance: 90+ (target)
@@ -1903,9 +1819,7 @@ organizations to:
 - Tree shaking (Webpack/Turbopack)
 
 ### 5.3 Technical Debt
-
 #### 5.3.1 Critical TODOs
-
 **Source:** `/home/patrick/fresh-root/STRATEGIC_AUDIT_TODOS.md`
 
 **CRITICAL (Blocking Multi-Instance Production):**
@@ -1934,7 +1848,6 @@ organizations to:
 **Total Critical Effort:** 18-24 hours
 
 #### 5.3.2 High Priority TODOs
-
 1. **TODO-004: Firestore Rules Test Coverage**
    - **Effort:** 8 hours
    - **Current:** Minimal test coverage
@@ -1955,7 +1868,6 @@ organizations to:
 **Total High Priority Effort:** 24 hours
 
 #### 5.3.3 Cosmetic/Non-Blocking Debt
-
 **ESLint Warnings:**
 
 - 7 instances of `@typescript-eslint/no-explicit-any`
@@ -1977,7 +1889,6 @@ organizations to:
 - **Status:** Not blocking
 
 #### 5.3.4 Framework Constraints
-
 **TailwindCSS v4 Migration:**
 
 - Current: TailwindCSS v3
@@ -1993,9 +1904,7 @@ organizations to:
 - **Impact:** Minimal (isolated to route handlers)
 
 ### 5.4 Current Production Status
-
 #### 5.4.1 Production-Ready for Single Instance
-
 **Deployment Readiness:** ✅ **YES** - Can deploy today
 
 **Production Checklist:**
@@ -2030,7 +1939,6 @@ gcloud run deploy fresh-root --image gcr.io/PROJECT/fresh-root
 - ✅ Monitor Sentry for errors
 
 #### 5.4.2 Multi-Instance Readiness
-
 **Status:** ⚠️ **NOT READY** - Requires Critical TODOs (18-24 hours)
 
 **Blockers:**
@@ -2044,7 +1952,7 @@ gcloud run deploy fresh-root --image gcr.io/PROJECT/fresh-root
 1. Complete Critical TODOs (Week 1)
 2. Provision Redis instance (Upstash or self-hosted)
 3. Configure OTEL exporter (Jaeger or Honeycomb)
-4. Update environment variables (REDIS_URL, OTEL_EXPORTER_OTLP_ENDPOINT)
+4. Update environment variables (REDIS\_URL, OTEL\_EXPORTER\_OTLP\_ENDPOINT)
 5. Deploy 2+ instances behind load balancer
 6. Test rate limiting with distributed load
 7. Verify traces in OTEL backend
@@ -2052,7 +1960,6 @@ gcloud run deploy fresh-root --image gcr.io/PROJECT/fresh-root
 **Estimated Timeline:** 1 week (including Critical TODOs)
 
 #### 5.4.3 Enterprise Production Readiness
-
 **Status:** ⚠️ **NOT READY** - Requires 30-60 day roadmap
 
 **Gaps for Enterprise:**
@@ -2071,9 +1978,7 @@ gcloud run deploy fresh-root --image gcr.io/PROJECT/fresh-root
 ---
 
 ## SUMMARY & REQUEST FOR PANEL
-
 ### What We Need from the Review Panel
-
 **Primary Questions:**
 
 1. **Architecture Validation:**
@@ -2116,6 +2021,5 @@ gcloud run deploy fresh-root --image gcr.io/PROJECT/fresh-root
 ---
 
 ## End of Architectural Review Panel Input Document
-
 **Document Version:** 1.0 **Last Updated:** November 30, 2025 **Total Pages:** 26 **Total
 Sections:** 5 (all complete)

@@ -1,11 +1,9 @@
 # Firebase Modernization & Type Safety Implementation Plan
-
 **Created**: 2025-01-30\
 **Status**: Planning Phase\
 **Priority**: Medium-High
 
 ## 1. Overview
-
 This plan addresses the Firebase SDK v12 typing situation in the `fresh-root` monorepo. The Firebase
 admin and client SDKs return `any`-typed values (e.g., `snap.data()`, `getFirestore()`) which causes
 104+ ESLint no-unsafe-\* errors. The solution is a phased approach combining pragmatic suppression
@@ -14,9 +12,7 @@ with strategic type-safe wrapper functions.
 ---
 
 ## 2. Implementation Steps
-
 ### Implementation Phase 1: Lint Error Cleanup (Immediate) ✅ COMPLETE
-
 **GOAL-P1**: Reduce remaining 196 ESLint errors to <50 by fixing no-unused-vars and require-await
 
 | Task  | Description                                                           | Status     | Effort     |
@@ -52,7 +48,6 @@ framework. Remaining errors are:
 ---
 
 ### Implementation Phase 2: Firebase Wrapper Functions (Optional Enhancement)
-
 **GOAL-P2**: Create type-safe wrapper functions for common Firebase operations
 
 | Task  | Description                                                                   | Status  | Est. Effort |
@@ -86,7 +81,6 @@ export async function queryWithType<T>(db: Firestore, q: Query): Promise<T[]> {
 ---
 
 ### Implementation Phase 3: ESLint Configuration Documentation
-
 **GOAL-P3**: Document Firebase typing limitations and suppression strategy
 
 | Task  | Description                                                                          | Status  | Est. Effort |
@@ -107,7 +101,6 @@ export async function queryWithType<T>(db: Firestore, q: Query): Promise<T[]> {
 ---
 
 ## 3. Alternatives Considered
-
 - **ALT-001: Full Type Guards Everywhere**: Adding explicit type guards to every Firebase call
   - **Rationale rejected**: Verbose, creates boilerplate; suppression + wrappers is more
     maintainable
@@ -128,7 +121,6 @@ export async function queryWithType<T>(db: Firestore, q: Query): Promise<T[]> {
 ---
 
 ## 4. Dependencies
-
 - **DEP-001**: TypeScript 5.9.3 (already installed, supports type assertions)
 - **DEP-002**: ESLint 9.39.1 flat config (already in place, supports file-pattern rules)
 - **DEP-003**: Firebase SDK v12.0.0 (client) and firebase-admin v13.6.0 (server)
@@ -138,7 +130,6 @@ export async function queryWithType<T>(db: Firestore, q: Query): Promise<T[]> {
 ---
 
 ## 5. Files to Modify (Phase 1 Only)
-
 - `apps/web/app/api/*/route.ts` (8 files)
 - `apps/web/middleware.ts`
 - `types/firebase-admin.d.ts`
@@ -147,9 +138,7 @@ export async function queryWithType<T>(db: Firestore, q: Query): Promise<T[]> {
 ---
 
 ## 6. Testing Strategy
-
 ### Pre-Implementation Baseline
-
 ```bash
 # Current state
 pnpm lint 2>&1 | grep "✖" | wc -l  # Should show 196
@@ -158,7 +147,6 @@ pnpm build                           # Should succeed
 ```
 
 ### After Phase 1 (Lint Cleanup)
-
 ```bash
 # Expected: 196 → ~100 errors
 pnpm lint 2>&1 | grep "✖" | wc -l
@@ -167,7 +155,6 @@ pnpm build                           # Should still succeed
 ```
 
 ### After Phase 2 (Type Wrappers) - Optional
-
 ```bash
 # Create test file for wrappers
 pnpm test -- lib/firebase/typed-wrappers.test.ts
@@ -178,7 +165,6 @@ pnpm vitest run
 ---
 
 ## 7. Risks & Assumptions
-
 | Risk                                             | Likelihood | Mitigation                                                     |
 | ------------------------------------------------ | ---------- | -------------------------------------------------------------- |
 | Breaking existing API routes during refactor     | Medium     | Test each route after changes; use git commit incrementally    |
@@ -196,7 +182,6 @@ pnpm vitest run
 ---
 
 ## 8. Success Criteria
-
 - ✅ ESLint error count: 196 → <100 (Phase 1)
 - ✅ All 4 packages pass `pnpm typecheck`
 - ✅ No build errors: `pnpm build` succeeds
@@ -207,7 +192,6 @@ pnpm vitest run
 ---
 
 ## 9. Timeline Estimate
-
 - **Phase 1 (Lint Cleanup)**: 3-4 hours
 - **Phase 2 (Type Wrappers)**: 6-8 hours (optional)
 - **Phase 3 (Documentation)**: 2-3 hours
@@ -218,7 +202,6 @@ pnpm vitest run
 ---
 
 ## 10. Next Actions
-
 1. **Immediate**: Review this plan with team and GitHub Copilot prompts
 2. **This session**: Execute Phase 1 (lint cleanup) to reduce error count
 3. **Future**: Consider Phase 2 (type wrappers) for new Firebase code

@@ -1,22 +1,18 @@
 # Section-Specific PostgreSQL Migration Guides
-
-**Version**: 1.0  
-**Created**: December 22, 2025  
-**Parent Document**: [POSTGRESQL_MIGRATION_STRATEGY.md](./POSTGRESQL_MIGRATION_STRATEGY.md)
+**Version**: 1.0\
+**Created**: December 22, 2025\
+**Parent Document**: [POSTGRESQL\_MIGRATION\_STRATEGY.md](./POSTGRESQL_MIGRATION_STRATEGY.md)
 
 ---
 
 ## Overview
-
 This document provides **detailed migration guides for each subsystem** of Fresh Schedules. Each
 section can be migrated independently, allowing for incremental migration.
 
 ---
 
 ## Section 1: Authentication
-
 ### Current State (Firebase Auth)
-
 **Files**:
 
 - `apps/web/lib/firebase-admin.ts` - Server-side auth verification
@@ -33,21 +29,17 @@ section can be migrated independently, allowing for incremental migration.
 - Custom claims (optional)
 
 ### Target State
-
 **Option A: Supabase Auth** (Recommended - minimal code changes)
 
 **Option B: Auth.js (NextAuth)** (Self-hosted, more control)
 
 ### Migration Steps (Supabase Auth)
-
 #### Step 1: Install Supabase Client
-
 ```bash
 pnpm add @supabase/supabase-js @supabase/ssr --filter @apps/web
 ```
 
 #### Step 2: Create Supabase Client Utilities
-
 ```typescript
 // apps/web/lib/supabase/server.ts
 import { createServerClient, type CookieOptions } from "@supabase/ssr";
@@ -89,7 +81,6 @@ export function createClient() {
 ```
 
 #### Step 3: Update Auth Context
-
 ```typescript
 // apps/web/src/lib/auth-context.tsx (AFTER)
 "use client";
@@ -159,7 +150,6 @@ export const useAuth = () => {
 ```
 
 #### Step 4: Update API Route Auth Verification
-
 ```typescript
 // packages/api-framework/src/middleware/auth.ts (AFTER)
 import { createClient } from "@/lib/supabase/server";
@@ -183,7 +173,6 @@ export async function verifyAuth(request: NextRequest): Promise<AuthContext | nu
 ```
 
 #### Step 5: Migrate Users
-
 ```typescript
 // scripts/migrate-auth-users.ts
 import { getAuth } from "firebase-admin/auth";
@@ -226,7 +215,6 @@ async function migrateUsers() {
 ```
 
 ### Rollback Plan
-
 1. Keep Firebase Auth enabled during transition
 2. Both auth systems can coexist (check Supabase first, fallback to Firebase)
 3. Full rollback: Revert to original auth-context.tsx
@@ -234,9 +222,7 @@ async function migrateUsers() {
 ---
 
 ## Section 2: Data Layer (Firestore → PostgreSQL)
-
 ### Current State
-
 **Files**:
 
 - `apps/web/lib/firebase-admin.ts` - `getFirebaseAdminDb()`
@@ -255,13 +241,10 @@ async function migrateUsers() {
 - `/users/{userId}`
 
 ### Target State
-
 PostgreSQL with Prisma ORM + Supabase (or Neon/Railway)
 
 ### Migration Steps
-
 #### Step 1: Set Up Prisma
-
 ```bash
 pnpm add prisma @prisma/client --filter @apps/web
 pnpm add -D prisma --filter @apps/web
@@ -269,7 +252,6 @@ cd apps/web && npx prisma init
 ```
 
 #### Step 2: Create Prisma Schema
-
 ```prisma
 // apps/web/prisma/schema.prisma
 generator client {
@@ -405,7 +387,6 @@ model Venue {
 ```
 
 #### Step 3: Create Database Abstraction
-
 ```typescript
 // packages/database/src/index.ts
 export interface DatabaseClient {
@@ -501,7 +482,6 @@ export class PostgresClient implements DatabaseClient {
 ```
 
 #### Step 4: Create Feature Flag
-
 ```typescript
 // apps/web/lib/database.ts
 import { FirestoreClient } from "@packages/database/firestore";
@@ -529,7 +509,6 @@ export const GET = createOrgEndpoint({
 ```
 
 #### Step 5: Data Migration Script
-
 ```typescript
 // scripts/migrate-data-to-postgres.ts
 import { getFirebaseAdminDb } from "@/lib/firebase-admin";
@@ -611,7 +590,6 @@ main();
 ```
 
 ### Rollback Plan
-
 1. Keep `DATABASE_PROVIDER=firestore` as default
 2. Toggle back anytime by changing env var
 3. Firestore data remains untouched during migration
@@ -619,9 +597,7 @@ main();
 ---
 
 ## Section 3: Real-time Updates
-
 ### Current State (Firestore Listeners)
-
 **Files**:
 
 - React components using `onSnapshot()`
@@ -637,9 +613,7 @@ const unsubscribe = onSnapshot(collection(db, `orgs/${orgId}/schedules`), (snaps
 ```
 
 ### Target State: Supabase Realtime
-
 #### Step 1: Enable Realtime in Supabase
-
 ```sql
 -- Run in Supabase SQL Editor
 ALTER PUBLICATION supabase_realtime ADD TABLE schedules;
@@ -647,7 +621,6 @@ ALTER PUBLICATION supabase_realtime ADD TABLE shifts;
 ```
 
 #### Step 2: Create React Hook
-
 ```typescript
 // apps/web/src/hooks/useRealtimeSchedules.ts
 "use client";
@@ -713,7 +686,6 @@ export function useRealtimeSchedules(orgId: string) {
 ```
 
 #### Step 3: Alternative - WebSocket Server
-
 If not using Supabase, set up custom WebSocket:
 
 ```typescript
@@ -722,15 +694,12 @@ If not using Supabase, set up custom WebSocket:
 ```
 
 ### Rollback Plan
-
 Real-time can be disabled without affecting core functionality. Fallback to polling.
 
 ---
 
 ## Section 4: Cloud Functions → Vercel Functions
-
 ### Current State
-
 **Files**:
 
 - `functions/src/onboarding.ts` - Join organization callable
@@ -738,13 +707,10 @@ Real-time can be disabled without affecting core functionality. Fallback to poll
 - `functions/src/domain/billing.ts` - Payment calculations
 
 ### Target State
-
 All functions moved to Next.js API routes (already mostly done).
 
 ### Migration Steps
-
 #### Step 1: Convert Callable Functions to API Routes
-
 **Before (Firebase Callable)**:
 
 ```typescript
@@ -774,7 +740,6 @@ export const POST = createAuthenticatedEndpoint({
 ```
 
 #### Step 2: Convert Firestore Triggers to Webhooks
-
 **Before (Firestore Trigger)**:
 
 ```typescript
@@ -823,15 +788,12 @@ export const POST = async (request: NextRequest) => {
 ```
 
 ### Rollback Plan
-
 Keep Cloud Functions deployed but disabled. Can re-enable if needed.
 
 ---
 
 ## Section 5: Cloud Storage → Supabase Storage / S3
-
 ### Current State
-
 **Files**:
 
 - `apps/web/app/lib/firebaseClient.ts` - Storage client
@@ -847,13 +809,10 @@ gs://fresh-schedules.appspot.com/
 ```
 
 ### Target State
-
 Supabase Storage (S3-compatible) or direct S3/R2.
 
 ### Migration Steps
-
 #### Step 1: Create Supabase Storage Buckets
-
 ```sql
 -- In Supabase SQL Editor
 INSERT INTO storage.buckets (id, name, public) VALUES
@@ -872,7 +831,6 @@ USING (bucket_id = 'avatars');
 ```
 
 #### Step 2: Update Upload Components
-
 ```typescript
 // Before (Firebase)
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
@@ -902,7 +860,6 @@ async function uploadAvatar(file: File, userId: string) {
 ```
 
 #### Step 3: Migrate Existing Files
-
 ```typescript
 // scripts/migrate-storage.ts
 import { getStorage } from "firebase-admin/storage";
@@ -946,13 +903,11 @@ async function migrateStorage() {
 ```
 
 ### Rollback Plan
-
 Keep Firebase Storage files until migration verified. Update URLs in database.
 
 ---
 
 ## Summary: Migration Order
-
 | Priority | Subsystem       | Complexity | Time     |
 | -------- | --------------- | ---------- | -------- |
 | 1        | Data Layer      | High       | 1 week   |
@@ -966,7 +921,6 @@ Keep Firebase Storage files until migration verified. Update URLs in database.
 ---
 
 ## Environment Variables Reference
-
 ```bash
 # PostgreSQL/Supabase
 DATABASE_URL="postgresql://..."

@@ -1,8 +1,7 @@
 # FRESH SCHEDULES - DIRECTIVES
-
-> **Version**: 1.0.0  
-> **Status**: MANDATORY  
-> **Authority**: Sr Dev / Architecture  
+> **Version**: 1.0.0\
+> **Status**: MANDATORY\
+> **Authority**: Sr Dev / Architecture\
 > **Binding**: YES - Violations block merge
 
 This document defines mandatory requirements. These are not suggestions.
@@ -10,11 +9,9 @@ This document defines mandatory requirements. These are not suggestions.
 ---
 
 ## DIRECTIVE 01: SECURITY
-
 **Scope**: All code that handles auth, data access, or secrets.
 
 ### D01.1 API Route Requirements
-
 **MUST**:
 
 - Use `createOrgEndpoint()` for org-scoped routes
@@ -46,7 +43,6 @@ export async function GET(req: Request) {
 ```
 
 ### D01.2 Firestore Rules Requirements
-
 **MUST**:
 
 - Include `sameOrg()` check for all org-scoped collections
@@ -74,7 +70,6 @@ match /schedules/{scheduleId} {
 ```
 
 ### D01.3 Secret Management
-
 **MUST**:
 
 - Store secrets in environment variables
@@ -90,11 +85,9 @@ match /schedules/{scheduleId} {
 ---
 
 ## DIRECTIVE 02: TYPE SAFETY
-
 **Scope**: All TypeScript code.
 
 ### D02.1 No Any
-
 **MUST**:
 
 - Provide explicit types for all function parameters
@@ -121,7 +114,6 @@ function processData(input: any): any {
 ```
 
 ### D02.2 Schema-Derived Types
-
 **MUST**:
 
 - Define types using `z.infer<typeof Schema>`
@@ -147,7 +139,6 @@ export const ScheduleSchema = z.object({...}); // Not connected
 ```
 
 ### D02.3 Generic Preservation
-
 **MUST**:
 
 - Preserve generic type parameters through wrapper functions
@@ -169,11 +160,9 @@ function validate(schema: z.ZodType<unknown>, data: unknown): unknown {
 ---
 
 ## DIRECTIVE 03: BRANCH MANAGEMENT
-
 **Scope**: All git operations.
 
 ### D03.1 Branch Naming
-
 **MUST** follow pattern: `{type}/{ticket}-{description}`
 
 | Type       | Purpose           | Example                         |
@@ -185,7 +174,6 @@ function validate(schema: z.ZodType<unknown>, data: unknown): unknown {
 | `hotfix`   | Emergency fix     | `hotfix/FS-999-auth-bypass`     |
 
 ### D03.2 Commit Messages
-
 **MUST** follow Conventional Commits:
 
 ```
@@ -209,7 +197,6 @@ type(scope): description
 ```
 
 ### D03.3 Merge Rules
-
 **MUST**:
 
 - Rebase on target before opening PR
@@ -225,11 +212,9 @@ type(scope): description
 ---
 
 ## DIRECTIVE 04: TESTING
-
 **Scope**: All production code.
 
 ### D04.1 Test Requirements
-
 | Code Type       | Required Tests                            |
 | --------------- | ----------------------------------------- |
 | API Route       | Unit test for handler logic               |
@@ -238,7 +223,6 @@ type(scope): description
 | Components      | Storybook stories (visual tests optional) |
 
 ### D04.2 Test Naming
-
 ```typescript
 // Pattern: describe what, context, expected
 describe('ScheduleService', () => {
@@ -251,7 +235,6 @@ describe('ScheduleService', () => {
 ```
 
 ### D04.3 Rules Testing
-
 **MUST** test these scenarios for every collection:
 
 - Authenticated user with correct role → Allow
@@ -262,11 +245,9 @@ describe('ScheduleService', () => {
 ---
 
 ## DIRECTIVE 05: API DESIGN
-
 **Scope**: All API routes.
 
 ### D05.1 Response Format
-
 **ALL** responses MUST use:
 
 ```typescript
@@ -281,7 +262,6 @@ describe('ScheduleService', () => {
 ```
 
 ### D05.2 HTTP Methods
-
 | Method | Purpose         | Idempotent |
 | ------ | --------------- | ---------- |
 | GET    | Read data       | Yes        |
@@ -291,7 +271,6 @@ describe('ScheduleService', () => {
 | DELETE | Remove resource | Yes        |
 
 ### D05.3 Status Codes
-
 | Code | When to Use                       |
 | ---- | --------------------------------- |
 | 200  | Successful GET, PUT, PATCH        |
@@ -307,11 +286,9 @@ describe('ScheduleService', () => {
 ---
 
 ## DIRECTIVE 06: CODE ORGANIZATION
-
 **Scope**: File and folder structure.
 
 ### D06.1 Import Order
-
 ```typescript
 // 1. Node built-ins
 import { readFile } from "fs";
@@ -329,7 +306,6 @@ import { helper } from "./helper";
 ```
 
 ### D06.2 File Naming
-
 | Type      | Convention                 | Example              |
 | --------- | -------------------------- | -------------------- |
 | Component | PascalCase                 | `ScheduleCard.tsx`   |
@@ -340,7 +316,6 @@ import { helper } from "./helper";
 | Config    | `*.config.*`               | `tailwind.config.ts` |
 
 ### D06.3 Export Rules
-
 **MUST**:
 
 - Use named exports for utilities, hooks, components
@@ -359,11 +334,9 @@ export default function SchedulePage() {...}
 ---
 
 ## DIRECTIVE 07: PERFORMANCE
-
 **Scope**: User-facing code.
 
 ### D07.1 Bundle Size
-
 **MUST**:
 
 - Keep page bundles under 250KB gzipped
@@ -371,7 +344,6 @@ export default function SchedulePage() {...}
 - Tree-shake unused code
 
 ### D07.2 Data Fetching
-
 **MUST**:
 
 - Use React Query for server state
@@ -379,7 +351,6 @@ export default function SchedulePage() {...}
 - Cache appropriately (staleTime, cacheTime)
 
 ### D07.3 Rendering
-
 **MUST**:
 
 - Memoize expensive computations
@@ -389,11 +360,9 @@ export default function SchedulePage() {...}
 ---
 
 ## DIRECTIVE 08: ERROR HANDLING
-
 **Scope**: All code paths.
 
 ### D08.1 Never Swallow Errors
-
 ```typescript
 // ✅ CORRECT - Log and re-throw or handle
 try {
@@ -412,15 +381,13 @@ try {
 ```
 
 ### D08.2 Error Boundaries
-
 **MUST** wrap major UI sections with error boundaries to prevent full-page crashes.
 
 ### D08.3 User-Facing Errors
-
 **MUST** show user-friendly messages; **MUST NOT** expose stack traces or internal details.
 
 ---
 
 **END OF DIRECTIVES**
 
-Next document: [04_INSTRUCTIONS.md](./04_INSTRUCTIONS.md)
+Next document: [04\_INSTRUCTIONS.md](./04_INSTRUCTIONS.md)
