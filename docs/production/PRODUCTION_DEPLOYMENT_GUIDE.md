@@ -1,5 +1,4 @@
 # Production Deployment Guide
-
 **Status:** Ready for Production\
 **Date:** November 28, 2025\
 **Target Branch:** main\
@@ -8,7 +7,6 @@
 ---
 
 ## Pre-Deployment Checklist
-
 ✅ **Code Quality Verification**
 
 - Pattern Score: 130.0 (exceeds 90+ threshold by 40 points)
@@ -48,9 +46,7 @@
 ---
 
 ## Deployment Steps
-
 ### Step 1: Verify Current State on Dev
-
 ```bash
 # Ensure on dev branch
 git checkout dev
@@ -72,7 +68,6 @@ Expected output:
 ```
 
 ### Step 2: Create Release Branch
-
 ```bash
 # Create release branch from dev
 git checkout -b release/production-ready
@@ -82,7 +77,6 @@ git push origin release/production-ready
 ```
 
 ### Step 3: Create PR to Main
-
 On GitHub:
 
 1. Open PR: `release/production-ready` → `main`
@@ -91,7 +85,6 @@ On GitHub:
 
 ```markdown
 ## Production Deployment
-
 - Pattern Score: 130.0/100 (44+ above 90 requirement)
 - Tier 0 (Security): 0 violations ✅
 - Tier 1 (Integrity): 0 violations ✅
@@ -103,7 +96,6 @@ This PR contains all production-ready code. guard-main.yml will run final verifi
 ```
 
 ### Step 4: guard-main.yml Executes
-
 Automatic workflow runs:
 
 ```
@@ -116,7 +108,6 @@ Automatic workflow runs:
 ```
 
 ### Step 5: Merge to Main
-
 Once guard-main shows ✅ green:
 
 ```bash
@@ -137,7 +128,6 @@ git push origin main
 ```
 
 ### Step 6: Verify on Production
-
 ```bash
 # Verify main branch has code
 git checkout main
@@ -152,9 +142,7 @@ FRESH_PATTERNS_MIN_SCORE=90 pnpm lint:patterns
 ---
 
 ## Post-Deployment
-
 ### Verify Production Deployment
-
 ```bash
 # Check main branch latest commit
 git log main -1 --oneline
@@ -166,16 +154,14 @@ FRESH_PATTERNS_MIN_SCORE=90 pnpm lint:patterns
 ```
 
 ### Update Documentation
-
 On main branch after successful deployment:
 
-1. Verify [PRODUCTION_READINESS_EXECUTIVE_SUMMARY.md](./PRODUCTION_READINESS_EXECUTIVE_SUMMARY.md)
+1. Verify [PRODUCTION\_READINESS\_EXECUTIVE\_SUMMARY.md](./PRODUCTION_READINESS_EXECUTIVE_SUMMARY.md)
    is current
-2. Check [RUNTIME_DOCUMENTATION_INDEX.md](./RUNTIME_DOCUMENTATION_INDEX.md) links are valid
-3. Confirm CI workflows visible in `.github/workflows/`
+1. Check [RUNTIME\_DOCUMENTATION\_INDEX.md](./RUNTIME_DOCUMENTATION_INDEX.md) links are valid
+2. Confirm CI workflows visible in `.github/workflows/`
 
 ### Monitor Production
-
 Set up alerts for:
 
 - guard-main workflow failures
@@ -186,11 +172,9 @@ Set up alerts for:
 ---
 
 ## Rollback Plan (If Needed)
-
 If production issues detected after deployment:
 
 ### Option 1: Quick Revert
-
 ```bash
 git revert HEAD --no-edit
 git push origin main
@@ -199,7 +183,6 @@ git push origin main
 This creates a revert commit, automatically triggers guard-main for verification.
 
 ### Option 2: Hotfix Branch
-
 ```bash
 # Create hotfix from main
 git checkout main
@@ -214,7 +197,6 @@ git checkout -b hotfix/issue-description
 ```
 
 ### Option 3: Return to Previous Commit
-
 ```bash
 git checkout main
 git reset --hard <previous-commit-hash>
@@ -226,25 +208,21 @@ git push origin main --force-with-lease
 ---
 
 ## Documentation Links (Runtime Only)
-
 ### For Operations Team
-
 - **Deployment Status:**
-  [PRODUCTION_READINESS_EXECUTIVE_SUMMARY.md](./PRODUCTION_READINESS_EXECUTIVE_SUMMARY.md)
-- **Full Analysis:** [PRODUCTION_READINESS.md](./PRODUCTION_READINESS.md)
+  [PRODUCTION\_READINESS\_EXECUTIVE\_SUMMARY.md](./PRODUCTION_READINESS_EXECUTIVE_SUMMARY.md)
+- **Full Analysis:** [PRODUCTION\_READINESS.md](./PRODUCTION_READINESS.md)
 - **CI/CD Logs:** `.github/workflows/guard-main.yml` (GitHub Actions)
 
 ### For Development Team
-
 - **Standards Reference:** See dev branch
-  [docs/standards/00_STANDARDS_INDEX.md](../../dev/docs/standards/00_STANDARDS_INDEX.md)
+  [docs/standards/00\_STANDARDS\_INDEX.md](../../dev/docs/standards/00_STANDARDS_INDEX.md)
 - **Implementation Guides:** See dev branch
   [docs/PHASE\_\*.md](../../dev/docs/PHASE_1_TIER_0_FIXES.md)
 - **Architecture:** See dev branch
-  [docs/standards/SYMMETRY_FRAMEWORK.md](../../dev/docs/standards/SYMMETRY_FRAMEWORK.md)
+  [docs/standards/SYMMETRY\_FRAMEWORK.md](../../dev/docs/standards/SYMMETRY_FRAMEWORK.md)
 
 ### For Operators
-
 - **Guard Workflows:** `.github/workflows/guard-main.yml` (production gate)
 - **Pattern Validation:** `scripts/validate-patterns.mjs` (90+ enforcement)
 - **Build Artifacts:** Verified by guard-main on every PR to main
@@ -252,9 +230,7 @@ git push origin main --force-with-lease
 ---
 
 ## Continuous Monitoring
-
 ### Automated Checks on Main
-
 Every commit to main triggers:
 
 1. **guard-main.yml** (if PR from dev)
@@ -271,7 +247,6 @@ Every commit to main triggers:
    - Status posted to PR
 
 ### Manual Verification
-
 Daily:
 
 ```bash
@@ -282,7 +257,6 @@ pnpm lint:patterns     # Verify 90+ score
 ---
 
 ## Support Contacts
-
 **If guard-main fails on PR to main:**
 
 - Check CI logs in GitHub Actions
@@ -297,15 +271,14 @@ pnpm lint:patterns     # Verify 90+ score
 
 **If unsure about deployment status:**
 
-- Check [RUNTIME_DOCUMENTATION_INDEX.md](./RUNTIME_DOCUMENTATION_INDEX.md)
+- Check [RUNTIME\_DOCUMENTATION\_INDEX.md](./RUNTIME_DOCUMENTATION_INDEX.md)
 - See metrics in
-  [PRODUCTION_READINESS_EXECUTIVE_SUMMARY.md](./PRODUCTION_READINESS_EXECUTIVE_SUMMARY.md)
+  [PRODUCTION\_READINESS\_EXECUTIVE\_SUMMARY.md](./PRODUCTION_READINESS_EXECUTIVE_SUMMARY.md)
 - Verify guard-main logs on GitHub
 
 ---
 
 ## Success Criteria
-
 ✅ **Deployment Successful When:**
 
 - PR to main shows "✅ Production Gate: PASSED"
@@ -318,7 +291,6 @@ pnpm lint:patterns     # Verify 90+ score
 ---
 
 ## Quick Reference
-
 | Step    | Command                                                               | Expected Result  |
 | ------- | --------------------------------------------------------------------- | ---------------- |
 | Verify  | `pnpm lint:patterns`                                                  | Score 130.0 ✅   |

@@ -1,30 +1,25 @@
 ---
-applyTo: "**/*.{test,spec}.{ts,tsx},tests/**,**/__tests__/**"
+
+applyTo: "**/\*.{test,spec}.{ts,tsx},tests/**,**/**tests**/**"
 description:
-  "Testing standards and code review guidelines for Vitest, Playwright, and review processes."
-priority: 5
----
+"Testing standards and code review guidelines for Vitest, Playwright, and review processes."
+## priority: 5
 
 # Testing & Review Standards
-
 ## Code Review Priorities
-
 ### 🔴 CRITICAL (Block Merge)
-
 - **Security**: Vulnerabilities, exposed secrets, auth issues
 - **Correctness**: Logic errors, data corruption risks
 - **Breaking Changes**: API changes without versioning
 - **Data Loss**: Risk of data loss or corruption
 
 ### 🟡 IMPORTANT (Requires Discussion)
-
 - **Code Quality**: SOLID violations, excessive duplication
 - **Test Coverage**: Missing tests for critical paths
 - **Performance**: N+1 queries, memory leaks
 - **Architecture**: Deviations from patterns
 
 ### 🟢 SUGGESTION (Non-Blocking)
-
 - **Readability**: Poor naming, complexity
 - **Optimization**: Performance without functional impact
 - **Best Practices**: Minor convention deviations
@@ -33,7 +28,6 @@ priority: 5
 ---
 
 ## Review Principles
-
 1. **Be specific**: Reference exact lines, files
 2. **Provide context**: Explain WHY it's an issue
 3. **Suggest solutions**: Show corrected code
@@ -45,9 +39,7 @@ priority: 5
 ---
 
 ## Vitest (Unit Testing)
-
 ### Test Structure
-
 ```typescript
 // [P1][TEST][TEST] Feature tests
 // Tags: P1, TEST, TEST
@@ -79,7 +71,6 @@ describe("FeatureName", () => {
 ```
 
 ### Test File Location
-
 ```
 src/
 ├── services/
@@ -89,7 +80,6 @@ src/
 ```
 
 ### Mock Patterns
-
 ```typescript
 // Mock module
 vi.mock("@/lib/firebase-admin", () => ({
@@ -105,7 +95,6 @@ expect(spy).toHaveBeenCalledWith(expectedArg);
 ```
 
 ### API Route Testing
-
 ```typescript
 import { createMockRequest } from "@fresh-schedules/api-framework/testing";
 import { GET, POST } from "../route";
@@ -154,9 +143,7 @@ describe("POST /api/schedules", () => {
 ---
 
 ## Playwright (E2E Testing)
-
 ### Test Structure
-
 ```typescript
 import { test, expect } from "@playwright/test";
 
@@ -182,7 +169,6 @@ test.describe("Feature Name", () => {
 ```
 
 ### Locator Best Practices
-
 ```typescript
 // ✅ Good - User-facing, accessible
 page.getByRole("button", { name: "Submit" });
@@ -197,7 +183,6 @@ page.locator("div > button:first-child");
 ```
 
 ### Assertions
-
 ```typescript
 // ✅ Use auto-retrying assertions
 await expect(page.getByText("Loaded")).toBeVisible();
@@ -209,7 +194,6 @@ await page.waitForTimeout(1000);
 ```
 
 ### ARIA Snapshots
-
 ```typescript
 await expect(page.getByRole("main")).toMatchAriaSnapshot(`
   - main:
@@ -223,9 +207,7 @@ await expect(page.getByRole("main")).toMatchAriaSnapshot(`
 ---
 
 ## Test Coverage Strategy
-
 ### What Must Be Tested
-
 | Component         | Coverage Target       |
 | ----------------- | --------------------- |
 | API Routes        | 80%+ (all methods)    |
@@ -235,7 +217,6 @@ await expect(page.getByRole("main")).toMatchAriaSnapshot(`
 | Edge Cases        | Explicit tests        |
 
 ### What to Test
-
 ```typescript
 // Happy path
 it("should create schedule with valid data", () => {});
@@ -254,7 +235,6 @@ it("should handle maximum items", () => {});
 ```
 
 ### Running Tests
-
 ```bash
 pnpm test              # Unit tests
 pnpm test:coverage     # With coverage report
@@ -265,7 +245,6 @@ pnpm test:e2e          # Playwright E2E
 ---
 
 ## Test File Naming
-
 ```
 *.test.ts      # Unit tests (Vitest)
 *.spec.ts      # E2E tests (Playwright)
@@ -275,33 +254,29 @@ pnpm test:e2e          # Playwright E2E
 ---
 
 ## Review Checklist
-
 ### Before Requesting Review
-
-- [ ] All tests pass locally
-- [ ] Coverage maintained/improved
-- [ ] No console.log statements
-- [ ] Error cases tested
-- [ ] Edge cases considered
-- [ ] Documentation updated
+- \[ ] All tests pass locally
+- \[ ] Coverage maintained/improved
+- \[ ] No console.log statements
+- \[ ] Error cases tested
+- \[ ] Edge cases considered
+- \[ ] Documentation updated
 
 ### During Review
-
-- [ ] Tests cover the change
-- [ ] Tests are readable
-- [ ] Mocks are appropriate
-- [ ] Assertions are meaningful
-- [ ] No flaky test patterns
+- \[ ] Tests cover the change
+- \[ ] Tests are readable
+- \[ ] Mocks are appropriate
+- \[ ] Assertions are meaningful
+- \[ ] No flaky test patterns
 
 ---
 
 ## Quality Checklist (Tests)
-
-- [ ] Locators are accessible and specific
-- [ ] Tests grouped logically
-- [ ] Assertions reflect user expectations
-- [ ] Naming follows convention
-- [ ] Code properly formatted
+- \[ ] Locators are accessible and specific
+- \[ ] Tests grouped logically
+- \[ ] Assertions reflect user expectations
+- \[ ] Naming follows convention
+- \[ ] Code properly formatted
 
 ---
 

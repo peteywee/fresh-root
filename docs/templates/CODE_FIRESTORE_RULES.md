@@ -1,5 +1,4 @@
-# Template: CODE_FIRESTORE_RULES
-
+# Template: CODE\_FIRESTORE\_RULES
 ```firestore
 rules_version = '2';
 service cloud.firestore {

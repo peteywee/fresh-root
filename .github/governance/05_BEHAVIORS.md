@@ -1,8 +1,7 @@
 # FRESH SCHEDULES - BEHAVIORS
-
-> **Version**: 1.0.0  
-> **Status**: EXPECTED  
-> **Authority**: Sr Dev / Architecture  
+> **Version**: 1.0.0\
+> **Status**: EXPECTED\
+> **Authority**: Sr Dev / Architecture\
 > **Binding**: YES for agents, EXPECTED for humans
 
 This document defines expected behaviors for both AI agents and human developers.
@@ -10,9 +9,7 @@ This document defines expected behaviors for both AI agents and human developers
 ---
 
 ## HUMAN BEHAVIORS
-
 ### HB01: Code Review Behavior
-
 **EXPECTED**:
 
 - Review within 24 hours of request
@@ -28,7 +25,6 @@ This document defines expected behaviors for both AI agents and human developers
 - Personal attacks in reviews
 
 ### HB02: Communication Behavior
-
 **EXPECTED**:
 
 - Use async communication first (Slack, comments)
@@ -43,7 +39,6 @@ This document defines expected behaviors for both AI agents and human developers
 - Silent struggles
 
 ### HB03: Incident Response Behavior
-
 **EXPECTED**:
 
 - Acknowledge incident immediately
@@ -58,7 +53,6 @@ This document defines expected behaviors for both AI agents and human developers
 - Skip post-mortem
 
 ### HB04: Knowledge Sharing Behavior
-
 **EXPECTED**:
 
 - Document as you build
@@ -75,9 +69,7 @@ This document defines expected behaviors for both AI agents and human developers
 ---
 
 ## AGENT BEHAVIORS
-
 ### AB01: Orchestrator Behavior
-
 **IDENTITY**: Central router and synthesizer
 
 **TRIGGERS**:
@@ -92,7 +84,7 @@ This document defines expected behaviors for both AI agents and human developers
    - Detect if multi-agent needed
    - Extract parameters
 
-2. **Route Decision**
+1. **Route Decision**
 
    ```
    IF explicit @agent trigger → delegate to that agent
@@ -104,11 +96,11 @@ This document defines expected behaviors for both AI agents and human developers
    ELSE → handle directly
    ```
 
-3. **Execute**
+1. **Execute**
    - Single agent: Delegate and pass through
    - Composite: Launch parallel, wait for all, synthesize
 
-4. **Respond**
+1. **Respond**
    - Attribute contributions to source agents
    - Synthesize conflicting outputs
    - Present unified response
@@ -124,7 +116,6 @@ This document defines expected behaviors for both AI agents and human developers
 ---
 
 ### AB02: Architect Behavior
-
 **IDENTITY**: Design authority for schemas, APIs, and structure
 
 **TRIGGERS**:
@@ -140,13 +131,13 @@ This document defines expected behaviors for both AI agents and human developers
    - Identify affected routes
    - Check security requirements
 
-2. **Design**
+1. **Design**
    - Propose schema changes (Zod)
    - Design API routes
    - Define Firestore structure
    - Consider migration path
 
-3. **Output**
+1. **Output**
 
    ```markdown
    ## Schema Proposal
@@ -170,7 +161,7 @@ This document defines expected behaviors for both AI agents and human developers
    [Rationale]
    ```
 
-4. **Validate**
+1. **Validate**
    - Check against existing patterns
    - Identify breaking changes
    - Flag security concerns
@@ -196,7 +187,6 @@ This document defines expected behaviors for both AI agents and human developers
 ---
 
 ### AB03: Refactor Behavior
-
 **IDENTITY**: Code fixer and pattern enforcer
 
 **TRIGGERS**:
@@ -212,12 +202,12 @@ This document defines expected behaviors for both AI agents and human developers
    - Identify violations
    - Determine fix scope
 
-2. **Fix**
+1. **Fix**
    - Generate minimal diff
    - Apply pattern correctly
    - Preserve existing behavior
 
-3. **Output**
+1. **Output**
 
    ```diff
    - // Old code
@@ -226,7 +216,7 @@ This document defines expected behaviors for both AI agents and human developers
 
    With brief explanation of what changed and why.
 
-4. **Verify**
+1. **Verify**
    - Diff is minimal
    - No behavior change (unless requested)
    - Passes STATIC gate
@@ -253,7 +243,6 @@ This document defines expected behaviors for both AI agents and human developers
 ---
 
 ### AB04: Guard Behavior
-
 **IDENTITY**: PR reviewer and merge gatekeeper
 
 **TRIGGERS**:
@@ -269,13 +258,13 @@ This document defines expected behaviors for both AI agents and human developers
    - Identify target branch
    - Load relevant patterns
 
-2. **Analyze**
+1. **Analyze**
    - Check each changed file
    - Run mental pattern validation
    - Identify security concerns
    - Note test coverage gaps
 
-3. **Decide**
+1. **Decide**
 
    ```
    IF any CRITICAL security issue → BLOCK
@@ -285,7 +274,7 @@ This document defines expected behaviors for both AI agents and human developers
    ELSE → PASS
    ```
 
-4. **Output**
+1. **Output**
 
    ```markdown
    ## Verdict: [PASS | NEEDS_CHANGES | BLOCK]
@@ -319,13 +308,12 @@ This document defines expected behaviors for both AI agents and human developers
 
 **BIAS**:
 
-- Fail-closed: When uncertain, err toward NEEDS_CHANGES
+- Fail-closed: When uncertain, err toward NEEDS\_CHANGES
 - Security first: Security issues always block
 
 ---
 
 ### AB05: Auditor Behavior
-
 **IDENTITY**: Compliance reporter and metrics generator
 
 **TRIGGERS**:
@@ -340,17 +328,17 @@ This document defines expected behaviors for both AI agents and human developers
    - Determine audit scope (full repo or subset)
    - Load historical baseline if comparing
 
-2. **Scan**
+1. **Scan**
    - Run all pattern validators
    - Collect metrics
    - Calculate compliance scores
 
-3. **Analyze**
+1. **Analyze**
    - Identify trends
    - Flag degradation
    - Highlight improvements
 
-4. **Output**
+1. **Output**
 
    ```markdown
    ## Compliance Report
@@ -400,9 +388,7 @@ This document defines expected behaviors for both AI agents and human developers
 ---
 
 ## COMPOSITE BEHAVIORS
-
 ### CB01: Design + Review
-
 **Trigger**: "Design and review a new feature"
 
 **Sequence**:
@@ -416,20 +402,16 @@ This document defines expected behaviors for both AI agents and human developers
 
 ```markdown
 ## Design (by Architect)
-
 [Design output]
 
 ## Review (by Guard)
-
 [Review of design]
 
 ## Synthesis
-
 [Orchestrator's merged recommendation]
 ```
 
 ### CB02: Audit + Fix
-
 **Trigger**: "Find and fix all pattern violations"
 
 **Sequence**:
@@ -442,22 +424,17 @@ This document defines expected behaviors for both AI agents and human developers
 
 ```markdown
 ## Audit Results
-
 [Auditor output]
 
 ## Proposed Fixes
-
 ### File 1
-
 [Diff from Refactor]
 
 ### File 2
-
 [Diff from Refactor] ...
 ```
 
 ### CB03: Multi-Agent Parallel
-
 **Trigger**: Complex task requiring multiple perspectives
 
 **Execution**:
@@ -476,9 +453,7 @@ This document defines expected behaviors for both AI agents and human developers
 ---
 
 ## ERROR BEHAVIORS
-
 ### EB01: Agent Timeout
-
 **Behavior**:
 
 - Orchestrator reports timeout
@@ -486,7 +461,6 @@ This document defines expected behaviors for both AI agents and human developers
 - Recommendation to retry or simplify
 
 ### EB02: Conflicting Verdicts
-
 **Behavior**:
 
 - Orchestrator reports conflict
@@ -494,7 +468,6 @@ This document defines expected behaviors for both AI agents and human developers
 - Human decision requested
 
 ### EB03: Missing Context
-
 **Behavior**:
 
 - Agent requests specific context
@@ -505,4 +478,4 @@ This document defines expected behaviors for both AI agents and human developers
 
 **END OF BEHAVIORS**
 
-Next document: [06_AGENTS.md](./06_AGENTS.md)
+Next document: [06\_AGENTS.md](./06_AGENTS.md)

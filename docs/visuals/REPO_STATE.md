@@ -1,5 +1,4 @@
 # Repository State
-
 ```mermaid
 stateDiagram-v2
     [*] --> main: merge from dev<br/>(requires 2+ reviews)
@@ -38,13 +37,11 @@ stateDiagram-v2
 ```
 
 ## Current State
-
 - **Branch**: `main`
 - **Total Branches**: 10
 - **Uncommitted Changes**: 9
 
 ## Recent Commits
-
 ```
 34cd13e chore: update TypeScript and Vitest versions, migrate ESLint ignore rules to config, and remove obsolete .eslintignore file
 637d11c fix(lint): implement ESLint flat config monorepo solution

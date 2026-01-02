@@ -1,5 +1,4 @@
 # 🎯 CREWOPS PROTOCOL: ACTIVATION COMPLETE
-
 **Status**: ✅ FULLY ACTIVE\
 **Date**: December 4, 2025\
 **Binding**: Automatic (No user action required)
@@ -7,7 +6,6 @@
 ---
 
 ## Summary: What's Now Active
-
 The **CrewOps Protocol** is now fully implemented and **automatically engaged** on:
 
 1. **Session Bootstrap** — When agent starts
@@ -19,9 +17,7 @@ just start asking questions.
 ---
 
 ## 📦 Implementation: 4 Files Created/Enhanced
-
 ### 1. **agents/crewops.md** (Enhanced - 747 lines)
-
 The complete operating manual with:
 
 - Constitution (7 non-negotiable laws)
@@ -35,8 +31,7 @@ The complete operating manual with:
 
 **Key Binding**: Constitution is immutable law that all workers inherit instantly.
 
-### 2. **agents/CREWOPS_ACTIVATION.md** (New - ~400 lines)
-
+### 2. **agents/CREWOPS\_ACTIVATION.md** (New - ~400 lines)
 The auto-engagement framework that loads CrewOps on:
 
 - **Stage 1**: Session bootstrap
@@ -48,13 +43,12 @@ Contains:
 - Automatic activation sequence
 - Non-trivial detection rules
 - Phase A→E execution workflow
-- Keyword modifiers (CREWOPS_OK, CREWOPS_DESIGN_ONLY, CREWOPS_AUDIT, etc.)
+- Keyword modifiers (CREWOPS\_OK, CREWOPS\_DESIGN\_ONLY, CREWOPS\_AUDIT, etc.)
 - Tool activation per role
 - Worker responsibilities matrix
 - Orchestrator enforcement checklist
 
-### 3. **agents/CREWOPS_ACTIVATION_STATUS.md** (New - Reference)
-
+### 3. **agents/CREWOPS\_ACTIVATION\_STATUS.md** (New - Reference)
 Status and configuration tracking:
 
 - What's active and where
@@ -65,8 +59,7 @@ Status and configuration tracking:
 - Protocol enforcement checklist
 - Session memory hooks
 
-### 4. **agents/CREWOPS_QUICK_REFERENCE.md** (New - User Guide)
-
+### 4. **agents/CREWOPS\_QUICK\_REFERENCE.md** (New - User Guide)
 Quick reference card for end users:
 
 - Session bootstrap message
@@ -81,9 +74,7 @@ Quick reference card for end users:
 ---
 
 ## 🎬 Activation Flow (Automatic)
-
 ### On Agent Session Start
-
 ```
 1. Load agents/crewops.md into context
 2. Load agents/CREWOPS_ACTIVATION.md into context
@@ -106,7 +97,6 @@ MCP Integration: GitHub + Firecrawl available
 ```
 
 ### On Non-Trivial Prompt
-
 ```
 User sends request → Orchestrator detects non-trivial → Protocol engages
 
@@ -124,7 +114,6 @@ Ready for Phases A→E execution.
 ---
 
 ## 🔄 Protocol Phases (Always A→E)
-
 For every non-trivial request:
 
 **Phase A: Context Saturation (READ)**
@@ -163,7 +152,6 @@ For every non-trivial request:
 ---
 
 ## 🎭 Crew Roles (Auto-Assigned)
-
 **Mandatory Core Crew** (always present):
 
 | Role                  | Responsibility                | Tools                       |
@@ -172,15 +160,14 @@ For every non-trivial request:
 | **Product Owner**     | Success criteria, constraints | Requirements                |
 | **Systems Architect** | Structure, interfaces, design | Design tools                |
 | **Security Red Team** | Threat model, veto Phase E    | Security analysis           |
-| **Research Analyst**  | Verify facts, run tools       | read_file, grep_search, MCP |
-| **QA/Test Engineer**  | Validate gates, test          | get_errors, runners         |
+| **Research Analyst**  | Verify facts, run tools       | read\_file, grep\_search, MCP |
+| **QA/Test Engineer**  | Validate gates, test          | get\_errors, runners         |
 
 Each worker inherits Constitution instantly. Red Team has veto power (Security Supremacy).
 
 ---
 
 ## 🛠️ Tool Deployment (Automatic)
-
 **Research Analyst** auto-deploys:
 
 - `read_file`, `grep_search`, `semantic_search` (code inspection)
@@ -203,7 +190,6 @@ Each worker inherits Constitution instantly. Red Team has veto power (Security S
 ---
 
 ## 🔐 Security Supremacy (Veto Gate)
-
 **Red Team can BLOCK work** if they find:
 
 - ❌ Auth bypass risks
@@ -226,10 +212,9 @@ No work proceeds past Phase E until veto is addressed.
 ---
 
 ## 📋 Evidence Hierarchy (Binding Priority)
-
 Facts verified in this order:
 
-1. **Tool observation** (highest) → read_file, grep_search, tests
+1. **Tool observation** (highest) → read\_file, grep\_search, tests
 2. **Primary docs** → official documentation
 3. **Secondary sources** → examples, blog posts
 4. **Assumptions** (lowest) → labeled `[ASSUMPTION]` with fallback
@@ -239,7 +224,6 @@ If a critical assumption cannot be verified → protocol blocks.
 ---
 
 ## 🎯 Definition of Done (DoD)
-
 Task is "done" only when:
 
 - ✅ Commands run locally without error
@@ -253,7 +237,6 @@ Protocol verifies all DoD items before finalizing.
 ---
 
 ## 🔧 Keyword Modifiers (Optional)
-
 Use these in your prompt to customize behavior:
 
 ```
@@ -277,12 +260,11 @@ CREWOPS_DESIGN_ONLY
 ---
 
 ## 📊 Binding Priority Order (Immutable)
-
 Conflicts resolved in this strict order:
 
 1. **System instructions + safety policy** (HIGHEST)
 2. **CREWOPS Constitution** (Section 2)
-3. **Activation Framework** (CREWOPS_ACTIVATION.md)
+3. **Activation Framework** (CREWOPS\_ACTIVATION.md)
 4. **User request** (current turn)
 5. **Prior turns / preferences** (LOWEST)
 
@@ -291,7 +273,6 @@ Conflicts resolved in this strict order:
 ---
 
 ## ✅ Orchestrator Enforcement Checklist
-
 Before responding to any non-trivial prompt:
 
 - \[ ] Constitution loaded (Section 2)
@@ -310,15 +291,12 @@ Before responding to any non-trivial prompt:
 ---
 
 ## 📈 Typical Workflow (Example)
-
 ### You Send
-
 ```
 Build a new API endpoint for org-scoped rate limiting.
 ```
 
 ### Agent Responds (Automatically)
-
 ```
 ✅ CREWOPS Protocol Active
 [... activation message ...]
@@ -380,7 +358,6 @@ All DoD items verified. Task complete. Ready for merge.
 ---
 
 ## 🚨 Emergency Fallback
-
 If protocol cannot initialize:
 
 ```
@@ -392,7 +369,6 @@ Override: Use CREWOPS_FORCE to re-attempt
 ---
 
 ## 📝 Session Memory (Store After Each Task)
-
 After completing a task, store for next session:
 
 1. **Tool Effectiveness**: Which tools most productive?
@@ -404,18 +380,16 @@ After completing a task, store for next session:
 ---
 
 ## 📚 Reference Documents
-
 | Document                         | Purpose                                   | Location                                    |
 | -------------------------------- | ----------------------------------------- | ------------------------------------------- |
 | **crewops.md**                   | Main manual (Constitution, phases, tools) | `agents/crewops.md` (747 lines)             |
-| **CREWOPS_ACTIVATION.md**        | Auto-engagement framework                 | `agents/CREWOPS_ACTIVATION.md` (~400 lines) |
-| **CREWOPS_ACTIVATION_STATUS.md** | Status & configuration tracking           | `agents/CREWOPS_ACTIVATION_STATUS.md`       |
-| **CREWOPS_QUICK_REFERENCE.md**   | User quick reference card                 | `agents/CREWOPS_QUICK_REFERENCE.md`         |
+| **CREWOPS\_ACTIVATION.md**        | Auto-engagement framework                 | `agents/CREWOPS_ACTIVATION.md` (~400 lines) |
+| **CREWOPS\_ACTIVATION\_STATUS.md** | Status & configuration tracking           | `agents/CREWOPS_ACTIVATION_STATUS.md`       |
+| **CREWOPS\_QUICK\_REFERENCE.md**   | User quick reference card                 | `agents/CREWOPS_QUICK_REFERENCE.md`         |
 
 ---
 
 ## 🎯 You're Ready
-
 The protocol is:
 
 - ✅ **Loaded** at session start
@@ -432,7 +406,6 @@ automatically.
 ---
 
 ## 🚀 Next Steps
-
 1. **You ask a question** (non-trivial)
 2. **Protocol engages** automatically
 3. **You see phases A→E** unfold

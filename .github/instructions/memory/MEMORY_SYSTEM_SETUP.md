@@ -1,18 +1,14 @@
 # Memory System: CPMEM + Indexed Integration
-
 **Complete workflow for unified lesson capture, CPMEM metadata, and AI-discoverable memory.**
 
 ## What You've Set Up
-
 ### 1. **Enhanced `/remember` Prompt**
-
 - **File**:
   [.github/prompts/remember-enhanced.prompt.md](.github/prompts/remember-enhanced.prompt.md)
 - **Purpose**: Transforms lessons into CPMEM-enriched memory files with rich metadata
 - **Syntax**: `/remember [>domain [scope]] [#tags] lesson content`
 
 ### 2. **Indexed Folder Structure**
-
 - **Location**: `.github/instructions/memory/indexed/{domain}/`
 - **File pattern**: `memory/indexed/{domain}/{lesson-id}.md`
 - **Each file includes**:
@@ -22,7 +18,6 @@
   - Cross-domain linking
 
 ### 3. **Master Index**
-
 - **File**:
   [.github/instructions/memory/indexed/INDEX.md](.github/instructions/memory/indexed/INDEX.md)
 - **Purpose**: Searchable registry of all lessons
@@ -34,16 +29,13 @@
 - **Auto-updated** when you use `/remember`
 
 ### 4. **Quick Start Guide**
-
 - **File**:
-  [.github/instructions/memory/REMEMBER_QUICKSTART.md](.github/instructions/memory/REMEMBER_QUICKSTART.md)
+  [.github/instructions/memory/REMEMBER\_QUICKSTART.md](.github/instructions/memory/REMEMBER_QUICKSTART.md)
 - **For**: Quick syntax reference, examples, workflows
 - **Share this** with teammates
 
 ## How It Works
-
 ### Creating a Memory
-
 ```bash
 /remember >git-workflow #automation #pattern use grep -v -E for cleaner regex patterns
 ```
@@ -51,10 +43,15 @@
 **What happens**:
 
 1. ✅ AI parses: domain=`git-workflow`, tags=`[automation, pattern]`, scope=`global` (default)
-2. ✅ Analyzes lesson and generates: type=`pattern`, priority=`2`, CPMEM classification
-3. ✅ Creates lesson-id: `use-grep-pattern-matching`
-4. ✅ Writes full file to: `memory/indexed/git-workflow/use-grep-pattern-matching.md`
-5. ✅ **Includes frontmatter**:
+
+1. ✅ Analyzes lesson and generates: type=`pattern`, priority=`2`, CPMEM classification
+
+1. ✅ Creates lesson-id: `use-grep-pattern-matching`
+
+1. ✅ Writes full file to: `memory/indexed/git-workflow/use-grep-pattern-matching.md`
+
+1. ✅ **Includes frontmatter**:
+
    ```yaml
    ---
    type: pattern
@@ -67,11 +64,12 @@
    relatedDomains: ["code-quality", "automation"]
    ---
    ```
-6. ✅ Updates INDEX.md with new entry
-7. ✅ **Response formatted as**: CPMEM header + lesson content + tags + file path
+
+1. ✅ Updates INDEX.md with new entry
+
+1. ✅ **Response formatted as**: CPMEM header + lesson content + tags + file path
 
 ### AI Searching Memories
-
 When building prompts or solving problems, AI can:
 
 - Search INDEX.md by domain: Find all git-workflow lessons
@@ -81,7 +79,6 @@ When building prompts or solving problems, AI can:
 - Recommend related lessons based on metadata
 
 ### Workspace vs Global
-
 **Global** (default): `~/.config/Code/User/prompts/memory/indexed/`
 
 - Applies to ALL projects
@@ -98,11 +95,9 @@ When building prompts or solving problems, AI can:
 ```
 
 ## CPMEM Integration
-
 Every memory file captures CPMEM metadata:
 
-```yaml
----
+## ```yaml
 description: "Domain responsibility"
 tags: ["type-tag", "domain-tag", "context-tag"]
 type: "pattern|gotcha|best-practice|automation|workflow|trick|warning"
@@ -110,8 +105,7 @@ priority: 1-3 # 1=critical, 2=important, 3=nice-to-know
 classification: "TRIVIAL|NON-TRIVIAL" # From CPMEM
 relatedDomains: ["domain1", "domain2"]
 relatedLessons: ["lesson-id1", "lesson-id2"]
-keywords: ["word1", "word2"]
----
+## keywords: ["word1", "word2"]
 ```
 
 **Benefits**:
@@ -123,9 +117,7 @@ keywords: ["word1", "word2"]
 - ✅ CPMEM classification tracks rigor level
 
 ## Example: Complete Workflow
-
 ### Day 1: Learn a lesson
-
 ```
 /remember >typescript workspace #gotcha #subtle check strict null checks - undefined optional is not nullable
 ```
@@ -139,7 +131,6 @@ Created: `memory/indexed/typescript/undefined-vs-nullable.md`
 - INDEX updated automatically
 
 ### Day 2: Related lesson
-
 ```
 /remember >typescript workspace #pattern #best-practice use optional chaining ?. with type guards for safe access
 ```
@@ -150,7 +141,6 @@ Created: `memory/indexed/typescript/optional-chaining-pattern.md`
 - Complements: the gotcha with solution pattern
 
 ### Day 3: Cross-domain learning
-
 ```
 /remember >testing workspace #pattern #typescript use generics for type-safe test fixtures
 ```
@@ -161,7 +151,6 @@ Created: `memory/indexed/testing/generic-test-fixtures.md`
 - INDEX groups by both domains
 
 ### Week 1: Review & Share
-
 ```
 Check: .github/instructions/memory/indexed/INDEX.md
 - Shows 3 typescript lessons
@@ -170,7 +159,6 @@ Check: .github/instructions/memory/indexed/INDEX.md
 ```
 
 ## Directory Structure
-
 ```
 .github/
 ├── instructions/
@@ -196,27 +184,25 @@ Check: .github/instructions/memory/indexed/INDEX.md
 ```
 
 ## Next Actions
-
 1. **Update VS Code Settings** (if needed):
    - Ensure `/remember` command routes to `remember-enhanced.prompt.md`
    - Or test: Open command palette → `/remember test #tag lesson`
 
-2. **Review & Clean Up**:
+1. **Review & Clean Up**:
    - Migrate valuable lessons from old `/remember` responses
    - Use: `/remember >domain workspace #tag lesson` to capture them
 
-3. **Share with Team**:
-   - Share REMEMBER_QUICKSTART.md with teammates
+1. **Share with Team**:
+   - Share REMEMBER\_QUICKSTART.md with teammates
    - Encourage domain-specific memory capture
    - Link to INDEX.md in team documentation
 
-4. **Monitor Growth**:
+1. **Monitor Growth**:
    - Check INDEX.md regularly
    - Identify gaps in domain coverage
    - Notice emerging patterns in tags/priorities
 
 ## Key Benefits
-
 | Feature                | Benefit                                                     |
 | ---------------------- | ----------------------------------------------------------- |
 | **CPMEM Metadata**     | Rich classification enables smart filtering and correlation |
@@ -228,7 +214,6 @@ Check: .github/instructions/memory/indexed/INDEX.md
 | **Type Categories**    | Gotchas separate from patterns separate from best-practices |
 
 ## Tags Quick Reference
-
 **Always include 2-3 tags minimum** for best AI discoverability:
 
 **Type Tags** (pick one):

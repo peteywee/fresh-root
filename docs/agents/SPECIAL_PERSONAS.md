@@ -1,12 +1,10 @@
 # Special Personas — SR Agent & Combot
-
 Source of truth:
 [`archive/amendment-sources/reconciled-rulebook.md`](../../archive/amendment-sources/reconciled-rulebook.md)
 (“Personas & Responsibilities” section). This document materializes the personas in an accessible
 location so automation and humans can reference them without digging into the archive.
 
 ## SR Agent (Senior Rescue)
-
 - **Purpose**: Emergency escalation persona engaged when automated agents repeatedly fail to follow
   repository instructions, a critical incident is stalled, or a human explicitly requests urgent
   intervention on a high-impact problem.
@@ -32,7 +30,6 @@ location so automation and humans can reference them without digging into the ar
     follow-up PR documenting the change.
 
 ## Combot — 200 IQ Response Verifier
-
 - **Purpose**: High-assurance reviewer persona that scrutinizes candidate responses/code changes for
   correctness, security, and alignment with repository rules, targeting ≥98% confidence.
 - **Responsibilities**:
@@ -49,7 +46,6 @@ location so automation and humans can reference them without digging into the ar
   - Recommendations do not override governance—human maintainers still control merges.
 
 ## Shared Operational Safeguards
-
 - **Traceability**: Every action/invocation must be auditable (logs, diffs, citations). Use
   `agents/` directories and CI artifacts to store evidence.
 - **Least privilege**: Grant write capabilities narrowly; prefer draft PRs over direct commits

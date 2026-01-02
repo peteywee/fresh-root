@@ -1,22 +1,18 @@
 # Guardrails: Practical Examples
-
 Real-world scenarios and how to handle them with the guardrail tools.
 
 ---
 
 ## Scenario 1: You Make a Cross-Package Import
-
 **Situation:** You're working on `api-framework` and need to use a type from `types` package.
 
 ### ❌ What You Might Do (Wrong)
-
 ```typescript
 // packages/api-framework/src/index.ts
 import type { OrgRole } from "../../types/src/rbac"; // Relative path
 ```
 
 ### What Happens
-
 **In development:** Works fine, TypeScript finds the type.
 
 **After `pnpm build`:**
@@ -27,7 +23,6 @@ import type { OrgRole } from "../../types/src/rbac"; // Relative path
 - Build succeeds but runtime fails ❌
 
 ### How Guardrails Catch It
-
 **Immediately on save** (if using ESLint extension):
 
 ```
@@ -45,11 +40,10 @@ packages/api-framework/src/index.ts:2:1  error
 ```
 
 ### ✅ Fix It
-
 **Option 1: Auto-fix**
 
 ```bash
-$ pnpm lint:fix
+pnpm lint:fix
 ```
 
 ESLint auto-suggests and applies the fix:
@@ -74,32 +68,28 @@ import type { OrgRole } from "@fresh-schedules/types";
 ```
 
 ### Validation
-
 ```bash
-$ pnpm lint              # Should pass now
-$ pnpm typecheck         # Verify TypeScript works
-$ pnpm build:sdk         # Build the package
+pnpm lint              # Should pass now
+pnpm typecheck         # Verify TypeScript works
+pnpm build:sdk         # Build the package
 ```
 
 ---
 
 ## Scenario 2: You Add a New Internal Dependency
-
 **Situation:** You created a new package `packages/validators` and need to use it in
 `api-framework`.
 
 ### Step 1: Create Package Structure
-
 ```bash
-$ mkdir packages/validators
-$ cd packages/validators
-$ npm init -y
+mkdir packages/validators
+cd packages/validators
+npm init -y
 ```
 
 ### Step 2: ❌ Wrong: Add with version
-
 ```bash
-$ pnpm add @fresh-schedules/validators@0.1.0
+pnpm add @fresh-schedules/validators@0.1.0
 ```
 
 This creates:
@@ -112,9 +102,8 @@ This creates:
 **Problem:** Will break when validators version changes.
 
 ### Step 3: ✅ Right: Add with workspace protocol
-
 ```bash
-$ pnpm add -D @fresh-schedules/validators@workspace:*
+pnpm add -D @fresh-schedules/validators@workspace:*
 ```
 
 This creates:
@@ -127,7 +116,6 @@ This creates:
 **Better:** Always points to local version.
 
 ### Step 4: Guardrails Validation
-
 **Check workspace:**
 
 ```bash
@@ -146,23 +134,22 @@ $ pnpm workspace:check
 Auto-fix:
 
 ```bash
-$ pnpm workspace:fix
+pnpm workspace:fix
 ```
 
 **Check imports:**
 
 ```bash
-$ pnpm lint  # No relative import errors
+pnpm lint  # No relative import errors
 ```
 
 **Check types:**
 
 ```bash
-$ pnpm typecheck
+pnpm typecheck
 ```
 
 ### Step 5: Update tsconfig (if TypeScript)
-
 Add reference to `/tsconfig.base.json`:
 
 ```json
@@ -181,19 +168,17 @@ Add path alias to `/tsconfig.base.json`:
 Validate:
 
 ```bash
-$ pnpm typecheck  # Should resolve types from new package
+pnpm typecheck  # Should resolve types from new package
 ```
 
 ---
 
 ## Scenario 3: You Upgrade a Shared Dependency
-
 **Situation:** TypeScript 5.9 → 5.10 is released, you want to upgrade.
 
 ### Step 1: Upgrade in Root
-
 ```bash
-$ pnpm upgrade -D typescript@5.10.0 --save-exact
+pnpm upgrade -D typescript@5.10.0 --save-exact
 ```
 
 Updates `package.json`:
@@ -203,9 +188,8 @@ Updates `package.json`:
 ```
 
 ### Step 2: Check Version Consistency
-
 ```bash
-$ pnpm deps:sync:check
+pnpm deps:sync:check
 ```
 
 **Output:**
@@ -218,9 +202,8 @@ SemverRangeMismatch found:
 ```
 
 ### Step 3: Sync Versions
-
 ```bash
-$ pnpm deps:sync
+pnpm deps:sync
 ```
 
 Updates all packages to use new version:
@@ -231,21 +214,18 @@ Updates all packages to use new version:
 ```
 
 ### Step 4: Update Lock File
-
 ```bash
-$ pnpm install
+pnpm install
 ```
 
 ### Step 5: Validate Everything
-
 ```bash
-$ pnpm typecheck      # Verify TypeScript works
-$ pnpm lint           # Check linting still passes
-$ pnpm test:unit      # Run tests
+pnpm typecheck      # Verify TypeScript works
+pnpm lint           # Check linting still passes
+pnpm test:unit      # Run tests
 ```
 
 ### Full Example
-
 ```bash
 # One-command upgrade workflow
 pnpm upgrade -D typescript@latest --save-exact && \
@@ -259,13 +239,11 @@ pnpm upgrade -D typescript@latest --save-exact && \
 ---
 
 ## Scenario 4: Detecting Dependency Bloat
-
 **Situation:** Your build is getting larger, want to find duplicate dependencies.
 
 ### Analyze Duplication
-
 ```bash
-$ pnpm deps:analyze
+pnpm deps:analyze
 ```
 
 **Output (example):**
@@ -286,19 +264,15 @@ $ pnpm deps:analyze
 ```
 
 ### Fix Duplication
-
 ```bash
 $ pnpm deps:sync:check
 # Shows what's mismatched
-
 $ pnpm deps:sync
 # Auto-fixes to consistent versions
-
 $ pnpm install
 ```
 
 ### Verify Impact
-
 ```bash
 # Check lock file before
 $ git diff pnpm-lock.yaml | head -20
@@ -311,16 +285,14 @@ $ du -sh node_modules
 ---
 
 ## Scenario 5: PR Review Found an Import Issue
-
 **Situation:** PR #42 got merged with a relative import that breaks production.
 
 ### Step 1: Find the Issue
-
 In CI logs or locally:
 
 ```bash
-$ pnpm lint:check
-$ cat eslint-report.json | jq '.[] | select(.messages | length > 0)'
+pnpm lint:check
+cat eslint-report.json | jq '.[] | select(.messages | length > 0)'
 ```
 
 **Output:**
@@ -339,58 +311,51 @@ $ cat eslint-report.json | jq '.[] | select(.messages | length > 0)'
 ```
 
 ### Step 2: Fix Automatically
-
 ```bash
-$ pnpm lint:fix
+pnpm lint:fix
 ```
 
 ESLint updates the import to use package alias.
 
 ### Step 3: Verify
-
 ```bash
-$ pnpm typecheck
-$ pnpm build:sdk
+pnpm typecheck
+pnpm build:sdk
 ```
 
 ### Step 4: Commit
-
 ```bash
-$ git add .
-$ git commit -m "fix: use package alias instead of relative import"
-$ git push origin branch-name
+git add .
+git commit -m "fix: use package alias instead of relative import"
+git push origin branch-name
 ```
 
 ---
 
 ## Scenario 6: Setting Up Pre-Commit Hook
-
 **Situation:** You want to prevent broken imports from ever being committed.
 
 ### Install husky
-
 ```bash
-$ pnpm add -D husky
-$ npx husky install
+pnpm add -D husky
+npx husky install
 ```
 
 ### Create Pre-Commit Hook
-
 ```bash
-$ npx husky add .husky/pre-commit "pnpm lint:fix && pnpm workspace:check"
+npx husky add .husky/pre-commit "pnpm lint:fix && pnpm workspace:check"
 ```
 
 This creates `.husky/pre-commit`:
 
 ```bash
-#!/bin/sh
+# !/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
 pnpm lint:fix && pnpm workspace:check
 ```
 
 ### Test It
-
 ```bash
 # Create a file with relative import
 $ echo 'import x from "../../types"' > test.ts
@@ -404,13 +369,11 @@ $ git commit -m "test"
 ---
 
 ## Scenario 7: Monorepo has Version Inconsistencies
-
 **Situation:** Workspace check passes, but you have version mismatches.
 
 ### Find Mismatches
-
 ```bash
-$ pnpm deps:sync:check
+pnpm deps:sync:check
 ```
 
 **Output:**
@@ -424,9 +387,8 @@ SemverRangeMismatch found:
 ```
 
 ### Fix Automatically
-
 ```bash
-$ pnpm deps:sync
+pnpm deps:sync
 ```
 
 For workspace: mismatches:
@@ -438,36 +400,31 @@ For semver mismatches:
 - Aligns to single consistent range (usually most permissive)
 
 ### Install
-
 ```bash
-$ pnpm install
+pnpm install
 ```
 
 ### Validate
-
 ```bash
-$ pnpm deps:sync:check  # Should show no mismatches
-$ pnpm typecheck        # Ensure everything still works
+pnpm deps:sync:check  # Should show no mismatches
+pnpm typecheck        # Ensure everything still works
 ```
 
 ---
 
 ## Scenario 8: New Team Member Onboarding
-
 **Situation:** New dev clones repo, needs to validate setup.
 
 ### Step 1: Clone & Install
-
 ```bash
-$ git clone https://github.com/peteywee/fresh-root.git
-$ cd fresh-root
-$ pnpm install
+git clone https://github.com/peteywee/fresh-root.git
+cd fresh-root
+pnpm install
 ```
 
 ### Step 2: Run Guardrails
-
 ```bash
-$ pnpm guardrails
+pnpm guardrails
 ```
 
 This runs:
@@ -483,9 +440,8 @@ This runs:
 ```
 
 ### Step 3: Validate Full Setup
-
 ```bash
-$ pnpm validate:all
+pnpm validate:all
 ```
 
 This runs:
@@ -498,10 +454,9 @@ This runs:
 **Success:** All 7 packages ready to go!
 
 ### Step 4: Set Up Pre-Commit
-
 ```bash
-$ pnpm install -D husky
-$ npx husky install
+pnpm install -D husky
+npx husky install
 ```
 
 Now they're protected against accidentally committing broken code.
@@ -509,11 +464,9 @@ Now they're protected against accidentally committing broken code.
 ---
 
 ## Scenario 9: Continuous Integration Pipeline
-
 **Situation:** Want to prevent broken PRs from merging.
 
 ### GitHub Actions Workflow
-
 Create `.github/workflows/guardrails.yml`:
 
 ```yaml
@@ -570,19 +523,17 @@ jobs:
 
       - name: Show import issues
         run: |
-          cat eslint-report.json | jq '.[] | 
-          select(.messages | map(.ruleId == "import/no-relative-packages") | any)' 
+          cat eslint-report.json | jq '.[] |
+          select(.messages | map(.ruleId == "import/no-relative-packages") | any)'
           || echo "No import issues"
 ```
 
 ---
 
 ## Scenario 10: Emergency Fix for Production
-
 **Situation:** Production broke, need to quickly identify and fix issues.
 
 ### Quick Diagnosis
-
 ```bash
 # 1. Check all guardrails
 $ pnpm validate:pre-push
@@ -599,7 +550,6 @@ $ pnpm deps:sync:check
 ```
 
 ### Emergency Fix
-
 ```bash
 # 1. Auto-fix all issues
 $ pnpm guardrails:fix
@@ -616,7 +566,6 @@ $ git push origin main
 ---
 
 ## Quick Commands Reference
-
 ```bash
 # Daily workflow (run before committing)
 pnpm lint:fix              # Fix linting + import issues

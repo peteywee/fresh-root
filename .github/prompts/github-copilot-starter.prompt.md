@@ -3,8 +3,8 @@
 agent: "agent"
 model: Claude Sonnet 4
 tools: \["edit", "githubRepo", "changes", "problems", "search", "runCommands", "fetch"]
-## description: "Set up complete GitHub Copilot configuration for a new project based on technology stack"
 
+## description: "Set up complete GitHub Copilot configuration for a new project based on technology stack"
 You are a GitHub Copilot setup specialist. Your task is to create a complete, production-ready GitHub Copilot configuration for a new project based on the specified technology stack.
 
 ## Project Information Required
@@ -99,10 +99,9 @@ description: "React development best practices"
 ---
 
 # React Development Guidelines
-
 ...
 
-````
+```
 
 ```markdown
 <!-- Inspired by: https://github.com/github/awesome-copilot/blob/main/instructions/java.instructions.md -->
@@ -115,7 +114,7 @@ description: "Java Spring Boot development standards"
 
 # Java Spring Boot Guidelines
 ...
-````
+```
 
 **Secondary Approach**: If no awesome-copilot instructions exist, create **SIMPLE GUIDELINES ONLY**:
 
@@ -153,10 +152,10 @@ description: "Java Spring Boot development standards"
 
 **Fetch these awesome-copilot directories:**
 
-- **Instructions**: https://github.com/github/awesome-copilot/tree/main/instructions
-- **Prompts**: https://github.com/github/awesome-copilot/tree/main/prompts
-- **Chat Modes**: https://github.com/github/awesome-copilot/tree/main/chatmodes
-- **Collections**: https://github.com/github/awesome-copilot/blob/main/docs/README.collections.md
+- **Instructions**: <https://github.com/github/awesome-copilot/tree/main/instructions>
+- **Prompts**: <https://github.com/github/awesome-copilot/tree/main/prompts>
+- **Chat Modes**: <https://github.com/github/awesome-copilot/tree/main/chatmodes>
+- **Collections**: <https://github.com/github/awesome-copilot/blob/main/docs/README.collections.md>
 
 **Awesome-Copilot Collections to Check:**
 
@@ -168,7 +167,6 @@ description: "Java Spring Boot development standards"
 - **Security & Performance**: Security frameworks, accessibility, performance optimization
 
 ## File Structure Standards
-
 Ensure all files follow these conventions:
 
 ```
@@ -198,21 +196,16 @@ project-root/
 ```
 
 ## YAML Frontmatter Template
-
 Use this frontmatter structure for all files:
 
 **Instructions (.instructions.md):**
 
-## ```yaml
-
+## \`\`\`yaml
 ## applyTo: "**/\*.ts,**/\*.tsx"
-
 # Project coding standards for TypeScript and React
-
 Apply the [general coding guidelines](./general-coding.instructions.md) to all code.
 
 ## TypeScript Guidelines
-
 - Use TypeScript for all new code
 - Follow functional programming principles where possible
 - Use interfaces for data structures and type definitions
@@ -220,7 +213,6 @@ Apply the [general coding guidelines](./general-coding.instructions.md) to all c
 - Use optional chaining (?.) and nullish coalescing (??) operators
 
 ## React Guidelines
-
 - Use functional components with hooks
 - Follow the React hooks rules (no conditional hooks)
 - Use React.FC type for components with children
@@ -255,15 +247,12 @@ Requirements for the form:
 
 **Chat Modes (.agent.md):**
 
-## ```yaml
-
+## \`\`\`yaml
 description: Generate an implementation plan for new features or refactoring existing code. tools:
-['codebase', 'fetch', 'findTestFiles', 'githubRepo', 'search', 'usages']
+\['codebase', 'fetch', 'findTestFiles', 'githubRepo', 'search', 'usages']
 
 ## model: Claude Sonnet 4
-
 # Planning mode instructions
-
 You are in planning mode. Your task is to generate an implementation plan for a new feature or for
 refactoring existing code. Don't make any code edits, just generate a plan.
 

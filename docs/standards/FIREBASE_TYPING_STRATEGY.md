@@ -13,9 +13,7 @@ date: 2025-12-02
 ---
 
 ## Phase 1: Error Suppression (Low Effort, Immediate Impact)
-
 ### Status: ACTIVE (Background process running)
-
 **Objective:** Suppress Firebase-related unsafe-\* ESLint rules for known SDK limitations
 
 **Files Affected:**
@@ -58,9 +56,7 @@ change only)
 ---
 
 ## Phase 2: Quick Wins (Auto-fixable)
-
 ### Status: ACTIVE (Background process running)
-
 **no-unused-vars (43 errors) - 30 min**
 
 - Type assertions were removed, leaving unused imports
@@ -78,9 +74,7 @@ change only)
 ---
 
 ## Phase 3: Medium Effort Fixes (Manual Review)
-
 ### require-await (39 errors) - 2-4 hours
-
 **Pattern:** Async functions without actual await operations
 
 **Files with Issue:**
@@ -113,9 +107,7 @@ export const POST = (req: Request) => {
 ---
 
 ## Phase 4: Type Safety Improvements (Future)
-
 ### Create Firebase Typing Wrapper Library
-
 **Objective:** Provide type-safe Firebase API access without modifying SDK
 
 **Pattern:**
@@ -151,7 +143,6 @@ const userData = snapData<UserProfile>(snap);
 ---
 
 ## Error Breakdown Summary
-
 | Category                | Count | Phase | Effort   | Impact            |
 | ----------------------- | ----- | ----- | -------- | ----------------- |
 | no-unsafe-assignment    | 104   | 1     | Low      | High (suppressed) |
@@ -165,7 +156,6 @@ const userData = snapData<UserProfile>(snap);
 ---
 
 ## Success Criteria
-
 - \[ ] Phase 1: 195 Firebase unsafe-\* errors suppressed
 - \[ ] Phase 2: 40-50 unused-vars errors fixed (auto)
 - \[ ] Phase 3: 30+ require-await errors fixed (manual)
@@ -175,7 +165,6 @@ const userData = snapData<UserProfile>(snap);
 ---
 
 ## Implementation Timeline
-
 **Phase 1 (Active):** Dec 2 - Now (config, ~15 min) **Phase 2 (Queued):** Dec 2 - Within 1 hour
 (auto-fix) **Phase 3 (Queued):** Dec 2 - Within 4 hours (require-await fixes) **Phase 4 (Future):**
 Q1 2026 (Firebase wrapper library)
@@ -183,7 +172,6 @@ Q1 2026 (Firebase wrapper library)
 ---
 
 ## References
-
 - **Firebase Typing Issue:** <https://github.com/firebase/firebase-js-sdk/issues/7598>
 - **ESLint Config:** apps/web/eslint.config.mjs
 - **Firebase Files:** apps/web/src/lib/, apps/web/app/api/

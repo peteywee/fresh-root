@@ -1,12 +1,10 @@
 # Fresh Schedules Quick Index
-
-**Last Updated**: 2025-12-23  
+**Last Updated**: 2025-12-23\
 **Purpose**: Fast reference for common lookups
 
 ---
 
 ## 🔴 Current Blockers
-
 | Issue                               | Location                                                                          | Fix Required         |
 | ----------------------------------- | --------------------------------------------------------------------------------- | -------------------- |
 | **Onboarding doesn't persist**      | `apps/web/app/onboarding/create-network-org/page.tsx`                             | Wire form to API     |
@@ -16,9 +14,7 @@
 ---
 
 ## 📁 Key File Locations
-
 ### Infrastructure
-
 | Component             | Path                                                |
 | --------------------- | --------------------------------------------------- |
 | Rate Limit Middleware | `apps/web/app/api/_shared/rate-limit-middleware.ts` |
@@ -29,7 +25,6 @@
 | SDK Factory           | `packages/api-framework/src/index.ts`               |
 
 ### Onboarding
-
 | Component       | Path                                                          |
 | --------------- | ------------------------------------------------------------- |
 | Wizard Context  | `apps/web/app/onboarding/_wizard/OnboardingWizardContext.tsx` |
@@ -39,7 +34,6 @@
 | Profile API     | `apps/web/app/api/onboarding/profile/route.ts`                |
 
 ### Core APIs
-
 | Resource      | Path                                      |
 | ------------- | ----------------------------------------- |
 | Organizations | `apps/web/app/api/organizations/route.ts` |
@@ -49,7 +43,6 @@
 | Attendance    | `apps/web/app/api/attendance/route.ts`    |
 
 ### Ops Dashboard
-
 | Component    | Path                                              |
 | ------------ | ------------------------------------------------- |
 | Metrics API  | `apps/web/app/api/metrics/route.ts`               |
@@ -60,7 +53,6 @@
 ---
 
 ## 📊 Coverage Status
-
 ```
 Rate Limiting:  ████████░░░░░░░░░░░  41% (16/39)
 SDK Factory:    ███████████░░░░░░░░  56% (22/39)
@@ -71,7 +63,6 @@ OTEL:           ███████████████████ 100% (
 ---
 
 ## 🔧 Common Commands
-
 ```bash
 # Dev server
 pnpm dev
@@ -95,7 +86,6 @@ pnpm build
 ---
 
 ## 📋 Sprint Issues
-
 | Issue                                                     | Description         | Status           |
 | --------------------------------------------------------- | ------------------- | ---------------- |
 | [#195](https://github.com/peteywee/fresh-root/issues/195) | Sprint Tracker      | Active           |
@@ -109,7 +99,6 @@ pnpm build
 ---
 
 ## 🔗 Full Audits
-
 - [Infrastructure Reality Audit](./reports/INFRASTRUCTURE_REALITY_AUDIT.md)
 - [Implementation Tracker](./IMPLEMENTATION_TRACKER.md)
 - [Fast Track to Production](./FAST_TRACK_TO_PRODUCTION.md)

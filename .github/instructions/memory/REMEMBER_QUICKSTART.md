@@ -1,9 +1,7 @@
 # `/remember` Quick Start
-
 **Unified memory system combining CPMEM metadata + searchable indexed lessons**
 
 ## One-Minute Overview
-
 When you learn something:
 
 ```
@@ -14,9 +12,7 @@ When you learn something:
 Indexed for AI search via INDEX.md ✅ Tagged for cross-domain discovery
 
 ## Syntax Cheatsheet
-
 ### Basic (Global Scope)
-
 ```
 /remember >git-workflow #automation use grep -v -E for patterns
 ```
@@ -24,7 +20,6 @@ Indexed for AI search via INDEX.md ✅ Tagged for cross-domain discovery
 Creates: `memory/indexed/git-workflow/use-grep-pattern-matching.md`
 
 ### Workspace-Specific
-
 ```
 /remember >testing workspace #pattern #safety use setup/teardown functions
 ```
@@ -32,13 +27,11 @@ Creates: `memory/indexed/git-workflow/use-grep-pattern-matching.md`
 Creates: `.github/instructions/memory/indexed/testing/setup-teardown-functions.md`
 
 ### With Multiple Tags
-
 ```
 /remember >typescript #gotcha #critical #types never use any without considering alternatives
 ```
 
 ### Minimal (Auto-Detects Domain)
-
 ```
 /remember #debugging this technique helped find race conditions
 ```
@@ -46,7 +39,6 @@ Creates: `.github/instructions/memory/indexed/testing/setup-teardown-functions.m
 AI infers domain and creates metadata automatically.
 
 ## Tag Reference
-
 **Type Tags** (what kind of lesson):
 
 - `#pattern` - Best practice / design pattern
@@ -72,7 +64,6 @@ AI infers domain and creates metadata automatically.
 - `#critical` - High impact
 
 ## Output Format
-
 When you use `/remember`, the response shows:
 
 ```
@@ -82,11 +73,9 @@ domain: git-workflow
 tags: ["automation", "pattern", "grep"]
 priority: 2
 classification: NON-TRIVIAL
-created: 2025-12-25
----
+## created: 2025-12-25
 
 # Lesson: Use grep -v -E for Pattern Matching
-
 **Location**: memory/indexed/git-workflow/grep-pattern-matching.md
 **Tags**: #automation #pattern #grep
 **Type**: Pattern | **Priority**: 2
@@ -105,7 +94,6 @@ created: 2025-12-25
 ```
 
 ## Finding Lessons
-
 All lessons indexed at: `.github/instructions/memory/indexed/INDEX.md`
 
 The index shows:
@@ -116,33 +104,27 @@ The index shows:
 - Statistics (total, coverage, recency)
 
 ## Common Workflows
-
 ### After Debugging a Tricky Issue
-
 ```
 /remember >domain #gotcha #debugging #subtle detailed lesson from session
 ```
 
 ### Establishing a New Best Practice
-
 ```
 /remember >domain #best-practice #pattern clear guidance and examples
 ```
 
 ### Creating Automation
-
 ```
 /remember >domain #automation #workflow step-by-step for script/tool
 ```
 
 ### Critical Learning
-
 ```
 /remember >domain #critical #warning what could break and how to prevent
 ```
 
 ## File Organization
-
 ```
 .github/instructions/memory/indexed/
 ├── INDEX.md                      ← Master searchable index
@@ -163,7 +145,6 @@ The index shows:
 Global memories use same structure under: `~/.config/Code/User/prompts/memory/indexed/`
 
 ## Next Steps
-
 1. **Use `/remember`** to capture today's learnings
 2. **Check INDEX.md** to see what's already documented
 3. **Link related lessons** when creating new ones

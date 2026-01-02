@@ -1,75 +1,76 @@
 "use client";
 
-import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Activity, BarChart3, Shield, FileText } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { 
+  LayoutDashboard, 
+  BarChart3, 
+  ShieldAlert, 
+  Hammer, 
+  Settings, 
+  FileText,
+  Activity
+} from "lucide-react";
 
-type Props = { mobile?: boolean };
+const NAV_ITEMS = [
+  { label: "Overview", href: "/ops", icon: LayoutDashboard },
+  { label: "Analytics", href: "/ops/analytics", icon: BarChart3 },
+  { label: "Build Status", href: "/ops/builds", icon: Hammer },
+  { label: "Security & RBAC", href: "/ops/security", icon: ShieldAlert },
+  { label: "System Health", href: "/ops/health", icon: Activity },
+  { label: "Audit Logs", href: "/ops/audit-logs", icon: FileText },
+  { label: "Settings", href: "/ops/settings", icon: Settings },
+];
 
-function NavLink({
-  href,
-  label,
-  icon: Icon,
-  active,
-}: {
-  href: string;
-  label: string;
-  icon: React.ComponentType<{ className?: string }>;
-  active: boolean;
-}) {
-  return (
-    <Link
-      href={href}
-      className={[
-        "flex items-center gap-2 rounded-lg px-3 py-2 text-sm transition",
-        active ? "bg-slate-900 text-white" : "text-slate-300 hover:bg-slate-900 hover:text-white",
-      ].join(" ")}
-    >
-      <Icon className="h-4 w-4" />
-      <span>{label}</span>
-    </Link>
-  );
-}
-
-export default function OpsHubNav({ mobile }: Props) {
+export function OpsHubNav() {
   const pathname = usePathname();
 
-  const routes = [
-    { href: "/ops", label: "Overview", icon: Activity },
-    { href: "/ops/builds", label: "Build Performance", icon: BarChart3 },
-    { href: "/ops/security", label: "Security Scans", icon: Shield },
-    { href: "/ops/analytics", label: "Codebase Analytics", icon: FileText },
-  ];
-
-  const activeMatch = (href: string) =>
-    href === "/ops" ? pathname === "/ops" : pathname.startsWith(href);
-
   return (
-    <div className={mobile ? "px-4 py-3" : "p-4 sticky top-0 h-screen"}>
-      <div className="mb-4">
-        <div className="text-xs uppercase tracking-wide text-slate-400">Ops Hub</div>
-        <div className="text-lg font-semibold text-white">Observability</div>
+    <nav className="p-4 space-y-1">
+      <div className="mb-4 px-2">
+        <p className="text-xs font-mono uppercase text-muted-foreground tracking-wider mb-2">
+          Core Modules
+        </p>
       </div>
+      {NAV_ITEMS.map((item) => {
+        const isActive = pathname === item.href;
+        const Icon = item.icon;
 
-      <nav className={mobile ? "flex gap-2 overflow-x-auto" : "flex flex-col gap-1"}>
-        {routes.map((r) => (
-          <div key={r.href} className={mobile ? "shrink-0" : ""}>
-            <NavLink href={r.href} label={r.label} icon={r.icon} active={activeMatch(r.href)} />
-          </div>
-        ))}
-      </nav>
-
-      {!mobile && (
-        <div className="mt-6 rounded-lg border border-slate-800 bg-slate-900/40 p-3 text-xs text-slate-300">
-          <div className="font-semibold text-slate-200 mb-1">Notes</div>
-          <ul className="list-disc pl-4 space-y-1">
-            <li>All endpoints are admin-gated.</li>
-            <li>Build metrics are stored in Firestore (no JSONL appends).</li>
-            <li>Retention defaults to 90 days (TTL-ready).</li>
-          </ul>
-        </div>
-      )}
-    </div>
+        return (
+          <Link
+            key={item.href}
+            href={item.href}
+            className={cn(
+              "flex items-center gap-3 px-3 py-2.5 rounded-sm text-sm font-medium transition-all duration-200 group",
+              isActive 
+                ? "bg-primary/10 text-primary border-l-2 border-primary" 
+                : "text-muted-foreground hover:bg-muted hover:text-foreground border-l-2 border-transparent"
+            )}
+          >
+            <Icon className={cn(
+              "w-4 h-4 transition-colors",
+              isActive ? "text-primary" : "text-muted-foreground group-hover:text-foreground"
+            )} />
+            {item.label}
+          </Link>
+        );
+      })}
+      
+      <div className="mt-8 px-2">
+        <p className="text-xs font-mono uppercase text-muted-foreground tracking-wider mb-2">
+          External
+        </p>
+        <Link
+          href="/"
+          className="flex items-center gap-3 px-3 py-2 text-sm text-muted-foreground hover:text-foreground"
+        >
+          <span className="w-4 h-4 flex items-center justify-center border border-muted-foreground rounded-[2px] text-[10px]">
+            ↗
+          </span>
+          Public Site
+        </Link>
+      </div>
+    </nav>
   );
 }

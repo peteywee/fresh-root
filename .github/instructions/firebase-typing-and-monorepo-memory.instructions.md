@@ -6,11 +6,9 @@ description: "Key learnings from Firebase SDK v12 typing strategy and monorepo d
 resolution"
 
 # Firebase & Monorepo Dependency Management Memory
-
 Core patterns for maintaining a TypeScript monorepo with Firebase as a primary data layer.
 
 ## Firebase SDK v12 Type Safety Pattern
-
 Firebase SDK v12 client and admin SDKs intentionally return `any`-typed values from core APIs
 (`snap.data()`, `getFirestore()`, `query.getDocs()`, etc.). This is a **documented limitation of the
 SDK**, not a bug.
@@ -41,6 +39,7 @@ SDK**, not a bug.
    ```
 
 1. **Create type-safe wrapper functions** for complex operations (optional enhancement):
+
    ```typescript
    export async function getDocWithType<T>(
      db: Firestore,
@@ -55,7 +54,6 @@ SDK**, not a bug.
 Centralizing the suppression is cleaner.
 
 ## Monorepo React Peer Dependency Resolution
-
 When using React in multiple packages, **pnpm may resolve multiple React versions** if
 peerDependencies are not explicitly set.
 
@@ -93,9 +91,7 @@ Then pin React in the root package.json:
 copies of React in `node_modules`, leading to React Hook failures and type mismatches.
 
 ## TypeScript no-unused-vars & require-await Patterns
-
 ### no-unused-vars (Prefix with Underscore)
-
 ESLint detects legitimate unused parameters in callbacks and route handlers. **Prefix with
 underscore** instead of removing:
 
@@ -111,7 +107,6 @@ export async function POST(_request: Request) { ... }
 etc.). Renaming breaks the framework.
 
 ### require-await (Remove async or Add Await)
-
 ESLint catches async functions with no actual `await` statements. Two valid patterns:
 
 ```typescript
@@ -127,7 +122,6 @@ export async function POST(request: Request) {
 ```
 
 ## ESLint Configuration File Patterns
-
 Use **file pattern rules** in flat config for package-specific suppressions:
 
 ```javascript
@@ -143,7 +137,6 @@ Use **file pattern rules** in flat config for package-specific suppressions:
 **Avoid**: Global suppressions that hide issues in non-Firebase code.
 
 ## Dependency Removal Gotchas
-
 Root `package.json` should **only list workspace packages in `pnpm-workspace.yaml`**, not in
 `dependencies`:
 
@@ -163,7 +156,6 @@ Root `package.json` should **only list workspace packages in `pnpm-workspace.yam
 resolve them correctly.
 
 ## TypeScript Schema Module Resolution in Monorepos
-
 When creating new schema files in `packages/types/src/` and immediately importing them in routes:
 
 **Common issue**: TypeScript can't resolve newly created exports even after adding to `index.ts`.

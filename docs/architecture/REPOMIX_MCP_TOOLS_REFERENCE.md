@@ -1,16 +1,13 @@
 # Repomix MCP Tools Reference
-
-**Status**: ✅ **Configured and Ready**  
-**Configuration**: `.mcp.json` - `repomix/repomix-mcp`  
-**Access**: Available in GitHub Copilot after restart  
+**Status**: ✅ **Configured and Ready**\
+**Configuration**: `.mcp.json` - `repomix/repomix-mcp`\
+**Access**: Available in GitHub Copilot after restart\
 **Date**: December 16, 2025
 
 ---
 
 ## 🛠️ Available Tools (7 Total)
-
-### **1. mcp_repomix_pack_codebase**
-
+### **1. mcp\_repomix\_pack\_codebase**
 **Purpose**: Package a local code directory for AI analysis
 
 **Parameters**:
@@ -56,8 +53,7 @@ Result: Structured output showing:
 
 ---
 
-### **2. mcp_repomix_pack_remote_repository**
-
+### **2. mcp\_repomix\_pack\_remote\_repository**
 **Purpose**: Clone and analyze a GitHub repository
 
 **Parameters**:
@@ -107,8 +103,7 @@ Result: Analyzes Next.js repo, compares patterns with ours
 
 ---
 
-### **3. mcp_repomix_attach_packed_output**
-
+### **3. mcp\_repomix\_attach\_packed\_output**
 **Purpose**: Load an existing packed output file for AI analysis
 
 **Parameters**:
@@ -142,8 +137,7 @@ Result: Loads the packed output, makes it available for analysis
 
 ---
 
-### **4. mcp_repomix_grep_repomix_output**
-
+### **4. mcp\_repomix\_grep\_repomix\_output**
 **Purpose**: Search within a packed Repomix output (like grep)
 
 **Parameters**:
@@ -195,8 +189,7 @@ Result: Returns all matches with 2 lines before/after
 
 ---
 
-### **5. mcp_repomix_generate_skill**
-
+### **5. mcp\_repomix\_generate\_skill**
 **Purpose**: Generate a Claude Agent Skill from a codebase
 
 **Parameters**:
@@ -260,8 +253,7 @@ Result:
 
 ---
 
-### **6. mcp_repomix_file_system_read_file**
-
+### **6. mcp\_repomix\_file\_system\_read\_file**
 **Purpose**: Read a file with built-in security validation
 
 **Parameters**:
@@ -317,8 +309,7 @@ Message: "File contains sensitive data (API keys, tokens).
 
 ---
 
-### **7. mcp_repomix_file_system_read_directory**
-
+### **7. mcp\_repomix\_file\_system\_read\_directory**
 **Purpose**: List directory contents with security awareness
 
 **Parameters**:
@@ -373,7 +364,6 @@ Result:
 ---
 
 ## 📊 Comparison Matrix
-
 | Tool                         | Real-Time | Compression | External | Security     | Token Efficient  |
 | ---------------------------- | --------- | ----------- | -------- | ------------ | ---------------- |
 | `pack_codebase`              | ✅        | ✅          | ❌       | ⚠️ Basic     | ✅ 70% savings   |
@@ -387,66 +377,61 @@ Result:
 ---
 
 ## 🎯 Common Use Cases
-
 ### Use Case 1: Real-Time Code Analysis
-
 ```
 User: "Analyze the SDK factory pattern and suggest improvements"
 
 Agent workflow:
   1. [Calls mcp_repomix_pack_codebase]
      ↓ Gets structured codebase in ~5 tokens
-  2. [Analyzes patterns]
+  1. [Analyzes patterns]
      ↓ Identifies middleware chain, validation, RBAC
-  3. [Calls mcp_repomix_grep_repomix_output]
+  1. [Calls mcp_repomix_grep_repomix_output]
      ↓ Finds error handling patterns
-  4. [Returns analysis + improvements]
+  1. [Returns analysis + improvements]
 
 Result: Complete analysis in <2 min, 70% fewer tokens
 ```
 
 ### Use Case 2: Competitor Research
-
 ```
 User: "How does Supabase handle real-time subscriptions?"
 
 Agent workflow:
   1. [Calls mcp_repomix_pack_remote_repository]
      ↓ Clones supabase/supabase, analyzes patterns
-  2. [Searches for WebSocket/subscription patterns]
+  1. [Searches for WebSocket/subscription patterns]
      ↓ mcp_repomix_grep_repomix_output with "subscribe|WebSocket"
-  3. [Compares to our implementation]
-  4. [Returns competitive analysis]
+  1. [Compares to our implementation]
+  2. [Returns competitive analysis]
 
 Result: Instant competitive intelligence
 ```
 
 ### Use Case 3: Team Knowledge Sharing
-
 ```
 User: "Create a Skill for the Firestore patterns we use"
 
 Agent workflow:
   1. [Calls mcp_repomix_generate_skill]
      ↓ Packages firestore rules + SDK patterns
-  2. [Creates .claude/skills/firestore-patterns/]
-  3. [Shares with team]
+  1. [Creates .claude/skills/firestore-patterns/]
+  2. [Shares with team]
 
 Result: Team can now use @firestore-patterns in any chat
 ```
 
 ### Use Case 4: Security Audit
-
 ```
 User: "Find all API endpoints with error handling"
 
 Agent workflow:
   1. [Calls mcp_repomix_pack_codebase]
      ↓ Gets all API routes
-  2. [Calls mcp_repomix_grep_repomix_output]
+  1. [Calls mcp_repomix_grep_repomix_output]
      ↓ Searches: "catch|error|Exception|500"
-  3. [Identifies missing error handling]
-  4. [Reports risks]
+  1. [Identifies missing error handling]
+  2. [Reports risks]
 
 Result: Security vulnerabilities found + fixed
 ```
@@ -454,15 +439,12 @@ Result: Security vulnerabilities found + fixed
 ---
 
 ## 🚀 Quick Start
-
 ### Step 1: Restart GitHub Copilot
-
 - Close VS Code
 - Reopen VS Code
 - The `.mcp.json` changes should load
 
 ### Step 2: Verify MCP Connection
-
 Ask in Copilot chat:
 
 ```
@@ -483,7 +465,6 @@ Available Repomix MCP Tools:
 ```
 
 ### Step 3: Test with Simple Request
-
 ```
 "Pack the types package and show me the structure"
 ```
@@ -497,16 +478,14 @@ Agent should:
 ---
 
 ## 📚 Documentation Links
-
 - **Setup**: See `.mcp.json` for configuration
-- **Integration Plan**: [REPOMIX_MCP_INTEGRATION_PLAN.md](./REPOMIX_MCP_INTEGRATION_PLAN.md)
+- **Integration Plan**: [REPOMIX\_MCP\_INTEGRATION\_PLAN.md](./REPOMIX_MCP_INTEGRATION_PLAN.md)
 - **Repomix Docs**: <https://repomix.com/docs/mcp>
 - **MCP Protocol**: <https://modelcontextprotocol.io/>
 
 ---
 
 ## ⚙️ Configuration Details
-
 **In `.mcp.json`**:
 
 ```json
@@ -530,32 +509,27 @@ Agent should:
 ---
 
 ## 🔧 Troubleshooting
-
 ### Tools not appearing
-
-- [ ] Restart VS Code completely
-- [ ] Check `.mcp.json` is valid (use online JSON validator)
-- [ ] Check terminal for MCP server errors
-- [ ] Try: `npx @repomix/mcp-server@latest --version`
+- \[ ] Restart VS Code completely
+- \[ ] Check `.mcp.json` is valid (use online JSON validator)
+- \[ ] Check terminal for MCP server errors
+- \[ ] Try: `npx @repomix/mcp-server@latest --version`
 
 ### MCP server not connecting
-
-- [ ] Verify Node.js >= 20.10.0
-- [ ] Verify npx available: `which npx`
-- [ ] Check firewall/network settings
-- [ ] Look for MCP error logs in VS Code output
+- \[ ] Verify Node.js >= 20.10.0
+- \[ ] Verify npx available: `which npx`
+- \[ ] Check firewall/network settings
+- \[ ] Look for MCP error logs in VS Code output
 
 ### Performance slow
-
-- [ ] Use `compress: true` to reduce tokens by 70%
-- [ ] Use `grep_repomix_output` instead of re-packing
-- [ ] Limit with `includePatterns` (e.g., `"src/**/*.ts"`)
-- [ ] Use `topFilesLength: 5` for smaller summaries
+- \[ ] Use `compress: true` to reduce tokens by 70%
+- \[ ] Use `grep_repomix_output` instead of re-packing
+- \[ ] Limit with `includePatterns` (e.g., `"src/**/*.ts"`)
+- \[ ] Use `topFilesLength: 5` for smaller summaries
 
 ---
 
 ## 📈 Benefits Summary
-
 | Benefit          | Impact                | Example                             |
 | ---------------- | --------------------- | ----------------------------------- |
 | **Speed**        | 10x faster analysis   | Analyze API framework in <1 minute  |
@@ -567,9 +541,9 @@ Agent should:
 
 ---
 
-**Status**: ✅ **Ready to Use**  
-**Next**: Restart GitHub Copilot and test  
-**Owner**: Your Development Team  
+**Status**: ✅ **Ready to Use**\
+**Next**: Restart GitHub Copilot and test\
+**Owner**: Your Development Team\
 **Last Updated**: December 16, 2025
 
 ---

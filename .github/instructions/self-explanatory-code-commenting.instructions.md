@@ -4,18 +4,13 @@ description: "Guidelines for GitHub Copilot to write comments to achieve self-ex
 less comments. Examples are in JavaScript but it should work on any language that has comments."
 
 ## applyTo: "\*\*"
-
 # Self-explanatory Code Commenting Instructions
-
 ## Core Principle
-
 **Write code that speaks for itself. Comment only when necessary to explain WHY, not WHAT.** We do
 not need comments most of the time.
 
 ## Commenting Guidelines
-
 ### ❌ AVOID These Comment Types
-
 **Obvious Comments**
 
 ```javascript
@@ -42,7 +37,6 @@ const tax = price * 0.08; // Actually 8%
 ```
 
 ### ✅ WRITE These Comment Types
-
 **Complex Business Logic**
 
 ```javascript
@@ -75,7 +69,6 @@ const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 ```
 
 ## Decision Framework
-
 Before writing a comment, ask:
 
 1. **Is the code self-explanatory?** → No comment needed
@@ -84,9 +77,7 @@ Before writing a comment, ask:
 4. **Will this help future maintainers?** → Good comment
 
 ## Special Cases for Comments
-
 ### Public APIs
-
 ```javascript
 /**
  * Calculate compound interest using the standard formula.
@@ -103,7 +94,6 @@ function calculateCompoundInterest(principal, rate, time, compoundFrequency = 1)
 ```
 
 ## Quality Checklist
-
 Before committing, ensure your comments:
 
 - \[ ] Explain WHY, not WHAT
@@ -114,6 +104,5 @@ Before committing, ensure your comments:
 - \[ ] Use proper spelling and professional language
 
 ## Summary
-
 Remember: **The best comment is the one you don't need to write because the code is
 self-documenting.**

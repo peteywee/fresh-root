@@ -1,16 +1,14 @@
 ---
+
 priority: 1
-applyTo: "**/*.ts,**/*.tsx,**/eslint.config.*,**/.eslintrc.*"
-description: "Pattern-based code quality remediation strategies and ESLint safeguard rule creation"
----
+applyTo: "**/\*.ts,**/_.tsx,\*\*/eslint.config._,\*\*/.eslintrc.\*"
+## description: "Pattern-based code quality remediation strategies and ESLint safeguard rule creation"
 
 # Code Quality Memory
-
 Systematic approaches for maintaining code quality through pattern detection, safeguard rules, and
 batch remediation strategies.
 
 ## Pattern Protocol for Error Remediation
-
 When you find the same error pattern **3 or more times**, create a **safeguard rule** instead of
 fixing individual instances:
 
@@ -20,14 +18,14 @@ fixing individual instances:
    pnpm exec eslint . --ext .ts,.tsx 2>&1 | grep -oP '@typescript-eslint/[a-z-]+' | sort | uniq -c | sort -rn
    ```
 
-2. **Apply the 3x Rule**: If count ≥ 3, create safeguard rule in ESLint config
+1. **Apply the 3x Rule**: If count ≥ 3, create safeguard rule in ESLint config
 
-3. **Create architectural fixes** over per-file patches:
+1. **Create architectural fixes** over per-file patches:
    - Document pattern in `.github/safeguards/{pattern}.rule.md`
    - Apply systematic solution (interface changes, type adjustments)
    - Update safeguard documentation with status tracking
 
-4. **Convert errors to warnings** for legitimate patterns:
+1. **Convert errors to warnings** for legitimate patterns:
 
    ```javascript
    // In eslint.config.mjs
@@ -40,7 +38,7 @@ fixing individual instances:
    }
    ```
 
-5. **Document reasoning** with comments explaining why the pattern is acceptable
+1. **Document reasoning** with comments explaining why the pattern is acceptable
 
 For large error counts (100+ errors), use systematic batch processing:
 
@@ -50,7 +48,6 @@ For large error counts (100+ errors), use systematic batch processing:
 4. **Validate incrementally**: Check compilation after each batch
 
 ## ESLint Configuration Hierarchy
-
 **Local config takes precedence** over root config in monorepos:
 
 - Check for `apps/web/eslint.config.mjs` before modifying root config
@@ -58,7 +55,6 @@ For large error counts (100+ errors), use systematic batch processing:
 - Apply safeguard rules in the config where TypeScript plugins are defined
 
 ## Error Pattern Categories
-
 Common patterns that warrant safeguard rules:
 
 - **Firebase SDK limitations**: `no-unsafe-*` rules (Firebase v12 returns `any`)
@@ -67,7 +63,6 @@ Common patterns that warrant safeguard rules:
 - **Unused variables**: Use underscore prefix pattern (`_varName`)
 
 ## Legacy File Handling
-
 For files not in TypeScript project configuration:
 
 ```javascript
@@ -83,7 +78,6 @@ For files not in TypeScript project configuration:
 ```
 
 ## Validation Gates
-
 Always verify after batch remediation:
 
 1. **TypeScript compilation**: `pnpm -w typecheck`
