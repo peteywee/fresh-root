@@ -1,5 +1,5 @@
-// [P1][API][CODE] File management API endpoint
-// Tags: P1, API, CODE, files, editor
+// [P1][FILES][API] File management API endpoint
+// Tags: P1, FILES, API, files, editor
 
 import { NextResponse } from "next/server";
 import * as fs from "fs/promises";
