@@ -1,5 +1,4 @@
 # GitHub Copilot Prompts - Session Summary & Strategic Guidance
-
 **Session Date**: 2025-01-30\
 **Workspace**: `fresh-root` - TypeScript/Next.js Monorepo with Firebase\
 **Status**: Planning Phase Complete - Ready for Phase 1 Execution
@@ -7,12 +6,10 @@
 ---
 
 ## 📋 Prompt Guidance Applied
-
 This session leveraged 5 GitHub Copilot prompts from
 [awesome-copilot](https://github.com/copilotusers/awesome-copilot) to guide strategic planning:
 
 ### 1. GitHub Copilot Starter (372 lines)
-
 **Purpose**: Foundation for workspace Copilot configuration
 
 **Key Guidance**:
@@ -28,7 +25,6 @@ This session leveraged 5 GitHub Copilot prompts from
 ---
 
 ### 2. Create Implementation Plan (157 lines)
-
 **Purpose**: Structure for implementation planning
 
 **Template Structure**:
@@ -48,7 +44,6 @@ This session leveraged 5 GitHub Copilot prompts from
 ---
 
 ### 3. Documentation Writer (46 lines)
-
 **Purpose**: Diátaxis documentation framework
 
 **Four Documentation Types**:
@@ -63,7 +58,6 @@ This session leveraged 5 GitHub Copilot prompts from
 ---
 
 ### 4. Remember/Memory Keeper (125 lines)
-
 **Purpose**: Transform lessons into reusable domain-specific knowledge
 
 **Syntax**: `/remember [>domain [scope]] lesson content`
@@ -78,7 +72,6 @@ This session leveraged 5 GitHub Copilot prompts from
 ---
 
 ### 5. Review & Refactor (759 bytes)
-
 **Purpose**: Code quality and standards enforcement
 
 **Strategy**:
@@ -93,9 +86,7 @@ This session leveraged 5 GitHub Copilot prompts from
 ---
 
 ## 🎯 Strategic Plan Summary
-
 ### Current State (Baseline)
-
 ```
 ESLint Errors:        196 (down from 379 via Firebase suppression)
 TypeScript:           ✅ ALL 4 PACKAGES PASS
@@ -105,7 +96,6 @@ Lint Warnings:        43 no-unused-vars + 34 require-await
 ```
 
 ### Phase 1: Lint Error Cleanup (Immediate - 3-4 hours)
-
 **Goal**: Reduce 196 → <100 errors
 
 | Error Type     | Count | Fix Pattern               | Effort  |
@@ -120,7 +110,6 @@ Firebase-related)
 ---
 
 ### Phase 2: Type-Safe Firebase Wrappers (Optional Enhancement - 6-8 hours)
-
 **Goal**: Improve type safety for new Firebase code
 
 **Deliverables**:
@@ -141,7 +130,6 @@ export async function getDocWithType<T>(db: Firestore, ref: DocumentReference): 
 ---
 
 ### Phase 3: Documentation (2-3 hours)
-
 **Goal**: Capture strategy for team reference
 
 **Deliverables**:
@@ -153,9 +141,7 @@ export async function getDocWithType<T>(db: Firestore, ref: DocumentReference): 
 ---
 
 ## 🔑 Key Decisions Made
-
 ### Decision 1: Pragmatic Firebase Suppression ✅
-
 **Context**: Firebase SDK v12 returns `any` types; fighting the SDK design creates busywork
 
 **Choice**: Suppress no-unsafe-\* rules for Firebase code, document rationale
@@ -172,7 +158,6 @@ export async function getDocWithType<T>(db: Firestore, ref: DocumentReference): 
 ---
 
 ### Decision 2: Phased Approach ✅
-
 **Context**: Complete Firebase typing overhaul would be 50+ hour project
 
 **Choice**: Phase 1 (lint cleanup) + optional Phase 2 (wrappers) + Phase 3 (docs)
@@ -189,7 +174,6 @@ export async function getDocWithType<T>(db: Firestore, ref: DocumentReference): 
 ---
 
 ### Decision 3: Memory-Driven Knowledge Base ✅
-
 **Context**: Multiple monorepo and Firebase patterns learned
 
 **Choice**: Document in `.github/instructions/` for team reuse
@@ -207,7 +191,6 @@ export async function getDocWithType<T>(db: Firestore, ref: DocumentReference): 
 ---
 
 ## 📊 Session Achievements
-
 | Category                  | Metric                           | Status      |
 | ------------------------- | -------------------------------- | ----------- |
 | **Dependency Resolution** | Root package.json cleaned        | ✅ Complete |
@@ -223,9 +206,7 @@ export async function getDocWithType<T>(db: Firestore, ref: DocumentReference): 
 ---
 
 ## ⚡ Next Immediate Actions
-
 ### Phase 1 Execution (Ready to Start)
-
 ```bash
 # 1. Fix no-unused-vars (prefix with _)
 # Affected files:
@@ -248,7 +229,6 @@ pnpm build
 ```
 
 ### Team Communication
-
 Share `.github/instructions/firebase-typing-and-monorepo-memory.instructions.md` with team to
 establish shared understanding of:
 
@@ -259,7 +239,6 @@ establish shared understanding of:
 ---
 
 ## 📚 Documentation Index
-
 **Created This Session**:
 
 - ✅ `.github/IMPLEMENTATION_PLAN_FIREBASE.md` - Detailed 3-phase implementation plan
@@ -277,9 +256,7 @@ establish shared understanding of:
 ---
 
 ## 🎓 Lessons for Future Sessions
-
 ### Lesson 1: Leverage Existing Guidance
-
 Using awesome-copilot prompts **before** implementing ensured:
 
 - Structured approach (phased vs. all-at-once)
@@ -288,7 +265,6 @@ Using awesome-copilot prompts **before** implementing ensured:
 - Clear success criteria (what does "done" look like?)
 
 ### Lesson 2: Firebase as Architectural Choice
-
 Firebase SDK v12's `any` types are:
 
 - **Not a bug** - documented in Firebase issues
@@ -297,7 +273,6 @@ Firebase SDK v12's `any` types are:
 - **Not permanent** - wrappers provide future flexibility
 
 ### Lesson 3: Monorepo Dependency Management
-
 pnpm requires:
 
 - Explicit React peerDependencies in all packages

@@ -1,5 +1,4 @@
 # 🤖 Automation & CI: Continuous Visual Generation
-
 **Purpose**: Enable automatic visual documentation updates on push\
 **Owner**: Documentation Lead\
 **Branch**: docs-and-tests (or dev)
@@ -7,7 +6,6 @@
 ---
 
 ## 📋 Overview
-
 This guide establishes how visuals are automatically generated and maintained:
 
 1. **On Every Push**: Generate basic metrics (errors, files, etc.)
@@ -18,7 +16,6 @@ This guide establishes how visuals are automatically generated and maintained:
 ---
 
 ## 🚀 Automation Script: Visual Generator
-
 **File**: `scripts/generate-visuals.sh`
 
 ```bash
@@ -81,9 +78,7 @@ echo "✅ Visuals generated at ${VISUALS_DIR}/progress/"
 ---
 
 ## 📅 Scheduled Tasks
-
 ### Daily at 09:00 UTC
-
 ```yaml
 name: Daily Metrics Report
 schedule: "0 9 * * *"
@@ -95,7 +90,6 @@ steps:
 ```
 
 ### On Every Push to dev
-
 ```yaml
 name: Update Visuals
 on:
@@ -111,7 +105,6 @@ steps: 1. pnpm -w typecheck 1. Count errors 2. Update progress metrics 3. Push u
 ```
 
 ### On Phase Completion (Manual)
-
 ```bash
 # When Phase 1 complete:
 ./scripts/generate-visuals.sh --phase=1 --complete
@@ -123,7 +116,6 @@ steps: 1. pnpm -w typecheck 1. Count errors 2. Update progress metrics 3. Push u
 ```
 
 ### On Merge to main (Archive)
-
 ```yaml
 name: Archive and Summarize
 on:
@@ -139,7 +131,6 @@ steps:
 ---
 
 ## 📁 Artifact Structure
-
 ```
 docs/visuals/
 ├─ progress/
@@ -179,12 +170,9 @@ docs/visuals/
 ---
 
 ## 🎨 Visual Template Examples
-
 ### ASCII Error Distribution
-
 ```markdown
 ## Error Distribution
-
 \`\`\` Errors by Category:
 
 Module Import Errors ██████████ 45 errors (46%) Type Coercion Errors ████░░░░░░ 22 errors (23%) Zod
@@ -195,10 +183,8 @@ Total: 97 errors Progress: ████░░░░░░░░░░░░░�
 ```
 
 ### ASCII Progress Bar
-
 ```markdown
 ## Overall Progress
-
 \`\`\` Phase 1: Cleanup ████░░░░░░ 40% Phase 2: Dependencies ░░░░░░░░░░ 0% Phase 3: Type Safety
 ░░░░░░░░░░ 0% Phase 4: Validation & Merge ░░░░░░░░░░ 0%
 
@@ -206,10 +192,8 @@ Overall: ██░░░░░░░░ 10% (1 phase underway) \`\`\`
 ```
 
 ### Branch Diff Tree
-
 ```markdown
 ## Repository Structure
-
 \`\`\` main (production) ├─ 450 files ├─ Status: ✅ Stable └─ Last updated: 3 days ago
 
 dev (current) ├─ 465 files (+15 new) ├─ Status: 🔧 In progress ├─ TypeScript errors: 97 ├─ Packages
@@ -222,7 +206,6 @@ needed \`\`\`
 ---
 
 ## 📊 Live Dashboard Update Logic
-
 **DASHBOARD.md** gets updated with this logic:
 
 ```javascript
@@ -262,9 +245,7 @@ function generateProgressBar(percentage) {
 ---
 
 ## 🔄 Continuous Integration Setup
-
 ### GitHub Actions Workflow
-
 **File**: `.github/workflows/generate-visuals.yml`
 
 ```yaml
@@ -315,9 +296,7 @@ jobs:
 ---
 
 ## 📝 Manual Triggers
-
 ### Generate Phase Report Manually
-
 ```bash
 # After Phase 1 complete
 ./scripts/generate-phase-report.sh --phase=1
@@ -335,9 +314,7 @@ jobs:
 ---
 
 ## 🎯 Metrics Tracked
-
 ### Real-Time Metrics (Updated on every push)
-
 - TypeScript error count
 - TypeScript warning count
 - Number of files changed
@@ -346,7 +323,6 @@ jobs:
 - Test pass rate
 
 ### Phase Completion Metrics
-
 - Files deleted per phase
 - Time to complete phase
 - Errors fixed per phase
@@ -354,7 +330,6 @@ jobs:
 - Lines of code changed
 
 ### Branch Metrics
-
 - File count per branch
 - Unique files per branch
 - Merge conflicts
@@ -364,7 +339,6 @@ jobs:
 ---
 
 ## 🚀 Quick Start: Run Visuals Manually
-
 ```bash
 # Generate all visuals
 bash scripts/generate-visuals.sh
@@ -385,9 +359,7 @@ bash scripts/generate-all-reports.sh
 ---
 
 ## 📌 Integration with PR/Merge Workflow
-
 ### On PR to main
-
 ```
 1. Generate comparison: main vs dev
 2. Create visual showing what will change
@@ -396,7 +368,6 @@ bash scripts/generate-all-reports.sh
 ```
 
 ### On Merge to main
-
 ```
 1. Archive current visuals/ to docs/archive/
 2. Create merge summary with before/after metrics
@@ -405,7 +376,6 @@ bash scripts/generate-all-reports.sh
 ```
 
 ### On docs-and-tests Updates
-
 ```
 1. Update visual reference library
 2. Add new visual templates
@@ -416,7 +386,6 @@ bash scripts/generate-all-reports.sh
 ---
 
 ## ✅ Checklist for Visual Automation
-
 - \[ ] `scripts/generate-visuals.sh` created
 - \[ ] GitHub Actions workflow configured
 - \[ ] Manual trigger scripts ready

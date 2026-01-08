@@ -1,14 +1,12 @@
 # PostgreSQL Migration Strategy: Firebase Exit Plan
-
-**Version**: 1.0  
-**Created**: December 22, 2025  
+**Version**: 1.0\
+**Created**: December 22, 2025\
 **Purpose**: Comprehensive escape hatch when Firebase costs exceed budget or features don't meet
 needs
 
 ---
 
 ## Executive Summary
-
 This document provides a **complete migration path from Firebase to PostgreSQL** for the Fresh
 Schedules application. It's designed as an **escape hatch** to be executed when:
 
@@ -22,9 +20,7 @@ Schedules application. It's designed as an **escape hatch** to be executed when:
 ---
 
 ## Part 1: Decision Triggers
-
 ### When to Migrate
-
 | Trigger              | Threshold                 | Action                     |
 | -------------------- | ------------------------- | -------------------------- |
 | **Monthly Cost**     | > $500/month sustained    | Begin Phase 1 planning     |
@@ -35,7 +31,6 @@ Schedules application. It's designed as an **escape hatch** to be executed when:
 | **Performance**      | Query latency > 500ms p95 | Optimize or migrate        |
 
 ### Cost Projection Model
-
 ```
 Firebase Blaze Plan Estimates (as of 2025):
 - Firestore reads: $0.036 per 100K reads
@@ -56,9 +51,7 @@ Decision: Migrate when Firebase > $100/month OR feature-blocked
 ---
 
 ## Part 2: Target Architecture
-
 ### Current Stack (Firebase)
-
 ```
 ┌─────────────────────────────────────────────────────────┐
 │                    Fresh Schedules                       │
@@ -73,7 +66,6 @@ Decision: Migrate when Firebase > $100/month OR feature-blocked
 ```
 
 ### Target Stack (PostgreSQL)
-
 ```
 ┌─────────────────────────────────────────────────────────┐
 │                    Fresh Schedules                       │
@@ -89,7 +81,6 @@ Decision: Migrate when Firebase > $100/month OR feature-blocked
 ```
 
 ### Recommended Provider: **Supabase**
-
 | Feature   | Firebase            | Supabase                          |
 | --------- | ------------------- | --------------------------------- |
 | Auth      | Firebase Auth       | Supabase Auth (same API patterns) |
@@ -103,11 +94,8 @@ Decision: Migrate when Firebase > $100/month OR feature-blocked
 ---
 
 ## Part 3: Data Model Translation
-
 ### Firestore → PostgreSQL Schema Mapping
-
 #### Organizations
-
 **Firestore Path**: `/organizations/{orgId}`
 
 ```sql
@@ -128,7 +116,6 @@ CREATE INDEX idx_organizations_status ON organizations(status);
 ```
 
 #### Memberships
-
 **Firestore Path**: `/memberships/{membership_id}` (composite: `{userId}_{orgId}`)
 
 ```sql
@@ -149,7 +136,6 @@ CREATE INDEX idx_memberships_role ON memberships(role);
 ```
 
 #### Schedules
-
 **Firestore Path**: `/orgs/{orgId}/schedules/{scheduleId}`
 
 ```sql
@@ -173,7 +159,6 @@ CREATE INDEX idx_schedules_status ON schedules(status);
 ```
 
 #### Shifts
-
 **Firestore Path**: `/orgs/{orgId}/schedules/{scheduleId}/shifts/{shiftId}`
 
 ```sql
@@ -199,7 +184,6 @@ CREATE INDEX idx_shifts_time ON shifts(start_time, end_time);
 ```
 
 #### Positions
-
 **Firestore Path**: `/orgs/{orgId}/positions/{positionId}`
 
 ```sql
@@ -220,7 +204,6 @@ CREATE INDEX idx_positions_active ON positions(is_active);
 ```
 
 #### Users (Auth)
-
 **Firebase Auth** → **Supabase Auth** (automatic) OR custom users table
 
 ```sql
@@ -243,7 +226,6 @@ CREATE INDEX idx_users_email ON users(email);
 ```
 
 #### Metrics (New - for Ops Hub)
-
 ```sql
 CREATE TABLE build_metrics (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -268,15 +250,13 @@ CREATE INDEX idx_build_metrics_sha ON build_metrics(sha);
 ---
 
 ## Part 4: Migration Phases
-
 ### Phase 0: Preparation (1-2 days)
-
 1. **Set up PostgreSQL instance**
    - Supabase: Create project at supabase.com
    - Neon: Create database at neon.tech
    - Railway: Create PostgreSQL service
 
-2. **Install ORM**
+1. **Install ORM**
 
    ```bash
    pnpm add prisma @prisma/client --filter @apps/web
@@ -284,11 +264,11 @@ CREATE INDEX idx_build_metrics_sha ON build_metrics(sha);
    npx prisma init
    ```
 
-3. **Create schema.prisma**
+1. **Create schema.prisma**
    - Translate all Firestore collections to Prisma models
    - Generate migrations: `npx prisma migrate dev`
 
-4. **Set up database abstraction layer**
+1. **Set up database abstraction layer**
 
    ```typescript
    // packages/database/src/index.ts
@@ -307,13 +287,12 @@ CREATE INDEX idx_build_metrics_sha ON build_metrics(sha);
    ```
 
 ### Phase 1: Shadow Writes (1 week)
-
 1. **Enable dual-write mode**
    - All writes go to both Firestore AND PostgreSQL
    - Reads still come from Firestore (source of truth)
    - Monitor for discrepancies
 
-2. **Data sync script**
+1. **Data sync script**
 
    ```typescript
    // scripts/sync-to-postgres.ts
@@ -330,44 +309,41 @@ CREATE INDEX idx_build_metrics_sha ON build_metrics(sha);
    }
    ```
 
-3. **Validation queries**
+1. **Validation queries**
    - Count comparison: Firestore vs PostgreSQL
    - Sample comparison: Random 100 records
    - Hash comparison: Full data integrity check
 
 ### Phase 2: Read Migration (1 week)
-
 1. **Create feature flag**
 
    ```typescript
    const USE_POSTGRES = process.env.DATABASE_PROVIDER === "postgres";
    ```
 
-2. **Migrate reads one API route at a time**
+1. **Migrate reads one API route at a time**
    - Start with low-traffic, non-critical routes
    - Monitor latency and errors
    - Roll back if issues detected
 
-3. **Order of migration (by risk)**
-   1. `GET /api/ops/*` (internal only)
-   2. `GET /api/positions` (simple CRUD)
-   3. `GET /api/venues` (simple CRUD)
-   4. `GET /api/schedules` (medium complexity)
-   5. `GET /api/shifts` (high volume)
-   6. Auth-related reads (highest risk)
+1. **Order of migration (by risk)**
+   2. `GET /api/ops/*` (internal only)
+   3. `GET /api/positions` (simple CRUD)
+   4. `GET /api/venues` (simple CRUD)
+   5. `GET /api/schedules` (medium complexity)
+   6. `GET /api/shifts` (high volume)
+   7. Auth-related reads (highest risk)
 
 ### Phase 3: Write Migration (1 week)
-
 1. **Switch writes to PostgreSQL-first**
    - PostgreSQL is now source of truth
    - Shadow-write to Firestore (for rollback capability)
 
-2. **Update all POST/PUT/PATCH/DELETE handlers**
+1. **Update all POST/PUT/PATCH/DELETE handlers**
 
-3. **Run full test suite against PostgreSQL**
+1. **Run full test suite against PostgreSQL**
 
 ### Phase 4: Cleanup (2-3 days)
-
 1. **Disable Firestore writes**
 2. **Remove dual-write code**
 3. **Archive Firestore data (export to JSON)**
@@ -377,10 +353,8 @@ CREATE INDEX idx_build_metrics_sha ON build_metrics(sha);
 ---
 
 ## Part 5: Auth Migration
-
 ### Option A: Supabase Auth (Recommended)
-
-**Pros**: Drop-in replacement, similar API, built-in row-level security  
+**Pros**: Drop-in replacement, similar API, built-in row-level security\
 **Cons**: Vendor lock-in (but less than Firebase)
 
 ```typescript
@@ -398,8 +372,7 @@ const {
 ```
 
 ### Option B: Auth.js (NextAuth)
-
-**Pros**: Open source, self-hosted, flexible providers  
+**Pros**: Open source, self-hosted, flexible providers\
 **Cons**: More setup, manage sessions yourself
 
 ```typescript
@@ -421,7 +394,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 ```
 
 ### User Migration Script
-
 ```typescript
 // scripts/migrate-users.ts
 import { getAuth } from "firebase-admin/auth";
@@ -456,9 +428,7 @@ async function migrateUsers() {
 ---
 
 ## Part 6: Real-time Migration
-
 ### Firestore Real-time → PostgreSQL Subscriptions
-
 **Option A: Supabase Realtime**
 
 ```typescript
@@ -502,9 +472,7 @@ channel.bind("schedule-updated", (data) => {
 ---
 
 ## Part 7: Storage Migration
-
 ### Firebase Storage → Supabase Storage (or S3/R2)
-
 ```typescript
 // Migration script
 import { getStorage } from "firebase-admin/storage";
@@ -529,9 +497,7 @@ async function migrateStorage() {
 ---
 
 ## Part 8: Functions Migration
-
 ### Firebase Functions → Vercel Functions
-
 Most Cloud Functions can be converted to Next.js API routes or Vercel Edge Functions.
 
 ```typescript
@@ -560,7 +526,6 @@ export const POST = createOrgEndpoint({
 ```
 
 ### Firestore Triggers → PostgreSQL Triggers or Webhooks
-
 ```sql
 -- PostgreSQL trigger example
 CREATE OR REPLACE FUNCTION notify_shift_change()
@@ -583,23 +548,19 @@ FOR EACH ROW EXECUTE FUNCTION notify_shift_change();
 ---
 
 ## Part 9: Rollback Plan
-
 If PostgreSQL migration fails at any phase:
 
 ### Phase 1-2 Rollback (Shadow/Read)
-
 1. Disable feature flag: `DATABASE_PROVIDER=firestore`
 2. All traffic returns to Firestore immediately
 3. No data loss (Firestore remained source of truth)
 
 ### Phase 3 Rollback (Write)
-
 1. Re-enable Firestore writes
 2. Sync any PostgreSQL-only changes back to Firestore
 3. Disable PostgreSQL writes
 
 ### Full Rollback
-
 1. Keep PostgreSQL as backup
 2. Restore Firestore as primary
 3. Document lessons learned
@@ -608,9 +569,7 @@ If PostgreSQL migration fails at any phase:
 ---
 
 ## Part 10: Cost Comparison
-
 ### Current Firebase (Estimated at Scale)
-
 | Resource          | Usage          | Monthly Cost   |
 | ----------------- | -------------- | -------------- |
 | Firestore reads   | 5M             | $18            |
@@ -622,7 +581,6 @@ If PostgreSQL migration fails at any phase:
 | **Total**         |                | **~$75/month** |
 
 ### PostgreSQL (Supabase Pro)
-
 | Resource       | Included                       | Monthly Cost  |
 | -------------- | ------------------------------ | ------------- |
 | Database       | 8GB storage, unlimited queries | $25           |
@@ -633,7 +591,6 @@ If PostgreSQL migration fails at any phase:
 | **Total**      |                                | **$25/month** |
 
 ### Break-even Analysis
-
 - Firebase < $25/month → Stay on Firebase
 - Firebase $25-100/month → Monitor, plan migration
 - Firebase > $100/month → Execute migration
@@ -641,7 +598,6 @@ If PostgreSQL migration fails at any phase:
 ---
 
 ## Part 11: Timeline Summary
-
 | Phase                  | Duration      | Milestone                           |
 | ---------------------- | ------------- | ----------------------------------- |
 | **0: Preparation**     | 1-2 days      | PostgreSQL instance + ORM setup     |
@@ -654,9 +610,7 @@ If PostgreSQL migration fails at any phase:
 ---
 
 ## Appendix: Quick Reference
-
 ### Environment Variables (PostgreSQL)
-
 ```bash
 # Supabase
 DATABASE_URL="postgresql://postgres:[password]@db.[project].supabase.co:5432/postgres"
@@ -672,7 +626,6 @@ DATABASE_URL="postgresql://postgres:[password]@[host]:[port]/railway"
 ```
 
 ### Useful Commands
-
 ```bash
 # Prisma
 npx prisma migrate dev          # Create and apply migration
@@ -688,7 +641,6 @@ supabase functions deploy       # Deploy edge functions
 ```
 
 ### Key Files to Create
-
 ```
 packages/database/
 ├── src/

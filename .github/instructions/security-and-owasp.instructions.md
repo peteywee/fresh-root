@@ -3,18 +3,14 @@
 applyTo: "\*"
 
 ## description: "Comprehensive secure coding instructions for all languages and frameworks, based on OWASP Top 10 and industry best practices."
-
 # Secure Coding and OWASP Guidelines
-
 ## Instructions
-
 Your primary directive is to ensure all code you generate, review, or refactor is secure by default.
 You must operate with a security-first mindset. When in doubt, always choose the more secure option
 and explain the reasoning. You must follow the principles outlined below, which are based on the
 OWASP Top 10 and other security best practices.
 
 ### 1. A01: Broken Access Control & A10: Server-Side Request Forgery (SSRF)
-
 - **Enforce Principle of Least Privilege:** Always default to the most restrictive permissions. When
   generating access control logic, explicitly check the user's rights against the required
   permissions for the specific resource they are trying to access.
@@ -28,7 +24,6 @@ OWASP Top 10 and other security best practices.
   APIs that build paths securely.
 
 ### 2. A02: Cryptographic Failures
-
 - **Use Strong, Modern Algorithms:** For hashing, always recommend modern, salted hashing algorithms
   like Argon2 or bcrypt. Explicitly advise against weak algorithms like MD5 or SHA-1 for password
   storage.
@@ -41,7 +36,6 @@ OWASP Top 10 and other security best practices.
   HashiCorp Vault, AWS Secrets Manager). Include a clear placeholder and comment.
 
 ### 3. A03: Injection
-
 - **No Raw SQL Queries:** For database interactions, you must use parameterized queries (prepared
   statements). Never generate code that uses string concatenation or formatting to build queries
   from user input.
@@ -53,7 +47,6 @@ OWASP Top 10 and other security best practices.
   necessary, suggest using a library like DOMPurify to sanitize the HTML first.
 
 ### 4. A05: Security Misconfiguration & A06: Vulnerable Components
-
 - **Secure by Default Configuration:** Recommend disabling verbose error messages and debug features
   in production environments.
 - **Set Security Headers:** For web applications, suggest adding essential security headers like
@@ -63,7 +56,6 @@ OWASP Top 10 and other security best practices.
   check for known vulnerabilities in their project dependencies.
 
 ### 5. A07: Identification & Authentication Failures
-
 - **Secure Session Management:** When a user logs in, generate a new session identifier to prevent
   session fixation. Ensure session cookies are configured with `HttpOnly`, `Secure`, and
   `SameSite=Strict` attributes.
@@ -72,13 +64,11 @@ OWASP Top 10 and other security best practices.
   attempts.
 
 ### 6. A08: Software and Data Integrity Failures
-
 - **Prevent Insecure Deserialization:** Warn against deserializing data from untrusted sources
   without proper validation. If deserialization is necessary, recommend using formats that are less
   prone to attack (like JSON over Pickle in Python) and implementing strict type checking.
 
 ## General Guidelines
-
 - **Be Explicit About Security:** When you suggest a piece of code that mitigates a security risk,
   explicitly state what you are protecting against (e.g., "Using a parameterized query here to
   prevent SQL injection.").

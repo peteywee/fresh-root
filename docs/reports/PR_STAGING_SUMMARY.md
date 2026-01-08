@@ -1,5 +1,4 @@
 # PR Dev: Infrastructure Hardening & Architecture
-
 **Branch**: `dev/architecture-and-functions-pr`\
 **Target**: `dev` → `main`\
 **Date**: November 30, 2025\
@@ -8,7 +7,6 @@
 ---
 
 ## Executive Summary
-
 Complete infrastructure hardening with production-ready observability, rate limiting, and cloud
 function exports. All changes tested locally with passing typecheck, lint, and dev server stability
 verification.
@@ -19,13 +17,10 @@ tracing; functions ready for Firebase deployment.
 ---
 
 ## Changes Overview
-
 ### 1. Architecture Diagrams (`docs/ARCHITECTURE_DIAGRAMS.md`) ✨
-
 **4 Mermaid diagrams providing visual reference for infrastructure**:
 
 #### 1a. Strategic Execution Roadmap (Gantt)
-
 ```
 Timeline: Phase -1 (Reality) → Phase 0 (Safety) → Phase 1 (Foundation) → Launch
 - Customer discovery validation (Dec 1-8)
@@ -36,7 +31,6 @@ Timeline: Phase -1 (Reality) → Phase 0 (Safety) → Phase 1 (Foundation) → L
 ```
 
 #### 1b. Rate Limiting & Observability Flow (Flowchart)
-
 ```
 Dual-mode limiter:
   - Redis for production multi-instance
@@ -46,7 +40,6 @@ Dual-mode limiter:
 ```
 
 #### 1c. OpenTelemetry Tracing Hierarchy (Graph)
-
 ```
 Request span tree:
   - Root HTTP span (all routes)
@@ -58,7 +51,6 @@ Request span tree:
 ```
 
 #### 1d. Production Validation & Env Config (Sequence)
-
 ```
 Complete lifecycle:
   - Build phase (optional strict validation)
@@ -73,7 +65,6 @@ Complete lifecycle:
 ---
 
 ### 2. Cloud Functions Entrypoint (`functions/src/index.ts`)
-
 **Canonical exports for Firebase deployment**:
 
 ```typescript
@@ -107,7 +98,6 @@ denormalization fixes N+1 performance issues at scale.
 ---
 
 ### 3. Rate Limiting System (Previously merged to dev) ✅
-
 **Location**: `apps/web/src/lib/api/rate-limit.ts`
 
 **Features**:
@@ -130,7 +120,6 @@ export const POST = withRateLimit({ rpsLimit: 10 }, async (req) => {
 ---
 
 ### 4. Production Environment Validation (Previously merged to dev) ✅
-
 **Location**: `packages/env/src/index.ts` + `packages/env/src/production.ts`
 
 **Validation**:
@@ -152,7 +141,6 @@ assertProduction(); // FAIL if REDIS_URL or OTEL endpoint missing
 ---
 
 ### 5. OpenTelemetry Tracing (Previously merged to dev) ✅
-
 **Location**: `apps/web/app/api/_shared/otel-init.ts` + `apps/web/app/api/_shared/otel.ts`
 
 **Features**:
@@ -170,9 +158,7 @@ assertProduction(); // FAIL if REDIS_URL or OTEL endpoint missing
 ---
 
 ## Quality Checks
-
 ### ✅ All Gates Passing
-
 ```bash
 ✅ pnpm typecheck
    Result: 0 errors (26 warnings all pre-existing)
@@ -197,7 +183,6 @@ assertProduction(); // FAIL if REDIS_URL or OTEL endpoint missing
 ---
 
 ## Commits in This PR
-
 | Commit    | Message                                           | Changes                                              |
 | --------- | ------------------------------------------------- | ---------------------------------------------------- |
 | `fcb2c7c` | Add db:seed and test:integration npm scripts      | 2 new scripts (seed emulator, integration tests)     |
@@ -207,7 +192,6 @@ assertProduction(); // FAIL if REDIS_URL or OTEL endpoint missing
 ---
 
 ## Testing Performed
-
 - \[x] **Dev server stability**: 5.4s startup, no OOM crashes (Chromebook tested)
 - \[x] **Rate limiting operational**: Redis connection + in-memory fallback working
 - \[x] **OTEL tracing**: Lazy-loaded, no module-load hangs
@@ -220,9 +204,7 @@ assertProduction(); // FAIL if REDIS_URL or OTEL endpoint missing
 ---
 
 ## Deployment Checklist
-
 ### For Production
-
 ```bash
 # 1. Set environment variables
 export FIREBASE_PROJECT_ID=fresh-root-prod
@@ -240,7 +222,6 @@ npm run build && npm start
 ```
 
 ### For Local Dev
-
 ```bash
 # In-memory rate limiting active by default
 # OTEL tracing gated by endpoint availability
@@ -251,7 +232,6 @@ pnpm dev
 ---
 
 ## Key References
-
 | Document                                               | Purpose                                                     |
 | ------------------------------------------------------ | ----------------------------------------------------------- |
 | `docs/standards/OBSERVABILITY_AND_TRACING_STANDARD.md` | Observability policy (when to span, what to measure)        |
@@ -262,7 +242,6 @@ pnpm dev
 ---
 
 ## Breaking Changes
-
 **None**. All changes are:
 
 - Backwards compatible with existing routes
@@ -272,7 +251,6 @@ pnpm dev
 ---
 
 ## Performance Impact
-
 | Metric             | Before      | After                             | Impact                 |
 | ------------------ | ----------- | --------------------------------- | ---------------------- |
 | Dev startup        | ~6.5s       | ~5.4s                             | ✅ -15% faster         |
@@ -283,23 +261,19 @@ pnpm dev
 ---
 
 ## Reviewer Notes
-
 ### What This PR Achieves
-
 ✅ **Infrastructure Hardening**: Rate limiting + observability system fully operational ✅ **Cloud
 Functions Ready**: joinOrganization and denormalization triggers exportable ✅ **Chromebook
 Stabilization**: Code 9 OOM crashes eliminated ✅ **Visual Reference**: 4 architecture diagrams for
 onboarding and debugging ✅ **Production Ready**: All env validation + gating in place
 
 ### What This PR Does NOT Change
-
 - No breaking changes to existing API routes
 - No changes to Firestore security rules (those exist in `firestore.rules`)
 - No changes to existing client-side components
 - No database migrations required
 
 ### For Code Review
-
 Please verify:
 
 - \[ ] Architecture diagrams are clear and technically accurate
@@ -310,7 +284,6 @@ Please verify:
 - \[ ] No unintended side effects from lazy-loaded OTEL init
 
 ### Questions
-
 Refer to:
 
 1. **Observability**: See `docs/standards/OBSERVABILITY_AND_TRACING_STANDARD.md` (§2-4)
@@ -321,15 +294,12 @@ Refer to:
 ---
 
 ## Merge & Deployment Plan
-
 ### Stage 1: Code Review ✅ (This PR)
-
 - \[ ] All reviewer checks pass
 - \[ ] No conflicts with main
 - \[ ] No additional changes requested
 
 ### Stage 2: Merge to Dev
-
 ```bash
 git checkout dev
 git merge --no-ff stage/architecture-and-functions-pr
@@ -337,14 +307,12 @@ git push origin dev
 ```
 
 ### Stage 3: QA & Testing
-
 ```bash
 # Run full suite
 pnpm typecheck && pnpm lint && pnpm build && pnpm test:rules
 ```
 
 ### Stage 4: Merge to Main
-
 ```bash
 git checkout main
 git merge --ff dev
@@ -352,7 +320,6 @@ git push origin main
 ```
 
 ### Stage 5: Deploy to Production
-
 ```bash
 firebase deploy --only firestore:indexes,functions
 ```

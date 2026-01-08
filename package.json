@@ -32,7 +32,9 @@
     "validate:all": "pnpm lint && pnpm workspace:check && pnpm deps:sync:check && pnpm typecheck",
     "validate:full": "pnpm fix:all && pnpm guardrails:fix && pnpm validate:all && pnpm test:unit",
     "check": "pnpm lint:fix && pnpm workspace:check && pnpm typecheck",
-    "visuals:generate": "node scripts/generate-visuals.mjs"
+    "visuals:generate": "node scripts/generate-visuals.mjs",
+    "docs:update": "node scripts/docs-sync.mjs",
+    "docs:analyze": "node scripts/docs-auto-update.mjs"
   },
   "engines": {
     "node": ">=20.10.0",
@@ -102,6 +104,7 @@
     "repomix": "^1.10.2",
     "rimraf": "^6.1.2",
     "speakeasy": "^2.0.0",
+    "supabase": "^2.71.1",
     "syncpack": "^13.0.4",
     "tailwind-merge": "^3.4.0",
     "tailwindcss": "^4.1.18",

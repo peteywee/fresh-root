@@ -1,21 +1,18 @@
 ---
+
 id: A02
-extends: 06_AGENTS.md
+extends: 06\_AGENTS.md
 section: Worker Routing
-tags: [agents, routing, orchestrator, hierarchy]
+tags: \[agents, routing, orchestrator, hierarchy]
 status: canonical
 priority: P1
-source: .github/WORKER_DECISION_TREE.md
----
+## source: .github/WORKER\_DECISION\_TREE.md
 
 # Amendment A02: Worker Decision Tree & Routing
-
 ## Purpose
-
-Extends 06_AGENTS with detailed worker routing logic and hierarchical team structures.
+Extends 06\_AGENTS with detailed worker routing logic and hierarchical team structures.
 
 ## Decision Flow
-
 When task arrives at Orchestrator:
 
 ```mermaid
@@ -34,7 +31,6 @@ graph TD
 ```
 
 ## Routing Rules
-
 | Condition            | Route To                | Authority Level      |
 | -------------------- | ----------------------- | -------------------- |
 | Auth bypass risk     | Security Red Team       | **VETO** (can block) |
@@ -46,7 +42,6 @@ graph TD
 | Single file edit     | Orchestrator (direct)   | Low                  |
 
 ## Hierarchical Team Structure
-
 For complex tasks, spawn sub-teams:
 
 ```
@@ -67,7 +62,6 @@ ORCHESTRATOR (Commander)
 ```
 
 ## Worker Contracts
-
 Each worker must:
 
 1. **Accept** task with clear acknowledgment
@@ -76,11 +70,9 @@ Each worker must:
 4. **Validate** output before marking complete
 
 ## Escalation Path
-
 ```
 Worker → Team Lead → Orchestrator → Security Red Team (if needed)
 ```
 
 ## Reference
-
 Full execution log: `archive/amendment-sources/WORKER_DECISION_TREE.md`

@@ -19,7 +19,7 @@
 
 ## Hierarchy Position
 
-```
+```text
 L0: Canonical Governance (.github/governance/01-12)
   ↓
 L1: Amendments (.github/governance/amendments/)
@@ -47,6 +47,16 @@ canonical docs.
 | [03_SECURITY_AND_SAFETY.instructions.md](./03_SECURITY_AND_SAFETY.instructions.md)       | `*`                                  | P0       | OWASP Top 10, security patterns, AI safety                                   |
 | [04_FRAMEWORK_PATTERNS.instructions.md](./04_FRAMEWORK_PATTERNS.instructions.md)         | `apps/**,packages/**`                | P1       | Next.js, Firebase, Tailwind, monorepo patterns                               |
 | [05_TESTING_AND_REVIEW.instructions.md](./05_TESTING_AND_REVIEW.instructions.md)         | `**/*.{test,spec}.{ts,tsx},tests/**` | P1       | Vitest, Playwright, code review                                              |
+
+---
+
+## Operational Protocols (New)
+
+**Radical skepticism & logic enforcement** - Always available via `/` commands.
+
+- [logic-agent.instructions.md](./logic-agent.instructions.md) — Core skepticism protocol, 5-step verification (foundation framework)
+- [logic-agent-cli.instructions.md](./logic-agent-cli.instructions.md) — Slash command integration, invocation patterns (`/verify`, `/logic`, etc.)
+- [LOGIC_AGENT_QUICK_REF.md](./LOGIC_AGENT_QUICK_REF.md) — Quick reference card with command cheatsheet (fast lookup)
 
 ---
 
@@ -141,7 +151,7 @@ Find instructions by topic:
 
 ---
 
-# Repository Instruction Index
+## Repository Instruction Index
 
 This section collects canonical, high-priority directives extracted from the repository governance
 documents and agent instructions. Each entry includes the exact quoted directive (when available), a

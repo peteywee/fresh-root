@@ -17,20 +17,23 @@ const LoginForm = React.memo(() => {
   const router = useRouter();
   const params = useSearchParams();
   const redirectParam = params?.get("redirect");
-  
+
   const [status, setStatus] = useState<string>("");
   const [error, setError] = useState<string>("");
   const [loading, setLoading] = useState(false);
 
   // Determine redirect based on user type
-  const getRedirectPath = useCallback((userEmail: string) => {
-    const isSuperAdmin = SUPER_ADMIN_EMAILS.includes(userEmail.toLowerCase());
-    // Super admins go to dashboard unless they explicitly requested another page
-    if (isSuperAdmin && !redirectParam) {
-      return "/dashboard";
-    }
-    return redirectParam || "/";
-  }, [redirectParam]);
+  const getRedirectPath = useCallback(
+    (userEmail: string) => {
+      const isSuperAdmin = SUPER_ADMIN_EMAILS.includes(userEmail.toLowerCase());
+      // Super admins go to dashboard unless they explicitly requested another page
+      if (isSuperAdmin && !redirectParam) {
+        return "/dashboard";
+      }
+      return redirectParam || "/";
+    },
+    [redirectParam],
+  );
 
   // If the page loads with an email link, complete sign-in
   useEffect(() => {
@@ -153,12 +156,8 @@ const LoginForm = React.memo(() => {
     <main className="flex min-h-screen items-center justify-center bg-gradient-to-br from-surface via-surface-card to-surface-accent p-6">
       <div className="card w-full max-w-md animate-slide-up">
         <div className="mb-6 space-y-2 text-center">
-          <h1 className="text-3xl font-bold text-primary">
-            Welcome Back
-          </h1>
-          <p className="text-text-muted">
-            Sign in to access your dashboard
-          </p>
+          <h1 className="text-3xl font-bold text-primary">Welcome Back</h1>
+          <p className="text-text-muted">Sign in to access your dashboard</p>
         </div>
 
         {error && (

@@ -1,12 +1,10 @@
 # Fast Track to Production - Optimized Execution Plan
-
 **Created**: 2025-12-23 **Current Progress**: 27/45 tasks (60%) - E2E test complete! **Target**:
 Production deployment in 2.5 hours **Strategy**: Focus on blockers, skip non-critical work
 
 ---
 
 ## Executive Summary
-
 **What's Actually Done:** ✅ All core features implemented (Phases 0-4) ✅ API routes using
 Firestore ✅ Auth, data persistence, UX complete ✅ Security patterns validated (130/90 score!)
 
@@ -31,9 +29,7 @@ Firestore ✅ Auth, data persistence, UX complete ✅ Security patterns validate
 ---
 
 ## Revised Task List (6.5 hours → 2.5 hours)
-
 ### ✅ Task 1: E2E Golden Path Test - **COMPLETE**
-
 **Status**: Done (PR #xxx, commit 3014640)
 
 **What Was Implemented**:
@@ -57,9 +53,7 @@ Firestore ✅ Auth, data persistence, UX complete ✅ Security patterns validate
 ---
 
 ### 🎯 Critical Path (Remaining)
-
 #### Task 2: Performance Audit (1h) - **NEXT UP**
-
 **Why Important**: Verifies app is production-ready for users
 
 **Steps**:
@@ -70,19 +64,18 @@ Firestore ✅ Auth, data persistence, UX complete ✅ Security patterns validate
    - `/signin` (auth)
    - `/app/dashboard` (main app)
    - `/app/schedules` (core feature)
-3. Target: ≥90 all categories (Performance, Accessibility, Best Practices, SEO)
+1. Target: ≥90 all categories (Performance, Accessibility, Best Practices, SEO)
 
 **Acceptance**:
 
-- [ ] Performance ≥90
-- [ ] Accessibility ≥90
-- [ ] Best Practices ≥90
-- [ ] SEO ≥80 (acceptable for app)
+- \[ ] Performance ≥90
+- \[ ] Accessibility ≥90
+- \[ ] Best Practices ≥90
+- \[ ] SEO ≥80 (acceptable for app)
 
 ---
 
 #### Task 3: ARIA Quick Audit (0.5h)
-
 **Why Important**: Ensures basic accessibility compliance
 
 **Steps**:
@@ -93,18 +86,16 @@ Firestore ✅ Auth, data persistence, UX complete ✅ Security patterns validate
 
 **Acceptance**:
 
-- [ ] 0 critical violations
-- [ ] 0 serious violations
-- [ ] Minor violations documented
+- \[ ] 0 critical violations
+- \[ ] 0 serious violations
+- \[ ] Minor violations documented
 
 ---
 
 #### Task 4: Deploy to Staging (1h)
-
 **Why Important**: Verifies deployment process works (Vercel OR Cloudflare)
 
 ##### Option A: Vercel Deployment (Recommended)
-
 1. Test local production build first:
 
    ```bash
@@ -112,28 +103,30 @@ Firestore ✅ Auth, data persistence, UX complete ✅ Security patterns validate
    pnpm --filter web start
    ```
 
-2. Push to GitHub - Vercel auto-deploys preview on PR
-3. Configure environment variables in Vercel dashboard:
+1. Push to GitHub - Vercel auto-deploys preview on PR
+
+1. Configure environment variables in Vercel dashboard:
    - All `NEXT_PUBLIC_*` vars from `.env.local`
    - `GOOGLE_APPLICATION_CREDENTIALS_JSON_BASE64` secret
-4. Verify deployment at preview URL
+
+1. Verify deployment at preview URL
 
 ##### Option B: Cloudflare Pages (Alternative)
-
 1. Build locally to verify:
 
    ```bash
    pnpm --filter web build
    ```
 
-2. Deploy via Wrangler:
+1. Deploy via Wrangler:
 
    ```bash
    pnpm wrangler pages deploy apps/web/.next/standalone --project-name fresh-schedules
    ```
 
-3. Configure secrets in Cloudflare dashboard
-4. Verify at `*.pages.dev` URL
+1. Configure secrets in Cloudflare dashboard
+
+1. Verify at `*.pages.dev` URL
 
 **Common Build Issues & Fixes**:
 
@@ -148,19 +141,17 @@ Firestore ✅ Auth, data persistence, UX complete ✅ Security patterns validate
 
 **Acceptance**:
 
-- [ ] Local production build succeeds
-- [ ] Staging URL accessible (Vercel OR Cloudflare)
-- [ ] Firebase connected
-- [ ] Homepage loads
-- [ ] Login page loads
-- [ ] No critical errors in browser console
+- \[ ] Local production build succeeds
+- \[ ] Staging URL accessible (Vercel OR Cloudflare)
+- \[ ] Firebase connected
+- \[ ] Homepage loads
+- \[ ] Login page loads
+- \[ ] No critical errors in browser console
 
 ---
 
 ### 🔧 Optional Improvements (If Time Permits)
-
 #### Task 5: Clean Up `any` Types (1h) - **LOW PRIORITY**
-
 **Current State**: 25 occurrences, mostly in:
 
 - Test files (mocks, fixtures) - SAFE TO IGNORE
@@ -171,13 +162,12 @@ Firestore ✅ Auth, data persistence, UX complete ✅ Security patterns validate
 
 **Acceptance**:
 
-- [ ] Middleware context properly typed
-- [ ] Other `any` types documented as acceptable
+- \[ ] Middleware context properly typed
+- \[ ] Other `any` types documented as acceptable
 
 ---
 
 ## Execution Timeline (2.5 hours remaining)
-
 ```text
 ✅ Hour 0-2:   E2E Golden Path Test (Task 1) - COMPLETE
             └─ Created golden-path.spec.ts with 6 passing tests
@@ -205,36 +195,32 @@ DONE: Ready for production! 🚀
 ---
 
 ## Deployment Troubleshooting Guide
-
 ### Pre-Deployment Checklist
-
-✅ Local build succeeds: `pnpm --filter web build`  
-✅ All tests pass: `pnpm test`  
-✅ E2E tests pass: `pnpm playwright test`  
-✅ TypeScript clean: `pnpm typecheck`  
+✅ Local build succeeds: `pnpm --filter web build`\
+✅ All tests pass: `pnpm test`\
+✅ E2E tests pass: `pnpm playwright test`\
+✅ TypeScript clean: `pnpm typecheck`\
 ✅ Linting clean: `pnpm lint`
 
 ### Vercel Deployment Issues
-
-**Issue**: Build fails with "Dynamic server usage"  
+**Issue**: Build fails with "Dynamic server usage"\
 **Solution**: This is expected! Pages using `cookies()` can't be static. ✅ Normal behavior.
 
-**Issue**: "outputFileTracingRoot" warning  
+**Issue**: "outputFileTracingRoot" warning\
 **Solution**: Add to `apps/web/next.config.js`:
 
 ```javascript
 outputFileTracingRoot: path.join(__dirname, "../../");
 ```
 
-**Issue**: Missing environment variables  
+**Issue**: Missing environment variables\
 **Solution**: Add all vars from `.env.local` to Vercel project settings → Environment Variables
 
-**Issue**: Firebase Admin SDK not working  
+**Issue**: Firebase Admin SDK not working\
 **Solution**: Ensure `GOOGLE_APPLICATION_CREDENTIALS_JSON_BASE64` is set in Vercel secrets
 
 ### Cloudflare Pages Issues
-
-**Issue**: `process.exit` not supported in edge runtime  
+**Issue**: `process.exit` not supported in edge runtime\
 **Solution**: Wrap in check:
 
 ```typescript
@@ -243,14 +229,13 @@ if (typeof process !== "undefined" && process.exit) {
 }
 ```
 
-**Issue**: Firebase Admin SDK doesn't work  
+**Issue**: Firebase Admin SDK doesn't work\
 **Solution**: Use Firebase REST API instead (Cloudflare Edge doesn't support Node.js APIs)
 
-**Issue**: Build output not compatible  
+**Issue**: Build output not compatible\
 **Solution**: Ensure `output: 'standalone'` in `next.config.js`
 
 ### Firebase Configuration
-
 Required environment variables for both platforms:
 
 ```bash
@@ -266,7 +251,6 @@ GOOGLE_APPLICATION_CREDENTIALS_JSON_BASE64=
 ```
 
 ### Quick Deployment Test
-
 Test deployment works before committing:
 
 ```bash
@@ -281,9 +265,7 @@ pnpm wrangler pages dev apps/web/.next
 ---
 
 ## What We're NOT Doing (And Why It's OK)
-
 ### Deferred Type Safety Work
-
 - **E1-E4: Remove `any` types**
   - Only 25 occurrences, 20+ are in test files
   - Middleware context types (3) are acceptable with proper JSDoc
@@ -301,7 +283,6 @@ pnpm wrangler pages dev apps/web/.next
   - **Impact**: None - already done
 
 ### Deferred Features
-
 - **F3: File upload**
   - Not critical for MVP
   - Can add post-launch
@@ -315,31 +296,27 @@ pnpm wrangler pages dev apps/web/.next
 ---
 
 ## Success Criteria (Gate 7 - Production Ready)
-
 ### Must Pass
-
-- [x] All API routes using Firestore ✅
-- [x] Auth flow works ✅
-- [x] Data persistence verified ✅
-- [x] Pattern validation ≥90 ✅ (130/90!)
-- [x] TypeScript compiles ✅
-- [x] ESLint passes ✅
-- [ ] E2E golden path passes ⏳
-- [ ] Lighthouse ≥90 (Performance, A11y, BP) ⏳
-- [ ] Staging deployment verified ⏳
-- [ ] No critical accessibility violations ⏳
+- \[x] All API routes using Firestore ✅
+- \[x] Auth flow works ✅
+- \[x] Data persistence verified ✅
+- \[x] Pattern validation ≥90 ✅ (130/90!)
+- \[x] TypeScript compiles ✅
+- \[x] ESLint passes ✅
+- \[ ] E2E golden path passes ⏳
+- \[ ] Lighthouse ≥90 (Performance, A11y, BP) ⏳
+- \[ ] Staging deployment verified ⏳
+- \[ ] No critical accessibility violations ⏳
 
 ### Nice to Have (Can Defer)
-
-- [ ] Zero `any` types (currently 25, mostly tests)
-- [ ] 100% test coverage (currently ~60%)
-- [ ] All ARIA labels perfect
-- [ ] File upload feature
+- \[ ] Zero `any` types (currently 25, mostly tests)
+- \[ ] 100% test coverage (currently ~60%)
+- \[ ] All ARIA labels perfect
+- \[ ] File upload feature
 
 ---
 
 ## Risk Assessment
-
 | Risk                     | Probability | Impact | Mitigation                                |
 | ------------------------ | ----------- | ------ | ----------------------------------------- |
 | E2E test flaky           | Medium      | High   | Use deterministic test data, proper waits |
@@ -350,7 +327,6 @@ pnpm wrangler pages dev apps/web/.next
 ---
 
 ## Decision Log
-
 **Why skip E1-E5 (Type Safety)?**
 
 - Audit shows work is already done or non-critical
@@ -374,21 +350,20 @@ pnpm wrangler pages dev apps/web/.next
 ---
 
 ## Next Steps
-
 1. **Start with E2E test** (Task 1) - 4 hours
    - This is the biggest blocker
    - Will catch any integration issues
 
-2. **Run performance audit** (Task 2) - 1 hour
+1. **Run performance audit** (Task 2) - 1 hour
    - Quick validation of production readiness
 
-3. **Quick ARIA check** (Task 3) - 0.5 hour
+1. **Quick ARIA check** (Task 3) - 0.5 hour
    - Catch any critical accessibility issues
 
-4. **Deploy to staging** (Task 4) - 1 hour
+1. **Deploy to staging** (Task 4) - 1 hour
    - Verify deployment process
 
-5. **🚀 Ship to production!**
+1. **🚀 Ship to production!**
 
 ---
 

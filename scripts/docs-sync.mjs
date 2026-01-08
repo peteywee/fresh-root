@@ -21,8 +21,8 @@ if (!fs.existsSync(archDir)) {
 const activePath = fs.existsSync(reportPath) ? reportPath : dashboardPath;
 
 if (!fs.existsSync(activePath)) {
-  console.error("⚠️ No Repomix report found. Run 'pnpm repomix' first.");
-  process.exit(1);
+  console.warn("⚠️ No Repomix report found. Skipping docs update.");
+  process.exit(0); // Exit gracefully for CI
 }
 
 const timestamp = new Date().toISOString();

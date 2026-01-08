@@ -1,5 +1,4 @@
 # AI Agent Guide: Fresh Schedules Codebase
-
 **Version**: 2.1 **Last Updated**: December 10, 2025 **Target**: AI coding agents (GitHub Copilot,
 Claude Code, Cursor, etc.)
 
@@ -7,7 +6,6 @@ This guide provides essential knowledge for AI agents to be immediately producti
 Schedules codebase.
 
 ## 🎯 Before You Start
-
 **Important**: This codebase is governed by production development directives. Read these files for
 binding operational rules:
 
@@ -26,7 +24,6 @@ binding operational rules:
 These directives are **binding**—not suggestions. They define how you must operate in this codebase.
 
 ### 📚 New: Hierarchical Governance System
-
 **As of December 2025**, documentation is organized in a 5-level hierarchy for fast AI retrieval:
 
 ```
@@ -62,7 +59,6 @@ details. Each has YAML frontmatter for indexing.
 ---
 
 ## Table of Contents
-
 1. [Quick Start](#quick-start-1)
 2. [MCP Tool Strategy](#mcp-tool-strategy-1) ⭐ **NEW**
 3. [Operational Directives](#operational-directives-1)
@@ -83,11 +79,9 @@ details. Each has YAML frontmatter for indexing.
 ---
 
 ## MCP Tool Strategy
-
 **⭐ NEW (December 16, 2025)**: MCP tools are now configured in tiers for automatic availability.
 
 ### Always-On Tools (No waiting, use immediately)
-
 You have **47 tools** available automatically without any setup:
 
 | Tier       | Tools                     | Purpose                                             | Status       |
@@ -98,7 +92,6 @@ You have **47 tools** available automatically without any setup:
 | **Tier 2** | Chrome DevTools (8 tools) | Browser automation, screenshots                     | 🟡 On-demand |
 
 ### Tool Selection Guide
-
 **Use GitHub MCP when**:
 
 - Searching code across repo
@@ -129,7 +122,6 @@ You have **47 tools** available automatically without any setup:
 - Performance profiling
 
 ### Quick Examples
-
 ```markdown
 User: "Analyze API route patterns" → Agent uses: mcp_repomix_pack_codebase (zero cost, fast)
 
@@ -142,27 +134,23 @@ User: "Deploy Firestore rules" → Agent uses: firebase/deploy (deployment)
 ```
 
 ### Best Practices
-
 1. **Explicit tool requests**: Say "Use Repomix to analyze..." instead of just "analyze"
 2. **Tool chaining**: Combine tools for better results (pack → grep → analyze)
-3. **Caching**: Reuse packed outputs to save tokens (attach_packed_output)
-4. **Fallbacks**: If MCP tool unavailable, fall back to local tools (read_file, grep_search)
+3. **Caching**: Reuse packed outputs to save tokens (attach\_packed\_output)
+4. **Fallbacks**: If MCP tool unavailable, fall back to local tools (read\_file, grep\_search)
 
 ### Reference Documentation
-
 - **Full Reference**:
-  [docs/REPOMIX_MCP_TOOLS_REFERENCE.md](../docs/REPOMIX_MCP_TOOLS_REFERENCE.md) - Detailed tool
+  [docs/REPOMIX\_MCP\_TOOLS\_REFERENCE.md](../docs/REPOMIX_MCP_TOOLS_REFERENCE.md) - Detailed tool
   documentation
-- **Strategy**: [docs/MCP_TOOLING_STRATEGY.md](../docs/MCP_TOOLING_STRATEGY.md) - Tier architecture
+- **Strategy**: [docs/MCP\_TOOLING\_STRATEGY.md](../docs/MCP_TOOLING_STRATEGY.md) - Tier architecture
   and planning
 - **Configuration**: [.mcp.json](.mcp.json) - Tool configuration
 
 ---
 
 ## Quick Start
-
 ### Essential Context
-
 - **Project Type**: Next.js 16 PWA (App Router) + Firebase backend
 - **Monorepo**: pnpm workspaces + Turbo
 - **Architecture**: SDK Factory pattern for API routes (90%+ migrated)
@@ -171,7 +159,6 @@ User: "Deploy Firestore rules" → Agent uses: firebase/deploy (deployment)
 - **Package Manager**: pnpm ONLY (enforced via pre-commit hooks)
 
 ### First Commands
-
 ````bash
 # Install dependencies (use pnpm only!)
 pnpm install --frozen-lockfile
@@ -192,25 +179,22 @@ NEXT_PUBLIC_USE_EMULATORS=true firebase emulators:start
 ```typescript
 
 ### Critical Files to Read First
-
 **Navigation Indexes** (Start here for discovery):
 1. [.github/governance/INDEX.md](.github/governance/INDEX.md) - Canonical rules, amendments, tag lookup
 2. [.github/instructions/INDEX.md](.github/instructions/INDEX.md) - Implementation instructions catalog
 3. [docs/INDEX.md](../docs/INDEX.md) - Documentation catalog
 
 **Implementation Essentials**:
-4. `packages/api-framework/src/index.ts` - SDK factory (current standard)
-5. `packages/types/src/index.ts` - Zod schemas (single source of truth)
-6. `docs/standards/CODING_RULES_AND_PATTERNS.md` - Comprehensive coding standards
-7. `firestore.rules` - Security rules (must sync with API routes)
-8. `apps/web/app/api/_template/route.ts` - API route template
+1. `packages/api-framework/src/index.ts` - SDK factory (current standard)
+2. `packages/types/src/index.ts` - Zod schemas (single source of truth)
+3. `docs/standards/CODING_RULES_AND_PATTERNS.md` - Comprehensive coding standards
+4. `firestore.rules` - Security rules (must sync with API routes)
+5. `apps/web/app/api/_template/route.ts` - API route template
 
 ---
 
 ## Operational Directives
-
 ### Production Development Philosophy
-
 This codebase enforces **strict hierarchical thinking and sequential execution**. When making
 changes:
 
@@ -228,7 +212,6 @@ changes:
 - `.github/instructions/code-review-generic.instructions.md` - Code review standards
 
 ### CrewOps Protocol
-
 For **non-trivial tasks** (multi-step feature work, architectural changes, complex bug fixes), the
 CrewOps protocol automatically engages a multi-role team:
 
@@ -247,9 +230,7 @@ leakage, insecure defaults, or missing access controls.
 ---
 
 ## Architecture Overview
-
 ### Monorepo Structure
-
 ```typescript
 fresh-root/
 ├── apps/
@@ -272,14 +253,12 @@ fresh-root/
 ```typescript
 
 ### Service Boundaries
-
 1. **Client**: Next.js React components (`apps/web/app/`)
 2. **API Layer**: Next.js API routes (`apps/web/app/api/`)
 3. **Data Layer**: Firebase Admin SDK (server-side only)
 4. **Security Layer**: Firestore rules (client/server enforcement)
 
 ### Major Architectural Changes (Recent)
-
 - **SDK Factory Migration**: 90%+ of routes migrated from `withSecurity` wrapper pattern to
   declarative SDK factory pattern
 - **Zod-First Validation**: All API inputs validated via Zod schemas in `packages/types`
@@ -288,11 +267,9 @@ fresh-root/
 ---
 
 ## The Triad of Trust
-
 **CRITICAL PRINCIPLE**: Every domain entity that crosses system boundaries MUST have all three:
 
 ### 1. Zod Schema (Type Definition)
-
 **Location**: `packages/types/src/[entity].ts`
 
 ```typescript
@@ -331,7 +308,6 @@ export const UpdateShiftSchema = ShiftSchema.partial().omit({ id: true });
 ```typescript
 
 ### 2. API Route (with SDK Factory)
-
 **Location**: `apps/web/app/api/[entities]/route.ts`
 
 ```typescript
@@ -368,7 +344,6 @@ export const POST = createOrgEndpoint({
 ```typescript
 
 ### 3. Firestore Security Rules
-
 **Location**: `firestore.rules`
 
 ```javascript
@@ -389,11 +364,9 @@ match /orgs/{orgId}/schedules/{scheduleId}/shifts/{shiftId} {
 ---
 
 ## SDK Factory Pattern (Current Standard)
-
 **Status**: 90%+ of routes migrated. This is the **preferred pattern** for all new API routes.
 
 ### Why SDK Factory?
-
 The SDK factory (`@fresh-schedules/api-framework`) provides a declarative, type-safe way to create
 API endpoints with built-in:
 
@@ -408,7 +381,6 @@ API endpoints with built-in:
 - ✅ Request tracing
 
 ### Middleware Pipeline (Automatic)
-
 ```typescript
 1. Rate Limiting (Redis/in-memory)
    ↓
@@ -428,7 +400,6 @@ API endpoints with built-in:
 ```typescript
 
 ### Factory Types
-
 ```typescript
 // 1. Public endpoint (no auth required)
 export const GET = createPublicEndpoint({
@@ -468,7 +439,6 @@ export const POST = createRateLimitedEndpoint({
 ```typescript
 
 ### Complete Example
-
 ```typescript
 // apps/web/app/api/schedules/route.ts
 import { createOrgEndpoint } from "@fresh-schedules/api-framework";
@@ -532,7 +502,6 @@ export const POST = createOrgEndpoint({
 ```typescript
 
 ### Configuration Options
-
 ```typescript
 export interface EndpointConfig<TInput, TOutput> {
   // Authentication requirement
@@ -569,13 +538,10 @@ export interface EndpointConfig<TInput, TOutput> {
 ---
 
 ## Type Safety & Validation
-
 ### Core Principle: Zod-First
-
 **Never duplicate types.** All types that cross boundaries originate from Zod schemas.
 
 ### Schema Organization
-
 **Location**: `packages/types/src/`
 
 **Files**:
@@ -589,7 +555,6 @@ export interface EndpointConfig<TInput, TOutput> {
 - `index.ts` - Exports all schemas
 
 ### Schema Pattern
-
 ```typescript
 // 1. Define base schema
 export const EntitySchema = z.object({
@@ -619,7 +584,6 @@ export const UpdateEntitySchema = EntitySchema.partial().omit({
 ```typescript
 
 ### Validation Error Handling
-
 SDK factory automatically converts ZodErrors to user-friendly responses:
 
 ```json
@@ -638,7 +602,6 @@ SDK factory automatically converts ZodErrors to user-friendly responses:
 ```typescript
 
 ### Custom Validation Rules
-
 ```typescript
 export const ShiftSchema = z
   .object({
@@ -654,9 +617,7 @@ export const ShiftSchema = z
 ---
 
 ## Authentication & Authorization
-
 ### Session Management
-
 **Pattern**: Firebase Admin SDK session cookie verification
 
 **Flow**:
@@ -674,7 +635,6 @@ Set-Cookie: session=${value}; HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=${
 ```typescript
 
 ### Role-Based Access Control (RBAC)
-
 **Role Hierarchy** (lowest to highest):
 
 ```typescript
@@ -712,7 +672,6 @@ export const DELETE = createOrgEndpoint({
 ```typescript
 
 ### Organization Context
-
 **Pattern**: Loaded from Firestore membership collection
 
 **Query**:
@@ -763,9 +722,7 @@ const membershipQuery = await db
 ---
 
 ## Security Patterns
-
 ### 1. CSRF Protection
-
 **Pattern**: Double-submit cookie pattern (automatic in SDK factory)
 
 **Applied To**: POST, PUT, PATCH, DELETE (mutations only)
@@ -787,7 +744,6 @@ export const POST = createPublicEndpoint({
 - Token must match cookie value
 
 ### 2. Rate Limiting
-
 **Implementation**: Redis-backed (production) or in-memory (dev)
 
 **Environment Variables**:
@@ -828,7 +784,6 @@ Retry-After: 45  (seconds until reset)
 ```typescript
 
 ### 3. Input Validation
-
 **Pattern**: Zod schemas validate ALL inputs at API boundaries
 
 **Automatic**: When you specify `input: Schema`, SDK factory validates before handler
@@ -845,7 +800,6 @@ if (!parsed.success) {
 ```typescript
 
 ### 4. Organization Isolation
-
 **ALWAYS** scope queries to the user's organization:
 
 **❌ WRONG**:
@@ -861,7 +815,6 @@ const schedules = await db.collection(`orgs/${context.org!.orgId}/schedules`).ge
 ```typescript
 
 ### 5. Security Headers
-
 **Automatic**: Applied to all responses via SDK factory
 
 **Headers Applied**:
@@ -876,9 +829,7 @@ const schedules = await db.collection(`orgs/${context.org!.orgId}/schedules`).ge
 ---
 
 ## Data Layer & Firebase
-
 ### Firebase Admin SDK
-
 **Location**: `apps/web/lib/firebase-admin.ts`
 
 **Singleton Pattern**:
@@ -900,7 +851,6 @@ const auth = getAuth();
 - `GOOGLE_APPLICATION_CREDENTIALS_JSON` (service account JSON string)
 
 ### Firestore Collection Paths
-
 ```typescript
 /users/{userId}                                    - User profiles
 /orgs/{orgId}                                      - Organizations
@@ -913,7 +863,6 @@ const auth = getAuth();
 ```typescript
 
 ### Firestore Access Pattern
-
 ```typescript
 export const GET = createOrgEndpoint({
   handler: async ({ context }) => {
@@ -939,7 +888,6 @@ export const GET = createOrgEndpoint({
 ```typescript
 
 ### Firestore Security Rules
-
 **Location**: `firestore.rules`
 
 **Key Helper Functions**:
@@ -991,9 +939,7 @@ match /orgs/{orgId}/schedules/{scheduleId} {
 ---
 
 ## Testing Patterns
-
 ### Test Framework: Vitest
-
 **Config**: `apps/web/vitest.config.ts`
 
 **Run Tests**:
@@ -1005,7 +951,6 @@ pnpm test:watch        # Watch mode
 ```typescript
 
 ### Test Utilities
-
 **Location**: `packages/api-framework/src/testing.ts`
 
 **Mock Request Builder**:
@@ -1042,7 +987,6 @@ const orgContext = createMockOrgContext({
 ```typescript
 
 ### Test Structure
-
 **Location**: Co-located with code in `__tests__/` directories
 
 ```typescript
@@ -1102,7 +1046,6 @@ describe("POST /api/schedules", () => {
 ```typescript
 
 ### Firestore Rules Tests
-
 **Location**: `tests/rules/`
 
 **Run**: `pnpm test:rules`
@@ -1112,9 +1055,7 @@ describe("POST /api/schedules", () => {
 ---
 
 ## Development Workflows
-
 ### Package Manager: pnpm ONLY
-
 **⚠️ CRITICAL**: This project enforces pnpm. Using npm or yarn will be blocked by pre-commit hooks.
 
 **Why pnpm?**:
@@ -1147,7 +1088,6 @@ pnpm clean
 ```typescript
 
 ### Turbo Tasks
-
 **Config**: `turbo.json`
 
 **Tasks**:
@@ -1168,7 +1108,6 @@ pnpm test       # Turbo runs test tasks
 ```typescript
 
 ### Firebase Emulators
-
 **Start Emulators**:
 
 ```bash
@@ -1195,7 +1134,6 @@ pnpm sim:auth  # Auth simulation
 - UI: `localhost:4000`
 
 ### Pre-Commit Hooks
-
 **Location**: `.husky/pre-commit`
 
 **Validation Steps** (runs automatically):
@@ -1216,7 +1154,6 @@ pnpm format
 ```typescript
 
 ### Local Quality Gates (Before PR)
-
 **Checklist**:
 
 - \[ ] `pnpm install --frozen-lockfile` completes without warnings
@@ -1231,16 +1168,13 @@ pnpm format
 ---
 
 ## Hard Rules (Must Follow)
-
 ### 1. Package Manager
-
 **RULE**: Use pnpm ONLY. Never use npm or yarn.
 
 **Why**: Enforced via pre-commit hooks and `.npmrc`. Using other package managers will cause CI
 failures.
 
 ### 2. Type Safety
-
 **RULE**: Never duplicate types. Always use `z.infer<typeof Schema>`.
 
 **❌ WRONG**:
@@ -1262,7 +1196,6 @@ export type User = z.infer<typeof UserSchema>;
 ```typescript
 
 ### 3. Security Middleware
-
 **RULE**: All API routes MUST use SDK factory or `withSecurity` wrapper.
 
 **❌ WRONG**:
@@ -1286,7 +1219,6 @@ export const GET = createOrgEndpoint({
 ```typescript
 
 ### 4. Input Validation
-
 **RULE**: All POST/PUT/PATCH routes MUST validate input via Zod.
 
 **❌ WRONG**:
@@ -1312,7 +1244,6 @@ export const POST = createOrgEndpoint({
 ```typescript
 
 ### 5. Organization Isolation
-
 **RULE**: Always scope Firestore queries to `context.org.orgId`.
 
 **❌ WRONG**:
@@ -1328,7 +1259,6 @@ const schedules = await db.collection(`orgs/${context.org!.orgId}/schedules`).ge
 ```typescript
 
 ### 6. The Triad of Trust
-
 **RULE**: Every domain entity MUST have:
 
 1. Zod schema in `packages/types/src/`
@@ -1338,7 +1268,6 @@ const schedules = await db.collection(`orgs/${context.org!.orgId}/schedules`).ge
 **Verify**: Run `node scripts/validate-patterns.mjs` to check coverage.
 
 ### 7. File Headers
-
 **RULE**: Every source file MUST have a header:
 
 ```typescript
@@ -1354,13 +1283,11 @@ const schedules = await db.collection(`orgs/${context.org!.orgId}/schedules`).ge
 **Auto-applied**: Pre-commit hook runs `node scripts/tag-files.mjs`
 
 ### 8. Lockfile Integrity
-
 **RULE**: Never commit lockfile changes without explanation in PR description.
 
 **Why**: Prevents accidental dependency changes.
 
 ### 9. No Deprecated Packages
-
 **RULE**: If `pnpm install` shows deprecated warnings, fix before merging.
 
 **Options**:
@@ -1370,7 +1297,6 @@ const schedules = await db.collection(`orgs/${context.org!.orgId}/schedules`).ge
 3. Document why it remains (with issue link)
 
 ### 10. Error Handling
-
 **RULE**: Always log errors with context before returning error response.
 
 **❌ WRONG**:
@@ -1398,9 +1324,7 @@ catch (err) {
 ---
 
 ## Common Patterns & Examples
-
 ### Creating a New Domain Entity
-
 **Steps**:
 
 ```bash
@@ -1600,7 +1524,6 @@ describe("POST /api/my-entities", () => {
 ```typescript
 
 ### Migrating Legacy Route to SDK Factory
-
 **Before** (legacy `withSecurity` pattern):
 
 ```typescript
@@ -1652,9 +1575,7 @@ export const POST = createOrgEndpoint({
 ---
 
 ## File Organization
-
 ### Path Aliases
-
 **Config**: `tsconfig.json`
 
 ```json
@@ -1681,7 +1602,6 @@ import { helper } from "@/src/lib/helpers";
 ```typescript
 
 ### Import Order (Enforced by ESLint)
-
 ```typescript
 // 1. External/builtin (Node.js, npm packages)
 import { z } from "zod";
@@ -1697,7 +1617,6 @@ import { ok, badRequest } from "./validation";
 ```typescript
 
 ### Domain-Driven Structure
-
 **Group by feature/domain, not by technical layer**:
 
 **❌ WRONG**:
@@ -1725,11 +1644,8 @@ import { ok, badRequest } from "./validation";
 ---
 
 ## Troubleshooting
-
 ### Common Issues
-
 #### 1. "Invalid Options: Unexpected top-level property"
-
 **Cause**: ESLint v9 removed some CLI flags. Using `eslint_d` wrapper.
 
 **Fix**: Use `eslint` directly (already fixed in latest):
@@ -1743,7 +1659,6 @@ import { ok, badRequest } from "./validation";
 ```typescript
 
 #### 2. "packageManager field is required"
-
 **Cause**: pnpm enforcement script checking package.json.
 
 **Fix**: Ensure root `package.json` has:
@@ -1755,20 +1670,17 @@ import { ok, badRequest } from "./validation";
 ```typescript
 
 #### 3. 427 TypeScript Errors
-
 **Cause**: Broken SDK factory migration (syntax errors).
 
 **Fix**: Already reverted in latest commits. If you see TS1128, TS1005, TS1472 errors, revert to
 working commit.
 
 #### 4. "Link cannot be used as JSX component" (TS2786)
-
 **Cause**: React 19 types with Next.js 16 (uses React 18).
 
 **Status**: Known issue, 13 errors acceptable. Will be fixed when Next.js 16.1+ supports React 19.
 
 #### 5. Rate Limit Not Working in Production
-
 **Cause**: Using in-memory rate limiter with multiple instances.
 
 **Fix**: Set Redis environment variables:
@@ -1779,7 +1691,6 @@ UPSTASH_REDIS_REST_TOKEN=****
 ```typescript
 
 #### 6. CSRF Token Invalid
-
 **Cause**: Token not included in request header.
 
 **Fix**: Client must send CSRF token in `X-CSRF-Token` header for mutations.
@@ -1796,7 +1707,6 @@ export const POST = createPublicEndpoint({
 ```typescript
 
 #### 7. "Organization context not found"
-
 **Cause**: Missing `orgId` in query params or `x-org-id` header.
 
 **Fix**: Include org ID in request:
@@ -1812,7 +1722,6 @@ fetch("/api/schedules", {
 ```typescript
 
 #### 8. Firestore Permission Denied
-
 **Cause**: Mismatch between API route permissions and Firestore rules.
 
 **Fix**: Verify Firestore rules allow the operation for the user's role. Check membership document
@@ -1821,9 +1730,7 @@ exists.
 ---
 
 ## Quick Reference
-
 ### Key Files
-
 | Purpose          | Location                                |
 | ---------------- | --------------------------------------- |
 | **Navigation Indexes** | |
@@ -1840,7 +1747,6 @@ exists.
 | Test Utilities   | `packages/api-framework/src/testing.ts` |
 
 ### Environment Variables
-
 ```bash
 # Firebase
 FIREBASE_PROJECT_ID=your-project-id
@@ -1863,7 +1769,6 @@ NODE_ENV=production|development
 ```typescript
 
 ### Useful Scripts
-
 ```bash
 # Development
 pnpm dev                    # Start dev server
@@ -1890,7 +1795,6 @@ node scripts/tag-files.mjs            # Add file headers
 ```typescript
 
 ### Role Hierarchy
-
 ```typescript
 org_owner   (100) - Full control
   ↓
@@ -1906,7 +1810,6 @@ staff       (40)  - View own schedule
 ```typescript
 
 ### HTTP Status Codes
-
 ```typescript
 200 OK                    - Success (GET)
 201 Created              - Success (POST)
@@ -1921,7 +1824,6 @@ staff       (40)  - View own schedule
 ```typescript
 
 ### Error Response Format
-
 ```typescript
 {
   "error": {
@@ -1941,7 +1843,6 @@ staff       (40)  - View own schedule
 ---
 
 ## Summary
-
 This codebase follows a **Zod-first, SDK factory pattern** with **hierarchical RBAC** and
 **comprehensive security**. Key takeaways:
 
@@ -1955,7 +1856,6 @@ This codebase follows a **Zod-first, SDK factory pattern** with **hierarchical R
 8. **Read the docs** - `docs/CODING_RULES_AND_PATTERNS.md` has comprehensive patterns
 
 ### Operating Under the Directives
-
 **Remember**: The production development directive is binding. This means:
 
 - ✅ **Hierarchical thinking**: Understand dependencies before acting

@@ -1,20 +1,16 @@
 # L3 — Scheduling Engine Modules
-
 This file documents the scheduling engine modules, Zod schemas, and domain types in Fresh Schedules.
 
 ---
 
 ## 1. Type System Overview
-
 All domain types are defined in `packages/types/src/` using Zod schemas. Types are inferred using
 `z.infer<typeof Schema>` — never duplicated.
 
 ---
 
 ## 2. Core Domain Schemas
-
 ### Scheduling Domain
-
 | Schema                 | File           | Purpose                    |
 | ---------------------- | -------------- | -------------------------- |
 | `ScheduleSchema`       | `schedules.ts` | Schedule entity definition |
@@ -26,7 +22,6 @@ All domain types are defined in `packages/types/src/` using Zod schemas. Types a
 | `PositionSchema`       | `positions.ts` | Position/role definition   |
 
 ### Organization Domain
-
 | Schema             | File             | Purpose               |
 | ------------------ | ---------------- | --------------------- |
 | `OrgSchema`        | `orgs.ts`        | Organization entity   |
@@ -35,7 +30,6 @@ All domain types are defined in `packages/types/src/` using Zod schemas. Types a
 | `ZoneSchema`       | `zones.ts`       | Zone within venue     |
 
 ### Staff Management
-
 | Schema                   | File            | Purpose             |
 | ------------------------ | --------------- | ------------------- |
 | `AttendanceRecordSchema` | `attendance.ts` | Attendance tracking |
@@ -44,7 +38,6 @@ All domain types are defined in `packages/types/src/` using Zod schemas. Types a
 | `CheckOutSchema`         | `attendance.ts` | Check-out payload   |
 
 ### RBAC & Security
-
 | Schema             | File      | Purpose                |
 | ------------------ | --------- | ---------------------- |
 | `OrgRoleSchema`    | `rbac.ts` | Role enumeration       |
@@ -53,7 +46,6 @@ All domain types are defined in `packages/types/src/` using Zod schemas. Types a
 ---
 
 ## 3. Onboarding Schemas
-
 Located in `packages/types/src/onboarding.ts`:
 
 | Schema                          | Purpose                         |
@@ -68,7 +60,6 @@ Located in `packages/types/src/onboarding.ts`:
 ---
 
 ## 4. Compliance Schemas
-
 Located in `packages/types/src/compliance/`:
 
 | Schema                          | File                         | Purpose                   |
@@ -80,7 +71,6 @@ Located in `packages/types/src/compliance/`:
 ---
 
 ## 5. Network & Corporate Schemas
-
 Located in `packages/types/src/`:
 
 | Schema                     | File                           | Purpose                |
@@ -95,7 +85,6 @@ Located in `packages/types/src/`:
 ---
 
 ## 6. Utility Schemas
-
 | Schema                | File             | Purpose                     |
 | --------------------- | ---------------- | --------------------------- |
 | `ErrorResponseSchema` | `errors.ts`      | Standardized error response |
@@ -112,7 +101,6 @@ Located in `packages/types/src/`:
 ---
 
 ## 7. Type Export Pattern
-
 All schemas are re-exported from `packages/types/src/index.ts`:
 
 ```typescript
@@ -148,7 +136,6 @@ export * from "./internal";
 ---
 
 ## 8. Schema Derivation Pattern
-
 All schemas follow this pattern to prevent duplication:
 
 ```typescript
@@ -182,7 +169,6 @@ export const UpdateEntitySchema = EntitySchema.partial().omit({
 ---
 
 ## 9. Validation Refinements
-
 Complex validation using Zod refinements:
 
 ```typescript
@@ -199,7 +185,7 @@ export const ShiftSchema = z
 
 ---
 
-**Total Schema Files**: 30  
-**Total Schemas**: 60+  
-**Package**: `@fresh-schedules/types`  
+**Total Schema Files**: 30\
+**Total Schemas**: 60+\
+**Package**: `@fresh-schedules/types`\
 **Last Generated**: December 2025

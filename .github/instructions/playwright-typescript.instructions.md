@@ -3,11 +3,8 @@
 description: "Playwright test generation instructions"
 
 ## applyTo: "\*\*"
-
 ## Test Writing Guidelines
-
 ### Code Quality Standards
-
 - **Locators**: Prioritize user-facing, role-based locators (`getByRole`, `getByLabel`, `getByText`,
   etc.) for resilience and accessibility. Use `test.step()` to group interactions and improve test
   readability and reporting.
@@ -20,7 +17,6 @@ description: "Playwright test generation instructions"
   to explain complex logic or non-obvious interactions.
 
 ### Test Structure
-
 - **Imports**: Start with `import { test, expect } from '@playwright/test';`.
 - **Organization**: Group related tests for a feature under a `test.describe()` block.
 - **Hooks**: Use `beforeEach` for setup actions common to all tests in a `describe` block (e.g.,
@@ -28,14 +24,12 @@ description: "Playwright test generation instructions"
 - **Titles**: Follow a clear naming convention, such as `Feature - Specific action or scenario`.
 
 ### File Organization
-
 - **Location**: Store all test files in the `tests/` directory.
 - **Naming**: Use the convention `<feature-or-page>.spec.ts` (e.g., `login.spec.ts`,
   `search.spec.ts`).
 - **Scope**: Aim for one test file per major application feature or page.
 
 ### Assertion Best Practices
-
 - **UI Structure**: Use `toMatchAriaSnapshot` to verify the accessibility tree structure of a
   component. This provides a comprehensive and accessible snapshot.
 - **Element Counts**: Use `toHaveCount` to assert the number of elements found by a locator.
@@ -43,7 +37,6 @@ description: "Playwright test generation instructions"
 - **Navigation**: Use `toHaveURL` to verify the page URL after an action.
 
 ## Example Test Structure
-
 ```typescript
 import { test, expect } from "@playwright/test";
 
@@ -80,7 +73,6 @@ test.describe("Movie Search Feature", () => {
 ```
 
 ## Test Execution Strategy
-
 1. **Initial Run**: Execute tests with `npx playwright test --project=chromium`
 2. **Debug Failures**: Analyze test failures and identify root causes
 3. **Iterate**: Refine locators, assertions, or test logic as needed
@@ -88,7 +80,6 @@ test.describe("Movie Search Feature", () => {
 5. **Report**: Provide feedback on test results and any issues discovered
 
 ## Quality Checklist
-
 Before finalizing tests, ensure:
 
 - \[ ] All locators are accessible and specific and avoid strict mode violations

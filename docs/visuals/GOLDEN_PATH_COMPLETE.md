@@ -1,13 +1,11 @@
 # Fresh Schedules: Complete User Journey (Sign-In → Onboarding → App)
-
-> **Generated**: December 17, 2025  
-> **Status**: Verified against actual source code  
+> **Generated**: December 17, 2025\
+> **Status**: Verified against actual source code\
 > **Grounded in**: `apps/web/app/(auth)/`, `apps/web/app/onboarding/`, `apps/web/app/api/`
 
 ---
 
 ## Visual Overview
-
 ```text
 ┌─────────────────────────────────────────────────────────────────────────────────┐
 │                           FRESH SCHEDULES USER JOURNEY                          │
@@ -69,7 +67,6 @@
 ---
 
 ## Phase 1: Authentication (Actual Code)
-
 ```text
 ┌─────────────────────────────────────────────────────────────────────────────────┐
 │                           AUTHENTICATION PHASE                                   │
@@ -129,7 +126,6 @@
 ---
 
 ## Phase 2: Org Check Gate (Middleware)
-
 ```text
 ┌─────────────────────────────────────────────────────────────────────────────────┐
 │                           ORG CHECK GATE                                         │
@@ -175,7 +171,6 @@
 ---
 
 ## Phase 3: Onboarding Wizard (Complete Flow)
-
 ```text
 ┌─────────────────────────────────────────────────────────────────────────────────┐
 │                           ONBOARDING WIZARD                                      │
@@ -324,9 +319,7 @@
 ---
 
 ## 🔴 GAPS IDENTIFIED IN CURRENT IMPLEMENTATION
-
 ### Gap 1: Frontend pages don't call their APIs
-
 | Page                                            | Expected API Call                               | Actual Behavior                                                                              |
 | ----------------------------------------------- | ----------------------------------------------- | -------------------------------------------------------------------------------------------- |
 | `/onboarding/create-network-org/page.tsx`       | `POST /api/onboarding/create-network-org`       | **Comment only**: "Real implementation would POST..." then `nav.push("/onboarding/block-4")` |
@@ -338,7 +331,6 @@
 ---
 
 ### Gap 2: Missing orgId cookie set
-
 | Where Expected                             | What Should Happen                             | What Actually Happens                  |
 | ------------------------------------------ | ---------------------------------------------- | -------------------------------------- |
 | After network creation                     | Set `orgId` cookie so `proxy.ts` allows access | **Not implemented** - cookie never set |
@@ -351,7 +343,6 @@ because `orgId` cookie is never set.
 ---
 
 ### Gap 3: No profile persistence
-
 | Route                          | Expected                          | Actual                                                 |
 | ------------------------------ | --------------------------------- | ------------------------------------------------------ |
 | `POST /api/onboarding/profile` | Write to Firestore `/users/{uid}` | **Not found** - route may not exist or doesn't persist |
@@ -361,7 +352,6 @@ because `orgId` cookie is never set.
 ---
 
 ### Gap 4: API routes return mock data (no Firestore writes)
-
 | Route                                      | Returns                                          | Actually Writes to Firestore?           |
 | ------------------------------------------ | ------------------------------------------------ | --------------------------------------- |
 | `/api/onboarding/create-network-org`       | `{ id, name, type, ownerId, createdAt, status }` | ❌ **No** - mock data only              |
@@ -372,7 +362,6 @@ because `orgId` cookie is never set.
 ---
 
 ### Gap 5: activate-network never called
-
 | Expected Flow                                  | Actual Flow                            |
 | ---------------------------------------------- | -------------------------------------- |
 | create-network-\* → activate-network → block-4 | create-network-\* → **skip** → block-4 |
@@ -382,7 +371,6 @@ because `orgId` cookie is never set.
 ---
 
 ## 📋 Recommended Fixes
-
 ```text
 Priority 1 (Critical - Flow Broken):
 ├── Wire frontend pages to call their API routes
@@ -403,7 +391,6 @@ Priority 3 (Polish):
 ---
 
 ## API Route Summary
-
 | Route                                      | Method | Auth          | Input Schema                      | Writes to Firestore |
 | ------------------------------------------ | ------ | ------------- | --------------------------------- | ------------------- |
 | `/api/session`                             | POST   | Public        | `CreateSessionSchema`             | N/A (cookie only)   |
@@ -419,7 +406,6 @@ Priority 3 (Polish):
 ---
 
 ## Related Files
-
 | Category           | Path                                                          |
 | ------------------ | ------------------------------------------------------------- |
 | Auth Helpers       | `apps/web/src/lib/auth-helpers.ts`                            |
@@ -432,7 +418,6 @@ Priority 3 (Polish):
 ---
 
 ## Schedule & Shift Flow (Actual Code)
-
 ```text
 ┌─────────────────────────────────────────────────────────────────────────────────┐
 │                      SCHEDULE & SHIFT MANAGEMENT                                 │
@@ -553,7 +538,6 @@ Priority 3 (Polish):
 ---
 
 ## Schedule Document Structure
-
 ```typescript
 interface ScheduleDoc {
   id: string; // Auto-generated
@@ -572,10 +556,9 @@ interface ScheduleDoc {
 ---
 
 ## 🔴 Additional Gaps Found in Schedule/Shift Flow
-
 | #      | Gap                                     | Location                                  | Impact                       |
 | ------ | --------------------------------------- | ----------------------------------------- | ---------------------------- |
-| **6**  | GET /schedules/[id] returns mock data   | `schedules/[id]/route.ts`                 | No real schedule fetch       |
+| **6**  | GET /schedules/\[id] returns mock data   | `schedules/[id]/route.ts`                 | No real schedule fetch       |
 | **7**  | PATCH/DELETE schedules return mock data | `schedules/[id]/route.ts`                 | Updates don't persist        |
 | **8**  | All shift endpoints return mock data    | `shifts/route.ts`, `shifts/[id]/route.ts` | No real shift persistence    |
 | **9**  | Positions return mock data              | `positions/route.ts`                      | No real position persistence |
@@ -584,11 +567,8 @@ interface ScheduleDoc {
 ---
 
 ## 📋 DETAILED FIX PLAN
-
 ### Phase 1: Onboarding Flow Fixes (Critical - User Cannot Complete Onboarding)
-
 #### Fix 1.1: Wire create-network-org frontend to API
-
 **File**: `apps/web/app/onboarding/create-network-org/page.tsx`
 
 **Current** (line 43-44):
@@ -633,7 +613,6 @@ nav.push("/onboarding/block-4");
 ---
 
 #### Fix 1.2: Wire create-network-corporate frontend to API
-
 **File**: `apps/web/app/onboarding/create-network-corporate/page.tsx`
 
 **Current** (line 45-46):
@@ -648,7 +627,6 @@ nav.push("/onboarding/block-4");
 ---
 
 #### Fix 1.3: Wire join page to API
-
 **File**: `apps/web/app/onboarding/join/page.tsx`
 
 **Current** (line 40-41):
@@ -663,7 +641,6 @@ nav.push("/onboarding/block-4");
 ---
 
 #### Fix 1.4: Add POST handler to admin-form API
-
 **File**: `apps/web/app/api/onboarding/admin-form/route.ts`
 
 **Current**: Only has GET handler
@@ -684,7 +661,6 @@ export const POST = createAuthenticatedEndpoint({
 ---
 
 #### Fix 1.5: Set orgId cookie after network creation
-
 **File**: `apps/web/app/api/onboarding/create-network-org/route.ts`
 
 **Add after successful creation**:
@@ -704,7 +680,6 @@ return response;
 ---
 
 #### Fix 1.6: Add Firestore writes to create-network-org API
-
 **File**: `apps/web/app/api/onboarding/create-network-org/route.ts`
 
 **Current**: Returns mock data
@@ -718,33 +693,17 @@ return response;
 ---
 
 ### Phase 2: Schedule/Shift Persistence Fixes
-
-#### Fix 2.1: Add Firestore reads to GET /schedules/[id]
-
-#### Fix 2.2: Add Firestore writes to PATCH /schedules/[id]
-
-#### Fix 2.3: Add Firestore deletes to DELETE /schedules/[id]
-
+#### Fix 2.1: Add Firestore reads to GET /schedules/\[id]
+#### Fix 2.2: Add Firestore writes to PATCH /schedules/\[id]
+#### Fix 2.3: Add Firestore deletes to DELETE /schedules/\[id]
 #### Fix 2.4: Add Firestore operations to all shift endpoints
-
 #### Fix 2.5: Add Firestore operations to position endpoints
-
-#### Fix 2.6: Make publish update schedule.state to "published"
-
----
-
+## #### Fix 2.6: Make publish update schedule.state to "published"
 ### Phase 3: Type System Alignment
-
 #### Fix 3.1: Create AdminFormSchema in packages/types
-
 #### Fix 3.2: Ensure OnboardingWizardContext has all setters
-
-#### Fix 3.3: Add missing JoinWithTokenSchema
-
----
-
+## #### Fix 3.3: Add missing JoinWithTokenSchema
 ## Execution Order
-
 ```text
 Phase 1 (Critical Path - Onboarding Broken)
 ├── 1.4: Add POST to admin-form (enables frontend to get formToken)

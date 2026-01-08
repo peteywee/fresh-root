@@ -1,9 +1,7 @@
 # 🧭 Fresh Schedules Architecture Overview
-
 **Status:** Auto-generated architecture documentation (placeholder - will be updated on first push)
 
 ## Automation Status
-
 | Component         | Status        | Next Update           |
 | ----------------- | ------------- | --------------------- |
 | Pre-push hook     | ✅ Configured | Before your next push |
@@ -12,9 +10,7 @@
 | Metrics tracking  | ✅ Configured | After dashboard runs  |
 
 ## Getting Started
-
 ### Local Development
-
 Generate reports locally:
 
 ```bash
@@ -32,7 +28,6 @@ pnpm docs:analyze
 ```
 
 ### Automation Hooks
-
 **Pre-push** (runs automatically):
 
 ```bash
@@ -54,7 +49,6 @@ git push
 - Collects growth metrics
 
 ## Next Steps
-
 1. **Push code** to trigger the first CI analysis
 2. **Check Actions** tab for generated reports
 3. **Review** `_index.md` for full architecture overview

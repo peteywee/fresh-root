@@ -1,5 +1,5 @@
-// [P1][API][CODE] Terminal execution API endpoint
-// Tags: P1, API, CODE, terminal, execution
+// [P1][TERMINAL][API] Terminal execution API endpoint
+// Tags: P1, TERMINAL, API, terminal, execution
 
 import { NextResponse } from "next/server";
 import { spawn } from "child_process";

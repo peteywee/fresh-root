@@ -1,11 +1,9 @@
 # L2 — Staff Management
-
 > **Status:** ✅ Documented from actual codebase analysis **Last Updated:** 2025-12-17 **Analyzed
 > Routes:** 12 endpoints, ~800 LOC **Related Collections:** users, memberships, positions,
-> attendance_records, shifts
+> attendance\_records, shifts
 
 ## 1. Role in the System
-
 The Staff Management subsystem handles user profiles, organization membership, position assignments,
 and staff-related operations within the Fresh Schedules platform. It provides:
 
@@ -18,11 +16,8 @@ and staff-related operations within the Fresh Schedules platform. It provides:
 All routes use the `@fresh-schedules/api-framework` SDK with typed validation and authentication.
 
 ## 2. Actual Implementation Analysis
-
 ### 2.1 Endpoints Inventory
-
 #### User Profile & Membership Endpoints
-
 | Endpoint                                     | Method | Purpose                     | Auth                | Validation                |
 | -------------------------------------------- | ------ | --------------------------- | ------------------- | ------------------------- |
 | `/api/onboarding/profile`                    | POST   | Complete user profile setup | ✅ Required         | `OnboardingProfileSchema` |
@@ -35,7 +30,6 @@ All routes use the `@fresh-schedules/api-framework` SDK with typed validation an
 | `/api/organizations/[id]/members/[memberId]` | DELETE | Remove specific member      | ✅ Required (admin) | None                      |
 
 #### Position Management Endpoints
-
 | Endpoint              | Method | Purpose                | Auth                   | Validation             |
 | --------------------- | ------ | ---------------------- | ---------------------- | ---------------------- |
 | `/api/positions`      | GET    | List positions for org | ✅ Required (org)      | Query params           |
@@ -45,7 +39,6 @@ All routes use the `@fresh-schedules/api-framework` SDK with typed validation an
 | `/api/positions/[id]` | DELETE | Delete position (soft) | ✅ Required (admin+)   | None                   |
 
 #### Attendance & Shift Endpoints
-
 | Endpoint          | Method | Purpose                  | Auth                     | Validation                     |
 | ----------------- | ------ | ------------------------ | ------------------------ | ------------------------------ |
 | `/api/attendance` | GET    | List attendance records  | ✅ Required              | Query params                   |
@@ -55,9 +48,7 @@ All routes use the `@fresh-schedules/api-framework` SDK with typed validation an
 **A09 Handler Signature Invariant** is enforced.
 
 ### 2.2 Data Models & Types
-
 #### User Profile (Firestore: `/users/{uid}`)
-
 From `apps/web/src/lib/userProfile.ts`:
 
 ```typescript
@@ -92,7 +83,6 @@ export interface UserProfileDoc {
 - Self-declared role captured during signup
 
 #### Membership (Firestore: `/memberships/{uid}_{orgId}`)
-
 From `packages/types/src/memberships.ts`:
 
 ```typescript
@@ -121,7 +111,6 @@ export interface Membership {
 - Audit trail: tracks who invited and when joined
 
 #### Position (Firestore: `/positions/{orgId}/{positionId}`)
-
 From `packages/types/src/positions.ts`:
 
 ```typescript
@@ -155,7 +144,6 @@ export interface Position {
 - Soft delete via `isActive` flag
 
 #### Attendance Record (Firestore: `/attendance_records/{orgId}/{recordId}`)
-
 From `packages/types/src/attendance.ts`:
 
 ```typescript
@@ -216,7 +204,6 @@ export interface AttendanceRecord {
 - Admin override capability with audit trail
 
 #### Shift Assignment (within Shift document)
-
 From `packages/types/src/shifts.ts`:
 
 ```typescript
@@ -274,7 +261,6 @@ export interface Shift {
 - Links to position for skill matching
 
 ### 2.3 Firestore Collections Used
-
 - **`users/{uid}`** - User profile and onboarding state
   - Fields: `id`, `profile`, `onboarding`, `createdAt`, `updatedAt`
   - Created on first sign-in via `ensureUserProfile()`
@@ -301,7 +287,6 @@ export interface Shift {
   - Multiple staff per shift supported
 
 ### 2.4 Authentication & Authorization Context
-
 All routes receive:
 
 ```typescript
@@ -332,9 +317,7 @@ All routes receive:
 - `roles: ["scheduler"]` - Custom role for schedule operations
 
 ## 3. Critical Findings
-
 ### 🔴 CRITICAL-01: No Firestore Persistence in Member Operations
-
 **Location:** `/api/organizations/[id]/members/*` **Issue:** Member endpoints return mock data
 without Firestore operations
 
@@ -385,7 +368,6 @@ export const GET = createOrgEndpoint({
 ```
 
 ### 🔴 CRITICAL-02: Position Operations Missing Firestore Integration
-
 **Location:** `/api/positions/*` **Issue:** Position CRUD endpoints return mock data without
 persistence
 
@@ -420,7 +402,6 @@ export const GET = createOrgEndpoint({
 **Recommendation:** Add Firestore persistence layer (see §5 for full example)
 
 ### 🔴 CRITICAL-03: Missing User Profile Extended Data
-
 **Location:** `apps/web/src/lib/userProfile.ts` **Issue:** User profile only stores basic identity,
 no staff-specific data
 
@@ -491,7 +472,6 @@ profile: {
 ```
 
 ### 🟡 HIGH-01: No Composite Queries for Shift Assignment
-
 **Location:** Shift assignment logic (theoretical) **Issue:** Cannot efficiently query staff by
 position skills, availability, and qualifications
 
@@ -523,7 +503,6 @@ interface StaffAssignmentIndex {
 ```
 
 ### 🟡 HIGH-02: Attendance Check-In Has No Validation
-
 **Location:** `/api/attendance` POST endpoint **Issue:** No validation of check-in location, time,
 or duplicate prevention
 
@@ -590,7 +569,6 @@ async function validateCheckIn(input: CheckInInput, shift: Shift): Promise<Valid
 ```
 
 ### 🟡 HIGH-03: No Staff Directory / Roster View
-
 **Location:** Missing endpoint entirely **Issue:** No way to list all staff across organization with
 profiles
 
@@ -611,7 +589,6 @@ profiles
 **Recommendation:** Create dedicated staff endpoints (see §5 for implementation)
 
 ### 🟢 MEDIUM-01: Position Required Certifications Unstructured
-
 **Location:** `packages/types/src/positions.ts` **Issue:** `requiredCertifications: string[]` is
 free-text, not structured data
 
@@ -659,7 +636,6 @@ interface StaffCertification {
 ```
 
 ### 🟢 MEDIUM-02: No Bulk Operations for Staff Management
-
 **Location:** All member/staff endpoints **Issue:** No batch endpoints for bulk invites, role
 updates, or removals
 
@@ -712,19 +688,16 @@ export const POST = createOrgEndpoint({
 ```
 
 ## 4. Architectural Notes & Invariants
-
 ### ✅ Enforced Invariants
-
 1. **A09 Handler Signature Invariant** - All routes use SDK factory pattern
 2. **Input Validation** - Zod schemas validate all request bodies before handler execution
 3. **Authentication Required** - All endpoints use `createAuthenticatedEndpoint()` or
    `createOrgEndpoint()`
-4. **Type Safety** - Typed wrappers (`getDocWithType`, `setDocWithType`) for Firestore operations
-5. **Org Scoping** - `createOrgEndpoint()` automatically validates user belongs to requested org
-6. **Role-Based Access** - `roles: ["admin"]` enforces permission checks
+1. **Type Safety** - Typed wrappers (`getDocWithType`, `setDocWithType`) for Firestore operations
+2. **Org Scoping** - `createOrgEndpoint()` automatically validates user belongs to requested org
+3. **Role-Based Access** - `roles: ["admin"]` enforces permission checks
 
 ### ⚠️ Missing Invariants
-
 1. **Profile Completeness** - No validation that required staff profile fields are filled
 2. **Certification Expiry** - No automatic detection of expired certifications
 3. **Active Staff Only** - No enforcement that only active staff can be assigned shifts
@@ -733,7 +706,6 @@ export const POST = createOrgEndpoint({
 6. **Shift Assignment Limits** - No validation of max hours per week or double-booking
 
 ### 📐 Design Patterns
-
 **User Profile Pattern:**
 
 - Single source of truth: `users/{uid}`
@@ -763,9 +735,7 @@ export const POST = createOrgEndpoint({
 - Geographic validation capability (geofencing)
 
 ## 5. Example Patterns
-
 ### ✅ Good Pattern: User Profile Creation
-
 ```typescript
 // File: apps/web/src/lib/userProfile.ts
 export async function ensureUserProfile(args: {
@@ -834,7 +804,6 @@ export async function ensureUserProfile(args: {
 - Structured namespaces (profile, onboarding)
 
 ### ✅ Good Pattern: Org Scoping with Role Check
-
 ```typescript
 // File: organizations/[id]/members/[memberId]/route.ts
 export const PATCH = createOrgEndpoint({
@@ -875,7 +844,6 @@ export const PATCH = createOrgEndpoint({
 - Structured logging for security monitoring
 
 ### ❌ Bad Pattern: Missing Firestore Persistence
-
 ```typescript
 // ❌ CURRENT: Returns mock data, doesn't persist
 export const GET = createOrgEndpoint({
@@ -916,7 +884,6 @@ export const GET = createOrgEndpoint({
 ```
 
 ### ❌ Bad Pattern: Unstructured Certification Strings
-
 ```typescript
 // ❌ CURRENT: Free-text array
 interface Position {
@@ -940,7 +907,6 @@ interface CertificationType {
 ```
 
 ### ✅ Refactored Pattern: Complete Staff Management Endpoint
-
 ```typescript
 // File: api/staff/route.ts (NEW)
 import { createOrgEndpoint } from "@fresh-schedules/api-framework";
@@ -1085,7 +1051,6 @@ export const GET_DETAIL = createOrgEndpoint({
 - Extensible for certifications and positions
 
 ### ✅ Refactored Pattern: Position Assignment with Validation
-
 ```typescript
 // File: api/shifts/[id]/assign/route.ts (NEW)
 import { createOrgEndpoint } from "@fresh-schedules/api-framework";
@@ -1225,26 +1190,25 @@ export const POST = createOrgEndpoint({
 - Returns useful IDs for tracking
 
 ## 6. Open Questions
-
 1. **How should staff availability preferences be structured?**
    - Weekly recurring patterns vs. one-off availability?
    - Blackout dates for vacations?
    - Preferred vs. unavailable times?
    - Should availability be enforced or just suggestions?
 
-2. **What is the certification verification workflow?**
+1. **What is the certification verification workflow?**
    - Who can upload certifications (self-service or admin-only)?
    - Automated expiry notifications?
    - Document approval process?
    - Integration with external verification systems?
 
-3. **How should position-based vs. person-based pay rates work?**
+1. **How should position-based vs. person-based pay rates work?**
    - Position has base hourly rate
    - Staff can have override rate
    - Different rates for different positions?
    - How to handle overtime calculations?
 
-4. **What staff metrics should be tracked?**
+1. **What staff metrics should be tracked?**
    - Total hours worked (by week/month)
    - Average hours per shift
    - No-show rate
@@ -1252,32 +1216,31 @@ export const POST = createOrgEndpoint({
    - Shifts confirmed vs. declined
    - Preferred positions vs. actually assigned
 
-5. **How should skill/qualification matching work for AI scheduling?**
+1. **How should skill/qualification matching work for AI scheduling?**
    - Fuzzy matching on skill levels?
    - Preference scoring (prefers certain positions)?
    - Seniority considerations?
    - Fairness algorithms to distribute desirable shifts?
 
-6. **What is the staff onboarding flow after invitation?**
+1. **What is the staff onboarding flow after invitation?**
    - Email invite → click link → create account → fill profile
    - Required profile fields before first shift?
    - Mandatory training/orientation tracking?
    - Background check integration?
 
-7. **How should emergency contact information be stored?**
+1. **How should emergency contact information be stored?**
    - Separate subcollection for privacy?
    - Encrypted fields?
    - Multiple emergency contacts?
    - Who has access (admin only vs. managers)?
 
-8. **Should there be a staff performance/review system?**
+1. **Should there be a staff performance/review system?**
    - Manager notes on staff members?
    - Performance ratings?
    - Link to attendance (no-shows, late arrivals)?
    - Promotion/demotion tracking?
 
 ## 7. Recommendations Summary
-
 | Priority | Action                                                          | Estimated Effort |
 | -------- | --------------------------------------------------------------- | ---------------- |
 | 🔴 P0    | Add Firestore persistence to member operations                  | 3-4 days         |
@@ -1296,7 +1259,6 @@ export const POST = createOrgEndpoint({
 **Total Estimated Effort:** ~30-40 days
 
 ## 8. Related Subsystems
-
 - **RBAC/Security** - Membership roles drive access control
 - **Organizations** - Staff are scoped to organizations
 - **Positions** - Define job roles and requirements for staff
@@ -1306,28 +1268,27 @@ export const POST = createOrgEndpoint({
 - **Notifications** - Shift assignments, schedule changes (not yet implemented)
 
 ## 9. Next Steps
-
 1. **Prioritize P0 items:**
    - Implement Firestore persistence for members and positions
    - Extend user profile schema with staff fields
    - Add basic staff directory endpoint
 
-2. **Design certification system:**
+1. **Design certification system:**
    - Define certification type catalog structure
    - Implement certification issuance and expiry tracking
    - Add qualification verification to shift assignment
 
-3. **Build availability system:**
+1. **Build availability system:**
    - Design recurring availability pattern schema
    - Implement availability preference endpoints
    - Integrate with shift assignment validation
 
-4. **Improve shift assignment:**
+1. **Improve shift assignment:**
    - Add conflict detection
    - Implement qualification checking
    - Add automated attendance record creation
 
-5. **Document complete staff lifecycle:**
+1. **Document complete staff lifecycle:**
    - Invitation → onboarding → profile completion
    - Qualification tracking → shift assignment
    - Attendance tracking → performance review
