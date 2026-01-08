@@ -104,6 +104,7 @@
     "repomix": "^1.10.2",
     "rimraf": "^6.1.2",
     "speakeasy": "^2.0.0",
+    "supabase": "^2.71.1",
     "syncpack": "^13.0.4",
     "tailwind-merge": "^3.4.0",
     "tailwindcss": "^4.1.18",
