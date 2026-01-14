@@ -14,9 +14,15 @@ docs/
 ├── architecture/          # System design, patterns, decisions
 ├── standards/            # Coding standards, patterns, templates
 ├── guides/               # How-to guides, tutorials
+│   ├── infrastructure/   # Infrastructure setup (Redis, OTEL)
+│   ├── performance/      # Performance optimization
+│   └── deployment/       # Production deployment
 ├── production/           # Operations, deployment, monitoring
 ├── templates/            # Reusable document templates
-└── reports/              # Analysis reports, audits
+├── reports/              # Analysis reports, audits, trackers
+├── plans/                # Execution plans and roadmaps
+├── issues/               # Issue tracking and progress
+└── metrics/              # Performance metrics
 ```
 
 ---
@@ -50,12 +56,30 @@ Coding standards, patterns, and quality requirements.
 
 Step-by-step tutorials and how-to guides.
 
-| Document                                | Purpose                     | Status |
-| --------------------------------------- | --------------------------- | ------ |
-| [SETUP.md](./guides/SETUP.md)           | Local environment setup     | Active |
-| [DEPLOYMENT.md](./guides/DEPLOYMENT.md) | Production deployment steps | Active |
-| [TESTING.md](./guides/TESTING.md)       | Test strategy and execution | Active |
-| [FIREBASE.md](./guides/FIREBASE.md)     | Firebase integration guide  | Active |
+| Category | Document | Purpose | Status |
+| -------- | -------- | ------- | ------ |
+| **Infrastructure** | [INDEX](./guides/infrastructure/INDEX.md) | Infrastructure setup guides | Active |
+| | [MEMORY_MANAGEMENT.md](./guides/infrastructure/MEMORY_MANAGEMENT.md) | Redis configuration & rate limiting | Active |
+| | [OPENTELEMETRY_SETUP.md](./guides/infrastructure/OPENTELEMETRY_SETUP.md) | Distributed tracing setup | Active |
+| **Performance** | [INDEX](./guides/performance/INDEX.md) | Performance optimization guides | Active |
+| | [PERFORMANCE_BENCHMARKS.md](./guides/performance/PERFORMANCE_BENCHMARKS.md) | Performance monitoring & optimization | Active |
+| **Deployment** | [INDEX](./guides/deployment/INDEX.md) | Deployment guides | Active |
+| | [FAST_TRACK_TO_PRODUCTION.md](./guides/deployment/FAST_TRACK_TO_PRODUCTION.md) | Production deployment checklist | Active |
+| **General** | [SETUP.md](./guides/SETUP.md) | Local environment setup | Active |
+| | [DEPLOYMENT.md](./guides/DEPLOYMENT.md) | Production deployment steps | Active |
+| | [TESTING.md](./guides/TESTING.md) | Test strategy and execution | Active |
+| | [FIREBASE.md](./guides/FIREBASE.md) | Firebase integration guide | Active |
+
+---
+
+## Plans (`plans/`)
+
+Execution plans and strategic roadmaps.
+
+| Document | Purpose | Status |
+| -------- | ------- | ------ |
+| [INDEX](./plans/INDEX.md) | Plans index | Active |
+| [WAVE_EXECUTION_PLAN.md](./plans/WAVE_EXECUTION_PLAN.md) | Wave-based development strategy | Active |
 
 ---
 
@@ -85,13 +109,16 @@ Reusable document and code templates.
 
 ## Reports (`reports/`)
 
-Analysis reports, audits, retrospectives.
+Analysis reports, audits, retrospectives, and tracking.
 
-| Document                                                     | Purpose                    | Status   |
-| ------------------------------------------------------------ | -------------------------- | -------- |
-| [REPOMIX_ANALYSIS.md](./reports/REPOMIX_ANALYSIS.md)         | Repomix integration report | Complete |
-| [SECURITY_AUDIT.md](./reports/SECURITY_AUDIT.md)             | Security assessment        | Complete |
-| [PERFORMANCE_ANALYSIS.md](./reports/PERFORMANCE_ANALYSIS.md) | Performance benchmarks     | Draft    |
+| Document | Purpose | Status |
+| -------- | ------- | ------ |
+| [INDEX](./reports/INDEX.md) | Reports index | Active |
+| [IMPLEMENTATION_TRACKER.md](./reports/IMPLEMENTATION_TRACKER.md) | Implementation progress tracker | Active |
+| [DEPRECATIONS.md](./reports/DEPRECATIONS.md) | Deprecated features & migrations | Active |
+| [REPOMIX_ANALYSIS.md](./reports/REPOMIX_ANALYSIS.md) | Repomix integration report | Complete |
+| [SECURITY_AUDIT.md](./reports/SECURITY_AUDIT.md) | Security assessment | Complete |
+| [PERFORMANCE_ANALYSIS.md](./reports/PERFORMANCE_ANALYSIS.md) | Performance benchmarks | Draft |
 
 ---
 
@@ -118,17 +145,22 @@ Historical documents, superseded plans, completed migrations.
 - [Coding Standards](./standards/CODING_RULES_AND_PATTERNS.md) - **Start here**
 - [AI Agent Guide](./architecture/AI_AGENT_GUIDE.md) - AI assistant onboarding
 - [Setup Guide](./guides/SETUP.md) - Local environment
+- [Performance Guide](./guides/performance/PERFORMANCE_BENCHMARKS.md) - Optimization strategies
+- [Infrastructure Guides](./guides/infrastructure/INDEX.md) - Redis, OTEL setup
 
 ### For AI Agents
 
 - [CrewOps Manual](./architecture/CREWOPS_MANUAL.md) - Multi-agent coordination
 - [Governance Index](../.github/governance/INDEX.md) - Canonical rules (L0/L1)
 - [Instructions Index](../.github/instructions/INDEX.md) - Implementation instructions (L2)
+- [Issues Tracking](./issues/INDEX.md) - Current project status
 
 ### For Operators
 
 - [Deployment Checklist](./production/DEPLOYMENT_CHECKLIST.md) - Pre-deploy verification
 - [Deployment Guide](./guides/DEPLOYMENT.md) - Step-by-step deployment
+- [Fast Track to Production](./guides/deployment/FAST_TRACK_TO_PRODUCTION.md) - Quick deployment guide
+- [Wave Execution Plan](./plans/WAVE_EXECUTION_PLAN.md) - Strategic roadmap
 
 ---
 
