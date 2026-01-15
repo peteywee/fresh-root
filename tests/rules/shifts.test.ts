@@ -1,6 +1,6 @@
 // [P1][TEST][RULES] Shifts collection security rules tests
 // Tags: P1, TEST, RULES, SHIFTS, RBAC, SECURITY
-import { beforeAll, afterAll, beforeEach, describe, expect, it } from "vitest";
+import { beforeAll, afterAll, beforeEach, describe, it } from "vitest";
 import { assertFails, assertSucceeds } from "@firebase/rules-unit-testing";
 
 import { createRulesTestEnv, ctxUnauth, ctxUser, seed, cleanup, membershipId } from "./helpers";
@@ -10,7 +10,6 @@ describe("rules: shifts collection", () => {
   const orgId = "org-shifts";
   const scheduleId = "schedule-1";
   const shiftId = "shift-1";
-  const shiftPath = `orgs/${orgId}/schedules/${scheduleId}/shifts/${shiftId}`;
   
   let env: RulesTestEnvironment;
 

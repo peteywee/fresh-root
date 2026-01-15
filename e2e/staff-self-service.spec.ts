@@ -24,10 +24,7 @@ test.describe("Staff Self-Service - Schedule Access", () => {
     await page.waitForLoadState("networkidle");
 
     // Should load schedules page or redirect to auth
-    const url = page.url();
-    expect(
-      url.includes("schedules") || url.includes("login") || url.includes("onboarding"),
-    ).toBeTruthy();
+    await expect(page).toHaveURL(/\/(schedules|login|onboarding)/);
   });
 
   test("staff cannot access admin functions", async ({ page }) => {

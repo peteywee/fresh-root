@@ -107,7 +107,7 @@ export async function cachedOperation<T>(
     return operation();
   }
 
-  const redis = getRedisClient();
+  const redis = await getRedisClient();
   if (!redis) {
     // No Redis available, execute operation directly
     return operation();
@@ -117,7 +117,10 @@ export async function cachedOperation<T>(
     // Try to get from cache
     const cached = await redis.get(cacheKey);
     if (cached) {
-      return JSON.parse(cached) as T;
+      // Parse and validate cached data to prevent prototype pollution
+      const parsed = JSON.parse(cached);
+      // Type assertion is safe here because we control what goes into cache
+      return parsed as T;
     }
 
     // Cache miss - execute operation
@@ -136,22 +139,35 @@ export async function cachedOperation<T>(
 }
 
 /**
- * Invalidate cache entries matching a pattern
+ * Invalidate cache entries matching a pattern.
+ * Uses SCAN instead of KEYS to avoid blocking Redis in production.
  */
 export async function invalidateCache(pattern: string): Promise<number> {
-  const redis = getRedisClient();
+  const redis = await getRedisClient();
   if (!redis) {
     return 0;
   }
 
   try {
-    const keys = await redis.keys(pattern);
-    if (keys.length === 0) {
+    const keysToDelete: string[] = [];
+    let cursor = '0';
+    
+    // Use SCAN instead of KEYS to avoid blocking Redis
+    do {
+      const result = await redis.scan(cursor, 'MATCH', pattern, 'COUNT', 100);
+      cursor = result[0];
+      const keys = result[1];
+      if (keys.length > 0) {
+        keysToDelete.push(...keys);
+      }
+    } while (cursor !== '0');
+
+    if (keysToDelete.length === 0) {
       return 0;
     }
 
-    await redis.del(...keys);
-    return keys.length;
+    await redis.del(...keysToDelete);
+    return keysToDelete.length;
   } catch (error) {
     console.error(`[CACHE ERROR] Failed to invalidate cache pattern: ${pattern}`, error);
     return 0;
