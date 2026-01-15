@@ -25,17 +25,30 @@ program
     const { collectMarkdownFiles } = await import("./fsHelpers");
     // Resolve paths from the original cwd, not the package directory
     const cwd = process.env.INIT_CWD || process.cwd();
+    
+    // Normalize cwd to prevent path traversal
+    const normalizedCwd = path.resolve(cwd);
+    
     for (const p of paths) {
-      const absolute = path.isAbsolute(p) ? p : path.resolve(cwd, p);
-      if (fs.existsSync(absolute)) {
-        const stats = fs.statSync(absolute);
+      // Sanitize user input to prevent path traversal
+      const absolute = path.isAbsolute(p) ? path.resolve(p) : path.resolve(cwd, p);
+      const normalized = path.normalize(absolute);
+      
+      // Ensure resolved path is within the cwd or its subdirectories
+      if (!normalized.startsWith(normalizedCwd) && !path.isAbsolute(p)) {
+        console.error(`Access denied: Path outside working directory: ${p}`);
+        continue;
+      }
+      
+      if (fs.existsSync(normalized)) {
+        const stats = fs.statSync(normalized);
         if (stats.isDirectory()) {
-          collectMarkdownFiles(absolute, excludeDirs).forEach((f) => targets.push(f));
+          collectMarkdownFiles(normalized, excludeDirs).forEach((f) => targets.push(f));
         } else if (stats.isFile()) {
-          targets.push(absolute);
+          targets.push(normalized);
         }
       } else {
-        console.error(`Path not found: ${absolute}`);
+        console.error(`Path not found: ${normalized}`);
       }
     }
 

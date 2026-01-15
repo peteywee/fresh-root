@@ -59,7 +59,7 @@ export async function measurePerformance<T>(
 
     // Log slow queries
     if (config.slowQueryThreshold && duration > config.slowQueryThreshold) {
-      console.warn(`[SLOW QUERY] ${operationName} took ${duration}ms`, {
+      console.warn("[SLOW QUERY] Query exceeded threshold", {
         operation: operationName,
         duration,
         threshold: config.slowQueryThreshold,
@@ -131,7 +131,10 @@ export async function cachedOperation<T>(
 
     return result;
   } catch (error) {
-    console.error(`[CACHE ERROR] Failed to use cache for key: ${cacheKey}`, error);
+    console.error("[CACHE ERROR] Failed to use cache", {
+      cacheKey,
+      error: error instanceof Error ? error.message : String(error),
+    });
     // Fall back to direct operation
     return operation();
   }
@@ -154,7 +157,10 @@ export async function invalidateCache(cacheKey: string): Promise<boolean> {
     await redis.del(cacheKey);
     return true;
   } catch (error) {
-    console.error(`[CACHE ERROR] Failed to invalidate cache key: ${cacheKey}`, error);
+    console.error("[CACHE ERROR] Failed to invalidate cache", {
+      cacheKey,
+      error: error instanceof Error ? error.message : String(error),
+    });
     return false;
   }
 }

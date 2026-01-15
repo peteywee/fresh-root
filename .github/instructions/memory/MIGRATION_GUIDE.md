@@ -194,15 +194,13 @@ git diff --cached | grep -v node_modules | grep -v .git | grep -v build
 
 # Use:
 git diff --cached | grep -v -E '(node_modules|\.git|build)'
-````
-
-````
+```
 
 **INDEX Updated**:
 ```markdown
 | git-workflow | block-root-docs | automation | automation, git, validation, pre-commit | 2 | 2025-12-25 | .husky/\*\*, scripts/\*\*.sh |
 | git-workflow | grep-pattern-matching | pattern | pattern, shell, regex | 2 | 2025-12-25 | scripts/\*\*.sh |
-````
+```
 
 ## How to Migrate
 ### Quick Migration (One Lesson)
