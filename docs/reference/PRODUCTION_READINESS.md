@@ -1,8 +1,8 @@
-# NOTE: This file was moved to docs/production/PRODUCTION\_READINESS\_SIGN\_OFF.md
-This file has been moved to `docs/production/PRODUCTION_READINESS_SIGN_OFF.md` and is maintained
-there as the canonical source of truth.
+# Production Readiness Checklist
 
-Please update bookmarks and references to the new location.
+This file is the canonical production readiness reference. It consolidates requirements from the old PRODUCTION_READINESS_SIGN_OFF.md file.
+
+Please see [Deployment Guide](../guides/DEPLOYMENT.md) for deployment procedures.
 
 ### Quality Metrics
 | Category             | Status | Result                                                  |

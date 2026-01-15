@@ -90,9 +90,9 @@ vercel --prod
 | **PRODUCTION\_DEPLOYMENT\_SUMMARY.md** | 10KB  | Implementation summary      |
 
 ### Quick Links
-- [Deployment Guide](./DEPLOYMENT_GUIDE.md) - Start here for deployment
-- [Audit Report](./LIGHTHOUSE_AUDIT_REPORT.md) - Performance testing
-- [Implementation Summary](./PRODUCTION_DEPLOYMENT_SUMMARY.md) - What's done
+- [Deployment Guide](../guides/DEPLOYMENT.md) - Start here for deployment
+- [Audit Report](../reports/LIGHTHOUSE_AUDIT_REPORT.md) - Performance testing
+- [Implementation Summary](../reports/PHASE_3_COMPLETION_SUMMARY.md) - What's done
 
 ---
 
@@ -144,7 +144,7 @@ FIREBASE_PROJECT_ID=...
 GOOGLE_APPLICATION_CREDENTIALS_JSON_BASE64=...
 ```
 
-**📖 Full list**: See [DEPLOYMENT\_GUIDE.md](./DEPLOYMENT_GUIDE.md#environment-variables-reference)
+**📖 Full list**: See [DEPLOYMENT\_GUIDE.md](../guides/DEPLOYMENT.md#environment-variables-reference)
 
 ### Performance Targets
 - **Performance**: ≥85
@@ -176,7 +176,7 @@ GOOGLE_APPLICATION_CREDENTIALS_JSON_BASE64=...
 | Cloudflare edge errors | Use REST API for Firebase   |
 | Network timeout        | Increase deployment timeout |
 
-**📖 Full guide**: See [DEPLOYMENT\_GUIDE.md](./DEPLOYMENT_GUIDE.md#troubleshooting)
+**📖 Full guide**: See [DEPLOYMENT\_GUIDE.md](../guides/DEPLOYMENT.md#troubleshooting)
 
 ---
 
@@ -213,7 +213,7 @@ GOOGLE_APPLICATION_CREDENTIALS_JSON_BASE64=...
 
 ## 📞 Support
 ### Documentation
-- [Deployment Guide](./DEPLOYMENT_GUIDE.md)
+- [Deployment Guide](../guides/DEPLOYMENT.md)
 - [Audit Report](./LIGHTHOUSE_AUDIT_REPORT.md)
 - [Implementation Summary](./PRODUCTION_DEPLOYMENT_SUMMARY.md)
 

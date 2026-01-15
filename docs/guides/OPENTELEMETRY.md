@@ -472,9 +472,9 @@ sum(rate(traces_spanmetrics_calls_total[5m]))
 
 ## Related Documentation
 - [Environment Validation](../apps/web/src/lib/env.server.ts)
-- [Memory Management](./MEMORY_MANAGEMENT.md)
-- [Issue #197](./issues/ISSUE_196_STATUS_UPDATE.md)
-- [Strategic Audit TODOs](./reports/STRATEGIC_AUDIT_TODOS.md)
+- [Memory Management](../reference/MEMORY_MANAGEMENT.md)
+- [Issue #197](../archived/issues/ISSUE_196_STATUS_UPDATE.md)
+- [Strategic Audit TODOs](../reports/STRATEGIC_AUDIT_TODOS.md)
 
 ## Support
 **Issues**: Create GitHub issue with label `observability`

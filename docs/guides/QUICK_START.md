@@ -23,7 +23,7 @@
 4. CI validates automatically
 
 ### 🚀 Deployment Team
-1. Check: [PRODUCTION\_DEPLOYMENT\_GUIDE.md](./PRODUCTION_DEPLOYMENT_GUIDE.md)
+1. Check: [guides/DEPLOYMENT.md](./guides/DEPLOYMENT.md)
 2. Follow: Step-by-step deployment
 3. Expected: All guard-main checks pass ✅
 
@@ -52,7 +52,7 @@
 **On Main (Production):**
 
 - [RUNTIME\_DOCUMENTATION\_INDEX.md](./RUNTIME_DOCUMENTATION_INDEX.md) ← Start here
-- [PRODUCTION\_DEPLOYMENT\_GUIDE.md](./PRODUCTION_DEPLOYMENT_GUIDE.md)
+- [guides/DEPLOYMENT.md](./guides/DEPLOYMENT.md)
 - [BRANCH\_LINKING\_GUIDE.md](./BRANCH_LINKING_GUIDE.md)
 
 **On Dev (Development):**
@@ -157,14 +157,14 @@ git checkout -b feature/my-feature
 
 ## Your Role
 ### If you're an Operations Manager
-→ Go to [PRODUCTION\_READINESS\_EXECUTIVE\_SUMMARY.md](./PRODUCTION_READINESS_EXECUTIVE_SUMMARY.md)
+→ Go to [reference/PRODUCTION_READINESS.md](../reference/PRODUCTION_READINESS.md)
 
 ### If you're a Developer
 → Go to dev branch, read
 [docs/standards/00\_STANDARDS\_INDEX.md](../../dev/docs/standards/00_STANDARDS_INDEX.md)
 
 ### If you're Deploying
-→ Go to [PRODUCTION\_DEPLOYMENT\_GUIDE.md](./PRODUCTION_DEPLOYMENT_GUIDE.md)
+→ Go to [guides/DEPLOYMENT.md](./DEPLOYMENT.md)
 
 ### If you're Auditing
 → Go to [BRANCH\_LINKING\_GUIDE.md](./BRANCH_LINKING_GUIDE.md)

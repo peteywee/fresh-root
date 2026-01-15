@@ -73,13 +73,13 @@ Core engineering standards, coding rules, and best practices that must be follow
 - **[Firebase Typing](./standards/FIREBASE_TYPING_STRATEGY.md)** - Strategy for type-safe Firebase
   usage.
 - **[PNPM Enforcement](./standards/PNPM_ENFORCEMENT.md)** - Rules regarding package management.
-- **[Memory Management](./standards/MEMORY_MANAGEMENT.md)** - Guidelines for memory usage.
+- **[Memory Management](./reference/MEMORY_MANAGEMENT.md)** - Guidelines for memory usage.
 
 ## 🚀 [Production](./production/)
 Guides, checklists, and validation steps for production deployment.
 
-- **[Production Readiness](./production/PRODUCTION_READINESS.md)** - Core readiness checklist.
-- **[Deployment Guide](./production/PRODUCTION_DEPLOYMENT_GUIDE.md)** - Step-by-step deployment
+- **[Production Readiness](./reference/PRODUCTION_READINESS.md)** - Core readiness checklist.
+- **[Deployment Guide](./guides/DEPLOYMENT.md)** - Step-by-step deployment
   instructions.
 - **[Environment Validation](./production/PRODUCTION_ENV_VALIDATION.md)** - How to validate the
   production environment.
