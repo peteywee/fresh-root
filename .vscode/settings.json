@@ -16,7 +16,9 @@
     "**/dist": true,
     "**/.next": true,
     "**/coverage": true,
-    "**/pnpm-lock.yaml": true
+    "**/pnpm-lock.yaml": true,
+    "archive/l3-prompts-deprecated": true,
+    "**/*.prompt.md": false
   },
   "github.copilot.enable": {
     "*": true,
@@ -90,5 +92,25 @@
   },
   "[markdown]": {
     "editor.defaultFormatter": "DavidAnson.vscode-markdownlint"
+  },
+  "claude.agents": {
+    "enabled": true,
+    "discoverable": true,
+    "showAutocomplete": true
+  },
+  "claude.agentAutocomplete": {
+    "enabled": true,
+    "showSuggestions": true,
+    "triggerCharacters": ["@", "/"],
+    "minChars": 1,
+    "debounceMs": 100
+  },
+  "claude.mentions": {
+    "enabled": true,
+    "contextAware": true,
+    "inPullRequests": true,
+    "inIssues": true,
+    "inCodeReview": true,
+    "inTextBoxes": true
   }
 }

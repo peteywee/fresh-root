@@ -1,8 +1,13 @@
+"use client";
+
 import { Button } from "@/components/ui/Button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
 import { ArrowRight, Clock, ShieldCheck, Users } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export default function LandingPage() {
+  const router = useRouter();
+
   return (
     <main className="min-h-screen bg-background text-foreground">
       <header className="mx-auto max-w-6xl px-6 py-12">
@@ -17,11 +22,13 @@ export default function LandingPage() {
           </p>
 
           <div className="flex flex-wrap gap-3">
-            <Button>
+            <Button onClick={() => router.push("/login")}>
               Get started
               <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
-            <Button variant="outline">View demo</Button>
+            <Button variant="outline" onClick={() => router.push("/demo")}>
+              View demo
+            </Button>
           </div>
         </div>
       </header>

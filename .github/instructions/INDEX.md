@@ -28,11 +28,14 @@ L2: Instructions (.github/instructions/) ← YOU ARE HERE
   ↓
 L3: Prompts (.github/prompts/)
   ↓
-L4: Documentation (docs/)
+L4a: Agent Registry (.claude/agents/) ← Agent configurations & discovery
+  ↓
+L4b: Documentation (docs/) ← Human guides
 ```
 
-**Authority**: Instructions implement L0/L1 governance rules. Conflicts resolved by escalating to
-canonical docs.
+**Authority**: Instructions implement L0/L1 governance rules. Conflicts resolved by escalating to canonical docs.
+
+**Agent Layer**: Agents are configured and discovered via [.claude/agents/INDEX.md](../../.claude/agents/INDEX.md) (L4a operational layer)
 
 ---
 
@@ -146,8 +149,8 @@ Find instructions by topic:
 ## Related Indexes
 
 - [Governance Index](../governance/INDEX.md) - Canonical rules (L0/L1)
-- [Documentation Index](../../docs/INDEX.md) - Human guides (L4)
-- [Prompts](../prompts/) - Slash command templates (L3)
+- [Agent Registry](../../.claude/agents/INDEX.md) - Agent discovery & configuration (L4a)
+- [Documentation Index](../../docs/INDEX.md) - Human guides (L4b)
 
 ---
 

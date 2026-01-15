@@ -41,13 +41,6 @@
       "tier": "on-demand",
       "priority": 5,
       "description": "Browser automation, screenshots, DOM inspection (requires input prompts)"
-    },
-    "supabase": {
-      "type": "http",
-      "url": "https://mcp.supabase.com/mcp?project_ref=xpuwfzyyhnirmegrghoj",
-      "tier": "always-on",
-      "priority": 4,
-      "description": "Supabase database, auth, and real-time operations (10+ tools)"
     }
   },
   "inputs": [
@@ -61,8 +54,8 @@
   ],
   "toolTiers": {
     "always-on": {
-      "servers": ["github/github-mcp-server", "repomix/repomix-mcp", "firebase", "supabase"],
-      "totalTools": 57,
+      "servers": ["github/github-mcp-server", "repomix/repomix-mcp", "firebase"],
+      "totalTools": 47,
       "initTime": "100-200ms",
       "prompts": 0,
       "description": "Tools that are always ready without user input"

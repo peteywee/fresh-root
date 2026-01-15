@@ -97,6 +97,8 @@ export async function completeEmailLinkIfPresent(): Promise<boolean> {
 
   try {
     await signInWithEmailLink(auth!, email, window.location.href);
+    // Email is automatically verified after completing magic link
+    // Firebase sets emailVerified=true on the user account
   } catch (e) {
     reportError(e, { phase: "complete_email_link" });
     throw e;
