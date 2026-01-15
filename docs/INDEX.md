@@ -109,6 +109,7 @@ Historical documents, superseded plans, completed migrations.
 - [Setup Guide](./guides/SETUP.md) - Local environment
 
 ### For AI Agents
+- [Agents Registry](../.claude/agents/INDEX.md) - Discoverable agents, invocation methods
 - [CrewOps Manual](./architecture/CREWOPS_MANUAL.md) - Multi-agent coordination
 - [Governance Index](../.github/governance/INDEX.md) - Canonical rules (L0/L1)
 - [Instructions Index](../.github/instructions/INDEX.md) - Implementation instructions (L2)
@@ -129,11 +130,23 @@ L2: Agent Instructions (.github/instructions/)
   ↓
 L3: Prompt Templates (.github/prompts/)
   ↓
-L4: Human Documentation (docs/) ← YOU ARE HERE
+L4a: Agent Registry (.claude/agents/) ← Agent configurations & discovery
+  ↓
+L4b: Human Documentation (docs/) ← YOU ARE HERE
 ```
 
 **Rule**: L4 documentation must align with L0-L3. For binding decisions, see
 [Governance Index](../.github/governance/INDEX.md).
+
+**Agent Registry**: All discoverable agents are registered in [.claude/agents/INDEX.md](../.claude/agents/INDEX.md)
+
+### L4a: Agent Registry (.claude/agents/)
+Discoverable agents with invocation methods, capabilities, and configurations.
+
+| Agent                | Invocations | Status | Registry |
+| -------------------- | ----------- | ------ | -------- |
+| **UI/UX Specialist** | `@ui-ux`, `@ux`, `@design` / `/ui-ux`, `/design` | ✅ Active | [.claude/agents/ui-ux-specialist/](../.claude/agents/ui-ux-specialist/) |
+| **PR Conflict Resolver** | Agent-based | ✅ Active | [.claude/agents/pr-conflict-resolver.md](../.claude/agents/pr-conflict-resolver.md) |
 
 ---
 
@@ -150,7 +163,8 @@ L4: Human Documentation (docs/) ← YOU ARE HERE
 
 ### Find by Role
 - **New Developer**: AI\_AGENT\_GUIDE.md → CODING\_RULES\_AND\_PATTERNS.md → SETUP.md
-- **AI Agent**: Governance INDEX → Instructions INDEX → CREWOPS\_MANUAL
+- **AI Agent**: Agents Registry → Governance INDEX → Instructions INDEX → CREWOPS\_MANUAL
+- **Agent Developer**: [.claude/agents/INDEX.md](../.claude/agents/INDEX.md) → Agent template
 - **Operator**: DEPLOYMENT\_CHECKLIST → DEPLOYMENT.md → MONITORING.md
 - **Architect**: DEPENDENCY\_GRAPH → API\_SCHEMA\_AUDIT → Governance/03\_DIRECTIVES
 
@@ -167,4 +181,5 @@ When adding new documentation:
 
 ---
 
-**Last Major Consolidation**: 2025-12-16 (357 files → ~150 files)
+**Last Major Consolidation**: 2025-12-16 (357 files → ~150 files)  
+**Agent Registry Added**: January 14, 2026 (UI/UX Specialist Agent)
