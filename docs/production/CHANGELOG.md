@@ -1,3 +1,21 @@
+---
+title: "Project Changelog"
+description: "Record of all notable changes, releases, and version history"
+keywords:
+  - changelog
+  - releases
+  - version
+  - history
+category: "reference"
+status: "active"
+audience:
+  - developers
+  - stakeholders
+related-docs:
+  - ../INDEX.md
+  - FINAL_SIGN_OFF.md
+---
+
 # Changelog
 All notable changes to Fresh Root will be documented in this file.
 

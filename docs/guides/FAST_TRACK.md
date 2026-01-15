@@ -1,3 +1,21 @@
+---
+title: "Fast Track to Production"
+description: "Accelerated guide for deploying the application to production"
+keywords:
+  - deployment
+  - production
+  - fast-track
+  - launch
+category: "guide"
+status: "active"
+audience:
+  - operators
+  - developers
+related-docs:
+  - DEPLOYMENT.md
+  - ../reference/PRODUCTION_READINESS.md
+---
+
 # Fast Track to Production - Optimized Execution Plan
 **Created**: 2025-12-23 **Current Progress**: 27/45 tasks (60%) - E2E test complete! **Target**:
 Production deployment in 2.5 hours **Strategy**: Focus on blockers, skip non-critical work

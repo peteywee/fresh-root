@@ -1,3 +1,20 @@
+---
+title: "VS Code Tasks Configuration"
+description: "Guide to configuring and running VS Code tasks for development workflows"
+keywords:
+  - vscode
+  - tasks
+  - automation
+  - development
+category: "guide"
+status: "active"
+audience:
+  - developers
+related-docs:
+  - QUICK_START.md
+  - SETUP.md
+---
+
 # VS Code Tasks Configuration
 This document describes the available VS Code tasks for the Fresh-Root project.
 

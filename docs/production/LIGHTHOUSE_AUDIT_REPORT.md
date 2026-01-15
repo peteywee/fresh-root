@@ -1,3 +1,23 @@
+---
+title: "Lighthouse Audit Report"
+description: "Lighthouse performance, SEO, and accessibility audit results"
+keywords:
+  - lighthouse
+  - audit
+  - performance
+  - seo
+  - accessibility
+category: "report"
+status: "active"
+audience:
+  - developers
+  - operators
+  - stakeholders
+related-docs:
+  - FINAL_SIGN_OFF.md
+  - ../guides/PERFORMANCE_PROFILING.md
+---
+
 # Lighthouse Audit Report - Fresh Schedules v1.5.0
 **Date**: December 24, 2024\
 **Version**: 1.5.0\

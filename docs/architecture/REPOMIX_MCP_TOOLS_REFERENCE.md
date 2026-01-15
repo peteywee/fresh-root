@@ -1,3 +1,23 @@
+---
+title: "Repomix MCP Tools Reference"
+description: "Complete reference for Repomix Model Context Protocol tools and capabilities"
+keywords:
+  - repomix
+  - mcp
+  - tools
+  - reference
+  - integration
+category: "architecture"
+status: "active"
+audience:
+  - developers
+  - ai-agents
+  - architects
+related-docs:
+  - MCP_TOOLING_STRATEGY.md
+  - MCP_TOOL_ECOSYSTEM_INVENTORY.md
+---
+
 # Repomix MCP Tools Reference
 **Status**: ✅ **Configured and Ready**\
 **Configuration**: `.mcp.json` - `repomix/repomix-mcp`\

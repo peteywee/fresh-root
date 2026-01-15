@@ -1,13 +1,43 @@
-# Source Templates (Canonical)
-Use these as the **single source of truth** for new files. Generate with:
+---
+title: "Document Templates"
+description: "Reusable templates for documents, code, and processes"
+keywords:
+  - templates
+  - boilerplate
+  - scaffolding
+  - reusable
+category: "template"
+status: "active"
+audience:
+  - developers
+  - teams
+---
 
-```bash
-node scripts/gen/scaffold-from-template.mjs TemplateName OUT_PATH "Key=Value" ...
-```
+# Document Templates
 
-**Examples:**
+This section contains reusable templates for documents, code, and processes.
 
-```bash
+## Document Templates
+- **Architecture Decision Record (ADR)** - Template for recording design decisions
+- **Incident Report** - Template for post-mortem analysis
+- **Meeting Notes** - Template for recording decisions and action items
+- **RFC (Request for Comments)** - Template for proposing major changes
+
+## Code Templates
+- **API Route Template** - Boilerplate for new API endpoints
+- **React Component Template** - Component boilerplate with hooks
+- **Test Template** - Unit test boilerplate
+- **Page Component** - Next.js page component template
+
+## Process Templates
+- **Deployment Checklist** - Pre-deployment verification steps
+- **Code Review Checklist** - PR review items
+- **Onboarding Checklist** - New team member setup
+- **Release Checklist** - Release process steps
+
+---
+
+**See also**: [Guides](../guides/) for step-by-step instructions, [Standards](../standards/) for best practices
 # New TS module
 node scripts/gen/scaffold-from-template.mjs CODE_TS_MODULE packages/types/src/widgets.ts "Name=Widget" "Owner=core" "Description=Domain entity"
 

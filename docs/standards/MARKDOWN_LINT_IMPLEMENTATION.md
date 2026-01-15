@@ -1,3 +1,22 @@
+---
+title: "Markdown Lint Implementation"
+description: "Markdown linting setup, rules, and configuration for documentation quality"
+keywords:
+  - markdown
+  - linting
+  - documentation
+  - quality
+  - implementation
+category: "standard"
+status: "active"
+audience:
+  - developers
+  - documentation-contributors
+related-docs:
+  - ../guides/README.md
+  - ../INDEX.md
+---
+
 # Markdown Lint Library - Correct Implementation
 **Status**: ✅ Production Ready\
 **Version**: 1.0.0\

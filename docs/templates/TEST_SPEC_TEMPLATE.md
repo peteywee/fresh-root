@@ -1,3 +1,21 @@
+---
+title: "Test Specification Template"
+description: "Template for test specifications with comprehensive coverage"
+keywords:
+  - template
+  - testing
+  - test-spec
+  - vitest
+category: "template"
+status: "active"
+audience:
+  - developers
+  - qa-engineers
+related-docs:
+  - ../guides/TESTING.md
+  - ../standards/COVERAGE_STRATEGY.md
+---
+
 # TEST SPEC — \<Feature/Route/Schema>
 ## Purpose
 Explain the user/business risk covered by these tests.

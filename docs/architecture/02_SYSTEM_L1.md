@@ -1,3 +1,21 @@
+---
+title: "System Architecture Overview (L1)"
+description: "Global system architecture, major capabilities, critical flows, and cross-cutting concerns"
+keywords:
+  - architecture
+  - system-design
+  - overview
+  - L1
+category: "architecture"
+status: "active"
+audience:
+  - architects
+  - developers
+related-docs:
+  - 01_SYSTEM_L0_Bible.md
+  - FUTURE_PROOF_SYSTEM_DESIGN.md
+---
+
 # L1 — System Architecture Overview
 This section describes the **global system**: major capabilities, critical flows, and cross-cutting
 concerns.

@@ -1,3 +1,21 @@
+---
+title: "OpenTelemetry Setup Guide"
+description: "Setup and configuration guide for OpenTelemetry observability"
+keywords:
+  - opentelemetry
+  - observability
+  - monitoring
+  - setup
+category: "guide"
+status: "active"
+audience:
+  - developers
+  - operators
+related-docs:
+  - ../guides/MONITORING.md
+  - ../standards/LOGGING.md
+---
+
 # OpenTelemetry Setup & Configuration Guide
 **Last Updated**: 2025-12-26
 **Status**: Production Ready

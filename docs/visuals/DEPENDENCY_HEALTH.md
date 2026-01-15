@@ -1,3 +1,23 @@
+---
+title: "Dependency Health Analysis"
+description: "Visual analysis of dependency health and vulnerability status"
+keywords:
+  - dependencies
+  - health
+  - analysis
+  - vulnerabilities
+  - visual
+category: "report"
+status: "active"
+audience:
+  - developers
+  - architects
+  - operators
+related-docs:
+  - ../architecture/DEPENDENCY_GRAPH.md
+  - DEPENDENCIES.md
+---
+
 # Dependency Health Analysis
 ```mermaid
 pie title Dependency Status

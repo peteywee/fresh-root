@@ -1,3 +1,23 @@
+---
+title: "Repository Visuals & Analytics"
+description: "Automated diagrams, charts, and analytics for repository structure and metrics"
+keywords:
+  - visuals
+  - analytics
+  - diagrams
+  - metrics
+  - reports
+category: "report"
+status: "active"
+audience:
+  - developers
+  - architects
+  - stakeholders
+related-docs:
+  - ../INDEX.md
+  - ../architecture/DEPENDENCY_GRAPH.md
+---
+
 # Repository Visuals & Analytics
 **Generated**: 2025-12-10T13:50:53.077Z\
 **Auto-updated**: On every commit (CI workflow)

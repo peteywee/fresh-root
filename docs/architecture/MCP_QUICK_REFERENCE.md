@@ -1,3 +1,21 @@
+---
+title: "MCP Tools Quick Reference Card"
+description: "Quick reference card for Model Context Protocol tools and common operations"
+keywords:
+  - mcp
+  - tools
+  - quick-reference
+  - reference
+category: "architecture"
+status: "active"
+audience:
+  - developers
+  - ai-agents
+related-docs:
+  - MCP_TOOLING_STRATEGY.md
+  - REPOMIX_MCP_TOOLS_REFERENCE.md
+---
+
 # MCP Tools Quick Reference Card
 **Print this or keep it bookmarked!**
 

@@ -1,3 +1,23 @@
+---
+title: "Ops Hub Implementation & Migration Plan"
+description: "Implementation plan for operations hub, monitoring, and dashboard migration"
+keywords:
+  - operations
+  - migration
+  - implementation
+  - ops-hub
+  - monitoring
+category: "architecture"
+status: "active"
+audience:
+  - operators
+  - architects
+  - developers
+related-docs:
+  - FUTURE_PROOF_SYSTEM_DESIGN.md
+  - ../guides/DEPLOYMENT.md
+---
+
 # Ops Hub Implementation & Migration Plan
 **Version**: 1.0\
 **Created**: December 22, 2025\

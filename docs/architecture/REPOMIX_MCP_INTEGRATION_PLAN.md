@@ -1,3 +1,22 @@
+---
+title: "Repomix MCP Integration Plan"
+description: "Implementation plan for Repomix Model Context Protocol integration and tool setup"
+keywords:
+  - repomix
+  - mcp
+  - integration
+  - plan
+  - implementation
+category: "architecture"
+status: "active"
+audience:
+  - developers
+  - architects
+related-docs:
+  - MCP_TOOLING_STRATEGY.md
+  - REPOMIX_MCP_TOOLS_REFERENCE.md
+---
+
 # Repomix MCP Integration Plan
 **Status**: 🔴 **NOT IMPLEMENTED**\
 **Priority**: P1 (High Value, Low Effort)\

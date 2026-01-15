@@ -1,3 +1,21 @@
+---
+title: "Production Deployment Reference"
+description: "Production deployment guides, checklists, and readiness verification"
+keywords:
+  - production
+  - deployment
+  - operations
+  - readiness
+category: "reference"
+status: "active"
+audience:
+  - operators
+  - developers
+related-docs:
+  - ../guides/DEPLOYMENT.md
+  - ../reference/PRODUCTION_READINESS.md
+---
+
 # 🚀 Production Deployment - Quick Reference
 **Version**: 1.5.0\
 **Status**: ✅ Ready for Manual Verification\

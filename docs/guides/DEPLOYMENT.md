@@ -1,3 +1,22 @@
+---
+title: "Production Deployment Guide"
+description: "Complete guide for deploying the application to production environments"
+keywords:
+  - deployment
+  - production
+  - ci-cd
+  - operations
+  - firebase
+category: "guide"
+status: "active"
+audience:
+  - operators
+  - developers
+related-docs:
+  - ../reference/PRODUCTION_READINESS.md
+  - ../guides/FAST_TRACK.md
+---
+
 # Production Deployment Guide - Fresh Schedules v1.5.0
 **Last Updated**: December 24, 2024\
 **Version**: 1.5.0\

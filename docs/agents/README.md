@@ -1,3 +1,23 @@
+---
+title: "AI Agents Documentation"
+description: "Documentation for AI agent systems, instruction hierarchies, and operational protocols"
+keywords:
+  - ai-agents
+  - agents
+  - automation
+  - instructions
+  - protocols
+category: "architecture"
+status: "active"
+audience:
+  - ai-agents
+  - developers
+  - architects
+related-docs:
+  - ../architecture/CREWOPS_MANUAL.md
+  - ../standards/CONSOLIDATION_TODO.md
+---
+
 # AI Agents Documentation
 This directory contains documentation for AI agent systems, instruction hierarchies, and operational
 protocols.

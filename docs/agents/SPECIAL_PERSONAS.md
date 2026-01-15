@@ -1,3 +1,22 @@
+---
+title: "Special Personas - SR Agent & Combot"
+description: "Operational specifications for special AI agent personas (SR Agent, Combot)"
+keywords:
+  - ai-agents
+  - personas
+  - sr-agent
+  - combot
+  - agent-config
+category: "architecture"
+status: "active"
+audience:
+  - ai-agents
+  - developers
+related-docs:
+  - GLOBAL_COGNITION_AGENT.md
+  - ../architecture/CREWOPS_MANUAL.md
+---
+
 # Special Personas — SR Agent & Combot
 Source of truth:
 [`archive/amendment-sources/reconciled-rulebook.md`](../../archive/amendment-sources/reconciled-rulebook.md)

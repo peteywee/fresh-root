@@ -1,4 +1,21 @@
 ---
+title: "Firebase SDK v12 Typing Strategy"
+description: "Modernization strategy for Firebase SDK v12 typing and monorepo dependency"
+keywords:
+  - firebase
+  - typing
+  - typescript
+  - sdk
+  - strategy
+category: "standard"
+status: "active"
+audience:
+  - developers
+  - architects
+related-docs:
+  - SDK_FACTORY_COMPREHENSIVE_GUIDE.md
+  - ../guides/FIREBASE.md
+---
 
 title: Firebase SDK v12 Typing Modernization Strategy
 date: 2025-12-02

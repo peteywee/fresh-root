@@ -1,3 +1,21 @@
+---
+title: "Memory Management Reference"
+description: "Reference guide for memory management patterns and best practices"
+keywords:
+  - memory
+  - performance
+  - optimization
+  - reference
+category: "reference"
+status: "active"
+audience:
+  - developers
+  - architects
+related-docs:
+  - ../guides/PERFORMANCE.md
+  - ../standards/PERFORMANCE_OPTIMIZATION.md
+---
+
 # Memory Management & Redis Configuration
 **Last Updated**: 2025-12-26
 **Status**: Production Ready

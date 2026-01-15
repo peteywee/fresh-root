@@ -1,3 +1,23 @@
+---
+title: "Memory Management for Production"
+description: "Memory optimization, monitoring, and troubleshooting for production environments"
+keywords:
+  - memory
+  - performance
+  - production
+  - optimization
+  - troubleshooting
+category: "standard"
+status: "active"
+audience:
+  - operators
+  - developers
+  - architects
+related-docs:
+  - ../reference/PRODUCTION_READINESS.md
+  - ERROR_PREVENTION_PATTERNS.md
+---
+
 # Memory Management for Production
 ## Critical Issue Fixed: Node Exit Code 9 (SIGKILL - Out of Memory)
 ### Problem

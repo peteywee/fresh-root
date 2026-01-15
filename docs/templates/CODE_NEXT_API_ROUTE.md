@@ -1,3 +1,21 @@
+---
+title: "Next.js API Route Code Template"
+description: "Boilerplate template for Next.js API routes with SDK factory pattern"
+keywords:
+  - template
+  - next.js
+  - api
+  - code
+  - boilerplate
+category: "template"
+status: "active"
+audience:
+  - developers
+related-docs:
+  - API_ROUTE_DOC_TEMPLATE.md
+  - ../standards/SDK_FACTORY_COMPREHENSIVE_GUIDE.md
+---
+
 # Template: CODE\_NEXT\_API\_ROUTE
 ```ts
 /**

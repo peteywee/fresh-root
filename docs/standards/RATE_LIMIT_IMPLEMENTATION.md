@@ -1,3 +1,22 @@
+---
+title: "Rate Limit Implementation Guide"
+description: "Complete implementation guide for rate limiting middleware and Redis integration"
+keywords:
+  - rate-limiting
+  - redis
+  - middleware
+  - implementation
+  - security
+category: "standard"
+status: "active"
+audience:
+  - developers
+  - architects
+related-docs:
+  - SDK_FACTORY_COMPREHENSIVE_GUIDE.md
+  - ../guides/DEPLOYMENT.md
+---
+
 # Rate Limit Middleware Implementation Guide
 **Status**: ✅ **FULLY IMPLEMENTED**
 

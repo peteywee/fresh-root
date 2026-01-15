@@ -1,4 +1,24 @@
-# Performance Benchmarks & Optimization Guide
+---
+title: "Performance Benchmarks Report"
+description: "Performance metrics, benchmarks, and optimization recommendations"
+keywords:
+  - performance
+  - benchmarks
+  - metrics
+  - optimization
+  - report
+category: "report"
+status: "active"
+audience:
+  - developers
+  - architects
+  - operators
+related-docs:
+  - ../standards/PERFORMANCE_OPTIMIZATION.md
+  - ../guides/PERFORMANCE_PROFILING.md
+---
+
+# Performance Benchmarks Report & Optimization Guide
 **Last Updated**: 2025-12-28
 **Status**: Production Implementation Complete
 

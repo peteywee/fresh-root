@@ -1,3 +1,22 @@
+---
+title: "Service Runbook Template"
+description: "Template for operational runbooks with incident response procedures"
+keywords:
+  - template
+  - runbook
+  - operations
+  - incident-response
+  - procedures
+category: "template"
+status: "active"
+audience:
+  - operators
+  - developers
+related-docs:
+  - DOC_SPEC.md
+  - ../production/README.md
+---
+
 # Template: DOC\_RUNBOOK
 ## ${Service} Runbook
 **Owner:** ${Owner} **SLOs:** ${SLOs} **Pager:** ${Pager}

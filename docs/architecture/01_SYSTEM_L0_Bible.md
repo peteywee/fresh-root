@@ -1,3 +1,23 @@
+---
+title: "Project Bible - System Foundation"
+description: "Core system specification, standards, and foundation freeze documentation"
+keywords:
+  - architecture
+  - system-design
+  - foundation
+  - specification
+  - bible
+category: "architecture"
+status: "active"
+audience:
+  - architects
+  - team-leads
+  - stakeholders
+related-docs:
+  - 02_SYSTEM_L1.md
+  - FUTURE_PROOF_SYSTEM_DESIGN.md
+---
+
 # Project Bible v14.5 – Bridge Freeze Specification
 **Role:** Foundation Freeze (finish 13.5→14 carry-over; standardize patterns for v15)\
 **Owner:** Lead Developer (Docs) • CTO Oversight: Patrick Craven\

@@ -1,13 +1,57 @@
-# 🏗️ Architecture Documentation
-This directory contains **auto-generated architectural documentation** for the Fresh Schedules
-codebase.
+---
+title: "Architecture Documentation"
+description: "System design, architectural patterns, decisions, and component interactions"
+keywords:
+  - architecture
+  - design
+  - patterns
+  - decisions
+category: "reference"
+status: "active"
+audience:
+  - architects
+  - developers
+  - ai-agents
+---
 
-## Files
-- **`_index.md`** — Main architecture overview (auto-updated on every push)
-- **`repomix-ci.md`** — Latest CI-generated dependency map
-- **`repomix-ci.json`** — Machine-readable dependency report
-- **`repomix-dashboard.md`** — Nightly updated dashboard
-- **`repomix-dashboard.json`** — Dashboard metrics in JSON format
+# Architecture Documentation
+
+This section contains documentation about the system design, architectural patterns, technology decisions, and high-level component interactions.
+
+## Categories
+
+### System Design & Decisions
+- **API Schema & Validation** - REST API design patterns, endpoint structure, request/response validation
+- **Database Architecture** - Firestore structure, collections, security rules design
+- **Infrastructure** - Cloud infrastructure, deployment architecture, scalability patterns
+- **Integration Patterns** - How components communicate, event flows, API contracts
+
+### Architectural Patterns
+- **SDK Factory Pattern** - Type-safe API endpoint factories with built-in security
+- **Zod Validation** - Type-driven validation at system boundaries
+- **Security Patterns** - RBAC, authentication flows, data isolation
+- **Caching Strategies** - Distributed caching, invalidation, performance optimization
+
+### Technology Decisions
+- **Firebase Ecosystem** - Why Firebase, pros/cons, alternatives considered
+- **Next.js App Router** - Modern React SSR, streaming, server components
+- **TypeScript** - Type safety, stricter mode, compilation targets
+- **Monorepo (pnpm workspaces)** - Dependency management, package organization
+
+---
+
+## Quick Navigation
+
+| Document | Purpose | Type |
+|----------|---------|------|
+| API Schema Audit | REST API design and validation patterns | Analysis |
+| SDK Factory Guide | Type-safe API endpoint implementation | Pattern |
+| Database Design | Firestore collections and security rules | Design |
+| Performance Architecture | Caching, optimization, scaling strategies | Design |
+
+---
+
+**See also**: [Standards](../standards/) for coding patterns, [Guides](../guides/) for implementation tutorials
 
 ## Auto-Generation
 | Trigger   | Script                                    | Output                | Frequency        |

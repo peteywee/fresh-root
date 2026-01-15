@@ -1,3 +1,22 @@
+---
+title: "Documentation Consolidation TODO"
+description: "Master task list for documentation consolidation and organization work"
+keywords:
+  - documentation
+  - consolidation
+  - organization
+  - standards
+  - todo
+category: "standard"
+status: "active"
+audience:
+  - developers
+  - team-leads
+related-docs:
+  - ../INDEX.md
+  - ../DOCUMENTATION_REORGANIZATION_PROGRESS.md
+---
+
 # Documentation Consolidation Execution TODO
 > **Status**: IN PROGRESS\
 > **Created**: 2025-12-16\

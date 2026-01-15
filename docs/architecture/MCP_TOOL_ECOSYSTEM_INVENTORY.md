@@ -1,3 +1,23 @@
+---
+title: "MCP Tool Ecosystem Inventory"
+description: "Complete inventory of Model Context Protocol tools, tiers, and integration status"
+keywords:
+  - mcp
+  - tools
+  - ecosystem
+  - inventory
+  - ai-agents
+category: "architecture"
+status: "active"
+audience:
+  - developers
+  - ai-agents
+  - architects
+related-docs:
+  - MCP_TOOLING_STRATEGY.md
+  - REPOMIX_MCP_TOOLS_REFERENCE.md
+---
+
 # MCP Tool Ecosystem: Complete Inventory
 **Date**: December 16, 2025\
 **Status**: Phase 1 Complete (Tier 1 Always-On)\

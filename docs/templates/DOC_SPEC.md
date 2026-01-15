@@ -1,3 +1,22 @@
+---
+title: "Feature Specification Template"
+description: "Template for technical feature specifications and requirements"
+keywords:
+  - template
+  - specification
+  - feature
+  - requirements
+  - technical
+category: "template"
+status: "active"
+audience:
+  - developers
+  - product-managers
+related-docs:
+  - DOC_ADR.md
+  - DOC_RUNBOOK.md
+---
+
 # Template: DOC\_SPEC
 ## Spec: ${Feature}
 **Owner:** ${Owner} **Goal:** ${Goal}

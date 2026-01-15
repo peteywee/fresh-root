@@ -1,3 +1,22 @@
+---
+title: "Repository State Diagram"
+description: "Visual state machine diagram showing repository organization and workflow states"
+keywords:
+  - repository
+  - state-diagram
+  - visual
+  - workflow
+  - organization
+category: "report"
+status: "active"
+audience:
+  - developers
+  - architects
+related-docs:
+  - FILE_DISTRIBUTION.md
+  - ../INDEX.md
+---
+
 # Repository State
 ```mermaid
 stateDiagram-v2

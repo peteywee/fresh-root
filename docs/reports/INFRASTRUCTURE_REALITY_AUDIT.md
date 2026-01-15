@@ -1,3 +1,23 @@
+---
+title: "Infrastructure Reality Audit"
+description: "Audit of infrastructure, deployment, and operational reality"
+keywords:
+  - audit
+  - infrastructure
+  - report
+  - operational
+  - assessment
+category: "report"
+status: "active"
+audience:
+  - operators
+  - architects
+  - stakeholders
+related-docs:
+  - ../production/FINAL_SIGN_OFF.md
+  - ../guides/DEPLOYMENT.md
+---
+
 # Infrastructure Reality Audit - 2025-12-23
 **Note**: This document reflects the state of the codebase as of the date above. Some information
 may have changed since this audit was performed.

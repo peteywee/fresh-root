@@ -1,5 +1,14 @@
 {
-  "errors": [],
+  "errors": [
+    {
+      "file": "apps/web/app/api/auth/logout/route.ts",
+      "pattern": "API_ROUTE",
+      "name": "Write Validation",
+      "message": "Write API routes must validate input using Zod before use",
+      "tier": 0,
+      "severity": "error"
+    }
+  ],
   "warnings": [],
   "info": [],
   "triadStatus": [

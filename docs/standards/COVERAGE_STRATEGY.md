@@ -1,3 +1,22 @@
+---
+title: "Test Coverage Strategy"
+description: "Guidelines for comprehensive test coverage across schemas, API routes, and business logic"
+keywords:
+  - testing
+  - coverage
+  - standards
+  - zod
+  - schemas
+category: "standard"
+status: "active"
+audience:
+  - developers
+  - qa-engineers
+related-docs:
+  - ../guides/TESTING.md
+  - ERROR_PREVENTION_PATTERNS.md
+---
+
 # Coverage Strategy
 ## What "Comprehensive" Means Here
 - **Schemas**: 100% property coverage via Zod safeParse tests (valid + invalid matrices).

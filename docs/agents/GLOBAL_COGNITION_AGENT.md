@@ -1,3 +1,22 @@
+---
+title: "Global Cognition Agent - Operational Spec"
+description: "Specification for the Global Cognition Agent, a repository-aware AI assistant"
+keywords:
+  - ai-agents
+  - agent-spec
+  - operational
+  - cognition
+  - repository-aware
+category: "architecture"
+status: "active"
+audience:
+  - ai-agents
+  - developers
+related-docs:
+  - ../architecture/CREWOPS_MANUAL.md
+  - SPECIAL_PERSONAS.md
+---
+
 # Global Cognition Agent — Operational Spec
 This document defines the Global Cognition Agent: a repository-aware, index-aware, tool-driven
 assistant for Fresh Root / Fresh Schedules.

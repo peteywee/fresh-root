@@ -1,3 +1,21 @@
+---
+title: "TypeScript Module Code Template"
+description: "Template for TypeScript module organization and exports"
+keywords:
+  - template
+  - typescript
+  - module
+  - code
+  - patterns
+category: "template"
+status: "active"
+audience:
+  - developers
+related-docs:
+  - CODE_ZOD_SCHEMA.md
+  - ../standards/ERROR_PREVENTION_PATTERNS.md
+---
+
 # Template: CODE\_TS\_MODULE
 ```ts
 /**

@@ -1,3 +1,22 @@
+---
+title: "Error Prevention & Pattern Recognition"
+description: "Safeguards and patterns for preventing recurring TypeScript and runtime errors"
+keywords:
+  - error-prevention
+  - patterns
+  - typescript
+  - safeguards
+  - standards
+category: "standard"
+status: "active"
+audience:
+  - developers
+  - architects
+related-docs:
+  - SDK_FACTORY_COMPREHENSIVE_GUIDE.md
+  - ../guides/TESTING.md
+---
+
 # TypeScript Error Prevention & Pattern Recognition
 ## Series-A Standards: Error Safeguards
 This document tracks recurring error patterns across FRESH-ROOT and establishes safeguards to

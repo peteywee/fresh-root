@@ -1,3 +1,20 @@
+---
+title: "API Route Documentation Template"
+description: "Template for documenting API routes and endpoints"
+keywords:
+  - template
+  - api
+  - documentation
+  - routes
+category: "template"
+status: "active"
+audience:
+  - developers
+related-docs:
+  - CODE_NEXT_API_ROUTE.md
+  - ../standards/SDK_FACTORY_COMPREHENSIVE_GUIDE.md
+---
+
 # API Route Documentation Template
 ## Summary
 - Route: `app/api/<...>/route.ts`

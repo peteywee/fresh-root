@@ -1,3 +1,22 @@
+---
+title: "File Distribution Analysis"
+description: "Visual analysis of file types and distribution in the repository"
+keywords:
+  - file-distribution
+  - visual
+  - analysis
+  - repository
+  - metrics
+category: "report"
+status: "active"
+audience:
+  - developers
+  - architects
+related-docs:
+  - REPO_STATE.md
+  - ../architecture/DEPENDENCY_GRAPH.md
+---
+
 # File Distribution
 ```mermaid
 pie title File Types in Repository

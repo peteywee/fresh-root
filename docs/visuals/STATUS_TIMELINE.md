@@ -1,3 +1,23 @@
+---
+title: "Project Status Timeline"
+description: "Timeline visualization of project milestones, phases, and status"
+keywords:
+  - timeline
+  - status
+  - milestones
+  - phases
+  - visual
+category: "report"
+status: "active"
+audience:
+  - developers
+  - stakeholders
+  - team-leads
+related-docs:
+  - REPO_STATE.md
+  - ../production/CHANGELOG.md
+---
+
 # Project Status Timeline
 ```mermaid
 timeline

@@ -1,3 +1,23 @@
+---
+title: "MCP Tooling Strategy"
+description: "Architecture and strategy for Model Context Protocol tool integration (always-on vs on-demand)"
+keywords:
+  - mcp
+  - tooling
+  - architecture
+  - ai-agents
+  - integration
+category: "architecture"
+status: "active"
+audience:
+  - developers
+  - architects
+  - ai-agents
+related-docs:
+  - MCP_TOOL_ECOSYSTEM_INVENTORY.md
+  - REPOMIX_MCP_TOOLS_REFERENCE.md
+---
+
 # MCP Tooling Strategy: Always-On vs. On-Demand
 **Date**: December 16, 2025\
 **Status**: Planning Phase\

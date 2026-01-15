@@ -1,3 +1,22 @@
+---
+title: "SDK Factory Pattern - Comprehensive Guide"
+description: "Complete guide to SDK Factory pattern, implementation, and migration strategies"
+keywords:
+  - sdk-factory
+  - pattern
+  - api
+  - typescript
+  - architecture
+category: "standard"
+status: "active"
+audience:
+  - developers
+  - architects
+related-docs:
+  - ../guides/DEPLOYMENT.md
+  - ERROR_PREVENTION_PATTERNS.md
+---
+
 # SDK Factory Pattern - Comprehensive Overview & Implementation Guide
 **Status**: ✅ Production Ready (90%+ Migrated)\
 **Version**: 2.0.0\
