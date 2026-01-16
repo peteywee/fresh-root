@@ -175,6 +175,13 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Setup Java for Firebase Emulators
+        if: matrix.test-type == 'rules' || matrix.test-type == 'e2e'
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
       - name: Setup Firebase Emulator
         if: matrix.test-type == 'rules' || matrix.test-type == 'e2e'
         run: |
