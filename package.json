@@ -43,6 +43,7 @@
   "devDependencies": {
     "@eslint/js": "^9.39.2",
     "@fresh-schedules/types": "workspace:*",
+    "@manypkg/cli": "^0.25.1",
     "@types/node": "^24.10.4",
     "@typescript-eslint/eslint-plugin": "^8.50.0",
     "@typescript-eslint/parser": "^8.50.0",
@@ -56,6 +57,7 @@
     "globals": "^16.5.0",
     "globby": "^16.0.0",
     "prettier": "^3.7.4",
+    "syncpack": "^13.0.4",
     "tsup": "8.5.1",
     "tsx": "^4.21.0",
     "turbo": "^2.7.2",
