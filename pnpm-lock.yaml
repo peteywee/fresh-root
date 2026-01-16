@@ -11,6 +11,9 @@ importers:
       '@eslint/js':
         specifier: ^9.39.2
         version: 9.39.2
+      '@firebase/rules-unit-testing':
+        specifier: ^5.0.0
+        version: 5.0.0(firebase@12.7.0)
       '@fresh-schedules/types':
         specifier: workspace:*
         version: link:packages/types
