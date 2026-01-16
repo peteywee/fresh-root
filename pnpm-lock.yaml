@@ -56,6 +56,9 @@ importers:
       prettier:
         specifier: ^3.7.4
         version: 3.7.4
+      repomix:
+        specifier: ^1.11.1
+        version: 1.11.1(hono@4.11.1)
       syncpack:
         specifier: ^13.0.4
         version: 13.0.4(typescript@5.9.3)
