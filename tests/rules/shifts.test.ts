@@ -39,35 +39,35 @@ describe("rules: shifts collection", () => {
         createdAt: Date.now(),
       });
 
-      // Seed memberships for various roles
+      // Seed memberships for various roles (using roles array for hasAnyRoleLegacy)
       await db.collection("memberships").doc(membershipId("staff-user", orgId)).set({
         uid: "staff-user",
         orgId,
-        role: "staff",
+        roles: ["staff"],
         status: "active",
       });
       await db.collection("memberships").doc(membershipId("scheduler-user", orgId)).set({
         uid: "scheduler-user",
         orgId,
-        role: "scheduler",
+        roles: ["scheduler"],
         status: "active",
       });
       await db.collection("memberships").doc(membershipId("manager-user", orgId)).set({
         uid: "manager-user",
         orgId,
-        role: "manager",
+        roles: ["manager"],
         status: "active",
       });
       await db.collection("memberships").doc(membershipId("admin-user", orgId)).set({
         uid: "admin-user",
         orgId,
-        role: "admin",
+        roles: ["admin"],
         status: "active",
       });
       await db.collection("memberships").doc(membershipId("owner-user", orgId)).set({
         uid: "owner-user",
         orgId,
-        role: "org_owner",
+        roles: ["org_owner", "owner"],
         status: "active",
       });
     });
@@ -271,7 +271,7 @@ describe("rules: shifts collection", () => {
         await db.collection("memberships").doc(membershipId("other-user", otherOrg)).set({
           uid: "other-user",
           orgId: otherOrg,
-          role: "manager",
+          roles: ["manager"],
           status: "active",
         });
       });
@@ -290,7 +290,7 @@ describe("rules: shifts collection", () => {
         await db.collection("memberships").doc(membershipId("manager-user", otherOrg)).set({
           uid: "manager-user",
           orgId: otherOrg,
-          role: "manager",
+          roles: ["manager"],
           status: "active",
         });
       });

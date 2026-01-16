@@ -50,6 +50,9 @@ importers:
       eslint-plugin-unused-imports:
         specifier: ^4.3.0
         version: 4.3.0(@typescript-eslint/eslint-plugin@8.50.0(@typescript-eslint/parser@8.50.0(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3))(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3))(eslint@9.39.2(jiti@2.6.1))
+      firebase-admin:
+        specifier: ^13.6.0
+        version: 13.6.0(encoding@0.1.13)
       globals:
         specifier: ^16.5.0
         version: 16.5.0

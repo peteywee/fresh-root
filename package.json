@@ -43,6 +43,7 @@
   "devDependencies": {
     "@eslint/js": "^9.39.2",
     "@firebase/rules-unit-testing": "^5.0.0",
+    "firebase-admin": "^13.6.0",
     "@fresh-schedules/types": "workspace:*",
     "@manypkg/cli": "^0.25.1",
     "@types/node": "^24.10.4",
