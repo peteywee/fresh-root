@@ -1,13 +1,31 @@
-# Ops Hub Implementation & Migration Plan
+---
+title: "Ops Hub Implementation & Migration Plan"
+description: "Implementation plan for operations hub, monitoring, and dashboard migration"
+keywords:
+  - operations
+  - migration
+  - implementation
+  - ops-hub
+  - monitoring
+category: "architecture"
+status: "active"
+audience:
+  - operators
+  - architects
+  - developers
+related-docs:
+  - FUTURE_PROOF_SYSTEM_DESIGN.md
+  - ../guides/DEPLOYMENT.md
+---
 
-**Version**: 1.0  
-**Created**: December 22, 2025  
+# Ops Hub Implementation & Migration Plan
+**Version**: 1.0\
+**Created**: December 22, 2025\
 **Status**: Ready for Implementation
 
 ---
 
 ## Executive Summary
-
 Transform the monolithic ops dashboard into a **multi-section observability hub** with:
 
 - **4 Sections**: Overview, Build Performance, Security Scans, Codebase Analytics
@@ -19,9 +37,7 @@ Transform the monolithic ops dashboard into a **multi-section observability hub*
 ---
 
 ## Part 1: Current State Analysis
-
 ### Existing Architecture
-
 ```
 apps/web/app/(app)/ops/
 ├── page.tsx              # Server component with auth (requireOpsSuperAccess)
@@ -33,7 +49,6 @@ apps/web/app/api/ops/
 ```
 
 ### Current Issues
-
 | Issue                       | Impact                                | Priority |
 | --------------------------- | ------------------------------------- | -------- |
 | **Concurrent JSONL writes** | Race condition in CI, data corruption | P0       |
@@ -45,9 +60,7 @@ apps/web/app/api/ops/
 ---
 
 ## Part 2: Target Architecture
-
 ### Navigation Structure (Nested Routes)
-
 ```
 /ops                  → Overview (current dashboard, refactored)
 /ops/builds           → Build Performance (trend charts + table)
@@ -56,7 +69,6 @@ apps/web/app/api/ops/
 ```
 
 ### File Structure (Final)
-
 ```
 apps/web/app/(app)/ops/
 ├── layout.tsx                    # NEW: Ops layout with sidebar
@@ -91,9 +103,7 @@ packages/types/src/
 ---
 
 ## Part 3: Firestore Schema Design
-
 ### Collection: `_metrics/build-performance/entries/{docId}`
-
 ```typescript
 // Zod Schema
 export const BuildPerformanceEntrySchema = z.object({
@@ -121,7 +131,6 @@ export type BuildPerformanceEntry = z.infer<typeof BuildPerformanceEntrySchema>;
 ```
 
 ### Collection: `_metrics/security-scans/entries/{docId}`
-
 ```typescript
 export const SecurityScanEntrySchema = z.object({
   id: z.string(),
@@ -148,7 +157,6 @@ export type SecurityScanEntry = z.infer<typeof SecurityScanEntrySchema>;
 ```
 
 ### Collection: `_metrics/codebase-analytics/entries/{docId}`
-
 ```typescript
 export const CodebaseAnalyticsEntrySchema = z.object({
   id: z.string(),
@@ -180,7 +188,6 @@ export type CodebaseAnalyticsEntry = z.infer<typeof CodebaseAnalyticsEntrySchema
 ```
 
 ### Firestore Security Rules Addition
-
 ```javascript
 // Add to firestore.rules
 match /_metrics/{metricType}/entries/{entryId} {
@@ -196,18 +203,14 @@ match /_metrics/{metricType}/entries/{entryId} {
 ---
 
 ## Part 4: Migration Execution Plan
-
 ### Phase 1: Foundation (Day 1, ~3 hours)
-
 #### Step 1.1: Install Dependencies
-
 ```bash
 pnpm add recharts --filter @apps/web
 pnpm add -D @types/recharts --filter @apps/web
 ```
 
 #### Step 1.2: Create Zod Schemas
-
 ```bash
 # Create file
 touch packages/types/src/ops-metrics.ts
@@ -216,7 +219,6 @@ touch packages/types/src/ops-metrics.ts
 **Content**: All three schemas defined above, exported from `packages/types/src/index.ts`
 
 #### Step 1.3: Create Reusable Chart Components
-
 | Component             | Purpose            | Props                                     |
 | --------------------- | ------------------ | ----------------------------------------- |
 | `TrendLineChart.tsx`  | Line chart wrapper | `data`, `xKey`, `yKeys`, `colors`         |
@@ -225,7 +227,6 @@ touch packages/types/src/ops-metrics.ts
 | `MetricCard.tsx`      | Metric display     | `title`, `value`, `description`, `status` |
 
 #### Step 1.4: Create Ops Layout with Sidebar
-
 ```tsx
 // apps/web/app/(app)/ops/layout.tsx
 import OpsSidebar from "./OpsSidebar";
@@ -287,9 +288,7 @@ export default function OpsSidebar() {
 ---
 
 ### Phase 2: Firestore Migration (Day 1-2, ~3 hours)
-
 #### Step 2.1: Create POST Endpoint for CI Writes
-
 ```typescript
 // apps/web/app/api/ops/build-performance/route.ts - ADD POST handler
 
@@ -317,7 +316,6 @@ export const POST = createAdminEndpoint({
 ```
 
 #### Step 2.2: Modify GET Endpoint for Firestore + Pagination
-
 ```typescript
 // apps/web/app/api/ops/build-performance/route.ts - MODIFY GET handler
 
@@ -374,10 +372,8 @@ export const GET = createAdminEndpoint({
 ```
 
 #### Step 2.3: Update CI Workflow
-
 ```yaml
 # .github/workflows/ci.yml - REPLACE file append with API call
-
 - name: 📊 Persist build metrics to Firestore
   if: always() && github.event_name == 'push' && github.ref == 'refs/heads/main'
   env:
@@ -415,11 +411,9 @@ export const GET = createAdminEndpoint({
 ```
 
 #### Step 2.4: Create Migration Script
-
 ```javascript
 // scripts/migrate-metrics-to-firestore.mjs
-#!/usr/bin/env node
-
+# !/usr/bin/env node
 import { readFileSync } from "fs";
 import { initializeApp, cert } from "firebase-admin/app";
 import { getFirestore } from "firebase-admin/firestore";
@@ -487,9 +481,7 @@ migrate().catch(console.error);
 ---
 
 ### Phase 3: Build Performance Page (Day 2, ~2 hours)
-
 #### Step 3.1: Create Summary Stats Endpoint
-
 ```typescript
 // apps/web/app/api/ops/build-performance/summary/route.ts
 export const GET = createAdminEndpoint({
@@ -568,77 +560,64 @@ export const GET = createAdminEndpoint({
 ```
 
 #### Step 3.2: Create Build Performance Page
-
 See implementation in Wave 3 of the implementation order below.
 
 ---
 
 ### Phase 4: Security Scans Page (Day 3, ~2 hours)
-
 #### Step 4.1: Create Security Scans API Endpoint
-
 Fetches Semgrep results from GitHub Code Scanning API and caches in Firestore.
 
 #### Step 4.2: Create Security Scans Page
-
 Displays severity distribution, findings table, and timeline.
 
 ---
 
 ### Phase 5: Codebase Analytics Page (Day 3, ~1.5 hours)
-
 Refactor existing `/api/ops/analyze` endpoint output into the new page format.
 
 ---
 
 ## Part 5: Implementation Order (Parallel Batches)
-
 ### Batch 1 (Parallel) - Foundation
-
-- [ ] Install Recharts dependency
-- [ ] Create `packages/types/src/ops-metrics.ts` with all Zod schemas
-- [ ] Create `OpsSidebar.tsx` navigation component
-- [ ] Create `ops/layout.tsx` with sidebar
+- \[ ] Install Recharts dependency
+- \[ ] Create `packages/types/src/ops-metrics.ts` with all Zod schemas
+- \[ ] Create `OpsSidebar.tsx` navigation component
+- \[ ] Create `ops/layout.tsx` with sidebar
 
 ### Batch 2 (Parallel) - Chart Components
-
-- [ ] Create `TrendLineChart.tsx`
-- [ ] Create `StatSummaryCard.tsx`
-- [ ] Extract `StatusBadge.tsx` from OpsClient
-- [ ] Extract `MetricCard.tsx` from OpsClient
+- \[ ] Create `TrendLineChart.tsx`
+- \[ ] Create `StatSummaryCard.tsx`
+- \[ ] Extract `StatusBadge.tsx` from OpsClient
+- \[ ] Extract `MetricCard.tsx` from OpsClient
 
 ### Batch 3 (Sequential) - Firestore Migration
-
-- [ ] Add POST handler to build-performance route
-- [ ] Modify GET handler for Firestore + pagination
-- [ ] Update CI workflow to POST metrics
-- [ ] Create and run migration script
-- [ ] Verify data in Firestore console
+- \[ ] Add POST handler to build-performance route
+- \[ ] Modify GET handler for Firestore + pagination
+- \[ ] Update CI workflow to POST metrics
+- \[ ] Create and run migration script
+- \[ ] Verify data in Firestore console
 
 ### Batch 4 (Parallel) - Pages
-
-- [ ] Create `ops/builds/page.tsx` (Build Performance)
-- [ ] Create `ops/security/page.tsx` (Security Scans)
-- [ ] Create `ops/analytics/page.tsx` (Codebase Analytics)
-- [ ] Refactor `ops/page.tsx` (Overview)
+- \[ ] Create `ops/builds/page.tsx` (Build Performance)
+- \[ ] Create `ops/security/page.tsx` (Security Scans)
+- \[ ] Create `ops/analytics/page.tsx` (Codebase Analytics)
+- \[ ] Refactor `ops/page.tsx` (Overview)
 
 ### Batch 5 (Sequential) - API Endpoints
-
-- [ ] Create `build-performance/summary/route.ts`
-- [ ] Create `security-scans/route.ts`
-- [ ] Create `codebase-analytics/route.ts`
+- \[ ] Create `build-performance/summary/route.ts`
+- \[ ] Create `security-scans/route.ts`
+- \[ ] Create `codebase-analytics/route.ts`
 
 ### Batch 6 - Testing & Cleanup
-
-- [ ] Add unit tests for all new endpoints
-- [ ] Remove old JSONL persistence code from CI
-- [ ] Update Firestore security rules
-- [ ] Run full test suite
+- \[ ] Add unit tests for all new endpoints
+- \[ ] Remove old JSONL persistence code from CI
+- \[ ] Update Firestore security rules
+- \[ ] Run full test suite
 
 ---
 
 ## Part 6: Rollback Plan
-
 If migration fails:
 
 1. **Revert CI workflow** to JSONL file append (keep as commented code)
@@ -648,7 +627,6 @@ If migration fails:
 ---
 
 ## Part 7: Success Metrics
-
 | Metric                     | Target                     | Measurement                          |
 | -------------------------- | -------------------------- | ------------------------------------ |
 | Build metrics persisted    | 100% of main branch builds | Check Firestore count vs GitHub runs |
@@ -659,7 +637,6 @@ If migration fails:
 ---
 
 ## Appendix: Environment Variables Required
-
 ```bash
 # For CI → Firestore writes
 OPS_API_KEY=<generate-secure-token>
@@ -669,7 +646,7 @@ GOOGLE_APPLICATION_CREDENTIALS_JSON=<service-account-json>
 FIREBASE_PROJECT_ID=fresh-schedules
 ```
 
-Generate OPS_API_KEY:
+Generate OPS\_API\_KEY:
 
 ```bash
 openssl rand -base64 32

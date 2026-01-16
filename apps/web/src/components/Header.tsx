@@ -4,9 +4,8 @@
 import React from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { signOut } from "firebase/auth";
-import { auth } from "../../app/lib/firebaseClient";
 import { useAuth } from "../lib/auth-context";
+import { logoutEverywhere } from "../lib/auth-helpers";
 import Logo from "../../components/Logo";
 
 export default function Header() {
@@ -14,13 +13,8 @@ export default function Header() {
   const router = useRouter();
 
   const handleLogout = async () => {
-    if (!auth) {
-      console.warn("Firebase auth not initialized");
-      return;
-    }
-
     try {
-      await signOut(auth);
+      await logoutEverywhere();
       router.push("/login");
     } catch (error) {
       console.error("Logout error:", error);

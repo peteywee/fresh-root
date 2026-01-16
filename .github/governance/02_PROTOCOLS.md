@@ -1,8 +1,7 @@
 # FRESH SCHEDULES - PROTOCOLS
-
-> **Version**: 1.0.0  
-> **Status**: CANONICAL  
-> **Authority**: Sr Dev / Architecture  
+> **Version**: 1.0.0\
+> **Status**: CANONICAL\
+> **Authority**: Sr Dev / Architecture\
 > **Binding**: YES - All protocols are enforceable
 
 This document defines the operational protocols for Fresh Schedules development.
@@ -10,11 +9,9 @@ This document defines the operational protocols for Fresh Schedules development.
 ---
 
 ## PROTOCOL 01: CLASSIFICATION
-
 **Purpose**: Determine change complexity before work begins.
 
 ### Classification Decision Tree
-
 ```
 START
   │
@@ -38,7 +35,6 @@ START
 ```
 
 ### Classification Matrix
-
 | Dimension    | TRIVIAL          | NON-TRIVIAL       | CRITICAL                  |
 | ------------ | ---------------- | ----------------- | ------------------------- |
 | **Files**    | 1                | 2-10              | >10 or security files     |
@@ -49,7 +45,6 @@ START
 | **Rollback** | Trivial          | Planned           | Migration script required |
 
 ### Output Format
-
 After classification, document:
 
 ```markdown
@@ -60,11 +55,9 @@ After classification, document:
 ---
 
 ## PROTOCOL 02: PIPELINE SELECTION
-
 **Purpose**: Map classification to appropriate validation pipeline.
 
 ### Pipeline Families
-
 | Family       | When to Use                            | Minimum Gates               |
 | ------------ | -------------------------------------- | --------------------------- |
 | **Feature**  | New functionality                      | STATIC                      |
@@ -74,7 +67,6 @@ After classification, document:
 | **Security** | Auth, rules, secrets                   | ALL GATES                   |
 
 ### Variant Selection
-
 | Variant      | Criteria                             | Gates Included       |
 | ------------ | ------------------------------------ | -------------------- |
 | **FAST**     | 1 file, no domain logic              | STATIC only          |
@@ -82,7 +74,6 @@ After classification, document:
 | **HEAVY**    | >5 files OR multi-domain OR security | All applicable gates |
 
 ### Selection Matrix
-
 | Scenario                     | Pipeline          |
 | ---------------------------- | ----------------- |
 | Fix typo in component        | Feature.FAST      |
@@ -98,11 +89,9 @@ After classification, document:
 ---
 
 ## PROTOCOL 03: GATE EXECUTION
-
 **Purpose**: Define how gates run and what blocks/passes.
 
 ### Gate Order (Mandatory)
-
 ```
 1. STATIC     → [blocking] Must pass before any other gate
 2. CORRECTNESS → [blocking] Tests must pass
@@ -112,9 +101,7 @@ After classification, document:
 ```
 
 ### Gate Specifications
-
 #### STATIC Gate
-
 | Check      | Command             | Fail Behavior        |
 | ---------- | ------------------- | -------------------- |
 | TypeScript | `pnpm typecheck`    | BLOCK                |
@@ -124,7 +111,6 @@ After classification, document:
 **Auto-Fix Available**: `pnpm lint --fix && pnpm format`
 
 #### CORRECTNESS Gate
-
 | Check       | Command           | Fail Behavior      |
 | ----------- | ----------------- | ------------------ |
 | Unit Tests  | `pnpm test:unit`  | BLOCK              |
@@ -132,7 +118,6 @@ After classification, document:
 | E2E Tests   | `pnpm test:e2e`   | BLOCK (HEAVY only) |
 
 #### SAFETY Gate
-
 | Check              | Command                  | Fail Behavior          |
 | ------------------ | ------------------------ | ---------------------- |
 | Pattern Validation | `pnpm validate:patterns` | BLOCK if <90 score     |
@@ -140,21 +125,18 @@ After classification, document:
 | Dependency Audit   | `pnpm audit`             | BLOCK on high/critical |
 
 #### PERF Gate
-
 | Check       | Command              | Fail Behavior         |
 | ----------- | -------------------- | --------------------- |
 | Bundle Size | `pnpm build:analyze` | Warn if >10% increase |
 | Lighthouse  | CI only              | Warn if <80 score     |
 
 #### AI Gate
-
 | Check               | Purpose                       | Fail Behavior |
 | ------------------- | ----------------------------- | ------------- |
 | Context Validator   | Verify agent context complete | Advisory      |
 | Hallucination Check | Flag uncertain claims         | Advisory      |
 
 ### Gate Result Format
-
 ```typescript
 interface GateResult {
   gate: "STATIC" | "CORRECTNESS" | "SAFETY" | "PERF" | "AI";
@@ -169,11 +151,9 @@ interface GateResult {
 ---
 
 ## PROTOCOL 04: MERGE CONTROL
-
 **Purpose**: Define when and how code merges.
 
 ### Merge Requirements by Branch
-
 | Target | From                       | Requirements                              |
 | ------ | -------------------------- | ----------------------------------------- |
 | `main` | `dev` only                 | All gates pass, 2 approvals, no conflicts |
@@ -181,7 +161,6 @@ interface GateResult {
 | `dev`  | `hotfix/*`                 | All gates pass, 1 approval                |
 
 ### Merge Strategies
-
 | Scenario       | Strategy     | Rationale             |
 | -------------- | ------------ | --------------------- |
 | Feature → dev  | Squash       | Clean history         |
@@ -191,7 +170,6 @@ interface GateResult {
 | Hotfix → main  | Merge commit | Audit trail           |
 
 ### Conflict Resolution
-
 1. Rebase feature branch on target
 2. Resolve conflicts locally
 3. Re-run gates
@@ -200,11 +178,9 @@ interface GateResult {
 ---
 
 ## PROTOCOL 05: EMERGENCY PROCEDURES
-
 **Purpose**: Handle production incidents.
 
 ### Severity Levels
-
 | Level  | Definition                                  | Response Time |
 | ------ | ------------------------------------------- | ------------- |
 | **P0** | Production down, data loss, security breach | Immediate     |
@@ -213,7 +189,6 @@ interface GateResult {
 | **P3** | Cosmetic issue, no functional impact        | Next sprint   |
 
 ### Hotfix Protocol
-
 1. Create `hotfix/[ticket]-[description]` from `main`
 2. Implement minimal fix
 3. Run Security.HEAVY pipeline
@@ -223,7 +198,6 @@ interface GateResult {
 7. Post-mortem within 48 hours
 
 ### Rollback Protocol
-
 1. Identify failing commit
 2. `git revert [commit]` on `main`
 3. Run STATIC gate
@@ -234,11 +208,9 @@ interface GateResult {
 ---
 
 ## PROTOCOL 06: AGENT INVOCATION
-
 **Purpose**: Define how agents are activated and routed.
 
 ### Invocation Patterns
-
 | Pattern                      | Agent Routed             | Example                              |
 | ---------------------------- | ------------------------ | ------------------------------------ |
 | `@architect {verb} {target}` | Architect                | `@architect design TimeOff`          |
@@ -249,7 +221,6 @@ interface GateResult {
 | Natural language review      | Orchestrator → Guard     | "Is this PR ready?"                  |
 
 ### Orchestrator Routing Rules
-
 ```
 IF message contains explicit @agent trigger
   → Route directly to that agent
@@ -275,7 +246,6 @@ ELSE
 ```
 
 ### Parallel Execution Protocol
-
 When orchestrator detects multi-agent task:
 
 1. Parse task into sub-tasks
@@ -288,11 +258,9 @@ When orchestrator detects multi-agent task:
 ---
 
 ## PROTOCOL 07: ERROR HANDLING
-
 **Purpose**: Standardize error responses and recovery.
 
 ### Error Categories
-
 | Category   | HTTP Code | User Message              | Log Level |
 | ---------- | --------- | ------------------------- | --------- |
 | Validation | 400       | Specific field errors     | INFO      |
@@ -303,7 +271,6 @@ When orchestrator detects multi-agent task:
 | Server     | 500       | "Something went wrong"    | ERROR     |
 
 ### Response Format
-
 ```typescript
 // Success
 {
@@ -323,7 +290,6 @@ When orchestrator detects multi-agent task:
 ```
 
 ### Recovery Procedures
-
 | Error Type         | Recovery Action                             |
 | ------------------ | ------------------------------------------- |
 | Validation failure | Return field-level errors, let user correct |
@@ -334,11 +300,9 @@ When orchestrator detects multi-agent task:
 ---
 
 ## PROTOCOL 08: DOCUMENTATION
-
 **Purpose**: Keep docs current and discoverable.
 
 ### Documentation Requirements
-
 | Change Type      | Required Docs                         |
 | ---------------- | ------------------------------------- |
 | New API endpoint | OpenAPI spec, README example          |
@@ -348,7 +312,6 @@ When orchestrator detects multi-agent task:
 | Breaking change  | Migration guide, changelog entry      |
 
 ### Location Standards
-
 | Doc Type       | Location             |
 | -------------- | -------------------- |
 | API Reference  | `docs/api/`          |
@@ -361,4 +324,4 @@ When orchestrator detects multi-agent task:
 
 **END OF PROTOCOLS**
 
-Next document: [03_DIRECTIVES.md](./03_DIRECTIVES.md)
+Next document: [03\_DIRECTIVES.md](./03_DIRECTIVES.md)

@@ -1,10 +1,8 @@
 # L2 — Billing, Subscription & Pricing Subsystem
-
 > **Status:** 🟡 Schema-Only Implementation (No Active Payment Processing) **Last Updated:**
 > 2025-12-17 **Implementation Status:** Type definitions exist, but no billing logic implemented
 
 ## 1. Role in the System
-
 The Billing & Pricing subsystem is designed to manage subscription tiers, usage limits, and payment
 processing for the Fresh Schedules platform. Currently, it exists **only as type definitions** - no
 actual billing routes, Stripe integration, or payment processing has been implemented.
@@ -19,11 +17,8 @@ actual billing routes, Stripe integration, or payment processing has been implem
 - ❌ No invoice generation or payment webhooks
 
 ## 2. Actual Implementation Analysis
-
 ### 2.1 Type Definitions Inventory
-
 #### Network-Level Billing (from `packages/types/src/networks.ts`)
-
 ```typescript
 // Subscription Plans
 export const NetworkPlan = z.enum([
@@ -61,7 +56,6 @@ export const NetworkSchema = z.object({
 ```
 
 #### Organization-Level Billing (from `packages/types/src/orgs.ts`)
-
 ```typescript
 // Subscription Tiers
 export const SubscriptionTier = z.enum(["free", "starter", "professional", "enterprise"]);
@@ -90,9 +84,7 @@ export const OrganizationSchema = z.object({
 ```
 
 ### 2.2 Missing Implementation Components
-
 #### ❌ No Billing API Endpoints
-
 **Expected but not found:**
 
 - `/api/billing/subscribe` - Create subscription
@@ -105,7 +97,6 @@ export const OrganizationSchema = z.object({
 **Actual routes found:** Zero billing endpoints exist.
 
 #### ❌ No Payment Provider Integration
-
 **No Stripe SDK imports found in codebase:**
 
 ```bash
@@ -121,7 +112,6 @@ $ grep -r "stripe" apps/web functions packages --include="*.ts"
 - Payment Intent handling
 
 #### ❌ No Usage Metering
-
 **Expected metering targets:**
 
 - Active users per organization
@@ -136,7 +126,6 @@ $ grep -r "stripe" apps/web functions packages --include="*.ts"
 - No background jobs to track usage
 
 #### ❌ No Invoice Generation
-
 **Expected functionality:**
 
 - Monthly invoice generation
@@ -147,7 +136,6 @@ $ grep -r "stripe" apps/web functions packages --include="*.ts"
 **Current state:** None implemented
 
 ### 2.3 Firestore Collections (Billing-Related)
-
 **Expected Collections (not found):**
 
 ```typescript
@@ -174,9 +162,7 @@ $ grep -r "stripe" apps/web functions packages --include="*.ts"
 ```
 
 ## 3. Critical Findings
-
 ### 🔴 CRITICAL-01: Complete Absence of Payment Processing
-
 **Location:** Entire codebase **Issue:** No payment processing infrastructure exists
 
 **Evidence:**
@@ -200,7 +186,6 @@ $ grep -r "NetworkPlan" apps/web/app/api --include="*.ts"
 **Recommendation:** Build complete billing subsystem before production launch
 
 ### 🔴 CRITICAL-02: No Quota Enforcement
-
 **Location:** All API routes **Issue:** Usage limits defined but never enforced
 
 **Example - Organizations route:**
@@ -240,7 +225,6 @@ export const POST = createAuthenticatedEndpoint({
 **Recommendation:** Add quota middleware to all resource creation endpoints
 
 ### 🔴 CRITICAL-03: Trial Periods Not Enforced
-
 **Location:** Organization schema has `trialEndsAt` but no enforcement **Issue:** Trials defined but
 never expire
 
@@ -263,7 +247,6 @@ export const OrganizationSchema = z.object({
 **Recommendation:** Add trial check middleware to all authenticated routes
 
 ### 🟡 HIGH-01: Inconsistent Plan/Tier Naming
-
 **Location:** `networks.ts` and `orgs.ts` **Issue:** Two similar but incompatible enums
 
 **Problem:**
@@ -290,7 +273,6 @@ SubscriptionTier = "free" | "starter" | "professional" | "enterprise";
 **Recommendation:** Unify into single source of truth or document relationship
 
 ### 🟡 HIGH-02: No Billing Contact Information
-
 **Location:** Organization schema **Issue:** No billing-specific contact fields
 
 **Current schema:**
@@ -312,7 +294,6 @@ export const OrganizationSchema = z.object({
 **Recommendation:** Add dedicated billing contact fields
 
 ### 🟡 HIGH-03: No Audit Trail for Billing Events
-
 **Location:** N/A (missing entirely) **Issue:** No tracking of subscription changes, payments, or
 failures
 
@@ -337,9 +318,7 @@ failures
 **Recommendation:** Implement billing event log collection
 
 ## 4. Architectural Notes & Invariants
-
 ### ✅ Correctly Designed (Schema-Level)
-
 1. **Plan Hierarchy:** Network → Organization separation makes sense
 2. **Nullable Limits:** `maxVenues: z.number().int().nullable()` - allows unlimited
 3. **Multiple Billing Modes:** Supports card, invoice, and partner billing
@@ -347,7 +326,6 @@ failures
 5. **Status Enum:** Captures all subscription states
 
 ### ⚠️ Missing Invariants (Need Implementation)
-
 1. **Quota Enforcement:** Resources MUST NOT exceed plan limits
 2. **Trial Expiration:** Expired trials MUST be downgraded or suspended
 3. **Payment Validation:** Subscription changes MUST validate payment method
@@ -355,7 +333,6 @@ failures
 5. **Audit Logging:** All billing events MUST be logged immutably
 
 ### 🏗️ Recommended Architecture
-
 ```typescript
 // Proposed middleware structure
 export const withQuotaCheck = (resourceType: string) => {
@@ -394,9 +371,7 @@ export const POST = createAuthenticatedEndpoint({
 ```
 
 ## 5. Example Patterns
-
 ### ❌ Current Pattern: No Enforcement
-
 ```typescript
 // File: apps/web/app/api/venues/route.ts
 export const POST = createAuthenticatedEndpoint({
@@ -420,7 +395,6 @@ export const POST = createAuthenticatedEndpoint({
 - Users can create unlimited resources
 
 ### ✅ Recommended Pattern: Quota Middleware
-
 ```typescript
 // File: apps/web/app/api/venues/route.ts
 export const POST = createAuthenticatedEndpoint({
@@ -464,7 +438,6 @@ export const POST = createAuthenticatedEndpoint({
 - ✅ Transaction ensures consistency
 
 ### ✅ Recommended Pattern: Trial Enforcement Middleware
-
 ```typescript
 // File: packages/api-framework/src/middleware/trial.ts
 export const withTrialCheck = () => {
@@ -511,7 +484,6 @@ export const POST = createAuthenticatedEndpoint({
 ```
 
 ### ✅ Recommended Pattern: Stripe Webhook Handler
-
 ```typescript
 // File: apps/web/app/api/webhooks/stripe/route.ts
 import Stripe from "stripe";
@@ -590,44 +562,42 @@ async function handleSubscriptionCreated(subscription: Stripe.Subscription) {
 ```
 
 ## 6. Open Questions
-
 1. **What is the pricing model?**
    - Per-user? Per-venue? Per-organization?
    - Flat monthly fee or usage-based?
    - How do Network vs Organization plans interact?
 
-2. **What features are gated by plan tier?**
+1. **What features are gated by plan tier?**
    - Is AI scheduling only for enterprise?
    - Are analytics available in starter?
    - What's the feature matrix per plan?
 
-3. **How should trials work?**
+1. **How should trials work?**
    - Automatic trial on signup?
    - How many days?
    - What happens when trial expires (grace period, immediate suspend)?
 
-4. **What payment providers are planned?**
+1. **What payment providers are planned?**
    - Stripe only or also PayPal, Square?
    - International payment methods?
    - Cryptocurrency?
 
-5. **How are network-level vs org-level plans related?**
+1. **How are network-level vs org-level plans related?**
    - Can org exceed network's plan?
    - Do limits cascade (network limit → org limit)?
    - Who pays - network owner or org owner?
 
-6. **What's the upgrade/downgrade flow?**
+1. **What's the upgrade/downgrade flow?**
    - Immediate effect or next billing cycle?
    - Prorated refunds?
    - Data retention on downgrade?
 
-7. **How are partners/resellers handled?**
+1. **How are partners/resellers handled?**
    - Commission structure?
    - White-label pricing?
    - Separate admin portal?
 
 ## 7. Recommendations Summary
-
 | Priority | Action                                                | Estimated Effort |
 | -------- | ----------------------------------------------------- | ---------------- |
 | 🔴 P0    | Design and document pricing model                     | 2-3 days         |
@@ -646,7 +616,6 @@ async function handleSubscriptionCreated(subscription: Stripe.Subscription) {
 **Total Estimated Effort:** ~35-50 days (full billing subsystem)
 
 ## 8. Related Subsystems
-
 - **Authentication** - Trial checks must integrate with auth middleware
 - **Organizations** - Org status tied to subscription state
 - **Networks** - Network plans govern org limits
@@ -655,82 +624,69 @@ async function handleSubscriptionCreated(subscription: Stripe.Subscription) {
 - **Notifications** - Payment failures, trial expiration warnings
 
 ## 9. Next Steps
-
 ### Phase 1: Foundation (P0)
-
 1. Document pricing model and feature matrix
 2. Set up Stripe account and API keys
 3. Design billing database schema (subscriptions, invoices, etc.)
 4. Implement quota middleware framework
 
 ### Phase 2: Core Billing (P0)
-
 1. Build Stripe checkout integration
 2. Implement webhook handler for subscription events
 3. Add trial expiration middleware
 4. Create basic billing API endpoints
 
 ### Phase 3: Enforcement (P1)
-
 1. Add quota checks to all resource creation routes
 2. Implement usage tracking and metering
 3. Build billing event audit log
 4. Add upgrade prompts when limits hit
 
 ### Phase 4: Customer Experience (P2)
-
 1. Build customer billing portal
 2. Implement invoice generation
 3. Create billing notification system
 4. Add usage analytics dashboard
 
 ## 10. Implementation Checklist
-
 ### Data Layer
-
-- [ ] Create `/subscriptions/{networkId}` collection
-- [ ] Create `/invoices/{invoiceId}` collection
-- [ ] Create `/payment_methods/{customerId}/{methodId}` collection
-- [ ] Create `/usage_logs/{networkId}/{date}` collection
-- [ ] Create `/billing_events/{eventId}` audit log
-- [ ] Add billing contact fields to Organization schema
-- [ ] Add Stripe IDs to Network schema (customerId, subscriptionId)
+- \[ ] Create `/subscriptions/{networkId}` collection
+- \[ ] Create `/invoices/{invoiceId}` collection
+- \[ ] Create `/payment_methods/{customerId}/{methodId}` collection
+- \[ ] Create `/usage_logs/{networkId}/{date}` collection
+- \[ ] Create `/billing_events/{eventId}` audit log
+- \[ ] Add billing contact fields to Organization schema
+- \[ ] Add Stripe IDs to Network schema (customerId, subscriptionId)
 
 ### API Layer
-
-- [ ] `POST /api/billing/checkout` - Create Stripe checkout session
-- [ ] `POST /api/billing/portal` - Redirect to customer portal
-- [ ] `POST /api/billing/cancel` - Cancel subscription
-- [ ] `GET /api/billing/invoices` - List invoices
-- [ ] `GET /api/billing/usage` - Current usage stats
-- [ ] `POST /api/webhooks/stripe` - Handle Stripe events
+- \[ ] `POST /api/billing/checkout` - Create Stripe checkout session
+- \[ ] `POST /api/billing/portal` - Redirect to customer portal
+- \[ ] `POST /api/billing/cancel` - Cancel subscription
+- \[ ] `GET /api/billing/invoices` - List invoices
+- \[ ] `GET /api/billing/usage` - Current usage stats
+- \[ ] `POST /api/webhooks/stripe` - Handle Stripe events
 
 ### Middleware
-
-- [ ] `withQuotaCheck(resource)` - Enforce plan limits
-- [ ] `withTrialCheck()` - Validate trial status
-- [ ] `withBillingAccess()` - Verify user can manage billing
+- \[ ] `withQuotaCheck(resource)` - Enforce plan limits
+- \[ ] `withTrialCheck()` - Validate trial status
+- \[ ] `withBillingAccess()` - Verify user can manage billing
 
 ### Background Jobs
-
-- [ ] Daily usage aggregation (count users, venues, shifts)
-- [ ] Trial expiration checker (runs daily)
-- [ ] Failed payment retry (runs daily)
-- [ ] Usage limit notifications (near quota warnings)
+- \[ ] Daily usage aggregation (count users, venues, shifts)
+- \[ ] Trial expiration checker (runs daily)
+- \[ ] Failed payment retry (runs daily)
+- \[ ] Usage limit notifications (near quota warnings)
 
 ### Testing
-
-- [ ] Unit tests for quota enforcement logic
-- [ ] Integration tests for Stripe webhooks
-- [ ] E2E tests for subscription lifecycle
-- [ ] Load tests for usage metering
+- \[ ] Unit tests for quota enforcement logic
+- \[ ] Integration tests for Stripe webhooks
+- \[ ] E2E tests for subscription lifecycle
+- \[ ] Load tests for usage metering
 
 ## 11. Pricing Model Proposal (Draft)
-
 **Note:** This is a placeholder based on schema analysis. Needs product/business validation.
 
 ### Free Plan
-
 - **Cost:** $0/month
 - **Limits:**
   - 1 organization
@@ -740,7 +696,6 @@ async function handleSubscriptionCreated(subscription: Stripe.Subscription) {
 - **Features:** Basic scheduling, mobile app
 
 ### Starter Plan
-
 - **Cost:** $29/month
 - **Limits:**
   - 1 organization
@@ -750,7 +705,6 @@ async function handleSubscriptionCreated(subscription: Stripe.Subscription) {
 - **Features:** + Analytics, email support
 
 ### Growth/Professional Plan
-
 - **Cost:** $99/month
 - **Limits:**
   - 3 organizations
@@ -760,13 +714,11 @@ async function handleSubscriptionCreated(subscription: Stripe.Subscription) {
 - **Features:** + AI scheduling, priority support, API access
 
 ### Enterprise Plan
-
 - **Cost:** Custom pricing
 - **Limits:** Unlimited (or custom)
 - **Features:** + Custom integrations, dedicated support, SLA
 
 ### Internal Plan
-
 - **Cost:** N/A (for testing/demos)
 - **Limits:** Unlimited
 - **Features:** All features enabled

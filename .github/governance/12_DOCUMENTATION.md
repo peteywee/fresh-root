@@ -1,8 +1,7 @@
 # FRESH SCHEDULES - DOCUMENTATION
-
-> **Version**: 1.0.0  
-> **Status**: REFERENCE  
-> **Authority**: Sr Dev / Architecture  
+> **Version**: 1.0.0\
+> **Status**: REFERENCE\
+> **Authority**: Sr Dev / Architecture\
 > **Binding**: NO - Reference material
 
 This document covers SDK behavior, fix issues, troubleshooting, and known limitations.
@@ -10,9 +9,7 @@ This document covers SDK behavior, fix issues, troubleshooting, and known limita
 ---
 
 ## SDK OVERVIEW
-
 ### What the SDK Does
-
 The Fresh Schedules SDK provides:
 
 1. **Schema Factories** - Build Zod schemas with less boilerplate
@@ -21,7 +18,6 @@ The Fresh Schedules SDK provides:
 4. **Error Detection** - Find TypeScript issues with fixes
 
 ### What the SDK Doesn't Do
-
 1. **Magic fixes** - Some issues require manual intervention
 2. **Config management** - tsconfig/eslint changes are manual
 3. **Architecture decisions** - Uses existing patterns, doesn't invent
@@ -30,9 +26,7 @@ The Fresh Schedules SDK provides:
 ---
 
 ## WHY FIX BREAKS
-
 ### The Problem
-
 You run `pnpm lint --fix` and it:
 
 - Fixes some things ✅
@@ -40,9 +34,7 @@ You run `pnpm lint --fix` and it:
 - Leaves you worse off than before 😤
 
 ### Root Causes
-
 #### 1. Conflicting Tools
-
 ```bash
 # ESLint wants single quotes
 const name = 'hello';
@@ -66,7 +58,6 @@ module.exports = {
 ```
 
 #### 2. Order Matters
-
 ```bash
 # WRONG: Fix in wrong order
 pnpm lint --fix  # Might undo format changes
@@ -79,7 +70,6 @@ pnpm format
 ```
 
 #### 3. Type-Breaking Fixes
-
 ESLint can "fix" code that then breaks TypeScript:
 
 ```typescript
@@ -98,7 +88,6 @@ pnpm lint --fix && pnpm typecheck
 ```
 
 #### 4. Partial Fixes
-
 Some patterns can't be auto-fixed:
 
 ```typescript
@@ -115,14 +104,12 @@ export async function GET(req: Request) {
 ```
 
 #### 5. Version Mismatches
-
 ```bash
 # Different packages have different Zod versions
 pnpm why zod
 # zod@3.22.0 in root
 # zod@3.21.0 in packages/types
 # zod@3.23.0 in apps/web
-
 # Types don't match, inference breaks
 ```
 
@@ -136,7 +123,6 @@ pnpm dedupe
 ---
 
 ## FIX CAPABILITY MATRIX
-
 | Issue               | Auto-Fix?  | SDK Handles?         | What to Do           |
 | ------------------- | ---------- | -------------------- | -------------------- |
 | Missing semicolon   | ✅ Yes     | ✅ `pnpm format`     | Run format           |
@@ -150,7 +136,6 @@ pnpm dedupe
 | Security issue      | ❌ No      | ✅ Reports           | Manual review        |
 
 ### Legend
-
 - ✅ **Yes**: Fully automatic
 - ⚠️ **Partial**: Helps but may need manual work
 - ❌ **No**: Requires manual intervention
@@ -158,9 +143,7 @@ pnpm dedupe
 ---
 
 ## COMMON ISSUES
-
 ### TS2307: Module Not Found
-
 ```
 Cannot find module '@fresh-schedules/types' or its corresponding type declarations.
 ```
@@ -185,7 +168,6 @@ Cannot find module '@fresh-schedules/types' or its corresponding type declaratio
 ---
 
 ### TS2345: Argument Type Mismatch (Zod)
-
 ```
 Argument of type 'ZodObject<...>' is not assignable to parameter of type 'ZodType<unknown>'
 ```
@@ -199,7 +181,7 @@ Argument of type 'ZodObject<...>' is not assignable to parameter of type 'ZodTyp
    pnpm dedupe
    ```
 
-2. **Over-constrained generics**
+1. **Over-constrained generics**
 
    ```typescript
    // WRONG
@@ -209,7 +191,7 @@ Argument of type 'ZodObject<...>' is not assignable to parameter of type 'ZodTyp
    function validate<T extends ZodTypeAny>(schema: T): z.infer<T> {...}
    ```
 
-3. **Missing generic preservation**
+1. **Missing generic preservation**
 
    ```typescript
    // WRONG - loses type info
@@ -224,7 +206,6 @@ Argument of type 'ZodObject<...>' is not assignable to parameter of type 'ZodTyp
 ---
 
 ### TS7031: Implicit Any Parameter
-
 ```
 Parameter 'req' implicitly has an 'any' type.
 ```
@@ -247,9 +228,7 @@ export async function GET(req: NextRequest) {...}
 ---
 
 ### Pattern Violations
-
-#### API_001: Missing Org Scope
-
+#### API\_001: Missing Org Scope
 ```typescript
 // VIOLATION
 export async function GET(req: Request) {
@@ -272,8 +251,7 @@ structure)
 
 ---
 
-### SEC_001: Firestore Rules Gap
-
+### SEC\_001: Firestore Rules Gap
 ```javascript
 // VIOLATION - No org check
 match /schedules/{scheduleId} {
@@ -292,9 +270,7 @@ match /organizations/{orgId}/schedules/{scheduleId} {
 ---
 
 ## TROUBLESHOOTING GUIDE
-
 ### Fix Workflow
-
 ```bash
 # Step 1: Run checks to see what's broken
 pnpm typecheck
@@ -309,7 +285,6 @@ pnpm typecheck                 # Verify types
 
 # Step 3: If types broke, manual fix needed
 # Look at the error, fix the actual issue
-
 # Step 4: Verify patterns
 pnpm validate:patterns
 
@@ -318,7 +293,6 @@ pnpm test:unit
 ```
 
 ### When Fix Doesn't Work
-
 1. **Read the error** - What exactly failed?
 2. **Check the order** - Did you run format before lint?
 3. **Check versions** - Are dependencies in sync?
@@ -326,7 +300,6 @@ pnpm test:unit
 5. **Manual fix** - Some things need human judgment
 
 ### Debug Commands
-
 ```bash
 # See what ESLint would change
 pnpm lint --fix-dry-run
@@ -348,26 +321,23 @@ node scripts/validate-patterns.mjs --verbose
 ---
 
 ## SDK ARCHITECTURE
-
 ### How Pattern Validation Works
-
 ```
 1. Load pattern definitions
    ↓
-2. Glob for matching files
+1. Glob for matching files
    ↓
-3. For each file:
+1. For each file:
    - Read content
    - Apply pattern regex/AST check
    - Record violations
    ↓
-4. Calculate compliance score
+1. Calculate compliance score
    ↓
-5. Output report
+1. Output report
 ```
 
 ### Why It Can't Fix Everything
-
 Pattern validation is **detection**, not **transformation**.
 
 To auto-fix, the SDK would need to:
@@ -383,9 +353,7 @@ This is what humans (and AI agents) do. The SDK gives you the **information** to
 ---
 
 ## VS CODE INTEGRATION
-
 ### Copilot Instructions Location
-
 ```
 .github/copilot-instructions.md
 ```
@@ -393,41 +361,33 @@ This is what humans (and AI agents) do. The SDK gives you the **information** to
 This file tells VS Code Copilot about your project. All governance docs should be summarized here.
 
 ### Example copilot-instructions.md
-
 ```markdown
 # Fresh Schedules - Copilot Instructions
-
 ## Project Overview
-
 Multi-tenant SaaS scheduling platform using Next.js, TypeScript, Firebase.
 
 ## Key Patterns
-
 - API routes use `createOrgEndpoint()` from `@fresh-schedules/api-framework`
 - All types use Zod schemas in `packages/types/`
 - Firestore rules enforce org isolation
 
 ## Agent Invocations
-
 - `@architect design {feature}` - Design new features
 - `@refactor fix {file}` - Fix pattern violations
 - `@guard review` - Review current changes
 - `@auditor report` - Generate compliance report
 
 ## Common Commands
-
 - `pnpm typecheck` - Check types
 - `pnpm lint` - Run linter
 - `pnpm test:unit` - Run unit tests
 - `pnpm orchestrate --auto` - Run appropriate pipeline
 
 ## Governance Docs
-
 See `.github/governance/` for full documentation.
 ```
 
 ### Agent Mode Setup
-
 For VS Code to run agents in parallel:
 
 ```jsonc
@@ -440,19 +400,16 @@ For VS Code to run agents in parallel:
 ---
 
 ## MAINTAINING THESE DOCS
-
 ### When to Update
-
 | Event                | Update                          |
 | -------------------- | ------------------------------- |
-| New pattern added    | 01_DEFINITIONS, 11_GATES        |
-| New agent added      | 06_AGENTS, copilot-instructions |
-| Pipeline change      | 08_PIPELINES, 09_CI_CD          |
-| Branch rule change   | 10_BRANCH_RULES                 |
-| SDK limitation found | 12_DOCUMENTATION                |
+| New pattern added    | 01\_DEFINITIONS, 11\_GATES        |
+| New agent added      | 06\_AGENTS, copilot-instructions |
+| Pipeline change      | 08\_PIPELINES, 09\_CI\_CD          |
+| Branch rule change   | 10\_BRANCH\_RULES                 |
+| SDK limitation found | 12\_DOCUMENTATION                |
 
 ### Document Hierarchy
-
 ```
 01_DEFINITIONS.md     ← Everything references this
        ↓
@@ -475,27 +432,22 @@ For VS Code to run agents in parallel:
 ---
 
 ## QUICK REFERENCE
-
 ### Fix Order
-
 ```
 format → lint --fix → typecheck → validate:patterns
 ```
 
 ### Gate Order
-
 ```
 STATIC → CORRECTNESS → SAFETY → PERF → AI
 ```
 
 ### Agent Order (for complex tasks)
-
 ```
 Architect (design) → Refactor (implement) → Guard (review) → Auditor (verify)
 ```
 
 ### When Stuck
-
 1. Read the error message carefully
 2. Check this documentation
 3. Search past conversations
@@ -509,20 +461,19 @@ Architect (design) → Refactor (implement) → Guard (review) → Auditor (veri
 ---
 
 ## FILE INDEX
-
 | File                | Purpose                     |
 | ------------------- | --------------------------- |
-| 01_DEFINITIONS.md   | All terms, values, entities |
-| 02_PROTOCOLS.md     | How things work             |
-| 03_DIRECTIVES.md    | What's required             |
-| 04_INSTRUCTIONS.md  | How to do things            |
-| 05_BEHAVIORS.md     | Expected behaviors          |
-| 06_AGENTS.md        | Agent specifications        |
-| 07_PROMPTS.md       | Prompt templates            |
-| 08_PIPELINES.md     | Pipeline configurations     |
-| 09_CI_CD.md         | GitHub Actions workflows    |
-| 10_BRANCH_RULES.md  | Git branch rules            |
-| 11_GATES.md         | Gate configurations         |
-| 12_DOCUMENTATION.md | This file                   |
+| 01\_DEFINITIONS.md   | All terms, values, entities |
+| 02\_PROTOCOLS.md     | How things work             |
+| 03\_DIRECTIVES.md    | What's required             |
+| 04\_INSTRUCTIONS.md  | How to do things            |
+| 05\_BEHAVIORS.md     | Expected behaviors          |
+| 06\_AGENTS.md        | Agent specifications        |
+| 07\_PROMPTS.md       | Prompt templates            |
+| 08\_PIPELINES.md     | Pipeline configurations     |
+| 09\_CI\_CD.md         | GitHub Actions workflows    |
+| 10\_BRANCH\_RULES.md  | Git branch rules            |
+| 11\_GATES.md         | Gate configurations         |
+| 12\_DOCUMENTATION.md | This file                   |
 
 **Total**: 12 documents covering complete governance system

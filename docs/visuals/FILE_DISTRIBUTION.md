@@ -1,5 +1,23 @@
-# File Distribution
+---
+title: "File Distribution Analysis"
+description: "Visual analysis of file types and distribution in the repository"
+keywords:
+  - file-distribution
+  - visual
+  - analysis
+  - repository
+  - metrics
+category: "report"
+status: "active"
+audience:
+  - developers
+  - architects
+related-docs:
+  - REPO_STATE.md
+  - ../architecture/DEPENDENCY_GRAPH.md
+---
 
+# File Distribution
 ```mermaid
 pie title File Types in Repository
     "TypeScript/TSX (76664)" : 76664
@@ -9,14 +27,12 @@ pie title File Types in Repository
 ```
 
 ## Codebase Metrics
-
 - **TypeScript Files**: 76664
 - **Test Files**: 1152
 - **Documentation**: 124 files
 - **Test Coverage**: Target 80%+
 
 ## File Organization
-
 ```
 apps/
   web/

@@ -130,7 +130,7 @@ Workers report to Primary before proceeding.
 
 ## 6. Error Pattern Detection
 
-**Same error >3 times = Create a safeguard**
+### Same error >3 times = Create a safeguard
 
 ### Protocol
 
@@ -242,7 +242,7 @@ Every source file needs:
 
 ### Commit Messages
 
-```
+```text
 type(scope): short description (50 chars)
 
 Longer explanation if needed.
@@ -274,14 +274,14 @@ Types: feat, fix, docs, refactor, test, chore
 
 ### Other Instructions Load Conditionally
 
-| File            | When Loaded                     |
-| --------------- | ------------------------------- |
-| 02_CODE_QUALITY | _.ts, _.tsx, _.js, _.jsx, \*.md |
-| 03_SECURITY     | api/, auth/, security code      |
-| 04_FRAMEWORK    | apps/, packages/                |
-| 05_TESTING      | test, spec, **tests**           |
+- 02_CODE_QUALITY — `*.ts`, `*.tsx`, `*.js`, `*.jsx`, `*.md`
+- 03_SECURITY — `api/`, `auth/`, security code
+- 04_FRAMEWORK — `apps/`, `packages/`
+- 05_TESTING — `test`, `spec`, `**tests**`
 
 ### Slash Commands Available
+
+**Core Commands**:
 
 - `/plan` — Create implementation plan
 - `/implement` — Execute implementation
@@ -292,8 +292,33 @@ Types: feat, fix, docs, refactor, test, chore
 - `/test` — Generate/run tests
 - `/deploy` — Deployment workflow
 
+**Logic Agent** (Radical Skepticism Protocol, 85% confidence floor):
+
+Core Commands:
+
+- `/logic verify` — Full 5-step verification protocol
+- `/logic chain` — Verify dependency chain
+- `/logic risk` — Risk assessment matrix
+- `/logic test` — Coverage analysis
+- `/logic assumptions` — Find hidden assumptions
+- `/logic red-team` — Attack analysis
+- `/logic confidence` — Rate certainty level
+- `/logic decision` — Document a decision
+- `/logic ground` — Show evidence, not theory
+
+Power Combos:
+
+- `/logic gauntlet` — assumptions → verify → red-team
+- `/logic ladder` — chain → confidence → ground
+- `/logic deploy` — risk → test → decision
+
+Flags: `-h` (help), `-v` (visual/Mermaid), `-f` (fast)
+Tags: `#shipping`, `#arch`, `#bug`, `#perf`
+
+**See**: `.github/instructions/logic-agent-cli.instructions.md` for full reference
+
 ---
 
 **This directive is BINDING for all agent operations.**
 
-**Last Updated**: December 8, 2025
+**Last Updated**: December 28, 2025

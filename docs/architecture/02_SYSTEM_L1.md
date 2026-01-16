@@ -1,10 +1,26 @@
-# L1 — System Architecture Overview
+---
+title: "System Architecture Overview (L1)"
+description: "Global system architecture, major capabilities, critical flows, and cross-cutting concerns"
+keywords:
+  - architecture
+  - system-design
+  - overview
+  - L1
+category: "architecture"
+status: "active"
+audience:
+  - architects
+  - developers
+related-docs:
+  - 01_SYSTEM_L0_Bible.md
+  - FUTURE_PROOF_SYSTEM_DESIGN.md
+---
 
+# L1 — System Architecture Overview
 This section describes the **global system**: major capabilities, critical flows, and cross-cutting
 concerns.
 
 ## 1. High-Level Components
-
 - **Web App (Fresh Schedules PWA)**
   - Next.js App Router, React, Tailwind.
   - Responsible for UI, UX, and client-side orchestration.
@@ -25,7 +41,6 @@ concerns.
   - Docs and analysis agents (filetag/MCP/etc.) — **supporting**, not core runtime.
 
 ## 2. Critical Flows
-
 1. **Onboarding Flow**
    - Create user profile → org → venue → membership → initial labor settings.
 
@@ -44,7 +59,6 @@ concerns.
    - Authenticated calls → claims-based access → rules-verified reads/writes.
 
 ## 3. Cross-Cutting Concerns
-
 - **Distributed Consistency**
   - Multi-document writes across orgs/venues/schedules/shifts must be transactional where possible,
     or have compensation mechanisms.

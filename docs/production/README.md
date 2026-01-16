@@ -1,13 +1,29 @@
-# 🚀 Production Deployment - Quick Reference
+---
+title: "Production Deployment Reference"
+description: "Production deployment guides, checklists, and readiness verification"
+keywords:
+  - production
+  - deployment
+  - operations
+  - readiness
+category: "reference"
+status: "active"
+audience:
+  - operators
+  - developers
+related-docs:
+  - ../guides/DEPLOYMENT.md
+  - ../reference/PRODUCTION_READINESS.md
+---
 
-**Version**: 1.5.0  
-**Status**: ✅ Ready for Manual Verification  
+# 🚀 Production Deployment - Quick Reference
+**Version**: 1.5.0\
+**Status**: ✅ Ready for Manual Verification\
 **Last Updated**: December 24, 2024
 
 ---
 
 ## 📋 Implementation Status
-
 | Phase                      | Status      | Time    | Details                             |
 | -------------------------- | ----------- | ------- | ----------------------------------- |
 | **1. Production Build**    | ✅ Complete | 10 min  | 711MB, 66 routes, all tests passing |
@@ -16,15 +32,13 @@
 | **4. Version Bump**        | ✅ Complete | 5 min   | v1.5.0, CHANGELOG updated           |
 | **5. Manual Verification** | ⏳ Pending  | 2-4 hrs | Requires network + credentials      |
 
-**Total Automated**: 50 minutes ✅  
+**Total Automated**: 50 minutes ✅\
 **Total Manual**: 2-4 hours ⏳
 
 ---
 
 ## 🎯 Quick Start (Manual Steps)
-
 ### Step 1: Run Lighthouse Audits (15-30 min)
-
 ```bash
 # Start production server
 pnpm --filter web build
@@ -38,7 +52,6 @@ open lighthouse-reports/summary.json
 ```
 
 ### Step 2: Deploy to Staging (30-60 min)
-
 ```bash
 # Vercel (recommended)
 vercel login
@@ -51,13 +64,11 @@ wrangler pages deploy apps/web/.next/standalone
 ```
 
 ### Step 3: Verify & Release (10-15 min)
-
 ```bash
 # Test core flows on staging
 # - Authentication
 # - Schedule viewing
 # - Navigation
-
 # Create production PR
 git checkout main
 git pull
@@ -72,69 +83,58 @@ vercel --prod
 ---
 
 ## 📚 Documentation Index
-
 | Document                             | Size  | Purpose                     |
 | ------------------------------------ | ----- | --------------------------- |
-| **DEPLOYMENT_GUIDE.md**              | 9KB   | Complete deployment process |
-| **LIGHTHOUSE_AUDIT_REPORT.md**       | 6.7KB | Performance audit guide     |
-| **PRODUCTION_DEPLOYMENT_SUMMARY.md** | 10KB  | Implementation summary      |
+| **DEPLOYMENT\_GUIDE.md**              | 9KB   | Complete deployment process |
+| **LIGHTHOUSE\_AUDIT\_REPORT.md**       | 6.7KB | Performance audit guide     |
+| **PRODUCTION\_DEPLOYMENT\_SUMMARY.md** | 10KB  | Implementation summary      |
 
 ### Quick Links
-
-- [Deployment Guide](./DEPLOYMENT_GUIDE.md) - Start here for deployment
-- [Audit Report](./LIGHTHOUSE_AUDIT_REPORT.md) - Performance testing
-- [Implementation Summary](./PRODUCTION_DEPLOYMENT_SUMMARY.md) - What's done
+- [Deployment Guide](../guides/DEPLOYMENT.md) - Start here for deployment
+- [Audit Report](../reports/LIGHTHOUSE_AUDIT_REPORT.md) - Performance testing
+- [Implementation Summary](../reports/PHASE_3_COMPLETION_SUMMARY.md) - What's done
 
 ---
 
 ## ✅ What's Complete
-
 ### Build & Verification
-
-- [x] Production build successful (711MB)
-- [x] 66 routes compiled (42 static, 24 dynamic)
-- [x] Font loading issue resolved
-- [x] All TypeScript compilation passing
-- [x] All tests passing (E2E, unit, rules)
+- \[x] Production build successful (711MB)
+- \[x] 66 routes compiled (42 static, 24 dynamic)
+- \[x] Font loading issue resolved
+- \[x] All TypeScript compilation passing
+- \[x] All tests passing (E2E, unit, rules)
 
 ### Documentation
-
-- [x] Deployment guide (Vercel + Cloudflare)
-- [x] Environment variables documented (24 vars)
-- [x] Troubleshooting guide (8 scenarios)
-- [x] Security checklist (10 items)
-- [x] Rollback procedures
+- \[x] Deployment guide (Vercel + Cloudflare)
+- \[x] Environment variables documented (24 vars)
+- \[x] Troubleshooting guide (8 scenarios)
+- \[x] Security checklist (10 items)
+- \[x] Rollback procedures
 
 ### Tooling
-
-- [x] Lighthouse audit script
-- [x] Automated report generation
-- [x] Threshold validation
-- [x] Summary generation
+- \[x] Lighthouse audit script
+- \[x] Automated report generation
+- \[x] Threshold validation
+- \[x] Summary generation
 
 ### Version Management
-
-- [x] CHANGELOG.md updated
-- [x] package.json v1.5.0
-- [x] Git history clean
+- \[x] CHANGELOG.md updated
+- \[x] package.json v1.5.0
+- \[x] Git history clean
 
 ---
 
 ## ⏳ What's Pending
-
 ### Manual Verification
-
-- [ ] Lighthouse audits (requires network)
-- [ ] Accessibility tests (requires browser)
-- [ ] Staging deployment (requires credentials)
-- [ ] Production deployment (requires approval)
+- \[ ] Lighthouse audits (requires network)
+- \[ ] Accessibility tests (requires browser)
+- \[ ] Staging deployment (requires credentials)
+- \[ ] Production deployment (requires approval)
 
 ---
 
 ## 🎓 Key Information
-
 ### Environment Variables (Required)
-
 ```bash
 NEXT_PUBLIC_FIREBASE_API_KEY=...
 NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=...
@@ -144,29 +144,25 @@ FIREBASE_PROJECT_ID=...
 GOOGLE_APPLICATION_CREDENTIALS_JSON_BASE64=...
 ```
 
-**📖 Full list**: See [DEPLOYMENT_GUIDE.md](./DEPLOYMENT_GUIDE.md#environment-variables-reference)
+**📖 Full list**: See [DEPLOYMENT\_GUIDE.md](../guides/DEPLOYMENT.md#environment-variables-reference)
 
 ### Performance Targets
-
 - **Performance**: ≥85
 - **Accessibility**: ≥85
 - **Best Practices**: ≥90
 - **SEO**: ≥90
 
 ### Security Checklist
-
-✅ HTTPS enforced  
-✅ CSP headers configured  
-✅ CSRF protection enabled  
-✅ Rate limiting configured  
+✅ HTTPS enforced\
+✅ CSP headers configured\
+✅ CSRF protection enabled\
+✅ Rate limiting configured\
 ✅ Input validation (Zod)
 
 ---
 
 ## 🔧 Troubleshooting
-
 ### Build Issues
-
 | Issue                | Solution                              |
 | -------------------- | ------------------------------------- |
 | Font fetch failed    | ✅ System font fallback configured    |
@@ -174,28 +170,24 @@ GOOGLE_APPLICATION_CREDENTIALS_JSON_BASE64=...
 | Dynamic server usage | ✅ Expected for cookie-based routes   |
 
 ### Deployment Issues
-
 | Issue                  | Solution                    |
 | ---------------------- | --------------------------- |
 | Vercel build fails     | Check environment variables |
 | Cloudflare edge errors | Use REST API for Firebase   |
 | Network timeout        | Increase deployment timeout |
 
-**📖 Full guide**: See [DEPLOYMENT_GUIDE.md](./DEPLOYMENT_GUIDE.md#troubleshooting)
+**📖 Full guide**: See [DEPLOYMENT\_GUIDE.md](../guides/DEPLOYMENT.md#troubleshooting)
 
 ---
 
 ## 📊 Metrics
-
 ### Build Performance
-
 - **Compilation**: ~60 seconds
 - **Bundle Size**: 711MB
 - **Static Pages**: 42
 - **Dynamic Pages**: 24
 
 ### Code Quality
-
 - **TypeScript**: 0 errors
 - **ESLint**: All passing
 - **Tests**: 100% passing
@@ -204,44 +196,37 @@ GOOGLE_APPLICATION_CREDENTIALS_JSON_BASE64=...
 ---
 
 ## 🎯 Success Criteria
-
 ### Production Ready ✅
-
-- [x] Build successful
-- [x] Tests passing
-- [x] Documentation complete
-- [x] Tooling ready
-- [x] Security configured
+- \[x] Build successful
+- \[x] Tests passing
+- \[x] Documentation complete
+- \[x] Tooling ready
+- \[x] Security configured
 
 ### Manual Verification ⏳
-
-- [ ] Lighthouse scores meet thresholds
-- [ ] Accessibility audit complete
-- [ ] Staging verified
-- [ ] Production deployed
+- \[ ] Lighthouse scores meet thresholds
+- \[ ] Accessibility audit complete
+- \[ ] Staging verified
+- \[ ] Production deployed
 
 ---
 
 ## 📞 Support
-
 ### Documentation
-
-- [Deployment Guide](./DEPLOYMENT_GUIDE.md)
+- [Deployment Guide](../guides/DEPLOYMENT.md)
 - [Audit Report](./LIGHTHOUSE_AUDIT_REPORT.md)
 - [Implementation Summary](./PRODUCTION_DEPLOYMENT_SUMMARY.md)
 
 ### Getting Help
-
 - GitHub Issues: [peteywee/fresh-root/issues](https://github.com/peteywee/fresh-root/issues)
 - Documentation: `docs/production/`
-- Team Chat: [Your channel]
+- Team Chat: \[Your channel]
 
 ---
 
 ## 🎉 Next Steps
-
 1. **Review this README** for overview
-2. **Read DEPLOYMENT_GUIDE.md** for detailed steps
+2. **Read DEPLOYMENT\_GUIDE.md** for detailed steps
 3. **Run lighthouse-audit.mjs** when ready
 4. **Deploy to staging** using Vercel or Cloudflare
 5. **Verify and ship** to production
@@ -250,8 +235,8 @@ GOOGLE_APPLICATION_CREDENTIALS_JSON_BASE64=...
 
 ---
 
-**Deployment Confidence**: ✅ 95% High  
-**Risk Level**: ✅ Low  
+**Deployment Confidence**: ✅ 95% High\
+**Risk Level**: ✅ Low\
 **Rollback**: ✅ Procedures ready
 
 🚀 **Let's ship it!**

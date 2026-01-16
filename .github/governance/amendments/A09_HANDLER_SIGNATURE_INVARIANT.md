@@ -1,17 +1,15 @@
 ---
+
 title: "A09: Handler Signature Invariant for SDK Factory Routes"
-applyTo: "apps/web/app/api/**/route.ts"
+applyTo: "apps/web/app/api/\*\*/route.ts"
 priority: "P0"
-tags: ["API", "SDK", "PATTERN", "STABILITY"]
+tags: \["API", "SDK", "PATTERN", "STABILITY"]
 effectiveDate: "2025-12-17"
-supersedes: []
-relatedAmendments: ["A07_FIREBASE_IMPL.md", "A03_SECURITY_AMENDMENTS.md"]
----
+supersedes: \[]
+## relatedAmendments: \["A07\_FIREBASE\_IMPL.md", "A03\_SECURITY\_AMENDMENTS.md"]
 
 # A09: Handler Signature Invariant for SDK Factory Routes
-
 ## Problem Statement
-
 SDK factory routes (`createOrgEndpoint`, `createPublicEndpoint`, etc.) have experienced repeated
 merge conflicts and automated rewrites due to conflicting incentives:
 
@@ -29,7 +27,6 @@ Result:    MERGE CONFLICT on the same line
 ```
 
 ## Solution: Handler Signature Invariant
-
 All SDK factory routes MUST follow a locked-in handler destructuring shape. This breaks the churn
 cycle by:
 
@@ -38,9 +35,7 @@ cycle by:
 3. **Creating a structural invariant** that CI and pre-commit hooks can validate.
 
 ## Canonical Handler Signature
-
 ### Rule
-
 All handlers created via any SDK factory endpoint (`createEndpoint`, `createOrgEndpoint`,
 `createPublicEndpoint`, `createAuthenticatedEndpoint`, `createAdminEndpoint`,
 `createRateLimitedEndpoint`) MUST destructure exactly these four parameters:
@@ -52,7 +47,6 @@ handler: async ({ request, input, context, params }) => {
 ```
 
 ### Unused Parameter Convention
-
 If a parameter is not used in the handler, rename it with an underscore prefix **in the
 destructuring**:
 
@@ -76,14 +70,12 @@ handler: async ({ request, input, context, params }) => {
 ```
 
 ### Why Underscore Inside Destructuring
-
 - Keeps the type signature stable (no merge conflicts when SDK adds/removes parameters).
 - Satisfies ESLint rule `@typescript-eslint/no-unused-vars` with `argsIgnorePattern: "^_"`.
 - Prevents automated scripts from deleting parameters, which would break the invariant.
 - Communicates intent: "I know this param exists, I'm just not using it yet."
 
 ## ESLint Enforcement
-
 Routes MUST configure ESLint to allow underscore-prefixed destructured arguments:
 
 **File**: `eslint.config.mjs`
@@ -108,7 +100,6 @@ This exempts underscore-prefixed destructured arguments from lint warnings, remo
 to delete them.
 
 ## Script Safeguards
-
 All scripts that modify route.ts files (`scripts/complete-migrate-routes.mjs`,
 `scripts/safe-migrate-routes.mjs`, `scripts/refactor-all.mjs`) MUST:
 
@@ -133,7 +124,6 @@ const newHandler = `handler: async ({ request: _request, input: _input, context,
 ```
 
 ## CI/Pre-Commit Validation
-
 A validator script (`scripts/validate-handler-signature.mjs`) MUST run in:
 
 1. **Pre-commit hook** — blocks commits with signature deviations.
@@ -164,9 +154,7 @@ Validator output on violation:
 ```
 
 ## Examples
-
 ### ✅ Compliant Examples
-
 **GET handler using only context and params:**
 
 ```typescript
@@ -204,7 +192,6 @@ export const DELETE = createOrgEndpoint({
 ```
 
 ### ❌ Non-Compliant Examples
-
 **Missing request and input:**
 
 ```typescript
@@ -230,7 +217,6 @@ handler: async ({ context, request, params, input }) => { ... }
 ```
 
 ## Implementation Timeline
-
 | Phase | Action                                            | Owner    | Target Date  |
 | ----- | ------------------------------------------------- | -------- | ------------ |
 | **1** | Lock canonical rule (this amendment)              | AI Agent | Dec 17, 2025 |
@@ -241,7 +227,6 @@ handler: async ({ context, request, params, input }) => { ... }
 | **6** | Multi-pass verification (confirm churn is dead)   | AI Agent | Dec 17, 2025 |
 
 ## Success Criteria
-
 ✅ **Immediate**:
 
 - All route.ts files follow canonical handler signature.
@@ -255,23 +240,21 @@ handler: async ({ context, request, params, input }) => { ... }
 - New routes auto-follow the pattern (documented in template).
 
 ## Rollout
-
 1. **Apply to all existing routes** (Phase 5 of master plan).
 2. **Update API route template** (`apps/web/app/api/_template/route.ts`) to demonstrate canonical
    signature.
-3. **Document in README and instructions** (reference this amendment).
-4. **Monitor CI validator** for any violations (should be zero after backfill).
+1. **Document in README and instructions** (reference this amendment).
+2. **Monitor CI validator** for any violations (should be zero after backfill).
 
 ## Related Standards
-
-- [A03_SECURITY_AMENDMENTS.md](./A03_SECURITY_AMENDMENTS.md) — Organization scoping and auth
+- [A03\_SECURITY\_AMENDMENTS.md](./A03_SECURITY_AMENDMENTS.md) — Organization scoping and auth
   patterns.
-- [A07_FIREBASE_IMPL.md](./A07_FIREBASE_IMPL.md) — Firebase Admin SDK usage.
+- [A07\_FIREBASE\_IMPL.md](./A07_FIREBASE_IMPL.md) — Firebase Admin SDK usage.
 - [api-framework-memory.instructions.md](../.github/instructions/api-framework-memory.instructions.md)
   — SDK factory typing strategy.
 
 ---
 
-**Status**: ACTIVE  
-**Last Updated**: Dec 17, 2025  
+**Status**: ACTIVE\
+**Last Updated**: Dec 17, 2025\
 **Approval**: AI Agent (Architecture Authority)

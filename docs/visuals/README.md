@@ -1,10 +1,28 @@
-# Repository Visuals & Analytics
+---
+title: "Repository Visuals & Analytics"
+description: "Automated diagrams, charts, and analytics for repository structure and metrics"
+keywords:
+  - visuals
+  - analytics
+  - diagrams
+  - metrics
+  - reports
+category: "report"
+status: "active"
+audience:
+  - developers
+  - architects
+  - stakeholders
+related-docs:
+  - ../INDEX.md
+  - ../architecture/DEPENDENCY_GRAPH.md
+---
 
-**Generated**: 2025-12-10T13:50:53.077Z  
+# Repository Visuals & Analytics
+**Generated**: 2025-12-10T13:50:53.077Z\
 **Auto-updated**: On every commit (CI workflow)
 
 ## Contents
-
 - [Architecture Diagram](./ARCHITECTURE.md) - System structure and dependencies
 - [Dependency Tree](./DEPENDENCIES.md) - Package dependencies and versions
 - [Repository State](./REPO_STATE.md) - Branch status and git history
@@ -13,7 +31,6 @@
 - [Status Timeline](./STATUS_TIMELINE.md) - Project milestones and health
 
 ## Usage
-
 **Update locally**:
 
 ```bash
@@ -23,12 +40,11 @@ node scripts/generate-visuals.mjs --verbose
 **In CI (automated)**: Runs on every push to `dev` and `main` branches via GitHub Actions.
 
 ## Viewing Mermaid Diagrams
-
 - **GitHub**: Renders automatically in `.md` files
 - **VS Code**: Install "Markdown Preview Mermaid Support" extension
 - **Web**: Use <https://mermaid.live> to paste diagrams
 
 ---
 
-**Last Updated**: 12/10/2025, 1:50:53 PM  
+**Last Updated**: 12/10/2025, 1:50:53 PM\
 **Status**: ✅ Auto-maintained

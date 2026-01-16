@@ -1,5 +1,23 @@
-# Dependency Tree
+---
+title: "Package Dependency Tree"
+description: "Visual representation of package dependencies and relationships"
+keywords:
+  - dependencies
+  - packages
+  - visual
+  - diagram
+  - monorepo
+category: "report"
+status: "active"
+audience:
+  - developers
+  - architects
+related-docs:
+  - ../architecture/DEPENDENCY_GRAPH.md
+  - ../architecture/FUTURE_PROOF_SYSTEM_DESIGN.md
+---
 
+# Dependency Tree
 ```mermaid
 graph LR
     root["🌳 fresh-root<br/>monorepo"]

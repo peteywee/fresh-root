@@ -84,7 +84,7 @@ test.describe("Golden Path - Error Handling", () => {
 
   test("api returns proper status codes", async ({ page }) => {
     // Test an API route responds properly
-    const response = await page.request.get("/api/health-check");
+    const response = await page.request.get("/api/health");
 
     // Should be either 200 (if exists) or 404 (if not implemented)
     expect([200, 404]).toContain(response.status());

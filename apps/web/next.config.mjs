@@ -57,8 +57,7 @@ const nextConfig = {
     : undefined,
   modularizeImports: {
     "lucide-react": {
-      transform: "lucide-react/icons/{{member}}",
-      skipDefaultConversion: true,
+      transform: "lucide-react/dist/esm/icons/{{kebabCase member}}",
     },
     "date-fns": {
       transform: "date-fns/{{member}}",

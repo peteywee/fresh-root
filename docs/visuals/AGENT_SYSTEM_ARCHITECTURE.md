@@ -1,20 +1,18 @@
 ---
+
 title: Agent System Architecture - Visual Documentation
 version: 1.0.0
-date_created: 2025-12-08
+date\_created: 2025-12-08
 status: Active
 owner: TopShelfService LLC
-tags: [visuals, architecture, agents, mermaid]
----
 
+## tags: \[visuals, architecture, agents, mermaid]
 # Agent System Architecture
-
 Visual documentation of the AI agent instruction system, workflow handoffs, and quality gates.
 
 ---
 
 ## 1. Instruction Hierarchy Mind Map
-
 ```mermaid
 mindmap
   root((Agent Instruction System))
@@ -67,7 +65,6 @@ mindmap
 ---
 
 ## 2. Red Team Handoff Workflow
-
 ```mermaid
 flowchart TB
     subgraph Input["📥 User Request"]
@@ -117,7 +114,6 @@ flowchart TB
 ---
 
 ## 3. Quality Gate Flow
-
 ```mermaid
 flowchart LR
     subgraph Gates["Quality Gates (Ordered)"]
@@ -162,7 +158,6 @@ flowchart LR
 ---
 
 ## 4. Instruction Loading Strategy
-
 ```mermaid
 flowchart TD
     subgraph Trigger["File Context Detection"]
@@ -202,7 +197,6 @@ flowchart TD
 ---
 
 ## 5. CrewOps Swarm Protocol
-
 ```mermaid
 flowchart TB
     subgraph Orchestrator["🎯 Orchestrator (Primary)"]
@@ -242,7 +236,6 @@ flowchart TB
 ---
 
 ## 6. Slash Command Ecosystem
-
 ```mermaid
 flowchart LR
     subgraph Commands["Slash Commands"]
@@ -288,7 +281,6 @@ flowchart LR
 ---
 
 ## 7. Error Pattern Detection & Safeguard Creation
-
 ```mermaid
 flowchart TD
     subgraph Detection["Error Detection"]
@@ -328,7 +320,6 @@ flowchart TD
 ---
 
 ## 8. Complete Agent System Architecture
-
 ```mermaid
 graph TB
     subgraph User["👤 User Layer"]
@@ -400,7 +391,6 @@ graph TB
 ---
 
 ## Diagram Legend
-
 | Symbol         | Meaning                      |
 | -------------- | ---------------------------- |
 | 🔴 Red Fill    | Security/Critical (Blocking) |
@@ -413,5 +403,5 @@ graph TB
 
 ---
 
-**Last Updated**: December 8, 2025  
+**Last Updated**: December 8, 2025\
 **Rendering**: GitHub, VS Code (Markdown Preview Mermaid Support), mermaid.live

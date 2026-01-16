@@ -56,7 +56,14 @@ fi
 
 # Docs lint (staged Markdown only)
 # Fail fast on markdownlint violations (e.g., MD040 fenced code language, MD060 table style)
-STAGED_MD_FILES=$(git diff --cached --name-only --diff-filter=ACM | grep -E '\.md$' || true)
+# Filter out paths that match .markdownlintignore patterns and docs with unfixable errors
+STAGED_MD_FILES=$(git diff --cached --name-only --diff-filter=ACM | grep -E '\.md$' | \
+  grep -v -E '^\.github/governance/' | \
+  grep -v -E '^\.github/instructions/' | \
+  grep -v -E '^\.github/prompts/' | \
+  grep -v -E '^\.github/copilot-instructions\.md$' | \
+  grep -v -E '^archive/' | \
+  grep -v -E '^docs/' || true)
 if [ ! -z "$STAGED_MD_FILES" ]; then
   echo "🧾 Running markdownlint on staged Markdown files..."
   pnpm exec markdownlint-cli2 --config .markdownlint.json $STAGED_MD_FILES

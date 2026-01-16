@@ -1,11 +1,9 @@
 # L3 — Cloud Functions Catalog
-
 This file documents all Firebase Cloud Functions in the Fresh Schedules system.
 
 ---
 
 ## 1. Functions Overview
-
 Cloud Functions are located in `functions/src/` and handle background processing, triggers, and
 callable operations.
 
@@ -22,11 +20,9 @@ callable operations.
 ---
 
 ## 2. Firestore Triggers
-
 ### `onScheduleUpdate`
-
-**Trigger**: `functions.firestore.onUpdate`  
-**Path**: Schedule documents  
+**Trigger**: `functions.firestore.onUpdate`\
+**Path**: Schedule documents\
 **Purpose**: React to schedule changes for denormalization and notifications
 
 ```typescript
@@ -38,9 +34,8 @@ export const onScheduleUpdate = functions.firestore.onUpdate(async (change, cont
 ---
 
 ### `onZoneWrite`
-
-**Trigger**: `onDocumentWritten` (V2)  
-**Path**: Zone documents  
+**Trigger**: `onDocumentWritten` (V2)\
+**Path**: Zone documents\
 **Purpose**: Handle zone creation/updates for denormalization
 
 ```typescript
@@ -52,9 +47,8 @@ export const onZoneWrite = onDocumentWritten("zones/{orgId}/zones/{zoneId}", asy
 ---
 
 ### `onAttendanceApproved`
-
-**Trigger**: `onDocumentUpdated` (V2)  
-**Path**: Attendance records  
+**Trigger**: `onDocumentUpdated` (V2)\
+**Path**: Attendance records\
 **Purpose**: Process approved attendance for ledger/billing
 
 ```typescript
@@ -69,10 +63,8 @@ export const onAttendanceApproved = onDocumentUpdated(
 ---
 
 ## 3. Callable Functions
-
 ### `joinOrganization`
-
-**Type**: `onCall` (V2)  
+**Type**: `onCall` (V2)\
 **Purpose**: Allow users to join an organization via invite token
 
 ```typescript
@@ -102,9 +94,7 @@ export const joinOrganization = onCall<JoinOrganizationRequest>(async (request) 
 ---
 
 ## 4. HTTP Functions
-
 ### Onboarding Functions
-
 Located in `functions/src/onboarding.ts`:
 
 - Network creation
@@ -114,9 +104,7 @@ Located in `functions/src/onboarding.ts`:
 ---
 
 ## 5. Domain Logic
-
 ### `domain/billing.ts`
-
 Billing calculation and ledger operations:
 
 - Rate calculation
@@ -124,7 +112,6 @@ Billing calculation and ledger operations:
 - Payment processing hooks
 
 ### `ledger.ts`
-
 Time-based ledger operations:
 
 - Hours tracking
@@ -134,7 +121,6 @@ Time-based ledger operations:
 ---
 
 ## 6. Deployment
-
 Functions are deployed via Firebase CLI:
 
 ```bash
@@ -151,7 +137,6 @@ firebase deploy --only functions:onScheduleUpdate
 ---
 
 ## 7. Environment Variables
-
 Functions require these environment variables (set via Firebase config):
 
 | Variable                | Purpose              |
@@ -161,6 +146,6 @@ Functions require these environment variables (set via Firebase config):
 
 ---
 
-**Total Functions**: 8 files  
-**Runtime**: Node.js 20  
+**Total Functions**: 8 files\
+**Runtime**: Node.js 20\
 **Last Generated**: December 2025

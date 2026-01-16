@@ -1,8 +1,7 @@
 # FRESH SCHEDULES - BRANCH RULES
-
-> **Version**: 1.0.0  
-> **Status**: CANONICAL  
-> **Authority**: Sr Dev / Architecture  
+> **Version**: 1.0.0\
+> **Status**: CANONICAL\
+> **Authority**: Sr Dev / Architecture\
 > **Binding**: YES - Enforced by GitHub
 
 This document defines branch protection rules. Designed to be light and extensible.
@@ -10,7 +9,6 @@ This document defines branch protection rules. Designed to be light and extensib
 ---
 
 ## BRANCH HIERARCHY
-
 ```
 main (production)
 │
@@ -27,9 +25,7 @@ main (production)
 ---
 
 ## CORE RULES
-
 ### main Branch
-
 | Setting                         | Value           | Reason                 |
 | ------------------------------- | --------------- | ---------------------- |
 | **Require PR**                  | Yes             | No direct pushes       |
@@ -43,7 +39,6 @@ main (production)
 | **Allow deletions**             | No              | Never                  |
 
 ### dev Branch
-
 | Setting                         | Value | Reason                 |
 | ------------------------------- | ----- | ---------------------- |
 | **Require PR**                  | Yes   | No direct pushes       |
@@ -56,7 +51,6 @@ main (production)
 | **Allow deletions**             | No    | Never                  |
 
 ### Feature Branches (feature/_, fix/_, refactor/_, chore/_)
-
 | Setting                  | Value | Reason            |
 | ------------------------ | ----- | ----------------- |
 | **Require PR**           | No    | Can push directly |
@@ -64,7 +58,6 @@ main (production)
 | **Allow force push**     | Yes   | Allow rebasing    |
 
 ### Hotfix Branches (hotfix/\*)
-
 | Setting                | Value | Reason             |
 | ---------------------- | ----- | ------------------ |
 | **Require PR**         | Yes   | Still needs review |
@@ -75,15 +68,12 @@ main (production)
 ---
 
 ## BRANCH NAMING
-
 ### Pattern
-
 ```
 {type}/{ticket}-{description}
 ```
 
 ### Types
-
 | Type       | Purpose           | Example                       |
 | ---------- | ----------------- | ----------------------------- |
 | `feature`  | New functionality | `feature/FS-123-add-time-off` |
@@ -93,7 +83,6 @@ main (production)
 | `hotfix`   | Emergency fix     | `hotfix/FS-999-auth-bypass`   |
 
 ### Validation Regex
-
 ```regex
 ^(feature|fix|refactor|chore|hotfix)\/[A-Z]+-[0-9]+-[a-z0-9-]+$|^(feature|fix|refactor|chore)\/[a-z0-9-]+$
 ```
@@ -101,7 +90,6 @@ main (production)
 ---
 
 ## MERGE STRATEGIES
-
 | Source       | Target | Strategy     |
 | ------------ | ------ | ------------ |
 | `feature/*`  | `dev`  | Squash       |
@@ -113,13 +101,11 @@ main (production)
 | `hotfix/*`   | `dev`  | Merge commit |
 
 ### Why Squash for Features
-
 - Clean history
 - One commit = one feature/fix
 - Easy to revert
 
 ### Why Merge Commit for Releases
-
 - Preserve PR reference
 - Clear audit trail
 - Shows merge point
@@ -127,9 +113,7 @@ main (production)
 ---
 
 ## WORKFLOW
-
 ### Standard Flow
-
 ```bash
 # 1. Create branch from dev
 git checkout dev
@@ -138,21 +122,17 @@ git checkout -b feature/FS-123-new-feature
 
 # 2. Work on feature
 # ... commits ...
-
 # 3. Push and open PR
 git push -u origin feature/FS-123-new-feature
 # Open PR to dev
-
 # 4. Review and merge (squash)
 # PR merged → branch auto-deleted
-
 # 5. Release to main
 # Open PR from dev to main
 # 2 approvals → merge commit
 ```
 
 ### Hotfix Flow
-
 ```bash
 # 1. Create hotfix from main
 git checkout main
@@ -161,14 +141,11 @@ git checkout -b hotfix/FS-999-critical
 
 # 2. Fix and test
 # ... minimal fix ...
-
 # 3. Push and open PR to main
 git push -u origin hotfix/FS-999-critical
 # Open PR to main
-
 # 4. Emergency review (1 approval)
 # Merge to main
-
 # 5. Also merge to dev
 git checkout dev
 git merge hotfix/FS-999-critical
@@ -178,9 +155,7 @@ git push
 ---
 
 ## GITHUB CONFIGURATION
-
 ### Branch Protection API
-
 ```javascript
 // scripts/setup-branch-protection.mjs
 const { Octokit } = require("@octokit/rest");
@@ -231,7 +206,6 @@ await octokit.repos.updateBranchProtection({
 ```
 
 ### Rulesets (Alternative)
-
 ```yaml
 # .github/rulesets/main.yml
 name: Main Branch Rules
@@ -257,9 +231,7 @@ rules:
 ---
 
 ## EXTENDING RULES
-
 ### Adding New Branch Type
-
 1. Define naming convention
 2. Add to validation regex
 3. Document merge strategy
@@ -278,7 +250,6 @@ docs/*:
 ```
 
 ### Adding Status Checks
-
 1. Add workflow in `.github/workflows/`
 2. Add check name to required checks
 3. Update branch protection
@@ -291,7 +262,6 @@ required_status_checks: {
 ```
 
 ### Environment-Based Rules
-
 ```javascript
 // Different rules per environment
 if (process.env.ENV === "enterprise") {
@@ -303,9 +273,7 @@ if (process.env.ENV === "enterprise") {
 ---
 
 ## VIOLATIONS
-
 ### Common Violations
-
 | Violation            | Solution           |
 | -------------------- | ------------------ |
 | Direct push to main  | Always use PR      |
@@ -314,7 +282,6 @@ if (process.env.ENV === "enterprise") {
 | Wrong merge strategy | Use correct button |
 
 ### Recovery
-
 ```bash
 # Accidentally pushed to main (if possible)
 git revert HEAD
@@ -328,4 +295,4 @@ git push
 
 **END OF BRANCH RULES**
 
-Next document: [11_GATES.md](./11_GATES.md)
+Next document: [11\_GATES.md](./11_GATES.md)

@@ -1,5 +1,23 @@
-# Template: CI_WORKFLOW_TEMPLATE
+---
+title: "CI Workflow Template"
+description: "Template for GitHub Actions CI/CD workflows with security best practices"
+keywords:
+  - template
+  - ci-cd
+  - github-actions
+  - workflow
+  - automation
+category: "template"
+status: "active"
+audience:
+  - developers
+  - devops
+related-docs:
+  - ../guides/DEPLOYMENT.md
+  - ../production/README.md
+---
 
+# Template: CI\_WORKFLOW\_TEMPLATE
 ```yaml
 name: ci-minimal-secure
 

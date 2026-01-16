@@ -1,5 +1,23 @@
-# Architecture Diagram
+---
+title: "System Architecture Diagram"
+description: "Mermaid diagram showing system architecture, components, and data flows"
+keywords:
+  - architecture
+  - diagram
+  - visual
+  - mermaid
+  - components
+category: "report"
+status: "active"
+audience:
+  - developers
+  - architects
+related-docs:
+  - ../architecture/FUTURE_PROOF_SYSTEM_DESIGN.md
+  - ../architecture/01_SYSTEM_L0_Bible.md
+---
 
+# Architecture Diagram
 ```mermaid
 graph TB
     subgraph apps["📱 Applications"]
@@ -46,7 +64,6 @@ graph TB
 ```
 
 ## Architecture Principles
-
 - **Monorepo**: pnpm workspaces + Turbo
 - **Type Safety**: Zod-first validation, TypeScript strict
 - **SDK Factory**: Declarative API route pattern (90%+ coverage)

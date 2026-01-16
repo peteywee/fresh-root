@@ -1,16 +1,29 @@
-# VS Code Tasks Configuration
+---
+title: "VS Code Tasks Configuration"
+description: "Guide to configuring and running VS Code tasks for development workflows"
+keywords:
+  - vscode
+  - tasks
+  - automation
+  - development
+category: "guide"
+status: "active"
+audience:
+  - developers
+related-docs:
+  - QUICK_START.md
+  - SETUP.md
+---
 
+# VS Code Tasks Configuration
 This document describes the available VS Code tasks for the Fresh-Root project.
 
 ## Using Tasks in VS Code
-
 Press `Ctrl+Shift+P` (or `Cmd+Shift+P` on macOS) and search for "Tasks: Run Task" to see all
 available tasks.
 
 ## Available Tasks
-
 ### Core Development
-
 | Task                  | Command                             | Purpose                                         |
 | --------------------- | ----------------------------------- | ----------------------------------------------- |
 | **Install (frozen)**  | `pnpm -w install --frozen-lockfile` | Install dependencies with exact versions        |
@@ -20,7 +33,6 @@ available tasks.
 | **Format (Prettier)** | `pnpm -w format`                    | Format all code with Prettier                   |
 
 ### Testing
-
 | Task                       | Command                      | Purpose                              |
 | -------------------------- | ---------------------------- | ------------------------------------ |
 | **Test (watch)**           | `pnpm test`                  | Run tests in watch mode (background) |
@@ -30,7 +42,6 @@ available tasks.
 | **Test: E2E (Playwright)** | `pnpm -w test:e2e`           | Run end-to-end tests with Playwright |
 
 ### Build & Quality
-
 | Task                    | Command                                        | Purpose                                                       |
 | ----------------------- | ---------------------------------------------- | ------------------------------------------------------------- |
 | **Build (all)**         | `pnpm -w build`                                | Build all packages and apps                                   |
@@ -40,34 +51,29 @@ available tasks.
 | **Index: File Index**   | `scripts/index/generate-file-index.sh --write` | Generate and update file index                                |
 
 ### New: Cleanup
-
 | Task                                 | Command                                | Purpose                                                          |
 | ------------------------------------ | -------------------------------------- | ---------------------------------------------------------------- |
 | **Cleanup: Remove Legacy Artifacts** | `bash scripts/cleanup/full-cleanup.sh` | Remove v14 legacy files, emulator data, temp files (interactive) |
 
 ### New: Quality Gates
-
 | Task                              | Command                                       | Purpose                                                           |
 | --------------------------------- | --------------------------------------------- | ----------------------------------------------------------------- |
 | **Quality: Check Doc Parity**     | `node scripts/ci/check-doc-parity.mjs`        | Validate all API routes and schemas have docs and TEST SPEC links |
 | **Quality: Verify Tests Present** | `node scripts/tests/verify-tests-present.mjs` | Ensure API routes and core modules have test coverage             |
 
 ### New: Documentation
-
 | Task                                       | Command                                       | Purpose                                                      |
 | ------------------------------------------ | --------------------------------------------- | ------------------------------------------------------------ |
 | **Docs: Generate Mini-Index (Schemas)**    | `node scripts/migration/gen-mini-indexes.mjs` | Generate mini-index for Zod schemas (consolidated reference) |
 | **Docs: Generate Mini-Index (API Routes)** | `node scripts/migration/gen-mini-indexes.mjs` | Generate mini-index for API routes (consolidated reference)  |
 
 ### New: Migration Tools
-
 | Task                                 | Command                                       | Purpose                                                  |
 | ------------------------------------ | --------------------------------------------- | -------------------------------------------------------- |
 | **Migration: Check v15 Readiness**   | `node scripts/migration/migration-status.mjs` | Validate v15 migration readiness (7 quality checks)      |
 | **Migration: Generate Mini-Indexes** | `node scripts/migration/gen-mini-indexes.mjs` | Generate schema and API route mini-indexes for migration |
 
 ## Setup: Adding Tasks to VS Code
-
 The tasks are configured in `.vscode/tasks.json` (which is `.gitignore`d). All new tasks are
 automatically included:
 
@@ -79,7 +85,6 @@ To manually add a task, press `Ctrl+Shift+D` (or `Cmd+Shift+D`), click "Configur
 the `tasks` array in `.vscode/tasks.json`.
 
 ## Running Tasks from Command Line
-
 All tasks can also be run directly from the terminal:
 
 ```bash
@@ -97,7 +102,6 @@ bash scripts/cleanup/full-cleanup.sh
 ```
 
 ## Pre-Commit Hooks
-
 The following checks run automatically before each commit (via Husky):
 
 - ✅ File auto-tagging
@@ -107,7 +111,6 @@ The following checks run automatically before each commit (via Husky):
 **Note**: ESLint has been moved to GitHub Actions CI for faster local commits.
 
 ## Quality Gates Checklist
-
 Before pushing to GitHub, run:
 
 ```bash
@@ -138,7 +141,6 @@ bash scripts/cleanup/full-cleanup.sh
 ```
 
 ## Available Helper Scripts
-
 | Script                                   | Purpose                                               |
 | ---------------------------------------- | ----------------------------------------------------- |
 | `scripts/ci/check-doc-parity.mjs`        | Validate API routes/schemas have docs and TEST SPECs  |

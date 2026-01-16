@@ -1,15 +1,13 @@
 # ERROR PATTERN: Type Assertions Bypassing Zod Validation
-
-**Status**: ACTIVE SAFEGUARD  
-**Detection Date**: December 12, 2025  
-**Severity**: P0 CRITICAL  
-**Occurrences Detected**: 20+  
+**Status**: ACTIVE SAFEGUARD\
+**Detection Date**: December 12, 2025\
+**Severity**: P0 CRITICAL\
+**Occurrences Detected**: 20+\
 **High-Risk Files**: `batch/route.ts` (6), `shifts/route.ts` (3), `positions/route.ts` (2)
 
 ---
 
 ## Problem Definition
-
 The **Triad of Trust** pattern requires:
 
 1. ✅ Zod schema in `packages/types/src/`
@@ -25,7 +23,6 @@ that:
 - Create security vulnerabilities (unvalidated data flows)
 
 ### ❌ ANTI-PATTERN Examples
-
 ```typescript
 // BAD: Type assertion bypasses validation
 const validated = input as Record<string, unknown>;
@@ -43,9 +40,7 @@ Zod validation ✅ → Type Assertion ❌ → No validation happening!
 ---
 
 ## Detection Rules
-
 ### ESLint Configuration
-
 Add to `eslint.config.mjs`:
 
 ```javascript
@@ -66,7 +61,6 @@ Add to `eslint.config.mjs`:
 ```
 
 ### Pre-Commit Hook Check
-
 Add to `.husky/pre-commit`:
 
 ```bash
@@ -85,9 +79,7 @@ fi
 ---
 
 ## Required Fix Pattern
-
 ### ✅ CORRECT: Use Zod Validation
-
 ```typescript
 // GOOD: Zod validation enforced
 import { z } from "zod";
@@ -107,23 +99,21 @@ export const PATCH = createOrgEndpoint({
 ```
 
 ### Refactoring Rules
-
 1. **Never use `as any`**
    - Replace with explicit Zod schema
    - Or narrow type with `if` checks
 
-2. **Never use `as Record<string, unknown>`**
+1. **Never use `as Record<string, unknown>`**
    - Define proper schema
    - Use `z.record()` if needed
 
-3. **Array items must be validated**
+1. **Array items must be validated**
    - Don't do: `(item as any).payload`
    - Do: `ItemSchema.parse(item).payload`
 
 ---
 
 ## Files Requiring Fix (Priority Order)
-
 | File                         | Issue              | Fix                                |
 | ---------------------------- | ------------------ | ---------------------------------- |
 | `batch/route.ts`             | 6× `as any`        | Define item schema, validate array |
@@ -136,16 +126,13 @@ export const PATCH = createOrgEndpoint({
 ---
 
 ## Validation Gates
-
 ### Before Commit
-
 ```bash
 # Must pass with 0 violations
 eslint --rule '@typescript-eslint/no-explicit-any: error' apps/web/app/api/**/*.ts
 ```
 
 ### TypeScript Strict Mode
-
 Ensure `tsconfig.json`:
 
 ```json
@@ -160,7 +147,6 @@ Ensure `tsconfig.json`:
 ```
 
 ### Test Coverage
-
 All routes with assertions must have:
 
 - ✅ Input validation tests
@@ -170,9 +156,7 @@ All routes with assertions must have:
 ---
 
 ## Architecture Decision
-
 ### Why This Matters
-
 The **Triad of Trust** pattern ensures:
 
 ```
@@ -187,7 +171,6 @@ Type assertions break this chain at step 2, allowing invalid data to flow to Fir
 security rules might also fail, leaving gaps.
 
 ### Long-term Solution
-
 1. **Create SafeInput wrapper type** in `packages/api-framework`
 2. **Auto-generate schemas** from TypeScript interfaces
 3. **Enforce at lint time** - reject all type assertions in API routes
@@ -196,7 +179,6 @@ security rules might also fail, leaving gaps.
 ---
 
 ## Red Team Veto Triggers
-
 🚫 **BLOCK DEPLOYMENT IF:**
 
 - New type assertions added to API routes
@@ -207,7 +189,6 @@ security rules might also fail, leaving gaps.
 ---
 
 ## Next Steps
-
 1. ✅ **Safeguard Created** (this file)
 2. 🔜 **Fix High-Risk Routes** (batch/route.ts first)
 3. 🔜 **Add ESLint Rule** (prevent regression)
@@ -216,7 +197,7 @@ security rules might also fail, leaving gaps.
 
 ---
 
-**Created**: 2025-12-12  
-**Validated By**: Error Protocol v3.2  
-**Status**: ACTIVE ENFORCEMENT  
+**Created**: 2025-12-12\
+**Validated By**: Error Protocol v3.2\
+**Status**: ACTIVE ENFORCEMENT\
 **Last Updated**: 2025-12-12

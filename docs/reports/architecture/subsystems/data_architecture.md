@@ -1,10 +1,8 @@
 # L2 — Firestore Data Architecture
-
 > **Status:** ✅ Documented from actual codebase analysis **Last Updated:** 2025-12-17
 > **Collections:** 9 primary collections, 25 type modules, 145 Zod schemas
 
 ## 1. Role in the System
-
 The Data Architecture defines how all application state is persisted and queried in Firestore. It
 establishes:
 
@@ -17,9 +15,7 @@ establishes:
 in current implementation.
 
 ## 2. Firestore Collection Structure
-
 ### 2.1 Primary Collections
-
 | Collection                  | Path                                     | Scope        | Document Count (est.) |
 | --------------------------- | ---------------------------------------- | ------------ | --------------------- |
 | `attendance_records`        | `/attendance_records/{orgId}/{recordId}` | Per-org      | 10k-100k              |
@@ -36,7 +32,6 @@ in current implementation.
 routes.
 
 ### 2.2 Multi-Tenancy Pattern
-
 **All org-scoped collections use composite keys:**
 
 ```
@@ -56,7 +51,6 @@ routes.
 - ⚠️ Cross-org queries require collection groups
 
 ### 2.3 Schema Definitions
-
 All schemas defined in `packages/types/src/`:
 
 ```typescript
@@ -80,9 +74,7 @@ export const ScheduleSchema = z
 ```
 
 ## 3. Critical Findings
-
 ### 🔴 CRITICAL-01: Mock Data in Production Routes
-
 **Location:** Most API endpoints **Issue:** Routes return mock data instead of querying Firestore
 
 **Evidence from onboarding routes:**
@@ -115,7 +107,6 @@ await updateDocWithType<NetworkDoc>(adb, networkRef, {
 ```
 
 ### 🔴 CRITICAL-02: No Composite Indexes Defined
-
 **Location:** Project root (missing `firestore.indexes.json`) **Issue:** No index configuration file
 found
 
@@ -149,7 +140,6 @@ found
 **Impact:** Complex queries will fail in production without indexes
 
 ### 🟡 HIGH-01: Inconsistent Timestamp Format
-
 **Location:** All schema definitions **Issue:** Some fields accept both number and string
 
 ```typescript
@@ -169,7 +159,6 @@ createdAt: z.union([
 **Recommendation:** Standardize on Unix milliseconds (number)
 
 ### 🟡 HIGH-02: Missing Foreign Key Validation
-
 **Location:** All relationship fields **Issue:** No validation that referenced IDs exist
 
 ```typescript
@@ -184,7 +173,6 @@ export const ScheduleSchema = z.object({
 **Impact:** Orphaned records, referential integrity violations
 
 ### 🟢 MEDIUM-01: No Data Migration Strategy
-
 **Location:** Schemas with refine() validators **Issue:** Breaking schema changes will fail on old
 data
 
@@ -197,9 +185,7 @@ data
 **If old data has invalid dates, validation fails on read!**
 
 ## 4. Data Relationships
-
 ### 4.1 Entity Relationship Diagram
-
 ```
 Network (1)
   ↓
@@ -214,7 +200,6 @@ Organization (N) ── Memberships (N) ── Users (N)
 ```
 
 ### 4.2 Key Relationships
-
 | Parent       | Child      | Relationship | FK Field                  | Cascade Delete? |
 | ------------ | ---------- | ------------ | ------------------------- | --------------- |
 | Organization | Schedule   | 1:N          | `schedule.orgId`          | ❓ Unknown      |
@@ -227,9 +212,7 @@ Organization (N) ── Memberships (N) ── Users (N)
 **Missing:** Explicit cascade delete policies
 
 ## 5. Type System Architecture
-
 ### 5.1 Type Module Structure
-
 **25 type modules in `packages/types/src/`:**
 
 Core Types:
@@ -254,7 +237,6 @@ Support Types:
 - `session.ts` - User sessions
 
 ### 5.2 Schema Export Pattern
-
 ```typescript
 // Every module exports:
 export const EntitySchema = z.object({ ... });
@@ -272,9 +254,7 @@ export type Schedule = z.infer<typeof ScheduleSchema>;
 - ✅ Auto-generated types from schemas
 
 ## 6. Good Patterns
-
 ### ✅ Pattern: Typed Firestore Wrappers
-
 ```typescript
 // From typed-wrappers:
 export async function updateDocWithType<T>(
@@ -289,7 +269,6 @@ export async function updateDocWithType<T>(
 **Benefits:** Type safety for Firestore operations
 
 ### ✅ Pattern: Status Enums
-
 ```typescript
 export const ScheduleStatus = z.enum(["draft", "published", "active", "completed", "archived"]);
 ```
@@ -297,7 +276,6 @@ export const ScheduleStatus = z.enum(["draft", "published", "active", "completed
 **Benefits:** State machine validation, no magic strings
 
 ### ✅ Pattern: Timestamps as Numbers
-
 ```typescript
 createdAt: z.number().int().positive(); // Unix milliseconds
 ```
@@ -309,9 +287,7 @@ createdAt: z.number().int().positive(); // Unix milliseconds
 - No timezone issues
 
 ## 7. Anti-Patterns
-
 ### ❌ Anti-Pattern: Dual Timestamp Format
-
 ```typescript
 createdAt: z.union([z.number().int().positive(), z.string().datetime()]);
 ```
@@ -319,7 +295,6 @@ createdAt: z.union([z.number().int().positive(), z.string().datetime()]);
 **Problem:** Can't reliably compare dates without normalization
 
 ### ❌ Anti-Pattern: No Required Fields Enforcement
-
 ```typescript
 // Many fields are optional that shouldn't be:
 export const OrganizationSchema = z.object({
@@ -331,16 +306,13 @@ export const OrganizationSchema = z.object({
 ```
 
 ### ❌ Anti-Pattern: String Min Length Without Context
-
 ```typescript
 z.string().min(1); // ❌ Just checks not empty
 z.string().min(1, "Organization name is required"); // ✅ Has context
 ```
 
 ## 8. Data Access Patterns
-
 ### 8.1 Common Queries (Inferred)
-
 **Get all schedules for org:**
 
 ```typescript
@@ -366,7 +338,6 @@ const shifts = await db.collection("shifts").doc(orgId).collection(scheduleId).g
 ```
 
 ### 8.2 Performance Considerations
-
 **Collection Group Queries** (when needed):
 
 ```typescript
@@ -377,7 +348,6 @@ const allShifts = await db.collectionGroup("shifts").where("startTime", ">=", st
 **Requires collection group index!**
 
 ## 9. Recommendations
-
 | Priority | Action                                            | Effort   | Impact   |
 | -------- | ------------------------------------------------- | -------- | -------- |
 | 🔴 P0    | Implement actual Firestore operations (not mocks) | 5-7 days | Critical |
@@ -392,7 +362,6 @@ const allShifts = await db.collectionGroup("shifts").where("startTime", ">=", st
 **Total Estimated Effort:** ~15-19 days
 
 ## 10. Security Rules (Not Found)
-
 **Missing:** `firestore.rules` file
 
 **Recommended structure:**
@@ -413,7 +382,6 @@ service cloud.firestore {
 ```
 
 ## 11. Next Steps
-
 1. Implement actual Firestore persistence in all routes
 2. Create and deploy composite indexes
 3. Standardize all timestamps to Unix milliseconds

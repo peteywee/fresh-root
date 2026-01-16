@@ -1,5 +1,23 @@
-# Markdown Lint Library - Correct Implementation
+---
+title: "Markdown Lint Implementation"
+description: "Markdown linting setup, rules, and configuration for documentation quality"
+keywords:
+  - markdown
+  - linting
+  - documentation
+  - quality
+  - implementation
+category: "standard"
+status: "active"
+audience:
+  - developers
+  - documentation-contributors
+related-docs:
+  - ../guides/README.md
+  - ../INDEX.md
+---
 
+# Markdown Lint Library - Correct Implementation
 **Status**: ✅ Production Ready\
 **Version**: 1.0.0\
 **Last Updated**: December 7, 2025
@@ -7,7 +25,6 @@
 ---
 
 ## Table of Contents
-
 1. [Overview](#overview)
 2. [Architecture](#architecture)
 3. [Usage](#usage)
@@ -19,7 +36,6 @@
 ---
 
 ## Overview
-
 The markdown-lint-lib is a **production-grade markdown validation and auto-fix system** that
 integrates with Next.js API routes and CI/CD pipelines. It provides:
 
@@ -33,9 +49,7 @@ integrates with Next.js API routes and CI/CD pipelines. It provides:
 ---
 
 ## Architecture
-
 ### Component Structure
-
 ```
 scripts/markdown-lint-lib/
 ├── index.mjs                    # Main library with rule profiles
@@ -50,7 +64,6 @@ scripts/markdown-lint-lib/
 ```
 
 ### Execution Flow
-
 ```
 User Input (CLI/API)
     ↓
@@ -72,9 +85,7 @@ Output Summary
 ---
 
 ## Usage
-
 ### CLI Usage
-
 ```bash
 # Lint all markdown files (standard profile)
 node scripts/markdown-lint-lib/task.mjs
@@ -97,7 +108,6 @@ pnpm run docs:fix           # Lint and fix
 ```
 
 ### API Usage
-
 ```typescript
 import { lintMarkdown, fixMarkdown } from "./scripts/markdown-lint-lib/index.mjs";
 
@@ -116,7 +126,6 @@ const fixed = await fixMarkdown({
 ```
 
 ### Pre-Commit Hook
-
 ```bash
 # !/bin/bash
 # .husky/pre-commit
@@ -130,9 +139,7 @@ pnpm run docs:lint || {
 ---
 
 ## Profiles
-
 ### Strict Profile (51 Rules - Full Enforcement)
-
 **Use Case**: Production documentation, official guides
 
 ```javascript
@@ -157,7 +164,6 @@ pnpm run docs:lint || {
 - Consistent emphasis style
 
 ### Standard Profile (38 Rules - Recommended)
-
 **Use Case**: General documentation, API docs, team guides
 
 Includes all critical rules from Strict profile except:
@@ -169,7 +175,6 @@ Includes all critical rules from Strict profile except:
 **Best Balance** between strictness and usability.
 
 ### Lenient Profile (25 Rules - Relaxed)
-
 **Use Case**: Legacy documentation, blog posts, informal content
 
 Only enforces:
@@ -183,16 +188,12 @@ Only enforces:
 ---
 
 ## Rules & Fixes
-
 ### Rule Categories
-
 #### 1. Headers (13 Rules) - 12 Auto-Fixable
-
 ```markdown
 ❌ WRONG:
 
 # Header without space
-
 ✅ FIXED:
 
 # Header with proper space
@@ -202,7 +203,6 @@ Only enforces:
 **Auto-fix**: 12/13 (except MD024 - requires semantic understanding)
 
 #### 2. Lists (8 Rules) - 7 Auto-Fixable
-
 ```markdown
 ❌ WRONG:
 
@@ -220,7 +220,6 @@ Only enforces:
 **Auto-fix**: 7/8
 
 #### 3. Whitespace & Spacing (10 Rules) - 9 Auto-Fixable
-
 ```markdown
 ❌ WRONG: line with trailing spaces double spaces
 
@@ -230,7 +229,6 @@ Only enforces:
 **Auto-fix**: 9/10
 
 #### 4. Code (7 Rules) - 6 Auto-Fixable
-
 `````markdown
 ❌ WRONG: code without fence
 
@@ -261,7 +259,6 @@ http://bare.url (plain)
 **Auto-fix**: 4/5
 
 #### 6. Advanced (5 Rules) - 3 Auto-Fixable
-
 ```markdown
 ❌ WRONG:
 
@@ -279,9 +276,7 @@ http://bare.url (plain)
 ---
 
 ## Integration
-
 ### GitHub Actions
-
 ```yaml
 # .github/workflows/markdown-lint.yml
 name: Markdown Lint
@@ -309,7 +304,6 @@ jobs:
 ```
 
 ### Pre-Commit Hook
-
 ```bash
 # !/bin/bash
 # .husky/pre-commit
@@ -317,7 +311,6 @@ pnpm run docs:lint || exit 1
 ```
 
 ### CI/CD Pipeline
-
 ```bash
 # !/bin/bash
 # scripts/ci-markdown-check.sh
@@ -336,9 +329,7 @@ echo "✅ All markdown files passed linting"
 ---
 
 ## Implementation Guide
-
 ### 1. Setup
-
 ```bash
 # Install dependencies
 pnpm add -D markdownlint markdownlint-cli2
@@ -348,7 +339,6 @@ node scripts/markdown-lint-lib/task.mjs --profile=standard
 ```
 
 ### 2. Add to package.json
-
 ```json
 {
   "scripts": {
@@ -360,7 +350,6 @@ node scripts/markdown-lint-lib/task.mjs --profile=standard
 ```
 
 ### 3. Create .markdownlint-cli2.jsonc
-
 ```jsonc
 {
   "$schema": "https://raw.githubusercontent.com/DavidAnson/markdownlint-cli2/main/schema/markdownlint-cli2-schema.json",
@@ -383,7 +372,6 @@ node scripts/markdown-lint-lib/task.mjs --profile=standard
 ```
 
 ### 4. Run Initial Lint
-
 ```bash
 # Check for issues
 pnpm run docs:lint
@@ -396,7 +384,6 @@ pnpm run docs:check
 ```
 
 ### 5. Integrate into CI/CD
-
 ```bash
 # Add to GitHub Actions workflow
 - name: Lint Markdown
@@ -409,9 +396,7 @@ husky add .husky/pre-commit "pnpm run docs:lint"
 ---
 
 ## Common Issues & Solutions
-
 ### Issue: markdownlint-cli2 not found
-
 **Solution**:
 
 ```bash
@@ -420,7 +405,6 @@ pnpm add -D markdownlint@^0.40.0
 ```
 
 ### Issue: Too many line length violations
-
 **Solution**:
 
 ```json
@@ -434,7 +418,6 @@ pnpm add -D markdownlint@^0.40.0
 ```
 
 ### Issue: Auto-fix not working
-
 **Solution**:
 
 ```bash
@@ -448,7 +431,6 @@ node scripts/markdown-lint-lib/task.mjs --verbose --fix
 ---
 
 ## Best Practices
-
 1. **Use Standard Profile by Default**: Balances strictness with usability
 2. **Run docs:fix Before Committing**: Auto-fixes 90%+ of issues
 3. **Review Fixed Changes**: Always review auto-fixes before committing
@@ -460,7 +442,6 @@ node scripts/markdown-lint-lib/task.mjs --verbose --fix
 ---
 
 ## Future Enhancements
-
 - \[ ] Web UI for interactive linting
 - \[ ] Real-time VS Code extension
 - \[ ] Custom rule creation framework
@@ -470,6 +451,6 @@ node scripts/markdown-lint-lib/task.mjs --verbose --fix
 
 ---
 
-**Status**: ✅ Ready for production use  
-**Maintenance**: Active  
-**Support**: See docs/CODING_RULES_AND_PATTERNS.md
+**Status**: ✅ Ready for production use\
+**Maintenance**: Active\
+**Support**: See docs/CODING\_RULES\_AND\_PATTERNS.md

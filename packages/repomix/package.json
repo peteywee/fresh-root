@@ -27,7 +27,7 @@
     "clean": "rm -rf dist"
   },
   "dependencies": {
-    "repomix": "^1.10.2"
+    "repomix": "^1.11.1"
   },
   "devDependencies": {
     "@types/node": "^24.10.4",
