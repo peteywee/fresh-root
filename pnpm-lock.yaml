@@ -295,6 +295,9 @@ importers:
       '@fresh-schedules/types':
         specifier: workspace:*
         version: link:../types
+      '@opentelemetry/api':
+        specifier: ^1.9.0
+        version: 1.9.0
       '@upstash/redis':
         specifier: ^1.35.8
         version: 1.35.8
