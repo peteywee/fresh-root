@@ -160,6 +160,9 @@ function executeCommand(
     const binary = parts[0];
     const args = parts.slice(1);
 
+    // nosemgrep: javascript.lang.security.detect-child-process.detect-child-process
+    // Security: Authenticated API with extensive validation: allowlist (L38-74),
+    // blocked patterns (L19-35), safe char filter (L93-97), cwd validation (L76-81), shell:false
     const child = spawn(binary, args, {
       cwd,
       env: { ...process.env, TERM: "xterm-256color" },
