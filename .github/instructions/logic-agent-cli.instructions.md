@@ -447,7 +447,7 @@ Show evidence, not theory.
 
 **Output**:
 
-````markdown
+`````markdown
 ## Ground Truth: [Subject]
 
 ### Claim
@@ -474,6 +474,8 @@ Requests/sec: 810.37
 
 **Confidence**: 95% (based on test)
 ````
+`````
+
 ````
 
 ---
@@ -631,3 +633,4 @@ FLOOR: 85% minimum confidence
 
 **Version**: 2.0.0 **Last Updated**: December 28, 2025 **Hierarchy**: L2 (Instructions Layer) **See
 Also**: [logic-agent.instructions.md](./logic-agent.instructions.md)
+````
