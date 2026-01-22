@@ -22,7 +22,9 @@ status: "In progress"
 ---
 
 ## 1. Requirements & Constraints
+
 ### Requirements
+
 - **REQ-001**: All 41 identified gaps must be closed before production deployment
 - **REQ-002**: Pattern validation score must reach ≥95 (currently ~85)
 - **REQ-003**: Zero TypeScript compilation errors (`pnpm typecheck`)
@@ -33,12 +35,14 @@ status: "In progress"
 - **SEC-003**: Firestore rules must pass all security tests
 
 ### Constraints
+
 - **CON-001**: Must use existing SDK factory pattern (no new frameworks)
 - **CON-002**: Must maintain backward compatibility with existing API consumers
 - **CON-003**: Must complete within 9 working days
 - **CON-004**: Teams work 6h productive hours per day
 
 ### Guidelines
+
 - **GUD-001**: Follow Triad of Trust (Schema + API + Firestore Rules)
 - **GUD-002**: All PRs require typecheck + lint + tests before merge
 - **GUD-003**: Feature flags for risky features
@@ -48,7 +52,9 @@ status: "In progress"
 ---
 
 ## 2. Team Structure & Individual Duties
+
 ### 🔷 Team Roster
+
 ```
 ┌─────────────────────────────────────────────────────────────────────────┐
 │                         FRESH SCHEDULES v4                              │
@@ -71,6 +77,7 @@ status: "In progress"
 ```
 
 ### 👤 Individual Duty Assignments
+
 | Person           | Role            | Responsibility                                      | Streams | Daily Hours |
 | ---------------- | --------------- | --------------------------------------------------- | ------- | ----------- |
 | **Orchestrator** | PM              | Coordination, standups, gate reviews, escalation    | All     | 4h          |
@@ -82,6 +89,7 @@ status: "In progress"
 | **SecRed**       | Security Lead   | Code review, auth audit, OWASP check, sign-off      | All     | 4h          |
 
 ### 📋 Individual Task Ownership Matrix
+
 ```
 ┌───────────────────────────────────────────────────────────────────────────────┐
 │                          TASK OWNERSHIP MATRIX                                │
@@ -109,7 +117,9 @@ status: "In progress"
 ---
 
 ## 3. Implementation Phases
+
 ### Phase 0: Prerequisites (Day 0)
+
 - **GOAL-P0**: Establish infrastructure for safe feature rollout and E2E testing
 
 | Task | Description                                                          | Owner   | Est. | Accept Criteria                   | Completed | Date |
@@ -128,6 +138,7 @@ status: "In progress"
 ---
 
 ### Phase 1: Auth Chain (Days 1-2)
+
 - **GOAL-A**: Complete authentication pipeline from Firebase to session
 
 | Task | Description                                       | Owner   | Est. | Accept Criteria                             | Completed | Date |
@@ -148,6 +159,7 @@ status: "In progress"
 ---
 
 ### Phase 2: Data Persistence (Days 2-3)
+
 - **GOAL-B**: All onboarding flows write to Firestore
 
 | Task | Description                                           | Owner   | Est. | Accept Criteria                      | Completed | Date |
@@ -168,6 +180,7 @@ status: "In progress"
 ---
 
 ### Phase 3: UX Completion (Days 3-4)
+
 - **GOAL-C**: Complete navigation, profile, and context infrastructure
 
 | Task | Description                         | Owner   | Est. | Accept Criteria                      | Completed | Date |
@@ -188,6 +201,7 @@ status: "In progress"
 ---
 
 ### Phase 4: API Migration (Days 4-5)
+
 - **GOAL-D**: Replace all mock data with Firestore reads
 
 | Task | Collection                        | Owner   | Est. | Accept Criteria       | Completed | Date |
@@ -211,6 +225,7 @@ status: "In progress"
 ---
 
 ### Phase 5: Type Safety (Days 1-6, parallel)
+
 - **GOAL-E**: Eliminate all `any` types and add missing schemas
 
 | Task  | Description                                    | Owner   | Est. | Accept Criteria                               | Completed | Date |
@@ -231,6 +246,7 @@ status: "In progress"
 ---
 
 ### Phase 6: Feature Completion (Days 6-8)
+
 - **GOAL-F**: Complete core features and polish
 
 | Task | Description                                    | Owner   | Est. | Accept Criteria                        | Completed | Date |
@@ -254,6 +270,7 @@ status: "In progress"
 ---
 
 ### Phase 7: Production Readiness (Day 9)
+
 - **GOAL-PROD**: Final validation and deployment
 
 | Task   | Description                         | Owner        | Est. | Accept Criteria       | Completed | Date |
@@ -275,7 +292,9 @@ status: "In progress"
 ---
 
 ## 4. Visual Timeline
+
 ### 📅 9-Day Gantt Chart
+
 ```
          │ Day 0  │ Day 1  │ Day 2  │ Day 3  │ Day 4  │ Day 5  │ Day 6  │ Day 7  │ Day 8  │ Day 9  │
 ─────────┼────────┼────────┼────────┼────────┼────────┼────────┼────────┼────────┼────────┼────────┤
@@ -302,6 +321,7 @@ LEGEND: ████ = Active work   ░░░░ = Buffer   ▓▓▓▓ = Revi
 ```
 
 ### 📊 Workload Distribution
+
 ```
                     HOURS PER TEAM MEMBER
     ┌────────────────────────────────────────────────────┐
@@ -323,6 +343,7 @@ LEGEND: ████ = Active work   ░░░░ = Buffer   ▓▓▓▓ = Revi
 ```
 
 ### 🔗 Dependency Flow Diagram
+
 ```
                                  ┌─────────────────┐
                                  │   PHASE 0       │
@@ -377,7 +398,9 @@ LEGEND: ████ = Active work   ░░░░ = Buffer   ▓▓▓▓ = Revi
 ---
 
 ## 5. Success Criteria & Acceptance
+
 ### 📈 Quantitative Success Metrics
+
 | Metric            | Target | Current | Method                  | Owner        |
 | ----------------- | ------ | ------- | ----------------------- | ------------ |
 | Gaps Closed       | 41/41  | 0/41    | Task count              | Orchestrator |
@@ -391,6 +414,7 @@ LEGEND: ████ = Active work   ░░░░ = Buffer   ▓▓▓▓ = Revi
 | OWASP Violations  | 0      | 0       | Security audit          | SecRed       |
 
 ### ✅ Qualitative Success Criteria
+
 | Criteria             | Validator    | Accept Criteria                                          |
 | -------------------- | ------------ | -------------------------------------------------------- |
 | Golden path complete | QA + Product | User can signup → create org → create schedule → publish |
@@ -401,6 +425,7 @@ LEGEND: ████ = Active work   ░░░░ = Buffer   ▓▓▓▓ = Revi
 | Accessible           | Bravo-1      | Screen reader navigable, keyboard accessible             |
 
 ### 🏁 Definition of Done (Per Task)
+
 - \[ ] Code compiles: `pnpm typecheck` passes
 - \[ ] Linting clean: `pnpm lint` passes
 - \[ ] Tests pass: `pnpm test` includes new coverage
@@ -412,6 +437,7 @@ LEGEND: ████ = Active work   ░░░░ = Buffer   ▓▓▓▓ = Revi
 ---
 
 ## 6. Alternatives Considered
+
 - **ALT-001**: Monolithic deployment (rejected - too risky without gates)
 - **ALT-002**: Outsource to contractors (rejected - context switching cost)
 - **ALT-003**: Reduce scope to 20 critical gaps (rejected - technical debt compounds)
@@ -420,6 +446,7 @@ LEGEND: ████ = Active work   ░░░░ = Buffer   ▓▓▓▓ = Revi
 ---
 
 ## 7. Dependencies
+
 - **DEP-001**: Firebase emulator must be available for local development
 - **DEP-002**: GitHub Actions runners must support Firebase CLI
 - **DEP-003**: Vercel preview deployments for staging
@@ -429,13 +456,16 @@ LEGEND: ████ = Active work   ░░░░ = Buffer   ▓▓▓▓ = Revi
 ---
 
 ## 8. Files Affected
+
 ### New Files
+
 - `apps/web/src/lib/features.ts` - Feature flags
 - `tests/e2e/fixtures/auth.ts` - E2E auth fixture
 - `packages/types/src/batch.ts` - BatchOperationSchema
 - `packages/types/src/internal.ts` - BackupRequestSchema
 
 ### Modified Files
+
 - `apps/web/app/api/**/*.ts` - All API routes (SDK factory migration)
 - `apps/web/src/hooks/useAuth.ts` - Wire to Firebase
 - `apps/web/src/components/Header.tsx` - Add logout
@@ -446,6 +476,7 @@ LEGEND: ████ = Active work   ░░░░ = Buffer   ▓▓▓▓ = Revi
 ---
 
 ## 9. Testing Strategy
+
 - **TEST-001**: Unit tests for all new schemas (Vitest)
 - **TEST-002**: Integration tests for API routes (Vitest)
 - **TEST-003**: Firestore rules tests (`pnpm test:rules`)
@@ -457,6 +488,7 @@ LEGEND: ████ = Active work   ░░░░ = Buffer   ▓▓▓▓ = Revi
 ---
 
 ## 10. Risks & Mitigations
+
 | ID       | Risk                             | Probability | Impact | Mitigation                                |
 | -------- | -------------------------------- | ----------- | ------ | ----------------------------------------- |
 | RISK-001 | Auth integration fails           | Medium      | High   | Feature flag to revert, extensive logging |
@@ -466,6 +498,7 @@ LEGEND: ████ = Active work   ░░░░ = Buffer   ▓▓▓▓ = Revi
 | RISK-005 | Team member unavailable          | Low         | Medium | Cross-training, shared ownership          |
 
 ### Assumptions
+
 - **ASSUMPTION-001**: All team members available for 9 consecutive days
 - **ASSUMPTION-002**: Firebase emulator works in CI environment
 - **ASSUMPTION-003**: No major bugs discovered in existing code
@@ -474,7 +507,9 @@ LEGEND: ████ = Active work   ░░░░ = Buffer   ▓▓▓▓ = Revi
 ---
 
 ## 11. Communication & Escalation
+
 ### Daily Cadence
+
 | Time     | Event           | Participants         | Channel   |
 | -------- | --------------- | -------------------- | --------- |
 | 9:00 AM  | Daily standup   | All teams            | #standup  |
@@ -482,6 +517,7 @@ LEGEND: ████ = Active work   ░░░░ = Buffer   ▓▓▓▓ = Revi
 | Gate day | Gate review     | Leads + Orchestrator | #gates    |
 
 ### Escalation Matrix
+
 | Severity    | Max Time     | Escalate To          | Channel       |
 | ----------- | ------------ | -------------------- | ------------- |
 | P0 Blocker  | 30 min       | Orchestrator + Leads | #urgent       |
@@ -490,6 +526,7 @@ LEGEND: ████ = Active work   ░░░░ = Buffer   ▓▓▓▓ = Revi
 | P3 Minor    | Next standup | Team                 | Daily standup |
 
 ### Security Escalation
+
 - Any auth bypass → **IMMEDIATE** SecRed + Orchestrator
 - Data leak risk → **IMMEDIATE** SecRed + Orchestrator
 - OWASP violation → **2 hours** SecRed review
@@ -497,13 +534,16 @@ LEGEND: ████ = Active work   ░░░░ = Buffer   ▓▓▓▓ = Revi
 ---
 
 ## 12. Rollback Procedures
+
 ### Level 1: Task Rollback
+
 ```bash
 git revert <commit-hash>
 git push origin dev
 ```
 
 ### Level 2: Phase Rollback
+
 ```bash
 git checkout <pre-phase-tag>
 git checkout -b rollback/phase-N
@@ -511,6 +551,7 @@ gh pr create --title "Rollback Phase N"
 ```
 
 ### Level 3: Feature Flag Disable
+
 ```bash
 # Set in environment
 NEXT_PUBLIC_FEATURE_REAL_AUTH=false
@@ -519,6 +560,7 @@ NEXT_PUBLIC_FEATURE_FIRESTORE_WRITES=false
 ```
 
 ### Level 4: Full Rollback
+
 ```bash
 git checkout $(git tag --list 'v1.4.*' | tail -1)
 # Redeploy stable version
@@ -527,6 +569,7 @@ git checkout $(git tag --list 'v1.4.*' | tail -1)
 ---
 
 ## 13. Related Specifications
+
 - [SDK Factory Comprehensive Guide](../standards/SDK_FACTORY_COMPREHENSIVE_GUIDE.md)
 - [Coding Rules and Patterns](../standards/CODING_RULES_AND_PATTERNS.md)
 - [Governance Index](../../.github/governance/INDEX.md)
@@ -536,6 +579,7 @@ git checkout $(git tag --list 'v1.4.*' | tail -1)
 ---
 
 ## Appendix A: Full Task Checklist
+
 ```
 PHASE 0: PREREQUISITES
 [ ] P0.1 Feature flags infrastructure
@@ -604,6 +648,7 @@ Total: 49 tasks
 ---
 
 ## Appendix B: Hours Summary
+
 | Stream    | Hours     | Primary Owner |
 | --------- | --------- | ------------- |
 | Phase 0   | 2h        | Charlie       |

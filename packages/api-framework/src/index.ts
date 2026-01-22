@@ -684,4 +684,10 @@ export * from "./enhancements";
 // =============================================================================
 export * from "./performance";
 export type { PerformanceConfig } from "./performance";
-export { measurePerformance, cachedOperation, invalidateCache, QueryOptimization, MemoryOptimization } from "./performance";
+export {
+  measurePerformance,
+  cachedOperation,
+  invalidateCache,
+  QueryOptimization,
+  MemoryOptimization,
+} from "./performance";

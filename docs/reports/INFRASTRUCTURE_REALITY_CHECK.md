@@ -1,4 +1,5 @@
 # Infrastructure Reality Check
+
 **Generated**: 2025-12-23\
 **Purpose**: Ground truth status of critical infrastructure\
 **Tags**: infrastructure, security, observability, rate-limiting
@@ -6,6 +7,7 @@
 ---
 
 ## 🚨 Executive Summary
+
 **You were right to question this.** The infrastructure EXISTS but is **NOT WIRED UP**.
 
 | Component                 | Packages Installed         | Config Files      | Routes Using | Status          |
@@ -18,7 +20,9 @@
 ---
 
 ## 📊 Detailed Breakdown
+
 ### Rate Limiting
+
 **What exists:**
 
 ```
@@ -49,6 +53,7 @@ Routes WITHOUT rate limiting: 38/39
 ---
 
 ### Sentry Error Tracking
+
 **What exists:**
 
 ```
@@ -77,6 +82,7 @@ Routes using Sentry.captureException: 0/39
 ---
 
 ### OpenTelemetry Tracing
+
 **What exists:**
 
 ```
@@ -105,7 +111,9 @@ Routes using getTracer: 0/39
 ---
 
 ## 🔥 Risk Assessment
+
 ### Current State
+
 | Vulnerability               | Severity    | Exploit Scenario               |
 | --------------------------- | ----------- | ------------------------------ |
 | **No rate limiting**        | 🔴 CRITICAL | Attacker can DDoS any endpoint |
@@ -114,6 +122,7 @@ Routes using getTracer: 0/39
 | **Auth routes unprotected** | 🔴 CRITICAL | Brute force attacks possible   |
 
 ### Priority Routes Missing Rate Limiting
+
 ```
 apps/web/app/api/session/route.ts           # Auth - CRITICAL
 apps/web/app/api/session/bootstrap/route.ts # Auth - CRITICAL
@@ -125,6 +134,7 @@ apps/web/app/api/organizations/[id]/route.ts  # Org access - HIGH
 ---
 
 ## ✅ What Actually Works
+
 1. **In-memory rate limiter** - Works for single-instance dev
 2. **Redis limiter code** - Tested, just not wired
 3. **Sentry SDK init** - Will work if DSN provided
@@ -133,7 +143,9 @@ apps/web/app/api/organizations/[id]/route.ts  # Org access - HIGH
 ---
 
 ## 🛠️ Fix Path (Priority Order)
+
 ### 1. Rate Limiting (30 min)
+
 ```bash
 # Already have middleware, just need to apply it
 # Add to all critical routes:
@@ -142,6 +154,7 @@ export const POST = withRateLimit(handler, { ... });
 ```
 
 ### 2. Sentry (10 min)
+
 ```bash
 # Add to .env.local:
 NEXT_PUBLIC_SENTRY_DSN=https://xxx@sentry.io/xxx
@@ -151,6 +164,7 @@ import { reportError } from "@/src/lib/error/reporting";
 ```
 
 ### 3. OTEL (15 min)
+
 ```bash
 # Add to .env.local:
 OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:4318/v1/traces
@@ -160,7 +174,9 @@ OBSERVABILITY_TRACES_ENABLED=true
 ---
 
 ## 📋 Quick Reference Index
+
 ### Files to Wire Rate Limiting
+
 | File                           | Priority | Pattern to Add                  |
 | ------------------------------ | -------- | ------------------------------- |
 | `api/session/route.ts`         | P0       | `RateLimits.AUTH` (5/60s)       |
@@ -170,6 +186,7 @@ OBSERVABILITY_TRACES_ENABLED=true
 | `api/shifts/*/route.ts`        | P1       | `RateLimits.STANDARD`           |
 
 ### Error Reporting Pattern
+
 ```typescript
 import { reportError } from "@/src/lib/error/reporting";
 
@@ -182,6 +199,7 @@ try {
 ```
 
 ### OTEL Tracing Pattern
+
 ```typescript
 import { getTracer, withTracing } from "../_shared/otel";
 
@@ -194,6 +212,7 @@ export const GET = withTracing("schedules.get", async (req, span) => {
 ---
 
 ## 🎯 Metrics After Fix
+
 | Metric                     | Current   | Target                 |
 | -------------------------- | --------- | ---------------------- |
 | Routes with rate limiting  | 1/39 (3%) | 39/39 (100%)           |
@@ -203,6 +222,7 @@ export const GET = withTracing("schedules.get", async (req, span) => {
 ---
 
 ## 📌 Mini-Index for Future Sessions
+
 ```
 RATE LIMITING:
 - Implementation: packages/api-framework/src/rate-limit.ts

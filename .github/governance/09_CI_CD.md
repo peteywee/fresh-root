@@ -1,4 +1,5 @@
 # FRESH SCHEDULES - CI/CD
+
 > **Version**: 1.0.0\
 > **Status**: CANONICAL\
 > **Authority**: Sr Dev / Architecture\
@@ -9,6 +10,7 @@ This document defines CI/CD workflows. Designed to be light and extensible.
 ---
 
 ## WORKFLOW OVERVIEW
+
 | Workflow          | Trigger      | Purpose                |
 | ----------------- | ------------ | ---------------------- |
 | `ci.yml`          | PR, Push     | Core validation        |
@@ -19,6 +21,7 @@ This document defines CI/CD workflows. Designed to be light and extensible.
 ---
 
 ## CORE CI WORKFLOW
+
 ```yaml
 # .github/workflows/ci.yml
 name: CI
@@ -120,6 +123,7 @@ jobs:
 ---
 
 ## ORCHESTRATE WORKFLOW
+
 ```yaml
 # .github/workflows/orchestrate.yml
 name: Orchestrate
@@ -319,6 +323,7 @@ jobs:
 ---
 
 ## DEPLOY WORKFLOW
+
 ```yaml
 # .github/workflows/deploy.yml
 name: Deploy
@@ -372,6 +377,7 @@ jobs:
 ---
 
 ## CLEANUP WORKFLOW
+
 ```yaml
 # .github/workflows/cleanup.yml
 name: Cleanup
@@ -409,7 +415,9 @@ jobs:
 ---
 
 ## REUSABLE WORKFLOWS
+
 ### Setup Action
+
 ```yaml
 # .github/actions/setup/action.yml
 name: Setup
@@ -432,6 +440,7 @@ runs:
 ```
 
 ### Usage in Workflows
+
 ```yaml
 jobs:
   build:
@@ -444,7 +453,9 @@ jobs:
 ---
 
 ## EXTENDING WORKFLOWS
+
 ### Adding a New Gate
+
 1. Add job to `orchestrate.yml`:
 
 ```yaml
@@ -468,11 +479,13 @@ summary:
 1. Update pipeline configs in `08_PIPELINES.md`
 
 ### Adding a New Pipeline
+
 1. Add to classification logic in `orchestrate.yml`
 2. Update gate conditions to include new pipeline
 3. Document in `08_PIPELINES.md`
 
 ### Environment-Specific Deploys
+
 ```yaml
 # Add to deploy.yml
 jobs:
@@ -490,6 +503,7 @@ jobs:
 ---
 
 ## SECRETS REQUIRED
+
 | Secret              | Used By    | Purpose             |
 | ------------------- | ---------- | ------------------- |
 | `VERCEL_TOKEN`      | deploy.yml | Vercel deployment   |
@@ -501,7 +515,9 @@ jobs:
 ---
 
 ## TROUBLESHOOTING
+
 ### Gate Failures
+
 | Issue              | Solution                                 |
 | ------------------ | ---------------------------------------- |
 | TypeScript errors  | Run `pnpm typecheck` locally             |
@@ -511,6 +527,7 @@ jobs:
 | Pattern violations | Run `node scripts/validate-patterns.mjs` |
 
 ### Workflow Issues
+
 | Issue                   | Solution                         |
 | ----------------------- | -------------------------------- |
 | Workflow not triggering | Check branch patterns in `on:`   |
@@ -522,4 +539,4 @@ jobs:
 
 **END OF CI/CD**
 
-Next document: [10\_BRANCH\_RULES.md](./10_BRANCH_RULES.md)
+Next document: [10_BRANCH_RULES.md](./10_BRANCH_RULES.md)

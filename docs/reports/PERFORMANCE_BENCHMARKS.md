@@ -19,22 +19,28 @@ related-docs:
 ---
 
 # Performance Benchmarks Report & Optimization Guide
-**Last Updated**: 2025-12-28
-**Status**: Production Implementation Complete
+
+**Last Updated**: 2025-12-28 **Status**: Production Implementation Complete
 
 ## Overview
-This guide documents the performance optimization infrastructure, benchmarking results, and monitoring configuration for the Fresh Schedules application. All optimizations are implemented and validated in production.
+
+This guide documents the performance optimization infrastructure, benchmarking results, and
+monitoring configuration for the Fresh Schedules application. All optimizations are implemented and
+validated in production.
 
 ---
 
 ## Performance Budgets
+
 ### API Endpoints
+
 - **p50**: < 100ms
 - **p95**: < 200ms
 - **p99**: < 500ms
 - **Timeout**: 30s (hard limit)
 
 ### Page Loads
+
 - **p50**: < 1s
 - **p95**: < 2s
 - **p99**: < 3s
@@ -43,12 +49,14 @@ This guide documents the performance optimization infrastructure, benchmarking r
 - **TTI (Time to Interactive)**: < 3.5s
 
 ### Database Queries
+
 - **p50**: < 25ms
 - **p95**: < 50ms
 - **p99**: < 100ms
 - **Slow Query Threshold**: 100ms
 
 ### Resource Usage
+
 - **Memory**: < 512MB per instance
 - **CPU**: < 70% average
 - **Disk I/O**: < 5MB/s sustained
@@ -56,7 +64,9 @@ This guide documents the performance optimization infrastructure, benchmarking r
 ---
 
 ## Implemented Optimizations
+
 ### 1. Redis Caching for Hot Paths
+
 **Implementation**: `packages/api-framework/src/performance.ts`
 
 **Strategy**:
@@ -69,11 +79,11 @@ This guide documents the performance optimization infrastructure, benchmarking r
 **Usage Example**:
 
 ```typescript
-import { cachedOperation, buildCacheKey } from '@fresh-schedules/api-framework';
+import { cachedOperation, buildCacheKey } from "@fresh-schedules/api-framework";
 
 export const GET = createOrgEndpoint({
   handler: async ({ context }) => {
-    const cacheKey = buildCacheKey('org', context.org!.orgId);
+    const cacheKey = buildCacheKey("org", context.org!.orgId);
 
     const orgData = await cachedOperation(
       cacheKey,
@@ -82,7 +92,7 @@ export const GET = createOrgEndpoint({
         const doc = await db.doc(`orgs/${context.org!.orgId}`).get();
         return doc.data();
       },
-      { ttl: 300 } // 5 minutes
+      { ttl: 300 }, // 5 minutes
     );
 
     return NextResponse.json({ data: orgData });
@@ -93,16 +103,17 @@ export const GET = createOrgEndpoint({
 **Cache Invalidation**:
 
 ```typescript
-import { invalidateCache } from '@fresh-schedules/api-framework';
+import { invalidateCache } from "@fresh-schedules/api-framework";
 
 // Invalidate all organization caches
-await invalidateCache('org:*');
+await invalidateCache("org:*");
 
 // Invalidate specific org cache
-await invalidateCache('org:org-123');
+await invalidateCache("org:org-123");
 ```
 
 ### 2. Query Optimization
+
 **Batch Fetching**:
 
 ```typescript
@@ -120,18 +131,19 @@ const schedulesMap = await QueryOptimization.batchFetch(
 
 ```typescript
 // Only fetch required fields to reduce payload size
-const doc = await db.doc('orgs/org-123').get();
-const fields = QueryOptimization.selectFields(doc, ['name', 'status', 'plan']);
+const doc = await db.doc("orgs/org-123").get();
+const fields = QueryOptimization.selectFields(doc, ["name", "status", "plan"]);
 ```
 
 ### 3. Memory Optimization
+
 **Pagination for Large Datasets**:
 
 ```typescript
-import { MemoryOptimization } from '@fresh-schedules/api-framework';
+import { MemoryOptimization } from "@fresh-schedules/api-framework";
 
 // Process large collections without loading everything into memory
-const query = db.collection('orgs/org-123/shifts').orderBy('startTime');
+const query = db.collection("orgs/org-123/shifts").orderBy("startTime");
 
 for await (const batch of MemoryOptimization.paginateQuery(query, 50)) {
   // Process batch of 50 shifts
@@ -140,20 +152,21 @@ for await (const batch of MemoryOptimization.paginateQuery(query, 50)) {
 ```
 
 ### 4. Performance Monitoring
+
 **Operation Measurement**:
 
 ```typescript
-import { measurePerformance } from '@fresh-schedules/api-framework';
+import { measurePerformance } from "@fresh-schedules/api-framework";
 
 export const GET = createOrgEndpoint({
   handler: async ({ context }) => {
     const result = await measurePerformance(
-      'fetch-schedules',
+      "fetch-schedules",
       async () => {
         const db = getFirestore();
         return await db.collection(`orgs/${context.org!.orgId}/schedules`).get();
       },
-      { orgId: context.org!.orgId }
+      { orgId: context.org!.orgId },
     );
 
     return NextResponse.json({ data: result });
@@ -170,14 +183,16 @@ export const GET = createOrgEndpoint({
 ---
 
 ## Performance Metrics Collection
+
 ### Real-Time Metrics
+
 **Global Performance Metrics**:
 
 ```typescript
-import { globalMetrics } from '@fresh-schedules/api-framework';
+import { globalMetrics } from "@fresh-schedules/api-framework";
 
 // Get statistics for a specific operation
-const stats = globalMetrics.getStats('fetch-schedules');
+const stats = globalMetrics.getStats("fetch-schedules");
 console.log(`
   Count: ${stats.count}
   Average: ${stats.avg}ms
@@ -190,6 +205,7 @@ const allStats = globalMetrics.getAllStats();
 ```
 
 ### OpenTelemetry Integration
+
 All performance measurements are automatically exported to OpenTelemetry:
 
 ```bash
@@ -210,7 +226,9 @@ OTEL_EXPORTER_OTLP_HEADERS=api-key=YOUR_KEY
 ---
 
 ## Benchmarking Tools
+
 ### Built-in Benchmarks
+
 **Location**: `apps/web/src/lib/__benchmarks__/`
 
 **Run Benchmarks**:
@@ -227,6 +245,7 @@ pnpm bench --prof
 ```
 
 ### Lighthouse Performance Auditing
+
 **Automated Lighthouse Checks**:
 
 ```bash
@@ -248,6 +267,7 @@ pnpm lighthouse:prod
 - SEO: 90+
 
 ### API Load Testing
+
 **Using Apache Bench (ab)**:
 
 ```bash
@@ -260,25 +280,25 @@ ab -n 100 -c 10 -H "Cookie: session=YOUR_SESSION" \
 
 ```javascript
 // k6-test.js
-import http from 'k6/http';
-import { check, sleep } from 'k6';
+import http from "k6/http";
+import { check, sleep } from "k6";
 
 export let options = {
   stages: [
-    { duration: '30s', target: 20 },
-    { duration: '1m', target: 50 },
-    { duration: '30s', target: 0 },
+    { duration: "30s", target: 20 },
+    { duration: "1m", target: 50 },
+    { duration: "30s", target: 0 },
   ],
 };
 
-export default function() {
-  let response = http.get('https://your-domain.com/api/schedules?orgId=org-123', {
-    headers: { 'Cookie': 'session=YOUR_SESSION' },
+export default function () {
+  let response = http.get("https://your-domain.com/api/schedules?orgId=org-123", {
+    headers: { Cookie: "session=YOUR_SESSION" },
   });
 
   check(response, {
-    'status is 200': (r) => r.status === 200,
-    'response time < 200ms': (r) => r.timings.duration < 200,
+    "status is 200": (r) => r.status === 200,
+    "response time < 200ms": (r) => r.timings.duration < 200,
   });
 
   sleep(1);
@@ -294,7 +314,9 @@ k6 run k6-test.js
 ---
 
 ## Performance Monitoring Dashboard
+
 ### Key Metrics to Track
+
 1. **API Response Times** (by endpoint)
    - p50, p95, p99 latency
    - Request rate (req/s)
@@ -317,6 +339,7 @@ k6 run k6-test.js
    - Network I/O (MB/s)
 
 ### Grafana Dashboards
+
 **Pre-built Dashboard Templates** (See `docs/MONITORING_DASHBOARDS_SETUP.md`):
 
 - API Health Dashboard
@@ -327,7 +350,9 @@ k6 run k6-test.js
 ---
 
 ## Performance Regression Detection
+
 ### Automated Performance Tests
+
 **CI/CD Integration**:
 
 ```yaml
@@ -356,6 +381,7 @@ jobs:
 ```
 
 ### Performance Budget Enforcement
+
 **Budget Configuration** (`performance-budget.json`):
 
 ```json
@@ -388,7 +414,9 @@ pnpm perf:check
 ---
 
 ## Troubleshooting Performance Issues
+
 ### Slow API Responses
+
 **Diagnosis Steps**:
 
 1. Check OpenTelemetry traces for the request
@@ -405,6 +433,7 @@ pnpm perf:check
 - Implement field projection to reduce payload size
 
 ### High Memory Usage
+
 **Diagnosis Steps**:
 
 1. Check for memory leaks (increasing over time)
@@ -420,6 +449,7 @@ pnpm perf:check
 - Optimize data structures
 
 ### Cache Issues
+
 **Low Cache Hit Rate**:
 
 - Verify Redis connection is stable
@@ -436,7 +466,9 @@ pnpm perf:check
 ---
 
 ## Configuration
+
 ### Environment Variables
+
 ```bash
 # Performance Monitoring
 OBSERVABILITY_TRACES_ENABLED=true
@@ -452,14 +484,15 @@ ENFORCE_PERFORMANCE_BUDGETS=true
 ```
 
 ### Performance Config
+
 ```typescript
-import { configurePerformance } from '@fresh-schedules/api-framework';
+import { configurePerformance } from "@fresh-schedules/api-framework";
 
 // Configure global performance settings
 configurePerformance({
-  slowQueryThreshold: 100,  // ms
+  slowQueryThreshold: 100, // ms
   enableCaching: true,
-  cacheTTL: 300,  // seconds
+  cacheTTL: 300, // seconds
   enableMetrics: true,
 });
 ```
@@ -467,6 +500,7 @@ configurePerformance({
 ---
 
 ## Production Deployment Checklist
+
 - \[ ] Redis configured and connected
 - \[ ] OpenTelemetry tracing enabled
 - \[ ] Performance budgets validated
@@ -481,7 +515,9 @@ configurePerformance({
 ---
 
 ## Continuous Performance Testing
+
 ### Weekly Performance Review
+
 1. Review p95/p99 latency trends
 2. Check for performance regressions
 3. Analyze slow query patterns
@@ -489,6 +525,7 @@ configurePerformance({
 5. Assess resource usage trends
 
 ### Monthly Capacity Planning
+
 1. Project traffic growth
 2. Identify scaling bottlenecks
 3. Plan infrastructure upgrades
@@ -497,6 +534,7 @@ configurePerformance({
 ---
 
 ## Related Documentation
+
 - `docs/OPENTELEMETRY_SETUP.md` - Distributed tracing configuration
 - `docs/MONITORING_DASHBOARDS_SETUP.md` - Grafana dashboard setup
 - `docs/MEMORY_MANAGEMENT.md` - Redis configuration
@@ -504,5 +542,5 @@ configurePerformance({
 
 ---
 
-**Status**: All performance optimizations implemented and production-ready ✅
-**Next Steps**: Deploy to staging, run load tests, monitor metrics, adjust budgets as needed
+**Status**: All performance optimizations implemented and production-ready ✅ **Next Steps**: Deploy
+to staging, run load tests, monitor metrics, adjust budgets as needed

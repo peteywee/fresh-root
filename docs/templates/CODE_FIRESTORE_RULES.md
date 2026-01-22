@@ -16,7 +16,8 @@ related-docs:
   - ../standards/SDK_FACTORY_COMPREHENSIVE_GUIDE.md
 ---
 
-# Template: CODE\_FIRESTORE\_RULES
+# Template: CODE_FIRESTORE_RULES
+
 ```firestore
 rules_version = '2';
 service cloud.firestore {

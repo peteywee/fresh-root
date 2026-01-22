@@ -10,6 +10,7 @@ Please update bookmarks and references to the new location:
 The full content and history remain available in that location.
 
 # Production Environment Validation Guide
+
 **Status**: ✅ **FULLY IMPLEMENTED**
 
 This guide shows how to validate your environment to catch production misconfigurations early.
@@ -17,6 +18,7 @@ This guide shows how to validate your environment to catch production misconfigu
 ---
 
 ## The Problem
+
 Production issues often hide until high load:
 
 ```
@@ -31,7 +33,9 @@ Impact:   Attackers can make 10x more requests (10 instances × limits)
 ---
 
 ## Quick Start: Add to Your App
+
 ### 1. Call Validation at Startup
+
 **File**: `apps/web/instrumentation.ts` (or `pages/_app.tsx` or Next.js layout)
 
 ```typescript
@@ -54,6 +58,7 @@ export default function Layout({ children }) {
 - Logs status to console
 
 ### 2. Use Environment Guards
+
 ```typescript
 import { assertProduction, assertNotProduction, env } from "@packages/env";
 
@@ -75,6 +80,7 @@ export function seedTestData() {
 ```
 
 ### 3. Check Multi-Instance Status
+
 ```typescript
 import { getMultiInstanceInfo, env } from "@packages/env";
 
@@ -92,7 +98,9 @@ console.log(`✅ ${info.message}`);
 ---
 
 ## Production Requirements
+
 ### What Must Be Set in Production
+
 ```bash
 # REQUIRED
 NODE_ENV=production
@@ -107,11 +115,13 @@ OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4318
 ```
 
 ### Validation Happens At
+
 1. **Startup**: `preFlightChecks(env)` runs
 2. **Guard calls**: `assertProduction(env)` throws if misconfigured
-3. **Rate limiting**: `getRateLimiter()` auto-selects based on REDIS\_URL
+3. **Rate limiting**: `getRateLimiter()` auto-selects based on REDIS_URL
 
 ### Error Messages
+
 If Redis is missing in production:
 
 ```
@@ -128,7 +138,9 @@ Required for production:
 ---
 
 ## API Reference
+
 ### `preFlightChecks(env)`
+
 Run comprehensive startup validation. Throws if critical config missing.
 
 ```typescript
@@ -151,6 +163,7 @@ preFlightChecks(env);
 ---
 
 ### `assertProduction(env)`
+
 Guard that throws if NOT in production. Use for production-only code.
 
 ```typescript
@@ -169,11 +182,12 @@ export async function captureMetrics(data: unknown) {
 }
 ```
 
-**Throws if**: NODE\_ENV is not "production"
+**Throws if**: NODE_ENV is not "production"
 
 ---
 
 ### `assertNotProduction(env)`
+
 Guard that throws if in production. Use for dev-only code.
 
 ```typescript
@@ -188,11 +202,12 @@ export function seedDatabase() {
 }
 ```
 
-**Throws if**: NODE\_ENV is "production"
+**Throws if**: NODE_ENV is "production"
 
 ---
 
 ### `getMultiInstanceInfo(env)`
+
 Check multi-instance deployment status. Returns risk assessment.
 
 ```typescript
@@ -224,6 +239,7 @@ if (info.riskLevel === "critical") {
 ---
 
 ### `isProduction(env)`
+
 Simple boolean check.
 
 ```typescript
@@ -239,6 +255,7 @@ if (isProduction(env)) {
 ---
 
 ### `isMultiInstanceEnabled(env)`
+
 Check if Redis is configured.
 
 ```typescript
@@ -256,6 +273,7 @@ if (isMultiInstanceEnabled(env)) {
 ---
 
 ### `validateProductionEnv(env)`
+
 Strict validation for production. Throws if any required field missing.
 
 ```typescript
@@ -274,7 +292,9 @@ try {
 ---
 
 ## Real-World Examples
+
 ### Example 1: Next.js Instrumentation
+
 ```typescript
 // apps/web/instrumentation.ts
 
@@ -293,6 +313,7 @@ export async function register() {
 ```
 
 ### Example 2: API Route with Guards
+
 ```typescript
 // apps/web/app/api/analytics/capture/route.ts
 
@@ -312,6 +333,7 @@ export const POST = async (req: NextRequest) => {
 ```
 
 ### Example 3: Rate Limit Middleware with Validation
+
 ```typescript
 // apps/web/app/api/_shared/rate-limit-middleware.ts (enhanced)
 
@@ -339,6 +361,7 @@ export function withRateLimit(handler, config) {
 ```
 
 ### Example 4: Startup Script
+
 ```typescript
 // scripts/validate-env.ts
 
@@ -373,6 +396,7 @@ pnpm tsx scripts/validate-env.ts
 ---
 
 ## Deployment Checklist
+
 Before deploying to production:
 
 - \[ ] `REDIS_URL` is set in production environment
@@ -388,7 +412,9 @@ Before deploying to production:
 ---
 
 ## Common Mistakes
-### ❌ Mistake 1: Forgetting REDIS\_URL in Production
+
+### ❌ Mistake 1: Forgetting REDIS_URL in Production
+
 ```typescript
 // Production env missing REDIS_URL
 NODE_ENV=production
@@ -403,6 +429,7 @@ NEXT_PUBLIC_FIREBASE_API_KEY=...
 ---
 
 ### ❌ Mistake 2: Using Production-Only Code in Dev
+
 ```typescript
 async function syncToDataWarehouse() {
   assertProduction(env); // ← Throws in dev!
@@ -418,6 +445,7 @@ syncToDataWarehouse(); // ❌ Crash
 ---
 
 ### ❌ Mistake 3: Assuming Redis is Set
+
 ```typescript
 const redis = new Redis(env.REDIS_URL); // ← Could be undefined!
 
@@ -430,6 +458,7 @@ const redis = new Redis(env.REDIS_URL); // ← Could be undefined!
 ---
 
 ## Summary
+
 | Use Case              | Function                      | When                   |
 | --------------------- | ----------------------------- | ---------------------- |
 | Check startup         | `preFlightChecks(env)`        | App initialization     |

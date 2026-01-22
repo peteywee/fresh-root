@@ -128,20 +128,26 @@ Evaluate findings and provide:
 ---
 
 # 👨‍💼 SR DEV REVIEW
+
 ## Findings Addressed
-- [[ ]] [Finding]: [Fix applied]
+
+- [[]] [Finding]: [Fix applied]
 
 ## Corrections Applied
+
 1. [File:Line] [Change description]
 
 ## Confidence Score
+
 - Security: [x]%
 - Logic: [x]%
 - Patterns: [x]%
 - Overall: [x]%
 
 ## Final Decision
+
 🟢 APPROVED / 🔴 REQUIRES CHANGES
+
 ```
 
 ## Veto Triggers (Auto-Block)
@@ -161,3 +167,4 @@ These immediately block delivery:
 - Provide severity ratings
 - Include fix recommendations
 - Sr Dev review is final authority
+```

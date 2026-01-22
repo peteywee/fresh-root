@@ -38,6 +38,7 @@ Create a plan for the new schedule API migration
 ## Output Format
 
 Implementation plan in `/plan/` directory with:
+
 - Front matter (metadata)
 - Context analysis
 - Phase-based tasks

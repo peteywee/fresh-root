@@ -9,10 +9,12 @@ priority: 1 applyTo: "**/api/**/route.ts,packages/api-framework/\*_/_.ts"
 ---
 
 # API Framework Memory
+
 Critical patterns for maintaining type safety and developer experience in the Fresh Schedules API
 framework.
 
 ## ZodType Compatibility Resolution
+
 **Context**: Zod schema objects (`ZodObject<Schema, $strip>`) don't structurally match TypeScript's
 generic `ZodType<TInput, any, any>` constraint due to internal property differences.
 
@@ -33,6 +35,7 @@ interface EndpointConfig<TInput = unknown, TOutput = unknown> {
 - No actual security vulnerability - schemas still enforce data structure
 
 ## Input Type Inference Workaround
+
 **Current limitation**: Handler input parameter typed as `unknown` instead of schema-inferred type.
 
 **Workaround pattern**:
@@ -50,6 +53,7 @@ export const POST = createOrgEndpoint({
 **Future enhancement**: Implement overloaded factory functions for proper type inference.
 
 ## Handler Parameter Naming Convention
+
 **Pattern**: SDK factory passes `{ request, input, context, params, item, index }` depending on
 endpoint type.
 
@@ -93,6 +97,7 @@ find app/api -name "route.ts" -exec sed -i 's/_request/request/g; s/_context/con
 ```
 
 ## Error Protocol Application
+
 **Trigger**: Same error pattern occurring 3+ times across codebase **Action**: Create architectural
 fix rather than per-file patches **Documentation**: Store safeguard rules in `.github/safeguards/`
 with status tracking

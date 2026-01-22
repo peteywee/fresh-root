@@ -80,8 +80,8 @@ Timeline & Next Steps
 2. After confirmation, proceed to Step 1 (index the repo). I will: search known instruction
    directories, read the attached `.github/instructions/*` files, `AGENTS.md`,
    `.github/copilot-instructions.md`, `docs/*` policy docs, and the `packages` folder for patterns.
-1. Produce the index and share it for review.
-2. Extract directives and reconcile into the draft instruction.
+3. Produce the index and share it for review.
+4. Extract directives and reconcile into the draft instruction.
 
 Questions / Choices for you
 

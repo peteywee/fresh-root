@@ -1,4 +1,5 @@
 # FRESH SCHEDULES - PIPELINES
+
 > **Version**: 1.0.0\
 > **Status**: CANONICAL\
 > **Authority**: Sr Dev / Architecture\
@@ -9,7 +10,9 @@ This document defines all pipeline configurations.
 ---
 
 ## PIPELINE OVERVIEW
+
 ### Families
+
 | Family       | Purpose                | Trigger                      |
 | ------------ | ---------------------- | ---------------------------- |
 | **Feature**  | New functionality      | `feature/*` branches         |
@@ -19,6 +22,7 @@ This document defines all pipeline configurations.
 | **Security** | Auth, rules, secrets   | Changes to security files    |
 
 ### Variants
+
 | Variant      | Criteria                         | Speed       |
 | ------------ | -------------------------------- | ----------- |
 | **FAST**     | 1 file, no domain logic          | ~30 seconds |
@@ -28,7 +32,9 @@ This document defines all pipeline configurations.
 ---
 
 ## PIPELINE CONFIGURATIONS
+
 ### Feature.FAST
+
 ```yaml
 name: Feature.FAST
 description: Quick validation for single-file, non-critical changes
@@ -50,6 +56,7 @@ failFast: true
 ---
 
 ### Feature.STANDARD
+
 ```yaml
 name: Feature.STANDARD
 description: Standard feature development validation
@@ -72,6 +79,7 @@ failFast: true
 ---
 
 ### Feature.HEAVY
+
 ```yaml
 name: Feature.HEAVY
 description: Comprehensive validation for large features
@@ -96,6 +104,7 @@ failFast: true
 ---
 
 ### Bug.FAST
+
 ```yaml
 name: Bug.FAST
 description: Quick fix for obvious bugs
@@ -117,6 +126,7 @@ failFast: true
 ---
 
 ### Bug.STANDARD
+
 ```yaml
 name: Bug.STANDARD
 description: Standard bug fix validation
@@ -139,6 +149,7 @@ failFast: true
 ---
 
 ### Bug.HEAVY
+
 ```yaml
 name: Bug.HEAVY
 description: Complex bug fix with broad impact
@@ -162,6 +173,7 @@ failFast: true
 ---
 
 ### Schema.STANDARD
+
 ```yaml
 name: Schema.STANDARD
 description: Schema/type changes validation
@@ -185,6 +197,7 @@ failFast: true
 ---
 
 ### Schema.HEAVY
+
 ```yaml
 name: Schema.HEAVY
 description: Breaking schema changes
@@ -210,6 +223,7 @@ failFast: true
 ---
 
 ### Refactor.FAST
+
 ```yaml
 name: Refactor.FAST
 description: Quick refactoring validation
@@ -231,6 +245,7 @@ failFast: true
 ---
 
 ### Refactor.STANDARD
+
 ```yaml
 name: Refactor.STANDARD
 description: Standard refactoring validation
@@ -253,6 +268,7 @@ failFast: true
 ---
 
 ### Refactor.HEAVY
+
 ```yaml
 name: Refactor.HEAVY
 description: Large-scale refactoring
@@ -276,6 +292,7 @@ failFast: true
 ---
 
 ### Security.STANDARD
+
 ```yaml
 name: Security.STANDARD
 description: Security-related changes
@@ -301,6 +318,7 @@ required_approvals: 2
 ---
 
 ### Security.HEAVY
+
 ```yaml
 name: Security.HEAVY
 description: Critical security changes
@@ -329,7 +347,9 @@ security_review: required
 ---
 
 ## AUTO-DETECTION RULES
+
 ### Detection Priority
+
 ```typescript
 function detectPipeline(changedFiles: string[]): Pipeline {
   // 1. Security detection (highest priority)
@@ -370,6 +390,7 @@ function detectPipeline(changedFiles: string[]): Pipeline {
 ```
 
 ### Family Detection
+
 ```typescript
 function detectFamily(changedFiles: string[]): Family {
   // Check branch name first
@@ -394,7 +415,9 @@ function detectFamily(changedFiles: string[]): Family {
 ---
 
 ## GATE SPECIFICATIONS
+
 ### STATIC Gate
+
 ```yaml
 name: STATIC
 displayName: Static Analysis
@@ -411,6 +434,7 @@ autoFix:
 ```
 
 ### CORRECTNESS Gate
+
 ```yaml
 name: CORRECTNESS
 displayName: Tests & Correctness
@@ -427,6 +451,7 @@ coverage:
 ```
 
 ### SAFETY Gate
+
 ```yaml
 name: SAFETY
 displayName: Security & Safety
@@ -443,6 +468,7 @@ thresholds:
 ```
 
 ### PERF Gate
+
 ```yaml
 name: PERF
 displayName: Performance Analysis
@@ -458,6 +484,7 @@ thresholds:
 ```
 
 ### AI Gate
+
 ```yaml
 name: AI
 displayName: AI Advisory
@@ -472,7 +499,9 @@ parallel: true
 ---
 
 ## PIPELINE EXECUTION
+
 ### Execution Order
+
 ```
 1. STATIC (always first - fastest feedback)
    ↓ pass
@@ -486,6 +515,7 @@ parallel: true
 ```
 
 ### Fail-Fast Behavior
+
 When `failFast: true`:
 
 - First gate failure stops pipeline
@@ -499,6 +529,7 @@ When `failFast: false`:
 - Used for comprehensive audits
 
 ### Result Format
+
 ```typescript
 interface PipelineResult {
   pipeline: string;
@@ -520,13 +551,16 @@ interface PipelineResult {
 ---
 
 ## OVERRIDES
+
 ### Manual Pipeline Selection
+
 ```bash
 # Override auto-detection
 pnpm orchestrate Security.HEAVY --force
 ```
 
 ### Skip Gates (DANGER)
+
 ```bash
 # Skip specific gate (requires approval comment)
 pnpm orchestrate Feature.STANDARD --skip=PERF
@@ -535,6 +569,7 @@ pnpm orchestrate Feature.STANDARD --skip=PERF
 ```
 
 ### Emergency Override
+
 For P0 incidents only:
 
 ```bash
@@ -548,4 +583,4 @@ pnpm orchestrate --emergency
 
 **END OF PIPELINES**
 
-Next document: [09\_CI\_CD.md](./09_CI_CD.md)
+Next document: [09_CI_CD.md](./09_CI_CD.md)

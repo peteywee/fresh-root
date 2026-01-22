@@ -1,27 +1,23 @@
 ---
 
-agent: "agent"
-description: "Build, validate, and deploy to production"
-tools:
-\[
-"runCommands/terminalLastCommand",
-"runTasks",
-"github/github-mcp-server/\*",
-"usages",
-"problems",
-"testFailure",
-"todos",
-]
+agent: "agent" description: "Build, validate, and deploy to production" tools: \[
+"runCommands/terminalLastCommand", "runTasks", "github/github-mcp-server/\*", "usages", "problems",
+"testFailure", "todos", ]
+
 -
 
 # Deploy Workflow
+
 ## Directive
+
 Execute deployment workflow for: `${input:Environment}`
 
 Environment: `dev` | `staging` | `production`
 
 ## Pre-Deployment Checklist
+
 ### 1. Code Validation
+
 ```bash
 pnpm typecheck       # Must pass
 pnpm lint            # Must pass
@@ -30,24 +26,29 @@ pnpm test:rules      # Must pass (if rules changed)
 ```
 
 ### 2. Pattern Validation
+
 ```bash
 node scripts/validate-patterns.mjs
 # Score must be ≥90
 ```
 
 ### 3. Build Verification
+
 ```bash
 pnpm build           # Must succeed
 ```
 
 ### 4. Security Check
+
 - \[ ] No secrets in code
 - \[ ] All inputs validated
 - \[ ] SDK factory used for all routes
 - \[ ] Org scoping enforced
 
 ## Deployment Steps
+
 ### Dev Environment
+
 ```bash
 # 1. Verify branch
 git status
@@ -61,6 +62,7 @@ git push origin dev
 ```
 
 ### Production Environment
+
 ```bash
 # 1. Ensure on main or dev branch
 git checkout main
@@ -76,6 +78,7 @@ vercel --prod
 ```
 
 ### Firebase Rules
+
 ```bash
 # Deploy Firestore rules
 firebase deploy --only firestore:rules
@@ -88,6 +91,7 @@ firebase deploy --only functions
 ```
 
 ## Rollback Procedure
+
 If deployment fails:
 
 ```bash
@@ -104,36 +108,44 @@ git push origin main
 ```
 
 ## Output Format
+
 ```markdown
 # Deployment Report
+
 ## Environment
+
 [dev/staging/production]
 
 ## Pre-Deployment Checks
-- [[ ]] TypeScript: ✅/❌
-- [[ ]] Lint: ✅/❌
-- [[ ]] Tests: ✅/❌
-- [[ ]] Pattern Score: [x]
-- [[ ]] Build: ✅/❌
-- [[ ]] Security: ✅/❌
+
+- [[]] TypeScript: ✅/❌
+- [[]] Lint: ✅/❌
+- [[]] Tests: ✅/❌
+- [[]] Pattern Score: [x]
+- [[]] Build: ✅/❌
+- [[]] Security: ✅/❌
 
 ## Deployment Status
-- [[ ]] Code pushed
-- [[ ]] CI passed
-- [[ ]] Deploy succeeded
-- [[ ]] Smoke test passed
+
+- [[]] Code pushed
+- [[]] CI passed
+- [[]] Deploy succeeded
+- [[]] Smoke test passed
 
 ## Verification
+
 - URL: [deployed URL]
 - Version: [version/commit]
 - Time: [timestamp]
 
 ## Rollback Ready
+
 - Previous version: [version]
 - Rollback command: `[command]`
 ```
 
 ## Rules
+
 - Never deploy with failing tests
 - Always verify CI passes
 - Document rollback procedure

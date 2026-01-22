@@ -3,16 +3,21 @@
 description: "Next.js + Tailwind development standards and instructions"
 
 ## applyTo: "\*\*/_.tsx, \*\*/_.ts, \*\*/_.jsx, \*\*/_.js, \*\*/\*.css"
+
 # Next.js + Tailwind Development Instructions
+
 Instructions for high-quality Next.js applications with Tailwind CSS styling and TypeScript.
 
 ## Project Context
+
 - Latest Next.js (App Router)
 - TypeScript for type safety
 - Tailwind CSS for styling
 
 ## Development Standards
+
 ### Architecture
+
 - App Router with server and client components
 - Group routes by feature/domain
 - Implement proper error boundaries
@@ -20,12 +25,14 @@ Instructions for high-quality Next.js applications with Tailwind CSS styling and
 - Leverage static optimization where possible
 
 ### TypeScript
+
 - Strict mode enabled
 - Clear type definitions
 - Proper error handling with type guards
 - Zod for runtime type validation
 
 ### Styling
+
 - Tailwind CSS with consistent color palette
 - Responsive design patterns
 - Dark mode support
@@ -33,18 +40,21 @@ Instructions for high-quality Next.js applications with Tailwind CSS styling and
 - Maintain semantic HTML structure
 
 ### State Management
+
 - React Server Components for server state
 - React hooks for client state
 - Proper loading and error states
 - Optimistic updates where appropriate
 
 ### Data Fetching
+
 - Server Components for direct database queries
 - React Suspense for loading states
 - Proper error handling and retry logic
 - Cache invalidation strategies
 
 ### Security
+
 - Input validation and sanitization
 - Proper authentication checks
 - CSRF protection
@@ -52,6 +62,7 @@ Instructions for high-quality Next.js applications with Tailwind CSS styling and
 - Secure API route handling
 
 ### Performance
+
 - Image optimization with next/image
 - Font optimization with next/font
 - Route prefetching
@@ -59,6 +70,7 @@ Instructions for high-quality Next.js applications with Tailwind CSS styling and
 - Bundle size optimization
 
 ### Implementation Process
+
 1. Plan component hierarchy
 2. Define types and interfaces
 3. Implement server-side logic

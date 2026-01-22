@@ -1,4 +1,5 @@
 # FRESH SCHEDULES - GATES
+
 > **Version**: 1.0.0\
 > **Status**: CANONICAL\
 > **Authority**: Sr Dev / Architecture\
@@ -9,6 +10,7 @@ This document defines gate configurations that don't interfere with each other.
 ---
 
 ## GATE OVERVIEW
+
 | Gate            | Purpose              | Blocking    | Can Run Parallel |
 | --------------- | -------------------- | ----------- | ---------------- |
 | **STATIC**      | Syntax, types, style | Yes         | Within itself    |
@@ -20,10 +22,13 @@ This document defines gate configurations that don't interfere with each other.
 ---
 
 ## GATE: STATIC
+
 ### Purpose
+
 Validate code compiles, passes lint, and follows formatting.
 
 ### Configuration
+
 ```json
 {
   "gate": "STATIC",
@@ -54,7 +59,9 @@ Validate code compiles, passes lint, and follows formatting.
 ```
 
 ### Related Configs
+
 #### tsconfig.json
+
 ```json
 {
   "compilerOptions": {
@@ -70,6 +77,7 @@ Validate code compiles, passes lint, and follows formatting.
 ```
 
 #### .eslintrc.js
+
 ```javascript
 module.exports = {
   extends: ["next/core-web-vitals", "plugin:@typescript-eslint/recommended"],
@@ -82,6 +90,7 @@ module.exports = {
 ```
 
 #### .prettierrc
+
 ```json
 {
   "semi": true,
@@ -93,6 +102,7 @@ module.exports = {
 ```
 
 ### Non-Interference
+
 - TypeScript, ESLint, Prettier run in parallel (no file conflicts)
 - ESLint and Prettier are configured to not conflict:
   - Prettier handles formatting
@@ -102,10 +112,13 @@ module.exports = {
 ---
 
 ## GATE: CORRECTNESS
+
 ### Purpose
+
 Validate tests pass and behavior is correct.
 
 ### Configuration
+
 ```json
 {
   "gate": "CORRECTNESS",
@@ -141,7 +154,9 @@ Validate tests pass and behavior is correct.
 ```
 
 ### Related Configs
+
 #### vitest.config.ts (Unit)
+
 ```typescript
 import { defineConfig } from "vitest/config";
 
@@ -164,6 +179,7 @@ export default defineConfig({
 ```
 
 #### vitest.config.rules.ts (Rules)
+
 ```typescript
 import { defineConfig } from "vitest/config";
 
@@ -178,6 +194,7 @@ export default defineConfig({
 ```
 
 #### playwright.config.ts (E2E)
+
 ```typescript
 import { defineConfig } from "@playwright/test";
 
@@ -193,6 +210,7 @@ export default defineConfig({
 ```
 
 ### Non-Interference
+
 - Tests run sequentially (not parallel) to avoid:
   - Firebase emulator conflicts
   - Port collisions
@@ -203,10 +221,13 @@ export default defineConfig({
 ---
 
 ## GATE: SAFETY
+
 ### Purpose
+
 Validate security patterns, secrets, and dependencies.
 
 ### Configuration
+
 ```json
 {
   "gate": "SAFETY",
@@ -249,7 +270,9 @@ Validate security patterns, secrets, and dependencies.
 ```
 
 ### Related Configs
+
 #### Pattern Validator (validate-patterns.mjs)
+
 ```javascript
 const patterns = [
   {
@@ -276,6 +299,7 @@ export default patterns;
 ```
 
 #### .gitsecrets
+
 ```
 # AWS
 [a-zA-Z0-9/+=]{40}
@@ -289,6 +313,7 @@ secret[_-]?key[_-]?=.{20,}
 ```
 
 ### Non-Interference
+
 - Pattern validation, secret scan, and audit run in parallel
 - No file modifications during safety checks
 - Each check reads independently
@@ -296,10 +321,13 @@ secret[_-]?key[_-]?=.{20,}
 ---
 
 ## GATE: PERF
+
 ### Purpose
+
 Validate performance budgets and bundle size.
 
 ### Configuration
+
 ```json
 {
   "gate": "PERF",
@@ -335,7 +363,9 @@ Validate performance budgets and bundle size.
 ```
 
 ### Related Configs
+
 #### next.config.mjs (Bundle Analysis)
+
 ```javascript
 import withBundleAnalyzer from "@next/bundle-analyzer";
 
@@ -349,6 +379,7 @@ export default config;
 ```
 
 #### lighthouserc.json
+
 ```json
 {
   "ci": {
@@ -368,6 +399,7 @@ export default config;
 ```
 
 ### Non-Interference
+
 - Build must complete before analysis
 - Sequential execution prevents resource conflicts
 - Only blocks if threshold exceeded
@@ -375,10 +407,13 @@ export default config;
 ---
 
 ## GATE: AI
+
 ### Purpose
+
 Advisory checks for context validation and quality.
 
 ### Configuration
+
 ```json
 {
   "gate": "AI",
@@ -401,6 +436,7 @@ Advisory checks for context validation and quality.
 ```
 
 ### Behavior
+
 - Never blocks pipeline
 - Provides advisory feedback
 - Run by agents, not CI
@@ -408,7 +444,9 @@ Advisory checks for context validation and quality.
 ---
 
 ## FIX COMMAND BEHAVIOR
+
 ### Why Fix Sometimes Breaks
+
 The SDK and gates have fix commands, but they can fail because:
 
 1. **Conflicting Fixes**: ESLint and Prettier both try to modify same file
@@ -424,6 +462,7 @@ The SDK and gates have fix commands, but they can fail because:
    - **Solution**: Run fixes sequentially
 
 ### Correct Fix Order
+
 ```bash
 # 1. Format first (Prettier)
 pnpm format
@@ -438,6 +477,7 @@ pnpm typecheck
 ```
 
 ### SDK Fix Capabilities
+
 | Issue Type        | Auto-Fix?  | Why Not?            |
 | ----------------- | ---------- | ------------------- |
 | Formatting        | ✅ Yes     | Prettier handles    |
@@ -449,6 +489,7 @@ pnpm typecheck
 | Type mismatch     | ❌ No      | Needs understanding |
 
 ### Documenting Fix Limitations
+
 ```typescript
 interface PatternDefinition {
   id: string;
@@ -463,7 +504,9 @@ interface PatternDefinition {
 ---
 
 ## GATE ORDERING
+
 ### Execution Sequence
+
 ```
 STATIC (parallel internally)
    │
@@ -501,6 +544,7 @@ AI (advisory, parallel)
 ```
 
 ### Why This Order
+
 1. **STATIC First**: Fastest feedback, catches obvious issues
 2. **CORRECTNESS After STATIC**: No point testing broken code
 3. **SAFETY After CORRECTNESS**: Security on working code
@@ -510,7 +554,9 @@ AI (advisory, parallel)
 ---
 
 ## AVOIDING CONFLICTS
+
 ### Config File Separation
+
 ```
 .eslintrc.js         # Lint rules only
 .prettierrc          # Format rules only
@@ -521,6 +567,7 @@ playwright.config.ts # E2E tests (separate!)
 ```
 
 ### Package.json Scripts
+
 ```json
 {
   "scripts": {
@@ -538,6 +585,7 @@ playwright.config.ts # E2E tests (separate!)
 ```
 
 ### Preventing Overlap
+
 | Tool A            | Tool B     | Conflict?    | Resolution                |
 | ----------------- | ---------- | ------------ | ------------------------- |
 | ESLint            | Prettier   | Format rules | eslint-config-prettier    |
@@ -549,4 +597,4 @@ playwright.config.ts # E2E tests (separate!)
 
 **END OF GATES**
 
-Next document: [12\_DOCUMENTATION.md](./12_DOCUMENTATION.md)
+Next document: [12_DOCUMENTATION.md](./12_DOCUMENTATION.md)

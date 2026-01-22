@@ -1,9 +1,7 @@
 # Logic Agent Activation Guide
 
-**Status**: Ready to use
-**Namespace**: `/logic`
-**Confidence Floor**: 85% (always-on)
-**Docs**: `.github/instructions/logic-agent*.instructions.md`
+**Status**: Ready to use **Namespace**: `/logic` **Confidence Floor**: 85% (always-on) **Docs**:
+`.github/instructions/logic-agent*.instructions.md`
 
 ---
 
@@ -171,15 +169,15 @@ Agent: [Confidence: X%, because...]
 
 The agent should **automatically suggest** commands when:
 
-| Trigger | Suggested Command |
-| ------- | ----------------- |
-| Major architectural decision | `/logic red-team` |
-| "I think..." or "probably..." | `/logic ground` |
-| Complex logic chain | `/logic chain -v` |
-| Before merging PR | `/logic deploy` |
-| After bug discovered | `/logic assumptions` |
-| Performance claim | `/logic verify` |
-| "Ready to ship" | `/logic gauntlet #shipping` |
+| Trigger                       | Suggested Command           |
+| ----------------------------- | --------------------------- |
+| Major architectural decision  | `/logic red-team`           |
+| "I think..." or "probably..." | `/logic ground`             |
+| Complex logic chain           | `/logic chain -v`           |
+| Before merging PR             | `/logic deploy`             |
+| After bug discovered          | `/logic assumptions`        |
+| Performance claim             | `/logic verify`             |
+| "Ready to ship"               | `/logic gauntlet #shipping` |
 
 ---
 
@@ -301,23 +299,19 @@ That's the point. Skepticism catches bugs.
 
 ### "This slows us down"
 
-Short term: yes (5 min to verify)
-Long term: no (prevents 3hr debugging)
+Short term: yes (5 min to verify) Long term: no (prevents 3hr debugging)
 
 ### "I'm confident without evidence"
 
-Then you're guessing, not confident.
-Actual confidence comes with proof.
+Then you're guessing, not confident. Actual confidence comes with proof.
 
 ### "We don't have time for this"
 
-You have time to fix bugs?
-This prevents them.
+You have time to fix bugs? This prevents them.
 
 ### "My confidence is below 85%"
 
-That's the point. You need more verification.
-The floor exists to catch this.
+That's the point. You need more verification. The floor exists to catch this.
 
 ---
 
@@ -357,7 +351,5 @@ Type `/logic -h` to see all commands.
 
 ---
 
-**Status**: Active and ready to use
-**Start**: Now
-**Invocation**: `/logic <command>`
-**Reference**: [LOGIC_AGENT_QUICK_REF.md](./LOGIC_AGENT_QUICK_REF.md)
+**Status**: Active and ready to use **Start**: Now **Invocation**: `/logic <command>` **Reference**:
+[LOGIC_AGENT_QUICK_REF.md](./LOGIC_AGENT_QUICK_REF.md)

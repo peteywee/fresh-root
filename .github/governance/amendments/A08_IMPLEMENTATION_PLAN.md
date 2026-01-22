@@ -1,43 +1,46 @@
 ---
 
-id: A08
-extends: (root)
-section: Governance Rollout
-tags: \[plan, phases, implementation, governance]
-status: active
-priority: P0
+id: A08 extends: (root) section: Governance Rollout tags: \[plan, phases, implementation,
+governance] status: active priority: P0
+
 ## source: docs/governance.md
 
 # Amendment A08: Governance Implementation Plan & Status
+
 ## Purpose
+
 Tracks the rollout of the canonical governance system and documentation consolidation.
 
 ## Implementation Phases
+
 ### Phase 1: Create Canonical Docs ✅ COMPLETE
+
 **Objective**: Define 12 canonical governance documents (L0)
 
-- \[x] 01\_DEFINITIONS.md - Terms, values, domain entities
-- \[x] 02\_PROTOCOLS.md - How things work
-- \[x] 03\_DIRECTIVES.md - What's required (MUST rules)
-- \[x] 04\_INSTRUCTIONS.md - How to do tasks
-- \[x] 05\_BEHAVIORS.md - Expected agent behaviors
-- \[x] 06\_AGENTS.md - Agent definitions and roles
-- \[x] 07\_PROMPTS.md - Prompt patterns and templates
-- \[x] 08\_PIPELINES.md - CI/CD pipeline structure
-- \[x] 09\_CI\_CD.md - CI/CD configuration
-- \[x] 10\_BRANCH\_RULES.md - Branch and merge strategy
-- \[x] 11\_GATES.md - Quality gates and validation
-- \[x] 12\_DOCUMENTATION.md - Doc standards and format
+- \[x] 01_DEFINITIONS.md - Terms, values, domain entities
+- \[x] 02_PROTOCOLS.md - How things work
+- \[x] 03_DIRECTIVES.md - What's required (MUST rules)
+- \[x] 04_INSTRUCTIONS.md - How to do tasks
+- \[x] 05_BEHAVIORS.md - Expected agent behaviors
+- \[x] 06_AGENTS.md - Agent definitions and roles
+- \[x] 07_PROMPTS.md - Prompt patterns and templates
+- \[x] 08_PIPELINES.md - CI/CD pipeline structure
+- \[x] 09_CI_CD.md - CI/CD configuration
+- \[x] 10_BRANCH_RULES.md - Branch and merge strategy
+- \[x] 11_GATES.md - Quality gates and validation
+- \[x] 12_DOCUMENTATION.md - Doc standards and format
 
 ### Phase 2: Move to Canonical Location ✅ COMPLETE
+
 **Objective**: Relocate governance docs to `.github/governance/`
 
 - \[x] Created `.github/governance/` directory
 - \[x] Moved 12 canonical docs from `docs/standards/files/`
-- \[x] Added QUICK\_REFERENCE.md
-- \[x] Added PROTOCOL\_DIRECTIVE\_IMPROVEMENTS.md
+- \[x] Added QUICK_REFERENCE.md
+- \[x] Added PROTOCOL_DIRECTIVE_IMPROVEMENTS.md
 
 ### Phase 3: Consolidate 357 Files 🏃 IN PROGRESS
+
 **Objective**: Reduce scattered markdown files by 58%
 
 - \[x] Phase 1: Archive 39 root-level docs
@@ -49,6 +52,7 @@ Tracks the rollout of the canonical governance system and documentation consolid
 - \[ ] Phase 6: Update copilot-instructions.md
 
 ### Phase 4: Create Amendments ✅ COMPLETE (THIS PHASE)
+
 **Objective**: Extract valuable pieces as L1 indexed amendments
 
 | ID  | Amendment               | Status                 |
@@ -63,6 +67,7 @@ Tracks the rollout of the canonical governance system and documentation consolid
 | A08 | Implementation Plan     | ✅ Created (this file) |
 
 ### Phase 5: Create Indexes ⏸️ PENDING
+
 **Objective**: Build tag-indexed lookup tables
 
 - \[ ] `.github/governance/INDEX.md` (L0 + L1 index)
@@ -70,6 +75,7 @@ Tracks the rollout of the canonical governance system and documentation consolid
 - \[ ] `.github/instructions/INDEX.md` (instructions catalog)
 
 ### Phase 6: Validate ⏸️ PENDING
+
 **Objective**: Verify consolidation goals met
 
 - \[ ] Root .md files ≤2
@@ -79,6 +85,7 @@ Tracks the rollout of the canonical governance system and documentation consolid
 - \[ ] No duplicates remain
 
 ### Phase 7: Finalize ⏸️ PENDING
+
 **Objective**: Update references and create PR
 
 - \[ ] Update `.github/copilot-instructions.md`
@@ -86,6 +93,7 @@ Tracks the rollout of the canonical governance system and documentation consolid
 - \[ ] Merge after approval
 
 ## Hierarchy Levels (Established)
+
 | Level  | Location                         | Purpose                      | Binding?         |
 | ------ | -------------------------------- | ---------------------------- | ---------------- |
 | **L0** | `.github/governance/`            | Canonical 12-doc system      | YES              |
@@ -95,6 +103,7 @@ Tracks the rollout of the canonical governance system and documentation consolid
 | **L4** | `docs/`                          | Human guides & references    | NO               |
 
 ## Success Metrics
+
 | Metric                  | Before | Target | Current |
 | ----------------------- | ------ | ------ | ------- |
 | Total .md files         | 357    | ~150   | TBD     |
@@ -104,12 +113,14 @@ Tracks the rollout of the canonical governance system and documentation consolid
 | AI retrieval confidence | ~60%   | 99%    | TBD     |
 
 ## Next Actions
+
 1. **Complete Phase 4** - Commit amendments (A01-A08) ✅
 2. **Start Phase 5** - Create 3 INDEX.md files
 3. **Run Phase 6** - Validation checks
 4. **Execute Phase 7** - Update copilot-instructions.md, create PR
 
 ## Reference
+
 Full consolidation plan: `docs/standards/DOCUMENTATION_CONSOLIDATION_PLAN.md`\
 Execution TODO: `docs/standards/CONSOLIDATION_TODO.md`\
 Source: `archive/amendment-sources/governance.md`

@@ -1,4 +1,5 @@
 # ERROR PATTERN: Markdown Fences Missing Language + Table Column Style
+
 **Status**: ACTIVE SAFEGUARD\
 **Detection Date**: December 19, 2025\
 **Severity**: P2 (Docs quality)\
@@ -7,6 +8,7 @@
 ---
 
 ## Problem Definition
+
 Two recurring markdownlint issues degrade doc quality and create noisy CI/editor warnings:
 
 1. **`MD040`**: Fenced code blocks without a language specifier
@@ -20,7 +22,9 @@ Two recurring markdownlint issues degrade doc quality and create noisy CI/editor
 ---
 
 ## Required Fix Pattern
+
 ### ✅ Code fences must always declare a language
+
 Use these conventions:
 
 - **ASCII diagrams / plain text blocks**: `text`
@@ -51,6 +55,7 @@ type Example = { ok: true };
 ---
 
 ### ✅ Tables must use consistent, compact separators
+
 Prefer the “compact” style:
 
 ```text
@@ -67,11 +72,14 @@ Rules of thumb:
 ---
 
 ## Detection & Prevention
+
 ### Editor / CI detection
+
 - Markdownlint will flag these as `MD040` / `MD060`.
 - Repo config: `.markdownlint.json` enables `MD040`.
 
 ### Preferred auto-fix in this repo
+
 Run the markdown fixer (or the full fixer pipeline):
 
 ```bash
@@ -83,6 +91,7 @@ pnpm fix:all
 ---
 
 ## Validation Gates (Before Commit)
+
 ```bash
 pnpm --filter @fresh-root/markdown-fixer fix
 pnpm format
@@ -97,6 +106,7 @@ pnpm exec markdownlint-cli2 "**/*.md"
 ---
 
 ## Red Team Veto Triggers (Docs)
+
 🚫 Block merging if:
 
 - New fenced code blocks are added without a language.
