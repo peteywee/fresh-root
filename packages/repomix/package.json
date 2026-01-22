@@ -27,6 +27,7 @@
     "clean": "rm -rf dist"
   },
   "dependencies": {
+    "hono": "4.11.4",
     "repomix": "^1.11.1"
   },
   "devDependencies": {
