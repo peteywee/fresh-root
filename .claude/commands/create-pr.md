@@ -5,6 +5,7 @@ Create a new pull request from the current branch to main with auto-generated ti
 ## Workflow
 
 1. **Check current state**:
+
    ```bash
    git status
    git branch --show-current
@@ -17,6 +18,7 @@ Create a new pull request from the current branch to main with auto-generated ti
    - If changes exist, ask user if they want to commit first
 
 4. **Analyze commits for PR**:
+
    ```bash
    git log origin/main..HEAD --oneline
    git diff origin/main --stat
@@ -34,6 +36,7 @@ Create a new pull request from the current branch to main with auto-generated ti
    - **Test plan**: Checklist of verification steps
 
 6. **Create the PR**:
+
    ```bash
    gh pr create --base main --head [branch] --title "[title]" --body "$(cat <<'EOF'
    ## Summary

@@ -5,26 +5,28 @@
 
 ## Purpose
 
-This document explains which markdownlint rules are disabled and why. These decisions are intentional safeguards to prevent pre-commit hook failures on documentation that cannot be auto-fixed.
+This document explains which markdownlint rules are disabled and why. These decisions are
+intentional safeguards to prevent pre-commit hook failures on documentation that cannot be
+auto-fixed.
 
 ## Disabled Rules
 
-| Rule | Name | Reason |
-|------|------|--------|
-| MD002 | First heading should be top level | Conflicts with YAML frontmatter |
-| MD003 | Heading style | Mixed styles (atx/setext) across docs |
-| MD022 | Headings should be surrounded by blank lines | Cannot be auto-fixed reliably |
-| MD025 | Single H1 | Multi-section docs legitimately need multiple H1s |
-| MD031 | Fenced code blocks surrounded by blank lines | Cannot be auto-fixed reliably |
-| MD032 | Lists surrounded by blank lines | Cannot be auto-fixed reliably |
-| MD033 | Inline HTML | Used intentionally in docs (badges, etc.) |
-| MD034 | Bare URLs | Common in link-heavy docs |
-| MD036 | Emphasis used instead of heading | Intentional styling choice |
-| MD040 | Fenced code language | Many example blocks don't need lang |
-| MD041 | First line should be heading | Conflicts with YAML frontmatter |
-| MD051 | Link fragments should be valid | TOC anchors with `-1` suffix from generators |
-| MD058 | Table formatting | Cannot be auto-fixed reliably |
-| MD060 | Table column style | Too strict for compact tables |
+| Rule  | Name                                         | Reason                                            |
+| ----- | -------------------------------------------- | ------------------------------------------------- |
+| MD002 | First heading should be top level            | Conflicts with YAML frontmatter                   |
+| MD003 | Heading style                                | Mixed styles (atx/setext) across docs             |
+| MD022 | Headings should be surrounded by blank lines | Cannot be auto-fixed reliably                     |
+| MD025 | Single H1                                    | Multi-section docs legitimately need multiple H1s |
+| MD031 | Fenced code blocks surrounded by blank lines | Cannot be auto-fixed reliably                     |
+| MD032 | Lists surrounded by blank lines              | Cannot be auto-fixed reliably                     |
+| MD033 | Inline HTML                                  | Used intentionally in docs (badges, etc.)         |
+| MD034 | Bare URLs                                    | Common in link-heavy docs                         |
+| MD036 | Emphasis used instead of heading             | Intentional styling choice                        |
+| MD040 | Fenced code language                         | Many example blocks don't need lang               |
+| MD041 | First line should be heading                 | Conflicts with YAML frontmatter                   |
+| MD051 | Link fragments should be valid               | TOC anchors with `-1` suffix from generators      |
+| MD058 | Table formatting                             | Cannot be auto-fixed reliably                     |
+| MD060 | Table column style                           | Too strict for compact tables                     |
 
 ## Enabled Rules (Enforced)
 
@@ -64,6 +66,7 @@ Before enabling a new rule:
 ## Pre-commit Hook
 
 The hook in `.husky/pre-commit` only lints staged markdown files and excludes:
+
 - `.github/governance/**`
 - `.github/instructions/**`
 - `.github/prompts/**`

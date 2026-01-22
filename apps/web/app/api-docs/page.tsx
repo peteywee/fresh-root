@@ -121,9 +121,7 @@ export default function APIDocsPage() {
         <div className="mt-8 rounded-lg bg-blue-50 p-6">
           <h3 className="mb-4 text-lg font-bold text-blue-900">Authentication</h3>
           <div className="prose prose-sm max-w-none text-blue-800">
-            <p>
-              This API uses session-based authentication. To authenticate:
-            </p>
+            <p>This API uses session-based authentication. To authenticate:</p>
             <ol>
               <li>Obtain a Firebase ID token through Firebase Authentication</li>
               <li>Call POST /api/session with the ID token</li>
@@ -142,9 +140,7 @@ export default function APIDocsPage() {
               <li>Write operations: 50 requests/minute</li>
               <li>Authentication: 10 requests/minute</li>
             </ul>
-            <p>
-              Rate limit headers are included in all responses to help you track your usage.
-            </p>
+            <p>Rate limit headers are included in all responses to help you track your usage.</p>
           </div>
         </div>
       </div>

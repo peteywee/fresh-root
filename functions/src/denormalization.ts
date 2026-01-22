@@ -1,7 +1,7 @@
 // [P0][APP][CODE] Denormalization
 // Tags: P0, APP, CODE
 import { initializeApp, getApps } from "firebase-admin/app";
-import { getFirestore, Firestore } from "firebase-admin/firestore";
+import { getFirestore, Firestore, Timestamp } from "firebase-admin/firestore";
 import * as logger from "firebase-functions/logger";
 import { onDocumentWritten } from "firebase-functions/v2/firestore";
 
@@ -84,7 +84,7 @@ export const onZoneWrite = onDocumentWritten(
 
         tx.update(venueRef, {
           cachedZones,
-          zonesUpdatedAt: FirebaseFirestore.Timestamp.now(),
+          zonesUpdatedAt: Timestamp.now(),
         });
       });
 

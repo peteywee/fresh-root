@@ -1,5 +1,7 @@
 # 🔴 RED TEAM ATTACK REPORT
+
 ## Target Analysis
+
 **File**: `/apps/web/app/api/batch/route.ts`\
 **Severity**: P0 CRITICAL\
 **Lines**: 1-65\
@@ -9,7 +11,9 @@
 ---
 
 ## Security Checks
+
 ### ✅ SEC-01: Auth Bypass
+
 **Status**: 🟢 PASS
 
 **Finding**: Route uses `createOrgEndpoint` with `roles: ["manager"]` requirement.
@@ -23,6 +27,7 @@
 ---
 
 ### ❌ SEC-02: Data Leakage
+
 **Status**: 🔴 FAIL - CRITICAL
 
 **Finding**: Input validation bypassed via type assertions.
@@ -78,6 +83,7 @@ return { id: result.id, processedAt: Date.now() };
 ---
 
 ### ✅ SEC-03: Injection
+
 **Status**: 🟡 CONDITIONAL
 
 **Finding**: No SQL/XSS injection directly, but unvalidated object property access creates injection
@@ -93,6 +99,7 @@ surface.
 ---
 
 ### ❌ SEC-04: Access Control (Org Scoping)
+
 **Status**: 🟡 PARTIAL PASS
 
 **Finding**: Route-level org scoping is correct, but processed items aren't scoped.
@@ -149,6 +156,7 @@ async function processBatchItems(
 ---
 
 ### ❌ SEC-05: Secret Handling
+
 **Status**: 🟢 PASS
 
 **Finding**: No secrets detected in code, logs use `orgId` (safe).
@@ -163,7 +171,9 @@ async function processBatchItems(
 ---
 
 ## Logic Checks
+
 ### ❌ LOG-01: Logic Verification
+
 **Status**: 🔴 FAIL
 
 **Finding**: Contradictory error handling bypasses validation.
@@ -199,6 +209,7 @@ const result = await processBatchItems(input.items, context, request);
 ---
 
 ### ✅ LOG-02: Race Conditions
+
 **Status**: 🟢 PASS
 
 **Finding**: No shared state mutation, each request is isolated.
@@ -213,6 +224,7 @@ const result = await processBatchItems(input.items, context, request);
 ---
 
 ### ⚠️ LOG-03: Error Handling
+
 **Status**: 🟡 PARTIAL FAIL
 
 **Finding**: Error handling masks the type assertion issue.
@@ -238,7 +250,9 @@ caught generically:
 ---
 
 ## Pattern Checks
+
 ### ❌ PAT-01: Pattern Compliance (Triad of Trust)
+
 **Status**: 🔴 FAIL - BLOCKING
 
 **Triad Requirement**:
@@ -283,6 +297,7 @@ handler: async ({ input, context, request }) => {
 ---
 
 ### ❌ PAT-02: Type Safety
+
 **Status**: 🔴 FAIL - CRITICAL
 
 **Finding**: 6 instances of type assertions stripping safety.
@@ -316,6 +331,7 @@ const batch: CreateBatch = input; // ✓ Safe, known structure
 ---
 
 ### ❌ PAT-03: SDK Factory Usage
+
 **Status**: 🟡 PARTIAL PASS
 
 **Finding**: SDK factory configured correctly at route level, but handler breaks the pattern.
@@ -343,7 +359,9 @@ handler: async({ input: CreateBatch, context, request })(
 ---
 
 ## Edge Cases
+
 ### ❌ EDGE-01: Null/Undefined Handling
+
 **Status**: 🔴 FAIL
 
 **Finding**: Defensive check happens AFTER type assertions strip safety.
@@ -395,6 +413,7 @@ itemHandler: async ({ item, index }) => {
 ---
 
 ### ❌ EDGE-02: Empty Arrays
+
 **Status**: 🟡 PARTIAL FAIL
 
 **Finding**: Empty array handling unclear due to type assertions.
@@ -418,6 +437,7 @@ if (!input || !Array.isArray((input as any).items)) {  // ← Passes!
 ---
 
 ### ❌ EDGE-03: Boundary Values
+
 **Status**: 🟡 PARTIAL FAIL
 
 **Finding**: Max batch size enforced in `createBatchHandler`, but Zod schema doesn't validate it.
@@ -452,7 +472,9 @@ export const CreateBatchSchema = z.object({
 ---
 
 ## Summary
+
 ### Issue Count & Severity
+
 | Severity        | Count | Issues                                                                         |
 | --------------- | ----- | ------------------------------------------------------------------------------ |
 | 🔴 **CRITICAL** | **5** | Data leakage, untyped context, type assertions, null handling, Triad violation |
@@ -461,6 +483,7 @@ export const CreateBatchSchema = z.object({
 | 🟢 **PASS**     | **3** | Auth, secrets, race conditions                                                 |
 
 ### Total Issues: **14**
+
 - **CRITICAL (blocks delivery)**: 5
 - **HIGH (should fix)**: 4
 - **MEDIUM (recommend)**: 2
@@ -469,9 +492,11 @@ export const CreateBatchSchema = z.object({
 ---
 
 ## 🔴 VETO STATUS: **BLOCKED**
+
 **This route CANNOT be deployed in current state.**
 
 ### Blocking Issues
+
 1. 🔴 **Data Leakage** (SEC-02)
    - Type assertions allow field injection
    - Response may leak sensitive data
@@ -500,7 +525,9 @@ export const CreateBatchSchema = z.object({
 ---
 
 ## Required Fixes (Priority Order)
+
 ### Priority 1: Remove all type assertions
+
 ```typescript
 // ❌ BEFORE
 const payload = (item as any).payload || {};
@@ -512,6 +539,7 @@ return { id: validated.id, processedAt: Date.now() };
 ```
 
 ### Priority 2: Type context parameter
+
 ```typescript
 // ❌ BEFORE
 async function processBatchItems(items: unknown[], context: any, request: Request, ...)
@@ -526,12 +554,14 @@ async function processBatchItems(
 ```
 
 ### Priority 3: Add Zod max constraint
+
 ```typescript
 // Add to packages/types/src/batch.ts
 items: z.array(BatchItemSchema).max(200, "Maximum 200 items per batch");
 ```
 
 ### Priority 4: Remove redundant null checks
+
 ```typescript
 // ❌ DELETE THIS - Zod already validated
 if (!input || !Array.isArray((input as any).items)) {
@@ -545,11 +575,13 @@ const result = await processBatchItems(input.items, context, request);
 ---
 
 ## Security Red Team Sign-Off
+
 **Analyst**: Security Protocol v3.2\
 **Analysis Date**: 2025-12-12\
 **Confidence**: 100% (patterns are clear violations)
 
 ### Veto Summary
+
 🔴 **BLOCKED FOR DEPLOYMENT**
 
 This route violates:

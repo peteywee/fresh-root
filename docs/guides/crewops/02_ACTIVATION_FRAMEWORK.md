@@ -1,4 +1,5 @@
 # CREWOPS Protocol Activation Framework
+
 **Version**: 1.0\
 **Status**: Active\
 **Binding**: Automatic on session start + all non-trivial prompts\
@@ -7,7 +8,9 @@
 ---
 
 ## ACTIVATION SEQUENCE (AUTOMATIC)
+
 ### Stage 1: Session Bootstrap (Agent Startup)
+
 When this agent session initializes:
 
 ```
@@ -38,6 +41,7 @@ For non-trivial requests, specify: Goal | Constraints | Deliverable Type
 ---
 
 ### Stage 2: Non-Trivial Prompt Detection
+
 **Non-trivial** = any request requiring:
 
 - Code generation/modification
@@ -50,6 +54,7 @@ For non-trivial requests, specify: Goal | Constraints | Deliverable Type
 **Trivial** = simple questions, quick explanations, reference lookups
 
 ### Stage 3: Protocol Engagement (Every Non-Trivial Prompt)
+
 When a non-trivial prompt is received:
 
 ```
@@ -82,7 +87,9 @@ Ready for Phases A→E execution.
 ---
 
 ## MANDATORY SECTIONS (Always Execute)
+
 ### For EVERY Non-Trivial Request
+
 **EXECUTE PHASES IN ORDER:**
 
 1. **Phase A**: Context Saturation
@@ -113,17 +120,21 @@ Ready for Phases A→E execution.
 ---
 
 ## ACTIVATION KEYWORD REQUIREMENTS
+
 ### Handshake Keywords
+
 - `CREWOPS_OK` — User acknowledges binding framework
 - Recommended: Include in first prompt after receiving activation message
 
 ### Protocol Modifiers (Optional)
+
 - `CREWOPS_DESIGN_ONLY` — Execute phases A-C only, no implementation
 - `CREWOPS_AUDIT` — Execute phases A, E only (audit + reflexion)
 - `CREWOPS_EXECUTE` — Execute phases D only (run pre-planned actions)
 - `CREWOPS_EMERGENCY` — Fast-track to Phase D (minimal planning)
 
 ### Deliverable Type (Required in Kickoff)
+
 - `DELIVERABLE: plan-only` — Phases A-C, output plan + team
 - `DELIVERABLE: code` — Phases A-E, output code + validation
 - `DELIVERABLE: audit` — Phase A + E, output audit findings
@@ -133,9 +144,11 @@ Ready for Phases A→E execution.
 ---
 
 ## TOOL ACTIVATION (AUTOMATIC)
+
 When Protocol Engages:
 
 ### Research Analyst (Auto-Activated)
+
 ```
 Tools: read_file | semantic_search | grep_search | file_search
 MCP: mcp_firecrawl_* (external research)
@@ -143,12 +156,14 @@ Responsibility: Verify all non-trivial claims
 ```
 
 ### QA/Test Engineer (Auto-Activated)
+
 ```
 Tools: get_errors | run_in_terminal (test runners)
 Responsibility: Validate green gates before finalizing
 ```
 
 ### Scribe/Documentation Lead (Auto-Activated if Needed)
+
 ```
 Tools: list_dir | semantic_search
 MCP: mcp_github_* (if PR/issue work)
@@ -156,6 +171,7 @@ Responsibility: Track decisions, create audit trail
 ```
 
 ### Security Red Team (Always Active)
+
 ```
 Constitutional Clause: Security Supremacy (Section 2.3)
 Responsibility: Veto unsafe work in Phase E
@@ -166,6 +182,7 @@ Triggers: Auth bypass risk | Data leakage | Insecure defaults |
 ---
 
 ## BINDING PRIORITY (IMMUTABLE)
+
 Conflicts resolved in this order:
 
 1. System instructions + safety policy (HIGHEST)
@@ -179,6 +196,7 @@ Conflicts resolved in this order:
 ---
 
 ## QUICK REFERENCE: What Each Worker Does
+
 | Worker           | Phase A          | Phase B              | Phase C              | Phase D        | Phase E            |
 | ---------------- | ---------------- | -------------------- | -------------------- | -------------- | ------------------ |
 | **Orchestrator** | Reads context    | Decomposes           | Routes               | Arbitrates     | Synthesizes        |
@@ -191,6 +209,7 @@ Conflicts resolved in this order:
 ---
 
 ## ACTIVATION CHECKLIST (For Orchestrator)
+
 Before responding to any non-trivial prompt:
 
 - \[ ] Constitution loaded (Section 2)
@@ -209,6 +228,7 @@ Before responding to any non-trivial prompt:
 ---
 
 ## EXAMPLE: Protocol Activation In Action
+
 ```
 USER: "Build a new API endpoint for org rate-limiting with per-user quotas"
 
@@ -270,6 +290,7 @@ AGENT [CREWOPS ACTIVATED]:
 ---
 
 ## SESSION MEMORY (After Each Task)
+
 Store for next session:
 
 1. **Tool Effectiveness**: Which tools most productive?
@@ -282,9 +303,10 @@ Store for next session:
 ---
 
 ## EMERGENCY FALLBACK (If Protocol Fails)
+
 If CREWOPS cannot initialize:
 
-1. **State**: "CREWOPS\_INIT\_FAILED"
+1. **State**: "CREWOPS_INIT_FAILED"
 2. **Reason**: Specify what prevented activation
 3. **Fallback**: Revert to standard instruction set
 4. **Escalation**: Request manual user override
@@ -300,6 +322,7 @@ Override: Include CREWOPS_FORCE to re-attempt initialization
 ---
 
 ## DEACTIVATION & RESET
+
 Protocol can be paused:
 
 - `CREWOPS_PAUSE` — Hold until explicitly resumed

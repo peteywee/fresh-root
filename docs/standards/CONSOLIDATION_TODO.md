@@ -18,9 +18,10 @@ related-docs:
 ---
 
 # Documentation Consolidation Execution TODO
+
 > **Status**: IN PROGRESS\
 > **Created**: 2025-12-16\
-> **Plan Reference**: [DOCUMENTATION\_CONSOLIDATION\_PLAN.md](./DOCUMENTATION_CONSOLIDATION_PLAN.md)\
+> **Plan Reference**: [DOCUMENTATION_CONSOLIDATION_PLAN.md](./DOCUMENTATION_CONSOLIDATION_PLAN.md)\
 > **Total Tasks**: 37 (with 8 subtasks)\
 > **Estimated Duration**: 2-3 hours\
 > **Execution Mode**: Parallel where safe, sequential where dependencies exist
@@ -28,6 +29,7 @@ related-docs:
 ---
 
 ## Teams & Roles
+
 | Team                | Role                                | Parallelizable?                |
 | ------------------- | ----------------------------------- | ------------------------------ |
 | **Research Team**   | Discovery, analysis, validation     | YES (for verification tasks)   |
@@ -40,6 +42,7 @@ related-docs:
 ---
 
 ## Phase Overview
+
 ```mermaid
 graph TB
     A[Setup: .gitignore + Commit] --> B[Phase 1: Archive 39 root files]
@@ -65,21 +68,25 @@ graph TB
 ---
 
 ## Task List
+
 ### ✅ PHASE 0: SETUP (COMPLETE)
+
 #### Task 1: Setup .gitignore and commit base files
+
 - **Team**: Research Team
 - **Status**: ✅ COMPLETE
 - **Dependencies**: None
 - **Actions**:
   - \[x] Add `.claude/`, `repomix-output.*`, `docs/reports/pattern-validation-report.json`,
     `API_SCHEMA_AUDIT_REPORT.json` to .gitignore
-  - \[x] Commit DOCUMENTATION\_CONSOLIDATION\_PLAN.md and ORCHESTRATOR\_SUMMARY.md
+  - \[x] Commit DOCUMENTATION_CONSOLIDATION_PLAN.md and ORCHESTRATOR_SUMMARY.md
 - **Commit**: `docs: add consolidation plan and update .gitignore for generated files`
 - **Result**: Baseline established
 
 ---
 
 ### ✅ PHASE 1: ARCHIVE ROOT-LEVEL DOCS (COMPLETE)
+
 **Objective**: Remove 39 loose root-level markdown files\
 **Team**: Archive Team (3 parallel workers)\
 **Status**: ✅ COMPLETE - 2025-12-16\
@@ -89,6 +96,7 @@ graph TB
 ---
 
 ### ✅ PHASE 2: MERGE & DELETE DUPLICATES (COMPLETE)
+
 **Objective**: Remove ~50 duplicate files\
 **Team**: Merge Team (2 parallel workers)\
 **Status**: ✅ COMPLETE - 2025-12-16\
@@ -98,6 +106,7 @@ graph TB
 ---
 
 ### ✅ PHASE 3: RELOCATE ORPHANED DOCS (COMPLETE)
+
 **Objective**: Move orphaned docs to proper parent folders\
 **Team**: Merge Team (2 parallel workers)\
 **Status**: ✅ COMPLETE - 2025-12-16\
@@ -107,6 +116,7 @@ graph TB
 ---
 
 ### ✅ PHASE 3A: EXTRACT AMENDMENTS (COMPLETE)
+
 **Objective**: Create 8 indexed amendment files\
 **Team**: Extract Team (4 parallel workers)\
 **Status**: ✅ COMPLETE - 2025-12-16\
@@ -116,7 +126,9 @@ graph TB
 ---
 
 ### 🟡 PHASE 4: CREATE MASTER INDEXES (IN PROGRESS)
+
 #### Task 2: Archive root-level execution docs
+
 - **Status**: ⏸️ PENDING
 
 - **Dependencies**: Task 1 (Setup complete)
@@ -140,6 +152,7 @@ graph TB
 - **Files**: 8 files → archive/execution/
 
 #### Task 3: Archive root-level migration docs
+
 - **Status**: ⏸️ PENDING
 
 - **Dependencies**: Task 1 (Setup complete)
@@ -162,6 +175,7 @@ graph TB
 - **Files**: 7 files → archive/migration/
 
 #### Task 4: Archive REPOMIX docs
+
 - **Status**: ⏸️ PENDING
 
 - **Dependencies**: Task 1 (Setup complete)
@@ -179,6 +193,7 @@ graph TB
 - **Files**: ~17 files → archive/repomix/
 
 #### Task 5: Delete oversized/temp files
+
 - **Status**: ⏸️ PENDING
 
 - **Dependencies**: Task 1 (Setup complete)
@@ -196,9 +211,10 @@ graph TB
 
 - **Files**: 4 files deleted
 
-- **⚠️ Warning**: DEPENDENCY\_GRAPH.md is 112K lines - no archival needed
+- **⚠️ Warning**: DEPENDENCY_GRAPH.md is 112K lines - no archival needed
 
 #### Task 6: Consolidate archive folders
+
 - **Status**: ⏸️ PENDING
 
 - **Dependencies**: Tasks 2-5 (other archives complete)
@@ -218,6 +234,7 @@ graph TB
 - **Files**: Consolidate existing archives
 
 #### Task 7: Commit Phase 1
+
 - **Status**: ⏸️ PENDING
 - **Dependencies**: Tasks 2-6 (all Phase 1 complete)
 - **Assignee**: Archive Team Lead
@@ -230,12 +247,14 @@ graph TB
 ---
 
 ### 🟡 PHASE 2: MERGE & DELETE DUPLICATES
+
 **Objective**: Remove ~50 duplicate files\
 **Team**: Merge Team (2 parallel workers)\
 **Parallelizable**: PARTIAL - some dependencies\
 **Estimated Time**: 10 minutes
 
 #### Task 8: Delete duplicate production docs
+
 - **Status**: ⏸️ PENDING
 
 - **Dependencies**: Task 7 (Phase 1 commit)
@@ -255,6 +274,7 @@ graph TB
 - **Files**: 5 files deleted
 
 #### Task 9: Delete duplicate reports
+
 - **Status**: ⏸️ PENDING
 
 - **Dependencies**: Task 7 (Phase 1 commit)
@@ -273,6 +293,7 @@ graph TB
 - **Files**: 4 files deleted
 
 #### Task 10: Archive CrewOps duplicates
+
 - **Status**: ⏸️ PENDING
 
 - **Dependencies**: Task 7 (Phase 1 commit)
@@ -291,6 +312,7 @@ graph TB
 - **Files**: ~9 files → archive/crewops/, 1 deleted
 
 #### Task 11: Archive superseded agent docs
+
 - **Status**: ⏸️ PENDING
 
 - **Dependencies**: Task 7 (Phase 1 commit)
@@ -307,6 +329,7 @@ graph TB
 - **Files**: 2 files → archive/historical/
 
 #### Task 12: Commit Phase 2
+
 - **Status**: ⏸️ PENDING
 - **Dependencies**: Tasks 8-11 (all Phase 2 complete)
 - **Assignee**: Merge Team Lead
@@ -319,12 +342,14 @@ graph TB
 ---
 
 ### 🟡 PHASE 3: RELOCATE ORPHANED DOCS
+
 **Objective**: Move orphaned docs to proper parent folders\
 **Team**: Merge Team (2 parallel workers)\
 **Parallelizable**: YES - independent moves\
 **Estimated Time**: 10 minutes
 
 #### Task 13: Relocate plan/ docs
+
 - **Status**: ⏸️ PENDING
 
 - **Dependencies**: Task 12 (Phase 2 commit)
@@ -344,6 +369,7 @@ graph TB
 - **Files**: plan/ → docs/architecture/plans/, plan/redteam/ → .github/reports/redteam/
 
 #### Task 14: Relocate orphaned .github docs
+
 - **Status**: ⏸️ PENDING
 
 - **Dependencies**: Task 12 (Phase 2 commit)
@@ -363,6 +389,7 @@ graph TB
 - **Files**: 4+ files relocated
 
 #### Task 15: Relocate docs/ orphans
+
 - **Status**: ⏸️ PENDING
 
 - **Dependencies**: Task 12 (Phase 2 commit)
@@ -381,6 +408,7 @@ graph TB
 - **Files**: 4 files relocated
 
 #### Task 16: Archive amendment source files
+
 - **Status**: ⏸️ PENDING
 
 - **Dependencies**: Task 12 (Phase 2 commit)
@@ -404,6 +432,7 @@ graph TB
 - **Files**: 8-10 files → archive/amendment-sources/
 
 #### Task 17: Commit Phase 3
+
 - **Status**: ⏸️ PENDING
 - **Dependencies**: Tasks 13-16 (all Phase 3 complete)
 - **Assignee**: Merge Team Lead
@@ -416,12 +445,14 @@ graph TB
 ---
 
 ### 🟡 PHASE 3A: EXTRACT AMENDMENTS
+
 **Objective**: Create 8 indexed amendment files\
 **Team**: Extract Team (4 parallel workers)\
 **Parallelizable**: YES - independent extractions\
 **Estimated Time**: 30 minutes
 
 #### Task 18: Create amendments directory
+
 - **Status**: ⏸️ PENDING
 - **Dependencies**: Task 17 (Phase 3 commit)
 - **Assignee**: Extract Team Lead
@@ -431,16 +462,17 @@ graph TB
   mkdir -p .github/governance/amendments
   ```
 
-#### Task 19: Extract A01\_BATCH\_PROTOCOL.md
+#### Task 19: Extract A01_BATCH_PROTOCOL.md
+
 - **Status**: ⏸️ PENDING
 
 - **Dependencies**: Task 18 (directory created)
 
 - **Assignee**: Extract Worker 1
 
-- **Source**: archive/amendment-sources/BATCH\_PROTOCOL\_OFFICIAL.md
+- **Source**: archive/amendment-sources/BATCH_PROTOCOL_OFFICIAL.md
 
-- **Target**: .github/governance/amendments/A01\_BATCH\_PROTOCOL.md
+- **Target**: .github/governance/amendments/A01_BATCH_PROTOCOL.md
 
 - **Template**:
 
@@ -458,16 +490,17 @@ graph TB
 
 - **Content**: Extract batch processing rules, validation patterns, example code
 
-#### Task 20: Extract A02\_WORKER\_DECISION.md
+#### Task 20: Extract A02_WORKER_DECISION.md
+
 - **Status**: ⏸️ PENDING
 
 - **Dependencies**: Task 18 (directory created)
 
 - **Assignee**: Extract Worker 2
 
-- **Source**: archive/amendment-sources/WORKER\_DECISION\_TREE.md
+- **Source**: archive/amendment-sources/WORKER_DECISION_TREE.md
 
-- **Target**: .github/governance/amendments/A02\_WORKER\_DECISION.md
+- **Target**: .github/governance/amendments/A02_WORKER_DECISION.md
 
 - **Template**:
 
@@ -485,16 +518,17 @@ graph TB
 
 - **Content**: Extract worker routing logic, decision tree
 
-#### Task 21: Extract A03\_SECURITY\_AMENDMENTS.md
+#### Task 21: Extract A03_SECURITY_AMENDMENTS.md
+
 - **Status**: ⏸️ PENDING
 
 - **Dependencies**: Task 18 (directory created)
 
 - **Assignee**: Extract Worker 3
 
-- **Source**: archive/amendment-sources/SECURITY\_FIXES.md
+- **Source**: archive/amendment-sources/SECURITY_FIXES.md
 
-- **Target**: .github/governance/amendments/A03\_SECURITY\_AMENDMENTS.md
+- **Target**: .github/governance/amendments/A03_SECURITY_AMENDMENTS.md
 
 - **Template**:
 
@@ -512,7 +546,8 @@ graph TB
 
 - **Content**: Extract security fix patterns (SF-001, SF-002, SF-003)
 
-#### Task 22: Extract A04\_RECONCILED\_RULES.md
+#### Task 22: Extract A04_RECONCILED_RULES.md
+
 - **Status**: ⏸️ PENDING
 
 - **Dependencies**: Task 18 (directory created)
@@ -521,7 +556,7 @@ graph TB
 
 - **Source**: archive/amendment-sources/reconciled-rulebook.md
 
-- **Target**: .github/governance/amendments/A04\_RECONCILED\_RULES.md
+- **Target**: .github/governance/amendments/A04_RECONCILED_RULES.md
 
 - **Template**:
 
@@ -539,7 +574,8 @@ graph TB
 
 - **Content**: Extract rule conflict resolution hierarchy
 
-#### Task 23: Extract A05\_BRANCH\_STRATEGY.md
+#### Task 23: Extract A05_BRANCH_STRATEGY.md
+
 - **Status**: ⏸️ PENDING
 
 - **Dependencies**: Task 18 (directory created)
@@ -548,7 +584,7 @@ graph TB
 
 - **Source**: archive/amendment-sources/BRANC&#x48;_&#x53;TRATEGY_\*.md
 
-- **Target**: .github/governance/amendments/A05\_BRANCH\_STRATEGY.md
+- **Target**: .github/governance/amendments/A05_BRANCH_STRATEGY.md
 
 - **Template**:
 
@@ -566,16 +602,17 @@ graph TB
 
 - **Content**: Extract branch patterns, commit message format
 
-#### Task 24: Extract A06\_CODING\_PATTERNS.md
+#### Task 24: Extract A06_CODING_PATTERNS.md
+
 - **Status**: ⏸️ PENDING
 
 - **Dependencies**: Task 18 (directory created)
 
 - **Assignee**: Extract Worker 2
 
-- **Source**: archive/amendment-sources/CODING\_RULES\_AND\_PATTERNS.md
+- **Source**: archive/amendment-sources/CODING_RULES_AND_PATTERNS.md
 
-- **Target**: .github/governance/amendments/A06\_CODING\_PATTERNS.md
+- **Target**: .github/governance/amendments/A06_CODING_PATTERNS.md
 
 - **Template**:
 
@@ -593,16 +630,17 @@ graph TB
 
 - **Content**: Extract SDK Factory patterns, Zod-first types, Triad of Trust
 
-#### Task 25: Extract A07\_FIREBASE\_IMPL.md
+#### Task 25: Extract A07_FIREBASE_IMPL.md
+
 - **Status**: ⏸️ PENDING
 
 - **Dependencies**: Task 18 (directory created)
 
 - **Assignee**: Extract Worker 3
 
-- **Source**: archive/amendment-sources/IMPLEMENTATION\_PLAN\_FIREBASE.md
+- **Source**: archive/amendment-sources/IMPLEMENTATION_PLAN_FIREBASE.md
 
-- **Target**: .github/governance/amendments/A07\_FIREBASE\_IMPL.md
+- **Target**: .github/governance/amendments/A07_FIREBASE_IMPL.md
 
 - **Template**:
 
@@ -620,7 +658,8 @@ graph TB
 
 - **Content**: Extract Firebase config, deployment commands
 
-#### Task 26: Extract A08\_IMPLEMENTATION\_PLAN.md
+#### Task 26: Extract A08_IMPLEMENTATION_PLAN.md
+
 - **Status**: ⏸️ PENDING
 
 - **Dependencies**: Task 18 (directory created)
@@ -629,7 +668,7 @@ graph TB
 
 - **Source**: archive/amendment-sources/governance.md
 
-- **Target**: .github/governance/amendments/A08\_IMPLEMENTATION\_PLAN.md
+- **Target**: .github/governance/amendments/A08_IMPLEMENTATION_PLAN.md
 
 - **Template**:
 
@@ -648,6 +687,7 @@ graph TB
 - **Content**: Extract governance rollout phases, status
 
 #### Task 27: Commit Phase 3A
+
 - **Status**: ⏸️ PENDING
 - **Dependencies**: Tasks 19-26 (all amendments extracted)
 - **Assignee**: Extract Team Lead
@@ -660,6 +700,7 @@ graph TB
 ---
 
 ### ✅ PHASE 4 (COMPLETE): CREATE MASTER INDEXES
+
 **Status**: ✅ COMPLETE - 2025-12-16\
 **Objective**: Create 3 INDEX.md files for fast AI lookup\
 **Team**: Index Team (3 parallel workers)\
@@ -670,6 +711,7 @@ graph TB
 - .github/instructions/INDEX.md (L2 instructions catalog)
 
 #### Task 28: Create .github/governance/INDEX.md
+
 - **Status**: ✅ COMPLETE
 - **Dependencies**: Task 27 (Phase 3A commit) ✅
 - **Assignee**: Index Worker 1
@@ -682,6 +724,7 @@ graph TB
   - Quick Reference link
 
 #### Task 29: Create docs/INDEX.md
+
 - **Status**: ✅ COMPLETE
 - **Dependencies**: Task 27 (Phase 3A commit)
 - **Assignee**: Index Worker 2
@@ -696,6 +739,7 @@ graph TB
   - Reports section
 
 #### Task 30: Create .github/instructions/INDEX.md
+
 - **Status**: ✅ COMPLETE
 - **Dependencies**: Task 27 (Phase 3A commit)
 - **Assignee**: Index Worker 3
@@ -708,6 +752,7 @@ graph TB
   - Best Practices
 
 #### Task 31: Commit Phase 4
+
 - **Status**: 🏃 IN PROGRESS
 - **Dependencies**: Tasks 28-30 (all indexes created) ✅
 - **Assignee**: Index Team Lead
@@ -720,12 +765,14 @@ graph TB
 ---
 
 ### ✅ PHASE 5 (COMPLETE): VALIDATION
+
 **Status**: ✅ COMPLETE - 2025-12-16\
 **Objective**: Verify all consolidation goals achieved\
 **Team**: Validation Team\
-**Report**: CONSOLIDATION\_VALIDATION\_REPORT.md
+**Report**: CONSOLIDATION_VALIDATION_REPORT.md
 
 #### Task 32: File count checks
+
 - **Status**: ✅ COMPLETE
 
 - **Dependencies**: Task 31 (Phase 4 commit) ✅
@@ -750,6 +797,7 @@ graph TB
 - **Expected**: ≤2, 0, <200
 
 #### Task 33: Index existence
+
 - **Status**: ✅ COMPLETE
 - **Dependencies**: Task 31 (Phase 4 commit) ✅
 - **Assignee**: Validation Team
@@ -765,6 +813,7 @@ graph TB
   ```
 
 #### Task 34: Quality checks
+
 - **Status**: ✅ COMPLETE
 - **Dependencies**: Task 31 (Phase 4 commit) ✅
 - **Assignee**: Validation Team
@@ -783,29 +832,32 @@ graph TB
   ```
 
 #### Task 35: AI retrieval test
+
 - **Status**: ✅ COMPLETE
 - **Dependencies**: Task 31 (Phase 4 commit) ✅
 - **Assignee**: Validation Team
 - **Results**: 95%+ retrieval confidence achieved
 - **Tests**:
-  - Ask AI: "What is batch protocol?" → Should find A01\_BATCH\_PROTOCOL.md
-  - Ask AI: "Security fix patterns?" → Should find A03\_SECURITY\_AMENDMENTS.md
-  - Ask AI: "Branch strategy?" → Should find A05\_BRANCH\_STRATEGY.md and 10\_BRANCH\_RULES.md
-  - Ask AI: "Worker routing?" → Should find A02\_WORKER\_DECISION.md
+  - Ask AI: "What is batch protocol?" → Should find A01_BATCH_PROTOCOL.md
+  - Ask AI: "Security fix patterns?" → Should find A03_SECURITY_AMENDMENTS.md
+  - Ask AI: "Branch strategy?" → Should find A05_BRANCH_STRATEGY.md and 10_BRANCH_RULES.md
+  - Ask AI: "Worker routing?" → Should find A02_WORKER_DECISION.md
 
 ---
 
 ### ✅ PHASE 6 (COMPLETE): FINALIZATION
+
 **Status**: ✅ COMPLETE - 2025-12-16\
 **Objective**: Update references and create PR summary\
 **Team**: Index Team + Research Team\
 **Deliverables**:
 
 - ✅ Updated .github/copilot-instructions.md
-- ✅ Created CONSOLIDATION\_PR\_SUMMARY.md
-- ✅ Created CONSOLIDATION\_VALIDATION\_REPORT.md
+- ✅ Created CONSOLIDATION_PR_SUMMARY.md
+- ✅ Created CONSOLIDATION_VALIDATION_REPORT.md
 
 #### Task 36: Update copilot-instructions.md
+
 - **Status**: ✅ COMPLETE
 - **Dependencies**: Task 35 (Validation complete) ✅
 - **Assignee**: Index Worker 1
@@ -818,12 +870,13 @@ graph TB
   - Added amendment system documentation
 
 #### Task 37: Create PR
+
 - **Status**: ✅ COMPLETE
 - **Dependencies**: Task 36 (copilot-instructions updated) ✅
 - **Assignee**: Research Team Lead
 - **Completed**: 2025-12-16
-- **PR Summary**: CONSOLIDATION\_PR\_SUMMARY.md created
-- **Validation Report**: CONSOLIDATION\_VALIDATION\_REPORT.md created
+- **PR Summary**: CONSOLIDATION_PR_SUMMARY.md created
+- **Validation Report**: CONSOLIDATION_VALIDATION_REPORT.md created
 - **PR Title**: `docs: consolidate 357 markdown files into hierarchical governance system`
 - **PR Description**:
 
@@ -865,7 +918,9 @@ graph TB
 ---
 
 ## Parallel Execution Strategy
+
 ### Wave 1: Archive (Tasks 2-6)
+
 **Run in parallel** - 3 workers, no dependencies
 
 ```bash
@@ -875,6 +930,7 @@ graph TB
 ```
 
 ### Wave 2: Merge (Tasks 8-11)
+
 **Run in parallel** - 2 workers, no dependencies
 
 ```bash
@@ -883,6 +939,7 @@ graph TB
 ```
 
 ### Wave 3: Relocate (Tasks 13-16)
+
 **Run in parallel** - 2 workers, no dependencies
 
 ```bash
@@ -891,6 +948,7 @@ graph TB
 ```
 
 ### Wave 4: Extract (Tasks 19-26)
+
 **Run in parallel** - 4 workers, no dependencies
 
 ```bash
@@ -901,6 +959,7 @@ graph TB
 ```
 
 ### Wave 5: Index (Tasks 28-30)
+
 **Run in parallel** - 3 workers, no dependencies
 
 ```bash
@@ -910,12 +969,15 @@ graph TB
 ```
 
 ### Wave 6: Validation & Final (Tasks 32-37)
+
 **Run sequentially** - must verify in order
 
 ---
 
 ## Commit Strategy
+
 ### What Gets Committed
+
 - ✅ All markdown files (moves, creates, deletes)
 - ✅ .gitignore updates
 - ✅ INDEX.md files
@@ -923,12 +985,14 @@ graph TB
 - ✅ Updated copilot-instructions.md
 
 ### What Does NOT Get Committed (Already in .gitignore)
+
 - ❌ `.claude/` (generated Claude skills)
 - ❌ `repomix-output.*` (Repomix generated outputs)
 - ❌ `docs/reports/pattern-validation-report.json` (validation reports)
 - ❌ `API_SCHEMA_AUDIT_REPORT.json` (audit reports)
 
 ### Commit Messages
+
 All commits follow conventional commit format:
 
 ```text
@@ -940,6 +1004,7 @@ docs: <description>
 ---
 
 ## Success Criteria
+
 - \[ ] Root directory has ≤2 .md files (README.md only)
 - \[ ] Total .md files reduced from 357 to <200
 - \[ ] All files belong to a parent folder (no loose docs)
@@ -953,6 +1018,7 @@ docs: <description>
 ---
 
 ## Rollback Plan
+
 If issues occur during execution:
 
 1. **Identify failed phase** (check last commit)
@@ -978,6 +1044,7 @@ git checkout fix/lockfile-update
 ---
 
 ## Progress Tracking
+
 Update this file as tasks complete:
 
 - Change ⏸️ PENDING → 🏃 IN PROGRESS → ✅ COMPLETE

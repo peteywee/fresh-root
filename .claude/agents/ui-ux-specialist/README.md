@@ -1,20 +1,22 @@
 # UI/UX Specialist Agent
 
-Professional UI/UX design agent for component design, accessibility review, and user experience optimization.
+Professional UI/UX design agent for component design, accessibility review, and user experience
+optimization.
 
 ## Quick Start
 
 ### Invocation Methods
 
-| Context | Command |
-|---------|---------|
-| **Chat** | `@ui-ux review this button` |
-| **Chat Alt** | `@ux design system question` |
-| **Slash** | `/ui-ux design review` |
+| Context        | Command                      |
+| -------------- | ---------------------------- |
+| **Chat**       | `@ui-ux review this button`  |
+| **Chat Alt**   | `@ux design system question` |
+| **Slash**      | `/ui-ux design review`       |
 | **PR Comment** | `@ui-ux check accessibility` |
-| **Issue** | `@ui-ux audit form UX` |
+| **Issue**      | `@ui-ux audit form UX`       |
 
 ### Autocomplete
+
 - Type `@ui` → suggestions appear
 - Type `/de` → autocomplete shows `/design` and `/ui-ux`
 - Context-aware suggestions in PRs, issues, and chat
@@ -54,13 +56,15 @@ ui-ux-specialist/
 ## Configuration Details
 
 ### Invocation Patterns
+
 ```javascript
-mentions: ["@ui-ux", "@ui/ux", "@ux", "@design"]
-commands: ["/ui-ux", "/design"]
-aliases: ["ux", "design", "ui", "accessibility", "wcag", "a11y"]
+mentions: ["@ui-ux", "@ui/ux", "@ux", "@design"];
+commands: ["/ui-ux", "/design"];
+aliases: ["ux", "design", "ui", "accessibility", "wcag", "a11y"];
 ```
 
 ### Contexts
+
 - ✅ Chat
 - ✅ Pull Requests (with inline comments)
 - ✅ Issues (with inline comments)
@@ -68,6 +72,7 @@ aliases: ["ux", "design", "ui", "accessibility", "wcag", "a11y"]
 - ✅ Text Boxes
 
 ### Autocomplete
+
 - **Trigger**: Type `@` or `/`
 - **Min Chars**: 1 (shows after `@u`)
 - **Debounce**: 100ms
@@ -75,7 +80,9 @@ aliases: ["ux", "design", "ui", "accessibility", "wcag", "a11y"]
 - **Context-Aware**: Different suggestions for PRs, issues, chat, code
 
 ### VS Code Settings
+
 See `.vscode/settings.json`:
+
 ```json
 "claude.agents": { "enabled": true, "discoverable": true, "showAutocomplete": true }
 "claude.mentions": { "enabled": true, "inPullRequests": true, "inIssues": true, "inTextBoxes": true }
@@ -84,30 +91,35 @@ See `.vscode/settings.json`:
 ## Testing the Configuration
 
 ### Test 1: Chat Mention
+
 ```
 Try typing: @ui-ux
 Expected: Autocomplete popup with suggestions
 ```
 
 ### Test 2: Slash Command
+
 ```
 Try typing: /ui-ux
 Expected: Autocomplete shows "/ui-ux design review"
 ```
 
 ### Test 3: PR Comment
+
 ```
 In a PR, type: @ui-ux accessibility check
 Expected: Agent mentions work in PR comments
 ```
 
 ### Test 4: Issue Comment
+
 ```
 In an issue, type: @design
 Expected: Shows design-related suggestions
 ```
 
 ### Test 5: Textbox Autocomplete
+
 ```
 Any textbox (comment box, description, etc.):
 Type: @ui then wait 100ms
@@ -115,6 +127,7 @@ Expected: Autocomplete suggestions appear
 ```
 
 ### Test 6: Context-Aware Suggestions
+
 ```
 In a PR, type: @ui-ux
 In chat, type: @ui-ux
@@ -136,16 +149,19 @@ Expected: Different suggestions based on context
 ## Troubleshooting
 
 ### Agent Not Showing
+
 1. Check `.vscode/settings.json` has `claude.agents.enabled: true`
 2. Verify `AGENT.md` YAML frontmatter is valid
 3. Try reloading VS Code (`Cmd+Shift+P` → "Reload Window")
 
 ### Autocomplete Not Appearing
+
 1. Ensure `claude.agentAutocomplete.enabled: true`
 2. Check trigger characters include `@` and `/`
 3. Verify `config.js` has `enabled: true` on autocomplete
 
 ### Wrong Suggestions
+
 1. Check `config.js` context-aware suggestions object
 2. Verify current context is recognized (PR, issue, chat, code)
 3. Review priority settings
@@ -159,12 +175,10 @@ Expected: Different suggestions based on context
 
 ## Status
 
-✅ **Discoverable** - Works with @-mentions, /-commands, autocomplete
-✅ **Context-Aware** - Suggestions change based on PR/issue/chat context
-✅ **Configurable** - Easily add invocations, update suggestions, adjust triggers
-✅ **Tested** - Ready for use across Fresh Schedules codebase
+✅ **Discoverable** - Works with @-mentions, /-commands, autocomplete ✅ **Context-Aware** -
+Suggestions change based on PR/issue/chat context ✅ **Configurable** - Easily add invocations,
+update suggestions, adjust triggers ✅ **Tested** - Ready for use across Fresh Schedules codebase
 
 ---
 
-**Last Updated**: January 2026
-**Version**: 1.0.0
+**Last Updated**: January 2026 **Version**: 1.0.0

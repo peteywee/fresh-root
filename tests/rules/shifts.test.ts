@@ -11,7 +11,7 @@ describe("rules: shifts collection", () => {
   const scheduleId = "schedule-1";
   const shiftId = "shift-1";
   const shiftPath = `orgs/${orgId}/schedules/${scheduleId}/shifts/${shiftId}`;
-  
+
   let env: RulesTestEnvironment;
 
   beforeAll(async () => {
@@ -27,17 +27,20 @@ describe("rules: shifts collection", () => {
         name: "Weekly Schedule",
         status: "published",
       });
-      
+
       // Seed test shift
-      await db.collection(`orgs/${orgId}/schedules/${scheduleId}/shifts`).doc(shiftId).set({
-        scheduleId,
-        orgId,
-        startTime: Date.now(),
-        endTime: Date.now() + 8 * 60 * 60 * 1000, // 8 hours
-        assignedTo: "staff-user",
-        status: "published",
-        createdAt: Date.now(),
-      });
+      await db
+        .collection(`orgs/${orgId}/schedules/${scheduleId}/shifts`)
+        .doc(shiftId)
+        .set({
+          scheduleId,
+          orgId,
+          startTime: Date.now(),
+          endTime: Date.now() + 8 * 60 * 60 * 1000, // 8 hours
+          assignedTo: "staff-user",
+          status: "published",
+          createdAt: Date.now(),
+        });
 
       // Seed memberships for various roles
       await db.collection("memberships").doc(membershipId("staff-user", orgId)).set({
@@ -81,27 +84,28 @@ describe("rules: shifts collection", () => {
     it("denies unauthenticated read access to shifts", async () => {
       const anon = ctxUnauth(env).firestore();
       await assertFails(
-        anon.collection(`orgs/${orgId}/schedules/${scheduleId}/shifts`).doc(shiftId).get()
+        anon.collection(`orgs/${orgId}/schedules/${scheduleId}/shifts`).doc(shiftId).get(),
       );
     });
 
     it("denies unauthenticated write access to shifts", async () => {
       const anon = ctxUnauth(env).firestore();
       await assertFails(
-        anon.collection(`orgs/${orgId}/schedules/${scheduleId}/shifts`).doc("new-shift").set({
-          scheduleId,
-          orgId,
-          startTime: Date.now(),
-          endTime: Date.now() + 8 * 60 * 60 * 1000,
-        })
+        anon
+          .collection(`orgs/${orgId}/schedules/${scheduleId}/shifts`)
+          .doc("new-shift")
+          .set({
+            scheduleId,
+            orgId,
+            startTime: Date.now(),
+            endTime: Date.now() + 8 * 60 * 60 * 1000,
+          }),
       );
     });
 
     it("denies unauthenticated listing of shifts", async () => {
       const anon = ctxUnauth(env).firestore();
-      await assertFails(
-        anon.collection(`orgs/${orgId}/schedules/${scheduleId}/shifts`).get()
-      );
+      await assertFails(anon.collection(`orgs/${orgId}/schedules/${scheduleId}/shifts`).get());
     });
   });
 
@@ -109,28 +113,29 @@ describe("rules: shifts collection", () => {
     it("allows staff to read their own assigned shift", async () => {
       const staff = ctxUser(env, "staff-user", { orgId }).firestore();
       await assertSucceeds(
-        staff.collection(`orgs/${orgId}/schedules/${scheduleId}/shifts`).doc(shiftId).get()
+        staff.collection(`orgs/${orgId}/schedules/${scheduleId}/shifts`).doc(shiftId).get(),
       );
     });
 
     it("allows staff to list shifts in their org schedule", async () => {
       const staff = ctxUser(env, "staff-user", { orgId }).firestore();
-      await assertSucceeds(
-        staff.collection(`orgs/${orgId}/schedules/${scheduleId}/shifts`).get()
-      );
+      await assertSucceeds(staff.collection(`orgs/${orgId}/schedules/${scheduleId}/shifts`).get());
     });
 
     it("denies staff from creating shifts", async () => {
       const staff = ctxUser(env, "staff-user", { orgId }).firestore();
       await assertFails(
-        staff.collection(`orgs/${orgId}/schedules/${scheduleId}/shifts`).doc("new-shift").set({
-          scheduleId,
-          orgId,
-          startTime: Date.now(),
-          endTime: Date.now() + 8 * 60 * 60 * 1000,
-          assignedTo: "staff-user",
-          status: "published",
-        })
+        staff
+          .collection(`orgs/${orgId}/schedules/${scheduleId}/shifts`)
+          .doc("new-shift")
+          .set({
+            scheduleId,
+            orgId,
+            startTime: Date.now(),
+            endTime: Date.now() + 8 * 60 * 60 * 1000,
+            assignedTo: "staff-user",
+            status: "published",
+          }),
       );
     });
 
@@ -139,14 +144,14 @@ describe("rules: shifts collection", () => {
       await assertFails(
         staff.collection(`orgs/${orgId}/schedules/${scheduleId}/shifts`).doc(shiftId).update({
           status: "cancelled",
-        })
+        }),
       );
     });
 
     it("denies staff from deleting shifts", async () => {
       const staff = ctxUser(env, "staff-user", { orgId }).firestore();
       await assertFails(
-        staff.collection(`orgs/${orgId}/schedules/${scheduleId}/shifts`).doc(shiftId).delete()
+        staff.collection(`orgs/${orgId}/schedules/${scheduleId}/shifts`).doc(shiftId).delete(),
       );
     });
   });
@@ -155,22 +160,25 @@ describe("rules: shifts collection", () => {
     it("allows scheduler to read shifts", async () => {
       const scheduler = ctxUser(env, "scheduler-user", { orgId }).firestore();
       await assertSucceeds(
-        scheduler.collection(`orgs/${orgId}/schedules/${scheduleId}/shifts`).doc(shiftId).get()
+        scheduler.collection(`orgs/${orgId}/schedules/${scheduleId}/shifts`).doc(shiftId).get(),
       );
     });
 
     it("allows scheduler to create shifts", async () => {
       const scheduler = ctxUser(env, "scheduler-user", { orgId }).firestore();
       await assertSucceeds(
-        scheduler.collection(`orgs/${orgId}/schedules/${scheduleId}/shifts`).doc("new-shift").set({
-          scheduleId,
-          orgId,
-          startTime: Date.now(),
-          endTime: Date.now() + 8 * 60 * 60 * 1000,
-          assignedTo: "staff-user",
-          status: "draft",
-          createdAt: Date.now(),
-        })
+        scheduler
+          .collection(`orgs/${orgId}/schedules/${scheduleId}/shifts`)
+          .doc("new-shift")
+          .set({
+            scheduleId,
+            orgId,
+            startTime: Date.now(),
+            endTime: Date.now() + 8 * 60 * 60 * 1000,
+            assignedTo: "staff-user",
+            status: "draft",
+            createdAt: Date.now(),
+          }),
       );
     });
 
@@ -179,14 +187,14 @@ describe("rules: shifts collection", () => {
       await assertSucceeds(
         scheduler.collection(`orgs/${orgId}/schedules/${scheduleId}/shifts`).doc(shiftId).update({
           status: "cancelled",
-        })
+        }),
       );
     });
 
     it("allows scheduler to delete shifts", async () => {
       const scheduler = ctxUser(env, "scheduler-user", { orgId }).firestore();
       await assertSucceeds(
-        scheduler.collection(`orgs/${orgId}/schedules/${scheduleId}/shifts`).doc(shiftId).delete()
+        scheduler.collection(`orgs/${orgId}/schedules/${scheduleId}/shifts`).doc(shiftId).delete(),
       );
     });
   });
@@ -195,22 +203,25 @@ describe("rules: shifts collection", () => {
     it("allows manager to read shifts", async () => {
       const manager = ctxUser(env, "manager-user", { orgId }).firestore();
       await assertSucceeds(
-        manager.collection(`orgs/${orgId}/schedules/${scheduleId}/shifts`).doc(shiftId).get()
+        manager.collection(`orgs/${orgId}/schedules/${scheduleId}/shifts`).doc(shiftId).get(),
       );
     });
 
     it("allows manager to create shifts", async () => {
       const manager = ctxUser(env, "manager-user", { orgId }).firestore();
       await assertSucceeds(
-        manager.collection(`orgs/${orgId}/schedules/${scheduleId}/shifts`).doc("manager-shift").set({
-          scheduleId,
-          orgId,
-          startTime: Date.now(),
-          endTime: Date.now() + 8 * 60 * 60 * 1000,
-          assignedTo: "staff-user",
-          status: "published",
-          createdAt: Date.now(),
-        })
+        manager
+          .collection(`orgs/${orgId}/schedules/${scheduleId}/shifts`)
+          .doc("manager-shift")
+          .set({
+            scheduleId,
+            orgId,
+            startTime: Date.now(),
+            endTime: Date.now() + 8 * 60 * 60 * 1000,
+            assignedTo: "staff-user",
+            status: "published",
+            createdAt: Date.now(),
+          }),
       );
     });
 
@@ -219,14 +230,14 @@ describe("rules: shifts collection", () => {
       await assertSucceeds(
         manager.collection(`orgs/${orgId}/schedules/${scheduleId}/shifts`).doc(shiftId).update({
           assignedTo: "other-staff",
-        })
+        }),
       );
     });
 
     it("allows manager to delete shifts", async () => {
       const manager = ctxUser(env, "manager-user", { orgId }).firestore();
       await assertSucceeds(
-        manager.collection(`orgs/${orgId}/schedules/${scheduleId}/shifts`).doc(shiftId).delete()
+        manager.collection(`orgs/${orgId}/schedules/${scheduleId}/shifts`).doc(shiftId).delete(),
       );
     });
   });
@@ -235,30 +246,33 @@ describe("rules: shifts collection", () => {
     it("allows admin to perform all shift operations", async () => {
       const admin = ctxUser(env, "admin-user", { orgId }).firestore();
       await assertSucceeds(
-        admin.collection(`orgs/${orgId}/schedules/${scheduleId}/shifts`).doc(shiftId).get()
+        admin.collection(`orgs/${orgId}/schedules/${scheduleId}/shifts`).doc(shiftId).get(),
       );
       await assertSucceeds(
-        admin.collection(`orgs/${orgId}/schedules/${scheduleId}/shifts`).doc("admin-shift").set({
-          scheduleId,
-          orgId,
-          startTime: Date.now(),
-          endTime: Date.now() + 8 * 60 * 60 * 1000,
-          assignedTo: "staff-user",
-          status: "published",
-          createdAt: Date.now(),
-        })
+        admin
+          .collection(`orgs/${orgId}/schedules/${scheduleId}/shifts`)
+          .doc("admin-shift")
+          .set({
+            scheduleId,
+            orgId,
+            startTime: Date.now(),
+            endTime: Date.now() + 8 * 60 * 60 * 1000,
+            assignedTo: "staff-user",
+            status: "published",
+            createdAt: Date.now(),
+          }),
       );
     });
 
     it("allows org_owner to perform all shift operations", async () => {
       const owner = ctxUser(env, "owner-user", { orgId }).firestore();
       await assertSucceeds(
-        owner.collection(`orgs/${orgId}/schedules/${scheduleId}/shifts`).doc(shiftId).get()
+        owner.collection(`orgs/${orgId}/schedules/${scheduleId}/shifts`).doc(shiftId).get(),
       );
       await assertSucceeds(
         owner.collection(`orgs/${orgId}/schedules/${scheduleId}/shifts`).doc(shiftId).update({
           status: "completed",
-        })
+        }),
       );
     });
   });
@@ -278,7 +292,7 @@ describe("rules: shifts collection", () => {
 
       const otherUser = ctxUser(env, "other-user", { orgId: otherOrg }).firestore();
       await assertFails(
-        otherUser.collection(`orgs/${orgId}/schedules/${scheduleId}/shifts`).doc(shiftId).get()
+        otherUser.collection(`orgs/${orgId}/schedules/${scheduleId}/shifts`).doc(shiftId).get(),
       );
     });
 
@@ -297,7 +311,10 @@ describe("rules: shifts collection", () => {
 
       const managerDifferentOrg = ctxUser(env, "manager-user", { orgId: otherOrg }).firestore();
       await assertFails(
-        managerDifferentOrg.collection(`orgs/${orgId}/schedules/${scheduleId}/shifts`).doc(shiftId).get()
+        managerDifferentOrg
+          .collection(`orgs/${orgId}/schedules/${scheduleId}/shifts`)
+          .doc(shiftId)
+          .get(),
       );
     });
   });
@@ -306,24 +323,30 @@ describe("rules: shifts collection", () => {
     it("denies creating shift with missing required fields", async () => {
       const manager = ctxUser(env, "manager-user", { orgId }).firestore();
       await assertFails(
-        manager.collection(`orgs/${orgId}/schedules/${scheduleId}/shifts`).doc("invalid-shift").set({
-          // Missing scheduleId, orgId, startTime, endTime
-          assignedTo: "staff-user",
-        })
+        manager
+          .collection(`orgs/${orgId}/schedules/${scheduleId}/shifts`)
+          .doc("invalid-shift")
+          .set({
+            // Missing scheduleId, orgId, startTime, endTime
+            assignedTo: "staff-user",
+          }),
       );
     });
 
     it("denies creating shift with invalid orgId", async () => {
       const manager = ctxUser(env, "manager-user", { orgId }).firestore();
       await assertFails(
-        manager.collection(`orgs/${orgId}/schedules/${scheduleId}/shifts`).doc("wrong-org-shift").set({
-          scheduleId,
-          orgId: "wrong-org", // Doesn't match path
-          startTime: Date.now(),
-          endTime: Date.now() + 8 * 60 * 60 * 1000,
-          assignedTo: "staff-user",
-          status: "published",
-        })
+        manager
+          .collection(`orgs/${orgId}/schedules/${scheduleId}/shifts`)
+          .doc("wrong-org-shift")
+          .set({
+            scheduleId,
+            orgId: "wrong-org", // Doesn't match path
+            startTime: Date.now(),
+            endTime: Date.now() + 8 * 60 * 60 * 1000,
+            assignedTo: "staff-user",
+            status: "published",
+          }),
       );
     });
   });

@@ -1,32 +1,41 @@
 ## # Labels
+
 name: "🔧 Production Work Item" about: Standardized work ticket for production readiness title:
 "\[WORK-ID] Title" labels: \[] assignees: \[peteywee]
 
 ---
 
 ## Labels
+
 - P\*:
 - Area:
 
 ## Objective
+
 Explain why this matters for production readiness.
 
 ## Scope
+
 **In:** **Out:**
 
 ## Files / Paths
+
 - path/to/file – description
 
 ## Commands
+
 ```bash
 ## deterministic steps
 ```
 
 ## Acceptance Criteria
+
 - \[ ]
 
 ## Success KPIs
+
 ## Definition of Done
+
 - \[ ] CI green
 - \[ ] Docs updated
 - \[ ] Tests ≥ 85 %
@@ -35,11 +44,13 @@ Explain why this matters for production readiness.
 - \[ ] All lint/format errors auto-fixed before commit/PR (any language)
 
 ## Explanation / Rationale
+
 Why this task exists, dependencies, and production impact.
 
 ---
 
 ### 6️⃣ Why This Ties Directly to Production Readiness
+
 | Capability                 | Enabled By                 | Effect                               |
 | -------------------------- | -------------------------- | ------------------------------------ |
 | **Reproducibility**        | Commands + Files + Scope   | “Works on my machine” eliminated     |
@@ -51,6 +62,7 @@ Why this task exists, dependencies, and production impact.
 ---
 
 ### 7️⃣ Meta Acceptance Criteria (for this framework itself)
+
 - \[x] Every future response must include **Labels, Objective, Scope, Files/Paths, Commands,
   Acceptance Criteria, Success KPIs, Definition of Done**.
 - \[x] Template stored in `.github/ISSUE_TEMPLATE/_production-template.md`.
@@ -59,6 +71,7 @@ Why this task exists, dependencies, and production impact.
 ---
 
 ### ✅ Definition of Done (for this framework)
+
 - This framework is documented and committed.
 - It governs every subsequent answer.
 - Missing any section = invalid response.
@@ -83,6 +96,7 @@ philosophy into enforceable policy.
 | Explanation / Rationale | Captures architectural intent for future maintainers and audits.                                       |
 
 #### Acceptance Benchmarks (Global Defaults)
+
 Unless overridden in a specific issue:
 
 - CI: must pass lint, typecheck, unit, and integration suites.

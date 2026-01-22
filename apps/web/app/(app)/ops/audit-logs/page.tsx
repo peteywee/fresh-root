@@ -16,12 +16,64 @@ interface AuditLogEntry {
 }
 
 const LOGS: AuditLogEntry[] = [
-  { id: "1", timestamp: "2025-01-15T14:32:01Z", level: "info", category: "auth", actor: "user@example.com", action: "LOGIN", resource: "session", details: "IP: 192.168.1.100" },
-  { id: "2", timestamp: "2025-01-15T14:31:45Z", level: "warn", category: "security", actor: "system", action: "RATE_LIMIT", resource: "/api/batch", details: "Threshold exceeded" },
-  { id: "3", timestamp: "2025-01-15T14:30:22Z", level: "info", category: "data", actor: "admin@company.com", action: "UPDATE", resource: "organizations/org_123" },
-  { id: "4", timestamp: "2025-01-15T14:29:55Z", level: "error", category: "system", actor: "scheduler", action: "FAILED", resource: "cron/shift-reminder", details: "Timeout" },
-  { id: "5", timestamp: "2025-01-15T14:28:10Z", level: "info", category: "auth", actor: "newuser@test.com", action: "SIGNUP", resource: "users/usr_456" },
-  { id: "6", timestamp: "2025-01-15T14:27:33Z", level: "debug", category: "data", actor: "api", action: "QUERY", resource: "schedules", details: "45 results" },
+  {
+    id: "1",
+    timestamp: "2025-01-15T14:32:01Z",
+    level: "info",
+    category: "auth",
+    actor: "user@example.com",
+    action: "LOGIN",
+    resource: "session",
+    details: "IP: 192.168.1.100",
+  },
+  {
+    id: "2",
+    timestamp: "2025-01-15T14:31:45Z",
+    level: "warn",
+    category: "security",
+    actor: "system",
+    action: "RATE_LIMIT",
+    resource: "/api/batch",
+    details: "Threshold exceeded",
+  },
+  {
+    id: "3",
+    timestamp: "2025-01-15T14:30:22Z",
+    level: "info",
+    category: "data",
+    actor: "admin@company.com",
+    action: "UPDATE",
+    resource: "organizations/org_123",
+  },
+  {
+    id: "4",
+    timestamp: "2025-01-15T14:29:55Z",
+    level: "error",
+    category: "system",
+    actor: "scheduler",
+    action: "FAILED",
+    resource: "cron/shift-reminder",
+    details: "Timeout",
+  },
+  {
+    id: "5",
+    timestamp: "2025-01-15T14:28:10Z",
+    level: "info",
+    category: "auth",
+    actor: "newuser@test.com",
+    action: "SIGNUP",
+    resource: "users/usr_456",
+  },
+  {
+    id: "6",
+    timestamp: "2025-01-15T14:27:33Z",
+    level: "debug",
+    category: "data",
+    actor: "api",
+    action: "QUERY",
+    resource: "schedules",
+    details: "45 results",
+  },
 ];
 
 function LevelBadge({ level }: { level: LogLevel }) {
@@ -54,10 +106,12 @@ export default function LogsPage() {
         </div>
         <div className="flex items-center gap-2">
           <Button variant="outline" size="sm" className="h-9 border-border text-muted-foreground">
-            <Filter className="w-4 h-4 mr-2" />Filters
+            <Filter className="w-4 h-4 mr-2" />
+            Filters
           </Button>
           <Button variant="outline" size="sm" className="h-9 border-border text-muted-foreground">
-            <Download className="w-4 h-4 mr-2" />Export
+            <Download className="w-4 h-4 mr-2" />
+            Export
           </Button>
         </div>
       </div>
@@ -89,10 +143,16 @@ export default function LogsPage() {
                 <td className="p-4 text-muted-foreground">
                   {new Date(log.timestamp).toLocaleString()}
                 </td>
-                <td className="p-4"><LevelBadge level={log.level} /></td>
-                <td className="p-4"><CategoryIcon category={log.category} /></td>
+                <td className="p-4">
+                  <LevelBadge level={log.level} />
+                </td>
+                <td className="p-4">
+                  <CategoryIcon category={log.category} />
+                </td>
                 <td className="p-4 text-foreground">{log.actor}</td>
-                <td className="p-4"><span className="text-primary font-semibold">{log.action}</span></td>
+                <td className="p-4">
+                  <span className="text-primary font-semibold">{log.action}</span>
+                </td>
                 <td className="p-4 text-muted-foreground">
                   <div>{log.resource}</div>
                   {log.details && (
@@ -110,8 +170,12 @@ export default function LogsPage() {
       <div className="flex items-center justify-between text-sm text-muted-foreground">
         <span>Showing 1-6 of 1,284 entries</span>
         <div className="flex gap-2">
-          <Button variant="outline" size="sm" disabled>Previous</Button>
-          <Button variant="outline" size="sm">Next</Button>
+          <Button variant="outline" size="sm" disabled>
+            Previous
+          </Button>
+          <Button variant="outline" size="sm">
+            Next
+          </Button>
         </div>
       </div>
     </div>

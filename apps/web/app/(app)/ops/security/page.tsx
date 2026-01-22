@@ -7,7 +7,9 @@ export default function SecurityPage() {
     <div className="space-y-8 animate-fade-in-up">
       <div>
         <h1 className="text-3xl font-heading font-bold text-foreground">Security & Access</h1>
-        <p className="text-muted-foreground">Manage RBAC policies and system-wide security settings.</p>
+        <p className="text-muted-foreground">
+          Manage RBAC policies and system-wide security settings.
+        </p>
       </div>
 
       <div className="grid md:grid-cols-3 gap-6">
@@ -36,10 +38,13 @@ export default function SecurityPage() {
 
       <div className="bg-card border border-border p-6 rounded-sm space-y-6">
         <h2 className="text-xl font-heading font-bold">Role-Based Access Control (RBAC)</h2>
-        
+
         <div className="space-y-4">
           {["Super Admin", "Ops Manager", "Support Agent", "Viewer"].map((role) => (
-            <div key={role} className="flex items-center justify-between p-4 bg-background border border-border/50 rounded-sm">
+            <div
+              key={role}
+              className="flex items-center justify-between p-4 bg-background border border-border/50 rounded-sm"
+            >
               <div className="flex items-center gap-4">
                 <div className="w-10 h-10 bg-secondary flex items-center justify-center rounded-full">
                   <Key className="w-5 h-5 text-muted-foreground" />
@@ -49,7 +54,9 @@ export default function SecurityPage() {
                   <p className="text-xs text-muted-foreground">Inherits standard permissions</p>
                 </div>
               </div>
-              <Button variant="outline" size="sm" className="border-border">Configure</Button>
+              <Button variant="outline" size="sm" className="border-border">
+                Configure
+              </Button>
             </div>
           ))}
         </div>

@@ -11,16 +11,8 @@
         "ts-accent-red": "#EF4444"
       },
       "fontFamily": {
-        "headline": [
-          "Montserrat",
-          "system-ui",
-          "sans-serif"
-        ],
-        "body": [
-          "Inter",
-          "system-ui",
-          "sans-serif"
-        ]
+        "headline": ["Montserrat", "system-ui", "sans-serif"],
+        "body": ["Inter", "system-ui", "sans-serif"]
       }
     }
   }

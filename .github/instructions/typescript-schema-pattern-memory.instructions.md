@@ -1,15 +1,16 @@
 ---
 
-priority: 1
-applyTo: "packages/types/**/\*.ts,apps/web/app/api/**/\*.ts"
-description:
-"TypeScript schema pattern lessons learned from Zod validation implementation in monorepo. Covers
+priority: 1 applyTo: "packages/types/**/\*.ts,apps/web/app/api/**/\*.ts" description: "TypeScript
+schema pattern lessons learned from Zod validation implementation in monorepo. Covers
+
 ## module resolution, inline vs. exported schemas, and pragmatic workarounds."
 
 # TypeScript Schema & Module Resolution Memory
+
 Lessons from implementing Zod input validation across the fresh-root monorepo.
 
 ## The Module Resolution Trap: Newly Created Schema Files
+
 **Problem**: Created new schema files (`session.ts`, `internal.ts`) in `packages/types/src/`,
 exported them in `index.ts`, but TypeScript compiler couldn't resolve them when importing in API
 routes.
@@ -25,6 +26,7 @@ create a new `.ts` file and immediately export it from `index.ts`, the module gr
 updated in the type checker's internal state.
 
 ### What Didn't Work ❌
+
 **Attempt 1: Import from newly created package file**
 
 ```typescript
@@ -60,6 +62,7 @@ pnpm -w typecheck --force
 - Suggests deeper module resolution issue in monorepo setup
 
 ### What Worked ✅
+
 **Solution: Inline Zod schemas directly in route files**
 
 ```typescript
@@ -93,6 +96,7 @@ export const POST = createAuthenticatedEndpoint({
 - Clear locality (schema near usage)
 
 ### Hybrid Approach: Best for Medium-Term ✅
+
 **Pattern: Define inline now, plan refactor for later**
 
 ```typescript
@@ -115,6 +119,7 @@ export const POST = createAuthenticatedEndpoint({
 - Created files: Already exist for future refactoring/documentation
 
 ## Rule: Pragmatic Module Resolution in Monorepos
+
 **When implementing new cross-package features**:
 
 1. **Define schema file** in `packages/types/src/` (for documentation/git history)
@@ -154,6 +159,7 @@ export const POST = createAuthenticatedEndpoint({
 ```
 
 ## Validation Workaround: Multiple Typecheck Runs
+
 **If module resolution still fails after first attempt**:
 
 ```bash
@@ -177,6 +183,7 @@ pnpm -w typecheck
 - `@fresh-schedules/types` exports are visible in autocomplete
 
 ## Takeaway
+
 **Monorepo module resolution can lag behind file creation.** When implementing new schemas:
 
 - ✅ Create files (for documentation)

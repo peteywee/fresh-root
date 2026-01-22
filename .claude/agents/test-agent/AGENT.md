@@ -23,6 +23,7 @@ Generate and run tests for a feature or file.
 ## Quick Start
 
 Use this agent to:
+
 - Generate unit tests (Vitest)
 - Generate API route tests
 - Generate E2E tests (Playwright)
@@ -53,6 +54,7 @@ Generate tests for the schedule API routes
 ## Output Format
 
 Tests organized by type with:
+
 - Happy path tests
 - Error case tests
 - Edge case tests

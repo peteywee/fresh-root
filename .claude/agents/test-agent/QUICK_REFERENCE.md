@@ -1,16 +1,19 @@
 # Test Agent — Quick Reference
 
 ## Invocation
+
 ```
 Use the test agent to generate tests for [target]
 ```
 
 ## Test Types
+
 - **Unit Tests** (Vitest): Functions, fast
 - **API Route Tests**: HTTP handlers
 - **E2E Tests** (Playwright): User flows
 
 ## Run Tests
+
 ```bash
 pnpm test              # Run all tests
 pnpm test:coverage     # With coverage report
@@ -19,6 +22,7 @@ pnpm test:watch        # Watch mode
 ```
 
 ## Test Template
+
 ```typescript
 describe("functionName", () => {
   it("should handle valid input", () => {
@@ -33,11 +37,13 @@ describe("functionName", () => {
 ```
 
 ## Coverage Goals
+
 - Statements: >80%
 - Branches: >75%
 - Functions: >80%
 - Lines: >80%
 
 ## See Also
+
 - [README.md](./README.md) — Full documentation
 - [AGENT.md](./AGENT.md) — Configuration

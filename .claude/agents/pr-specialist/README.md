@@ -20,6 +20,7 @@ The PR Specialist agent handles the complete PR workflow:
 ```
 
 This will:
+
 - Analyze commits on current branch
 - Generate a semantic PR title
 - Create a summary of changes
@@ -33,6 +34,7 @@ This will:
 ```
 
 This will:
+
 - Fetch PR details and diff
 - Summarize changes by file
 - Check CI/CD status
@@ -46,6 +48,7 @@ This will:
 ```
 
 This will:
+
 - Verify approval requirements met
 - Confirm CI passes
 - Merge with squash (default)
@@ -54,13 +57,13 @@ This will:
 
 ## Commands
 
-| Command | Description | Example |
-|---------|-------------|---------|
-| `@pr create` | Create new PR | `@pr create --base main` |
-| `@pr review <n>` | Review PR #n | `@pr review 123` |
-| `@pr merge <n>` | Merge PR #n | `@pr merge 123 --strategy squash` |
-| `@pr update` | Update current PR | `@pr update` |
-| `@pr status <n>` | Check PR status | `@pr status 123` |
+| Command          | Description       | Example                           |
+| ---------------- | ----------------- | --------------------------------- |
+| `@pr create`     | Create new PR     | `@pr create --base main`          |
+| `@pr review <n>` | Review PR #n      | `@pr review 123`                  |
+| `@pr merge <n>`  | Merge PR #n       | `@pr merge 123 --strategy squash` |
+| `@pr update`     | Update current PR | `@pr update`                      |
+| `@pr status <n>` | Check PR status   | `@pr status 123`                  |
 
 ## PR Title Conventions
 
@@ -75,11 +78,11 @@ Uses conventional commits format:
 
 ## Merge Strategies
 
-| Strategy | When to Use |
-|----------|-------------|
+| Strategy | When to Use                                       |
+| -------- | ------------------------------------------------- |
 | `squash` | Default. Clean history, single commit per feature |
-| `rebase` | Preserve individual commits, linear history |
-| `merge` | Preserve branch history with merge commit |
+| `rebase` | Preserve individual commits, linear history       |
+| `merge`  | Preserve branch history with merge commit         |
 
 ## Configuration
 
@@ -113,11 +116,11 @@ Add to `.vscode/settings.json`:
 
 ## Keyboard Shortcuts
 
-| OS | Shortcut | Action |
-|----|----------|--------|
-| Mac | `Cmd+Shift+P` | Insert @pr |
+| OS      | Shortcut       | Action     |
+| ------- | -------------- | ---------- |
+| Mac     | `Cmd+Shift+P`  | Insert @pr |
 | Windows | `Ctrl+Shift+P` | Insert @pr |
-| Linux | `Ctrl+Shift+P` | Insert @pr |
+| Linux   | `Ctrl+Shift+P` | Insert @pr |
 
 ## Examples
 

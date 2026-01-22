@@ -1,15 +1,17 @@
 ---
 
-description:
-"Lessons learned from GitHub Actions workflows, environment variables, and CI debugging"
-applyTo: ".github/workflows/_.yml,.github/workflows/\*\*/_.yml"
+description: "Lessons learned from GitHub Actions workflows, environment variables, and CI
+debugging" applyTo: ".github/workflows/_.yml,.github/workflows/\*\*/_.yml"
+
 ## priority: 2
 
 # GitHub Actions Memory
+
 Hard-won lessons from CI/CD pipeline debugging, environment configuration, and workflow
 optimization.
 
 ## Environment Variables in Build Jobs
+
 **Pattern**: Environment variables from GitHub Secrets must be explicitly declared in the `env:`
 block of each job that needs them.
 
@@ -41,6 +43,7 @@ jobs:
 - All workflows that run builds need the same environment variables configured
 
 ## pnpm Script Argument Passing
+
 **Pattern**: When using `pnpm <script>` with arguments, avoid the `--` separator if the underlying
 command will interpret it literally.
 
@@ -63,6 +66,7 @@ run: pnpm repomix . --style markdown --output result.md
 - Not needed for most npm/pnpm scripts that simply proxy to the actual command
 
 ## CLI Wrapper API Alignment
+
 **Pattern**: When wrapping external CLI libraries, match their exact API expectations rather than
 creating abstractions.
 
@@ -92,6 +96,7 @@ const options = {
 3. Match the library's expected structure precisely
 
 ## Local Testing Before CI
+
 **Pattern**: Test CLI commands locally using the exact syntax that will run in CI before pushing
 changes.
 
@@ -114,6 +119,7 @@ seconds.
 **Time Saved**: A 5-minute local test can save 30+ minutes of CI iteration cycles.
 
 ## Build Success vs Runtime Failures
+
 **Pattern**: A successful build in CI doesn't guarantee the application will run correctly.
 
 **Example**: Next.js builds can succeed even if runtime environment variables are missing, but page

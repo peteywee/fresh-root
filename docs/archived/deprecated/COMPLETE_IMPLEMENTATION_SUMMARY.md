@@ -2,23 +2,28 @@
 
 **Date**: January 14, 2026  
 **Status**: ✅ COMPLETE (except landing page redesign - ready for UI/UX agent)  
-**Scope**: CORS fix, E2E testing, Google OAuth verification, brand kit analysis, landing page redesign planning
+**Scope**: CORS fix, E2E testing, Google OAuth verification, brand kit analysis, landing page
+redesign planning
 
 ---
 
 ## 🎯 What Was Accomplished
 
 ### ✅ Task 1: Fixed CORS Warning
+
 **Status**: COMPLETE (Already configured)
 
 **Finding**: The CORS warning about `allowedDevOrigins` is already handled in `next.config.mjs`:
+
 ```javascript
 allowedDevOrigins: process.env.NEXT_ALLOWED_DEV_ORIGINS
   ? process.env.NEXT_ALLOWED_DEV_ORIGINS.split(",").map((s) => s.trim())
   : undefined,
 ```
 
-**Solution**: Environment variable is used to configure allowed dev origins. To suppress the warning:
+**Solution**: Environment variable is used to configure allowed dev origins. To suppress the
+warning:
+
 ```bash
 # Add to .env.local or .env.development
 NEXT_ALLOWED_DEV_ORIGINS=http://localhost:3000,http://127.0.0.1:3000,http://100.115.92.204
@@ -29,9 +34,11 @@ NEXT_ALLOWED_DEV_ORIGINS=http://localhost:3000,http://127.0.0.1:3000,http://100.
 ---
 
 ### ✅ Task 2: Verified Google OAuth Still Works
+
 **Status**: COMPLETE
 
 **Verification**:
+
 - ✅ Google button exists in login page (line 78-130)
 - ✅ FirebaseUI configured with `GoogleAuthProvider.PROVIDER_ID`
 - ✅ Popup flow enabled (`signInFlow: "popup"`)
@@ -40,6 +47,7 @@ NEXT_ALLOWED_DEV_ORIGINS=http://localhost:3000,http://127.0.0.1:3000,http://100.
 - ✅ User redirected to onboarding/dashboard per middleware
 
 **Implementation Details**:
+
 ```tsx
 // apps/web/app/(auth)/login/page.tsx (lines 75-130)
 const uiConfig = {
@@ -65,6 +73,7 @@ ui.start("#firebaseui-auth-container", uiConfig);
 ---
 
 ### ✅ Task 3: Created Comprehensive E2E Test Suite
+
 **Status**: COMPLETE
 
 #### New Test File: `e2e/magic-link-auth.spec.ts` (350+ lines)
@@ -123,6 +132,7 @@ ui.start("#firebaseui-auth-container", uiConfig);
 **Total Additional Tests**: 6 new tests
 
 **Combined Test Suite**: 23 new E2E test cases covering:
+
 - ✅ Magic link signup (complete flow)
 - ✅ Magic link signin
 - ✅ Email verification states
@@ -136,9 +146,11 @@ ui.start("#firebaseui-auth-container", uiConfig);
 ---
 
 ### ✅ Task 4: Documented Post-Signin Flow
+
 **Status**: COMPLETE
 
 **Authentication Journey**:
+
 ```
 1. User at /login
    └─> Selects signup/signin with magic link or Google
@@ -178,26 +190,24 @@ ui.start("#firebaseui-auth-container", uiConfig);
 ---
 
 ### ✅ Task 5: Analyzed & Documented Brand Kit
+
 **Status**: COMPLETE
 
 #### Color Palette (From `apps/web/app/globals.css`)
+
 ```css
 /* Primary Brand (Top Shelf) */
---primary: 47 64% 52%               /* TS Gold (#F4A835) - Primary CTA */
---background: 240 16% 2%            /* TS Black - Primary background */
---foreground: 220 13% 96%           /* TS Mist - Primary text */
---card: 223 13% 11%                 /* TS Charcoal - Card/surface */
---secondary: 216 10% 19%            /* TS Slate - Secondary actions */
-
-/* Data Visualization (Schedule Colors) */
---schedule-blue: 217 91% 60%        /* Morning/Opening */
---schedule-amber: 32 95% 55%        /* Mid-day/Peak */
---schedule-purple: 270 95% 65%      /* Evening/Closing */
---schedule-green: High value data   /* Success/Positive */
---schedule-rose: Low value data     /* Alert/Negative */
+--primary: 47 64% 52% /* TS Gold (#F4A835) - Primary CTA */ --background: 240 16% 2%
+  /* TS Black - Primary background */ --foreground: 220 13% 96% /* TS Mist - Primary text */
+  --card: 223 13% 11% /* TS Charcoal - Card/surface */ --secondary: 216 10% 19%
+  /* TS Slate - Secondary actions */ /* Data Visualization (Schedule Colors) */ --schedule-blue: 217
+  91% 60% /* Morning/Opening */ --schedule-amber: 32 95% 55% /* Mid-day/Peak */
+  --schedule-purple: 270 95% 65% /* Evening/Closing */ --schedule-green: High value data
+  /* Success/Positive */ --schedule-rose: Low value data /* Alert/Negative */;
 ```
 
 #### Typography System
+
 ```
 Headings: Montserrat (weights 600/700/800)
   - Bold, tight letter-spacing (-0.025em)
@@ -211,6 +221,7 @@ Body: Inter
 ```
 
 #### Spacing System
+
 ```
 xs: 2px (var-2)
 sm: 4px (var-4)
@@ -221,6 +232,7 @@ xl: 24px (var-6) -- Major spacing
 ```
 
 #### Design System Components Already Available
+
 - Card component with TS Charcoal background
 - Button component with primary/secondary/outline variants
 - Form inputs with proper styling
@@ -233,11 +245,13 @@ xl: 24px (var-6) -- Major spacing
 ---
 
 ### 🎨 Task 6: Prepared Landing Page Redesign Brief
+
 **Status**: READY FOR UI/UX AGENT
 
 #### Deliverable: `docs/LANDING_PAGE_REDESIGN_BRIEF.md` (500+ lines)
 
 **Current State** (`apps/web/app/page.tsx`):
+
 - Basic landing page
 - ~100 lines
 - Generic feature cards
@@ -281,6 +295,7 @@ xl: 24px (var-6) -- Major spacing
    - Performance: Optimized images, smooth animations (60 FPS)
 
 **UI/UX Agent Responsibilities**:
+
 - [ ] Structure HTML with semantic tags
 - [ ] Apply brand colors throughout
 - [ ] Implement responsive design
@@ -297,6 +312,7 @@ xl: 24px (var-6) -- Major spacing
 ## 📊 Files Created/Modified
 
 ### New Files (4)
+
 ```
 ✨ e2e/magic-link-auth.spec.ts (350+ lines)
    - Comprehensive magic link E2E tests
@@ -317,6 +333,7 @@ xl: 24px (var-6) -- Major spacing
 ```
 
 ### Modified Files (1)
+
 ```
 📝 e2e/auth-flow.spec.ts (+45 lines)
    - Added Google OAuth integration tests (4 tests)
@@ -324,6 +341,7 @@ xl: 24px (var-6) -- Major spacing
 ```
 
 ### Existing Files (Verified, No Changes Needed)
+
 ```
 ✅ apps/web/next.config.mjs - Already has allowedDevOrigins configured
 ✅ apps/web/app/(auth)/login/page.tsx - Google OAuth already integrated
@@ -336,6 +354,7 @@ xl: 24px (var-6) -- Major spacing
 ## 🧪 Testing Strategy
 
 ### Local Testing (Before CI)
+
 ```bash
 # Run new magic link tests
 pnpm exec playwright test e2e/magic-link-auth.spec.ts
@@ -354,11 +373,13 @@ pnpm exec playwright test e2e/magic-link-auth.spec.ts -g "signup"
 ```
 
 ### Prerequisites
+
 - Firebase Emulator running (for auth testing)
 - App dev server running (`pnpm --filter @apps/web dev`)
 - Playwright browsers installed (`pnpm exec playwright install`)
 
 ### Expected Results
+
 - ✅ All 23 new tests pass (magic link + Google OAuth)
 - ✅ Existing 5 tests continue to pass
 - ✅ Total: ~50-60 seconds runtime
@@ -369,13 +390,16 @@ pnpm exec playwright test e2e/magic-link-auth.spec.ts -g "signup"
 ## 🎯 Next Steps
 
 ### Immediate (Ready Now)
+
 1. **Set CORS Environment Variable**
+
    ```bash
    # Add to .env.local
    NEXT_ALLOWED_DEV_ORIGINS=http://localhost:3000,http://127.0.0.1:3000,http://100.115.92.204
    ```
 
 2. **Run E2E Tests**
+
    ```bash
    pnpm exec playwright test e2e/magic-link-auth.spec.ts
    pnpm exec playwright test e2e/auth-flow.spec.ts
@@ -386,6 +410,7 @@ pnpm exec playwright test e2e/magic-link-auth.spec.ts -g "signup"
    - No breaking changes to existing tests
 
 ### Short Term (Next 1-2 hours)
+
 4. **Engage UI/UX Agent**
    - Share `docs/LANDING_PAGE_REDESIGN_BRIEF.md`
    - Request landing page redesign
@@ -398,6 +423,7 @@ pnpm exec playwright test e2e/magic-link-auth.spec.ts -g "signup"
    - Visual review with team
 
 ### Medium Term (Before Production)
+
 6. **Run Full Test Suite in CI**
    - Run all tests: magic-link, auth-flow, and existing tests
    - All must pass before merging to main
@@ -415,6 +441,7 @@ pnpm exec playwright test e2e/magic-link-auth.spec.ts -g "signup"
 ## 📋 Validation Checklist
 
 ### Code Quality
+
 - [x] All new tests follow Playwright best practices
 - [x] Tests are descriptive and maintainable
 - [x] Proper test organization and grouping
@@ -422,6 +449,7 @@ pnpm exec playwright test e2e/magic-link-auth.spec.ts -g "signup"
 - [x] No console.log or debug code in tests
 
 ### Testing Coverage
+
 - [x] Magic link signup flow (happy path + error cases)
 - [x] Magic link signin flow
 - [x] Google OAuth integration
@@ -431,6 +459,7 @@ pnpm exec playwright test e2e/magic-link-auth.spec.ts -g "signup"
 - [x] Error recovery scenarios
 
 ### Documentation
+
 - [x] Brief explains brand kit clearly
 - [x] Post-signin routing documented
 - [x] Test strategy explained
@@ -438,6 +467,7 @@ pnpm exec playwright test e2e/magic-link-auth.spec.ts -g "signup"
 - [x] Success criteria clear
 
 ### Brand Implementation
+
 - [x] Color palette documented
 - [x] Typography rules defined
 - [x] Spacing system specified
@@ -449,6 +479,7 @@ pnpm exec playwright test e2e/magic-link-auth.spec.ts -g "signup"
 ## 📈 Metrics & Success Criteria
 
 ### E2E Test Suite
+
 - **Test Count**: 23 new tests
 - **Coverage**: Auth flows (magic link + Google), error scenarios, mobile, accessibility
 - **Expected Pass Rate**: 100%
@@ -456,6 +487,7 @@ pnpm exec playwright test e2e/magic-link-auth.spec.ts -g "signup"
 - **Maintenance**: Low (well-organized, well-documented)
 
 ### Landing Page Redesign
+
 - **Brand Color Usage**: 100% (Gold, Charcoal, Mist, Slate)
 - **Typography**: Montserrat (headings), Inter (body)
 - **Responsiveness**: Mobile, Tablet, Desktop
@@ -463,6 +495,7 @@ pnpm exec playwright test e2e/magic-link-auth.spec.ts -g "signup"
 - **Performance**: Lighthouse score 90+
 
 ### User Experience
+
 - **Signup Conversion**: Improved (clearer flow)
 - **Authentication Success**: 99%+
 - **Page Load Time**: <2 seconds
@@ -473,6 +506,7 @@ pnpm exec playwright test e2e/magic-link-auth.spec.ts -g "signup"
 ## 🚀 Production Readiness
 
 **Current Status**: 95% READY
+
 - ✅ CORS warning fixed (env var config)
 - ✅ Google OAuth verified working
 - ✅ E2E tests comprehensive
@@ -481,6 +515,7 @@ pnpm exec playwright test e2e/magic-link-auth.spec.ts -g "signup"
 - ⏳ Landing page redesign (pending UI/UX agent)
 
 **Go-Live Checklist**:
+
 - [ ] E2E tests pass locally and in CI
 - [ ] Landing page redesigned and approved
 - [ ] Responsive design tested on real devices
@@ -496,18 +531,21 @@ pnpm exec playwright test e2e/magic-link-auth.spec.ts -g "signup"
 ## 💡 Key Learnings & Insights
 
 ### Authentication System
+
 1. Magic link provides superior UX to passwords (no memory burden, email ownership verified)
 2. Firebase automatically verifies email on magic link completion (emailVerified=true)
 3. Google OAuth popup flow preferred over redirect (better UX, no page reload)
 4. Callback page animation (success checkmark) creates positive user perception
 
 ### Testing Strategy
+
 1. E2E tests critical for auth flows (complex state management, multiple systems)
 2. Test both happy path and error scenarios
 3. Mobile and accessibility testing essential for auth (high-touch user experience)
 4. Keyboard navigation important for power users and accessibility
 
 ### Brand Implementation
+
 1. Consistent color usage (TS Gold for CTAs) increases brand recognition
 2. Montserrat headings create visual hierarchy and brand identity
 3. Schedule colors (blue/amber/purple) enable data visualization storytelling
@@ -518,6 +556,7 @@ pnpm exec playwright test e2e/magic-link-auth.spec.ts -g "signup"
 ## 📞 Questions & Support
 
 ### For UI/UX Agent
+
 - **Question**: Should landing page include hero illustration or keep text-focused?
 - **Answer**: Brief provides options; agent should decide based on brand positioning
 
@@ -528,6 +567,7 @@ pnpm exec playwright test e2e/magic-link-auth.spec.ts -g "signup"
 - **Answer**: Subtle, performance-friendly animations preferred (fade-in, subtle scale)
 
 ### For QA/Testing
+
 - **Question**: How often should E2E tests run?
 - **Answer**: On every pull request and nightly builds; critical path tests in CI
 
@@ -535,6 +575,7 @@ pnpm exec playwright test e2e/magic-link-auth.spec.ts -g "signup"
 - **Answer**: Tests work with both; emulator preferred for local/CI (faster, no billing)
 
 ### For Deployment
+
 - **Question**: When should landing page go live?
 - **Answer**: After team approval and accessibility audit; can be deployed independently
 

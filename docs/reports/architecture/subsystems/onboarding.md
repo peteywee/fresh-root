@@ -1,8 +1,10 @@
 # L2 — Onboarding & Network Creation
+
 > **Status:** ✅ Documented from actual codebase analysis **Last Updated:** 2025-12-17 **Analyzed
 > Routes:** 7 endpoints, ~400 LOC
 
 ## 1. Role in the System
+
 The Onboarding subsystem handles new user registration and organization network setup. It provides
 three distinct flows:
 
@@ -13,7 +15,9 @@ three distinct flows:
 All routes use the `@fresh-schedules/api-framework` SDK with typed validation and authentication.
 
 ## 2. Actual Implementation Analysis
+
 ### 2.1 Endpoints Inventory
+
 | Endpoint                                   | Method | Purpose                          | Auth        | Validation                        |
 | ------------------------------------------ | ------ | -------------------------------- | ----------- | --------------------------------- |
 | `/api/onboarding/profile`                  | POST   | Complete user profile setup      | ✅ Required | `OnboardingProfileSchema`         |
@@ -28,6 +32,7 @@ All routes use the `@fresh-schedules/api-framework` SDK with typed validation an
 Signature Invariant** is enforced.
 
 ### 2.2 Data Models & Types
+
 From `packages/types/src/onboarding.ts`:
 
 ```typescript
@@ -64,6 +69,7 @@ export const OnboardingJoinWithTokenSchema = z.object({
 ```
 
 ### 2.3 Firestore Collections Used
+
 - **`networks`** - Organization/network documents
   - Fields: `id`, `name`, `status`, `activatedAt`, `createdAt`, `updatedAt`, `ownerId`
   - Status enum: `"active" | "inactive" | "pending"`
@@ -72,6 +78,7 @@ export const OnboardingJoinWithTokenSchema = z.object({
 mock/local data for development.
 
 ### 2.4 Authentication & Context
+
 All routes receive:
 
 ```typescript
@@ -94,7 +101,9 @@ Authentication is **required** via `createAuthenticatedEndpoint()` - unauthorize
 rejected before handler execution.
 
 ## 3. Critical Findings
+
 ### 🔴 CRITICAL-01: Missing Actual Firestore Operations
+
 **Location:** All onboarding routes **Issue:** Most endpoints return `ok(mockData)` without
 persisting to Firestore
 
@@ -122,6 +131,7 @@ await updateDocWithType<UserProfile>(adminDb, userRef, profile);
 ```
 
 ### 🔴 CRITICAL-02: Placeholder Test Coverage
+
 **Location:** `apps/web/app/api/onboarding/__tests__/` **Issue:** All tests are placeholders with no
 actual assertions
 
@@ -139,6 +149,7 @@ describe("api/onboarding/profile route", () => {
 for each endpoint (see §5 for examples)
 
 ### 🟡 HIGH-01: No Validation of Network Ownership
+
 **Location:** `activate-network/route.ts` **Issue:** Any authenticated user can activate any
 networkId
 
@@ -154,6 +165,7 @@ await updateDocWithType<NetworkDoc>(adb, networkRef, {
 `context.auth.userId === network.ownerId` before activation
 
 ### 🟡 HIGH-02: Missing Idempotency
+
 **Location:** All POST endpoints **Issue:** Repeated requests can cause duplicate network creation
 
 **Recommendation:** Use idempotency keys:
@@ -167,20 +179,25 @@ export const POST = createAuthenticatedEndpoint({
 ```
 
 ## 4. Architectural Notes & Invariants
+
 ### ✅ Enforced Invariants
+
 1. **A09 Handler Signature Invariant** - All routes use SDK factory pattern
 2. **Input Validation** - Zod schemas validate all request bodies before handler execution
 3. **Authentication Required** - `createAuthenticatedEndpoint()` blocks unauthenticated requests
 4. **Type Safety** - Typed wrappers (`updateDocWithType`) used for Firestore operations
 
 ### ⚠️ Missing Invariants
+
 1. **Authorization Checks** - No validation of resource ownership
 2. **Audit Logging** - No tracking of onboarding events
 3. **Rate Limiting** - No protection against onboarding spam
 4. **Transaction Safety** - Multi-step flows not wrapped in transactions
 
 ## 5. Example Patterns
+
 ### ✅ Good Pattern: SDK Factory Usage
+
 ```typescript
 // File: onboarding/profile/route.ts
 export const POST = createAuthenticatedEndpoint({
@@ -208,6 +225,7 @@ export const POST = createAuthenticatedEndpoint({
 - Consistent error handling
 
 ### ❌ Bad Pattern: Missing Persistence
+
 ```typescript
 // ❌ CURRENT: Just returns data
 return ok(profile);
@@ -218,6 +236,7 @@ return ok(profile);
 ```
 
 ### ❌ Bad Pattern: No Authorization Check
+
 ```typescript
 // File: activate-network/route.ts
 // ❌ CURRENT: No ownership verification
@@ -242,6 +261,7 @@ await updateDocWithType<NetworkDoc>(adb, networkRef, {
 ```
 
 ### ✅ Refactored Pattern: Complete Onboarding Flow
+
 ```typescript
 export const POST = createAuthenticatedEndpoint({
   input: OnboardingProfileSchema,
@@ -281,6 +301,7 @@ export const POST = createAuthenticatedEndpoint({
 ```
 
 ## 6. Open Questions
+
 1. **What is the complete onboarding flow sequence?**
    - Which endpoints are called in what order?
    - Are there client-side state machines?
@@ -298,6 +319,7 @@ export const POST = createAuthenticatedEndpoint({
    - Additional validation steps?
 
 ## 7. Recommendations Summary
+
 | Priority | Action                                          | Estimated Effort |
 | -------- | ----------------------------------------------- | ---------------- |
 | 🔴 P0    | Add Firestore persistence to all endpoints      | 2-3 days         |
@@ -311,12 +333,14 @@ export const POST = createAuthenticatedEndpoint({
 **Total Estimated Effort:** ~10-15 days
 
 ## 8. Related Subsystems
+
 - **RBAC/Security** - User roles assigned during onboarding
 - **Organizations** - Network creation tied to org hierarchy
 - **Authentication** - Firebase Auth integration
 - **Notifications** - Welcome emails/onboarding notifications (not yet implemented)
 
 ## 9. Next Steps
+
 1. Prioritize fixing CRITICAL-01 (missing Firestore persistence)
 2. Add comprehensive test coverage for happy path + edge cases
 3. Implement authorization checks before network operations

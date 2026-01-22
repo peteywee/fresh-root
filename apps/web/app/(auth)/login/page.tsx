@@ -124,14 +124,20 @@ const LoginForm = React.memo(() => {
 
   return (
     <main className="flex min-h-screen items-center justify-center bg-gradient-to-br from-surface via-surface-card to-surface-accent p-6">
-      <div className="card w-full max-w-md motion-safe:animate-slide-up" role="main" aria-labelledby="login-title">
+      <div
+        className="card w-full max-w-md motion-safe:animate-slide-up"
+        role="main"
+        aria-labelledby="login-title"
+      >
         <div className="mb-8 space-y-2 text-center">
-          <h1 id="login-title" className="text-3xl font-bold text-primary">Welcome Back</h1>
+          <h1 id="login-title" className="text-3xl font-bold text-primary">
+            Welcome Back
+          </h1>
           <p className="text-text-muted">Sign in or create your account</p>
         </div>
 
         {error && (
-          <div 
+          <div
             className="mb-6 motion-safe:animate-fade-in whitespace-pre-line rounded-lg border border-danger bg-danger/10 p-4 text-sm text-danger"
             role="alert"
             aria-live="polite"
@@ -140,7 +146,7 @@ const LoginForm = React.memo(() => {
           </div>
         )}
         {status && (
-          <div 
+          <div
             className="mb-6 motion-safe:animate-fade-in whitespace-pre-line rounded-lg border border-secondary bg-secondary/10 p-4 text-sm text-secondary"
             role="status"
             aria-live="polite"
@@ -166,8 +172,8 @@ const LoginForm = React.memo(() => {
         <div id="firebaseui-google-container" className="mt-6" />
 
         <div className="mt-8 text-center text-sm text-text-muted">
-          <Link 
-            href="/" 
+          <Link
+            href="/"
             className="rounded-md transition-colors hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
           >
             ← Back to home

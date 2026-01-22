@@ -39,7 +39,9 @@ test.describe("Staff Self-Service - Schedule Access", () => {
     // Should redirect or show access denied
     const url = page.url();
     // Staff should not have direct access to builder
-    expect(url.includes("builder") || url.includes("schedules") || url.includes("login")).toBeTruthy();
+    expect(
+      url.includes("builder") || url.includes("schedules") || url.includes("login"),
+    ).toBeTruthy();
   });
 });
 
