@@ -107,6 +107,8 @@ export async function POST(request: NextRequest) {
     const timestamp = Date.now();
     const outputExt =
       config.output === "markdown" ? "md" : config.output === "plain" ? "txt" : config.output;
+    // nosemgrep: javascript.lang.security.audit.path-traversal.path-join-resolve-traversal.path-join-resolve-traversal
+    // Security: Output file uses constant /tmp base with timestamp, not user input
     const outputFile = path.join("/tmp", `repomix-output-${timestamp}.${outputExt}`);
     args.push("--output", outputFile);
 

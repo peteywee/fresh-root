@@ -1,0 +1,12 @@
+{
+  "name": "Top Shelf Service",
+  "short_name": "TopShelf",
+  "description": "Scheduling and operations tools from Top Shelf Service LLC. The hardest part is done for you.",
+  "icons": [
+    {
+      "src": "/logos/app-icon/512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

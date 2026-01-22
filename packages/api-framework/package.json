@@ -24,6 +24,7 @@
   },
   "dependencies": {
     "@fresh-schedules/types": "workspace:*",
+    "@opentelemetry/api": "^1.9.0",
     "@upstash/redis": "^1.35.8",
     "firebase-admin": "^13.6.0",
     "ioredis": "^5.8.2",

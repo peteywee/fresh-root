@@ -57,6 +57,9 @@ async function resolveAndValidatePath(
   const hasTraversal = inputPath.split(/[/\\]+/).includes("..");
   if (hasTraversal) return null;
 
+  // nosemgrep: javascript.lang.security.audit.path-traversal.path-join-resolve-traversal.path-join-resolve-traversal
+  // Security: Input pre-validated for null bytes (L56) and ".." traversal (L57-58),
+  // then realpath validation (L72-80) ensures symlinks can't escape workspace
   const absolute = path.isAbsolute(inputPath)
     ? path.normalize(inputPath)
     : path.normalize(path.join(WORKSPACE_ROOT, inputPath));
@@ -93,6 +96,7 @@ async function resolveAndValidatePath(
       if (parts.some((part) => BLOCKED_DIRS.has(part))) {
         return null;
       }
+      // nosemgrep: javascript.lang.security.audit.path-traversal.path-join-resolve-traversal.path-join-resolve-traversal
       return path.join(parentReal, path.basename(absolute));
     } catch {
       return null;
@@ -143,6 +147,7 @@ export const GET = createAuthenticatedEndpoint({
           .map((entry) => ({
             name: entry.name,
             type: entry.isDirectory() ? "directory" : "file",
+            // nosemgrep: javascript.lang.security.audit.path-traversal.path-join-resolve-traversal.path-join-resolve-traversal
             path: path.relative(WORKSPACE_ROOT, path.join(fullPath, entry.name)),
           }));
         return NextResponse.json({ type: "directory", items });

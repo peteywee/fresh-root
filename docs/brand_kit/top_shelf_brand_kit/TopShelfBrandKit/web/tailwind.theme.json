@@ -1,0 +1,27 @@
+{
+  "theme": {
+    "extend": {
+      "colors": {
+        "ts-black": "#050507",
+        "ts-charcoal": "#181A1F",
+        "ts-slate": "#2C3036",
+        "ts-mist": "#F3F4F6",
+        "ts-accent-green": "#22C55E",
+        "ts-accent-amber": "#F59E0B",
+        "ts-accent-red": "#EF4444"
+      },
+      "fontFamily": {
+        "headline": [
+          "Montserrat",
+          "system-ui",
+          "sans-serif"
+        ],
+        "body": [
+          "Inter",
+          "system-ui",
+          "sans-serif"
+        ]
+      }
+    }
+  }
+}
