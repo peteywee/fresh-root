@@ -1,4 +1,5 @@
 # FRESH SCHEDULES - BRANCH RULES
+
 > **Version**: 1.0.0\
 > **Status**: CANONICAL\
 > **Authority**: Sr Dev / Architecture\
@@ -9,6 +10,7 @@ This document defines branch protection rules. Designed to be light and extensib
 ---
 
 ## BRANCH HIERARCHY
+
 ```
 main (production)
 │
@@ -25,7 +27,9 @@ main (production)
 ---
 
 ## CORE RULES
+
 ### main Branch
+
 | Setting                         | Value           | Reason                 |
 | ------------------------------- | --------------- | ---------------------- |
 | **Require PR**                  | Yes             | No direct pushes       |
@@ -39,6 +43,7 @@ main (production)
 | **Allow deletions**             | No              | Never                  |
 
 ### dev Branch
+
 | Setting                         | Value | Reason                 |
 | ------------------------------- | ----- | ---------------------- |
 | **Require PR**                  | Yes   | No direct pushes       |
@@ -51,6 +56,7 @@ main (production)
 | **Allow deletions**             | No    | Never                  |
 
 ### Feature Branches (feature/_, fix/_, refactor/_, chore/_)
+
 | Setting                  | Value | Reason            |
 | ------------------------ | ----- | ----------------- |
 | **Require PR**           | No    | Can push directly |
@@ -58,6 +64,7 @@ main (production)
 | **Allow force push**     | Yes   | Allow rebasing    |
 
 ### Hotfix Branches (hotfix/\*)
+
 | Setting                | Value | Reason             |
 | ---------------------- | ----- | ------------------ |
 | **Require PR**         | Yes   | Still needs review |
@@ -68,12 +75,15 @@ main (production)
 ---
 
 ## BRANCH NAMING
+
 ### Pattern
+
 ```
 {type}/{ticket}-{description}
 ```
 
 ### Types
+
 | Type       | Purpose           | Example                       |
 | ---------- | ----------------- | ----------------------------- |
 | `feature`  | New functionality | `feature/FS-123-add-time-off` |
@@ -83,6 +93,7 @@ main (production)
 | `hotfix`   | Emergency fix     | `hotfix/FS-999-auth-bypass`   |
 
 ### Validation Regex
+
 ```regex
 ^(feature|fix|refactor|chore|hotfix)\/[A-Z]+-[0-9]+-[a-z0-9-]+$|^(feature|fix|refactor|chore)\/[a-z0-9-]+$
 ```
@@ -90,6 +101,7 @@ main (production)
 ---
 
 ## MERGE STRATEGIES
+
 | Source       | Target | Strategy     |
 | ------------ | ------ | ------------ |
 | `feature/*`  | `dev`  | Squash       |
@@ -101,11 +113,13 @@ main (production)
 | `hotfix/*`   | `dev`  | Merge commit |
 
 ### Why Squash for Features
+
 - Clean history
 - One commit = one feature/fix
 - Easy to revert
 
 ### Why Merge Commit for Releases
+
 - Preserve PR reference
 - Clear audit trail
 - Shows merge point
@@ -113,7 +127,9 @@ main (production)
 ---
 
 ## WORKFLOW
+
 ### Standard Flow
+
 ```bash
 # 1. Create branch from dev
 git checkout dev
@@ -133,6 +149,7 @@ git push -u origin feature/FS-123-new-feature
 ```
 
 ### Hotfix Flow
+
 ```bash
 # 1. Create hotfix from main
 git checkout main
@@ -155,7 +172,9 @@ git push
 ---
 
 ## GITHUB CONFIGURATION
+
 ### Branch Protection API
+
 ```javascript
 // scripts/setup-branch-protection.mjs
 const { Octokit } = require("@octokit/rest");
@@ -206,6 +225,7 @@ await octokit.repos.updateBranchProtection({
 ```
 
 ### Rulesets (Alternative)
+
 ```yaml
 # .github/rulesets/main.yml
 name: Main Branch Rules
@@ -231,7 +251,9 @@ rules:
 ---
 
 ## EXTENDING RULES
+
 ### Adding New Branch Type
+
 1. Define naming convention
 2. Add to validation regex
 3. Document merge strategy
@@ -250,6 +272,7 @@ docs/*:
 ```
 
 ### Adding Status Checks
+
 1. Add workflow in `.github/workflows/`
 2. Add check name to required checks
 3. Update branch protection
@@ -262,6 +285,7 @@ required_status_checks: {
 ```
 
 ### Environment-Based Rules
+
 ```javascript
 // Different rules per environment
 if (process.env.ENV === "enterprise") {
@@ -273,7 +297,9 @@ if (process.env.ENV === "enterprise") {
 ---
 
 ## VIOLATIONS
+
 ### Common Violations
+
 | Violation            | Solution           |
 | -------------------- | ------------------ |
 | Direct push to main  | Always use PR      |
@@ -282,6 +308,7 @@ if (process.env.ENV === "enterprise") {
 | Wrong merge strategy | Use correct button |
 
 ### Recovery
+
 ```bash
 # Accidentally pushed to main (if possible)
 git revert HEAD
@@ -295,4 +322,4 @@ git push
 
 **END OF BRANCH RULES**
 
-Next document: [11\_GATES.md](./11_GATES.md)
+Next document: [11_GATES.md](./11_GATES.md)

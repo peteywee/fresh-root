@@ -1,10 +1,12 @@
 # SR Agent Invocation — Immediate Attention Required
+
 Date: 2025-12-05 Invoker: Automated Copilot Assistant (repo scan)
 
 Severity: CRITICAL — Secrets exposed in repository; Tier-0 security violations detected by pattern
 validator.
 
 ## Summary
+
 This file is a formal SR Agent invocation. The automated QA run detected committed secrets in
 `./.env.local` and many Tier-0 security violations reported by `scripts/validate-patterns.mjs`
 (numerous API routes missing required security wrappers and lacking Zod validation). TypeScript
@@ -19,6 +21,7 @@ Key artifacts (created / located in repo):
   `BACKUP_CRON_TOKEN`, etc.) — **treat as compromised** if values are real.
 
 ## Immediate Actions Required (SR Agent)
+
 1. Rotate and revoke all possibly-exposed credentials immediately:
    - Firebase API keys (rotate if used for privileged operations), session secrets, service account
      keys.
@@ -66,6 +69,7 @@ Key artifacts (created / located in repo):
    - Re-run `node scripts/validate-patterns.mjs` and iterate until Tier-0 fixes are resolved.
 
 ## Operational Notes for SR Agent
+
 - Evidence and outputs are in `docs/qa-report.md`. Do NOT print or copy secret values into chat or
   issue comments.
 - All actions that modify history must be coordinated with repository owners and the release
@@ -74,6 +78,7 @@ Key artifacts (created / located in repo):
   may require immediate history rewrite.
 
 ## Combot Verification Request
+
 After human actions, request a Combot review with `/combot-review` (see
 `agents/combot-integration.md`) to run an automated high-confidence pass checking that:
 
@@ -82,10 +87,12 @@ After human actions, request a Combot review with `/combot-review` (see
 - `pnpm -w typecheck` completes successfully
 
 ## Contact / Escalation
+
 - Primary: repo owner `@peteywee` (GitHub)
 - Secondary: Security lead (see team roster)
 
 ## Invocation Record
+
 - Invocation created by Copilot Assistant after pattern validator run on 2025-12-05.
 - Files referenced: `docs/qa-report.md`, `repomix-output.xml` (packed repomix exists in repo root),
   `scripts/validate-patterns.mjs`.

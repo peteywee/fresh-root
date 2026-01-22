@@ -27,7 +27,9 @@ test.describe("Authentication Flow", () => {
     // Should redirect to login or onboarding
     await page.waitForLoadState("networkidle");
     const url = page.url();
-    expect(url.includes("login") || url.includes("onboarding") || url.includes("auth")).toBeTruthy();
+    expect(
+      url.includes("login") || url.includes("onboarding") || url.includes("auth"),
+    ).toBeTruthy();
   });
 
   test("login page displays authentication options", async ({ page }) => {
@@ -123,9 +125,9 @@ test.describe("Google OAuth - Integration", () => {
     await page.goto("/login");
 
     // Google button should be visible
-    const googleButton = page.locator('button:has-text("Google")').or(
-      page.locator('button:has-text("Sign in with Google")'),
-    );
+    const googleButton = page
+      .locator('button:has-text("Google")')
+      .or(page.locator('button:has-text("Sign in with Google")'));
 
     await expect(googleButton).toBeVisible();
   });
@@ -133,14 +135,12 @@ test.describe("Google OAuth - Integration", () => {
   test("Google button should have proper link styling", async ({ page }) => {
     await page.goto("/login");
 
-    const googleButton = page.locator('button:has-text("Google")').or(
-      page.locator('button:has-text("Sign in with Google")'),
-    );
+    const googleButton = page
+      .locator('button:has-text("Google")')
+      .or(page.locator('button:has-text("Sign in with Google")'));
 
     // Should have cursor:pointer
-    const cursor = await googleButton.evaluate((el) =>
-      window.getComputedStyle(el).cursor,
-    );
+    const cursor = await googleButton.evaluate((el) => window.getComputedStyle(el).cursor);
     expect(cursor).toBe("pointer");
   });
 
@@ -152,9 +152,9 @@ test.describe("Google OAuth - Integration", () => {
     const popupPromise = context.waitForEvent("page");
 
     // Click Google button (might open popup)
-    const googleButton = page.locator('button:has-text("Google")').or(
-      page.locator('button:has-text("Sign in with Google")'),
-    );
+    const googleButton = page
+      .locator('button:has-text("Google")')
+      .or(page.locator('button:has-text("Sign in with Google")'));
 
     // Depending on config, might open popup or redirect
     // For popup flow, we should see new page event
@@ -177,8 +177,8 @@ test.describe("Google OAuth - Integration", () => {
       const popupUrl = popupPage.url();
       expect(
         popupUrl.includes("accounts.google.com") ||
-        popupUrl.includes("firebase") ||
-        popupUrl.includes("login"),
+          popupUrl.includes("firebase") ||
+          popupUrl.includes("login"),
       ).toBeTruthy();
     }
   });
@@ -191,15 +191,15 @@ test.describe("Google OAuth - Integration", () => {
     await createAccountButton.click();
 
     // Google button should still be visible or marked as secondary
-    const googleButton = page.locator('button:has-text("Google")').or(
-      page.locator('button:has-text("Sign in with Google")'),
-    );
+    const googleButton = page
+      .locator('button:has-text("Google")')
+      .or(page.locator('button:has-text("Sign in with Google")'));
 
     // Should either be visible or have aria-hidden/display:none
     const isVisible = await googleButton.isVisible().catch(() => false);
-    const isHidden = await googleButton.evaluate(
-      (el) => window.getComputedStyle(el).display === "none",
-    ).catch(() => false);
+    const isHidden = await googleButton
+      .evaluate((el) => window.getComputedStyle(el).display === "none")
+      .catch(() => false);
 
     expect(isVisible || isHidden).toBeTruthy();
   });
@@ -215,9 +215,7 @@ test.describe("Authentication - Post-Signin Redirect", () => {
     // Should eventually redirect to / or a dashboard/onboarding page
     const finalUrl = page.url();
     expect(
-      finalUrl.includes("/") ||
-      finalUrl.includes("/onboarding") ||
-      finalUrl.includes("/dashboard"),
+      finalUrl.includes("/") || finalUrl.includes("/onboarding") || finalUrl.includes("/dashboard"),
     ).toBeTruthy();
   });
 
@@ -225,7 +223,7 @@ test.describe("Authentication - Post-Signin Redirect", () => {
     // This test verifies that after auth, users are redirected appropriately:
     // New users -> /onboarding
     // Existing users -> /dashboard or /
-    
+
     // Test structure: verify redirect logic exists
     const response = await page.request.get("/");
 

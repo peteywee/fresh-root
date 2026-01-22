@@ -4,17 +4,20 @@ Review and refactor code according to guidelines.
 
 ## Overview
 
-Senior expert software engineer agent that reviews and refactors code to maintain clean, maintainable code aligned with project standards.
+Senior expert software engineer agent that reviews and refactors code to maintain clean,
+maintainable code aligned with project standards.
 
 ## When to Use
 
 ✅ **Use this agent for**:
+
 - Code cleanup and refactoring
 - Align code with guidelines
 - Remove duplication
 - Improve code quality
 
 ❌ **Don't use this agent for**:
+
 - Feature implementation (use Implement Agent)
 - Code review only (use Review Agent)
 - Bug fixing (use Implement Agent)

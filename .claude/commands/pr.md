@@ -1,6 +1,7 @@
 # PR Management Skill
 
-You are a PR (Pull Request) specialist. Handle the complete PR lifecycle based on the user's request.
+You are a PR (Pull Request) specialist. Handle the complete PR lifecycle based on the user's
+request.
 
 ## Available Commands
 
@@ -24,6 +25,7 @@ When creating a PR:
    - A summary of changes (2-3 bullet points)
    - A test plan checklist
 5. Create the PR using:
+
 ```bash
 gh pr create --base main --head [current-branch] --title "[title]" --body "$(cat <<'EOF'
 ## Summary
@@ -36,13 +38,15 @@ gh pr create --base main --head [current-branch] --title "[title]" --body "$(cat
 EOF
 )"
 ```
+
 6. Return the PR URL
 
 ## PR Review Workflow
 
 When reviewing a PR:
 
-1. Fetch PR details: `gh pr view [number] --json title,body,state,author,additions,deletions,changedFiles,reviews,comments`
+1. Fetch PR details:
+   `gh pr view [number] --json title,body,state,author,additions,deletions,changedFiles,reviews,comments`
 2. Get the diff: `gh pr diff [number]`
 3. Check CI status: `gh pr checks [number]`
 4. Summarize:

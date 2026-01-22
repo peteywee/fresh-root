@@ -1,19 +1,20 @@
 ---
 
-id: A06
-extends: 03\_DIRECTIVES.md
-section: Implementation Patterns
-tags: \[patterns, api, sdk-factory, coding, types]
-status: canonical
-priority: P1
-## source: docs/standards/CODING\_RULES\_AND\_PATTERNS.md
+id: A06 extends: 03_DIRECTIVES.md section: Implementation Patterns tags: \[patterns, api,
+sdk-factory, coding, types] status: canonical priority: P1
+
+## source: docs/standards/CODING_RULES_AND_PATTERNS.md
 
 # Amendment A06: Coding Patterns & Implementation Standards
+
 ## Purpose
-Extends 03\_DIRECTIVES with specific implementation patterns for Fresh Schedules codebase.
+
+Extends 03_DIRECTIVES with specific implementation patterns for Fresh Schedules codebase.
 
 ## Core Patterns
+
 ### Pattern 1: SDK Factory (Current Standard)
+
 **All API routes** use `createOrgEndpoint` or factory variants.
 
 ```typescript
@@ -32,6 +33,7 @@ export const POST = createOrgEndpoint({
 ```
 
 ### Pattern 2: Zod-First Types
+
 **Never duplicate types**. Always use `z.infer<typeof Schema>`.
 
 ```typescript
@@ -47,6 +49,7 @@ export type User = z.infer<typeof UserSchema>;
 ```
 
 ### Pattern 3: Triad of Trust
+
 Every domain entity MUST have all three:
 
 1. **Zod Schema** (`packages/types/src/`)
@@ -54,6 +57,7 @@ Every domain entity MUST have all three:
 3. **Firestore Rules** (`firestore.rules`)
 
 ### Pattern 4: Organization Isolation
+
 **Always scope** to organization context.
 
 ```typescript
@@ -65,6 +69,7 @@ const schedules = await db.collection(`orgs/${context.org!.orgId}/schedules`).ge
 ```
 
 ### Pattern 5: File Headers
+
 Every source file needs:
 
 ```typescript
@@ -77,6 +82,7 @@ Every source file needs:
 ```
 
 ## API Route Template
+
 ```typescript
 // [P0][API][CODE] Schedules API endpoint
 // Tags: P0, API, CODE
@@ -124,6 +130,7 @@ export const POST = createOrgEndpoint({
 ```
 
 ## Schema Template
+
 ```typescript
 // [P0][DOMAIN][SCHEMA] Schedule entity schema
 // Tags: P0, DOMAIN, SCHEMA
@@ -163,6 +170,7 @@ export const UpdateScheduleSchema = ScheduleSchema.partial().omit({
 ```
 
 ## Error Handling Pattern
+
 ```typescript
 try {
   const result = await operation();
@@ -179,5 +187,6 @@ try {
 ```
 
 ## Reference
+
 Full guide: `docs/standards/SDK_FACTORY_COMPREHENSIVE_GUIDE.md`\
 Source: `archive/amendment-sources/CODING_RULES_AND_PATTERNS.md`

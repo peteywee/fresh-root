@@ -1,8 +1,10 @@
 # Safeguard Rule: ZodType Compatibility
+
 **Created**: December 10, 2025 **Trigger**: 3+ occurrences of ZodType compatibility errors
 **Pattern**: `ZodObject<...> is missing properties from ZodType<TInput, any, any>`
 
 ## Error Pattern Detection
+
 **Files Affected**:
 
 - `app/api/internal/backup/route.ts`
@@ -17,12 +19,15 @@ Type 'ZodObject<{...}, $strip>' is missing the following properties from type 'Z
 ```
 
 ## Root Cause Analysis
+
 1. **API Framework Type Constraint**: `input?: ZodType<TInput, any, any>`
 2. **Actual Zod Schema Type**: `ZodObject<Schema, $strip, $output>`
 3. **Mismatch**: ZodObject doesn't extend ZodType in the expected way
 
 ## Prevention Rules
+
 ### ESLint Rule (packages/config/eslint-rules/zodtype-compatibility.js)
+
 ```javascript
 module.exports = {
   meta: {
@@ -59,6 +64,7 @@ module.exports = {
 ```
 
 ### TypeScript Template Fix
+
 ```typescript
 // CORRECT pattern:
 export const POST = createOrgEndpoint({
@@ -74,6 +80,7 @@ export const POST = createOrgEndpoint({
 ```
 
 ## Architectural Solution
+
 **File**: `packages/api-framework/src/index.ts` **Change**: Update EndpointConfig interface to
 accept broader Zod types
 
@@ -86,11 +93,13 @@ input?: z.ZodTypeAny;
 ```
 
 ## Monitoring
+
 - **CI Check**: Fail builds if this pattern occurs 3+ times without safeguard application
 - **Pre-commit Hook**: Auto-apply type assertions to new API routes
 - **Documentation**: Update API framework README with required pattern
 
 ## Status
+
 - \[x] Pattern detected (4+ occurrences)
 - \[x] Safeguard rule created
 - \[x] Architectural fix applied (`any` type resolves ZodType compatibility)
@@ -100,10 +109,12 @@ input?: z.ZodTypeAny;
 - \[ ] CI monitoring enabled
 
 ## Current Status: RESOLVED ✅
+
 **ZodType compatibility error eliminated**. Remaining issue is input type inference
 (`input: unknown` instead of inferred types).
 
 ### Workaround for Input Typing
+
 ```typescript
 export const POST = createOrgEndpoint({
   input: CreateWidgetSchema,

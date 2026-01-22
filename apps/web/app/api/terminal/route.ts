@@ -7,12 +7,12 @@ import { z } from "zod";
 import * as path from "path";
 import { createAuthenticatedEndpoint } from "@fresh-schedules/api-framework";
 
-const WORKSPACE_ROOT = "/workspaces/fresh-root";
+const WORKSPACE_ROOT = process.env.WORKSPACE_ROOT || process.cwd();
 
 // Input validation schema
 const TerminalInputSchema = z.object({
   command: z.string().min(1).max(1000),
-  cwd: z.string().default("/workspaces/fresh-root"),
+  cwd: z.string().default(WORKSPACE_ROOT),
 });
 
 // Security: Blocked dangerous patterns (with multiline flag)

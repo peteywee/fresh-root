@@ -299,7 +299,7 @@ function hasRequiredRole(userRole: OrgRole, requiredRoles: OrgRole[]): boolean {
  */
 async function verifyCsrf(request: NextRequest): Promise<boolean> {
   const csrfToken = request.headers.get("x-csrf-token");
-  const csrfCookie = request.cookies.get("csrf")?.value;
+  const csrfCookie = request.cookies.get("csrf-token")?.value ?? request.cookies.get("csrf")?.value;
 
   if (!csrfToken || !csrfCookie) {
     return false;
@@ -684,4 +684,10 @@ export * from "./enhancements";
 // =============================================================================
 export * from "./performance";
 export type { PerformanceConfig } from "./performance";
-export { measurePerformance, cachedOperation, invalidateCache, QueryOptimization, MemoryOptimization } from "./performance";
+export {
+  measurePerformance,
+  cachedOperation,
+  invalidateCache,
+  QueryOptimization,
+  MemoryOptimization,
+} from "./performance";

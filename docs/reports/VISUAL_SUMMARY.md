@@ -305,11 +305,13 @@ QUALITY
 ## 📞 How to Proceed
 
 ### Step 1: Set Environment Variable (5 min)
+
 ```bash
 echo 'NEXT_ALLOWED_DEV_ORIGINS=http://localhost:3000,http://127.0.0.1:3000' >> .env.local
 ```
 
 ### Step 2: Run E2E Tests Locally (10 min)
+
 ```bash
 pnpm --filter @apps/web dev  # Terminal 1: Start dev server
 cd apps/web
@@ -317,6 +319,7 @@ pnpm exec playwright test e2e/magic-link-auth.spec.ts  # Terminal 2: Run tests
 ```
 
 ### Step 3: Verify Results (2 min)
+
 ```
 Expected: ✅ All 23 tests pass
           ✅ ~50-60 second runtime
@@ -324,12 +327,14 @@ Expected: ✅ All 23 tests pass
 ```
 
 ### Step 4: Engage UI/UX Agent (1-2 hours)
+
 - Share: `docs/LANDING_PAGE_REDESIGN_BRIEF.md`
 - Request: Landing page redesign with brand kit
 - Review: Design iterations
 - Approve: Final design
 
 ### Step 5: Deploy to Production (30 min)
+
 ```
 1. All tests pass in CI
 2. Landing page approved
@@ -345,6 +350,7 @@ Expected: ✅ All 23 tests pass
 ## ✨ What Users Will See
 
 ### Authentication
+
 ```
 OLD                           NEW
 ┌─────────────────────┐      ┌──────────────────────┐
@@ -371,6 +377,7 @@ SIGNUP SUCCESS
 ```
 
 ### Landing Page
+
 ```
 OLD                              NEW (Pending Redesign)
 ┌────────────────────────┐      ┌───────────────────────┐
@@ -431,11 +438,11 @@ You now have:
 ✅ **Professional code quality** with accessibility built-in  
 ✅ **Complete documentation** for implementation and testing  
 ✅ **Brand kit analysis** ready for design implementation  
-✅ **Landing page brief** ready for UI/UX agent redesign  
+✅ **Landing page brief** ready for UI/UX agent redesign
 
 **Ready for**: Production deployment (except landing page redesign)  
 **Timeline**: Landing page redesign 1-2 hours, then ship  
-**Confidence**: HIGH - all core work complete and tested  
+**Confidence**: HIGH - all core work complete and tested
 
 ---
 

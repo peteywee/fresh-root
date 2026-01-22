@@ -8,7 +8,8 @@
 
 ## What Happened
 
-All **13 orchestration agent prompts** that were in this directory have been migrated to the new **L4a Agent Registry** at `.claude/agents/`.
+All **13 orchestration agent prompts** that were in this directory have been migrated to the new
+**L4a Agent Registry** at `.claude/agents/`.
 
 ### Why
 
@@ -22,13 +23,16 @@ All **13 orchestration agent prompts** that were in this directory have been mig
 ## Files Remaining in This Directory
 
 ### Still Active (3)
+
 - ✅ `PROMPTS_SESSION_SUMMARY.md` — Session logging (internal use)
 - ✅ `remember-enhanced.prompt.md` — Remember system prompt
 - ✅ `plan-copilotInstruction.prompt.md` — Legacy plan instruction
 - ✅ `ui-ux-agent.md` — UI/UX specialist detailed persona (supports L4a agent)
 
 ### Deprecated & Archived (13)
+
 ❌ Moved to `/archive/l3-prompts-deprecated/`:
+
 - `audit.prompt.md`
 - `create-implementation-plan.prompt.md`
 - `deploy.prompt.md`
@@ -48,6 +52,7 @@ All **13 orchestration agent prompts** that were in this directory have been mig
 ## Migration Path
 
 ### Old Way (L3)
+
 ```
 .github/prompts/plan.prompt.md
   → Manual invocation
@@ -55,6 +60,7 @@ All **13 orchestration agent prompts** that were in this directory have been mig
 ```
 
 ### New Way (L4a)
+
 ```
 .claude/agents/plan-agent/
 ├── AGENT.md              (Discovery manifest)
@@ -85,19 +91,19 @@ cat archive/l3-prompts-deprecated/plan.prompt.md
 
 All agents are now available in the [Agent Registry](../../.claude/agents/INDEX.md):
 
-| Agent | Location | Invocation |
-| --- | --- | --- |
-| Plan Agent | `.claude/agents/plan-agent/` | `@plan` |
-| Document Agent | `.claude/agents/document-agent/` | `@doc` |
-| Test Engineer | `.claude/agents/test-engineer/` | `@test` |
-| Code Review Expert | `.claude/agents/code-review-expert/` | `@review` |
-| Backend API Expert | `.claude/agents/backend-api-expert/` | `@api` |
-| Firebase Expert | `.claude/agents/firebase-expert/` | `@firebase` |
-| Security Red Teamer | `.claude/agents/security-red-teamer/` | `@security` |
-| DevOps & Infrastructure | `.claude/agents/devops-infrastructure/` | `@devops` |
-| Copilot Starter Agent | `.claude/agents/copilot-starter-agent/` | `@setup` |
-| Documentation Writer | `.claude/agents/documentation-writer-agent/` | `@writer` |
-| Create Plan Agent | `.claude/agents/create-plan-agent/` | `@create-plan` |
+| Agent                   | Location                                     | Invocation     |
+| ----------------------- | -------------------------------------------- | -------------- |
+| Plan Agent              | `.claude/agents/plan-agent/`                 | `@plan`        |
+| Document Agent          | `.claude/agents/document-agent/`             | `@doc`         |
+| Test Engineer           | `.claude/agents/test-engineer/`              | `@test`        |
+| Code Review Expert      | `.claude/agents/code-review-expert/`         | `@review`      |
+| Backend API Expert      | `.claude/agents/backend-api-expert/`         | `@api`         |
+| Firebase Expert         | `.claude/agents/firebase-expert/`            | `@firebase`    |
+| Security Red Teamer     | `.claude/agents/security-red-teamer/`        | `@security`    |
+| DevOps & Infrastructure | `.claude/agents/devops-infrastructure/`      | `@devops`      |
+| Copilot Starter Agent   | `.claude/agents/copilot-starter-agent/`      | `@setup`       |
+| Documentation Writer    | `.claude/agents/documentation-writer-agent/` | `@writer`      |
+| Create Plan Agent       | `.claude/agents/create-plan-agent/`          | `@create-plan` |
 
 ---
 

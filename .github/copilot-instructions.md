@@ -1,4 +1,5 @@
 # AI Agent Guide: Fresh Schedules Codebase
+
 **Version**: 2.1 **Last Updated**: December 10, 2025 **Target**: AI coding agents (GitHub Copilot,
 Claude Code, Cursor, etc.)
 
@@ -6,6 +7,7 @@ This guide provides essential knowledge for AI agents to be immediately producti
 Schedules codebase.
 
 ## 🎯 Before You Start
+
 **Important**: This codebase is governed by production development directives. Read these files for
 binding operational rules:
 
@@ -24,6 +26,7 @@ binding operational rules:
 These directives are **binding**—not suggestions. They define how you must operate in this codebase.
 
 ### 📚 New: Hierarchical Governance System
+
 **As of December 2025**, documentation is organized in a 5-level hierarchy for fast AI retrieval:
 
 ```
@@ -59,6 +62,7 @@ details. Each has YAML frontmatter for indexing.
 ---
 
 ## Table of Contents
+
 1. [Quick Start](#quick-start-1)
 2. [MCP Tool Strategy](#mcp-tool-strategy-1) ⭐ **NEW**
 3. [Operational Directives](#operational-directives-1)
@@ -79,9 +83,11 @@ details. Each has YAML frontmatter for indexing.
 ---
 
 ## MCP Tool Strategy
+
 **⭐ NEW (December 16, 2025)**: MCP tools are now configured in tiers for automatic availability.
 
 ### Always-On Tools (No waiting, use immediately)
+
 You have **47 tools** available automatically without any setup:
 
 | Tier       | Tools                     | Purpose                                             | Status       |
@@ -92,6 +98,7 @@ You have **47 tools** available automatically without any setup:
 | **Tier 2** | Chrome DevTools (8 tools) | Browser automation, screenshots                     | 🟡 On-demand |
 
 ### Tool Selection Guide
+
 **Use GitHub MCP when**:
 
 - Searching code across repo
@@ -122,6 +129,7 @@ You have **47 tools** available automatically without any setup:
 - Performance profiling
 
 ### Quick Examples
+
 ```markdown
 User: "Analyze API route patterns" → Agent uses: mcp_repomix_pack_codebase (zero cost, fast)
 
@@ -134,23 +142,27 @@ User: "Deploy Firestore rules" → Agent uses: firebase/deploy (deployment)
 ```
 
 ### Best Practices
+
 1. **Explicit tool requests**: Say "Use Repomix to analyze..." instead of just "analyze"
 2. **Tool chaining**: Combine tools for better results (pack → grep → analyze)
-3. **Caching**: Reuse packed outputs to save tokens (attach\_packed\_output)
-4. **Fallbacks**: If MCP tool unavailable, fall back to local tools (read\_file, grep\_search)
+3. **Caching**: Reuse packed outputs to save tokens (attach_packed_output)
+4. **Fallbacks**: If MCP tool unavailable, fall back to local tools (read_file, grep_search)
 
 ### Reference Documentation
+
 - **Full Reference**:
-  [docs/REPOMIX\_MCP\_TOOLS\_REFERENCE.md](../docs/REPOMIX_MCP_TOOLS_REFERENCE.md) - Detailed tool
+  [docs/REPOMIX_MCP_TOOLS_REFERENCE.md](../docs/REPOMIX_MCP_TOOLS_REFERENCE.md) - Detailed tool
   documentation
-- **Strategy**: [docs/MCP\_TOOLING\_STRATEGY.md](../docs/MCP_TOOLING_STRATEGY.md) - Tier architecture
+- **Strategy**: [docs/MCP_TOOLING_STRATEGY.md](../docs/MCP_TOOLING_STRATEGY.md) - Tier architecture
   and planning
 - **Configuration**: [.mcp.json](.mcp.json) - Tool configuration
 
 ---
 
 ## Quick Start
+
 ### Essential Context
+
 - **Project Type**: Next.js 16 PWA (App Router) + Firebase backend
 - **Monorepo**: pnpm workspaces + Turbo
 - **Architecture**: SDK Factory pattern for API routes (90%+ migrated)
@@ -159,6 +171,7 @@ User: "Deploy Firestore rules" → Agent uses: firebase/deploy (deployment)
 - **Package Manager**: pnpm ONLY (enforced via pre-commit hooks)
 
 ### First Commands
+
 ````bash
 # Install dependencies (use pnpm only!)
 pnpm install --frozen-lockfile

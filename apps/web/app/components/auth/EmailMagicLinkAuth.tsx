@@ -364,9 +364,7 @@ export default function EmailMagicLinkAuth({ onSuccess, onError }: EmailMagicLin
               ? "Click the link in the email to create your account and verify your email in one step."
               : "Click the link in the email to sign in to your account."}
           </p>
-          <p className="text-xs text-text-muted">
-            The link will expire in 24 hours for security.
-          </p>
+          <p className="text-xs text-text-muted">The link will expire in 24 hours for security.</p>
         </div>
 
         {error && (

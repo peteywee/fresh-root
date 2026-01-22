@@ -28,10 +28,10 @@ scripts/codex/codex.sh
 
 ## Repo Helper Tools
 
-| Tool | Purpose |
-| --- | --- |
-| scripts/codex/codex.sh | Launch Codex in repo root |
-| scripts/codex/validate.sh | Run pattern validator + typecheck |
+| Tool                           | Purpose                                  |
+| ------------------------------ | ---------------------------------------- |
+| scripts/codex/codex.sh         | Launch Codex in repo root                |
+| scripts/codex/validate.sh      | Run pattern validator + typecheck        |
 | scripts/codex/quality-gates.sh | Run validator + typecheck + lint + tests |
 
 ### Examples

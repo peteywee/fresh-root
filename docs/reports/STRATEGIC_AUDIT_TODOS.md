@@ -1,9 +1,11 @@
 # Fresh Root Strategic Audit - Action Items
+
 **Generated:** November 29, 2025 **Status:** In Progress **Overall Grade:** A- (93/100)
 
 ---
 
 ## 🎯 Executive Summary
+
 Fresh Root is production-ready with **3 critical infrastructure gaps** blocking horizontal scaling.
 **Total Remediation Time:** 54 hours (1.5 sprints for 2 engineers)
 
@@ -16,7 +18,9 @@ Fresh Root is production-ready with **3 critical infrastructure gaps** blocking 
 ---
 
 ## 📋 CRITICAL TODOS (Week 1 - Blocking Multi-Instance Production)
+
 ### ⚠️ TODO-001: Redis Rate Limiting Implementation
+
 **Priority:** CRITICAL **Effort:** 4-8 hours **Owner:** DevOps/Backend **Status:** 🔴 NOT STARTED
 
 **Why Critical:** Current in-memory rate limiting won't scale horizontally. Load-balanced
@@ -61,8 +65,8 @@ deployments can bypass rate limits (each instance tracks separately).
 
 - `rate-limit.ts` - Add Redis backend
 - `apps/web/app/api/_shared/middleware.ts` - Use Redis in production
-- `.env.example` - Document REDIS\_URL
-- `.env.production` - Add REDIS\_URL
+- `.env.example` - Document REDIS_URL
+- `.env.production` - Add REDIS_URL
 - `MEMORY_MANAGEMENT.md` - Document Redis setup
 
 **Verification Command:**
@@ -84,6 +88,7 @@ for i in {1..200}; do curl -X POST https://api.example.com/api/test; done | grep
 ---
 
 ### ⚠️ TODO-002: OpenTelemetry Tracing Implementation
+
 **Priority:** HIGH **Effort:** 4-6 hours **Owner:** DevOps/Backend **Status:** 🟡 IN PROGRESS
 (otel.ts updated, init needed)
 
@@ -182,6 +187,7 @@ open http://localhost:16686
 ---
 
 ### ⚠️ TODO-003: Environment Variable Validation
+
 **Priority:** MEDIUM **Effort:** 2 hours **Owner:** Backend **Status:** 🔴 NOT STARTED
 
 **Why Important:** Production incidents often caused by missing/invalid environment variables. Fail
@@ -271,7 +277,9 @@ pnpm dev
 ---
 
 ## 📊 HIGH PRIORITY TODOS (Week 2-3 - Before Day 30)
+
 ### TODO-004: Firestore Rules Test Coverage
+
 **Priority:** HIGH **Effort:** 8 hours **Owner:** QA/Backend **Status:** 🔴 NOT STARTED **Target:**
 80%+ rule coverage
 
@@ -345,6 +353,7 @@ firebase emulators:exec --only firestore \
 ---
 
 ### TODO-005: API Endpoint Test Coverage
+
 **Priority:** MEDIUM **Effort:** 12 hours **Owner:** QA/Backend **Status:** 🔴 NOT STARTED
 **Target:** 60%+ API route coverage
 
@@ -427,6 +436,7 @@ pnpm test --run
 ---
 
 ### TODO-006: Log Aggregation Configuration
+
 **Priority:** MEDIUM **Effort:** 4 hours **Owner:** DevOps **Status:** 🔴 NOT STARTED
 
 **Why Important:** Currently logs only go to stdout. Need centralized logging for debugging
@@ -493,7 +503,9 @@ curl http://localhost:3000/api/schedules
 ---
 
 ## 🚀 MEDIUM PRIORITY TODOS (30-Day Roadmap)
+
 ### TODO-007: Monitoring Dashboards
+
 **Priority:** MEDIUM **Effort:** 4 hours **Owner:** DevOps **Status:** 🔴 NOT STARTED
 
 **Tasks:**
@@ -526,6 +538,7 @@ curl http://localhost:3000/api/schedules
 ---
 
 ### TODO-008: E2E Test Suite (Playwright)
+
 **Priority:** MEDIUM **Effort:** 20 hours **Owner:** QA **Status:** 🔴 NOT STARTED
 
 **Tasks:**
@@ -564,6 +577,7 @@ curl http://localhost:3000/api/schedules
 ---
 
 ### TODO-009: API Documentation (OpenAPI)
+
 **Priority:** MEDIUM **Effort:** 8 hours **Owner:** Backend **Status:** 🔴 NOT STARTED
 
 **Tasks:**
@@ -600,6 +614,7 @@ curl http://localhost:3000/api/schedules
 ---
 
 ### TODO-010: Performance Profiling
+
 **Priority:** LOW **Effort:** 8 hours **Owner:** Backend **Status:** 🔴 NOT STARTED
 
 **Tasks:**
@@ -632,6 +647,7 @@ curl http://localhost:3000/api/schedules
 ---
 
 ### TODO-011: Security Penetration Testing
+
 **Priority:** LOW **Effort:** External engagement (16-40 hours) **Owner:** Security/External firm
 **Status:** 🔴 NOT STARTED
 
@@ -670,6 +686,7 @@ curl http://localhost:3000/api/schedules
 ---
 
 ### TODO-012: Disaster Recovery Procedures
+
 **Priority:** LOW **Effort:** 6 hours **Owner:** DevOps **Status:** 🔴 NOT STARTED
 
 **Tasks:**
@@ -710,7 +727,9 @@ curl http://localhost:3000/api/schedules
 ---
 
 ## 📈 90-DAY STRATEGIC INITIATIVES
+
 ### TODO-013: Horizontal Scaling Infrastructure (30 days)
+
 **Priority:** STRATEGIC **Effort:** 40 hours **Owner:** DevOps/Architecture
 
 **Tasks:**
@@ -744,6 +763,7 @@ curl http://localhost:3000/api/schedules
 ---
 
 ### TODO-014: Service Separation (60 days)
+
 **Priority:** STRATEGIC **Effort:** 80 hours **Owner:** Architecture/Backend
 
 **Tasks:**
@@ -777,6 +797,7 @@ curl http://localhost:3000/api/schedules
 ---
 
 ### TODO-015: Advanced Observability (90 days)
+
 **Priority:** STRATEGIC **Effort:** 40 hours **Owner:** DevOps/SRE
 
 **Tasks:**
@@ -808,9 +829,11 @@ curl http://localhost:3000/api/schedules
 ---
 
 ## ✅ VERIFICATION CHECKLIST
+
 Before marking overall project as complete, verify:
 
 ### Pre-Production Checklist
+
 - \[ ] Pattern validator: 90+ score
 - \[ ] TypeScript compilation: 0 errors
 - \[ ] ESLint: 0 errors
@@ -820,6 +843,7 @@ Before marking overall project as complete, verify:
 - \[ ] Environment validation working
 
 ### 30-Day Checklist
+
 - \[ ] Firestore rules: 80%+ test coverage
 - \[ ] API routes: 60%+ test coverage
 - \[ ] Log aggregation configured
@@ -827,6 +851,7 @@ Before marking overall project as complete, verify:
 - \[ ] Alerts configured
 
 ### 90-Day Checklist
+
 - \[ ] E2E test suite (5+ critical flows)
 - \[ ] API documentation (OpenAPI/Swagger)
 - \[ ] Performance profiling complete
@@ -836,13 +861,16 @@ Before marking overall project as complete, verify:
 ---
 
 ## 📊 PROGRESS TRACKING
+
 ### Overall Status
+
 - **Critical TODOs:** 0/3 complete (0%)
 - **High Priority TODOs:** 0/3 complete (0%)
 - **Medium Priority TODOs:** 0/6 complete (0%)
 - **Strategic Initiatives:** 0/3 complete (0%)
 
 ### Timeline
+
 - **Week 1:** Critical infrastructure (TODO-001, TODO-002, TODO-003)
 - **Week 2-3:** Testing & observability (TODO-004, TODO-005, TODO-006)
 - **Week 4-8:** Medium priority items
@@ -851,6 +879,7 @@ Before marking overall project as complete, verify:
 ---
 
 ## 📞 QUESTIONS FOR PATRICK
+
 Before starting implementation, need answers to:
 
 1. **Timeline:** Are you planning single-instance or multi-instance deployment initially?
@@ -858,12 +887,13 @@ Before starting implementation, need answers to:
 3. **Redis:** Do you have Redis infrastructure already, or need to provision?
 4. **Help:** Want me to implement any of these TODOs? I can start with Redis rate limiting (4
    hours).
-1. **Budget:** Any budget constraints for SaaS tools (Datadog, Honeycomb, etc.)?
-2. **Timeline Constraints:** Any hard deadlines for production launch?
+5. **Budget:** Any budget constraints for SaaS tools (Datadog, Honeycomb, etc.)?
+6. **Timeline Constraints:** Any hard deadlines for production launch?
 
 ---
 
 ## 🎯 RECOMMENDED PRIORITIZATION
+
 **If launching in 1 week:**
 
 1. TODO-001: Redis rate limiting (CRITICAL)

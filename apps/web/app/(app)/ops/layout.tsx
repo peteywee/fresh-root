@@ -1,11 +1,7 @@
 import React from "react";
 import { OpsHubNav } from "./_components/OpsHubNav";
 
-export default function OpsLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function OpsLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex min-h-screen bg-background text-foreground font-sans">
       <aside className="w-64 flex-shrink-0 border-r border-border bg-card hidden md:block">
@@ -28,9 +24,7 @@ export default function OpsLayout({
         </div>
 
         <div className="flex-1 p-6 md:p-8 lg:p-10 overflow-y-auto">
-          <div className="max-w-7xl mx-auto space-y-8">
-            {children}
-          </div>
+          <div className="max-w-7xl mx-auto space-y-8">{children}</div>
         </div>
       </main>
     </div>

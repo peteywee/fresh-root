@@ -18,6 +18,7 @@ related-docs:
 ---
 
 # Dependency Tree
+
 ```mermaid
 graph LR
     root["🌳 fresh-root<br/>monorepo"]

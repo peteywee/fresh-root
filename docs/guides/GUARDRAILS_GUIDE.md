@@ -1,11 +1,14 @@
 # Guardrails Guide: Using eslint-plugin-import, @manypkg/cli, and syncpack
+
 This document explains how to use the three guardrail tools to prevent monorepo configuration
 breaks.
 
 ---
 
 ## Quick Reference
+
 ### Daily Workflow
+
 ```bash
 # Run before committing
 pnpm lint:fix          # Catch import issues early
@@ -18,6 +21,7 @@ pnpm deps:sync         # Auto-align dependency versions
 ```
 
 ### Pre-commit Validation
+
 ```bash
 # Comprehensive validation
 pnpm fix:all           # Lint fix + format + markdown
@@ -28,12 +32,14 @@ pnpm deps:sync:check   # List any version mismatches
 ---
 
 ## Tool 1: eslint-plugin-import
+
 **Purpose:** Catch import pattern errors at lint time (dev) instead of build time (CI).
 
 **Key Rule:** `import/no-relative-packages` - Prevents cross-package relative imports that break
 after bundling.
 
 ### Why This Matters
+
 ❌ **Breaks after tsup build:**
 
 ```typescript
@@ -48,6 +54,7 @@ import type { OrgRole } from "@fresh-schedules/types"; // ✅ Package alias work
 ```
 
 ### How It Works
+
 When you try to import from a relative path across packages:
 
 ```bash
@@ -63,6 +70,7 @@ packages/api-framework/src/index.ts
 ```
 
 ### Configuration
+
 Located in `eslint.config.mjs`:
 
 ```javascript
@@ -86,6 +94,7 @@ settings: {
 ```
 
 ### Usage Patterns
+
 **Pattern 1: Detect relative imports**
 
 ```bash
@@ -115,6 +124,7 @@ pnpm lint:check
 Outputs detailed violations to `eslint-report.json`.
 
 ### Prevention Strategy
+
 1. **During development:** Editor ESLint extension shows import errors instantly
 2. **On commit:** Run `pnpm lint:fix` to catch before pushing
 3. **In CI:** `pnpm lint` fails if relative imports exist
@@ -123,6 +133,7 @@ Outputs detailed violations to `eslint-report.json`.
 ---
 
 ## Tool 2: @manypkg/cli
+
 **Purpose:** Validate workspace structure and dependencies are correctly configured.
 
 **Checks:**
@@ -133,6 +144,7 @@ Outputs detailed violations to `eslint-report.json`.
 - No invalid dependency versions
 
 ### Why This Matters
+
 Without workspace validation:
 
 - Internal packages reference wrong versions (e.g., `"@fresh-schedules/types": "^0.1.0"` instead of
@@ -141,6 +153,7 @@ Without workspace validation:
 - CI passes but production fails
 
 ### How It Works
+
 ```bash
 pnpm workspace:check
 ```
@@ -162,6 +175,7 @@ pnpm workspace:check
 ```
 
 ### Configuration
+
 No configuration file needed. @manypkg uses conventions:
 
 - All packages in `/packages` are internal
@@ -169,6 +183,7 @@ No configuration file needed. @manypkg uses conventions:
 - These should reference each other with `workspace:*`
 
 ### Usage Patterns
+
 **Pattern 1: Validate workspace before commits**
 
 ```bash
@@ -201,6 +216,7 @@ pnpm build          # Verify everything builds
 ```
 
 ### Common Issues & Fixes
+
 **Issue:** New package added but not referenced correctly
 
 ```bash
@@ -229,6 +245,7 @@ pnpm workspace:fix
 ---
 
 ## Tool 3: syncpack
+
 **Purpose:** Keep dependency versions consistent across packages.
 
 **Ensures:**
@@ -238,6 +255,7 @@ pnpm workspace:fix
 - Reduces resolution complexity
 
 ### Why This Matters
+
 Without version sync:
 
 ```json
@@ -253,11 +271,12 @@ Without version sync:
 
 Results in:
 
-- 3 different versions installed (bloats node\_modules)
+- 3 different versions installed (bloats node_modules)
 - Type inconsistencies between packages
 - Harder to debug version-related bugs
 
 ### How It Works
+
 ```bash
 pnpm deps:sync:check
 ```
@@ -280,6 +299,7 @@ pnpm deps:sync
 Updates all to consistent range (usually the most permissive).
 
 ### Configuration
+
 Located in `.syncpackrc.json`:
 
 ```json
@@ -308,6 +328,7 @@ Located in `.syncpackrc.json`:
 - `pin` - Force specific version across monorepo
 
 ### Usage Patterns
+
 **Pattern 1: Check version consistency**
 
 ```bash
@@ -345,7 +366,7 @@ pnpm install
 pnpm deps:analyze
 ```
 
-Shows duplicate packages in node\_modules.
+Shows duplicate packages in node_modules.
 
 **Pattern 5: Production-only exact versions**
 
@@ -369,6 +390,7 @@ Shows duplicate packages in node\_modules.
 Ensures production apps use exact tested versions for **external dependencies**.
 
 ### Common Issues & Fixes
+
 **Issue:** Too many version mismatches
 
 ```bash
@@ -417,7 +439,9 @@ pnpm typecheck      # Verify TypeScript happy
 ---
 
 ## Critical Configuration: Known Conflicts & Resolutions
+
 ### Syncpack vs Manypkg Conflict (IMPORTANT)
+
 **Problem:** These two tools have fundamentally incompatible expectations for local workspace
 packages:
 
@@ -467,6 +491,7 @@ creates a circular breakage pattern.
 This conflicts with manypkg's `workspace:*` requirement.
 
 ### TypeScript Composite Project Paths (IMPORTANT)
+
 **Problem:** TypeScript can't resolve types from packages that have a build step.
 
 When a package like `@fresh-schedules/types` has a `tsconfig.json` with `"composite": true`,
@@ -519,7 +544,9 @@ pnpm typecheck
 ---
 
 ## Integration: Full Workflow
+
 ### Before Committing
+
 ```bash
 # 1. Fix linting issues (catches import problems)
 pnpm lint:fix
@@ -555,6 +582,7 @@ pnpm workspace:check && pnpm deps:sync:check
 ```
 
 ### In GitHub Actions (CI)
+
 ```yaml
 name: Validate
 
@@ -588,6 +616,7 @@ jobs:
 ```
 
 ### Adding New Package
+
 ```bash
 # 1. Create package
 mkdir packages/my-package
@@ -611,6 +640,7 @@ git commit -m "feat: add my-package"
 ```
 
 ### Fixing Broken Imports After PR
+
 If a PR adds broken imports:
 
 ```bash
@@ -632,7 +662,9 @@ pnpm lint:check
 ---
 
 ## Troubleshooting
+
 ### "import/no-relative-packages: Relative imports from parent packages"
+
 **Cause:** Importing from a different package using relative path.
 
 **Fix:**
@@ -652,6 +684,7 @@ pnpm lint --fix  # Auto-fixes most cases
 ```
 
 ### "@manypkg/cli: Package mismatch"
+
 **Cause:** Internal package referenced with version instead of `workspace:*`.
 
 **Fix:**
@@ -671,6 +704,7 @@ Or manually in package.json:
 ```
 
 ### "syncpack: SemverRangeMismatch"
+
 **Cause:** Same dependency has different versions in different packages.
 
 **Fix:**
@@ -687,6 +721,7 @@ pnpm deps:sync:check  # List all mismatches
 ```
 
 ### Build Fails But Lint Passes
+
 **Cause:** Import worked in dev but breaks after bundling.
 
 **Solution:** This is exactly what `import/no-relative-packages` prevents. If it slipped through:
@@ -705,6 +740,7 @@ pnpm lint:fix
 ---
 
 ## Best Practices
+
 1. **Run guardrails before each commit**
    - Hook into pre-commit if using husky
    - Or just run `pnpm fix:all && pnpm workspace:check`
@@ -741,6 +777,7 @@ pnpm lint:fix
 ---
 
 ## Summary
+
 | Tool                     | Detects                      | Fixes                        | When                |
 | ------------------------ | ---------------------------- | ---------------------------- | ------------------- |
 | **eslint-plugin-import** | Broken cross-package imports | Auto-suggest package aliases | Lint time (dev)     |

@@ -19,10 +19,12 @@ related-docs:
 ---
 
 # Infrastructure Reality Audit - 2025-12-23
+
 **Note**: This document reflects the state of the codebase as of the date above. Some information
 may have changed since this audit was performed.
 
 ## Executive Summary
+
 **Previous Assessment Was WRONG.** Infrastructure IS implemented but has coverage gaps.
 
 | Component     | Files Exist    | Wired to Routes | Coverage   |
@@ -33,6 +35,7 @@ may have changed since this audit was performed.
 | SDK Factory   | ✅ 1 framework | 22/39           | **56%**    |
 
 ## 1. Rate Limiting - PARTIAL ⚠️
+
 **Configured:** `USE_REDIS_RATE_LIMIT=true` with Upstash credentials in `.env.local`
 
 **Implementation Files:**
@@ -55,6 +58,7 @@ may have changed since this audit was performed.
 - ops/build-performance, internal/backup
 
 ## 2. Sentry - GLOBAL ✅
+
 **Config Files:**
 
 - `apps/web/sentry.client.config.ts`
@@ -68,6 +72,7 @@ may have changed since this audit was performed.
 - Global error boundary coverage via Next.js integration
 
 ## 3. OpenTelemetry - GLOBAL ✅
+
 **Implementation Files:**
 
 - `apps/web/app/api/_shared/otel-init.ts`
@@ -80,6 +85,7 @@ may have changed since this audit was performed.
 - All authenticated routes get automatic tracing via `requireSession()`
 
 ## 4. SDK Factory - PARTIAL ⚠️
+
 **Routes using SDK factory (22):**
 
 - Uses `createAuthenticatedEndpoint` or `createPublicEndpoint`
@@ -93,6 +99,7 @@ may have changed since this audit was performed.
 - ops/build-performance, repomix
 
 ## 5. CRITICAL: Onboarding Flow BROKEN 🔴
+
 **Problem:** UI pages don't call APIs!
 
 `apps/web/app/onboarding/create-network-org/page.tsx` around line 45:
@@ -113,6 +120,7 @@ nav.push("/onboarding/block-4");
 **UI just navigates without persisting anything to Firestore!**
 
 ## 6. Metrics/Dashboard Access
+
 **Existing endpoints:**
 
 - `GET /api/metrics` - exists with rate limiting
@@ -126,15 +134,19 @@ nav.push("/onboarding/block-4");
 - Real-time metrics aggregation
 
 ## Recommendations
+
 ### IMMEDIATE (Fix Today)
+
 1. **Wire onboarding UI to APIs** - Forms submit but don't POST
 2. **Add rate limiting to onboarding routes** - Currently unprotected
 
 ### SHORT TERM
+
 1. Migrate remaining 17 routes to SDK factory
 2. Add rate limiting to remaining 23 routes
 
 ### FOR OPS DASHBOARD
+
 1. Create `/api/ops/metrics` that aggregates OTEL spans
 2. Create `/api/ops/errors` that fetches from Sentry API
 3. Create `/api/ops/health-summary` composite endpoint

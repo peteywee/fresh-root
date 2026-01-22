@@ -17,11 +17,12 @@ related-docs:
 ---
 
 # Memory Management & Redis Configuration
-**Last Updated**: 2025-12-26
-**Status**: Production Ready
-**Related Issues**: #196 (Redis Rate Limiting)
+
+**Last Updated**: 2025-12-26 **Status**: Production Ready **Related Issues**: #196 (Redis Rate
+Limiting)
 
 ## Overview
+
 Fresh Schedules uses Redis for distributed state management, including:
 
 - **Rate Limiting**: Prevent API abuse across multiple instances
@@ -30,7 +31,9 @@ Fresh Schedules uses Redis for distributed state management, including:
 - **Idempotency**: Request deduplication (implemented)
 
 ## Redis Architecture
+
 ### Multi-Backend Support
+
 The application supports three Redis backends with automatic fallback:
 
 ```
@@ -42,6 +45,7 @@ The application supports three Redis backends with automatic fallback:
 ```
 
 ### Backend Selection Logic
+
 ```typescript
 // Automatically selects backend based on environment variables
 if (UPSTASH_REDIS_REST_URL && UPSTASH_REDIS_REST_TOKEN) {
@@ -54,7 +58,9 @@ if (UPSTASH_REDIS_REST_URL && UPSTASH_REDIS_REST_TOKEN) {
 ```
 
 ## Configuration
+
 ### Option 1: Upstash (Recommended)
+
 **Best for**: Vercel, serverless, edge deployments
 
 **Setup**:
@@ -84,6 +90,7 @@ UPSTASH_REDIS_REST_TOKEN=your-secret-token
 - ⚠️ Costs can scale with high request volume
 
 ### Option 2: ioredis (Traditional)
+
 **Best for**: Docker, Kubernetes, traditional server deployments
 
 **Setup**:
@@ -113,6 +120,7 @@ REDIS_URL=rediss://username:password@hostname:6380
 - ⚠️ Requires infrastructure management
 
 ### Option 3: In-Memory Fallback
+
 **Best for**: Local development, CI/CD tests
 
 **Setup**:
@@ -134,14 +142,16 @@ UPSTASH_REDIS_REST_URL+TOKEN or REDIS_URL.
 ```
 
 ## Rate Limiting
+
 ### How It Works
+
 ```typescript
 // API route with rate limiting
 export const POST = createOrgEndpoint({
   rateLimit: { maxRequests: 50, windowMs: 60000 }, // 50 req/min
   handler: async ({ input, context }) => {
     // Handler code
-  }
+  },
 });
 ```
 
@@ -155,6 +165,7 @@ export const POST = createOrgEndpoint({
 6. Return 429 if over limit, otherwise continue
 
 ### Rate Limit Headers
+
 **Success Response** (200, 201, etc.):
 
 ```
@@ -185,15 +196,17 @@ Retry-After: 45
 ```
 
 ### Recommended Limits
-| Operation Type | Limit | Window | Rationale |
-|----------------|-------|--------|-----------|
-| Read (GET) | 100 req | 60s | Allow frequent data fetching |
-| Write (POST/PUT) | 50 req | 60s | Prevent data spam |
-| Auth (Login/MFA) | 5 req | 60s | Brute-force protection |
-| Public endpoints | 10 req | 60s | Conservative for unauthenticated |
-| Health checks | 1000 req | 60s | Allow frequent monitoring |
+
+| Operation Type   | Limit    | Window | Rationale                        |
+| ---------------- | -------- | ------ | -------------------------------- |
+| Read (GET)       | 100 req  | 60s    | Allow frequent data fetching     |
+| Write (POST/PUT) | 50 req   | 60s    | Prevent data spam                |
+| Auth (Login/MFA) | 5 req    | 60s    | Brute-force protection           |
+| Public endpoints | 10 req   | 60s    | Conservative for unauthenticated |
+| Health checks    | 1000 req | 60s    | Allow frequent monitoring        |
 
 ### Configuration Examples
+
 ```typescript
 // Conservative (public endpoints)
 rateLimit: { maxRequests: 10, windowMs: 60000 }
@@ -209,7 +222,9 @@ rateLimit: { maxRequests: 1000, windowMs: 60000 }
 ```
 
 ## Multi-Instance Deployment
+
 ### Requirements
+
 For horizontal scaling (2+ instances), you **MUST** use Redis:
 
 ```bash
@@ -226,6 +241,7 @@ OR
 ```
 
 ### Verification Test
+
 ```bash
 # Deploy 2 instances with rate limit: 100 req/min
 # Send 200 requests
@@ -238,6 +254,7 @@ done | grep -c "429"
 ```
 
 ### Load Balancer Configuration
+
 **Ensure these settings**:
 
 - ✅ Round-robin or least-connections distribution
@@ -262,7 +279,9 @@ server {
 ```
 
 ## Monitoring & Observability
+
 ### Key Metrics to Track
+
 1. **Rate Limit Hit Rate**
    - Metric: `rate_limit_exceeded_total`
    - Alert: If >5% of requests are rate-limited
@@ -280,6 +299,7 @@ server {
    - Alert: If fallback is used in production
 
 ### Dashboard Queries
+
 **Grafana/Prometheus**:
 
 ```promql
@@ -294,7 +314,9 @@ increase(redis_connection_errors_total[1h])
 ```
 
 ## Troubleshooting
+
 ### Issue: "Using in-memory Redis fallback" in Production
+
 **Cause**: Redis environment variables not configured
 
 **Fix**:
@@ -309,6 +331,7 @@ export REDIS_URL=redis://hostname:6379
 ```
 
 ### Issue: Rate Limiting Not Working Across Instances
+
 **Symptoms**:
 
 - Rate limits can be bypassed by distributing requests
@@ -325,6 +348,7 @@ export REDIS_URL=redis://hostname:6379
 5. Verify with multi-instance test
 
 ### Issue: High Redis Latency
+
 **Symptoms**:
 
 - API responses slow
@@ -344,6 +368,7 @@ export REDIS_URL=redis://hostname:6379
 4. Consider caching frequently accessed data
 
 ### Issue: Redis Connection Errors
+
 **Symptoms**:
 
 - "Rate limit check failed" in logs
@@ -360,7 +385,9 @@ export REDIS_URL=redis://hostname:6379
 5. Consider redundancy (Redis Sentinel/Cluster)
 
 ## Best Practices
+
 ### Development
+
 1. **Use In-Memory Fallback**
    - No Redis setup needed locally
    - Faster development iteration
@@ -375,6 +402,7 @@ export REDIS_URL=redis://hostname:6379
    - Use Docker Redis for integration tests
 
 ### Staging
+
 1. **Use Same Redis Backend as Production**
    - Upstash or ioredis
    - Same configuration patterns
@@ -389,6 +417,7 @@ export REDIS_URL=redis://hostname:6379
    - Set up alerts
 
 ### Production
+
 1. **Always Use Redis**
    - ❌ Never use in-memory fallback
    - ✅ Configure Upstash or ioredis
@@ -409,11 +438,13 @@ export REDIS_URL=redis://hostname:6379
    - Adjust based on real traffic
 
 ## Performance Tuning
+
 ### Connection Pooling (ioredis)
+
 ```typescript
 // For high-traffic applications
 const redis = new IORedis({
-  host: 'hostname',
+  host: "hostname",
   port: 6379,
   maxRetriesPerRequest: 3,
   enableReadyCheck: true,
@@ -422,21 +453,23 @@ const redis = new IORedis({
   autoResubscribe: true,
   retryStrategy: (times) => {
     return Math.min(times * 50, 2000);
-  }
+  },
 });
 ```
 
 ### Key Expiration
+
 Rate limit keys automatically expire after the window:
 
 ```typescript
 // Automatic cleanup - no manual intervention needed
 // Keys: rl:${key} expire after windowSeconds
-await redis.incr(key);  // Create key
-await redis.expire(key, windowSeconds);  // Set expiry
+await redis.incr(key); // Create key
+await redis.expire(key, windowSeconds); // Set expiry
 ```
 
 ### Memory Usage
+
 **Estimated Redis Memory**:
 
 - Per rate-limited key: ~100 bytes
@@ -450,7 +483,9 @@ memory_mb = (unique_users * routes_with_rate_limits * 100 bytes) / 1_000_000
 ```
 
 ## Security
+
 ### Redis Authentication
+
 **Always use authentication**:
 
 ```bash
@@ -462,6 +497,7 @@ UPSTASH_REDIS_REST_TOKEN=your-secret-token
 ```
 
 ### TLS/SSL
+
 **Always use TLS in production**:
 
 ```bash
@@ -473,6 +509,7 @@ UPSTASH_REDIS_REST_URL=https://...
 ```
 
 ### Key Isolation
+
 Rate limit keys are prefixed:
 
 ```
@@ -482,7 +519,9 @@ rl:${path}:${ip}:${userId}
 This prevents collisions with other Redis usage (caching, sessions, etc.)
 
 ## Migration Guide
+
 ### From In-Memory to Redis
+
 **Steps**:
 
 1. Set Redis environment variables
@@ -494,6 +533,7 @@ This prevents collisions with other Redis usage (caching, sessions, etc.)
 **No code changes needed** - automatic detection
 
 ### From Upstash to ioredis (or vice versa)
+
 **Steps**:
 
 1. Update environment variables
@@ -503,16 +543,16 @@ This prevents collisions with other Redis usage (caching, sessions, etc.)
 **No code changes needed** - automatic detection
 
 ## Related Documentation
+
 - [API Framework Guide](./standards/SDK_FACTORY_COMPREHENSIVE_GUIDE.md)
 - [Issue #196: Redis Rate Limiting](./issues/ISSUE_196_STATUS_UPDATE.md)
 - [Strategic Audit TODOs](./reports/STRATEGIC_AUDIT_TODOS.md)
 
 ## Support
-**Issues**: Create GitHub issue with label `infrastructure`
-**Questions**: Contact DevOps team
+
+**Issues**: Create GitHub issue with label `infrastructure` **Questions**: Contact DevOps team
 
 ---
 
-**Last Updated**: 2025-12-26
-**Maintained By**: DevOps Team
-**Review Frequency**: Quarterly or after infrastructure changes
+**Last Updated**: 2025-12-26 **Maintained By**: DevOps Team **Review Frequency**: Quarterly or after
+infrastructure changes

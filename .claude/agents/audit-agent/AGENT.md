@@ -25,6 +25,7 @@ Security audit based on OWASP Top 10 and codebase patterns.
 ## Quick Start
 
 Use this agent to:
+
 - Perform security audits on code, features, or entire codebase
 - Check OWASP Top 10 compliance
 - Verify SDK factory usage
@@ -35,6 +36,7 @@ Use this agent to:
 ## How to Use
 
 **Orchestration invocation**:
+
 ```
 Use the audit agent to perform a security audit on [scope]
 Run the audit agent on the authentication module
@@ -60,24 +62,24 @@ Audit the new API routes for security issues
 
 ```markdown
 # Security Audit Report
-**Scope**: [What was audited]
-**Date**: [Date]
-**Status**: 🟢 PASS / 🟡 WARNINGS / 🔴 FAIL
+
+**Scope**: [What was audited] **Date**: [Date] **Status**: 🟢 PASS / 🟡 WARNINGS / 🔴 FAIL
 
 ## Summary
+
 - Critical: [count]
 - High: [count]
 - Medium: [count]
 - Low: [count]
 
 ## Findings
+
 ### [SEVERITY] Finding Title
-**Location**: file:line
-**Issue**: [Description]
-**Risk**: [What could happen]
-**Fix**: [How to fix]
+
+**Location**: file:line **Issue**: [Description] **Risk**: [What could happen] **Fix**: [How to fix]
 
 ## Recommendations
+
 1. [Priority action items]
 ```
 

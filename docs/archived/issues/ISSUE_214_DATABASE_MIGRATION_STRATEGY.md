@@ -1,12 +1,17 @@
 # Issue #214: Database Migration Strategy
+
 ## Labels
+
 - P0: STRATEGIC
 - Area: Architecture, Database
 
 ## Objective
-Design and implement database migration strategy for future PostgreSQL migration while maintaining Firestore compatibility.
+
+Design and implement database migration strategy for future PostgreSQL migration while maintaining
+Firestore compatibility.
 
 ## Scope
+
 **In:**
 
 - Migration strategy documentation
@@ -22,12 +27,14 @@ Design and implement database migration strategy for future PostgreSQL migration
 - Schema versioning (future work)
 
 ## Files / Paths
+
 - `docs/migrations/future/POSTGRESQL_MIGRATION_STRATEGY.md` - Existing strategy doc
 - Migration tools implementation
 - Data validation scripts
 - `docs/runbooks/DATABASE_MIGRATION.md` - Migration runbook (NEW)
 
 ## Commands
+
 ```bash
 # Test dual-write pattern
 pnpm test:dual-write
@@ -40,6 +47,7 @@ pnpm test:migration-rollback
 ```
 
 ## Acceptance Criteria
+
 - \[ ] Migration strategy documented
 - \[ ] Dual-write pattern implemented
 - \[ ] Data synchronization tools created
@@ -47,12 +55,14 @@ pnpm test:migration-rollback
 - \[ ] Migration runbook complete
 
 ## Success KPIs
+
 - **Data Consistency**: 100% during migration
 - **Zero Downtime**: Migration with no service interruption
 - **Rollback Success**: <15 minutes to rollback
 - **Performance Impact**: <5% during migration
 
 ## Definition of Done
+
 - \[ ] Migration strategy approved
 - \[ ] Tools implemented and tested
 - \[ ] Runbook complete

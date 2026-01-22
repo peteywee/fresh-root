@@ -25,6 +25,7 @@ Build, validate, and deploy to production.
 ## Quick Start
 
 Use this agent to:
+
 - Validate code before deployment
 - Deploy to dev, staging, or production
 - Execute pre-deployment checklist
@@ -53,6 +54,7 @@ pnpm build           # Must succeed
 ## Deployment Steps
 
 ### Dev Environment
+
 ```bash
 git status
 git branch
@@ -61,6 +63,7 @@ git push origin dev
 ```
 
 ### Production Environment
+
 ```bash
 git checkout main
 git tag -a v[VERSION] -m "Release [VERSION]"
@@ -69,6 +72,7 @@ vercel --prod  # Or automatic via Vercel
 ```
 
 ### Firebase Rules
+
 ```bash
 firebase deploy --only firestore:rules
 firebase deploy --only storage
@@ -87,10 +91,13 @@ git push origin main
 
 ```markdown
 # Deployment Report
+
 ## Environment
+
 [dev/staging/production]
 
 ## Pre-Deployment Checks
+
 - [ ] TypeScript: ✅/❌
 - [ ] Lint: ✅/❌
 - [ ] Tests: ✅/❌
@@ -99,12 +106,14 @@ git push origin main
 - [ ] Security: ✅/❌
 
 ## Deployment Status
+
 - [ ] Code pushed
 - [ ] CI passed
 - [ ] Deploy succeeded
 - [ ] Smoke test passed
 
 ## Verification
+
 - URL: [deployed URL]
 - Version: [version/commit]
 - Time: [timestamp]

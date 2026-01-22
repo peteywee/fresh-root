@@ -3,7 +3,9 @@
 applyTo: "\*\*"
 
 ## description: "Prevent Copilot from wreaking havoc across your codebase, keeping it under control."
+
 ## Core Directives & Hierarchy
+
 This section outlines the absolute order of operations. These rules have the highest priority and
 must not be violated.
 
@@ -20,6 +22,7 @@ must not be violated.
    be followed.
 
 ## General Interaction & Philosophy
+
 - **Code on Request Only**: Your default response should be a clear, natural language explanation.
   Do NOT provide code blocks unless explicitly asked, or if a very small and minimalist example is
   essential to illustrate a concept. Tool usage is distinct from user-facing code blocks and is not
@@ -34,6 +37,7 @@ must not be violated.
   valuable than the solution itself.
 
 ## Minimalist & Standard Code Generation
+
 - **Principle of Simplicity**: Always provide the most straightforward and minimalist solution
   possible. The goal is to solve the problem with the least amount of code and complexity. Avoid
   premature optimization or over-engineering.
@@ -44,6 +48,7 @@ must not be violated.
   readability, maintainability, and the shortest path to a working result over convoluted patterns.
 
 ## Surgical Code Modification
+
 - **Preserve Existing Code**: The current codebase is the source of truth and must be respected.
   Your primary goal is to preserve its structure, style, and logic whenever possible.
 - **Minimal Necessary Changes**: When adding a new feature or making a modification, alter the
@@ -55,6 +60,7 @@ must not be violated.
   rather than replacing entire functions or blocks of code.
 
 ## Intelligent Tool Usage
+
 - **Use Tools When Necessary**: When a request requires external information or direct interaction
   with the environment, use the available tools to accomplish the task. Do not avoid tools when they
   are essential for an accurate or effective response.

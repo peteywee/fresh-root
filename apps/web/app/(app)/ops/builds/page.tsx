@@ -19,18 +19,51 @@ export default function BuildsPage() {
           </thead>
           <tbody className="divide-y divide-border/50">
             {[
-              { status: "success", commit: "a9f2b3", msg: "feat: update schedule colors", branch: "main", time: "10m ago", dur: "2m 14s" },
-              { status: "running", commit: "88c1d2", msg: "fix: nav layout", branch: "dev", time: "15m ago", dur: "Running..." },
-              { status: "failed", commit: "7b2a11", msg: "chore: db migration", branch: "feat/db", time: "1h ago", dur: "45s" },
-              { status: "success", commit: "6c5d44", msg: "docs: update readme", branch: "main", time: "3h ago", dur: "1m 30s" },
+              {
+                status: "success",
+                commit: "a9f2b3",
+                msg: "feat: update schedule colors",
+                branch: "main",
+                time: "10m ago",
+                dur: "2m 14s",
+              },
+              {
+                status: "running",
+                commit: "88c1d2",
+                msg: "fix: nav layout",
+                branch: "dev",
+                time: "15m ago",
+                dur: "Running...",
+              },
+              {
+                status: "failed",
+                commit: "7b2a11",
+                msg: "chore: db migration",
+                branch: "feat/db",
+                time: "1h ago",
+                dur: "45s",
+              },
+              {
+                status: "success",
+                commit: "6c5d44",
+                msg: "docs: update readme",
+                branch: "main",
+                time: "3h ago",
+                dur: "1m 30s",
+              },
             ].map((build, i) => (
               <tr key={i} className="group hover:bg-muted/20 transition-colors">
                 <td className="p-4">
-                  <span className={`inline-flex items-center px-2 py-1 rounded text-xs font-bold uppercase tracking-wider
-                    ${build.status === 'success' ? 'bg-schedule-green/20 text-schedule-green' : 
-                      build.status === 'running' ? 'bg-schedule-blue/20 text-schedule-blue animate-pulse' :
-                      'bg-schedule-rose/20 text-schedule-rose'
-                    }`}>
+                  <span
+                    className={`inline-flex items-center px-2 py-1 rounded text-xs font-bold uppercase tracking-wider
+                    ${
+                      build.status === "success"
+                        ? "bg-schedule-green/20 text-schedule-green"
+                        : build.status === "running"
+                          ? "bg-schedule-blue/20 text-schedule-blue animate-pulse"
+                          : "bg-schedule-rose/20 text-schedule-rose"
+                    }`}
+                  >
                     {build.status}
                   </span>
                 </td>

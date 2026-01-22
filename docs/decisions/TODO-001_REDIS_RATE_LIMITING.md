@@ -1,4 +1,5 @@
 # TODO-001: Redis Rate Limiting + Idempotency Implementation Plan
+
 **Priority:** ✅ COMPLETE **Estimated Effort:** 8-12 hours → **Actual: ~3 hours** **Dependencies:**
 Upstash Redis account or self-hosted Redis instance **Completed:** December 20, 2025 **Commit:**
 `f973a41`
@@ -6,6 +7,7 @@ Upstash Redis account or self-hosted Redis instance **Completed:** December 20, 
 ---
 
 ## Executive Summary
+
 \~~The current rate limiter uses in-memory storage, which breaks in multi-instance deployments (each
 instance has its own counter).~~ **RESOLVED:** Redis-backed rate limiting and idempotency storage
 implemented using Upstash Redis (serverless, Edge-compatible).
@@ -13,18 +15,22 @@ implemented using Upstash Redis (serverless, Edge-compatible).
 ---
 
 ## Current State Analysis
+
 ### Rate Limiter Location
+
 ```text
 packages/api-framework/src/rate-limit.ts
 ```
 
 ### Current Implementation Issues
+
 1. **In-memory Map** — `rateLimitStore: Map<string, { count, resetTime }>`
 2. **No TTL cleanup** — Memory leaks on long-running instances
 3. **No distributed coordination** — Each instance counts independently
 4. **Idempotency placeholder** — `getIdempotentResponse()` returns `null` (no-op)
 
 ### Affected Files
+
 | File                                        | Issue                              |
 | ------------------------------------------- | ---------------------------------- |
 | `packages/api-framework/src/rate-limit.ts`  | In-memory rate limit store         |
@@ -35,12 +41,15 @@ packages/api-framework/src/rate-limit.ts
 ---
 
 ## Architecture Design
+
 ### Option A: Upstash Redis (Recommended)
+
 - **Pros:** Serverless, Edge-compatible, pay-per-request, global replication
 - **Cons:** External dependency, costs at scale
 - **Latency:** ~1-5ms per operation
 
 ### Option B: Redis Cluster (Self-Hosted)
+
 - **Pros:** Full control, no per-request costs
 - **Cons:** Ops overhead, not Edge-compatible without proxy
 - **Latency:** ~1-2ms (same region)
@@ -48,8 +57,11 @@ packages/api-framework/src/rate-limit.ts
 ## ### Decision: **Option A (Upstash)** for initial rollout
 
 ## Implementation Steps
+
 ### Phase 1: Environment Setup (1 hour)
+
 #### 1.1 Add Upstash credentials to env schema
+
 ```typescript
 // packages/env/src/server.ts
 export const ServerEnvSchema = z.object({
@@ -65,6 +77,7 @@ export const ServerEnvSchema = z.object({
 ```
 
 #### 1.2 Add to `.env.example`
+
 ```bash
 # Redis Rate Limiting (required for multi-instance production)
 UPSTASH_REDIS_REST_URL=https://your-redis.upstash.io
@@ -73,6 +86,7 @@ USE_REDIS_RATE_LIMIT=false
 ```
 
 #### 1.3 Install Upstash SDK
+
 ```bash
 pnpm add @upstash/redis --filter=@fresh-schedules/api-framework
 ```
@@ -80,7 +94,9 @@ pnpm add @upstash/redis --filter=@fresh-schedules/api-framework
 ---
 
 ### Phase 2: Redis Client Singleton (1 hour)
+
 #### 2.1 Create Redis client factory
+
 ```typescript
 // packages/api-framework/src/redis-client.ts
 import { Redis } from "@upstash/redis";
@@ -118,7 +134,9 @@ export function isRedisEnabled(): boolean {
 ---
 
 ### Phase 3: Rate Limiter Migration (3 hours)
+
 #### 3.1 Refactor rate limiter with Redis backend
+
 ```typescript
 // packages/api-framework/src/rate-limit.ts
 
@@ -202,6 +220,7 @@ function checkRateLimitMemory(
 ```
 
 #### 3.2 Update rate limit middleware to be async
+
 ```typescript
 // packages/api-framework/src/middleware/rate-limit.ts
 
@@ -237,7 +256,9 @@ export function withRateLimit(config: RateLimitConfig) {
 ---
 
 ### Phase 4: Idempotency Implementation (3 hours)
+
 #### 4.1 Implement Redis-backed idempotency
+
 ```typescript
 // packages/api-framework/src/idempotency.ts
 
@@ -304,6 +325,7 @@ export async function storeIdempotentResponse(key: string, response: NextRespons
 ```
 
 #### 4.2 Update idempotency middleware
+
 ```typescript
 // packages/api-framework/src/middleware/idempotency.ts
 
@@ -333,7 +355,9 @@ export function withIdempotency(config?: IdempotencyConfig) {
 ---
 
 ### Phase 5: Integration & Testing (2 hours)
+
 #### 5.1 Update endpoint factory
+
 ```typescript
 // packages/api-framework/src/factory.ts
 
@@ -367,6 +391,7 @@ export function createEndpoint(config: EndpointConfig) {
 ```
 
 #### 5.2 Add integration tests
+
 ```typescript
 // packages/api-framework/tests/rate-limit.integration.test.ts
 
@@ -405,7 +430,9 @@ describe("Redis Rate Limiting", () => {
 ---
 
 ### Phase 6: Deployment & Rollout (1 hour)
+
 #### 6.1 Environment configuration
+
 1. Create Upstash Redis database at <https://console.upstash.com>
 2. Copy REST URL and Token
 3. Add to Vercel/production secrets:
@@ -417,11 +444,13 @@ describe("Redis Rate Limiting", () => {
    ```
 
 #### 6.2 Gradual rollout
+
 1. **Week 1:** Deploy with `USE_REDIS_RATE_LIMIT=false` (verify no regressions)
 2. **Week 2:** Enable on staging with `USE_REDIS_RATE_LIMIT=true`
 3. **Week 3:** Enable on production
 
 #### 6.3 Monitoring
+
 Add dashboard metrics:
 
 - Redis operation latency (p50, p95, p99)
@@ -432,6 +461,7 @@ Add dashboard metrics:
 ---
 
 ## File Checklist
+
 | File                                         | Action                  | Priority |
 | -------------------------------------------- | ----------------------- | -------- |
 | `packages/env/src/server.ts`                 | Add Redis env vars      | P0       |
@@ -447,6 +477,7 @@ Add dashboard metrics:
 ---
 
 ## Rollback Plan
+
 If issues occur after enabling Redis:
 
 1. Set `USE_REDIS_RATE_LIMIT=false` in environment
@@ -457,6 +488,7 @@ If issues occur after enabling Redis:
 ---
 
 ## Success Criteria
+
 - \[x] Rate limits work correctly across multiple Vercel instances
 - \[x] Idempotent requests return cached responses within 24h
 - \[ ] p95 latency increase < 5ms per request _(needs production validation)_

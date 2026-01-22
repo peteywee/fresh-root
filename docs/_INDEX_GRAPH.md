@@ -29,11 +29,13 @@ related-docs:
 ## Core Navigation
 
 ### Master Index
+
 **[INDEX.md]** (Entry Point)
+
 - Related to:
-  - _METADATA_SCHEMA.md (defines format)
-  - _INDEX_KEYWORDS.md (provides keyword search)
-  - _INDEX_GRAPH.md (this file, provides relationships)
+  - \_METADATA_SCHEMA.md (defines format)
+  - \_INDEX_KEYWORDS.md (provides keyword search)
+  - \_INDEX_GRAPH.md (this file, provides relationships)
   - All category README files (architecture/, guides/, standards/, etc.)
 
 ---
@@ -41,6 +43,7 @@ related-docs:
 ## Architecture Documentation Relationships
 
 ### [architecture/README.md]
+
 - Related to:
   - [architecture/SYSTEM_DESIGN.md] (detailed system)
   - [architecture/DESIGN_PATTERNS.md] (architectural patterns)
@@ -50,6 +53,7 @@ related-docs:
   - [standards/CODING_RULES_AND_PATTERNS.md] (implementation rules)
 
 ### [architecture/SYSTEM_DESIGN.md]
+
 - Related to:
   - [architecture/DATA_LAYER.md] (data layer design)
   - [architecture/DEPLOYMENT_ARCHITECTURE.md] (deployment design)
@@ -57,6 +61,7 @@ related-docs:
   - [standards/] (implementation standards)
 
 ### [architecture/API_SCHEMA_AUDIT.md]
+
 - Related to:
   - [standards/API_DESIGN.md] (API design rules)
   - [standards/ZOD_INTEGRATION.md] (validation patterns)
@@ -64,6 +69,7 @@ related-docs:
   - [guides/API_DEVELOPMENT.md] (API development guide)
 
 ### [architecture/DESIGN_PATTERNS.md]
+
 - Related to:
   - [standards/DESIGN_PATTERNS.md] (detailed pattern library)
   - [standards/ARCHITECTURE_PATTERNS.md] (architectural patterns)
@@ -71,12 +77,14 @@ related-docs:
   - [templates/code/] (code templates implementing patterns)
 
 ### [architecture/SDK_FACTORY_DESIGN.md]
+
 - Related to:
   - [guides/SDK_FACTORY.md] (usage guide)
   - [standards/SDK_FACTORY_PATTERNS.md] (detailed rules)
   - [templates/code/SDK_FACTORY_TEMPLATE.md] (implementation template)
 
 ### [architecture/DEPLOYMENT_ARCHITECTURE.md]
+
 - Related to:
   - [guides/DEPLOYMENT.md] (deployment procedures)
   - [guides/CI_CD_SETUP.md] (CI/CD setup)
@@ -88,6 +96,7 @@ related-docs:
 ## Guides & How-To Documentation Relationships
 
 ### [guides/README.md]
+
 - Related to:
   - [guides/SETUP.md] (local setup)
   - [guides/DEPLOYMENT.md] (production deployment)
@@ -96,6 +105,7 @@ related-docs:
   - [guides/API_DEVELOPMENT.md] (API development)
 
 ### [guides/SETUP.md]
+
 - Related to:
   - [guides/LOCAL_DEVELOPMENT.md] (local dev workflow)
   - [guides/ENVIRONMENT_SETUP.md] (environment configuration)
@@ -103,6 +113,7 @@ related-docs:
   - [guides/PNPM_SETUP.md] (pnpm setup)
 
 ### [guides/TESTING.md]
+
 - Related to:
   - [guides/UNIT_TESTING.md] (unit test guide)
   - [guides/E2E_TESTING.md] (E2E test guide)
@@ -112,6 +123,7 @@ related-docs:
   - [templates/code/TEST_TEMPLATE.md] (test template)
 
 ### [guides/FIREBASE.md]
+
 - Related to:
   - [guides/FIREBASE_DEPLOYMENT.md] (Firebase deployment)
   - [guides/EMULATOR_SETUP.md] (Firebase emulators)
@@ -120,6 +132,7 @@ related-docs:
   - [guides/DATABASE_DESIGN.md] (database design)
 
 ### [guides/API_DEVELOPMENT.md]
+
 - Related to:
   - [guides/SDK_FACTORY.md] (SDK factory pattern usage)
   - [standards/API_DESIGN.md] (API design standards)
@@ -128,6 +141,7 @@ related-docs:
   - [architecture/API_SCHEMA_AUDIT.md] (API design audit)
 
 ### [guides/DEPLOYMENT.md]
+
 - Related to:
   - [architecture/DEPLOYMENT_ARCHITECTURE.md] (deployment design)
   - [guides/CI_CD_SETUP.md] (CI/CD setup)
@@ -136,6 +150,7 @@ related-docs:
   - [guides/SCALING.md] (scaling considerations)
 
 ### [guides/CODE_REVIEW.md]
+
 - Related to:
   - [guides/PULL_REQUEST_PROCESS.md] (PR process)
   - [reference/checklists/CODE_REVIEW_CHECKLIST.md] (review checklist)
@@ -147,6 +162,7 @@ related-docs:
 ## Standards & Best Practices Relationships
 
 ### [standards/README.md]
+
 - Related to:
   - [standards/CODING_RULES_AND_PATTERNS.md] (canonical rules)
   - [standards/SECURITY.md] (security standards)
@@ -154,6 +170,7 @@ related-docs:
   - [standards/TYPESCRIPT_STANDARDS.md] (TypeScript standards)
 
 ### [standards/CODING_RULES_AND_PATTERNS.md]
+
 - Related to:
   - [standards/SDK_FACTORY_PATTERNS.md] (SDK factory rules)
   - [standards/API_DESIGN.md] (API design rules)
@@ -163,6 +180,7 @@ related-docs:
   - [reference/checklists/CODE_QUALITY_CHECKLIST.md] (code quality checklist)
 
 ### [standards/API_DESIGN.md]
+
 - Related to:
   - [standards/SDK_FACTORY_PATTERNS.md] (SDK factory patterns)
   - [standards/ZOD_INTEGRATION.md] (Zod validation)
@@ -171,6 +189,7 @@ related-docs:
   - [templates/code/API_ROUTE_TEMPLATE.md] (API route template)
 
 ### [standards/ZOD_INTEGRATION.md]
+
 - Related to:
   - [standards/VALIDATION_PATTERNS.md] (validation patterns)
   - [standards/TYPESCRIPT_STANDARDS.md] (TypeScript types)
@@ -178,6 +197,7 @@ related-docs:
   - [templates/code/SCHEMA_TEMPLATE.md] (schema template)
 
 ### [standards/SECURITY.md]
+
 - Related to:
   - [standards/OWASP_COMPLIANCE.md] (OWASP standards)
   - [standards/ENCRYPTION.md] (encryption patterns)
@@ -188,6 +208,7 @@ related-docs:
   - [reports/SECURITY_AUDIT.md] (security audit)
 
 ### [standards/TYPESCRIPT_STANDARDS.md]
+
 - Related to:
   - [standards/TYPE_SYSTEM.md] (type system rules)
   - [standards/ZOD_INTEGRATION.md] (Zod validation)
@@ -195,6 +216,7 @@ related-docs:
   - [templates/code/TYPESCRIPT_TEMPLATE.md] (TypeScript template)
 
 ### [standards/REACT_PATTERNS.md]
+
 - Related to:
   - [standards/COMPONENT_PATTERNS.md] (component patterns)
   - [standards/REACT_HOOKS.md] (hooks patterns)
@@ -207,6 +229,7 @@ related-docs:
 ## Reference Documentation Relationships
 
 ### [reference/README.md]
+
 - Related to:
   - [reference/API_REFERENCE.md] (API reference)
   - [reference/FIRESTORE_SCHEMA.md] (Firestore schema)
@@ -215,18 +238,21 @@ related-docs:
   - [reference/DEPENDENCY_GRAPH.md] (dependencies)
 
 ### [reference/checklists/DEPLOYMENT_CHECKLIST.md]
+
 - Related to:
   - [guides/DEPLOYMENT.md] (deployment guide)
   - [reference/checklists/PRODUCTION_READINESS_CHECKLIST.md] (readiness checklist)
   - [templates/documents/DEPLOYMENT_RUNBOOK.md] (deployment runbook)
 
 ### [reference/checklists/CODE_REVIEW_CHECKLIST.md]
+
 - Related to:
   - [guides/CODE_REVIEW.md] (code review guide)
   - [standards/CODING_RULES_AND_PATTERNS.md] (code standards)
   - [guides/PULL_REQUEST_PROCESS.md] (PR process)
 
 ### [reference/checklists/SECURITY_CHECKLIST.md]
+
 - Related to:
   - [standards/SECURITY.md] (security standards)
   - [standards/OWASP_COMPLIANCE.md] (OWASP rules)
@@ -237,37 +263,44 @@ related-docs:
 ## Templates Relationships
 
 ### [templates/README.md]
+
 - Related to:
   - [templates/documents/] (document templates)
   - [templates/code/] (code templates)
   - [templates/processes/] (process templates)
 
 ### [templates/documents/ADR_TEMPLATE.md]
+
 - Related to:
   - [decisions/] (decision documents)
   - [architecture/SYSTEM_DESIGN.md] (architectural decisions)
 
 ### [templates/documents/RFC_TEMPLATE.md]
+
 - Related to:
   - [decisions/] (design proposals)
 
 ### [templates/code/API_ROUTE_TEMPLATE.md]
+
 - Related to:
   - [guides/API_DEVELOPMENT.md] (API development guide)
   - [standards/API_DESIGN.md] (API design standards)
   - [standards/SDK_FACTORY_PATTERNS.md] (SDK factory patterns)
 
 ### [templates/code/SCHEMA_TEMPLATE.md]
+
 - Related to:
   - [standards/ZOD_INTEGRATION.md] (Zod validation)
   - [guides/DATABASE_DESIGN.md] (database design)
 
 ### [templates/code/COMPONENT_TEMPLATE.md]
+
 - Related to:
   - [standards/COMPONENT_PATTERNS.md] (component patterns)
   - [guides/REACT_DEVELOPMENT.md] (React guide)
 
 ### [templates/code/TEST_TEMPLATE.md]
+
 - Related to:
   - [guides/TESTING.md] (testing guide)
   - [standards/TEST_PATTERNS.md] (test patterns)
@@ -277,18 +310,21 @@ related-docs:
 ## Reports & Analysis Relationships
 
 ### [reports/README.md]
+
 - Related to:
   - [reports/SECURITY_AUDIT.md] (security audit)
   - [reports/PERFORMANCE_BENCHMARKS.md] (performance analysis)
   - [reports/RETROSPECTIVES.md] (retrospectives)
 
 ### [reports/SECURITY_AUDIT.md]
+
 - Related to:
   - [standards/SECURITY.md] (security standards)
   - [standards/OWASP_COMPLIANCE.md] (OWASP rules)
   - [guides/SECURITY_HARDENING.md] (hardening guide)
 
 ### [reports/PERFORMANCE_BENCHMARKS.md]
+
 - Related to:
   - [guides/PERFORMANCE.md] (performance guide)
   - [standards/PERFORMANCE_OPTIMIZATION.md] (optimization patterns)
@@ -299,16 +335,19 @@ related-docs:
 ## Decision Records Relationships
 
 ### [decisions/README.md]
+
 - Related to:
-  - All decision files (001_, 002_, etc.)
+  - All decision files (001*, 002*, etc.)
   - [architecture/] (architectural outcomes)
 
 ### [decisions/001_MONOREPO_STRUCTURE.md]
+
 - Related to:
   - [guides/MONOREPO_SETUP.md] (monorepo guide)
   - [architecture/MONOREPO_ARCHITECTURE.md] (monorepo architecture)
 
 ### [decisions/002_SDK_FACTORY_PATTERN.md]
+
 - Related to:
   - [architecture/SDK_FACTORY_DESIGN.md] (design document)
   - [standards/SDK_FACTORY_PATTERNS.md] (implementation standards)
@@ -319,12 +358,14 @@ related-docs:
 ## Archived Documentation Relationships
 
 ### [archived/README.md]
+
 - Related to:
   - [archived/DEPRECATED_APPROACHES.md] (deprecated approaches)
   - [archived/HISTORICAL_DOCS.md] (historical docs)
   - [guides/MIGRATION_GUIDES.md] (migration guides)
 
 ### [archived/DEPRECATED_APPROACHES.md]
+
 - Related to:
   - Newer versions of same topic in active sections
   - [guides/MIGRATION_GUIDES.md] (migration path)
@@ -336,19 +377,24 @@ related-docs:
 ### Security Across Categories
 
 **Core Standards**:
+
 - [standards/SECURITY.md] (standards)
 
 **Implementation Guides**:
+
 - [guides/SECURITY_HARDENING.md] (hardening)
 - [guides/AUTHENTICATION.md] (authentication)
 
 **Architecture**:
+
 - [architecture/SECURITY_ARCHITECTURE.md] (design)
 
 **Reference**:
+
 - [reference/SECURITY_CHECKLIST.md] (checklist)
 
 **Reports**:
+
 - [reports/SECURITY_AUDIT.md] (audit)
 
 ---
@@ -356,22 +402,27 @@ related-docs:
 ### API Development Across Categories
 
 **Architecture**:
+
 - [architecture/API_SCHEMA_AUDIT.md] (audit)
 - [architecture/SDK_FACTORY_DESIGN.md] (design)
 
 **Standards**:
+
 - [standards/API_DESIGN.md] (design rules)
 - [standards/SDK_FACTORY_PATTERNS.md] (patterns)
 
 **Guides**:
+
 - [guides/API_DEVELOPMENT.md] (guide)
 - [guides/SDK_FACTORY.md] (usage)
 
 **Templates**:
+
 - [templates/code/API_ROUTE_TEMPLATE.md] (template)
 - [templates/code/SCHEMA_TEMPLATE.md] (schema template)
 
 **Reference**:
+
 - [reference/API_REFERENCE.md] (API reference)
 
 ---
@@ -379,18 +430,22 @@ related-docs:
 ### Testing Across Categories
 
 **Standards**:
+
 - [standards/TEST_PATTERNS.md] (patterns)
 - [standards/TEST_COVERAGE.md] (coverage)
 
 **Guides**:
+
 - [guides/TESTING.md] (guide)
 - [guides/UNIT_TESTING.md] (unit tests)
 - [guides/E2E_TESTING.md] (E2E tests)
 
 **Templates**:
+
 - [templates/code/TEST_TEMPLATE.md] (template)
 
 **Reference**:
+
 - [reference/checklists/TEST_CHECKLIST.md] (checklist)
 
 ---
@@ -398,19 +453,24 @@ related-docs:
 ### Deployment Across Categories
 
 **Architecture**:
+
 - [architecture/DEPLOYMENT_ARCHITECTURE.md] (design)
 
 **Guides**:
+
 - [guides/DEPLOYMENT.md] (procedures)
 - [guides/CI_CD_SETUP.md] (CI/CD setup)
 
 **Templates**:
+
 - [templates/documents/DEPLOYMENT_RUNBOOK.md] (runbook)
 
 **Reference**:
+
 - [reference/checklists/DEPLOYMENT_CHECKLIST.md] (checklist)
 
 **Reports**:
+
 - [reports/DEPLOYMENT_ANALYSIS.md] (analysis)
 
 ---
@@ -418,6 +478,7 @@ related-docs:
 ## Discovery Patterns
 
 ### Start Here (Popular Entry Points)
+
 1. [INDEX.md] → Master index
 2. [architecture/README.md] → Understand system
 3. [guides/SETUP.md] → Get running
@@ -427,6 +488,7 @@ related-docs:
 ### Common Journeys
 
 **New Developer**:
+
 1. [guides/SETUP.md] (setup)
 2. [guides/ARCHITECTURE_OVERVIEW.md] (understand system)
 3. [standards/CODING_RULES_AND_PATTERNS.md] (learn rules)
@@ -434,6 +496,7 @@ related-docs:
 5. [guides/CODE_REVIEW.md] (review process)
 
 **Building API Endpoint**:
+
 1. [guides/API_DEVELOPMENT.md] (overview)
 2. [standards/API_DESIGN.md] (design rules)
 3. [templates/code/API_ROUTE_TEMPLATE.md] (template)
@@ -441,6 +504,7 @@ related-docs:
 5. [guides/TESTING.md] (testing)
 
 **Deploying to Production**:
+
 1. [guides/DEPLOYMENT.md] (procedures)
 2. [reference/checklists/DEPLOYMENT_CHECKLIST.md] (checklist)
 3. [guides/CI_CD_SETUP.md] (CI/CD)
@@ -448,6 +512,7 @@ related-docs:
 5. [guides/MONITORING.md] (monitoring)
 
 **Security Audit**:
+
 1. [standards/SECURITY.md] (standards)
 2. [standards/OWASP_COMPLIANCE.md] (OWASP rules)
 3. [reference/checklists/SECURITY_CHECKLIST.md] (checklist)

@@ -1,6 +1,7 @@
 # Logic Agent: Radical Skepticism Protocol
 
-**Mission**: Every statement, assumption, and response is treated as potentially false until proven otherwise through evidence-based verification.
+**Mission**: Every statement, assumption, and response is treated as potentially false until proven
+otherwise through evidence-based verification.
 
 ---
 
@@ -118,14 +119,9 @@ CONTEXT FOR NEXT DECISION: [This fact is safe to build upon]
 
 ### Red Flags (Immediate Distrust)
 
-🚩 "It should work because..."
-🚩 "In my experience..."
-🚩 "Logically it would..."
-🚩 "Most likely..."
-🚩 "Probably..."
-🚩 Chain of 3+ unverified assumptions
-🚩 "I think the error is..."
-🚩 No evidence shown for critical claim
+🚩 "It should work because..." 🚩 "In my experience..." 🚩 "Logically it would..." 🚩 "Most
+likely..." 🚩 "Probably..." 🚩 Chain of 3+ unverified assumptions 🚩 "I think the error is..." 🚩 No
+evidence shown for critical claim
 
 ---
 
@@ -296,7 +292,8 @@ CLAIM              REALITY              PROOF
 
 **You can only go up the pyramid if each level is solid.**
 
-If claim is shaky → evidence crumbles → ground fails → verification breaks → testing fails → deployment risks.
+If claim is shaky → evidence crumbles → ground fails → verification breaks → testing fails →
+deployment risks.
 
 ---
 
@@ -329,29 +326,34 @@ If claim is shaky → evidence crumbles → ground fails → verification breaks
 ## Decision: [Decision Name]
 
 ### 1. CLAIM
+
 [One sentence]
 
 ### 2. EVIDENCE NEEDED
+
 - [ ] [Specific, measurable evidence A]
 - [ ] [Specific, measurable evidence B]
 - [ ] [Specific, measurable evidence C]
 
 ### 3. EVIDENCE GATHERED
+
 [Copy actual output/proof here]
 
 ### 4. ANALYSIS
-Does evidence match claim? How well?
-[Detailed comparison]
+
+Does evidence match claim? How well? [Detailed comparison]
 
 ### 5. CONFIDENCE
+
 [0-100%] - [Reasoning with specific risks]
 
 ### 6. REMAINING UNKNOWNS
+
 [List things that could still be wrong]
 
 ### 7. DECISION
-[Safe to proceed because: _____]
-[NOT safe to proceed because: _____]
+
+[Safe to proceed because: _____] [NOT safe to proceed because: _____]
 ```
 
 ---
@@ -390,7 +392,4 @@ If you think something is true, but didn't verify it:
 
 ---
 
-**Last Updated**: December 28, 2025
-**Author**: Logic Agent Protocol
-**Status**: Active Directive
-
+**Last Updated**: December 28, 2025 **Author**: Logic Agent Protocol **Status**: Active Directive

@@ -1,14 +1,17 @@
 ---
 
-description:
-"Dynamic personality switching and orchestration patterns for complex AI agent workflows"
+description: "Dynamic personality switching and orchestration patterns for complex AI agent
+workflows"
 
 ## applyTo: "\*\*/\*"
+
 # Orchestration Memory
+
 Patterns for managing complex AI agent workflows through dynamic personality switching and error
 protocol compliance.
 
 ## Dynamic Personality Switching
+
 **Critical principle**: Different problem types require different cognitive approaches. Agent must
 dynamically adopt appropriate personas:
 
@@ -23,6 +26,7 @@ dynamically adopt appropriate personas:
 - **Crisis Management** - Emergency response, critical path resolution
 
 ## Error Protocol Integration
+
 **Trigger**: When same error pattern occurs 3+ times **Required workflow**:
 
 1. **Switch to Error Protocol Analyst** persona
@@ -35,6 +39,7 @@ dynamically adopt appropriate personas:
 unblocked
 
 ## Orchestration Handoff Patterns
+
 **CREWOPS Protocol Integration**:
 
 - **Non-trivial tasks** → Multi-agent crew activation

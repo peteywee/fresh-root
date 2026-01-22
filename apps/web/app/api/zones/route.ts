@@ -3,10 +3,11 @@ export const dynamic = "force-dynamic";
 
 import { createOrgEndpoint } from "@fresh-schedules/api-framework";
 import { CreateZoneSchema } from "@fresh-schedules/types";
+import type { CreateZoneInput } from "@fresh-schedules/types";
 import { getFirestore } from "firebase-admin/firestore";
 import { NextResponse } from "next/server";
 
-import { badRequest, ok, serverError } from "../_shared/validation";
+import { badRequest, forbidden, ok, serverError } from "../_shared/validation";
 import { FLAGS } from "../../../src/lib/features";
 
 /**
@@ -23,6 +24,9 @@ export const GET = createOrgEndpoint({
 
       if (!venueId) {
         return badRequest("venueId query parameter is required");
+      }
+      if (!orgId) {
+        return badRequest("Organization context is required");
       }
 
       // D6: Fetch from Firestore if FIRESTORE_WRITES enabled
@@ -67,12 +71,18 @@ export const POST = createOrgEndpoint({
   rateLimit: { maxRequests: 50, windowMs: 60_000 },
   handler: async ({ request: _request, input, context, params: _params }) => {
     try {
-      const validated = input as Record<string, unknown>;
+      const validated = input as CreateZoneInput;
       const orgId = context.org?.orgId;
+      if (!orgId) {
+        return badRequest("Organization context is required");
+      }
+      if (validated.orgId !== orgId) {
+        return forbidden("orgId does not match organization context");
+      }
 
       const zone = {
-        orgId,
         ...validated,
+        orgId,
         createdBy: context.auth?.userId,
         createdAt: Date.now(),
         updatedAt: Date.now(),

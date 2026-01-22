@@ -1,10 +1,12 @@
 # 📊 Architecture & Repository Visuals System
+
 **Status**: ✅ **DEPLOYED & AUTOMATED**\
 **Last Updated**: December 7, 2025
 
 ---
 
 ## Overview
+
 Automated CI/CD system that generates and maintains **architecture diagrams, dependency
 visualizations, and repository state analysis** on every commit to `dev` and `main` branches.
 
@@ -13,42 +15,50 @@ visualizations, and repository state analysis** on every commit to `dev` and `ma
 ---
 
 ## What Gets Generated
+
 ### 1. **Architecture Diagram** (`docs/visuals/ARCHITECTURE.md`)
+
 - Monorepo structure (apps, packages, services)
 - Component dependencies and relationships
 - Technology stack overview
 - Mermaid graph visualization
 
 ### 2. **Dependency Tree** (`docs/visuals/DEPENDENCIES.md`)
+
 - Package dependency graph
 - Critical dependency versions
 - Transitive dependencies
 - Version pinning info
 
 ### 3. **Repository State** (`docs/visuals/REPO_STATE.md`)
+
 - Branch status and git strategy
 - Git history timeline
 - Recent commits
 - State machine diagram
 
 ### 4. **Dependency Health Analysis** (`docs/visuals/DEPENDENCY_HEALTH.md`)
+
 - Vulnerability audit results
 - Peer dependency issues
 - Deprecation warnings
 - Security status
 
 ### 5. **File Distribution** (`docs/visuals/FILE_DISTRIBUTION.md`)
+
 - Code metrics (TypeScript files, tests, docs)
 - File organization structure
 - Test coverage targets
 - Distribution pie charts
 
 ### 6. **Status Timeline** (`docs/visuals/STATUS_TIMELINE.md`)
+
 - Development milestones
 - Project readiness status
 - Planned improvements
 
 ### 7. **Dependency Remediation Report** (`docs/DEPENDENCY_REMEDIATION_REPORT.md`)
+
 - Deprecated packages with migration steps
 - Unmet peer dependencies solutions
 - Duplicate version consolidation guide
@@ -57,7 +67,9 @@ visualizations, and repository state analysis** on every commit to `dev` and `ma
 ---
 
 ## How It Works
+
 ### Automated Workflow
+
 ```mermaid
 graph LR
     push["📤 Push to dev/main"]
@@ -85,6 +97,7 @@ graph LR
 ```
 
 ### File Management
+
 - **Generated**: Every time `.github/workflows/generate-visuals.yml` runs
 - **Trigger Events**:
   - Push to `main` or `dev`
@@ -97,7 +110,9 @@ graph LR
 ---
 
 ## Scripts
+
 ### Generate Visuals Locally
+
 ```bash
 # Generate all visuals
 pnpm visuals:generate
@@ -110,6 +125,7 @@ node scripts/generate-visuals.mjs --output ./custom-dir
 ```
 
 ### Analyze Dependencies & Tree Diff
+
 ```bash
 # Full dependency analysis with tree diff
 pnpm deps:analyze
@@ -127,7 +143,9 @@ pnpm deps:dedupe
 ---
 
 ## CI/CD Workflows
+
 ### Primary Workflow: `generate-visuals.yml`
+
 **Triggers**: Push to main/dev, schedule, manual dispatch
 
 **Jobs**:
@@ -150,6 +168,7 @@ pnpm deps:dedupe
    - Maintains index of all visuals
 
 ### Secondary Workflow: `dependency-health.yml`
+
 **Purpose**: Continuous dependency monitoring
 
 **Runs**:
@@ -160,6 +179,7 @@ pnpm deps:dedupe
 ---
 
 ## File Locations
+
 ```
 fresh-root/
 ├── scripts/
@@ -185,6 +205,7 @@ fresh-root/
 ---
 
 ## Dependencies Added
+
 Minimal dependencies added to `package.json`:
 
 ```json
@@ -205,34 +226,41 @@ Minimal dependencies added to `package.json`:
 ---
 
 ## Key Features
+
 ### ✅ Automatic Updates
+
 - Generates on every relevant commit
 - Runs in CI/CD pipeline
 - No manual intervention needed
 
 ### ✅ Only Latest Versions
+
 - Old versions automatically deleted
 - Repository stays clean
 - No version clutter
 
 ### ✅ CI-Mandated
+
 - Required step in build pipeline
 - Blocks merge if visuals fail to generate
 - Status checks enforce compliance
 
 ### ✅ Comprehensive Analysis
+
 - 60+ regex patterns for file validation
 - Dependency health monitoring
 - Tree diff for structural changes
 - Deprecation tracking
 
 ### ✅ Team Accessibility
+
 - GitHub renders Mermaid natively
 - VSCode with extension support
 - Mermaid.live compatibility
 - Markdown-based, version-controllable
 
 ### ✅ Actionable Reports
+
 - Clear remediation steps
 - Specific fix commands
 - Migration guides for deprecated packages
@@ -241,22 +269,27 @@ Minimal dependencies added to `package.json`:
 ---
 
 ## Viewing Visuals
+
 ### In GitHub
+
 1. Navigate to `docs/visuals/` folder
 2. Mermaid diagrams render automatically
 3. Click on `.md` files to view
 
 ### In VS Code
+
 1. Install extension: **"Markdown Preview Mermaid Support"**
 2. Open any visual file
 3. Preview shows rendered diagrams
 
 ### In Browser
+
 1. Go to <https://mermaid.live>
 2. Paste diagram code from `.md` files
 3. Diagram renders interactively
 
 ### In CI Reports
+
 1. Check workflow summary in GitHub Actions
 2. PR comments include visual updates
 3. Linked to `docs/visuals/README.md`
@@ -264,7 +297,9 @@ Minimal dependencies added to `package.json`:
 ---
 
 ## Remediation Workflow
+
 ### For Deprecated Dependencies
+
 1. **Detection**: `generate-visuals.yml` finds deprecated packages
 
 1. **Report**: `DEPENDENCY_REMEDIATION_REPORT.md` lists with reasons
@@ -280,18 +315,21 @@ Minimal dependencies added to `package.json`:
 1. **Verify**: Run `pnpm test` and `pnpm typecheck`
 
 ### For Peer Dependency Issues
+
 1. **Detection**: `analyze-tree-diff.mjs` detects unmet peers
 2. **Report**: Listed with context in remediation report
 3. **Fix**: Usually just `pnpm install`
 4. **Verify**: `pnpm ls` shows no errors
 
 ### For Duplicate Versions
+
 1. **Detection**: `findDuplicateVersions()` identifies multiples
 2. **Consolidation**: `pnpm dedupe` command
 3. **Commit**: Clear message about deduplication
 4. **Lockfile**: Automatically updated
 
 ### For Tree Changes
+
 1. **Analysis**: Tree diff compares branches
 2. **Impact**: Shows file changes between commits
 3. **Review**: Developers understand structural changes
@@ -300,6 +338,7 @@ Minimal dependencies added to `package.json`:
 ---
 
 ## Package.json Scripts
+
 ```json
 {
   "scripts": {
@@ -316,6 +355,7 @@ Minimal dependencies added to `package.json`:
 ---
 
 ## CI Integration Status
+
 | Component                 | Status    | Details                    |
 | ------------------------- | --------- | -------------------------- |
 | **generate-visuals.yml**  | ✅ Active | Runs on push, auto-commits |
@@ -328,6 +368,7 @@ Minimal dependencies added to `package.json`:
 ---
 
 ## Success Criteria
+
 ✅ **System is working when**:
 
 1. ✅ Push to `dev` or `main` triggers `generate-visuals.yml`
@@ -342,7 +383,9 @@ Minimal dependencies added to `package.json`:
 ---
 
 ## Troubleshooting
+
 ### Visuals Not Updating
+
 ```bash
 # Run locally to debug
 pnpm visuals:generate:verbose
@@ -352,12 +395,14 @@ pnpm visuals:generate:verbose
 ```
 
 ### Script Timeout
+
 ```bash
 # Increase Node memory
 NODE_OPTIONS=--max-old-space-size=4096 pnpm visuals:generate
 ```
 
 ### Dependency Analysis Fails
+
 ```bash
 # Ensure pnpm is up to date
 pnpm install-completion bash
@@ -369,6 +414,7 @@ pnpm deps:analyze:verbose
 ---
 
 ## Future Enhancements
+
 Planned additions:
 
 - \[ ] Performance metrics graph (bundle size, test speed)
@@ -382,6 +428,7 @@ Planned additions:
 ---
 
 ## Authority & Governance
+
 This visual system is governed by:
 
 - **Sr Dev Directive** (`.github/SR_DEV_DIRECTIVE.md`)
@@ -392,6 +439,7 @@ This visual system is governed by:
 ---
 
 ## Support
+
 For issues, questions, or improvements:
 
 1. Check `docs/visuals/README.md` for quick reference
@@ -405,4 +453,4 @@ For issues, questions, or improvements:
 **System Status**: ✅ **FULLY OPERATIONAL**\
 **Last Deployment**: December 7, 2025\
 **Maintenance**: Automated via CI/CD\
-**Manual Override**: Available via workflow\_dispatch
+**Manual Override**: Available via workflow_dispatch

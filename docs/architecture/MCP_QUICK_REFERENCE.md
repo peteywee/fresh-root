@@ -17,11 +17,13 @@ related-docs:
 ---
 
 # MCP Tools Quick Reference Card
+
 **Print this or keep it bookmarked!**
 
 ---
 
 ## 🎯 What MCP Tools Should Always Be On
+
 | Tool                | Status   | Should Always Be On? | Why?                                               |
 | ------------------- | -------- | -------------------- | -------------------------------------------------- |
 | **GitHub MCP**      | ✅ HTTP  | **YES**              | 0ms overhead, 25+ critical tools                   |
@@ -32,6 +34,7 @@ related-docs:
 ---
 
 ## 📋 Tool Activation Decision
+
 ```
 Task Type → Best Tool(s) → When to Use
 ─────────────────────────────────────────────────────────────
@@ -58,7 +61,9 @@ Safe File Read → Repomix MCP (file_system_read_file)
 ---
 
 ## ⚡ Quick Tool Commands
+
 ### GitHub MCP
+
 ```
 "Search for [keyword] in the codebase"
 "List all open pull requests"
@@ -67,6 +72,7 @@ Safe File Read → Repomix MCP (file_system_read_file)
 ```
 
 ### Repomix MCP
+
 ```
 "Analyze the API framework patterns"
 "Pack the types package"
@@ -76,6 +82,7 @@ Safe File Read → Repomix MCP (file_system_read_file)
 ```
 
 ### Firebase MCP
+
 ```
 "Query the users collection"
 "Deploy Firestore rules"
@@ -84,6 +91,7 @@ Safe File Read → Repomix MCP (file_system_read_file)
 ```
 
 ### Chrome DevTools
+
 ```
 "Take a screenshot of the login page"
 "Automate [browser task]"
@@ -92,7 +100,9 @@ Safe File Read → Repomix MCP (file_system_read_file)
 ---
 
 ## 🚀 Best Practices
+
 ### DO ✅
+
 - Use **Repomix** for analysis (save 70% tokens)
 - Chain tools: Pack → Grep → Analyze
 - Cache packed outputs: Reuse with `attach_packed_output`
@@ -100,6 +110,7 @@ Safe File Read → Repomix MCP (file_system_read_file)
 - Trust tool selection to agent (auto-detection works)
 
 ### DON'T ❌
+
 - Don't re-pack same code multiple times
 - Don't manually read large files (use Repomix)
 - Don't search external repos without Repomix
@@ -109,7 +120,9 @@ Safe File Read → Repomix MCP (file_system_read_file)
 ---
 
 ## 💡 When to Use What
+
 ### Scenario: "Analyze our API error handling"
+
 **BEST WAY** (Uses tools effectively):
 
 ```
@@ -131,6 +144,7 @@ Result: Slow, wastes tokens
 ```
 
 ### Scenario: "How does Vercel handle middleware?"
+
 **BEST WAY** (Uses Repomix for external research):
 
 ```
@@ -159,6 +173,7 @@ Result: 30+ minutes of work
 ---
 
 ## 🔐 Security Built-In
+
 All Repomix file operations:
 
 - ✅ Block `.env` and `.env.*` files
@@ -171,6 +186,7 @@ All Repomix file operations:
 ---
 
 ## 📊 Performance Expectations
+
 | Operation            | Time | Tokens                                   |
 | -------------------- | ---- | ---------------------------------------- |
 | GitHub search        | <5s  | 500-2000                                 |
@@ -182,6 +198,7 @@ All Repomix file operations:
 ---
 
 ## 🎓 Learning Path
+
 **Day 1**: Get comfortable with basic usage
 
 - Try: "Pack the types package"
@@ -209,33 +226,40 @@ All Repomix file operations:
 ---
 
 ## 🆘 Troubleshooting
+
 ### "Tool not responding"
+
 → Tools are transient. Try again. Check internet.
 
 ### "Getting wrong results"
+
 → Be more specific. Example: "Pack only src/ directory" → Use explicit tool: "Use Repomix to..."
 
 ### "Takes too long"
+
 → Use compression: Repomix compresses 70% → Use grep instead of re-packing: Faster, no token cost
 
 ### "Too many tokens"
+
 → Use Repomix compression (auto, 70% savings) → Use grep on packed output (search without re-pack) →
 Limit scope with patterns: includePatterns="src/\*\*"
 
 ---
 
 ## 📚 Full Docs
+
 For detailed information:
 
-- **Strategy & Architecture**: [MCP\_TOOLING\_STRATEGY.md](./docs/MCP_TOOLING_STRATEGY.md)
-- **Tool Reference**: [REPOMIX\_MCP\_TOOLS\_REFERENCE.md](./docs/REPOMIX_MCP_TOOLS_REFERENCE.md)
+- **Strategy & Architecture**: [MCP_TOOLING_STRATEGY.md](./docs/MCP_TOOLING_STRATEGY.md)
+- **Tool Reference**: [REPOMIX_MCP_TOOLS_REFERENCE.md](./docs/REPOMIX_MCP_TOOLS_REFERENCE.md)
 - **Inventory & Workflows**:
-  [MCP\_TOOL\_ECOSYSTEM\_INVENTORY.md](./docs/MCP_TOOL_ECOSYSTEM_INVENTORY.md)
+  [MCP_TOOL_ECOSYSTEM_INVENTORY.md](./docs/MCP_TOOL_ECOSYSTEM_INVENTORY.md)
 - **Agent Guide**: [.github/copilot-instructions.md](./.github/copilot-instructions.md)
 
 ---
 
 ## ✨ The Magic
+
 You now have **47 tools** that:
 
 - ⚡ Work automatically (zero prompts for 90% of tasks)

@@ -6,7 +6,7 @@ import { createOrgEndpoint } from "@fresh-schedules/api-framework";
 import { CreateItemSchema } from "@fresh-schedules/types";
 import { NextResponse } from "next/server";
 
-import { badRequest, ok, serverError } from "../_shared/validation";
+import { badRequest, forbidden, ok, serverError } from "../_shared/validation";
 
 /**
  * GET /api/items
@@ -16,10 +16,14 @@ export const GET = createOrgEndpoint({
   handler: async ({ request, input: _input, context, params: _params }) => {
     try {
       const { searchParams } = new URL(request.url);
-      const orgId = searchParams.get("orgId") || context.org?.orgId;
+      const orgIdParam = searchParams.get("orgId");
+      const orgId = orgIdParam || context.org?.orgId;
 
       if (!orgId) {
         return badRequest("orgId query parameter is required");
+      }
+      if (orgIdParam && context.org?.orgId && orgIdParam !== context.org.orgId) {
+        return forbidden("orgId does not match organization context");
       }
 
       // Mock data - in production, fetch from Firestore
@@ -53,9 +57,13 @@ export const POST = createOrgEndpoint({
     try {
       // Type assertion safe - input validated by SDK factory
       const typedInput = input as z.infer<typeof CreateItemSchema>;
+      const orgId = context.org?.orgId;
+      if (!orgId) {
+        return badRequest("Organization context is required");
+      }
       const item = {
         id: `item-${Date.now()}`,
-        orgId: context.org?.orgId,
+        orgId,
         ...typedInput,
         createdBy: context.auth?.userId,
         createdAt: Date.now(),

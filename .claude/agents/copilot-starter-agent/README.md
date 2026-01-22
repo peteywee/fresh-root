@@ -4,17 +4,20 @@ Set up complete GitHub Copilot configuration for a new project.
 
 ## Overview
 
-Creates a complete, production-ready GitHub Copilot configuration for any technology stack or project type.
+Creates a complete, production-ready GitHub Copilot configuration for any technology stack or
+project type.
 
 ## When to Use
 
 ✅ **Use this agent for**:
+
 - New project bootstrap
 - Copilot setup for existing projects
 - Technology stack change
 - Team onboarding
 
 ❌ **Don't use this agent for**:
+
 - Modifying existing configuration
 - Code implementation
 - Project execution
@@ -30,6 +33,7 @@ Configure Copilot for the new TypeScript project
 ## Project Information Required
 
 Gather from user:
+
 1. **Primary Language/Framework** (e.g., JavaScript/React, Python/Django)
 2. **Project Type** (web app, API, mobile, library)
 3. **Additional Technologies** (database, cloud, testing)
@@ -39,9 +43,11 @@ Gather from user:
 ## Configuration Files Created
 
 ### 1. `.github/copilot-instructions.md`
+
 Main repository instructions for all Copilot interactions.
 
 ### 2. `.github/instructions/` Directory
+
 - `${primaryLanguage}.instructions.md` - Language guidelines
 - `testing.instructions.md` - Testing standards
 - `documentation.instructions.md` - Documentation
@@ -50,6 +56,7 @@ Main repository instructions for all Copilot interactions.
 - `code-review.instructions.md` - Code review standards
 
 ### 3. `.github/prompts/` Directory
+
 - `setup-component.prompt.md` - Component creation
 - `write-tests.prompt.md` - Test generation
 - `code-review.prompt.md` - Code review
@@ -58,11 +65,13 @@ Main repository instructions for all Copilot interactions.
 - `debug-issue.prompt.md` - Debugging
 
 ### 4. `.github/agents/` Directory
+
 - `architect.agent.md` - Architecture planning
 - `reviewer.agent.md` - Code review
 - `debugger.agent.md` - Debugging
 
 ### 5. `.github/workflows/copilot-setup-steps.yml`
+
 GitHub Actions workflow for CI environment setup.
 
 ## Process

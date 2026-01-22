@@ -19,6 +19,7 @@ related-docs:
 ---
 
 # MCP Tool Ecosystem: Complete Inventory
+
 **Date**: December 16, 2025\
 **Status**: Phase 1 Complete (Tier 1 Always-On)\
 **Total Tools**: 47 available to agents\
@@ -28,6 +29,7 @@ related-docs:
 ---
 
 ## 🎯 Tool Availability Map
+
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │                    FRESH SCHEDULES MCP TOOL ECOSYSTEM                        │
@@ -113,6 +115,7 @@ related-docs:
 ---
 
 ## 📊 Tool Selection Decision Tree
+
 ```
 ┌──────────────────────────────────┐
 │ Agent receives task/question      │
@@ -185,7 +188,9 @@ Anal │Work│base  │ser  │
 ---
 
 ## 🚀 Agent Workflow with MCP Tools
+
 ### Scenario 1: Code Analysis Task
+
 ```
 User: "Analyze the SDK factory pattern and suggest improvements"
 
@@ -202,6 +207,7 @@ Result: Complete analysis in <2 minutes, 70% token savings
 ```
 
 ### Scenario 2: Repository Operations
+
 ```
 User: "Search for all error handling in API routes"
 
@@ -218,6 +224,7 @@ Result: Instant results, zero manual setup
 ```
 
 ### Scenario 3: Competitive Research
+
 ```
 User: "How does Supabase handle real-time subscriptions?"
 
@@ -234,6 +241,7 @@ Result: Instant competitive intelligence without manual repo cloning
 ```
 
 ### Scenario 4: Database Operations
+
 ```
 User: "Migrate Firestore data from old schema to new schema"
 
@@ -255,24 +263,29 @@ Result: Complete data migration with zero manual Firebase CLI commands
 ---
 
 ## 💾 Tool Usage Frequency (Estimated)
+
 Based on development task patterns:
 
 ### Critical (Daily)
+
 - ✅ **GitHub MCP**: `search_code` (10+ times/day)
 - ✅ **GitHub MCP**: `list_pull_requests` (5+ times/day)
 - ✅ **Repomix MCP**: `pack_codebase` (3+ times/day when analyzing)
 
 ### Common (Weekly)
+
 - ✅ **Firebase MCP**: Firestore CRUD operations (2-3 times/week)
 - ✅ **Repomix MCP**: `grep_repomix_output` (pattern searches)
 - ✅ **GitHub MCP**: `create_pull_request`, `create_issue`
 
 ### Specialized (Monthly)
+
 - 🟡 **Chrome DevTools**: E2E test debugging
 - ✅ **Firebase MCP**: Rules deployment
 - ✅ **Repomix MCP**: `generate_skill` (team knowledge sharing)
 
 ### Rare (On-demand)
+
 - ✅ **Repomix MCP**: `pack_remote_repository` (competitor research)
 - ✅ **Firebase MCP**: Emulator control
 - 🟡 **Chrome DevTools**: Performance profiling
@@ -280,7 +293,9 @@ Based on development task patterns:
 ---
 
 ## 🎛️ Tool Configuration Details
+
 ### Tier 1: Always-On Configuration
+
 **GitHub MCP**:
 
 ```json
@@ -318,6 +333,7 @@ Based on development task patterns:
 ```
 
 ### Tier 2: On-Demand Configuration
+
 **Chrome DevTools**:
 
 ```json
@@ -334,7 +350,9 @@ Based on development task patterns:
 ---
 
 ## ⚙️ Activation Rules
+
 ### Automatic Detection
+
 The agent should automatically activate tools based on keywords:
 
 | Keyword                           | Tool                  | Action             |
@@ -348,6 +366,7 @@ The agent should automatically activate tools based on keywords:
 | "deploy", "rules", "functions"    | Firebase MCP          | Deployment         |
 
 ### Manual Override
+
 Agents can explicitly request tools:
 
 ```
@@ -359,7 +378,9 @@ Agents can explicitly request tools:
 ---
 
 ## 📈 Optimization Metrics
+
 ### Success Criteria (Phase 1 Complete)
+
 - ✅ 47 tools available always-on
 - ✅ 0 required user prompts for 90% of tasks
 - ✅ <300ms startup time (Tier 1)
@@ -368,6 +389,7 @@ Agents can explicitly request tools:
 - ✅ Agent tool selection guide (in copilot-instructions.md)
 
 ### Next Phases
+
 **Phase 2 (This Week)**:
 
 - Create MCP manifest (.mcp-manifest.json)
@@ -383,12 +405,15 @@ Agents can explicitly request tools:
 ---
 
 ## 🔑 Key Takeaways
+
 ### Always Use These (Never Manual)
+
 1. **GitHub MCP** — Search code, manage PRs/issues
 2. **Repomix MCP** — Analyze code patterns, research external repos
 3. **Firebase MCP** — Database operations, deployments
 
 ### Tool Advantages
+
 - 🚀 **47 tools** available without setup
 - 💾 **70% token savings** with Repomix compression
 - ⚡ **10x faster** analysis vs manual CLI
@@ -396,6 +421,7 @@ Agents can explicitly request tools:
 - 📊 **Real-time** code intelligence
 
 ### When Tools Fail
+
 - Fallback to local tools: `read_file`, `grep_search`, `file_search`
 - Don't give up — try MCP tool again (transient failures)
 - Report errors so team can debug
@@ -403,9 +429,10 @@ Agents can explicitly request tools:
 ---
 
 ## 📚 Reference Files
-- [MCP\_TOOLING\_STRATEGY.md](./MCP_TOOLING_STRATEGY.md) — Detailed tier architecture and
+
+- [MCP_TOOLING_STRATEGY.md](./MCP_TOOLING_STRATEGY.md) — Detailed tier architecture and
   implementation plan
-- [REPOMIX\_MCP\_TOOLS\_REFERENCE.md](./REPOMIX_MCP_TOOLS_REFERENCE.md) — Complete Repomix tool
+- [REPOMIX_MCP_TOOLS_REFERENCE.md](./REPOMIX_MCP_TOOLS_REFERENCE.md) — Complete Repomix tool
   documentation
 - [.mcp.json](../.mcp.json) — Current MCP configuration (view source)
 - [.github/copilot-instructions.md](../.github/copilot-instructions.md) — Agent guidelines

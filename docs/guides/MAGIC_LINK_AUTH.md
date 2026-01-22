@@ -26,23 +26,26 @@ related-docs:
 
 ## Executive Summary
 
-You now have a **professional, magic link-based authentication system** that replaces password-based signin with email magic links. The system includes:
+You now have a **professional, magic link-based authentication system** that replaces password-based
+signin with email magic links. The system includes:
 
 ✅ **Separate Signin vs Signup Flows** - Clear UX distinction  
 ✅ **Email Verification During Signup** - One-step account creation + email verification  
 ✅ **Professional UI Component** - Reusable `EmailMagicLinkAuth` with state management  
 ✅ **Dedicated UI/UX Agent** - Ensures all future auth components look professional  
 ✅ **Enhanced Callback Page** - Shows verification success with animations  
-✅ **Google OAuth Support** - Maintained for alternative authentication  
+✅ **Google OAuth Support** - Maintained for alternative authentication
 
 ---
 
 ## What Was Changed
 
 ### 1. **New UI/UX Agent** ⭐
+
 **Location**: `.github/prompts/ui-ux-agent.md`
 
 A dedicated prompt file for a specialized UI/UX design agent that ensures:
+
 - Professional, modern design with accessible components
 - WCAG 2.1 AA compliance (color contrast, keyboard navigation)
 - Consistent design system (colors, typography, spacing)
@@ -52,11 +55,13 @@ A dedicated prompt file for a specialized UI/UX design agent that ensures:
 **How to Use**: Mention `@ui-ux-agent` in PR descriptions or GitHub issues for design reviews.
 
 ### 2. **New Email Magic Link Component** ✨
+
 **Location**: `apps/web/app/components/auth/EmailMagicLinkAuth.tsx`
 
 A self-contained, professional authentication component with:
 
 #### Features
+
 - **Three-step flow**:
   1. **Choose** - Select Sign In vs Create Account
   2. **Enter Email** - Form with validation & error handling
@@ -69,14 +74,16 @@ A self-contained, professional authentication component with:
 - **Professional Styling**: Uses design system (primary, secondary, success, danger colors)
 
 #### Component Props
+
 ```typescript
 interface EmailMagicLinkAuthProps {
-  onSuccess?: () => void;  // Called after link is sent
-  onError?: (error: string) => void;  // Called on errors
+  onSuccess?: () => void; // Called after link is sent
+  onError?: (error: string) => void; // Called on errors
 }
 ```
 
 #### Usage
+
 ```tsx
 import EmailMagicLinkAuth from "@/app/components/auth/EmailMagicLinkAuth";
 
@@ -93,15 +100,18 @@ export default function LoginPage() {
 ```
 
 ### 3. **Refactored Login Page**
+
 **Location**: `apps/web/app/(auth)/login/page.tsx`
 
 #### What Changed
+
 - ❌ Removed: Email/Password signin method
 - ✨ Added: `EmailMagicLinkAuth` component (primary auth)
 - ✅ Kept: Google OAuth via separate FirebaseUI instance
 - 🎨 Enhanced: Professional card-based layout with animations
 
 #### New Structure
+
 ```
 Login Page
 ├── Header ("Welcome Back")
@@ -114,15 +124,18 @@ Login Page
 ```
 
 #### Key Improvements
+
 - Magic link is primary authentication (not an afterthought)
 - Google option is below as secondary (maintains choice)
 - Clear visual distinction between signin and signup flows
 - Professional animations and state feedback
 
 ### 4. **Enhanced Auth Callback Page**
+
 **Location**: `apps/web/app/auth/callback/page.tsx`
 
 #### What Changed
+
 - **Email Verification Success State**: Shows checkmark animation when email is verified
 - **User Email Display**: Shows the email that was just verified
 - **Better Error UI**: Clear error state with action ("Return to Login")
@@ -130,6 +143,7 @@ Login Page
 - **Smooth Animations**: Spin → success → redirect flow
 
 #### State Flow
+
 ```
 1. "working" → Loading spinner with verification message
 2. "email-verified" → Success checkmark, email display, brief pause
@@ -138,9 +152,12 @@ Login Page
 ```
 
 ### 5. **Auth Helpers Enhancement**
+
 **Location**: `apps/web/src/lib/auth-helpers.ts`
 
-Added documentation clarifying that **Firebase automatically sets `emailVerified=true`** when user completes magic link signin. This means:
+Added documentation clarifying that **Firebase automatically sets `emailVerified=true`** when user
+completes magic link signin. This means:
+
 - No manual email verification step needed
 - User accounts are instantly verified upon magic link completion
 - Seamless experience for signup flow
@@ -164,6 +181,7 @@ Added documentation clarifying that **Firebase automatically sets `emailVerified
 ```
 
 ### Key Points
+
 - **No separate email verification step** - it happens automatically when clicking the magic link
 - **`emailVerified` flag is set by Firebase** - not by your code
 - **User can immediately access all features** that require email verification
@@ -193,7 +211,9 @@ Login Page
 ```
 
 ### Type Safety
+
 All components use TypeScript with:
+
 - `AuthMode` type for signin/signup distinction
 - Proper error handling with Error interface
 - Optional callback functions with correct signatures
@@ -203,6 +223,7 @@ All components use TypeScript with:
 ## Design System Integration
 
 ### Colors Used
+
 - **`primary`** - Main CTA (Sign In, Send Magic Link)
 - **`secondary`** - Secondary option (Google)
 - **`success`** - Email verified confirmation
@@ -211,16 +232,19 @@ All components use TypeScript with:
 - **`surface`** / **`surface-card`** - Background layers
 
 ### Typography
+
 - **Heading**: 2xl, font-bold (h1 titles)
 - **Body**: base, font-normal (descriptions)
 - **Small**: sm, font-normal (helper text)
 
 ### Spacing
+
 - **Gaps between sections**: 4-6 units
 - **Padding in forms**: px-4 py-3 (standard)
 - **Card padding**: p-6 (outer), p-4 (inner sections)
 
 ### Animations
+
 - **Spin**: Loading states (infinite)
 - **Scale-up**: Success checkmark (celebration)
 - **Fade-in**: Error/status messages
@@ -231,6 +255,7 @@ All components use TypeScript with:
 ## Security Considerations
 
 ### Magic Link Security
+
 1. **Links expire in 24 hours** - Firebase default
 2. **One-time use** - Link is invalid after first click
 3. **Email verification built-in** - Proves email ownership
@@ -238,16 +263,19 @@ All components use TypeScript with:
 5. **Rate limiting** - Implemented in `sendEmailLinkRobust()`
 
 ### Email Sending
+
 ```typescript
 await sendSignInLinkToEmail(auth, email, actionCodeSettings);
 ```
 
 **Action Code Settings**:
+
 - `url`: Redirects to `/auth/callback` after clicking
 - `handleCodeInApp`: true (handles link in-app, not via email client)
 - Prevents CSRF by binding email in localStorage
 
 ### Session Security
+
 - **HTTP-only cookies** - Set by `/api/session` endpoint
 - **Secure flag** - Only sent over HTTPS in production
 - **SameSite=Lax** - CSRF protection
@@ -258,6 +286,7 @@ await sendSignInLinkToEmail(auth, email, actionCodeSettings);
 ## Testing Checklist
 
 ### Unit Tests Needed
+
 - [ ] `EmailMagicLinkAuth` renders all three states
 - [ ] Email validation works correctly
 - [ ] Resend button disabled during countdown
@@ -265,6 +294,7 @@ await sendSignInLinkToEmail(auth, email, actionCodeSettings);
 - [ ] Error messages display properly
 
 ### Integration Tests Needed
+
 - [ ] Magic link signup flow end-to-end
 - [ ] Magic link signin flow end-to-end
 - [ ] Email verification happens automatically
@@ -273,6 +303,7 @@ await sendSignInLinkToEmail(auth, email, actionCodeSettings);
 - [ ] Session is created after auth callback
 
 ### E2E Tests Needed (Playwright)
+
 - [ ] Full signup flow with email verification
 - [ ] Full signin flow with magic link
 - [ ] Callback page shows success animation
@@ -284,24 +315,28 @@ await sendSignInLinkToEmail(auth, email, actionCodeSettings);
 ## Future Enhancements
 
 ### Phase 1: Email Verification Features
+
 - [ ] Email verification status in account menu
 - [ ] Option to change email (re-verify)
 - [ ] Verification reminder emails (if not verified after 7 days)
 - [ ] Resend verification from account settings
 
 ### Phase 2: Security Features
+
 - [ ] Rate limiting per email (10 links/hour)
 - [ ] Suspicious activity detection
 - [ ] Login notifications ("Someone signed in from new device")
 - [ ] Passwordless 2FA option (SMS/TOTP)
 
 ### Phase 3: UX Improvements
+
 - [ ] QR code option for mobile email-to-app flow
 - [ ] Social proof ("2,500 people signed up this week")
 - [ ] Progressive profiling (gather info during signup)
 - [ ] Multi-language support for auth emails
 
 ### Phase 4: Advanced
+
 - [ ] WebAuthn/Passkey support
 - [ ] Biometric signin (Face ID / Touch ID on mobile)
 - [ ] Account linking (multiple emails per account)
@@ -312,41 +347,45 @@ await sendSignInLinkToEmail(auth, email, actionCodeSettings);
 ## Architecture Decisions
 
 ### Why Magic Links
+
 ✅ **No password management** - Simplifies security  
 ✅ **Email ownership verified** - One step process  
 ✅ **Mobile-friendly** - Click link, auto-signin  
 ✅ **Low friction** - No password to remember  
-✅ **Modern UX** - Expected by modern apps  
+✅ **Modern UX** - Expected by modern apps
 
 ### Why Separate Signin/Signup
+
 ✅ **Clearer intent** - User knows what they're doing  
 ✅ **Different messaging** - "Sign in" vs "Create account"  
 ✅ **Future flexibility** - Can add different fields later  
-✅ **A/B testing** - Can track signup vs signin separately  
+✅ **A/B testing** - Can track signup vs signin separately
 
 ### Why Keep Google OAuth
+
 ✅ **User choice** - Some prefer OAuth  
 ✅ **Faster for existing users** - One-click signin  
 ✅ **Fallback option** - If email provider down  
-✅ **Social proof** - Shows app is secure/popular  
+✅ **Social proof** - Shows app is secure/popular
 
 ---
 
 ## File Reference
 
-| File | Purpose | Status |
-|------|---------|--------|
-| `.github/prompts/ui-ux-agent.md` | UI/UX specialist prompt | ✅ New |
-| `apps/web/app/components/auth/EmailMagicLinkAuth.tsx` | Magic link component | ✅ New |
-| `apps/web/app/(auth)/login/page.tsx` | Login page | ✅ Modified |
-| `apps/web/app/auth/callback/page.tsx` | Auth callback handler | ✅ Enhanced |
-| `apps/web/src/lib/auth-helpers.ts` | Auth utilities | ✅ Enhanced (docs only) |
+| File                                                  | Purpose                 | Status                  |
+| ----------------------------------------------------- | ----------------------- | ----------------------- |
+| `.github/prompts/ui-ux-agent.md`                      | UI/UX specialist prompt | ✅ New                  |
+| `apps/web/app/components/auth/EmailMagicLinkAuth.tsx` | Magic link component    | ✅ New                  |
+| `apps/web/app/(auth)/login/page.tsx`                  | Login page              | ✅ Modified             |
+| `apps/web/app/auth/callback/page.tsx`                 | Auth callback handler   | ✅ Enhanced             |
+| `apps/web/src/lib/auth-helpers.ts`                    | Auth utilities          | ✅ Enhanced (docs only) |
 
 ---
 
 ## Next Steps
 
 ### For You (Developer)
+
 1. **Test the flows**:
    - Go to `/login`
    - Click "Create Account" → Enter email → Check terminal/email for link
@@ -363,7 +402,9 @@ await sendSignInLinkToEmail(auth, email, actionCodeSettings);
    - Add E2E tests in `e2e/auth-flow.spec.ts`
 
 ### For UI/UX Agent
+
 Call the agent for:
+
 - Design refinements to auth pages
 - Accessibility audits (WCAG compliance)
 - Animation polish (micro-interactions)
@@ -371,7 +412,9 @@ Call the agent for:
 - Mobile responsiveness testing
 
 ### For Security Team
+
 Review:
+
 - Rate limiting implementation
 - Email link expiration (24h)
 - Session cookie security
@@ -385,7 +428,8 @@ Review:
 A: Magic links eliminate password management, reducing security breaches while improving UX.
 
 **Q: What if user doesn't receive the email?**  
-A: Resend button with countdown timer appears after sending. Check spam folder is mentioned implicitly.
+A: Resend button with countdown timer appears after sending. Check spam folder is mentioned
+implicitly.
 
 **Q: Can user change email after signup?**  
 A: Yes, future enhancement - add "change email" in account settings that re-verifies.
@@ -400,7 +444,8 @@ A: Yes, Google guarantees email verification on their end. `emailVerified=true` 
 A: Yes, remove the Google section from login page. Magic link becomes only option.
 
 **Q: How do I customize the email that's sent?**  
-A: The email is sent by Firebase/Gmail. You configure the action code settings in `actionCodeSettings.ts`. Customize sender, template in Firebase Console.
+A: The email is sent by Firebase/Gmail. You configure the action code settings in
+`actionCodeSettings.ts`. Customize sender, template in Firebase Console.
 
 ---
 

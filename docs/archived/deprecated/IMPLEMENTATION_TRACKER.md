@@ -1,17 +1,20 @@
 # Fresh Schedules Implementation Tracker
+
 **Last Updated**: 2025-12-23 (Sprint v4.0 Active)\
 **Current Phase**: Phase 5 - Type Safety (Ready to Start)\
 **Branch**: dev (Phase 4 merged)\
-**Source Plan**: [docs/plans/IMPLEMENTATION\_PLAN\_v4.md](./plans/IMPLEMENTATION_PLAN_v4.md)\
+**Source Plan**: [docs/plans/IMPLEMENTATION_PLAN_v4.md](./plans/IMPLEMENTATION_PLAN_v4.md)\
 **Active Sprint**:
 [Sprint v4.0 - Mock→Firestore + Infra](https://github.com/peteywee/fresh-root/issues/195)
 
 ## 🎯 Progress Overview
+
 **Completed**: 26/45 tasks (58%)\
 **In Progress**: Phase 5 (Type Safety) - Ready to start\
 **Next Up**: E1-E8 (Type safety and schema improvements)
 
 ### 🚀 Active Sprint Issues
+
 | Track        | Issue                                                                           | Priority    | Status             |
 | ------------ | ------------------------------------------------------------------------------- | ----------- | ------------------ |
 | **Master**   | [#195 Sprint Tracker](https://github.com/peteywee/fresh-root/issues/195)        | -           | Active             |
@@ -25,15 +28,18 @@
 ---
 
 ## ✅ Completed Tasks
+
 ### Phase 0: Prerequisites (100% Complete)
+
 - ✅ **P0.1**: Feature flags infrastructure at `apps/web/src/lib/features.ts`
 - ✅ **P0.2**: E2E OAuth mock setup with Firebase emulator at `tests/e2e/fixtures/auth.ts`
 - ✅ **P0.3**: CI emulator configuration in `.github/workflows/ci.yml`
 
 ### Phase 1: Auth Chain (100% COMPLETE ✅)
+
 - ✅ **A1**: Wire `useAuth()` to Firebase `onAuthStateChanged`
   - **File**: `apps/web/src/lib/auth-context.tsx`
-  - **Changes**: Connected to Firebase auth, added REAL\_AUTH feature flag support
+  - **Changes**: Connected to Firebase auth, added REAL_AUTH feature flag support
   - **Status**: ✅ Deployed to dev
 
 - ✅ **A2**: Wire `proxy()` to middleware for route protection
@@ -58,12 +64,13 @@
   - **Status**: ✅ Deployed to dev
 
 ### Phase 2: Data Persistence (100% COMPLETE ✅)
+
 - ✅ **B1**: Write org document to Firestore
   - **File**: `apps/web/app/api/onboarding/create-network-org/route.ts`
   - **Changes**: Writes organization to `organizations/{orgId}` collection
   - **Status**: ✅ Deployed to dev
 
-- ✅ **B2**: Create org\_owner membership for creator
+- ✅ **B2**: Create org_owner membership for creator
   - **File**: `apps/web/app/api/onboarding/create-network-org/route.ts`
   - **Changes**: Creates membership with `org_owner` role in
     `organizations/{orgId}/members/{userId}`
@@ -85,6 +92,7 @@
   - **Status**: ✅ Tests passing
 
 ### Phase 3: UX Completion (100% COMPLETE ✅)
+
 - ✅ **C1**: Header component with logout button (Bravo-1)
   - **File**: `apps/web/src/components/Header.tsx`
   - **Changes**: Header with user menu, logout button, Firebase signOut integration
@@ -109,6 +117,7 @@
   - **Status**: ✅ No CSP errors reported (Header & profile components verified)
 
 ### Phase 4: API Migration (100% COMPLETE ✅)
+
 - ✅ **D1**: Attendance → Firestore
   - **File**: `apps/web/app/api/attendance/route.ts`
   - **Changes**: Full Firestore CRUD with feature flag support
@@ -154,103 +163,129 @@
 ## ## 📋 Pending Tasks
 
 ### Phase 5: Type Safety (All Charlie tasks)
+
 #### E1-E4: Remove any types from 5 identified files
+
 - **Estimate**: 2h
 - **Accept Criteria**: `grep ": any"` returns 0
 
 #### E5: Add structured error logging to all handlers
+
 - **Estimate**: 3h
 - **Accept Criteria**: All handlers have try/catch with context
 
 #### E6: Create BatchOperationSchema in types package
+
 - **Estimate**: 1h
 - **Files**: `packages/types/src/batch.ts`
 
 #### E7: Create BackupRequestSchema in types package
+
 - **Estimate**: 1h
 - **Files**: `packages/types/src/internal.ts`
 
 #### E8: Consolidate Firebase typed wrappers
+
 - **Estimate**: 2h
 - **Files**: `packages/types/src/firebase.ts`
 
 ---
 
 ### Phase 6: Feature Completion
+
 #### F1: Implement publishSchedule with status change (Alpha-1)
+
 - **Estimate**: 3h
 - **Accept Criteria**: Schedule status changes to `published`
 
 #### F2: Connect schedule builder to Firestore (Bravo-1)
+
 - **Estimate**: 4h
 - **Accept Criteria**: Drag-drop saves to Firestore
 
 #### F3: Implement file upload (optional) (Bravo-2)
+
 - **Estimate**: 3h
 - **Accept Criteria**: Files persist in Storage
 
 #### F4: Add loading states to all async operations (Bravo-1)
+
 - **Estimate**: 1.5h
 - **Accept Criteria**: Spinners visible during loads
 
 #### F5: Add error boundaries to route segments (Bravo-2)
+
 - **Estimate**: 1.5h
 - **Accept Criteria**: Errors caught, friendly message shown
 
 #### F6: Add ARIA labels for accessibility (Bravo-1)
+
 - **Estimate**: 1h
 - **Accept Criteria**: Lighthouse a11y ≥95
 
 #### F7: Add route prefetching to navigation (Bravo-2)
+
 - **Estimate**: 30m
 - **Accept Criteria**: Links prefetch on hover
 
 #### F8: Write E2E golden path test (Charlie)
+
 - **Estimate**: 4h
 - **Accept Criteria**: Full flow test passes
 
 ---
 
 ### Phase 7: Production Readiness
+
 #### QA1: Deploy to staging environment
+
 - **Estimate**: 1h
 - **Owner**: Orchestrator
 
 #### QA2: Run E2E against staging
+
 - **Estimate**: 1h
 - **Owner**: Charlie
 
 #### QA3: Security audit and sign-off
+
 - **Estimate**: 2h
 - **Owner**: SecRed
 
 #### QA4: Performance validation (Lighthouse)
+
 - **Estimate**: 1h
 - **Owner**: Charlie
 
 #### QA5: Accessibility validation (axe-core)
+
 - **Estimate**: 30m
 - **Owner**: Bravo-1
 
 #### DEPLOY: Production deployment
+
 - **Estimate**: 1h
 - **Owner**: Orchestrator
 
 ---
 
 ## 🔑 Key Files Modified So Far
+
 ### Phase 0
+
 - `apps/web/src/lib/features.ts` - Feature flags
 - `tests/e2e/fixtures/auth.ts` - E2E auth fixture (NEW)
 - `.github/workflows/ci.yml` - CI with E2E emulator support
 
 ### Phase 1 (Partial)
+
 - `apps/web/src/lib/auth-context.tsx` - Connected to Firebase
 - `apps/web/app/middleware.ts` - Integrated proxy for route protection
 
 ---
 
 ## 📍 Current Location
+
 **Branch**: `dev` (Phase 4 complete, ready for Phase 5)\
 **Next Steps**:
 
@@ -263,7 +298,9 @@
 ---
 
 ## 🚦 Gate Checkpoints
+
 ### Gate 0: Phase 0 Prerequisites ✅
+
 - \[x] P0.1-P0.3 complete
 - \[x] Feature flags parseable
 - \[x] E2E auth fixture works
@@ -271,6 +308,7 @@
 - \[x] **STATUS**: PASSED
 
 ### Gate 1: Auth Chain ✅ PASSED
+
 - \[x] A1-A5 complete
 - \[x] Login/logout works with Firebase
 - \[x] orgId cookie visible after org creation
@@ -280,6 +318,7 @@
 - \[x] **STATUS**: PASSED
 
 ### Gate 2: Data Persistence ✅ PASSED
+
 - \[x] B1-B5 complete
 - \[x] Organizations written to Firestore
 - \[x] Memberships created with roles
@@ -287,18 +326,21 @@
 - \[x] **STATUS**: PASSED
 
 ### Gate 3: UX Completion ✅ PASSED
+
 - \[x] C1-C5 complete
 - \[x] Header/Sidebar functional
 - \[x] Profile persists to Firestore
 - \[x] **STATUS**: PASSED
 
 ### Gate 4: API Migration ✅ PASSED
+
 - \[x] D1-D8 complete
 - \[x] All routes have Firestore integration
 - \[x] Mock fallback behind feature flags
 - \[x] **STATUS**: PASSED
 
 ### Gate 5: Type Safety (Current)
+
 - \[ ] E1-E8 complete
 - \[ ] No `any` types in main codebase
 - \[ ] Structured error logging
@@ -307,6 +349,7 @@
 ## ### Gate 6-7: (Pending)
 
 ## 🎯 Quick Resume Guide
+
 **To continue work**:
 
 1. **Check current branch**:
@@ -327,6 +370,7 @@
 ---
 
 ## 📊 Progress Metrics
+
 | Metric            | Target | Current | Status         |
 | ----------------- | ------ | ------- | -------------- |
 | Gaps Closed       | 41/41  | 26/45   | 🟢 58%         |
@@ -347,6 +391,7 @@
 ---
 
 ## 🔄 Git Workflow
+
 **Feature Branch Strategy**:
 
 - Feature branches → `dev` → `main`
@@ -365,15 +410,18 @@ main (production)
 ---
 
 ## 📝 Notes & Decisions
+
 ### 2025-12-23 (Phase 4 Status Update)
+
 - ℹ️ **TRACKER UPDATE**: Updated tracker to reflect Phase 4 completion
 - Phase 4 was completed on 2025-12-22 (commit d59a6c8)
 - All D1-D8 tasks finished with Firestore integration
 - All routes have proper error handling and org scoping
-- Mock data kept as development fallback behind FIRESTORE\_WRITES flag
+- Mock data kept as development fallback behind FIRESTORE_WRITES flag
 - **Gate 4 PASSED**: All API migrations complete, ready for Phase 5
 
 ### 2025-12-18 (Phase 2 Complete)
+
 - ✅ **PHASE 2 COMPLETE**: All B1-B5 tasks finished
 - B1: Organization documents written to Firestore `organizations/{orgId}`
 - B2: Org creator memberships with `org_owner` role in `organizations/{orgId}/members/{userId}`
@@ -384,8 +432,9 @@ main (production)
 - **Gate 2 PASSED**: Ready for Phase 3
 
 ### 2025-12-18 (Phase 1 Complete)
+
 - ✅ **PHASE 1 COMPLETE**: All A1-A5 tasks finished
-- A1: Wired useAuth() with REAL\_AUTH feature flag support
+- A1: Wired useAuth() with REAL_AUTH feature flag support
 - A2: Integrated proxy into middleware for route protection
 - A3: Set orgId cookie on org creation (both network org and corporate)
 - A4: Validate invite tokens with Firestore (checks expiry, used status)
@@ -396,7 +445,9 @@ main (production)
 ---
 
 ## 🆘 Troubleshooting
+
 ### Common Issues
+
 **Issue**: Firebase not initialized
 
 - **Solution**: Check `NEXT_PUBLIC_FIREBASE_*` env vars are set
@@ -415,11 +466,12 @@ main (production)
 ---
 
 ## 📚 Related Documentation
-- [IMPLEMENTATION\_PLAN\_v4.md](./plans/IMPLEMENTATION_PLAN_v4.md) - Full plan
-- [SDK\_FACTORY\_COMPREHENSIVE\_GUIDE.md](./standards/SDK_FACTORY_COMPREHENSIVE_GUIDE.md) - API
+
+- [IMPLEMENTATION_PLAN_v4.md](./plans/IMPLEMENTATION_PLAN_v4.md) - Full plan
+- [SDK_FACTORY_COMPREHENSIVE_GUIDE.md](./standards/SDK_FACTORY_COMPREHENSIVE_GUIDE.md) - API
   patterns
-- [CODING\_RULES\_AND\_PATTERNS.md](./standards/CODING_RULES_AND_PATTERNS.md) - Code standards
-- [CREWOPS\_MANUAL.md](./architecture/CREWOPS_MANUAL.md) - Team workflow
+- [CODING_RULES_AND_PATTERNS.md](./standards/CODING_RULES_AND_PATTERNS.md) - Code standards
+- [CREWOPS_MANUAL.md](./architecture/CREWOPS_MANUAL.md) - Team workflow
 
 ---
 

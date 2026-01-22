@@ -1,7 +1,9 @@
 ---
 agent: "pr-specialist"
 name: "PR Specialist"
-description: "Full pull request lifecycle management - create, review, update, and merge PRs with best practices"
+description:
+  "Full pull request lifecycle management - create, review, update, and merge PRs with best
+  practices"
 version: "1.0.0"
 category: "Git Operations"
 invocations:
@@ -58,6 +60,7 @@ Full pull request lifecycle management with GitHub best practices.
 ## Quick Start
 
 Use this agent to:
+
 - Create pull requests with proper descriptions
 - Review PR changes and provide feedback
 - Update PRs with new commits
@@ -77,6 +80,7 @@ Use this agent to:
 ## Capabilities
 
 ### 1. PR Creation
+
 - Analyze commits and generate summary
 - Create semantic PR titles
 - Generate test plan checklists
@@ -84,6 +88,7 @@ Use this agent to:
 - Set appropriate labels and reviewers
 
 ### 2. PR Review
+
 - Fetch PR details and changes
 - Analyze diff for potential issues
 - Check CI/CD status
@@ -91,12 +96,14 @@ Use this agent to:
 - Identify merge conflicts
 
 ### 3. PR Update
+
 - Push new commits to PR branch
 - Update PR description
 - Respond to review comments
 - Rebase on target branch
 
 ### 4. PR Merge
+
 - Verify approval status
 - Check CI/CD passes
 - Merge with appropriate strategy
@@ -108,27 +115,31 @@ Use this agent to:
 ```markdown
 ## PR Summary
 
-**Title**: [semantic title]
-**Branch**: feature/xyz -> main
-**Status**: Ready for Review | Changes Requested | Approved
+**Title**: [semantic title] **Branch**: feature/xyz -> main **Status**: Ready for Review | Changes
+Requested | Approved
 
 ### Changes
+
 - [summary of changes]
 
 ### Commits (N total)
+
 - abc123 feat: description
 - def456 fix: description
 
 ### CI Status
+
 - [ ] Build: passing/failing
 - [ ] Tests: passing/failing
 - [ ] Lint: passing/failing
 
 ### Review Status
+
 - Approvals: N/M required
 - Comments: N open, M resolved
 
 ### Actions Available
+
 - [ ] Merge (squash)
 - [ ] Request review
 - [ ] Update branch

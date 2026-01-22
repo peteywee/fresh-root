@@ -1,28 +1,25 @@
 ---
 
-agent: "agent"
-description: "Execute an implementation plan with validation at each step"
-tools:
-\[
-"changes",
-"search/codebase",
-"edit/editFiles",
-"problems",
-"runTasks",
-"runCommands/terminalLastCommand",
-"usages",
-]
+agent: "agent" description: "Execute an implementation plan with validation at each step" tools: \[
+"changes", "search/codebase", "edit/editFiles", "problems", "runTasks",
+"runCommands/terminalLastCommand", "usages", ]
+
 -
 
 # Execute Implementation
+
 ## Directive
+
 Execute the implementation plan for: `${input:TaskDescription}`
 
 ## Process
+
 ### 1. Load or Create Plan
+
 If no plan exists, create TODO list first. If plan exists, load and verify current state.
 
 ### 2. Execute Tasks Sequentially
+
 For each task:
 
 1. **Mark in-progress** (only one at a time)
@@ -31,12 +28,13 @@ For each task:
    - Search codebase for patterns
    - Make minimal changes
    - Follow existing conventions
-1. **Validate the change**
+4. **Validate the change**
    - Check for errors
    - Verify patterns match
-1. **Mark completed** immediately
+5. **Mark completed** immediately
 
 ### 3. Validation Gates
+
 After each significant change:
 
 - Check for TypeScript errors
@@ -44,6 +42,7 @@ After each significant change:
 - Run relevant tests if applicable
 
 ### 4. Final Validation
+
 After all tasks:
 
 ```bash
@@ -54,6 +53,7 @@ node scripts/validate-patterns.mjs
 ```
 
 ## Code Change Rules
+
 - Use SDK factory pattern for API routes
 - Use Zod schemas from packages/types
 - Scope all queries to organization
@@ -62,27 +62,34 @@ node scripts/validate-patterns.mjs
 - Handle all error cases
 
 ## Output Format
+
 ```markdown
 ## Implementation Progress
+
 ### Task 1: [Title]
+
 Status: ✅ Completed Changes:
 
 - [File]: [Description of change]
 
 ### Task 2: [Title]
+
 Status: 🔄 In Progress ...
 
 ## Validation Results
+
 - TypeScript: ✅/❌
 - Lint: ✅/❌
 - Tests: ✅/❌
 - Patterns: [score]
 
 ## Next Steps
+
 [What remains or what user should verify]
 ```
 
 ## Rules
+
 - One task in-progress at a time
 - Mark completed immediately
 - Validate after each change

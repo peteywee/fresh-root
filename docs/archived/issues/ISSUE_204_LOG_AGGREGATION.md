@@ -1,12 +1,17 @@
 # Issue #204: Log Aggregation Configuration
+
 ## Labels
+
 - P0: MEDIUM
 - Area: Observability, DevOps
 
 ## Objective
-Configure centralized log aggregation to enable efficient debugging of production issues and improve observability.
+
+Configure centralized log aggregation to enable efficient debugging of production issues and improve
+observability.
 
 ## Scope
+
 **In:**
 
 - Log aggregation service setup (Datadog/ELK/Loki)
@@ -22,6 +27,7 @@ Configure centralized log aggregation to enable efficient debugging of productio
 - Historical log migration
 
 ## Files / Paths
+
 - `apps/web/src/lib/logger.ts` - Enhanced structured logging
 - `docker-compose.yml` - Log aggregation service (if self-hosted)
 - `.env.production` - Log aggregation credentials
@@ -29,6 +35,7 @@ Configure centralized log aggregation to enable efficient debugging of productio
 - `docs/runbooks/LOG_QUERIES.md` - Common log queries (NEW)
 
 ## Commands
+
 ```bash
 # Test structured logging locally
 pnpm dev
@@ -41,6 +48,7 @@ curl http://localhost:3000/api/schedules
 ```
 
 ## Acceptance Criteria
+
 - \[ ] Log aggregation service configured
 - \[ ] Logs centralized and searchable
 - \[ ] Alerts configured for critical patterns
@@ -49,12 +57,14 @@ curl http://localhost:3000/api/schedules
 - \[ ] RequestId correlation working
 
 ## Success KPIs
+
 - **Log Centralization**: 100% of application logs aggregated
 - **Search Performance**: <2s to query last 24h of logs
 - **Alert Response**: <5min from error to alert
 - **Retention**: 30 days minimum
 
 ## Definition of Done
+
 - \[ ] CI green
 - \[ ] Docs updated
 - \[ ] Log aggregation operational

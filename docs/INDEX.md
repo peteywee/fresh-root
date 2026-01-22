@@ -1,6 +1,7 @@
 ---
 title: "Documentation Master Index"
-description: "Complete guide to Fresh Schedules documentation organized by category, audience, and purpose"
+description:
+  "Complete guide to Fresh Schedules documentation organized by category, audience, and purpose"
 keywords:
   - documentation
   - index
@@ -28,18 +29,21 @@ audience:
 ## Quick Navigation by Role
 
 ### For New Developers
+
 1. [Local Setup Guide](guides/SETUP.md) - Get dev environment running
 2. [Architecture Overview](architecture/) - Understand the system
 3. [Coding Standards](standards/CODING_RULES_AND_PATTERNS.md) - Our rules
 4. [First Contribution Guide](guides/) - Make your first PR
 
 ### For Operators / DevOps
+
 1. [Deployment Guide](guides/DEPLOYMENT.md) - Deploy to production
 2. [Operations Guide](guides/) - Running in production
 3. [Monitoring & Alerts](guides/) - Setup monitoring
 4. [Production Checklist](reference/checklists/) - Pre-deploy
 
 ### For Architects
+
 1. [Architecture Overview](architecture/) - System design
 2. [Design Decisions](decisions/) - Why we chose technologies
 3. [API Design Patterns](standards/) - REST endpoint patterns
@@ -47,6 +51,7 @@ audience:
 5. [Scalability Patterns](architecture/) - Growth strategy
 
 ### For AI Agents
+
 1. [Metadata Schema](_METADATA_SCHEMA.md) - How docs are tagged
 2. [Keyword Index](_INDEX_KEYWORDS.md) - Searchable keywords
 3. [Relationship Graph](_INDEX_GRAPH.md) - Doc relationships
@@ -103,6 +108,7 @@ docs/
 ## Documentation by Category
 
 ### 📐 Architecture Documentation
+
 System design, patterns, and technology decisions.
 
 **Location**: [`docs/architecture/`](architecture/)  
@@ -110,6 +116,7 @@ System design, patterns, and technology decisions.
 **Audience**: Architects, Senior Developers, AI Agents
 
 **Content Areas**:
+
 - System design and component interactions
 - Technology choices and rationale
 - Integration patterns and data flows
@@ -117,6 +124,7 @@ System design, patterns, and technology decisions.
 - Security architecture and threat models
 
 **Key Files**:
+
 - `API_SCHEMA_AUDIT.md` - API design analysis
 - `DEPENDENCY_GRAPH.md` - Package relationship map
 - See [`architecture/README.md`](architecture/README.md) for complete list
@@ -126,6 +134,7 @@ System design, patterns, and technology decisions.
 ---
 
 ### 📚 Implementation Guides
+
 Step-by-step how-to guides, tutorials, and procedures.
 
 **Location**: [`docs/guides/`](guides/)  
@@ -133,12 +142,14 @@ Step-by-step how-to guides, tutorials, and procedures.
 **Audience**: Developers, Operators, Teams
 
 **Subcategories**:
+
 - **setup/** - Local development environment
 - **deployment/** - Production deployment procedures
 - **operations/** - Running and maintaining production
 - Plus: Feature development, testing, Firebase, performance
 
 **Key Files**:
+
 - `SETUP.md` - Local dev environment
 - `DEPLOYMENT.md` - Production deployment
 - `TESTING.md` - Testing guidelines
@@ -150,6 +161,7 @@ Step-by-step how-to guides, tutorials, and procedures.
 ---
 
 ### 📋 Coding Standards & Best Practices
+
 Rules, patterns, and quality standards.
 
 **Location**: [`docs/standards/`](standards/)  
@@ -157,6 +169,7 @@ Rules, patterns, and quality standards.
 **Audience**: All Developers, AI Agents
 
 **Content Areas**:
+
 - Mandatory coding rules
 - Language/framework patterns (TypeScript, React, Firebase, etc)
 - Security standards and OWASP compliance
@@ -166,6 +179,7 @@ Rules, patterns, and quality standards.
 - Code organization and import rules
 
 **Key Files**:
+
 - `CODING_RULES_AND_PATTERNS.md` - **Canonical** rules
 - See [`standards/README.md`](standards/README.md) for complete list
 
@@ -174,6 +188,7 @@ Rules, patterns, and quality standards.
 ---
 
 ### 🔍 Reference Documentation
+
 Quick references, API docs, checklists, and lookup tables.
 
 **Location**: [`docs/reference/`](reference/)  
@@ -181,6 +196,7 @@ Quick references, API docs, checklists, and lookup tables.
 **Audience**: All Developers, Operators, AI Agents
 
 **Content Areas**:
+
 - API endpoint reference
 - CLI command reference
 - Environment variables reference
@@ -190,9 +206,11 @@ Quick references, API docs, checklists, and lookup tables.
 - Database limits and quotas
 
 **Subfolders**:
+
 - `checklists/` - Deployment, security, code review checklists
 
 **Key Files**:
+
 - See [`reference/README.md`](reference/README.md) for complete list
 
 **AI Tags**: `reference`, `lookup`, `api-docs`, `checklist`, `quick-reference`
@@ -200,6 +218,7 @@ Quick references, API docs, checklists, and lookup tables.
 ---
 
 ### 📊 Reports & Analyses
+
 Audit findings, performance metrics, retrospectives.
 
 **Location**: [`docs/reports/`](reports/)  
@@ -207,11 +226,13 @@ Audit findings, performance metrics, retrospectives.
 **Audience**: Architects, Leads, Stakeholders
 
 **Content Areas**:
+
 - **audits/** - Security, code quality, infrastructure audits
 - **retrospectives/** - Post-mortems, lessons learned
 - **analyses/** - Performance, dependency, complexity analyses
 
 **Key Files**:
+
 - See [`reports/README.md`](reports/README.md) for complete list
 
 **AI Tags**: `report`, `audit`, `analysis`, `retrospective`, `metrics`
@@ -219,6 +240,7 @@ Audit findings, performance metrics, retrospectives.
 ---
 
 ### 📝 Templates
+
 Reusable document and code templates.
 
 **Location**: [`docs/templates/`](templates/)  
@@ -226,11 +248,13 @@ Reusable document and code templates.
 **Audience**: Developers, Teams, All contributors
 
 **Content**:
+
 - **documents/** - ADR, RFC, incident report templates
 - **code/** - API route, component, test templates
 - **processes/** - Deployment, review, release checklists
 
 **Key Files**:
+
 - See [`templates/README.md`](templates/README.md) for complete list
 
 **AI Tags**: `template`, `boilerplate`, `scaffold`
@@ -238,16 +262,17 @@ Reusable document and code templates.
 ---
 
 ### 📦 Archived Documentation
+
 Deprecated, historical, and completed work.
 
 **Location**: [`docs/archived/`](archived/)  
 **Category**: `archive`  
-**Audience**: Reference only
-**Status**: Mostly `deprecated`
+**Audience**: Reference only **Status**: Mostly `deprecated`
 
 **Note**: Always check current documentation first. Archived docs may be outdated.
 
 **Content**:
+
 - Deprecated approaches (replaced by newer ones)
 - Historical documentation (completed projects)
 - Old architecture (no longer used)
@@ -261,26 +286,28 @@ Deprecated, historical, and completed work.
 
 Use these keywords to find related documentation:
 
-| Keyword | Related Docs | Category |
-|---------|--------------|----------|
-| `api`, `endpoint`, `rest`, `validation` | API Design, SDK Factory, Validation | standards, architecture |
-| `auth`, `authentication`, `authorization`, `rbac`, `login` | Auth patterns, Security | guides, standards |
-| `database`, `firestore`, `firebase`, `collections`, `schema` | Firebase integration, Database design | guides, reference, standards |
-| `deployment`, `production`, `devops`, `operations` | Deployment guide, Operations | guides, reference |
-| `testing`, `test`, `unit`, `integration`, `e2e`, `vitest` | Testing guide, Test patterns | guides, standards |
-| `performance`, `optimization`, `caching`, `metrics`, `benchmark` | Performance guide, Benchmarks | guides, reports, standards |
-| `security`, `owasp`, `encryption`, `audit`, `vulnerability` | Security standards, Audit | standards, reports, reference |
-| `typescript`, `types`, `zod`, `validation`, `schema` | TypeScript standards, Zod validation | standards, patterns |
-| `react`, `frontend`, `components`, `hooks`, `next.js` | React patterns, Component guide | standards, guides |
-| `firebase`, `cloud`, `gcp`, `functions`, `auth` | Firebase guide, Cloud architecture | guides, standards |
-| `monorepo`, `dependencies`, `pnpm`, `workspace`, `turbo` | Monorepo guide, Dependencies | guides, reference |
+| Keyword                                                          | Related Docs                          | Category                      |
+| ---------------------------------------------------------------- | ------------------------------------- | ----------------------------- |
+| `api`, `endpoint`, `rest`, `validation`                          | API Design, SDK Factory, Validation   | standards, architecture       |
+| `auth`, `authentication`, `authorization`, `rbac`, `login`       | Auth patterns, Security               | guides, standards             |
+| `database`, `firestore`, `firebase`, `collections`, `schema`     | Firebase integration, Database design | guides, reference, standards  |
+| `deployment`, `production`, `devops`, `operations`               | Deployment guide, Operations          | guides, reference             |
+| `testing`, `test`, `unit`, `integration`, `e2e`, `vitest`        | Testing guide, Test patterns          | guides, standards             |
+| `performance`, `optimization`, `caching`, `metrics`, `benchmark` | Performance guide, Benchmarks         | guides, reports, standards    |
+| `security`, `owasp`, `encryption`, `audit`, `vulnerability`      | Security standards, Audit             | standards, reports, reference |
+| `typescript`, `types`, `zod`, `validation`, `schema`             | TypeScript standards, Zod validation  | standards, patterns           |
+| `react`, `frontend`, `components`, `hooks`, `next.js`            | React patterns, Component guide       | standards, guides             |
+| `firebase`, `cloud`, `gcp`, `functions`, `auth`                  | Firebase guide, Cloud architecture    | guides, standards             |
+| `monorepo`, `dependencies`, `pnpm`, `workspace`, `turbo`         | Monorepo guide, Dependencies          | guides, reference             |
 
 ---
 
 ## Using Documentation for AI
 
 ### 1. **Parse YAML Frontmatter**
+
 All files have metadata at the top:
+
 ```yaml
 ---
 title: "..."
@@ -293,21 +320,27 @@ related-docs: ["path/to/related.md", ...]
 ```
 
 ### 2. **Use Keywords for Search**
-The `keywords` array in frontmatter is optimized for AI semantic search. Use it to find related content.
+
+The `keywords` array in frontmatter is optimized for AI semantic search. Use it to find related
+content.
 
 ### 3. **Check Status First**
+
 - `active` - Current and authoritative
 - `draft` - Work in progress
 - `deprecated` - Outdated, check newer docs first
 - `archived` - Historical reference only
 
 ### 4. **Navigate via Related Docs**
+
 Use `related-docs` field to understand document relationships and context.
 
 ### 5. **Filter by Audience**
+
 If `ai-agents` is in audience field, the doc is written with AI agent needs in mind.
 
 ### 6. **Check Metadata Schema**
+
 See [`_METADATA_SCHEMA.md`](_METADATA_SCHEMA.md) for full specification of all frontmatter fields.
 
 ---
@@ -330,6 +363,7 @@ When adding or updating docs:
 **Questions?**: Check individual category README files
 
 # Documentation Index
+
 > **Location**: L4 (Human-Friendly Documentation)\
 > **Purpose**: Comprehensive guides for developers, operators, and stakeholders\
 > **Last Updated**: 2025-12-16
@@ -337,6 +371,7 @@ When adding or updating docs:
 ---
 
 ## Document Organization
+
 ```
 docs/
 ├── INDEX.md (this file)
@@ -351,29 +386,32 @@ docs/
 ---
 
 ## Architecture (`architecture/`)
+
 System design, architectural decisions, and component interactions.
 
 | Document                                                  | Purpose                   | Status |
 | --------------------------------------------------------- | ------------------------- | ------ |
-| [AI\_AGENT\_GUIDE.md](./architecture/AI_AGENT_GUIDE.md)     | AI agent onboarding       | Active |
-| [CREWOPS\_MANUAL.md](./architecture/CREWOPS_MANUAL.md)     | Multi-agent orchestration | Active |
-| [DEPENDENCY\_GRAPH.md](./architecture/DEPENDENCY_GRAPH.md) | Package dependencies      | Active |
-| [API\_SCHEMA\_AUDIT.md](./architecture/API_SCHEMA_AUDIT.md) | API validation patterns   | Active |
+| [AI_AGENT_GUIDE.md](./architecture/AI_AGENT_GUIDE.md)     | AI agent onboarding       | Active |
+| [CREWOPS_MANUAL.md](./architecture/CREWOPS_MANUAL.md)     | Multi-agent orchestration | Active |
+| [DEPENDENCY_GRAPH.md](./architecture/DEPENDENCY_GRAPH.md) | Package dependencies      | Active |
+| [API_SCHEMA_AUDIT.md](./architecture/API_SCHEMA_AUDIT.md) | API validation patterns   | Active |
 
 ---
 
 ## Standards (`standards/`)
+
 Coding standards, patterns, and quality requirements.
 
 | Document                                                                 | Purpose                          | Status        |
 | ------------------------------------------------------------------------ | -------------------------------- | ------------- |
-| [CODING\_RULES\_AND\_PATTERNS.md](./standards/CODING_RULES_AND_PATTERNS.md) | Comprehensive coding standards   | **Canonical** |
-| [CONSOLIDATION\_TODO.md](./standards/CONSOLIDATION_TODO.md)               | Documentation consolidation plan | In Progress   |
-| [PATTERN\_VALIDATION.md](./standards/PATTERN_VALIDATION.md)               | Validation scoring rubric        | Active        |
+| [CODING_RULES_AND_PATTERNS.md](./standards/CODING_RULES_AND_PATTERNS.md) | Comprehensive coding standards   | **Canonical** |
+| [CONSOLIDATION_TODO.md](./standards/CONSOLIDATION_TODO.md)               | Documentation consolidation plan | In Progress   |
+| [PATTERN_VALIDATION.md](./standards/PATTERN_VALIDATION.md)               | Validation scoring rubric        | Active        |
 
 ---
 
 ## Guides (`guides/`)
+
 Step-by-step tutorials and how-to guides.
 
 | Document                                | Purpose                     | Status |
@@ -387,39 +425,43 @@ Step-by-step tutorials and how-to guides.
 ---
 
 ## Production (`production/`)
+
 Operations, monitoring, incident response.
 
 | Document                                                        | Purpose                 | Status |
 | --------------------------------------------------------------- | ----------------------- | ------ |
-| [DEPLOYMENT\_CHECKLIST.md](./production/DEPLOYMENT_CHECKLIST.md) | Pre-deploy verification | Active |
+| [DEPLOYMENT_CHECKLIST.md](./production/DEPLOYMENT_CHECKLIST.md) | Pre-deploy verification | Active |
 | [MONITORING.md](./production/MONITORING.md)                     | Monitoring and alerts   | Draft  |
-| [INCIDENT\_RESPONSE.md](./production/INCIDENT_RESPONSE.md)       | Incident runbook        | Draft  |
+| [INCIDENT_RESPONSE.md](./production/INCIDENT_RESPONSE.md)       | Incident runbook        | Draft  |
 
 ---
 
 ## Templates (`templates/`)
+
 Reusable document and code templates.
 
 | Document                                                   | Purpose                      | Status |
 | ---------------------------------------------------------- | ---------------------------- | ------ |
-| [API\_ROUTE\_TEMPLATE.md](./templates/API_ROUTE_TEMPLATE.md) | API route boilerplate        | Active |
-| [AMENDMENT\_TEMPLATE.md](./templates/AMENDMENT_TEMPLATE.md) | Governance amendment format  | Active |
-| [ADR\_TEMPLATE.md](./templates/ADR_TEMPLATE.md)             | Architecture Decision Record | Active |
+| [API_ROUTE_TEMPLATE.md](./templates/API_ROUTE_TEMPLATE.md) | API route boilerplate        | Active |
+| [AMENDMENT_TEMPLATE.md](./templates/AMENDMENT_TEMPLATE.md) | Governance amendment format  | Active |
+| [ADR_TEMPLATE.md](./templates/ADR_TEMPLATE.md)             | Architecture Decision Record | Active |
 
 ---
 
 ## Reports (`reports/`)
+
 Analysis reports, audits, retrospectives.
 
 | Document                                                     | Purpose                    | Status   |
 | ------------------------------------------------------------ | -------------------------- | -------- |
-| [REPOMIX\_ANALYSIS.md](./reports/REPOMIX_ANALYSIS.md)         | Repomix integration report | Complete |
-| [SECURITY\_AUDIT.md](./reports/SECURITY_AUDIT.md)             | Security assessment        | Complete |
-| [PERFORMANCE\_ANALYSIS.md](./reports/PERFORMANCE_ANALYSIS.md) | Performance benchmarks     | Draft    |
+| [REPOMIX_ANALYSIS.md](./reports/REPOMIX_ANALYSIS.md)         | Repomix integration report | Complete |
+| [SECURITY_AUDIT.md](./reports/SECURITY_AUDIT.md)             | Security assessment        | Complete |
+| [PERFORMANCE_ANALYSIS.md](./reports/PERFORMANCE_ANALYSIS.md) | Performance benchmarks     | Draft    |
 
 ---
 
 ## Archive (`../archive/`)
+
 Historical documents, superseded plans, completed migrations.
 
 | Category          | Location                     | Contents                       |
@@ -435,24 +477,29 @@ Historical documents, superseded plans, completed migrations.
 ---
 
 ## Quick Links
+
 ### For Developers
+
 - [Coding Standards](./standards/CODING_RULES_AND_PATTERNS.md) - **Start here**
 - [AI Agent Guide](./architecture/AI_AGENT_GUIDE.md) - AI assistant onboarding
 - [Setup Guide](./guides/SETUP.md) - Local environment
 
 ### For AI Agents
+
 - [Agents Registry](../.claude/agents/INDEX.md) - Discoverable agents, invocation methods
 - [CrewOps Manual](./architecture/CREWOPS_MANUAL.md) - Multi-agent coordination
 - [Governance Index](../.github/governance/INDEX.md) - Canonical rules (L0/L1)
 - [Instructions Index](../.github/instructions/INDEX.md) - Implementation instructions (L2)
 
 ### For Operators
+
 - [Deployment Checklist](./production/DEPLOYMENT_CHECKLIST.md) - Pre-deploy verification
 - [Deployment Guide](./guides/DEPLOYMENT.md) - Step-by-step deployment
 
 ---
 
 ## Documentation Hierarchy
+
 ```
 L0: Governance Canonical (.github/governance/01-12)
   ↓
@@ -470,44 +517,50 @@ L4b: Human Documentation (docs/) ← YOU ARE HERE
 **Rule**: L4 documentation must align with L0-L3. For binding decisions, see
 [Governance Index](../.github/governance/INDEX.md).
 
-**Agent Registry**: All discoverable agents are registered in [.claude/agents/INDEX.md](../.claude/agents/INDEX.md)
+**Agent Registry**: All discoverable agents are registered in
+[.claude/agents/INDEX.md](../.claude/agents/INDEX.md)
 
 ### L4a: Agent Registry (.claude/agents/)
+
 Discoverable agents with invocation methods, capabilities, and configurations.
 
-| Agent                | Invocations | Status | Registry |
-| -------------------- | ----------- | ------ | -------- |
-| **UI/UX Specialist** | `@ui-ux`, `@ux`, `@design` / `/ui-ux`, `/design` | ✅ Active | [.claude/agents/ui-ux-specialist/](../.claude/agents/ui-ux-specialist/) |
-| **PR Conflict Resolver** | Agent-based | ✅ Active | [.claude/agents/pr-conflict-resolver.md](../.claude/agents/pr-conflict-resolver.md) |
+| Agent                    | Invocations                                      | Status    | Registry                                                                            |
+| ------------------------ | ------------------------------------------------ | --------- | ----------------------------------------------------------------------------------- |
+| **UI/UX Specialist**     | `@ui-ux`, `@ux`, `@design` / `/ui-ux`, `/design` | ✅ Active | [.claude/agents/ui-ux-specialist/](../.claude/agents/ui-ux-specialist/)             |
+| **PR Conflict Resolver** | Agent-based                                      | ✅ Active | [.claude/agents/pr-conflict-resolver.md](../.claude/agents/pr-conflict-resolver.md) |
 
 ---
 
 ## Search Tips
+
 ### Find by Topic
-- **API patterns**: See [CODING\_RULES\_AND\_PATTERNS.md](./standards/CODING_RULES_AND_PATTERNS.md) §
+
+- **API patterns**: See [CODING_RULES_AND_PATTERNS.md](./standards/CODING_RULES_AND_PATTERNS.md) §
   SDK Factory
 - **Security**: See [Governance](../.github/governance/03_DIRECTIVES.md) § D01-D02 +
-  [A03\_SECURITY](../.github/governance/amendments/A03_SECURITY_AMENDMENTS.md)
+  [A03_SECURITY](../.github/governance/amendments/A03_SECURITY_AMENDMENTS.md)
 - **Testing**: See [TESTING.md](./guides/TESTING.md) +
-  [.github/instructions/05\_TESTING\_AND\_REVIEW.instructions.md](../.github/instructions/05_TESTING_AND_REVIEW.instructions.md)
+  [.github/instructions/05_TESTING_AND_REVIEW.instructions.md](../.github/instructions/05_TESTING_AND_REVIEW.instructions.md)
 - **Firebase**: See [FIREBASE.md](./guides/FIREBASE.md) +
-  [A07\_FIREBASE](../.github/governance/amendments/A07_FIREBASE_IMPL.md)
+  [A07_FIREBASE](../.github/governance/amendments/A07_FIREBASE_IMPL.md)
 
 ### Find by Role
-- **New Developer**: AI\_AGENT\_GUIDE.md → CODING\_RULES\_AND\_PATTERNS.md → SETUP.md
-- **AI Agent**: Agents Registry → Governance INDEX → Instructions INDEX → CREWOPS\_MANUAL
+
+- **New Developer**: AI_AGENT_GUIDE.md → CODING_RULES_AND_PATTERNS.md → SETUP.md
+- **AI Agent**: Agents Registry → Governance INDEX → Instructions INDEX → CREWOPS_MANUAL
 - **Agent Developer**: [.claude/agents/INDEX.md](../.claude/agents/INDEX.md) → Agent template
-- **Operator**: DEPLOYMENT\_CHECKLIST → DEPLOYMENT.md → MONITORING.md
-- **Architect**: DEPENDENCY\_GRAPH → API\_SCHEMA\_AUDIT → Governance/03\_DIRECTIVES
+- **Operator**: DEPLOYMENT_CHECKLIST → DEPLOYMENT.md → MONITORING.md
+- **Architect**: DEPENDENCY_GRAPH → API_SCHEMA_AUDIT → Governance/03_DIRECTIVES
 
 ---
 
 ## Contributing
+
 When adding new documentation:
 
 1. Place in appropriate folder (architecture/standards/guides/production/templates/reports)
 2. Update this INDEX.md
-3. Add YAML formatter (see [AMENDMENT\_TEMPLATE.md](./templates/AMENDMENT_TEMPLATE.md))
+3. Add YAML formatter (see [AMENDMENT_TEMPLATE.md](./templates/AMENDMENT_TEMPLATE.md))
 4. Link from related documents
 5. Verify alignment with [Governance](../.github/governance/INDEX.md)
 

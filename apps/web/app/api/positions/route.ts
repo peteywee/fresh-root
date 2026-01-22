@@ -3,10 +3,11 @@ export const dynamic = "force-dynamic";
 
 import { createOrgEndpoint } from "@fresh-schedules/api-framework";
 import { CreatePositionSchema } from "@fresh-schedules/types";
+import type { CreatePositionInput } from "@fresh-schedules/types";
 import { getFirestore } from "firebase-admin/firestore";
 import { NextResponse } from "next/server";
 
-import { badRequest, ok, serverError } from "../_shared/validation";
+import { badRequest, forbidden, ok, serverError } from "../_shared/validation";
 import { FLAGS } from "../../../src/lib/features";
 
 /**
@@ -18,10 +19,14 @@ export const GET = createOrgEndpoint({
   handler: async ({ request, input: _input, context, params: _params }) => {
     try {
       const { searchParams } = new URL(request.url);
-      const orgId = searchParams.get("orgId") || context.org?.orgId;
+      const orgIdParam = searchParams.get("orgId");
+      const orgId = orgIdParam || context.org?.orgId;
 
       if (!orgId) {
         return badRequest("orgId query parameter is required");
+      }
+      if (orgIdParam && context.org?.orgId && orgIdParam !== context.org.orgId) {
+        return forbidden("orgId does not match organization context");
       }
 
       // D2: Fetch from Firestore if FIRESTORE_WRITES enabled
@@ -66,12 +71,18 @@ export const POST = createOrgEndpoint({
   rateLimit: { maxRequests: 50, windowMs: 60_000 },
   handler: async ({ request: _request, input, context, params: _params }) => {
     try {
-      const validated = input as Record<string, unknown>;
+      const validated = input as CreatePositionInput;
       const orgId = context.org?.orgId;
+      if (!orgId) {
+        return badRequest("Organization context is required");
+      }
+      if (validated.orgId !== orgId) {
+        return forbidden("orgId does not match organization context");
+      }
 
       const position = {
-        orgId,
         ...validated,
+        orgId,
         createdBy: context.auth?.userId,
         createdAt: Date.now(),
         updatedAt: Date.now(),

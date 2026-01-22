@@ -312,8 +312,7 @@ Power Combos:
 - `/logic ladder` — chain → confidence → ground
 - `/logic deploy` — risk → test → decision
 
-Flags: `-h` (help), `-v` (visual/Mermaid), `-f` (fast)
-Tags: `#shipping`, `#arch`, `#bug`, `#perf`
+Flags: `-h` (help), `-v` (visual/Mermaid), `-f` (fast) Tags: `#shipping`, `#arch`, `#bug`, `#perf`
 
 **See**: `.github/instructions/logic-agent-cli.instructions.md` for full reference
 

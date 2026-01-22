@@ -1,11 +1,13 @@
 # Create Plan Agent — Quick Reference
 
 ## Invocation
+
 ```
 Use the create plan agent to create a plan for [purpose]
 ```
 
 ## Plan Purposes
+
 - `upgrade` — Package/dependency upgrades
 - `refactor` — Code refactoring
 - `feature` — New features
@@ -16,13 +18,16 @@ Use the create plan agent to create a plan for [purpose]
 - `process` — Process improvements
 
 ## File Naming
+
 `/plan/[purpose]-[component]-[version].md`
 
 Examples:
+
 - `upgrade-firebase-v12-1.md`
 - `refactor-auth-module-2.md`
 
 ## Front Matter
+
 ```yaml
 goal: [Title]
 version: [1.0]
@@ -33,6 +38,7 @@ tags: [feature, upgrade, architecture, etc.]
 ```
 
 ## Required Sections
+
 - Context
 - Tasks (with IDs, dependencies, criteria)
 - Phases (with gates and parallelization)
@@ -40,6 +46,7 @@ tags: [feature, upgrade, architecture, etc.]
 - Success Metrics
 
 ## Task Format
+
 ```
 ID: REQ-001 / TASK-001
 Title: [Action + Noun]
@@ -50,6 +57,7 @@ Estimated: [Xh / Xm]
 ```
 
 ## Key Principles
+
 - ✅ Deterministic (machine-readable)
 - ✅ Atomic tasks (single responsibility)
 - ✅ Explicit dependencies
@@ -57,5 +65,6 @@ Estimated: [Xh / Xm]
 - ✅ Automated validation
 
 ## See Also
+
 - [README.md](./README.md) — Full documentation
 - [AGENT.md](./AGENT.md) — Configuration

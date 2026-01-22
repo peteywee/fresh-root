@@ -7,7 +7,7 @@ import * as path from "path";
 import { z } from "zod";
 import { createAuthenticatedEndpoint } from "@fresh-schedules/api-framework";
 
-const WORKSPACE_ROOT = "/workspaces/fresh-root";
+const WORKSPACE_ROOT = process.env.WORKSPACE_ROOT || process.cwd();
 
 // Allowed file extensions for editing
 const ALLOWED_EXTENSIONS = [

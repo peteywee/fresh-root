@@ -39,15 +39,17 @@ function StatusBadge({ status }: { status: HealthStatus }) {
 }
 
 export default function HealthPage() {
-  const healthyCount = SERVICES.filter(s => s.status === "healthy").length;
-  const degradedCount = SERVICES.filter(s => s.status === "degraded").length;
-  const downCount = SERVICES.filter(s => s.status === "down").length;
+  const healthyCount = SERVICES.filter((s) => s.status === "healthy").length;
+  const degradedCount = SERVICES.filter((s) => s.status === "degraded").length;
+  const downCount = SERVICES.filter((s) => s.status === "down").length;
 
   return (
     <div className="space-y-8 animate-fade-in-up">
       <div>
         <h1 className="text-3xl font-heading font-bold text-foreground">System Health</h1>
-        <p className="text-muted-foreground mt-1">Real-time service status and performance metrics.</p>
+        <p className="text-muted-foreground mt-1">
+          Real-time service status and performance metrics.
+        </p>
       </div>
 
       <div className="grid gap-4 md:grid-cols-4">
@@ -56,7 +58,9 @@ export default function HealthPage() {
             <CardTitle className="text-sm font-medium text-muted-foreground">Healthy</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-heading font-bold text-schedule-green">{healthyCount}</div>
+            <div className="text-3xl font-heading font-bold text-schedule-green">
+              {healthyCount}
+            </div>
           </CardContent>
         </Card>
         <Card variant="solid" className="border-l-4 border-l-schedule-amber">
@@ -64,7 +68,9 @@ export default function HealthPage() {
             <CardTitle className="text-sm font-medium text-muted-foreground">Degraded</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-heading font-bold text-schedule-amber">{degradedCount}</div>
+            <div className="text-3xl font-heading font-bold text-schedule-amber">
+              {degradedCount}
+            </div>
           </CardContent>
         </Card>
         <Card variant="solid" className="border-l-4 border-l-schedule-rose">
@@ -77,7 +83,9 @@ export default function HealthPage() {
         </Card>
         <Card variant="solid" className="border-l-4 border-l-primary">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">Uptime (30d)</CardTitle>
+            <CardTitle className="text-sm font-medium text-muted-foreground">
+              Uptime (30d)
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-3xl font-heading font-bold text-primary">99.94%</div>
@@ -108,7 +116,9 @@ export default function HealthPage() {
                   <StatusBadge status={service.status} />
                 </td>
                 <td className="p-4 font-mono text-muted-foreground">{service.latency}</td>
-                <td className="p-4 text-right text-muted-foreground text-xs">{service.lastCheck}</td>
+                <td className="p-4 text-right text-muted-foreground text-xs">
+                  {service.lastCheck}
+                </td>
               </tr>
             ))}
           </tbody>
@@ -118,7 +128,8 @@ export default function HealthPage() {
       <div className="rounded-lg border border-border bg-card p-4">
         <div className="text-sm font-semibold text-foreground mb-2">ℹ️ Health Check Endpoints</div>
         <p className="text-sm text-muted-foreground">
-          Data aggregated from <code className="text-primary">/api/ops/health</code> and individual service endpoints. Refresh interval: 30 seconds.
+          Data aggregated from <code className="text-primary">/api/ops/health</code> and individual
+          service endpoints. Refresh interval: 30 seconds.
         </p>
       </div>
     </div>

@@ -21,7 +21,8 @@ related-docs:
 
 # Documentation Reorganization Progress
 
-> **Objective**: Organize docs/ directory with no loose files, eliminate redundancy, make fully indexable with AI-friendly metadata and keyword tagging  
+> **Objective**: Organize docs/ directory with no loose files, eliminate redundancy, make fully
+> indexable with AI-friendly metadata and keyword tagging  
 > **Status**: 🟡 IN-PROGRESS (Foundation Complete, Consolidation Phase)  
 > **Last Updated**: January 15, 2026
 
@@ -33,7 +34,7 @@ related-docs:
 
 **Established metadata framework for all documentation**
 
-- ✅ **Created _METADATA_SCHEMA.md** (250+ lines)
+- ✅ **Created \_METADATA_SCHEMA.md** (250+ lines)
   - Defines YAML frontmatter specification with 8 required fields
   - Includes directory structure guidance
   - Provides migration checklist for existing docs
@@ -67,11 +68,15 @@ related-docs:
   - Plus category-level navigation and descriptions
 
 - ✅ **Completed inventory of all files**
-  - **17 loose files in /docs/ root**: AUTH_TESTING_GUIDE.md, DEPRECATIONS.md, MAGIC_LINK_AUTH_GUIDE.md, MEMORY_MANAGEMENT.md, OPENTELEMETRY_SETUP.md, PERFORMANCE_BENCHMARKS.md, etc.
+  - **17 loose files in /docs/ root**: AUTH_TESTING_GUIDE.md, DEPRECATIONS.md,
+    MAGIC_LINK_AUTH_GUIDE.md, MEMORY_MANAGEMENT.md, OPENTELEMETRY_SETUP.md,
+    PERFORMANCE_BENCHMARKS.md, etc.
   - **11 files in architecture/** - FUTURE_PROOFING_CHECKLIST.md, MCP_QUICK_REFERENCE.md, etc.
   - **11 files in guides/** - CHROMEBOOK_KEEP_COPILOT.md, FIREBASE_PROMPT_WORKFLOW.md, etc.
-  - **8 files in standards/** - CONSOLIDATION_TODO.md, COVERAGE_STRATEGY.md, FIREBASE_TYPING_STRATEGY.md, etc.
-  - **14 files in production/** - Multiple DEPLOYMENT_*.md and PRODUCTION_*.md (DUPLICATES IDENTIFIED)
+  - **8 files in standards/** - CONSOLIDATION_TODO.md, COVERAGE_STRATEGY.md,
+    FIREBASE_TYPING_STRATEGY.md, etc.
+  - **14 files in production/** - Multiple DEPLOYMENT*\*.md and PRODUCTION*\*.md (DUPLICATES
+    IDENTIFIED)
   - **4 files in plans/** - Multiple IMPLEMENTATION_PLAN versions
   - **23 files in issues/** - ISSUE_196-218 tracking
   - **16 files in reports/** - Scattered analysis files
@@ -86,19 +91,20 @@ related-docs:
 - ✅ **Created comprehensive INDEX.md** (400+ lines)
   - Quick navigation by role: developers, operators, architects, AI agents
   - Complete category documentation (8 categories with descriptions)
-  - Search by topic (11 topic areas: API, auth, database, testing, deployment, performance, security, TypeScript, frontend, Firebase, monorepo)
+  - Search by topic (11 topic areas: API, auth, database, testing, deployment, performance,
+    security, TypeScript, frontend, Firebase, monorepo)
   - AI agent guidelines with metadata parsing instructions
   - Filter patterns (by status, audience, category)
   - Contributing documentation section
 
-- ✅ **Created _INDEX_KEYWORDS.md** (300+ lines)
+- ✅ **Created \_INDEX_KEYWORDS.md** (300+ lines)
   - 150+ keywords organized by topic
   - Keyword → Document mappings
   - Multi-keyword search patterns
   - Wildcard and filter capabilities
   - Searchable keyword index for AI agents
 
-- ✅ **Created _INDEX_GRAPH.md** (350+ lines)
+- ✅ **Created \_INDEX_GRAPH.md** (350+ lines)
   - Semantic relationships between documents
   - Document → [Related Documents] mappings
   - Cross-category relationship examples
@@ -119,10 +125,11 @@ related-docs:
 **Moving loose files and eliminating redundancy**
 
 #### Task 8: Consolidate Duplicate Files ⏳
+
 - **Status**: NOT-STARTED
 - **Files to consolidate**:
-  - Multiple DEPLOYMENT_*.md (in root, guides/, production/)
-  - Multiple PRODUCTION_*.md (in production/)
+  - Multiple DEPLOYMENT\_\*.md (in root, guides/, production/)
+  - Multiple PRODUCTION\_\*.md (in production/)
   - MEMORY_MANAGEMENT.md (in root and standards/)
   - Multiple INDEX/QUICK_INDEX files
   - Multiple IMPLEMENTATION_PLAN versions (v3, v4)
@@ -130,8 +137,9 @@ related-docs:
   - Redundant Repomix setup guides
 
 #### Task 9: Move Loose Root Files ⏳
+
 - **Status**: NOT-STARTED
-- **Target**: Clean docs/ root (only INDEX.md, README.md, _METADATA_SCHEMA.md, _INDEX*.md)
+- **Target**: Clean docs/ root (only INDEX.md, README.md, \_METADATA_SCHEMA.md, \_INDEX\*.md)
 - **Files to move** (17 files):
   - `AUTH_TESTING_GUIDE.md` → `guides/AUTHENTICATION_TESTING.md`
   - `MAGIC_LINK_AUTH_GUIDE.md` → `guides/MAGIC_LINK_AUTH.md`
@@ -144,6 +152,7 @@ related-docs:
   - Plus 9 more
 
 #### Task 10: Migrate Nested Loose Files ⏳
+
 - **Status**: NOT-STARTED
 - **Files to move**:
   - /plans/ files (4) → /decisions/ or /archived/
@@ -153,6 +162,7 @@ related-docs:
   - Duplicate pattern/architecture files → consolidate
 
 #### Task 11: Add Metadata Frontmatter ⏳
+
 - **Status**: NOT-STARTED
 - **Scope**: 65+ markdown files
 - **Process**:
@@ -165,9 +175,10 @@ related-docs:
     - `status`: active|draft|deprecated|archived
     - `audience`: List of audiences
     - `related-docs`: Links to related files
-  - Validate against _METADATA_SCHEMA.md
+  - Validate against \_METADATA_SCHEMA.md
 
 #### Task 12: Update Cross-References ⏳
+
 - **Status**: NOT-STARTED
 - **Scope**: ~20-30 files with internal links
 - **Process**:
@@ -177,9 +188,10 @@ related-docs:
   - Test that documentation navigation works
 
 #### Task 13: Validation & Verification ⏳
+
 - **Status**: NOT-STARTED
 - **Checks**:
-  - ✅ No loose files in /docs/ root (except INDEX.md, README.md, _METADATA*.md)
+  - ✅ No loose files in /docs/ root (except INDEX.md, README.md, \_METADATA\*.md)
   - ✅ No duplicate content (one canonical version per topic)
   - ✅ 100% metadata frontmatter compliance
   - ✅ All internal cross-references valid
@@ -261,24 +273,25 @@ docs/ (after Phase 1 & 2)
 
 ## Success Criteria Status
 
-| Criterion | Status | Details |
-|-----------|--------|---------|
-| **No loose files in /docs/ root** | 🟡 IN-PROGRESS | 17 files remaining to move (foundation established) |
-| **No duplicate content** | 🟡 IN-PROGRESS | 10 files to consolidate identified (not yet merged) |
-| **100% metadata frontmatter** | ❌ NOT-STARTED | 65+ files need metadata added (schema created) |
-| **All internal links valid** | ❌ NOT-STARTED | Cross-references need updating (20-30 files) |
-| **AI-friendly indexes created** | ✅ COMPLETE | INDEX.md, _INDEX_KEYWORDS.md, _INDEX_GRAPH.md all created |
-| **Searchable by keyword** | ✅ COMPLETE | 150+ keywords mapped in _INDEX_KEYWORDS.md |
-| **Searchable by topic** | ✅ COMPLETE | 11+ topic areas in INDEX.md |
-| **Searchable by role** | ✅ COMPLETE | 4 role-based navigation paths in INDEX.md |
-| **Relationship graph** | ✅ COMPLETE | Complete graph with cross-category relationships |
-| **Clear contributing guidelines** | ✅ COMPLETE | Documented in INDEX.md and _METADATA_SCHEMA.md |
+| Criterion                         | Status         | Details                                                     |
+| --------------------------------- | -------------- | ----------------------------------------------------------- |
+| **No loose files in /docs/ root** | 🟡 IN-PROGRESS | 17 files remaining to move (foundation established)         |
+| **No duplicate content**          | 🟡 IN-PROGRESS | 10 files to consolidate identified (not yet merged)         |
+| **100% metadata frontmatter**     | ❌ NOT-STARTED | 65+ files need metadata added (schema created)              |
+| **All internal links valid**      | ❌ NOT-STARTED | Cross-references need updating (20-30 files)                |
+| **AI-friendly indexes created**   | ✅ COMPLETE    | INDEX.md, \_INDEX_KEYWORDS.md, \_INDEX_GRAPH.md all created |
+| **Searchable by keyword**         | ✅ COMPLETE    | 150+ keywords mapped in \_INDEX_KEYWORDS.md                 |
+| **Searchable by topic**           | ✅ COMPLETE    | 11+ topic areas in INDEX.md                                 |
+| **Searchable by role**            | ✅ COMPLETE    | 4 role-based navigation paths in INDEX.md                   |
+| **Relationship graph**            | ✅ COMPLETE    | Complete graph with cross-category relationships            |
+| **Clear contributing guidelines** | ✅ COMPLETE    | Documented in INDEX.md and \_METADATA_SCHEMA.md             |
 
 ---
 
 ## Next Actions (Priority Order)
 
 ### 1. **Consolidate Duplicate Files** (HIGH - ~1 hour)
+
 ```
 DEPLOYMENT_GUIDE.md + DEPLOYMENT_PROCEDURES.md → guides/DEPLOYMENT.md
 PRODUCTION_CHECKLIST.md + PRODUCTION_READINESS.md → reference/PRODUCTION_OPERATIONS.md
@@ -289,28 +302,33 @@ MCP_QUICK_REFERENCE.md + REPOMIX_MCP_INTEGRATION.md → consolidate into one
 ```
 
 ### 2. **Move Loose Root Files** (HIGH - ~30 minutes)
+
 - Move 17 files from `/docs/` root to appropriate categories
-- Result: Clean root with only INDEX.md, README.md, _METADATA_SCHEMA.md, *INDEX**.md
+- Result: Clean root with only INDEX.md, README.md, \_METADATA_SCHEMA.md, \*INDEX\*\*.md
 
 ### 3. **Migrate Nested Loose Files** (MEDIUM - ~30 minutes)
+
 - Move /plans/ files to /decisions/ or /archived/
 - Move /issues/ files to /archived/issues/
 - Move /metrics/ files to /reports/metrics/
 - Clean up duplicate pattern/architecture files
 
 ### 4. **Add Metadata to All Files** (LARGE - ~2-3 hours)
+
 - Apply YAML frontmatter to all 65+ files
-- Follow _METADATA_SCHEMA.md format
+- Follow \_METADATA_SCHEMA.md format
 - Semantic keywords (3-10 per file)
 - Proper category assignment
 - Status and audience fields
 
 ### 5. **Update All Cross-References** (MEDIUM - ~1 hour)
+
 - Fix internal links throughout documentation
 - Verify all relative paths valid
 - Test documentation navigation
 
 ### 6. **Final Validation** (SMALL - ~15 minutes)
+
 - Verify no loose files remain
 - Confirm 100% metadata compliance
 - Update keyword and relationship indexes
@@ -321,6 +339,7 @@ MCP_QUICK_REFERENCE.md + REPOMIX_MCP_INTEGRATION.md → consolidate into one
 ## Documentation Transformation
 
 ### Before Organization
+
 ```
 docs/
 ├── 17 loose files (root)
@@ -338,6 +357,7 @@ docs/
 ```
 
 ### After Organization (Goal)
+
 ```
 docs/
 ├── _METADATA_SCHEMA.md         (metadata definition)
@@ -403,47 +423,51 @@ docs/
 ## Key Improvements
 
 ### Organization
+
 - ✅ Clear category structure (8 main categories)
 - ✅ Proper subcategories for complex topics
 - ✅ Eliminated file scatter across root and subdirectories
 - ✅ Consolidated duplicate content
 
 ### Indexing
+
 - ✅ 150+ semantic keywords
 - ✅ Complete relationship graph with cross-references
 - ✅ Role-based navigation (developers, operators, architects, AI agents)
 - ✅ Topic-based search (11 major topics)
 
 ### Metadata
+
 - ✅ YAML frontmatter specification defined
 - ✅ 8 required metadata fields
 - ✅ AI-friendly format (keywords, status, audience, related-docs)
 - ✅ Migration checklist included
 
 ### Discoverability
+
 - ✅ Master INDEX.md with comprehensive navigation
 - ✅ Category-level README files
-- ✅ Keyword search index (_INDEX_KEYWORDS.md)
-- ✅ Relationship graph (_INDEX_GRAPH.md)
+- ✅ Keyword search index (\_INDEX_KEYWORDS.md)
+- ✅ Relationship graph (\_INDEX_GRAPH.md)
 - ✅ Search by keyword, topic, role, category, status
 
 ---
 
 ## Statistics
 
-| Metric | Value |
-|--------|-------|
-| **Total Files (Before)** | 65+ loose/scattered |
-| **Categories Created** | 8 |
-| **New Subdirectories** | 5 |
-| **Metadata Fields** | 8 |
-| **Keywords** | 150+ |
-| **Relationships Mapped** | 200+ |
-| **Index Files Created** | 3 (_METADATA_SCHEMA.md, _INDEX_KEYWORDS.md, _INDEX_GRAPH.md) |
-| **Category READMEs** | 8 |
-| **Role-Based Paths** | 4 (developers, operators, architects, AI agents) |
-| **Topic Areas** | 11+ |
-| **Discovery Patterns** | 5+ common user journeys |
+| Metric                   | Value                                                           |
+| ------------------------ | --------------------------------------------------------------- |
+| **Total Files (Before)** | 65+ loose/scattered                                             |
+| **Categories Created**   | 8                                                               |
+| **New Subdirectories**   | 5                                                               |
+| **Metadata Fields**      | 8                                                               |
+| **Keywords**             | 150+                                                            |
+| **Relationships Mapped** | 200+                                                            |
+| **Index Files Created**  | 3 (\_METADATA_SCHEMA.md, \_INDEX_KEYWORDS.md, \_INDEX_GRAPH.md) |
+| **Category READMEs**     | 8                                                               |
+| **Role-Based Paths**     | 4 (developers, operators, architects, AI agents)                |
+| **Topic Areas**          | 11+                                                             |
+| **Discovery Patterns**   | 5+ common user journeys                                         |
 
 ---
 
@@ -451,11 +475,11 @@ docs/
 
 To continue with consolidation and metadata addition:
 
-1. **Reference the metadata schema**: See [_METADATA_SCHEMA.md](./_METADATA_SCHEMA.md)
+1. **Reference the metadata schema**: See [\_METADATA_SCHEMA.md](./_METADATA_SCHEMA.md)
 2. **Follow the directory structure**: Refer to this file and [INDEX.md](./INDEX.md)
 3. **Use the template**: Copy YAML frontmatter template from schema
-4. **Add related-docs**: Use [_INDEX_GRAPH.md](./_INDEX_GRAPH.md) for relationships
-5. **Verify keywords**: Use [_INDEX_KEYWORDS.md](./_INDEX_KEYWORDS.md) for consistency
+4. **Add related-docs**: Use [\_INDEX_GRAPH.md](./_INDEX_GRAPH.md) for relationships
+5. **Verify keywords**: Use [\_INDEX_KEYWORDS.md](./_INDEX_KEYWORDS.md) for consistency
 
 ---
 
@@ -463,4 +487,4 @@ To continue with consolidation and metadata addition:
 **Phase 3 Start Date**: Ready for implementation  
 **Estimated Phase 3 Completion**: ~4-5 hours of focused work
 
-**Questions?** Refer to [INDEX.md](./INDEX.md) or [_METADATA_SCHEMA.md](./_METADATA_SCHEMA.md)
+**Questions?** Refer to [INDEX.md](./INDEX.md) or [\_METADATA_SCHEMA.md](./_METADATA_SCHEMA.md)

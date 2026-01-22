@@ -10,6 +10,7 @@ Performance isn't just a buzzword—it's the difference between a product people
 ---
 
 ## General Principles
+
 - **Measure First, Optimize Second:** Always profile and measure before optimizing. Use benchmarks,
   profilers, and monitoring tools to identify real bottlenecks. Guessing is the enemy of
   performance.
@@ -33,4 +34,5 @@ Performance isn't just a buzzword—it's the difference between a product people
 ---
 
 ## Frontend Performance
+
 ... (file truncated)

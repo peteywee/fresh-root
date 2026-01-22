@@ -1,4 +1,5 @@
-# NOTE: This file was moved to docs/production/PRODUCTION\_READINESS\_KPI.md
+# NOTE: This file was moved to docs/production/PRODUCTION_READINESS_KPI.md
+
 This file has been moved to `docs/production/PRODUCTION_READINESS_KPI.md` and is maintained there as
 the canonical source of truth.
 
@@ -8,13 +9,16 @@ Please update bookmarks and references to the new location.
 **Status:** ✅ **PRODUCTION READY** (All KPIs met)
 
 ## Executive Summary
+
 This document serves as a standard quality gate for all Copilot agent work. All deliverables must
 meet these KPIs before being considered production-ready.
 
 ---
 
 ## Core KPIs (Required)
+
 ### 1. **TypeScript Compilation** ✅
+
 - **Requirement:** Zero TypeScript errors across entire codebase
 - **Tool:** `pnpm --filter @apps/web... run typecheck`
 - **Status:** ✅ **PASS** - No errors detected
@@ -27,6 +31,7 @@ meet these KPIs before being considered production-ready.
   ```
 
 ### 2. **Unit & Integration Tests** ✅
+
 - **Requirement:** 100% test pass rate; minimum 6 test suites passing
 - **Tool:** `pnpm -w vitest run`
 - **Status:** ✅ **PASS** - 6/6 test files, 6/6 tests passed
@@ -45,6 +50,7 @@ meet these KPIs before being considered production-ready.
   ```
 
 ### 3. **Code Quality (Linting)** ✅
+
 - **Requirement:** ESLint warnings ≤ 200 (configurable threshold)
 - **Tool:** `pnpm -w lint`
 - **Status:** ✅ **PASS** - 120 warnings (well under limit)
@@ -56,6 +62,7 @@ meet these KPIs before being considered production-ready.
 - **Result:** Reduced from 205 → 120 (40% improvement)
 
 ### 4. **No Duplicate/Conflicting Exports** ✅
+
 - **Requirement:** API routes export only standard HTTP methods (GET, POST, PATCH, DELETE, etc.)
 - **Status:** ✅ **PASS** - All conflicting exports removed
 - **Fixed Files:**
@@ -69,6 +76,7 @@ meet these KPIs before being considered production-ready.
   - `metrics/route.ts` - Removed `recordRequest` export
 
 ### 5. **Context Parameter Resolution** ✅
+
 - **Requirement:** All route handlers use resolved `params: Record<string, string>` (not `Promise`)
 - **Status:** ✅ **PASS** - All context types aligned with middleware
 - **Fixed Files:**
@@ -82,7 +90,9 @@ meet these KPIs before being considered production-ready.
 ---
 
 ## Extended KPIs (Recommended)
+
 ### 6. **Type Safety & Middleware Alignment** ✅
+
 - **Requirement:** All handlers properly typed for `withSecurity` middleware
 - **Status:** ✅ **PASS**
 - **Details:**
@@ -91,6 +101,7 @@ meet these KPIs before being considered production-ready.
   - Proper composition of auth middleware (`requireOrgMembership`, `requireRole`)
 
 ### 7. **Rate Limiting Configuration** ✅
+
 - **Requirement:** All protected endpoints use consistent rate limiting
 - **Status:** ✅ **PASS**
 - **Configuration:**
@@ -98,6 +109,7 @@ meet these KPIs before being considered production-ready.
   - Public endpoints: Configured via `withSecurity` options
 
 ### 8. **CSRF Protection** ✅
+
 - **Requirement:** All state-mutating endpoints (PATCH, DELETE, POST) use CSRF protection
 - **Status:** ✅ **PASS**
 - **Implementation:**
@@ -105,6 +117,7 @@ meet these KPIs before being considered production-ready.
   - POST/PATCH/DELETE: `csrfProtection()` wrapping `withSecurity`
 
 ### 9. **Input Validation** ✅
+
 - **Requirement:** All POST/PATCH endpoints validate with Zod schemas
 - **Status:** ✅ **PASS**
 - **Validated Routes:**
@@ -115,6 +128,7 @@ meet these KPIs before being considered production-ready.
   - Shift/venue/zone CRUD
 
 ### 10. **Error Handling Consistency** ✅
+
 - **Requirement:** Uniform API error responses across all endpoints
 - **Status:** ✅ **PASS**
 - **Pattern:**
@@ -129,7 +143,9 @@ meet these KPIs before being considered production-ready.
 ---
 
 ## Development Process KPIs
+
 ### 11. **Git Commit Hygiene** ✅
+
 - **Status:** ✅ Clean working directory
 - **Commits This Session:** 51 ahead of origin/dev
 - **Changes Summary:**
@@ -139,17 +155,20 @@ meet these KPIs before being considered production-ready.
   - Export conflicts: Resolved
 
 ### 12. **Test Coverage** ✅
+
 - **Status:** ✅ Core onboarding flows tested
 - **Current Coverage:** 6 integration tests
 - **Recommendation:** Extend to API routes (shifts, venues, zones, users, organizations)
 
 ### 13. **Documentation** ✅
+
 - **Status:** ✅ Inline code comments comprehensive
 - **Tags Used:** `[P0]`, `[P1]`, `[API]`, `[MIDDLEWARE]`, `[SECURITY]`, etc.
 
 ---
 
 ## Production Readiness Matrix
+
 | KPI               | Category | Status         | Weight   | Notes                   |
 | ----------------- | -------- | -------------- | -------- | ----------------------- |
 | TypeScript Errors | Core     | ✅ 0/0         | Critical | Zero tolerance          |
@@ -166,17 +185,21 @@ meet these KPIs before being considered production-ready.
 ---
 
 ## Remaining Actions Before Production Deployment
+
 ### Priority 1 (Complete) ✅
+
 - \[x] Run `pnpm -w lint --fix` to auto-resolve warnings
 - \[x] Reduced from 205 to 120 warnings
 - \[x] All critical KPIs now passing
 
 ### Priority 2 (Recommended - Within 24 hours)
+
 - \[ ] Extend test coverage to API route families (shifts, venues, zones, users, organizations)
 - \[ ] Add integration tests for auth middleware composition
 - \[ ] Validate CSRF token flow end-to-end
 
 ### Priority 3 (Before production)
+
 - \[ ] Load testing on rate-limited endpoints
 - \[ ] Security audit of input sanitization
 - \[ ] End-to-end test of complete onboarding flow
@@ -185,6 +208,7 @@ meet these KPIs before being considered production-ready.
 ---
 
 ## Sign-Off
+
 **Agent Name:** GitHub Copilot (Claude Haiku 4.5)\
 **Date Completed:** November 28, 2025\
 **Status:** ✅ **PRODUCTION READY** (All KPIs met)
@@ -206,6 +230,7 @@ meet these KPIs before being considered production-ready.
 ---
 
 ## Standard KPI Application for Future Copilot Work
+
 All future Copilot agent deliverables **must include**:
 
 1. This KPI checklist (tailored to task)

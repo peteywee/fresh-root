@@ -1,4 +1,5 @@
 # 🎯 SR DEV DIRECTIVE: Three-Branch Governance Architecture
+
 **Effective Date**: December 7, 2025\
 **Authority**: Sr Dev (Architecture)\
 **Status**: ACTIVE GOVERNANCE\
@@ -7,7 +8,9 @@
 ---
 
 ## Executive Directive
+
 ### Three Primary Branches - ONLY
+
 Effective immediately, the Fresh Schedules codebase operates under a **three-branch governance
 model**:
 
@@ -23,6 +26,7 @@ model**:
 - Follow naming convention: `feature|fix|chore|refactor/[issue-#]-[description]`
 
 ### Authority & Enforcement
+
 **This governance is enforced by**:
 
 - ✅ GitHub API branch protection rules
@@ -41,7 +45,9 @@ model**:
 ---
 
 ## Branch Responsibilities
+
 ### 🟢 **main** Branch - Production Code
+
 **Purpose**: Single source of truth for production deployments\
 **Owner**: DevOps/Release team\
 **Code Quality**: HIGHEST
@@ -87,6 +93,7 @@ model**:
 ```
 
 ### 🟡 **dev** Branch - Working Branch
+
 **Purpose**: Integration point for features, testing ground\
 **Owner**: Engineering team\
 **Code Quality**: HIGH
@@ -137,6 +144,7 @@ git push origin feature/123-description
 ```
 
 ### 📘 **docs-tests-logs** Branch - Archive
+
 **Purpose**: Single source of truth for all project artifacts\
 **Owner**: Sr Dev / Documentation team\
 **Code Quality**: N/A (archive-only)\
@@ -193,7 +201,9 @@ git push origin docs/add-new-doc
 ---
 
 ## File Pattern Governance
+
 ### Main Branch - ALLOWED PATTERNS
+
 ```regex
 ^apps/.*\.(ts|tsx|js|jsx|json|css)$
 ^packages/.*\.(ts|tsx|js|jsx|json|css)$
@@ -212,6 +222,7 @@ git push origin docs/add-new-doc
 ```
 
 ### Main Branch - FORBIDDEN PATTERNS
+
 ```regex
 ^docs/                          # Documentation
 \.e2e\.ts$                      # E2E tests
@@ -224,6 +235,7 @@ performance-metrics/            # Performance data
 ```
 
 ### Dev Branch - ALLOWED PATTERNS
+
 ```regex
 ^apps/.*\.(ts|tsx|js|jsx)$
 ^packages/.*\.(ts|tsx|js|jsx)$
@@ -242,6 +254,7 @@ performance-metrics/            # Performance data
 ```
 
 ### Dev Branch - FORBIDDEN PATTERNS
+
 ```regex
 ^docs/(?!feature-)              # Only feature-specific docs
 IMPLEMENTATION_COMPLETE|REPORT  # Project reports
@@ -252,6 +265,7 @@ performance-metrics/            # Performance data
 ```
 
 ### Docs-Tests-Logs Branch - ALLOWED PATTERNS
+
 ```regex
 ^docs/.*\.md$
 ^\.github/(IMPLEMENTATION_COMPLETE|REPORTS|SUMMARIES|BRANCH_STRATEGY)
@@ -266,6 +280,7 @@ performance-metrics/            # Performance data
 ```
 
 ### Docs-Tests-Logs Branch - FORBIDDEN PATTERNS
+
 ```regex
 ^apps/.*\.ts$                   # Feature code
 ^packages/.*\.ts$               # Package code
@@ -278,19 +293,23 @@ performance-metrics/            # Performance data
 ---
 
 ## GitHub Actions Enforcement Workflows
+
 ### Workflow 1: Branch File Pattern Validator
+
 - **Trigger**: Every PR (opened, updated)
 - **Action**: Validates file patterns match target branch
 - **Output**: PR comment with validation result
 - **Failure**: Blocks merge with detailed error
 
 ### Workflow 2: Feature Branch Auto-Cleanup
+
 - **Trigger**: PR merge to dev
 - **Action**: Auto-deletes feature branch
 - **Output**: PR comment confirming cleanup
 - **Success**: Branch removed from repo
 
 ### Workflow 3: Main Branch Merge Gate
+
 - **Trigger**: PR to main
 - **Action**: Enforces main branch rules
 - **Validation**:
@@ -301,6 +320,7 @@ performance-metrics/            # Performance data
 - **Output**: PR comment with gate status
 
 ### Workflow 4: Docs-Tests-Logs Archive Guard
+
 - **Trigger**: PR to docs-tests-logs
 - **Action**: Ensures archive-only content
 - **Validation**: Blocks feature code
@@ -309,7 +329,9 @@ performance-metrics/            # Performance data
 ---
 
 ## Commit Standards by Branch
+
 ### Feature Branches (feature/\*)
+
 ```bash
 # Daily minimum: 1 commit per day
 git commit -m "feat: implement login validation"
@@ -324,6 +346,7 @@ git commit -m "fix: resolve edge case in session"
 ```
 
 ### Dev Branch Merges
+
 ```bash
 # Via PR from feature branches
 # Automatically commits feature to dev
@@ -332,6 +355,7 @@ git commit -m "fix: resolve edge case in session"
 ```
 
 ### Main Branch Merges
+
 ```bash
 # Via PR from dev
 # Includes release notes
@@ -340,6 +364,7 @@ git commit -m "fix: resolve edge case in session"
 ```
 
 ### Docs-Tests-Logs Branch
+
 ```bash
 # As artifacts are generated
 git commit -m "docs: add architecture overview"
@@ -353,7 +378,9 @@ git commit -m "report: add performance metrics"
 ---
 
 ## Escalation & Exceptions
+
 ### When to Contact Sr Dev
+
 1. **Merge blocked** and you don't understand why
 2. **Committed to wrong branch** (not yet pushed)
 3. **Need to revert** a main branch commit
@@ -361,6 +388,7 @@ git commit -m "report: add performance metrics"
 5. **Questions** about governance
 
 ### Emergency: Hotfix to Main
+
 **If production is broken:**
 
 ```bash
@@ -378,7 +406,9 @@ git commit -m "report: add performance metrics"
 ---
 
 ## Monitoring & Metrics
+
 ### Track Monthly
+
 - Commits per feature (target: ≥1 per day)
 - Feature branch lifetime (target: <1 week)
 - PRs merged per sprint
@@ -386,6 +416,7 @@ git commit -m "report: add performance metrics"
 - Branch violation rate
 
 ### Audit Quarterly
+
 - Review branch sizes
 - Check for stale branches
 - Verify compliance rate
@@ -394,6 +425,7 @@ git commit -m "report: add performance metrics"
 ---
 
 ## Summary: Standard Operating Procedure
+
 ```
 1. ALWAYS start feature work on dev
    git checkout dev
@@ -433,6 +465,7 @@ git commit -m "report: add performance metrics"
 ---
 
 ## Final Authority Statement
+
 **Effective immediately**:
 
 1. ✅ Three-branch architecture is standard

@@ -8,39 +8,42 @@
 
 ## Archive Contents
 
-All files in this directory are deprecated L3 prompt files that have been migrated to the new L4a Agent Registry at `.claude/agents/`.
+All files in this directory are deprecated L3 prompt files that have been migrated to the new L4a
+Agent Registry at `.claude/agents/`.
 
 ---
 
 ## Archived Files
 
-| File | Agent | Migrated To | Status |
-| --- | --- | --- | --- |
-| `audit.prompt.md` | Audit Agent | `security-red-teamer/` | ✅ |
-| `create-implementation-plan.prompt.md` | Create Implementation Plan | `create-plan-agent/` | ✅ |
-| `deploy.prompt.md` | Deploy Agent | (specialized agent) | ✅ |
-| `document.prompt.md` | Document Agent | `document-agent/` | ✅ |
-| `documentation-writer.prompt.md` | Documentation Writer | `documentation-writer-agent/` | ✅ |
-| `github-copilot-starter.prompt.md` | Copilot Starter | `copilot-starter-agent/` | ✅ |
-| `implement.prompt.md` | Implement Agent | (specialized agent) | ✅ |
-| `iterate.prompt.md` | Iterate Agent | (specialized agent) | ✅ |
-| `plan.prompt.md` | Plan Agent | `plan-agent/` | ✅ |
-| `red-team.prompt.md` | Red Team Agent | `security-red-teamer/` | ✅ |
-| `review-and-refactor.prompt.md` | Review & Refactor | `code-review-expert/` | ✅ |
-| `review.prompt.md` | Review Agent | `code-review-expert/` | ✅ |
-| `test.prompt.md` | Test Agent | `test-engineer/` | ✅ |
+| File                                   | Agent                      | Migrated To                   | Status |
+| -------------------------------------- | -------------------------- | ----------------------------- | ------ |
+| `audit.prompt.md`                      | Audit Agent                | `security-red-teamer/`        | ✅     |
+| `create-implementation-plan.prompt.md` | Create Implementation Plan | `create-plan-agent/`          | ✅     |
+| `deploy.prompt.md`                     | Deploy Agent               | (specialized agent)           | ✅     |
+| `document.prompt.md`                   | Document Agent             | `document-agent/`             | ✅     |
+| `documentation-writer.prompt.md`       | Documentation Writer       | `documentation-writer-agent/` | ✅     |
+| `github-copilot-starter.prompt.md`     | Copilot Starter            | `copilot-starter-agent/`      | ✅     |
+| `implement.prompt.md`                  | Implement Agent            | (specialized agent)           | ✅     |
+| `iterate.prompt.md`                    | Iterate Agent              | (specialized agent)           | ✅     |
+| `plan.prompt.md`                       | Plan Agent                 | `plan-agent/`                 | ✅     |
+| `red-team.prompt.md`                   | Red Team Agent             | `security-red-teamer/`        | ✅     |
+| `review-and-refactor.prompt.md`        | Review & Refactor          | `code-review-expert/`         | ✅     |
+| `review.prompt.md`                     | Review Agent               | `code-review-expert/`         | ✅     |
+| `test.prompt.md`                       | Test Agent                 | `test-engineer/`              | ✅     |
 
 ---
 
 ## Why Were These Archived
 
 ### Before (L3)
+
 - ❌ No discovery system
 - ❌ Difficult to search
 - ❌ Manual invocation only
 - ❌ Inconsistent structure
 
 ### After (L4a)
+
 - ✅ YAML frontmatter discovery
 - ✅ Searchable via agent registry
 - ✅ @-mention autocomplete
@@ -83,7 +86,9 @@ cat /archive/l3-prompts-deprecated/plan.prompt.md
 
 ## Searching
 
-These archived prompts **will not appear in workspace searches** to avoid confusion. They are preserved for:
+These archived prompts **will not appear in workspace searches** to avoid confusion. They are
+preserved for:
+
 - Historical reference
 - Compliance/audit trails
 - Legacy system integration

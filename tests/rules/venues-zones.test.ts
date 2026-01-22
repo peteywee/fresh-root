@@ -54,21 +54,29 @@ describe("venues and zones collections", () => {
         });
 
       // Seed memberships
-      await ctx.firestore().collection("memberships").doc("user-staff_org-123").set({
-        uid: "user-staff",
-        orgId: "org-123",
-        roles: ["staff"],
-        status: "active",
-        createdAt: Date.now(),
-      });
+      await ctx
+        .firestore()
+        .collection("memberships")
+        .doc("user-staff_org-123")
+        .set({
+          uid: "user-staff",
+          orgId: "org-123",
+          roles: ["staff"],
+          status: "active",
+          createdAt: Date.now(),
+        });
 
-      await ctx.firestore().collection("memberships").doc("user-manager_org-123").set({
-        uid: "user-manager",
-        orgId: "org-123",
-        roles: ["manager"],
-        status: "active",
-        createdAt: Date.now(),
-      });
+      await ctx
+        .firestore()
+        .collection("memberships")
+        .doc("user-manager_org-123")
+        .set({
+          uid: "user-manager",
+          orgId: "org-123",
+          roles: ["manager"],
+          status: "active",
+          createdAt: Date.now(),
+        });
     });
   });
 
@@ -80,21 +88,31 @@ describe("venues and zones collections", () => {
     describe("unauthenticated access", () => {
       it("should deny reading venues without auth", async () => {
         const ctx = ctxAnon(testEnv);
-        const venueRef = ctx.firestore().collection("venues").doc("org-123").collection("venues").doc("venue-1");
+        const venueRef = ctx
+          .firestore()
+          .collection("venues")
+          .doc("org-123")
+          .collection("venues")
+          .doc("venue-1");
 
         await assertFails(venueRef.get());
       });
 
       it("should deny writing venues without auth", async () => {
         const ctx = ctxAnon(testEnv);
-        const venueRef = ctx.firestore().collection("venues").doc("org-123").collection("venues").doc("venue-new");
+        const venueRef = ctx
+          .firestore()
+          .collection("venues")
+          .doc("org-123")
+          .collection("venues")
+          .doc("venue-new");
 
         await assertFails(
           venueRef.set({
             name: "New Venue",
             orgId: "org-123",
             createdAt: Date.now(),
-          })
+          }),
         );
       });
     });
@@ -104,27 +122,42 @@ describe("venues and zones collections", () => {
 
       it("should allow staff to read venues in their org", async () => {
         const ctx = ctxUser(testEnv, "user-staff", staffClaims);
-        const venueRef = ctx.firestore().collection("venues").doc("org-123").collection("venues").doc("venue-1");
+        const venueRef = ctx
+          .firestore()
+          .collection("venues")
+          .doc("org-123")
+          .collection("venues")
+          .doc("venue-1");
 
         await assertSucceeds(venueRef.get());
       });
 
       it("should deny staff from creating venues", async () => {
         const ctx = ctxUser(testEnv, "user-staff", staffClaims);
-        const venueRef = ctx.firestore().collection("venues").doc("org-123").collection("venues").doc("venue-new");
+        const venueRef = ctx
+          .firestore()
+          .collection("venues")
+          .doc("org-123")
+          .collection("venues")
+          .doc("venue-new");
 
         await assertFails(
           venueRef.set({
             name: "New Venue",
             orgId: "org-123",
             createdAt: Date.now(),
-          })
+          }),
         );
       });
 
       it("should deny staff from updating venues", async () => {
         const ctx = ctxUser(testEnv, "user-staff", staffClaims);
-        const venueRef = ctx.firestore().collection("venues").doc("org-123").collection("venues").doc("venue-1");
+        const venueRef = ctx
+          .firestore()
+          .collection("venues")
+          .doc("org-123")
+          .collection("venues")
+          .doc("venue-1");
 
         await assertFails(venueRef.update({ name: "Modified Venue" }));
       });
@@ -135,14 +168,24 @@ describe("venues and zones collections", () => {
 
       it("should allow manager to read venues", async () => {
         const ctx = ctxUser(testEnv, "user-manager", managerClaims);
-        const venueRef = ctx.firestore().collection("venues").doc("org-123").collection("venues").doc("venue-1");
+        const venueRef = ctx
+          .firestore()
+          .collection("venues")
+          .doc("org-123")
+          .collection("venues")
+          .doc("venue-1");
 
         await assertSucceeds(venueRef.get());
       });
 
       it("should allow manager to create venues", async () => {
         const ctx = ctxUser(testEnv, "user-manager", managerClaims);
-        const venueRef = ctx.firestore().collection("venues").doc("org-123").collection("venues").doc("venue-new");
+        const venueRef = ctx
+          .firestore()
+          .collection("venues")
+          .doc("org-123")
+          .collection("venues")
+          .doc("venue-new");
 
         await assertSucceeds(
           venueRef.set({
@@ -151,20 +194,30 @@ describe("venues and zones collections", () => {
             address: "456 Oak St",
             createdAt: Date.now(),
             updatedAt: Date.now(),
-          })
+          }),
         );
       });
 
       it("should allow manager to update venues", async () => {
         const ctx = ctxUser(testEnv, "user-manager", managerClaims);
-        const venueRef = ctx.firestore().collection("venues").doc("org-123").collection("venues").doc("venue-1");
+        const venueRef = ctx
+          .firestore()
+          .collection("venues")
+          .doc("org-123")
+          .collection("venues")
+          .doc("venue-1");
 
         await assertSucceeds(venueRef.update({ name: "Updated Office" }));
       });
 
       it("should deny manager from deleting venues (owner/admin only)", async () => {
         const ctx = ctxUser(testEnv, "user-manager", managerClaims);
-        const venueRef = ctx.firestore().collection("venues").doc("org-123").collection("venues").doc("venue-1");
+        const venueRef = ctx
+          .firestore()
+          .collection("venues")
+          .doc("org-123")
+          .collection("venues")
+          .doc("venue-1");
 
         await assertFails(venueRef.delete());
       });
@@ -173,7 +226,12 @@ describe("venues and zones collections", () => {
     describe("admin and owner role access", () => {
       it("should allow admin to delete venues", async () => {
         const ctx = ctxUser(testEnv, "user-admin", { orgId: "org-123", roles: ["admin"] });
-        const venueRef = ctx.firestore().collection("venues").doc("org-123").collection("venues").doc("venue-1");
+        const venueRef = ctx
+          .firestore()
+          .collection("venues")
+          .doc("org-123")
+          .collection("venues")
+          .doc("venue-1");
 
         await assertSucceeds(venueRef.delete());
       });
@@ -182,7 +240,12 @@ describe("venues and zones collections", () => {
         const ctx = ctxUser(testEnv, "user-owner", { orgId: "org-123", roles: ["org_owner"] });
 
         // Create a venue first
-        const venueRef = ctx.firestore().collection("venues").doc("org-123").collection("venues").doc("venue-temp");
+        const venueRef = ctx
+          .firestore()
+          .collection("venues")
+          .doc("org-123")
+          .collection("venues")
+          .doc("venue-temp");
         await testEnv.withSecurityRulesDisabled(async (adminCtx) => {
           await adminCtx
             .firestore()
@@ -204,14 +267,24 @@ describe("venues and zones collections", () => {
     describe("tenant isolation", () => {
       it("should deny cross-org venue access", async () => {
         const ctx = ctxUser(testEnv, "user-other", { orgId: "org-456", roles: ["manager"] });
-        const venueRef = ctx.firestore().collection("venues").doc("org-123").collection("venues").doc("venue-1");
+        const venueRef = ctx
+          .firestore()
+          .collection("venues")
+          .doc("org-123")
+          .collection("venues")
+          .doc("venue-1");
 
         await assertFails(venueRef.get());
       });
 
       it("should deny cross-org venue writes", async () => {
         const ctx = ctxUser(testEnv, "user-other", { orgId: "org-456", roles: ["manager"] });
-        const venueRef = ctx.firestore().collection("venues").doc("org-123").collection("venues").doc("venue-1");
+        const venueRef = ctx
+          .firestore()
+          .collection("venues")
+          .doc("org-123")
+          .collection("venues")
+          .doc("venue-1");
 
         await assertFails(venueRef.update({ name: "Hacked" }));
       });
@@ -231,21 +304,31 @@ describe("venues and zones collections", () => {
     describe("unauthenticated access", () => {
       it("should deny reading zones without auth", async () => {
         const ctx = ctxAnon(testEnv);
-        const zoneRef = ctx.firestore().collection("zones").doc("org-123").collection("zones").doc("zone-1");
+        const zoneRef = ctx
+          .firestore()
+          .collection("zones")
+          .doc("org-123")
+          .collection("zones")
+          .doc("zone-1");
 
         await assertFails(zoneRef.get());
       });
 
       it("should deny writing zones without auth", async () => {
         const ctx = ctxAnon(testEnv);
-        const zoneRef = ctx.firestore().collection("zones").doc("org-123").collection("zones").doc("zone-new");
+        const zoneRef = ctx
+          .firestore()
+          .collection("zones")
+          .doc("org-123")
+          .collection("zones")
+          .doc("zone-new");
 
         await assertFails(
           zoneRef.set({
             name: "New Zone",
             orgId: "org-123",
             createdAt: Date.now(),
-          })
+          }),
         );
       });
     });
@@ -255,21 +338,31 @@ describe("venues and zones collections", () => {
 
       it("should allow staff to read zones in their org", async () => {
         const ctx = ctxUser(testEnv, "user-staff", staffClaims);
-        const zoneRef = ctx.firestore().collection("zones").doc("org-123").collection("zones").doc("zone-1");
+        const zoneRef = ctx
+          .firestore()
+          .collection("zones")
+          .doc("org-123")
+          .collection("zones")
+          .doc("zone-1");
 
         await assertSucceeds(zoneRef.get());
       });
 
       it("should deny staff from creating zones", async () => {
         const ctx = ctxUser(testEnv, "user-staff", staffClaims);
-        const zoneRef = ctx.firestore().collection("zones").doc("org-123").collection("zones").doc("zone-new");
+        const zoneRef = ctx
+          .firestore()
+          .collection("zones")
+          .doc("org-123")
+          .collection("zones")
+          .doc("zone-new");
 
         await assertFails(
           zoneRef.set({
             name: "New Zone",
             orgId: "org-123",
             createdAt: Date.now(),
-          })
+          }),
         );
       });
     });
@@ -279,14 +372,24 @@ describe("venues and zones collections", () => {
 
       it("should allow manager to read zones", async () => {
         const ctx = ctxUser(testEnv, "user-manager", managerClaims);
-        const zoneRef = ctx.firestore().collection("zones").doc("org-123").collection("zones").doc("zone-1");
+        const zoneRef = ctx
+          .firestore()
+          .collection("zones")
+          .doc("org-123")
+          .collection("zones")
+          .doc("zone-1");
 
         await assertSucceeds(zoneRef.get());
       });
 
       it("should allow manager to create zones", async () => {
         const ctx = ctxUser(testEnv, "user-manager", managerClaims);
-        const zoneRef = ctx.firestore().collection("zones").doc("org-123").collection("zones").doc("zone-new");
+        const zoneRef = ctx
+          .firestore()
+          .collection("zones")
+          .doc("org-123")
+          .collection("zones")
+          .doc("zone-new");
 
         await assertSucceeds(
           zoneRef.set({
@@ -295,20 +398,30 @@ describe("venues and zones collections", () => {
             venueId: "venue-1",
             createdAt: Date.now(),
             updatedAt: Date.now(),
-          })
+          }),
         );
       });
 
       it("should allow manager to update zones", async () => {
         const ctx = ctxUser(testEnv, "user-manager", managerClaims);
-        const zoneRef = ctx.firestore().collection("zones").doc("org-123").collection("zones").doc("zone-1");
+        const zoneRef = ctx
+          .firestore()
+          .collection("zones")
+          .doc("org-123")
+          .collection("zones")
+          .doc("zone-1");
 
         await assertSucceeds(zoneRef.update({ name: "Reception Area" }));
       });
 
       it("should allow manager to delete zones", async () => {
         const ctx = ctxUser(testEnv, "user-manager", managerClaims);
-        const zoneRef = ctx.firestore().collection("zones").doc("org-123").collection("zones").doc("zone-1");
+        const zoneRef = ctx
+          .firestore()
+          .collection("zones")
+          .doc("org-123")
+          .collection("zones")
+          .doc("zone-1");
 
         await assertSucceeds(zoneRef.delete());
       });
@@ -317,14 +430,24 @@ describe("venues and zones collections", () => {
     describe("tenant isolation", () => {
       it("should deny cross-org zone access", async () => {
         const ctx = ctxUser(testEnv, "user-other", { orgId: "org-456", roles: ["manager"] });
-        const zoneRef = ctx.firestore().collection("zones").doc("org-123").collection("zones").doc("zone-1");
+        const zoneRef = ctx
+          .firestore()
+          .collection("zones")
+          .doc("org-123")
+          .collection("zones")
+          .doc("zone-1");
 
         await assertFails(zoneRef.get());
       });
 
       it("should deny cross-org zone writes", async () => {
         const ctx = ctxUser(testEnv, "user-other", { orgId: "org-456", roles: ["manager"] });
-        const zoneRef = ctx.firestore().collection("zones").doc("org-123").collection("zones").doc("zone-1");
+        const zoneRef = ctx
+          .firestore()
+          .collection("zones")
+          .doc("org-123")
+          .collection("zones")
+          .doc("zone-1");
 
         await assertFails(zoneRef.update({ name: "Hacked" }));
       });

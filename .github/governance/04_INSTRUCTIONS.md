@@ -1,4 +1,5 @@
 # FRESH SCHEDULES - INSTRUCTIONS
+
 > **Version**: 1.0.0\
 > **Status**: REFERENCE\
 > **Authority**: Sr Dev / Architecture\
@@ -9,11 +10,14 @@ This document provides step-by-step instructions for common tasks.
 ---
 
 ## INSTRUCTION 01: Creating a New API Endpoint
+
 ### Prerequisites
+
 - Feature branch created
 - Schema exists in `packages/types/`
 
 ### Steps
+
 **Step 1**: Create route file
 
 ```bash
@@ -71,11 +75,14 @@ pnpm test:unit
 ---
 
 ## INSTRUCTION 02: Adding a New Schema
+
 ### Prerequisites
+
 - Clear requirements for entity shape
 - Understanding of validation rules
 
 ### Steps
+
 **Step 1**: Create schema file
 
 ```bash
@@ -129,11 +136,14 @@ pnpm lint
 ---
 
 ## INSTRUCTION 03: Adding Firestore Rules
+
 ### Prerequisites
+
 - Schema defined
 - Access requirements clear
 
 ### Steps
+
 **Step 1**: Add helper functions (if needed)
 
 ```javascript
@@ -195,11 +205,14 @@ pnpm test:rules
 ---
 
 ## INSTRUCTION 04: Fixing a Pattern Violation
+
 ### Prerequisites
+
 - Pattern validation report showing violation
 - Understanding of correct pattern
 
 ### Steps
+
 **Step 1**: Identify violation
 
 ```bash
@@ -239,7 +252,9 @@ pnpm validate:patterns
 ---
 
 ## INSTRUCTION 05: Running Local Development
+
 ### Initial Setup
+
 ```bash
 # Clone repo
 git clone git@github.com:peteywee/frsh-root.git
@@ -259,6 +274,7 @@ pnpm dev
 ```
 
 ### Daily Workflow
+
 ```bash
 # Update dependencies
 git pull origin dev
@@ -284,12 +300,15 @@ git push -u origin feature/FS-123-my-feature
 ---
 
 ## INSTRUCTION 06: Deploying to Production
+
 ### Prerequisites
+
 - All gates pass on `dev`
 - Required approvals obtained
 - Changelog updated
 
 ### Steps
+
 **Step 1**: Merge dev to main
 
 ```bash
@@ -315,11 +334,14 @@ git push origin v1.2.3
 ---
 
 ## INSTRUCTION 07: Creating a Hotfix
+
 ### Prerequisites
+
 - P0/P1 issue identified
 - Root cause understood
 
 ### Steps
+
 **Step 1**: Create hotfix branch from main
 
 ```bash
@@ -371,7 +393,9 @@ git push origin v1.2.4
 ---
 
 ## INSTRUCTION 08: Using the Orchestrator
+
 ### Auto-Detection Mode
+
 ```bash
 # Detect pipeline from changed files
 pnpm orchestrate --auto
@@ -381,6 +405,7 @@ pnpm orchestrate --auto --dry-run
 ```
 
 ### Explicit Pipeline Mode
+
 ```bash
 # Run specific pipeline
 pnpm orchestrate Feature.STANDARD
@@ -393,6 +418,7 @@ pnpm orchestrate Feature.STANDARD --fix
 ```
 
 ### CI Mode
+
 ```bash
 # Write results to file for CI consumption
 pnpm orchestrate --auto --ci
@@ -401,7 +427,9 @@ pnpm orchestrate --auto --ci
 ---
 
 ## INSTRUCTION 09: Invoking Agents
+
 ### Direct Invocation
+
 ```
 @architect design TimeOff
 @refactor fix apps/web/app/api/schedules/route.ts
@@ -410,6 +438,7 @@ pnpm orchestrate --auto --ci
 ```
 
 ### Natural Language
+
 ```
 Design a new leave request feature for employees
 Fix the pattern violations in the schedules API
@@ -418,6 +447,7 @@ Generate a compliance report for the last sprint
 ```
 
 ### Composite Tasks
+
 ```
 Design and review a new shift swap feature
 # Orchestrator will run Architect, then Guard
@@ -426,7 +456,9 @@ Design and review a new shift swap feature
 ---
 
 ## INSTRUCTION 10: Debugging Gate Failures
+
 ### STATIC Gate Failures
+
 **TypeScript errors**:
 
 ```bash
@@ -451,6 +483,7 @@ pnpm format
 ```
 
 ### CORRECTNESS Gate Failures
+
 **Unit test failures**:
 
 ```bash
@@ -467,6 +500,7 @@ pnpm test:rules
 ```
 
 ### SAFETY Gate Failures
+
 **Pattern violations**:
 
 ```bash
@@ -486,4 +520,4 @@ git secrets --scan
 
 **END OF INSTRUCTIONS**
 
-Next document: [05\_BEHAVIORS.md](./05_BEHAVIORS.md)
+Next document: [05_BEHAVIORS.md](./05_BEHAVIORS.md)

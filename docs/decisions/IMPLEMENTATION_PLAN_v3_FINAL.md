@@ -1,4 +1,5 @@
 # Fresh Schedules: Complete Implementation Plan
+
 > **Version**: 3.0 (FINAL)\
 > **Created**: 2025-12-18\
 > **Target**: Fix all 41 identified gaps\
@@ -7,10 +8,12 @@
 ---
 
 ## Executive Summary
+
 This plan remediates 41 production gaps across 6 work streams in 9 days using 4 parallel teams. All
 blocking issues from v1/v2 are now resolved.
 
 ### Key Improvements from v2
+
 - ✅ OAuth mock strategy defined (MSW + Firebase emulator)
 - ✅ CI emulator config documented
 - ✅ Feature flag infrastructure added to Phase 0
@@ -22,10 +25,12 @@ blocking issues from v1/v2 are now resolved.
 ---
 
 ## Phase 0: Prerequisites (Day 0 - 2 hours)
+
 **Owner**: Charlie Team\
 **Blocker**: Must complete before any other work
 
 ### P0.1: Feature Flag Infrastructure
+
 ```typescript
 // apps/web/src/lib/features.ts
 import { z } from "zod";
@@ -48,6 +53,7 @@ export const FLAGS = FeatureFlags.parse({
 **Time**: 30 min
 
 ### P0.2: E2E OAuth Mock Setup
+
 ```typescript
 // tests/e2e/fixtures/auth.ts
 import { test as base } from "@playwright/test";
@@ -83,6 +89,7 @@ export const test = base.extend<{ authenticatedPage: Page }>({
 **Time**: 45 min
 
 ### P0.3: CI Emulator Configuration
+
 ```yaml
 # .github/workflows/e2e.yml
 jobs:
@@ -120,6 +127,7 @@ jobs:
 **Time**: 45 min
 
 ### P0 Checkpoint
+
 - \[ ] Feature flags file exists
 - \[ ] E2E auth fixture works locally
 - \[ ] CI emulator config validated
@@ -128,6 +136,7 @@ jobs:
 ---
 
 ## Team Structure (Unchanged)
+
 | Team             | Lead          | Streams      | Members Needed |
 | ---------------- | ------------- | ------------ | -------------- |
 | **Alpha**        | Backend Lead  | A, B, D      | 2              |
@@ -139,7 +148,9 @@ jobs:
 ---
 
 ## Detailed Task Breakdown with Estimates
+
 ### Stream A: Auth Chain (Alpha)
+
 | ID  | Task                   | Subtasks | Est. | Owner   | Deps | Accept Criteria                     |
 | --- | ---------------------- | -------- | ---- | ------- | ---- | ----------------------------------- |
 | A1  | Wire useAuth           | 6        | 2h   | Alpha-1 | P0   | Firebase user in context            |
@@ -151,6 +162,7 @@ jobs:
 **Total Stream A**: 9 hours
 
 ### Stream B: Data Persistence (Alpha)
+
 | ID  | Task                      | Subtasks | Est. | Owner   | Deps  | Accept Criteria       |
 | --- | ------------------------- | -------- | ---- | ------- | ----- | --------------------- |
 | B1  | create-network-org writes | 5        | 3h   | Alpha-1 | A3    | Org doc in Firestore  |
@@ -162,6 +174,7 @@ jobs:
 **Total Stream B**: 10 hours
 
 ### Stream C: UX Completion (Bravo)
+
 | ID  | Task                | Subtasks | Est. | Owner   | Deps | Accept Criteria              |
 | --- | ------------------- | -------- | ---- | ------- | ---- | ---------------------------- |
 | C1  | Header with logout  | 6        | 2h   | Bravo-1 | A1   | Logout clears session        |
@@ -173,6 +186,7 @@ jobs:
 **Total Stream C**: 9 hours
 
 ### Stream D: API Migration (Alpha)
+
 | ID  | Task       | Collection            | Est. | Owner   | Deps | Accept Criteria       |
 | --- | ---------- | --------------------- | ---- | ------- | ---- | --------------------- |
 | D1  | attendance | `orgs/{o}/attendance` | 1.5h | Alpha-1 | B5   | GET returns real data |
@@ -187,6 +201,7 @@ jobs:
 **Total Stream D**: 12.5 hours
 
 ### Stream E: Type Safety (Charlie)
+
 | ID    | Task                     | Files             | Est. | Owner   | Deps  | Accept Criteria             |
 | ----- | ------------------------ | ----------------- | ---- | ------- | ----- | --------------------------- |
 | E1-E4 | Remove `any` types       | 5 files           | 2h   | Charlie | -     | `pnpm typecheck` passes     |
@@ -198,6 +213,7 @@ jobs:
 **Total Stream E**: 9 hours
 
 ### Stream F: Feature Completion (Bravo + Alpha)
+
 | ID  | Task                     | Est. | Owner   | Deps   | Accept Criteria         |
 | --- | ------------------------ | ---- | ------- | ------ | ----------------------- |
 | F1  | publishSchedule          | 3h   | Alpha-1 | D3     | Schedule status changes |
@@ -214,6 +230,7 @@ jobs:
 ---
 
 ## Parallel Execution Schedule
+
 ```
         Day 0    Day 1    Day 2    Day 3    Day 4    Day 5    Day 6    Day 7    Day 8    Day 9
         ─────────────────────────────────────────────────────────────────────────────────────
@@ -226,6 +243,7 @@ SecRed  [P0]     [Rev A1] [Rev A5] [Rev B]  [Rev D]  ───────  [Rev
 ```
 
 ### Key Dependencies Graph
+
 ```
 P0 (Feature Flags + E2E Setup)
  │
@@ -250,7 +268,9 @@ P0 (Feature Flags + E2E Setup)
 ---
 
 ## Validation Gates (Detailed)
+
 ### Gate 1: Auth Complete (End of Day 2)
+
 | Check              | Command           | Expected             |
 | ------------------ | ----------------- | -------------------- |
 | A1-A5 complete     | Review PRs        | All merged           |
@@ -259,6 +279,7 @@ P0 (Feature Flags + E2E Setup)
 | Security review    | Red Team sign-off | Approved             |
 
 ### Gate 2: Data Complete (End of Day 3)
+
 | Check                   | Command           | Expected    |
 | ----------------------- | ----------------- | ----------- |
 | B1-B5 complete          | Review PRs        | All merged  |
@@ -267,6 +288,7 @@ P0 (Feature Flags + E2E Setup)
 | Membership in Firestore | Emulator UI       | Doc visible |
 
 ### Gate 3: UX Complete (End of Day 4)
+
 | Check            | Command         | Expected              |
 | ---------------- | --------------- | --------------------- |
 | C1-C5 complete   | Review PRs      | All merged            |
@@ -275,6 +297,7 @@ P0 (Feature Flags + E2E Setup)
 | No CSP errors    | Browser console | Clean                 |
 
 ### Gate 4: API Complete (End of Day 5)
+
 | Check          | Command                     | Expected   |
 | -------------- | --------------------------- | ---------- |
 | D1-D8 complete | Review PRs                  | All merged |
@@ -283,6 +306,7 @@ P0 (Feature Flags + E2E Setup)
 | Type check     | `pnpm typecheck`            | 0 errors   |
 
 ### Gate 5: Quality Complete (End of Day 6)
+
 | Check          | Command                 | Expected   |
 | -------------- | ----------------------- | ---------- |
 | E1-E8 complete | Review PRs              | All merged |
@@ -291,6 +315,7 @@ P0 (Feature Flags + E2E Setup)
 | Lint clean     | `pnpm lint`             | 0 warnings |
 
 ### Gate 6: Features Complete (End of Day 8)
+
 | Check             | Command              | Expected      |
 | ----------------- | -------------------- | ------------- |
 | F1-F8 complete    | Review PRs           | All merged    |
@@ -299,6 +324,7 @@ P0 (Feature Flags + E2E Setup)
 | Coverage          | `pnpm test:coverage` | ≥80%          |
 
 ### Gate 7: Production Ready (Day 9)
+
 | Check            | Command             | Expected           |
 | ---------------- | ------------------- | ------------------ |
 | Staging deployed | Vercel preview      | Live               |
@@ -310,7 +336,9 @@ P0 (Feature Flags + E2E Setup)
 ---
 
 ## Risk Mitigations
+
 ### High Risk: Auth Integration
+
 **Risk**: Firebase auth state not syncing with session cookie\
 **Mitigation**:
 
@@ -321,16 +349,18 @@ P0 (Feature Flags + E2E Setup)
 **Fallback**: Revert to stub auth, investigate
 
 ### Medium Risk: Firestore Rules
+
 **Risk**: Rules block legitimate operations\
 **Mitigation**:
 
 1. Write rules tests BEFORE deploying rules
 2. Test in emulator with all role types
-3. Gradual rollout: staff → manager → admin → org\_owner
+3. Gradual rollout: staff → manager → admin → org_owner
 
 **Fallback**: Revert rules, keep API middleware auth
 
 ### Medium Risk: E2E Flakiness
+
 **Risk**: OAuth mocks unstable\
 **Mitigation**:
 
@@ -341,6 +371,7 @@ P0 (Feature Flags + E2E Setup)
 **Fallback**: Mark flaky tests, fix in follow-up
 
 ### Low Risk: Timeline Slip
+
 **Risk**: Tasks take longer than estimated\
 **Mitigation**:
 
@@ -351,7 +382,9 @@ P0 (Feature Flags + E2E Setup)
 ---
 
 ## Rollback Procedures
+
 ### Level 1: Task Rollback
+
 ```bash
 # Revert single PR
 git revert <commit-hash>
@@ -359,6 +392,7 @@ git push origin dev
 ```
 
 ### Level 2: Phase Rollback
+
 ```bash
 # Revert to pre-phase commit
 git checkout <pre-phase-tag>
@@ -370,6 +404,7 @@ gh pr create --title "Rollback Phase N"
 ```
 
 ### Level 3: Feature Flag Disable
+
 ```bash
 # In Vercel dashboard
 NEXT_PUBLIC_FEATURE_REAL_AUTH=false
@@ -380,6 +415,7 @@ vercel --prod
 ```
 
 ### Level 4: Full Rollback
+
 ```bash
 # Revert to last known good
 git checkout $(git tag --list 'v1.3.*' | tail -1)
@@ -389,6 +425,7 @@ vercel --prod
 ---
 
 ## Communication Matrix
+
 | Event          | Channel   | Participants            | Timing          |
 | -------------- | --------- | ----------------------- | --------------- |
 | Daily standup  | #standup  | All teams               | 9:00 AM         |
@@ -398,6 +435,7 @@ vercel --prod
 | Deployment     | #deploys  | All                     | Before/after    |
 
 ### Escalation Timing
+
 | Severity      | Max Time to Escalate |
 | ------------- | -------------------- |
 | P0 (Blocker)  | 30 minutes           |
@@ -408,7 +446,9 @@ vercel --prod
 ---
 
 ## Success Criteria (Final)
+
 ### Quantitative
+
 | Metric            | Target | Method                |
 | ----------------- | ------ | --------------------- |
 | Gaps closed       | 41/41  | Count tasks           |
@@ -422,6 +462,7 @@ vercel --prod
 | OWASP violations  | 0      | Security audit        |
 
 ### Qualitative
+
 | Criteria                      | Validator    |
 | ----------------------------- | ------------ |
 | User can complete golden path | QA + Product |
@@ -433,6 +474,7 @@ vercel --prod
 ---
 
 ## Appendix A: Full Task Checklist
+
 ```
 [ ] P0.1 Feature flags infrastructure
 [ ] P0.2 E2E OAuth mock setup
@@ -486,6 +528,7 @@ Total: 45 tasks (including P0)
 ---
 
 ## Appendix B: Estimated Hours
+
 | Stream    | Hours   | Team          |
 | --------- | ------- | ------------- |
 | Phase 0   | 2h      | Charlie       |
@@ -508,32 +551,38 @@ With 2 people per team working 6h/day:
 ---
 
 ## Appendix C: PR Template
+
 ```markdown
 ## Summary
+
 [What this PR does]
 
 ## Tasks Completed
-- [[ ]] A1.1 Read current implementation
-- [[ ]] A1.2 Import onAuthStateChanged
-- [[ ]] ...
+
+- [[]] A1.1 Read current implementation
+- [[]] A1.2 Import onAuthStateChanged
+- [[]] ...
 
 ## Testing
-- [[ ]] Unit tests added
-- [[ ]] Integration tests pass
-- [[ ]] Manual QA completed
+
+- [[]] Unit tests added
+- [[]] Integration tests pass
+- [[]] Manual QA completed
 
 ## Checklist
-- [[ ]] `pnpm typecheck` passes
-- [[ ]] `pnpm lint` passes
-- [[ ]] `pnpm test` passes
-- [[ ]] Triad verified (Schema + API + Rules)
-- [[ ]] Feature flag added (if applicable)
+
+- [[]] `pnpm typecheck` passes
+- [[]] `pnpm lint` passes
+- [[]] `pnpm test` passes
+- [[]] Triad verified (Schema + API + Rules)
+- [[]] Feature flag added (if applicable)
 
 ## Security
-- [[ ]] No secrets in code
-- [[ ]] Input validated with Zod
-- [[ ]] Org scoping verified
-- [[ ]] Red Team review (if auth-related)
+
+- [[]] No secrets in code
+- [[]] Input validated with Zod
+- [[]] Org scoping verified
+- [[]] Red Team review (if auth-related)
 ```
 
 ---

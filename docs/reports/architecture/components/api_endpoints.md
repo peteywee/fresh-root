@@ -1,4 +1,5 @@
 # L3 — API Endpoints & Contracts
+
 This file catalogs all API routes in the Fresh Schedules system. All routes use the SDK Factory
 pattern (`createPublicEndpoint`, `createAuthenticatedEndpoint`, `createOrgEndpoint`) for consistent
 security, validation, and rate limiting.
@@ -6,7 +7,9 @@ security, validation, and rate limiting.
 ---
 
 ## 1. Core API Routes
+
 ### Health & Monitoring
+
 | Endpoint       | Methods | Factory Type  | Description                    |
 | -------------- | ------- | ------------- | ------------------------------ |
 | `/api/health`  | GET     | Public        | Health check with dependencies |
@@ -14,6 +17,7 @@ security, validation, and rate limiting.
 | `/api/metrics` | GET     | Authenticated | Application metrics endpoint   |
 
 ### Authentication & Session
+
 | Endpoint                 | Methods   | Factory Type  | Description                     |
 | ------------------------ | --------- | ------------- | ------------------------------- |
 | `/api/session`           | GET, POST | Authenticated | Session management              |
@@ -22,6 +26,7 @@ security, validation, and rate limiting.
 | `/api/auth/mfa/verify`   | POST      | Authenticated | MFA TOTP verification           |
 
 ### Organizations
+
 | Endpoint                                     | Methods         | Factory Type | Description               |
 | -------------------------------------------- | --------------- | ------------ | ------------------------- |
 | `/api/organizations`                         | GET, POST       | Org          | List/create organizations |
@@ -30,6 +35,7 @@ security, validation, and rate limiting.
 | `/api/organizations/[id]/members/[memberId]` | GET, PATCH, DEL | Org          | Member CRUD               |
 
 ### Scheduling
+
 | Endpoint              | Methods         | Factory Type | Description           |
 | --------------------- | --------------- | ------------ | --------------------- |
 | `/api/schedules`      | GET, POST       | Org          | List/create schedules |
@@ -40,17 +46,20 @@ security, validation, and rate limiting.
 | `/api/positions/[id]` | GET, PATCH, DEL | Org          | Position CRUD by ID   |
 
 ### Venues & Zones
+
 | Endpoint      | Methods         | Factory Type | Description        |
 | ------------- | --------------- | ------------ | ------------------ |
 | `/api/venues` | GET, POST       | Org          | List/create venues |
 | `/api/zones`  | GET, PATCH, DEL | Org          | Zone CRUD          |
 
 ### Attendance
+
 | Endpoint          | Methods   | Factory Type  | Description                   |
 | ----------------- | --------- | ------------- | ----------------------------- |
 | `/api/attendance` | GET, POST | Authenticated | Attendance records management |
 
 ### Onboarding Flow
+
 | Endpoint                              | Methods | Factory Type  | Description                      |
 | ------------------------------------- | ------- | ------------- | -------------------------------- |
 | `/api/onboarding/verify-eligibility`  | GET     | Authenticated | Check user eligibility           |
@@ -62,6 +71,7 @@ security, validation, and rate limiting.
 | `/api/onboarding/join-with-token`     | POST    | Authenticated | Join org via invite token        |
 
 ### Utilities
+
 | Endpoint           | Methods   | Factory Type | Description        |
 | ------------------ | --------- | ------------ | ------------------ |
 | `/api/batch`       | POST      | Org          | Batch operations   |
@@ -71,6 +81,7 @@ security, validation, and rate limiting.
 | `/api/publish`     | POST      | Org          | Publish schedules  |
 
 ### Internal/Admin
+
 | Endpoint               | Methods | Factory Type  | Description               |
 | ---------------------- | ------- | ------------- | ------------------------- |
 | `/api/internal/backup` | POST    | Authenticated | Trigger backup operations |
@@ -79,6 +90,7 @@ security, validation, and rate limiting.
 ---
 
 ## 2. SDK Factory Types
+
 All routes use one of these factory types:
 
 ```typescript
@@ -91,6 +103,7 @@ createAdminEndpoint; // Auth + admin/owner role required
 ---
 
 ## 3. Shared Middleware
+
 Located in `apps/web/app/api/_shared/`:
 
 | File                       | Purpose                                 |
@@ -106,6 +119,7 @@ Located in `apps/web/app/api/_shared/`:
 ---
 
 ## 4. Input Validation
+
 All POST/PUT/PATCH routes use Zod schemas from `@fresh-schedules/types`:
 
 - `CreateScheduleSchema`, `UpdateScheduleSchema`
@@ -118,6 +132,7 @@ All POST/PUT/PATCH routes use Zod schemas from `@fresh-schedules/types`:
 ---
 
 ## 5. Rate Limiting
+
 Default limits applied via SDK factory:
 
 | Operation Type   | Limit       |

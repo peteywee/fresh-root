@@ -1,19 +1,21 @@
 # Scheduling SDK Deprecation Ledger
-## LEGACY\_COMPONENT: inlineScheduleCreationV1
+
+## LEGACY_COMPONENT: inlineScheduleCreationV1
+
 **TYPE:** Route/Function with inline Firestore writes
 
-**LOCATION\_OLD** (representative):
+**LOCATION_OLD** (representative):
 
 - `apps/web/app/api/schedules/create/route.ts`
 - `functions/src/schedules/createScheduleInline.ts`
 
-**REASON\_REMOVED:**
+**REASON_REMOVED:**
 
 - Non-transactional multi-document writes.
 - Mixed concerns (HTTP handling, validation, persistence).
 - No idempotency, making retries unsafe.
 
-**RISK\_IF\_LOST:**
+**RISK_IF_LOST:**
 
 - We forget the business assumptions (how shifts were derived, how assignments were initially
   attached).
@@ -21,10 +23,11 @@
 
 ---
 
-## NEW\_SDK\_INTERFACE
+## NEW_SDK_INTERFACE
+
 **NAME:** `@fresh-root/scheduling-sdk`
 
-**LOCATION\_NEW:** `packages/scheduling-sdk/src/transactions/createSchedule.ts`
+**LOCATION_NEW:** `packages/scheduling-sdk/src/transactions/createSchedule.ts`
 
 **SURFACE:**
 
@@ -40,7 +43,9 @@
 ---
 
 ## EXAMPLES
-### BEFORE\_CODE (Representative Pattern)
+
+### BEFORE_CODE (Representative Pattern)
+
 ```ts
 // legacy-style pattern (representative)
 
@@ -62,7 +67,8 @@ for (const assignment of assignments) {
 }
 ```
 
-### AFTER\_CODE (SDK Usage)
+### AFTER_CODE (SDK Usage)
+
 ```ts
 import { createScheduleWithShifts } from "@fresh-root/scheduling-sdk";
 
@@ -81,7 +87,8 @@ const result = await createScheduleWithShifts({
 
 ---
 
-## MIGRATION\_CHECKLIST
+## MIGRATION_CHECKLIST
+
 - \[ ] Audit all `schedules` collection writes in routes and functions.
 - \[ ] Replace inline writes with SDK calls.
 - \[ ] Add integration tests covering the new SDK surface.

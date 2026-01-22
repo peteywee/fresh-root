@@ -39,7 +39,9 @@ test.describe("Schedule Management - Basic CRUD", () => {
 
     // Should load builder or redirect to auth
     const url = page.url();
-    expect(url.includes("builder") || url.includes("login") || url.includes("onboarding")).toBeTruthy();
+    expect(
+      url.includes("builder") || url.includes("login") || url.includes("onboarding"),
+    ).toBeTruthy();
   });
 
   test("API endpoint for schedules responds", async ({ page }) => {

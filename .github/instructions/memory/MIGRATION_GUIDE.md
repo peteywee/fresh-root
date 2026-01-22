@@ -1,8 +1,11 @@
 # Migrating to Enhanced Memory System
+
 **From flat memory files → CPMEM-indexed searchable knowledge base**
 
 ## What Changed
+
 ### Before (Original `/remember`)
+
 ```
 .github/instructions/
 ├── api-framework-memory.instructions.md
@@ -19,6 +22,7 @@
 - ❌ INDEX not machine-readable
 
 ### Now (Enhanced CPMEM-Indexed)
+
 ```
 .github/instructions/memory/
 ├── REMEMBER_QUICKSTART.md
@@ -43,7 +47,9 @@
 - ✅ AI-discoverable via metadata
 
 ## Migration Path
+
 ### Option 1: Keep Both (Gradual Migration)
+
 Keep original memory files at root, start new lessons in `memory/indexed/`:
 
 ```bash
@@ -57,6 +63,7 @@ Keep original memory files at root, start new lessons in `memory/indexed/`:
 ✅ **Pro**: No disruption, gradual transition ❌ **Con**: Dual system during migration
 
 ### Option 2: Archive Old, Start Fresh
+
 Move original files to archive, use new system exclusively:
 
 ```bash
@@ -70,6 +77,7 @@ mv .github/instructions/*-memory.instructions.md archive/memory-v1/
 ✅ **Pro**: Clean slate, clear system ❌ **Con**: Requires consolidating existing knowledge
 
 ### Option 3: Bulk Import (Recommended)
+
 Selectively migrate valuable lessons from old files to new indexed system:
 
 ```bash
@@ -92,7 +100,9 @@ cat .github/instructions/typescript-5-es2022.instructions.md
 ✅ **Pro**: Best of both, preserves valuable knowledge ❌ **Con**: Requires review effort
 
 ## What to Migrate
+
 ### Definitely Migrate (High Priority)
+
 - ✅ Critical best-practices (`#critical`, priority=1)
 - ✅ Common gotchas (`#gotcha`)
 - ✅ Established patterns (`#pattern`)
@@ -113,6 +123,7 @@ Migrate as:
 ```
 
 ### Nice to Have (Lower Priority)
+
 - ⚠️ Editorial guidance
 - ⚠️ General explanations
 - ⚠️ Verbose examples
@@ -120,10 +131,14 @@ Migrate as:
 **These can stay** in original files or migrate later.
 
 ## Sample Migration: git-workflow-memory.instructions.md
+
 ### Original File
+
 ```markdown
 # Git Workflow Memory
+
 ## Pre-Commit Hook: Documentation File Organization
+
 **Problem**: Documentation files accumulate at repository root...
 
 **Solution**: Add pre-commit hook to block `.md` files from root except whitelisted files.
@@ -136,38 +151,43 @@ Migrate as:
 ```
 
 ### Migrated to New System
+
 **File 1**: `memory/indexed/git-workflow/block-root-docs.md`
 
 ## ```yaml
-description: "Git workflow enforcement and pre-commit validation"
-applyTo: [".husky/**", "scripts/**/*.sh"]
-tags: ["automation", "git", "validation", "pre-commit"]
-type: "automation"
-domain: "git-workflow"
-priority: 2
-created: "2025-12-25"
-classification: "NON-TRIVIAL"
-keywords: ["pre-commit", "documentation", "root", "enforcement"]
-relatedDomains: ["code-quality", "automation"]
+
+description: "Git workflow enforcement and pre-commit validation" applyTo: [".husky/**",
+"scripts/**/*.sh"] tags: ["automation", "git", "validation", "pre-commit"] type: "automation"
+domain: "git-workflow" priority: 2 created: "2025-12-25" classification: "NON-TRIVIAL" keywords:
+["pre-commit", "documentation", "root", "enforcement"] relatedDomains: ["code-quality",
+"automation"]
+
 ## relatedLessons: ["grep-pattern-matching"]
 
 # Block Root Documentation Files
+
 _Prevent non-README docs from cluttering repository root via pre-commit hook._
 
 ## Problem
-Documentation files accumulate at repository root without enforcement, cluttering the main directory.
+
+Documentation files accumulate at repository root without enforcement, cluttering the main
+directory.
 
 ## Solution
+
 Use `.husky/pre-commit` hook to block `.md` files from root except whitelisted files.
 
 ## Implementation
+
 [code block from original]
 
 ## Key Patterns
+
 1. Use `grep -v -E 'pattern1|pattern2'` for cleaner regex (see related: grep-pattern-matching)
 2. Always include helpful error messages with fix suggestions
 3. Test hooks before committing to enforce them
-```
+
+`````
 
 **File 2**: `memory/indexed/git-workflow/grep-pattern-matching.md`
 
@@ -194,7 +214,7 @@ git diff --cached | grep -v node_modules | grep -v .git | grep -v build
 
 # Use:
 git diff --cached | grep -v -E '(node_modules|\.git|build)'
-````
+`````
 
 ````
 
@@ -205,7 +225,9 @@ git diff --cached | grep -v -E '(node_modules|\.git|build)'
 ````
 
 ## How to Migrate
+
 ### Quick Migration (One Lesson)
+
 1. **Pick a lesson from old file**:
 
    ```bash
@@ -223,6 +245,7 @@ git diff --cached | grep -v -E '(node_modules|\.git|build)'
 1. **Verify**: Check file created and INDEX.md updated
 
 ### Bulk Migration (All Lessons in Domain)
+
 1. **Extract lesson titles**:
 
    ```bash
@@ -244,6 +267,7 @@ git diff --cached | grep -v -E '(node_modules|\.git|build)'
    ```
 
 ## Testing Migration
+
 After migrating lessons:
 
 1. **Check INDEX.md**:
@@ -266,28 +290,34 @@ After migrating lessons:
    - Should return 2-3 related lessons with metadata
 
 ## Timeline Suggestion
+
 ### Week 1: Setup (Done ✓)
+
 - ✅ Create enhanced prompt: `remember-enhanced.prompt.md`
 - ✅ Create indexed folder structure
 - ✅ Create INDEX.md template
-- ✅ Create REMEMBER\_QUICKSTART.md
+- ✅ Create REMEMBER_QUICKSTART.md
 
 ### Week 2-3: High-Priority Migration
+
 - Migrate critical lessons from each domain
 - Focus on: `#critical`, priority=1, frequently used patterns
 - Test: Verify INDEX updates, cross-links work
 
 ### Week 4+: Gradual Migration
+
 - Migrate remaining lessons as time permits
 - Add new lessons to `memory/indexed/` (never root-level)
 - Archive old files once domain complete
 
 ### Ongoing
+
 - Use `/remember` for all new learnings
 - Review INDEX.md monthly
 - Update related domains as knowledge evolves
 
 ## FAQ
+
 **Q: Can I keep both systems?** A: Yes! Use original files as archive, all new lessons go to
 `memory/indexed/`.
 

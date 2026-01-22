@@ -280,7 +280,7 @@ export const MemoryOptimization = {
   /**
    * Paginate query results to avoid loading everything into memory
    */
-  async* paginateQuery<T>(
+  async *paginateQuery<T>(
     query: FirebaseFirestore.Query,
     pageSize: number = 50,
   ): AsyncGenerator<T[]> {

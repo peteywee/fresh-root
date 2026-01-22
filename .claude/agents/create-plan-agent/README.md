@@ -4,11 +4,13 @@ Create implementation plan files for features, refactoring, upgrades.
 
 ## Overview
 
-Creates machine-readable, deterministic implementation plan files designed for autonomous execution by AI agents or humans.
+Creates machine-readable, deterministic implementation plan files designed for autonomous execution
+by AI agents or humans.
 
 ## When to Use
 
 ✅ **Use this agent for**:
+
 - Create machine-executable plans
 - Package upgrade planning
 - Refactoring projects
@@ -16,6 +18,7 @@ Creates machine-readable, deterministic implementation plan files designed for a
 - Architecture changes
 
 ❌ **Don't use this agent for**:
+
 - Interactive planning (use Plan Agent)
 - Quick tasks
 - Vague objectives
@@ -30,16 +33,16 @@ Create a plan for the new schedule API migration
 
 ## Plan Purposes
 
-| Prefix | Meaning | Examples |
-|--------|---------|----------|
-| `upgrade` | Package/dependency upgrades | Node.js, React, Firebase |
-| `refactor` | Code refactoring | Module extraction, API migration |
-| `feature` | New feature development | Auth module, schedule API |
-| `data` | Data migration | Schema changes, data transformation |
-| `infrastructure` | Infrastructure changes | Database, hosting, CI/CD |
-| `architecture` | Architectural changes | System redesign, pattern adoption |
-| `design` | Design system updates | Component library, design tokens |
-| `process` | Process improvements | Workflow, validation |
+| Prefix           | Meaning                     | Examples                            |
+| ---------------- | --------------------------- | ----------------------------------- |
+| `upgrade`        | Package/dependency upgrades | Node.js, React, Firebase            |
+| `refactor`       | Code refactoring            | Module extraction, API migration    |
+| `feature`        | New feature development     | Auth module, schedule API           |
+| `data`           | Data migration              | Schema changes, data transformation |
+| `infrastructure` | Infrastructure changes      | Database, hosting, CI/CD            |
+| `architecture`   | Architectural changes       | System redesign, pattern adoption   |
+| `design`         | Design system updates       | Component library, design tokens    |
+| `process`        | Process improvements        | Workflow, validation                |
 
 ## File Organization
 
@@ -48,6 +51,7 @@ Plans stored in `/plan/` directory:
 **Naming**: `[purpose]-[component]-[version].md`
 
 Examples:
+
 - `upgrade-firebase-v12-1.md`
 - `refactor-auth-module-2.md`
 - `feature-schedule-api-1.md`
@@ -67,12 +71,15 @@ tags: [feature, upgrade, chore, architecture, migration, bug]
 ## Plan Sections
 
 ### Context
+
 - Current state analysis
 - Problem definition
 - Goals and constraints
 
 ### Tasks
+
 Machine-executable tasks with:
+
 - ID (REQ-001, TASK-001)
 - Title (action-oriented)
 - Description (specific, unambiguous)
@@ -81,19 +88,23 @@ Machine-executable tasks with:
 - Estimated time
 
 ### Phases
+
 Discrete phases with:
+
 - Measurable completion criteria
 - Parallel task indicators
 - Sequential dependencies
 - Validation gates
 
 ### Validation Criteria
+
 - TypeScript: 0 errors
 - Tests: All pass
 - Pattern score: ≥90
 - Specific functionality verified
 
 ### Success Metrics
+
 - Quantifiable outcomes
 - Performance improvements
 - Coverage metrics

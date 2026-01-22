@@ -89,7 +89,9 @@ export default function AuthCallbackPage() {
             </div>
             <h1 className="mb-2 text-2xl font-semibold text-text-primary">Email Verified!</h1>
             <p className="text-text-muted">
-              {userEmail && <span className="block font-medium text-text-primary">{userEmail}</span>}
+              {userEmail && (
+                <span className="block font-medium text-text-primary">{userEmail}</span>
+              )}
               Setting up your account…
             </p>
           </>

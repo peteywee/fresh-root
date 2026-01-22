@@ -1,33 +1,41 @@
 ---
 
-agent: "agent"
-description: "Generate and run tests for a feature or file"
+agent: "agent" description: "Generate and run tests for a feature or file"
+
 ## tools: \["search/codebase", "edit/editFiles", "problems", "runTasks", "testFailure"]
 
 # Generate & Run Tests
+
 ## Directive
+
 Generate or run tests for: `${input:Target}`
 
 Target can be: file path, feature name, or "coverage" for coverage report.
 
 ## Test Types
+
 ### Unit Tests (Vitest)
+
 - Test individual functions/methods
 - Mock external dependencies
 - Fast execution
 
 ### API Route Tests
+
 - Test HTTP handlers
 - Mock request/response
 - Verify status codes and responses
 
 ### E2E Tests (Playwright)
+
 - Test user flows
 - Real browser interaction
 - Accessibility checks
 
 ## Process
+
 ### 1. Analyze Target
+
 Determine what needs testing:
 
 - What functions/methods exist?
@@ -35,6 +43,7 @@ Determine what needs testing:
 - What edge cases exist?
 
 ### 2. Generate Tests
+
 Create test file with:
 
 - Happy path tests
@@ -43,6 +52,7 @@ Create test file with:
 - Validation tests (for API routes)
 
 ### 3. Run Tests
+
 ```bash
 pnpm test [file]           # Run specific tests
 pnpm test:coverage         # With coverage
@@ -50,7 +60,9 @@ pnpm test:e2e              # E2E tests
 ```
 
 ## Test Templates
+
 ### Unit Test
+
 ```typescript
 import { describe, it, expect, vi } from "vitest";
 
@@ -72,6 +84,7 @@ describe("functionName", () => {
 ```
 
 ### API Route Test
+
 ```typescript
 import { describe, it, expect } from "vitest";
 import { createMockRequest } from "@fresh-schedules/api-framework/testing";
@@ -114,9 +127,12 @@ describe("POST /api/feature", () => {
 ```
 
 ## Output Format
+
 ```markdown
 # Test Results
+
 ## Tests Generated
+
 - [file]: [count] tests
 
 ## Test Summary
@@ -138,6 +154,7 @@ case
 ```
 
 ## Rules
+
 - Follow existing test patterns
 - Use meaningful test names
 - Test both success and failure

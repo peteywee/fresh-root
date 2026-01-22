@@ -99,9 +99,10 @@ description: "React development best practices"
 ---
 
 # React Development Guidelines
+
 ...
 
-```
+````
 
 ```markdown
 <!-- Inspired by: https://github.com/github/awesome-copilot/blob/main/instructions/java.instructions.md -->
@@ -114,7 +115,7 @@ description: "Java Spring Boot development standards"
 
 # Java Spring Boot Guidelines
 ...
-```
+````
 
 **Secondary Approach**: If no awesome-copilot instructions exist, create **SIMPLE GUIDELINES ONLY**:
 
@@ -167,6 +168,7 @@ description: "Java Spring Boot development standards"
 - **Security & Performance**: Security frameworks, accessibility, performance optimization
 
 ## File Structure Standards
+
 Ensure all files follow these conventions:
 
 ```
@@ -196,16 +198,21 @@ project-root/
 ```
 
 ## YAML Frontmatter Template
+
 Use this frontmatter structure for all files:
 
 **Instructions (.instructions.md):**
 
 ## \`\`\`yaml
+
 ## applyTo: "**/\*.ts,**/\*.tsx"
+
 # Project coding standards for TypeScript and React
+
 Apply the [general coding guidelines](./general-coding.instructions.md) to all code.
 
 ## TypeScript Guidelines
+
 - Use TypeScript for all new code
 - Follow functional programming principles where possible
 - Use interfaces for data structures and type definitions
@@ -213,6 +220,7 @@ Apply the [general coding guidelines](./general-coding.instructions.md) to all c
 - Use optional chaining (?.) and nullish coalescing (??) operators
 
 ## React Guidelines
+
 - Use functional components with hooks
 - Follow the React hooks rules (no conditional hooks)
 - Use React.FC type for components with children
@@ -248,11 +256,14 @@ Requirements for the form:
 **Chat Modes (.agent.md):**
 
 ## \`\`\`yaml
+
 description: Generate an implementation plan for new features or refactoring existing code. tools:
 \['codebase', 'fetch', 'findTestFiles', 'githubRepo', 'search', 'usages']
 
 ## model: Claude Sonnet 4
+
 # Planning mode instructions
+
 You are in planning mode. Your task is to generate an implementation plan for a new feature or for
 refactoring existing code. Don't make any code edits, just generate a plan.
 

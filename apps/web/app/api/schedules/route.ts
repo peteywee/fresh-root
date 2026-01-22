@@ -6,7 +6,7 @@ import { CreateScheduleSchema } from "@fresh-schedules/types";
 import type { CreateScheduleInput } from "@fresh-schedules/types";
 import { Timestamp } from "firebase-admin/firestore";
 
-import { badRequest, ok, parseJson, serverError } from "../_shared/validation";
+import { badRequest, forbidden, ok, parseJson, serverError } from "../_shared/validation";
 
 import { setDocWithType, queryWithType } from "@/src/lib/firebase/typed-wrappers";
 import { adminDb } from "@/src/lib/firebase.server";
@@ -117,6 +117,9 @@ const createSchedule = async (request: Request, context: RequestContext) => {
     // parsed may not be fully narrowed by TypeScript across module boundaries; assert shape
     const successParsed = parsed as { success: true; data: CreateScheduleInput };
     const { name, startDate, endDate } = successParsed.data;
+    if (successParsed.data.orgId !== context.org!.orgId) {
+      return forbidden("orgId does not match organization context");
+    }
     const scheduleRef = db.collection(`organizations/${context.org!.orgId}/schedules`).doc();
     const now = Timestamp.now();
 

@@ -1,12 +1,16 @@
 # Issue #207: API Documentation (OpenAPI)
+
 ## Labels
+
 - P0: MEDIUM
 - Area: Documentation, API
 
 ## Objective
+
 Generate comprehensive OpenAPI documentation for all API endpoints with interactive playground.
 
 ## Scope
+
 **In:**
 
 - OpenAPI spec generation from Zod schemas
@@ -22,11 +26,13 @@ Generate comprehensive OpenAPI documentation for all API endpoints with interact
 - Rate limit documentation (covered in API responses)
 
 ## Files / Paths
+
 - `apps/web/app/api/docs/route.ts` - Swagger UI endpoint (NEW)
 - `apps/web/lib/openapi.ts` - OpenAPI spec generator (NEW)
 - Package dependencies: `next-swagger-doc`, `swagger-ui-react`, `zod-to-openapi`
 
 ## Commands
+
 ```bash
 # Install OpenAPI tools
 pnpm add next-swagger-doc swagger-ui-react zod-to-openapi
@@ -40,6 +46,7 @@ pnpm dev
 ```
 
 ## Acceptance Criteria
+
 - \[ ] OpenAPI spec generated from Zod schemas
 - \[ ] Swagger UI accessible at /api/docs
 - \[ ] All endpoints documented
@@ -47,12 +54,14 @@ pnpm dev
 - \[ ] Authentication flow documented
 
 ## Success KPIs
+
 - **Endpoint Coverage**: 100% of public API endpoints documented
 - **Accuracy**: 0 documentation/implementation mismatches
 - **Adoption**: Developer feedback positive
 - **Maintenance**: Auto-generated from schemas (no manual sync)
 
 ## Definition of Done
+
 - \[ ] OpenAPI spec generated
 - \[ ] Swagger UI accessible
 - \[ ] All endpoints documented

@@ -4,17 +4,20 @@ Build, validate, and deploy to production.
 
 ## Overview
 
-The Deploy Agent manages the entire deployment workflow including pre-deployment validation, deployment execution, and rollback capabilities.
+The Deploy Agent manages the entire deployment workflow including pre-deployment validation,
+deployment execution, and rollback capabilities.
 
 ## When to Use
 
 ✅ **Use this agent for**:
+
 - Deploy to production
 - Deploy to staging
 - Pre-deployment validation
 - Rollback management
 
 ❌ **Don't use this agent for**:
+
 - Code implementation (use Implement Agent)
 - Testing (use Test Agent)
 - Local development (manual work)
@@ -30,6 +33,7 @@ Deploy with full validation
 ## Pre-Deployment Checklist
 
 ### 1. Code Validation
+
 ```bash
 pnpm typecheck       # Must pass
 pnpm lint            # Must pass
@@ -38,17 +42,20 @@ pnpm test:rules      # Must pass (if rules changed)
 ```
 
 ### 2. Pattern Validation
+
 ```bash
 node scripts/validate-patterns.mjs
 # Score must be ≥90
 ```
 
 ### 3. Build Verification
+
 ```bash
 pnpm build           # Must succeed
 ```
 
 ### 4. Security Check
+
 - [ ] No secrets in code
 - [ ] All inputs validated
 - [ ] SDK factory used for all routes
@@ -57,6 +64,7 @@ pnpm build           # Must succeed
 ## Deployment Environments
 
 ### Dev Environment
+
 ```bash
 git status
 git branch
@@ -65,6 +73,7 @@ git push origin dev
 ```
 
 ### Staging Environment
+
 ```bash
 git checkout staging
 git pull origin staging
@@ -74,6 +83,7 @@ git push origin staging
 ```
 
 ### Production Environment
+
 ```bash
 git checkout main
 git tag -a v[VERSION] -m "Release [VERSION]"
@@ -97,6 +107,7 @@ firebase deploy --only functions
 ## Rollback Procedure
 
 If deployment fails:
+
 ```bash
 # 1. Identify last good commit
 git log --oneline -10
@@ -114,10 +125,13 @@ git push origin main
 
 ```markdown
 # Deployment Report
+
 ## Environment
+
 [dev/staging/production]
 
 ## Pre-Deployment Checks
+
 - [ ] TypeScript: ✅/❌
 - [ ] Lint: ✅/❌
 - [ ] Tests: ✅/❌
@@ -126,17 +140,20 @@ git push origin main
 - [ ] Security: ✅/❌
 
 ## Deployment Status
+
 - [ ] Code pushed
 - [ ] CI passed
 - [ ] Deploy succeeded
 - [ ] Smoke test passed
 
 ## Verification
+
 - URL: [deployed URL]
 - Version: [version/commit]
 - Time: [timestamp]
 
 ## Rollback Ready
+
 - Previous version: [version]
 - Rollback command: `[command]`
 ```

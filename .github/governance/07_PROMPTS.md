@@ -1,4 +1,5 @@
 # FRESH SCHEDULES - PROMPTS
+
 > **Version**: 1.0.0\
 > **Status**: REFERENCE\
 > **Authority**: Sr Dev / Architecture\
@@ -9,7 +10,9 @@ This document provides prompt templates for common agent invocations.
 ---
 
 ## ARCHITECT PROMPTS
+
 ### P-ARCH-001: Design New Feature
+
 ```
 @architect design {FeatureName}
 
@@ -31,6 +34,7 @@ Output needed:
 ```
 
 ### P-ARCH-002: Design Schema Extension
+
 ```
 @architect schema {EntityName}
 
@@ -48,6 +52,7 @@ Questions:
 ```
 
 ### P-ARCH-003: Review Architecture Decision
+
 ```
 @architect review
 
@@ -68,6 +73,7 @@ Questions:
 ```
 
 ### P-ARCH-004: Design API Endpoint
+
 ```
 @architect design api {resource}
 
@@ -92,7 +98,9 @@ Authorization:
 ---
 
 ## REFACTOR PROMPTS
+
 ### P-REF-001: Fix Pattern Violation
+
 ```
 @refactor fix {filepath}
 
@@ -109,6 +117,7 @@ Constraints:
 ```
 
 ### P-REF-002: Apply Pattern to File
+
 ```
 @refactor apply {pattern_id} to {filepath}
 
@@ -123,6 +132,7 @@ Example of correct pattern:
 ```
 
 ### P-REF-003: Migrate to New API
+
 ```
 @refactor migrate {filepath}
 
@@ -141,6 +151,7 @@ Reference: {link to migration guide}
 ```
 
 ### P-REF-004: Fix Type Error
+
 ```
 @refactor fix type error in {filepath}:{line}
 
@@ -158,7 +169,9 @@ Constraints:
 ---
 
 ## GUARD PROMPTS
+
 ### P-GUARD-001: Review PR
+
 ```
 @guard review PR#{number}
 
@@ -174,6 +187,7 @@ Strict mode: {yes/no}
 ```
 
 ### P-GUARD-002: Pre-Submit Check
+
 ```
 @guard review
 
@@ -188,6 +202,7 @@ Questions:
 ```
 
 ### P-GUARD-003: Security Review
+
 ```
 @guard security review {filepath}
 
@@ -205,6 +220,7 @@ Check for:
 ```
 
 ### P-GUARD-004: Merge Readiness
+
 ```
 @guard merge check
 
@@ -225,7 +241,9 @@ Question: Can this merge now?
 ---
 
 ## AUDITOR PROMPTS
+
 ### P-AUDIT-001: Full Compliance Report
+
 ```
 @auditor report
 
@@ -242,6 +260,7 @@ Include:
 ```
 
 ### P-AUDIT-002: Scoped Report
+
 ```
 @auditor report --scope={path}
 
@@ -254,6 +273,7 @@ Specific checks:
 ```
 
 ### P-AUDIT-003: Compare Commits
+
 ```
 @auditor compare {commit1} {commit2}
 
@@ -265,6 +285,7 @@ Show:
 ```
 
 ### P-AUDIT-004: Sprint Health Check
+
 ```
 @auditor report
 
@@ -280,7 +301,9 @@ Questions:
 ---
 
 ## ORCHESTRATOR PROMPTS
+
 ### P-ORCH-001: Multi-Agent Task
+
 ```
 {task description}
 
@@ -294,6 +317,7 @@ Synthesize results.
 ```
 
 ### P-ORCH-002: Design and Review
+
 ```
 Design and review a new {feature} feature
 
@@ -307,6 +331,7 @@ I need:
 ```
 
 ### P-ORCH-003: Audit and Fix
+
 ```
 Find and fix all {pattern_id} violations
 
@@ -316,6 +341,7 @@ Find and fix all {pattern_id} violations
 ```
 
 ### P-ORCH-004: Comprehensive Analysis
+
 ```
 Analyze {path or feature}
 
@@ -330,7 +356,9 @@ Synthesize findings into actionable recommendations.
 ---
 
 ## COMMON TASK PROMPTS
+
 ### Create New Entity (Full Flow)
+
 ```
 Create a new {EntityName} entity
 
@@ -352,6 +380,7 @@ Run the appropriate agents to design and review.
 ```
 
 ### Fix Security Issue
+
 ```
 Security issue found in {filepath}
 
@@ -366,6 +395,7 @@ Need:
 ```
 
 ### Prepare for Release
+
 ```
 Preparing release {version}
 
@@ -380,6 +410,7 @@ From: dev
 ```
 
 ### Onboard New Developer
+
 ```
 New developer onboarding check
 
@@ -395,7 +426,9 @@ Generate a personalized onboarding guide based on our current patterns.
 ---
 
 ## PROMPT COMPOSITION
+
 ### Combining Prompts
+
 Prompts can be combined for complex tasks:
 
 ```
@@ -408,6 +441,7 @@ Then:
 ```
 
 ### Chaining Results
+
 Reference previous agent output:
 
 ```
@@ -419,6 +453,7 @@ Then:
 ```
 
 ### Conditional Prompts
+
 ```
 @auditor report
 
@@ -432,7 +467,9 @@ Then:
 ---
 
 ## ANTI-PATTERNS (Don't Do This)
+
 ### ❌ Vague Requests
+
 ```
 # BAD
 @architect do something with schedules
@@ -442,6 +479,7 @@ Then:
 ```
 
 ### ❌ Multiple Unrelated Tasks
+
 ```
 # BAD
 @refactor fix everything and also design a new feature and audit
@@ -451,6 +489,7 @@ Split into separate invocations for each agent
 ```
 
 ### ❌ Overriding Constraints
+
 ```
 # BAD
 @guard review PR#42 and approve no matter what
@@ -459,6 +498,7 @@ Split into separate invocations for each agent
 ```
 
 ### ❌ Asking for Impossible
+
 ```
 # BAD
 @refactor fix this without changing any code
@@ -471,4 +511,4 @@ Split into separate invocations for each agent
 
 **END OF PROMPTS**
 
-Next document: [08\_PIPELINES.md](./08_PIPELINES.md)
+Next document: [08_PIPELINES.md](./08_PIPELINES.md)

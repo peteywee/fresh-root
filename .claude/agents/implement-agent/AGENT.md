@@ -27,6 +27,7 @@ Execute an implementation plan with validation at each step.
 ## Quick Start
 
 Use this agent to:
+
 - Execute structured implementation plans
 - Make code changes with validation at each step
 - Follow existing codebase patterns
@@ -36,6 +37,7 @@ Use this agent to:
 ## How to Use
 
 **Orchestration invocation**:
+
 ```
 Use the implement agent to execute this plan: [description]
 Run the implement agent to implement the authentication module
@@ -44,6 +46,7 @@ Run the implement agent to implement the authentication module
 ## Setup
 
 This agent requires:
+
 1. A structured plan (created by the Plan Agent)
 2. Access to codebase search and edit tools
 3. Running validation commands (typecheck, lint, test)
@@ -51,6 +54,7 @@ This agent requires:
 ## Validation Gates
 
 This agent enforces validation at each step:
+
 - TypeScript compilation
 - ESLint checks
 - Unit tests
@@ -59,6 +63,7 @@ This agent enforces validation at each step:
 ## Task Management
 
 Uses the `manage_todo_list` tool to:
+
 - Create TODO lists from plans
 - Mark tasks in-progress (one at a time)
 - Mark tasks completed immediately
@@ -67,6 +72,7 @@ Uses the `manage_todo_list` tool to:
 ## Pattern Compliance
 
 Follows these codebase patterns:
+
 - SDK factory for API routes
 - Zod schemas from `packages/types`
 - Organization scoping
@@ -76,6 +82,7 @@ Follows these codebase patterns:
 ## Output Format
 
 Reports progress with:
+
 - Task completion status
 - Changed files and descriptions
 - Validation results

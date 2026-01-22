@@ -18,6 +18,7 @@ related-docs:
 ---
 
 # Architecture Diagram
+
 ```mermaid
 graph TB
     subgraph apps["📱 Applications"]
@@ -64,6 +65,7 @@ graph TB
 ```
 
 ## Architecture Principles
+
 - **Monorepo**: pnpm workspaces + Turbo
 - **Type Safety**: Zod-first validation, TypeScript strict
 - **SDK Factory**: Declarative API route pattern (90%+ coverage)

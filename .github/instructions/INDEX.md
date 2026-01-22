@@ -33,9 +33,11 @@ L4a: Agent Registry (.claude/agents/) ← Agent configurations & discovery
 L4b: Documentation (docs/) ← Human guides
 ```
 
-**Authority**: Instructions implement L0/L1 governance rules. Conflicts resolved by escalating to canonical docs.
+**Authority**: Instructions implement L0/L1 governance rules. Conflicts resolved by escalating to
+canonical docs.
 
-**Agent Layer**: Agents are configured and discovered via [.claude/agents/INDEX.md](../../.claude/agents/INDEX.md) (L4a operational layer)
+**Agent Layer**: Agents are configured and discovered via
+[.claude/agents/INDEX.md](../../.claude/agents/INDEX.md) (L4a operational layer)
 
 ---
 
@@ -57,9 +59,12 @@ L4b: Documentation (docs/) ← Human guides
 
 **Radical skepticism & logic enforcement** - Always available via `/` commands.
 
-- [logic-agent.instructions.md](./logic-agent.instructions.md) — Core skepticism protocol, 5-step verification (foundation framework)
-- [logic-agent-cli.instructions.md](./logic-agent-cli.instructions.md) — Slash command integration, invocation patterns (`/verify`, `/logic`, etc.)
-- [LOGIC_AGENT_QUICK_REF.md](./LOGIC_AGENT_QUICK_REF.md) — Quick reference card with command cheatsheet (fast lookup)
+- [logic-agent.instructions.md](./logic-agent.instructions.md) — Core skepticism protocol, 5-step
+  verification (foundation framework)
+- [logic-agent-cli.instructions.md](./logic-agent-cli.instructions.md) — Slash command integration,
+  invocation patterns (`/verify`, `/logic`, etc.)
+- [LOGIC_AGENT_QUICK_REF.md](./LOGIC_AGENT_QUICK_REF.md) — Quick reference card with command
+  cheatsheet (fast lookup)
 
 ---
 

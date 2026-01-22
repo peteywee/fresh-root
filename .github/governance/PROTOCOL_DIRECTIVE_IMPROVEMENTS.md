@@ -1,4 +1,5 @@
 # Fresh Schedules Protocol & Directive Improvement Report
+
 **Repository**: `peteywee/frsh-root` (Fresh Schedules)\
 **Date**: December 12, 2025\
 **Classification**: NON-TRIVIAL (Refactor.HEAVY + Security.STANDARD)
@@ -6,6 +7,7 @@
 ---
 
 ## Executive Summary
+
 This document provides a comprehensive analysis of the current repository governance architecture
 and recommends improvements across protocols, directives, tools, and agent behavior contracts. The
 goal is to establish a post-CrewOps orchestration system that is more maintainable, enforceable, and
@@ -14,7 +16,9 @@ cognitively aligned with development workflows.
 ---
 
 ## Part 1: Current State Analysis
+
 ### 1.1 Existing Governance Files Identified
+
 From past conversation context:
 
 | File                                         | Category  | Status           |
@@ -30,6 +34,7 @@ From past conversation context:
 | `docs/crewops/*`                             | Legacy    | **DEPRECATED**   |
 
 ### 1.2 Current Agent Modes
+
 The system currently supports four agent personas:
 
 1. **FRESH Architect** — Designs structure & boundaries
@@ -38,6 +43,7 @@ The system currently supports four agent personas:
 4. **FRESH Auditor** — Full compliance reports
 
 ### 1.3 Identified Issues
+
 | Issue                                            | Severity | Location                        |
 | ------------------------------------------------ | -------- | ------------------------------- |
 | CrewOps deprecation creates orchestration gap    | **HIGH** | `docs/crewops/`                 |
@@ -51,7 +57,9 @@ The system currently supports four agent personas:
 ---
 
 ## Part 2: Protocol Improvements
+
 ### 2.1 New Protocol Architecture
+
 Replace the current flat structure with a hierarchical protocol system:
 
 ```
@@ -79,11 +87,14 @@ Replace the current flat structure with a hierarchical protocol system:
 ```
 
 ### 2.2 New Classification Protocol
+
 Replace the existing task classification with this enhanced version:
 
 ```markdown
 # 01_CLASSIFICATION_PROTOCOL.md
+
 ## Classification Matrix
+
 | Dimension  | TRIVIAL (ALL true) | NON-TRIVIAL (ANY true)                                             |
 | ---------- | ------------------ | ------------------------------------------------------------------ |
 | **Scope**  | ≤1 file            | >1 file OR cross-module                                            |
@@ -94,9 +105,11 @@ Replace the existing task classification with this enhanced version:
 | **Tests**  | Existing coverage  | New tests required                                                 |
 
 ## Fail-Closed Rule
+
 If classification is uncertain → NON-TRIVIAL
 
 ## Pipeline Selection Matrix
+
 | Scenario                       | Pipeline         | Gates Required      |
 | ------------------------------ | ---------------- | ------------------- |
 | New feature, isolated          | Feature.FAST     | STATIC              |
@@ -112,40 +125,49 @@ If classification is uncertain → NON-TRIVIAL
 ```
 
 ### 2.3 New Gate Protocol
+
 ```markdown
 # 03_GATE_PROTOCOL.md
+
 ## Gate Classes
+
 ### STATIC Gate
+
 - **Tools**: ESLint, Prettier, TypeScript
 - **Commands**: `pnpm lint:fix`, `pnpm format:fix`, `pnpm typecheck`
 - **Pass Criteria**: Zero errors, zero warnings in strict mode
 - **Blocking**: YES (merge-blocking)
 
 ### CORRECTNESS Gate
+
 - **Tools**: Vitest (unit), Playwright (E2E), Rules tests
 - **Commands**: `pnpm test:unit`, `pnpm test:e2e`, `pnpm test:rules`
 - **Pass Criteria**: 100% passing, coverage thresholds met
 - **Blocking**: YES
 
 ### SAFETY Gate
+
 - **Tools**: `validate-patterns.ts`, secret scans, dependency audit
 - **Commands**: `pnpm validate:patterns`, `pnpm audit`, `pnpm secrets:check`
 - **Pass Criteria**: All patterns compliant, no secrets, no critical CVEs
 - **Blocking**: YES
 
 ### PERF/COST Gate
+
 - **Tools**: Bundle analyzer, Lighthouse, Firebase cost estimator
 - **Commands**: `pnpm analyze:bundle`, `pnpm audit:perf`
 - **Pass Criteria**: No regression >10%, cost estimate approved
 - **Blocking**: CONDITIONAL (for performance-sensitive changes)
 
 ### AI Gate
+
 - **Tools**: Context validator, hallucination checker
 - **Commands**: `pnpm validate:ai-context`
 - **Pass Criteria**: Context complete, no hallucination flags
 - **Blocking**: ADVISORY (for AI-assisted changes)
 
 ## Gate Execution Order
+
 1. STATIC (always first, fastest feedback)
 2. CORRECTNESS (after static passes)
 3. SAFETY (parallel with correctness)
@@ -156,15 +178,18 @@ If classification is uncertain → NON-TRIVIAL
 ---
 
 ## Part 3: Directive Improvements
+
 ### 3.1 Rewritten Branch Directive
+
 ```markdown
 # BRANCH_DIRECTIVE.md
+
 ## Branch Hierarchy
 ```
 
-main (production) ├── dev (pre-production validation) │ ├── feature/_(new features) │ ├── fix/_
-(bug fixes) │ ├── refactor/_(code improvements) │ └── chore/_ (maintenance) └── hotfix/\*
-(emergency production fixes)
+main (production) ├── dev (pre-production validation) │ ├── feature/_(new features) │ ├── fix/_ (bug
+fixes) │ ├── refactor/_(code improvements) │ └── chore/_ (maintenance) └── hotfix/\* (emergency
+production fixes)
 
 ```
 
@@ -204,10 +229,14 @@ refactor/{scope}-{description} chore/{scope}-{description} hotfix/URGENT-{descri
 ```
 
 ### 3.2 New Security Directive
+
 ```markdown
 # SECURITY_DIRECTIVE.md
+
 ## Non-Negotiable Requirements
+
 ### API Route Security
+
 Every API route in `apps/web/app/api/` MUST:
 
 1. Use `createOrgEndpoint` or `createNetworkEndpoint` wrapper
@@ -216,6 +245,7 @@ Every API route in `apps/web/app/api/` MUST:
 4. Return standardized error responses
 
 ### Firestore Rules
+
 Every collection rule MUST:
 
 1. Include `sameOrg(orgId)` or `isNetworkMember()` check
@@ -224,16 +254,19 @@ Every collection rule MUST:
 4. Be tested in `tests/rules/`
 
 ### Environment Variables
+
 1. NO secrets in `.env.local` committed to repo
 2. All secrets via environment injection at runtime
 3. Secret patterns validated by `scripts/validate-secrets.ts`
 
 ### SDK Usage
+
 1. Use factory functions from `@fresh-schedules/sdk-wrappers`
 2. NO direct Firebase Admin imports in route handlers
 3. All SDK calls wrapped with error handling
 
 ## Violation Response
+
 | Severity                    | Response                               |
 | --------------------------- | -------------------------------------- |
 | CRITICAL (data exposure)    | Block merge, alert team, immediate fix |
@@ -245,12 +278,16 @@ Every collection rule MUST:
 ---
 
 ## Part 4: Tool Improvements
+
 ### 4.1 Tool Registry
+
 Create a central tool manifest at `.github/TOOL_REGISTRY.md`:
 
 ```markdown
 # TOOL_REGISTRY.md
+
 ## Validation Tools
+
 | Tool                | Purpose                | Command                  | Gate        |
 | ------------------- | ---------------------- | ------------------------ | ----------- |
 | `validate-patterns` | Pattern compliance     | `pnpm validate:patterns` | SAFETY      |
@@ -259,6 +296,7 @@ Create a central tool manifest at `.github/TOOL_REGISTRY.md`:
 | `validate-schemas`  | Zod schema consistency | `pnpm validate:schemas`  | CORRECTNESS |
 
 ## Analysis Tools
+
 | Tool                 | Purpose               | Command                   | Output              |
 | -------------------- | --------------------- | ------------------------- | ------------------- |
 | `analyze-deps`       | Dependency graph      | `pnpm analyze:deps`       | `deps.json`         |
@@ -267,6 +305,7 @@ Create a central tool manifest at `.github/TOOL_REGISTRY.md`:
 | `analyze-bundle`     | Bundle size analysis  | `pnpm analyze:bundle`     | `bundle-stats.json` |
 
 ## Generation Tools
+
 | Tool              | Purpose              | Command                | Output                |
 | ----------------- | -------------------- | ---------------------- | --------------------- |
 | `gen-types`       | Type generation      | `pnpm gen:types`       | `packages/types/`     |
@@ -274,6 +313,7 @@ Create a central tool manifest at `.github/TOOL_REGISTRY.md`:
 | `gen-rules-tests` | Firestore test stubs | `pnpm gen:rules-tests` | `tests/rules/`        |
 
 ## Orchestration Tools (Post-CrewOps)
+
 | Tool                | Purpose              | Command                  | Notes            |
 | ------------------- | -------------------- | ------------------------ | ---------------- |
 | `orchestrate`       | Run full pipeline    | `pnpm orchestrate`       | Replaces CrewOps |
@@ -282,6 +322,7 @@ Create a central tool manifest at `.github/TOOL_REGISTRY.md`:
 ```
 
 ### 4.2 New Orchestrator Tool
+
 Replace CrewOps with a TypeScript-based orchestrator:
 
 ```typescript
@@ -345,6 +386,7 @@ async function runPipeline(config: PipelineConfig): Promise<PipelineResult> {
 ```
 
 ### 4.3 Migrate `validate-patterns.mjs` to TypeScript
+
 ```typescript
 // scripts/validate-patterns.ts
 
@@ -459,10 +501,14 @@ export async function validatePatterns(rootDir: string): Promise<ValidationRepor
 ---
 
 ## Part 5: Agent Behavior Contracts
+
 ### 5.1 Agent Contract Specification
+
 ````markdown
 # AGENT_CONTRACTS.md
+
 ## Contract Structure
+
 Each agent mode has a defined contract with:
 
 - **Identity**: Name, purpose, authority level
@@ -475,24 +521,29 @@ Each agent mode has a defined contract with:
 ---
 
 ## FRESH Architect Agent
+
 ### Identity
+
 - **Name**: FRESH Architect
 - **Purpose**: Design structure, boundaries, and patterns
 - **Authority**: Can propose schema changes, new patterns, deprecations
 
 ### Triggers
+
 - "As FRESH architect, design..."
 - "Architect mode: create..."
 - Schema design requests
 - New feature architecture requests
 
 ### Inputs Required
+
 - Feature requirements or problem statement
 - Current relevant schemas (auto-loaded from `packages/types/`)
 - Affected API routes
 - Security requirements
 
 ### Outputs
+
 | Artifact                     | Format              | Location                      |
 | ---------------------------- | ------------------- | ----------------------------- |
 | Schema proposal              | TypeScript + Zod    | `packages/types/src/schemas/` |
@@ -501,12 +552,14 @@ Each agent mode has a defined contract with:
 | Architecture decision record | Markdown            | `docs/adr/`                   |
 
 ### Constraints
+
 - MUST NOT directly modify production code (propose only)
 - MUST reference canonical patterns from `PATTERN_CATALOG.md`
 - MUST include security considerations
 - MUST NOT create new patterns without justification
 
 ### Personality
+
 - **Tone**: Authoritative but collaborative
 - **Style**: Thorough explanations, multiple options when appropriate
 - **Bias**: Prefer existing patterns over new ones
@@ -515,23 +568,28 @@ Each agent mode has a defined contract with:
 ---
 
 ## FRESH Refactor Agent
+
 ### Identity
+
 - **Name**: FRESH Refactor
 - **Purpose**: Fix pattern violations and improve code quality
 - **Authority**: Can modify code to match patterns
 
 ### Triggers
+
 - "As FRESH refactor, fix..."
 - "Refactor mode: improve..."
 - Pattern violation found in audit
 - Technical debt tickets
 
 ### Inputs Required
+
 - File(s) to refactor
 - Specific violation or improvement goal
 - Pattern rules from `PATTERN_CATALOG.md`
 
 ### Outputs
+
 | Artifact     | Format       | Notes                 |
 | ------------ | ------------ | --------------------- |
 | Code diff    | Unified diff | Ready for PR          |
@@ -539,12 +597,14 @@ Each agent mode has a defined contract with:
 | Explanation  | Markdown     | Why changes were made |
 
 ### Constraints
+
 - MUST produce minimal diffs (change only what's necessary)
 - MUST NOT change behavior (unless explicitly requested)
 - MUST pass STATIC gate locally before outputting
 - MUST NOT introduce new dependencies without approval
 
 ### Personality
+
 - **Tone**: Precise, technical
 - **Style**: Diff-focused, minimal commentary
 - **Bias**: Conservative changes, smallest possible fix
@@ -553,24 +613,29 @@ Each agent mode has a defined contract with:
 ---
 
 ## FRESH Guard Agent
+
 ### Identity
+
 - **Name**: FRESH Guard
 - **Purpose**: Review PRs for compliance and quality
 - **Authority**: Can block/approve merges
 
 ### Triggers
+
 - "As FRESH guard, review..."
 - "Guard mode: check this PR..."
 - PR opened to `dev` or `main`
 - Manual review request
 
 ### Inputs Required
+
 - PR diff
 - Target branch
 - Author context
 - Related tickets
 
 ### Outputs
+
 | Artifact        | Format                       | Notes                   |
 | --------------- | ---------------------------- | ----------------------- |
 | Review decision | PASS / BLOCK / NEEDS_CHANGES | Clear verdict           |
@@ -578,6 +643,7 @@ Each agent mode has a defined contract with:
 | Recommendations | Markdown                     | Improvement suggestions |
 
 ### Decision Matrix
+
 | Finding                     | Count | Verdict         |
 | --------------------------- | ----- | --------------- |
 | Critical security           | ≥1    | **BLOCK**       |
@@ -587,12 +653,14 @@ Each agent mode has a defined contract with:
 | Clean                       | 0     | **PASS**        |
 
 ### Constraints
+
 - MUST check all files in diff
 - MUST NOT approve own changes (if applicable)
 - MUST provide actionable feedback for blocks
 - MUST NOT block for style preferences not in patterns
 
 ### Personality
+
 - **Tone**: Firm but fair
 - **Style**: Checklist-based, systematic
 - **Bias**: Err on the side of blocking (fail-closed)
@@ -601,23 +669,28 @@ Each agent mode has a defined contract with:
 ---
 
 ## FRESH Auditor Agent
+
 ### Identity
+
 - **Name**: FRESH Auditor
 - **Purpose**: Generate comprehensive compliance reports
 - **Authority**: Read-only analysis, no modifications
 
 ### Triggers
+
 - "As FRESH auditor, generate report..."
 - "Auditor mode: scan..."
 - Scheduled compliance checks
 - Pre-release audits
 
 ### Inputs Required
+
 - Scope (full repo, specific directory, specific patterns)
 - Report format preference
 - Historical comparison (optional)
 
 ### Outputs
+
 | Artifact               | Format            | Location                   |
 | ---------------------- | ----------------- | -------------------------- |
 | Full compliance report | Markdown          | `docs/reports/compliance/` |
@@ -626,36 +699,49 @@ Each agent mode has a defined contract with:
 | Trend analysis         | Markdown + charts | `docs/reports/trends/`     |
 
 ### Report Structure
+
 ```markdown
 # Compliance Report - {date}
+
 ## Executive Summary
+
 - Overall Score: {X}/100
 - Critical Issues: {N}
 - Gate Status: {PASS/FAIL}
 
 ## By Pattern Category
+
 ### API Patterns (Score: X/100)
+
 ### UI Patterns (Score: X/100)
+
 ### Security Patterns (Score: X/100)
+
 ### Type Patterns (Score: X/100)
+
 ## Issue Catalog
+
 [Sorted by severity]
 
 ## Recommendations
+
 [Prioritized action items]
 
 ## Trend Analysis
+
 [Comparison with previous audits]
 ```
 ````
 
 ### Constraints
+
 - MUST NOT modify any files
 - MUST produce deterministic results for same input
 - MUST include timestamps and commit hashes
 - MUST NOT make assumptions about intent
 
 ### Personality
+
 - **Tone**: Neutral, data-driven
 - **Style**: Report format, heavy on metrics
 - **Bias**: Completeness over brevity
@@ -680,7 +766,7 @@ Create clear invocation patterns:
 ### Architect
 ````
 
-@architect design {feature\_name} --schemas: {comma-separated schema names} --apis: {comma-separated
+@architect design {feature_name} --schemas: {comma-separated schema names} --apis: {comma-separated
 route paths} --security: {role requirements}
 
 ```
@@ -688,29 +774,32 @@ route paths} --security: {role requirements}
 ### Refactor
 ```
 
-@refactor fix {file\_path} --pattern: {pattern\_id} --auto: {true|false}
+@refactor fix {file_path} --pattern: {pattern_id} --auto: {true|false}
 
 ```
 
 ### Guard
 ```
 
-@guard review {PR\_reference} --strict: {true|false} --focus: {security|patterns|all}
+@guard review {PR_reference} --strict: {true|false} --focus: {security|patterns|all}
 
 ```
 
 ### Auditor
 ```
 
-@auditor report --scope: {path|full} --format: {full|summary|json} --compare: {commit\_hash}
+@auditor report --scope: {path|full} --format: {full|summary|json} --compare: {commit_hash}
 
 ```
+
 ```
 
 ---
 
 ## Part 6: Implementation Roadmap
+
 ### Phase 1: Foundation (Week 1)
+
 | Task                                    | Owner       | Deliverable            |
 | --------------------------------------- | ----------- | ---------------------- |
 | Create `.github/protocols/` structure   | Architect   | Directory structure    |
@@ -719,6 +808,7 @@ route paths} --security: {role requirements}
 | Migrate `validate-patterns.mjs` → `.ts` | Implementer | TypeScript validator   |
 
 ### Phase 2: Contracts (Week 2)
+
 | Task                            | Owner       | Deliverable              |
 | ------------------------------- | ----------- | ------------------------ |
 | Write `AGENT_CONTRACTS.md`      | Architect   | All 4 agent specs        |
@@ -727,6 +817,7 @@ route paths} --security: {role requirements}
 | Write new `BRANCH_DIRECTIVE.md` | Architect   | Branch rules             |
 
 ### Phase 3: Integration (Week 3)
+
 | Task                        | Owner       | Deliverable        |
 | --------------------------- | ----------- | ------------------ |
 | Update GitHub Actions       | Implementer | New gate workflows |
@@ -735,6 +826,7 @@ route paths} --security: {role requirements}
 | Integration testing         | QA          | Full pipeline test |
 
 ### Phase 4: Validation (Week 4)
+
 | Task                 | Owner     | Deliverable      |
 | -------------------- | --------- | ---------------- |
 | Security review      | Security  | Sign-off         |
@@ -745,7 +837,9 @@ route paths} --security: {role requirements}
 ---
 
 ## Part 7: Success Metrics
+
 ### Governance Health Metrics
+
 | Metric                   | Target | Measurement                   |
 | ------------------------ | ------ | ----------------------------- |
 | Classification accuracy  | >95%   | Manual audit of 20 random PRs |
@@ -755,6 +849,7 @@ route paths} --security: {role requirements}
 | Agent invocation success | >95%   | Agent usage logs              |
 
 ### Developer Experience Metrics
+
 | Metric                    | Target      | Measurement        |
 | ------------------------- | ----------- | ------------------ |
 | Time to first commit      | <30 min     | New dev onboarding |
@@ -765,7 +860,9 @@ route paths} --security: {role requirements}
 ---
 
 ## Appendix A: Migration from CrewOps
+
 ### Deprecated Items
+
 | CrewOps Component                 | Replacement                     |
 | --------------------------------- | ------------------------------- |
 | `docs/crewops/BATCH_WORKERS.md`   | `scripts/orchestrate.ts`        |
@@ -774,6 +871,7 @@ route paths} --security: {role requirements}
 | CrewOps batch execution           | `pnpm orchestrate`              |
 
 ### Migration Steps
+
 1. **Freeze** CrewOps usage (mark deprecated)
 2. **Create** new orchestrator
 3. **Parallel run** both systems for 1 week
@@ -784,22 +882,24 @@ route paths} --security: {role requirements}
 ---
 
 ## Appendix B: Pattern Catalog Quick Reference
+
 | Pattern ID | Layer | Description                  | Severity |
 | ---------- | ----- | ---------------------------- | -------- |
-| API\_001    | API   | createOrgEndpoint required   | ERROR    |
-| API\_002    | API   | Zod validation required      | ERROR    |
-| API\_003    | API   | Standardized error responses | ERROR    |
-| UI\_001     | UI    | "use client" for hooks       | ERROR    |
-| UI\_002     | UI    | Typed props interface        | WARNING  |
-| SEC\_001    | Rules | sameOrg() check required     | ERROR    |
-| SEC\_002    | Rules | list: false by default       | ERROR    |
-| SEC\_003    | Rules | RBAC on writes               | ERROR    |
-| TYPE\_001   | Types | Export from index.ts         | WARNING  |
-| TYPE\_002   | Types | Zod schema naming            | WARNING  |
+| API_001    | API   | createOrgEndpoint required   | ERROR    |
+| API_002    | API   | Zod validation required      | ERROR    |
+| API_003    | API   | Standardized error responses | ERROR    |
+| UI_001     | UI    | "use client" for hooks       | ERROR    |
+| UI_002     | UI    | Typed props interface        | WARNING  |
+| SEC_001    | Rules | sameOrg() check required     | ERROR    |
+| SEC_002    | Rules | list: false by default       | ERROR    |
+| SEC_003    | Rules | RBAC on writes               | ERROR    |
+| TYPE_001   | Types | Export from index.ts         | WARNING  |
+| TYPE_002   | Types | Zod schema naming            | WARNING  |
 
 ---
 
 ## Appendix C: CPMEM Template
+
 ```
 [CPMEM]
 task_id: {short_identifier}

@@ -1,6 +1,7 @@
 ---
 title: "MCP Tooling Strategy"
-description: "Architecture and strategy for Model Context Protocol tool integration (always-on vs on-demand)"
+description:
+  "Architecture and strategy for Model Context Protocol tool integration (always-on vs on-demand)"
 keywords:
   - mcp
   - tooling
@@ -19,6 +20,7 @@ related-docs:
 ---
 
 # MCP Tooling Strategy: Always-On vs. On-Demand
+
 **Date**: December 16, 2025\
 **Status**: Planning Phase\
 **Author**: Development Team\
@@ -27,6 +29,7 @@ related-docs:
 ---
 
 ## Executive Summary
+
 We have **4 MCP servers configured** with **25+ total tools** available. The challenge: ensuring
 agents automatically access the **right tools at the right time** without manual intervention.
 
@@ -47,7 +50,9 @@ agents automatically access the **right tools at the right time** without manual
 ---
 
 ## Current MCP Server Status
+
 ### **1. GitHub MCP** ✅ ALWAYS-ON (CRITICAL)
+
 **Status**: HTTP server, always available\
 **Initialization**: None required\
 **Tools Available**: 25+
@@ -86,6 +91,7 @@ agents automatically access the **right tools at the right time** without manual
 ---
 
 ### **2. Firebase** 🟡 SEMI-ALWAYS-ON (FREQUENTLY NEEDED)
+
 **Status**: stdio, requires initialization\
 **Initialization**: `firebase login`, project context\
 **Tools Available**: 15+
@@ -129,6 +135,7 @@ agents automatically access the **right tools at the right time** without manual
 ---
 
 ### **3. Repomix** 🟢 ON-DEMAND BUT CRITICAL (NEW)
+
 **Status**: stdio, zero prompts\
 **Initialization**: None required\
 **Tools Available**: 7
@@ -170,6 +177,7 @@ agents automatically access the **right tools at the right time** without manual
 ---
 
 ### **4. Chrome DevTools** 🔴 PROBLEMATIC (LOW PRIORITY)
+
 **Status**: stdio, requires input prompts (3 prompts per start)\
 **Initialization**: Browser URL, headless mode, isolation settings\
 **Tools Available**: 8+
@@ -208,6 +216,7 @@ agents automatically access the **right tools at the right time** without manual
 ---
 
 ## Tool Selection Hierarchy
+
 **Agent should auto-select tools in this order**:
 
 ```
@@ -249,7 +258,9 @@ agents automatically access the **right tools at the right time** without manual
 ---
 
 ## Recommendation: MCP Configuration Tiers
+
 ### **TIER 1: Always-On (Startup)**
+
 These should initialize automatically when VS Code opens:
 
 1. **GitHub MCP** ✅ Already always-on
@@ -286,6 +297,7 @@ These should initialize automatically when VS Code opens:
 ---
 
 ### **TIER 2: On-Demand with Auto-Activation**
+
 These activate when agent detects specific keywords:
 
 1. **Chrome DevTools** → Activate only if user asks for screenshot/browser task
@@ -315,6 +327,7 @@ These activate when agent detects specific keywords:
 ---
 
 ### **TIER 3: Manual (Full Setup)**
+
 These require explicit user action (leave as-is):
 
 - Custom integrations
@@ -324,6 +337,7 @@ These require explicit user action (leave as-is):
 ---
 
 ## Tool Availability Matrix
+
 | Tool         | Tier | Status        | Init Time | Prompts | Frequency | Priority |
 | ------------ | ---- | ------------- | --------- | ------- | --------- | -------- |
 | GitHub MCP   | 1    | ✅ Ready      | 0ms       | 0       | HIGH      | P0       |
@@ -334,7 +348,9 @@ These require explicit user action (leave as-is):
 ---
 
 ## Implementation Plan
+
 ### **PHASE 1: Immediate (Today)**
+
 **Task 1**: Update `.mcp.json` with Tier 1 configuration
 
 ```json
@@ -383,6 +399,7 @@ These require explicit user action (leave as-is):
 ---
 
 ### **PHASE 2: Smart Agent Integration (This Week)**
+
 Create an MCP availability manifest that agents can query:
 
 **File**: `.mcp-manifest.json`
@@ -422,6 +439,7 @@ Create an MCP availability manifest that agents can query:
 
 ```markdown
 ## MCP Tool Selection Strategy
+
 When planning a task:
 
 1. **Always-On Tools** (no wait):
@@ -445,6 +463,7 @@ When planning a task:
 ---
 
 ### **PHASE 3: Advanced (Next Week)**
+
 **Auto-Activation Engine**:
 
 Create smart activation that:
@@ -488,7 +507,9 @@ const MCPActivationEngine = {
 ---
 
 ## Best Practices for Agent Tool Access
+
 ### **Rule 1: Explicit Tool Requests**
+
 Agent should request specific tools when possible:
 
 ```
@@ -500,6 +521,7 @@ Agent should request specific tools when possible:
 ```
 
 ### **Rule 2: Tool Chaining**
+
 Combine tools for better results:
 
 ```
@@ -513,6 +535,7 @@ Agent:
 ```
 
 ### **Rule 3: Caching Results**
+
 Reuse packed outputs to save tokens:
 
 ```
@@ -526,6 +549,7 @@ Second request: "Find all Zod schemas"
 ```
 
 ### **Rule 4: Fallback Strategy**
+
 If MCP tool unavailable, fall back gracefully:
 
 ```
@@ -540,20 +564,22 @@ Example:
 ---
 
 ## Tool Redundancy Matrix
+
 Some tasks have multiple tool options:
 
 | Task             | Best Tool           | Fallback 1          | Fallback 2      |
 | ---------------- | ------------------- | ------------------- | --------------- |
-| Search code      | GitHub MCP          | Local grep\_search   | —               |
-| Analyze patterns | Repomix MCP         | read\_file + grep    | —               |
+| Search code      | GitHub MCP          | Local grep_search   | —               |
+| Analyze patterns | Repomix MCP         | read_file + grep    | —               |
 | Create PR        | GitHub MCP          | Manual git          | —               |
 | Deploy rules     | Firebase MCP        | Manual firebase CLI | —               |
-| Read file safely | Repomix file\_system | read\_file           | —               |
-| Repo research    | Repomix pack\_remote | GitHub MCP search   | Manual research |
+| Read file safely | Repomix file_system | read_file           | —               |
+| Repo research    | Repomix pack_remote | GitHub MCP search   | Manual research |
 
 ---
 
 ## Success Metrics
+
 **By end of PHASE 2, we should achieve**:
 
 - ✅ 95%+ of tasks use always-on tools without prompts
@@ -574,6 +600,7 @@ pnpm report:mcp-metrics
 ---
 
 ## Summary: Always-On vs. On-Demand
+
 **TIER 1 (Always-On, no waiting)**:
 
 1. ✅ GitHub MCP — Repo/PR/issue operations

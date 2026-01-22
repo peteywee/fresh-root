@@ -1,19 +1,25 @@
 // [P0][ORG][MEMBERS][API] Organization members endpoint
 
 import { createOrgEndpoint } from "@fresh-schedules/api-framework";
+import { MembershipRole } from "@fresh-schedules/types";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
-import { ok, serverError } from "../../../_shared/validation";
+import { forbidden, ok, serverError } from "../../../_shared/validation";
+
+const MemberRoleSchema = z.preprocess(
+  (value) => (value === "member" ? "staff" : value),
+  MembershipRole,
+);
 
 const AddMemberSchema = z.object({
   email: z.string().email("Invalid email address"),
-  role: z.enum(["member", "manager", "admin"]).describe("Member role in organization"),
+  role: MemberRoleSchema.describe("Member role in organization"),
 });
 
 const UpdateMemberSchema = z.object({
   memberId: z.string().min(1),
-  role: z.enum(["member", "manager", "admin"]).optional(),
+  role: MemberRoleSchema.optional(),
 });
 
 const RemoveMemberSchema = z.object({
@@ -31,8 +37,11 @@ const RemoveMemberSchema = z.object({
  * List members of an organization
  */
 export const GET = createOrgEndpoint({
-  handler: async ({ request: _request, input: _input, context: _context, params }) => {
+  handler: async ({ request: _request, input: _input, context, params }) => {
     try {
+      if (params.id !== context.org!.orgId) {
+        return forbidden("Access denied");
+      }
       const { getFirestore } = await import("firebase-admin/firestore");
       const db = getFirestore();
       const { id } = params;
@@ -65,6 +74,9 @@ export const POST = createOrgEndpoint({
   input: AddMemberSchema,
   handler: async ({ request: _request, input, context, params }) => {
     try {
+      if (params.id !== context.org!.orgId) {
+        return forbidden("Access denied");
+      }
       // Type assertion safe - input validated by SDK factory
       const typedInput = input as z.infer<typeof AddMemberSchema>;
       const member = {
@@ -89,8 +101,11 @@ export const POST = createOrgEndpoint({
 export const PATCH = createOrgEndpoint({
   roles: ["admin"],
   input: UpdateMemberSchema,
-  handler: async ({ request: _request, input, context, params: _params }) => {
+  handler: async ({ request: _request, input, context, params }) => {
     try {
+      if (params.id !== context.org!.orgId) {
+        return forbidden("Access denied");
+      }
       // Type assertion safe - input validated by SDK factory
       const typedInput = input as z.infer<typeof UpdateMemberSchema>;
       const { memberId, role } = typedInput;
@@ -109,8 +124,11 @@ export const PATCH = createOrgEndpoint({
 export const DELETE = createOrgEndpoint({
   roles: ["admin"],
   input: RemoveMemberSchema,
-  handler: async ({ request: _request, input, context: _context, params: _params }) => {
+  handler: async ({ request: _request, input, context, params }) => {
     try {
+      if (params.id !== context.org!.orgId) {
+        return forbidden("Access denied");
+      }
       // Type assertion safe - input validated by SDK factory
       const typedInput = input as z.infer<typeof RemoveMemberSchema>;
       const { memberId } = typedInput;

@@ -16,7 +16,8 @@ related-docs:
   - ../standards/SDK_FACTORY_COMPREHENSIVE_GUIDE.md
 ---
 
-# Template: CODE\_NEXT\_API\_ROUTE
+# Template: CODE_NEXT_API_ROUTE
+
 ```ts
 /**
  * Next.js API Route: ${Name}

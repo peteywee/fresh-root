@@ -1,4 +1,5 @@
 # FRESH SCHEDULES - AGENTS
+
 > **Version**: 1.0.0\
 > **Status**: CANONICAL\
 > **Authority**: Sr Dev / Architecture\
@@ -9,6 +10,7 @@ This document defines all agent specifications, contracts, and the orchestrator 
 ---
 
 ## AGENT REGISTRY
+
 | Agent            | ID             | Role                            | Parallel Safe     |
 | ---------------- | -------------- | ------------------------------- | ----------------- |
 | **Orchestrator** | `orchestrator` | Route, delegate, synthesize     | N/A (coordinator) |
@@ -20,7 +22,9 @@ This document defines all agent specifications, contracts, and the orchestrator 
 ---
 
 ## ORCHESTRATOR AGENT
+
 ### Contract
+
 ```typescript
 interface OrchestratorContract {
   id: "orchestrator";
@@ -66,6 +70,7 @@ interface OrchestratorContract {
 ```
 
 ### Routing Logic
+
 ```typescript
 function routeTask(input: string): RoutingDecision {
   // 1. Check for explicit agent triggers
@@ -128,6 +133,7 @@ function parseExplicitTrigger(input: string): { agent: AgentId } | null {
 ```
 
 ### Parallel Execution (VS Code Agent Mode)
+
 ```typescript
 async function executeComposite(
   agents: AgentId[],
@@ -172,7 +178,9 @@ function synthesizeResults(results: AgentResult[]): SynthesizedOutput {
 ---
 
 ## ARCHITECT AGENT
+
 ### Contract
+
 ```typescript
 interface ArchitectContract {
   id: "architect";
@@ -231,8 +239,10 @@ interface ArchitectContract {
 ```
 
 ### Output Template
+
 ```markdown
 ## Schema Proposal
+
 \`\`\`typescript import { z } from 'zod';
 
 export const {EntityName}Schema = z.object({ id: z.string().min(1), orgId: z.string().min(1), // ...
@@ -241,6 +251,7 @@ fields });
 export type {EntityName} = z.infer<typeof {EntityName}Schema>; \`\`\`
 
 ## API Routes
+
 | Method | Path            | Purpose    | Roles      |
 | ------ | --------------- | ---------- | ---------- |
 | GET    | /api/{resource} | List all   | scheduler+ |
@@ -249,23 +260,28 @@ export type {EntityName} = z.infer<typeof {EntityName}Schema>; \`\`\`
 | ...
 
 ## Firestore Rules
+
 \`\`\`javascript match /organizations/{orgId}/{collection}/{docId} { allow read: if sameOrg(orgId);
 allow write: if hasRole(orgId, ['manager', 'admin']); } \`\`\`
 
 ## Migration Plan
+
 1. Deploy schema changes
 2. Run migration script
 3. Verify data integrity
 4. Update UI components
 
 ## Architecture Decision Record
+
 **Context**: [Why this design] **Decision**: [What we're doing] **Consequences**: [Trade-offs]
 ```
 
 ---
 
 ## REFACTOR AGENT
+
 ### Contract
+
 ```typescript
 interface RefactorContract {
   id: "refactor";
@@ -313,18 +329,23 @@ interface RefactorContract {
 ```
 
 ### Output Template
+
 ```markdown
 ## Fix for {file}
+
 **Pattern**: {pattern_id} - {pattern_name} **Violation**: {description}
 
 ### Diff
+
 \`\`\`diff --- a/{file} +++ b/{file} @@ -15,7 +15,10 @@ // unchanged context -// old code +// new
 code // unchanged context \`\`\`
 
 ### Before
+
 \`\`\`typescript // Old implementation \`\`\`
 
 ### After
+
 \`\`\`typescript // New implementation \`\`\`
 
 **Why**: {brief explanation}
@@ -333,7 +354,9 @@ code // unchanged context \`\`\`
 ---
 
 ## GUARD AGENT
+
 ### Contract
+
 ```typescript
 interface GuardContract {
   id: "guard";
@@ -389,37 +412,46 @@ interface GuardContract {
 ```
 
 ### Output Template
+
 ```markdown
 ## PR Review
+
 **Verdict**: ✅ PASS | ⚠️ NEEDS_CHANGES | ❌ BLOCK
 
 ### Summary
+
 - Files changed: {count}
 - Lines added: {added}
 - Lines removed: {removed}
 
 ### Issues Found
+
 | Severity | File     | Line | Issue             |
 | -------- | -------- | ---- | ----------------- |
 | ERROR    | route.ts | 15   | Missing org scope |
 | WARNING  | types.ts | 42   | Implicit any      |
 
 ### Required Changes
+
 1. {Actionable fix}
 2. {Actionable fix}
 
 ### Recommendations
+
 - {Optional improvement}
 
 ### Approved For
-- [[ ]] dev
-- [[ ]] main (requires additional review)
+
+- [[]] dev
+- [[]] main (requires additional review)
 ```
 
 ---
 
 ## AUDITOR AGENT
+
 ### Contract
+
 ```typescript
 interface AuditorContract {
   id: "auditor";
@@ -468,14 +500,14 @@ interface AuditorContract {
 ```
 
 ### Output Template
+
 ```markdown
 # Compliance Report
-**Generated**: {timestamp}
-**Scope**: {scope}
-**Commit**: {hash}
-**Branch**: {branch}
+
+**Generated**: {timestamp} **Scope**: {scope} **Commit**: {hash} **Branch**: {branch}
 
 ## Executive Summary
+
 | Category    | Score   | Δ     | Status |
 | ----------- | ------- | ----- | ------ |
 | Security    | 95%     | +2%   | ✅     |
@@ -485,26 +517,31 @@ interface AuditorContract {
 | **Overall** | **88%** | +1.5% | ✅     |
 
 ## Critical Issues (Requires Immediate Action)
+
 | ID   | Category | File       | Description       |
 | ---- | -------- | ---------- | ----------------- |
 | C001 | Security | auth.ts:45 | Unprotected route |
 
 ## Warnings (Should Address)
+
 | ID   | Category | File        | Description        |
 | ---- | -------- | ----------- | ------------------ |
 | W001 | Types    | utils.ts:12 | Implicit any       |
 | W002 | Pattern  | api.ts:78   | Missing validation |
 
 ## Trends (Last 5 Reports)
+
 \`\`\` Security: 92% → 93% → 94% → 95% → 95% ↗ Types: 85% → 86% → 88% → 89% → 88% ↘ Patterns: 90% →
 91% → 91% → 92% → 92% ↗ \`\`\`
 
 ## Recommendations (Prioritized)
+
 1. **[HIGH]** Fix C001 - Unprotected route
 2. **[MEDIUM]** Address type safety regression
 3. **[LOW]** Consider adding tests for uncovered paths
 
 ## Methodology
+
 - Pattern validation: `validate-patterns.mjs`
 - Type checking: `tsc --noEmit`
 - Security scan: `git secrets` + manual review
@@ -513,7 +550,9 @@ interface AuditorContract {
 ---
 
 ## VS CODE INTEGRATION
+
 ### Agent Mode Configuration
+
 For VS Code's Agent Mode to run sub-agents in parallel:
 
 ```jsonc
@@ -526,6 +565,7 @@ For VS Code's Agent Mode to run sub-agents in parallel:
 ```
 
 ### Workspace Agents
+
 ```jsonc
 // .vscode/agents.json (custom extension config)
 {
@@ -560,7 +600,9 @@ For VS Code's Agent Mode to run sub-agents in parallel:
 ---
 
 ## AGENT COMMUNICATION
+
 ### Inter-Agent Protocol
+
 When orchestrator runs composite mode:
 
 ```typescript
@@ -577,6 +619,7 @@ interface AgentMessage {
 ```
 
 ### Result Aggregation
+
 ```typescript
 interface AggregatedResult {
   task: string;
@@ -597,4 +640,4 @@ interface AggregatedResult {
 
 **END OF AGENTS**
 
-Next document: [07\_PROMPTS.md](./07_PROMPTS.md)
+Next document: [07_PROMPTS.md](./07_PROMPTS.md)

@@ -1,7 +1,6 @@
 # Logic Agent Quick Reference
 
-**Namespace**: `/logic`
-**Confidence Floor**: 85% (always-on)
+**Namespace**: `/logic` **Confidence Floor**: 85% (always-on)
 
 ---
 
@@ -136,34 +135,20 @@ Runs: risk → test → decision
 
 ## When to Use
 
-✅ Major decisions
-✅ Before code review
-✅ After bug discovered
-✅ Planning features
-✅ Merging PRs
+✅ Major decisions ✅ Before code review ✅ After bug discovered ✅ Planning features ✅ Merging PRs
 ✅ Performance concerns
 
-❌ Quick syntax q's
-❌ Obvious fixes
-❌ Under severe time pressure
-❌ Documented patterns
+❌ Quick syntax q's ❌ Obvious fixes ❌ Under severe time pressure ❌ Documented patterns
 
 ---
 
 ## What It Rejects
 
-❌ "Probably works"
-❌ "I think..."
-❌ "Most likely..."
-❌ "In my experience..."
+❌ "Probably works" ❌ "I think..." ❌ "Most likely..." ❌ "In my experience..."
 
 ## What It Requires
 
-✅ Actual evidence
-✅ Measured data
-✅ Code shown
-✅ Tests passing
-✅ Reasoning mapped
+✅ Actual evidence ✅ Measured data ✅ Code shown ✅ Tests passing ✅ Reasoning mapped
 
 ---
 

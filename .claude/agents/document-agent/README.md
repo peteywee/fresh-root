@@ -4,11 +4,13 @@ Generate or update documentation (JSDoc, README, ADRs, API docs).
 
 ## Overview
 
-The Document Agent generates and maintains comprehensive documentation following Fresh Schedules standards.
+The Document Agent generates and maintains comprehensive documentation following Fresh Schedules
+standards.
 
 ## When to Use
 
 ✅ **Use this agent for**:
+
 - Generate JSDoc for new code
 - Update API documentation
 - Create ADRs for decisions
@@ -16,6 +18,7 @@ The Document Agent generates and maintains comprehensive documentation following
 - Create user guides
 
 ❌ **Don't use this agent for**:
+
 - Code implementation (use Implement Agent)
 - Code review (use Review Agent)
 
@@ -30,6 +33,7 @@ Create ADR for the new caching strategy
 ## Documentation Types
 
 ### Code (JSDoc)
+
 ```typescript
 /**
  * Brief description of what the function does.
@@ -44,6 +48,7 @@ Create ADR for the new caching strategy
 ```
 
 ### API Documentation
+
 - HTTP method and path
 - Authentication requirements
 - Request schema
@@ -52,22 +57,29 @@ Create ADR for the new caching strategy
 - Examples
 
 ### Architecture (ADR Format)
+
 ```markdown
 # ADR-XXX: Title
+
 ## Status
+
 Proposed | Accepted
 
 ## Context
+
 The issue we're seeing...
 
 ## Decision
+
 What we've decided...
 
 ## Consequences
+
 What becomes easier/harder...
 ```
 
 ### User Documentation
+
 - README files
 - How-to guides
 - Tutorials

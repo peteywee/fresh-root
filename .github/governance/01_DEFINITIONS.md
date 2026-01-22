@@ -1,4 +1,5 @@
 # FRESH SCHEDULES - DEFINITIONS
+
 > **Version**: 1.0.0\
 > **Status**: CANONICAL\
 > **Authority**: Sr Dev / Architecture\
@@ -10,6 +11,7 @@ governance system. All other documents reference these definitions.
 ---
 
 ## 1. CORE VALUES
+
 These values govern all development decisions. When in conflict, apply in order.
 
 | #   | Value                       | Definition                                                               | Example                                                  |
@@ -23,7 +25,9 @@ These values govern all development decisions. When in conflict, apply in order.
 ---
 
 ## 2. DOMAIN TERMS
+
 ### 2.1 Business Entities
+
 | Term                   | Definition                                            | Firestore Collection              |
 | ---------------------- | ----------------------------------------------------- | --------------------------------- |
 | **Organization (Org)** | Top-level tenant container. All data scoped to org.   | `organizations`                   |
@@ -35,6 +39,7 @@ These values govern all development decisions. When in conflict, apply in order.
 | **Network**            | Multi-org grouping (franchise/corporate)              | `networks`                        |
 
 ### 2.2 Roles & Permissions
+
 | Role            | Scope    | Can Do                              | Cannot Do                     |
 | --------------- | -------- | ----------------------------------- | ----------------------------- |
 | `org_owner`     | Full org | Everything                          | Delete org (requires support) |
@@ -45,6 +50,7 @@ These values govern all development decisions. When in conflict, apply in order.
 | `network_admin` | Network  | View all orgs, aggregate reports    | Modify individual org data    |
 
 ### 2.3 Status Enums
+
 ```typescript
 // Schedule statuses
 type ScheduleStatus = "draft" | "published" | "active" | "completed" | "archived";
@@ -59,7 +65,9 @@ type MemberStatus = "invited" | "active" | "suspended" | "removed";
 ---
 
 ## 3. TECHNICAL TERMS
+
 ### 3.1 Architecture Components
+
 | Term                | Definition                                             | Location                  |
 | ------------------- | ------------------------------------------------------ | ------------------------- |
 | **API Framework**   | Endpoint factories for auth, rate limiting, validation | `packages/api-framework/` |
@@ -68,6 +76,7 @@ type MemberStatus = "invited" | "active" | "suspended" | "removed";
 | **Web App**         | Next.js 14 application                                 | `apps/web/`               |
 
 ### 3.2 Pattern Identifiers
+
 | Pattern ID | Category   | What It Validates                                             |
 | ---------- | ---------- | ------------------------------------------------------------- |
 | `API_001`  | Security   | API routes use `createOrgEndpoint` or `createNetworkEndpoint` |
@@ -83,6 +92,7 @@ type MemberStatus = "invited" | "active" | "suspended" | "removed";
 | `TS_003`   | Generics   | Preserve generics through wrapper functions                   |
 
 ### 3.3 File Classifications
+
 | Classification    | Pattern                           | Example                                  |
 | ----------------- | --------------------------------- | ---------------------------------------- |
 | **API Route**     | `apps/web/app/api/**/*.ts`        | `apps/web/app/api/schedules/route.ts`    |
@@ -97,7 +107,9 @@ type MemberStatus = "invited" | "active" | "suspended" | "removed";
 ---
 
 ## 4. GOVERNANCE TERMS
+
 ### 4.1 Document Types
+
 | Type            | Purpose                     | Binding? | Location                |
 | --------------- | --------------------------- | -------- | ----------------------- |
 | **Protocol**    | How things work (mechanics) | YES      | `.github/protocols/`    |
@@ -107,6 +119,7 @@ type MemberStatus = "invited" | "active" | "suspended" | "removed";
 | **Index**       | Quick reference, lookups    | NO       | `.github/indexes/`      |
 
 ### 4.2 Classification Terms
+
 | Term            | Definition                     | Criteria                                               |
 | --------------- | ------------------------------ | ------------------------------------------------------ |
 | **TRIVIAL**     | Low-risk, minimal scope change | ≤1 file, no domain logic, no auth, no data persistence |
@@ -114,6 +127,7 @@ type MemberStatus = "invited" | "active" | "suspended" | "removed";
 | **CRITICAL**    | Highest risk, requires review  | Security, billing, data migration, schema changes      |
 
 ### 4.3 Pipeline Terms
+
 | Term         | Definition                                                      |
 | ------------ | --------------------------------------------------------------- |
 | **Gate**     | Validation checkpoint (STATIC, CORRECTNESS, SAFETY, PERF, AI)   |
@@ -124,16 +138,19 @@ type MemberStatus = "invited" | "active" | "suspended" | "removed";
 ---
 
 ## 5. AGENT TERMS
+
 ### 5.1 Agent Roles
+
 | Agent            | Role                                            | Authority                               |
 | ---------------- | ----------------------------------------------- | --------------------------------------- |
 | **Orchestrator** | Route tasks to correct agent, aggregate results | Parse invocations, dispatch, synthesize |
 | **Architect**    | Design schemas, APIs, structures                | Propose changes, define patterns        |
 | **Refactor**     | Fix pattern violations, apply fixes             | Modify code within pattern constraints  |
-| **Guard**        | Review PRs, gate merges                         | PASS/BLOCK/NEEDS\_CHANGES verdicts       |
+| **Guard**        | Review PRs, gate merges                         | PASS/BLOCK/NEEDS_CHANGES verdicts       |
 | **Auditor**      | Generate compliance reports                     | Full read access, metrics generation    |
 
 ### 5.2 Invocation Terms
+
 | Term           | Definition                                      | Example                                  |
 | -------------- | ----------------------------------------------- | ---------------------------------------- |
 | **Trigger**    | Pattern that activates an agent                 | `@architect design`, `@guard review`     |
@@ -142,6 +159,7 @@ type MemberStatus = "invited" | "active" | "suspended" | "removed";
 | **Verdict**    | Agent's final output/decision                   | `PASS`, `BLOCK`, `NEEDS_CHANGES`         |
 
 ### 5.3 Execution Modes
+
 | Mode           | Description                                    | Parallelism |
 | -------------- | ---------------------------------------------- | ----------- |
 | **Sequential** | One agent at a time, in order                  | None        |
@@ -152,7 +170,9 @@ type MemberStatus = "invited" | "active" | "suspended" | "removed";
 ---
 
 ## 6. SDK TERMS
+
 ### 6.1 Factory Functions
+
 | Factory                 | Purpose                        | Input         | Output                |
 | ----------------------- | ------------------------------ | ------------- | --------------------- |
 | `createOrgEndpoint`     | Org-scoped API route with auth | Config object | Route handler         |
@@ -162,6 +182,7 @@ type MemberStatus = "invited" | "active" | "suspended" | "removed";
 | `DefineEnum`            | Type-safe enum                 | Name, values  | Zod enum              |
 
 ### 6.2 Validation Terms
+
 | Term             | Definition                      | When Fixable                   |
 | ---------------- | ------------------------------- | ------------------------------ |
 | **Auto-Fixable** | SDK can correct automatically   | `pnpm lint --fix` resolves     |
@@ -171,7 +192,9 @@ type MemberStatus = "invited" | "active" | "suspended" | "removed";
 ---
 
 ## 7. ERROR TERMS
+
 ### 7.1 TypeScript Error Categories
+
 | Category              | Error Codes     | Common Cause                                  |
 | --------------------- | --------------- | --------------------------------------------- |
 | **Module Resolution** | TS2307          | Missing `@fresh-schedules/*` path in tsconfig |
@@ -181,6 +204,7 @@ type MemberStatus = "invited" | "active" | "suspended" | "removed";
 | **Null/Undefined**    | TS2532, TS18048 | Missing null check                            |
 
 ### 7.2 Fix Capability Matrix
+
 | Error Type          | Auto-Fix?  | SDK Handles? | Manual Required?  |
 | ------------------- | ---------- | ------------ | ----------------- |
 | Lint violations     | ✅ Yes     | ✅ Yes       | No                |
@@ -193,6 +217,7 @@ type MemberStatus = "invited" | "active" | "suspended" | "removed";
 ---
 
 ## 8. BRANCH TERMS
+
 | Branch       | Purpose                    | Merges To      | From             |
 | ------------ | -------------------------- | -------------- | ---------------- |
 | `main`       | Production code            | Deploys        | `dev` only       |
@@ -206,6 +231,7 @@ type MemberStatus = "invited" | "active" | "suspended" | "removed";
 ---
 
 ## 9. GATE TERMS
+
 | Gate            | Purpose             | Commands                                             | Blocking?   |
 | --------------- | ------------------- | ---------------------------------------------------- | ----------- |
 | **STATIC**      | Syntax & style      | `pnpm lint`, `pnpm format:check`, `pnpm typecheck`   | Yes         |
@@ -217,6 +243,7 @@ type MemberStatus = "invited" | "active" | "suspended" | "removed";
 ---
 
 ## 10. VS CODE / COPILOT TERMS
+
 | Term                     | Definition                                       | Location                          |
 | ------------------------ | ------------------------------------------------ | --------------------------------- |
 | **Copilot Instructions** | Global instructions for all Copilot interactions | `.github/copilot-instructions.md` |
@@ -228,6 +255,7 @@ type MemberStatus = "invited" | "active" | "suspended" | "removed";
 ---
 
 ## APPENDIX A: ABBREVIATIONS
+
 | Abbrev | Full Term                                  |
 | ------ | ------------------------------------------ |
 | SDK    | Software Development Kit                   |
@@ -247,6 +275,7 @@ type MemberStatus = "invited" | "active" | "suspended" | "removed";
 ---
 
 ## APPENDIX B: FILE EXTENSION REFERENCE
+
 | Extension        | Type                   | Handler              |
 | ---------------- | ---------------------- | -------------------- |
 | `.ts`            | TypeScript source      | `tsc`, `tsx`         |
@@ -261,4 +290,4 @@ type MemberStatus = "invited" | "active" | "suspended" | "removed";
 
 **END OF DEFINITIONS**
 
-Next document: [02\_PROTOCOLS.md](./02_PROTOCOLS.md)
+Next document: [02_PROTOCOLS.md](./02_PROTOCOLS.md)

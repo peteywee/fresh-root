@@ -1,27 +1,34 @@
 # Guardrails Quick Start
+
 **For developers:** Get up and running with guardrails in 5 minutes.
 
 ---
 
 ## Day 1: Understanding Your Workflow
+
 Every commit and push runs **three guardrails** automatically:
 
 ### Pre-Commit (When You Type `git commit`)
+
 ✅ Handler signature validation (A09 invariant) ✅ Markdown linting ✅ Block merge conflict markers
 ✅ **Block deprecated scripts** (test:all, deps:check, deps:dedupe)
 
 ### Pre-Push (When You Type `git push`)
+
 ✅ TypeScript typecheck (all packages) ✅ ESLint (import rules enforced) ✅ Syncpack version
 validation ✅ Repomix dependency analysis (non-blocking)
 
 ### Pull Request (GitHub Actions)
+
 ✅ Full guardrails suite blocking (breaking PR if it fails) ✅ Handler signature validation ✅
 Typecheck + Lint + Workspace consistency
 
 ---
 
 ## Common Tasks
+
 ### Add a New npm Script
+
 **Decision tree:**
 
 ```plaintext
@@ -51,11 +58,12 @@ git commit -m "chore: add script 'check'"
 ---
 
 ### My Commit Was Blocked
+
 **Common blockers:**
 
 | Error                      | Cause                             | Fix                                    |
 | -------------------------- | --------------------------------- | -------------------------------------- |
-| `Handler signature failed` | route.ts mismatch                 | See A09\_HANDLER\_SIGNATURE\_INVARIANT.md |
+| `Handler signature failed` | route.ts mismatch                 | See A09_HANDLER_SIGNATURE_INVARIANT.md |
 | `Deprecated script added`  | test:all, deps:check, deps:dedupe | See DEPRECATIONS.md                    |
 | `Markdown lint failed`     | MD040, MD022 spacing              | Run `pnpm format`                      |
 | `Typecheck failed`         | TypeScript errors                 | Run `pnpm typecheck`                   |
@@ -73,6 +81,7 @@ SKIP_LINT=1 git push origin branch-name
 ---
 
 ### Run Guardrails Manually
+
 ```bash
 pnpm check                    # Quick check
 pnpm guardrails               # Full suite
@@ -85,6 +94,7 @@ pnpm format                   # Format code
 ---
 
 ### Low Memory Machine
+
 Pre-push hooks are expensive on limited RAM:
 
 ```bash
@@ -96,14 +106,16 @@ SKIP_CHECKS=1 git push origin branch-name
 ---
 
 ## Detailed Guides
-- **[GUARDRAILS\_GUIDE.md](GUARDRAILS_GUIDE.md)** — How each tool works
-- **[GUARDRAILS\_EXAMPLES.md](GUARDRAILS_EXAMPLES.md)** — 10 real-world scenarios
-- **[GUARDRAILS\_SCRIPTS.md](GUARDRAILS_SCRIPTS.md)** — npm scripts reference
+
+- **[GUARDRAILS_GUIDE.md](GUARDRAILS_GUIDE.md)** — How each tool works
+- **[GUARDRAILS_EXAMPLES.md](GUARDRAILS_EXAMPLES.md)** — 10 real-world scenarios
+- **[GUARDRAILS_SCRIPTS.md](GUARDRAILS_SCRIPTS.md)** — npm scripts reference
 - **[DEPRECATIONS.md](../DEPRECATIONS.md)** — Removed scripts + migrations
 
 ---
 
 ## What Guardrails Prevent
+
 | Issue                              | Guardrail            | Tool                   |
 | ---------------------------------- | -------------------- | ---------------------- |
 | Cross-package imports leaking APIs | Import rules         | `eslint-plugin-import` |
@@ -116,6 +128,7 @@ SKIP_CHECKS=1 git push origin branch-name
 ---
 
 ## Still Stuck
+
 1. Read the error message — it tells you what to do
 2. Check the error reference (e.g., "See .github/governance/amendments/A09\_...")
 3. Run the suggested quick fix command

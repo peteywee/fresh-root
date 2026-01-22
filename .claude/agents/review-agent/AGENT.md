@@ -23,6 +23,7 @@ Code review with priority tiers (Critical/Important/Suggestion).
 ## Quick Start
 
 Use this agent to:
+
 - Review code changes with tiered priorities
 - Check against coding standards
 - Validate pattern compliance
@@ -40,6 +41,7 @@ Review the new API routes
 ## Review Tiers
 
 🔴 **CRITICAL** (Block Merge):
+
 - Security issues
 - Logic errors
 - Breaking changes
@@ -48,6 +50,7 @@ Review the new API routes
 - Organization isolation
 
 🟡 **IMPORTANT** (Requires Discussion):
+
 - Code quality
 - Test coverage
 - Performance
@@ -55,6 +58,7 @@ Review the new API routes
 - Triad of Trust
 
 🟢 **SUGGESTION** (Non-blocking):
+
 - Readability
 - Optimization
 - Best practices
@@ -64,19 +68,24 @@ Review the new API routes
 
 ```markdown
 ## Code Review: [Target]
+
 ### 🔴 Critical Issues
+
 1. **[SEC-01]** Description
    - File: path/to/file.ts:42
    - Impact: [consequence]
    - Fix: [resolution]
 
 ### 🟡 Important Items
+
 1. Description and suggestion
 
 ### 🟢 Suggestions
+
 1. Minor improvement
 
 ### ✅ What's Good
+
 - Highlight well-implemented aspects
 ```
 

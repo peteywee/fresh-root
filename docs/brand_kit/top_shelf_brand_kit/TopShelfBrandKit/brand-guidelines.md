@@ -4,9 +4,11 @@
 
 ## 1. Brand Essence
 
-Top Shelf Service LLC™ exists to take the heavy, repetitive operational work off small operators so they can focus on people and profit.
+Top Shelf Service LLC™ exists to take the heavy, repetitive operational work off small operators so
+they can focus on people and profit.
 
-The logo — a lone figure pushing a massive boulder uphill — represents the invisible, exhausting labor that your clients do every day. Our promise is simple: **we move the boulder for them.**
+The logo — a lone figure pushing a massive boulder uphill — represents the invisible, exhausting
+labor that your clients do every day. Our promise is simple: **we move the boulder for them.**
 
 ## 2. Brand Voice
 
@@ -22,8 +24,10 @@ The logo — a lone figure pushing a massive boulder uphill — represents the i
 
 ## 3. Logo Usage
 
-- **Primary logo:** full illustration of the figure and boulder. Use on hero sections, print, and brand collateral.
-- **Icon logo:** simplified square mark cropped from the illustration. Use for app icons and favicons.
+- **Primary logo:** full illustration of the figure and boulder. Use on hero sections, print, and
+  brand collateral.
+- **Icon logo:** simplified square mark cropped from the illustration. Use for app icons and
+  favicons.
 - Always maintain clear space equal to the height of the figure’s head around the logo.
 - Minimum digital size: 64px width for the primary mark.
 - Do not distort, recolor, or place the logo on busy photographic backgrounds.
@@ -52,8 +56,8 @@ Usage:
 
 Preferred typefaces (both available via Google Fonts):
 
-- **Headlines:** *Montserrat* (600–800 weight)
-- **Body / UI:** *Inter* (400–600 weight)
+- **Headlines:** _Montserrat_ (600–800 weight)
+- **Body / UI:** _Inter_ (400–600 weight)
 
 Fallback stacks:
 
@@ -62,7 +66,8 @@ Fallback stacks:
 
 ## 6. Imagery
 
-- Bias toward black‑and‑white or desaturated photography showing real work: kitchens, line cooks, dish pits, managers with clipboards, late‑night cleanup.
+- Bias toward black‑and‑white or desaturated photography showing real work: kitchens, line cooks,
+  dish pits, managers with clipboards, late‑night cleanup.
 - Avoid staged stock photography with overly polished, smiling models.
 - When in doubt: choose gritty, honest imagery that looks like real life, not a commercial.
 

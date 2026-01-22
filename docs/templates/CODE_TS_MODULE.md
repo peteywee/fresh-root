@@ -16,7 +16,8 @@ related-docs:
   - ../standards/ERROR_PREVENTION_PATTERNS.md
 ---
 
-# Template: CODE\_TS\_MODULE
+# Template: CODE_TS_MODULE
+
 ```ts
 /**
  * ${Name} module

@@ -1,8 +1,6 @@
 # Logic Agent CLI Reference
 
-**Namespace**: `/logic`
-**Version**: 2.0.0
-**Confidence Floor**: 85% (always-on, non-negotiable)
+**Namespace**: `/logic` **Version**: 2.0.0 **Confidence Floor**: 85% (always-on, non-negotiable)
 
 ---
 
@@ -66,22 +64,26 @@ Full 5-step verification protocol.
 ## Verification: [Subject]
 
 ### 1. CLAIM
+
 [Statement being verified]
 
 ### 2. EVIDENCE NEEDED
+
 - [ ] [Specific evidence A]
 - [ ] [Specific evidence B]
 
 ### 3. EVIDENCE GATHERED
+
 [Actual proof with file:line references]
 
 ### 4. ANALYSIS
+
 [Does evidence support claim?]
 
 ### 5. VERDICT
-**Confidence**: XX% [CLEAR|CAUTION|YELLOW|GARBAGE]
-**Proceed**: YES/NO
-**Risks**: [remaining unknowns]
+
+**Confidence**: XX% [CLEAR|CAUTION|YELLOW|GARBAGE] **Proceed**: YES/NO **Risks**: [remaining
+unknowns]
 ```
 
 ---
@@ -100,14 +102,13 @@ Verify dependency chain (A→B→C all solid?).
 ```markdown
 ## Chain Analysis: [Subject]
 
-| Link | Status | Evidence |
-|------|--------|----------|
-| A → B | ✓ verified | [file:line] |
-| B → C | ✗ assumed | NEEDS VERIFICATION |
+| Link  | Status     | Evidence           |
+| ----- | ---------- | ------------------ |
+| A → B | ✓ verified | [file:line]        |
+| B → C | ✗ assumed  | NEEDS VERIFICATION |
 
-**Weakest link**: B → C (unverified)
-**Chain confidence**: 75% 🟠 YELLOW
-**Action**: Verify B → C before proceeding
+**Weakest link**: B → C (unverified) **Chain confidence**: 75% 🟠 YELLOW **Action**: Verify B → C
+before proceeding
 ```
 
 **Visual Output** (`-v`):
@@ -144,27 +145,30 @@ Risk assessment matrix.
 ## Risk Assessment: [Subject]
 
 ### 🔴 CRITICAL (Block Deploy)
-| Risk | Probability | Impact | Mitigation |
-|------|-------------|--------|------------|
-| Data loss | 10% | 100% | Add rollback |
+
+| Risk      | Probability | Impact | Mitigation   |
+| --------- | ----------- | ------ | ------------ |
+| Data loss | 10%         | 100%   | Add rollback |
 
 ### 🟠 HIGH (Mitigate First)
-| Risk | Probability | Impact | Mitigation |
-|------|-------------|--------|------------|
-| Timeout | 40% | 60% | Circuit breaker |
+
+| Risk    | Probability | Impact | Mitigation      |
+| ------- | ----------- | ------ | --------------- |
+| Timeout | 40%         | 60%    | Circuit breaker |
 
 ### 🟡 MEDIUM (Acknowledge)
-| Risk | Probability | Impact | Mitigation |
-|------|-------------|--------|------------|
-| Stale cache | 30% | 30% | TTL + hooks |
+
+| Risk        | Probability | Impact | Mitigation  |
+| ----------- | ----------- | ------ | ----------- |
+| Stale cache | 30%         | 30%    | TTL + hooks |
 
 ### 🟢 LOW (Monitor)
-| Risk | Probability | Impact | Mitigation |
-|------|-------------|--------|------------|
-| Log noise | 80% | 5% | Log config |
 
-**Risk Score**: 65/100
-**Recommendation**: Address CRITICAL + HIGH before deploy
+| Risk      | Probability | Impact | Mitigation |
+| --------- | ----------- | ------ | ---------- |
+| Log noise | 80%         | 5%     | Log config |
+
+**Risk Score**: 65/100 **Recommendation**: Address CRITICAL + HIGH before deploy
 ```
 
 **Visual Output** (`-v`):
@@ -211,15 +215,15 @@ Test coverage analysis.
 ```markdown
 ## Test Coverage: [Subject]
 
-| Category | Coverage | Status |
-|----------|----------|--------|
-| Happy path | 100% | ✅ |
-| Error cases | 40% | ⚠️ Missing: timeout, network |
-| Integration | 0% | ❌ No service tests |
-| Scale/Load | 0% | ❌ No perf tests |
+| Category    | Coverage | Status                       |
+| ----------- | -------- | ---------------------------- |
+| Happy path  | 100%     | ✅                           |
+| Error cases | 40%      | ⚠️ Missing: timeout, network |
+| Integration | 0%       | ❌ No service tests          |
+| Scale/Load  | 0%       | ❌ No perf tests             |
 
-**Overall**: 35% 🔴 GARBAGE
-**Missing Critical**:
+**Overall**: 35% 🔴 GARBAGE **Missing Critical**:
+
 - [ ] Timeout handling
 - [ ] Network failure
 - [ ] Database integration
@@ -276,24 +280,27 @@ Find hidden assumptions.
 ## Hidden Assumptions: [Subject]
 
 ### Verified ✓
-| Assumption | Evidence |
-|------------|----------|
+
+| Assumption    | Evidence            |
+| ------------- | ------------------- |
 | API available | Health check passes |
 
 ### Unverified ⚠️
-| Assumption | Risk | Action |
-|------------|------|--------|
-| Cache warm | Slow first request | Add warmup |
-| DB indexed | Query timeout | Verify indexes |
+
+| Assumption | Risk               | Action         |
+| ---------- | ------------------ | -------------- |
+| Cache warm | Slow first request | Add warmup     |
+| DB indexed | Query timeout      | Verify indexes |
 
 ### Dangerous 🔴
-| Assumption | Why Dangerous |
-|------------|---------------|
-| "Works locally" | CI differs |
+
+| Assumption        | Why Dangerous     |
+| ----------------- | ----------------- |
+| "Works locally"   | CI differs        |
 | "User won't do X" | Users always do X |
 
-**Count**: 12 total, 4 verified, 6 unverified, 2 dangerous
-**Impact**: 75% confidence (too many unverified)
+**Count**: 12 total, 4 verified, 6 unverified, 2 dangerous **Impact**: 75% confidence (too many
+unverified)
 ```
 
 ---
@@ -313,17 +320,20 @@ Attack the solution systematically.
 ## Red Team Analysis: [Subject]
 
 ### Attack Vectors
-| Vector | Exploitability | Impact | Status |
-|--------|---------------|--------|--------|
-| Token theft | Medium | High | ✓ Mitigated |
-| Session fixation | Easy | High | 🔴 VULNERABLE |
+
+| Vector           | Exploitability | Impact | Status        |
+| ---------------- | -------------- | ------ | ------------- |
+| Token theft      | Medium         | High   | ✓ Mitigated   |
+| Session fixation | Easy           | High   | 🔴 VULNERABLE |
 
 ### Vulnerabilities Found
+
 1. **Session fixation** (CRITICAL)
    - No rotation on login
    - Fix: Regenerate session
 
 ### What Would Break This
+
 - [ ] Network interception (HTTPS mitigates)
 - [ ] XSS (CSP mitigates)
 
@@ -363,19 +373,20 @@ Rate certainty level with evidence breakdown.
 ## Confidence Rating: [Subject]
 
 ### Rating Breakdown
-| Factor | Score | Evidence |
-|--------|-------|----------|
-| Code verified | 95% | TS strict, lint passing |
-| Tests passing | 90% | Unit + integration green |
-| Edge cases | 60% | Missing timeout tests |
-| Scale tested | 0% | No load testing |
+
+| Factor        | Score | Evidence                 |
+| ------------- | ----- | ------------------------ |
+| Code verified | 95%   | TS strict, lint passing  |
+| Tests passing | 90%   | Unit + integration green |
+| Edge cases    | 60%   | Missing timeout tests    |
+| Scale tested  | 0%    | No load testing          |
 
 ### Calculation
+
 (95 + 90 + 60 + 0) / 4 = 61%
 
-**Overall**: 61% 🔴 GARBAGE
-**Floor**: 85% (NOT MET)
-**Verdict**: Cannot proceed until scale testing complete
+**Overall**: 61% 🔴 GARBAGE **Floor**: 85% (NOT MET) **Verdict**: Cannot proceed until scale testing
+complete
 ```
 
 ---
@@ -394,26 +405,30 @@ Document a decision with evidence.
 ```markdown
 ## Decision Record: [Subject]
 
-**Date**: [timestamp]
-**Tags**: #arch
+**Date**: [timestamp] **Tags**: #arch
 
 ### Context
+
 [Why this decision is needed]
 
 ### Decision
+
 [What was decided]
 
 ### Alternatives Considered
-| Option | Pros | Cons | Why Not |
-|--------|------|------|---------|
-| Option A | Fast | Complex | Selected ✓ |
-| Option B | Simple | Slow | Perf concern |
+
+| Option   | Pros   | Cons    | Why Not      |
+| -------- | ------ | ------- | ------------ |
+| Option A | Fast   | Complex | Selected ✓   |
+| Option B | Simple | Slow    | Perf concern |
 
 ### Evidence
+
 - [Benchmark data]
 - [Test results]
 
 ### Risks Accepted
+
 - [ ] [Risk 1]
 - [ ] [Risk 2]
 
@@ -432,18 +447,21 @@ Show evidence, not theory.
 
 **Output**:
 
-```markdown
+````markdown
 ## Ground Truth: [Subject]
 
 ### Claim
+
 "API handles 1000 req/s"
 
 ### Theory (What We Think)
+
 - Load balancer distributes evenly
 - Database handles queries
 
 ### Reality (What We Know)
-```bash
+
+````bash
 $ hey -n 1000 -c 100 https://api.example.com/health
 Requests/sec: 810.37
 ```text
@@ -455,8 +473,8 @@ Requests/sec: 810.37
 "API handles 810 req/s verified, not 1000 as claimed"
 
 **Confidence**: 95% (based on test)
-
-```
+````
+````
 
 ---
 
@@ -611,7 +629,5 @@ FLOOR: 85% minimum confidence
 
 ---
 
-**Version**: 2.0.0
-**Last Updated**: December 28, 2025
-**Hierarchy**: L2 (Instructions Layer)
-**See Also**: [logic-agent.instructions.md](./logic-agent.instructions.md)
+**Version**: 2.0.0 **Last Updated**: December 28, 2025 **Hierarchy**: L2 (Instructions Layer) **See
+Also**: [logic-agent.instructions.md](./logic-agent.instructions.md)

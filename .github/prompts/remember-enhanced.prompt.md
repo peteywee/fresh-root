@@ -164,11 +164,18 @@ _Indexed, searchable knowledge base organized by domain and lesson._
 - Last Updated: {date}
 
 ## By Domain
-...tables for each domain with lesson metadata...
+...
+
+tables for each domain with lesson metadata...
 
 ## By Tag
+
 ...cross-referenced tags mapping to lessons...
 
 ## By Type
+
 ...lessons organized by pattern/gotcha/best-practice/etc...
+
+```
+
 ```
