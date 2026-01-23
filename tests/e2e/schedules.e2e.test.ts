@@ -60,8 +60,12 @@ describe("schedules API E2E Tests", () => {
     });
 
     it("should handle valid request", async () => {
+      const now = Date.now();
       const validPayload = {
-        // TODO: Add valid payload based on schema
+        orgId: "org-test",
+        name: "Test Schedule",
+        startDate: now + 24 * 60 * 60 * 1000,
+        endDate: now + 7 * 24 * 60 * 60 * 1000,
       };
 
       const { response } = await safeFetch(`${BASE_URL}/api/schedules`, {

@@ -24,7 +24,9 @@ describe("organizations-[id]-members-[memberId] API E2E Tests", () => {
     // Requires authentication
 
     it("should return 200 for valid request", async () => {
-      const { response } = await safeFetch(`${BASE_URL}/api/organizations/[id]/members/[memberId]`);
+      const { response } = await safeFetch(
+        `${BASE_URL}/api/organizations/org-test/members/member-test`,
+      );
       if (!serverAvailable || !response) {
         expect(true).toBe(true); // Skip gracefully
         return;
@@ -34,7 +36,9 @@ describe("organizations-[id]-members-[memberId] API E2E Tests", () => {
     });
 
     it("should return 401 without authentication", async () => {
-      const { response } = await safeFetch(`${BASE_URL}/api/organizations/[id]/members/[memberId]`);
+      const { response } = await safeFetch(
+        `${BASE_URL}/api/organizations/org-test/members/member-test`,
+      );
       if (!serverAvailable || !response) {
         expect(true).toBe(true); // Skip gracefully
         return;
@@ -49,7 +53,7 @@ describe("organizations-[id]-members-[memberId] API E2E Tests", () => {
 
     it("should return 400 for invalid input", async () => {
       const { response } = await safeFetch(
-        `${BASE_URL}/api/organizations/[id]/members/[memberId]`,
+        `${BASE_URL}/api/organizations/org-test/members/member-test`,
         {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
@@ -65,11 +69,11 @@ describe("organizations-[id]-members-[memberId] API E2E Tests", () => {
 
     it("should handle valid request", async () => {
       const validPayload = {
-        // TODO: Add valid payload based on UpdateMemberApiSchema
+        role: "manager",
       };
 
       const { response } = await safeFetch(
-        `${BASE_URL}/api/organizations/[id]/members/[memberId]`,
+        `${BASE_URL}/api/organizations/org-test/members/member-test`,
         {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
@@ -91,7 +95,7 @@ describe("organizations-[id]-members-[memberId] API E2E Tests", () => {
 
     it("should require authentication", async () => {
       const { response } = await safeFetch(
-        `${BASE_URL}/api/organizations/[id]/members/[memberId]`,
+        `${BASE_URL}/api/organizations/org-test/members/member-test`,
         {
           method: "DELETE",
         },

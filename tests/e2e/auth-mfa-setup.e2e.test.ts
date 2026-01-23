@@ -38,7 +38,7 @@ describe("auth-mfa-setup API E2E Tests", () => {
 
     it("should handle valid request", async () => {
       const validPayload = {
-        // TODO: Add valid payload based on schema
+        requestId: "setup-test",
       };
 
       const { response } = await safeFetch(`${BASE_URL}/api/auth/mfa/setup`, {

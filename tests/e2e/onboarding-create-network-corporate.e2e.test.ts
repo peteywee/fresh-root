@@ -39,7 +39,8 @@ describe("onboarding-create-network-corporate API E2E Tests", () => {
 
     it("should handle valid request", async () => {
       const validPayload = {
-        // TODO: Add valid payload based on CreateCorporateOnboardingSchema
+        networkName: "Test Network",
+        corporateName: "Test Corporate",
       };
 
       const { response } = await safeFetch(`${BASE_URL}/api/onboarding/create-network-corporate`, {

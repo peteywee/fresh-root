@@ -60,7 +60,9 @@ describe("zones API E2E Tests", () => {
 
     it("should handle valid request", async () => {
       const validPayload = {
-        // TODO: Add valid payload based on schema
+        orgId: "org-test",
+        venueId: "venue-test",
+        name: "Test Zone",
       };
 
       const { response } = await safeFetch(`${BASE_URL}/api/zones`, {
