@@ -575,10 +575,7 @@ Quick reference...
 ### Git & Merge Operations
 | Agent | Invocation | Purpose | Status |
 | --- | --- | --- | --- |
-<<<<<<< HEAD
-=======
 | **PR Specialist** | `@pr`, `/pr`, `/create-pr` | Full PR lifecycle - create, review, merge, cleanup | ✅ |
->>>>>>> origin/dev
 | **PR Conflict Resolver** | (agent-based) | Merge conflicts, review feedback, PR cleanup | ✅ |
 
 ---
@@ -592,23 +589,13 @@ Quick reference...
 | **Security & DevOps** | 2 | ✅ Active |
 | **Testing & Quality** | 2 | ✅ Active |
 | **Planning & Documentation** | 5 | ✅ Active |
-<<<<<<< HEAD
-| **Git Operations** | 1 | ✅ Active |
-| **TOTAL L4a AGENTS** | **12 discoverable** | ✅ Complete |
-| **TOTAL Ecosystem** | **13+ agents** | ✅ Full coverage |
-=======
 | **Git Operations** | 2 | ✅ Active |
 | **TOTAL L4a AGENTS** | **13 discoverable** | ✅ Complete |
 | **TOTAL Ecosystem** | **14+ agents** | ✅ Full coverage |
->>>>>>> origin/dev
 
 ---
 
 ## Last Updated
 
-<<<<<<< HEAD
-**January 15, 2026** — All 12 L4a agents completed and registered
-=======
 **January 16, 2026** — All 13 L4a agents completed and registered (added PR Specialist)
->>>>>>> origin/dev
 

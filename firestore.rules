@@ -62,8 +62,9 @@ service cloud.firestore {
 
       // Schedules as subcollection under orgs
       match /schedules/{scheduleId} {
-  allow read: if isSignedIn() && (sameOrg(orgId) || isOrgMember(orgId));
-        allow write: if isSignedIn() && ((hasAnyRole(['org_owner','admin','corporate','manager','scheduler']) && sameOrg(orgId)) || hasAnyRoleLegacy(orgId, ['owner','admin','manager','scheduler']));
+      allow read: if isSignedIn() && (sameOrg(orgId) || isOrgMember(orgId));
+        allow create, update: if isSignedIn() && ((hasAnyRole(['org_owner','admin','corporate','manager','scheduler']) && sameOrg(orgId)) || hasAnyRoleLegacy(orgId, ['owner','admin','manager','scheduler']));
+        allow delete: if isSignedIn() && ((hasAnyRole(['org_owner','admin','manager']) && sameOrg(orgId)) || hasAnyRoleLegacy(orgId, ['owner','admin','manager']));
       }
 
       // Positions as subcollection under orgs
@@ -115,7 +116,8 @@ service cloud.firestore {
       // Schedules as subcollection under organizations
       match /schedules/{scheduleId} {
         allow read: if isSignedIn() && (sameOrg(orgId) || isOrgMember(orgId));
-        allow write: if isSignedIn() && ((hasAnyRole(['org_owner','admin','manager','scheduler']) && sameOrg(orgId)) || hasAnyRoleLegacy(orgId, ['owner','admin','manager','scheduler']));
+        allow create, update: if isSignedIn() && ((hasAnyRole(['org_owner','admin','manager','scheduler']) && sameOrg(orgId)) || hasAnyRoleLegacy(orgId, ['owner','admin','manager','scheduler']));
+        allow delete: if isSignedIn() && ((hasAnyRole(['org_owner','admin','manager']) && sameOrg(orgId)) || hasAnyRoleLegacy(orgId, ['owner','admin','manager']));
       }
 
       // Positions as subcollection under organizations

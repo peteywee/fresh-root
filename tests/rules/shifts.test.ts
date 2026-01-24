@@ -271,11 +271,7 @@ describe("rules: shifts collection", () => {
         await db.collection("memberships").doc(membershipId("other-user", otherOrg)).set({
           uid: "other-user",
           orgId: otherOrg,
-<<<<<<< HEAD
-          role: "manager",
-=======
           roles: ["manager"],
->>>>>>> origin/dev
           status: "active",
         });
       });
@@ -286,17 +282,6 @@ describe("rules: shifts collection", () => {
       );
     });
 
-<<<<<<< HEAD
-    it("denies manager from accessing shifts in different org even with same uid", async () => {
-      const otherOrg = "org-different";
-      await seed(env, async (db) => {
-        await db.collection("orgs").doc(otherOrg).set({ name: "Different Org" });
-        // Same user but in different org
-        await db.collection("memberships").doc(membershipId("manager-user", otherOrg)).set({
-          uid: "manager-user",
-          orgId: otherOrg,
-          role: "manager",
-=======
     it("denies manager from different org without target org membership", async () => {
       const otherOrg = "org-different";
       await seed(env, async (db) => {
@@ -306,34 +291,23 @@ describe("rules: shifts collection", () => {
           uid: "cross-org-manager",
           orgId: otherOrg,
           roles: ["manager"],
->>>>>>> origin/dev
           status: "active",
         });
       });
 
-<<<<<<< HEAD
-      const managerDifferentOrg = ctxUser(env, "manager-user", { orgId: otherOrg }).firestore();
-      await assertFails(
-        managerDifferentOrg.collection(`orgs/${orgId}/schedules/${scheduleId}/shifts`).doc(shiftId).get()
-=======
       // This user only has membership in org-different, not org-shifts
       const crossOrgManager = ctxUser(env, "cross-org-manager", { orgId: otherOrg }).firestore();
       await assertFails(
         crossOrgManager.collection(`orgs/${orgId}/schedules/${scheduleId}/shifts`).doc(shiftId).get()
->>>>>>> origin/dev
       );
     });
   });
 
-<<<<<<< HEAD
-  describe("data validation", () => {
-=======
   // Note: Data validation (required fields, orgId matching path) is not currently
   // enforced in Firestore rules. These validations should be implemented in
   // application code or added to rules if schema enforcement is needed.
   // Skipping these tests as the rules only check role-based permissions.
   describe.skip("data validation (not implemented in rules)", () => {
->>>>>>> origin/dev
     it("denies creating shift with missing required fields", async () => {
       const manager = ctxUser(env, "manager-user", { orgId }).firestore();
       await assertFails(
