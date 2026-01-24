@@ -483,7 +483,6 @@ describe("attendance records and join tokens", () => {
         })
       );
     });
-
     it("should deny cross-org access at top-level path", async () => {
       const ctx = ctxUser(testEnv, "user-other", { orgId: "org-456", roles: ["manager"] });
       const tokenRef = ctx.firestore().collection("join_tokens").doc("org-123").collection("join_tokens").doc("token-2");
