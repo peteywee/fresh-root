@@ -28,6 +28,7 @@ const defaultConfig: Required<PerformanceConfig> = {
 };
 
 let config: Required<PerformanceConfig> = { ...defaultConfig };
+const inFlightOperations = new Map<string, Promise<unknown>>();
 
 /**
  * Configure performance monitoring
@@ -57,14 +58,25 @@ export async function measurePerformance<T>(
     const result = await operation();
     const duration = Date.now() - startTime;
 
+    if (config.enableMetrics) {
+      globalMetrics.record(operationName, duration);
+    }
+
     // Log slow queries
     if (config.slowQueryThreshold && duration > config.slowQueryThreshold) {
-      console.warn(`[SLOW QUERY] ${operationName} took ${duration}ms`, {
-        operation: operationName,
+      span.addEvent("slow_query_detected", {
         duration,
         threshold: config.slowQueryThreshold,
         ...attributes,
       });
+      if (process.env.NODE_ENV !== "production") {
+        console.warn(`[SLOW QUERY] ${operationName} took ${duration}ms`, {
+          operation: operationName,
+          duration,
+          threshold: config.slowQueryThreshold,
+          ...attributes,
+        });
+      }
     }
 
     span.setAttributes({
@@ -119,17 +131,36 @@ export async function cachedOperation<T>(
     // Try to get from cache
     const cached = await redis.get(cacheKey);
     if (cached) {
-      return JSON.parse(cached) as T;
+      try {
+        return JSON.parse(cached) as T;
+      } catch (parseError) {
+        console.error(`[CACHE ERROR] Failed to parse cached data for key: ${cacheKey}`, parseError);
+        await redis.del(cacheKey);
+      }
+    }
+
+    const inFlight = inFlightOperations.get(cacheKey);
+    if (inFlight) {
+      return (await inFlight) as T;
     }
 
     // Cache miss - execute operation
-    const result = await operation();
+    const operationPromise = (async () => {
+      const result = await operation();
 
-    // Store in cache with TTL
-    const ttl = options?.ttl ?? config.cacheTTL;
-    await redis.set(cacheKey, JSON.stringify(result), { ex: ttl });
+      // Store in cache with TTL
+      const ttl = options?.ttl ?? config.cacheTTL;
+      await redis.set(cacheKey, JSON.stringify(result), { ex: ttl });
 
-    return result;
+      return result;
+    })();
+
+    inFlightOperations.set(cacheKey, operationPromise);
+    try {
+      return await operationPromise;
+    } finally {
+      inFlightOperations.delete(cacheKey);
+    }
   } catch (error) {
     console.error(`[CACHE ERROR] Failed to use cache for key: ${cacheKey}`, error);
     // Fall back to direct operation

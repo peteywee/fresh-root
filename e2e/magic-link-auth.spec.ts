@@ -132,7 +132,7 @@ test.describe("Magic Link Authentication - Signup Flow", () => {
 
   test("should show error state for network failures", async ({ page }) => {
     // Setup: Intercept network and simulate failure
-    await page.route("**/api/**", (route) => route.abort());
+    await page.route("**/api/auth/send-magic-link", (route) => route.abort());
 
     // Try to send magic link
     await page.locator('button:has-text("Create Account")').click();
@@ -229,15 +229,13 @@ test.describe("Magic Link Authentication - Callback Page", () => {
 
     // Eventually should redirect to / and then middleware handles onboarding/dashboard redirect
     // Wait for navigation
-    await page.waitForURL(/\/(onboarding|dashboard|$)/, { timeout: 10000 }).catch(() => {
-      // If we're at root, that's also okay (middleware will redirect)
-    });
+    await page.waitForURL(/\/(onboarding|dashboard)?$/, { timeout: 10000 });
 
-    const finalUrl = page.url();
+    const finalUrl = new URL(page.url());
     expect(
-      finalUrl.includes("onboarding") || 
-      finalUrl.includes("dashboard") || 
-      finalUrl.includes("localhost:3000/")
+      finalUrl.pathname === "/onboarding" ||
+      finalUrl.pathname === "/dashboard" ||
+      finalUrl.pathname === "/"
     ).toBeTruthy();
   });
 });

@@ -12,7 +12,7 @@ module.exports.agent = {
 
   invocations: {
     mentions: ["@pr", "@pull-request", "@pr-specialist"],
-    commands: ["/pr", "/pull-request", "/create-pr"],
+    slashCommands: ["/pr", "/pull-request", "/create-pr"],
     aliases: ["pr-helper", "pr-manager"],
   },
 

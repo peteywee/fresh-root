@@ -37,6 +37,19 @@ function zodToOpenAPI(schema: z.ZodTypeAny): any {
   if (schema instanceof z.ZodBoolean) {
     return { type: "boolean" };
   }
+  if (schema instanceof z.ZodUnion) {
+    return {
+      oneOf: (schema as any)._def.options.map(zodToOpenAPI),
+    };
+  }
+  if (schema instanceof z.ZodIntersection) {
+    return {
+      allOf: [
+        zodToOpenAPI((schema as any)._def.left),
+        zodToOpenAPI((schema as any)._def.right),
+      ],
+    };
+  }
   if (schema instanceof z.ZodArray) {
     return {
       type: "array",
@@ -71,7 +84,8 @@ function zodToOpenAPI(schema: z.ZodTypeAny): any {
     return zodToOpenAPI((schema as any)._def.innerType);
   }
   if (schema instanceof z.ZodNullable) {
-    return zodToOpenAPI((schema as any)._def.innerType);
+    const innerSchema = zodToOpenAPI((schema as any)._def.innerType);
+    return { ...innerSchema, nullable: true };
   }
 
   // Default fallback
