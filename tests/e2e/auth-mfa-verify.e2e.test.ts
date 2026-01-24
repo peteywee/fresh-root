@@ -38,7 +38,8 @@ describe("auth-mfa-verify API E2E Tests", () => {
 
     it("should handle valid request", async () => {
       const validPayload = {
-        // TODO: Add valid payload based on schema
+        secret: "JBSWY3DPEHPK3PXP",
+        token: "123456",
       };
 
       const { response } = await safeFetch(`${BASE_URL}/api/auth/mfa/verify`, {

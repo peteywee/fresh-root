@@ -39,7 +39,7 @@ describe("onboarding-activate-network API E2E Tests", () => {
 
     it("should handle valid request", async () => {
       const validPayload = {
-        // TODO: Add valid payload based on ActivateNetworkSchema
+        networkId: "network-test",
       };
 
       const { response } = await safeFetch(`${BASE_URL}/api/onboarding/activate-network`, {

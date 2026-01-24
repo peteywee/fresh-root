@@ -1,13 +1,21 @@
 import type { Config } from "tailwindcss";
 
+const tailwindAnimate = (() => {
+  try {
+    return require("tailwindcss-animate");
+  } catch {
+    return null;
+  }
+})();
+
 const config: Config = {
   darkMode: ["class"],
   content: [
-    "./pages/**/*.{ts,tsx}",
-    "./components/**/*.{ts,tsx}",
-    "./app/**/*.{ts,tsx}",
-    "./src/**/*.{ts,tsx}",
-    "../../packages/ui/src/**/*.{ts,tsx}"
+    "./pages/**/*.{ts,tsx,mdx}",
+    "./components/**/*.{ts,tsx,mdx}",
+    "./app/**/*.{ts,tsx,mdx}",
+    "./src/**/*.{ts,tsx,mdx}",
+    "../../packages/ui/src/**/*.{ts,tsx}",
   ],
   theme: {
     container: {
@@ -28,6 +36,11 @@ const config: Config = {
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
+        surface: "#1a2332",
+        "surface-card": "#232f42",
+        "surface-accent": "#3a4a5f",
+        "text-primary": "#f2f4f8",
+        "text-muted": "#b2b8cc",
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
@@ -70,7 +83,7 @@ const config: Config = {
           green: "hsl(var(--schedule-green))",
           rose: "hsl(var(--schedule-rose))",
           cyan: "hsl(var(--schedule-cyan))",
-        }
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -89,7 +102,7 @@ const config: Config = {
         "fade-in-up": {
           "0%": { opacity: "0", transform: "translateY(10px)" },
           "100%": { opacity: "1", transform: "translateY(0)" },
-        }
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -98,7 +111,7 @@ const config: Config = {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [tailwindAnimate].filter(Boolean),
 };
 
 export default config;

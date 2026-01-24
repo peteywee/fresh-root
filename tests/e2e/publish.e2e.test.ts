@@ -39,7 +39,8 @@ describe("publish API E2E Tests", () => {
 
     it("should handle valid request", async () => {
       const validPayload = {
-        // TODO: Add valid payload based on schema
+        scheduleId: "schedule-test",
+        notifyUsers: true,
       };
 
       const { response } = await safeFetch(`${BASE_URL}/api/publish`, {
