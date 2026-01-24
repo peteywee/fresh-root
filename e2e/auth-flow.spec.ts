@@ -149,7 +149,7 @@ test.describe("Google OAuth - Integration", () => {
 
     // Listen for popup
     let popupPage: any = null;
-    const popupPromise = context.waitForEvent("page");
+    const popupPromise = context.waitForEvent("page", { timeout: 2000 });
 
     // Click Google button (might open popup)
     const googleButton = page.locator('button:has-text("Google")').or(
@@ -158,18 +158,14 @@ test.describe("Google OAuth - Integration", () => {
 
     // Depending on config, might open popup or redirect
     // For popup flow, we should see new page event
-    const _clickPromise = googleButton.click().catch(() => {
-      // Button might be disabled or unavailable
-    });
-
-    // Try to get popup (with timeout in case it doesn't open)
     try {
-      popupPage = await Promise.race([
+      [popupPage] = await Promise.all([
         popupPromise,
-        new Promise((resolve) => setTimeout(resolve, 2000)),
+        googleButton.click(),
       ]);
-    } catch (_e) {
-      // Popup might not open in test environment
+    } catch (_error) {
+      console.log("Google auth button click did not open a popup, which may be expected.");
+      popupPage = null;
     }
 
     // If popup opened, verify it's the Google auth page
