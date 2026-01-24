@@ -9,69 +9,42 @@ import { createAuthenticatedEndpoint } from "@fresh-schedules/api-framework";
 
 const WORKSPACE_ROOT = "/workspaces/fresh-root";
 
+const COMMANDS = {
+  ls: { binary: "ls", allowUserArgs: true },
+  pwd: { binary: "pwd", allowUserArgs: false },
+  cat: { binary: "cat", allowUserArgs: true },
+  head: { binary: "head", allowUserArgs: true },
+  tail: { binary: "tail", allowUserArgs: true },
+  grep: { binary: "grep", allowUserArgs: true },
+  find: { binary: "find", allowUserArgs: true },
+  echo: { binary: "echo", allowUserArgs: true },
+  git: { binary: "git", allowUserArgs: true },
+  gh: { binary: "gh", allowUserArgs: true },
+  repomix: { binary: "repomix", allowUserArgs: true },
+  tree: { binary: "tree", allowUserArgs: true },
+  wc: { binary: "wc", allowUserArgs: true },
+  which: { binary: "which", allowUserArgs: true },
+  env: { binary: "env", allowUserArgs: true },
+  printenv: { binary: "printenv", allowUserArgs: true },
+  sort: { binary: "sort", allowUserArgs: true },
+  uniq: { binary: "uniq", allowUserArgs: true },
+  awk: { binary: "awk", allowUserArgs: true },
+  sed: { binary: "sed", allowUserArgs: true },
+} as const;
+
+const COMMAND_IDS = Object.keys(COMMANDS) as [
+  keyof typeof COMMANDS,
+  ...(keyof typeof COMMANDS)[],
+];
+
 // Input validation schema
 const TerminalInputSchema = z.object({
-  command: z.string().min(1).max(1000),
-  cwd: z.string().default("/workspaces/fresh-root"),
+  commandId: z.enum(COMMAND_IDS),
+  args: z.array(z.string().min(1).max(120)).max(16).default([]),
+  cwd: z.string().default(WORKSPACE_ROOT),
 });
 
-// Security: Blocked dangerous patterns (with multiline flag)
-const BLOCKED_PATTERNS = [
-  /rm\s+-rf\s+\//,
-  /sudo\s+rm/,
-  /:\(\)\{.*:\|:.*\};:/, // Fork bomb
-  /mkfs/,
-  /dd\s+if=/,
-  />\s*\/dev\/sd/,
-  /chmod\s+-R\s+777\s+\//,
-  /\|\s*bash/, // Piped to bash
-  /\|\s*sh/, // Piped to sh
-  /eval\s*\(/,
-  /\$\(/, // Command substitution
-  /`/, // Backtick command substitution
-  /;\s*(rm|mkfs|dd|chmod|sudo)/, // Command chaining
-  /&&\s*(rm|mkfs|dd|chmod|sudo)/, // Logical AND with dangerous
-  /\|\|.*rm/, // OR with rm
-];
-
-// Allowed command prefixes
-const ALLOWED_PREFIXES = [
-  "ls",
-  "pwd",
-  "cat",
-  "head",
-  "tail",
-  "grep",
-  "find",
-  "echo",
-  "node",
-  "npm",
-  "pnpm",
-  "npx",
-  "yarn",
-  "git",
-  "gh",
-  "repomix",
-  "tree",
-  "wc",
-  "which",
-  "env",
-  "printenv",
-  "touch",
-  "cp",
-  "mv",
-  "less",
-  "more",
-  "sort",
-  "uniq",
-  "awk",
-  "sed",
-  "curl",
-  "wget",
-  "docker",
-  "kubectl",
-  "turbo",
-];
+const SAFE_TOKEN = /^[A-Za-z0-9._@:+=,/\-]+$/;
 
 function validateCwd(cwd: string): boolean {
   // Ensure cwd is within workspace
@@ -80,35 +53,17 @@ function validateCwd(cwd: string): boolean {
   return normalized.startsWith(workspaceNormalized) || normalized === workspaceNormalized;
 }
 
-function validateCommand(cmd: string): { valid: boolean; reason?: string } {
-  const trimmed = cmd.trim();
-
-  // Check for newlines to prevent injection
-  if (trimmed.includes("\n")) {
+function validateArgs(args: string[]): { valid: boolean; reason?: string } {
+  if (args.some((arg) => arg.includes("\n"))) {
     return { valid: false, reason: "Blocked: newlines not allowed" };
   }
 
-  // Allow only safe characters (no quotes, pipes, or shell metacharacters)
-  // This keeps spawn() arguments literal and prevents shell expansion even further.
-  const SAFE_TOKEN = /^[A-Za-z0-9._@:\/+-]+$/;
-  const tokens = trimmed.split(/\s+/);
-  if (tokens.some((token) => !SAFE_TOKEN.test(token))) {
-    return { valid: false, reason: "Blocked: command contains unsafe characters" };
+  if (args.some((arg) => !SAFE_TOKEN.test(arg))) {
+    return { valid: false, reason: "Blocked: arguments contain unsafe characters" };
   }
 
-  // Check blocked patterns
-  for (const pattern of BLOCKED_PATTERNS) {
-    if (pattern.test(trimmed)) {
-      return { valid: false, reason: "Blocked: dangerous command pattern detected" };
-    }
-  }
-
-  // Check if starts with allowed prefix
-  const firstWord = trimmed.split(/\s+/)[0];
-  const isAllowed = ALLOWED_PREFIXES.includes(firstWord);
-
-  if (!isAllowed) {
-    return { valid: false, reason: `Command "${firstWord}" not allowed` };
+  if (args.some((arg) => arg.includes(".."))) {
+    return { valid: false, reason: "Blocked: path traversal is not allowed" };
   }
 
   return { valid: true };
@@ -117,7 +72,15 @@ function validateCommand(cmd: string): { valid: boolean; reason?: string } {
 export const POST = createAuthenticatedEndpoint({
   input: TerminalInputSchema,
   handler: async ({ input }: { input: z.infer<typeof TerminalInputSchema> }) => {
-    const { command, cwd } = input;
+    if (process.env.NODE_ENV === "production" && process.env.ALLOW_TERMINAL_API !== "true") {
+      return NextResponse.json({
+        stdout: "",
+        stderr: "⛔ Terminal API is disabled in production",
+        exitCode: 1,
+      }, { status: 403 });
+    }
+
+    const { commandId, args, cwd } = input;
 
     // Validate cwd is within workspace
     if (!validateCwd(cwd)) {
@@ -128,8 +91,7 @@ export const POST = createAuthenticatedEndpoint({
       });
     }
 
-    // Validate command
-    const validation = validateCommand(command);
+    const validation = validateArgs(args);
     if (!validation.valid) {
       return NextResponse.json({
         stdout: "",
@@ -139,14 +101,15 @@ export const POST = createAuthenticatedEndpoint({
     }
 
     // Execute command with timeout
-    const result = await executeCommand(command, cwd);
+    const result = await executeCommand(commandId, args, cwd);
 
     return NextResponse.json(result);
   },
 });
 
 function executeCommand(
-  command: string,
+  commandId: keyof typeof COMMANDS,
+  args: string[],
   cwd: string,
 ): Promise<{ stdout: string; stderr: string; exitCode: number }> {
   return new Promise((resolve) => {
@@ -155,20 +118,18 @@ function executeCommand(
     let stderr = "";
     let killed = false;
 
-    // Split command into binary + args to avoid shell interpretation
-    const parts = command.trim().split(/\s+/);
-    const binary = parts[0];
-    const args = parts.slice(1);
+    const commandConfig = COMMANDS[commandId];
+    const safeArgs = commandConfig.allowUserArgs ? args : [];
 
     // nosemgrep: javascript.lang.security.detect-child-process.detect-child-process
     // Security: Authenticated API with extensive validation: allowlist (L38-74),
     // blocked patterns (L19-35), safe char filter (L93-97), cwd validation (L76-81), shell:false
-    const child = spawn(binary, args, {
+    const child = spawn(commandConfig.binary, safeArgs, {
       cwd,
       env: { ...process.env, TERM: "xterm-256color" },
       timeout,
       shell: false,
-    });
+    }); // nosemgrep: javascript.lang.security.detect-child-process.detect-child-process
 
     const timer = setTimeout(() => {
       killed = true;
