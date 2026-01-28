@@ -107,6 +107,18 @@ module.exports.agent = {
     autoDeleteBranch: true,
     requireApproval: true,
     requireCIPass: true,
+    branchNaming: {
+      pattern: "{type}/{ticket}-{description}",
+      regex:
+        "^(feature|fix|refactor|chore|hotfix)\\/[A-Z]+-[0-9]+-[a-z0-9-]+$|^(feature|fix|refactor|chore)\\/[a-z0-9-]+$",
+      examples: [
+        "feature/FS-123-add-time-off",
+        "fix/FS-456-schedule-calc",
+        "refactor/FS-789-cleanup",
+        "chore/update-deps",
+        "hotfix/FS-999-auth-bypass",
+      ],
+    },
   },
 };
 

@@ -141,6 +141,27 @@ Use this agent to:
 3. **Size**: Keep PRs focused (<400 lines when possible)
 4. **Reviews**: Address all comments before merge
 5. **Merge Strategy**: Default to squash for clean history
+6. **Branch Naming**: Enforce repository branch naming conventions
+
+## Branch Naming Conventions
+
+**Pattern**: `{type}/{ticket}-{description}`
+
+**Types**:
+
+| Type | Purpose | Example |
+| --- | --- | --- |
+| `feature` | New functionality | `feature/FS-123-add-time-off` |
+| `fix` | Bug fixes | `fix/FS-456-schedule-calc` |
+| `refactor` | Code improvement | `refactor/FS-789-cleanup` |
+| `chore` | Maintenance | `chore/update-deps` |
+| `hotfix` | Emergency fix | `hotfix/FS-999-auth-bypass` |
+
+**Validation Regex**:
+
+```
+^(feature|fix|refactor|chore|hotfix)\/[A-Z]+-[0-9]+-[a-z0-9-]+$|^(feature|fix|refactor|chore)\/[a-z0-9-]+$
+```
 
 ## See Also
 
