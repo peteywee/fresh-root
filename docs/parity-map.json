@@ -1,0 +1,125 @@
+{
+  "api": [
+    {
+      "doc": "docs/api/auth.md",
+      "routes": [
+        "apps/web/app/api/auth/**/route.ts",
+        "apps/web/app/api/session/route.ts",
+        "apps/web/app/api/session/**/route.ts",
+        "apps/web/app/api/users/profile/route.ts"
+      ]
+    },
+    {
+      "doc": "docs/api/onboarding.md",
+      "routes": [
+        "apps/web/app/api/onboarding/**/route.ts"
+      ]
+    },
+    {
+      "doc": "docs/api/ops.md",
+      "routes": [
+        "apps/web/app/api/ops/**/route.ts"
+      ]
+    },
+    {
+      "doc": "docs/api/scheduling.md",
+      "routes": [
+        "apps/web/app/api/schedules/route.ts",
+        "apps/web/app/api/schedules/**/route.ts",
+        "apps/web/app/api/shifts/route.ts",
+        "apps/web/app/api/shifts/**/route.ts",
+        "apps/web/app/api/positions/route.ts",
+        "apps/web/app/api/positions/**/route.ts",
+        "apps/web/app/api/publish/route.ts",
+        "apps/web/app/api/attendance/route.ts"
+      ]
+    },
+    {
+      "doc": "docs/api/orgs.md",
+      "routes": [
+        "apps/web/app/api/organizations/route.ts",
+        "apps/web/app/api/organizations/**/route.ts",
+        "apps/web/app/api/join-tokens/route.ts",
+        "apps/web/app/api/venues/route.ts",
+        "apps/web/app/api/zones/route.ts"
+      ]
+    },
+    {
+      "doc": "docs/api/misc.md",
+      "routes": [
+        "apps/web/app/api/_template/route.ts",
+        "apps/web/app/api/batch/route.ts",
+        "apps/web/app/api/docs/route.ts",
+        "apps/web/app/api/files/route.ts",
+        "apps/web/app/api/health/route.ts",
+        "apps/web/app/api/healthz/route.ts",
+        "apps/web/app/api/internal/backup/route.ts",
+        "apps/web/app/api/items/route.ts",
+        "apps/web/app/api/metrics/route.ts",
+        "apps/web/app/api/repomix/route.ts",
+        "apps/web/app/api/terminal/route.ts",
+        "apps/web/app/api/widgets/route.ts"
+      ]
+    }
+  ],
+  "schemas": [
+    {
+      "doc": "docs/schemas/auth.md",
+      "schemas": [
+        "packages/types/src/rbac.ts",
+        "packages/types/src/session.ts",
+        "packages/types/src/memberships.ts"
+      ]
+    },
+    {
+      "doc": "docs/schemas/onboarding.md",
+      "schemas": [
+        "packages/types/src/onboarding.ts"
+      ]
+    },
+    {
+      "doc": "docs/schemas/orgs.md",
+      "schemas": [
+        "packages/types/src/orgs.ts",
+        "packages/types/src/corporates.ts",
+        "packages/types/src/networks.ts",
+        "packages/types/src/join-tokens.ts",
+        "packages/types/src/links/corpOrgLinks.ts",
+        "packages/types/src/links/corpOrgLinks.v14.ts",
+        "packages/types/src/links/orgVenueAssignments.ts"
+      ]
+    },
+    {
+      "doc": "docs/schemas/scheduling.md",
+      "schemas": [
+        "packages/types/src/schedules.ts",
+        "packages/types/src/shifts.ts",
+        "packages/types/src/positions.ts",
+        "packages/types/src/venues.ts",
+        "packages/types/src/zones.ts",
+        "packages/types/src/attendance.ts",
+        "packages/types/src/compliance.ts",
+        "packages/types/src/compliance/adminResponsibilityForm.ts"
+      ]
+    },
+    {
+      "doc": "docs/schemas/ops.md",
+      "schemas": [
+        "packages/types/src/ops-metrics.ts",
+        "packages/types/src/events.ts"
+      ]
+    },
+    {
+      "doc": "docs/schemas/misc.md",
+      "schemas": [
+        "packages/types/src/batch.ts",
+        "packages/types/src/errors.ts",
+        "packages/types/src/internal.ts",
+        "packages/types/src/items.ts",
+        "packages/types/src/messages.ts",
+        "packages/types/src/receipts.ts",
+        "packages/types/src/widgets.ts"
+      ]
+    }
+  ]
+}
