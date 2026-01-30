@@ -1,4 +1,5 @@
 # 🌳 Branch Consolidation & Analysis
+
 **Owner**: Documentation Lead / Orchestrator\
 **Purpose**: Visual guide to branch structure and consolidation strategy\
 **Last Updated**: December 5, 2025
@@ -6,6 +7,7 @@
 ---
 
 ## 📊 Current Branch State
+
 ```
 Repository Structure:
 ┌─────────────────────────────────────────────────────────────┐
@@ -38,7 +40,9 @@ Repository Structure:
 ---
 
 ## 🗂️ File Distribution by Branch
+
 ### main (Production - Baseline)
+
 ```
 Total Files: ~450
 ├─ apps/web/ ........................ ~180 files
@@ -58,6 +62,7 @@ Total Files: ~450
 ```
 
 ### dev (Current - Our Branch)
+
 ```
 Total Files: ~465 (+15 from main)
 ├─ [All of main]
@@ -76,6 +81,7 @@ Total Files: ~465 (+15 from main)
 ```
 
 ### Feature Branches (Various)
+
 ```
 fix/config-typeerrors: ~480 files (+30 from main)
 ├─ Type error fixes (partially complete)
@@ -92,7 +98,9 @@ dep-fixes: ~475 files (+25 from main)
 ---
 
 ## 📋 File Consolidation Decisions
+
 ### ✅ Decision 1: Canonical lib Location
+
 **Question**: apps/web/lib vs apps/web/src/lib?
 
 **Analysis**:
@@ -118,6 +126,7 @@ Action: DELETE apps/web/lib/
 ```
 
 ### ✅ Decision 2: Zod Schemas Location
+
 **Question**: Where should all schemas live?
 
 **Current State**:
@@ -141,6 +150,7 @@ Action: DELETE duplicates from validation.ts
 ```
 
 ### ✅ Decision 3: Legacy File Archival
+
 **Question**: What happens to old files?
 
 **Strategy**:
@@ -168,7 +178,9 @@ Priority 3 (CONSOLIDATE):
 ---
 
 ## 🔄 Merge Strategy
+
 ### Current Situation
+
 ```
 Timeline:
 ┌──────────────────────────────────────────────────────────┐
@@ -197,6 +209,7 @@ Timeline:
 ```
 
 ### Recommended Merge Flow
+
 **Phase 1: Consolidate on dev**
 
 ```
@@ -263,7 +276,9 @@ Step 9: Archive old branches
 ---
 
 ## 🎯 Action Items by Role
+
 ### Cleanup Lead
+
 ```
 Phase 1: Branch Analysis
 ├─ [ ] List all files in main
@@ -286,6 +301,7 @@ Phase 3: Execution
 ```
 
 ### Documentation Lead
+
 ```
 Continuous: Visual Updates
 ├─ [ ] Update DASHBOARD.md after each phase
@@ -298,7 +314,9 @@ Continuous: Visual Updates
 ---
 
 ## 📊 Visual: File Consolidation Before & After
+
 ### BEFORE Consolidation (Current dev branch)
+
 ```
 apps/web/
 ├─ lib/ ......................... (DUPLICATES)
@@ -327,6 +345,7 @@ Status: MESSY (465 files, duplicates exist)
 ```
 
 ### AFTER Consolidation (Post-cleanup)
+
 ```
 apps/web/
 ├─ src/lib/ ..................... (SINGLE CANONICAL)
@@ -357,15 +376,18 @@ Status: CLEAN (450 files, no duplicates)
 ---
 
 ## ✅ Consolidation Checklist
+
 ### Pre-Consolidation
+
 - \[ ] All branches backed up (or documented)
 - \[ ] Current branch is `dev`
 - \[ ] Git status clean
 - \[ ] Decision matrix reviewed (lib location, schema location, etc.)
 
 ### During Consolidation
+
 - \[ ] Delete .bak files
-- \[ ] Remove \_dropin\_temp directory
+- \[ ] Remove \_dropin_temp directory
 - \[ ] Archive old files to docs/archive/
 - \[ ] Consolidate apps/web/lib → apps/web/src/lib
 - \[ ] Update imports to use src/lib
@@ -373,6 +395,7 @@ Status: CLEAN (450 files, no duplicates)
 - \[ ] Verify no syntax errors
 
 ### Post-Consolidation
+
 - \[ ] `pnpm -w typecheck` passes
 - \[ ] `pnpm test` passes (or unaffected)
 - \[ ] `pnpm lint` passes
@@ -383,6 +406,7 @@ Status: CLEAN (450 files, no duplicates)
 ---
 
 ## 🔗 Related Documents
+
 - `TEAM_STRUCTURE.md` — Specialist roles and responsibilities
 - `DASHBOARD.md` — Live progress tracker
 - `PHASE1_CLEANUP_PLAN.md` — Detailed cleanup execution

@@ -12,7 +12,7 @@ module.exports = {
     patterns: ["Use the create plan agent to create a plan", "Create a plan for", "Plan the"],
   },
   purposePrefixes: ["upgrade", "refactor", "feature", "data", "infrastructure", "architecture", "design", "process"],
-  fileLocation: "/plan/",
+  fileLocation: "./plan/",
   fileNamingConvention: "[purpose]-[component]-[version].md",
   frontMatterFields: [
     "goal",

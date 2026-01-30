@@ -7,7 +7,7 @@ import { test, expect } from "@playwright/test";
  *
  * Comprehensive tests for the new passwordless authentication system:
  * 1. Signup with magic link (email verification automatic)
- * 2. Signin with magic link  
+ * 2. Signin with magic link
  * 3. Email verification success states
  * 4. Error scenarios (invalid email, network issues, expired links)
  * 5. Resend throttling (60-second countdown)
@@ -75,7 +75,10 @@ test.describe("Magic Link Authentication - Signup Flow", () => {
     await page.waitForTimeout(200);
 
     // Check if button is enabled or error cleared
-    const hasError = await page.locator("text=/error|invalid/i").isVisible().catch(() => false);
+    const hasError = await page
+      .locator("text=/error|invalid/i")
+      .isVisible()
+      .catch(() => false);
     expect(!hasError || isDisabled === false).toBeTruthy();
   });
 
@@ -122,7 +125,7 @@ test.describe("Magic Link Authentication - Signup Flow", () => {
     await resendButton.click();
 
     // Button should show countdown (e.g., "Resend in 60s")
-    const countdownText = page.locator('button:has-text(/Resend in \\d+s/)');
+    const countdownText = page.locator("button:has-text(/Resend in \\d+s/)");
     await expect(countdownText).toBeVisible({ timeout: 1000 });
 
     // Verify button is disabled during countdown
@@ -143,7 +146,7 @@ test.describe("Magic Link Authentication - Signup Flow", () => {
     await sendButton.click();
 
     // Should show error message
-    const errorMessage = page.locator('text=/error|failed|try again/i');
+    const errorMessage = page.locator("text=/error|failed|try again/i");
     await expect(errorMessage).toBeVisible({ timeout: 3000 });
   });
 
@@ -154,7 +157,9 @@ test.describe("Magic Link Authentication - Signup Flow", () => {
     await emailInput.fill("test+back@example.com");
 
     // Find and click back button (arrow icon or text)
-    const backButton = page.locator('button[aria-label="Back"]').or(page.locator('button:has-text("Back")'));
+    const backButton = page
+      .locator('button[aria-label="Back"]')
+      .or(page.locator('button:has-text("Back")'));
     await backButton.click();
 
     // Should return to mode selection
@@ -209,7 +214,7 @@ test.describe("Magic Link Authentication - Callback Page", () => {
   test("callback page should show loading state", async ({ page }) => {
     // Navigate directly to callback (simulating magic link click)
     // In reality, callback is triggered via magic link URL with params
-    
+
     // For testing purposes, we'll verify callback page structure
     // This would be tested via actual magic link click in integration tests
 
@@ -218,7 +223,7 @@ test.describe("Magic Link Authentication - Callback Page", () => {
 
     // Should show loading spinner initially
     const _spinner = page.locator("text=/signing you in|verifying/i");
-    
+
     // Spinner might be very fast, so just verify page loads
     await page.waitForLoadState("networkidle");
   });
@@ -235,9 +240,9 @@ test.describe("Magic Link Authentication - Callback Page", () => {
 
     const finalUrl = page.url();
     expect(
-      finalUrl.includes("onboarding") || 
-      finalUrl.includes("dashboard") || 
-      finalUrl.includes("localhost:3000/")
+      finalUrl.includes("onboarding") ||
+        finalUrl.includes("dashboard") ||
+        finalUrl.includes("localhost:3000/"),
     ).toBeTruthy();
   });
 });
@@ -351,7 +356,7 @@ test.describe("Magic Link Authentication - Error Recovery", () => {
     await page.waitForTimeout(1000);
 
     // Should show error message
-    const errorHeading = page.locator('text=/error|failed|authentication failed/i');
+    const errorHeading = page.locator("text=/error|failed|authentication failed/i");
     const errorVisible = await errorHeading.isVisible().catch(() => false);
 
     // Should have recovery option (link back to login)
@@ -369,12 +374,17 @@ test.describe("Magic Link Authentication - Error Recovery", () => {
     await emailInput.fill("first@example.com");
 
     // Simulate going back to change email
-    const _backButton = page.locator('button').filter({ has: page.locator("[aria-label*='Back']") });
+    const _backButton = page
+      .locator("button")
+      .filter({ has: page.locator("[aria-label*='Back']") });
 
     // Or if there's a text button
-    await page.locator('button:has-text("Back")').click().catch(() => {
-      // Back button might not exist, that's okay
-    });
+    await page
+      .locator('button:has-text("Back")')
+      .click()
+      .catch(() => {
+        // Back button might not exist, that's okay
+      });
 
     // Should be able to try again or change email
     const emailInputAgain = page.locator('input[type="email"]');

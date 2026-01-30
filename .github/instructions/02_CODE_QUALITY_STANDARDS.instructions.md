@@ -1,13 +1,15 @@
 ---
-
-applyTo: "\*\*/\*.{ts,tsx,js,jsx}"
+applyTo: "**/*.{ts,tsx,js,jsx}"
 description:
-"Code quality standards for TypeScript/JavaScript: style, patterns, performance, commenting."
-## priority: 2
+  "Code quality standards for TypeScript/JavaScript: style, patterns, performance, commenting."
+---
 
 # Code Quality Standards
+
 ## TypeScript 5.x / ES2022 Standards
+
 ### Strict Mode Required
+
 ```json
 {
   "compilerOptions": {
@@ -20,12 +22,14 @@ description:
 ```
 
 ### Type Inference
+
 - Prefer inference over explicit types where clear
 - Explicit types for function parameters and return types
 - Use `z.infer<typeof Schema>` for Zod schemas (never duplicate)
 - No `any` — use `unknown` with type guards
 
 ### ES2022 Features
+
 - Use `Array.at()` for negative indexing
 - Use `Object.hasOwn()` instead of `hasOwnProperty`
 - Use private fields (`#field`) for encapsulation
@@ -34,7 +38,9 @@ description:
 ---
 
 ## Object Calisthenics (Business Domain Code)
+
 ### 1. One Level of Indentation per Method
+
 ```typescript
 // ❌ Bad
 function process(users: User[]) {
@@ -53,6 +59,7 @@ function process(users: User[]) {
 ```
 
 ### 2. Don't Use ELSE
+
 ```typescript
 // ❌ Bad
 function process(order: Order) {
@@ -71,6 +78,7 @@ function process(order: Order) {
 ```
 
 ### 3. Wrap Primitives in Domain Objects
+
 ```typescript
 // ❌ Bad
 function createUser(name: string, age: number) {}
@@ -86,6 +94,7 @@ class Age {
 ```
 
 ### 4. First Class Collections
+
 ```typescript
 // ❌ Bad
 class Group {
@@ -105,6 +114,7 @@ class Group {
 ```
 
 ### 5. One Dot Per Line
+
 ```typescript
 // ❌ Bad
 const email = order.user.getEmail().toUpperCase().trim();
@@ -116,6 +126,7 @@ const normalizedEmail = email.toUpperCase().trim();
 ```
 
 ### 6. Don't Abbreviate
+
 ```typescript
 // ❌ Bad
 const usrMgr = new UserManager();
@@ -127,6 +138,7 @@ const configuration = loadConfig();
 ```
 
 ### 7. Keep Entities Small
+
 - Maximum 10 methods per class
 - Maximum 50 lines per class
 - Maximum 10 classes per namespace
@@ -135,7 +147,9 @@ const configuration = loadConfig();
 ---
 
 ## Self-Explanatory Code
+
 ### Comment ONLY When Necessary
+
 **✅ Comment for:**
 
 - WHY (reasoning, not WHAT)
@@ -160,6 +174,7 @@ const tax = calculateProgressiveTax(income, [0.1, 0.2], [10000]);
 ```
 
 ### Naming Conventions
+
 - Variables/Functions: `camelCase`
 - Classes/Types/Interfaces: `PascalCase`
 - Constants: `UPPER_SNAKE_CASE`
@@ -169,7 +184,9 @@ const tax = calculateProgressiveTax(income, [0.1, 0.2], [10000]);
 ---
 
 ## Performance Best Practices
+
 ### Avoid N+1 Queries
+
 ```typescript
 // ❌ Bad
 for (const user of users) {
@@ -182,16 +199,19 @@ const orders = await db.collection("orders").where("userId", "in", userIds).get(
 ```
 
 ### Efficient Data Structures
+
 - Use `Map` for key-value with non-string keys
 - Use `Set` for unique collections
 - Use appropriate data structure for access pattern
 
 ### Avoid Premature Optimization
+
 - Measure first, optimize second
 - Profile before assuming bottleneck
 - Simple algorithms often faster in practice
 
 ### Memory Management
+
 - Avoid creating unnecessary objects in loops
 - Use generators for large datasets
 - Clean up subscriptions and event listeners
@@ -199,7 +219,9 @@ const orders = await db.collection("orders").where("userId", "in", userIds).get(
 ---
 
 ## Code Organization
+
 ### Import Order
+
 ```typescript
 // 1. External/builtin
 import { z } from "zod";
@@ -213,11 +235,13 @@ import { helper } from "./utils";
 ```
 
 ### Function Organization
+
 1. Public API functions first
 2. Helper functions below
 3. Types/interfaces at top or bottom (consistent)
 
 ### File Size
+
 - Prefer smaller, focused files
 - Split when file exceeds ~300 lines
 - One concept per file
@@ -225,7 +249,9 @@ import { helper } from "./utils";
 ---
 
 ## Error Handling
+
 ### Always Catch and Handle
+
 ```typescript
 // ❌ Bad
 try {
@@ -245,6 +271,7 @@ try {
 ```
 
 ### Structured Errors
+
 ```typescript
 class AppError extends Error {
   constructor(
@@ -262,6 +289,7 @@ class AppError extends Error {
 ---
 
 ## Formatting (Prettier Config)
+
 ```javascript
 {
   semi: true,

@@ -1,5 +1,7 @@
 # Fresh Schedules Architecture Diagrams
+
 ## 1. New Orchestration Architecture (Post-CrewOps)
+
 ```mermaid
 flowchart TB
     subgraph Trigger["Trigger Layer"]
@@ -46,6 +48,7 @@ flowchart TB
 ```
 
 ## 2. Agent Interaction Model
+
 ```mermaid
 sequenceDiagram
     participant Dev as Developer
@@ -67,6 +70,7 @@ sequenceDiagram
 ```
 
 ## 3. Gate Execution Flow
+
 ```mermaid
 stateDiagram-v2
     [*] --> PENDING
@@ -113,6 +117,7 @@ stateDiagram-v2
 ```
 
 ## 4. Protocol Hierarchy
+
 ```mermaid
 graph TD
     subgraph Meta["Meta Layer"]
@@ -156,6 +161,7 @@ graph TD
 ```
 
 ## 5. Data Flow: API Route Security Pattern
+
 ```mermaid
 flowchart LR
     subgraph Client
@@ -195,6 +201,7 @@ flowchart LR
 ```
 
 ## 6. Agent Decision Tree
+
 ```mermaid
 flowchart TD
     Start[Receive Invocation] --> Parse{Parse Invocation}
@@ -229,6 +236,7 @@ flowchart TD
 ```
 
 ## 7. Branch Strategy
+
 ```mermaid
 gitGraph
     commit id: "initial"
@@ -260,6 +268,7 @@ gitGraph
 ```
 
 ## 8. Pattern Compliance Scoring
+
 ```mermaid
 pie title Pattern Compliance by Category
     "API Patterns" : 85
@@ -272,6 +281,7 @@ pie title Pattern Compliance by Category
 ---
 
 ## Diagram Placement Guide
+
 | Diagram                    | Location                             | Purpose                         |
 | -------------------------- | ------------------------------------ | ------------------------------- |
 | Orchestration Architecture | `docs/architecture/orchestration.md` | Overview of new pipeline system |

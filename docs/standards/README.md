@@ -1,6 +1,7 @@
 ---
 title: "Coding Standards & Best Practices"
-description: "Coding standards, patterns, rules, and best practices for the Fresh Schedules codebase"
+description:
+  "Coding standards, patterns, rules, and best practices for the Fresh Schedules codebase"
 keywords:
   - standards
   - patterns
@@ -17,11 +18,13 @@ audience:
 
 # Coding Standards & Best Practices
 
-This section defines the standards, patterns, rules, and best practices for writing code in Fresh Schedules.
+This section defines the standards, patterns, rules, and best practices for writing code in Fresh
+Schedules.
 
 ## Categories
 
 ### Core Standards
+
 - **Coding Rules & Patterns** - Comprehensive rules for all code
 - **TypeScript** - Type safety, strict mode, conventions
 - **API Design** - REST endpoint patterns, validation
@@ -29,12 +32,14 @@ This section defines the standards, patterns, rules, and best practices for writ
 - **Performance** - Optimization patterns, caching
 
 ### Language/Framework Specific
+
 - **React & Next.js** - Component patterns, hooks, SSR
 - **Firebase** - Admin SDK, Firestore, Auth
 - **Zod Validation** - Schema design, error handling
 - **Tailwind CSS** - Utility-first styling conventions
 
 ### Quality Standards
+
 - **Error Handling** - Logging, error types, recovery
 - **Testing** - Unit, integration, E2E test patterns
 - **Documentation** - Code comments, API docs
@@ -42,6 +47,7 @@ This section defines the standards, patterns, rules, and best practices for writ
 - **Performance** - Metrics, optimization, monitoring
 
 ### Code Organization
+
 - **File Structure** - Directory organization, naming
 - **Imports** - Order, aliases, grouping
 - **Type Definitions** - Zod schemas, interfaces
@@ -51,15 +57,15 @@ This section defines the standards, patterns, rules, and best practices for writ
 
 ## Quick Navigation
 
-| Document | Purpose | Type |
-|----------|---------|------|
-| Coding Rules & Patterns | All mandatory rules and patterns | Standard |
-| TypeScript Best Practices | Type safety and conventions | Pattern |
-| API Design Guide | REST endpoint patterns | Standard |
-| Testing Patterns | Test structure and practices | Pattern |
-| Security Checklist | Security review checklist | Reference |
+| Document                  | Purpose                          | Type      |
+| ------------------------- | -------------------------------- | --------- |
+| Coding Rules & Patterns   | All mandatory rules and patterns | Standard  |
+| TypeScript Best Practices | Type safety and conventions      | Pattern   |
+| API Design Guide          | REST endpoint patterns           | Standard  |
+| Testing Patterns          | Test structure and practices     | Pattern   |
+| Security Checklist        | Security review checklist        | Reference |
 
 ---
 
-**See also**: [Architecture](../architecture/) for design decisions, [Guides](../guides/) for implementation
-
+**See also**: [Architecture](../architecture/) for design decisions, [Guides](../guides/) for
+implementation

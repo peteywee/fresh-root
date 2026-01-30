@@ -12,13 +12,10 @@ export default function LandingPage() {
     <main className="min-h-screen bg-background text-foreground">
       <header className="mx-auto max-w-6xl px-6 py-12">
         <div className="flex flex-col gap-6">
-          <h1 className="text-4xl font-semibold tracking-tight">
-            Fresh Schedules
-          </h1>
+          <h1 className="text-4xl font-semibold tracking-tight">Fresh Schedules</h1>
 
           <p className="max-w-2xl text-lg text-muted-foreground">
-            Build a full schedule fast, stay inside labor targets,
-            and keep teams aligned.
+            Build a full schedule fast, stay inside labor targets, and keep teams aligned.
           </p>
 
           <div className="flex flex-wrap gap-3">

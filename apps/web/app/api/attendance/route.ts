@@ -20,13 +20,17 @@ export const GET = createAuthenticatedEndpoint({
   handler: async ({ request, input: _input, context, params: _params }) => {
     try {
       const { searchParams } = new URL(request.url);
-      const orgId = searchParams.get("orgId") || context.org!.orgId;
+      const orgIdParam = searchParams.get("orgId");
+      const orgId = orgIdParam || context.org!.orgId;
       const shiftId = searchParams.get("shiftId");
       const scheduleId = searchParams.get("scheduleId");
       const staffUid = searchParams.get("staffUid");
 
       if (!orgId) {
         return badRequest("orgId query parameter is required");
+      }
+      if (orgIdParam && context.org?.orgId && orgIdParam !== context.org.orgId) {
+        return forbidden("Organization ID mismatch");
       }
 
       // D1: Fetch from Firestore if FIRESTORE_WRITES enabled

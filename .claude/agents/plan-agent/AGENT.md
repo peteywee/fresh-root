@@ -1,7 +1,8 @@
 ---
 agent: "plan-agent"
 name: "Plan Agent"
-description: "Create a structured implementation plan with TODO list, dependencies, and validation criteria"
+description:
+  "Create a structured implementation plan with TODO list, dependencies, and validation criteria"
 version: "1.0.0"
 category: "Planning & Documentation"
 invocation:
@@ -26,6 +27,7 @@ Create a structured implementation plan with TODO list, dependencies, and valida
 ## Quick Start
 
 Use this agent to:
+
 - Create structured implementation plans
 - Generate TODO lists with dependencies
 - Map critical path and risks
@@ -54,26 +56,32 @@ Plan the database schema refactoring
 # Implementation Plan: [Goal]
 
 ## Context
+
 [Current state and goal]
 
 ## TODO List
-| ID | Task | Dependencies | Status |
-|----|------|--------------|--------|
-| 1  | ...  | None         | not-started |
-| 2  | ...  | 1            | not-started |
+
+| ID  | Task | Dependencies | Status      |
+| --- | ---- | ------------ | ----------- |
+| 1   | ...  | None         | not-started |
+| 2   | ...  | 1            | not-started |
 
 ## Dependency Graph
+
 [Visual representation]
 
 ## Risks & Mitigations
+
 - Risk 1: [Description] → Mitigation: [Plan]
 
 ## Validation Criteria
+
 - [ ] TypeScript: 0 errors
 - [ ] Tests: All pass
 - [ ] Pattern score: ≥90
 
 ## Estimated Time
+
 [x] hours/minutes
 ```
 

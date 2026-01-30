@@ -1,4 +1,5 @@
 # Deprecated npm Scripts
+
 **Last Updated:** December 25, 2025
 
 This document tracks deprecated npm scripts and the rationale for their removal.
@@ -6,7 +7,9 @@ This document tracks deprecated npm scripts and the rationale for their removal.
 ---
 
 ## Removed Scripts (v1.5.0 - December 25, 2025)
+
 ### `test:all`
+
 **Status:** ❌ REMOVED
 
 **Deprecated:** December 25, 2025
@@ -30,6 +33,7 @@ pnpm test:integration  # Integration tests
 ---
 
 ### `deps:check`
+
 **Status:** ❌ REMOVED
 
 **Deprecated:** December 25, 2025
@@ -52,6 +56,7 @@ pnpm ls --depth=0       # List dependencies
 ---
 
 ### `deps:dedupe`
+
 **Status:** ❌ REMOVED
 
 **Deprecated:** December 25, 2025
@@ -75,9 +80,11 @@ pnpm install --force-peer-deps
 ---
 
 ## Active Scripts (Kept)
+
 These scripts remain and are actively maintained:
 
 ### Core Scripts
+
 - `pnpm dev` — Start development server
 - `pnpm build` — Build all packages
 - `pnpm build:sdk` — Build SDK-specific artifacts
@@ -89,6 +96,7 @@ These scripts remain and are actively maintained:
 - `pnpm test:rules` — Firestore rules testing
 
 ### Quality & Guardrails
+
 - `pnpm lint` — Run ESLint
 - `pnpm lint:fix` — Auto-fix lint violations
 - `pnpm format` — Format code (Prettier)
@@ -98,6 +106,7 @@ These scripts remain and are actively maintained:
 - `pnpm guardrails:fix` — Auto-fix guardrail violations
 
 ### Workspace & Dependencies
+
 - `pnpm workspace:check` — Validate workspace consistency (@manypkg/cli)
 - `pnpm workspace:fix` — Auto-fix workspace issues
 - `pnpm deps:sync` — Sync dependency versions across packages
@@ -105,6 +114,7 @@ These scripts remain and are actively maintained:
 - `pnpm deps:analyze` — Analyze dependency tree
 
 ### Validation & Pre-commit
+
 - `pnpm validate:pre-commit` — Run pre-commit checks (handler validation, typecheck, lint)
 - `pnpm validate:pre-push` — Run pre-push checks (typecheck, lint, Repomix)
 - `pnpm validate:full` — Run comprehensive validation suite
@@ -113,6 +123,7 @@ These scripts remain and are actively maintained:
 ---
 
 ## Governance Rules
+
 **Script Proposal Workflow:**
 
 Before adding new npm scripts, check:
@@ -120,8 +131,8 @@ Before adding new npm scripts, check:
 1. **Is it a one-liner?** Add it. (e.g., `"clean": "turbo run clean"`)
 2. **Does it combine 2+ scripts?** Create an alias with clear naming. (e.g.,
    `"check": "pnpm lint:fix && pnpm workspace:check && pnpm typecheck"`)
-1. **Is it rarely used?** Don't add it — document the manual command instead.
-2. **Does it duplicate existing tools?** Use the existing tool. (e.g., don't create `deps:check`
+3. **Is it rarely used?** Don't add it — document the manual command instead.
+4. **Does it duplicate existing tools?** Use the existing tool. (e.g., don't create `deps:check`
    when `pnpm audit` exists)
 
 **Criteria for Removal:**
@@ -140,8 +151,9 @@ Before adding new npm scripts, check:
 ---
 
 ## Future Deprecations (Under Review)
+
 Currently evaluated for removal (not yet deprecated):
 
 - None at this time
 
-See [GUARDRAILS\_SCRIPTS.md](./guides/GUARDRAILS_SCRIPTS.md) for full script reference.
+See [GUARDRAILS_SCRIPTS.md](./guides/GUARDRAILS_SCRIPTS.md) for full script reference.

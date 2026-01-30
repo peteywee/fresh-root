@@ -22,13 +22,15 @@ related-docs:
 
 ## Overview
 
-This document shows the transformation from basic password-based auth to a **professional magic link system** with dedicated UI/UX oversight.
+This document shows the transformation from basic password-based auth to a **professional magic link
+system** with dedicated UI/UX oversight.
 
 ---
 
 ## Before: Basic Firebase Auth
 
 ### Login Flow
+
 ```
 /login
   ├── FirebaseUI Component
@@ -40,20 +42,23 @@ This document shows the transformation from basic password-based auth to a **pro
 ```
 
 ### Issues
+
 ❌ No clear distinction between signin and signup  
 ❌ Password option tempting users to create passwords  
 ❌ Email verification optional / hidden in UI  
 ❌ Generic callback page with minimal feedback  
 ❌ No professional design guidance  
-❌ Inconsistent UX across different auth methods  
+❌ Inconsistent UX across different auth methods
 
 ### User Experience
+
 ```
-User clicks "Email Link" → Generic form → "Check your email" → 
+User clicks "Email Link" → Generic form → "Check your email" →
 Minimal success message → Redirect
 ```
 
 **Pain Points**:
+
 - Unclear if they're signing up or signing in
 - No visual confirmation of email verification
 - Generic styling feels corporate
@@ -64,6 +69,7 @@ Minimal success message → Redirect
 ## After: Professional Magic Link System
 
 ### Login Flow
+
 ```
 /login
   ├── EmailMagicLinkAuth Component (NEW)
@@ -90,6 +96,7 @@ Minimal success message → Redirect
 ```
 
 ### Improvements
+
 ✅ Clear signin vs signup distinction  
 ✅ Magic link is primary (not hidden option)  
 ✅ Professional, modern design  
@@ -97,17 +104,19 @@ Minimal success message → Redirect
 ✅ UI/UX agent ensures consistency  
 ✅ Accessible (WCAG 2.1 AA)  
 ✅ Smooth animations with purpose  
-✅ Error recovery built-in  
+✅ Error recovery built-in
 
 ### User Experience
+
 ```
-User clicks "Create Account" → Enters email → 
-Success message with email display → 
-Clicks link → Email verified! animation → 
+User clicks "Create Account" → Enters email →
+Success message with email display →
+Clicks link → Email verified! animation →
 Auto-redirect to dashboard (account ready)
 ```
 
 **Benefits**:
+
 - Crystal clear what they're doing
 - Visual confirmation of email verification
 - Celebration animation (delight!)
@@ -119,10 +128,11 @@ Auto-redirect to dashboard (account ready)
 ## Component Comparison
 
 ### FirebaseUI Approach
-```tsx
-<div id="firebaseui-auth-container" />
 
-ui.start('#firebaseui-auth-container', {
+```tsx
+<div id="firebaseui-auth-container" />;
+
+ui.start("#firebaseui-auth-container", {
   signInOptions: [
     GoogleAuthProvider.PROVIDER_ID,
     {
@@ -146,11 +156,9 @@ ui.start('#firebaseui-auth-container', {
 **Cons**: No control over UI, generic look, password option included
 
 ### New EmailMagicLinkAuth Approach
+
 ```tsx
-<EmailMagicLinkAuth
-  onSuccess={() => setLoading(true)}
-  onError={(err) => setError(err)}
-/>
+<EmailMagicLinkAuth onSuccess={() => setLoading(true)} onError={(err) => setError(err)} />
 ```
 
 **Pros**: Full control, professional design, signin/signup split  
@@ -163,6 +171,7 @@ ui.start('#firebaseui-auth-container', {
 ### Login Page Layout
 
 **Before:**
+
 ```
 ┌─────────────────────────┐
 │  Welcome Back           │
@@ -180,6 +189,7 @@ ui.start('#firebaseui-auth-container', {
 ```
 
 **After:**
+
 ```
 ┌─────────────────────────┐
 │  Welcome Back           │
@@ -205,6 +215,7 @@ ui.start('#firebaseui-auth-container', {
 ### Callback Page Layout
 
 **Before:**
+
 ```
 ┌──────────────────────┐
 │  Signing you in…     │
@@ -216,6 +227,7 @@ ui.start('#firebaseui-auth-container', {
 ```
 
 **After (Success):**
+
 ```
 ┌──────────────────────┐
 │         ✓            │
@@ -227,6 +239,7 @@ ui.start('#firebaseui-auth-container', {
 ```
 
 **After (Error):**
+
 ```
 ┌──────────────────────┐
 │         ✗            │
@@ -242,26 +255,27 @@ ui.start('#firebaseui-auth-container', {
 
 ## Feature Comparison Table
 
-| Feature | Before | After |
-|---------|--------|-------|
-| **Signin Method** | Email/Password + Link | Magic Link Only |
-| **Signup Method** | Email/Password + Link | Magic Link Only |
-| **Google OAuth** | ✅ Included | ✅ Included |
-| **Design Control** | ❌ Generic FirebaseUI | ✅ Custom Component |
-| **Signin/Signup UX** | 😕 Same form for both | ✅ Clear distinction |
-| **Email Verification** | 🤔 Optional | ✅ Automatic |
-| **Callback Feedback** | ⚠️ Generic message | ✅ Success animation |
-| **Accessibility** | ✅ FirebaseUI default | ✅ WCAG 2.1 AA |
-| **Customization** | ❌ Limited | ✅ Full control |
-| **Mobile Experience** | 📱 OK | 📱 Optimized |
-| **Error Recovery** | ⚠️ Minimal | ✅ Resend + guidance |
-| **Professional Design** | 🏢 Corporate | ✨ Modern + Cohesive |
+| Feature                 | Before                | After                |
+| ----------------------- | --------------------- | -------------------- |
+| **Signin Method**       | Email/Password + Link | Magic Link Only      |
+| **Signup Method**       | Email/Password + Link | Magic Link Only      |
+| **Google OAuth**        | ✅ Included           | ✅ Included          |
+| **Design Control**      | ❌ Generic FirebaseUI | ✅ Custom Component  |
+| **Signin/Signup UX**    | 😕 Same form for both | ✅ Clear distinction |
+| **Email Verification**  | 🤔 Optional           | ✅ Automatic         |
+| **Callback Feedback**   | ⚠️ Generic message    | ✅ Success animation |
+| **Accessibility**       | ✅ FirebaseUI default | ✅ WCAG 2.1 AA       |
+| **Customization**       | ❌ Limited            | ✅ Full control      |
+| **Mobile Experience**   | 📱 OK                 | 📱 Optimized         |
+| **Error Recovery**      | ⚠️ Minimal            | ✅ Resend + guidance |
+| **Professional Design** | 🏢 Corporate          | ✨ Modern + Cohesive |
 
 ---
 
 ## Code Changes Summary
 
 ### New Files
+
 ```
 ✨ .github/prompts/ui-ux-agent.md
 ✨ apps/web/app/components/auth/EmailMagicLinkAuth.tsx
@@ -270,6 +284,7 @@ ui.start('#firebaseui-auth-container', {
 ```
 
 ### Modified Files
+
 ```
 📝 apps/web/app/(auth)/login/page.tsx
    - Replaced FirebaseUI with EmailMagicLinkAuth
@@ -287,6 +302,7 @@ ui.start('#firebaseui-auth-container', {
 ```
 
 ### Lines of Code
+
 - **New Component**: ~400 LOC (self-contained, reusable)
 - **Login Page**: ~50 LOC (down from ~150 with FirebaseUI setup)
 - **Callback Page**: ~120 LOC (up from ~50, but much better UX)
@@ -297,6 +313,7 @@ ui.start('#firebaseui-auth-container', {
 ## Migration Path
 
 ### For New Users
+
 ```
 1. Visit /login
 2. Click "Create Account"
@@ -309,6 +326,7 @@ ui.start('#firebaseui-auth-container', {
 **Result**: Account created + email verified in ~2 minutes (seamless)
 
 ### For Existing Users
+
 ```
 1. Visit /login
 2. Click "Sign In"
@@ -321,6 +339,7 @@ ui.start('#firebaseui-auth-container', {
 **Result**: Sign in with no password to remember
 
 ### From Old System
+
 - **Password-based users**: Can reset password via magic link (future feature)
 - **Email-link users**: Same flow, now with better UI
 - **Google users**: Unchanged, still works perfectly
@@ -330,12 +349,14 @@ ui.start('#firebaseui-auth-container', {
 ## Design System Benefits
 
 ### Consistency
+
 - Same colors, typography, spacing across all auth pages
 - Animations serve a purpose (not decorative)
 - Error states clearly differentiated
 - Success states celebrated
 
 ### Accessibility
+
 - WCAG 2.1 AA compliance (4.5:1 color contrast minimum)
 - Full keyboard navigation
 - Screen reader compatible
@@ -343,6 +364,7 @@ ui.start('#firebaseui-auth-container', {
 - Descriptive button text
 
 ### Professional Image
+
 - Modern, clean aesthetic
 - Thoughtful micro-interactions
 - Clear information hierarchy
@@ -354,16 +376,19 @@ ui.start('#firebaseui-auth-container', {
 ## Performance Impact
 
 ### Bundle Size
+
 - EmailMagicLinkAuth: ~5 KB (minified)
 - Removed FirebaseUI dependency: -50 KB 🎉
 - **Net savings**: ~45 KB smaller bundle
 
 ### Load Time
+
 - No FirebaseUI initialization delay
 - Component renders instantly
 - Firebase calls same (magic link sending is unchanged)
 
 ### User Experience
+
 - No flicker or flash on load
 - Instant form interaction
 - Fast validation feedback
@@ -374,6 +399,7 @@ ui.start('#firebaseui-auth-container', {
 ## What Comes Next
 
 ### Phase 1: Testing & Refinement
+
 - [ ] Run through complete signup/signin flows
 - [ ] Verify email delivery
 - [ ] Test error cases (expired links, typos)
@@ -381,18 +407,21 @@ ui.start('#firebaseui-auth-container', {
 - [ ] Gather user feedback
 
 ### Phase 2: Email Customization
+
 - [ ] Brand the email template (add logo)
 - [ ] Customize email subject line
 - [ ] Add instructions in email body
 - [ ] Test email deliverability
 
 ### Phase 3: Analytics
+
 - [ ] Track signup conversion funnel
 - [ ] Monitor email click-through rate
 - [ ] Measure auth success rate
 - [ ] A/B test different copy
 
 ### Phase 4: Enhanced Features
+
 - [ ] Email change/verification
 - [ ] Login notifications
 - [ ] Suspicious activity alerts
@@ -425,18 +454,21 @@ A: Optimized for mobile (44px+ touch targets, responsive layout, instant link ha
 ## Metrics to Track
 
 ### Adoption
+
 - New users per day (signup funnel)
 - Magic link click-through rate (%)
 - Email delivery rate (%)
 - Conversion from click → verified account (%)
 
 ### Engagement
+
 - Time from signup to first action
 - Email verification drop-off rate
 - Returning user percentage
 - Account completion rate
 
 ### Quality
+
 - Error rate (invalid links, expired, etc)
 - User support tickets about auth
 - Mobile vs desktop signup ratio

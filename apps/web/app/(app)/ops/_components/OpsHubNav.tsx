@@ -3,14 +3,14 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { 
-  LayoutDashboard, 
-  BarChart3, 
-  ShieldAlert, 
-  Hammer, 
-  Settings, 
+import {
+  LayoutDashboard,
+  BarChart3,
+  ShieldAlert,
+  Hammer,
+  Settings,
   FileText,
-  Activity
+  Activity,
 } from "lucide-react";
 
 const NAV_ITEMS = [
@@ -43,20 +43,22 @@ export function OpsHubNav() {
             href={item.href}
             className={cn(
               "flex items-center gap-3 px-3 py-2.5 rounded-sm text-sm font-medium transition-all duration-200 group",
-              isActive 
-                ? "bg-primary/10 text-primary border-l-2 border-primary" 
-                : "text-muted-foreground hover:bg-muted hover:text-foreground border-l-2 border-transparent"
+              isActive
+                ? "bg-primary/10 text-primary border-l-2 border-primary"
+                : "text-muted-foreground hover:bg-muted hover:text-foreground border-l-2 border-transparent",
             )}
           >
-            <Icon className={cn(
-              "w-4 h-4 transition-colors",
-              isActive ? "text-primary" : "text-muted-foreground group-hover:text-foreground"
-            )} />
+            <Icon
+              className={cn(
+                "w-4 h-4 transition-colors",
+                isActive ? "text-primary" : "text-muted-foreground group-hover:text-foreground",
+              )}
+            />
             {item.label}
           </Link>
         );
       })}
-      
+
       <div className="mt-8 px-2">
         <p className="text-xs font-mono uppercase text-muted-foreground tracking-wider mb-2">
           External

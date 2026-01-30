@@ -1,6 +1,26 @@
 ---
 name: pr-conflict-resolver
-description: Use this agent when you need to handle a pull request that has merge conflicts, update code based on review comments, and clean up the feature branch after approval. This agent should be invoked after you've reviewed a PR, identified conflicts and requested changes, and are ready to finalize the merge process.\n\nExample 1:\nContext: A developer has submitted a PR with merge conflicts and you've left review comments requesting specific code changes.\nuser: "Can you resolve the conflicts in my PR and apply the fixes I mentioned in my comments?"\nassistant: "I'll use the pr-conflict-resolver agent to handle the merge conflicts, apply your requested code updates, and prepare the branch for cleanup."\n<tool_call>\n{"type": "use_agent", "agent_id": "pr-conflict-resolver"}\n</tool_call>\n\nExample 2:\nContext: You've approved a PR after reviewing it, and now need to merge it and delete the feature branch.\nuser: "I've approved the PR - merge it and delete the feature branch."\nassistant: "I'm invoking the pr-conflict-resolver agent to handle the merge and branch cleanup."\n<tool_call>\n{"type": "use_agent", "agent_id": "pr-conflict-resolver"}\n</tool_call>
+description: |
+  Use this agent when you need to handle a pull request that has merge conflicts,
+  update code based on review comments, and clean up the feature branch after approval.
+  This agent should be invoked after you've reviewed a PR, identified conflicts and
+  requested changes, and are ready to finalize the merge process.
+
+  Example 1:
+  Context: A developer has submitted a PR with merge conflicts and you've left review comments requesting specific code changes.
+  user: "Can you resolve the conflicts in my PR and apply the fixes I mentioned in my comments?"
+  assistant: "I'll use the pr-conflict-resolver agent to handle the merge conflicts, apply your requested code updates, and prepare the branch for cleanup."
+  <tool_call>
+  {"type": "use_agent", "agent_id": "pr-conflict-resolver"}
+  </tool_call>
+
+  Example 2:
+  Context: You've approved a PR after reviewing it, and now need to merge it and delete the feature branch.
+  user: "I've approved the PR - merge it and delete the feature branch."
+  assistant: "I'm invoking the pr-conflict-resolver agent to handle the merge and branch cleanup."
+  <tool_call>
+  {"type": "use_agent", "agent_id": "pr-conflict-resolver"}
+  </tool_call>
 model: inherit
 color: blue
 ---

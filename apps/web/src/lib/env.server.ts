@@ -47,7 +47,7 @@ const ServerEnvSchema = z.object({
 
   // === Cache & Storage ===
   REDIS_URL: z.string().url().optional(),
-  
+
   // === Upstash Redis (Rate Limiting) ===
   UPSTASH_REDIS_REST_URL: z.string().url().optional(),
   UPSTASH_REDIS_REST_TOKEN: z.string().optional(),
@@ -152,7 +152,7 @@ export function loadServerEnv(): ServerEnv {
       console.error("[env.server] Production requires CORS_ORIGINS to be configured");
       throw new Error("Missing CORS_ORIGINS in production");
     }
-    
+
     // Validate Redis configuration for multi-instance deployments
     if (env.USE_REDIS_RATE_LIMIT === "true") {
       if (!env.UPSTASH_REDIS_REST_URL && !env.REDIS_URL) {
@@ -161,7 +161,7 @@ export function loadServerEnv(): ServerEnv {
         );
         throw new Error("Missing Redis configuration for rate limiting in production");
       }
-      
+
       if (env.UPSTASH_REDIS_REST_URL && !env.UPSTASH_REDIS_REST_TOKEN) {
         console.error("[env.server] UPSTASH_REDIS_REST_URL requires UPSTASH_REDIS_REST_TOKEN");
         throw new Error("Missing UPSTASH_REDIS_REST_TOKEN in production");

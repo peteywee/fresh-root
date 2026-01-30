@@ -37,23 +37,29 @@ Perform a red team analysis on the API routes
 
 ```markdown
 # 🔴 RED TEAM ATTACK REPORT
+
 ## Target: [What was analyzed]
 
 ## Security Checks
+
 - [ ] SEC-01: Auth bypass [PASS/FAIL]
 - [ ] SEC-02: Data leakage [PASS/FAIL]
 - [ ] SEC-03: Injection [PASS/FAIL]
 
 ## Logic Checks
+
 - [ ] LOG-01: Logic errors [PASS/FAIL]
 
 ## Pattern Checks
+
 - [ ] PAT-01: Compliance [PASS/FAIL]
 
 ## Edge Case Checks
+
 - [ ] EDGE-01: Null handling [PASS/FAIL]
 
 ## Sr Dev Review
+
 [Evaluation of findings and corrections]
 ```
 

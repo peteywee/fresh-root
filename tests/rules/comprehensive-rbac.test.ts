@@ -42,13 +42,17 @@ describe("RBAC role hierarchy", () => {
       // Seed memberships for all roles
       const roles = ["staff", "scheduler", "manager", "admin", "org_owner"];
       for (const role of roles) {
-        await ctx.firestore().collection("memberships").doc(`user-${role}_org-123`).set({
-          uid: `user-${role}`,
-          orgId: "org-123",
-          roles: [role],
-          status: "active",
-          createdAt: Date.now(),
-        });
+        await ctx
+          .firestore()
+          .collection("memberships")
+          .doc(`user-${role}_org-123`)
+          .set({
+            uid: `user-${role}`,
+            orgId: "org-123",
+            roles: [role],
+            status: "active",
+            createdAt: Date.now(),
+          });
       }
     });
   });
@@ -60,7 +64,12 @@ describe("RBAC role hierarchy", () => {
   describe("schedule write permissions by role", () => {
     it("staff should NOT be able to write schedules", async () => {
       const ctx = ctxUser(testEnv, "user-staff", { orgId: "org-123", roles: ["staff"] });
-      const schedRef = ctx.firestore().collection("orgs").doc("org-123").collection("schedules").doc("sched-new");
+      const schedRef = ctx
+        .firestore()
+        .collection("orgs")
+        .doc("org-123")
+        .collection("schedules")
+        .doc("sched-new");
 
       await assertFails(
         schedRef.set({
@@ -69,13 +78,18 @@ describe("RBAC role hierarchy", () => {
           startDate: Date.now(),
           endDate: Date.now() + 604800000,
           createdAt: Date.now(),
-        })
+        }),
       );
     });
 
     it("scheduler SHOULD be able to write schedules", async () => {
       const ctx = ctxUser(testEnv, "user-scheduler", { orgId: "org-123", roles: ["scheduler"] });
-      const schedRef = ctx.firestore().collection("orgs").doc("org-123").collection("schedules").doc("sched-scheduler");
+      const schedRef = ctx
+        .firestore()
+        .collection("orgs")
+        .doc("org-123")
+        .collection("schedules")
+        .doc("sched-scheduler");
 
       await assertSucceeds(
         schedRef.set({
@@ -84,13 +98,18 @@ describe("RBAC role hierarchy", () => {
           startDate: Date.now(),
           endDate: Date.now() + 604800000,
           createdAt: Date.now(),
-        })
+        }),
       );
     });
 
     it("manager SHOULD be able to write schedules", async () => {
       const ctx = ctxUser(testEnv, "user-manager", { orgId: "org-123", roles: ["manager"] });
-      const schedRef = ctx.firestore().collection("orgs").doc("org-123").collection("schedules").doc("sched-manager");
+      const schedRef = ctx
+        .firestore()
+        .collection("orgs")
+        .doc("org-123")
+        .collection("schedules")
+        .doc("sched-manager");
 
       await assertSucceeds(
         schedRef.set({
@@ -99,13 +118,18 @@ describe("RBAC role hierarchy", () => {
           startDate: Date.now(),
           endDate: Date.now() + 604800000,
           createdAt: Date.now(),
-        })
+        }),
       );
     });
 
     it("admin SHOULD be able to write schedules", async () => {
       const ctx = ctxUser(testEnv, "user-admin", { orgId: "org-123", roles: ["admin"] });
-      const schedRef = ctx.firestore().collection("orgs").doc("org-123").collection("schedules").doc("sched-admin");
+      const schedRef = ctx
+        .firestore()
+        .collection("orgs")
+        .doc("org-123")
+        .collection("schedules")
+        .doc("sched-admin");
 
       await assertSucceeds(
         schedRef.set({
@@ -114,13 +138,18 @@ describe("RBAC role hierarchy", () => {
           startDate: Date.now(),
           endDate: Date.now() + 604800000,
           createdAt: Date.now(),
-        })
+        }),
       );
     });
 
     it("org_owner SHOULD be able to write schedules", async () => {
       const ctx = ctxUser(testEnv, "user-org_owner", { orgId: "org-123", roles: ["org_owner"] });
-      const schedRef = ctx.firestore().collection("orgs").doc("org-123").collection("schedules").doc("sched-owner");
+      const schedRef = ctx
+        .firestore()
+        .collection("orgs")
+        .doc("org-123")
+        .collection("schedules")
+        .doc("sched-owner");
 
       await assertSucceeds(
         schedRef.set({
@@ -129,7 +158,7 @@ describe("RBAC role hierarchy", () => {
           startDate: Date.now(),
           endDate: Date.now() + 604800000,
           createdAt: Date.now(),
-        })
+        }),
       );
     });
   });
@@ -214,7 +243,10 @@ describe("RBAC role hierarchy", () => {
   describe("role hierarchy enforcement", () => {
     it("should enforce scheduler < manager for deletions", async () => {
       // Scheduler can create but manager should delete
-      const schedulerCtx = ctxUser(testEnv, "user-scheduler", { orgId: "org-123", roles: ["scheduler"] });
+      const schedulerCtx = ctxUser(testEnv, "user-scheduler", {
+        orgId: "org-123",
+        roles: ["scheduler"],
+      });
       const managerCtx = ctxUser(testEnv, "user-manager", { orgId: "org-123", roles: ["manager"] });
 
       // Create schedule as scheduler
@@ -230,19 +262,38 @@ describe("RBAC role hierarchy", () => {
           orgId: "org-123",
           startDate: Date.now(),
           createdAt: Date.now(),
-        })
+        }),
       );
 
       // Scheduler should NOT be able to delete
-      await assertFails(schedulerCtx.firestore().collection("schedules").doc("org-123").collection("schedules").doc("sched-test").delete());
+      await assertFails(
+        schedulerCtx
+          .firestore()
+          .collection("schedules")
+          .doc("org-123")
+          .collection("schedules")
+          .doc("sched-test")
+          .delete(),
+      );
 
       // Manager SHOULD be able to delete
-      await assertSucceeds(managerCtx.firestore().collection("schedules").doc("org-123").collection("schedules").doc("sched-test").delete());
+      await assertSucceeds(
+        managerCtx
+          .firestore()
+          .collection("schedules")
+          .doc("org-123")
+          .collection("schedules")
+          .doc("sched-test")
+          .delete(),
+      );
     });
 
     it("should enforce manager < org_owner for org deletion", async () => {
       const managerCtx = ctxUser(testEnv, "user-manager", { orgId: "org-123", roles: ["manager"] });
-      const ownerCtx = ctxUser(testEnv, "user-org_owner", { orgId: "org-123", roles: ["org_owner"] });
+      const ownerCtx = ctxUser(testEnv, "user-org_owner", {
+        orgId: "org-123",
+        roles: ["org_owner"],
+      });
 
       const orgRef = ownerCtx.firestore().collection("orgs").doc("org-123");
 
@@ -259,7 +310,12 @@ describe("RBAC role hierarchy", () => {
 
     it("corporate role should have manager-level permissions", async () => {
       const ctx = ctxUser(testEnv, "user-corporate", corporateClaims);
-      const schedRef = ctx.firestore().collection("orgs").doc("org-123").collection("schedules").doc("sched-corporate");
+      const schedRef = ctx
+        .firestore()
+        .collection("orgs")
+        .doc("org-123")
+        .collection("schedules")
+        .doc("sched-corporate");
 
       await assertSucceeds(
         schedRef.set({
@@ -268,20 +324,25 @@ describe("RBAC role hierarchy", () => {
           startDate: Date.now(),
           endDate: Date.now() + 604800000,
           createdAt: Date.now(),
-        })
+        }),
       );
     });
 
     it("corporate role should be able to manage positions", async () => {
       const ctx = ctxUser(testEnv, "user-corporate", corporateClaims);
-      const posRef = ctx.firestore().collection("orgs").doc("org-123").collection("positions").doc("pos-corporate");
+      const posRef = ctx
+        .firestore()
+        .collection("orgs")
+        .doc("org-123")
+        .collection("positions")
+        .doc("pos-corporate");
 
       await assertSucceeds(
         posRef.set({
           name: "Corporate Position",
           orgId: "org-123",
           createdAt: Date.now(),
-        })
+        }),
       );
     });
   });
@@ -289,7 +350,12 @@ describe("RBAC role hierarchy", () => {
   describe("legacy membership-based roles", () => {
     it("should allow access via legacy membership without token claims", async () => {
       const ctx = ctxUser(testEnv, "user-manager", {}); // No token claims
-      const schedRef = ctx.firestore().collection("orgs").doc("org-123").collection("schedules").doc("sched-legacy");
+      const schedRef = ctx
+        .firestore()
+        .collection("orgs")
+        .doc("org-123")
+        .collection("schedules")
+        .doc("sched-legacy");
 
       // Should succeed because membership document exists
       await assertSucceeds(
@@ -298,13 +364,18 @@ describe("RBAC role hierarchy", () => {
           orgId: "org-123",
           startDate: Date.now(),
           createdAt: Date.now(),
-        })
+        }),
       );
     });
 
     it("should enforce role hierarchy in legacy memberships", async () => {
       const ctx = ctxUser(testEnv, "user-staff", {}); // Staff via legacy membership
-      const schedRef = ctx.firestore().collection("orgs").doc("org-123").collection("schedules").doc("sched-staff-legacy");
+      const schedRef = ctx
+        .firestore()
+        .collection("orgs")
+        .doc("org-123")
+        .collection("schedules")
+        .doc("sched-staff-legacy");
 
       // Staff should NOT be able to write even with legacy membership
       await assertFails(
@@ -313,7 +384,7 @@ describe("RBAC role hierarchy", () => {
           orgId: "org-123",
           startDate: Date.now(),
           createdAt: Date.now(),
-        })
+        }),
       );
     });
   });
@@ -321,7 +392,12 @@ describe("RBAC role hierarchy", () => {
   describe("combined token and legacy auth", () => {
     it("should work with token claims when available", async () => {
       const ctx = ctxUser(testEnv, "user-manager", { orgId: "org-123", roles: ["manager"] });
-      const schedRef = ctx.firestore().collection("orgs").doc("org-123").collection("schedules").doc("sched-token");
+      const schedRef = ctx
+        .firestore()
+        .collection("orgs")
+        .doc("org-123")
+        .collection("schedules")
+        .doc("sched-token");
 
       await assertSucceeds(
         schedRef.set({
@@ -329,13 +405,18 @@ describe("RBAC role hierarchy", () => {
           orgId: "org-123",
           startDate: Date.now(),
           createdAt: Date.now(),
-        })
+        }),
       );
     });
 
     it("should fallback to legacy membership when token missing", async () => {
       const ctx = ctxUser(testEnv, "user-manager", {}); // No token, uses membership
-      const schedRef = ctx.firestore().collection("orgs").doc("org-123").collection("schedules").doc("sched-fallback");
+      const schedRef = ctx
+        .firestore()
+        .collection("orgs")
+        .doc("org-123")
+        .collection("schedules")
+        .doc("sched-fallback");
 
       await assertSucceeds(
         schedRef.set({
@@ -343,7 +424,7 @@ describe("RBAC role hierarchy", () => {
           orgId: "org-123",
           startDate: Date.now(),
           createdAt: Date.now(),
-        })
+        }),
       );
     });
   });

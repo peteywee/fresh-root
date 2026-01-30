@@ -4,22 +4,26 @@ Execute an implementation plan with validation at each step.
 
 ## Overview
 
-The Implement Agent executes structured implementation plans for features, refactoring, or infrastructure changes. It follows a methodical approach:
+The Implement Agent executes structured implementation plans for features, refactoring, or
+infrastructure changes. It follows a methodical approach:
 
 1. **Load or Create Plan** — If no plan exists, create a TODO list first
-2. **Execute Tasks Sequentially** — Mark tasks in-progress, verify dependencies, execute, validate, mark completed
+2. **Execute Tasks Sequentially** — Mark tasks in-progress, verify dependencies, execute, validate,
+   mark completed
 3. **Validation Gates** — After each change: TypeScript, ESLint, tests, pattern validator
 4. **Final Validation** — All checks must pass before claiming completion
 
 ## When to Use
 
 ✅ **Use this agent for**:
+
 - Executing multi-step feature implementations
 - Refactoring large sections of code
 - Following structured plans from the Plan Agent
 - Making changes across multiple files with validation
 
 ❌ **Don't use this agent for**:
+
 - Quick one-off fixes (use direct edit instead)
 - Planning (use the Plan Agent)
 - Code review (use the Review Agent)
@@ -28,6 +32,7 @@ The Implement Agent executes structured implementation plans for features, refac
 ## Invocation
 
 ### Orchestration
+
 ```
 Use the implement agent to execute this plan: create the authentication module
 Run the implement agent to implement the new schedule API
@@ -36,12 +41,15 @@ Run the implement agent to implement the new schedule API
 ## How It Works
 
 ### Phase 1: Plan Loading
+
 - If no plan exists, creates a TODO list
 - If plan exists, loads and verifies current state
 - Shows task dependencies
 
 ### Phase 2: Sequential Execution
+
 For each task:
+
 1. Mark task as in-progress (only one at a time)
 2. Verify dependencies are complete
 3. Execute the task
@@ -55,13 +63,16 @@ For each task:
 5. Mark task as completed immediately
 
 ### Phase 3: Validation Gates
+
 After each significant change:
+
 - ✅ TypeScript compilation passes
 - ✅ ESLint passes
 - ✅ Tests pass (if applicable)
 - ✅ Pattern validator ≥90
 
 ### Phase 4: Final Validation
+
 ```bash
 pnpm typecheck
 pnpm lint
@@ -81,25 +92,29 @@ node scripts/validate-patterns.mjs
 ## Output Format
 
 Reports progress with:
+
 ```markdown
 ## Implementation Progress
 
 ### Task 1: [Title]
-Status: ✅ Completed
-Changes:
+
+Status: ✅ Completed Changes:
+
 - [File]: [Description]
 
 ### Task 2: [Title]
-Status: 🔄 In Progress
-...
+
+Status: 🔄 In Progress ...
 
 ## Validation Results
+
 - TypeScript: ✅
 - Lint: ✅
 - Tests: ✅
 - Patterns: ✅ (score: 95)
 
 ## Next Steps
+
 [What remains or what user should verify]
 ```
 
@@ -114,6 +129,7 @@ Status: 🔄 In Progress
 ## Setup & Troubleshooting
 
 ### Prerequisites
+
 - [ ] `pnpm install --frozen-lockfile` completed
 - [ ] All tools available (search, edit, validate, run)
 - [ ] Codebase in clean state (no uncommitted changes)
@@ -121,16 +137,19 @@ Status: 🔄 In Progress
 ### Common Issues
 
 **"Validation failed"**
+
 - Check error message carefully
 - Fix the issue before continuing
 - Don't proceed with broken code
 
 **"Dependency not complete"**
+
 - Don't skip dependencies
 - Mark dependencies as in-progress if needed
 - Validate dependency completion
 
 **"Pattern validator <90"**
+
 - Review pattern violations
 - Fix issues or document in issue
 - Re-run validator

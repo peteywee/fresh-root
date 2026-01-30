@@ -461,6 +461,16 @@ describe("Schedules API", () => {
         });
       });
 
+      it("should return 403 when orgId in body does not match context", async () => {
+        const request = createAuthenticatedRequest("POST", "/api/schedules", {
+          body: { ...validScheduleInput, orgId: "org-other-999" },
+          role: "scheduler",
+        });
+        const response = await callEndpoint(POST, request);
+
+        expect(response.status).toBe(403);
+      });
+
       it("should succeed for scheduler role", async () => {
         const request = createAuthenticatedRequest("POST", "/api/schedules", {
           body: validScheduleInput,

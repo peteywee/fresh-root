@@ -7,12 +7,12 @@ import { z } from "zod";
 import * as path from "path";
 import { createAuthenticatedEndpoint } from "@fresh-schedules/api-framework";
 
-const WORKSPACE_ROOT = "/workspaces/fresh-root";
+const WORKSPACE_ROOT = process.env.WORKSPACE_ROOT || process.cwd();
 
 // Input validation schema
 const TerminalInputSchema = z.object({
   command: z.string().min(1).max(1000),
-  cwd: z.string().default("/workspaces/fresh-root"),
+  cwd: z.string().default(WORKSPACE_ROOT),
 });
 
 // Security: Blocked dangerous patterns (with multiline flag)
@@ -160,6 +160,9 @@ function executeCommand(
     const binary = parts[0];
     const args = parts.slice(1);
 
+    // nosemgrep: javascript.lang.security.detect-child-process.detect-child-process
+    // Security: Authenticated API with extensive validation: allowlist (L38-74),
+    // blocked patterns (L19-35), safe char filter (L93-97), cwd validation (L76-81), shell:false
     const child = spawn(binary, args, {
       cwd,
       env: { ...process.env, TERM: "xterm-256color" },

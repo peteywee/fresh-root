@@ -1,9 +1,12 @@
 # Repomix Integration Guide
+
 Repomix has been integrated into Fresh Schedules as both a **CLI tool** and a **library** for
 analyzing and packaging codebases.
 
 ## Quick Start
+
 ### CLI Usage
+
 ```bash
 # Get help
 pnpm repomix --help
@@ -25,6 +28,7 @@ pnpm repomix user/repo --style markdown
 ```
 
 ### CLI Options
+
 - `--style <format>` - Output format: `xml` (default), `markdown`, `json`, `plain`
 - `--output <path>` - Output file path (default: `repomix-output.{xml|md|json}`)
 - `--ignore <patterns>` - Patterns to ignore (comma-separated)
@@ -34,6 +38,7 @@ pnpm repomix user/repo --style markdown
 - `-h, --help` - Show help
 
 ### Library Usage
+
 Use repomix programmatically in your code:
 
 ```typescript
@@ -57,25 +62,30 @@ await runDefaultAction(
 ```
 
 ## Common Use Cases
+
 ### 1. Generate Codebase Documentation
+
 ```bash
 # Create a markdown representation of your codebase
 pnpm repomix . --style markdown --output CODEBASE.md
 ```
 
 ### 2. Prepare for AI Analysis
+
 ```bash
 # Compress output for ChatGPT/Claude analysis
 pnpm repomix . --style xml --compress --output ai-input.xml
 ```
 
 ### 3. Analyze Specific Package
+
 ```bash
 # Analyze just the API framework package
 pnpm repomix packages/api-framework --style markdown
 ```
 
-### 4. Exclude node\_modules and build artifacts
+### 4. Exclude node_modules and build artifacts
+
 ```bash
 pnpm repomix . \
   --style markdown \
@@ -83,6 +93,7 @@ pnpm repomix . \
 ```
 
 ### 5. Generate focused analysis
+
 ```bash
 # Only include API routes
 pnpm repomix . \
@@ -92,7 +103,9 @@ pnpm repomix . \
 ```
 
 ## Package Details
+
 ### Location
+
 ```
 packages/repomix/
 ├── src/
@@ -105,10 +118,12 @@ packages/repomix/
 ```
 
 ### Package Name
+
 - **NPM**: `@fresh-schedules/repomix`
 - **Workspace**: `@fresh-schedules/repomix` (internal package)
 
 ### Scripts
+
 ```bash
 # Build the package
 pnpm --filter @fresh-schedules/repomix build
@@ -121,7 +136,9 @@ pnpm --filter @fresh-schedules/repomix clean
 ```
 
 ## Library API
+
 ### Exported Functions
+
 ```typescript
 // Run repomix on directories
 export async function runDefaultAction(
@@ -138,13 +155,16 @@ export async function getVersion(): Promise<string>;
 ```
 
 ### Exported Types
+
 ```typescript
 export type RepomixConfig    // Configuration schema
 export type CliOptions       // CLI options interface
 ```
 
 ## Integration Points
+
 ### Root Package.json
+
 Added convenience command:
 
 ```json
@@ -156,13 +176,16 @@ Added convenience command:
 ```
 
 ### Dependency Chain
+
 - **fresh-root** (root)
   - Depends on: `@fresh-schedules/repomix`
 - **@fresh-schedules/repomix** (package)
   - Depends on: `repomix@^0.2.43`
 
 ## Examples
+
 ### Example 1: CI/CD Integration
+
 ```bash
 # !/bin/bash
 # Generate codebase documentation for each release
@@ -174,6 +197,7 @@ pnpm repomix . \
 ```
 
 ### Example 2: Programmatic API Usage
+
 ```typescript
 // scripts/analyze-codebase.ts
 import { runDefaultAction, setLogLevel } from "@fresh-schedules/repomix";
@@ -199,6 +223,7 @@ main().catch(console.error);
 ```
 
 ### Example 3: GitHub Repository Analysis
+
 ```bash
 # Analyze a GitHub repository directly
 pnpm repomix peteywee/fresh-root \
@@ -208,7 +233,9 @@ pnpm repomix peteywee/fresh-root \
 ```
 
 ## Troubleshooting
+
 ### CLI not found
+
 ```bash
 # Ensure the package is built
 pnpm --filter @fresh-schedules/repomix build
@@ -218,6 +245,7 @@ node packages/repomix/dist/cli.js --help
 ```
 
 ### Build errors
+
 ```bash
 # Clean and rebuild
 pnpm --filter @fresh-schedules/repomix clean
@@ -225,6 +253,7 @@ pnpm --filter @fresh-schedules/repomix build
 ```
 
 ### Type errors in library usage
+
 Ensure you're importing from the correct path:
 
 ```typescript
@@ -236,6 +265,7 @@ import { runDefaultAction } from "@fresh-schedules/repomix/dist/index";
 ```
 
 ## Architecture
+
 ```
 ┌─────────────────────────────────────────┐
 │  fresh-root (root workspace)            │
@@ -259,11 +289,13 @@ import { runDefaultAction } from "@fresh-schedules/repomix/dist/index";
 ```
 
 ## Related Documentation
+
 - [repomix GitHub](https://github.com/yamadashy/repomix)
 - [repomix Documentation](https://repomix.com)
 - [Fresh Schedules Codebase Guide](./)
 
 ## Version Information
+
 - **@fresh-schedules/repomix**: v0.1.0
 - **repomix (underlying)**: v0.2.43
 - **Node requirement**: >=20.10.0

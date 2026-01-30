@@ -1,10 +1,11 @@
 // [P0][JOIN-TOKENS][API] Join tokens endpoint
 
+import { randomBytes } from "node:crypto";
 import { z } from "zod";
 import { createOrgEndpoint } from "@fresh-schedules/api-framework";
 import { CreateJoinTokenSchema } from "@fresh-schedules/types";
 
-import { ok, serverError } from "../_shared/validation";
+import { badRequest, forbidden, ok, serverError } from "../_shared/validation";
 
 /**
  * GET /api/join-tokens
@@ -42,10 +43,17 @@ export const POST = createOrgEndpoint({
     try {
       // Type assertion safe - input validated by SDK factory
       const typedInput = input as z.infer<typeof CreateJoinTokenSchema>;
+      const orgId = context.org?.orgId;
+      if (!orgId) {
+        return badRequest("Organization context is required");
+      }
+      if (typedInput.orgId !== orgId) {
+        return forbidden("orgId does not match organization context");
+      }
       const token = {
         id: `token-${Date.now()}`,
-        orgId: context.org?.orgId,
-        token: Math.random().toString(36).substring(2, 15),
+        orgId,
+        token: randomBytes(24).toString("hex"),
         createdBy: context.auth?.userId,
         createdAt: Date.now(),
         expiresAt: typedInput.expiresAt ?? Date.now() + 604800000,

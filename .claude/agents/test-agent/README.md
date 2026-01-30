@@ -4,17 +4,20 @@ Generate and run tests for a feature or file.
 
 ## Overview
 
-The Test Agent generates comprehensive tests following Fresh Schedules testing standards and runs them to verify coverage and functionality.
+The Test Agent generates comprehensive tests following Fresh Schedules testing standards and runs
+them to verify coverage and functionality.
 
 ## When to Use
 
 ✅ **Use this agent for**:
+
 - Generate tests for new features
 - Test API routes
 - Increase test coverage
 - Verify all edge cases are covered
 
 ❌ **Don't use this agent for**:
+
 - Quick unit test (write directly)
 - Code review (use Review Agent)
 - Performance testing (manual work)
@@ -30,6 +33,7 @@ Generate tests for the schedule feature
 ## Test Types
 
 ### Unit Tests (Vitest)
+
 ```typescript
 import { describe, it, expect } from "vitest";
 
@@ -51,6 +55,7 @@ describe("functionName", () => {
 ```
 
 ### API Route Tests
+
 ```typescript
 import { createMockRequest } from "@fresh-schedules/api-framework/testing";
 import { GET, POST } from "../route";
@@ -75,6 +80,7 @@ describe("POST /api/feature", () => {
 ```
 
 ### E2E Tests (Playwright)
+
 - Real browser interaction
 - Accessibility checks
 - User flow validation
@@ -102,11 +108,13 @@ describe("POST /api/feature", () => {
 ## Test Coverage
 
 Run with coverage:
+
 ```bash
 pnpm test:coverage
 ```
 
 Reports percentage of:
+
 - Statements covered
 - Branches covered
 - Functions covered
@@ -115,6 +123,7 @@ Reports percentage of:
 ## Output Format
 
 Tests organized by type with clear descriptions of:
+
 - What is being tested
 - Expected behavior
 - Edge cases

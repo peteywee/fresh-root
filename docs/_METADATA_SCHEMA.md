@@ -31,7 +31,6 @@ related-docs:
   - path/to/related1.md
   - path/to/related2.md
 ---
-
 # Title (H1 header)
 ...content...
 ```
@@ -41,18 +40,21 @@ related-docs:
 ## Field Definitions
 
 ### `title` (required)
+
 - **Type**: String
 - **Purpose**: Human-readable document title
 - **Length**: 4-100 characters
 - **Example**: "SDK Factory Pattern Implementation Guide"
 
 ### `description` (required)
+
 - **Type**: String
 - **Purpose**: One-sentence purpose statement
 - **Length**: 10-150 characters
 - **Example**: "Complete guide to implementing the SDK factory pattern for type-safe API endpoints"
 
 ### `keywords` (required)
+
 - **Type**: Array of strings
 - **Purpose**: Searchable keywords for AI and human discovery
 - **Count**: 3-10 keywords
@@ -60,6 +62,7 @@ related-docs:
 - **Rules**: Lowercase, hyphenated for multi-word terms
 
 ### `category` (required)
+
 - **Type**: Enum - one of:
   - `architecture` - System design, architectural patterns, decisions
   - `guide` - How-to guides, tutorials, step-by-step procedures
@@ -71,6 +74,7 @@ related-docs:
   - `archive` - Historical, deprecated, or completed work
 
 ### `tags` (optional)
+
 - **Type**: Array of strings
 - **Purpose**: Cross-cutting categorization beyond main category
 - **Examples**:
@@ -78,6 +82,7 @@ related-docs:
   - `["p0", "breaking-change", "ai-focus"]`
 
 ### `status` (required)
+
 - **Type**: Enum - one of:
   - `active` - Current, maintained, authoritative
   - `draft` - Work in progress, not finalized
@@ -85,6 +90,7 @@ related-docs:
   - `archived` - Historical, completed, not actively used
 
 ### `audience` (required)
+
 - **Type**: Array - one or more of:
   - `developers` - Software engineers writing code
   - `operators` - DevOps/SRE/Platform teams
@@ -94,6 +100,7 @@ related-docs:
   - `teams` - All team members
 
 ### `related-docs` (optional)
+
 - **Type**: Array of relative paths
 - **Purpose**: Cross-reference related documents for navigation
 - **Examples**:
@@ -193,7 +200,6 @@ related-docs:
   - architecture/API_SCHEMA_AUDIT.md
   - templates/API_ROUTE_TEMPLATE.md
 ---
-
 # SDK Factory Pattern Implementation Guide
 
 [Content here]
@@ -204,6 +210,7 @@ related-docs:
 ## Migration Checklist
 
 For each document:
+
 - [ ] Add YAML frontmatter with all required fields
 - [ ] Move to appropriate subdirectory
 - [ ] Update all cross-references
@@ -217,6 +224,7 @@ For each document:
 ## For AI Agents
 
 When searching or indexing docs:
+
 1. Always parse and use YAML frontmatter
 2. Use `keywords` field for semantic search
 3. Use `related-docs` to understand relationships
@@ -224,4 +232,3 @@ When searching or indexing docs:
 5. Use `status` to prioritize active docs over deprecated
 6. Use `audience` to filter for relevance
 7. Cross-reference via `_INDEX_GRAPH.md` for context
-

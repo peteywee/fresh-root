@@ -6,6 +6,8 @@ import { createOrgEndpoint } from "@fresh-schedules/api-framework";
 import { UpdateOrganizationSchema } from "@fresh-schedules/types";
 import { NextResponse } from "next/server";
 
+import { forbidden } from "../../_shared/validation";
+
 /**
  * GET /api/organizations/[id]
  * Get organization details
@@ -14,6 +16,9 @@ export const GET = createOrgEndpoint({
   handler: async ({ request: _request, input: _input, context, params }) => {
     try {
       const { id } = params;
+      if (id !== context.org!.orgId) {
+        return forbidden("Access denied");
+      }
       const org = {
         id,
         name: "Sample Organization",
@@ -41,6 +46,9 @@ export const PATCH = createOrgEndpoint({
   input: UpdateOrganizationSchema,
   handler: async ({ request: _request, input, context, params }) => {
     try {
+      if (params.id !== context.org!.orgId) {
+        return forbidden("Access denied");
+      }
       // Type assertion safe - input validated by SDK factory
       const typedInput = input as z.infer<typeof UpdateOrganizationSchema>;
       const updated = {
@@ -67,6 +75,9 @@ export const DELETE = createOrgEndpoint({
   roles: ["admin"],
   handler: async ({ request: _request, input: _input, context: _context, params }) => {
     try {
+      if (params.id !== context.org!.orgId) {
+        return forbidden("Access denied");
+      }
       return NextResponse.json({ deleted: true, id: params.id });
     } catch (error) {
       console.error("Failed to delete organization", { error, orgId: params.id });

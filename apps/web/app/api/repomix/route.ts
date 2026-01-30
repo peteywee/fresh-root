@@ -7,11 +7,11 @@ import { z } from "zod";
 import * as fs from "fs/promises";
 import * as path from "path";
 
-const WORKSPACE_ROOT = "/workspaces/fresh-root";
+const WORKSPACE_ROOT = process.env.WORKSPACE_ROOT || process.cwd();
 
 // Input validation schema
 const RepomixInputSchema = z.object({
-  directory: z.string().default("/workspaces/fresh-root"),
+  directory: z.string().default(WORKSPACE_ROOT),
   output: z.enum(["xml", "markdown", "json", "plain"]).default("xml"),
   compress: z.boolean().default(false),
   include: z.array(z.string()).optional(),
@@ -107,6 +107,8 @@ export async function POST(request: NextRequest) {
     const timestamp = Date.now();
     const outputExt =
       config.output === "markdown" ? "md" : config.output === "plain" ? "txt" : config.output;
+    // nosemgrep: javascript.lang.security.audit.path-traversal.path-join-resolve-traversal.path-join-resolve-traversal
+    // Security: Output file uses constant /tmp base with timestamp, not user input
     const outputFile = path.join("/tmp", `repomix-output-${timestamp}.${outputExt}`);
     args.push("--output", outputFile);
 
@@ -190,7 +192,7 @@ function executeRepomix(
 
     // Try npx repomix first
     const child = spawn("npx", ["repomix", ...args], {
-      cwd: "/workspaces/fresh-root",
+      cwd: WORKSPACE_ROOT,
       env: process.env,
       timeout,
     });

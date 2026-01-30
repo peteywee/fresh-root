@@ -1,18 +1,21 @@
 ---
-
-applyTo: "\*"
+applyTo: "*"
 description: "Security standards based on OWASP Top 10, AI safety, and responsible AI usage."
-## priority: 3
+---
 
 # Security & Safety Standards
+
 ## Core Principle
+
 **Security-first mindset.** When in doubt, choose the more secure option. Never sacrifice security
 for convenience.
 
 ---
 
 ## OWASP Top 10 Compliance
+
 ### A01: Broken Access Control
+
 **Enforce Principle of Least Privilege**
 
 ```typescript
@@ -34,6 +37,7 @@ export const GET = createOrgEndpoint({
 **Deny by Default**: Access only if explicitly allowed.
 
 ### A02: Cryptographic Failures
+
 - Use modern algorithms: Argon2 or bcrypt for passwords
 - Never MD5 or SHA-1 for security purposes
 - Always HTTPS in production
@@ -50,6 +54,7 @@ if (!API_KEY) throw new Error("API_KEY not configured");
 ```
 
 ### A03: Injection Prevention
+
 **Parameterized Queries Only**
 
 ```typescript
@@ -85,6 +90,7 @@ const validated = InputSchema.parse(body);
 ```
 
 ### A05: Security Misconfiguration
+
 **Security Headers Required**
 
 ```typescript
@@ -107,6 +113,7 @@ if (process.env.NODE_ENV === "production") {
 ```
 
 ### A07: Authentication Failures
+
 **Session Security**
 
 ```typescript
@@ -126,6 +133,7 @@ export const POST = createRateLimitedEndpoint({
 ```
 
 ### A08: Data Integrity
+
 **Never deserialize untrusted data without validation**
 
 ```typescript
@@ -140,6 +148,7 @@ await processData(parsed.data);
 ```
 
 ### A10: SSRF Prevention
+
 **Validate all URLs from user input**
 
 ```typescript
@@ -155,7 +164,9 @@ function validateUrl(url: string): boolean {
 ---
 
 ## AI Safety & Prompt Engineering
+
 ### Never Generate Harmful Content
+
 Refuse requests for:
 
 - Illegal activities
@@ -167,6 +178,7 @@ Refuse requests for:
 Response: "Sorry, I can't assist with that."
 
 ### Prompt Injection Prevention
+
 **System Prompt Isolation**
 
 ```typescript
@@ -182,12 +194,14 @@ const messages = [
 ```
 
 ### Bias Mitigation
+
 - Use inclusive language
 - Consider diverse user populations
 - Test for bias in outputs
 - Document limitations
 
 ### Responsible AI Usage
+
 - Be transparent about AI limitations
 - Don't claim false capabilities
 - Acknowledge uncertainty
@@ -196,7 +210,9 @@ const messages = [
 ---
 
 ## Fresh Schedules Security Patterns
+
 ### SDK Factory (Required for API Routes)
+
 ```typescript
 // ✅ All API routes MUST use SDK factory
 export const GET = createOrgEndpoint({
@@ -208,6 +224,7 @@ export const GET = createOrgEndpoint({
 ```
 
 ### Organization Isolation (Always)
+
 ```typescript
 // ❌ Never query without org scoping
 await db.collection("schedules").get();
@@ -217,6 +234,7 @@ await db.collection(`orgs/${context.org!.orgId}/schedules`).get();
 ```
 
 ### Rate Limiting
+
 ```typescript
 // Recommended limits
 export const POST = createOrgEndpoint({
@@ -231,6 +249,7 @@ rateLimit: { maxRequests: 10, windowMs: 60000 }
 ```
 
 ### CSRF Protection
+
 Automatic for POST/PUT/PATCH/DELETE via SDK factory.
 
 Disable only for webhooks:
@@ -247,7 +266,9 @@ export const POST = createPublicEndpoint({
 ---
 
 ## Security Checklist
+
 ### Before Committing Code
+
 - \[ ] No secrets in code (API keys, passwords, tokens)
 - \[ ] All inputs validated with Zod
 - \[ ] SDK factory used for all API routes
@@ -256,6 +277,7 @@ export const POST = createPublicEndpoint({
 - \[ ] No debug code/endpoints in production
 
 ### Code Review Security Focus
+
 1. Auth/authz correct?
 2. Input validation complete?
 3. Data scoped to org?
@@ -265,6 +287,7 @@ export const POST = createPublicEndpoint({
 ---
 
 ## Veto Triggers (Red Team)
+
 The following **immediately block** delivery:
 
 - ❌ Auth bypass possible

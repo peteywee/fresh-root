@@ -1,12 +1,14 @@
 ---
-
 applyTo: "apps/**,packages/**"
 description: "Framework-specific patterns for Next.js, Firebase, Tailwind, and monorepo structure."
-## priority: 4
+---
 
 # Framework Patterns
+
 ## Next.js 16 (App Router)
+
 ### Project Structure
+
 ```
 apps/web/
 ├── app/                    # Routes, layouts, API endpoints
@@ -20,6 +22,7 @@ apps/web/
 ```
 
 ### Server vs Client Components
+
 **Server Components (Default)**
 
 - Data fetching
@@ -50,6 +53,7 @@ export default function Button() {
 ```
 
 ### Never Use `next/dynamic` with `ssr: false` in Server Components
+
 ```typescript
 // ❌ Bad - Will error
 import dynamic from "next/dynamic";
@@ -60,6 +64,7 @@ import ClientComponent from "./ClientComponent";
 ```
 
 ### API Routes (Route Handlers)
+
 ```typescript
 // app/api/example/route.ts
 import { createOrgEndpoint } from "@fresh-schedules/api-framework";
@@ -82,6 +87,7 @@ export const POST = createOrgEndpoint({
 ```
 
 ### Route Groups
+
 ```
 app/
 ├── (marketing)/          # No /marketing in URL
@@ -95,7 +101,9 @@ app/
 ---
 
 ## Firebase (Admin SDK)
+
 ### Initialization
+
 ```typescript
 // lib/firebase-admin.ts
 import { getFirestore } from "firebase-admin/firestore";
@@ -106,6 +114,7 @@ export const auth = getAuth();
 ```
 
 ### Collection Paths
+
 ```
 /users/{userId}                                    # User profiles
 /orgs/{orgId}                                      # Organizations
@@ -116,6 +125,7 @@ export const auth = getAuth();
 ```
 
 ### Query Pattern (Always Org-Scoped)
+
 ```typescript
 // ✅ Correct - scoped to organization
 const snapshot = await db
@@ -130,6 +140,7 @@ const snapshot = await db.collection("schedules").get();
 ```
 
 ### Firestore Rules Helper Functions
+
 ```javascript
 // firestore.rules
 function isSignedIn() {
@@ -148,6 +159,7 @@ function hasAnyRole(orgId, roles) {
 ```
 
 ### Firebase Typing Strategy
+
 ```typescript
 // ✅ Use FirebaseFirestore namespace for types
 import { FirebaseFirestore } from "@google-cloud/firestore";
@@ -161,7 +173,9 @@ type QuerySnapshot = FirebaseFirestore.QuerySnapshot;
 ---
 
 ## Tailwind CSS
+
 ### Class Organization
+
 ```tsx
 // Order: Layout → Sizing → Spacing → Typography → Colors → Effects
 <div className="
@@ -175,6 +189,7 @@ type QuerySnapshot = FirebaseFirestore.QuerySnapshot;
 ```
 
 ### Responsive Design
+
 ```tsx
 // Mobile-first approach
 <div className="
@@ -185,6 +200,7 @@ type QuerySnapshot = FirebaseFirestore.QuerySnapshot;
 ```
 
 ### Custom Components
+
 ```tsx
 // Use cva for variant styling
 import { cva } from "class-variance-authority";
@@ -211,7 +227,9 @@ const buttonVariants = cva("inline-flex items-center justify-center rounded-md f
 ---
 
 ## Monorepo Structure (pnpm + Turbo)
+
 ### Package Organization
+
 ```
 packages/
 ├── api-framework/     # SDK factory for API routes
@@ -223,6 +241,7 @@ packages/
 ```
 
 ### Package Manager: pnpm ONLY
+
 ```bash
 # ❌ Never use
 npm install
@@ -234,6 +253,7 @@ pnpm add <package> --filter @apps/web
 ```
 
 ### Turbo Tasks
+
 ```bash
 pnpm dev          # Start dev servers
 pnpm build        # Build all packages
@@ -243,6 +263,7 @@ pnpm lint         # ESLint check
 ```
 
 ### Path Aliases
+
 ```typescript
 // ✅ Use aliases
 import { helper } from "@/src/lib/helpers";
@@ -255,7 +276,9 @@ import { helper } from "../../../src/lib/helpers";
 ---
 
 ## SDK Factory Pattern (Required)
+
 ### Factory Types
+
 ```typescript
 // Public - no auth
 createPublicEndpoint({ handler })
@@ -274,6 +297,7 @@ createRateLimitedEndpoint({ rateLimit, handler })
 ```
 
 ### Complete Example
+
 ```typescript
 import { createOrgEndpoint } from "@fresh-schedules/api-framework";
 import { CreateScheduleSchema } from "@fresh-schedules/types";
@@ -305,12 +329,15 @@ export const POST = createOrgEndpoint({
 ---
 
 ## Zod-First Validation (Triad of Trust)
+
 ### Every Domain Entity Has Three Parts
+
 1. **Zod Schema** in `packages/types/src/`
 2. **API Route** in `apps/web/app/api/`
 3. **Firestore Rules** in `firestore.rules`
 
 ### Schema Pattern
+
 ```typescript
 // packages/types/src/entity.ts
 import { z } from "zod";
