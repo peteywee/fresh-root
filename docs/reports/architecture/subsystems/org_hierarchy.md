@@ -454,7 +454,7 @@ All routes use `createOrgEndpoint()` which provides:
 **RBAC Role Hierarchy:**
 
 ```
-org_owner > admin > manager > scheduler > staff
+org_owner > admin > manager = scheduler > staff
 ```
 
 **Permission Matrix:**
@@ -464,8 +464,8 @@ org_owner > admin > manager > scheduler > staff
 | Delete org       | ✅        | ❌    | ❌      | ❌        | ❌    |
 | Manage members   | ✅        | ✅    | ❌      | ❌        | ❌    |
 | Update settings  | ✅        | ✅    | ❌      | ❌        | ❌    |
-| Create venues    | ✅        | ✅    | ✅      | ❌        | ❌    |
-| Create zones     | ✅        | ✅    | ✅      | ❌        | ❌    |
+| Create venues    | ✅        | ✅    | ✅      | ✅        | ❌    |
+| Create zones     | ✅        | ✅    | ✅      | ✅        | ❌    |
 | Create schedules | ✅        | ✅    | ✅      | ✅        | ❌    |
 | View schedules   | ✅        | ✅    | ✅      | ✅        | ✅    |
 | Check in/out     | ✅        | ✅    | ✅      | ✅        | ✅    |

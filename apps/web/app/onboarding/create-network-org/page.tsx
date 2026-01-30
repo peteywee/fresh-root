@@ -7,6 +7,15 @@ import React, { FormEvent, useState } from "react";
 
 import { useOnboardingWizard } from "../_wizard/OnboardingWizardContext";
 
+async function activateNetwork(networkId: string) {
+  const res = await fetch("/api/onboarding/activate-network", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ networkId }),
+  });
+  if (!res.ok) throw new Error("Failed to activate network");
+}
+
 type OrgFormState = {
   displayName: string;
   venueName: string;
@@ -74,10 +83,18 @@ export default function CreateNetworkOrgPage() {
       }
 
       const data = await res.json();
+      const createdId = data.data?.id;
 
-      if (data.data?.id) {
-        setOrgId(data.data.id);
-        setNetworkId(data.data.id);
+      if (createdId) {
+        setOrgId(createdId);
+        setNetworkId(createdId);
+
+        // Activate network so proxy gate passes after redirect
+        try {
+          await activateNetwork(createdId);
+        } catch (activationError) {
+          console.warn("activate-network failed", activationError);
+        }
       }
 
       router.push("/onboarding/block-4");

@@ -235,7 +235,7 @@ describe("attendance records and join tokens", () => {
         await assertSucceeds(recordRef.update({ status: "late" }));
       });
 
-      it("should deny scheduler from deleting attendance records (manager+ only)", async () => {
+      it("should allow scheduler to delete attendance records", async () => {
         const ctx = ctxUser(testEnv, "user-scheduler", schedulerClaims);
         const recordRef = ctx
           .firestore()
@@ -244,7 +244,7 @@ describe("attendance records and join tokens", () => {
           .collection("records")
           .doc("record-1");
 
-        await assertFails(recordRef.delete());
+        await assertSucceeds(recordRef.delete());
       });
     });
 

@@ -45,6 +45,10 @@ export async function measurePerformance<T>(
   operation: () => Promise<T>,
   attributes?: Record<string, string | number>,
 ): Promise<T> {
+  if (!config.enableMetrics) {
+    return operation();
+  }
+
   const span = tracer.startSpan(operationName, {
     attributes: {
       ...attributes,
@@ -58,9 +62,7 @@ export async function measurePerformance<T>(
     const result = await operation();
     const duration = Date.now() - startTime;
 
-    if (config.enableMetrics) {
-      globalMetrics.record(operationName, duration);
-    }
+    globalMetrics.record(operationName, duration);
 
     // Log slow queries
     if (config.slowQueryThreshold && duration > config.slowQueryThreshold) {
@@ -70,7 +72,7 @@ export async function measurePerformance<T>(
         ...attributes,
       });
       if (process.env.NODE_ENV !== "production") {
-        console.warn(`[SLOW QUERY] ${operationName} took ${duration}ms`, {
+        console.warn("[SLOW QUERY]", {
           operation: operationName,
           duration,
           threshold: config.slowQueryThreshold,
@@ -134,7 +136,10 @@ export async function cachedOperation<T>(
       try {
         return JSON.parse(cached) as T;
       } catch (parseError) {
-        console.error(`[CACHE ERROR] Failed to parse cached data for key: ${cacheKey}`, parseError);
+        console.error("[CACHE ERROR] Failed to parse cached data for key", {
+          cacheKey,
+          error: parseError,
+        });
         await redis.del(cacheKey);
       }
     }
@@ -162,7 +167,7 @@ export async function cachedOperation<T>(
       inFlightOperations.delete(cacheKey);
     }
   } catch (error) {
-    console.error(`[CACHE ERROR] Failed to use cache for key: ${cacheKey}`, error);
+    console.error("[CACHE ERROR] Failed to use cache for key", { cacheKey, error });
     // Fall back to direct operation
     return operation();
   }
@@ -185,7 +190,7 @@ export async function invalidateCache(cacheKey: string): Promise<boolean> {
     await redis.del(cacheKey);
     return true;
   } catch (error) {
-    console.error(`[CACHE ERROR] Failed to invalidate cache key: ${cacheKey}`, error);
+    console.error("[CACHE ERROR] Failed to invalidate cache key", { cacheKey, error });
     return false;
   }
 }

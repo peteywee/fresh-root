@@ -5,7 +5,7 @@
 //   corporate (90) - Network/multi-org scope
 //   org_owner (85) - Single org owner
 //   manager (60) - Manages schedules/staff
-//   scheduler (50) - Creates/edits schedules
+//   scheduler (60) - Creates/edits schedules (manager-equivalent)
 //   staff (40) - Views own schedule
 rules_version = '2';
 service cloud.firestore {
@@ -39,7 +39,7 @@ service cloud.firestore {
 
     // Combined check: admin always passes, then org-scoped roles
     function isManager() {
-      return isSuperAdmin() || hasAnyRole(['corporate','org_owner','manager']);
+      return isSuperAdmin() || hasAnyRole(['corporate','org_owner','manager','scheduler']);
     }
 
     function sameOrg(resourceOrgId) {
@@ -57,20 +57,20 @@ service cloud.firestore {
       allow get: if isSignedIn() && (isSuperAdmin() || sameOrg(orgId) || isOrgMember(orgId));
       allow create: if isSignedIn();
       // Admin can update/delete any org; org_owner can update/delete their own
-  allow update, delete: if isSignedIn() && (isSuperAdmin() || (hasAnyRole(['org_owner']) && sameOrg(orgId)) || hasAnyRoleLegacy(orgId, ['owner','admin']));
+      allow update, delete: if isSignedIn() && (isSuperAdmin() || (hasAnyRole(['org_owner']) && sameOrg(orgId)) || hasAnyRoleLegacy(orgId, ['owner','admin']));
       allow list: if isSuperAdmin();
 
       // Schedules as subcollection under orgs
       match /schedules/{scheduleId} {
-      allow read: if isSignedIn() && (sameOrg(orgId) || isOrgMember(orgId));
+        allow read: if isSignedIn() && (sameOrg(orgId) || isOrgMember(orgId));
         allow create, update: if isSignedIn() && ((hasAnyRole(['org_owner','admin','corporate','manager','scheduler']) && sameOrg(orgId)) || hasAnyRoleLegacy(orgId, ['owner','admin','manager','scheduler']));
-        allow delete: if isSignedIn() && ((hasAnyRole(['org_owner','admin','manager']) && sameOrg(orgId)) || hasAnyRoleLegacy(orgId, ['owner','admin','manager']));
+        allow delete: if isSignedIn() && ((hasAnyRole(['org_owner','admin','manager','scheduler']) && sameOrg(orgId)) || hasAnyRoleLegacy(orgId, ['owner','admin','manager','scheduler']));
       }
 
       // Positions as subcollection under orgs
       match /positions/{positionId} {
-  allow read: if isSignedIn() && (sameOrg(orgId) || isOrgMember(orgId));
-        allow write: if isSignedIn() && ((isManager() && sameOrg(orgId)) || hasAnyRoleLegacy(orgId, ['owner','admin','manager']));
+        allow read: if isSignedIn() && (sameOrg(orgId) || isOrgMember(orgId));
+        allow write: if isSignedIn() && ((isManager() && sameOrg(orgId)) || hasAnyRoleLegacy(orgId, ['owner','admin','manager','scheduler']));
       }
 
       // Shifts as subcollection under schedules
@@ -88,7 +88,7 @@ service cloud.firestore {
       match /join_tokens/{tokenId} {
         allow get: if isSignedIn() && (sameOrg(orgId) || isOrgMember(orgId));
         allow list: if false;
-        allow write: if isSignedIn() && ((isManager() && sameOrg(orgId)) || hasAnyRoleLegacy(orgId, ['owner','admin','manager']));
+        allow write: if isSignedIn() && ((isManager() && sameOrg(orgId)) || hasAnyRoleLegacy(orgId, ['owner','admin','manager','scheduler']));
       }
     }
 
@@ -96,13 +96,13 @@ service cloud.firestore {
     match /organizations/{orgId} {
       allow get: if isSignedIn() && (sameOrg(orgId) || isOrgMember(orgId));
       allow create: if isSignedIn();
-  allow update, delete: if isSignedIn() && ((hasAnyRole(['org_owner']) && sameOrg(orgId)) || hasAnyRoleLegacy(orgId, ['owner','admin']));
+      allow update, delete: if isSignedIn() && ((hasAnyRole(['org_owner']) && sameOrg(orgId)) || hasAnyRoleLegacy(orgId, ['owner','admin']));
       allow list: if false;
 
       // Messages - managers can create, all members can read
       match /messages/{messageId} {
         allow read: if isSignedIn() && (sameOrg(orgId) || isOrgMember(orgId));
-        allow write: if isSignedIn() && ((isManager() && sameOrg(orgId)) || hasAnyRoleLegacy(orgId, ['owner','admin','manager']));
+        allow write: if isSignedIn() && ((isManager() && sameOrg(orgId)) || hasAnyRoleLegacy(orgId, ['owner','admin','manager','scheduler']));
       }
 
       // Receipts - members can create their own receipts only; no enumeration
@@ -117,13 +117,13 @@ service cloud.firestore {
       match /schedules/{scheduleId} {
         allow read: if isSignedIn() && (sameOrg(orgId) || isOrgMember(orgId));
         allow create, update: if isSignedIn() && ((hasAnyRole(['org_owner','admin','manager','scheduler']) && sameOrg(orgId)) || hasAnyRoleLegacy(orgId, ['owner','admin','manager','scheduler']));
-        allow delete: if isSignedIn() && ((hasAnyRole(['org_owner','admin','manager']) && sameOrg(orgId)) || hasAnyRoleLegacy(orgId, ['owner','admin','manager']));
+        allow delete: if isSignedIn() && ((hasAnyRole(['org_owner','admin','manager','scheduler']) && sameOrg(orgId)) || hasAnyRoleLegacy(orgId, ['owner','admin','manager','scheduler']));
       }
 
       // Positions as subcollection under organizations
       match /positions/{positionId} {
         allow read: if isSignedIn() && (sameOrg(orgId) || isOrgMember(orgId));
-        allow write: if isSignedIn() && ((isManager() && sameOrg(orgId)) || hasAnyRoleLegacy(orgId, ['owner','admin','manager']));
+        allow write: if isSignedIn() && ((isManager() && sameOrg(orgId)) || hasAnyRoleLegacy(orgId, ['owner','admin','manager','scheduler']));
       }
     }
 
@@ -134,7 +134,7 @@ service cloud.firestore {
       allow get: if isSignedIn() && (
         resource.data.uid == uid() ||
         (isManager() && sameOrg(resource.data.orgId)) ||
-        hasAnyRoleLegacy(resource.data.orgId, ['owner','admin','manager'])
+        hasAnyRoleLegacy(resource.data.orgId, ['owner','admin','manager','scheduler'])
       );
       allow create: if isSignedIn() && (
         request.resource.data.uid == uid() ||
@@ -142,7 +142,7 @@ service cloud.firestore {
       );
       allow update, delete: if isSignedIn() && (
         (isManager() && sameOrg(resource.data.orgId)) ||
-        hasAnyRoleLegacy(resource.data.orgId, ['owner','admin','manager'])
+        hasAnyRoleLegacy(resource.data.orgId, ['owner','admin','manager','scheduler'])
       );
       allow list: if false;
     }
@@ -151,38 +151,38 @@ service cloud.firestore {
     match /venues/{orgId}/venues/{venueId} {
       allow get: if isSignedIn() && (sameOrg(orgId) || isOrgMember(orgId));
       // Create/Update by manager+, Delete by owner/admin only
-      allow create, update: if isSignedIn() && ((isManager() && sameOrg(orgId)) || hasAnyRoleLegacy(orgId, ['owner','admin','manager']));
+      allow create, update: if isSignedIn() && ((isManager() && sameOrg(orgId)) || hasAnyRoleLegacy(orgId, ['owner','admin','manager','scheduler']));
       allow delete: if isSignedIn() && ((hasAnyRole(['org_owner','admin']) && sameOrg(orgId)) || hasAnyRoleLegacy(orgId, ['owner','admin']));
       allow list: if false;
     }
 
     match /zones/{orgId}/zones/{zoneId} {
       allow get: if isSignedIn() && (sameOrg(orgId) || isOrgMember(orgId));
-      allow write: if isSignedIn() && ((isManager() && sameOrg(orgId)) || hasAnyRoleLegacy(orgId, ['owner','admin','manager']));
+      allow write: if isSignedIn() && ((isManager() && sameOrg(orgId)) || hasAnyRoleLegacy(orgId, ['owner','admin','manager','scheduler']));
       allow list: if false;
     }
 
     match /positions/{orgId}/positions/{positionId} {
       allow get: if isSignedIn() && (sameOrg(orgId) || isOrgMember(orgId));
-      allow write: if isSignedIn() && ((isManager() && sameOrg(orgId)) || hasAnyRoleLegacy(orgId, ['owner','admin','manager']));
+      allow write: if isSignedIn() && ((isManager() && sameOrg(orgId)) || hasAnyRoleLegacy(orgId, ['owner','admin','manager','scheduler']));
       allow list: if false;
     }
 
     // Schedules (top-level per org) - manager+ can write, block listing
     match /schedules/{orgId}/schedules/{scheduleId} {
       allow get: if isSignedIn() && (sameOrg(orgId) || isOrgMember(orgId));
-      // Create/Update by scheduler+, but restrict delete to manager+ (no scheduler)
+      // Create/Update/Delete by scheduler+ (manager-equivalent)
       allow create, update: if isSignedIn() && ((hasAnyRole(['org_owner','admin','manager','scheduler']) && sameOrg(orgId)) || hasAnyRoleLegacy(orgId, ['owner','admin','manager','scheduler']));
-      allow delete: if isSignedIn() && ((hasAnyRole(['org_owner','admin','manager']) && sameOrg(orgId)) || hasAnyRoleLegacy(orgId, ['owner','admin','manager']));
+      allow delete: if isSignedIn() && ((hasAnyRole(['org_owner','admin','manager','scheduler']) && sameOrg(orgId)) || hasAnyRoleLegacy(orgId, ['owner','admin','manager','scheduler']));
       allow list: if false;
     }
 
     // Shifts (top-level per org) - block listing; writes by scheduler+; staff can update own limited fields
     match /shifts/{orgId}/shifts/{shiftId} {
       allow get: if isSignedIn() && (sameOrg(orgId) || isOrgMember(orgId));
-      // Create/Update by scheduler+/manager/owner; delete by manager+ only (no scheduler)
+      // Create/Update/Delete by scheduler+ (manager-equivalent)
       allow create, update: if isSignedIn() && ((hasAnyRole(['org_owner','admin','manager','scheduler']) && sameOrg(orgId)) || hasAnyRoleLegacy(orgId, ['owner','admin','manager','scheduler']));
-      allow delete: if isSignedIn() && ((hasAnyRole(['org_owner','admin','manager']) && sameOrg(orgId)) || hasAnyRoleLegacy(orgId, ['owner','admin','manager']));
+      allow delete: if isSignedIn() && ((hasAnyRole(['org_owner','admin','manager','scheduler']) && sameOrg(orgId)) || hasAnyRoleLegacy(orgId, ['owner','admin','manager','scheduler']));
       // Staff self-service limited updates
       allow update: if isSignedIn() && sameOrg(orgId) && resource.data.userId == uid() &&
         request.resource.data.diff(resource.data).changedKeys().hasOnly(['notes','checkInTime','updatedAt']);
@@ -194,14 +194,14 @@ service cloud.firestore {
       allow get: if isSignedIn() && (sameOrg(orgId) || isOrgMember(orgId));
       // Only scheduler+/manager/owner can create/update/delete
       allow create, update: if isSignedIn() && ((hasAnyRole(['org_owner','admin','manager','scheduler']) && sameOrg(orgId)) || hasAnyRoleLegacy(orgId, ['owner','admin','manager','scheduler']));
-      allow delete: if isSignedIn() && ((hasAnyRole(['org_owner','admin','manager']) && sameOrg(orgId)) || hasAnyRoleLegacy(orgId, ['owner','admin','manager']));
+      allow delete: if isSignedIn() && ((hasAnyRole(['org_owner','admin','manager','scheduler']) && sameOrg(orgId)) || hasAnyRoleLegacy(orgId, ['owner','admin','manager','scheduler']));
       allow list: if false;
     }
 
     // Join tokens (non-enumerable) — owner/admin only
     match /join_tokens/{orgId}/join_tokens/{tokenId} {
       // Managers can read token metadata; write restricted to owner/admin
-      allow get: if isSignedIn() && ((hasAnyRole(['org_owner','admin','manager']) && sameOrg(orgId)) || hasAnyRoleLegacy(orgId, ['owner','admin','manager']));
+      allow get: if isSignedIn() && ((hasAnyRole(['org_owner','admin','manager','scheduler']) && sameOrg(orgId)) || hasAnyRoleLegacy(orgId, ['owner','admin','manager','scheduler']));
       allow create, update, delete: if isSignedIn() && ((hasAnyRole(['org_owner','admin']) && sameOrg(orgId)) || hasAnyRoleLegacy(orgId, ['owner','admin']));
       allow list: if false;
     }

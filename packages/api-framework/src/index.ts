@@ -269,7 +269,7 @@ function hasRequiredRole(userRole: OrgRole, requiredRoles: OrgRole[]): boolean {
     corporate: 90, // Network/multi-org scope
     org_owner: 85, // Single org owner
     manager: 60,
-    scheduler: 50,
+    scheduler: 60,
     staff: 40,
   };
 

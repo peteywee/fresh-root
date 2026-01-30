@@ -25,12 +25,16 @@ function toSchemaDocPath(schemaFile) {
 }
 
 function globToRegExp(glob) {
+  if (glob.length > 200) {
+    throw new Error(`Glob pattern too long: ${glob}`);
+  }
   const globStarToken = "__GLOBSTAR__";
   const globToken = "__GLOB__";
   const tokenized = glob.replace(/\*\*/g, globStarToken).replace(/\*/g, globToken);
   const escaped = tokenized.replace(/[-/\\^$+?.()|[\]{}]/g, "\\$&");
   const withGlobStar = escaped.replaceAll(globStarToken, ".*");
   const withGlob = withGlobStar.replaceAll(globToken, "[^/]*");
+  // nosemgrep: glob patterns are repository-controlled, not user input
   return new RegExp(`^${withGlob}$`);
 }
 

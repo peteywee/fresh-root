@@ -5,6 +5,17 @@
 import { useRouter } from "next/navigation";
 import React, { FormEvent, useState } from "react";
 
+import { useOnboardingWizard } from "../_wizard/OnboardingWizardContext";
+
+async function activateNetwork(networkId: string) {
+  const res = await fetch("/api/onboarding/activate-network", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ networkId }),
+  });
+  if (!res.ok) throw new Error("Failed to activate network");
+}
+
 // Narrow router usage to only push to eliminate any.
 type NavRouter = Pick<ReturnType<typeof useRouter>, "push">;
 
@@ -19,6 +30,7 @@ type CorporateFormState = {
 export default function CreateNetworkCorporatePage() {
   const router = useRouter();
   const nav: NavRouter = { push: router.push };
+  const { setNetworkId, setOrgId } = useOnboardingWizard();
   const [form, setForm] = useState<CorporateFormState>({
     corporateName: "",
     brandName: "",
@@ -33,7 +45,7 @@ export default function CreateNetworkCorporatePage() {
     setForm((prev) => ({ ...prev, [name]: value }));
   }
 
-  function handleSubmit(e: FormEvent) {
+  async function handleSubmit(e: FormEvent) {
     e.preventDefault();
 
     if (!form.corporateName.trim() || !form.brandName.trim()) {
@@ -43,8 +55,43 @@ export default function CreateNetworkCorporatePage() {
 
     setError(null);
 
-    // Real implementation would POST to /api/onboarding/create-network-corporate.
-    nav.push("/onboarding/block-4");
+    try {
+      const res = await fetch("/api/onboarding/create-network-corporate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          corporateName: form.corporateName,
+          brandName: form.brandName,
+          hqCity: form.hqCity,
+          hqState: form.hqState,
+          locationCount: form.locationCount,
+          formToken: "", // optional, keep empty until admin-responsibility supplies
+        }),
+      });
+
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        setError(data.error?.message || "Failed to create corporate network");
+        return;
+      }
+
+      const data = await res.json();
+      const createdId = data.data?.id;
+      if (createdId) {
+        setNetworkId(createdId);
+        setOrgId(createdId);
+        try {
+          await activateNetwork(createdId);
+        } catch (activationError) {
+          console.warn("activate-network failed", activationError);
+        }
+      }
+
+      nav.push("/onboarding/block-4");
+    } catch (err) {
+      console.error("Create corporate network failed", err);
+      setError("Network error. Please try again.");
+    }
   }
 
   return (

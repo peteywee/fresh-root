@@ -9,7 +9,7 @@ roles.
 
 **Core Responsibilities:**
 
-- Define role hierarchy (`org_owner` → `admin` → `manager` → `scheduler` → `corporate` → `staff`)
+- Define role hierarchy (`org_owner` → `admin` → `manager`/`scheduler` → `corporate` → `staff`)
 - Enforce permissions on API endpoints via SDK factory
 - Manage organization membership and context
 - Support multi-tenancy through network scoping
@@ -23,7 +23,7 @@ export const OrgRole = z.enum([
   "org_owner", // Full control over organization
   "admin", // Administrative access
   "manager", // Manage schedules and staff
-  "scheduler", // Create/edit schedules
+  "scheduler", // Create/edit schedules (manager-equivalent)
   "corporate", // Corporate network access
   "staff", // View-only/limited access
 ]);
@@ -32,8 +32,8 @@ export const OrgRole = z.enum([
 **Permission Levels (Inferred from usage):**
 
 ```
-org_owner  > admin  > manager  > scheduler  > corporate > staff
-   100       80        60          40           20        10
+org_owner  > admin  > manager  = scheduler  > corporate > staff
+  100       80        60          60           20        10
 ```
 
 ### 2.2 Context Loading
@@ -75,7 +75,7 @@ it("should require manager role or higher", () => {
     org_owner: 100,
     admin: 80,
     manager: 60,
-    scheduler: 40,
+    scheduler: 60,
     corporate: 20,
     staff: 10,
   };
