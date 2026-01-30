@@ -60,7 +60,7 @@
     "globby": "^16.0.0",
     "prettier": "^3.7.4",
     "repomix": "^1.11.1",
-    "syncpack": "^13.0.4",
+    "syncpack": "13",
     "tsup": "8.5.1",
     "tsx": "^4.21.0",
     "turbo": "^2.7.2",
@@ -79,7 +79,8 @@
       "google-auth-library": "10.5.0",
       "hono": "4.11.4",
       "qs": ">=6.14.1",
-      "diff": "^8.0.3"
+      "diff": "5.2.0",
+      "ts-node": "npm:tsx@4.21.0"
     },
     "peerDependencyRules": {
       "allowedVersions": {

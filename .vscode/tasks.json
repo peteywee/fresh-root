@@ -12,287 +12,276 @@
       "presentation": {
         "reveal": "always"
       }
+    },
+    {
+      "label": "shell: Validate: patterns & typecheck",
+      "type": "shell",
+      "command": "bash",
+      "args": [
+        "-lc",
+        "node scripts/validate-patterns.mjs || true; pnpm -w typecheck"
+      ],
+      "presentation": {
+        "reveal": "always"
+      }
+    },
+    {
+      "label": "shell: Git: Commit validator toggle",
+      "type": "shell",
+      "command": "bash",
+      "args": [
+        "-lc",
+        "git add scripts/validate-patterns.mjs && git commit -m \"chore(ci): allow SKIP_PATTERN_VALIDATOR to short-circuit validator\" || echo 'Nothing to commit'"
+      ],
+      "presentation": {
+        "reveal": "always"
+      }
+    },
+    {
+      "label": "shell: Validate: patterns (verbose)",
+      "type": "shell",
+      "command": "bash",
+      "args": [
+        "-lc",
+        "node scripts/validate-patterns.mjs --verbose"
+      ],
+      "presentation": {
+        "reveal": "always"
+      }
+    },
+    {
+      "label": "shell: Git: Commit triad fixes",
+      "type": "shell",
+      "command": "bash",
+      "args": [
+        "-lc",
+        "git add packages/types/src/internal.ts packages/types/src/session.ts apps/web/app/api/onboarding/create-network-org/route.ts apps/web/app/api/organizations/[id]/route.ts apps/web/app/api/internal/backup/route.ts apps/web/app/api/publish/route.ts apps/web/app/api/session/bootstrap/route.ts && git commit -m \"fix(api): add input schemas and Zod validation for onboarding, orgs, backup, publish, session\" || echo 'Nothing to commit'"
+      ],
+      "presentation": {
+        "reveal": "always"
+      }
+    },
+    {
+      "label": "shell: Git: Commit CI toggle",
+      "type": "shell",
+      "command": "bash",
+      "args": [
+        "-lc",
+        "git add .github/workflows/series-a-ci.yml && git commit -m \"chore(ci): temporarily set SKIP_PATTERN_VALIDATOR in CI\" || echo 'Nothing to commit'"
+      ],
+      "presentation": {
+        "reveal": "always"
+      }
+    },
+    {
+      "label": "Git: Push (skip lint)",
+      "type": "shell",
+      "command": "SKIP_LINT=1 git push origin dev --no-verify",
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Git: Push (skip checks)",
+      "type": "shell",
+      "command": "SKIP_CHECKS=1 git push origin dev --no-verify",
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Git: Push (normal)",
+      "type": "shell",
+      "command": "git push origin dev",
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Git: Push (web-only checks)",
+      "type": "shell",
+      "command": "pnpm --filter @apps/web run lint && git push origin dev",
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Install (frozen)",
+      "type": "shell",
+      "command": "pnpm -w install --frozen-lockfile",
+      "problemMatcher": []
+    },
+    {
+      "label": "Deps: Check (no deprecated/peers)",
+      "type": "shell",
+      "command": "pnpm -w install --frozen-lockfile",
+      "problemMatcher": [
+        {
+          "owner": "deps",
+          "severity": "error",
+          "pattern": {
+            "regexp": "^(.*deprecated.*)$",
+            "message": 1
+          }
+        },
+        {
+          "owner": "deps",
+          "severity": "error",
+          "pattern": {
+            "regexp": "^(.*Issues with peer dependencies found.*)$",
+            "message": 1
+          }
+        }
+      ]
+    },
+    {
+      "label": "Lint (auto-fix)",
+      "type": "shell",
+      "command": "pnpm -w run lint -- --fix",
+      "problemMatcher": [
+        "$eslint-stylish"
+      ]
+    },
+    {
+      "label": "Format (Prettier)",
+      "type": "shell",
+      "command": "pnpm -w run format",
+      "problemMatcher": []
+    },
+    {
+      "label": "Typecheck",
+      "type": "shell",
+      "command": "pnpm -w run typecheck",
+      "problemMatcher": [
+        "$tsc"
+      ]
+    },
+    {
+      "label": "Test (watch)",
+      "type": "shell",
+      "command": "pnpm test",
+      "isBackground": true,
+      "problemMatcher": []
+    },
+    {
+      "label": "Test (run once)",
+      "type": "shell",
+      "command": "pnpm vitest run",
+      "problemMatcher": []
+    },
+    {
+      "label": "Test (coverage)",
+      "type": "shell",
+      "command": "pnpm vitest run --coverage",
+      "problemMatcher": []
+    },
+    {
+      "label": "Test: Rules (Firebase)",
+      "type": "shell",
+      "command": "pnpm -w test:rules",
+      "problemMatcher": []
+    },
+    {
+      "label": "Test: E2E (Playwright)",
+      "type": "shell",
+      "command": "pnpm -w test:e2e",
+      "problemMatcher": []
+    },
+    {
+      "label": "Build (all)",
+      "type": "shell",
+      "command": "pnpm -w build",
+      "problemMatcher": []
+    },
+    {
+      "label": "Docs: Markdown Lint (auto-fix)",
+      "type": "shell",
+      "command": "pnpm run docs:md-fix",
+      "problemMatcher": []
+    },
+    {
+      "label": "Tag: Auto-tag Files",
+      "type": "shell",
+      "command": "node scripts/tag-files.mjs",
+      "problemMatcher": []
+    },
+    {
+      "type": "npm",
+      "script": "bench",
+      "path": "apps/web",
+      "problemMatcher": [
+        "$tsc"
+      ],
+      "label": "npm: bench - apps/web",
+      "detail": "vitest bench --config vitest.bench.config.ts"
+    },
+    {
+      "label": "Audit: Nesting (prevent double-nesting)",
+      "type": "shell",
+      "command": "node scripts/audit/nesting-audit.mjs"
+    },
+    {
+      "label": "Index: Generate file index",
+      "type": "shell",
+      "command": "scripts/index/generate-file-index.sh --write"
+    },
+    {
+      "label": "Cleanup: Remove Legacy Artifacts",
+      "type": "shell",
+      "command": "bash scripts/cleanup/full-cleanup.sh",
+      "detail": "Remove v14 legacy files, emulator data, and temp files (interactive with confirmation)",
+      "isBackground": false,
+      "problemMatcher": []
+    },
+    {
+      "label": "Quality: Check Doc Parity",
+      "type": "shell",
+      "command": "node scripts/ci/check-doc-parity.mjs",
+      "detail": "Validate that all API routes and schemas have corresponding documentation and TEST SPEC links",
+      "problemMatcher": []
+    },
+    {
+      "label": "Quality: Verify Tests Present",
+      "type": "shell",
+      "command": "node scripts/tests/verify-tests-present.mjs",
+      "detail": "Ensure API routes and core modules have proper test coverage",
+      "problemMatcher": []
+    },
+    {
+      "label": "Migration: Check v15 Readiness",
+      "type": "shell",
+      "command": "node scripts/migration/migration-status.mjs",
+      "detail": "Validate v15 migration readiness with 7 quality checks",
+      "problemMatcher": []
+    },
+    {
+      "label": "Migration: Generate Mini-Indexes",
+      "type": "shell",
+      "command": "node scripts/migration/gen-mini-indexes.mjs",
+      "detail": "Generate consolidated mini-indexes for Zod schemas and API routes",
+      "problemMatcher": []
+    },
+    {
+      "label": "Docs: Generate Mini-Index (Schemas)",
+      "type": "shell",
+      "command": "node scripts/migration/gen-mini-indexes.mjs",
+      "detail": "Generate mini-index for Zod schemas (docs/migration/v15/SCHEMAS_MINI_INDEX.md)",
+      "problemMatcher": []
+    },
+    {
+      "label": "Docs: Generate Mini-Index (API Routes)",
+      "type": "shell",
+      "command": "node scripts/migration/gen-mini-indexes.mjs",
+      "detail": "Generate mini-index for API routes (docs/migration/v15/API_ROUTES_MINI_INDEX.md)",
+      "problemMatcher": []
     }
-		,
-		{
-			"label": "shell: Validate: patterns & typecheck",
-			"type": "shell",
-			"command": "bash",
-			"args": [
-				"-lc",
-				"node scripts/validate-patterns.mjs || true; pnpm -w typecheck"
-			],
-			"presentation": {
-				"reveal": "always"
-			}
-		}
-		,
-		{
-			"label": "shell: Git: Commit validator toggle",
-			"type": "shell",
-			"command": "bash",
-			"args": [
-				"-lc",
-				"git add scripts/validate-patterns.mjs && git commit -m \"chore(ci): allow SKIP_PATTERN_VALIDATOR to short-circuit validator\" || echo 'Nothing to commit'"
-			],
-			"presentation": {
-				"reveal": "always"
-			}
-		}
-		,
-		{
-			"label": "shell: Validate: patterns (verbose)",
-			"type": "shell",
-			"command": "bash",
-			"args": [
-				"-lc",
-				"node scripts/validate-patterns.mjs --verbose"
-			],
-			"presentation": {
-				"reveal": "always"
-			}
-		}
-		,
-		{
-			"label": "shell: Git: Commit triad fixes",
-			"type": "shell",
-			"command": "bash",
-			"args": [
-				"-lc",
-				"git add packages/types/src/internal.ts packages/types/src/session.ts apps/web/app/api/onboarding/create-network-org/route.ts apps/web/app/api/organizations/[id]/route.ts apps/web/app/api/internal/backup/route.ts apps/web/app/api/publish/route.ts apps/web/app/api/session/bootstrap/route.ts && git commit -m \"fix(api): add input schemas and Zod validation for onboarding, orgs, backup, publish, session\" || echo 'Nothing to commit'"
-			],
-			"presentation": {
-				"reveal": "always"
-			}
-		}
-		,
-		{
-			"label": "shell: Git: Commit CI toggle",
-			"type": "shell",
-			"command": "bash",
-			"args": [
-				"-lc",
-				"git add .github/workflows/series-a-ci.yml && git commit -m \"chore(ci): temporarily set SKIP_PATTERN_VALIDATOR in CI\" || echo 'Nothing to commit'"
-			],
-			"presentation": {
-				"reveal": "always"
-			}
-		}
   ]
-}
-{
-	"version": "2.0.0",
-	"tasks": [
-		{
-			"label": "Git: Push (skip lint)",
-			"type": "shell",
-			"command": "SKIP_LINT=1 git push origin dev --no-verify",
-			"presentation": {
-				"reveal": "always",
-				"panel": "shared"
-			},
-			"problemMatcher": []
-		},
-		{
-			"label": "Git: Push (skip checks)",
-			"type": "shell",
-			"command": "SKIP_CHECKS=1 git push origin dev --no-verify",
-			"presentation": {
-				"reveal": "always",
-				"panel": "shared"
-			},
-			"problemMatcher": []
-		},
-		{
-			"label": "Git: Push (normal)",
-			"type": "shell",
-			"command": "git push origin dev",
-			"presentation": {
-				"reveal": "always",
-				"panel": "shared"
-			},
-			"problemMatcher": []
-		},
-		{
-			"label": "Git: Push (web-only checks)",
-			"type": "shell",
-			"command": "pnpm --filter @apps/web run lint && git push origin dev",
-			"presentation": {
-				"reveal": "always",
-				"panel": "shared"
-			},
-			"problemMatcher": []
-		},
-		{
-			"label": "Install (frozen)",
-			"type": "shell",
-			"command": "pnpm -w install --frozen-lockfile",
-			"problemMatcher": []
-		},
-		{
-			"label": "Deps: Check (no deprecated/peers)",
-			"type": "shell",
-			"command": "pnpm -w install --frozen-lockfile",
-			"problemMatcher": [
-				{
-					"owner": "deps",
-					"severity": "error",
-					"pattern": {
-						"regexp": "^(.*deprecated.*)$",
-						"message": 1
-					}
-				},
-				{
-					"owner": "deps",
-					"severity": "error",
-					"pattern": {
-						"regexp": "^(.*Issues with peer dependencies found.*)$",
-						"message": 1
-					}
-				}
-			]
-		},
-		{
-			"label": "Lint (auto-fix)",
-			"type": "shell",
-			"command": "pnpm -w run lint -- --fix",
-			"problemMatcher": [
-				"$eslint-stylish"
-			]
-		},
-		{
-			"label": "Format (Prettier)",
-			"type": "shell",
-			"command": "pnpm -w run format",
-			"problemMatcher": []
-		},
-		{
-			"label": "Typecheck",
-			"type": "shell",
-			"command": "pnpm -w run typecheck",
-			"problemMatcher": [
-				"$tsc"
-			]
-		},
-		{
-			"label": "Test (watch)",
-			"type": "shell",
-			"command": "pnpm test",
-			"isBackground": true,
-			"problemMatcher": []
-		},
-		{
-			"label": "Test (run once)",
-			"type": "shell",
-			"command": "pnpm vitest run",
-			"problemMatcher": []
-		},
-		{
-			"label": "Test (coverage)",
-			"type": "shell",
-			"command": "pnpm vitest run --coverage",
-			"problemMatcher": []
-		},
-		{
-			"label": "Test: Rules (Firebase)",
-			"type": "shell",
-			"command": "pnpm -w test:rules",
-			"problemMatcher": []
-		},
-		{
-			"label": "Test: E2E (Playwright)",
-			"type": "shell",
-			"command": "pnpm -w test:e2e",
-			"problemMatcher": []
-		},
-		{
-			"label": "Build (all)",
-			"type": "shell",
-			"command": "pnpm -w build",
-			"problemMatcher": []
-		},
-		{
-			"label": "Docs: Markdown Lint (auto-fix)",
-			"type": "shell",
-			"command": "pnpm run docs:md-fix",
-			"problemMatcher": []
-		},
-		{
-			"label": "Tag: Auto-tag Files",
-			"type": "shell",
-			"command": "node scripts/tag-files.mjs",
-			"problemMatcher": []
-		},
-		{
-			"type": "npm",
-			"script": "bench",
-			"path": "apps/web",
-			"problemMatcher": [
-				"$tsc"
-			],
-			"label": "npm: bench - apps/web",
-			"detail": "vitest bench --config vitest.bench.config.ts"
-		},
-		{
-			"label": "Audit: Nesting (prevent double-nesting)",
-			"type": "shell",
-			"command": "node scripts/audit/nesting-audit.mjs"
-		},
-		{
-			"label": "Index: Generate file index",
-			"type": "shell",
-			"command": "scripts/index/generate-file-index.sh --write"
-		},
-		{
-			"label": "Cleanup: Remove Legacy Artifacts",
-			"type": "shell",
-			"command": "bash scripts/cleanup/full-cleanup.sh",
-			"detail": "Remove v14 legacy files, emulator data, and temp files (interactive with confirmation)",
-			"isBackground": false,
-			"problemMatcher": []
-		},
-		{
-			"label": "Quality: Check Doc Parity",
-			"type": "shell",
-			"command": "node scripts/ci/check-doc-parity.mjs",
-			"detail": "Validate that all API routes and schemas have corresponding documentation and TEST SPEC links",
-			"problemMatcher": []
-		},
-		{
-			"label": "Quality: Verify Tests Present",
-			"type": "shell",
-			"command": "node scripts/tests/verify-tests-present.mjs",
-			"detail": "Ensure API routes and core modules have proper test coverage",
-			"problemMatcher": []
-		},
-		{
-			"label": "Migration: Check v15 Readiness",
-			"type": "shell",
-			"command": "node scripts/migration/migration-status.mjs",
-			"detail": "Validate v15 migration readiness with 7 quality checks",
-			"problemMatcher": []
-		},
-		{
-			"label": "Migration: Generate Mini-Indexes",
-			"type": "shell",
-			"command": "node scripts/migration/gen-mini-indexes.mjs",
-			"detail": "Generate consolidated mini-indexes for Zod schemas and API routes",
-			"problemMatcher": []
-		},
-		{
-			"label": "Docs: Generate Mini-Index (Schemas)",
-			"type": "shell",
-			"command": "node scripts/migration/gen-mini-indexes.mjs",
-			"detail": "Generate mini-index for Zod schemas (docs/migration/v15/SCHEMAS_MINI_INDEX.md)",
-			"problemMatcher": []
-		},
-		{
-			"label": "Docs: Generate Mini-Index (API Routes)",
-			"type": "shell",
-			"command": "node scripts/migration/gen-mini-indexes.mjs",
-			"detail": "Generate mini-index for API routes (docs/migration/v15/API_ROUTES_MINI_INDEX.md)",
-			"problemMatcher": []
-		},
-        
-	]
 }
