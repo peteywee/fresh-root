@@ -1,8 +1,7 @@
 ---
-
 description: "Playwright test generation instructions"
-
-## applyTo: "\*\*"
+applyTo: "**"
+---
 
 ## Test Writing Guidelines
 

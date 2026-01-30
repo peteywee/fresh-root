@@ -1,16 +1,17 @@
 ---
-
-priority: 1
-applyTo: "**/apps/web/**, **/packages/types/**"
+applyTo: "**/apps/web/**,**/packages/types/**"
 description:
-"Memory file for triage and batch endpoint patterns, testing best practices, and fixes applied for
-## schema/api/tests triad issues."
+  "Memory file for triage and batch endpoint patterns, testing best practices, and fixes applied for
+  schema/api/tests triad issues."
+---
 
 # Triage & Batch Endpoint Memory
+
 Tagline: Practical patterns for triaging API triad (schema → API → rules), creating batch endpoints,
 and testing them reliably.
 
 ## TL;DR
+
 - When triaging multiple PRs that touch API routes, prioritize the Triad of Trust: ensure a
   canonical `zod` schema (types), API route uses `createEndpoint/createOrgEndpoint` with `input`
   configured, and Firestore rules match the intended behavior.
@@ -18,6 +19,7 @@ and testing them reliably.
   both: an endpoint route and a small exported helper to make unit testing easier.
 
 ## What I did (Action steps taken)
+
 1. Identified triad Tier 0 issues in multiple PRs (missing `input` validation on write endpoints);
    created `fix/triad-remediation` branch to consolidate changes.
 1. Added a new canonical `BatchItemSchema` and `CreateBatchSchema` in `packages/types/src/batch.ts`
@@ -34,6 +36,7 @@ and testing them reliably.
    incorrect factory usage, and Request vs NextRequest types.
 
 ## What didn't work (Problems encountered & why)
+
 - Initial TypeScript errors: `CreateBatchSchema` was not exported from `@fresh-schedules/types`,
   causing import failures and build errors.
 - Middleware mismatch: using `createOrgEndpoint` but passing `auth`/`org` properties caused
@@ -51,6 +54,7 @@ and testing them reliably.
   to `any` or pass `request` directly of the `NextRequest` type.
 
 ## Fixes and Patterns to Follow (--fix)
+
 - Export schemas: Always export new schema files from `packages/types/src/index.ts` to keep schemas
   canonical and avoid duplicate definitions.
 - Type shims: When adding new runtime schema exports, update
@@ -70,6 +74,7 @@ and testing them reliably.
   if necessary cast to `any` with a comment explaining the runtime reliability.
 
 ## Example Code Quick Reference
+
 ```typescript
 // 1) Export schema in types package
 export const BatchItemSchema = z.object({ id: z.string(), payload: z.any() });
@@ -84,6 +89,7 @@ export async function processBatchItems(items, context, request) { return create
 ```
 
 ## Test & CI commands (copyable)
+
 ```bash
 # Run the validator
 node scripts/validate-patterns.mjs --verbose
@@ -96,6 +102,7 @@ pnpm -C apps/web test -- app/api/batch/__tests__/route.test.ts
 ```
 
 ## Notes / Caveats
+
 - Never remove CSRF protection from a route in production just to make testing easier — instead mock
   CSRF or isolate business logic in testable helpers.
 - Keep the triad in sync: if you add a schema, add tests, and consider security rules that may need
@@ -104,6 +111,7 @@ pnpm -C apps/web test -- app/api/batch/__tests__/route.test.ts
   weakening the route.
 
 ## Testing: Firebase auth + Firestore Mocks
+
 Tagline: How to mock Firebase Admin auth and Firestore for `createOrgEndpoint` protected routes in
 Vitest.
 
@@ -213,6 +221,7 @@ Suggested followups:
   index so `apps/web` can import it reliably.
 
 ## Process Suggestions
+
 - When multiple PRs touch the same domain (API routes), create a triage branch that consolidates
   changes, run `pnpm -w typecheck` and `node scripts/validate-patterns.mjs` early, and create small
   follow-up PRs for docs-only or test-only cleanups.

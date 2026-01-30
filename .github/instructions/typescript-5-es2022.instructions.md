@@ -1,8 +1,7 @@
 ---
-
 description: "Guidelines for TypeScript Development targeting TypeScript 5.x and ES2022 output"
-
-## applyTo: "\*\*/\*.ts"
+applyTo: "**/*.ts"
+---
 
 # TypeScript Development
 

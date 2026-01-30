@@ -1,11 +1,12 @@
 ---
-
-applyTo: "\*"
+applyTo: "*"
 description: "Security standards based on OWASP Top 10, AI safety, and responsible AI usage."
-## priority: 3
+---
 
 # Security & Safety Standards
+
 ## Core Principle
+
 **Security-first mindset.** When in doubt, choose the more secure option. Never sacrifice security
 for convenience.
 

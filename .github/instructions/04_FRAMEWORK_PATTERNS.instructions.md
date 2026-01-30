@@ -1,12 +1,14 @@
 ---
-
 applyTo: "apps/**,packages/**"
 description: "Framework-specific patterns for Next.js, Firebase, Tailwind, and monorepo structure."
-## priority: 4
+---
 
 # Framework Patterns
+
 ## Next.js 16 (App Router)
+
 ### Project Structure
+
 ```
 apps/web/
 ├── app/                    # Routes, layouts, API endpoints
@@ -20,6 +22,7 @@ apps/web/
 ```
 
 ### Server vs Client Components
+
 **Server Components (Default)**
 
 - Data fetching
@@ -50,6 +53,7 @@ export default function Button() {
 ```
 
 ### Never Use `next/dynamic` with `ssr: false` in Server Components
+
 ```typescript
 // ❌ Bad - Will error
 import dynamic from "next/dynamic";
@@ -60,6 +64,7 @@ import ClientComponent from "./ClientComponent";
 ```
 
 ### API Routes (Route Handlers)
+
 ```typescript
 // app/api/example/route.ts
 import { createOrgEndpoint } from "@fresh-schedules/api-framework";
@@ -82,6 +87,7 @@ export const POST = createOrgEndpoint({
 ```
 
 ### Route Groups
+
 ```
 app/
 ├── (marketing)/          # No /marketing in URL

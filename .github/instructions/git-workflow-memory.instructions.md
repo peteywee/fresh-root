@@ -1,9 +1,7 @@
 ---
-
-description: "Git workflow patterns, pre-commit hook strategies, and repository hygiene" applyTo:
-".husky/**,scripts/**/_.mjs,scripts/\*\*/_.sh"
-
-## priority: 2
+description: "Git workflow patterns, pre-commit hook strategies, and repository hygiene"
+applyTo: ".husky/**,scripts/**/*.mjs,scripts/**/*.sh"
+---
 
 # Git Workflow Memory
 

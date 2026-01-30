@@ -1,9 +1,8 @@
 ---
-
-priority: 1 applyTo: "apps/web/app/api/**/\*.ts,apps/web/lib/**/_.ts,packages/_/\*\*/\*.ts"
-
-description: "Key learnings from Firebase SDK v12 typing strategy and monorepo dependency
-resolution"
+applyTo: "apps/web/app/api/**/*.ts,apps/web/lib/**/*.ts,packages/**/*.ts"
+description:
+  "Key learnings from Firebase SDK v12 typing strategy and monorepo dependency resolution"
+---
 
 # Firebase & Monorepo Dependency Management Memory
 

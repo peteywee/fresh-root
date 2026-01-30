@@ -1,9 +1,8 @@
 ---
-
-description: "Dynamic personality switching and orchestration patterns for complex AI agent
-workflows"
-
-## applyTo: "\*\*/\*"
+description:
+  "Dynamic personality switching and orchestration patterns for complex AI agent workflows"
+applyTo: "**/*"
+---
 
 # Orchestration Memory
 

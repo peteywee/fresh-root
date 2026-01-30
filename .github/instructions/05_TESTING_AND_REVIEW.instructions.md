@@ -1,25 +1,29 @@
 ---
-
-applyTo: "**/\*.{test,spec}.{ts,tsx},tests/**,**/**tests**/**"
+applyTo: "**/*.{test,spec}.{ts,tsx},tests/**,**/__tests__/**"
 description:
-"Testing standards and code review guidelines for Vitest, Playwright, and review processes."
-## priority: 5
+  "Testing standards and code review guidelines for Vitest, Playwright, and review processes."
+---
 
 # Testing & Review Standards
+
 ## Code Review Priorities
+
 ### 🔴 CRITICAL (Block Merge)
+
 - **Security**: Vulnerabilities, exposed secrets, auth issues
 - **Correctness**: Logic errors, data corruption risks
 - **Breaking Changes**: API changes without versioning
 - **Data Loss**: Risk of data loss or corruption
 
 ### 🟡 IMPORTANT (Requires Discussion)
+
 - **Code Quality**: SOLID violations, excessive duplication
 - **Test Coverage**: Missing tests for critical paths
 - **Performance**: N+1 queries, memory leaks
 - **Architecture**: Deviations from patterns
 
 ### 🟢 SUGGESTION (Non-Blocking)
+
 - **Readability**: Poor naming, complexity
 - **Optimization**: Performance without functional impact
 - **Best Practices**: Minor convention deviations

@@ -50,7 +50,7 @@ and documentation links.
   a11y, mobile patterns
 
 **Config**: [AGENT.md](./ui-ux-specialist/AGENT.md) | [config.js](./ui-ux-specialist/config.js) |
-[Persona](../.github/prompts/ui-ux-agent.md)
+[Persona](../../.github/prompts/ui-ux-agent.md)
 
 **Tests**: ✅ 58/58 (100%)
 
@@ -102,21 +102,21 @@ and documentation links.
 These agents are designed for CLI-style invocation patterns. They are available in prompts and can
 be invoked through agent orchestration or explicit commands.
 
-| #   | Agent                          | Purpose                                               | Prompt File                                                                                       | Status |
-| --- | ------------------------------ | ----------------------------------------------------- | ------------------------------------------------------------------------------------------------- | ------ |
-| 1   | **Audit Agent**                | Security audits, code quality checks                  | [`audit.prompt.md`](../.github/prompts/audit.prompt.md)                                           | ✅     |
-| 2   | **Create Implementation Plan** | Generate implementation plans for features            | [`create-implementation-plan.prompt.md`](../.github/prompts/create-implementation-plan.prompt.md) | ✅     |
-| 3   | **Deploy Agent**               | Deployment workflows and release processes            | [`deploy.prompt.md`](../.github/prompts/deploy.prompt.md)                                         | ✅     |
-| 4   | **Documentation Writer**       | Technical documentation creation (Diátaxis framework) | [`documentation-writer.prompt.md`](../.github/prompts/documentation-writer.prompt.md)             | ✅     |
-| 5   | **Document Agent**             | General documentation tasks                           | [`document.prompt.md`](../.github/prompts/document.prompt.md)                                     | ✅     |
-| 6   | **GitHub Copilot Starter**     | Project setup and GitHub Copilot configuration        | [`github-copilot-starter.prompt.md`](../.github/prompts/github-copilot-starter.prompt.md)         | ✅     |
-| 7   | **Implement Agent**            | Code implementation and feature development           | [`implement.prompt.md`](../.github/prompts/implement.prompt.md)                                   | ✅     |
-| 8   | **Iterate Agent**              | Iterative improvements and refinements                | [`iterate.prompt.md`](../.github/prompts/iterate.prompt.md)                                       | ✅     |
-| 9   | **Plan Agent**                 | Project planning and roadmap creation                 | [`plan.prompt.md`](../.github/prompts/plan.prompt.md)                                             | ✅     |
-| 10  | **Red Team Agent**             | Security adversarial testing and edge case analysis   | [`red-team.prompt.md`](../.github/prompts/red-team.prompt.md)                                     | ✅     |
-| 11  | **Review & Refactor Agent**    | Code review and refactoring assistance                | [`review-and-refactor.prompt.md`](../.github/prompts/review-and-refactor.prompt.md)               | ✅     |
-| 12  | **Review Agent**               | General code review and feedback                      | [`review.prompt.md`](../.github/prompts/review.prompt.md)                                         | ✅     |
-| 13  | **Test Agent**                 | Test generation and quality assurance                 | [`test.prompt.md`](../.github/prompts/test.prompt.md)                                             | ✅     |
+| #   | Agent                          | Purpose                                               | Prompt File                                                                                          | Status |
+| --- | ------------------------------ | ----------------------------------------------------- | ---------------------------------------------------------------------------------------------------- | ------ |
+| 1   | **Audit Agent**                | Security audits, code quality checks                  | [`audit.prompt.md`](../../.github/prompts/audit.prompt.md)                                           | ✅     |
+| 2   | **Create Implementation Plan** | Generate implementation plans for features            | [`create-implementation-plan.prompt.md`](../../.github/prompts/create-implementation-plan.prompt.md) | ✅     |
+| 3   | **Deploy Agent**               | Deployment workflows and release processes            | [`deploy.prompt.md`](../../.github/prompts/deploy.prompt.md)                                         | ✅     |
+| 4   | **Documentation Writer**       | Technical documentation creation (Diátaxis framework) | [`documentation-writer.prompt.md`](../../.github/prompts/documentation-writer.prompt.md)             | ✅     |
+| 5   | **Document Agent**             | General documentation tasks                           | [`document.prompt.md`](../../.github/prompts/document.prompt.md)                                     | ✅     |
+| 6   | **GitHub Copilot Starter**     | Project setup and GitHub Copilot configuration        | [`github-copilot-starter.prompt.md`](../../.github/prompts/github-copilot-starter.prompt.md)         | ✅     |
+| 7   | **Implement Agent**            | Code implementation and feature development           | [`implement.prompt.md`](../../.github/prompts/implement.prompt.md)                                   | ✅     |
+| 8   | **Iterate Agent**              | Iterative improvements and refinements                | [`iterate.prompt.md`](../../.github/prompts/iterate.prompt.md)                                       | ✅     |
+| 9   | **Plan Agent**                 | Project planning and roadmap creation                 | [`plan.prompt.md`](../../.github/prompts/plan.prompt.md)                                             | ✅     |
+| 10  | **Red Team Agent**             | Security adversarial testing and edge case analysis   | [`red-team.prompt.md`](../../.github/prompts/red-team.prompt.md)                                     | ✅     |
+| 11  | **Review & Refactor Agent**    | Code review and refactoring assistance                | [`review-and-refactor.prompt.md`](../../.github/prompts/review-and-refactor.prompt.md)               | ✅     |
+| 12  | **Review Agent**               | General code review and feedback                      | [`review.prompt.md`](../../.github/prompts/review.prompt.md)                                         | ✅     |
+| 13  | **Test Agent**                 | Test generation and quality assurance                 | [`test.prompt.md`](../../.github/prompts/test.prompt.md)                                             | ✅     |
 
 ---
 
@@ -479,7 +479,7 @@ module.exports.agent = {
 - Examples & patterns
 - Edge cases & escalation rules
 
-**Example**: [.github/prompts/ui-ux-agent.md](../.github/prompts/ui-ux-agent.md)
+**Example**: [.github/prompts/ui-ux-agent.md](../../.github/prompts/ui-ux-agent.md)
 
 ---
 
@@ -557,10 +557,10 @@ Quick reference...
 
 ## Related Documentation
 
-- [L0-L4 Hierarchy](../.github/governance/INDEX.md) — Governance structure
-- [Instructions Layer](../.github/instructions/INDEX.md) — Agent behavior rules
+- [L0-L4 Hierarchy](../../.github/governance/INDEX.md) — Governance structure
+- [Instructions Layer](../../.github/instructions/INDEX.md) — Agent behavior rules
 - [Documentation INDEX](../docs/INDEX.md) — Human-friendly guides
-- [Master Directive](../.github/instructions/01_MASTER_AGENT_DIRECTIVE.instructions.md) — Core
+- [Master Directive](../../.github/instructions/01_MASTER_AGENT_DIRECTIVE.instructions.md) — Core
   operational rules
 
 ---

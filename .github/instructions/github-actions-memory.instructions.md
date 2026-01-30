@@ -1,9 +1,8 @@
 ---
-
-description: "Lessons learned from GitHub Actions workflows, environment variables, and CI
-debugging" applyTo: ".github/workflows/_.yml,.github/workflows/\*\*/_.yml"
-
-## priority: 2
+description:
+  "Lessons learned from GitHub Actions workflows, environment variables, and CI debugging"
+applyTo: ".github/workflows/*.yml,.github/workflows/**/*.yml"
+---
 
 # GitHub Actions Memory
 

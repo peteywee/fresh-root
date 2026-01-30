@@ -1,8 +1,7 @@
 ---
-
-applyTo: "\*\*/\*.md"
-
-## description: "Project memory for Markdown docs formatting, linting, and auto-fix workflows."
+applyTo: "**/*.md"
+description: "Project memory for Markdown docs formatting, linting, and auto-fix workflows."
+---
 
 # Markdown Docs Memory
 

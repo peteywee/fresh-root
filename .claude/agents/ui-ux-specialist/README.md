@@ -170,7 +170,7 @@ Expected: Different suggestions based on context
 
 - **Agent Manifest**: [AGENT.md](./AGENT.md)
 - **Config**: [config.js](./config.js)
-- **Full Persona**: [.github/prompts/ui-ux-agent.md](../../.github/prompts/ui-ux-agent.md)
+- **Full Persona**: [.github/prompts/ui-ux-agent.md](../../../.github/prompts/ui-ux-agent.md)
 - **VS Code Settings**: [.vscode/settings.json](../../.vscode/settings.json)
 
 ## Status

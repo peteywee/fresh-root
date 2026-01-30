@@ -107,7 +107,7 @@ loose files to proper categories, and add comprehensive YAML metadata frontmatte
   4. **Batch 4**: Architecture category (9 files including MCP_TOOLING, FUTURE_PROOF, SYSTEM_L0_L1)
   5. **Batch 5**: Production/reference files (3 files: FINAL_SIGN_OFF, CHANGELOG, LIGHTHOUSE_AUDIT)
   6. **Batch 6**: Category READMEs (3 files: production/, agents/, visuals/)
-  7. **Batch 7**: Template files (11 files: API*ROUTE, CODE*_, DOC\__ templates)
+  7. **Batch 7**: Template files (11 files: API*ROUTE, CODE*\_, DOC\_\_ templates)
   8. **Batch 8**: Visual files (6 files: ARCHITECTURE, DEPENDENCIES, DEPENDENCY_HEALTH, etc.)
   9. **Batch 9**: Agent files (3 files: GLOBAL_COGNITION_AGENT, SPECIAL_PERSONAS, README)
   10. **Batch 10-14**: Remaining files in all categories + final 6 files (NEW_GUIDE,

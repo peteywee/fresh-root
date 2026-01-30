@@ -1,13 +1,15 @@
 ---
-
-applyTo: "\*\*/\*.{ts,tsx,js,jsx}"
+applyTo: "**/*.{ts,tsx,js,jsx}"
 description:
-"Code quality standards for TypeScript/JavaScript: style, patterns, performance, commenting."
-## priority: 2
+  "Code quality standards for TypeScript/JavaScript: style, patterns, performance, commenting."
+---
 
 # Code Quality Standards
+
 ## TypeScript 5.x / ES2022 Standards
+
 ### Strict Mode Required
+
 ```json
 {
   "compilerOptions": {
@@ -20,12 +22,14 @@ description:
 ```
 
 ### Type Inference
+
 - Prefer inference over explicit types where clear
 - Explicit types for function parameters and return types
 - Use `z.infer<typeof Schema>` for Zod schemas (never duplicate)
 - No `any` — use `unknown` with type guards
 
 ### ES2022 Features
+
 - Use `Array.at()` for negative indexing
 - Use `Object.hasOwn()` instead of `hasOwnProperty`
 - Use private fields (`#field`) for encapsulation

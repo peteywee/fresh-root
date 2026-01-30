@@ -105,7 +105,7 @@ analysis ✅ Animation and interaction review
 ## Full Instructions
 
 For comprehensive design principles, checklists, patterns, and detailed guidance, see: 📖
-[`.github/prompts/ui-ux-agent.md`](.github/prompts/ui-ux-agent.md)
+[`.github/prompts/ui-ux-agent.md`](../../../.github/prompts/ui-ux-agent.md)
 
 ---
 
