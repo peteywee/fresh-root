@@ -64,7 +64,7 @@ importers:
         version: 3.7.4
       repomix:
         specifier: ^1.11.1
-        version: 1.11.1(hono@4.11.4)
+        version: 1.11.1(hono@4.11.7)
       syncpack:
         specifier: '13'
         version: 13.0.4(typescript@5.9.3)
@@ -404,11 +404,11 @@ importers:
   packages/repomix:
     dependencies:
       hono:
-        specifier: 4.11.4
-        version: 4.11.4
+        specifier: 4.11.7
+        version: 4.11.7
       repomix:
         specifier: ^1.11.1
-        version: 1.11.1(hono@4.11.4)
+        version: 1.11.1(hono@4.11.7)
     devDependencies:
       '@types/node':
         specifier: ^24.10.4
@@ -577,6 +577,10 @@ packages:
 
   '@babel/runtime@7.28.4':
     resolution: {integrity: sha512-Q/N6JNWvIvPnLDvjlE1OUBLPQHH6l3CltCEsHIujp45zQUSSh8K+gHnaEX45yAT1nyngnINhvWtzN+Nb9D8RAQ==}
+    engines: {node: '>=6.9.0'}
+
+  '@babel/runtime@7.28.6':
+    resolution: {integrity: sha512-05WQkdpL9COIMz4LjTxGpPNCdlpyimKppYNoJ5Di5EUObifl8t4tuLuUBBZEpoLYOmfvIWrsp9fCl0HoPRVTdA==}
     engines: {node: '>=6.9.0'}
 
   '@babel/template@7.28.6':
@@ -4329,8 +4333,8 @@ packages:
   hoist-non-react-statics@3.3.2:
     resolution: {integrity: sha512-/gGivxi8JPKWNm/W0jSmzcMPpfpPLc3dY/6GxhX2hQ9iGj3aDfklV4ET7NjKpSinLpJ5vafa9iiGIEZg10SfBw==}
 
-  hono@4.11.4:
-    resolution: {integrity: sha512-U7tt8JsyrxSRKspfhtLET79pU8K+tInj5QZXs1jSugO1Vq5dFj3kmZsRldo29mTBfcjDRVRXrEZ6LS63Cog9ZA==}
+  hono@4.11.7:
+    resolution: {integrity: sha512-l7qMiNee7t82bH3SeyUCt9UF15EVmaBvsppY2zQtrbIhl/yzBTny+YUxsVjSjQ6gaqaeVtZmGocom8TzBlA4Yw==}
     engines: {node: '>=16.9.0'}
 
   hosted-git-info@8.1.0:
@@ -6645,8 +6649,8 @@ packages:
     resolution: {integrity: sha512-o8qghlI8NZHU1lLPrpi2+Uq7abh4GGPpYANlalzWxyWteJOCsr/P+oPBA49TOLu5FTZO4d3F9MnWJfiMo4BkmA==}
     engines: {node: '>=18'}
 
-  watchpack@2.5.0:
-    resolution: {integrity: sha512-e6vZvY6xboSwLz2GD36c16+O/2Z6fKvIf4pOXptw2rY9MVwE/TXc6RGqxD3I3x0a28lwBY7DE+76uTPSsBrrCA==}
+  watchpack@2.5.1:
+    resolution: {integrity: sha512-Zn5uXdcFNIA1+1Ei5McRd+iRzfhENPCe7LeABkJtNulSxjma+l7ltNx55BWZkRlwRnpOgHqxnjyaDgJnNXnqzg==}
     engines: {node: '>=10.13.0'}
 
   web-streams-polyfill@3.3.3:
@@ -6995,6 +6999,8 @@ snapshots:
       '@babel/helper-plugin-utils': 7.27.1
 
   '@babel/runtime@7.28.4': {}
+
+  '@babel/runtime@7.28.6': {}
 
   '@babel/template@7.28.6':
     dependencies:
@@ -7607,9 +7613,9 @@ snapshots:
       protobufjs: 7.5.4
       yargs: 17.7.2
 
-  '@hono/node-server@1.19.9(hono@4.11.4)':
+  '@hono/node-server@1.19.9(hono@4.11.7)':
     dependencies:
-      hono: 4.11.4
+      hono: 4.11.7
 
   '@humanfs/core@0.19.1': {}
 
@@ -7791,9 +7797,9 @@ snapshots:
       js-yaml: 4.1.1
       tinyglobby: 0.2.15
 
-  '@modelcontextprotocol/sdk@1.25.2(hono@4.11.4)(zod@4.3.5)':
+  '@modelcontextprotocol/sdk@1.25.2(hono@4.11.7)(zod@4.3.5)':
     dependencies:
-      '@hono/node-server': 1.19.9(hono@4.11.4)
+      '@hono/node-server': 1.19.9(hono@4.11.7)
       ajv: 8.17.1
       ajv-formats: 3.0.1(ajv@8.17.1)
       content-type: 1.0.5
@@ -9149,7 +9155,7 @@ snapshots:
   '@testing-library/dom@10.4.1':
     dependencies:
       '@babel/code-frame': 7.28.6
-      '@babel/runtime': 7.28.4
+      '@babel/runtime': 7.28.6
       '@types/aria-query': 5.0.4
       aria-query: 5.3.0
       dom-accessibility-api: 0.5.16
@@ -11523,7 +11529,7 @@ snapshots:
     dependencies:
       react-is: 16.13.1
 
-  hono@4.11.4: {}
+  hono@4.11.7: {}
 
   hosted-git-info@8.1.0:
     dependencies:
@@ -13030,10 +13036,10 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  repomix@1.11.1(hono@4.11.4):
+  repomix@1.11.1(hono@4.11.7):
     dependencies:
       '@clack/prompts': 0.11.0
-      '@modelcontextprotocol/sdk': 1.25.2(hono@4.11.4)(zod@4.3.5)
+      '@modelcontextprotocol/sdk': 1.25.2(hono@4.11.7)(zod@4.3.5)
       '@repomix/strip-comments': 2.4.2
       '@repomix/tree-sitter-wasms': 0.1.16
       '@secretlint/core': 11.3.0
@@ -14077,7 +14083,7 @@ snapshots:
     dependencies:
       xml-name-validator: 5.0.0
 
-  watchpack@2.5.0:
+  watchpack@2.5.1:
     dependencies:
       glob-to-regexp: 0.4.1
       graceful-fs: 4.2.11
@@ -14121,7 +14127,7 @@ snapshots:
       schema-utils: 4.3.3
       tapable: 2.3.0
       terser-webpack-plugin: 5.3.16(webpack@5.104.1)
-      watchpack: 2.5.0
+      watchpack: 2.5.1
       webpack-sources: 3.3.3
     transitivePeerDependencies:
       - '@swc/core'
