@@ -38,7 +38,8 @@ describe("onboarding-create-network-org API E2E Tests", () => {
 
     it("should handle valid request", async () => {
       const validPayload = {
-        // TODO: Add valid payload based on schema
+        networkName: "Test Network",
+        orgName: "Test Org",
       };
 
       const { response } = await safeFetch(`${BASE_URL}/api/onboarding/create-network-org`, {

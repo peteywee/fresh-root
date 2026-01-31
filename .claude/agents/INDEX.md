@@ -48,9 +48,31 @@ This is the **agent discovery hub** for the Fresh Schedules codebase. All Claude
 
 ---
 
-#### 2. PR Conflict Resolver
+#### 2. PR Specialist Agent
 
-**Status**: ✅ Available  
+**Status**: ✅ Production-Ready
+**Directory**: `.claude/agents/pr-specialist/`
+
+**Purpose**: Full pull request lifecycle management - create, review, update, and merge PRs
+
+**Invocation**:
+- **@-mentions**: `@pr` `@pull-request` `@pr-specialist`
+- **Slash commands**: `/pr` `/pull-request` `/create-pr`
+- **Keyboard**: `Cmd+Shift+P` (Mac) / `Ctrl+Shift+P` (Windows/Linux)
+
+**Capabilities**:
+- PR creation with semantic titles
+- PR review and status checking
+- PR merging with strategy selection
+- Branch management and cleanup
+
+**Config**: [AGENT.md](./pr-specialist/AGENT.md) | [config.js](./pr-specialist/config.js)
+
+---
+
+#### 3. PR Conflict Resolver
+
+**Status**: ✅ Available
 **Directory**: `.claude/agents/pr-conflict-resolver.md`
 
 **Purpose**: Handle merge conflicts, apply review feedback, merge PRs, clean up branches
@@ -553,6 +575,7 @@ Quick reference...
 ### Git & Merge Operations
 | Agent | Invocation | Purpose | Status |
 | --- | --- | --- | --- |
+| **PR Specialist** | `@pr`, `/pr`, `/create-pr` | Full PR lifecycle - create, review, merge, cleanup | ✅ |
 | **PR Conflict Resolver** | (agent-based) | Merge conflicts, review feedback, PR cleanup | ✅ |
 
 ---
@@ -566,13 +589,13 @@ Quick reference...
 | **Security & DevOps** | 2 | ✅ Active |
 | **Testing & Quality** | 2 | ✅ Active |
 | **Planning & Documentation** | 5 | ✅ Active |
-| **Git Operations** | 1 | ✅ Active |
-| **TOTAL L4a AGENTS** | **12 discoverable** | ✅ Complete |
-| **TOTAL Ecosystem** | **13+ agents** | ✅ Full coverage |
+| **Git Operations** | 2 | ✅ Active |
+| **TOTAL L4a AGENTS** | **13 discoverable** | ✅ Complete |
+| **TOTAL Ecosystem** | **14+ agents** | ✅ Full coverage |
 
 ---
 
 ## Last Updated
 
-**January 15, 2026** — All 12 L4a agents completed and registered
+**January 16, 2026** — All 13 L4a agents completed and registered (added PR Specialist)
 

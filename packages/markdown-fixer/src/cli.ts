@@ -24,9 +24,14 @@ program
     const excludeDirs = new Set(["node_modules", ".next", "dist"]);
     const { collectMarkdownFiles } = await import("./fsHelpers");
     // Resolve paths from the original cwd, not the package directory
-    const cwd = process.env.INIT_CWD || process.cwd();
+    const cwd = process.env.npm_config_local_prefix || process.env.INIT_CWD || process.cwd();
+    const root = path.resolve(cwd);
     for (const p of paths) {
-      const absolute = path.isAbsolute(p) ? p : path.resolve(cwd, p);
+      const absolute = path.isAbsolute(p) ? path.normalize(p) : path.resolve(cwd, p);
+      if (absolute !== root && !absolute.startsWith(`${root}${path.sep}`)) {
+        console.error(`Path outside working directory: ${absolute}`);
+        continue;
+      }
       if (fs.existsSync(absolute)) {
         const stats = fs.statSync(absolute);
         if (stats.isDirectory()) {

@@ -7,7 +7,7 @@ import { z } from "zod";
 // corporate (90) - Network/multi-org scope, adjacent to org_owner
 // org_owner (85) - Owner of a single organization
 // manager (60) - Manages schedules, staff within org
-// scheduler (50) - Creates/edits schedules
+// scheduler (60) - Creates/edits schedules (manager-equivalent)
 // staff (40) - Views own schedule, limited self-updates
 export const OrgRole = z.enum(["admin", "corporate", "org_owner", "manager", "scheduler", "staff"]);
 export type OrgRole = z.infer<typeof OrgRole>;

@@ -238,7 +238,7 @@ admin (80)       ← User management, org settings
     ↓
 manager (60)     ← Schedule management, reports
     ↓
-scheduler (50)   ← Create/edit schedules
+scheduler (60)   ← Create/edit schedules (manager-equivalent)
     ↓
 corporate (45)   ← View across locations
     ↓

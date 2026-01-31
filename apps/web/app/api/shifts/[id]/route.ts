@@ -5,7 +5,7 @@ import { UpdateShiftSchema, type Shift } from "@fresh-schedules/types";
 import { getFirestore } from "firebase-admin/firestore";
 import { NextResponse } from "next/server";
 
-import { serverError } from "../../_shared/validation";
+import { badRequest, serverError } from "../../_shared/validation";
 
 /**
  * GET /api/shifts/[id]
@@ -14,12 +14,23 @@ import { serverError } from "../../_shared/validation";
 export const GET = createOrgEndpoint({
   handler: async ({ request: _request, input: _input, context, params }) => {
     try {
+      const { searchParams } = new URL(_request.url);
+      const scheduleId = searchParams.get("scheduleId");
       const { id } = params;
       const orgId = context.org!.orgId;
+      if (!scheduleId) {
+        return badRequest("scheduleId query parameter is required");
+      }
 
       // Fetch from Firestore
       const db = getFirestore();
-      const shiftRef = db.collection("orgs").doc(orgId).collection("shifts").doc(id);
+      const shiftRef = db
+        .collection("organizations")
+        .doc(orgId)
+        .collection("schedules")
+        .doc(scheduleId)
+        .collection("shifts")
+        .doc(id);
       const snap = await shiftRef.get();
 
       if (!snap.exists) {
@@ -50,12 +61,23 @@ export const PATCH = createOrgEndpoint({
   input: UpdateShiftSchema,
   handler: async ({ request: _request, input, context, params }) => {
     try {
+      const { searchParams } = new URL(_request.url);
+      const scheduleId = searchParams.get("scheduleId");
       const { id } = params;
       const orgId = context.org!.orgId;
+      if (!scheduleId) {
+        return badRequest("scheduleId query parameter is required");
+      }
 
       // Fetch current document to verify orgId and apply partial updates
       const db = getFirestore();
-      const shiftRef = db.collection("orgs").doc(orgId).collection("shifts").doc(id);
+      const shiftRef = db
+        .collection("organizations")
+        .doc(orgId)
+        .collection("schedules")
+        .doc(scheduleId)
+        .collection("shifts")
+        .doc(id);
       const snap = await shiftRef.get();
 
       if (!snap.exists) {
@@ -100,12 +122,23 @@ export const DELETE = createOrgEndpoint({
   roles: ["manager"],
   handler: async ({ request: _request, input: _input, context, params }) => {
     try {
+      const { searchParams } = new URL(_request.url);
+      const scheduleId = searchParams.get("scheduleId");
       const { id } = params;
       const orgId = context.org!.orgId;
+      if (!scheduleId) {
+        return badRequest("scheduleId query parameter is required");
+      }
 
       // Fetch current document
       const db = getFirestore();
-      const shiftRef = db.collection("orgs").doc(orgId).collection("shifts").doc(id);
+      const shiftRef = db
+        .collection("organizations")
+        .doc(orgId)
+        .collection("schedules")
+        .doc(scheduleId)
+        .collection("shifts")
+        .doc(id);
       const snap = await shiftRef.get();
 
       if (!snap.exists) {

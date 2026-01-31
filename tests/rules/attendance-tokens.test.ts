@@ -235,7 +235,7 @@ describe("attendance records and join tokens", () => {
         await assertSucceeds(recordRef.update({ status: "late" }));
       });
 
-      it("should deny scheduler from deleting attendance records (manager+ only)", async () => {
+      it("should allow scheduler to delete attendance records", async () => {
         const ctx = ctxUser(testEnv, "user-scheduler", schedulerClaims);
         const recordRef = ctx
           .firestore()
@@ -244,7 +244,7 @@ describe("attendance records and join tokens", () => {
           .collection("records")
           .doc("record-1");
 
-        await assertFails(recordRef.delete());
+        await assertSucceeds(recordRef.delete());
       });
     });
 
@@ -444,8 +444,9 @@ describe("attendance records and join tokens", () => {
       await assertSucceeds(tokenRef.get());
     });
 
-    it("should allow manager to create tokens at top-level path", async () => {
-      const ctx = ctxUser(testEnv, "user-manager", { orgId: "org-123", roles: ["manager"] });
+    it("should allow org_owner to create tokens at top-level path", async () => {
+      // Note: top-level /join_tokens path write is restricted to org_owner/admin only
+      const ctx = ctxUser(testEnv, "user-owner", { orgId: "org-123", roles: ["org_owner"] });
       const tokenRef = ctx
         .firestore()
         .collection("join_tokens")
@@ -463,6 +464,25 @@ describe("attendance records and join tokens", () => {
       );
     });
 
+    it("should deny manager from creating tokens at top-level path", async () => {
+      // Manager can only read at top-level /join_tokens path, not write
+      const ctx = ctxUser(testEnv, "user-manager", { orgId: "org-123", roles: ["manager"] });
+      const tokenRef = ctx
+        .firestore()
+        .collection("join_tokens")
+        .doc("org-123")
+        .collection("join_tokens")
+        .doc("token-mgr");
+
+      await assertFails(
+        tokenRef.set({
+          token: "manager-token",
+          orgId: "org-123",
+          role: "staff",
+          createdAt: Date.now(),
+        })
+      );
+    });
     it("should deny cross-org access at top-level path", async () => {
       const ctx = ctxUser(testEnv, "user-other", { orgId: "org-456", roles: ["manager"] });
       const tokenRef = ctx.firestore().collection("join_tokens").doc("org-123").collection("join_tokens").doc("token-2");

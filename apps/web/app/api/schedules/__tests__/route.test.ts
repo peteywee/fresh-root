@@ -223,7 +223,7 @@ vi.mock("@fresh-schedules/api-framework", () => ({
         const roleHierarchy: Record<string, number> = {
           staff: 10,
           corporate: 20,
-          scheduler: 30,
+          scheduler: 40,
           manager: 40,
           admin: 50,
           org_owner: 60,
@@ -901,7 +901,12 @@ describe("Schedules API", () => {
         });
       });
 
-      it("should return 403 for scheduler role (requires manager)", async () => {
+      it("should succeed for scheduler role", async () => {
+        mockFirestore._setMockData(
+          `organizations/${VALID_ORG_ID}/schedules/${VALID_SCHEDULE_ID}`,
+          createMockScheduleData(),
+        );
+
         const request = createAuthenticatedRequest(
           "DELETE",
           `/api/schedules/${VALID_SCHEDULE_ID}`,
@@ -911,7 +916,7 @@ describe("Schedules API", () => {
         );
         const response = await callEndpoint(DELETE, request, { id: VALID_SCHEDULE_ID });
 
-        expect(response.status).toBe(403);
+        expect(response.status).toBe(200);
       });
 
       it("should succeed for manager role", async () => {

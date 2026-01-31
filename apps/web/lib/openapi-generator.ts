@@ -28,54 +28,110 @@ export interface OpenAPIEndpoint {
  * Convert Zod schema to OpenAPI schema object
  */
 function zodToOpenAPI(schema: z.ZodTypeAny): any {
-  if (schema instanceof z.ZodString) {
-    return { type: "string" };
+  const typeName = (schema as any)?._def?.typeName as string | undefined;
+  if (!typeName) {
+    console.warn("[openapi] Unsupported schema without typeName", { schema });
+    return { type: "object", description: "Unsupported schema" };
   }
-  if (schema instanceof z.ZodNumber) {
-    return { type: "number" };
-  }
-  if (schema instanceof z.ZodBoolean) {
-    return { type: "boolean" };
-  }
-  if (schema instanceof z.ZodArray) {
-    return {
-      type: "array",
-      items: zodToOpenAPI((schema as any)._def.type),
-    };
-  }
-  if (schema instanceof z.ZodObject) {
-    const shape = (schema as any)._def.shape();
-    const properties: Record<string, any> = {};
-    const required: string[] = [];
 
-    for (const [key, value] of Object.entries(shape)) {
-      properties[key] = zodToOpenAPI(value as z.ZodTypeAny);
-      if (!(value as z.ZodTypeAny).isOptional()) {
-        required.push(key);
-      }
+  switch (typeName) {
+    case "ZodString":
+      return { type: "string" };
+    case "ZodNumber":
+      return { type: "number" };
+    case "ZodBoolean":
+      return { type: "boolean" };
+    case "ZodBigInt":
+      return { type: "integer", format: "int64" };
+    case "ZodDate":
+      return { type: "string", format: "date-time" };
+    case "ZodLiteral": {
+      const value = (schema as any)._def?.value;
+      const literalType = typeof value;
+      return {
+        type: literalType === "string" ? "string" : literalType === "number" ? "number" : "boolean",
+        enum: [value],
+      };
     }
+    case "ZodEnum":
+      return {
+        type: "string",
+        enum: (schema as any)._def?.values ?? [],
+      };
+    case "ZodNativeEnum": {
+      const values = Object.values((schema as any)._def?.values ?? {}).filter(
+        (val) => typeof val === "string" || typeof val === "number",
+      );
+      return { type: "string", enum: values };
+    }
+    case "ZodUnion": {
+      const options = (schema as any)._def?.options ?? [];
+      return { oneOf: Array.isArray(options) ? options.map(zodToOpenAPI) : [] };
+    }
+    case "ZodIntersection":
+      return {
+        allOf: [
+          zodToOpenAPI((schema as any)._def?.left),
+          zodToOpenAPI((schema as any)._def?.right),
+        ],
+      };
+    case "ZodArray":
+      return {
+        type: "array",
+        items: zodToOpenAPI((schema as any)._def?.type),
+      };
+    case "ZodTuple": {
+      const items = (schema as any)._def?.items ?? [];
+      const mappedItems = Array.isArray(items) ? items.map(zodToOpenAPI) : [];
+      return {
+        type: "array",
+        items: mappedItems.length ? { oneOf: mappedItems } : { type: "object" },
+        minItems: mappedItems.length || undefined,
+        maxItems: mappedItems.length || undefined,
+      };
+    }
+    case "ZodRecord":
+      return {
+        type: "object",
+        additionalProperties: zodToOpenAPI((schema as any)._def?.valueType),
+      };
+    case "ZodObject": {
+      const shapeFn = (schema as any)._def?.shape;
+      if (typeof shapeFn !== "function") {
+        console.warn("[openapi] Unsupported Zod object shape", { schema });
+        return { type: "object", description: "Unsupported object shape" };
+      }
+      const shape = shapeFn();
+      const properties: Record<string, any> = {};
+      const required: string[] = [];
 
-    return {
-      type: "object",
-      properties,
-      required: required.length > 0 ? required : undefined,
-    };
-  }
-  if (schema instanceof z.ZodEnum) {
-    return {
-      type: "string",
-      enum: (schema as any)._def.values,
-    };
-  }
-  if (schema instanceof z.ZodOptional) {
-    return zodToOpenAPI((schema as any)._def.innerType);
-  }
-  if (schema instanceof z.ZodNullable) {
-    return zodToOpenAPI((schema as any)._def.innerType);
-  }
+      for (const [key, value] of Object.entries(shape)) {
+        properties[key] = zodToOpenAPI(value as z.ZodTypeAny);
+        if (!(value as z.ZodTypeAny).isOptional()) {
+          required.push(key);
+        }
+      }
 
-  // Default fallback
-  return { type: "object" };
+      return {
+        type: "object",
+        properties,
+        required: required.length > 0 ? required : undefined,
+      };
+    }
+    case "ZodOptional":
+      return zodToOpenAPI((schema as any)._def?.innerType);
+    case "ZodNullable": {
+      const innerSchema = zodToOpenAPI((schema as any)._def?.innerType);
+      return { ...innerSchema, nullable: true };
+    }
+    case "ZodDefault":
+      return zodToOpenAPI((schema as any)._def?.innerType);
+    case "ZodEffects":
+      return zodToOpenAPI((schema as any)._def?.schema);
+    default:
+      console.warn("[openapi] Unsupported Zod schema type", { typeName });
+      return { type: "object", description: `Unsupported schema type: ${typeName}` };
+  }
 }
 
 /**

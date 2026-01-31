@@ -99,7 +99,7 @@ describe("POST /api/schedules (AI-Generated Tests)", () => {
       const roleHierarchy: Record<string, number> = {
         staff: 40,
         corporate: 45,
-        scheduler: 50,
+        scheduler: 60,
         manager: 60,
         admin: 80,
         org_owner: 100,
@@ -107,7 +107,12 @@ describe("POST /api/schedules (AI-Generated Tests)", () => {
 
       userRoles.forEach((role) => {
         const hasPermission = roleHierarchy[role]! >= roleHierarchy[requiredRole]!;
-        if (role.includes("manager") || role.includes("admin") || role === "org_owner") {
+        if (
+          role.includes("manager") ||
+          role.includes("scheduler") ||
+          role.includes("admin") ||
+          role === "org_owner"
+        ) {
           expect(hasPermission).toBe(true);
         }
       });

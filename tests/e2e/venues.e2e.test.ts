@@ -61,7 +61,8 @@ describe("venues API E2E Tests", () => {
 
     it("should handle valid request", async () => {
       const validPayload = {
-        // TODO: Add valid payload based on CreateVenueSchema
+        orgId: "org-test",
+        name: "Test Venue",
       };
 
       const { response } = await safeFetch(`${BASE_URL}/api/venues`, {

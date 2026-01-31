@@ -166,6 +166,10 @@ export function loadServerEnv(): ServerEnv {
         console.error("[env.server] UPSTASH_REDIS_REST_URL requires UPSTASH_REDIS_REST_TOKEN");
         throw new Error("Missing UPSTASH_REDIS_REST_TOKEN in production");
       }
+    } else if (env.UPSTASH_REDIS_REST_URL || env.UPSTASH_REDIS_REST_TOKEN) {
+      console.warn(
+        "[env.server] Upstash Redis credentials provided but USE_REDIS_RATE_LIMIT is not enabled. Set USE_REDIS_RATE_LIMIT=true to use Redis rate limiting.",
+      );
     }
   }
 

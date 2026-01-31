@@ -50,8 +50,9 @@ This section contains step-by-step guides, tutorials, and procedures for setting
 ## Quick Navigation
 
 | Document | Purpose | Audience |
-|----------|---------|----------|
+| --- | --- | --- |
 | Quick Start | Get local dev running in 5 minutes | New developers |
+| Codex Workflow | Use Codex in this repo | Developers, AI agents |
 | Deployment Checklist | Pre-deploy verification steps | Operators |
 | Testing Guide | Write tests for your code | Developers |
 | Firebase Setup | Configure Firebase for local dev | Developers |

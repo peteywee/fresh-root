@@ -24,7 +24,9 @@ describe("shifts-[id] API E2E Tests", () => {
     // Requires authentication
 
     it("should return 200 for valid request", async () => {
-      const { response } = await safeFetch(`${BASE_URL}/api/shifts/[id]`);
+      const { response } = await safeFetch(
+        `${BASE_URL}/api/shifts/shift-test?scheduleId=sched-test`,
+      );
       if (!serverAvailable || !response) {
         expect(true).toBe(true); // Skip gracefully
         return;
@@ -33,7 +35,9 @@ describe("shifts-[id] API E2E Tests", () => {
     });
 
     it("should return 401 without authentication", async () => {
-      const { response } = await safeFetch(`${BASE_URL}/api/shifts/[id]`);
+      const { response } = await safeFetch(
+        `${BASE_URL}/api/shifts/shift-test?scheduleId=sched-test`,
+      );
       if (!serverAvailable || !response) {
         expect(true).toBe(true); // Skip gracefully
         return;
@@ -47,7 +51,7 @@ describe("shifts-[id] API E2E Tests", () => {
     // Input: UpdateShiftSchema
 
     it("should return 400 for invalid input", async () => {
-      const { response } = await safeFetch(`${BASE_URL}/api/shifts/[id]`, {
+      const { response } = await safeFetch(`${BASE_URL}/api/shifts/shift-test?scheduleId=sched-test`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({}),
@@ -61,10 +65,12 @@ describe("shifts-[id] API E2E Tests", () => {
 
     it("should handle valid request", async () => {
       const validPayload = {
-        // TODO: Add valid payload based on UpdateShiftSchema
+        startTime: 10 * 60,
+        endTime: 18 * 60,
+        notes: "Updated shift",
       };
 
-      const { response } = await safeFetch(`${BASE_URL}/api/shifts/[id]`, {
+      const { response } = await safeFetch(`${BASE_URL}/api/shifts/shift-test?scheduleId=sched-test`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(validPayload),
@@ -83,7 +89,7 @@ describe("shifts-[id] API E2E Tests", () => {
     // Requires authentication
 
     it("should require authentication", async () => {
-      const { response } = await safeFetch(`${BASE_URL}/api/shifts/[id]`, {
+      const { response } = await safeFetch(`${BASE_URL}/api/shifts/shift-test?scheduleId=sched-test`, {
         method: "DELETE",
       });
       if (!serverAvailable || !response) {

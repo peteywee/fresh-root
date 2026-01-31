@@ -103,3 +103,7 @@ repomix-output.*
 repomix-output.xml
 .eslintcache
 lighthouse-reports/
+
+# Service account keys (NEVER commit)
+sa/
+*.json.backup

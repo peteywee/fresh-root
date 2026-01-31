@@ -9,6 +9,15 @@ import { queryWithType } from "@/src/lib/firebase/typed-wrappers";
 
 export type OrgRole = "org_owner" | "admin" | "manager" | "scheduler" | "corporate" | "staff";
 
+const ROLE_LEVELS: Record<OrgRole, number> = {
+  staff: 40,
+  corporate: 45,
+  scheduler: 60,
+  manager: 60,
+  admin: 80,
+  org_owner: 100,
+};
+
 /**
  * Membership document from Firestore
  */
@@ -60,7 +69,6 @@ export function requireOrgMembership(
 }
 
 export function requireRole(requiredRole: OrgRole) {
-  const hierarchy: OrgRole[] = ["staff", "corporate", "scheduler", "manager", "admin", "org_owner"];
   return function (
     handler: (
       request: NextRequest,
@@ -87,8 +95,8 @@ export function requireRole(requiredRole: OrgRole) {
         .map((r) => r.trim())
         .filter(Boolean) as OrgRole[];
 
-      const userLevel = roles.length ? Math.max(...roles.map((r) => hierarchy.indexOf(r))) : -1;
-      const requiredLevel = hierarchy.indexOf(requiredRole);
+      const userLevel = roles.length ? Math.max(...roles.map((r) => ROLE_LEVELS[r])) : -1;
+      const requiredLevel = ROLE_LEVELS[requiredRole];
       if (userLevel < requiredLevel) {
         return NextResponse.json(
           { error: `Forbidden - Requires ${requiredRole} role or higher` },
@@ -108,9 +116,8 @@ export function requireRole(requiredRole: OrgRole) {
  * Pure helper: determine if any of the user's roles satisfies the required role by hierarchy
  */
 export function hasRequiredRole(userRoles: OrgRole[], requiredRole: OrgRole): boolean {
-  const hierarchy: OrgRole[] = ["staff", "corporate", "scheduler", "manager", "admin", "org_owner"];
-  const userLevel = userRoles.length ? Math.max(...userRoles.map((r) => hierarchy.indexOf(r))) : -1;
-  const requiredLevel = hierarchy.indexOf(requiredRole);
+  const userLevel = userRoles.length ? Math.max(...userRoles.map((r) => ROLE_LEVELS[r])) : -1;
+  const requiredLevel = ROLE_LEVELS[requiredRole];
   return userLevel >= requiredLevel;
 }
 

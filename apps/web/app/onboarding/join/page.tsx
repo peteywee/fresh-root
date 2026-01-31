@@ -5,6 +5,17 @@
 import { useRouter } from "next/navigation";
 import React, { FormEvent, useState } from "react";
 
+import { useOnboardingWizard } from "../_wizard/OnboardingWizardContext";
+
+async function activateNetwork(networkId: string) {
+  const res = await fetch("/api/onboarding/activate-network", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ networkId }),
+  });
+  if (!res.ok) throw new Error("Failed to activate network");
+}
+
 // Narrow router to only push to avoid any casting.
 type NavRouter = Pick<ReturnType<typeof useRouter>, "push">;
 
@@ -16,6 +27,7 @@ type JoinFormState = {
 export default function JoinPage() {
   const router = useRouter();
   const nav: NavRouter = { push: router.push };
+  const { setOrgId, setJoinedRole, setNetworkId } = useOnboardingWizard();
   const [form, setForm] = useState<JoinFormState>({
     token: "",
     email: "",
@@ -27,7 +39,7 @@ export default function JoinPage() {
     setForm((prev) => ({ ...prev, [name]: value }));
   }
 
-  function handleSubmit(e: FormEvent) {
+  async function handleSubmit(e: FormEvent) {
     e.preventDefault();
 
     if (!form.token.trim()) {
@@ -37,8 +49,42 @@ export default function JoinPage() {
 
     setError(null);
 
-    // Real implementation would POST to /api/onboarding/join-with-token.
-    nav.push("/onboarding/block-4");
+    try {
+      const res = await fetch("/api/onboarding/join-with-token", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          joinToken: form.token,
+          email: form.email || undefined,
+        }),
+      });
+
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        setError(data.error?.message || "Failed to join organization");
+        return;
+      }
+
+      const data = await res.json();
+      const joinedOrgId = data?.data?.orgId || data?.orgId;
+      const role = data?.data?.role || data?.role;
+
+      if (joinedOrgId) {
+        setOrgId(joinedOrgId);
+        setNetworkId(joinedOrgId);
+        if (role) setJoinedRole(role);
+        try {
+          await activateNetwork(joinedOrgId);
+        } catch (activationError) {
+          console.warn("activate-network failed", activationError);
+        }
+      }
+
+      nav.push("/onboarding/block-4");
+    } catch (err) {
+      console.error("Join with token failed", err);
+      setError("Network error. Please try again.");
+    }
   }
 
   return (

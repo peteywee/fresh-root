@@ -61,7 +61,12 @@ describe("attendance API E2E Tests", () => {
 
     it("should handle valid request", async () => {
       const validPayload = {
-        // TODO: Add valid payload based on CreateAttendanceRecordSchema
+        orgId: "org-test",
+        shiftId: "shift-test",
+        scheduleId: "sched-test",
+        staffUid: "user-test",
+        scheduledStart: Date.now() + 60 * 60 * 1000,
+        scheduledEnd: Date.now() + 2 * 60 * 60 * 1000,
       };
 
       const { response } = await safeFetch(`${BASE_URL}/api/attendance`, {

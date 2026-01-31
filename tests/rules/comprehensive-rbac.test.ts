@@ -212,15 +212,15 @@ describe("RBAC role hierarchy", () => {
   });
 
   describe("role hierarchy enforcement", () => {
-    it("should enforce scheduler < manager for deletions", async () => {
-      // Scheduler can create but manager should delete
+    it("should treat scheduler and manager equivalently for deletions", async () => {
+      // Scheduler and manager should both be able to delete
       const schedulerCtx = ctxUser(testEnv, "user-scheduler", { orgId: "org-123", roles: ["scheduler"] });
       const managerCtx = ctxUser(testEnv, "user-manager", { orgId: "org-123", roles: ["manager"] });
 
       // Create schedule as scheduler
       const schedRef = schedulerCtx
         .firestore()
-        .collection("schedules")
+        .collection("orgs")
         .doc("org-123")
         .collection("schedules")
         .doc("sched-test");
@@ -233,11 +233,27 @@ describe("RBAC role hierarchy", () => {
         })
       );
 
-      // Scheduler should NOT be able to delete
-      await assertFails(schedulerCtx.firestore().collection("schedules").doc("org-123").collection("schedules").doc("sched-test").delete());
+      // Scheduler SHOULD be able to delete
+      await assertSucceeds(
+        schedulerCtx
+          .firestore()
+          .collection("orgs")
+          .doc("org-123")
+          .collection("schedules")
+          .doc("sched-test")
+          .delete(),
+      );
 
       // Manager SHOULD be able to delete
-      await assertSucceeds(managerCtx.firestore().collection("schedules").doc("org-123").collection("schedules").doc("sched-test").delete());
+      await assertSucceeds(
+        managerCtx
+          .firestore()
+          .collection("orgs")
+          .doc("org-123")
+          .collection("schedules")
+          .doc("sched-test")
+          .delete(),
+      );
     });
 
     it("should enforce manager < org_owner for org deletion", async () => {

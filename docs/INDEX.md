@@ -382,6 +382,7 @@ Step-by-step tutorials and how-to guides.
 | [DEPLOYMENT.md](./guides/DEPLOYMENT.md) | Production deployment steps | Active |
 | [TESTING.md](./guides/TESTING.md)       | Test strategy and execution | Active |
 | [FIREBASE.md](./guides/FIREBASE.md)     | Firebase integration guide  | Active |
+| [CODEX.md](./guides/CODEX.md)           | Codex workflow guide        | Active |
 
 ---
 
