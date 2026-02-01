@@ -1,31 +1,32 @@
 ---
+
 title: "Scheduling API"
-description: "Schedules, shifts, positions, and attendance"
+description: "Scheduling API endpoints"
 keywords:
   - api
-  - schedules
+  - scheduling
   - shifts
-  - positions
-  - attendance
 category: "reference"
 status: "active"
 audience:
   - developers
-  - ai-agents
+  - api-consumers
 related-docs:
   - INDEX.md
----
+  - ../schemas/INDEX.md
+createdAt: "2026-01-31T07:18:55Z"
+lastUpdated: "2026-01-31T07:18:55Z"
 
 # Scheduling API
 
 ## Endpoints
 
 - /api/schedules
-- /api/schedules/[id]
+- /api/schedules/\[id]
 - /api/shifts
-- /api/shifts/[id]
+- /api/shifts/\[id]
 - /api/positions
-- /api/positions/[id]
+- /api/positions/\[id]
 - /api/publish
 - /api/attendance
 

@@ -1,22 +1,28 @@
 ---
+
 title: "Zod Schema Code Template"
 description: "Template for Zod schema definitions with validation patterns"
 keywords:
-  - template
-  - zod
-  - schema
-  - validation
-  - typescript
+- template
+- zod
+- schema
+- validation
+- typescript
 category: "template"
 status: "active"
 audience:
-  - developers
+- developers
 related-docs:
-  - CODE_FIRESTORE_RULES.md
-  - ../standards/ERROR_PREVENTION_PATTERNS.md
+- CODE\_FIRESTORE\_RULES.md
+- ../standards/CODING\_RULES\_AND\_PATTERNS.md
+
+createdAt: "2026-01-31T12:00:00Z"
+lastUpdated: "2026-01-31T12:00:00Z"
+
 ---
 
-# Template: CODE\_ZOD\_SCHEMA
+# Template: CODE_ZOD_SCHEMA
+
 ```ts
 /**
  * ${Name} domain schema

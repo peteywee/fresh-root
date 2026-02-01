@@ -1,9 +1,30 @@
+---
+
+title: "L2 — Organization/Venue/Team Hierarchy"
+description: "Subsystem report for organization, venue, and team hierarchy."
+keywords:
+  - architecture
+  - subsystem
+  - organization
+  - hierarchy
+category: "report"
+status: "active"
+audience:
+  - developers
+  - architects
+createdAt: "2026-01-31T07:19:01Z"
+lastUpdated: "2026-01-31T07:19:01Z"
+
+---
+
 # L2 — Organization/Venue/Team Hierarchy
+
 > **Status:** ✅ Documented from actual codebase analysis **Last Updated:** 2025-12-17 **Analyzed
 > Routes:** 12 endpoints, ~800 LOC **Type Schemas:** 8 core types (Organization, Venue, Zone,
 > Membership, Corporate, Network, Links)
 
 ## 1. Role in the System
+
 The Organization Hierarchy subsystem implements the multi-tenant organizational structure that
 scopes all resources in Fresh Schedules. It provides the foundational data model for:
 
@@ -17,7 +38,9 @@ This is a **P0 Critical** subsystem - all other features (schedules, shifts, att
 this hierarchy for data scoping and access control.
 
 ## 2. Actual Implementation Analysis
+
 ### 2.1 Hierarchical Structure
+
 ```
 Network (Top Level - Multi-tenant Container)
 ├── Corporate Entities (Optional - Brands/HQ)
@@ -39,6 +62,7 @@ Network (Top Level - Multi-tenant Container)
 - **Zones nest under Venues** - provides spatial organization within locations
 
 ### 2.2 Endpoints Inventory
+
 | Endpoint                                     | Method | Purpose          | Auth | RBAC       | Validation                 |
 | -------------------------------------------- | ------ | ---------------- | ---- | ---------- | -------------------------- |
 | `/api/organizations`                         | GET    | List user's orgs | ✅   | User       | Query params               |
@@ -60,7 +84,9 @@ Network (Top Level - Multi-tenant Container)
 framework - **A09 Handler Signature Invariant** is enforced.
 
 ### 2.3 Data Models & Types
+
 #### 2.3.1 Organization Schema
+
 From `packages/types/src/orgs.ts`:
 
 ```typescript
@@ -125,6 +151,7 @@ export const SubscriptionTier = z.enum(["free", "starter", "professional", "ente
 ```
 
 #### 2.3.2 Venue Schema
+
 From `packages/types/src/venues.ts`:
 
 ```typescript
@@ -173,6 +200,7 @@ export const CoordinatesSchema = z.object({
 ```
 
 #### 2.3.3 Zone Schema
+
 From `packages/types/src/zones.ts`:
 
 ```typescript
@@ -211,6 +239,7 @@ export const ZoneType = z.enum([
 ```
 
 #### 2.3.4 Membership Schema
+
 From `packages/types/src/memberships.ts`:
 
 ```typescript
@@ -250,6 +279,7 @@ export const MembershipStatus = z.enum([
 ```
 
 #### 2.3.5 Network Schema
+
 From `packages/types/src/networks.ts`:
 
 ```typescript
@@ -323,6 +353,7 @@ export const NetworkStatus = z.enum(["pending_verification", "active", "suspende
 ```
 
 #### 2.3.6 Corporate Schema
+
 From `packages/types/src/corporates.ts`:
 
 ```typescript
@@ -349,6 +380,7 @@ export const CorporateSchema = z.object({
 ```
 
 #### 2.3.7 Link Schemas
+
 **Corporate-Organization Links** (`packages/types/src/links/corpOrgLinks.ts`):
 
 ```typescript
@@ -393,6 +425,7 @@ export const OrgVenueAssignmentSchema = z.object({
 ```
 
 ### 2.4 Firestore Collections Used
+
 **Primary Collections:**
 
 - **`/networks/{networkId}`** - Top-level network documents
@@ -428,6 +461,7 @@ export const OrgVenueAssignmentSchema = z.object({
 - ⚠️ No secondary indexes documented yet - may need composite indexes
 
 ### 2.5 Authentication & RBAC Context
+
 All routes use `createOrgEndpoint()` which provides:
 
 ```typescript
@@ -459,7 +493,7 @@ org_owner > admin > manager = scheduler > staff
 
 **Permission Matrix:**
 
-| Action           | org\_owner | admin | manager | scheduler | staff |
+| Action           | org_owner | admin | manager | scheduler | staff |
 | ---------------- | --------- | ----- | ------- | --------- | ----- |
 | Delete org       | ✅        | ❌    | ❌      | ❌        | ❌    |
 | Manage members   | ✅        | ✅    | ❌      | ❌        | ❌    |
@@ -471,7 +505,9 @@ org_owner > admin > manager = scheduler > staff
 | Check in/out     | ✅        | ✅    | ✅      | ✅        | ✅    |
 
 ## 3. Critical Findings
+
 ### 🔴 CRITICAL-01: Missing Firestore Persistence Across All Endpoints
+
 **Location:** All organization/venue/zone routes **Issue:** Mock data returned without persisting to
 Firestore
 
@@ -506,6 +542,7 @@ export const GET = createAuthenticatedEndpoint({
 **Recommendation:** See §5 for complete implementation example with Firestore queries.
 
 ### 🔴 CRITICAL-02: No Network-Organization Relationship Enforcement
+
 **Location:** `CreateOrganizationSchema`, `CreateVenueSchema` **Issue:** `networkId` is optional but
 never validated or used in queries
 
@@ -519,6 +556,7 @@ never validated or used in queries
 **Recommendation:** See §5 for network validation pattern.
 
 ### 🔴 CRITICAL-03: Membership Role Consistency Issues
+
 **Location:** `packages/types/src/memberships.ts` vs `packages/types/src/rbac.ts` **Issue:** Two
 different role enums exist with overlapping values
 
@@ -542,6 +580,7 @@ export const OrgRole = z.enum(["org_owner", "admin", "manager", "scheduler", "co
 **Recommendation:** Unify role definitions in one place (see §4 for pattern).
 
 ### 🟡 HIGH-01: Missing Org-Venue Authorization Checks
+
 **Location:** `/api/venues` route **Issue:** Venue creation doesn't verify user has access to
 specified `orgId`
 
@@ -550,6 +589,7 @@ specified `orgId`
 **Recommendation:** See §5 for authorization validation pattern.
 
 ### 🟡 HIGH-02: Zone Queries Missing venueId Validation
+
 **Location:** `/api/zones` GET route **Issue:** Queries zones by `venueId` but doesn't verify venue
 belongs to user's org
 
@@ -558,6 +598,7 @@ belongs to user's org
 **Recommendation:** See §5 for venue ownership verification pattern.
 
 ### 🟡 HIGH-03: Missing Corporate-Org Link Management Routes
+
 **Location:** No API routes found **Issue:** `CorpOrgLinkSchema` and `OrgVenueAssignmentSchema`
 defined but no CRUD endpoints
 
@@ -570,6 +611,7 @@ defined but no CRUD endpoints
 **Recommendation:** See §5 for link management endpoint pattern.
 
 ### 🟡 HIGH-04: Organization Settings Not Enforced
+
 **Location:** `OrganizationSettingsSchema` defined but not used **Issue:** Settings like
 `allowSelfScheduling`, `requireShiftConfirmation` exist but no enforcement logic
 
@@ -582,6 +624,7 @@ defined but no CRUD endpoints
 **Recommendation:** See §5 for settings enforcement pattern.
 
 ### 🟢 MEDIUM-01: Inconsistent Timestamp Formats
+
 **Location:** Multiple schemas **Issue:** Mix of `number` (Unix ms), `string` (ISO), and `Timestamp`
 types
 
@@ -589,23 +632,27 @@ types
 only when writing to Firestore.
 
 ### 🟢 MEDIUM-02: No Cascade Delete Logic
+
 **Location:** Organization/Venue delete endpoints **Issue:** Deleting org doesn't handle child
 venues/zones/memberships
 
 **Recommendation:** See §5 for cascade delete pattern with transactions.
 
 ## 4. Architectural Notes & Invariants
+
 ### ✅ Enforced Invariants
+
 1. **A09 Handler Signature Invariant** - All routes use SDK factory pattern (`createOrgEndpoint()`
    or `createAuthenticatedEndpoint()`)
 1. **Input Validation** - Zod schemas validate all request bodies before handler execution
-2. **Authentication Required** - `createOrgEndpoint()` blocks unauthenticated requests
-3. **Type Safety** - Typed wrappers (`getDocWithType`, `setDocWithType`) used consistently
-4. **RBAC Role Checks** - `roles: ["manager"]` enforced by SDK before handler runs
-5. **orgId Scoping** - All venue/zone queries include orgId (in theory - not in mock
+1. **Authentication Required** - `createOrgEndpoint()` blocks unauthenticated requests
+1. **Type Safety** - Typed wrappers (`getDocWithType`, `setDocWithType`) used consistently
+1. **RBAC Role Checks** - `roles: ["manager"]` enforced by SDK before handler runs
+1. **orgId Scoping** - All venue/zone queries include orgId (in theory - not in mock
    implementations)
 
 ### ⚠️ Missing Invariants
+
 1. **Network Boundary Enforcement** - No validation that org belongs to network
 2. **Membership Verification** - Routes assume context.org exists without checking membership doc
 3. **Cascade Operations** - No defined behavior for deleting parent entities
@@ -614,12 +661,15 @@ venues/zones/memberships
 6. **Secondary Index Requirements** - No documented composite indexes for common queries
 
 ### Hierarchy Scoping Rules
+
 **Rule 1: Every resource MUST have orgId** **Rule 2: Firestore paths MUST include orgId for
 subcollections** **Rule 3: Queries MUST filter by orgId from context** **Rule 4: Membership
 determines org access**
 
 ## 5. Example Patterns
+
 ### ✅ Good Pattern: Org-Scoped Query with Type Safety
+
 ```typescript
 // File: venues/route.ts (corrected version)
 export const GET = createOrgEndpoint({
@@ -660,6 +710,7 @@ export const GET = createOrgEndpoint({
 - ✅ Returns structured response
 
 ### ❌ Bad Pattern: Hardcoded Mock Data (Current Implementation)
+
 ```typescript
 // ❌ Returns hardcoded mock data, no persistence
 const venues = [{ id: "venue-1", name: "Main Venue" /* ... */ }];
@@ -667,6 +718,7 @@ return ok({ venues });
 ```
 
 ### ✅ Refactored Pattern: Complete Implementation
+
 See full code examples in sections above for:
 
 - Member addition with validation
@@ -676,6 +728,7 @@ See full code examples in sections above for:
 - Cascade delete with transactions
 
 ## 6. Open Questions
+
 1. **What is the intended network creation flow?**
 2. **How should Corporate-Org links be managed?**
 3. **What are the Venue assignment semantics?**
@@ -685,6 +738,7 @@ See full code examples in sections above for:
 7. **What composite indexes are needed?**
 
 ## 7. Recommendations Summary
+
 | Priority | Action                                                        | Estimated Effort |
 | -------- | ------------------------------------------------------------- | ---------------- |
 | 🔴 P0    | Implement Firestore persistence for all org/venue/zone routes | 4-5 days         |
@@ -701,6 +755,7 @@ See full code examples in sections above for:
 **Total Estimated Effort:** ~22-32 days
 
 ## 8. Related Subsystems
+
 - **Onboarding** - Creates initial network/org/venue during user signup
 - **RBAC/Security** - Membership roles determine org access permissions
 - **Schedules/Shifts** - All scheduling operations scoped by orgId
@@ -708,6 +763,7 @@ See full code examples in sections above for:
 - **Authentication** - Firebase Auth integrates with membership system
 
 ## 9. Next Steps
+
 1. **Immediate (P0):** Fix CRITICAL-01, CRITICAL-02, CRITICAL-03
 2. **Short-term (P1):** Add authorization, implement links, enforce settings
 3. **Medium-term (P2):** Standardize timestamps, add audit logging, document indexes

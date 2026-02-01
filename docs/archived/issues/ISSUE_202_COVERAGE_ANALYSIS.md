@@ -1,13 +1,33 @@
+---
+
+title: "[ARCHIVED] Issue #202: Firestore Rules Test Coverage Analysis"
+description: "Archived coverage analysis for issue #202 on Firestore rules testing."
+keywords:
+   - archive
+   - issue-202
+   - firestore
+   - testing
+category: "archive"
+status: "archived"
+audience:
+   - developers
+   - qa
+createdAt: "2026-01-31T07:18:58Z"
+lastUpdated: "2026-01-31T07:18:58Z"
+
+---
+
 # Issue #202: Firestore Rules Test Coverage Analysis
-**Date**: 2025-12-26
-**Status**: In Progress
-**Current Coverage**: ~40% (estimated)
-**Target Coverage**: 80%+
+
+**Date**: 2025-12-26 **Status**: In Progress **Current Coverage**: ~40% (estimated) **Target
+Coverage**: 80%+
 
 ---
 
 ## Current Test Infrastructure
+
 ### Existing Test Files (628 lines total)
+
 1. **auth-boundaries.test.ts** (~150 lines)
    - ✅ Unauthenticated access denied
    - ✅ Basic auth boundary checks
@@ -35,14 +55,18 @@
 ---
 
 ## Firestore Rules Analysis
+
 ### Collections Covered by Rules
+
 #### Primary Collections (9 total)
+
 1. `/users/{userId}` - User profiles (self-only)
 2. `/orgs/{orgId}` - Organizations (member access)
 3. `/organizations/{orgId}` - Alternate org path
 4. `/memberships/{membershipId}` - Org memberships
 
 #### Org-Scoped Subcollections (7 total under /orgs/)
+
 1. `/orgs/{orgId}/schedules/{scheduleId}`
 2. `/orgs/{orgId}/positions/{positionId}`
 3. `/orgs/{orgId}/schedules/{scheduleId}/shifts/{shiftId}`
@@ -53,6 +77,7 @@
 8. `/organizations/{orgId}/positions/{positionId}`
 
 #### Top-Level Per-Org Collections (6 total)
+
 1. `/venues/{orgId}/venues/{venueId}`
 2. `/zones/{orgId}/zones/{zoneId}`
 3. `/positions/{orgId}/positions/{positionId}`
@@ -66,8 +91,11 @@
 ---
 
 ## Coverage Gaps Analysis
+
 ### High Priority Gaps (Critical Security Paths)
+
 #### 1. Shifts Collection (NOT TESTED)
+
 - ❌ No tests for `/orgs/{orgId}/schedules/{scheduleId}/shifts/{shiftId}`
 - ❌ No tests for `/shifts/{orgId}/shifts/{shiftId}`
 - ❌ Staff self-service limited updates not tested
@@ -75,6 +103,7 @@
 - **Effort**: 2 hours
 
 #### 2. Positions Collection (NOT TESTED)
+
 - ❌ No tests for `/orgs/{orgId}/positions/{positionId}`
 - ❌ No tests for `/positions/{orgId}/positions/{positionId}`
 - ❌ Manager+ write access not verified
@@ -82,6 +111,7 @@
 - **Effort**: 1.5 hours
 
 #### 3. Venues & Zones (NOT TESTED)
+
 - ❌ No tests for `/venues/{orgId}/venues/{venueId}`
 - ❌ No tests for `/zones/{orgId}/zones/{zoneId}`
 - ❌ Tenant isolation not verified for these collections
@@ -89,12 +119,14 @@
 - **Effort**: 1.5 hours
 
 #### 4. Attendance Records (NOT TESTED)
+
 - ❌ No tests for `/attendance_records/{orgId}/records/{recordId}`
 - ❌ Scheduler+ write access not verified
 - **Risk**: Unauthorized attendance modifications
 - **Effort**: 1 hour
 
 #### 5. Join Tokens (NOT TESTED)
+
 - ❌ No tests for `/orgs/{orgId}/join_tokens/{tokenId}`
 - ❌ No tests for `/join_tokens/{orgId}/join_tokens/{tokenId}`
 - ❌ Manager-only access not verified
@@ -102,6 +134,7 @@
 - **Effort**: 1 hour
 
 #### 6. Messages & Receipts (NOT TESTED)
+
 - ❌ No tests for `/organizations/{orgId}/messages/{messageId}`
 - ❌ No tests for `/organizations/{orgId}/receipts/{receiptId}`
 - ❌ Self-service receipt creation not tested
@@ -109,7 +142,9 @@
 - **Effort**: 1 hour
 
 ### Medium Priority Gaps
+
 #### 7. RBAC Role Hierarchy (PARTIAL)
+
 - ⚠️ Only schedules tested for RBAC
 - ❌ No tests for other collections with role checks
 - ❌ Admin super-access not fully tested
@@ -117,6 +152,7 @@
 - **Effort**: 1.5 hours
 
 #### 8. Memberships Collection (PARTIAL)
+
 - ⚠️ Basic membership tested
 - ❌ Manager-created memberships not tested
 - ❌ Self-created memberships not tested
@@ -124,13 +160,16 @@
 - **Effort**: 1 hour
 
 #### 9. Organizations Collection (PARTIAL)
+
 - ⚠️ Basic org access tested
 - ❌ Alternate path (`/organizations/`) not tested
 - ❌ Create/update/delete not fully tested
 - **Effort**: 1 hour
 
 ### Low Priority Gaps
+
 #### 10. Edge Cases & Error Paths
+
 - ❌ Invalid custom claims handling
 - ❌ Missing orgId in token
 - ❌ Malformed membership IDs
@@ -139,7 +178,9 @@
 ---
 
 ## Implementation Plan
+
 ### Phase 1: Critical Security (6 hours)
+
 **Week 2, Day 1-2**
 
 1. **Shifts Tests** (2h)
@@ -164,6 +205,7 @@
    - Coverage: Scheduler+ access, manager-only tokens
 
 ### Phase 2: RBAC Completeness (2 hours)
+
 **Week 2, Day 2**
 
 1. **RBAC Comprehensive Tests** (1.5h)
@@ -178,6 +220,7 @@
    - Coverage: Create, update, delete, manager vs self
 
 ### Phase 3: Edge Cases & Validation (1 hour)
+
 **Week 2, Day 3**
 
 1. **Edge Cases Tests** (1h)
@@ -186,6 +229,7 @@
    - Coverage: Invalid tokens, missing claims, error paths
 
 ### Phase 4: Coverage Reporting (30 min)
+
 **Week 2, Day 3**
 
 1. **Generate Coverage Report**
@@ -196,7 +240,9 @@
 ---
 
 ## Test Structure Template
+
 ### Standard Test Pattern
+
 ```typescript
 // [P0][TEST][RULES] Collection name rules tests
 // Tags: P0, TEST, RULES, SECURITY, COLLECTION_NAME
@@ -261,35 +307,42 @@ describe("rules: collection_name", () => {
 ---
 
 ## Test Scenarios Checklist
+
 ### For Each Collection Path
+
 #### Authentication (3 tests)
+
 - \[ ] Unauthenticated read denied
 - \[ ] Unauthenticated write denied
 - \[ ] Unauthenticated list denied
 
 #### Tenant Isolation (4 tests)
+
 - \[ ] Same-org read allowed
 - \[ ] Cross-org read denied
 - \[ ] Same-org write allowed (if authorized)
 - \[ ] Cross-org write denied
 
 #### RBAC - Read (6 tests)
+
 - \[ ] Staff can read (if applicable)
 - \[ ] Scheduler can read
 - \[ ] Manager can read
-- \[ ] Org\_owner can read
+- \[ ] Org_owner can read
 - \[ ] Admin can read (super-access)
 - \[ ] Corporate can read (if applicable)
 
 #### RBAC - Write (6 tests)
+
 - \[ ] Staff write denied (unless self-service)
 - \[ ] Scheduler write allowed (if applicable)
 - \[ ] Manager write allowed
-- \[ ] Org\_owner write allowed
+- \[ ] Org_owner write allowed
 - \[ ] Admin write allowed (super-access)
 - \[ ] Role hierarchy enforced
 
 #### Special Cases (varies)
+
 - \[ ] Self-service operations (if applicable)
 - \[ ] Limited field updates (shifts, receipts)
 - \[ ] No-enumeration enforcement (list denied)
@@ -300,15 +353,18 @@ describe("rules: collection_name", () => {
 ---
 
 ## Success Metrics
+
 ### Quantitative Targets
-| Metric | Current | Target | Delta |
-|--------|---------|--------|-------|
-| Test Files | 5 | 12 | +7 |
-| Test Scenarios | ~30 | 150+ | +120 |
-| Rule Coverage | ~40% | 80%+ | +40% |
-| Collections Tested | 4 | 19 | +15 |
+
+| Metric             | Current | Target | Delta |
+| ------------------ | ------- | ------ | ----- |
+| Test Files         | 5       | 12     | +7    |
+| Test Scenarios     | ~30     | 150+   | +120  |
+| Rule Coverage      | ~40%    | 80%+   | +40%  |
+| Collections Tested | 4       | 19     | +15   |
 
 ### Qualitative Targets
+
 - ✅ All critical security paths tested
 - ✅ Tenant isolation verified for all collections
 - ✅ RBAC enforced for all permission checks
@@ -319,18 +375,22 @@ describe("rules: collection_name", () => {
 ---
 
 ## Risk Assessment
+
 ### High Risk Areas (Must Test)
+
 1. **Shifts self-service updates** - Staff modifying unauthorized fields
 2. **Cross-org data access** - Tenant isolation breaches
 3. **Admin super-access** - Overly broad permissions
 4. **Join token creation** - Unauthorized token generation
 
 ### Medium Risk Areas (Should Test)
+
 1. **Role hierarchy** - Incorrect role comparisons
 2. **Membership management** - Unauthorized membership changes
 3. **Soft-delete behavior** - Data still accessible after delete
 
 ### Low Risk Areas (Nice to Test)
+
 1. **Edge cases** - Invalid input handling
 2. **Error paths** - Graceful failures
 3. **Performance** - Rules execution time
@@ -338,6 +398,7 @@ describe("rules: collection_name", () => {
 ---
 
 ## Next Steps
+
 1. **Immediate** (Today):
    - Create shifts.test.ts
    - Create positions.test.ts
@@ -356,6 +417,7 @@ describe("rules: collection_name", () => {
 ---
 
 ## Commands Reference
+
 ```bash
 # Run all rules tests
 pnpm test:rules
@@ -372,13 +434,9 @@ pnpm test:rules -- --watch
 
 ---
 
-**Status**: Analysis Complete
-**Ready For**: Implementation Phase
-**Estimated Completion**: Week 2, Day 3 (72 hours from now)
-**Priority**: HIGH (Security-critical)
+**Status**: Analysis Complete **Ready For**: Implementation Phase **Estimated Completion**: Week 2,
+Day 3 (72 hours from now) **Priority**: HIGH (Security-critical)
 
 ---
 
-**Last Updated**: 2025-12-26
-**Author**: AI Development Agent
-**Review**: Pending team approval
+**Last Updated**: 2025-12-26 **Author**: AI Development Agent **Review**: Pending team approval

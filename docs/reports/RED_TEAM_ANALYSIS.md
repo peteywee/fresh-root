@@ -1,5 +1,25 @@
+---
+
+title: "Red Team Attack Report"
+description: "Red team analysis and attack surface review."
+keywords:
+  - red-team
+  - security
+  - report
+category: "report"
+status: "active"
+audience:
+  - developers
+  - security
+createdAt: "2026-01-31T07:19:02Z"
+lastUpdated: "2026-01-31T07:19:02Z"
+
+---
+
 # 🔴 RED TEAM ATTACK REPORT
+
 ## Target
+
 Ops Hub Implementation:
 
 - `/api/ops/build-performance/route.ts` - GET/POST endpoint
@@ -10,7 +30,9 @@ Ops Hub Implementation:
 ---
 
 ## Security Checks
+
 ### SEC-01: Auth Bypass
+
 - \[x] **PASS** - Auth bypass
   - Finding: Endpoint uses `createAdminEndpoint()` SDK factory wrapper
   - Evidence: Line 164 POST handler, Line 90 GET handler both wrapped with createAdminEndpoint
@@ -18,6 +40,7 @@ Ops Hub Implementation:
   - Impact: ✅ SECURE
 
 ### SEC-02: Data Leakage
+
 - \[x] **FAIL** - Response leaks internal directory structure
   - Finding: GET response exposes file paths in response body
   - Evidence: Lines 155-161, response includes `path: "docs/metrics/build-performance.log"` and
@@ -35,6 +58,7 @@ Ops Hub Implementation:
   - Fix: Add Zod validation on API response in client
 
 ### SEC-03: Injection
+
 - \[x] **PASS** - No injection vectors
   - Evidence:
     - GitHub API: Constructed with safe URL class (Line 54-56)
@@ -43,6 +67,7 @@ Ops Hub Implementation:
   - Validation: ✅ SECURE
 
 ### SEC-04: Access Control
+
 - \[x] **PASS** - Org/role scoping
   - Evidence: `createAdminEndpoint()` enforces admin-only access
   - Note: GET response includes `context.org?.orgId` in response (Line 155)
@@ -56,6 +81,7 @@ Ops Hub Implementation:
   - Fix: Remove or keep (context-aware, non-sensitive)
 
 ### SEC-05: Secret Handling
+
 - \[x] **PASS** - No secrets in code
   - Evidence:
     - GitHub token used from env vars (Line 104: `process.env.GITHUB_TOKEN`)
@@ -66,7 +92,9 @@ Ops Hub Implementation:
 ---
 
 ## Logic Checks
+
 ### LOG-01: Logic Errors
+
 - \[x] **FAIL** - Query parameter parsing lacks bounds
   - Finding: `limit` parameter has loose validation
   - Evidence: Line 93: `Math.max(1, Math.min(50, Number(limitParam ?? 10) || 10))`
@@ -89,6 +117,7 @@ Ops Hub Implementation:
   - Fix: Add fallback or validation
 
 ### LOG-02: Race Conditions
+
 - \[x] **PASS** - No race conditions
   - Evidence:
     - GET is read-only (no race)
@@ -97,6 +126,7 @@ Ops Hub Implementation:
   - Validation: ✅ SECURE
 
 ### LOG-03: Error Handling
+
 - \[x] **FAIL** - Incomplete error handling in GET
   - Finding: File read errors handled, but GitHub API errors could expose tokens
   - Evidence: Line 75 throws raw GitHub error message
@@ -121,7 +151,9 @@ Ops Hub Implementation:
 ---
 
 ## Pattern Checks
+
 ### PAT-01: Pattern Compliance
+
 - \[x] **FAIL** - SDK Factory pattern not fully applied
   - Finding: POST handler doesn't use Zod input validation
   - Evidence: Line 164-169 uses manual field checking instead of SDK factory's `input` parameter
@@ -146,6 +178,7 @@ Ops Hub Implementation:
   - Fix: Use schema-driven validation via SDK factory
 
 ### PAT-02: Type Safety
+
 - \[x] **FAIL** - Response type mismatch in client
   - Finding: Client expects `data.data` but API returns `data.entries`
   - Evidence: builds/page.tsx lines 106-110, interface has `data` field but API returns `entries`
@@ -163,6 +196,7 @@ Ops Hub Implementation:
   - Fix: Import `BuildPerformanceEntry` from @fresh-schedules/types
 
 ### PAT-03: SDK Factory
+
 - \[x] **FAIL** - POST doesn't follow SDK factory input pattern
   - Finding: Manual validation instead of declarative `input: Schema`
   - Evidence: Line 164 should have `input: CreateBuildPerformanceSchema`
@@ -172,7 +206,9 @@ Ops Hub Implementation:
 ---
 
 ## Edge Cases
+
 ### EDGE-01: Null/Undefined
+
 - \[x] **FAIL** - Chart data with invalid timestamps
   - Finding: `new Date(entry.timestamp).getTime()` could return NaN
   - Evidence: builds/page.tsx line 129
@@ -191,6 +227,7 @@ Ops Hub Implementation:
   - Validation: ✅ OK
 
 ### EDGE-02: Empty Arrays
+
 - \[x] **PASS** - Empty build data
   - Evidence: Line 188-190: Handles `data?.data.length === 0` explicitly
   - Shows "No build data available"
@@ -203,6 +240,7 @@ Ops Hub Implementation:
   - Fix: Show N/A or loading state instead of 0s
 
 ### EDGE-03: Boundary Values
+
 - \[x] **FAIL** - Negative duration edge case
   - Finding: POST accepts `installSeconds: Number(body.installSeconds)` without min check
   - Evidence: Line 192 coerces string to number without validation
@@ -224,6 +262,7 @@ Ops Hub Implementation:
 ---
 
 ## Summary
+
 | Category       | Count  | Critical | High  | Medium | Low   |
 | -------------- | ------ | -------- | ----- | ------ | ----- |
 | **Security**   | 5      | 0        | 1     | 1      | 2     |
@@ -233,6 +272,7 @@ Ops Hub Implementation:
 | **TOTAL**      | **29** | **2**    | **4** | **7**  | **9** |
 
 ### Critical Issues (BLOCKS DELIVERY)
+
 1. **CRITICAL-PAT-01**: API response format mismatch - client expects `data.data` but API returns
    `entries`
    - Severity: **BLOCKS FEATURE** - Page will crash
@@ -243,6 +283,7 @@ Ops Hub Implementation:
    - Fix Required: Add schema validation
 
 ### High Priority (SHOULD FIX)
+
 1. **HIGH-SEC-02**: GET response leaks file paths
 2. **HIGH-PAT-03**: POST doesn't use SDK factory input pattern
 3. **HIGH-LOG-03**: GET error handling could expose secrets
@@ -251,6 +292,7 @@ Ops Hub Implementation:
 ---
 
 ## 🔴 VETO STATUS
+
 **BLOCKED** - Cannot merge until critical issues fixed.
 
 **Reason**:
@@ -268,7 +310,9 @@ Ops Hub Implementation:
 ---
 
 # 👨‍💼 SR DEV REVIEW
+
 ## Issues Analysis
+
 All findings are valid. Identified:
 
 - 2 Critical issues blocking delivery
@@ -277,6 +321,7 @@ All findings are valid. Identified:
 - 9 Low-priority edge cases
 
 ## Root Causes
+
 1. **API-Client Contract Broken**: GET returns `entries` but client expects `data`
    - Cause: Interface drift, not tested
    - Fix: One simple rename
@@ -294,7 +339,9 @@ All findings are valid. Identified:
    - Fix: Remove or redact sensitive fields
 
 ## Corrections Required
+
 ### 1. Fix API Response Format (CRITICAL) ✅ FIXED
+
 Change GET response to use consistent field name:
 
 ```typescript
@@ -313,6 +360,7 @@ return NextResponse.json({
 **Status**: Implemented in commit 7ae6811
 
 ### 2. Add Chart Data Validation (MEDIUM) ✅ FIXED
+
 Validate timestamps before passing to chart and rendering:
 
 ```typescript
@@ -330,6 +378,7 @@ const isValidDate = !isNaN(ts.getTime());
 **Status**: Implemented - prevents chart breakage
 
 ### 3. Add SHA Validation to POST (MEDIUM) ✅ FIXED
+
 Validate SHA is 40-character hex string (git full hash):
 
 ```typescript
@@ -345,6 +394,7 @@ if (!/^[a-f0-9]{40}$/.test(sha)) {
 **Status**: Implemented - prevents invalid commit hashes
 
 ## Confidence Score
+
 - **Security**: 92% (High confidence in findings, low-risk data means high tolerance)
 - **Logic**: 95% (Clear contract mismatch and validation gaps)
 - **Patterns**: 98% (SDK factory pattern is documented standard)
@@ -353,9 +403,11 @@ if (!/^[a-f0-9]{40}$/.test(sha)) {
 **UPDATE (Post-Fix)**: 99% confidence - all critical and medium issues addressed
 
 ## Final Decision
+
 🟢 **APPROVED** - All blockers fixed
 
 ### Issues Fixed (Post-Analysis)
+
 1. ✅ API response format (renamed `entries` → `data`)
 2. ✅ Client interface to match
 3. ✅ POST handler timestamp validation (ISO datetime regex)
@@ -366,6 +418,7 @@ if (!/^[a-f0-9]{40}$/.test(sha)) {
 8. ✅ SHA validation (40-char hex requirement)
 
 ### Deferred (Non-Blocking, Lower Priority)
+
 - SDK factory input pattern (once types exports working)
 - Remove file paths from response (already removed)
 - Import types from package (types export issue)

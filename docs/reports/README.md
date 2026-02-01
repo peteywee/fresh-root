@@ -1,62 +1,38 @@
 ---
+
 title: "Reports & Analyses"
 description: "Analysis reports, audits, retrospectives, and study documents"
 keywords:
-  - reports
-  - audit
-  - analysis
-  - retrospective
-  - assessment
-category: "reference"
+- reports
+- audit
+- analysis
+- retrospective
+- assessment
+category: "report"
 status: "active"
 audience:
-  - architects
-  - developers
-  - stakeholders
+- architects
+- developers
+- stakeholders
+related-docs:
+	- ../INDEX.md
+	- ./TECH_DEBT_SNAPSHOT_2026-01-30.md
+	- ./CLEANUP_INDEX.md
+
+createdAt: "2026-01-31T00:00:00Z"
+lastUpdated: "2026-01-31T00:00:00Z"
+
 ---
 
 # Reports & Analyses
 
-This section contains detailed analysis reports, audit findings, retrospectives, and assessment documents.
+Time-bound assessments and audits. Treat these as snapshots.
 
-## Categories
+## Start here
 
-### Security & Compliance
-- **Security Audit** - Security assessment and findings
-- **OWASP Compliance** - Web application security checklist
-- **Penetration Testing** - Pen test results and remediations
-- **Vulnerability Assessment** - Dependency and code vulnerabilities
+- [Tech Debt Snapshot](./TECH_DEBT_SNAPSHOT_2026-01-30.md)
+- [Cleanup Index](./CLEANUP_INDEX.md)
 
-### Performance & Optimization
-- **Performance Benchmarks** - Metrics and baselines
-- **Lighthouse Audits** - Web vitals and performance scores
-- **Load Testing** - Scalability assessment
-- **Database Query Analysis** - Query performance and optimization
+## Notes
 
-### Architecture & Design
-- **Architecture Review** - Design evaluation
-- **Dependency Analysis** - Package dependency assessment
-- **Code Quality Metrics** - Complexity, coverage, health
-
-### Retrospectives & Lessons
-- **Post-Mortems** - Incident analysis and learnings
-- **Project Retrospectives** - What we learned, what to improve
-- **Migration Reports** - Technology migration results
-- **Lessons Learned** - Key insights from completed work
-
----
-
-## Quick Navigation
-
-| Document | Purpose | Type |
-|----------|---------|------|
-| Security Audit | Security assessment | Audit |
-| Performance Report | Performance benchmarks | Analysis |
-| Architecture Review | Design assessment | Review |
-| Migration Report | Tech migration results | Report |
-| Post-Mortem | Incident analysis | Retrospective |
-
----
-
-**See also**: [Archive](../archived/) for historical reports
-
+Archive reports that no longer drive current work.

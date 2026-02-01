@@ -1,10 +1,36 @@
+---
+
+title: "Production Readiness Checklist"
+description: "Canonical production readiness checklist and verification steps"
+keywords:
+
+- production
+- readiness
+- checklist
+- verification
+category: "reference"
+status: "active"
+audience:
+- operators
+- developers
+related-docs:
+   - README.md
+   - ../guides/DEPLOYMENT.md
+
+createdAt: "2026-01-31T00:00:00Z"
+lastUpdated: "2026-01-31T00:00:00Z"
+
+---
+
 # Production Readiness Checklist
 
-This file is the canonical production readiness reference. It consolidates requirements from the old PRODUCTION_READINESS_SIGN_OFF.md file.
+This file is the canonical production readiness reference. It consolidates requirements from the old
+PRODUCTION_READINESS_SIGN_OFF.md file.
 
 Please see [Deployment Guide](../guides/DEPLOYMENT.md) for deployment procedures.
 
 ### Quality Metrics
+
 | Category             | Status | Result                                                  |
 | -------------------- | ------ | ------------------------------------------------------- |
 | **Dependencies**     | ✅     | Frozen, current, 0 breaking changes                     |
@@ -19,7 +45,9 @@ Please see [Deployment Guide](../guides/DEPLOYMENT.md) for deployment procedures
 ---
 
 ## Phase Completion Summary
+
 ### ✅ Phase 1: Backend Onboarding (COMPLETE)
+
 - Network/Org/Venue creation with dual-write semantics
 - Session bootstrap API for routing decisions
 - Onboarding state tracking (profile-first gate)
@@ -27,12 +55,14 @@ Please see [Deployment Guide](../guides/DEPLOYMENT.md) for deployment procedures
 - 6 API endpoints fully tested
 
 ### ✅ Phase 2: Network Tenancy Migration (READY)
+
 - Firestore rules updated for network-scoped access control
 - Compliance document protection (server-only)
 - Backward compatibility maintained (legacy org paths still work)
 - Cross-network access prevention validated
 
 ### ✅ Global Cognition Agent (OPERATIONAL)
+
 - RBAC pattern scanning
 - Inline DB usage detection
 - Doc/test parity verification
@@ -42,13 +72,16 @@ Please see [Deployment Guide](../guides/DEPLOYMENT.md) for deployment procedures
 ---
 
 ## 1. Dependency Management
+
 ### Current State
+
 - **Package Manager**: pnpm 9.12.1
 - **Node Version**: 20.19.5 (LTS)
 - **Total Packages**: 47 installed (latest compatible versions)
 - **Outdated**: Only 1 (prettier dev: 3.7.1 → 3.7.3, non-critical)
 
 ### Updated Major Versions (Non-Breaking)
+
 - React: 18.3.1 → 19.2.0 ✅
 - Next.js: 16.0.1 → 16.0.5 ✅
 - Zod: 3.25.0 → 4.1.13 ✅
@@ -57,6 +90,7 @@ Please see [Deployment Guide](../guides/DEPLOYMENT.md) for deployment procedures
 - Turbo: Added 2.6.0 (monorepo orchestration) ✅
 
 ### Verification Command
+
 ```bash
 pnpm -w install --frozen-lockfile
 # Result: ✅ Already up to date
@@ -65,7 +99,9 @@ pnpm -w install --frozen-lockfile
 ---
 
 ## 2. Code Quality & Type Safety
+
 ### Type Checking
+
 ```
 packages/types typecheck: ✅ Done
 apps/web typecheck: ✅ Done
@@ -74,6 +110,7 @@ apps/web typecheck: ✅ Done
 **Status**: 0 type errors across all packages
 
 ### Linting Results
+
 ```
 Total: 7 warnings (0 errors)
 - 7x @typescript-eslint/no-explicit-any (framework integration - Next.js dynamic params)
@@ -93,7 +130,9 @@ pnpm -w lint
 ---
 
 ## 3. Testing Infrastructure
+
 ### Unit Tests
+
 ```
 Test Files: 6 passed (6)
 Tests: 6 passed (6)
@@ -115,12 +154,14 @@ pnpm vitest run
 ```
 
 ### Firestore Rules Tests
+
 ```bash
 pnpm -w test:rules
 # Status: Ready (Firebase emulator configured in firebase.ci.json)
 ```
 
 ### E2E Tests
+
 ```bash
 pnpm -w test:e2e
 # Status: Ready (Playwright configured for smoke tests)
@@ -129,18 +170,22 @@ pnpm -w test:e2e
 ---
 
 ## 4. Production Build Validation
+
 ### Build Command
+
 ```bash
 NODE_OPTIONS="--max-old-space-size=1536" SWC_NUM_THREADS=2 pnpm build
 # Result: ✅ BUILD SUCCESS
 ```
 
 ### Generated Routes (40+)
+
 - API Routes: ✅ 22 server-rendered (ƒ)
 - Pages: ✅ 18 static pre-rendered (○)
 - No build warnings or errors
 
 ### Build Output Summary
+
 ```
 Apps compiled:
   ✓ @apps/web (Next.js with all routes)
@@ -151,7 +196,9 @@ Apps compiled:
 ---
 
 ## 5. Security Audit
+
 ### Vulnerabilities Patched
+
 1. **Path Traversal (CRITICAL)** ✅
    - File: `packages/mcp-server/src/index.ts`
    - Fix: Added path.resolve() validation with boundary check
@@ -168,6 +215,7 @@ Apps compiled:
    - Status: DEPLOYED
 
 ### Infrastructure Hardening
+
 **Memory Stability** ✅
 
 - Node heap cap: 1536MB (dev), 2048MB (prod)
@@ -184,6 +232,7 @@ Apps compiled:
 - `run-dev.sh`: Standardized dev launcher
 
 ### Firestore Security Rules ✅
+
 - Network-scoped access control implemented
 - Compliance documents (server-only access)
 - Cross-network access prevention
@@ -193,6 +242,7 @@ Apps compiled:
 ---
 
 ## 6. Production Deployment Checklist
+
 - \[x] All dependencies installed with frozen lockfile
 - \[x] Zero critical/high severity security issues
 - \[x] 100% TypeScript type coverage
@@ -211,7 +261,9 @@ Apps compiled:
 ---
 
 ## 7. Deployment Instructions
+
 ### Pre-Deployment
+
 ```bash
 # Fresh install with memory constraints
 NODE_OPTIONS="--max-old-space-size=2048" pnpm -w install --frozen-lockfile
@@ -225,6 +277,7 @@ pnpm -w test:rules  # With Firebase credentials
 ```
 
 ### Deployment
+
 ```bash
 # Deploy to production (Firebase/Vercel/Cloud Run)
 # Environment: Set NODE_OPTIONS="--max-old-space-size=2048"
@@ -233,6 +286,7 @@ pnpm -w test:rules  # With Firebase credentials
 ```
 
 ### Post-Deployment
+
 ```bash
 # Monitor error rates, memory usage, and API latency
 # Verify onboarding flows work end-to-end
@@ -242,6 +296,7 @@ pnpm -w test:rules  # With Firebase credentials
 ---
 
 ## 8. Known Limitations & Mitigation
+
 | Issue                     | Impact                | Mitigation             | Status        |
 | ------------------------- | --------------------- | ---------------------- | ------------- |
 | 7 `any` type warnings     | Framework integration | Documented, justified  | ✅ Acceptable |
@@ -251,7 +306,9 @@ pnpm -w test:rules  # With Firebase credentials
 ---
 
 ## 9. Quality Standards Compliance
+
 ### ✅ Meets Repository Standards
+
 - \[x] **Zero Tier 0/1 violations** (security & integrity)
 - \[x] **Pattern score ≥ 90%** (production ready)
 - \[x] **All headers present** (tagging system)
@@ -260,6 +317,7 @@ pnpm -w test:rules  # With Firebase credentials
 - \[x] **Top-shelf service manner** (documented, tested, hardened)
 
 ### ✅ Technical Excellence
+
 - \[x] Modular architecture (monorepo with clear boundaries)
 - \[x] Error handling (comprehensive with proper HTTP status codes)
 - \[x] Performance optimization (memory tuning, rate limiting)
@@ -269,6 +327,7 @@ pnpm -w test:rules  # With Firebase credentials
 ---
 
 ## 10. Sign-Off Statement
+
 **This repository has been systematically audited, hardened, and verified for production
 deployment.**
 
@@ -284,6 +343,7 @@ All quality gates are passing. The codebase demonstrates:
 ---
 
 ## Next Phase: Frontend Features (Block 4)
+
 With the backend production-ready, the next phase focuses on:
 
 1. **Onboarding UX Polish**: Wizard flow refinements

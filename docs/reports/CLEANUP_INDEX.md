@@ -1,13 +1,52 @@
+---
+
+title: "Documentation & Test Cleanup Index"
+description: "Comprehensive cleanup index for docs, tests, logs, and governance files."
+keywords:
+  - cleanup
+  - documentation
+  - tests
+  - index
+category: "report"
+status: "active"
+audience:
+  - developers
+  - ai-agents
+createdAt: "2026-01-31T07:42:51Z"
+lastUpdated: "2026-01-31T07:42:51Z"
+
+---
+
 # Documentation & Test Cleanup Index
+
 **Created**: December 6, 2025\
-**Last Updated**: December 6, 2025\
+**Last Updated**: January 31, 2026\
 **Purpose**: Comprehensive review of docs, tests, logs, and AI governance files for consolidation
 and cleanup\
-**Status**: ✅ PHASE 1 COMPLETE – Ready for Phase 2 Planning (PAUSED)
+**Status**: 🟡 PHASE 3 RESUMED – Archiving and consolidation in progress
+
+---
+
+## Phase 3 Status Update (2026-01-31)
+
+Recent cleanup work moved legacy documents into archival locations and consolidated production
+references. Current focus is validating links and finishing remaining consolidation tasks.
+
+**Completed in this phase**:
+
+- Archived phase execution docs into docs/archived/execution-plans/
+- Archived deprecated production/standards/reference docs under docs/archived/deprecated/
+- Removed redundant root-level phase summaries (now archived)
+
+**Still in progress**:
+
+- Cross-reference validation for moved files
+- Final verification of indexes (INDEX.md, _INDEX_KEYWORDS.md, _INDEX_GRAPH.md)
 
 ---
 
 ## Executive Summary
+
 **Current State**:
 
 - **46 markdown files** in `/docs` (plus 7 subdirectories)
@@ -22,8 +61,11 @@ governance instruction sources creating confusion for AI agents.
 ---
 
 ## I. DOCUMENTATION INVENTORY
+
 ### A. Root-Level Markdown Files (docs/)
+
 #### 🟢 KEEP (Active, Essential)
+
 | File                             | Size | Purpose                        | Status        |
 | -------------------------------- | ---- | ------------------------------ | ------------- |
 | `QUICK_START.md`                 | 8K   | Entry point for new developers | **Active**    |
@@ -38,73 +80,78 @@ governance instruction sources creating confusion for AI agents.
 ---
 
 #### 🟡 MERGE/CONSOLIDATE (Overlapping Content)
+
 | File                                   | Size | Issue                                                   | Action                                                                     |
 | -------------------------------------- | ---- | ------------------------------------------------------- | -------------------------------------------------------------------------- |
-| `PRODUCTION_READINESS_KPI.md`          | 8K   | Overlaps with PRODUCTION\_READINESS.md                   | **Merge into PRODUCTION\_READINESS.md**                                     |
-| `PRODUCTION_READINESS_SIGN_OFF.md`     | 12K  | Final checklist; can merge with PRODUCTION\_READINESS.md | **Merge into PRODUCTION\_READINESS.md** + link from root PR\_STAGING\_SUMMARY |
+| `PRODUCTION_READINESS_KPI.md`          | 8K   | Overlaps with PRODUCTION_READINESS.md                   | **Merge into PRODUCTION_READINESS.md**                                     |
+| `PRODUCTION_READINESS_SIGN_OFF.md`     | 12K  | Final checklist; can merge with PRODUCTION_READINESS.md | **Merge into PRODUCTION_READINESS.md** + link from root PR_STAGING_SUMMARY |
 | `PRODUCTION_DOCS_INDEX.md`             | 8K   | Index of production docs; redundant with nav            | **Archive/remove** (link structure instead)                                |
-| `CODEBASE_ARCHITECTURAL_INDEX.md`      | 40K  | Overlaps with mega-book structure                       | **Archive to archive/; reference mega-book**                               |
-| `ARCHITECTURAL_REVIEW_PANEL_INPUTS.md` | 68K  | Strategic input; likely archived after review           | **Archive unless active review**                                           |
+| `CODEBASE_ARCHITECTURAL_INDEX.md`      | 40K  | Overlaps with mega-book structure                       | **Archive to docs/archived/deprecated/reports/**                           |
+| `ARCHITECTURAL_REVIEW_PANEL_INPUTS.md` | 68K  | Strategic input; likely archived after review           | **Archive to docs/archived/deprecated/reports/**                           |
 | `SESSION_SUMMARY_DEC_1_2025.md`        | 12K  | Dated session notes                                     | **Archive (date-stamped)**                                                 |
 
 ---
 
 #### 🔴 DELETE/ARCHIVE (Superseded or Redundant)
-| File                                      | Size | Reason                                                    | Action                                            |
-| ----------------------------------------- | ---- | --------------------------------------------------------- | ------------------------------------------------- |
-| `PHASE_1_TIER_0_FIXES.md`                 | 8K   | Phase 1 work completed; no future reference               | **Archive to archive/docs/**                      |
-| `PHASE_2_TIER_1_FIXES.md`                 | 8K   | Phase 2 work completed                                    | **Archive to archive/docs/**                      |
-| `PHASE_2_STATUS_REPORT.md`                | 8K   | Status report, phase complete                             | **Archive to archive/docs/**                      |
-| `PHASE_2_COMPLETION_SUMMARY.md`           | 8K   | Phase complete summary                                    | **Archive to archive/docs/**                      |
-| `PHASE_3_TIER3_CLEANUP.md`                | 8K   | Phase work item; reference only                           | **Archive to archive/docs/**                      |
-| `MIGRATION_COMPLETE.md`                   | 16K  | Migration complete; archived                              | **Archive to archive/docs/**                      |
-| `SDK_MIGRATION_COMPLETE.md`               | 8K   | SDK migration historic                                    | **Archive to archive/docs/**                      |
-| `SDK_MIGRATION_STATUS.md`                 | 8K   | Historic status                                           | **Archive to archive/docs/**                      |
-| `FRESH_ENGINE_MIGRATION_STATUS.md`        | 8K   | Historic migration                                        | **Archive to archive/docs/**                      |
-| `DEPLOYMENT_REPORT.md`                    | 8K   | Historic deployment report                                | **Archive to archive/docs/**                      |
-| `FINAL_SIGN_OFF.md`                       | 12K  | Historic sign-off                                         | **Archive to archive/docs/**                      |
-| `STRATEGIC_AUDIT_TODOS.md`                | 28K  | Dated audit todos                                         | **Archive to archive/docs/**                      |
-| `CHROMEBOOK_KEEP_COPILOT.md`              | 8K   | Device-specific guidance; niche use case                  | **Archive to archive/docs/**                      |
-| `CHROMEBOOK_MEMORY_STRATEGY.md`           | 8K   | Device-specific optimization                              | **Archive to archive/docs/**                      |
-| `CODE_9_CRASH_ANALYSIS.md`                | 8K   | Historic crash analysis                                   | **Archive to archive/docs/**                      |
-| `MEMORY_MANAGEMENT.md`                    | 4K   | Legacy memory notes                                       | **Archive to archive/docs/**                      |
-| `OOM_PREVENTION.md`                       | 4K   | Legacy OOM notes                                          | **Archive to archive/docs/**                      |
-| `ERROR_PREVENTION_PATTERNS.md`            | 8K   | Redundant with CODING\_RULES\_AND\_PATTERNS.md               | **Archive; reference from rules**                 |
-| `FIREBASE_PROMPT_WORKFLOW.md`             | 8K   | Historic Firebase workflow                                | **Archive to archive/docs/**                      |
-| `TEST_INTELLIGENCE_INTEGRATION_REPORT.md` | 20K  | Historic test report                                      | **Archive to archive/docs/**                      |
-| `TEST_INTELLIGENCE_SUMMARY.md`            | 16K  | Historic test summary                                     | **Archive to archive/docs/**                      |
-| `qa-report.md`                            | 8K   | Historic QA report                                        | **Archive to archive/docs/**                      |
-| `qa-postfix-report.md`                    | 4K   | Historic QA postfix                                       | **Archive to archive/docs/**                      |
-| `PR_STAGING_SUMMARY.md`                   | 12K  | Staging PR notes                                          | **Archive unless active**                         |
-| `BRANCH_LINKING_GUIDE.md`                 | 12K  | Git workflow guide; check if still used                   | **Keep or archive based on usage**                |
-| `PNPM_ENFORCEMENT.md`                     | 4K   | pnpm setup; covered in QUICK\_START                        | **Merge into QUICK\_START or remove**              |
-| `RATE_LIMIT_IMPLEMENTATION.md`            | 16K  | Implementation notes; check if current                    | **Verify current; move to implementation guides** |
-| `VERSION_v14.5.md`                        | 4K   | Version notes; superseded by current                      | **Archive to archive/docs/**                      |
-| `AGENTS.md`                               | 4K   | Agent docs; may be in docs/agents/                        | **Consolidate with docs/agents/ structure**       |
-| `AGENTS.md`                               | 4K   | Agent docs; check for duplication                         | **Review against docs/agents/**                   |
-| `copilot-instruction.md`                  | 8K   | Governance; check against .github/copilot-instructions.md | **See governance section**                        |
-| `repo-instruction-index.md`               | 8K   | Index of instructions                                     | **Keep or archive based on maintenance**          |
-| `reconciled-rulebook.md`                  | 16K  | Historic rulebook                                         | **Archive unless actively used**                  |
+
+| File                                      | Size | Reason                                                    | Action                                              |
+| ----------------------------------------- | ---- | --------------------------------------------------------- | --------------------------------------------------- |
+| `PHASE_1_TIER_0_FIXES.md`                 | 8K   | Phase 1 work completed; no future reference               | **Archive to archive/docs/**                        |
+| `PHASE_2_TIER_1_FIXES.md`                 | 8K   | Phase 2 work completed                                    | **Archive to archive/docs/**                        |
+| `PHASE_2_STATUS_REPORT.md`                | 8K   | Status report, phase complete                             | **Archive to archive/docs/**                        |
+| `PHASE_2_COMPLETION_SUMMARY.md`           | 8K   | Phase complete summary                                    | **Archive to archive/docs/**                        |
+| `PHASE_3_TIER3_CLEANUP.md`                | 8K   | Phase work item; reference only                           | **Archive to archive/docs/**                        |
+| `MIGRATION_COMPLETE.md`                   | 16K  | Migration complete; archived                              | **Archive to archive/docs/**                        |
+| `SDK_MIGRATION_COMPLETE.md`               | 8K   | SDK migration historic                                    | **Archive to archive/docs/**                        |
+| `SDK_MIGRATION_STATUS.md`                 | 8K   | Historic status                                           | **Archive to archive/docs/**                        |
+| `FRESH_ENGINE_MIGRATION_STATUS.md`        | 8K   | Historic migration                                        | **Archive to docs/archived/execution-plans/**       |
+| `DEPLOYMENT_REPORT.md`                    | 8K   | Historic deployment report                                | **Archive to archive/docs/**                        |
+| `FINAL_SIGN_OFF.md`                       | 12K  | Historic sign-off                                         | **Archive to docs/archived/deprecated/production/** |
+| `STRATEGIC_AUDIT_TODOS.md`                | 28K  | Dated audit todos                                         | **Archive to docs/archived/deprecated/reports/**    |
+| `CHROMEBOOK_KEEP_COPILOT.md`              | 8K   | Device-specific guidance; niche use case                  | **Archive to docs/archived/deprecated/guides/**     |
+| `CHROMEBOOK_MEMORY_STRATEGY.md`           | 8K   | Device-specific optimization                              | **Archive to docs/archived/deprecated/guides/**     |
+| `CODE_9_CRASH_ANALYSIS.md`                | 8K   | Historic crash analysis                                   | **Archive to archive/docs/**                        |
+| `MEMORY_MANAGEMENT.md`                    | 4K   | Legacy memory notes                                       | **Archive to docs/archived/deprecated/reference/**  |
+| `OOM_PREVENTION.md`                       | 4K   | Legacy OOM notes                                          | **Archive to archive/docs/**                        |
+| `ERROR_PREVENTION_PATTERNS.md`            | 8K   | Redundant with CODING_RULES_AND_PATTERNS.md               | **Archive to docs/archived/deprecated/standards/**  |
+| `FIREBASE_PROMPT_WORKFLOW.md`             | 8K   | Historic Firebase workflow                                | **Archive to docs/archived/deprecated/guides/**     |
+| `TEST_INTELLIGENCE_INTEGRATION_REPORT.md` | 20K  | Historic test report                                      | **Archive to docs/archived/deprecated/reports/**    |
+| `TEST_INTELLIGENCE_SUMMARY.md`            | 16K  | Historic test summary                                     | **Archive to docs/archived/deprecated/reports/**    |
+| `qa-report.md`                            | 8K   | Historic QA report                                        | **Archive to docs/archived/deprecated/reports/**    |
+| `qa-postfix-report.md`                    | 4K   | Historic QA postfix                                       | **Archive to docs/archived/deprecated/reports/**    |
+| `PR_STAGING_SUMMARY.md`                   | 12K  | Staging PR notes                                          | **Archive to docs/archived/deprecated/reports/**    |
+| `BRANCH_LINKING_GUIDE.md`                 | 12K  | Git workflow guide; check if still used                   | **Keep or archive based on usage**                  |
+| `PNPM_ENFORCEMENT.md`                     | 4K   | pnpm setup; covered in QUICK_START                        | **Merge into QUICK_START or remove**                |
+| `RATE_LIMIT_IMPLEMENTATION.md`            | 16K  | Implementation notes; check if current                    | **Archive to docs/archived/deprecated/standards/**  |
+| `VERSION_v14.5.md`                        | 4K   | Version notes; superseded by current                      | **Archive to archive/docs/**                        |
+| `AGENTS.md`                               | 4K   | Agent docs; may be in docs/agents/                        | **Consolidate with docs/agents/ structure**         |
+| `AGENTS.md`                               | 4K   | Agent docs; check for duplication                         | **Review against docs/agents/**                     |
+| `copilot-instruction.md`                  | 8K   | Governance; check against .github/copilot-instructions.md | **See governance section**                          |
+| `repo-instruction-index.md`               | 8K   | Index of instructions                                     | **Keep or archive based on maintenance**            |
+| `reconciled-rulebook.md`                  | 16K  | Historic rulebook                                         | **Archive unless actively used**                    |
 
 ---
 
 ### B. Subdirectories in `/docs`
+
 #### **docs/mega-book/** (232 KB)
+
 - **Status**: Comprehensive system documentation
 - **Structure**: L0 (system) → L1 (layers) → L2 (subsystems) → L3 (components) → L4 (tasks) →
   Appendices
 - **Assessment**:
   - ✅ Well-structured, detailed
-  - ⚠️ May be duplicative with CODING\_RULES\_AND\_PATTERNS.md
+  - ⚠️ May be duplicative with CODING_RULES_AND_PATTERNS.md
   - ⚠️ Not actively referenced in daily workflows
 - **Recommendation**:
   - **KEEP** as reference archive (high-quality comprehensive docs)
-  - **Link from QUICK\_START.md** as "deep reference"
+  - **Link from QUICK_START.md** as "deep reference"
   - Consider if it should be a wiki or separate doc site
 
 ---
 
 #### **docs/crewops/** (88 KB)
+
 - **Files**: 6 MD files + README
 - **Purpose**: Agent operation documentation (CREWOPS framework)
 - **Status**: Appears complete and structured
@@ -116,6 +163,7 @@ governance instruction sources creating confusion for AI agents.
 ---
 
 #### **docs/templates/** (48 KB)
+
 - **Content**: Template files for code generation
 - **Assessment**:
   - 🟢 Useful for scaffolding
@@ -125,6 +173,7 @@ governance instruction sources creating confusion for AI agents.
 ---
 
 #### **docs/visuals/** (72 KB)
+
 - **Content**: Visual diagrams, images, architecture diagrams
 - **Assessment**:
   - 🟢 Architecture reference
@@ -134,6 +183,7 @@ governance instruction sources creating confusion for AI agents.
 ---
 
 #### **docs/migration/** (16 KB)
+
 - **Content**: Migration tracking docs
 - **Assessment**:
   - 🟡 Historic; may be complete
@@ -143,6 +193,7 @@ governance instruction sources creating confusion for AI agents.
 ---
 
 #### **docs/mega-report/** (16 KB)
+
 - **Content**: Report files
 - **Assessment**:
   - 🟡 Check if actively maintained
@@ -151,7 +202,8 @@ governance instruction sources creating confusion for AI agents.
 ---
 
 #### **docs/agents/** (4 KB)
-- **Files**: GLOBAL\_COGNITION\_AGENT.md
+
+- **Files**: GLOBAL_COGNITION_AGENT.md
 - **Assessment**:
   - Overlaps with docs/crewops/ (agent operations)
 - **Recommendation**: **CONSOLIDATE with crewops/ or reference from there**
@@ -159,6 +211,7 @@ governance instruction sources creating confusion for AI agents.
 ---
 
 #### **docs/tests/** (4 KB)
+
 - **Content**: Test documentation
 - **Assessment**:
   - Minimal; likely outdated
@@ -169,8 +222,11 @@ governance instruction sources creating confusion for AI agents.
 ---
 
 ## II. AI GOVERNANCE & INSTRUCTION FILES
+
 ### Location: `.github/instructions/`
+
 #### 🟢 KEEP (Well-scoped, Active)
+
 | File                                                          | Scope                                                                | Purpose                                   | Status                  |
 | ------------------------------------------------------------- | -------------------------------------------------------------------- | ----------------------------------------- | ----------------------- |
 | `production-development-directive.instructions.md`            | \*\*                                                                 | Core prod workflow, hierarchical thinking | ✅ **MASTER DIRECTIVE** |
@@ -189,6 +245,7 @@ governance instruction sources creating confusion for AI agents.
 ---
 
 #### 🟡 MERGE/CONSOLIDATE (Overlapping)
+
 | File                                                  | Issue                                   | Consolidation Target                                                                   | Action                                          |
 | ----------------------------------------------------- | --------------------------------------- | -------------------------------------------------------------------------------------- | ----------------------------------------------- |
 | `github-actions-ci-cd-best-practices.instructions.md` | Likely overlaps with workflow standards | Create `.github/workflows/STANDARDS.md` or merge into production-development-directive | **ARCHIVE or FOLD INTO CI STANDARDS DOC**       |
@@ -197,19 +254,23 @@ governance instruction sources creating confusion for AI agents.
 ---
 
 ### Root-Level Governance Files
+
 #### Duplication Issue: Copilot Instructions
+
 | File                              | Location   | Status                  | Action                                        |
 | --------------------------------- | ---------- | ----------------------- | --------------------------------------------- |
 | `.github/copilot-instructions.md` | `.github/` | **Main governance doc** | ✅ **PRIMARY** (v2.0, comprehensive)          |
 | `docs/copilot-instruction.md`     | `docs/`    | **Duplicate**           | ❌ **DELETE** (superseded by .github version) |
 
 **Recommendation**: Delete `docs/copilot-instruction.md`; ensure `.github/copilot-instructions.md`
-is linked from QUICK\_START.md.
+is linked from QUICK_START.md.
 
 ---
 
 ## III. TEST FILES INVENTORY
+
 ### Test Configuration Files
+
 | File                                    | Purpose                 | Status                                            |
 | --------------------------------------- | ----------------------- | ------------------------------------------------- |
 | `vitest.config.ts` (root)               | Root vitest config      | ✅ Active                                         |
@@ -231,6 +292,7 @@ is linked from QUICK\_START.md.
 ---
 
 ### Test File Distribution
+
 | Category                               | Count | Status                                       |
 | -------------------------------------- | ----- | -------------------------------------------- |
 | Total test files (_.test.ts,_.spec.ts) | ~335  | Good coverage                                |
@@ -248,7 +310,9 @@ is linked from QUICK\_START.md.
 ---
 
 ## IV. LOG & REPORT FILES
+
 ### Root-Level Status/Report Files
+
 | File                             | Type                   | Age     | Status    | Action                                              |
 | -------------------------------- | ---------------------- | ------- | --------- | --------------------------------------------------- |
 | `pattern-validation-report.json` | Report                 | Current | ✅ Active | Keep (recent)                                       |
@@ -259,6 +323,7 @@ is linked from QUICK\_START.md.
 ---
 
 ### Generated/Cached Files (Should Be in .gitignore)
+
 | File                 | Purpose                  | Status                          | Action                          |
 | -------------------- | ------------------------ | ------------------------------- | ------------------------------- |
 | `repomix-output.xml` | Codebase analysis output | ⚠️ 2.2M, shouldn't be committed | **Add to .gitignore or remove** |
@@ -266,13 +331,16 @@ is linked from QUICK\_START.md.
 ---
 
 ## V. CLEANUP ACTION PLAN
+
 ### Phase 1: Parallel Batch Cleanup (Execute All Batches, Then Stop)
+
 **Approach**: Execute all cleanup batches in parallel to maximize efficiency. After completion,
 pause for Phase 2 planning (restructure).
 
 ---
 
 #### **BATCH 1: Remove Jest (Build System Clean)**
+
 **Rationale**: Jest is legacy; Vitest is primary. Remove Jest to simplify test configuration.
 
 ```bash
@@ -293,6 +361,7 @@ find apps packages -type f \( -name "*.ts" -o -name "*.tsx" -o -name "*.js" \) -
 ---
 
 #### **BATCH 2: Remove Duplicate Governance File**
+
 **Rationale**: `docs/copilot-instruction.md` is superseded by `.github/copilot-instructions.md`
 (v2.0).
 
@@ -309,6 +378,7 @@ head -10 .github/copilot-instructions.md | grep -q "Version" && echo "✓ Primar
 ---
 
 #### **BATCH 3: Archive Phase/Migration Historic Files**
+
 **Rationale**: Phase work is complete; preserve for audit trail but declutter active docs.
 
 ```bash
@@ -328,14 +398,14 @@ git mv docs/PHASE_3_TIER3_CLEANUP.md archive/docs/phase-work/
 git mv docs/MIGRATION_COMPLETE.md archive/docs/migrations/
 git mv docs/SDK_MIGRATION_COMPLETE.md archive/docs/migrations/
 git mv docs/SDK_MIGRATION_STATUS.md archive/docs/migrations/
-git mv docs/FRESH_ENGINE_MIGRATION_STATUS.md archive/docs/migrations/
+git mv docs/FRESH_ENGINE_MIGRATION_STATUS.md docs/archived/execution-plans/
 
 # Archive deployment/deployment reports
 git mv docs/DEPLOYMENT_REPORT.md archive/docs/reports/
 
 # Archive historic analysis/audit
-git mv docs/STRATEGIC_AUDIT_TODOS.md archive/docs/reports/
-git mv docs/FINAL_SIGN_OFF.md archive/docs/reports/
+git mv docs/STRATEGIC_AUDIT_TODOS.md docs/archived/deprecated/reports/
+git mv docs/FINAL_SIGN_OFF.md docs/archived/deprecated/production/
 ```
 
 **Expected Result**: 13 historic files moved to archive; docs/ becomes cleaner.
@@ -343,6 +413,7 @@ git mv docs/FINAL_SIGN_OFF.md archive/docs/reports/
 ---
 
 #### **BATCH 4: Archive Device-Specific & Legacy Optimization Docs**
+
 **Rationale**: Chromebook guidance and memory/OOM notes are edge cases; archive for reference.
 
 ```bash
@@ -350,15 +421,15 @@ mkdir -p archive/docs/device-specific
 mkdir -p archive/docs/legacy-optimization
 
 # Archive device-specific guidance
-git mv docs/CHROMEBOOK_KEEP_COPILOT.md archive/docs/device-specific/
-git mv docs/CHROMEBOOK_MEMORY_STRATEGY.md archive/docs/device-specific/
+git mv docs/CHROMEBOOK_KEEP_COPILOT.md docs/archived/deprecated/guides/
+git mv docs/CHROMEBOOK_MEMORY_STRATEGY.md docs/archived/deprecated/guides/
 
 # Archive legacy optimization notes (replaced by performance-optimization.instructions.md)
-git mv docs/MEMORY_MANAGEMENT.md archive/docs/legacy-optimization/
-git mv docs/OOM_PREVENTION.md archive/docs/legacy-optimization/
+git mv docs/MEMORY_MANAGEMENT.md docs/archived/deprecated/reference/
+git mv docs/OOM_PREVENTION.md docs/archived/deprecated/reference/
 
 # Archive crash analysis (historic)
-git mv docs/CODE_9_CRASH_ANALYSIS.md archive/docs/reports/
+git mv docs/CODE_9_CRASH_ANALYSIS.md docs/archived/deprecated/reports/
 ```
 
 **Expected Result**: 5 niche/legacy files archived.
@@ -366,16 +437,17 @@ git mv docs/CODE_9_CRASH_ANALYSIS.md archive/docs/reports/
 ---
 
 #### **BATCH 5: Archive Test & QA Reports**
+
 **Rationale**: Historic test/QA reports; reference-only after completion.
 
 ```bash
 mkdir -p archive/docs/test-reports
 
 # Archive test reports
-git mv docs/TEST_INTELLIGENCE_INTEGRATION_REPORT.md archive/docs/test-reports/
-git mv docs/TEST_INTELLIGENCE_SUMMARY.md archive/docs/test-reports/
-git mv docs/qa-report.md archive/docs/test-reports/
-git mv docs/qa-postfix-report.md archive/docs/test-reports/
+git mv docs/TEST_INTELLIGENCE_INTEGRATION_REPORT.md docs/archived/deprecated/reports/
+git mv docs/TEST_INTELLIGENCE_SUMMARY.md docs/archived/deprecated/reports/
+git mv docs/qa-report.md docs/archived/deprecated/reports/
+git mv docs/qa-postfix-report.md docs/archived/deprecated/reports/
 ```
 
 **Expected Result**: 4 test report files archived.
@@ -383,6 +455,7 @@ git mv docs/qa-postfix-report.md archive/docs/test-reports/
 ---
 
 #### **BATCH 6: Update .gitignore (Remove Generated Artifacts)**
+
 **Rationale**: Large generated files should not be committed.
 
 ```bash
@@ -398,6 +471,7 @@ grep "repomix" .gitignore && echo "✓ Added repomix-output.xml to .gitignore"
 ---
 
 #### **BATCH 7: Create Git Commit for Phase 1**
+
 **Rationale**: Consolidate all Phase 1 changes into single, clean commit.
 
 ```bash
@@ -433,6 +507,7 @@ git log --oneline -1 && echo "✓ Phase 1 commit created"
 ---
 
 ### Summary: Phase 1 Parallel Batches
+
 | Batch | Task                           | Files Affected | Time  |
 | ----- | ------------------------------ | -------------- | ----- |
 | 1     | Remove Jest build system       | 3 config files | 5 min |
@@ -455,6 +530,7 @@ git log --oneline -1 && echo "✓ Phase 1 commit created"
 ---
 
 ### ⛔ STOP HERE (Before Phase 2)
+
 After Phase 1 completion:
 
 1. ✅ Verify all Phase 1 commands executed successfully
@@ -466,6 +542,7 @@ After Phase 1 completion:
 ---
 
 ### Phase 2: Consolidation (1-2 hours)
+
 1. **Merge Production Readiness docs**
    - Consolidate `PRODUCTION_READINESS_KPI.md` and `PRODUCTION_READINESS_SIGN_OFF.md` into
      `PRODUCTION_READINESS.md`
@@ -474,46 +551,49 @@ After Phase 1 completion:
 1. **Review and archive historic docs**
 
    ```bash
-   git mv docs/CHROMEBOOK_*.md archive/docs/
-   git mv docs/CODE_9_CRASH_ANALYSIS.md archive/docs/
-   git mv docs/MEMORY_MANAGEMENT.md archive/docs/
-   git mv docs/OOM_PREVENTION.md archive/docs/
-   git mv docs/STRATEGIC_AUDIT_TODOS.md archive/docs/
-   git mv docs/TEST_INTELLIGENCE_*.md archive/docs/
-   git mv docs/qa-*.md archive/docs/
+
    ```
 
+git mv docs/CHROMEBOOK\_\_.md docs/archived/deprecated/guides/ git mv docs/CODE_9_CRASH_ANALYSIS.md
+docs/archived/deprecated/reports/ git mv docs/MEMORY_MANAGEMENT.md
+docs/archived/deprecated/reference/ git mv docs/OOM_PREVENTION.md
+docs/archived/deprecated/reference/ git mv docs/STRATEGIC_AUDIT_TODOS.md
+docs/archived/deprecated/reports/ git mv docs/TEST_INTELLIGENCE\_\_.md
+docs/archived/deprecated/reports/ git mv docs/qa-\*.md docs/archived/deprecated/reports/
+
+```
+
 1. **Consolidate Agent docs**
-   - Move `docs/AGENTS.md` content into `docs/crewops/` or reference from there
-   - Remove redundant file
+- Move `docs/AGENTS.md` content into `docs/crewops/` or reference from there
+- Remove redundant file
 
 ---
 
 ### Phase 3: Governance Cleanup (30 min)
 1. **Document instruction hierarchy**
-   - Create `.github/instructions/README.md` listing all instructions with scopes
-   - Ensure no overlapping scopes
+- Create `.github/instructions/README.md` listing all instructions with scopes
+- Ensure no overlapping scopes
 
 1. **Archive low-priority instructions** (if needed)
-   - `github-actions-ci-cd-best-practices.instructions.md` (if not actively used)
+- `github-actions-ci-cd-best-practices.instructions.md` (if not actively used)
 
 1. **Ensure .github/copilot-instructions.md is primary**
-   - Link from QUICK\_START.md
-   - Link from .github/instructions/README.md
+- Link from QUICK\_START.md
+- Link from .github/instructions/README.md
 
 ---
 
 ### Phase 4: Test Cleanup (1 hour)
 1. **Audit jest vs vitest usage**
-   - Run tests with vitest to confirm coverage
-   - Determine if jest is still needed
-   - If not: deprecate jest configs
+- Run tests with vitest to confirm coverage
+- Determine if jest is still needed
+- If not: deprecate jest configs
 
 1. **Update test documentation**
-   - Ensure CODING\_RULES\_AND\_PATTERNS.md covers test patterns
+- Ensure CODING\_RULES\_AND\_PATTERNS.md covers test patterns
 
 1. **Consolidate test configs**
-   - If vitest is primary, remove jest configs (or archive them)
+- If vitest is primary, remove jest configs (or archive them)
 
 ---
 
@@ -574,27 +654,37 @@ After Phase 1 completion:
 
 ---
 
+### Pending Cleanup Candidates (Not Located Yet)
+The following items were referenced in this index but were **not located** in the current
+docs tree. If they still exist, search in legacy locations (e.g., archive/ or non-docs
+folders) before removing these references.
+
+| File | Status | Action |
+| --- | --- | --- |
+| TEST\_INTELLIGENCE\_SUMMARY.md | Not found | Locate or remove reference |
+| qa-report.md | Not found | Locate or remove reference |
+| qa-postfix-report.md | Not found | Locate or remove reference |
+| CHROMEBOOK\_MEMORY\_STRATEGY.md | Not found | Locate or remove reference |
+| OOM\_PREVENTION.md | Not found | Locate or remove reference |
+| VERSION\_v14.5.md | Not found | Locate or remove reference |
+| AGENTS.md | Not found | Locate or remove reference |
+| repo-instruction-index.md | Not found | Locate or remove reference |
+| reconciled-rulebook.md | Not found | Located in archive/amendment-sources |
+| BRANCH\_LINKING\_GUIDE.md | Not found | Locate or remove reference |
+| PNPM\_ENFORCEMENT.md | Not found | Locate or remove reference |
+
+---
+
 ## VII. GOVERNANCE FILE HIERARCHY (Recommended)
 ```
-.github/
-  copilot-instructions.md                    ← MASTER DIRECTIVE (v2.0)
-  instructions/
-    README.md                                ← Index of all instructions
-    production-development-directive.md      ← Core workflow
-    code-review-generic.md
-    security-and-owasp.md
-    ai-prompt-engineering-safety-best-practices.md
-    nextjs.md
-    nextjs-tailwind.md
-    typescript-5-es2022.md
-    firebase-typing-and-monorepo-memory.md
-    playwright-typescript.md
-    performance-optimization.md
-    object-calisthenics.md
-    taming-copilot.md
-  workflows/
-    STANDARDS.md                             ← CI/CD standards (new)
-    *.yml                                    ← Actual workflows
+
+.github/ copilot-instructions.md ← MASTER DIRECTIVE (v2.0) instructions/ README.md ← Index of all
+instructions production-development-directive.md ← Core workflow code-review-generic.md
+security-and-owasp.md ai-prompt-engineering-safety-best-practices.md nextjs.md nextjs-tailwind.md
+typescript-5-es2022.md firebase-typing-and-monorepo-memory.md playwright-typescript.md
+performance-optimization.md object-calisthenics.md taming-copilot.md workflows/ STANDARDS.md ← CI/CD
+standards (new) \*.yml ← Actual workflows
+
 ```
 
 ---
@@ -612,3 +702,4 @@ After Phase 1 completion:
 **Index Status**: Ready for Review & Action\
 **Last Updated**: December 6, 2025\
 **Owner**: Cleanup Task Force (AI Agent)
+```

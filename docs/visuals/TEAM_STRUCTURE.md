@@ -1,11 +1,35 @@
+---
+
+title: "Specialist Team Structure"
+description: "Team roster and responsibilities for cleanup and remediation work."
+keywords:
+  - team
+  - roles
+  - operations
+category: "report"
+status: "active"
+audience:
+  - developers
+  - operators
+related-docs:
+  - README.md
+  - ../INDEX.md
+createdAt: "2026-01-31T07:19:03Z"
+lastUpdated: "2026-01-31T07:19:03Z"
+
+---
+
 # Specialist Team Structure
+
 **Mission**: Break down and delegate major cleanup, dependency resolution, and type safety fixes
 across specialist roles.
 
 ---
 
 ## 🎯 Team Roster & Responsibilities
+
 ### 1. **Orchestrator / Primary Agent (YOU)**
+
 - **Focus**: Strategic oversight, decision-making, phase transitions
 - **Tasks**:
   - Define priorities and phase sequencing
@@ -15,6 +39,7 @@ across specialist roles.
   - Manage branch merges and CI validation
 
 ### 2. **Cleanup Lead (Specialist #1)**
+
 - **Focus**: Identify and delete redundant/legacy files
 - **Responsibilities**:
   - Audit repo for duplicate files (libs, implementations, backups)
@@ -43,6 +68,7 @@ across specialist roles.
   ```
 
 ### 3. **Dependency Specialist (Specialist #2)**
+
 - **Focus**: Install missing packages, resolve dependency conflicts
 - **Responsibilities**:
   - Extract missing packages from TypeScript errors
@@ -70,6 +96,7 @@ across specialist roles.
   ```
 
 ### 4. **Type Safety Lead (Specialist #3)**
+
 - **Focus**: Fix TypeScript errors systematically
 - **Responsibilities**:
   - Categorize 97 TypeScript errors by type
@@ -99,6 +126,7 @@ across specialist roles.
   ```
 
 ### 5. **Documentation Lead (Specialist #4)**
+
 - **Focus**: Generate and maintain visual progress reports
 - **Responsibilities**:
   - Create ASCII/Markdown diagrams showing phase progress
@@ -115,6 +143,7 @@ across specialist roles.
 ---
 
 ## 📊 Workflow Sequencing
+
 ```
 Phase 1: Cleanup (Cleanup Lead + Orchestrator)
   ↓ Audit branches, identify duplicates
@@ -150,6 +179,7 @@ Documentation Lead (Continuous):
 ---
 
 ## 🔄 Branch Strategy
+
 **Primary Branches**:
 
 - `dev` — main development branch (current)
@@ -167,6 +197,7 @@ Documentation Lead (Continuous):
 ---
 
 ## 📈 Progress Tracking
+
 Each specialist maintains a progress log:
 
 | Specialist            | Log File           | Status              | ETA        |
@@ -179,6 +210,7 @@ Each specialist maintains a progress log:
 ---
 
 ## 🎯 Decision Gates (Checkpoints)
+
 After each phase, before proceeding:
 
 ```
@@ -209,6 +241,7 @@ GATE 4 (Before Merge):
 ---
 
 ## 🚀 How to Delegate
+
 **For Orchestrator (YOU)**:
 
 1. Review this document
@@ -228,35 +261,42 @@ GATE 4 (Before Merge):
 ---
 
 ## 📝 Artifact Template
+
 Each specialist creates artifacts following this template:
 
 ```markdown
 # [Specialist Role] - [Phase Name]
+
 **Status**: [Starting / In Progress / Complete] **Last Updated**: [Date/Time] **Blockers**: None /
 [List]
 
 ## Summary
+
 - Items Processed: N/M
 - Success Rate: X%
 - Critical Issues: N
 
 ## Items Processed
+
 | Item     | Action | Status | Notes                |
 | -------- | ------ | ------ | -------------------- |
 | file1.ts | DELETE | ✅     | Duplicate of src/lib |
 | file2.ts | KEEP   | ✅     | Only production copy |
 
 ## Next Steps
+
 1. [Next action]
 2. [Next action]
 
 ## Decision Log
+
 - [Date]: Decision to [action] because [reason]
 ```
 
 ---
 
 ## 🎨 Visual Examples
+
 Visual artifacts will include:
 
 **ASCII Progress Bar**:
@@ -294,6 +334,7 @@ Unique to dev (to clean):
 ---
 
 ## 🔗 Links to Phase Artifacts
+
 - Phase 1: `docs/visuals/branch-analysis/`
 - Phase 2: `docs/visuals/dependencies/`
 - Phase 3: `docs/visuals/type-errors/`

@@ -1,4 +1,5 @@
 ---
+
 title: "SDK Factory Pattern - Comprehensive Guide"
 description: "Complete guide to SDK Factory pattern, implementation, and migration strategies"
 keywords:
@@ -14,10 +15,14 @@ audience:
   - architects
 related-docs:
   - ../guides/DEPLOYMENT.md
-  - ERROR_PREVENTION_PATTERNS.md
+  - CODING\_RULES\_AND\_PATTERNS.md
+createdAt: "2026-01-31T07:19:02Z"
+lastUpdated: "2026-01-31T07:19:02Z"
+
 ---
 
 # SDK Factory Pattern - Comprehensive Overview & Implementation Guide
+
 **Status**: ✅ Production Ready (90%+ Migrated)\
 **Version**: 2.0.0\
 **Last Updated**: December 7, 2025
@@ -25,6 +30,7 @@ related-docs:
 ---
 
 ## Table of Contents
+
 1. [Overview](#overview)
 2. [Core Concepts](#core-concepts)
 3. [Use Cases & Implementations](#use-cases--implementations)
@@ -36,7 +42,9 @@ related-docs:
 ---
 
 ## Overview
+
 ### What is the SDK Factory
+
 The **SDK Factory** (`@fresh-schedules/api-framework`) is a declarative, type-safe framework for
 building Next.js API routes with:
 
@@ -52,6 +60,7 @@ building Next.js API routes with:
 - ✅ **Type Safety** (full TypeScript support)
 
 ### Problem It Solves
+
 **Before SDK Factory** (repetitive boilerplate):
 
 ```typescript
@@ -114,8 +123,11 @@ export const GET = createOrgEndpoint({
 ---
 
 ## Core Concepts
+
 ### 1. Endpoint Factories (4 Types)
+
 #### Public Endpoint
+
 **No authentication required**
 
 ```typescript
@@ -131,6 +143,7 @@ export const POST = createPublicEndpoint({
 **Use Cases**: Sign-ups, public data, webhooks
 
 #### Authenticated Endpoint
+
 **Auth required, no org context**
 
 ```typescript
@@ -146,6 +159,7 @@ export const GET = createAuthenticatedEndpoint({
 **Use Cases**: Personal data, user preferences, account info
 
 #### Organization Endpoint
+
 **Auth + org membership required**
 
 ```typescript
@@ -162,7 +176,8 @@ export const GET = createOrgEndpoint({
 **Use Cases**: Business operations, team data, org-scoped resources
 
 #### Admin Endpoint
-**Auth + admin/org\_owner role required**
+
+**Auth + admin/org_owner role required**
 
 ```typescript
 export const POST = createAdminEndpoint({
@@ -178,6 +193,7 @@ export const POST = createAdminEndpoint({
 **Use Cases**: User management, settings, compliance
 
 ### 2. The Middleware Pipeline
+
 Every request passes through an automatic 8-step pipeline:
 
 ```
@@ -231,6 +247,7 @@ Every request passes through an automatic 8-step pipeline:
 ```
 
 ### 3. Role Hierarchy
+
 ```
 org_owner (100)  ← Full control, all operations
     ↓
@@ -248,6 +265,7 @@ staff (40)       ← View own data only
 **Hierarchical Check**: If you require `manager`, users with `admin` or `org_owner` also pass.
 
 ### 4. Error Standardization
+
 All errors return consistent format:
 
 ```typescript
@@ -265,13 +283,15 @@ All errors return consistent format:
 }
 ```
 
-**Codes**: VALIDATION\_FAILED, UNAUTHORIZED, FORBIDDEN, NOT\_FOUND, CONFLICT, RATE\_LIMITED,
-INTERNAL\_ERROR
+**Codes**: VALIDATION_FAILED, UNAUTHORIZED, FORBIDDEN, NOT_FOUND, CONFLICT, RATE_LIMITED,
+INTERNAL_ERROR
 
 ---
 
 ## Use Cases & Implementations
+
 ### Use Case 1: Public API with Rate Limiting
+
 **Scenario**: Public health check endpoint
 
 ```typescript
@@ -295,6 +315,7 @@ export const GET = createPublicEndpoint({
 ```
 
 ### Use Case 2: Authenticated User Data
+
 **Scenario**: Get user profile
 
 ```typescript
@@ -318,6 +339,7 @@ export const GET = createAuthenticatedEndpoint({
 ```
 
 ### Use Case 3: Organization CRUD with Full Validation
+
 **Scenario**: Create schedule with validation
 
 ```typescript
@@ -350,6 +372,7 @@ export const POST = createOrgEndpoint({
 ```
 
 ### Use Case 4: Admin-Only Operation
+
 **Scenario**: Delete user from organization
 
 ```typescript
@@ -378,6 +401,7 @@ export const DELETE = createAdminEndpoint({
 ```
 
 ### Use Case 5: Complex Business Logic with Transaction
+
 **Scenario**: Bulk shift assignment with validation
 
 ```typescript
@@ -436,7 +460,9 @@ export const POST = createOrgEndpoint({
 ---
 
 ## Architecture & Flow
+
 ### Request Processing Flow
+
 ```
 1. HTTP Request arrives
    ↓
@@ -487,6 +513,7 @@ export const POST = createOrgEndpoint({
 ```
 
 ### Context Object Structure
+
 ```typescript
 {
   auth: {
@@ -508,7 +535,9 @@ export const POST = createOrgEndpoint({
 ---
 
 ## Enhancement Proposals
+
 ### Proposal 1: Request Middleware Chain
+
 **Problem**: Some operations need custom pre-processing
 
 **Proposal**:
@@ -532,6 +561,7 @@ export const POST = createOrgEndpoint({
 **Priority**: P1 (High value)
 
 ### Proposal 2: Batch Operation Handler
+
 **Problem**: Bulk operations have different rate limits and error handling
 
 **Proposal**:
@@ -558,6 +588,7 @@ export const POST = createBatchEndpoint({
 **Priority**: P1 (Many use cases)
 
 ### Proposal 3: Response Transformation
+
 **Problem**: No built-in response formatting/pagination
 
 **Proposal**:
@@ -586,6 +617,7 @@ export const GET = createOrgEndpoint({
 **Priority**: P2 (Nice to have)
 
 ### Proposal 4: Webhook Security Layer
+
 **Problem**: Webhooks need signature verification and replay protection
 
 **Proposal**:
@@ -611,6 +643,7 @@ export const POST = createWebhookEndpoint({
 **Priority**: P2 (Webhook support)
 
 ### Proposal 5: Idempotency Key Support
+
 **Problem**: Retries can cause duplicate operations
 
 **Proposal**:
@@ -638,7 +671,9 @@ export const POST = createOrgEndpoint({
 ---
 
 ## Migration Guide
+
 ### Step 1: Identify Target Routes
+
 Find all unmigratedAPI routes:
 
 ```bash
@@ -646,6 +681,7 @@ grep -r "export.*async function" apps/web/app/api --include="*.ts" | head -20
 ```
 
 ### Step 2: Create/Update Input Schema
+
 In `packages/types/src/your-entity.ts`:
 
 ```typescript
@@ -661,6 +697,7 @@ export type CreateItem = z.infer<typeof CreateItemSchema>;
 ```
 
 ### Step 3: Update Route Handler
+
 Before:
 
 ```typescript
@@ -687,6 +724,7 @@ export const POST = createOrgEndpoint({
 ```
 
 ### Step 4: Update Tests
+
 Test the handler directly:
 
 ```typescript
@@ -706,6 +744,7 @@ it("should create item", async () => {
 ```
 
 ### Step 5: Verify & Test
+
 ```bash
 # Type check
 pnpm typecheck
@@ -722,7 +761,9 @@ curl -X POST http://localhost:3000/api/items \
 ---
 
 ## Troubleshooting
+
 ### "Organization context not found"
+
 **Cause**: Missing `orgId` in request
 
 **Solution**:
@@ -738,6 +779,7 @@ fetch("/api/items", {
 ```
 
 ### "Permission denied (403)"
+
 **Cause**: User doesn't have required role
 
 **Solution**:
@@ -754,6 +796,7 @@ export const POST = createOrgEndpoint({
 ```
 
 ### Rate limit exceeded
+
 **Cause**: Too many requests too fast
 
 **Solution**:
@@ -776,6 +819,7 @@ async function retryWithBackoff(fn, maxRetries = 3) {
 ```
 
 ### Type errors in handler
+
 **Cause**: Incorrect input schema
 
 **Solution**:
@@ -789,6 +833,7 @@ console.log(result); // Check types match
 ---
 
 ## Summary
+
 The SDK Factory provides:
 
 - ✅ 90%+ migration of API routes

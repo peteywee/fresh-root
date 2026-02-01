@@ -1,4 +1,24 @@
+---
+
+title: "[ARCHIVED] Phase 1: Cleanup - Duplicate Files & Branch Analysis"
+description: "Archived execution plan for Phase 1 cleanup and branch analysis."
+keywords:
+  - archive
+  - cleanup
+  - plan
+  - phase-1
+category: "archive"
+status: "archived"
+audience:
+  - developers
+  - operators
+createdAt: "2026-01-31T07:18:58Z"
+lastUpdated: "2026-01-31T07:18:58Z"
+
+---
+
 # 🧹 Phase 1: Cleanup - Duplicate Files & Branch Analysis
+
 **Owner**: Cleanup Lead\
 **Status**: Phase 1a COMPLETE ✅ | Phase 1b STARTING\
 **Last Updated**: December 5, 2025\
@@ -7,16 +27,19 @@
 ---
 
 ## 📋 Execution Plan
+
 This phase identifies and systematically deletes:
 
-1. **Priority 1**: .bak files, temporary artifacts, \_dropin\_temp ✅ COMPLETE
+1. **Priority 1**: .bak files, temporary artifacts, \_dropin_temp ✅ COMPLETE
 2. **Priority 2**: Duplicate implementations (same function in 2+ places) 🟡 IN PROGRESS
 3. **Priority 3**: Legacy/archived files ⏳ PENDING
 
 ---
 
 ## 🔍 Files Identified for Deletion
+
 ### Priority 1: ✅ COMPLETE - Delete Immediately (No Review Needed)
+
 | File Path                                                      | Type      | Reason                      | Size | Status     |
 | -------------------------------------------------------------- | --------- | --------------------------- | ---- | ---------- |
 | `apps/web/app/api/session/bootstrap/route.ts.bak`              | .bak      | Backup file                 | 2KB  | ✅ DELETED |
@@ -36,7 +59,9 @@ This phase identifies and systematically deletes:
 ---
 
 ### Priority 2: 🟡 IN PROGRESS - Duplicate Implementations (Requires Review)
+
 #### Category A: apps/web/lib vs apps/web/src/lib (DUPLICATES)
+
 **Decision**: Keep `src/lib` as canonical, delete `apps/web/lib/` ✅ CONFIRMED
 
 **Analysis**:
@@ -64,6 +89,7 @@ ls -la apps/web/src/lib/    # Newer, canonical location
 ---
 
 #### Category B: Multiple Zod Schema Definitions
+
 | Schema                     | File 1                         | File 2                                   | Notes                                          |
 | -------------------------- | ------------------------------ | ---------------------------------------- | ---------------------------------------------- |
 | `CreateShiftSchema`        | `packages/types/src/shifts.ts` | `apps/web/app/api/_shared/validation.ts` | Keep packages/types, DELETE from validation.ts |
@@ -79,6 +105,7 @@ ls -la apps/web/src/lib/    # Newer, canonical location
 ---
 
 ### Priority 3: ⏳ PENDING - Legacy/Archived Files (Review & Backup)
+
 | File Path                  | Status | Reason             | Action                                 |
 | -------------------------- | ------ | ------------------ | -------------------------------------- |
 | `docs/migration/`          | Legacy | Old migration docs | Review, consolidate to current version |
@@ -88,7 +115,9 @@ ls -la apps/web/src/lib/    # Newer, canonical location
 ---
 
 ## ✅ Deletion Checklist
+
 ### Phase 1a: ✅ Priority 1 (Immediate Deletion) - COMPLETE
+
 ```bash
 # ✅ Commands executed:
 rm -f apps/web/app/api/session/bootstrap/route.ts.bak
@@ -115,6 +144,7 @@ rm -rf archive/
 ---
 
 ### Phase 1b: 🟡 IN PROGRESS - Priority 2 (Duplicate Consolidation)
+
 **Steps**:
 
 1. \[ ] Scan for all duplicate lib locations
@@ -128,6 +158,7 @@ rm -rf archive/
 ---
 
 ### Phase 1c: ⏳ Priority 3 (Legacy Cleanup)
+
 ```bash
 # Archive old documentation
 mkdir -p docs/archive/legacy-docs
@@ -145,6 +176,7 @@ mkdir -p docs/archive/phase-reports
 ---
 
 ## 📊 Deletion Summary (After Completion)
+
 | Phase           | Files Deleted    | Lines Removed | Size Freed | Status          |
 | --------------- | ---------------- | ------------- | ---------- | --------------- |
 | 1a (Priority 1) | 9 files + 2 dirs | ~500          | ~30KB      | ✅ COMPLETE     |
@@ -155,7 +187,9 @@ mkdir -p docs/archive/phase-reports
 ---
 
 ## 🔗 Branch Diff Analysis
+
 ### Current Repository State (After Priority 1)
+
 ```
 Branches:
   main (production) — ~450 files
@@ -169,11 +203,13 @@ Changes since start:
 ```
 
 ### Files Identified for Priority 2 & 3
+
 See detailed analysis below.
 
 ---
 
 ## 🎯 Decision Matrix
+
 | Decision                   | Options                       | Recommendation                 | Status       |
 | -------------------------- | ----------------------------- | ------------------------------ | ------------ |
 | **Canonical lib location** | lib/ vs src/lib/              | Use src/lib                    | ✅ CONFIRMED |
@@ -184,7 +220,9 @@ See detailed analysis below.
 ---
 
 ## 📝 Execution Log
+
 ### Phase 1a: Priority 1 Execution ✅ COMPLETE
+
 **Date**: Dec 5, 2025, 14:30 UTC\
 **Executed By**: Cleanup Lead (Orchestrator)
 
@@ -199,7 +237,7 @@ See detailed analysis below.
 - \[x] apps/web/app/api/shifts/\[id]/route.ts.bak ✅
 - \[x] apps/web/app/api/users/profile/route.ts.bak ✅
 - \[x] apps/web/app/api/onboarding/create-network-org/route.ts.bak3 ✅
-- \[x] \_dropin\_temp/ ✅
+- \[x] \_dropin_temp/ ✅
 - \[x] archive/ ✅
 
 **Verification**:
@@ -213,6 +251,7 @@ See detailed analysis below.
 ---
 
 ### Phase 1b: Priority 2 Execution 🟡 IN PROGRESS
+
 **Date Started**: Dec 5, 2025\
 **Current Task**: Identify lib/ duplicates
 
@@ -227,11 +266,13 @@ See detailed analysis below.
 ---
 
 ### Phase 1c: Priority 3 Execution ⏳ PENDING
+
 **Date**: TBD
 
 ---
 
 ## ✅ Phase 1 Completion Criteria
+
 **Gate 1 will pass when**:
 
 - \[x] All Priority 1 files deleted
@@ -246,6 +287,7 @@ See detailed analysis below.
 ---
 
 ## 📞 Questions for Orchestrator
+
 1. ✅ Keep `archive/` for historical reference or permanently delete? → DELETE (DONE)
 2. Is `apps/web/src/lib/` the canonical location? → YES (CONFIRMED)
 3. Should we create `docs/archive/` for legacy documentation? → YES (TO DO)

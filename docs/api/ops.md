@@ -1,18 +1,21 @@
 ---
+
 title: "Ops API"
-description: "Operational telemetry and health endpoints"
+description: "Operations and internal API endpoints"
 keywords:
   - api
   - ops
-  - metrics
+  - internal
 category: "reference"
 status: "active"
 audience:
   - developers
-  - ai-agents
+  - api-consumers
 related-docs:
   - INDEX.md
----
+  - ../schemas/INDEX.md
+createdAt: "2026-01-31T07:18:55Z"
+lastUpdated: "2026-01-31T07:18:55Z"
 
 # Ops API
 

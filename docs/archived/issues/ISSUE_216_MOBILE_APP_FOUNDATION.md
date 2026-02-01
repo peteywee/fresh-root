@@ -1,12 +1,35 @@
+---
+
+title: "[ARCHIVED] Issue #216: Mobile App Foundation"
+description: "Archived issue brief for mobile app foundation work."
+keywords:
+	- archive
+	- issue-216
+	- mobile
+	- foundation
+category: "archive"
+status: "archived"
+audience:
+	- developers
+	- designers
+createdAt: "2026-01-31T07:18:58Z"
+lastUpdated: "2026-01-31T07:18:58Z"
+
+---
+
 # Issue #216: Mobile App Foundation
+
 ## Labels
+
 - P0: FUTURE
 - Area: Mobile, Frontend
 
 ## Objective
+
 Establish foundation for mobile application development using React Native or PWA enhancement.
 
 ## Scope
+
 **In:**
 
 - Mobile strategy decision (React Native vs Enhanced PWA)
@@ -22,12 +45,14 @@ Establish foundation for mobile application development using React Native or PW
 - Mobile-specific features (future work)
 
 ## Files / Paths
+
 - `apps/mobile/` - Mobile app directory (NEW)
 - Shared UI components
 - Mobile-specific API endpoints
 - `docs/architecture/MOBILE_STRATEGY.md` - Strategy document (NEW)
 
 ## Commands
+
 ```bash
 # For React Native approach
 npx react-native init FreshSchedulesMobile
@@ -43,6 +68,7 @@ pnpm dev:mobile
 ```
 
 ## Acceptance Criteria
+
 - \[ ] Mobile strategy decided and documented
 - \[ ] Architecture designed
 - \[ ] Shared component library established
@@ -50,12 +76,14 @@ pnpm dev:mobile
 - \[ ] Basic UI scaffolding complete
 
 ## Success KPIs
+
 - **Code Reuse**: >70% component sharing
 - **Performance**: <3s app load time
 - **Offline Support**: Core features work offline
 - **Authentication**: Seamless mobile auth flow
 
 ## Definition of Done
+
 - \[ ] Mobile strategy documented
 - \[ ] Foundation established
 - \[ ] Authentication working

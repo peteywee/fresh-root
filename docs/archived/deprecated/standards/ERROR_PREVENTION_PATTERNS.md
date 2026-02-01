@@ -1,4 +1,5 @@
 ---
+
 title: "Error Prevention & Pattern Recognition"
 description: "Safeguards and patterns for preventing recurring TypeScript and runtime errors"
 keywords:
@@ -15,23 +16,31 @@ audience:
 related-docs:
   - SDK_FACTORY_COMPREHENSIVE_GUIDE.md
   - ../guides/TESTING.md
+createdAt: "2026-01-31T07:18:58Z"
+lastUpdated: "2026-01-31T07:18:58Z"
+
 ---
 
 # TypeScript Error Prevention & Pattern Recognition
+
 ## Series-A Standards: Error Safeguards
+
 This document tracks recurring error patterns across FRESH-ROOT and establishes safeguards to
 prevent them from reoccurring.
 
 ---
 
 ## Error Pattern Analysis: Recent Session
+
 ### Summary
+
 **Date**: December 1, 2025\
 **Total Errors Found**: 427 TypeScript errors (all in `@apps/web`)\
 **Root Cause**: SDK factory migration (commit 6639062) introduced broken code refactoring\
 **Resolution**: Reverted route files to previous working commit HEAD
 
 ### Error Breakdown
+
 | Error Code | Count | Category | Pattern                                | Prevention                                      |
 | ---------- | ----- | -------- | -------------------------------------- | ----------------------------------------------- |
 | TS1128     | 233   | Syntax   | "Declaration or statement expected"    | Missing closing braces/parens in handlers       |
@@ -40,7 +49,9 @@ prevent them from reoccurring.
 | TS1109     | 4     | Type     | Type compatibility issues              | React version mismatch (Link, Image components) |
 
 ### Errors Occurring >3 Times
+
 #### 1. **TS1128: "Declaration or statement expected" (233 occurrences)**
+
 **Pattern Identified**: Route handlers had duplicate/malformed function signatures
 
 ```typescript
@@ -68,6 +79,7 @@ export const POST = createAuthenticatedEndpoint({
 ---
 
 #### 2. **TS1005: "')' expected" (158 occurrences)**
+
 **Pattern Identified**: Missing closing parentheses in method calls
 
 ```typescript
@@ -90,6 +102,7 @@ body = await req.json();
 ---
 
 #### 3. **TS1472: "catch or finally expected" (32 occurrences)**
+
 **Pattern Identified**: Try blocks without catch/finally due to malformed nesting
 
 ```typescript
@@ -109,6 +122,7 @@ try {
 ---
 
 ### Root Causes (Avoid >3 Recurrence)
+
 | Cause                                  | Occurrences | Prevention                              | Status          |
 | -------------------------------------- | ----------- | --------------------------------------- | --------------- |
 | Incomplete refactors without typecheck | 427         | Require pre-commit typecheck            | ✅ Implemented  |
@@ -120,7 +134,9 @@ try {
 ---
 
 ## ESLint Configuration: Safeguards
+
 ### Current Rules (Root: `eslint.config.mjs`)
+
 ```javascript
 // Prevent incomplete try-catch
 'no-empty': ['error', { allowEmptyCatch: false }],
@@ -136,6 +152,7 @@ try {
 ```
 
 ### To Add for Enhanced Protection
+
 ```javascript
 // Custom rule: detect doubled handler signatures
 'no-duplicate-case': 'error',  // Catches duplicate patterns
@@ -150,7 +167,9 @@ try {
 ---
 
 ## Pre-Commit Hook Safeguards
+
 ### File: `.husky/pre-commit`
+
 **Current State**: Runs typecheck, format, and tag-files
 
 **Enhanced Protection Needed**:
@@ -182,7 +201,9 @@ echo "[husky] Pre-commit checks passed ✅"
 ---
 
 ## Error Prevention Checklist
+
 ### Before Committing Code Changes
+
 - \[ ] Ran `pnpm typecheck` - all errors fixed?
 - \[ ] Ran `pnpm lint` - no new warnings?
 - \[ ] Ran `pnpm format` - consistent style?
@@ -193,12 +214,14 @@ echo "[husky] Pre-commit checks passed ✅"
 - \[ ] Commits reference which error patterns are fixed?
 
 ### Before Pushing to Remote
+
 - \[ ] `git --no-pager diff HEAD~1 HEAD` shows clean changes?
 - \[ ] Pre-push hook passed all checks?
 - \[ ] No "red herring" changes from merge conflicts?
 - \[ ] CI/CD pipeline will pass lint and typecheck?
 
 ### Before Merging PR
+
 - \[ ] Code review approved?
 - \[ ] No errors marked as "BROKEN" in comments?
 - \[ ] TypeScript errors are 0 in CI logs?
@@ -207,7 +230,9 @@ echo "[husky] Pre-commit checks passed ✅"
 ---
 
 ## Series-A Standards Enforcement
+
 ### Level 1: Local Development (Your Machine)
+
 ```bash
 # Install pre-commit hooks
 pnpm install
@@ -220,6 +245,7 @@ git commit --no-verify
 ```
 
 ### Level 2: Branch Protection (GitHub)
+
 ```yaml
 # .github/workflows/ci.yml
 - name: Type Check
@@ -233,6 +259,7 @@ git commit --no-verify
 ```
 
 ### Level 3: Release Gating (Series-A)
+
 ```bash
 # Release script checks for zero errors
 pnpm release:series-a  # Fails if any TS errors exist
@@ -241,6 +268,7 @@ pnpm release:series-a  # Fails if any TS errors exist
 ---
 
 ## Monitoring Dashboard (Future)
+
 **TODO**: Add error metrics collection:
 
 ```bash
@@ -254,6 +282,7 @@ cat error-report.txt | wc -l  # Should stay at 13 (React version only)
 ---
 
 ## References
+
 - **TypeScript Error Codes**: <https://www.typescriptlang.org/docs/handbook/error-index.html>
 - **ESLint Rules**: <https://eslint.org/docs/rules/>
 - **Husky Docs**: <https://typicode.github.io/husky/>

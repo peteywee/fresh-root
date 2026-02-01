@@ -1,12 +1,36 @@
+---
+
+title: "[ARCHIVED] Issue #218: Team Collaboration Features"
+description: "Archived issue brief for team collaboration feature planning."
+keywords:
+  - archive
+  - issue-218
+  - collaboration
+  - features
+category: "archive"
+status: "archived"
+audience:
+  - developers
+  - designers
+createdAt: "2026-01-31T07:18:58Z"
+lastUpdated: "2026-01-31T07:18:58Z"
+
+---
+
 # Issue #218: Team Collaboration Features
+
 ## Labels
+
 - P0: FUTURE
 - Area: Features, UX
 
 ## Objective
-Implement team collaboration features including real-time updates, notifications, and activity feeds.
+
+Implement team collaboration features including real-time updates, notifications, and activity
+feeds.
 
 ## Scope
+
 **In:**
 
 - Real-time schedule updates (WebSocket/Firebase)
@@ -22,6 +46,7 @@ Implement team collaboration features including real-time updates, notifications
 - Project management (out of scope)
 
 ## Files / Paths
+
 - `apps/web/app/api/notifications/route.ts` - Notifications API (NEW)
 - `apps/web/src/components/ActivityFeed.tsx` - Activity feed component (NEW)
 - `apps/web/src/components/Notifications.tsx` - Notifications UI (NEW)
@@ -29,6 +54,7 @@ Implement team collaboration features including real-time updates, notifications
 - `docs/features/TEAM_COLLABORATION.md` - Feature documentation (NEW)
 
 ## Commands
+
 ```bash
 # Start real-time server
 pnpm dev:realtime
@@ -42,6 +68,7 @@ curl http://localhost:3000/api/activity-feed?orgId=org-123
 ```
 
 ## Acceptance Criteria
+
 - \[ ] Real-time updates working
 - \[ ] Notification system operational
 - \[ ] Activity feed displaying team actions
@@ -49,12 +76,14 @@ curl http://localhost:3000/api/activity-feed?orgId=org-123
 - \[ ] Notification preferences configurable
 
 ## Success KPIs
+
 - **Real-time Latency**: <500ms for updates
 - **Notification Delivery**: 99%+ success rate
 - **User Engagement**: 50%+ users check activity feed weekly
 - **Performance**: No impact on core scheduling features
 
 ## Definition of Done
+
 - \[ ] Real-time updates working
 - \[ ] Notifications operational
 - \[ ] Activity feed functional

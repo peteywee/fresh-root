@@ -1,4 +1,5 @@
 ---
+
 title: "API Documentation Index"
 description: "Batched API documentation by domain"
 keywords:
@@ -9,9 +10,13 @@ category: "reference"
 status: "active"
 audience:
   - developers
+  - api-consumers
   - ai-agents
 related-docs:
   - ../INDEX.md
+createdAt: "2026-01-31T07:18:55Z"
+lastUpdated: "2026-01-31T07:18:55Z"
+
 ---
 
 # API Documentation Index

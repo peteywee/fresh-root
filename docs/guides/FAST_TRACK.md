@@ -1,28 +1,35 @@
 ---
+
 title: "Fast Track to Production"
 description: "Accelerated guide for deploying the application to production"
 keywords:
-  - deployment
-  - production
-  - fast-track
-  - launch
+- deployment
+- production
+- fast-track
+- launch
 category: "guide"
 status: "active"
 audience:
-  - operators
-  - developers
+- operators
+- developers
 related-docs:
-  - DEPLOYMENT.md
-  - ../reference/PRODUCTION_READINESS.md
+- DEPLOYMENT.md
+- ../reference/PRODUCTION\_READINESS.md
+
+createdAt: "2026-01-31T00:00:00Z"
+lastUpdated: "2026-01-31T00:00:00Z"
+
 ---
 
 # Fast Track to Production - Optimized Execution Plan
+
 **Created**: 2025-12-23 **Current Progress**: 27/45 tasks (60%) - E2E test complete! **Target**:
 Production deployment in 2.5 hours **Strategy**: Focus on blockers, skip non-critical work
 
 ---
 
 ## Executive Summary
+
 **What's Actually Done:** ✅ All core features implemented (Phases 0-4) ✅ API routes using
 Firestore ✅ Auth, data persistence, UX complete ✅ Security patterns validated (130/90 score!)
 
@@ -47,7 +54,9 @@ Firestore ✅ Auth, data persistence, UX complete ✅ Security patterns validate
 ---
 
 ## Revised Task List (6.5 hours → 2.5 hours)
+
 ### ✅ Task 1: E2E Golden Path Test - **COMPLETE**
+
 **Status**: Done (PR #xxx, commit 3014640)
 
 **What Was Implemented**:
@@ -71,7 +80,9 @@ Firestore ✅ Auth, data persistence, UX complete ✅ Security patterns validate
 ---
 
 ### 🎯 Critical Path (Remaining)
+
 #### Task 2: Performance Audit (1h) - **NEXT UP**
+
 **Why Important**: Verifies app is production-ready for users
 
 **Steps**:
@@ -82,7 +93,7 @@ Firestore ✅ Auth, data persistence, UX complete ✅ Security patterns validate
    - `/signin` (auth)
    - `/app/dashboard` (main app)
    - `/app/schedules` (core feature)
-1. Target: ≥90 all categories (Performance, Accessibility, Best Practices, SEO)
+3. Target: ≥90 all categories (Performance, Accessibility, Best Practices, SEO)
 
 **Acceptance**:
 
@@ -94,6 +105,7 @@ Firestore ✅ Auth, data persistence, UX complete ✅ Security patterns validate
 ---
 
 #### Task 3: ARIA Quick Audit (0.5h)
+
 **Why Important**: Ensures basic accessibility compliance
 
 **Steps**:
@@ -111,9 +123,11 @@ Firestore ✅ Auth, data persistence, UX complete ✅ Security patterns validate
 ---
 
 #### Task 4: Deploy to Staging (1h)
+
 **Why Important**: Verifies deployment process works (Vercel OR Cloudflare)
 
 ##### Option A: Vercel Deployment (Recommended)
+
 1. Test local production build first:
 
    ```bash
@@ -130,6 +144,7 @@ Firestore ✅ Auth, data persistence, UX complete ✅ Security patterns validate
 1. Verify deployment at preview URL
 
 ##### Option B: Cloudflare Pages (Alternative)
+
 1. Build locally to verify:
 
    ```bash
@@ -169,7 +184,9 @@ Firestore ✅ Auth, data persistence, UX complete ✅ Security patterns validate
 ---
 
 ### 🔧 Optional Improvements (If Time Permits)
+
 #### Task 5: Clean Up `any` Types (1h) - **LOW PRIORITY**
+
 **Current State**: 25 occurrences, mostly in:
 
 - Test files (mocks, fixtures) - SAFE TO IGNORE
@@ -186,6 +203,7 @@ Firestore ✅ Auth, data persistence, UX complete ✅ Security patterns validate
 ---
 
 ## Execution Timeline (2.5 hours remaining)
+
 ```text
 ✅ Hour 0-2:   E2E Golden Path Test (Task 1) - COMPLETE
             └─ Created golden-path.spec.ts with 6 passing tests
@@ -213,7 +231,9 @@ DONE: Ready for production! 🚀
 ---
 
 ## Deployment Troubleshooting Guide
+
 ### Pre-Deployment Checklist
+
 ✅ Local build succeeds: `pnpm --filter web build`\
 ✅ All tests pass: `pnpm test`\
 ✅ E2E tests pass: `pnpm playwright test`\
@@ -221,6 +241,7 @@ DONE: Ready for production! 🚀
 ✅ Linting clean: `pnpm lint`
 
 ### Vercel Deployment Issues
+
 **Issue**: Build fails with "Dynamic server usage"\
 **Solution**: This is expected! Pages using `cookies()` can't be static. ✅ Normal behavior.
 
@@ -238,6 +259,7 @@ outputFileTracingRoot: path.join(__dirname, "../../");
 **Solution**: Ensure `GOOGLE_APPLICATION_CREDENTIALS_JSON_BASE64` is set in Vercel secrets
 
 ### Cloudflare Pages Issues
+
 **Issue**: `process.exit` not supported in edge runtime\
 **Solution**: Wrap in check:
 
@@ -254,6 +276,7 @@ if (typeof process !== "undefined" && process.exit) {
 **Solution**: Ensure `output: 'standalone'` in `next.config.js`
 
 ### Firebase Configuration
+
 Required environment variables for both platforms:
 
 ```bash
@@ -269,6 +292,7 @@ GOOGLE_APPLICATION_CREDENTIALS_JSON_BASE64=
 ```
 
 ### Quick Deployment Test
+
 Test deployment works before committing:
 
 ```bash
@@ -283,7 +307,9 @@ pnpm wrangler pages dev apps/web/.next
 ---
 
 ## What We're NOT Doing (And Why It's OK)
+
 ### Deferred Type Safety Work
+
 - **E1-E4: Remove `any` types**
   - Only 25 occurrences, 20+ are in test files
   - Middleware context types (3) are acceptable with proper JSDoc
@@ -301,6 +327,7 @@ pnpm wrangler pages dev apps/web/.next
   - **Impact**: None - already done
 
 ### Deferred Features
+
 - **F3: File upload**
   - Not critical for MVP
   - Can add post-launch
@@ -314,7 +341,9 @@ pnpm wrangler pages dev apps/web/.next
 ---
 
 ## Success Criteria (Gate 7 - Production Ready)
+
 ### Must Pass
+
 - \[x] All API routes using Firestore ✅
 - \[x] Auth flow works ✅
 - \[x] Data persistence verified ✅
@@ -327,6 +356,7 @@ pnpm wrangler pages dev apps/web/.next
 - \[ ] No critical accessibility violations ⏳
 
 ### Nice to Have (Can Defer)
+
 - \[ ] Zero `any` types (currently 25, mostly tests)
 - \[ ] 100% test coverage (currently ~60%)
 - \[ ] All ARIA labels perfect
@@ -335,6 +365,7 @@ pnpm wrangler pages dev apps/web/.next
 ---
 
 ## Risk Assessment
+
 | Risk                     | Probability | Impact | Mitigation                                |
 | ------------------------ | ----------- | ------ | ----------------------------------------- |
 | E2E test flaky           | Medium      | High   | Use deterministic test data, proper waits |
@@ -345,6 +376,7 @@ pnpm wrangler pages dev apps/web/.next
 ---
 
 ## Decision Log
+
 **Why skip E1-E5 (Type Safety)?**
 
 - Audit shows work is already done or non-critical
@@ -368,6 +400,7 @@ pnpm wrangler pages dev apps/web/.next
 ---
 
 ## Next Steps
+
 1. **Start with E2E test** (Task 1) - 4 hours
    - This is the biggest blocker
    - Will catch any integration issues

@@ -1,202 +1,30 @@
 # Fresh Root
 
-**Status:** ✅ Production Ready | **Version:** 1.4.0 | **Last Updated:** December 25, 2025
+Fresh Root is a production-grade staff scheduling platform built as a modern web application with a
+focus on reliability, security, and maintainability.
 
-A production-ready Progressive Web App (PWA) for staff scheduling with enterprise-grade security,
-comprehensive testing automation, and hierarchical governance documentation system.
+## What this repo contains
+- A web application with a secure API layer
+- Shared packages for validation, UI, and infrastructure
+- A documentation system that tracks standards and operations
 
-Built with Next.js 16, Firebase, TypeScript, and a modern monorepo architecture (pnpm workspaces).
+## Documentation
+Start with [docs/PROJECT_OVERVIEW.md](docs/PROJECT_OVERVIEW.md) for a brief overview and
+[docs/guides/ONBOARDING.md](docs/guides/ONBOARDING.md) for role-based onboarding.
 
----
-
-## 🎯 What's New (v1.5.0)
-
-### 🛡️ Guardrails Automation & Script Cleanup
-
-- **✅ Guardrails Hardening** — Automated CI/CD checks for guardrail validation
-- **🚫 Script Cleanup** — Removed 3 unused scripts (test:all, deps:check, deps:dedupe)
-- **📋 Deprecations Guide** — Documented removed scripts with migration paths
-- **🔐 Pre-commit Blocker** — Prevents re-introduction of deprecated scripts
-- **🧪 Syncpack Integration** — Version consistency validation in pre-push hooks
-- **📚 Guardrails Documentation** — 3 comprehensive guides (679 + 642 + 266 lines)
-
-### 📚 Previous: Documentation Consolidation & Governance
-
-- **🗂️ Hierarchical Documentation System** — 357 scattered files consolidated into 5-level hierarchy
-  (L0-L4)
-- **📊 58% File Reduction** — Reduced from 357 to 200 markdown files with zero duplicates
-- **🏷️ Tag-Based Discovery** — Fast AI retrieval with tag lookup tables (95%+ confidence)
-- **📝 8 Governance Amendments** — Extracted canonical implementation patterns (A01-A08)
-- **📇 3 Master Indexes** — Navigation indexes for governance, instructions, and documentation
-- **🗃️ 136 Files Archived** — Organized historical documentation into 7 categorical subdirectories
-- **🤖 AI-Optimized Structure** — Enhanced copilot instructions with governance references
-
-### 🎯 What Changed
-
-| Component         | Before | After | Impact                  |
-| ----------------- | ------ | ----- | ----------------------- |
-| **Total Files**   | 357    | 200   | -58% reduction          |
-| **Root Files**    | 39     | 3     | -92% cleanup            |
-| **Duplicates**    | 50+    | 0     | 100% eliminated         |
-| **Indexes**       | 0      | 3     | Tag-based lookup        |
-| **Amendments**    | 0      | 8     | Implementation patterns |
-| **AI Confidence** | ~60%   | 95%+  | +35% improvement        |
-
-### 📦 New Structure
-
-```plaintext
-.github/
-├── governance/
-│   ├── INDEX.md              # L0/L1 canonical + amendments
-│   ├── 01-12 canonical docs  # Binding governance
-│   └── amendments/           # A01-A08 implementation patterns
-├── instructions/
-│   └── INDEX.md              # L2 agent instructions catalog
-├── workflows/
-│   └── guardrails-ci.yml     # CI/CD guardrails validation
-docs/
-├── INDEX.md                  # L4 human documentation
-├── DEPRECATIONS.md           # Removed scripts & migration paths
-├── architecture/             # System design
-├── standards/                # Coding patterns
-├── guides/
-│   ├── GUARDRAILS_GUIDE.md        # Deep dive into guardrail tools
-│   ├── GUARDRAILS_EXAMPLES.md     # 10 real-world scenarios
-│   └── GUARDRAILS_SCRIPTS.md      # npm scripts quick reference
-└── production/               # Operations
-archive/                      # 136 historical files
-```
-
-**Key Quick Links:**
-
-- **Guardrails:** See [docs/guides/GUARDRAILS_GUIDE.md](docs/guides/GUARDRAILS_GUIDE.md) — Learn how
-  eslint-plugin-import, @manypkg/cli, and syncpack protect code quality
-- **Scripts:** See [docs/guides/GUARDRAILS_SCRIPTS.md](docs/guides/GUARDRAILS_SCRIPTS.md) —
-  Reference for all npm scripts
-- **Deprecated:** See [docs/DEPRECATIONS.md](docs/DEPRECATIONS.md) — Removed scripts (test:all,
-  deps:check, deps:dedupe) with migration paths
-
----
-
-## 🏗️ Architecture
-
-Fresh Root uses a **production-grade monorepo** with clear separation of concerns:
-
-```plaintext
-fresh-root/
-├── apps/web/                           # Next.js PWA application
-│   ├── app/                            # App Router with API routes
-│   │   ├── api/**/__tests__/           # 39 auto-generated test templates
-│   │   └── (app)/**                    # UI pages and components
-│   └── src/lib/                        # Firebase helpers, auth, utilities
-├── packages/                           # Shared libraries
-│   ├── types/                          # Zod schemas, TypeScript types
-│   ├── api-framework/                  # SDK factory pattern ⭐
-│   ├── ui/                             # UI component library
-│   └── rules-tests/                    # Firebase rules test infrastructure
-├── scripts/
-│   ├── tests/auto-generate-tests.mjs   # Coverage gap analyzer & test generator
-│   └── markdown-lint-lib/              # Markdown linting library
-├── tests/rules/                        # Firestore security rules tests
-├── docs/                               # Comprehensive documentation
-├── .github/workflows/
-│   ├── test-coverage.yml               # Measure coverage thresholds
-│   └── auto-generate-tests.yml         # Auto-generate missing tests
-└── firestore.rules                     # Security rules
-```
-
----
-
-## 🚀 Getting Started
-
-### Prerequisites
-
-- **Node.js:** ≥20.10.0 (see `.nvmrc`)
-- **pnpm:** 9.12.1 (enforced, see `package.json`)
-- **Git:** For version control
-- **Firebase CLI:** For emulator and deployment
-
-### Quick Setup
-
+## Quick start
 ```bash
-# 1. Clone repository
-git clone https://github.com/peteywee/fresh-root.git
-cd fresh-root
-
-# 2. Install dependencies (pnpm only!)
 pnpm install --frozen-lockfile
-
-# 3. Start development server
 pnpm dev
-# Opens http://localhost:3000
-# 4. Run tests
-pnpm test                      # Unit tests
-pnpm test -- --coverage        # With coverage report
-pnpm test:rules                # Firebase rules tests
-pnpm test:e2e                  # E2E tests (Playwright)
-
-# 5. Start Firebase emulators (separate terminal)
-firebase emulators:start
+pnpm test
 ```
 
-### Environment Setup
+## Contributing
+Work on the dev branch and follow [docs/standards/CODING_RULES_AND_PATTERNS.md](docs/standards/CODING_RULES_AND_PATTERNS.md).
 
-```bash
-# Copy environment template
-cp .env.example .env.local
-
-# Update with your configuration:
-# - Firebase project ID
-# - Firebase API keys
-# - Redis URL (for rate limiting)
-# - Emulator settings (for local development)
-```
-
----
-
-## 📊 Coverage Thresholds & Auto-Generation
-
-### How It Works
-
-**Layer 1: Detection** → **Layer 2: Generation** → **Layer 3: Implementation**
-
-```plaintext
-Push Code
-    ↓
-test-coverage.yml measures coverage
-    ↓
-Coverage below threshold?
-    ├─ YES → auto-generate-tests.yml generates templates
-    │         → Developer implements TODOs
-    │         → Coverage improves
-    │         → Threshold MET ✅
-    └─ NO  → CI PASSES ✅
-```
-
-### Thresholds (Hard Requirements)
-
-| Metric                | Minimum | Status       |
-| --------------------- | ------- | ------------ |
-| **Unit Tests**        | ≥90%    | 🔴 Enforced  |
-| **Integration Tests** | ≥80%    | 🔴 Enforced  |
-| **E2E Tests**         | ≥70%    | 🟡 Monitored |
-| **Overall**           | ≥85%    | 🔴 Enforced  |
-
-### Quick Commands
-
-```bash
-# Check coverage
-pnpm test -- --coverage
-
-# Force test auto-generation
-gh workflow run auto-generate-tests.yml -f force_generation=true
-
-# Review generated tests
-git status                    # See new test files
-git diff --name-only          # List modified files
-```
-
----
+## Security note
+This README intentionally avoids listing internal surfaces or exhaustive system details. See the
+documentation index for developer workflow guidance.
 
 ## 📝 Markdown Linting
 
@@ -421,7 +249,7 @@ Hooks automatically run:
 
 ## � Repomix: Repository Analysis & Packed Format
 
-### What is Repomix?
+### What is Repomix
 
 Repomix generates **compact, AI-ready representations** of your codebase. Perfect for:
 

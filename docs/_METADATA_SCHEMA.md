@@ -1,7 +1,29 @@
+---
+
+title: "Documentation Metadata Schema"
+description: "Definition of required YAML frontmatter fields for documentation"
+keywords:
+
+- metadata
+- schema
+- frontmatter
+- documentation
+category: "reference"
+status: "active"
+audience:
+- developers
+- ai-agents
+- teams
+
+createdAt: "2026-01-31T00:00:00Z"
+lastUpdated: "2026-01-31T00:00:00Z"
+
+---
+
 # Documentation Metadata Schema
 
-> **Location**: `docs/_METADATA_SCHEMA.md`  
-> **Purpose**: Defines YAML frontmatter format for all docs  
+> **Location**: `docs/_METADATA_SCHEMA.md`\
+> **Purpose**: Defines YAML frontmatter format for all docs\
 > **Last Updated**: January 15, 2026
 
 ---
@@ -10,36 +32,34 @@
 
 All markdown files in `/docs/` must include this frontmatter at the top:
 
-```yaml
----
-title: "Human-Readable Title"
-description: "One-sentence purpose of this document"
-keywords:
-  - keyword1
-  - keyword2
-  - keyword3
-category: "architecture|guide|standard|reference|decision|report|template|archive"
-tags:
-  - tag1
-  - tag2
-status: "active|draft|deprecated|archived"
-audience:
-  - developers
-  - operators
-  - architects
-related-docs:
-  - path/to/related1.md
-  - path/to/related2.md
----
+## ```yaml
+
+title: "Human-Readable Title" description: "One-sentence purpose of this document" keywords:
+
+- keyword1
+- keyword2
+- keyword3 category: "architecture|guide|standard|reference|decision|report|template|archive" tags:
+- tag1
+- tag2 status: "active|draft|deprecated|archived" audience:
+- developers
+- operators
+- architects related-docs:
+- path/to/related1.md
+
+## - path/to/related2.md
+
+createdAt: "2026-01-31T12:00:00Z"
+lastUpdated: "2026-01-31T12:00:00Z"
 
 # Title (H1 header)
+
 ...content...
-```
+
+````
 
 ---
 
 ## Field Definitions
-
 ### `title` (required)
 - **Type**: String
 - **Purpose**: Human-readable document title
@@ -102,7 +122,17 @@ related-docs:
     - architecture/API_SCHEMA_AUDIT.md
     - standards/CODING_RULES_AND_PATTERNS.md
     - guides/DEPLOYMENT.md
-  ```
+````
+
+## `createdAt` (required)
+- **Type**: ISO 8601 date-time string
+- **Purpose**: When the document was first created
+- **Example**: `"2026-01-31T12:00:00Z"`
+
+### `lastUpdated` (required)
+- **Type**: ISO 8601 date-time string
+- **Purpose**: Last material update time
+- **Example**: `"2026-01-31T12:00:00Z"`
 
 ---
 
@@ -166,57 +196,53 @@ docs/
 
 ## Example File with Metadata
 
-```yaml
----
-title: "SDK Factory Pattern Implementation Guide"
-description: "Complete guide to implementing the SDK factory pattern for type-safe API endpoints"
-keywords:
-  - sdk
-  - factory
-  - typescript
-  - api-routes
-  - validation
-  - zod
-  - next.js
-category: "guide"
-tags:
-  - api
-  - patterns
-  - typescript
-  - firebase
-status: "active"
-audience:
-  - developers
-  - ai-agents
-related-docs:
-  - standards/CODING_RULES_AND_PATTERNS.md
-  - architecture/API_SCHEMA_AUDIT.md
-  - templates/API_ROUTE_TEMPLATE.md
----
+## ```yaml
+
+title: "SDK Factory Pattern Implementation Guide" description: "Complete guide to implementing the
+SDK factory pattern for type-safe API endpoints" keywords:
+
+- sdk
+- factory
+- typescript
+- api-routes
+- validation
+- zod
+- next.js category: "guide" tags:
+- api
+- patterns
+- typescript
+- firebase status: "active" audience:
+- developers
+- ai-agents related-docs:
+- standards/CODING_RULES_AND_PATTERNS.md
+- architecture/API_SCHEMA_AUDIT.md
+
+## - templates/API_ROUTE_TEMPLATE.md
 
 # SDK Factory Pattern Implementation Guide
 
 [Content here]
+
 ```
 
 ---
 
 ## Migration Checklist
-
 For each document:
-- [ ] Add YAML frontmatter with all required fields
-- [ ] Move to appropriate subdirectory
-- [ ] Update all cross-references
-- [ ] Add to category README.md
-- [ ] Update master INDEX.md
-- [ ] Add to keyword search index
-- [ ] Add to relationship graph
+
+- \[ ] Add YAML frontmatter with all required fields
+- \[ ] Move to appropriate subdirectory
+- \[ ] Update all cross-references
+- \[ ] Add to category README.md
+- \[ ] Update master INDEX.md
+- \[ ] Add to keyword search index
+- \[ ] Add to relationship graph
 
 ---
 
 ## For AI Agents
-
 When searching or indexing docs:
+
 1. Always parse and use YAML frontmatter
 2. Use `keywords` field for semantic search
 3. Use `related-docs` to understand relationships
@@ -224,4 +250,4 @@ When searching or indexing docs:
 5. Use `status` to prioritize active docs over deprecated
 6. Use `audience` to filter for relevance
 7. Cross-reference via `_INDEX_GRAPH.md` for context
-
+```

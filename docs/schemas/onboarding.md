@@ -1,4 +1,5 @@
 ---
+
 title: "Onboarding Schemas"
 description: "Onboarding schema coverage"
 keywords:
@@ -11,6 +12,9 @@ audience:
   - ai-agents
 related-docs:
   - INDEX.md
+createdAt: "2026-01-31T07:19:02Z"
+lastUpdated: "2026-01-31T07:19:02Z"
+
 ---
 
 # Onboarding Schemas

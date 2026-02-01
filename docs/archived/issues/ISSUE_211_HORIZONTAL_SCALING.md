@@ -1,12 +1,36 @@
+---
+
+title: "[ARCHIVED] Issue #211: Horizontal Scaling Infrastructure"
+description: "Archived issue brief for horizontal scaling infrastructure."
+keywords:
+	- archive
+	- issue-211
+	- scaling
+	- infrastructure
+category: "archive"
+status: "archived"
+audience:
+	- operators
+	- developers
+createdAt: "2026-01-31T07:18:58Z"
+lastUpdated: "2026-01-31T07:18:58Z"
+
+---
+
 # Issue #211: Horizontal Scaling Infrastructure
+
 ## Labels
+
 - P0: STRATEGIC
 - Area: Infrastructure, DevOps
 
 ## Objective
-Implement infrastructure changes to enable horizontal scaling for multi-instance production deployment.
+
+Implement infrastructure changes to enable horizontal scaling for multi-instance production
+deployment.
 
 ## Scope
+
 **In:**
 
 - Redis for rate limiting (Issue #196)
@@ -23,6 +47,7 @@ Implement infrastructure changes to enable horizontal scaling for multi-instance
 - Multi-region deployment (future work)
 
 ## Files / Paths
+
 - `rate-limit.ts` - Redis rate limiter (see Issue #196)
 - `apps/web/app/api/health/route.ts` - Health check endpoint (NEW)
 - `apps/web/app/api/ready/route.ts` - Readiness check endpoint (NEW)
@@ -31,6 +56,7 @@ Implement infrastructure changes to enable horizontal scaling for multi-instance
 - Docker/Kubernetes configuration
 
 ## Commands
+
 ```bash
 # Test with multiple instances
 docker-compose up --scale web=3
@@ -47,6 +73,7 @@ for i in {1..200}; do curl http://localhost/api/test; done | grep -c "429"
 ```
 
 ## Acceptance Criteria
+
 - \[ ] Redis rate limiting implemented
 - \[ ] Redis session storage implemented
 - \[ ] Query caching implemented
@@ -56,12 +83,14 @@ for i in {1..200}; do curl http://localhost/api/test; done | grep -c "429"
 - \[ ] No single points of failure
 
 ## Success KPIs
+
 - **Instance Scale**: Successfully scale to 3+ instances
 - **Session Persistence**: 100% session continuity across instances
 - **Rate Limiting**: Works correctly across all instances
 - **Load Distribution**: Even distribution across instances
 
 ## Definition of Done
+
 - \[ ] Application scales horizontally
 - \[ ] No single points of failure
 - \[ ] Load balancer operational

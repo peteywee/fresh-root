@@ -1,10 +1,30 @@
+---
+
+title: "L3 — Firestore Collections & Indexes"
+description: "Documentation of Firestore collections, schemas, and indexes."
+keywords:
+  - firestore
+  - collections
+  - indexes
+category: "report"
+status: "active"
+audience:
+  - developers
+  - architects
+createdAt: "2026-01-31T07:19:00Z"
+lastUpdated: "2026-01-31T07:19:00Z"
+
+---
+
 # L3 — Firestore Collections & Indexes
+
 This file documents all Firestore collections, their schemas, security rules, and indexes used in
 Fresh Schedules.
 
 ---
 
 ## 1. Collection Hierarchy
+
 ```
 /users/{userId}                                     # User profiles
 /orgs/{orgId}                                       # Organizations
@@ -31,7 +51,9 @@ Fresh Schedules.
 ---
 
 ## 2. Core Collections
+
 ### `/users/{userId}`
+
 User profiles and preferences.
 
 | Field         | Type    | Description       |
@@ -48,6 +70,7 @@ User profiles and preferences.
 ---
 
 ### `/orgs/{orgId}`
+
 Organization entities.
 
 | Field       | Type   | Description       |
@@ -58,18 +81,19 @@ Organization entities.
 | `createdAt` | number | Timestamp         |
 | `updatedAt` | number | Timestamp         |
 
-**Rules**: Read by members; write by org\_owner only; no enumeration
+**Rules**: Read by members; write by org_owner only; no enumeration
 
 ---
 
 ### `/memberships/{userId}_{orgId}`
+
 User-to-organization membership with role.
 
 | Field       | Type   | Description                                    |
 | ----------- | ------ | ---------------------------------------------- |
 | `uid`       | string | User ID                                        |
 | `orgId`     | string | Organization ID                                |
-| `role`      | string | Role (staff/scheduler/manager/admin/org\_owner) |
+| `role`      | string | Role (staff/scheduler/manager/admin/org_owner) |
 | `status`    | string | active/inactive                                |
 | `createdAt` | number | Timestamp                                      |
 | `updatedAt` | number | Timestamp                                      |
@@ -79,6 +103,7 @@ User-to-organization membership with role.
 ---
 
 ### `/schedules/{orgId}/schedules/{scheduleId}`
+
 Schedule definitions.
 
 | Field       | Type   | Description              |
@@ -98,6 +123,7 @@ Schedule definitions.
 ---
 
 ### `/shifts/{orgId}/shifts/{shiftId}`
+
 Individual shift assignments.
 
 | Field        | Type    | Description               |
@@ -119,6 +145,7 @@ checkInTime)
 ---
 
 ### `/venues/{orgId}/venues/{venueId}`
+
 Physical locations.
 
 | Field       | Type    | Description      |
@@ -135,6 +162,7 @@ Physical locations.
 ---
 
 ### `/attendance_records/{orgId}/records/{recordId}`
+
 Time tracking records.
 
 | Field          | Type    | Description               |
@@ -152,6 +180,7 @@ Time tracking records.
 ---
 
 ## 3. Firestore Indexes
+
 From `firestore.indexes.json`:
 
 | Collection   | Fields                          | Query Scope |
@@ -166,6 +195,7 @@ From `firestore.indexes.json`:
 ---
 
 ## 4. Security Rule Helper Functions
+
 ```javascript
 isSignedIn(); // request.auth != null
 uid(); // request.auth.uid
@@ -179,6 +209,7 @@ sameOrg(orgId); // Token org matches resource org
 ---
 
 ## 5. Anti-Enumeration Pattern
+
 All collections use `allow list: if false` to prevent enumeration attacks. Clients must query with
 explicit filters (e.g., by orgId).
 

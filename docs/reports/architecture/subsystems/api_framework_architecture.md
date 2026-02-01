@@ -1,9 +1,29 @@
+---
+
+title: "L2 — API Framework Architecture & Design"
+description: "Subsystem report for the API framework architecture."
+keywords:
+  - architecture
+  - subsystem
+  - api-framework
+category: "report"
+status: "active"
+audience:
+  - developers
+  - architects
+createdAt: "2026-01-31T07:19:01Z"
+lastUpdated: "2026-01-31T07:19:01Z"
+
+---
+
 # L2 — API Framework Architecture & Design
+
 > **Status:** ✅ Documented from actual implementation analysis **Last Updated:** 2025-12-17
 > **Package:** `@fresh-schedules/api-framework` v1.0.0 **Adoption:** 100% - All 44+ route handlers
 > migrated
 
 ## 1. Role in the System
+
 The API Framework (`@fresh-schedules/api-framework`) is the **foundational abstraction layer** that
 standardizes ALL API route implementations. It provides a declarative SDK factory pattern that
 enforces:
@@ -17,7 +37,9 @@ enforces:
 affect the entire API surface.
 
 ## 2. Architecture Overview
+
 ### 2.1 Factory Functions (5 Types)
+
 | Factory                       | Auth         | Org Context  | Use Case                       |
 | ----------------------------- | ------------ | ------------ | ------------------------------ |
 | `createEndpoint`              | Configurable | Configurable | Legacy/flexible routes         |
@@ -27,6 +49,7 @@ affect the entire API surface.
 | `createBatchHandler`          | N/A          | N/A          | Batch processing endpoints     |
 
 ### 2.2 Request Pipeline
+
 ```
 Incoming Request
   ↓
@@ -50,6 +73,7 @@ Response (NextResponse)
 ```
 
 ### 2.3 Core Type Signature
+
 ```typescript
 interface EndpointConfig<TInput, TOutput> {
   auth?: "required" | "optional" | "none";
@@ -68,6 +92,7 @@ interface EndpointConfig<TInput, TOutput> {
 ```
 
 ### 2.4 Enhanced Features (from `enhancements.ts`)
+
 Additional middleware capabilities:
 
 - **Middleware Chain Execution** - Compose multiple middleware functions
@@ -76,7 +101,9 @@ Additional middleware capabilities:
 - **Idempotency Support** - Prevent duplicate requests via idempotency keys
 
 ## 3. Critical Findings
+
 ### 🔴 CRITICAL-01: In-Memory Rate Limiting
+
 **Location:** `packages/api-framework/src/index.ts:120-140` **Issue:** Rate limiting uses in-memory
 `Map` storage
 
@@ -132,6 +159,7 @@ async function checkRateLimit(key: string, config: RateLimitConfig) {
 ```
 
 ### 🔴 CRITICAL-02: No Request Context Cleanup
+
 **Location:** All factory functions **Issue:** No cleanup/disposal of context resources
 
 ```typescript
@@ -163,6 +191,7 @@ try {
 ```
 
 ### 🟡 HIGH-01: Idempotency Key Storage Not Implemented
+
 **Location:** `packages/api-framework/src/enhancements.ts` **Issue:** Idempotency functions return
 mock values
 
@@ -185,6 +214,7 @@ export function storeIdempotentResponse(
 **Impact:** Idempotency feature doesn't work - duplicate requests not prevented
 
 ### 🟡 HIGH-02: Missing Audit Logging
+
 **Location:** All endpoints **Issue:** No audit trail for sensitive operations
 
 **Example - Activate Network has NO audit log:**
@@ -228,6 +258,7 @@ export function createAuditedEndpoint<TInput, TOutput>(
 ```
 
 ### 🟢 MEDIUM-01: Inconsistent Error Response Format
+
 **Location:** Various endpoints **Issue:** Some routes use `{ ok: false, error }`, others use
 `{ error: { code, message } }`
 
@@ -257,7 +288,9 @@ function createErrorResponse(code: ErrorCode, message: string) {
 **Recommendation:** Standardize on SDK error format across all responses
 
 ## 4. Architectural Strengths
+
 ### ✅ Strong Type Safety
+
 ```typescript
 // Input and output types flow through entire pipeline
 export const POST = createOrgEndpoint({
@@ -272,6 +305,7 @@ export const POST = createOrgEndpoint({
 ```
 
 ### ✅ Declarative Security
+
 ```typescript
 // Security is configuration, not implementation
 export const POST = createOrgEndpoint({
@@ -285,6 +319,7 @@ export const POST = createOrgEndpoint({
 ```
 
 ### ✅ A09 Invariant Enforcement
+
 **Pre-commit hook validates ALL routes:**
 
 ```bash
@@ -294,7 +329,9 @@ export const POST = createOrgEndpoint({
 ```
 
 ## 5. Design Patterns
+
 ### ✅ Good Pattern: Factory Composition
+
 ```typescript
 // Base factory
 function createEndpoint<TInput, TOutput>(config: EndpointConfig) {
@@ -316,6 +353,7 @@ export function createOrgEndpoint<TInput, TOutput>(config: Omit<EndpointConfig, 
 **Why Good:** DRY principle, single source of truth for pipeline logic
 
 ### ❌ Anti-Pattern: Silent Failures
+
 ```typescript
 // File: packages/api-framework/src/enhancements.ts
 export function getIdempotentResponse(key: string): NextResponse | null {
@@ -337,6 +375,7 @@ export function getIdempotentResponse(key: string): NextResponse | null {
 ```
 
 ### ✅ Good Pattern: Context Enrichment
+
 ```typescript
 interface RequestContext {
   auth: AuthContext | null; // Step 1: Auth
@@ -356,7 +395,9 @@ async function buildContext(request: NextRequest): Promise<RequestContext> {
 ```
 
 ## 6. Testing Strategy
+
 ### Test Coverage Analysis
+
 From `/tmp/api-framework.txt`:
 
 ```
@@ -381,7 +422,9 @@ File: __tests__/enhancements.test.ts (20,229 chars, 4,825 tokens)
 - ❌ Error handling edge cases
 
 ## 7. Performance Characteristics
+
 ### Measured Overhead
+
 From benchmark analysis:
 
 | Operation                      | Overhead  | Impact                   |
@@ -413,7 +456,9 @@ async function verifyAuth(token: string): Promise<AuthContext> {
 ```
 
 ## 8. Migration Status
+
 ### Adoption Metrics
+
 - **Total Routes:** 44 routes
 - **Using SDK:** 44 (100%)
 - **Legacy Pattern:** 0 (0%)
@@ -421,6 +466,7 @@ async function verifyAuth(token: string): Promise<AuthContext> {
 **Migration Complete:** ✅ All routes migrated to SDK factory pattern
 
 ### Pre-Migration Pattern (Deprecated)
+
 ```typescript
 // ❌ OLD: Direct Firebase Admin usage
 export async function GET(request: NextRequest) {
@@ -436,6 +482,7 @@ export async function GET(request: NextRequest) {
 ```
 
 ### Post-Migration Pattern (Current)
+
 ```typescript
 // ✅ NEW: SDK factory pattern
 export const GET = createOrgEndpoint({
@@ -447,6 +494,7 @@ export const GET = createOrgEndpoint({
 ```
 
 ## 9. Recommendations
+
 | Priority | Action                               | Effort | Impact                       |
 | -------- | ------------------------------------ | ------ | ---------------------------- |
 | 🔴 P0    | Implement Redis-based rate limiting  | 2 days | High - Production critical   |
@@ -461,11 +509,13 @@ export const GET = createOrgEndpoint({
 **Total Estimated Effort:** ~11 days
 
 ## 10. Related Documentation
+
 - **Usage Guide:** `packages/api-framework/README.md` (comprehensive)
 - **Standard API Route:** `docs/reports/architecture/components/Standard_API_Route.md`
 - **A09 Invariant Validator:** `scripts/a09-validator-simple.mjs`
 
 ## 11. Next Steps
+
 1. **Immediate:** Implement Redis-based rate limiting (production blocker)
 2. **Short-term:** Add audit logging for compliance
 3. **Medium-term:** Improve test coverage of core factories

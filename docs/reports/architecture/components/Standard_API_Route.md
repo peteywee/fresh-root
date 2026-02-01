@@ -1,4 +1,23 @@
+---
+
+title: "Route API Standard (Next.js App Router, Layer 03)"
+description: "Standard for API route handler pattern and layering."
+keywords:
+  - api
+  - standard
+  - architecture
+category: "report"
+status: "active"
+audience:
+  - developers
+  - architects
+createdAt: "2026-01-31T07:19:00Z"
+lastUpdated: "2026-01-31T07:19:00Z"
+
+---
+
 # Route API Standard (Next.js App Router, Layer 03)
+
 **Purpose** Define the thin-edge handler pattern: **parse → validate → authorize → app-lib →
 respond**. All `apps/web/app/api/**/route.ts` files MUST follow this standard.
 

@@ -1,4 +1,5 @@
 ---
+
 title: "Ops Schemas"
 description: "Operational metrics schema coverage"
 keywords:
@@ -12,6 +13,9 @@ audience:
   - ai-agents
 related-docs:
   - INDEX.md
+createdAt: "2026-01-31T07:19:02Z"
+lastUpdated: "2026-01-31T07:19:02Z"
+
 ---
 
 # Ops Schemas

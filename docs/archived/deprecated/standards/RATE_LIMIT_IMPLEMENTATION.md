@@ -1,4 +1,5 @@
 ---
+
 title: "Rate Limit Implementation Guide"
 description: "Complete implementation guide for rate limiting middleware and Redis integration"
 keywords:
@@ -15,9 +16,13 @@ audience:
 related-docs:
   - SDK_FACTORY_COMPREHENSIVE_GUIDE.md
   - ../guides/DEPLOYMENT.md
+createdAt: "2026-01-31T07:18:58Z"
+lastUpdated: "2026-01-31T07:18:58Z"
+
 ---
 
 # Rate Limit Middleware Implementation Guide
+
 **Status**: ✅ **FULLY IMPLEMENTED**
 
 This guide shows how to use the rate limit middleware in your API routes.
@@ -25,7 +30,9 @@ This guide shows how to use the rate limit middleware in your API routes.
 ---
 
 ## Quick Start (Copy-Paste)
+
 ### Basic Pattern
+
 ```typescript
 // apps/web/app/api/your-route/route.ts
 
@@ -58,7 +65,9 @@ That's it. The middleware:
 ---
 
 ## Architecture
+
 ### Two-Layer System
+
 **Layer 1: Rate Limiter** (`src/lib/api/rate-limit.ts`)
 
 - `RateLimiter` interface with `consume(key)` method
@@ -74,6 +83,7 @@ That's it. The middleware:
 - Returns 429 or passes to handler
 
 ### Data Flow
+
 ```text
 Client Request
     ↓
@@ -96,7 +106,9 @@ Response
 ---
 
 ## Configuration
+
 ### RateLimitConfig Options
+
 ```typescript
 interface RateLimitConfig {
   // REQUIRED: Feature name for grouping (e.g., "auth", "onboarding")
@@ -118,6 +130,7 @@ interface RateLimitConfig {
 ```
 
 ### Recommended Presets
+
 | Use Case              | max  | windowSeconds | keyPrefix    | Notes                       |
 | --------------------- | ---- | ------------- | ------------ | --------------------------- |
 | **Auth (login)**      | 5    | 60            | `auth:login` | Strict: prevent brute force |
@@ -130,7 +143,9 @@ interface RateLimitConfig {
 ---
 
 ## Real-World Examples
+
 ### Example 1: Login Endpoint (Strict)
+
 ```typescript
 // apps/web/app/api/auth/login/route.ts
 
@@ -168,6 +183,7 @@ export const POST = withRateLimit(
 ---
 
 ### Example 2: Onboarding (Moderate)
+
 ```typescript
 // apps/web/app/api/onboarding/create-network-org/route.ts
 
@@ -210,6 +226,7 @@ export const POST = withRateLimit(
 ---
 
 ### Example 3: Public Search (Generous)
+
 ```typescript
 // apps/web/app/api/public/search/route.ts
 
@@ -244,6 +261,7 @@ export const GET = withRateLimit(
 ---
 
 ### Example 4: Health Check (No Real Limit)
+
 ```typescript
 // apps/web/app/api/health/route.ts
 
@@ -270,7 +288,9 @@ export const GET = withRateLimit(
 ---
 
 ## Middleware Chaining
+
 ### Stacking Middleware
+
 You can combine `withRateLimit` with other middleware:
 
 ```typescript
@@ -305,7 +325,9 @@ export const POST = withRateLimit(
 ---
 
 ## Environment & Backend Storage
+
 ### Development (Default)
+
 ```bash
 # No configuration needed
 NODE_ENV=development
@@ -320,6 +342,7 @@ NODE_ENV=development
 - **Not suitable for multi-instance** (each process has own buckets)
 
 ### Production with Redis
+
 ```bash
 # Set in your production .env
 REDIS_URL="redis://redis-host:6379"
@@ -334,6 +357,7 @@ NODE_ENV=production
 - Recommended for production deployments
 
 ### Production without Redis (Not Recommended)
+
 ```bash
 NODE_ENV=production
 # No REDIS_URL set
@@ -346,6 +370,7 @@ globally.
 ---
 
 ## Client Experience: 429 Response
+
 When a client hits the rate limit, they receive:
 
 ```http
@@ -376,7 +401,9 @@ X-RateLimit-Remaining: 0
 ---
 
 ## Performance & Memory
+
 ### Memory Usage
+
 **InMemoryRateLimiter**:
 
 - Per bucket: ~200 bytes (count + resetAt)
@@ -392,6 +419,7 @@ X-RateLimit-Remaining: 0
 - Can scale to millions of keys
 
 ### CPU Impact
+
 - `consume()` call: O(1) operation
 - Redis: single INCRBY + EXPIRE call
 - In-memory: single Map lookup
@@ -400,7 +428,9 @@ X-RateLimit-Remaining: 0
 ---
 
 ## Common Patterns
+
 ### Pattern 1: Per-User Rate Limiting
+
 Currently, rate limiting is per-IP. To limit per-user instead:
 
 ```typescript
@@ -428,6 +458,7 @@ key instead of IP.
 ---
 
 ### Pattern 2: Per-Organization Rate Limiting
+
 ```typescript
 export const POST = withRateLimit(
   requireSession(async (req, context) => {
@@ -449,7 +480,9 @@ export const POST = withRateLimit(
 ---
 
 ## Troubleshooting
+
 ### "Rate limit exceeded" immediately
+
 **Possible causes**:
 
 1. `max` set too low
@@ -465,6 +498,7 @@ export const POST = withRateLimit(
 ---
 
 ### Redis connection errors
+
 **Error**: `REDIS_URL is set but connection fails`
 
 **Solutions**:
@@ -477,6 +511,7 @@ export const POST = withRateLimit(
 ---
 
 ### Rate limits not enforced across instances
+
 **Issue**: Deployed 3 instances, but can make 3x more requests
 
 **Cause**: Using in-memory limiter (each instance has own buckets)
@@ -486,7 +521,9 @@ export const POST = withRateLimit(
 ---
 
 ## Testing Rate Limits
+
 ### Unit Test Example
+
 ```typescript
 import { describe, it, expect } from "vitest";
 import { withRateLimit } from "@/app/api/_shared/rate-limit-middleware";
@@ -537,6 +574,7 @@ describe("withRateLimit", () => {
 ---
 
 ## Deployment Checklist
+
 Before deploying with rate limiting:
 
 - \[ ] Choose `max` and `windowSeconds` for each route
@@ -549,6 +587,7 @@ Before deploying with rate limiting:
 - \[ ] Set up alerts for unusual 429 spike patterns
 
 ### Environment Variables
+
 ```bash
 # Upstash Redis (recommended for serverless/Edge)
 UPSTASH_REDIS_REST_URL=https://xxx.upstash.io
@@ -559,6 +598,7 @@ USE_REDIS_RATE_LIMIT=true  # Enable Redis, false = in-memory fallback
 ---
 
 ## Summary
+
 | Aspect                | Status                                       |
 | --------------------- | -------------------------------------------- |
 | **Middleware**        | ✅ Implemented (`rate-limit-middleware.ts`)  |

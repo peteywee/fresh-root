@@ -1,23 +1,29 @@
 ---
+
 title: "Repomix MCP Integration Plan"
 description: "Implementation plan for Repomix Model Context Protocol integration and tool setup"
 keywords:
-  - repomix
-  - mcp
-  - integration
-  - plan
-  - implementation
+- repomix
+- mcp
+- integration
+- plan
+- implementation
 category: "architecture"
 status: "active"
 audience:
-  - developers
-  - architects
+- developers
+- architects
 related-docs:
-  - MCP_TOOLING_STRATEGY.md
-  - REPOMIX_MCP_TOOLS_REFERENCE.md
+- MCP\_TOOLING\_STRATEGY.md
+- REPOMIX\_MCP\_TOOLS\_REFERENCE.md
+
+createdAt: "2026-01-31T00:00:00Z"
+lastUpdated: "2026-01-31T00:00:00Z"
+
 ---
 
 # Repomix MCP Integration Plan
+
 **Status**: 🔴 **NOT IMPLEMENTED**\
 **Priority**: P1 (High Value, Low Effort)\
 **Estimated Effort**: 2-3 hours\
@@ -26,7 +32,9 @@ related-docs:
 ---
 
 ## Current State Assessment
+
 ### ✅ What We Have
+
 - Repomix as npm package (`repomix@1.10.0`)
 - CLI usage via `pnpm repomix`
 - CI/CD automation (`.github/workflows/repomix-ci.yml`)
@@ -34,6 +42,7 @@ related-docs:
 - 95% effectiveness on existing features
 
 ### ❌ What We're Missing
+
 - **Repomix MCP Server** not configured in `.mcp.json`
 - **AI Agent Tools** not accessible (`mcp_repomix_*`)
 - **Claude Agent Skills** generation not automated
@@ -43,7 +52,9 @@ related-docs:
 ---
 
 ## Gap Analysis: Repomix MCP Tools
+
 ### Category 1: Code Analysis (5 Tools) ❌ UNUSED
+
 | Tool                                 | Purpose                    | Current Usage      | Missed Opportunity                          |
 | ------------------------------------ | -------------------------- | ------------------ | ------------------------------------------- |
 | `mcp_repomix_pack_codebase`          | Package local dirs for AI  | ❌ Manual CLI only | Real-time AI analysis during chat           |
@@ -53,12 +64,14 @@ related-docs:
 | `mcp_repomix_generate_skill`         | Create Claude Skills       | ❌ Not available   | Auto-generate team-shared skills            |
 
 ### Category 2: File System (2 Tools) ❌ UNUSED
+
 | Tool                                     | Purpose                       | Current Usage                | Missed Opportunity                |
 | ---------------------------------------- | ----------------------------- | ---------------------------- | --------------------------------- |
 | `mcp_repomix_file_system_read_directory` | List dirs with security       | ❌ Using `list_dir` instead  | Built-in sensitive file detection |
 | `mcp_repomix_file_system_read_file`      | Read with security validation | ❌ Using `read_file` instead | Auto-detect secrets/API keys      |
 
 ### Impact Assessment
+
 **Without Repomix MCP**:
 
 - AI agents use generic `read_file` + `list_dir` (no security validation)
@@ -78,7 +91,9 @@ related-docs:
 ---
 
 ## Implementation Plan
+
 ### Phase 1: Add Repomix MCP Server (30 min)
+
 **Step 1: Update `.mcp.json`**
 
 Add Repomix MCP server configuration:
@@ -123,6 +138,7 @@ pnpm add -D @repomix/mcp-server@latest
 ```
 
 ### Phase 2: Update Documentation (30 min)
+
 **Files to Update**:
 
 1. `.github/copilot-instructions.md` - Add Repomix MCP tools section
@@ -134,6 +150,7 @@ pnpm add -D @repomix/mcp-server@latest
 
 ```markdown
 ### Repomix MCP Tools
+
 When analyzing code structure or external repositories:
 
 - **Pack codebase**: `mcp_repomix_pack_codebase`
@@ -159,14 +176,16 @@ When analyzing code structure or external repositories:
 **Example Usage**:
 ```
 
-User: "Analyze the API framework patterns" Agent: \[Calls mcp\_repomix\_pack\_codebase on
+User: "Analyze the API framework patterns" Agent: \[Calls mcp_repomix_pack_codebase on
 packages/api-framework] Agent: \[Analyzes packed output, identifies patterns] Agent: "Found 3 core
 patterns: middleware pipeline, Zod validation, role-based auth"
 
 ```
+
 ```
 
 ### Phase 3: Create Usage Examples (1 hour)
+
 **File**: `scripts/examples/repomix-mcp-usage.mjs`
 
 ```javascript
@@ -207,6 +226,7 @@ console.log("Result: .claude/skills/sdk-factory-pattern/ created");
 ```
 
 ### Phase 4: Integration Testing (30 min)
+
 **Test Scenarios**:
 
 1. **Test 1: Pack Local Codebase**
@@ -240,7 +260,9 @@ console.log("Result: .claude/skills/sdk-factory-pattern/ created");
 ---
 
 ## Benefits of Full Repomix MCP Integration
+
 ### 1. **Real-Time Code Analysis** (Game Changer)
+
 **Before**:
 
 ```
@@ -261,6 +283,7 @@ Agent: "Found 3 patterns: middleware pipeline, Zod validation, RBAC..."
 **Impact**: 10x faster analysis, 70% fewer tokens
 
 ### 2. **Competitor Research** (Strategic Advantage)
+
 **Before**:
 
 ```
@@ -280,6 +303,7 @@ Agent: "Next.js uses middleware chains similar to our SDK factory..."
 **Impact**: Research external patterns without manual cloning
 
 ### 3. **Auto-Generated Skills** (Team Scalability)
+
 **Before**:
 
 ```
@@ -299,6 +323,7 @@ Agent: "Team can now use '@sdk-factory' in their prompts"
 **Impact**: Team-shared, versioned knowledge
 
 ### 4. **Security by Default** (Risk Reduction)
+
 **Before**:
 
 ```
@@ -318,6 +343,7 @@ Agent: "Cannot read .env - contains secrets"
 **Impact**: Built-in secret detection
 
 ### 5. **Fast Search Within Packed Outputs** (Efficiency)
+
 **Before**:
 
 ```
@@ -339,19 +365,23 @@ Agent: [Returns only matching sections with context]
 ---
 
 ## Success Metrics
+
 ### Immediate (Week 1)
+
 - ✅ MCP server configured in `.mcp.json`
 - ✅ All 7 Repomix MCP tools accessible
 - ✅ Documentation updated
 - ✅ Example scripts created
 
 ### Short-Term (Month 1)
+
 - ✅ 10+ AI conversations using Repomix MCP tools
 - ✅ 3+ Claude Skills auto-generated
 - ✅ 1+ external repo analysis completed
 - ✅ Security validation preventing secret leaks
 
 ### Long-Term (Quarter 1)
+
 - ✅ Team adoption: 80%+ engineers know about MCP tools
 - ✅ Skill library: 10+ team-shared skills in `.claude/skills/`
 - ✅ Competitor research: Regular pattern analysis
@@ -360,13 +390,16 @@ Agent: [Returns only matching sections with context]
 ---
 
 ## Risk Assessment
+
 ### Low Risk
+
 - MCP server is isolated (stdio, not network)
 - No production dependencies (devDependency only)
 - Can disable anytime by removing from `.mcp.json`
 - Falls back gracefully if MCP unavailable
 
 ### Mitigation
+
 - Test in dev environment first
 - Document rollback procedure
 - Add to `.mcp.json.example` for opt-in
@@ -375,6 +408,7 @@ Agent: [Returns only matching sections with context]
 ---
 
 ## Next Steps
+
 1. **Immediate** (Today):
    - \[ ] Update `.mcp.json` with Repomix MCP server config
    - \[ ] Test MCP connection in Copilot chat
@@ -382,7 +416,7 @@ Agent: [Returns only matching sections with context]
 
 1. **This Week**:
    - \[ ] Create usage examples (`scripts/examples/repomix-mcp-usage.mjs`)
-   - \[ ] Update AI\_AGENT\_GUIDE.md with MCP section
+   - \[ ] Update AI_AGENT_GUIDE.md with MCP section
    - \[ ] Test all 7 MCP tools
 
 1. **This Month**:
@@ -394,10 +428,11 @@ Agent: [Returns only matching sections with context]
 ---
 
 ## Related Documents
+
 - [Repomix Effectiveness Assessment](../archive/repomix/REPOMIX_EFFECTIVENESS_FINAL_ASSESSMENT.md) -
   Current 95% implementation
-- [FUTURE\_PROOF\_SYSTEM\_DESIGN.md](./FUTURE_PROOF_SYSTEM_DESIGN.md) - Long-term strategy
-- [AI\_AGENT\_GUIDE.md](./AI_AGENT_GUIDE.md) - Agent onboarding
+- [FUTURE_PROOF_SYSTEM_DESIGN.md](./FUTURE_PROOF_SYSTEM_DESIGN.md) - Long-term strategy
+- [AI_AGENT_GUIDE.md](./AI_AGENT_GUIDE.md) - Agent onboarding
 - `.mcp.json` - MCP server configuration
 
 ---

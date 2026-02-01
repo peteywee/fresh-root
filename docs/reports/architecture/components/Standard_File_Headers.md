@@ -1,5 +1,25 @@
+---
+
+title: "File Header & Tag Standard"
+description: "Required file header and tagging standard for source files."
+keywords:
+  - standard
+  - headers
+  - tagging
+category: "report"
+status: "active"
+audience:
+  - developers
+  - architects
+createdAt: "2026-01-31T07:19:00Z"
+lastUpdated: "2026-01-31T07:19:00Z"
+
+---
+
 # File Header & Tag Standard
+
 ## Required Header (top of every new/changed file)
+
 Include this exact block at the top of every new or modified source file so tooling and humans can
 quickly discover ownership, layer, and contracts.
 
@@ -13,6 +33,7 @@ quickly discover ownership, layer, and contracts.
 ```
 
 ### Rules
+
 - Layer reflects the five-layer model described in the repository docs. Use `L00`..`L04`
   accordingly.
 - `Contracts` should reference Zod schemas, TypeScript interfaces, or adapter interfaces (e.g.

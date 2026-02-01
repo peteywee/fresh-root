@@ -91,7 +91,7 @@
     "enable": false
   },
   "[markdown]": {
-    "editor.defaultFormatter": "DavidAnson.vscode-markdownlint"
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "claude.agents": {
     "enabled": true,

@@ -1,4 +1,24 @@
+---
+
+title: "[ARCHIVED] Fresh Schedules: Complete Application Flow"
+description: "Archived full application flow walkthrough from sign-in to logout."
+keywords:
+  - archive
+  - app-flow
+  - onboarding
+  - journey
+category: "archive"
+status: "archived"
+audience:
+  - developers
+  - designers
+createdAt: "2026-01-31T07:18:58Z"
+lastUpdated: "2026-01-31T07:18:58Z"
+
+---
+
 # Fresh Schedules: Complete Application Flow
+
 > **Complete User Journey** from sign-in to logout\
 > **Generated**: 2025-12-16\
 > **Based on**: Actual code inspection via Repomix analysis
@@ -6,6 +26,7 @@
 ---
 
 ## Table of Contents
+
 - [1.0 Sign-In](#10-sign-in)
   - [1.1 Login Page](#11-login-page)
   - [1.2 Google OAuth Flow](#12-google-oauth-flow)
@@ -39,7 +60,9 @@
 ---
 
 ## 1.0 Sign-In
+
 ### 1.1 Login Page
+
 **File**: `apps/web/app/(auth)/login/page.tsx`
 
 The login page provides two authentication methods:
@@ -63,6 +86,7 @@ The login page provides two authentication methods:
 - Uses `startGooglePopup()` for Google OAuth
 
 ### 1.2 Google OAuth Flow
+
 ```
 ┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐
 │   Login Page    │────▶│  Google Popup   │────▶│ establishSession│
@@ -90,6 +114,7 @@ router.replace("/auth/callback"); // Retry via callback
 ```
 
 ### 1.3 Magic Link Flow
+
 ```
 ┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐
 │   Login Page    │────▶│  Email Sent     │────▶│  User Clicks    │
@@ -115,7 +140,9 @@ router.replace("/auth/callback"); // Retry via callback
 ---
 
 ## 2.0 Auth Callback
+
 ### 2.1 Callback Processing
+
 **File**: `apps/web/app/auth/callback/page.tsx`
 
 Handles completion of any auth flow (email link or Google redirect):
@@ -141,6 +168,7 @@ export default function AuthCallbackPage() {
 ```
 
 ### 2.2 Session Establishment
+
 **File**: `apps/web/src/lib/auth-helpers.ts`
 
 ```typescript
@@ -178,7 +206,9 @@ response.cookies.set("session", sessionCookie, {
 ---
 
 ## 3.0 Org Gate (Middleware)
+
 ### 3.1 Proxy Check
+
 **File**: `apps/web/lib/proxy.ts`
 
 Before entering protected app routes, the proxy checks for organization context:
@@ -205,6 +235,7 @@ export function proxy(req: NextRequest) {
 ```
 
 ### 3.2 Security Headers
+
 **File**: `apps/web/app/middleware.ts`
 
 The middleware only sets security headers (no auth logic):
@@ -230,7 +261,9 @@ export const config = {
 ---
 
 ## 4.0 Onboarding Wizard
+
 ### 4.1 Profile Step
+
 **File**: `apps/web/app/onboarding/profile/page.tsx`
 
 First step collects user profile information:
@@ -250,6 +283,7 @@ First step collects user profile information:
 ```
 
 ### 4.2 Intent Selection
+
 **File**: `apps/web/app/onboarding/intent/page.tsx`
 
 User selects their path:
@@ -292,6 +326,7 @@ const handleClick = (choice: "join_existing" | "create_workspace") => {
 ```
 
 ### 4.3 Path A: Join Existing
+
 **File**: `apps/web/app/onboarding/join/page.tsx`
 
 ```
@@ -312,6 +347,7 @@ Intent: join_existing
 ```
 
 ### 4.4 Path B: Create Organization
+
 **Files**:
 
 - `apps/web/app/onboarding/admin-responsibility/page.tsx`
@@ -350,6 +386,7 @@ Intent: create_workspace (org_owner path)
 ```
 
 ### 4.5 Path C: Create Corporate
+
 **File**: `apps/web/app/onboarding/create-network-corporate/page.tsx`
 
 ```
@@ -375,6 +412,7 @@ Intent: create_workspace (corporate path)
 ```
 
 ### 4.6 Completion (Block 4)
+
 **File**: `apps/web/app/onboarding/block-4/page.tsx`
 
 ```typescript
@@ -424,7 +462,9 @@ export default function Block4Page() {
 ---
 
 ## 5.0 Protected App
+
 ### 5.1 Client-Side Guard
+
 **File**: `apps/web/app/components/ProtectedRoute.tsx`
 
 All protected pages wrap content with this guard:
@@ -453,6 +493,7 @@ export default function ProtectedRoute({ children }: { children: ReactNode }) {
 ```
 
 ### 5.2 Dashboard
+
 **File**: `apps/web/app/(app)/protected/dashboard/page.tsx`
 
 Main dashboard with publishing and schedule views:
@@ -506,6 +547,7 @@ export default function DashboardPage() {
 ```
 
 ### 5.3 Protected Demo
+
 **File**: `apps/web/app/(app)/protected/page.tsx`
 
 Demo page for testing CRUD operations:
@@ -535,7 +577,9 @@ export default function ProtectedDemoPage() {
 ---
 
 ## 6.0 Schedule Builder
+
 ### 6.1 Week View Prototype
+
 **File**: `apps/web/app/schedules/builder/page.tsx`
 
 Local-state prototype for schedule building:
@@ -586,7 +630,9 @@ export default function ScheduleBuilder() {
 ---
 
 ## 7.0 Logout
+
 ### 7.1 Logout Function
+
 **File**: `apps/web/src/lib/auth-helpers.ts`
 
 ```typescript
@@ -609,6 +655,7 @@ export async function logoutEverywhere() {
 ```
 
 ### 7.2 Session Deletion API
+
 **File**: `apps/web/app/api/session/route.ts`
 
 ```typescript
@@ -659,7 +706,9 @@ export const DELETE = createPublicEndpoint({
 ---
 
 ## 8.0 Visual Flow Diagram
+
 ### Complete User Journey
+
 ```
                                     FRESH SCHEDULES - COMPLETE USER FLOW
 ═══════════════════════════════════════════════════════════════════════════════════
@@ -796,7 +845,9 @@ export const DELETE = createPublicEndpoint({
 ---
 
 ## 9.0 Key Files Reference
+
 ### Authentication
+
 | File                                  | Purpose                                 |
 | ------------------------------------- | --------------------------------------- |
 | `apps/web/app/(auth)/login/page.tsx`  | Login page (Google + Magic Link)        |
@@ -805,6 +856,7 @@ export const DELETE = createPublicEndpoint({
 | `apps/web/app/api/session/route.ts`   | Session creation/deletion API           |
 
 ### Middleware & Guards
+
 | File                                         | Purpose                |
 | -------------------------------------------- | ---------------------- |
 | `apps/web/app/middleware.ts`                 | Security headers only  |
@@ -812,6 +864,7 @@ export const DELETE = createPublicEndpoint({
 | `apps/web/app/components/ProtectedRoute.tsx` | Client-side auth guard |
 
 ### Onboarding
+
 | File                                                          | Purpose                 |
 | ------------------------------------------------------------- | ----------------------- |
 | `apps/web/app/onboarding/profile/page.tsx`                    | Profile collection      |
@@ -824,6 +877,7 @@ export const DELETE = createPublicEndpoint({
 | `apps/web/app/onboarding/_wizard/OnboardingWizardContext.tsx` | Wizard state            |
 
 ### Protected App
+
 | File                                              | Purpose                    |
 | ------------------------------------------------- | -------------------------- |
 | `apps/web/app/(app)/protected/page.tsx`           | Protected demo page        |
@@ -833,11 +887,13 @@ export const DELETE = createPublicEndpoint({
 ---
 
 ## 10.0 SR Dev Gap Analysis
+
 > **Comprehensive review** of the entire golden path - auth, data, security, UX, and integration
 
 ---
 
 ### 🔴 P0: BLOCKING (Production cannot ship)
+
 | #     | Category | Gap                                          | Evidence                                                                | Impact                                           |
 | ----- | -------- | -------------------------------------------- | ----------------------------------------------------------------------- | ------------------------------------------------ |
 | **1** | **Auth** | `useAuth()` is a **stub**                    | `auth-context.tsx:22`: `setUser(null)` always                           | Auth guard always fails → infinite redirect loop |
@@ -849,6 +905,7 @@ export const DELETE = createPublicEndpoint({
 ---
 
 ### 🟠 P1: CRITICAL (Core flows broken)
+
 | #      | Category        | Gap                                | Evidence                                                       | Impact                             |
 | ------ | --------------- | ---------------------------------- | -------------------------------------------------------------- | ---------------------------------- |
 | **6**  | **UX**          | No logout button                   | `logoutEverywhere()` exported but never wired                  | Users can't sign out               |
@@ -860,6 +917,7 @@ export const DELETE = createPublicEndpoint({
 ---
 
 ### 🟡 P2: IMPORTANT (Degraded experience)
+
 | #      | Category       | Gap                              | Evidence                                               | Impact                  |
 | ------ | -------------- | -------------------------------- | ------------------------------------------------------ | ----------------------- |
 | **11** | **Data**       | Schedule builder is local-only   | `useState([...])` in `builder/page.tsx`                | Schedules don't persist |
@@ -871,6 +929,7 @@ export const DELETE = createPublicEndpoint({
 ---
 
 ### 🟢 P3: MINOR (Polish)
+
 | #      | Category | Gap                             | Evidence                                      | Impact                     |
 | ------ | -------- | ------------------------------- | --------------------------------------------- | -------------------------- |
 | **16** | **UX**   | No loading states in onboarding | Missing `isSubmitting` state                  | Form resubmission possible |
@@ -882,7 +941,9 @@ export const DELETE = createPublicEndpoint({
 ---
 
 ## 11.0 Root Cause Analysis
+
 ### Why is `useAuth()` a stub
+
 ```tsx
 // apps/web/src/lib/auth-context.tsx:20-24
 useEffect(() => {
@@ -908,6 +969,7 @@ useEffect(() => {
 ---
 
 ### Why isn't `proxy.ts` used
+
 ```typescript
 // apps/web/app/middleware.ts - ONLY sets headers
 export function middleware(_request: NextRequest) {
@@ -934,6 +996,7 @@ export function middleware(request: NextRequest) {
 ---
 
 ### Why no Firestore writes
+
 ```typescript
 // apps/web/app/api/onboarding/create-network-org/route.ts:21-28
 const org = {
@@ -956,7 +1019,9 @@ await updateDocWithType<NetworkDoc>(adb, networkRef, {
 ---
 
 ## 12.0 Fix Roadmap
+
 ### Phase 1: Auth Chain (P0s 1-3)
+
 ```
 Day 1:
 ├── 1.1 Wire useAuth() to Firebase onAuthStateChanged
@@ -965,6 +1030,7 @@ Day 1:
 ```
 
 ### Phase 2: Data Persistence (P0s 4-5)
+
 ```
 Day 2:
 ├── 2.1 create-network-org: Write to Firestore /orgs/{id}
@@ -974,6 +1040,7 @@ Day 2:
 ```
 
 ### Phase 3: UX Completion (P1s 6-10)
+
 ```
 Day 3:
 ├── 3.1 Add header component with logout button
@@ -984,6 +1051,7 @@ Day 3:
 ```
 
 ### Phase 4: Integration (P2s 11-15)
+
 ```
 Day 4:
 ├── 4.1 Connect schedule builder to /api/schedules
@@ -995,6 +1063,7 @@ Day 4:
 ---
 
 ## 13.0 Dependency Graph
+
 ```
                     ┌─────────────────────┐
                     │  1.1 Fix useAuth()  │
@@ -1035,6 +1104,7 @@ Day 4:
 ---
 
 ## 14.0 Verification Checklist
+
 After fixes, verify each gate:
 
 | Gate           | Test                             | Expected                                |
@@ -1049,7 +1119,9 @@ After fixes, verify each gate:
 ---
 
 ## 15.0 Additional Gaps from Deep Repomix Scan
+
 ### 🔴 Mock Data Routes (Returning Static Data Instead of Firestore)
+
 **Discovered Pattern**: Multiple API routes return hardcoded mock data instead of querying
 Firestore.
 
@@ -1070,6 +1142,7 @@ refresh.
 ---
 
 ### 🟡 Type Safety Issues
+
 | File                        | Issue                | Line       | Fix                          |
 | --------------------------- | -------------------- | ---------- | ---------------------------- |
 | `_shared/middleware.ts`     | `ctx: any` parameter | L642, L644 | Type as `RouteContext`       |
@@ -1080,6 +1153,7 @@ refresh.
 ---
 
 ### 🟡 TODO Comments Still in Code
+
 | File                       | TODO                                           | Line               |
 | -------------------------- | ---------------------------------------------- | ------------------ |
 | `publishSchedule`          | `TODO: perform the privileged write`           | `schedules.ts:503` |
@@ -1089,6 +1163,7 @@ refresh.
 ---
 
 ### 🟡 Stub/Placeholder Implementations
+
 | File                        | Issue                                                                      |
 | --------------------------- | -------------------------------------------------------------------------- |
 | `src/lib/auth-context.tsx`  | `Placeholder: replace with real initialization` - Always returns null user |
@@ -1099,6 +1174,7 @@ refresh.
 ---
 
 ### 🟢 Code Quality Observations
+
 | Category                 | Finding                                                                            |
 | ------------------------ | ---------------------------------------------------------------------------------- |
 | **SDK Factory Adoption** | ✅ Good - 36 routes using SDK factory patterns                                     |
@@ -1110,6 +1186,7 @@ refresh.
 ---
 
 ### 🟢 Duplicate Code Detection
+
 | Pattern              | Files                               | Recommendation                                            |
 | -------------------- | ----------------------------------- | --------------------------------------------------------- |
 | `typed-wrappers.ts`  | Duplicated in 2 locations           | Consolidate to single `@fresh-schedules/firebase` package |
@@ -1118,7 +1195,9 @@ refresh.
 ---
 
 ## 16.0 Updated Fix Roadmap (Including Deep Scan Findings)
+
 ### Phase 5: Implement Real Firestore Queries (NEW)
+
 ```
 Day 5:
 ├── 5.1 /api/attendance: Replace mock with Firestore query
@@ -1132,6 +1211,7 @@ Day 5:
 ```
 
 ### Phase 6: Type Safety & Code Quality (NEW)
+
 ```
 Day 6:
 ├── 6.1 Replace all `any` types with proper types
@@ -1144,6 +1224,7 @@ Day 6:
 ---
 
 ## 17.0 Gap Summary Matrix
+
 | Priority | Count | Category             | Status                |
 | -------- | ----- | -------------------- | --------------------- |
 | 🔴 P0    | 5     | Auth Chain           | Blocking              |
@@ -1162,6 +1243,6 @@ Day 6:
 
 **Document Version**: 3.0\
 **Generated from**: SR Dev code audit + Deep Repomix Scan\
-**Verification Method**: Repomix pack\_codebase + grep patterns (TODO, mock, stub, any, console)\
+**Verification Method**: Repomix pack_codebase + grep patterns (TODO, mock, stub, any, console)\
 **Scan Output ID**: 993e14056ec3d502 (165 files, 39,976 tokens)\
 **Audit Date**: 2025-12-18

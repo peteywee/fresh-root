@@ -1,12 +1,36 @@
+---
+
+title: "[ARCHIVED] Issue #202: Firestore Rules Test Coverage"
+description: "Archived issue brief for Firestore rules test coverage targets."
+keywords:
+  - archive
+  - issue-202
+  - firestore
+  - coverage
+category: "archive"
+status: "archived"
+audience:
+  - developers
+  - qa
+createdAt: "2026-01-31T07:18:58Z"
+lastUpdated: "2026-01-31T07:18:58Z"
+
+---
+
 # Issue #202: Firestore Rules Test Coverage
+
 ## Labels
+
 - P0: HIGH
 - Area: Testing, Security
 
 ## Objective
-Achieve 80%+ test coverage for Firestore security rules to prevent authorization vulnerabilities and ensure tenant isolation is properly enforced.
+
+Achieve 80%+ test coverage for Firestore security rules to prevent authorization vulnerabilities and
+ensure tenant isolation is properly enforced.
 
 ## Scope
+
 **In:**
 
 - Permission boundary tests (unauthenticated access prevention)
@@ -22,6 +46,7 @@ Achieve 80%+ test coverage for Firestore security rules to prevent authorization
 - Client SDK testing (separate from rules testing)
 
 ## Files / Paths
+
 - `firestore.rules` - Security rules definition
 - `packages/rules-tests/src/schedules.test.ts` - Schedule rules tests (NEW)
 - `packages/rules-tests/src/shifts.test.ts` - Shift rules tests (NEW)
@@ -31,6 +56,7 @@ Achieve 80%+ test coverage for Firestore security rules to prevent authorization
 - `.github/workflows/ci.yml` - CI integration for rules testing
 
 ## Commands
+
 ```bash
 # Set up Firebase emulator for testing
 firebase emulators:start --only firestore
@@ -46,6 +72,7 @@ firebase emulators:exec --only firestore \
 ```
 
 ## Acceptance Criteria
+
 - \[ ] Permission boundary tests written and passing
 - \[ ] Tenant isolation tests written and passing
 - \[ ] Role-based access tests written and passing
@@ -55,16 +82,18 @@ firebase emulators:exec --only firestore \
 - \[ ] Tests block PRs when failing
 
 ## Success KPIs
+
 - **Coverage**: ≥80% of Firestore rules tested
 - **Test Count**: ≥30 test cases covering all critical paths
 - **CI Integration**: 100% - all PRs run rules tests
 - **Security**: 0 authorization bypass vulnerabilities
 
 ## Definition of Done
+
 - \[ ] CI green (rules tests passing)
 - \[ ] Docs updated (testing guide added)
 - \[ ] Tests ≥ 85% (80% rules coverage + comprehensive test suite)
 - \[ ] Security audit clear (no authorization bypasses)
-- \[ ] Linked in roadmap (STRATEGIC\_AUDIT\_TODOS.md updated)
+- \[ ] Linked in roadmap (STRATEGIC_AUDIT_TODOS.md updated)
 
 **Status**: NOT STARTED | **Priority**: HIGH | **Effort**: 8 hours

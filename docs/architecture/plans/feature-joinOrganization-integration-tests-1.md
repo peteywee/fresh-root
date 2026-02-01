@@ -1,14 +1,26 @@
 ---
 
-goal: "Unblock joinOrganization integration tests against Firebase emulators"
-version: "1.0"
-date\_created: "2025-02-05"
-last\_updated: "2025-02-05"
-owner: "Backend QA"
-status: "In progress"
-## tags: \[feature, testing, firebase, functions]
+title: "Join Organization Integration Tests Plan"
+description: "Plan to unblock joinOrganization integration tests against Firebase emulators"
+keywords:
+
+- feature
+- testing
+- firebase
+- functions
+category: "architecture"
+status: "in-progress"
+audience:
+- developers
+- qa-engineers
+
+createdAt: "2026-01-31T00:00:00Z"
+lastUpdated: "2026-01-31T00:00:00Z"
+
+---
 
 # Introduction
+
 ![Status: In progress](https://img.shields.io/badge/status-In%20progress-yellow)
 
 This plan restores passing integration coverage for the `joinOrganization` Cloud Function by
@@ -16,6 +28,7 @@ stabilizing emulator setup, shortening data teardown, and ensuring deterministic
 assertions.
 
 ## 1. Requirements & Constraints
+
 - **REQ-001**: Integration tests must pass reliably on local emulators and CI runners within 90
   seconds total wall time.
 - **REQ-002**: Tests must exercise the real `joinOrganizationHandler` with Firestore/Auth emulator
@@ -28,7 +41,9 @@ assertions.
 - **PAT-001**: Prefer deterministic, time-bounded cleanup over unbounded collection scans.
 
 ## 2. Implementation Steps
+
 ### Implementation Phase 1
+
 - GOAL-001: Stabilize emulator bootstrap and teardown to eliminate timeouts.
 
 | Task     | Description                                                                                                                                                                                                               | Completed | Date |
@@ -38,6 +53,7 @@ assertions.
 | TASK-003 | Increase `testTimeout` and `hookTimeout` for the integration suite to 60s in `vitest.integration.config.ts` (or file-local `describe` timeout) while keeping per-test operations under 20s; document rationale.           |           |      |
 
 ### Implementation Phase 2
+
 - GOAL-002: Ensure deterministic test data and assertions for `joinOrganization`.
 
 | Task     | Description                                                                                                                                                                                   | Completed | Date |
@@ -47,24 +63,28 @@ assertions.
 | TASK-006 | Add coverage for expired/exhausted token handling using emulator data seeded per test; ensure cleanup reuses the new teardown utilities.                                                      |           |      |
 
 ## 3. Alternatives
+
 - **ALT-001**: Stub Firestore/Auth calls in integration tests; rejected because requirement mandates
   exercising emulator-backed logic.
 - **ALT-002**: Move tests to unit-only coverage; rejected because transactional and auth side
   effects must be validated end-to-end.
 
 ## 4. Dependencies
+
 - **DEP-001**: Firebase emulators (auth, firestore, functions) must be running locally or via CI
   service before tests start.
 - **DEP-002**: `vitest.integration.config.ts` must allow custom timeouts and import of
   `tests/integration/setup.ts`.
 
 ## 5. Files
+
 - **FILE-001**: `tests/integration/setup.ts` — emulator bootstrap and cleanup adjustments.
 - **FILE-002**: `tests/integration/joinOrganization.test.ts` — deterministic data creation and
   stability helpers.
 - **FILE-003**: `vitest.integration.config.ts` — integration-specific timeouts/config.
 
 ## 6. Testing
+
 - **TEST-001**:
   `pnpm vitest run --config vitest.integration.config.ts tests/integration/joinOrganization.test.ts`
   passes locally with emulators running.
@@ -72,6 +92,7 @@ assertions.
   wall-clock budget.
 
 ## 7. Risks & Assumptions
+
 - **RISK-001**: Emulator cleanup might still be slow if other suites populate large collections;
   mitigation is chunked deletes with hard caps and logging.
 - **RISK-002**: Increasing timeouts could mask underlying performance regressions; mitigation is to
@@ -80,6 +101,8 @@ assertions.
   instability.
 
 ## 8. Related Specifications / Further Reading
+
 - `functions/src/joinOrganization.ts`
 - `tests/integration/setup.ts`
-- `RATE_LIMIT_IMPLEMENTATION.md` (for emulator invocation behavior)
+- `docs/archived/deprecated/standards/RATE_LIMIT_IMPLEMENTATION.md` (for emulator invocation
+  behavior)

@@ -1,12 +1,36 @@
+---
+
+title: "[ARCHIVED] Issue #217: GraphQL API Layer"
+description: "Archived issue brief for GraphQL API layer exploration."
+keywords:
+  - archive
+  - issue-217
+  - graphql
+  - api
+category: "archive"
+status: "archived"
+audience:
+  - developers
+  - architects
+createdAt: "2026-01-31T07:18:58Z"
+lastUpdated: "2026-01-31T07:18:58Z"
+
+---
+
 # Issue #217: GraphQL API Layer
+
 ## Labels
+
 - P0: FUTURE
 - Area: API, Backend
 
 ## Objective
-Implement GraphQL API layer alongside REST API for more flexible client queries and reduced over-fetching.
+
+Implement GraphQL API layer alongside REST API for more flexible client queries and reduced
+over-fetching.
 
 ## Scope
+
 **In:**
 
 - GraphQL schema design
@@ -22,6 +46,7 @@ Implement GraphQL API layer alongside REST API for more flexible client queries 
 - GraphQL federation (future work)
 
 ## Files / Paths
+
 - `apps/web/app/api/graphql/route.ts` - GraphQL endpoint (NEW)
 - `graphql/schema.graphql` - GraphQL schema (NEW)
 - `graphql/resolvers/` - Resolver implementations (NEW)
@@ -29,6 +54,7 @@ Implement GraphQL API layer alongside REST API for more flexible client queries 
 - `docs/API_GRAPHQL_GUIDE.md` - GraphQL documentation (NEW)
 
 ## Commands
+
 ```bash
 # Install GraphQL dependencies
 pnpm add graphql apollo-server-nextjs graphql-tag
@@ -46,6 +72,7 @@ curl -X POST http://localhost:3000/api/graphql \
 ```
 
 ## Acceptance Criteria
+
 - \[ ] GraphQL schema designed
 - \[ ] GraphQL server operational
 - \[ ] Type generation working
@@ -53,12 +80,14 @@ curl -X POST http://localhost:3000/api/graphql \
 - \[ ] Core queries implemented
 
 ## Success KPIs
+
 - **Query Performance**: p95 <200ms
 - **Type Safety**: 100% generated types
 - **Adoption**: 20% of clients using GraphQL
 - **Documentation Quality**: All queries documented
 
 ## Definition of Done
+
 - \[ ] GraphQL API operational
 - \[ ] Types generated automatically
 - \[ ] Playground functional

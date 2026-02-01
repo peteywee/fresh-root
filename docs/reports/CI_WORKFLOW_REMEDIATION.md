@@ -1,10 +1,30 @@
+---
+
+title: "CI Workflow Remediation Report"
+description: "Report on CI workflow remediation actions and outcomes."
+keywords:
+  - ci
+  - remediation
+  - report
+category: "report"
+status: "active"
+audience:
+  - developers
+  - operators
+createdAt: "2026-01-31T07:19:01Z"
+lastUpdated: "2026-01-31T07:19:01Z"
+
+---
+
 # CI Workflow Remediation Report
+
 **Date**: December 7, 2025\
 **Status**: ✅ Resolved
 
 ---
 
 ## Executive Summary
+
 Multiple CI workflows were failing due to:
 
 1. Repository branch protection rules blocking automated pushes
@@ -18,7 +38,9 @@ All issues have been resolved. CI is now passing.
 ---
 
 ## Issues Encountered & Resolutions
+
 ### 1. Generate Visuals Workflow Failures
+
 **Problem**: Workflow tried to push directly to protected `dev` and `main` branches.
 
 **Error**:
@@ -39,6 +61,7 @@ remote: - Changes must be made through a pull request.
 ---
 
 ### 2. Series A CI Workflow Failures
+
 **Problem**: Multiple blocking issues:
 
 - 436 pre-existing lint errors in `apps/web`
@@ -60,6 +83,7 @@ remote: - Changes must be made through a pull request.
 ---
 
 ### 3. Next.js 16 Middleware/Proxy Conflict
+
 **Problem**: Next.js 16 renamed `middleware.ts` to `proxy.ts`. Both files existed.
 
 **Error**:
@@ -74,6 +98,7 @@ Please use "./proxy.ts" only.
 ---
 
 ### 4. Security Vulnerabilities
+
 **Problem**: 17 vulnerabilities reported (14 high, 3 moderate)
 
 **Vulnerable Packages**:
@@ -106,6 +131,7 @@ Please use "./proxy.ts" only.
 ---
 
 ### 5. jq Parsing Error in Dependency Health Job
+
 **Problem**: `pnpm ls --json` returns an array in monorepos, but script expected an object.
 
 **Error**:
@@ -123,6 +149,7 @@ jq 'if type == "array" then [.[].dependencies // {} | length] | add else .depend
 ---
 
 ### 6. pnpm Action Version
+
 **Problem**: `pnpm/action-setup@v2` is outdated.
 
 **Resolution**: Upgraded to `pnpm/action-setup@v4` in all workflows.
@@ -130,6 +157,7 @@ jq 'if type == "array" then [.[].dependencies // {} | length] | add else .depend
 ---
 
 ## Current CI Status
+
 | Workflow               | Status     | Notes                                |
 | ---------------------- | ---------- | ------------------------------------ |
 | `generate-visuals.yml` | ✅ Passing | Gracefully handles permission limits |
@@ -139,22 +167,27 @@ jq 'if type == "array" then [.[].dependencies // {} | length] | add else .depend
 ---
 
 ## Files Changed
+
 ### Deleted
+
 - `apps/web/middleware.ts` - Redundant (Next.js 16 uses proxy.ts)
 - `.github/workflows/series-a-ci.yml` - Too many blocking issues
 
 ### Modified
+
 - `.github/workflows/generate-visuals.yml` - Added graceful error handling
 - `package.json` - Added pnpm overrides for security fixes
 - `apps/web/src/lib/imports/_template.import.ts` - Replaced xlsx with exceljs
 
 ### Created
+
 - `.github/workflows/ci.yml` - New minimal CI workflow
 - `docs/CI_WORKFLOW_REMEDIATION.md` - This document
 
 ---
 
 ## Remaining Technical Debt
+
 1. **436 Lint Errors**: Pre-existing in `apps/web`. Need separate cleanup sprint.
 2. **markdown-fixer Build**: TypeScript errors need fixing.
 3. **GitHub Vulnerability Display**: Shows cached count (5) but `pnpm audit` is clean.
@@ -165,6 +198,7 @@ jq 'if type == "array" then [.[].dependencies // {} | length] | add else .depend
 ---
 
 ## Recommendations
+
 1. **Short-term**: Use new `ci.yml` for basic validation
 2. **Medium-term**: Fix 436 lint errors in dedicated cleanup PR
 3. **Long-term**: Re-enable full Series A CI once codebase is clean
@@ -172,6 +206,7 @@ jq 'if type == "array" then [.[].dependencies // {} | length] | add else .depend
 ---
 
 ## Commands for Verification
+
 ```bash
 # Check vulnerabilities
 pnpm audit

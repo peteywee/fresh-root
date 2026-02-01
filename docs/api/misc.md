@@ -1,23 +1,26 @@
 ---
+
 title: "Misc API"
-description: "Utility and internal endpoints"
+description: "Miscellaneous API endpoints"
 keywords:
   - api
+  - misc
   - utilities
 category: "reference"
 status: "active"
 audience:
   - developers
-  - ai-agents
+  - api-consumers
 related-docs:
   - INDEX.md
----
-
+  - ../schemas/INDEX.md
+createdAt: "2026-01-31T07:18:55Z"
+lastUpdated: "2026-01-31T07:18:55Z"
 # Misc API
 
 ## Endpoints
 
-- /api/_template
+- /api/\_template
 - /api/batch
 - /api/docs
 - /api/files

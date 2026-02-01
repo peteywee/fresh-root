@@ -1,12 +1,33 @@
+---
+
+title: "L3 — React Components & Pages"
+description: "Catalog of React components and Next.js pages."
+keywords:
+	- react
+	- components
+	- pages
+category: "report"
+status: "active"
+audience:
+	- developers
+	- designers
+createdAt: "2026-01-31T07:19:00Z"
+lastUpdated: "2026-01-31T07:19:00Z"
+
+---
+
 # L3 — React Components & Pages
+
 This file catalogs all React components and Next.js pages in the Fresh Schedules application.
 
 ---
 
 ## 1. Page Structure (App Router)
+
 Located in `apps/web/app/`:
 
 ### Public Pages
+
 | Path             | File                     | Description            |
 | ---------------- | ------------------------ | ---------------------- |
 | `/`              | `page.tsx`               | Landing page           |
@@ -16,6 +37,7 @@ Located in `apps/web/app/`:
 | `/planning`      | `planning/page.tsx`      | Planning view          |
 
 ### Protected Pages
+
 | Path                   | File                                 | Description          |
 | ---------------------- | ------------------------------------ | -------------------- |
 | `/protected`           | `(app)/protected/page.tsx`           | Protected home       |
@@ -23,6 +45,7 @@ Located in `apps/web/app/`:
 | `/protected/schedules` | `(app)/protected/schedules/page.tsx` | Schedules management |
 
 ### Onboarding Flow
+
 | Path                                   | File                                           | Description               |
 | -------------------------------------- | ---------------------------------------------- | ------------------------- |
 | `/onboarding`                          | `onboarding/page.tsx`                          | Onboarding entry          |
@@ -37,6 +60,7 @@ Located in `apps/web/app/`:
 | `/onboarding/blocked/*`                | `onboarding/blocked/*/page.tsx`                | Blocked state pages       |
 
 ### Schedule Builder
+
 | Path                 | File                         | Description         |
 | -------------------- | ---------------------------- | ------------------- |
 | `/schedules/builder` | `schedules/builder/page.tsx` | Schedule builder UI |
@@ -44,6 +68,7 @@ Located in `apps/web/app/`:
 ---
 
 ## 2. Layout Components
+
 | File                    | Scope                           |
 | ----------------------- | ------------------------------- |
 | `layout.tsx`            | Root layout (html, body, fonts) |
@@ -52,6 +77,7 @@ Located in `apps/web/app/`:
 ---
 
 ## 3. Loading States
+
 | File                                    | Scope                  |
 | --------------------------------------- | ---------------------- |
 | `(app)/protected/loading.tsx`           | Protected area loading |
@@ -62,9 +88,11 @@ Located in `apps/web/app/`:
 ---
 
 ## 4. UI Components
+
 Located in `apps/web/app/components/`:
 
 ### Core UI (`components/ui/`)
+
 | Component | File             | Description                                      |
 | --------- | ---------------- | ------------------------------------------------ |
 | `Alert`   | `ui/Alert.tsx`   | Alert/notification component                     |
@@ -75,6 +103,7 @@ Located in `apps/web/app/components/`:
 | `Spinner` | `ui/Loading.tsx` | Spinner animation (sm, md, lg)                   |
 
 ### Functional Components
+
 | Component        | File                 | Description                  |
 | ---------------- | -------------------- | ---------------------------- |
 | `ErrorBoundary`  | `ErrorBoundary.tsx`  | React error boundary wrapper |
@@ -87,6 +116,7 @@ Located in `apps/web/app/components/`:
 ---
 
 ## 5. Context Providers
+
 | Provider                  | File                                             | Purpose                   |
 | ------------------------- | ------------------------------------------------ | ------------------------- |
 | `AuthContext`             | `lib/auth-context.tsx`                           | Firebase auth state       |
@@ -97,6 +127,7 @@ Located in `apps/web/app/components/`:
 ---
 
 ## 6. Hooks
+
 | Hook            | File                   | Purpose                |
 | --------------- | ---------------------- | ---------------------- |
 | `useCreateItem` | `lib/useCreateItem.ts` | Item creation mutation |
@@ -104,6 +135,7 @@ Located in `apps/web/app/components/`:
 ---
 
 ## 7. Server Actions
+
 | Action            | File                         | Purpose                     |
 | ----------------- | ---------------------------- | --------------------------- |
 | `createSchedule`  | `actions/createSchedule.ts`  | Server action for schedules |
@@ -112,6 +144,7 @@ Located in `apps/web/app/components/`:
 ---
 
 ## 8. Utilities & Libs
+
 | Module                  | File                           | Purpose                   |
 | ----------------------- | ------------------------------ | ------------------------- |
 | `cache`                 | `lib/cache.ts`                 | Client-side caching       |
@@ -124,6 +157,7 @@ Located in `apps/web/app/components/`:
 ---
 
 ## 9. Middleware
+
 | File            | Purpose                              |
 | --------------- | ------------------------------------ |
 | `middleware.ts` | Next.js middleware (auth, redirects) |
@@ -131,6 +165,7 @@ Located in `apps/web/app/components/`:
 ---
 
 ## 10. Styling
+
 | File          | Purpose                    |
 | ------------- | -------------------------- |
 | `globals.css` | Global Tailwind CSS styles |

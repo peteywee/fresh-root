@@ -1,12 +1,36 @@
+---
+
+title: "Top Shelf Service LLC — Brand Guidelines (v1.0)"
+description: "Brand guidelines for Top Shelf Service LLC."
+keywords:
+  - brand
+  - guidelines
+  - marketing
+category: "reference"
+status: "active"
+audience:
+  - designers
+  - marketing
+related-docs:
+  - trademarks.md
+  - usage-license.md
+  - ../../../INDEX.md
+createdAt: "2026-01-31T07:18:58Z"
+lastUpdated: "2026-01-31T07:18:58Z"
+
+---
+
 # Top Shelf Service LLC™ — Brand Guidelines (v1.0)
 
 **Tagline:** The hardest part is done for you.
 
 ## 1. Brand Essence
 
-Top Shelf Service LLC™ exists to take the heavy, repetitive operational work off small operators so they can focus on people and profit.
+Top Shelf Service LLC™ exists to take the heavy, repetitive operational work off small operators so
+they can focus on people and profit.
 
-The logo — a lone figure pushing a massive boulder uphill — represents the invisible, exhausting labor that your clients do every day. Our promise is simple: **we move the boulder for them.**
+The logo — a lone figure pushing a massive boulder uphill — represents the invisible, exhausting
+labor that your clients do every day. Our promise is simple: **we move the boulder for them.**
 
 ## 2. Brand Voice
 
@@ -22,8 +46,10 @@ The logo — a lone figure pushing a massive boulder uphill — represents the i
 
 ## 3. Logo Usage
 
-- **Primary logo:** full illustration of the figure and boulder. Use on hero sections, print, and brand collateral.
-- **Icon logo:** simplified square mark cropped from the illustration. Use for app icons and favicons.
+- **Primary logo:** full illustration of the figure and boulder. Use on hero sections, print, and
+  brand collateral.
+- **Icon logo:** simplified square mark cropped from the illustration. Use for app icons and
+  favicons.
 - Always maintain clear space equal to the height of the figure’s head around the logo.
 - Minimum digital size: 64px width for the primary mark.
 - Do not distort, recolor, or place the logo on busy photographic backgrounds.
@@ -52,8 +78,8 @@ Usage:
 
 Preferred typefaces (both available via Google Fonts):
 
-- **Headlines:** *Montserrat* (600–800 weight)
-- **Body / UI:** *Inter* (400–600 weight)
+- **Headlines:** _Montserrat_ (600–800 weight)
+- **Body / UI:** _Inter_ (400–600 weight)
 
 Fallback stacks:
 
@@ -62,7 +88,8 @@ Fallback stacks:
 
 ## 6. Imagery
 
-- Bias toward black‑and‑white or desaturated photography showing real work: kitchens, line cooks, dish pits, managers with clipboards, late‑night cleanup.
+- Bias toward black‑and‑white or desaturated photography showing real work: kitchens, line cooks,
+  dish pits, managers with clipboards, late‑night cleanup.
 - Avoid staged stock photography with overly polished, smiling models.
 - When in doubt: choose gritty, honest imagery that looks like real life, not a commercial.
 
@@ -83,7 +110,7 @@ Fallback stacks:
 
 Example lockup:
 
-> Fresh Schedules™ by Top Shelf Service LLC™  
+> Fresh Schedules™ by Top Shelf Service LLC™\
 > The hardest part is done for you.
 
 ## 9. Legal Line

@@ -1,4 +1,5 @@
 ---
+
 title: "Codex Workflow Guide"
 description: "How to use Codex effectively in the Fresh Schedules repo"
 keywords:
@@ -12,6 +13,12 @@ status: "active"
 audience:
   - developers
   - ai-agents
+related-docs:
+  - README.md
+  - ../architecture/MCP_TOOLING_STRATEGY.md
+createdAt: "2026-01-31T07:18:59Z"
+lastUpdated: "2026-01-31T07:18:59Z"
+
 ---
 
 # Codex Workflow Guide
@@ -28,10 +35,10 @@ scripts/codex/codex.sh
 
 ## Repo Helper Tools
 
-| Tool | Purpose |
-| --- | --- |
-| scripts/codex/codex.sh | Launch Codex in repo root |
-| scripts/codex/validate.sh | Run pattern validator + typecheck |
+| Tool                           | Purpose                                  |
+| ------------------------------ | ---------------------------------------- |
+| scripts/codex/codex.sh         | Launch Codex in repo root                |
+| scripts/codex/validate.sh      | Run pattern validator + typecheck        |
 | scripts/codex/quality-gates.sh | Run validator + typecheck + lint + tests |
 
 ### Examples

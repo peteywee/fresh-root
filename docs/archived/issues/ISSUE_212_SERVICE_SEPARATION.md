@@ -1,12 +1,36 @@
+---
+
+title: "[ARCHIVED] Issue #212: Service Separation"
+description: "Archived issue brief for service separation architecture."
+keywords:
+	- archive
+	- issue-212
+	- architecture
+	- services
+category: "archive"
+status: "archived"
+audience:
+	- developers
+	- architects
+createdAt: "2026-01-31T07:18:58Z"
+lastUpdated: "2026-01-31T07:18:58Z"
+
+---
+
 # Issue #212: Service Separation
+
 ## Labels
+
 - P0: STRATEGIC
 - Area: Architecture, Backend
 
 ## Objective
-Separate monolithic application into autonomous microservices for better scalability and maintainability.
+
+Separate monolithic application into autonomous microservices for better scalability and
+maintainability.
 
 ## Scope
+
 **In:**
 
 - Extract API service as autonomous service
@@ -22,6 +46,7 @@ Separate monolithic application into autonomous microservices for better scalabi
 - Complete service mesh (optional for v1)
 
 ## Files / Paths
+
 - New repository: `fresh-root-api-service`
 - Event bus configuration (Pub/Sub/Kafka/Firebase Events)
 - API gateway configuration (Kong/Tyk/AWS API Gateway)
@@ -29,6 +54,7 @@ Separate monolithic application into autonomous microservices for better scalabi
 - `docs/architecture/SERVICE_SEPARATION_PLAN.md` - Architecture plan (NEW)
 
 ## Commands
+
 ```bash
 # Set up new service repository
 git clone <api-service-repo>
@@ -44,6 +70,7 @@ curl http://api-gateway/api/schedules
 ```
 
 ## Acceptance Criteria
+
 - \[ ] API service extracted and autonomous
 - \[ ] Event-driven communication working
 - \[ ] Service-to-service auth implemented
@@ -52,12 +79,14 @@ curl http://api-gateway/api/schedules
 - \[ ] Backward compatibility maintained
 
 ## Success KPIs
+
 - **Service Independence**: 100% - services deploy separately
 - **Event Latency**: <100ms for event propagation
 - **Gateway Performance**: <50ms overhead
 - **Deployment Time**: <15 minutes per service
 
 ## Definition of Done
+
 - \[ ] Services deployed independently
 - \[ ] Event-driven architecture operational
 - \[ ] API gateway configured

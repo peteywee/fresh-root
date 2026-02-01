@@ -1,22 +1,28 @@
 ---
+
 title: "Firestore Security Rules Template"
 description: "Template for Firestore security rules with common patterns"
 keywords:
-  - template
-  - firestore
-  - security
-  - rules
-  - firebase
+- template
+- firestore
+- security
+- rules
+- firebase
 category: "template"
 status: "active"
 audience:
-  - developers
+- developers
 related-docs:
-  - CODE_NEXT_API_ROUTE.md
-  - ../standards/SDK_FACTORY_COMPREHENSIVE_GUIDE.md
+- CODE\_NEXT\_API\_ROUTE.md
+- ../standards/SDK\_FACTORY\_COMPREHENSIVE\_GUIDE.md
+
+createdAt: "2026-01-31T12:00:00Z"
+lastUpdated: "2026-01-31T12:00:00Z"
+
 ---
 
-# Template: CODE\_FIRESTORE\_RULES
+# Template: CODE_FIRESTORE_RULES
+
 ```firestore
 rules_version = '2';
 service cloud.firestore {

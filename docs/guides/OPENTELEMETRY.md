@@ -1,27 +1,33 @@
 ---
+
 title: "OpenTelemetry Setup Guide"
 description: "Setup and configuration guide for OpenTelemetry observability"
 keywords:
-  - opentelemetry
-  - observability
-  - monitoring
-  - setup
+- opentelemetry
+- observability
+- monitoring
+- setup
 category: "guide"
 status: "active"
 audience:
-  - developers
-  - operators
+- developers
+- operators
 related-docs:
-  - ../guides/MONITORING.md
-  - ../standards/LOGGING.md
+- ../guides/MONITORING.md
+- ../standards/LOGGING.md
+
+createdAt: "2026-01-31T00:00:00Z"
+lastUpdated: "2026-01-31T00:00:00Z"
+
 ---
 
 # OpenTelemetry Setup & Configuration Guide
-**Last Updated**: 2025-12-26
-**Status**: Production Ready
-**Related Issues**: #197 (OpenTelemetry Tracing Implementation)
+
+**Last Updated**: 2025-12-26 **Status**: Production Ready **Related Issues**: #197 (OpenTelemetry
+Tracing Implementation)
 
 ## Overview
+
 Fresh Schedules uses OpenTelemetry for distributed tracing, providing visibility into:
 
 - API request flows
@@ -31,13 +37,16 @@ Fresh Schedules uses OpenTelemetry for distributed tracing, providing visibility
 - Dependency tracking
 
 ## Architecture
+
 ### Core Components
+
 1. **OTLP HTTP Exporter** - Sends traces to observability backends
 2. **NodeSDK** - OpenTelemetry instrumentation for Node.js
 3. **Semantic Conventions** - Standardized attribute naming
 4. **Trace Context Propagation** - Cross-service trace continuity
 
 ### Initialization Flow
+
 ```
 instrumentation.ts (Next.js 16 hook)
   ↓
@@ -49,8 +58,11 @@ Traces exported to OTEL_EXPORTER_OTLP_ENDPOINT
 ```
 
 ## Configuration
+
 ### Environment Variables
+
 #### Required for Tracing
+
 ```bash
 # Enable distributed tracing
 OBSERVABILITY_TRACES_ENABLED=true
@@ -60,6 +72,7 @@ OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:4318/v1/traces
 ```
 
 #### Optional
+
 ```bash
 # Authentication headers (comma-separated key=value pairs)
 OTEL_EXPORTER_OTLP_HEADERS=x-api-key=your-key,x-tenant=your-tenant
@@ -72,7 +85,9 @@ DEPLOYMENT_ENVIRONMENT=production
 ```
 
 ### Backend Options
+
 #### Option 1: Jaeger (Open Source)
+
 **Best for**: Local development, self-hosted observability
 
 **Setup**:
@@ -107,6 +122,7 @@ OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:4318/v1/traces
 - ⚠️ Requires maintenance
 
 #### Option 2: New Relic
+
 **Best for**: Enterprise production, full-stack observability
 
 **Setup**:
@@ -130,6 +146,7 @@ OTEL_EXPORTER_OTLP_HEADERS=api-key=YOUR_LICENSE_KEY
 - ⚠️ Higher latency (external SaaS)
 
 #### Option 3: Honeycomb
+
 **Best for**: High-cardinality data, modern observability
 
 **Setup**:
@@ -153,6 +170,7 @@ OTEL_EXPORTER_OTLP_HEADERS=x-honeycomb-team=YOUR_API_KEY
 - ⚠️ Learning curve
 
 #### Option 4: Grafana Tempo
+
 **Best for**: Cost-effective, self-hosted, scales well
 
 **Setup**:
@@ -181,8 +199,11 @@ OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:4318/v1/traces
 - ⚠️ Requires Grafana for visualization
 
 ## Usage
+
 ### Automatic Instrumentation
-Most HTTP requests, database calls, and external API calls are automatically instrumented by the OpenTelemetry SDK. No code changes needed.
+
+Most HTTP requests, database calls, and external API calls are automatically instrumented by the
+OpenTelemetry SDK. No code changes needed.
 
 **Instrumented automatically**:
 
@@ -192,6 +213,7 @@ Most HTTP requests, database calls, and external API calls are automatically ins
 - ✅ External service calls
 
 ### Manual Instrumentation
+
 For custom business logic or specific operations:
 
 ```typescript
@@ -211,12 +233,13 @@ export async function processSchedule(scheduleId: string) {
       // Custom attributes
       "schedule.id": scheduleId,
       "schedule.type": "weekly",
-    }
+    },
   );
 }
 ```
 
 ### Span Attributes
+
 Standard attributes (automatically added):
 
 - `service.name` - Service identifier
@@ -233,7 +256,9 @@ Custom attributes (add as needed):
 - Business-specific attributes
 
 ## Monitoring & Alerts
+
 ### Key Metrics to Track
+
 1. **Trace Completeness**
    - Metric: `traces_exported_total`
    - Alert: If <95% success rate
@@ -251,6 +276,7 @@ Custom attributes (add as needed):
    - Alert: If >0 in 5 minutes
 
 ### Example Queries
+
 **Jaeger UI**:
 
 - Service: `fresh-root-web-api`
@@ -270,7 +296,9 @@ sum(rate(traces_spanmetrics_calls_total[5m]))
 ```
 
 ## Troubleshooting
+
 ### Issue: "OpenTelemetry SDK not starting"
+
 **Symptoms**: Logs show "OpenTelemetry SDK started" but no traces appear
 
 **Causes**:
@@ -303,6 +331,7 @@ sum(rate(traces_spanmetrics_calls_total[5m]))
    ```
 
 ### Issue: "Traces not showing up in backend"
+
 **Symptoms**: SDK starts successfully but traces don't appear in Jaeger/New Relic/etc.
 
 **Causes**:
@@ -339,6 +368,7 @@ sum(rate(traces_spanmetrics_calls_total[5m]))
    ```
 
 ### Issue: "High latency from tracing"
+
 **Symptoms**: API requests slower after enabling tracing
 
 **Causes**:
@@ -370,6 +400,7 @@ sum(rate(traces_spanmetrics_calls_total[5m]))
    - Collector forwards to backend
 
 ### Issue: "Missing spans in trace"
+
 **Symptoms**: Incomplete traces with gaps
 
 **Causes**:
@@ -403,7 +434,9 @@ sum(rate(traces_spanmetrics_calls_total[5m]))
    ```
 
 ## Best Practices
+
 ### Development
+
 1. **Use Jaeger locally**
    - Run with Docker Compose
    - Enable tracing in `.env.local`
@@ -420,6 +453,7 @@ sum(rate(traces_spanmetrics_calls_total[5m]))
    - Enable better filtering
 
 ### Staging
+
 1. **Use production backend**
    - New Relic, Honeycomb, or Tempo
    - Same config as production
@@ -435,6 +469,7 @@ sum(rate(traces_spanmetrics_calls_total[5m]))
    - Check backend ingestion
 
 ### Production
+
 1. **Always enable tracing**
    - `OBSERVABILITY_TRACES_ENABLED=true`
    - Configure backend endpoint
@@ -456,6 +491,7 @@ sum(rate(traces_spanmetrics_calls_total[5m]))
    - Rotate regularly
 
 ## Performance Impact
+
 **Expected overhead**:
 
 - CPU: <5% increase
@@ -471,18 +507,18 @@ sum(rate(traces_spanmetrics_calls_total[5m]))
 - Use gzip compression (default)
 
 ## Related Documentation
+
 - [Environment Validation](../apps/web/src/lib/env.server.ts)
-- [Memory Management](../reference/MEMORY_MANAGEMENT.md)
+- [Memory Management (Archived)](../archived/deprecated/reference/MEMORY_MANAGEMENT.md)
 - [Issue #197](../archived/issues/ISSUE_196_STATUS_UPDATE.md)
-- [Strategic Audit TODOs](../reports/STRATEGIC_AUDIT_TODOS.md)
+- [Strategic Audit TODOs (Archived)](../archived/deprecated/reports/STRATEGIC_AUDIT_TODOS.md)
 
 ## Support
-**Issues**: Create GitHub issue with label `observability`
-**Questions**: Contact DevOps team
+
+**Issues**: Create GitHub issue with label `observability` **Questions**: Contact DevOps team
 **Escalation**: On-call rotation
 
 ---
 
-**Last Updated**: 2025-12-26
-**Maintained By**: DevOps & Observability Team
-**Review Frequency**: Quarterly or after infrastructure changes
+**Last Updated**: 2025-12-26 **Maintained By**: DevOps & Observability Team **Review Frequency**:
+Quarterly or after infrastructure changes

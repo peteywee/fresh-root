@@ -1,190 +1,62 @@
-# Quick Start: Runtime Documentation
-**Current Status:** Production Ready ✅\
-**Main Commit:** f1bfe18 | Score: 130.0 | Tier 0/1: 0 violations\
-**Updated:** 2025-11-28
+---
+
+title: "Quick Start Guide"
+description: "Entry point to the documentation set and core workflows"
+keywords:
+- quick-start
+- documentation
+- onboarding
+- deployment
+- standards
+category: "guide"
+status: "active"
+audience:
+- developers
+- operators
+- ai-agents
+related-docs:
+- ../INDEX.md
+- ../standards/README.md
+- ./DEPLOYMENT.md
+- ../reference/PRODUCTION\_READINESS.md
+- ./VSCODE\_TASKS.md
+
+createdAt: "2026-01-31T00:00:00Z"
+lastUpdated: "2026-01-31T00:00:00Z"
 
 ---
 
-## For Different Teams
-### 👨‍💼 Operations/Project Managers
-1. Read: [PRODUCTION\_READINESS\_EXECUTIVE\_SUMMARY.md](./PRODUCTION_READINESS_EXECUTIVE_SUMMARY.md)
-2. Check: Current score and deployment status
-3. Expected: All green ✅
+# Quick Start Guide
 
-### 👨‍💻 Developers Starting a Feature
-1. `git checkout dev`
-2. Read standard for your change:
-   - Security? → [PHASE\_1\_TIER\_0\_FIXES.md](./PHASE_1_TIER_0_FIXES.md)
-   - Types? → [PHASE\_2\_TIER\_1\_FIXES.md](./PHASE_2_TIER_1_FIXES.md)
-   - Architecture? → [standards/SYMMETRY\_FRAMEWORK.md](./standards/SYMMETRY_FRAMEWORK.md)
-1. Implement following standard
-2. Test: `pnpm lint:patterns` (should show 90+)
-3. Create PR to dev
-4. CI validates automatically
+## Start here
 
-### 🚀 Deployment Team
-1. Check: [guides/DEPLOYMENT.md](./guides/DEPLOYMENT.md)
-2. Follow: Step-by-step deployment
-3. Expected: All guard-main checks pass ✅
+- [Documentation Index](../INDEX.md)
+- [Guides Overview](./README.md)
+- [Standards Overview](../standards/README.md)
 
-### 🔍 Auditors/Security Review
-1. Main branch = Runtime code
-2. Check: [RUNTIME\_DOCUMENTATION\_INDEX.md](./RUNTIME_DOCUMENTATION_INDEX.md)
-3. Follow: Links to dev standards
-4. Verify: All checks documented and automated
+## Common workflows
 
----
+### Developers
 
-## Quick Facts
-| Metric                     | Value             |
-| -------------------------- | ----------------- |
-| **Pattern Score**          | 130.0 / 100 ✅    |
-| **Tier 0 Violations**      | 0 ✅              |
-| **Tier 1 Violations**      | 0 ✅              |
-| **TypeScript Errors**      | 0 ✅              |
-| **ESLint Blocking Errors** | 0 ✅              |
-| **Production Status**      | READY ✅          |
-| **Deployment Gate**        | guard-main.yml ✅ |
+1. Review [Standards Overview](../standards/README.md)
+2. Follow [Guide Index](./README.md)
+3. Use [VS Code Tasks](./VSCODE_TASKS.md)
 
----
+### Deployment
 
-## Key Documents
-**On Main (Production):**
+1. Review [Production Readiness](../reference/PRODUCTION_READINESS.md)
+2. Follow [Deployment Guide](./DEPLOYMENT.md)
 
-- [RUNTIME\_DOCUMENTATION\_INDEX.md](./RUNTIME_DOCUMENTATION_INDEX.md) ← Start here
-- [guides/DEPLOYMENT.md](./guides/DEPLOYMENT.md)
-- [BRANCH\_LINKING\_GUIDE.md](./BRANCH_LINKING_GUIDE.md)
+### Audits and history
 
-**On Dev (Development):**
+- [Branch Consolidation Guide](../visuals/branch-analysis/BRANCH_CONSOLIDATION_GUIDE.md)
 
-- [standards/00\_STANDARDS\_INDEX.md](./standards/00_STANDARDS_INDEX.md)
-- [PHASE\_1\_TIER\_0\_FIXES.md](./PHASE_1_TIER_0_FIXES.md)
-- [PHASE\_2\_TIER\_1\_FIXES.md](./PHASE_2_TIER_1_FIXES.md)
+## Core commands
 
----
-
-## One-Minute Overview
-**What's deployed to production (main)?**
-
-- All runtime code verified to 90+ standard ✅
-- 34 API endpoints, 4 schemas
-- Security hardened, type safe, quality verified
-
-**How does it stay production-ready?**
-
-- guard-main.yml enforces 90+ score on every merge
-- CI validates all changes automatically
-- Zero manual exceptions on Tier 0/1
-
-**How do developers know what to do?**
-
-- Standards documented on dev branch
-- CI links failures to relevant standards
-- Every runtime component traces back to requirement
-
-**How do we make changes?**
-
-1. Develop on dev branch following standards
-2. Merge to dev (ci-patterns validates)
-3. Auto PR to main (guard-main final check)
-4. If all green → deployed to production
-
----
-
-## Commands to Know
 ```bash
-# Check production score
-FRESH_PATTERNS_MIN_SCORE=90 pnpm lint:patterns
-
-# Expected output:
-# 💎 SCORE: 130.0 points — PERFECT
-# 🔴 Tier 0: 0
-# 🟠 Tier 1: 0
-# Verify types
-pnpm typecheck
-
-# Verify code quality
-pnpm lint
-
-# Start working on feature
-git checkout dev
-git pull origin dev
-git checkout -b feature/my-feature
+pnpm -w install --frozen-lockfile
+pnpm dev
+pnpm -w typecheck
+pnpm -w lint
+pnpm test
 ```
-
----
-
-## What Each Document Does
-| Document                                  | For             | Purpose                    |
-| ----------------------------------------- | --------------- | -------------------------- |
-| RUNTIME\_DOCUMENTATION\_INDEX.md            | Everyone        | Master index & entry point |
-| PRODUCTION\_READINESS\_EXECUTIVE\_SUMMARY.md | Operations      | Current status overview    |
-| PRODUCTION\_DEPLOYMENT\_GUIDE.md            | Deployment Team | How to deploy              |
-| BRANCH\_LINKING\_GUIDE.md                   | Architects      | How linking works          |
-| PHASE\_1\_TIER\_0\_FIXES.md                   | Developers      | Security requirements      |
-| PHASE\_2\_TIER\_1\_FIXES.md                   | Developers      | Type requirements          |
-| SYMMETRY\_FRAMEWORK.md                     | Developers      | Architecture requirements  |
-
----
-
-## If Something Goes Wrong
-**CI fails on dev PR:**
-
-1. Read error message (links to standard)
-2. Check: `pnpm lint:patterns:verbose`
-3. Fix locally following standard
-4. Commit and push
-5. CI re-runs automatically
-
-**guard-main fails on main PR:**
-
-1. Check guard-main.yml logs
-2. Error message links to standard
-3. Create fix PR to dev
-4. Merge to dev first
-5. Auto PR to main will retry
-6. guard-main verifies again
-
-**Need to understand a requirement:**
-
-1. Find component on main (runtime)
-2. Check BRANCH\_LINKING\_GUIDE.md
-3. Follow link to dev branch standard
-4. Read relevant Phase doc
-5. See examples and implementation
-
----
-
-## Your Role
-### If you're an Operations Manager
-→ Go to [reference/PRODUCTION_READINESS.md](../reference/PRODUCTION_READINESS.md)
-
-### If you're a Developer
-→ Go to dev branch, read
-[docs/standards/00\_STANDARDS\_INDEX.md](../../dev/docs/standards/00_STANDARDS_INDEX.md)
-
-### If you're Deploying
-→ Go to [guides/DEPLOYMENT.md](./DEPLOYMENT.md)
-
-### If you're Auditing
-→ Go to [BRANCH\_LINKING\_GUIDE.md](./BRANCH_LINKING_GUIDE.md)
-
----
-
-## Status Dashboard
-```
-✅ PRODUCTION READY
-├─ Code Quality:     130.0 / 100
-├─ Security:         0 violations (6 endpoints protected)
-├─ Integrity:        0 violations (4 schemas verified)
-├─ Type Safety:      0 errors
-├─ Build Status:     SUCCESS
-├─ Deployment Gate:  guard-main.yml ACTIVE
-└─ Documentation:    COMPLETE & LINKED
-```
-
----
-
-**Last Updated:** 2025-11-28\
-**Start Here:** [RUNTIME\_DOCUMENTATION\_INDEX.md](./RUNTIME_DOCUMENTATION_INDEX.md)\
-**All Good:** Yes ✅

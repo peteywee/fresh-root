@@ -1,64 +1,41 @@
 ---
+
 title: "Implementation Guides"
 description: "Step-by-step how-to guides, tutorials, and procedures for common tasks"
 keywords:
-  - guides
-  - howto
-  - tutorials
-  - procedures
-  - setup
-  - deployment
-category: "reference"
+- guides
+- howto
+- tutorials
+- procedures
+- setup
+- deployment
+category: "guide"
 status: "active"
 audience:
-  - developers
-  - operators
-  - teams
+- developers
+- operators
+- teams
+related-docs:
+	- ../INDEX.md
+	- ./ONBOARDING.md
+	- ./QUICK_START.md
+
+createdAt: "2026-01-31T00:00:00Z"
+lastUpdated: "2026-01-31T00:00:00Z"
+
 ---
 
 # Implementation Guides
 
-This section contains step-by-step guides, tutorials, and procedures for setting up, developing, testing, deploying, and operating Fresh Schedules.
+Short, task-focused guides for working in this repo.
 
-## Categories
+## Start here
 
-### Getting Started
-- **Local Setup** - How to set up development environment
-- **Architecture Overview** - Understanding the codebase structure
-- **First Contribution** - Making your first code change
+- [Onboarding](./ONBOARDING.md)
+- [Quick Start](./QUICK_START.md)
+- [Deployment](./DEPLOYMENT.md)
+- [Testing](./TESTING.md)
 
-### Development Guides
-- **Authentication Flow** - Implementing/testing auth features
-- **API Development** - Creating new API endpoints
-- **Firebase Integration** - Using Firestore, Auth, Functions
-- **Testing** - Writing unit, integration, and E2E tests
+## Notes
 
-### Deployment & Operations
-- **Deployment Process** - Step-by-step production deployment
-- **Monitoring** - Setting up alerts and dashboards
-- **Incident Response** - Handling production issues
-- **Scaling** - Horizontal scaling, performance optimization
-
-### Configuration & Setup
-- **Environment Variables** - All env vars and their purposes
-- **Redis Configuration** - Rate limiting, caching setup
-- **Firebase Emulators** - Local Firebase emulator setup
-- **VS Code Tasks** - Running dev server, tests, builds
-
----
-
-## Quick Navigation
-
-| Document | Purpose | Audience |
-| --- | --- | --- |
-| Quick Start | Get local dev running in 5 minutes | New developers |
-| Codex Workflow | Use Codex in this repo | Developers, AI agents |
-| Deployment Checklist | Pre-deploy verification steps | Operators |
-| Testing Guide | Write tests for your code | Developers |
-| Firebase Setup | Configure Firebase for local dev | Developers |
-| Performance Tuning | Optimize application performance | Architects |
-
----
-
-**See also**: [Standards](../standards/) for best practices, [Reference](../reference/) for quick lookups
-
+Keep this page minimal and link to only the most commonly used guides.
