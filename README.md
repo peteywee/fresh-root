@@ -320,6 +320,7 @@ User Input → Trim/Normalize → Zod Validation → SQL Escape → HTML Sanitiz
 - 🛡️ **Input Validation** — Zod-first validation on all API inputs with automatic sanitization
 - 🏢 **Organization Isolation** — Multi-tenant data segregation via Firestore
 - 🔄 **Sanitization Library** — DOMPurify + custom sanitizers for edge cases
+- 🛡️ **README Security Guard Rail** — Automatic pre-commit detection of exposed secrets (API keys, tokens, credentials)
 
 ### Firestore Security Rules
 
@@ -354,7 +355,14 @@ pnpm typecheck                # Catches unsafe typing
 
 # Validate patterns
 node scripts/validate-patterns.mjs
+
+# Scan README for exposed secrets
+node scripts/security/detect-readme-secrets.mjs
 ```
+
+**Security Guard Rail**: The pre-commit hook automatically scans README files for exposed secrets
+(API keys, tokens, credentials) and blocks commits. See
+[Security Guard Rail Guide](docs/guides/SECURITY_GUARDRAIL_README.md) for details.
 
 ---
 
