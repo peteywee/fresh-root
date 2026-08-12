@@ -7,6 +7,19 @@ if grep -nRE --exclude-dir=node_modules --exclude-dir=.git '^<<<<<<<|^=======$|^
   exit 1
 fi
 
+# [SECURITY] Scan README files for exposed secrets
+# Prevent accidental commit of API keys, tokens, credentials
+STAGED_README=$(git diff --cached --name-only | grep -E '^README\.md$|^docs/.*README\.md$|^docs/guides/(QUICK_START|DEPLOYMENT)\.md$' || true)
+if [ ! -z "$STAGED_README" ]; then
+  node scripts/security/detect-readme-secrets.mjs
+  if [ $? -ne 0 ]; then
+    echo ""
+    echo "❌ README security scan failed."
+    echo "   Remove secrets before committing. Use placeholders instead."
+    exit 1
+  fi
+fi
+
 # [A09] Validate handler signature invariant (route.ts files)
 # Prevent merge conflicts on SDK factory handler destructuring
 node scripts/validate-handler-signature.mjs
